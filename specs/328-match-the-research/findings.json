@@ -245,82 +245,82 @@
     "note": "the page attests two lifting gears and rolls them as a knob (\"a sweep\" or \"a pulley frame\"); a plain curb with no gear fixes an unattested form"
   },
   {
-    "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#basin beside the approach",
+    "key": "docs/building-programs.md::Country shrine (a village district's shrine)#basin beside the approach",
     "verdict": "DRIFTED",
     "note": "placement and plain basin fit, but the procedure's ground \"the roofed pavilion is an elite form, from Nikko in 1636\" is not in the record: the one pre-1868 pavilion is Yakyu Inari's of 1836, and an open basin before 1868 is unattested either way; reword to the record"
   },
   {
-    "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#burial ground beside the precinct",
+    "key": "docs/building-programs.md::Country shrine (a village district's shrine)#burial ground beside the precinct",
     "verdict": "DRIFTED",
     "note": "the drawing page records no deviation here: it rolls the village ground \"in the shrine's yard or apart from it on a knob\"; the procedure fixes \"in the shrine's yard\" where no map says otherwise - roll yard/apart and cite the knob"
   },
   {
-    "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan",
+    "key": "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan",
     "verdict": "DRIFTED",
     "note": "in the Edo period \"genkan\" meant an entrance with a shikidai at a house of standing; a farmhouse-form kuri's plain earth-floored vestibule is not one - tag it an entry (doma) or relabel"
   },
   {
-    "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob",
+    "key": "docs/building-programs.md::Country shrine (a village district's shrine)#farmers' stage knob",
     "verdict": "DRIFTED",
     "note": "absent-by-default fits, but knob 6's \"none in thirteen\" is not in the record, which gives 1,777 nationwide and over 200 in each of three prefectures; drop or cite it"
   },
   {
-    "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#fire-water",
+    "key": "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water",
     "verdict": "DRIFTED",
     "note": "the cited rule is one tub at each major wooden building and two at the kitchen; \"a tub at the hall's corners, one at the dwelling end\" gives the hall several and the kitchen end one"
   },
   {
-    "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof",
+    "key": "docs/building-programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof",
     "verdict": "DRIFTED",
     "note": "the cited drawing page never mentions Hoshigaoka's sheet and makes the monk's dwelling \"one end of the worship hall's own building\"; a hall in the center with the kitchen and the monk's rooms at the two ends is not what it records, and contradicts the program's own \"dwelling end behind\""
   },
   {
-    "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall largest and monk's home",
+    "key": "docs/building-programs.md::Country shrine (a village district's shrine)#hall largest and monk's home",
     "verdict": "NEEDS-RESEARCH",
     "note": "neither page ranks the hall above the dwelling; under the two-building form a 46 x 28 ft kuri (~1,290 sq ft) out-foots most measured halls (21-35 ft on a side), so \"largest\" should be UNRESEARCHED until a pass answers it"
   },
   {
-    "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#precinct size",
+    "key": "docs/building-programs.md::Country shrine (a village district's shrine)#precinct size",
     "verdict": "DRIFTED",
     "note": "register figures match, but \"every register figure is Meiji or later ... the one Edo set read ... runs about 60-240 tsubo\" is stale: the record gives Saga's Edo returns 45-540 tsubo and Nerima's 10 to over 3,000, and notes registers can also overstate"
   },
   {
-    "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate on the axis",
+    "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis",
     "verdict": "DRIFTED",
     "note": "\"customarily on the main axis\" asserts a custom; the drawing page takes the jin'ya form with \"No fixed central axis\" - label the axis placement GUESS/DEVIATION or drop \"customarily\""
   },
   {
-    "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob",
+    "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob",
     "verdict": "DRIFTED",
     "note": "staging kura vs terminal row fits, but knob 3's upland granary holding \"more in-kind goods (soybeans, barley...)\" runs against the record: dry-field tax was often paid in cash, and a soybean-bale tax is \"this project's guess alone\" - label it GUESS or align"
   },
   {
-    "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#latrines by zone",
+    "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone",
     "verdict": "DRIFTED",
     "note": "\"the residence privy attached\" (one) where the record gives a samurai house two privies, upper and lower; and \"one per zone\" is not on 0101.html (it is the drawing page's guess)"
   },
   {
-    "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground",
+    "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground",
     "verdict": "DRIFTED",
     "note": "no dojo at the compound fits (§708), but \"only a city keeps a dojo\" contradicts private halls flourishing \"in every part of the country\" late in the period"
   },
   {
-    "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#residence entrances",
+    "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#residence entrances",
     "verdict": "DRIFTED",
     "note": "a second form is attested (no shikidai genkan, guest by garden path) and not rolled; and at a jin'ya the visitor's genkan is on the office, the route going on to the residence"
   },
   {
-    "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#sand hearing court",
+    "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#sand hearing court",
     "verdict": "DRIFTED",
     "note": "the drawing page makes the floor a knob, white gravel or river cobbles, each plan taking one, and draws the court roofed; the program fixes a \"sand hearing court\" and names no floor knob"
   },
   {
-    "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#tier knob",
+    "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob",
     "verdict": "DRIFTED",
     "note": "the capital tier fixes \"most staff living out in the city\" where the record supports both housing forms (outside, as Edo's yoriki; inside, as a domain's Edo estate) - make it a knob"
   },
   {
-    "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine",
+    "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine",
     "verdict": "DRIFTED",
     "note": "the drawing page says every compound draws one modest shrine and records only Ochiba's exception; Hayakawa's two shrines are not recorded (Joge's two would support them)"
   },

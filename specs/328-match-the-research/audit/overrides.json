@@ -87,7 +87,7 @@
   "after": [],
   "files": [
    "docs/buildings.md",
-   "docs/buildings/programs.md",
+   "docs/building-programs.md",
    "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
    "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
    "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
@@ -109,7 +109,7 @@
   "after": [],
   "files": [
    "docs/buildings.md",
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "buildings.md line 93: replace the claim with two - `<!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura -->` and `<!-- Research: granary size and the terminal row - GUESS research/questions/0098-storehouses-for-the-tax-rice.drawing.html: ~43-50 x 25-27 ft, no page gives a county office granary's size or count; a row for a terminal store, the landing row the project's reading -->`. The vocabulary entry (line 113) and the programs.md granary band (line 86) stand unchanged.",
   "flag": "",
@@ -149,7 +149,7 @@
   "moved": "T25a (amendment 6): tiered by its work - a procedure paragraph plus three hand-drawn sheets redrawn",
   "tier": "E3"
  },
- "docs/buildings.md::Sacred features#a fence round the sanctuary alone as a wealth knob (0223 \u00a7171-172 finds such fences before 1868 only where the shogunate or a lord built them)": {
+ "docs/buildings.md::Sacred features#a fence round the sanctuary alone as a wealth knob (0223 §171-172 finds such fences before 1868 only where the shogunate or a lord built them)": {
   "fix": "the Fence and hedge bullet's sanctuary-only fence dropped from the wealth knob: 0223 drawing and programs.md draw no sanctuary fence at any wealth",
   "moved": "wave 3 reading: the procedure sentence must change (E0 -> E2)",
   "tier": "E2"
@@ -298,55 +298,55 @@
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Well curbs are 22x22 px rects (~7 ft) on the county example, Hayakawa, Ochiba, Ubame and the roundtrip test, and 15x15 px (5 ft) on Hoshigaoka; a true ~4 ft (12 px) curb resizes every one.",
   "tier": "E3"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#building size anchors": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#building size anchors": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "Exception path (FR-004), a page edit: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html line 8 'Our maps draw the villagers' worship hall 20 to 35 ft on a side' to 'about 18 to 35 ft long by 12 to 35 ft deep', citing Hie Shrine's 3-by-2-bay hall (~18 x 12 ft) and Rokusha's 9 tsubo from research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html. No implementation change: the band in l7r/diagram/buildings/types.json (hall w 18-35, h 12-35), the size-anchors paragraph (buildings/programs.md line 226) and the claim (line 168) already match 0215. If the page is held, the fallback is E1: types.json hall band w [20,35], h [20,35].",
   "flag": "",
   "moved": "T56a: tiered by its work by a fresh reader - The implementation's 18-35 ft band rests on 0215's measured Hie hall (~18 x 12 ft), so only the drawing page lags; Hoshigaoka measured at 3 px/ft draws the villagers' hall 84x96 px = 28 x 32 ft, the sanctuary 18x18 px = 6 ft square and the one roof 198x96 px = 66 x 32 ft = 2,112 sq ft, inside both the 18-35 and the 20-35 bands and the 2,100-3,600 sq ft one-roof band, so no sheet changes either way.",
   "tier": "E4"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#donated stonework": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#donated stonework": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "buildings/programs.md line 147: split the claim in two - '<!-- Research: donated stonework - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: guardian figures, lanterns, strength stones as gifts a parish gave its shrine -->' and '<!-- Research: donated stonework none at average - GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: on the wealth knob, none drawn at average; no count of village shrines keeping them -->'. The paragraph at line 183 and the sheet stand.",
   "flag": "",
   "moved": "T56a: tiered by its work by a fresh reader - MISLABELED: the drawing page (line 21) already says 'none is drawn at average wealth' as a knob, and the procedure (line 183) and Hoshigaoka already do that; only the claim's label and citation are wrong.",
   "tier": "E0"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling band 34-60 by 18-38 ft round the farmhouse guess": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling band 34-60 by 18-38 ft round the farmhouse guess": {
   "after": [],
-  "e0_basis": "docs/buildings/programs.md:198 (the dwelling row, 'reckoned from the farmhouse it resembled'); 0221 drawing page: 'drawn at the size of the map's farmhouses, 46 by 28 ft ... the farmhouse size is a guess'; its two-building size claim is already GUESS at programs.md:171",
+  "e0_basis": "docs/building-programs.md:198 (the dwelling row, 'reckoned from the farmhouse it resembled'); 0221 drawing page: 'drawn at the size of the map's farmhouses, 46 by 28 ft ... the farmhouse size is a guess'; its two-building size claim is already GUESS at programs.md:171",
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "<!-- Research: dwelling band 34-60 by 18-38 ft - GUESS research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: the band round the map's 46 x 28 ft farmhouse; no village parish temple's kuri measured, the one small kuri found (a Koshin hall) about 12 x 15 ft -->",
   "flag": "",
-  "moved": "T95a (fresh reader): docs/buildings/programs.md:198 (the dwelling row, 'reckoned from the farmhouse it resembled'); 0221 drawing page: 'drawn at the size of the map's farmhouses, 46 by 28 ft ... the farmhouse size is a guess'; its two-building size claim is already GUESS at programs.md:171",
+  "moved": "T95a (fresh reader): docs/building-programs.md:198 (the dwelling row, 'reckoned from the farmhouse it resembled'); 0221 drawing page: 'drawn at the size of the map's farmhouses, 46 by 28 ft ... the farmhouse size is a guess'; its two-building size claim is already GUESS at programs.md:171",
   "tier": "E0"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "tier": "E3"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#farmers' stage knob": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "buildings/programs.md line 220 (knob 6): '6. **Farmers' stage**: by the map when the shrine stands on one (knob 4: the sheet draws a stage only where its map has one); else `absent` or `present`, rolled from the seed with equal weights (a guess: the record attests stages often built on shrine ground from the early 1800s and dense in three prefectures - 1,777 counted nationwide, lost, noh and puppet stages included, over 200 in each of three - but gives no share of village shrines that kept one, so no regional weight can be set). Written in the notes file as `**Farmers' stage**: absent` or `present`.'; line 181: 'a farmers' stage and a sumo ring are knobs, rolled from the seed or taken from the map' in place of 'knobs, absent by default'; line 163 claim: '... farmers' stage knob - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: attested on shrine ground, regional; rolled with equal weights (GUESS: no share recorded) or by the map'; and the 0222 drawing page's 'absent by default ... leave both off unless they are turned on' brought to the roll - the same edit the sumo ring (knob 7) takes in this wave.",
   "flag": "",
   "moved": "T53a: a reopened row tiered by its work by a fresh reader - The knob exists and only its default becomes a seeded roll; the one sheet, hoshigaoka-shrine, stands on the Hoshigaoka map (notes knob 4 `**On map**`, knob 6 'absent (the default; the map draws none)'), so it follows its map by the procedure's own rule and draws no stage whatever its roll (crc32 'hoshigaoka-shrine:farmers' stage' would give present, 'hoshigaoka:farmers' stage' absent - moot); no engine code builds a stage, and 'regionally weighted' is not settable from the record (no per-shrine share), so equal weights as a labeled guess, matching the sumo ring.",
   "tier": "E2"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#fire-water": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md",
+   "docs/building-programs.md",
    "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
    "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg"
   ],
@@ -355,52 +355,52 @@
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Hoshigaoka's fire-water tubs are four circles at the one-roof building's four corners (372/542 x 446/555); one at the hall and two at the kitchen end moves them.",
   "tier": "E3"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "Exception path (FR-004): the only remedy the finding names is a page edit - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html line 29 ('so this is a map drawing convention') and its Evidence comment line 4 ('convention (the innermost arch one pitch off the hall ...)') to call the 12 ft distance a GUESS. The claim at buildings/programs.md line 128 (already GUESS), the rule at line 180 and the 12 ft drawn stand.",
   "flag": "",
   "moved": "T56a: tiered by its work by a fresh reader - The implementation already draws the innermost arch 12 ft (one pitch) off the hall as the page describes; the disagreement is only the page's class for that distance, which no implementation change resolves.",
   "tier": "E4"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet": {
   "after": [],
   "e0_basis": "impl-drift (wave 13 bundle C) names the label itself: 0221 attests exempt fields and is silent on where they lay, 'should be UNRESEARCHED'; the sheet draws nothing off its precinct either way",
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "programs.md:152 claim becomes `UNRESEARCHED: where a shrine's exempt fields lay against its precinct (research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html attests exempt fields, not their place)`; line 182's text stands.",
   "flag": "",
   "moved": "T51a: tiered by its work by a fresh reader - Nothing is drawn either way - the sheet crops to the precinct and a sheet on a map shows what the map shows - so no implementation change waits on research; the only fix is the label the impl-drift finding names.",
   "tier": "E0"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais 0099 drawing records it as": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais 0099 drawing records it as": {
   "after": [],
-  "e0_basis": "docs/buildings/programs.md:69; 0099 drawing page: 'Our maps seat the clerks to either side of the magistrate, level with the dais ... a deliberate deviation, for simplicity'. The same choice is still claimed UNRESEARCHED at docs/buildings.md:135 ('clerk positions at the dais') - same fix there",
+  "e0_basis": "docs/building-programs.md:69; 0099 drawing page: 'Our maps seat the clerks to either side of the magistrate, level with the dais ... a deliberate deviation, for simplicity'. The same choice is still claimed UNRESEARCHED at docs/buildings.md:135 ('clerk positions at the dais') - same fix there",
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "<!-- Research: clerk positions flanking the dais - DEVIATION research/questions/0099-the-hearing-court-shirasu.drawing.html: the clerks seated either side of the magistrate, level with the dais, not in a room of their own before it as at Edo; the seats' size a GUESS -->",
   "flag": "",
-  "moved": "T95a (fresh reader): docs/buildings/programs.md:69; 0099 drawing page: 'Our maps seat the clerks to either side of the magistrate, level with the dais ... a deliberate deviation, for simplicity'. The same choice is still claimed UNRESEARCHED at docs/buildings.md:135 ('clerk positions at the dais') - same fix there",
+  "moved": "T95a (fresh reader): docs/building-programs.md:69; 0099 drawing page: 'Our maps seat the clerks to either side of the magistrate, level with the dais ... a deliberate deviation, for simplicity'. The same choice is still claimed UNRESEARCHED at docs/buildings.md:135 ('clerk positions at the dais') - same fix there",
   "tier": "E0"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "buildings/programs.md line 67 (Two-court zoning): replace 'Formal visitors are received in the hall and go no deeper; the divider gate serves household traffic' with 'Formal visitors are received in the hall, and their way to the residence runs on through the office (research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html), never through the divider gate; the divider gate serves household traffic'; line 54 claim: drop '; that visitors go no deeper than the hall is the project's reading beyond the page'.",
   "flag": "",
   "moved": "T56a: tiered by its work by a fresh reader - One procedure paragraph's rule changes to agree with 0104's drawing page and with the program's own residence bullet (line 69, 'the visitors' way runs on through the office to the house'); the divider gate still sits behind the hall, so no sheet changes.",
   "tier": "E2"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md",
+   "docs/building-programs.md",
    "pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
   ],
   "fix": "knob 3's upland soybean/barley content shift dropped; upland granary reflects dry-field tax paid in cash",
@@ -408,48 +408,48 @@
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Ubame, the one upland sheet, draws the content shift on the sheet: its granary sublabel reads 'grain and in-kind forest goods' and its notes/comment tie the terminal store to in-kind tax, so dropping the shift changes a drawn caption (label-level redraw).",
   "tier": "E3"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "buildings/programs.md line 70: replace 'utility (the household's storehouses, a kitchen garden only where it gets its six hours of sun - rarely, behind a house - the attached family privy)' with 'utility (the household's storehouses, the attached family privy)' and add after the rear-strip sentence: '**The kitchen garden** (research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html): its site a knob among four - west of the residence, south beside the formal garden, the rear service ground (a Chinese list alone), a parcel of its own - with every site where a full-sun bed gets under six hours of direct sun in autumn ruled out (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html; a GUESS that a household chose by the sun); its size a knob from a soup-greens plot of about 1,076 sq ft to a field over half the grounds. A generated plan rolls each from the seed among the sites left; a hand-drawn plan takes one and its notes record it.'; line 43 claim: 'manor kitchen garden by the sun - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: site a knob among west, south, rear, own parcel, those under six hours ruled out; size a knob from ~1,076 sq ft to half the grounds'.",
   "flag": "",
   "moved": "T53a: a reopened row tiered by its work by a fresh reader - Measured on the SVGs: Hayakawa's bed (x 466-576, y 326-414) and Ubame's (x 582-684, y 330-424) lie south of their residences (bottom y 318, 322), Ochiba's (x 720-800, y 298-430) south-east in the inner garden below the karo's house, the placer's county-magistracy-example west of the house (x 63-255 vs residence x 348-516, its notes 'WEST of the house'), ochiba-roundtrip-test draws none - every sheet already takes an attested sunny site and its notes already declare the site and size knobs (feature 283), so only the procedure paragraph changes and no sheet is redrawn.",
   "tier": "E2"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#tier knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "buildings/programs.md line 110: 'The tiny end is a road checkpoint post: 2-3 samurai, one office room, a cell, a barrier gate' has no staff count in the record; research first (a checkpoint post's garrison), or meanwhile split it into its own claim '<!-- Research: checkpoint post's staff and rooms - UNRESEARCHED: 2-3 samurai, one office room -->' and keep line 44's claim to the capital housing knob and the checkpoint as the tiny end.",
   "flag": "",
   "moved": "T56a: tiered by its work by a fresh reader - research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.html gives Nuruyu's layout and Hakone's buildings (front post with an upper guardroom, guards' room, rest room, bath, a lockup) but no staff count, so the record does not yet say what the post's staffing should be.",
   "tier": "E4"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine": {
   "moved": "wave 1: E0 -> E3, the re-check found the implementation itself differs: Hayakawa's \"two modest shrines\" contradict the drawing page's rule \"a map draws one, a deliberate deviation\". Either the drawing page records Hayakawa as an exception or the sheet draws one",
   "tier": "E3"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
   "fix": "buildings/programs.md line 113 (knob 3): replace 'An upland county's granary also shifts CONTENTS: more in-kind goods (soybeans, barley, local products) and a partial strongbox role, since less of its tax is rice (see grounding).' with 'An upland county's granary also shifts CONTENTS: more in-kind goods (soybeans, barley, local products), since less of its tax is rice and the dry-field share arrives in kind (see grounding); the county's coin and valuables stay in the tax archive.'; delete the claim at line 53 (the 'upland granary contents' DEVIATION claim at line 52 stands).",
   "flag": "",
   "moved": "T53a: a reopened row tiered by its work by a fresh reader - The role conflicts with the project's own in-kind deviation and no sheet draws it: a grep of every magistracy sheet's notes finds no strongbox or coin in a granary (Ubame, the one upland county, keeps a modest kura on posts and its wealth in the sealed charcoal store; the strongroom role is the tax archive's, buildings.md line 109), so dropping one clause of one procedure paragraph matches the research.",
   "tier": "E2"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
   "after": [],
   "files": [
-   "docs/buildings/programs.md"
+   "docs/building-programs.md"
   ],
-  "fix": "buildings/programs.md line 17 claim: cite research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html and research/questions/0097-staff-rowhouses-and-barracks-nagaya.html - 'a wall with a formal main gate; the gatekeepers a knob: a gatehouse of its own beside the gate (Takayama's form, drawn about 40 by 12 ft) or a guardroom inside a gate range (Kaibara's, ~81 by 12 ft)', dropping the Omori pointer (108 ft, outside the 14-82 ft band); line 65 'formal main gate + gatehouse' -> name that knob; l7r/diagram/buildings/types.json gatehouse finding text from the temple's 18 x 12 ft to the 0093 drawing page's ~40 ft gatehouse of its own; redraw the freestanding gatehouse on pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg (rect x=656 y=706 54x36 px) and pool/magistracies/county-magistracy-example/county-magistracy-example.svg (rect x=354 y=603 54x36 px) at ~120x36 px (40 x 12 ft), with their notes.md R19 lines.",
+  "fix": "docs/building-programs.md:17 claim: cite research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html (gatekeepers a knob: a gatehouse of its own, ~40 ft GUESS, or a guardroom in the gate range) instead of 0090/0097's Omori and Kaibara ranges; :68 name that knob; :103 table and l7r/diagram/buildings/types.json:207-219 gatehouse finding text from the temple's 18 x 12 ft to 0093's ~40 x 12 ft; redraw the freestanding gatehouses drawn at 18 x 12 ft (pool/magistracies/county-magistracy-example/county-magistracy-example.svg:50 rect 54x36 px; pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg:371 group, its comment says 18 x 12 ft) at ~40 x 12 ft, with their notes.",
   "flag": "",
-  "moved": "T56a: tiered by its work by a fresh reader - Measured at 3 px/ft: Hayakawa's gate range 240x42 px = 80x14 ft and Ubame's ~215x42 px = ~72x14 ft match the Kaibara form, but Ochiba and the county example draw a freestanding gatehouse of 54x36 px = 18x12 ft (216 sq ft, the temple Kita-in's) where 0093's drawing page draws a jin'ya gatehouse of its own about 40 ft (Takayama's ~400 sq ft), so two sheets are redrawn beside the claim, paragraph and band text.",
+  "moved": "T119a (fresh reader): tiered by its work - Not fixed: the claim at docs/building-programs.md:17 still reads 'the gatehouse the office's gate range as at Omori and Kaibara', the band at :103 / types.json:209-217 is still 14-82 by 6-24 ft with the why 'about 18 by 12 ft: it is taken from the one measured, a temple's'. The page that sizes a gatehouse is 0093 drawing: 'How long is a gatehouse of its own drawn? About 40 ft, a GUESS ... The one ",
   "tier": "E3"
  },
  "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt distance upwind": {
@@ -2338,17 +2338,6 @@
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0080 records no floor",
   "tier": "E1"
  },
- "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon": {
-  "after": [],
-  "files": [
-   "l7r/diagram/settlement/homestead_parts/groves.py"
-  ],
-  "fix": "settlement/homestead_parts/groves.py:822-829: apply the yard-persimmon keep-out (_trees) to every crown kind, not the conifer alone, and update the claim at :730 to 'every crown refused under a yard persimmon's crown' (0046)",
-  "flag": "",
-  "found": "wave 10 re-check (tiered by its work at T42a)",
-  "moved": "T42a: tiered by its work - One keep-out condition in one function widens from conifers to every crown.",
-  "tier": "E2"
- },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 of the mean radius": {
   "after": [],
   "e0_basis": "the code already says what the page says: LESSER_BROADLEAF_S = (0.75, 0.85), inside 0080 drawing's 0.75-1.4, and its claim cites that band (fixed in wave 9)",
@@ -3066,5 +3055,56 @@
   "flag": "",
   "moved": "T107a (fresh reader): Line 12 of the same page (measured 2026-10-08) says 'Kashikawa and Mizuguchi, whose farms keep their own groves, draw no village belt', yet line 42 still reads 'on another, the outline is 917 ft, the frame 741 ft and the planting 787 ft' (note -11: 'Kashikawa -1121 to -204 ...') and line 44 'one ham",
   "tier": "E2"
+ },
+ "docs/building-programs.md::Country shrine (a village district's shrine)#hall largest and monk's home": {
+  "tier": "E2",
+  "fix": "docs/building-programs.md:189 (the 'hall is the precinct's largest building' paragraph), :234 (the Size anchors' hierarchy sentence) and the claim at :134: state the hierarchy per form - under one roof the hall-and-dwelling building out-foots every other; under two buildings the hall out-foots its sanctuary and the dwelling is the farmhouse-sized house beside it (0222 drawing: 'The hall alone is farmhouse-sized or smaller'), so 'the largest building' is claimed for the one-roof form only. No sheet in pool/country-shrines draws the two-building form (grep '**Form**: two buildings' finds none), so nothing is redrawn.",
+  "files": [
+   "docs/building-programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "moved": "T119a (fresh reader): tiered by its work - Not fixed: docs/building-programs.md:189 still says 'The hall is the precinct's largest building' for both forms, while the bands at :202-203 give the hall 18-35 by 12-35 ft (at most 1,225 sq ft) and the two-building dwelling 34-60 by 18-38 ft, drawn 46 x 28 ft (1,288 sq ft, claim :175). The pages do not back 'largest' under two buildings: 0222 drawing: 'The hall alone is farmhouse-sized or smalle"
+ },
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#road checkpoint tier": {
+  "tier": "E2",
+  "fix": "docs/building-programs.md:113 (Tier knob, the 'tiny end' sentence) and the claim at :45: describe the road checkpoint post as 0110 attests it - a barrier gate, an inspection hall facing the road, the officer's residence behind it (Nuruyu), with a lockup, stables and a notice board at the larger post (Hakone) - and drop the '2-3 samurai' count or claim it UNRESEARCHED (0110 gives none).",
+  "files": [
+   "docs/building-programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "moved": "T119a (fresh reader): tiered by its work - Not fixed: :45 claims 'a road checkpoint post of 2-3 samurai with one office room' from 0110 and :113 says '2-3 samurai, one office room, a cell, a barrier gate'. 0110 gives no garrison count (grep for samurai/garrison finds none) and more than one room: 'Facing it was the inspection hall (kendansho ...), and the officer's residence stood to the right, behind the hall', the officer's house '19 m ("
+ },
+ "l7r/diagram/waterfields/tint.py::mark_low#wet plots on the drain": {
+  "tier": "E2",
+  "fix": "l7r/diagram/waterfields/tint.py:86 (mark_low): replace 'd <= 0.25 * plot_across' with basin_rank's fronting test (:65) - Polygon(p['poly']).buffer(0.25 * plot_across).intersection(LineString(dpts)).length >= 0.25 * plot_across - so only a plot whose foot runs along the collector is sampled for FLOODED; keep 'low' at :85 as it is; update the claim at :76.",
+  "files": [
+   "l7r/diagram/waterfields/tint.py"
+  ],
+  "after": [],
+  "flag": "",
+  "moved": "T119a (fresh reader): tiered by its work - Not fixed: mark_low (tint.py:83-87) samples by distance, 'if d <= 0.25 * plot_across and R.random() < FLOOD_SAMPLE', so a plot touching the drain only at a corner is drawn wet; basin_rank already reads ON as fronting (:61-65: 'ON the collector means FRONTING it, not touching it at a corner ... a real length of its boundary runs along it'). 0007 drawing: 'A comb field gives each plot of its lowest "
+ },
+ "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html::the belts' measured figures#belt arcs": {
+  "tier": "E1",
+  "fix": "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:12: Inashiro's arc 49 -> 66 degrees (Kuwabata 71 and Sawada 14 still hold), and the measurement comment's date; the comment already says what the arc is measured from ('bearings from the houses' centroid, the smallest arc holding them all').",
+  "files": [
+   "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html"
+  ],
+  "after": [],
+  "flag": "",
+  "moved": "T119a (fresh reader): tiered by its work - Not fixed: the page (:12) reads 'Inashiro 49 degrees, Kuwabata 71 and Sawada 14'. Re-measured now on pool/hamlets/*/*.json village_groves (role windbreak) clumps, bearings from the mean of houses' x,y, smallest arc: Inashiro 66.0, Kuwabata 71.0, Sawada 14.6 (clumps_offpage changes none). Only Inashiro's number is stale; one value. Related to but not the same claim as the ranked '#outline, frame an"
+ },
+ "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon, no overlap": {
+  "after": [],
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "fix": "l7r/diagram/settlement/homestead_parts/groves.py:881: the persimmon give-way asks over_a_conifer, whose CROWN_OVER_SHARE = 0.8 (:243) lets a crown's edge reach under the persimmon; test full clearance instead (hypot(tx-x, ty-y) < tr + rr + slack, i.e. share 1.0) for the persimmon test only, and drop 'an edge may still reach a few feet under' from the claim at :737. The copse crowns are drawn through the same _draw_grove pass, so the one test covers Kuwabata's copse too.",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T119a (fresh reader): tiered by its work - Wave 39 extended the keep-out to every crown kind (groves.py:880 '...EVERY CROWN, not the conifer alone (feature 328, 0046 ...)'), but it still uses over_a_conifer: ':255 ... < (CROWN_OVER_SHARE * (r + cr) + slack) ** 2' with CROWN_OVER_SHARE = 0.8, and the claim at :737 admits 'an edge may still reach a few feet under'. 0046 drawing: 'its persimmon stands behind the house at the edge of its own g",
+  "tier": "E1"
  }
 }

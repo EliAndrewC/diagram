@@ -26,7 +26,7 @@
   "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#water-mouth grove drawn in the conifer-backed windbreak mix": "E2",
   "l7r/diagram/settlement/structures/urban_fixtures.py::UrbanFixturesMixin.drum_tower#platform size": "E1",
   "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sties at the dike-pond only": "E3",
-  "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall largest and monk's home": "E4",
+  "docs/building-programs.md::Country shrine (a village district's shrine)#hall largest and monk's home": "E4",
   "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed's sun ground clear of crowns, promised persimmons and bamboo (CANOPY_SHADE_FT, BAMBOO_SHADE_FT)": "E0",
   "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice": "E0"
 }
