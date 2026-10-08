@@ -497,6 +497,15 @@
   "moved": "T25a (amendment 6): tiered by its work - the sort at capacity.py:81 changes rule and free_seats needs the field outline to measure against; one function",
   "tier": "E2"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py"
+  ],
+  "fix": "cap the fixture count at the share (shrines 3-8 per 100 homesteads); the spec floor and half-up rounding never raise it past the cap",
+  "flag": "Held: question for the GM, deferred to the feature's end (goal amendment 2026-10-07). research/questions/0219-household-shrines-yashikigami.drawing.html: 'A map never has more shrines than three to eight homesteads in a hundred' against feature 133 T61, the GM: 'ensure that it is present' (Inashiro's fixtures_min {'shrine': 1}). Measured: Inashiro's shrine share 0.049 at 15 households caps at 0.735 - 0 shrines without the floor, 1 with it. Options: (a) the cap overrides the floor, Inashiro loses its hokora; (b) the floor stays and 0219's drawing page records it as a deviation the GM chose. Exception check (spec-fidelity, 2026-10-07): LEGITIMATE to leave open and continue",
+  "tier": "E2"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks": {
   "after": [],
   "files": [

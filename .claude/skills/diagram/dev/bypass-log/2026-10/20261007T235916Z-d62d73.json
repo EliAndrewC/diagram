@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-07T23:59:16Z",
+  "target": "claims-gate",
+  "commit": "3c997ab6b",
+  "why": "CLAIMS_OK: every introduced finding is a found row of feature 328, recorded in specs/328-match-the-research/claims-followup.md (Waves 9-20) and ranked"
+}

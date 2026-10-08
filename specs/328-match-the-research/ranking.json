@@ -6466,7 +6466,7 @@
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py"
   ],
   "after": [],
-  "flag": "",
+  "flag": "Held: question for the GM, deferred to the feature's end (goal amendment 2026-10-07). research/questions/0219-household-shrines-yashikigami.drawing.html: 'A map never has more shrines than three to eight homesteads in a hundred' against feature 133 T61, the GM: 'ensure that it is present' (Inashiro's fixtures_min {'shrine': 1}). Measured: Inashiro's shrine share 0.049 at 15 households caps at 0.735 - 0 shrines without the floor, 1 with it. Options: (a) the cap overrides the floor, Inashiro loses its hokora; (b) the floor stays and 0219's drawing page records it as a deviation the GM chose. Exception check (spec-fidelity, 2026-10-07): LEGITIMATE to leave open and continue",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
