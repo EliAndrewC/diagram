@@ -81,7 +81,7 @@ def test_a_connector_fold_onto_a_bed_is_refused() -> None:
 
     s = Registered(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
     s.M["lanes"][0]["connector"] = True
-    s.M["gardens"] = [{"x": 1800.0, "y": 22.0, "w": 12.0, "h": 12.0, "rot": 0.0}]  # under the folded connector's new first leg
+    s.M["gardens"] = [{"x": 1930.5, "y": 36.0, "w": 6.0, "h": 6.0, "rot": 0.0}]  # under the lane's new link to the connector's side (feature 328)
     assert fold_the_connector_hairpin(s) == 0
 
 

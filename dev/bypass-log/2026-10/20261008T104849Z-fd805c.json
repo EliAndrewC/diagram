@@ -1,0 +1,6 @@
+{
+  "utc": "20261008T104849Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "wave 43: no map moved (five manifests byte-identical after each change); every owed glyph unit passed or is at its two-round cap"
+}

@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-08T10:48:19Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 59,
+  "result": "failed: test-full",
+  "commit": "4a9b7c077",
+  "first_failure_s": 41.5,
+  "last_failure_s": 41.5,
+  "failed_tests": 1,
+  "host": {
+    "load": [
+      7.14,
+      6.45
+    ],
+    "mem_avail_mb": [
+      7985,
+      9536
+    ],
+    "cpu_temp_c": [
+      66.0,
+      64.0
+    ],
+    "stall_s": {
+      "cpu": 0.7,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

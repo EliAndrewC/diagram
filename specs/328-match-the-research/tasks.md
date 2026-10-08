@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 43): the hairpin's T, the third gather form, the steading's reach and the refused near join moved no map (the
+  five hamlets regenerated 2026-10-08 after each, manifests byte-identical)
 - none (wave 42): the confluence at the brook's drawn width moved no map (the five hamlets regenerated 2026-10-08,
   manifests byte-identical)
 - none (wave 41): the channel mouth's tolerance moved no map (the five hamlets regenerated 2026-10-08 with manifests
@@ -1394,4 +1396,31 @@ Back in ranking order (row 481 on).
 - [ ] T109 the joiner's confluence, both ends; row 481 closed (FR-003, FR-004)
       research: rendering
 - [ ] T110 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+      research: rendering
+
+## Phase 44 - wave 43 (amendment 42): rows 482-485 of the lane web
+
+In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/held-row492-nub.patch`).
+
+- `joints.py::fold_the_connector_hairpin#a hairpin at the track becomes a T` (row 482, E2): 0081 - "the arriving lane meets the
+  other's side as a T". The fold started the connector at the lane's vertex, so the two still met end to end; the lane is now
+  re-laid onto the connector's first leg (`tee`), from the vertex before the hairpin's where that vertex stands over the
+  connector's start, and the connector stays. The two fold tests restated (the lane meets the connector's side; a link through
+  a steading refused), the main one red on the old code.
+- `knots.py::next_gather#lane ends gathered` (row 483, E2): the third gather form wave 28 built and reverted with its polder
+  change (183792b7c) reapplied - a lone movable end teed onto the other node's lane (`teed_onto`), with its tests.
+- `law.py::fronting_ends#an end discharged by a house` (row 484, E2): 0246 - "within 60 ft of the house, or within 12 ft of the
+  steading's built ground". `reach_to_steading` measures both to the footprints (it was 80 ft from the house's center,
+  `DOORSTEP_FT`, which its other readers keep); `test_an_end_reaches_a_farmhouse_as_0246_measures_it`.
+- `serve.py::_lay_web_lane#a run arriving within _LANE_JOIN_FT` (row 485, E2): 0081 - "ends within 25 ft of one another are
+  joined at a single point". A run whose snap onto the way is not walkable is refused, as a far run whose link cannot be drawn
+  is (it was drawn stopping short, counted as arriving); the snap test pins it, red on the old code.
+- Wave 42's found row, tiered by a fresh reader (T111a, `audit/t111a-out.jsonl`): `ditch_strokes` E3 (each channel's width
+  carried across modules), left for its place.
+
+- [x] T111a wave 42's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T111 rows 482-485 (FR-003, FR-004)
+      research: rendering
+- [ ] T112 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

@@ -890,6 +890,17 @@
   "moved": "T109a (fresh reader): 0054 drawing page: 'A meeting is a junction when either channel's end lies inside the other's drawn width ... if neither lies inside the other's width, the stub shows.' brook_rules.py:52 sets a flat 13 px ('TRUNK_TOL'), wider than the 7 ft brook's whole bed (BROOK_DRAWN_W = 7.0, :53); comb.py:78-86 ",
   "tier": "E1"
  },
+ "l7r/diagram/hamletgen/water/brook_rules.py::ditch_strokes#the channels a crossing is judged against": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/water/brook_rules.py",
+   "l7r/diagram/hamletgen/water/brook.py"
+  ],
+  "fix": "l7r/diagram/hamletgen/water/brook_rules.py:285-288 ditch_strokes returns each net channel's (pts, w) - w the recorded drawn width c['w'] (waterfields/comb.py:430 head race chan_px(HEAD_RACE_FT=6.0), :639 drain, :742/781 canals, :799 branches), falling back to 2.5 only where a channel carries none; l7r/diagram/hamletgen/water/brook.py:289 brook_violations calls crosses_mid_run(fin, d, joiner_w=w) for d, w in ditches; brook.py:548 the skirt test the same; brook.py:513 outside_stretches unpacks the pts; sink.py:441 passes ditch_strokes(plan) through unchanged; tests/hamletgen/test_brook.py:323/366 give ditches as (pts, w) pairs and one new test pins a recorded width (a water end inside a 6 px race's half-width, outside 1.25 px) as a junction.",
+  "flag": "",
+  "moved": "T111a (fresh reader): brook_rules.py:288 builds the strokes from c['pts'] alone, dropping c['w'] that every net channel records (waterfields/comb.py:289 'channels: [{pts, w, role}]'; head race w = chan_px(HEAD_RACE_FT, grain), frame.py:40 HEAD_RACE_FT = 6.0), so brook.py:289 and :548 call crosses_mid_run (brook_rules.py:",
+  "tier": "E3"
+ },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered": {
   "after": [],
   "e0_basis": "hamletgen/water/polder.py:442 labels it NONE; :447-448 put the block's middle at (W/2, H/2) with its axes on plan.fall, so only the position is the choice and it is framing (impl-drift's reading); the claim's 'at any bearing' is wrong and is dropped",
@@ -1180,6 +1191,16 @@
   "moved": "wave 42: already fixed in wave 34 (a joint of two kinds pulled straight and split back, `_split_committed`)",
   "tier": "E0"
  },
+ "l7r/diagram/hamletgen/ways/joints.py::fold_the_connector_hairpin#a hairpin at the track becomes a T": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/joints.py"
+  ],
+  "fix": "fold the hairpin so the arriving lane meets the connector's side as a T, not end to end at b",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
   "after": [],
   "files": [
@@ -1210,6 +1231,16 @@
   "flag": "",
   "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
   "tier": "E4"
+ },
+ "l7r/diagram/hamletgen/ways/law.py::fronting_ends#an end discharged by a house": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/law.py"
+  ],
+  "fix": "count a lane end as reaching a farmhouse within 60 ft of the house or 12 ft of its steading's built ground (0246.drawing), not within 80 ft of the house's center (DOORSTEP_FT); fronting_ends and lane_ends_front_different_houses both read it",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
  },
  "l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined": {
   "after": [],
@@ -1279,6 +1310,16 @@
   "found": "wave 7 re-check (tiered by its work at T29a)",
   "moved": "T29a (amendment 7): tiered by its work - Two default literals in the d.get('w', ...) fallbacks at law_water.py lines 183 and 185, logic unchanged; the claim line moves with them.",
   "tier": "E1"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run arriving within _LANE_JOIN_FT (30 ft) of the network counts as joined, with no link drawn": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/serve.py"
+  ],
+  "fix": "a run arriving within 25 ft of the network is joined at a single point (link drawn), claim citing 0081",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#arrived at the network": {
   "after": [],

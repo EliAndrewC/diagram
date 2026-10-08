@@ -459,3 +459,20 @@ def test_a_point_lies_from_a_box_no_farther_than_from_what_it_holds_and_a_free_e
     boxes = [L._bbox(w) for w in ways]
     for q, free in (((50.0, 0.0), False), ((0.0, 0.0), True)):
         assert L.free_end(ways, 0, q) is free and L.free_end(ways, 0, q, boxes) is free, f"{q}: the boxes change no answer"
+
+
+def test_an_end_reaches_a_farmhouse_as_0246_measures_it() -> None:
+    """0246 (feature 328 wave 43): "within 60 ft of the house, or within 12 ft of the steading's built ground" - footprints, not
+    the 80 ft from the house's center it was."""
+    from l7r.diagram.hamletgen.ways.law import reach_to_steading
+
+    house = {"x": 100.0, "y": 100.0, "w": 40.0, "h": 30.0, "rot": 0.0}
+    M = {
+        "houses": [house],
+        "gardens": [{"x": 200.0, "y": 100.0, "w": 30.0, "h": 30.0, "rot": 0.0, "of": [100.0, 100.0]}],
+        "byres": [{"x": 400.0, "y": 100.0, "w": 10.0, "h": 10.0, "of": [999.0, 999.0]}],
+    }
+    assert reach_to_steading((179.0, 100.0), house, M), "59 ft off the house's east wall"
+    assert reach_to_steading((225.0, 100.0), house, M), "10 ft off its own garden, 105 ft off the house"
+    assert not reach_to_steading((240.0, 100.0), house, M), "25 ft past the garden: neither figure"
+    assert not reach_to_steading((400.0, 100.0), house, M), "a byre of another house is not this steading's"

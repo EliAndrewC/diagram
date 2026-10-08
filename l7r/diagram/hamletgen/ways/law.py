@@ -136,6 +136,42 @@ ink's), which both network tests read; a looser bar would call a near-miss a jun
 DOORSTEP_FT = 80.0
 """A free lane end this near a farmhouse's center is discharged by that house (`lane_ends_front_different_houses`).
 Research: an end discharged by a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 80 ft of its center"""
+HOUSE_REACH_FT = 60.0
+"""Research: an end reaches a farmhouse - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: "within 60 ft of the house, or within 12 ft of the steading's built ground" (the page's own guess)"""
+STEADING_REACH_FT = 12.0
+"""Research: an end reaches a steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its house, byre, shed, threshing yard or garden"""
+_STEADING_PARTS = ("byres", "farm_sheds", "threshing_yards", "gardens")
+
+
+def reach_to_steading(end: Pt, house: Mapping[str, Any], M: Mapping[str, Any]) -> bool:
+    """Does a lane end reach this farmhouse as 0246 measures it - within `HOUSE_REACH_FT` of the house, or within
+    `STEADING_REACH_FT` of its steading's built ground (the house, and the byres, sheds, yards and gardens recorded `of` it)?
+    Footprints, not centers (feature 328: it was 80 ft from the house's center, `DOORSTEP_FT`).
+
+    Research: an end reaches a farmhouse - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house or 12 ft of its built ground"""
+
+    def gap(poly: Sequence[Pt]) -> float:
+        return 0.0 if point_in_poly(end[0], end[1], list(poly)) else min(seg_dist(end[0], end[1], a, b) for a, b in zip(poly, [*poly[1:], poly[0]], strict=False))
+
+    hx, hy = float(house["x"]), float(house["y"])
+    body = rot_rect(hx, hy, float(house.get("w", 0.0)), float(house.get("h", 0.0)), float(house.get("rot", 0.0)))
+    if gap(body) <= HOUSE_REACH_FT:
+        return True
+    for key in _STEADING_PARTS:
+        for r in M.get(key) or []:
+            own = r.get("of")
+            if not own or math.dist((float(own[0]), float(own[1])), (hx, hy)) > 0.5:
+                continue
+            poly = (
+                [(float(a), float(b)) for a, b in r["poly"]]
+                if r.get("poly")
+                else (rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot", 0.0))) if r.get("w") else None)
+            )
+            if poly and gap(poly) <= STEADING_REACH_FT:
+                return True
+    return False
+
+
 DOORSTEP_MAX = 2
 """...and one farmhouse may absolve this many of them. Three reads as a fan of stubs pointing at one door (consts.py's
 0611 ruling).
@@ -581,9 +617,10 @@ def dangling_ends(M: Mapping[str, Any]) -> list[tuple[int, int]]:
 
 
 def fronting_ends(M: Mapping[str, Any]) -> dict[int, list[tuple[int, int]]]:
-    """The free lane ends each farmhouse discharges, as (lane index, end) - an end whose nearest farmhouse center is within `DOORSTEP_FT` (the connector's aside; an end within `JOIN_TOL` of another way is discharged by the junction).
+    """The free lane ends each farmhouse discharges, as (lane index, end) - an end that reaches its nearest farmhouse as 0246
+    measures it (`reach_to_steading`) (the connector's aside; an end within `JOIN_TOL` of another way is discharged by the junction).
     Research:
-        an end discharged by a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within DOORSTEP_FT, 80 ft of the nearest farmhouse's center
+        an end discharged by a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the nearest farmhouse or 12 ft of its steading's built ground
         an end discharged by a junction - NONE: an end within JOIN_TOL, the touch gap, of another way already meets it"""
     ways = _ways(M)
     houses = M.get("houses") or []
@@ -598,7 +635,7 @@ def fronting_ends(M: Mapping[str, Any]) -> dict[int, list[tuple[int, int]]]:
             if any(_min_dist(end, o) <= JOIN_TOL for k, o in enumerate(ways) if k != i and len(o) >= 2):  # the first junction answers
                 continue
             best = min(range(len(houses)), key=lambda h: math.hypot(end[0] - houses[h]["x"], end[1] - houses[h]["y"]))
-            if math.hypot(end[0] - houses[best]["x"], end[1] - houses[best]["y"]) <= DOORSTEP_FT:
+            if reach_to_steading(end, houses[best], M):  # 0246's reach (feature 328: it was DOORSTEP_FT from the center)
                 fronted.setdefault(best, []).append((i, e))
     return fronted
 

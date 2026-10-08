@@ -116,7 +116,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         how far inside a belt - UNRESEARCHED: a run over 60 ft inside a belt refused
         a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft
         link reach - UNRESEARCHED: a link up to 200 ft to the network
-        arrived at the network - research/questions/0081-village-lanes.drawing.html: a run within 25 ft of it (`_LANE_JOIN_FT`), the join reach
+        arrived at the network - research/questions/0081-village-lanes.drawing.html: a run within 25 ft of it (`_LANE_JOIN_FT`) is joined at a single point, its end carried onto the way, or not drawn where that link is not walkable
         link off walls - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`), a garden fence's 7 ft to a lane's middle
         link off hard ground - UNRESEARCHED: kept 8 ft off hard ground (`WEB_HARD_GAP`)
         a healing link kept - UNRESEARCHED: its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined
@@ -214,6 +214,11 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             # the moment snapping went in). If the gap is not walkable the lane simply ends where it
             # ended; a visible break is better than a lane through a wall.
             run = ([q, *run]) if end == 0 else ([*run, q])
+        else:
+            # ...AND A RUN WHOSE JOIN IS NOT WALKABLE IS NOT DRAWN (feature 328, 0081: "ends within 25 ft of one another are joined
+            # at a single point"): it was drawn stopping short, counted as arriving with no link, a gap the page does not allow -
+            # refused as a far run whose link cannot be drawn is
+            return False
     _draw_web(s, run, 3)
     return True
 

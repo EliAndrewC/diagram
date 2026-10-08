@@ -509,6 +509,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **On the unpushed waves 9-41** under condition (6): as at wave 41's close; the pair is owed (executed code).
 - **Verification**: the confluence cases red on the old code; `impl-drift` on the touched claims; the gate; the pair.
 
+## Wave 43 (amendment 42, 2026-10-08)
+
+- **Scope**: rows 482-485 in ranking order - the connector hairpin folded as a T, the third gather form (wave 28's, reapplied),
+  0246's reach to a steading, a near join refused where it is not walkable; wave 42's found row tiered E3 (T111a) (`tasks.md`
+  Phase 44). Rows 486-492 next.
+- **Occasions**: none - the five hamlets regenerated 2026-10-08 with byte-identical manifests after each change.
+- **On the unpushed waves 9-42** under condition (6): as at wave 42's close (the 329 merge's history rewritten on the GM's
+  approval, 2026-10-08); the pair is owed (executed code).
+- **Verification**: the tests red on the old code; `impl-drift` on the touched claims; the gate; the pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

@@ -7392,6 +7392,7 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E2",
+  "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
@@ -7424,6 +7425,7 @@
   "flag": "",
   "found": "wave 4 impl-drift (bundle12): fronting_ends",
   "tier_as_ranked": "E2",
+  "moved": "",
   "wave": "",
   "scope": "kept"
  },
@@ -7434,11 +7436,10 @@
   "files": [
    "l7r/diagram/hamletgen/ways/serve.py"
   ],
-  "after": [
-   "l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short"
-  ],
+  "after": [],
   "flag": "",
   "tier_as_ranked": "E2",
+  "moved": "",
   "verdict": "UNCLAIMED",
   "wave": "",
   "scope": "kept"
@@ -11136,6 +11137,23 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/water/brook_rules.py::ditch_strokes#the channels a crossing is judged against",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "l7r/diagram/hamletgen/water/brook_rules.py:285-288 ditch_strokes returns each net channel's (pts, w) - w the recorded drawn width c['w'] (waterfields/comb.py:430 head race chan_px(HEAD_RACE_FT=6.0), :639 drain, :742/781 canals, :799 branches), falling back to 2.5 only where a channel carries none; l7r/diagram/hamletgen/water/brook.py:289 brook_violations calls crosses_mid_run(fin, d, joiner_w=w) for d, w in ditches; brook.py:548 the skirt test the same; brook.py:513 outside_stretches unpacks the pts; sink.py:441 passes ditch_strokes(plan) through unchanged; tests/hamletgen/test_brook.py:323/366 give ditches as (pts, w) pairs and one new test pins a recorded width (a water end inside a 6 px race's half-width, outside 1.25 px) as a junction.",
+  "files": [
+   "l7r/diagram/hamletgen/water/brook_rules.py",
+   "l7r/diagram/hamletgen/water/brook.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 42 spec-fidelity round 2 aside (tier provisional)",
+  "tier_as_ranked": "E1",
+  "moved": "T111a (fresh reader): brook_rules.py:288 builds the strokes from c['pts'] alone, dropping c['w'] that every net channel records (waterfields/comb.py:289 'channels: [{pts, w, role}]'; head race w = chan_px(HEAD_RACE_FT, grain), frame.py:40 HEAD_RACE_FT = 6.0), so brook.py:289 and :548 call crosses_mid_run (brook_rules.py:",
   "wave": "",
   "scope": "kept"
  },

@@ -612,13 +612,13 @@ def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
 
 def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
     """Where a lane's short last leg meets the CONNECTOR's start and the two double back (`hairpin_over_a_short_leg`), the
-    connector is started at the lane's vertex before that leg instead - a T - and the leg dropped, record and ink
-    together, when the moved connector may be written (`may_write`). Returns the folds made.
+    lane is re-laid to meet the connector's side as a T (`tee`, from its vertex before that leg onto the connector's first
+    leg), when the link is clear and the overlap matrix admits it; the connector stays as it is. Returns the folds made.
 
-    Research: a hairpin at the track becomes a T - research/questions/0081-village-lanes.drawing.html"""
-    from .clearance import may_write
-    from .law import breaks_through, solid_boxes  # the law sits above this layer (it reads `hairpin_over_a_short_leg`)
+    It started the connector at the lane's vertex instead, so the two still met END TO END at that vertex (feature 328: 0081
+    has the arriving lane meet the other's side).
 
+    Research: a hairpin at the track becomes a T - research/questions/0081-village-lanes.drawing.html: the arriving lane meets the other's side as a T"""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     # ...NOT WHERE THE CONNECTOR STARTS AT THE WAY OUT'S GATE (feature 320; the exit strip's rule before it): the households'
     # ways reach it there, and moved off it they stood off the network; the settle re-aims the lane's end instead
@@ -634,17 +634,13 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
                 a, b, j = seq[-3], seq[-2], seq[-1]
                 if math.dist(j, cp[0]) > 1.5 or not hairpin_over_a_short_leg(a, b, j, cp[1]):
                     continue
-                new_c = [b, *cp[1:]]
-                if not may_write(cp, new_c, float(co.get("w") or 5.0), fabric) or breaks_through(new_c, solid_boxes(s.M)):
-                    continue  # ...nor a connector started so that its new first leg runs through a building (the lane law's reading)
-                kept = seq[:-1]
-                if not (admits_lane(s)(ln, kept) and admits_lane(s)(co, new_c)):
-                    continue  # ...nor where the overlap matrix refuses either as it would become (feature 287 M8)
-                ln["pts"] = _rounded(kept[::-1] if back else kept)
-                co["pts"] = _rounded(new_c)
+                # from the vertex before the leg; where its foot is the connector's own start (the vertex stands over it), from
+                # the one before that, the hairpin's vertex dropped
+                t = tee(seq, cp, [], fabric, []) or (tee([*seq[:-2], j], cp, [], fabric, []) if len(seq) >= 3 else None)
+                if t is None or not admits_lane(s)(ln, t):
+                    continue  # ...nor where the link is not walkable or the overlap matrix refuses it (feature 287 M8)
+                ln["pts"] = _rounded(t[::-1] if back else t)
                 s.reink_lane(i)
-                s.reink_lane(ci)
                 folds += 1
-                cp = new_c
                 break
     return folds
