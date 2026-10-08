@@ -14404,21 +14404,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond conversion": {
-  "code": "987c06db3228412d",
+  "code": "309ea2f8b27b7ff6",
   "core": "888d13aa4c38e315",
-  "date": "2026-10-07",
-  "note": "the code converts 0.9 of the block (DIKEPOND_CONVERSION), or 1.0 when the leftover is \"pond\", with eligible=\"all\"; the highest share the page records is \"30,000 mu, 75% of the cultivated area\" at Longshan, it says \"Most of the time a cash crop took only part of a village\", and the 1980s heartland was 35% ponds; set the fraction to 0.75 or below, or cite a page that attests near-total conversion",
+  "date": "2026-10-08",
+  "note": "fraction is 1.0 for a pond leftover, otherwise DIKEPOND_CONVERSION 0.9; the two forms come from the upstream plan.leftover roll; one parcel in ten is the degree the page attests",
   "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html": "8075cafe02516d96"
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
-  "research": "1dd5a52fe9f4744a",
+  "research": "909bb100e23424ac",
   "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:774c703e6b344687",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:a8f2a65cc17b2039",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:e7f4caa708aae920",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:fa2cfbd7a93f61e1"
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#ditch corridors": {
   "code": "77cefb1bdae92397",
@@ -14450,14 +14448,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#inlet stub extended outside the dike to the pond's rim (inlet_to_rim); 0019 §13 says \"no channel runs outside the dike\"": {
-  "code": "888d13aa4c38e315",
-  "core": "888d13aa4c38e315",
-  "date": "2026-10-07",
-  "note": "inlet stub extended outside the dike to the pond's rim (inlet_to_rim); 0019 §13 says \"no channel runs outside the dike\"",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#perimeter dike gapped at crossings": {
   "code": "66d5618fc5cdb55f",
   "core": "888d13aa4c38e315",
@@ -14471,6 +14461,44 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric": {
+  "code": "97a8221b514cd677",
+  "core": "888d13aa4c38e315",
+  "date": "2026-10-08",
+  "note": "rice polder: 190 ft module, mostly split, a few merged, gaps 1.5/4.0 a side (3 ft bund, 8 ft corridor); dike-pond: 160 ft module, 0.6 merged in pairs, gaps 11/11 (22 ft both ways)",
+  "pages": {
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+  },
+  "research": "5b339210163f008f",
+  "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:095f7e817a239457",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:2121aaffee2cc5ab",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:c34ac7096b3e1cd8",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#pond layout": {
+  "code": "3bacbf91922a7536",
+  "core": "888d13aa4c38e315",
+  "date": "2026-10-08",
+  "note": "the page attests two pond layouts (\"a mosaic ... and a chessboard ... the layout would be rolled block by block\"), but the code fixes the dike-pond block to the mosaic (POND_LAYOUT_MOSAIC 0.5) and never rolls the chessboard; either roll the chessboard per block or relabel the claim DEVIATION with the page recording a deliberate choice, not a known gap; 0.5 on Kuwabata and 0.0 for the rice polder are otherwise in step",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+  },
+  "research": "7e58acaa9e345ce6",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size": {
   "code": "ba6a23b430a09781",

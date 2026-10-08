@@ -1120,7 +1120,7 @@ drawing page - and two E2 (the reservoir's first seat and the inlet stub run out
 outside the dike"; one change in `polder.py`, left for its place in the run).
 
   - `l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond conversion` - cited to 0020's drawing page (the leftover roll, 1.0 or 0.9)
-  - `l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond mosaic bend strength` - claimed on 0019's drawing page
+  - `l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond mosaic bend strength` - claimed on 0019's drawing page; impl-drift found it DRIFTED (the chessboard layout is attested and never rolled): re-tiered E3, open
   - `l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric per archetype` - claimed on 0022's drawing page
 
 - [x] T89a wave 30's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)

@@ -1304,23 +1304,6 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond mosaic bend strength pondlayoutmosaic05, and the m",
-  "verdict": "UNCLAIMED",
-  "tier": "E0",
-  "fix": "pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond block is drawn as a mosaic, its lattice bent by POND_LAYOUT_MOSAIC 0.5 (a calibrated liberty set on the Kuwabata map), and a rice polder keeps the surveyed grid (0.0); the chessboard of ponds is a known gap, never rolled",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 30 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "e0_basis": "polder.py:191 sets mosaic = POND_LAYOUT_MOSAIC if pond_layout=='mosaic' else 0.0. research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:26-30 already says it: a rice polder on a surveyed grid, a dike-pond block as a mosaic ('the chessboard of ponds ... is not drawn', a known gap), the lattice bent out of line, and 'How strongly the lattice bends is a ",
-  "moved": "T89a (fresh reader): polder.py:191 sets mosaic = POND_LAYOUT_MOSAIC if pond_layout=='mosaic' else 0.0. research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:26-30 already says it: a rice polder on a surveyed grid, a dike-pond block as a mosaic ('the chessboard of ponds ... ",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric per archetype cell 190160, parcel mix, gap sel",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -10858,6 +10841,22 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond mosaic bend strength pondlayoutmosaic05, and the m",
+  "verdict": "UNCLAIMED",
+  "tier": "E3",
+  "fix": "roll the dike-pond block's layout between the mosaic and the chessboard per block (0019's drawing page attests both, 'the layout would be rolled block by block'); the chessboard a new form",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 30 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "moved": "wave 32: T89a's E0 withdrawn - impl-drift found the claim DRIFTED: the page attests two layouts and the code never rolls the chessboard; a new form, E3",
   "wave": "",
   "scope": "kept"
  },

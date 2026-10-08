@@ -1,51 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "a462c1f6bd7f3d2519dbf8eb54c5519b830c020f03e082306f30aa381658d563",
+ "plan_sha256": "69c27be8e340f3861290dc7d05175120067bafa8593cf2a4038a5a8545aabde4",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W31-1",
-   "summary": "Row 459 (bund.py a_way_onto_the_bund#on the bund) tried literally, measured, reverted and re-tiered E2 -> E3; stays in scope and ranked",
+   "id": "W32-scope",
+   "summary": "Wave 32 writes the three E0 claims in stage_polder (dike-pond conversion to 0020's drawing page, pond layout to 0019's, polder fabric to 0022's)",
    "class": "within",
-   "why": "FR-002/FR-003 tier by the work; reproduced by this reviewer in a scratch clone (the literal change alone, an end joined only within _JOINT_FT): Mizuguchi field_path joined -> run_on and test_no_lane_ends_knot_short_of_a_join[mizuguchi] fails with a 22.0 ft knot (lane 0 end vs lane 5). Not a deferral: the row remains DRIFTED, scope kept."
+   "why": "FR-003 E0: each drawing page predates feature 328 (last edits 319 H3, 2026-10-05) and already states what the code does (leftover roll 1.0/0.9; mosaic 0.5 vs grid 0.0, strength a calibrated liberty; 190/160 ft modules, 3/8 ft and 22 ft gaps, split/merge mix); only citations and wording change, lowest open tier first (SC-003)."
   },
   {
-   "id": "W31-2",
-   "summary": "Row 460: lanes_share_tread and served_network default their join to _TOUCH_GAP (4 ft), not LANE_JOIN_FT (25 ft)",
+   "id": "W32-E2-left",
+   "summary": "The reservoir's first seat (pry + 30 px) and the inlet stub outside the dike tiered E2 and left in the ranking for their place in the run",
    "class": "within",
-   "why": "FR-004: the implementation moves to 0081, which states one network and gives 25 ft only for ends 'joined at a single point' (the knot pass); the page is not edited"
+   "why": "FR-003/FR-006: a code change to match 0019's 'no channel runs outside the dike' is one rule in one module (E2); the fix direction is the implementation (FR-004), and it waits behind no lower tier, so it sits among the open E2 rows rather than being skipped or excepted."
   },
   {
-   "id": "W31-3",
-   "summary": "knots.WebMemo's 'share' answer follows lanes_share_tread's new default; LANE_JOIN_FT kept only as the box prefilter (imported from consts)",
+   "id": "W32-no-pair",
+   "summary": "No executed code changes, so no bookend pair is owed and no occasions open",
    "class": "within",
-   "why": "WebMemo must give the same answers as asking the web again; the 25 ft box test is a superset of 4 ft, so the prefilter changes no verdict"
+   "why": "The polder.py diff is docstring Research lines only; the plan's standing rule (Performance bookends) owes a pair only to a wave that changes engine behavior."
   },
   {
-   "id": "W31-4",
-   "summary": "Unit test that pinned 20 ft apart as one network rewritten to the page (20 ft not joined, 3 ft joined)",
+   "id": "W32-cond6",
+   "summary": "Stacking unpushed waves 9-31 continues under condition (6): (1)-(5) held at wave 31's close 7f35ded74",
    "class": "within",
-   "why": "enforces the requested match to the research; the old test pinned the drift"
+   "why": "Applies the already-adjudicated wave-11 stacking conditions; verified backup/digram-backlog on origin is 7f35ded74, T88 records the green gate, impl-drift and band-0 pair; this wave adds an amendment with a reset counter and this plan review before its first tick."
   },
   {
-   "id": "W31-5",
-   "summary": "Row 434 still held for the GM",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "carried from earlier waves; implied by the GM's own goal amendment ('If you need to ask me a question then please defer it to the end of the feature'); the row is held, not dropped"
-  },
-  {
-   "id": "W31-6",
-   "summary": "Occasions: none, no pool map changes",
+   "id": "W32-verify",
+   "summary": "impl-drift on the touched claims and the gate",
    "class": "within",
-   "why": "measured by this reviewer: all five pool hamlets regenerated at de7f7cbf6 in a scratch clone and their committed manifests did not change"
-  },
-  {
-   "id": "W31-7",
-   "summary": "Wave 31 stacks on unpushed waves 9-30 under the wave-11 exception's condition (6), its pair opening at 9a29aee8f",
-   "class": "within",
-   "why": "the stacking exception was ruled LEGITIMATE on conditions earlier; condition (1)'s backup holds (origin backup/digram-backlog is 9a29aee8f), wave 30's T86 ticked with a green gate, and this amendment is its own with a reset counter and this plan review before its first tick"
+   "why": "FR-005 verbatim."
   }
  ],
  "verdict": "CLEAR"
