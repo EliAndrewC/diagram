@@ -17,13 +17,21 @@ GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 HOOK_ERR=$(mktemp)
 trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 
-setup() { STATE_DIR=$(mktemp -d); export MEASURE_STATE_DIR="$STATE_DIR"; }
-teardown() { rm -rf "$STATE_DIR"; }
+# GUARD_EDIT_OK: feature 328 (2026-10-08) - every event names a throwaway tree as its cwd: the cadence rule reads that
+# tree's dev/run-log, and the repository's own log (whatever gate ran last) must not decide a vector here.
+setup() { STATE_DIR=$(mktemp -d); export MEASURE_STATE_DIR="$STATE_DIR"; EV_CWD=$(mktemp -d); export EV_CWD; }
+teardown() { rm -rf "$STATE_DIR" "$EV_CWD"; }
 
 # GUARD_EDIT_OK: feature 164 - a REAL json encode. The old printf left a multi-line command as raw
 # newlines inside a JSON string, which is invalid JSON, so a hook doing a proper parse saw an empty
 # command and every heredoc vector here passed for the wrong reason.
-bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"m1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
+bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"m1","cwd":os.environ.get("EV_CWD","/nonexistent"),"tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
+# a run-log record in the event tree: gate_rec <minutes ago> <result> [target]
+gate_rec() { mkdir -p "$EV_CWD/dev/run-log/2026-10"; M="$1" R="$2" T="${3:-done}" python3 -c '
+import json, os, datetime, time
+utc = datetime.datetime.fromtimestamp(time.time() - 60 * int(os.environ["M"]) - 300, datetime.timezone.utc)
+json.dump({"utc": utc.strftime("%Y-%m-%dT%H:%M:%SZ"), "target": os.environ["T"], "seconds": 300, "result": os.environ["R"]},
+          open(os.path.join(os.environ["EV_CWD"], "dev", "run-log", "2026-10", utc.strftime("%Y%m%dT%H%M%S") + "-1.json"), "w"))'; }
 edit_ev() { printf '{"session_id":"m1","tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
 run() { "$HOOK" pretool <<<"$1" 2>"$HOOK_ERR"; }
 
@@ -144,6 +152,39 @@ export GUARD_LOG_DIR=/proc/nonexistent/guard-log
 run "$(bash_ev 'make test-full')"; check "the first run still succeeds with an unwritable log" ok $?
 run "$(bash_ev 'make test-full')"; check "...and the second is still blocked" blocked $?
 export GUARD_LOG_DIR="$GUARD_LOG_ROOT"   # GUARD_EDIT_OK: feature 162 - restore the FILE-level isolation, never unset it
+teardown
+
+echo "12. THE CADENCE RULE (feature 328, GM 2026-10-08): a full gate soon after a GREEN one is refused once"
+setup
+gate_rec 70 green
+run "$(bash_ev 'make done')"; check "a gate 70 min after a green one is BLOCKED" blocked $?
+grep -q "make quick" "$HOOK_ERR" && grep -q "ONE \`make done\` for the whole batch" "$HOOK_ERR" && { echo "  ok    the message names the quick loop and the batch"; PASS=$((PASS+1)); } || { echo "  FAIL  the cadence message does not say what to do"; FAIL=$((FAIL+1)); }
+run "$(bash_ev 'make done')"; check "re-issuing goes through (once per green run, no deadlock)" ok $?
+teardown
+setup
+gate_rec 70 green
+run "$(edit_ev '/diagram/l7r/diagram/hamletgen/ways/smooth.py')"
+run "$(bash_ev 'git commit -q -m \"wave 47\"')"
+run "$(bash_ev 'make done')"; check "an engine edit and a commit do NOT reset it (the per-wave habit)" blocked $?
+teardown
+setup
+gate_rec 70 green test-full
+run "$(bash_ev 'make test-full')"; check "a test-full soon after a green test-full is refused too" blocked $?
+teardown
+setup
+gate_rec 20 "failed: test-full"
+run "$(bash_ev 'make done')"; check "a gate after a RED one goes through (fixing what it found)" ok $?
+teardown
+setup
+gate_rec 240 green
+run "$(bash_ev 'make done')"; check "a gate past the window goes through" ok $?
+teardown
+setup
+gate_rec 10 green
+run "$(bash_ev 'MEASURE_OK="the batch close" make done')"; check "MEASURE_OK escapes it" ok $?
+run "$(bash_ev 'make -n done')"; check "a dry run is not a measurement" ok $?
+run "$(bash_ev 'make quick')"; check "the quick loop is never refused" ok $?
+run "$(bash_ev 'make test-file FILE=tests/x.py')"; check "...nor a test file" ok $?
 teardown
 
 echo "8. status reports the count"

@@ -542,8 +542,8 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 - **Scope**: rows 491-494 in ranking order, and row 496 beside row 493 - 0081's "Every lane is pulled taut like a string"
   and "a returning leg under 40 ft is cut": the smoother cuts a hairpin arm even where its tip was the lane's only contact
-  (the lane joined again at the fold within the 25 ft join reach, else committed uncut and left for the settle, which cuts
-  every returning leg); a lane's end loses a last leg of 12 ft or less turning 90 degrees or more (the held
+  (the lane joined again at the fold within the 25 ft join reach, else committed uncut: the settle cuts an ordinary lane's
+  returning leg, and a tree lane's refuses the web - no hairpin is drawn); a lane's end loses a last leg of 12 ft or less turning 90 degrees or more (the held
   `audit/held-row492-nub.patch`); the track out drawn taut (no 34/46 px wander) and judged by the bend rule like every
   lane, a kinked connector refused where it is chosen; the field spur drawn taut (no 14 ft midpoint swing). Row 496 is
   taken ahead of row 495 (the connector's clearance at a footprint's edge, a new test of the corridor) because it is the
@@ -559,8 +559,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Performance bookends (constitution VI)
 
-Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
-`make perf LABEL=328-w<N>-start` / `-end` itself.
+Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
+`make perf LABEL=328-start` / `-end` themselves. FROM WAVE 46 THE PAIR IS BATCHED (GM 2026-10-08, FR-005): one pair per
+batch of 4-5 waves, the start at the commit before the batch's first engine change and the end at its last, both legs in
+scratch worktrees back to back on a quiet host, then `make perf-explain` and the `perf-audit` subagent; the gate
+(`make done`) and the batch's review occasions run at the same close. Each wave keeps its test files, map rerolls (and
+`make notes-census`), `impl-drift` and `spec-fidelity`.
+
+| batch | waves | pair | gate | state |
+|---|---|---|---|---|
+| 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); wave 43 with 46: 4a9b7c077 -> batch end | at the batch close | open |
 
 ## Constitution Check
 

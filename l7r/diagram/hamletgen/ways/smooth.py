@@ -15,6 +15,7 @@ from ..consts import (
     Poly,
     Pt,
 )
+from ..consts import WEB_FABRIC_GAP
 from .clearance import _ARM_FT, _HAIRPIN_DEG, _clear_link, _clear_touch, bowtie_cut
 from .geom import _TOUCH_GAP, _components, _plen, _seg_cross, _turn_deg, polyline_len
 
@@ -174,7 +175,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
          cut; a longer one is a lane in its own right and is kept. Where the arm's tip was the lane's
          only contact with another way, the cut lane is joined again at the fold by the touch pass
          (`web_rejoinable`, inside `commit_lane`); where it cannot be, the lane is committed uncut and the
-         settle cuts the leg (`settle._unkinked`) and mends the network.
+         settle cuts an ordinary lane's leg (`settle._unkinked`) and mends the network,
+         and refuses the web for a tree lane's (`refuse_unmended`) - no hairpin is drawn.
       3. BOW-TIE - where two lanes cross each other mid-run and one runs on past the crossing for
          less than `_ARM_FT`, that tail is cut back to the crossing, which becomes the junction.
       4. KNOTS - ends of different lanes within `_KNOT_FT` (25 ft) of one another meet at ONE node.
@@ -189,10 +191,10 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice
         web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a rewrite that splits the web is refused
-        a hairpin arm cut at the only contact - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut even where its tip was the lane's only contact, the lane joined again at the fold within the 25 ft join reach; where no join clears, the settle cuts it
+        a hairpin arm cut at the only contact - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut even where its tip was the lane's only contact, the lane joined again at the fold within the 25 ft join reach; where no join clears, the settle cuts an ordinary lane's leg and refuses the web for a tree lane's
         the knot's node on a through lane - research/questions/0081-village-lanes.drawing.html: ends joined at a single point, set on a through lane's tread (4 ft touch) where one runs, so the arriving lane meets its side as a T
         the knot's node at the centroid - GUESS: where no lane runs through the knot, its node is the ends' centroid
-        the string-pull chord's keep-out - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a chord at this lane's own margin stays max(4 ft, w/2 + 2 ft) off footprints, walls and water (a lane with no width taken at 5 ft), under the page's 7 ft from a lane's middle to a garden fence - filed to be brought to it
+        the string-pull chord's keep-out - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a chord at this lane's own margin keeps its middle at least 7 ft (`WEB_FABRIC_GAP`) off footprints, walls and water, more for a lane wider than 10 ft (w/2 + 2 ft)
         the track out and the streets left whole - research/questions/0081-village-lanes.drawing.html, research/questions/0033-row-villages-resson.drawing.html: the connector is drawn taut where it is chosen and judged there (`connector_keeps_the_law`), and a street is laid along its row, so neither is cut, pulled or gathered here"""
     changed = 0
     lanes = s.M.get("lanes") or []
@@ -247,7 +249,9 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         # `houses_clear_of_lanes`, `features_do_not_overlap`), while the 4 ft stepping and the jogs
         # a junction leaves are the SAME line drawn badly.
         # THE CHORD OWES THIS LANE'S OWN KEEP-OUT, not a flat 4 ft (feature 134 T50) - see `_clear_touch`.
-        _lane_gap = max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0)
+        # ...AT 0246's 7 ft FROM A LANE'S MIDDLE TO A FENCE at least (feature 328 wave 46: it was max(4 ft, w/2 + 2 ft), 4.5 ft
+        # for a 5 ft lane, under the page's figure and recorded nowhere as a departure)
+        _lane_gap = max(WEB_FABRIC_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0)
 
         def _shortcut_ok(a: int, b: int, pts: Poly = pts, _g: float = _lane_gap) -> bool:
             return string_pull_chord_ok(pts, a, b, hard, walls, water, _g)  # the body is `string_pull_chord_ok`

@@ -120,9 +120,14 @@ session's last actions are recording the running checks, a commit, and `scripts/
   implementation's own statement of what backs it.
 - **FR-005 (verification per fix)**: each fixed finding is re-checked by `impl-drift` (`make claims-bundle` ->
   dispatch -> `make claims-checked`) and is IN-STEP; the gate (`make done`) is green; maps a wave changes are regenerated;
-  review occasions it opens are run (feature 294).
+  review occasions it opens are run (feature 294). BATCHED (GM 2026-10-08, from wave 46): within a wave each fix is
+  iterated on `make quick` and the affected test files, and the wave regenerates the maps it changes (with `make
+  notes-census`) and runs `impl-drift` and `spec-fidelity`; the gate, the timing pair and its `perf-audit`, and the
+  wave's review occasions are taken ONCE per batch of 4-5 waves (or before anything lands), the pair spanning the batch
+  (the commit before its first wave against its last). A wave's close task is ticked when its batch closes.
 - **FR-006 (waves land, inside this one feature)**: the fixes land on main in waves, each a contiguous run of the
-  ranking (lowest tier first) that is complete, verified and pushed before the next begins. Feature 328 stays the one
+  ranking (lowest tier first) that is complete and verified (its batch closed, FR-005) and pushed before the next
+  begins - pushed in batches while landing is held (the band-3 sign-off for waves 9-10). Feature 328 stays the one
   feature: only the CURRENT wave's rows are task boxes in `tasks.md` (the rest of the ranking stays data in the ranking
   file), so the wave lands once its boxes are ticked (the open-task refusal reads only `tasks.md`'s boxes); the next
   wave's tasks are then appended as an amendment, reviewed on a reset counter.

@@ -108,6 +108,65 @@ case "$MODE" in
     if escape_or_refuse measure MEASURE_OK measure-ok "$HERE"; then : > "$STATE"; exit 0; fi
     case "$CMD" in *"git commit"*) : > "$STATE"; exit 0 ;; esac
 
+    # GUARD_EDIT_OK: feature 328, at the GM's request (2026-10-08) - THE CADENCE RULE. The streak above resets on every
+    # engine edit and commit, and the plain gate was never counted, so a session that edits, commits and gates once per
+    # small batch of fixes passed it every time: feature 328 ran `make done` (~7 min, 10,800 tests) after each of its
+    # waves, 60-90 min apart, and the gates found mostly mechanical misses that `make quick` or a test file finds. The
+    # GM: *"make your fixes, then run the quick tests, then make more fixes, then run the quick tests, and batch your
+    # lengthy tests rather than running them for every pool after every round of changes"* - and asked for this guard to
+    # catch the habit. So a FULL measurement (`make done`, `make test-full`, `done FULL=1`) is refused ONCE when the tree's
+    # run log holds a GREEN one finished within `MEASURE_CADENCE_S`; a run after a red goes through (that is fixing what
+    # the gate found), re-issuing goes through (once per green run, no deadlock), and nothing here resets on an edit.
+    CAD_SCAN=$(printf '%s' "$INPUT" | "$HERE/lib/hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
+    [ -n "$CAD_SCAN" ] || CAD_SCAN="$CMD"
+    case "$CAD_SCAN" in
+      *"make -n"*|*"make --dry-run"*) ;;
+      *"make done"*|*"make test-full"*|*"make -C"*test-full*)
+        CWD=$(json_str cwd); CWD=${CWD:-$PWD}
+        ROOT=$(git -C "$CWD" rev-parse --show-toplevel 2>/dev/null || printf '%s' "$CWD")
+        LAST=$(ROOT="$ROOT" python3 -c '
+import json, os, glob, datetime
+best = None
+for f in glob.glob(os.path.join(os.environ["ROOT"], "dev", "run-log", "*", "*.json")):
+    try:
+        r = json.load(open(f))
+    except Exception:
+        continue
+    if r.get("target") not in ("done", "test-full") or not r.get("utc"):
+        continue
+    t = datetime.datetime.strptime(r["utc"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.timezone.utc).timestamp() + float(r.get("seconds") or 0)
+    if best is None or t > best[0]:
+        best = (t, r.get("result", ""), os.path.basename(f))
+if best:
+    print("%d|%s|%s" % (best[0], best[1], best[2]))
+' 2>/dev/null || true)
+        if [ -n "$LAST" ]; then
+          L_T=${LAST%%|*}; L_REST=${LAST#*|}; L_RES=${L_REST%%|*}; L_ID=${L_REST#*|}
+          AGE=$(( $(date +%s) - L_T ))
+          CADENCE=${MEASURE_CADENCE_S:-10800}
+          if [ "$L_RES" = green ] && [ "$AGE" -lt "$CADENCE" ] && [ "$(cat "$STATE.cadence" 2>/dev/null)" != "$L_ID" ]; then
+            printf '%s' "$L_ID" > "$STATE.cadence"   # once per green run: re-issuing goes through
+            guard_log measure blocked-cadence "$(guard_cmd)"
+            MIN=$(( AGE / 60 ))
+            cat >&2 <<MSG
+BLOCKED (once): this tree's last full gate was GREEN ${MIN} min ago. Batch the expensive measurement; do not re-run it
+after every small round of changes (GM 2026-10-08).
+
+Do this instead, until the batch is done:
+ - after each fix: \`make quick\` (or \`make test-file FILE=<the test files your change reaches>\`) - seconds, never blocked
+ - after a map-changing fix: regenerate the maps it touches (\`make map GEN=...\`) and \`make notes-census\`
+ - claims: \`make claims-owed\` / \`make claims-bundle\` / impl-drift as you go - they are not the gate
+ - then ONE \`make done\` for the whole batch (feature 328: once per 4-5 waves, or before anything lands)
+
+A run after a RED gate is not refused (that is fixing what it found). Re-issuing this command goes through.
+(Escape: MEASURE_OK="<why>" in the command - a batch close, or a measurement a record needs.)
+MSG
+            exit 2
+          fi
+        fi
+        ;;
+    esac
+
     # GUARD_EDIT_OK: feature 164 - the shapes are matched against the SANITIZED command (see the note
     # at the top). `SCAN` falls back to the raw command if the matcher cannot be reached, so a broken
     # helper makes this guard stricter rather than blind.

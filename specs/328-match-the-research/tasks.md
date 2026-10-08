@@ -14,8 +14,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
 - (wave 46) placement-changed village lane on inashiro - the track out drawn taut (no 34/46 px wander) on Inashiro, Kuwabata
-  and Sawada, and Kashikawa's road squared at the ford on a leg past 40 ft; the village lane's glyph check is capped at two
-  rounds (listed for the GM's waiver with the others), so the occasion is declared and recorded on the gate run
+  and Sawada; run at batch 1's close (T119), from round 3 on under the GM's ruling of 2026-10-08 (rounds past two allowed)
+- (wave 46) placement-changed village lane on kashikawa - the road re-squared at the brook's ford on a leg past 40 ft
+  (`squaring.squared_against`), a different rule on a different map; run at batch 1's close (T119), round 3 on
 - none (wave 45): the hairpin and zigzag cuts and the behind-the-wall rule's removal moved no map (the five hamlets
   regenerated 2026-10-08, manifests byte-identical)
 - none (wave 44): the near joins and the steading reach's center moved no map (the five hamlets regenerated 2026-10-08,
@@ -1403,7 +1404,7 @@ Back in ranking order (row 481 on).
 - [x] T109 the joiner's confluence, both ends; row 481 closed (FR-003, FR-004)
       research: rendering
       verify: DONE. the joiner's confluence tested from either end, row 481 closed as fixed in wave 34; tests red on the old code; impl-drift IN-STEP; spec-fidelity CLEAR r2
-- [ ] T110 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+- [ ] T110 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
 
 ## Phase 44 - wave 43 (amendment 42): rows 482-485 of the lane web
@@ -1438,7 +1439,7 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 - [x] T111 rows 482-485 (FR-003, FR-004)
       research: rendering
       verify: DONE. rows 482-485: the hairpin's T, the third gather form, the steading reach, the refused near join; tests red on the old code; impl-drift IN-STEP r2; spec-fidelity CLEAR r2
-- [ ] T112 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+- [ ] T112 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
 
 ## Phase 45 - wave 44 (amendment 43): row 486, a near run joined at a single point; 0246's reach to the center
@@ -1468,7 +1469,7 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 - [x] T113 row 486; the reach to the center (FR-003, FR-004)
       research: rendering
       verify: DONE. row 486 joined at a single point (joined_link, carried_onto, the whole run snapped or linked at the way's width); the reach to the center; tests; impl-drift IN-STEP r3; spec-fidelity CLEAR r2
-- [ ] T114 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+- [ ] T114 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
 
 ## Phase 46 - wave 45 (amendment 44): rows 487-490 - 0081's hairpin and zigzag; no end is behind a house
@@ -1495,7 +1496,7 @@ In ranking order (rows 487-490; 491-492 next, row 492's change held as `audit/he
 - [x] T115 rows 487-490 (FR-003, FR-004)
       research: rendering
       verify: DONE. rows 487-490: the hairpin cut (40 ft+ a GUESS, E4 filed), the zigzag pulled straight, the behind-the-wall rule removed whole; tests; spec-fidelity CLEAR r2; impl-drift r2 one MISLABELED held for the E4 research
-- [ ] T116 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+- [ ] T116 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
 
 ## Phase 47 - wave 46 (amendment 45): rows 491-494 and 496 - 0081's taut lane and its cut hairpin
@@ -1506,7 +1507,8 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
   with no exception for an arm whose tip is the lane's only contact. The cut goes through `commit_lane` like every rewrite:
   where the fold stands within the 25 ft join reach of the network (`web_rejoinable`), the touch pass joins it there; where
   it does not, the rewrite is refused and the lane committed uncut (string-pulled), and the settle's `_unkinked` cuts every
-  returning leg and mends the network. `test_a_returning_leg_that_was_the_only_contact_is_cut_and_the_lane_joined_at_the_fold`
+  returning leg of an ordinary lane and mends the network; a tree lane's leg the settle may not cut refuses the web
+  (`refuse_unmended`) - no hairpin is drawn either way. `test_a_returning_leg_that_was_the_only_contact_is_cut_and_the_lane_joined_at_the_fold`
   (red on the old code), `test_a_cut_no_join_can_mend_is_left_for_the_settle`.
 - `sweeps.py::_drop_end_nubs#nub at a junction dropped` (row 492, E2): 0081's hook - a last leg of 12 ft or less turning 90
   degrees or more (`_NUB_FT`/`_NUB_TURN` are `_HOOK_FT`/`_HOOK_DEG`), the held patch applied.
@@ -1523,10 +1525,23 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
   (`squaring.squared_against`), and `tree.rejoined` sets its vertices clear of that leg; the strip test restated
   (`test_a_strip_squared_and_rejoined_bends_rather_than_kinks`). The last resort's refusal now names what breaks each rule
   (it said only "bends").
+- Round 1 (impl-drift): the string-pull chord's keep-out held to 0246's 7 ft from a lane's middle to a fence
+  (`WEB_FABRIC_GAP`; it was max(4 ft, w/2 + 2 ft)), an E1 found in the wave and fixed in it; the track and streets' exemption
+  from the smoother claimed; the anchors' 1778 hall named a temple's Kannon hall; three claims written for the Mode A
+  sections (sanctuary smallest, lanterns beside the approach, the checkpoint tier); found rows filed for the hall-largest
+  rule, the gatehouse band and the checkpoint tier (`audit/found-wave46.jsonl`).
 - Maps: Inashiro, Kuwabata and Sawada's track out drawn as two points (the households' records' `geom` follows it, no house
   moved); Kashikawa's road over the ford; Mizuguchi byte-identical.
 
 - [ ] T117 rows 491-494 and 496 (FR-003, FR-004)
       research: rendering
-- [ ] T118 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+- [ ] T118 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
+      research: rendering
+
+## Batch 1 close - waves 42-46 (FR-005 batched, GM 2026-10-08)
+
+- [ ] T119 batch 1's close: `make done` green on the batch's last commit; one timing pair 4a9b7c077 (before wave 43) -> the
+      batch's last engine commit, `perf-explain` and `perf-audit` (waves 42, 44 and 45 were paired alone); the occasions
+      the batch declares (wave 46's village lane, round 3 allowed by the GM's ruling); then T110, T112, T114, T116, T118
+      ticked and the wave column written (FR-005, FR-006)
       research: rendering
