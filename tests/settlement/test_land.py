@@ -669,6 +669,14 @@ def test_a_dike_cut_with_no_watercourse_in_reach_seats_its_gate_on_the_cut_itsel
     snapped.M["dikes"] = [{"crest": crest, "gaps": [(500.0, 200.0)], "outline": crest}]
     snapped.M["streams"] = [{"poly": [(495.0, 100.0), (495.0, 300.0)], "bedz": 0}]
     assert snapped.dike_gates() == 1
+    assert snapped.M["sluice_gates"][-1]["span"] == 20.0, "a narrow course: the field sluice's 20 ft"
+
+    # ...and a channel wider than the field sluice is spanned bank to bank (0179), the posts 2 ft past each bank
+    wide = Settlement(1000, 1000, seed=2)
+    wide.meta(name="P", scale="hamlet")
+    wide.M["dikes"] = [{"crest": crest, "gaps": [(500.0, 200.0)], "outline": crest}]
+    wide.M["canals"] = [{"poly": [(495.0, 100.0), (495.0, 300.0)], "w": 30.0}]
+    assert wide.dike_gates() == 1 and wide.M["sluice_gates"][-1]["span"] == 34.0
 
 
 def test_near_ring_cropland_leaves_a_GROVE_CLUMP_uncovered() -> None:

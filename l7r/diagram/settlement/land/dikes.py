@@ -350,7 +350,9 @@ class DikeMixin:
 
         Research:
             sluice at every cut - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a gate at each gap, along the crest across the water
-            gate span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: a 16 to 24 ft sluice span, 20 ft by default
+            gate span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: a 16 to 24 ft sluice span, 20 ft by default; bank to bank where the channel it sits on is wider
+            posts past the banks - GUESS: 2 ft past each bank where the gate spans a wider channel
+            gate on its watercourse - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: snapped onto the drawn course within 20 ft of the cut, else at the cut
             gate glyph at the polder cut - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the field sluice glyph,
                 its frame drawn true at the span passed"""
         n_gates = 0
@@ -361,7 +363,7 @@ class DikeMixin:
                 k = min(range(n), key=lambda i: math.hypot(crest[i][0] - gx, crest[i][1] - gy))
                 a, b = crest[(k - 2) % n], crest[(k + 2) % n]
                 rot = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
-                sx, sy, sd = gx, gy, 1e9
+                sx, sy, sd, sw = gx, gy, 1e9, 0.0
                 for key in (
                     "drawn_channels",
                     "streams",
@@ -377,10 +379,11 @@ class DikeMixin:
                             cx, cy = ax + tt * (bx - ax), ay + tt * (by - ay)
                             dd = math.hypot(cx - gx, cy - gy)
                             if dd < sd:
-                                sx, sy, sd = cx, cy, dd
+                                sx, sy, sd, sw = cx, cy, dd, float(ch.get("w") or 0.0)
                 if sd > self.px(20.0):  # no recorded course within reach: the cut itself is the seat
-                    sx, sy = gx, gy
-                self.sluice_gate(sx, sy, rot=rot, span=self.px(span_ft))
+                    sx, sy, sw = gx, gy, 0.0
+                # bank to bank on a wider channel (0179): the posts a foot or two past each bank, never under the field sluice's span
+                self.sluice_gate(sx, sy, rot=rot, span=max(self.px(span_ft), sw + self.px(4.0)))
                 n_gates += 1
         return n_gates
 

@@ -21,8 +21,8 @@ Guesses:
   gate was worked, so the frame is drawn from how a lifting gate works.
 
 Depiction: The map draws a gate as its frame seen from above: a board between two posts, with a crossbeam over them and a
-windlass drum at its middle. Its timbers and drum are drawn at the smallest size the map draws anything so that they show, where a real windlass
-drum drawn true would be under a pixel; the frame's span, post to post, is drawn true. A gate stands at every cut of the polder's dike, laid along the crest across the water, at
+windlass drum at its middle. Its timbers and drum are drawn at the smallest size the map draws anything so that they show, as the wells' are;
+the frame's span, post to post, is drawn true. A gate stands at every cut of the polder's dike, laid along the crest across the water, at
 the inlet high on the polder, the outfall low on it, and wherever else a channel crosses the dike; none is drawn in a fish
 pond's own bank, since a sluice through each pond's bank is known only from modern fish farming. Every gate is one glyph,
 with no open or shut form: opening or shutting a gate was an event of its season, not a state to show on every map.
