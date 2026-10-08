@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "4a9b7c077",
+    "label": "328-start",
+    "utc": "20261008T142706Z"
+  },
+  "binding": "99ddaa0ab9b6dc0ee8db80ef149aefa70848c79da442396d15ad36b41d21985a",
+  "criteria": {
+    "commensurate": "No. Seed 4 at 10hh: web 0.87 -> 1.14 s, roll 3.4 -> 3.7 s (+9%; the pair +12.1%), and web +0.11 to +0.35 s on every 40hh seed, all for off-canvas connector that no drawn map shows. The visible gain (a track that reaches the frame) costs nothing extra when drawn only to the edge.",
+    "necessary": "The NEED is real, the cost is not: wave 46 drew the track out taut (0081) and a fixed 4,000 ft fell short of a 5,600 ft canvas's far edge, so the track must leave the frame on every bearing. Drawing it the canvas' whole diagonal is not needed for that - the length past the edge is cropped away, yet field_runs samples all of it (run_on_target 3,577 -> 5,481 calls on seed 4).",
+    "no_way_around": "There is a way around it, already written: past_the_frame (canvas edge on its bearing + 400 ft, commit 66a73e2f2). Applied ALONE to 2e3153b4e it puts web back to 0.92 / 0.71 / 2.04 s (seed 4 at 10 / 15 / 40hh) against start 0.87 / 0.72 / 1.99 and end 1.14 / 0.83 / 2.34. So the slowdown at the measured end commit was avoidable."
+  },
+  "end": {
+    "commit": "2e3153b4e",
+    "label": "328-end",
+    "utc": "20261008T143016Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T144847Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 3.0,
+          "4": 12.1,
+          "47": -6.3
+        },
+        "total_pct": 2.4
+      },
+      "20": {
+        "seeds": {
+          "25": 1.6,
+          "39": 0.0,
+          "4": -10.0,
+          "47": 5.1
+        },
+        "total_pct": -1.6
+      },
+      "40": {
+        "seeds": {
+          "25": 2.4,
+          "39": 4.5,
+          "4": 1.7,
+          "47": 3.0
+        },
+        "total_pct": 2.8
+      }
+    },
+    "seeds": {
+      "25": 5.3,
+      "39": 4.9,
+      "4": 4.4,
+      "47": 2.3
+    },
+    "total_pct": 4.2
+  },
+  "note": "Adjudicates the pair as measured (328-end = 2e3153b4e), which predates the fix. The cure is a fresh 328-end leg at HEAD, back to back with a 328-start leg, which gets its own band and review. Reviewer prediction from the fix-only leg: roll medians seed4 10hh 3.4 (= start), 40hh seeds 4/39 within 0.1 s of start, residual seed47@40hh web +0.19 s (roll 12.7 -> 13.0, +2.4%) and seed25@40hh roll +3% that the reach does not explain - that pair's explanation must account for them.",
+  "verdict": "not-justified"
+}

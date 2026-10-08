@@ -568,7 +568,8 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 
 | batch | waves | pair | gate | state |
 |---|---|---|---|---|
-| 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); wave 43 with 46: 4a9b7c077 -> batch end | at the batch close | open |
+| 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); the batch 4a9b7c077 -> 2e3153b4e band 2, its cause (the track out drawn the canvas' diagonal past the frame, wave 46) removed by wave 47's `past_the_frame` - perf-audit consistent, audit not-justified as measured: batch 2's pair re-measures it, and explains seed 47's +0.19 s web at 40 households | green 2026-10-08 | closed but for the pair |
+| 2 | 47- | owed at the batch close, from 2e3153b4e | at the batch close | open |
 
 ## Constitution Check
 
