@@ -17,8 +17,8 @@ Guesses:
 - That the grave stands in a flooded paddy plot: the field graves of the Yangzi delta stood in working fields, but no source says what those fields grew.
 
 Depiction: The map draws the grave as a small raised mound of earth in the middle of a paddy plot, with two or three stones set
-one behind another, unequal in height. The plot's bunds are carried round the
-mound, so the flooded basins run up to its edge.
+one behind another, unequal in height. Its plot is split in two through the mound, as if a bund were run out to it, and each half
+stops short of the mound, so no flooded basin runs under the grave.
 
 Name: A grave island inside a plot
 Covers: `meta.grave_form = island`

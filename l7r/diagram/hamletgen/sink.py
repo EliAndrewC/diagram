@@ -387,7 +387,8 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
         join reach - UNRESEARCHED: 420 ft from the outfall
         confluence below the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: fallen BROOK_JOIN_DESCENT, the run downhill
         trunk below the junction - CONVENTION: BROOK_JOIN_TRUNK on the canvas
-        not on a corner of the brook - CONVENTION"""
+        not on a corner of the brook - CONVENTION
+        the nearest fallen point, off the crop - research/questions/0060-field-drains-akusuiro.drawing.html: the drain never crosses the crop; the nearest fallen candidate is the confluence"""
     dx, dy = plan.fall
     found: list[tuple[float, Pt]] = []
     legs = list(zip(plan.brook, plan.brook[1:], strict=False))

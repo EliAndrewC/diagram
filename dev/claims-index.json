@@ -8915,9 +8915,10 @@
   "date": "2026-10-03",
   "note": "35-45 in 100",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::PERSIMMON_FRONT_BAND#persimmon in front": {
@@ -12673,10 +12674,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::brook_join#confluence below the outfall": {
-  "code": "3e3d36d79b2ff0af",
-  "core": "177447b7d17f1fa4",
-  "date": "2026-10-05",
-  "note": "",
+  "code": "1a5555565711518c",
+  "core": "78a40e597cdd7908",
+  "date": "2026-10-08",
+  "note": "the confluence must have fallen along the land's fall; 20 ft is a minimum drop chosen within \"heads downhill\"",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
@@ -12688,39 +12689,57 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::brook_join#drain joins the passing brook": {
-  "code": "4d1def96d5117a08",
-  "core": "177447b7d17f1fa4",
-  "date": "2026-10-03",
-  "note": "0060",
+  "code": "9b32906745c676f1",
+  "core": "78a40e597cdd7908",
+  "date": "2026-10-08",
+  "note": "the drain joins the brook where it comes near the outfall, as the drainage \"returned to the river\"",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e"
+  ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/sink.py::brook_join#join reach": {
-  "code": "64a576044e040ac2",
-  "core": "177447b7d17f1fa4",
-  "date": "2026-10-03",
-  "note": "420, unanswered",
+ "l7r/diagram/hamletgen/sink.py::brook_join#drain to the brook never crosses the crop, and the nearest fallen candidate is taken as the confluence": {
+  "code": "78a40e597cdd7908",
+  "core": "78a40e597cdd7908",
+  "date": "2026-10-08",
+  "note": "drain to the brook never crosses the crop, and the nearest fallen candidate is taken as the confluence",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/sink.py::brook_join#join reach": {
+  "code": "8d2219e68da405e9",
+  "core": "78a40e597cdd7908",
+  "date": "2026-10-08",
+  "note": "the page says only \"comes near\" and gives no figure, so 420 ft is honestly unresearched",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::brook_join#not on a corner of the brook": {
-  "code": "743fa4301707929f",
-  "core": "177447b7d17f1fa4",
-  "date": "2026-10-03",
-  "note": "rendering",
+  "code": "5d0682e2b32cb0e4",
+  "core": "78a40e597cdd7908",
+  "date": "2026-10-08",
+  "note": "this only keeps a mitred bend from being drawn at the junction, so it is a drawing convention",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::brook_join#trunk below the junction": {
-  "code": "a70582f2e2648742",
-  "core": "177447b7d17f1fa4",
-  "date": "2026-10-03",
-  "note": "legibility",
+  "code": "61463f9fe9e74451",
+  "core": "78a40e597cdd7908",
+  "date": "2026-10-08",
+  "note": "150 ft of brook on the canvas below the junction is there so the junction can be read, a convention",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::confluence_keeps_the_brook#drain plumbing": {
@@ -33300,18 +33319,17 @@
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#in-field ponds, rocks and graves": {
   "code": "bde3e683f7abc411",
   "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "a pond sunk in one low plot, bedrock only on terraces and strips, a rare grave the paddy is carved round",
+  "date": "2026-10-08",
+  "note": "these features are drawn on the paddy",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:07108ce9127e5e0d",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:af167399c98dd6b3",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:9fed2c627efb7cf2",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:b04628d5c789e420"
   ],
   "verdict": "IN-STEP"
  },
@@ -33455,26 +33473,25 @@
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house": {
   "code": "9f0e1ee33ad6e6bd",
   "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "the farm_fixtures reason says the wood shed, like each fixture, is \"seated against its own farmhouse\", but 0043 says it \"stands about 6 ft (a ken) off a wall\"; the bath joined to the house, the yard and the bed beside it, and the fixtures seated on the plot all agree. Fix the exemption's text, or the placer if it really abuts the shed",
+  "date": "2026-10-08",
+  "note": "the claim puts \"the wood shed about 6 ft off a wall\", but 0043 has its \"edge is about 9.5 ft from the wall\" (a ken beyond the 3.5 ft clear strip) and so does the code; restate the claim as about 9.5 ft",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html": "bef5d458385c0006",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4",
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
   },
-  "research": "a7a327f1b47a3a00",
+  "research": "c1cd61d4a593d818",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:b4f6885af6bd959a",
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html:b3c440bb2468c83f",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
-   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf",
+   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
+   "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66"
   ],
   "verdict": "DRIFTED"
  },
@@ -42591,15 +42608,15 @@
   "date": "2026-10-05",
   "note": "the mulberry_dike_fishpond archetype returns before any pond, rock or grave",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:083596e0af6f1902",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:140bedbf9c3f6d56",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:ffcefa561c09cbc3"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field grave rate": {
@@ -42620,17 +42637,16 @@
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field pond on a low plot": {
   "code": "c4ce848af0023b24",
   "core": "28baa4359410638e",
-  "date": "2026-10-05",
-  "note": "tried over low plots only, sunk inside one",
+  "date": "2026-10-08",
+  "note": "the pond is sunk inside one low plot, and the order the low plots are tried in is a calibration",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:af167399c98dd6b3"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:b04628d5c789e420"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field pond rate": {
@@ -42639,13 +42655,13 @@
   "date": "2026-10-05",
   "note": "0.55 matches \"a little over half\", disclosed as a GUESS",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#rock outcrops": {
@@ -42654,15 +42670,15 @@
   "date": "2026-10-05",
   "note": "terraces always, ribbon valleys at 0.5, one to three outcrops",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:07108ce9127e5e0d",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:3fe0f2932541c1c8",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:6dc62b4125112014"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#town and city fields plain": {
@@ -42671,13 +42687,13 @@
   "date": "2026-10-05",
   "note": "the town and city tiers return before any feature",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e40a16f282229644"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_center_span#plumbing": {
@@ -42769,13 +42785,13 @@
   "code": "da9d969fdc766a3e",
   "core": "f51a4997b2f8d081",
   "date": "2026-10-08",
-  "note": "draws a reed ring inside the fitted outline in one low plot",
+  "note": "the reeds stand at 0.86 of the outline, on the wet margin between the bank and the open water",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:af167399c98dd6b3"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:b04628d5c789e420"
   ],
   "verdict": "IN-STEP"
  },
@@ -42785,10 +42801,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
-  "triaged": "2026-10-05",
+  "research": "759c82c15360b04f",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_rock#outcrop size": {
@@ -42816,6 +42832,7 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
   },
   "research": "175c93aa350e3f45",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -42965,15 +42982,14 @@
  "l7r/diagram/settlement/fields/features.py::carve_around_grave#paddy carved round the grave": {
   "code": "42ab4f179fc246b2",
   "core": "056900eca3126e2b",
-  "date": "2026-10-05",
-  "note": "no basin under the mound",
+  "date": "2026-10-08",
+  "note": "an island's host plot is split through the mound and the bund of a corner grave runs out to the corner, as the page says",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14",
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
   "verdict": "IN-STEP"
  },
@@ -43585,19 +43601,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/outfall.py::DOWNHILL_FRACTION#downhill share": {
-  "code": "055f6feef06c6c34",
-  "core": "eb3cdf5f0110babc",
+  "code": "2ed4bb691a49fd6e",
+  "core": "cebcf669e4894abd",
   "date": "2026-10-08",
-  "note": "the page gives no \"fifth\". It bounds a course's divergence at a strict \"under 90\" degrees and \"a tighter bound ... was considered and declined\"; 0.2 is a bound of about 78 degrees. Make the figure a GUESS, or bring the code to the page's under-90 rule",
+  "note": "0.0 with a strict > is the strict \"under 90\" degrees off the fall",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/outfall.py::_curved_run#curving out of the collector": {
   "code": "86a5e0a8af334acc",
@@ -43630,10 +43645,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/outfall.py::runs_downhill#water runs downhill": {
-  "code": "fc54c983b04c3408",
-  "core": "77609a174cac9e91",
+  "code": "42878b8b1de799bd",
+  "core": "d936f611ea6962b0",
   "date": "2026-10-08",
-  "note": "`>= frac * L` with frac 0.2 forbids courses about 78-90 degrees off the fall, which the page allows (\"a divergence near 90 degrees is what a dug channel is\"; tighter bounds declined). Same fix as DOWNHILL_FRACTION",
+  "note": "the net displacement must have a positive component down the fall, i.e. strictly under 90 degrees off it",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
@@ -43642,7 +43657,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PADDY_REST#rest forms": {
   "code": "1f283ffd514d808a",
@@ -45013,10 +45028,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms": {
-  "code": "0687d2a06e91567c",
+  "code": "692ddd2416e0716d",
   "core": "8d31976e685f0d1a",
   "date": "2026-10-08",
-  "note": "the 0.03 stands, but the claim's account misreads the page. The three floored-room baths span Kozutsumi 1771 (the headman's) and Ukiya 1842 (a headman's and a peasant's), so only two are among the two registers' 36. Restate it as \"the one peasant's of the 36\"",
+  "note": "the registers give 36 baths and one floored-room bath in a peasant's house (the other two were headmen's), so 0.03 holds for a hamlet with no headman",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f",
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
@@ -45026,9 +45041,10 @@
    "0044-baths-on-the-farm-furo.drawing.html:23b7ceda518aa3ec",
    "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
+   "0044-baths-on-the-farm-furo.html:cd48fd2aad413cde",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#manure form": {
   "code": "959157a1dc2a5f34",
@@ -45267,18 +45283,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall": {
-  "code": "7b15adf7b72b2f71",
+  "code": "9d825a7d8184ea63",
   "core": "5efeb905b7d48b3f",
   "date": "2026-10-08",
-  "note": "the 0043 drawing page says \"about 6 ft (a ken) off a wall\" and records no departure; the code stands the shed 9.5 ft off (gap plus 6). A DEVIATION needs the drawing page to record it, or the code goes back to a ken",
+  "note": "a ken (6 ft) beyond the 3.5 ft strip is about 9.5 ft, the page's own guess, and the reason for it matches",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_first#plumbing": {
   "code": "0b6b6918fb22210e",
@@ -45421,14 +45437,14 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
   "code": "bb675a743c70af25",
   "core": "b2f3b0f8b0a20a59",
-  "date": "2026-10-07",
-  "note": "back wall and both flanks, none in front",
+  "date": "2026-10-08",
+  "note": "the seats are off the back wall and both flanks, never the front",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf"
   ],
   "verdict": "IN-STEP"
  },
@@ -45464,30 +45480,30 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wall places a ken out": {
-  "code": "2550c457a41cdce0",
+  "code": "ffdcafaedcc20e1e",
   "core": "2835514bd703c516",
   "date": "2026-10-08",
-  "note": "the places are offered at g + WOODSHED_STEP_FT (about 9.5 ft) where the page says \"about 6 ft (a ken) off a wall\"",
+  "note": "wall places are offered at the gap plus a ken",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": {
   "code": "04caec43d865aff6",
   "core": "2835514bd703c516",
   "date": "2026-10-08",
-  "note": "offers the recorded seats and the places off every wall but the front",
+  "note": "places on the front wall are dropped by in_front",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf"
   ],
   "verdict": "IN-STEP"
  },
@@ -45693,13 +45709,13 @@
   "code": "9129c077f013cd5f",
   "core": "49197633a66343d0",
   "date": "2026-10-08",
-  "note": "refuses a seat wholly past the front wall",
+  "note": "a seat lying wholly past the front wall counts as the dooryard",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf"
   ],
   "verdict": "IN-STEP"
  },
@@ -45715,10 +45731,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
-  "code": "2b5cb6643b9cce40",
-  "core": "c029193969d6b97e",
+  "code": "2cf3776cd44454ec",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "a room of the main house, never a shed; refused rather than walked out",
+  "note": "the bath room must touch the house or raise FixtureUnlaid; it is never walked out into the yard",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
   },
@@ -45730,36 +45746,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
-  "code": "9ebeb4452e88c3d8",
-  "core": "c029193969d6b97e",
+  "code": "22d6e728ba61d090",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "each house rolls its wall through bath_wall",
+  "note": "bath_wall rolls the wall house by house among the three attested walls",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
-   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
-  "code": "8aa4702d519e4f4d",
-  "core": "c029193969d6b97e",
+  "code": "e0fd75cad4c470a2",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "no cited page gives a clearance or a slide",
+  "note": "no page gives a figure for either",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
-  "code": "d65a99613d58b30f",
-  "core": "c029193969d6b97e",
+  "code": "356d988b796765de",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "a farm with no dooryard seat keeps none",
+  "note": "a farm with no seat keeps no persimmon",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -45770,68 +45785,85 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon front or behind": {
-  "code": "f0cca1cfc65f3df3",
-  "core": "c029193969d6b97e",
+  "code": "d96745f0a6e58279",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "front or behind, rolled per house at the hamlet's share",
+  "note": "each house rolls front or behind against the hamlet's front share, with the front the likelier",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:591f08ea01d694fd",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in its own grove bands": {
-  "code": "9bf666810b6dda09",
-  "core": "c029193969d6b97e",
+  "code": "a7ab4cdf6a2a35b9",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "the 0046 drawing page answers this: the persimmon \"may stand in the grove behind the house ... its own grove, no other farm's\". It should cite that page, not say UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "only the farm's own grove bands are opened to its persimmon",
+  "pages": {
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
+  },
+  "research": "1640adf91280aca1",
   "rests": [
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
-  "code": "b1e96381c9c23736",
-  "core": "c029193969d6b97e",
+  "code": "c7afa07dab87c75e",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "no cited page orders the fixtures",
+  "note": "no page gives an order",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
-  "code": "3d97a97a3552c9c6",
-  "core": "c029193969d6b97e",
+  "code": "71278591ee429a91",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "for the privy, 0047 rules on reach: \"no more than 48 ft from its house\", and past that privies \"stray out of their own farmsteads\". The code's 24 paces of 8 ft (192 ft) apply to the privy too. Cite 0047 and hold the privy to its reach",
+  "note": "no page gives an outward pace",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the privy's reach": {
+  "code": "cf63785d0ef82f9c",
+  "core": "8376e07cbd4b972e",
+  "date": "2026-10-08",
+  "note": "every privy seat offered, attested places and sunny-side spots alike, is held to the 48 ft reach",
+  "pages": {
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+  },
+  "research": "fa621c85688c72b2",
   "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
-  "code": "289a80430130b96e",
-  "core": "c029193969d6b97e",
+  "code": "e8a37fff2e7d6596",
+  "core": "8376e07cbd4b972e",
   "date": "2026-10-08",
-  "note": "a short step off the house, behind or beside it",
+  "note": "0043 sets the shed a ken off \"every wall of the house\" but the code's walls also include the kura's (steading_rects \"N\" if kura), and the page is silent on the kura; label that half a GUESS or have the page record it",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::outward#plumbing": {
   "code": "bd995c0ec71c8ea3",
@@ -45857,32 +45889,32 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#the ken past the wall gap": {
-  "code": "76ff5829f0550183",
+  "code": "f134f61760f01f65",
   "core": "c164a0c90a58ff1f",
   "date": "2026-10-08",
-  "note": "the DEVIATION (about 9.5 ft against the page's 6 ft) is not recorded on the 0043 drawing page, which says only \"about 6 ft (a ken) off a wall\". Record it there, or go back to a ken",
+  "note": "the shed must clear the house by the gap plus 6 ft and stand within that of a wall, so its edge is about 9.5 ft off",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": {
   "code": "812d15d03d3e7f7b",
   "core": "c164a0c90a58ff1f",
   "date": "2026-10-08",
-  "note": "the standoff is `g + px(WOODSHED_STEP_FT)` = 3.5 + 6 = about 9.5 ft from the house, but the page says \"It stands about 6 ft (a ken) off a wall\"; the standoff should be about a ken, unless the 3.5 ft gap is eaves the page's figure leaves out",
+  "note": "the shed stays against a wall and is never in front",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:a9bab0ea2e325edf"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::steading_rects#storehouse annex": {
   "code": "d6e99436cf6b7d22",
@@ -45918,6 +45950,21 @@
   "note": "plumbing, nothing physical",
   "research": "",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::within_reach_of#the privy's reach": {
+  "code": "faec46e406c8b06e",
+  "core": "b50006a73b0d6393",
+  "date": "2026-10-08",
+  "note": "the test is per axis (a box), so a privy diagonal off a house corner can have its far edge about 68 ft (48*sqrt 2) from the house, against \"no more than 48 ft from its house\"; it should measure true distance to the walls",
+  "pages": {
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+  },
+  "research": "fa621c85688c72b2",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::world_fixtures#plumbing": {
   "code": "4761f3682d26fd01",
@@ -54578,9 +54625,10 @@
   "date": "2026-10-03",
   "note": "0043: the larger houses first",
   "pages": {
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "9322e3960da9a1f4"
   },
-  "research": "862d7c9fcd1644d6",
+  "research": "92ee0d1d955a01d8",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/lot.py::HouseholdLots.fixtures_of#quota, record and registry plumbing": {
@@ -65801,6 +65849,7 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
   },
   "research": "175c93aa350e3f45",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -65892,14 +65941,14 @@
  "l7r/diagram/waterfields/ring_rules.py::ring_violations#in-field features": {
   "code": "0665f06b7185f7b8",
   "core": "6d0d021063958c5f",
-  "date": "2026-10-05",
-  "note": "no bund crosses a pond and no basin runs under a grave",
+  "date": "2026-10-08",
+  "note": "a ring crossing a pond's rim or lying under a grave is refused",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:af167399c98dd6b3",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:b04628d5c789e420",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
   "verdict": "IN-STEP"
@@ -65985,12 +66034,13 @@
   "date": "2026-10-05",
   "note": "the plot stops short of the mound",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "948a2ebfa9ce4675"
   },
-  "research": "175c93aa350e3f45",
+  "research": "759c82c15360b04f",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::working_width#ring plumbing": {

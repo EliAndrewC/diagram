@@ -29,7 +29,7 @@ choice.
 basins cut back to run up round it, which is the Chinese form.
 
 [grave_form=corner] Here the grave is a small mound with one or two stones in a plot's corner against its bunds, which is
-the Japanese form.
+the Japanese form. The map sets the mound a short step in from the corner, clear of any ditch or path along the plot's edge, so it reads as standing in the corner, and carries the plot's bund round it; such a grave stood in a field's corner, beside its bunds.
 
 Name: grave island
 Covers: `field_graves` - a grave mound inside a paddy plot or in its corner

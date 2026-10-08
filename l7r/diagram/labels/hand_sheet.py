@@ -887,10 +887,6 @@ def placed(src: str) -> str:
     return out
 
 
-def _esc_text(s: str) -> str:
-    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-
-
 def render(src: str, png: str) -> None:
     """Render a sheet's placed text to `png` with resvg, as every sheet's gen does - from a temporary file beside the
     picture, removed after."""

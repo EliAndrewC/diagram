@@ -18,7 +18,7 @@ Guesses:
 - The mound's size, about 13 by 9 ft with one or two stones: no size of a field grave was found.
 
 Depiction: The map draws the grave as a small mound with one or two stones in a corner of a paddy plot, standing against its
-two bunds and just inside the plot, clear of any ditch or path along its edge. The bund is carried round the mound to the
+two bunds and just inside the plot, clear of any ditch or path along its edge. That short step in from the corner is a drawing convention, so the mound reads as standing in the corner; the real graves stood at a field's corner, beside its bunds. The bund is carried round the mound to the
 corner, so the flooded basin runs up to it.
 
 Name: A grave in a plot's corner

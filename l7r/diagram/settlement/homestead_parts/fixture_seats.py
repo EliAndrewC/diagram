@@ -209,10 +209,17 @@ def fixture_size(kind: str, forms: FixtureForms, px: Callable[[float], float], r
 
 
 def within_reach_of(r: Rect, house: Rect, reach: float) -> bool:
-    """Does `r` stand with its far edge no more than `reach` from `house`'s walls, on both axes?
+    """Does `r` stand with its far edge no more than `reach` from `house`'s walls - every corner of it within `reach` of
+    the house's outline, measured true (a box test let a privy off a corner stand about 68 ft out)?
 
     Research: the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: no more than 48 ft from its house"""
-    return abs(r[0] - house[0]) + r[2] / 2 <= house[2] / 2 + reach and abs(r[1] - house[1]) + r[3] / 2 <= house[3] / 2 + reach
+    for sx in (-1.0, 1.0):
+        for sy in (-1.0, 1.0):
+            gx = max(0.0, abs(r[0] + sx * r[2] / 2 - house[0]) - house[2] / 2)
+            gy = max(0.0, abs(r[1] + sy * r[3] / 2 - house[1]) - house[3] / 2)
+            if math.hypot(gx, gy) > reach:
+                return False
+    return True
 
 
 def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:
@@ -314,8 +321,9 @@ def lay_fixtures(
         seating order - UNRESEARCHED: FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, persimmon) is the order the fixtures take seats
         stepped outward - UNRESEARCHED: a fixture with no recorded seat free is offered the same seats a pace further out
         the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: never stepped past 48 ft from its house; a farmstead with no seat within it refuses its privy by name
-        wood shed's walls - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house and its kura, a
-            short step off the house - never the byre's or the retirement house's
+        wood shed's walls - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house's walls, a short
+            step off the house - never the byre's or the retirement house's
+        the kura's walls too - GUESS: the house's storehouse annex counts as a wall of the house for the shed
         persimmon front or behind - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: in front of the house or behind it, rolled per house at `forms.persimmon_front`
         persimmon in its own grove bands - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: it may stand in the grove behind the house - its own grove, no other farm's
         bath room joined - research/questions/0044-baths-on-the-farm-furo.drawing.html: refused rather than walked out
