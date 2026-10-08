@@ -1737,6 +1737,7 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	python3 scripts/check-stale-dirs.py .
 	python3 scripts/check-old-layout.py --selftest
 	python3 scripts/check-old-layout.py .
+	bash scripts/_layout_carry.sh --selftest
 
 format:          ## [static] ruff format over the tree
 	python3 -m ruff format .

@@ -349,5 +349,25 @@ expect_out "deleted backup/c on GitHub"
 OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=false syncmain "$D" done); check "a stop with the backup already at HEAD" 1 $?
 case "$OUT" in *"backed up HEAD"*) no_ "pushed a backup that was already at HEAD" ;; *) yes_ ;; esac
 
+echo "15. a clone with work in flight syncs in a move of the project to the root (feature 329, FR-008, FR-009)"
+# GUARD_EDIT_OK: feature 329 - a NEW case. The old path is built by concatenation so the old-layout check (which reads
+# this file) does not count it; the global git config is switched off so the case proves the SCRIPT passes
+# merge.directoryRenames, not the container's ~/.gitconfig.
+OLDP=".claude/skills/""diagram"
+D=$(topology mv)
+( cd "$D/seed" && mkdir -p "$OLDP/dev" "$OLDP/l7r" && printf 'a\nb\nc\n' > "$OLDP/dev/x.md" && echo 'X = 1' > "$OLDP/l7r/a.py" \
+  && echo '.gencache/' >> .gitignore && git add -A && git commit -qm old-layout && git push -q "$D/github.git" HEAD:main )
+OUT=$(GIT_CONFIG_GLOBAL=/dev/null syncmain "$D" sync-in); check "the clone takes the old layout" 0 $?
+( cd "$D/main/.clones/c" && printf 'a\nB\nc\n' > "$OLDP/dev/x.md" && echo new > "$OLDP/dev/new.md" && mkdir -p "$OLDP/.gencache" \
+  && echo warm > "$OLDP/.gencache/k" && git add -A && git commit -qm in-flight )
+( cd "$D/seed" && git mv "$OLDP/dev" dev && git mv "$OLDP/l7r" l7r && git commit -qm move && git push -q "$D/github.git" HEAD:main )
+OUT=$(GIT_CONFIG_GLOBAL=/dev/null syncmain "$D" sync-in); check "sync-in merges the move into the clone with work in flight" 0 $?
+C="$D/main/.clones/c"
+grep -qx B "$C/dev/x.md" 2>/dev/null && yes_ || no_ "the clone's edit did not land on the moved file"
+[ "$(cat "$C/dev/new.md" 2>/dev/null)" = new ] && yes_ || no_ "a file the clone added under the old directory did not follow the rename"
+[ "$(cat "$C/.gencache/k" 2>/dev/null)" = warm ] && yes_ || no_ "the clone's ignored cache was not carried to the root"
+[ ! -e "$C/$OLDP" ] && yes_ || no_ "the old directory was left behind"
+[ -z "$(git -C "$C" status --porcelain)" ] && yes_ || no_ "the merge left the clone dirty: $(git -C "$C" status --porcelain | head -3)"
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi
