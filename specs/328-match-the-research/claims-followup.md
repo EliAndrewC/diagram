@@ -541,3 +541,11 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
 - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building gap  maxtouch` (UNCLAIMED, E0): how close a pulled lane may come to a building: gap = max(_TOUCH_GAP=4 ft, half the lane width + 2 ft)
 - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#the clearance a straightened lane keeps from buildings and w` (UNCLAIMED, E0): the clearance a straightened lane keeps from buildings and walls where it touches them: half its width plus 2 ft, at least _TOUCH_GAP=4 ft, with a 5 ft width assumed when none is set
 - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pull at a joint is refused if it leaves more kinks than th` (UNCLAIMED, E0): a pull at a joint is refused if it leaves more kinks than the two lanes had (kink_spans)
+- Wave 80 (`waterfields/banks.py::swept_bend`, spec-fidelity ruled LEGITIMATE): a hairpin's bend is drawn tighter than 0054's
+  radius so its tangent point stays within 90% of its run - 0054's own cap fails past ~141 deg; the 90% is this project's
+  margin, claimed UNRESEARCHED (m:wave80-swept-bends). Raised for the GM's information; no question unless the GM wants another margin.
+- Wave 82 (`waterfields/seams/close.py::blunt_points`, spec-fidelity ruled LEGITIMATE): where a later cut (a grave island's
+  corner) leaves a point the maps refuse, the maps cut it off into a headland before they try the basin beside it - 0005 gives
+  cutting off ("along the drain") and taking in as alternatives; the order and the cut away from a drain are recorded on 0005's
+  drawing page as a DEVIATION (m:wave82-point-cut-off). Raised for the GM's information.
+

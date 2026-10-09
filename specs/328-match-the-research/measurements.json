@@ -1718,5 +1718,32 @@
       "newly passing": "33",
       "reading": "the bend radius ripples into placement through the channels every seat clears; E3 as waves 69, 74 and 81"
     }
+  },
+  "reverts-refusal-census": {
+    "quantity": "the seeds newly refused by the four reverted waves (69, 74, 81, 83), by the rule that refused them",
+    "observed": "2026-10-09",
+    "source": "the cohort logs of each wave (scratchpad cohort74.log, cohort81b.log, cohort83.log) and m:wave69-canal-taper-reverted; the baseline refuses 03, 10, 20, 22, 33, 906",
+    "command": "make cohort N=48, once per wave, read for the seeds not refused at baseline",
+    "method": "each newly refused seed classed by the failure the cohort printed; wave 74's canal-A-only variant (42/54) left out as a variant never proposed",
+    "value": {
+      "web gives up (lane law, off_ford, an unreached house)": {
+        "count": 7,
+        "seeds": "04 and 901 (wave 74), 42 (81), 23, 902 and 904 (83), 12 (69)"
+      },
+      "row farm off its street": {
+        "count": 4,
+        "seeds": "04 and 902 (69), 42 (74), 40 (83)"
+      },
+      "dispersed farm without its channel": {
+        "count": 2,
+        "seeds": "905 (69), 19 (74)"
+      },
+      "farmstead across the brook": {
+        "count": 1,
+        "seeds": "40 (69)"
+      },
+      "total": 14,
+      "reading": "two rule families - the lane web's last resort and the row's street adherence - refuse 11 of 14; they are the E3 entry point: hardening them would let the four reverted rows (canal taper, supply berm, thread run-on, fillet radius) be retaken"
+    }
   }
 }
