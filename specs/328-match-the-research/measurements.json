@@ -1907,5 +1907,20 @@
       "cohort_48": "52/54 (refused 10, 20); 33 newly passing, none newly failing",
       "pool": "Kashikawa: one door path (lane 9), already lawful, moved 4 to 5 px further from its nearest garden (9.3 to 10.8 ft); four maps unchanged"
     }
+  },
+  "retake-after-wave89": {
+    "quantity": "the reverted rows' patches re-run on the hardened web (HEAD after waves 87-89, baseline 52/54, refused 10 and 20)",
+    "observed": "2026-10-09",
+    "source": "a detached worktree at 23027ac09 with each patch from specs/328-match-the-research/audit/reverted/ applied; make cohort N=48",
+    "command": "make cohort N=48, once a patch",
+    "method": "each patch's cohort compared with the new baseline for seeds newly failing and newly passing",
+    "value": {
+      "wave84-fork-band": {
+        "cohort_passed": 49,
+        "newly failing": "31, 32 (a dispersed farm without its channel - given its well), 40 (a grove crossed by a lane), 43 (13 of 14 households seated)",
+        "newly passing": "10",
+        "was": "44/54 against 48, six newly failing"
+      }
+    }
   }
 }
