@@ -1,104 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "d556340c21b2b4a5c09b315555fa9645535bdbb9123a90e3b8af14d8e16b7179",
+ "plan_sha256": "a02e87a2f8a84c8a9b786d64da3dea3d2a06dea5912ddf9770a8f5b0d638bf9a",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W56-1 south strip at the tree's 50 ft in both placers",
-   "summary": "village_grove's seat strip and WoodShares.sun_depth / copse_keepouts read CANOPY_SHADE_FT (50 ft) south of every yard and bed, replacing the farmhouse's 39 ft (_sun_corridor_ft) and the 22 default (rows 144, 146, 147)",
+   "id": "W58-1 notice board's entrance reach in feet (row 603)",
+   "summary": "kosatsuba_anchor takes ftpx and compares KOSATSUBA_ENTRANCE_REACH_FT / ftpx; siting.py passes self.ftpx; hamlets byte-identical",
    "class": "within",
-   "why": "This is what 0038 says ('50 ft east, west and south of a plot' for a tree) and what the rows' fixes name. The crowns were already held to it (_sun_keepouts), so the seats now agree with the crowns. Both placers move together, as feature 317 requires."
+   "why": "Exactly the ranked fix of row 603, taken in its E2 turn; the engine diff is the two lines it names. A unit correction narrows nothing."
   },
   {
-   "id": "W56-2 the yard's morning lane east",
-   "summary": "the east lane (EAST_REACH_FT / EAST_LANE_FT, 50 ft) is now run over the threshing yard as well as the beds, in village_grove and copse_keepouts",
+   "id": "W58-2 row 595 measured, no code this wave",
+   "summary": "only-plain-houses-keep-a-byre: measured every house the five hamlets seat is kind plain, so the filter excludes nothing in scope; row left DRIFTED, scope kept, unassigned",
    "class": "within",
-   "why": "Rows 144 and 147 say 'every threshing yard and bed', and 0038 says 'a plot'. The test pins the yard's 50 ft east lane and its 50 ft south strip."
+   "why": "The row is not closed, deferred or excused: ranking.json keeps it DRIFTED/kept at E2 with no wave, so it is still owed in its easiest-to-hardest turn. Recording a measurement against a row narrows nothing. It must end the feature either fixed (the ranked one-file fix) or deferred under FR-010's 'value no kept map reads, deferred with its measured reason' clause - not in neither state."
   },
   {
-   "id": "W56-3 west lane left at the declared WEST_SUN_FT",
-   "summary": "copse_keepouts keeps its west lane conditional on west_ft rather than '50 ft regardless of west_ft' (row 147's suggested fix)",
+   "id": "W58-3 row 584 re-tiered E2 -> E3 on measure",
+   "summary": "the no-lot clause runs only on the legacy roller (a hamlet's lots already deal the kura largest first); the live clause - a scattered farm's kura on the north wall unreserved (shed=False) - needs the annex reserved in dispersed_layout across bundle.py, dispersed.py, fixture_seats.py, houses.py",
    "class": "within",
-   "why": "Measured, not assumed: hamletgen/homesteads/stages.py:156 calls s.west_sun_lane(WEST_SUN_FT), and consts.py:373 sets WEST_SUN_FT = 50.0. WoodShares is installed only on the scripted hamlets. So on in-scope code the seats keep 50 ft west of every plot, which is the row's substance. The 0-ft case remains only on the legacy roller and the frozen pool, which amendment 8 DEFERRED. This is a different route to the same result, not a narrowing."
+   "why": "The request ranks findings by 'how much implementation work we expect'; measuring the work and moving a row to the tier its measured work meets is the ranking kept honest, not a carve-out. Spec line 114 defines E3 as 'a change across modules', which four modules is. The row stays kept and owed (E3, not deferred). Dropping the no-lot clause is FR-010 (legacy-only code), not a new exception. Precedent: the mill row re-tiered E3 accepted at amendment 4; amendment 26's withdrawn re-tier turned on a literal fix that passed, which is not the case here."
   },
   {
-   "id": "W56-4 shared village_grove change reaches the legacy roller",
-   "summary": "the 50 ft south strip and the yard's east lane also apply where roll.py:457 calls village_grove",
+   "id": "W58-4 row 594 re-tiered E2 -> E3 on measure; wing-end knob reverted",
+   "summary": "0048 joins the stable to the house's lower (doma) end and its mirror forms mirror the whole plan; our houses keep the doma at -x so the left-first wing is the lower end; the ranked fix (roll the wing end alone) would put the stable at the upper end, so the remaining drift is a whole-plan mirror knob",
    "class": "within",
-   "why": "It applies the research more widely and carves nothing out. Amendment 8 defers fixing legacy findings and does not forbid shared code from matching the research. No legacy pool map is regenerated in this commit."
+   "why": "The ranked E2 fix was written and found to contradict 0048 (stable at the upper end half the time), so it does not make the implementation match the research - the amendment 26 test (does the literal fix pass?) fails here and the re-tier stands. The correct fix is a new knob, E3 by spec line 114. The row stays kept and owed, and the reverted code ships nothing that departs from the research."
   },
   {
-   "id": "W56-5 batch 4 begins while batch 3 waits for the GM",
-   "summary": "ranked rows continue in the clone while batch 3's band-3 sign-off and T137/T140 wait for the GM; batch 4's bookend is measured from batch 3's end",
+   "id": "W58-5 never-arriving approach claimed UNRESEARCHED",
+   "summary": "kosatsuba_anchor's fallback (anchored at the approach's point nearest the houses) gains a Research: claim labeled UNRESEARCHED",
    "class": "within",
-   "why": "The GM's standing goal (request.md amendment, 2026-10-07): 'please don't stop working until you hit the cap or the feature is done. If you need to ask me a question then please defer it to the end of the feature'. Stopping would be the departure from it. Constitution XIII keeps the regressed state unpushed, and that still holds: nothing from batch 3 or 4 lands until the sign-off and T137/T140 are settled. Batch 4's bookend is measured from batch 3's end, so that band-3 cause is not mixed into this batch."
+   "why": "Labeling existing behavior with its true class (FR-005); exempts nothing from a researched rule."
   },
   {
-   "id": "W56-6 east lanes down to the south-east corner",
-   "summary": "village_grove's and copse_keepouts' east lane over each yard and bed now runs to 50 ft below the plot's south edge",
+   "id": "W58-6 occasions none; verification by the anchor test, impl-drift, spec-fidelity",
+   "summary": "no review occasion declared because nothing a hamlet draws moves",
    "class": "within",
-   "why": "0038's drawing rule: no crown 'within 50 ft east, west or south of a yard or bed, from the plot's north edge down'; the old rectangle stopped at the south edge and left the south-east corner open. This closes a gap in the rule, carves nothing out."
-  },
-  {
-   "id": "W56-7 Inashiro off _KNOTS_WAITING",
-   "summary": "test_pool_261's waiting list drops Inashiro, since the re-laid ground gathers its lane knot",
-   "class": "within",
-   "why": "It removes a waiver, so the test now holds Inashiro to the no-knot rule; measured (m:wave56-sun-strips knots_and_refusal). Tightening, not narrowing."
-  },
-  {
-   "id": "W56-8 T140 held open until batch 4's pair",
-   "summary": "seed 25 at 40 households draws again after wave 56, but T140 is not closed until batch 4's pair confirms it",
-   "class": "within",
-   "why": "Not closing a task on one roll is what the request needs (the findings fixed). Nothing is excepted, and the regressed state stays unpushed as before."
-  },
-  {
-   "id": "W57-1 scrub ground claim restated, nothing redrawn",
-   "summary": "row 151's 'drop the straw-gold solid fill' is met by restating the claim: the code draws the tile pattern alone",
-   "class": "within",
-   "why": "Measured, not assumed: tiles.cover_path writes fill=url(#pattern) with no stroke, grass_tile has no background rect, cover.py says 'NO solid fill', and no straw-gold fill is in settlement/. The code already matches 0078 ('no solid fill and no outline'), so the drift was in the claim. Fixing the claim makes code and research match, which is what the request asks for."
-  },
-  {
-   "id": "W57-2 woods whole for the scrub, grass-only tile in the fringe",
-   "summary": "the scrub tile (brush dots) now leaves each wood whole; a wood_fringe_tile (the same tufts, no brush dot) fills the WOOD_FRINGE_FT band in the scrub's slot and class",
-   "class": "within",
-   "why": "Row 152's fix as written ('the wood-edge fringe tile carries grass only, no brush dots, inside WOOD_FRINGE_FT'); 0077: grass about 8 ft in under a wood's edge, and 'no brush or pines stand inside a coppice wood'."
-  },
-  {
-   "id": "W57-3 glyph occasion on Kashikawa",
-   "summary": "the redrawn scrub edge is reviewed on Kashikawa at batch 4's close",
-   "class": "within",
-   "why": "Review routing under feature 294's occasions. It does not change which findings are fixed or how."
-  },
-  {
-   "id": "W57-4 wood fringe thins in two steps",
-   "summary": "the WOOD_FRINGE_FT band under a wood's edge split into an outer half at the grass-only tile's density and an inner half at WOOD_FRINGE_THIN_KEEP (0.5) of its tufts, in the scrub's slot and class",
-   "class": "within",
-   "why": "0077 says the grass is 'thinning out over the first few paces under the crowns'; a uniform band was the drift impl-drift found. Two steps at half density is a calibrated degree along a continuum, labeled a CONVENTION at the constant, inside the research's thinning - it carves nothing out of the request to make the implementation match the research."
-  },
-  {
-   "id": "W57-5 no coppice crown in a marsh",
-   "summary": "the coppice placer skips a crown whose center is inside any marsh polygon (soft_idx[:len(soft)], the marshes only)",
-   "class": "within",
-   "why": "0074: woody growth stops at the marsh's edge (the belt's alder excepted, which this placer does not draw). The crowns had thinned 46 ft into the marsh over the grass's ramp - a drift, fixed, with a test red on the old code. Exactly the request's 'make the implementation match the referenced research'."
-  },
-  {
-   "id": "W57-6 header tiles and slots, crops' lean, scrub pine reach, ponds' open water claimed",
-   "summary": "Research: claims added - header fills/rule lines and draw-first slots as CONVENTION; crowns and pines clear of the crops, PINE_SPREAD_BS reach, and nothing on a pond or crescent pond as UNRESEARCHED",
-   "class": "within",
-   "why": "Labeling existing behavior with its true class is how the claims-report surfaces what matches and what does not; the record's rule is that an unlabeled guess is the one failure. No behavior is exempted from a researched rule by these labels."
-  },
-  {
-   "id": "W57-7 scrub pines' account restated to throws",
-   "summary": "the scrub-pines claim now says one THROW per 6,000 sq ft, at least two throws, a refused throw seating none",
-   "class": "within",
-   "why": "A description brought in step with what the code does under 0078's 'a few scraggly pines'; nothing redrawn, no case carved out."
-  },
-  {
-   "id": "W57-8 crescent pond grass margin scaled by bs",
-   "summary": "the bare margin round a crescent pond is 2.0 * bs rather than a flat 2.0 units",
-   "class": "within",
-   "why": "A unit correction (2 ft at the map's grain); equal at a hamlet's 1 ft/px, maps byte-identical. Tightens consistency, narrows nothing."
+   "why": "Hamlets are 1 ft/px and byte-identical; the occasion rule is the project's, and the test red on the old signature enforces the requested fix."
   }
  ],
  "verdict": "CLEAR"

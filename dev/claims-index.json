@@ -58709,13 +58709,19 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#an approach that never comes within reach of a dwelling is anchored at its point nearest the houses": {
-  "code": "2c257913dea874dd",
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#an approach that never arrives": {
+  "code": "3f221c751995aae1",
   "core": "2c257913dea874dd",
   "date": "2026-10-08",
-  "note": "an approach that never comes within reach of a dwelling is anchored at its point nearest the houses",
+  "note": "the code falls back to the approach point nearest a dwelling when no sample comes within reach, and neither cited question says where the entrance is when an approach stops short of the houses (0190 names only \"entrances\" and \"center\"; 0246 is silent), so UNRESEARCHED is right",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements": {
   "code": "af349b08c2b57ffa",

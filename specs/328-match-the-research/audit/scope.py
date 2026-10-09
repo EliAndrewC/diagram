@@ -160,6 +160,10 @@ def strings_used(skill: Path, ran: set[tuple[str, str]], read: set[str] = frozen
 
 
 DEFERRED_ON_MEASURE = {
+    # only plain houses keep a byre: every house a scripted hamlet seats is kind 'plain' with no role (the five hamlets 15, 20,
+    # 16, 12 and 19 plain), so the filter excludes nothing a kept map draws; only the legacy roller seats a big or headman
+    # house (wave 58's measure, 2026-10-08)
+    "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#only plain houses keep a byre",
     # the pond feeder stream: drawn only where a comb's pond source carries `feeder`, and the one hamlet pond source (the
     # polder's reservoir, `hamletgen/water/polder.py`) carries none - no kept map draws it (wave 51's measure, 2026-10-08)
     "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder from the sluice",
