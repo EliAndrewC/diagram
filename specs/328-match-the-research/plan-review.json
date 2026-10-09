@@ -1,62 +1,50 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "f683a41dabb902516690ea138ef402b6908edf50aabf8fd82e0af3d39d9d2944",
+ "plan_sha256": "bc794e042bc3eea4c9aacca5a360e82de4f496104952907ab9a20c97a30b7563",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W66-1 trim floor removed",
-   "summary": "_pull_back's 40% keep_frac floor dropped; only a junction (min_len) and two points hold a lane",
+   "id": "W67-1",
+   "summary": "reaches_dooryard is 0246's 12 ft of the steading's built ground (house, byre, shed, threshing yard, garden) on any side, via dooryard_dist now reading byre and shed from geom.boxes",
    "class": "within",
-   "why": "the ranked fix verbatim ('drop the 40% trim floor: a lane end reaching nothing is pulled back to the last house it serves (0246)'); unit test passes (re-run 2026-10-09, make test-file)"
+   "why": "ranking row 182 verbatim; 0246's own sentence; the literal fix the request (fix every in-scope finding to its research) asks for"
   },
   {
-   "id": "W66-2 walk held to the first thing reached",
-   "summary": "the walk stops at the first point past the last thing served; _reaches names way/house/field so chained reach zones do not carry it to the next house in",
+   "id": "W67-2",
+   "summary": "trim_lane_stubs counts an end within 60 ft of the house or 12 ft of its built ground, any side; feature 287 W57's behind-the-house and walked-past refusals and their helpers (behind_house, walked_past, vertex_behind, PAST_GRAIN_FT) removed",
    "class": "within",
-   "why": "without the floor, 'shortest end that reaches anything' would run back to whatever stands nearest the start; stopping at the first thing reached walking back IS 0246's 'the last house it serves'. Call site (lanes.py:348) pulls back only an end that reaches nothing, so a lane ending on a way is not trimmed"
+   "why": "ranking row 181 ('drop the behind/past refusal'); wave 66's direction that W57 stays only by a MODE 1 ruling; none sought, so the literal rule is built"
   },
   {
-   "id": "W66-3 a lane reaching nothing left whole",
-   "summary": "a lane whose whole run serves nothing is returned unchanged",
+   "id": "W67-3",
+   "summary": "the 60 ft reach measured from the house's drawn footprint, not its center (impl-drift round 2)",
    "class": "within",
-   "why": "pre-existing behavior; 0246 pulls an end back to the last house it serves and such a lane has none, so the page names no target to pull to"
+   "why": "the plainer reading of 0246's 'within 60 ft of the house'; widens, never narrows. Not fully recorded: _helpers.py line 47 still says 'within this of the house's center', and the scripted tier (hamletgen/ways/geom.py:490, math.dist from center; 0246's session comment 'to a farmhouse's center') now reads the same figure the other way, while the plan says this wave matches wave 45's twins"
   },
   {
-   "id": "W66-4 field graves exemption reason restated",
-   "summary": "taxonomy.py's field_graves reason restated to 0008's island-or-corner forms",
+   "id": "W67-4",
+   "summary": "both reaches and the fan rule's 60 ft read at the map's scale via px() (were pixels, right only at 1 ft/px), with a test red on the unscaled code",
    "class": "within",
-   "why": "the code already rolls both forms (settlement/fields/features.py: 'island' or 'corner', even odds), so the reason moves to what the code and 0008 both say; a claim re-owed by the merge of main, no behavior change"
+   "why": "a defect found in the code under fix (constitution XIV); 0246's figures are feet"
   },
   {
-   "id": "W66-5 spec linter table-valued record",
-   "summary": "spec_figures.appears crashed on a dict-valued measurement; recorded_numbers takes every nested number; tested",
+   "id": "W67-5",
+   "summary": "the house prefilter boxes the end by the larger reach and relies on house_extent filing each house by its whole steading",
    "class": "within",
-   "why": "a defect found in the work at hand (constitution XIV); a verification tool, no behavior on maps"
+   "why": "checked: house_extent reads byre and shed through part_box, which reads geom.boxes, so no byre-only reach is lost"
   },
   {
-   "id": "W66-6 Decisions rows 56-65 restated without bare figures",
-   "summary": "spec.md Decisions rows point at pages or m: records in place of unpointed figures",
+   "id": "W67-6",
+   "summary": "the fan rule keeps its center distance (_d) as its measure",
    "class": "within",
-   "why": "the figure contract (feature 239); the m: keys named (wave62-slide-bounded, wave63-board-footing, wave64-board-widths-and-caption) exist; the rows' meaning is unchanged"
+   "why": "the fan rule is its own UNRESEARCHED row, untouched by this wave"
   },
   {
-   "id": "W66-7 dooryard rows held for their own wave",
-   "summary": "reaches_dooryard and trim_lane_stubs#served at the dooryard (E2) left to a later wave with a lane review",
+   "id": "W67-7",
+   "summary": "bearing test's arm threshold moved to within 60 ft of the footprint (>= 415); Kuwabata-style test inverted (an end 11 ft behind the back wall stays)",
    "class": "within",
-   "why": "sequencing inside E2; the rows stay ranked and open, and SC-003 bars any E3 row while they stand"
-  },
-  {
-   "id": "W66-8 held dooryard rows fixed to 0246's any-side rule",
-   "summary": "reaches_dooryard and trim_lane_stubs#served at the dooryard to be fixed to 0246's any-side rule (60 ft of the house or 12 ft of house, byre, shed, threshing yard or garden) in their own wave with its lane review; W57's dooryard-only rule kept only on a MODE 1 LEGITIMATE ruling",
-   "class": "within",
-   "why": "round 1's NOT LEGITIMATE answered: the direction is now implementation to research per FR-004, matching the ranked fix lines and wave 45's hamletgen precedent; keeping the code's rule is routed to the Edge Cases exception path, not framed as an open choice. Deferral to a later wave is sequencing inside E2"
-  },
-  {
-   "id": "W66-9 board facing row held at E2",
-   "summary": "WayFacing.turn#board squared to its nearest way stays E2 in found-wave65.jsonl and ranking.json, its one predicate WayFacing.turn fed the placement kind at its call in _route_seats",
-   "class": "within",
-   "why": "round 1's NOT LEGITIMATE answered: the E3 re-tier and its 'admits both readings' argument are dropped; tier and tier_as_ranked both E2; the call is at siting.py:339 inside _route_seats (siting.py:287), and kosatsuba_faces_the_road has no test under tests/ beyond the legacy name fixtures"
+   "why": "tests enforcing the requested rule; arithmetic checked (26 ft off the wall, 54 ft reach)"
   }
  ],
  "verdict": "CLEAR"

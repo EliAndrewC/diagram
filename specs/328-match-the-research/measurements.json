@@ -1181,5 +1181,17 @@
       "unit": "a 200 ft lane served 40-70 ft from its start: whole before, ends 40-48 ft now"
     },
     "command": "for g in pool/hamlets/*/*.gen.py; do make map GEN=$g; done; cmp each pool/hamlets/<m>/<m>.json against HEAD's; make cohort N=48; make test-file FILE=tests/settlement/test_water_ways.py"
+  },
+  "wave67-dooryard-any-side": {
+    "quantity": "wave 67 (2026-10-09): a lane end reaches its farmhouse within 60 ft of the house or 12 ft of its built ground, on any side",
+    "observed": "2026-10-09",
+    "source": "tests/settlement/test_water_ways.py, tests/settlement/test_bearing.py; the five hamlets' manifests against HEAD's; make cohort N=48",
+    "command": "for g in pool/hamlets/*/*.gen.py; do make map GEN=$g; done; cmp each pool/hamlets/<m>/<m>.json against HEAD's; make cohort N=48; make test-file FILE=tests/settlement/test_water_ways.py; make test-file FILE=tests/settlement/test_bearing.py",
+    "method": "the unit tests; the hamlets rerolled and compared byte for byte; the cohort against wave 66's run",
+    "value": {
+      "hamlets": "byte-identical, all five",
+      "cohort_48": "48/54, the same six refused seeds (03, 10, 20, 22, 33, 906)",
+      "unit": "an end 11 ft behind a back wall: arrived (was pulled back); 13 ft behind: not; a byre 10 ft off: arrived"
+    }
   }
 }

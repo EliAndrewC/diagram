@@ -4488,6 +4488,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/geom.py::end_serves#an end reaches something seen",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the scripted tier counts an end as reaching a farmhouse within 60 ft of the house's CENTER (`math.dist(q, h)` over house points), where 0246 says 'within 60 ft of the house' and the settlement tier now measures from the drawn footprint (feature 328 wave 67): measure from the house's footprint here too, so the two tiers read one figure one way (spec-fidelity, wave 67)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/geom.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 67, spec-fidelity",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#gateway clearance",
   "tier": "E1",
   "fix": "TRACK_FABRIC_GAP 16 -> 7 ft in push_clear_of_fabric (0081/0246 lane-to-fence clearance)",
@@ -9440,6 +9455,22 @@
   "scope": "deferred"
  },
  {
+  "key": "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard",
+  "tier": "E2",
+  "fix": "count an end served within 60 ft of the house or 12 ft of its house, byre, shed, threshing yard or garden on any side (0246); drop the behind/past refusal",
+  "files": [
+   "l7r/diagram/settlement/water_ways/lanes.py"
+  ],
+  "after": [
+   "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the dooryard"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "67",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the dooryard",
   "tier": "E2",
   "fix": "reaches_dooryard counts the house, byre, shed, threshing yard and garden within 12 ft (0246), not just yard, beds and front band",
@@ -9450,7 +9481,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "67",
   "scope": "kept"
  },
  {
@@ -9468,22 +9499,6 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
- },
- {
-  "key": "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard",
-  "tier": "E2",
-  "fix": "count an end served within 60 ft of the house or 12 ft of its house, byre, shed, threshing yard or garden on any side (0246); drop the behind/past refusal",
-  "files": [
-   "l7r/diagram/settlement/water_ways/lanes.py"
-  ],
-  "after": [
-   "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the dooryard"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#ditch winding",

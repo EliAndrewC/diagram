@@ -13,8 +13,6 @@ from l7r.diagram.overlap.registry import refuse_unadmitted
 from .._geom import (
     Pt,
     edge_dist,
-    point_in_poly,
-    rot_rect,
     seg_dist,
 )
 from ..rolling.fit import houses_meeting
@@ -27,49 +25,24 @@ from ._helpers import (
     _angle_between,
     _lane_len,
     _pull_back,
+    dooryard_dist,
     fan_rival,
     junction_floor,
-    vertex_behind,
-    walked_past,
 )
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
 
-def _house_frame(house: Any, q: Pt) -> tuple[float, float]:
-    """`q` in the house's own frame: +x along the ridge, +y out through the FRONT face - the side the threshing yard is
-    laid on (`rolling/bundle.py`: the yard at `hy + hh / 2 + gap`, turned with the house by its rake)."""
-    th = math.radians(float(house.get("rot") or 0.0))
-    dx, dy = q[0] - float(house["x"]), q[1] - float(house["y"])
-    return (dx * math.cos(th) + dy * math.sin(th), -dx * math.sin(th) + dy * math.cos(th))
-
-
-def behind_house(house: Any, q: Pt) -> bool:
-    """Does `q` stand BEHIND the house - past its back wall, abreast of it (feature 287, water W57)?
-    Research: behind the back wall is not the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within the house's width plus its depth, past the back wall"""
-    lx, ly = _house_frame(house, q)
-    return ly < -float(house["h"]) / 2 and abs(lx) <= float(house["w"]) / 2 + float(house["h"])
-
-
 def reaches_dooryard(house: Any, q: Pt, reach: float = DOORYARD_REACH_FT) -> bool:
-    """THE RULE (feature 287, water W57; 269 B17, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html): a lane end reaches a farmhouse at its DOORYARD -
-    within `reach` of its threshing yard or its dooryard beds, or in the band `reach` deep in front of its front face.
+    """THE RULE (269 B17; research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html): a lane end
+    reaches a farmhouse within `reach` of the steading's built ground - its house, byre, shed, threshing yard or garden - on
+    ANY side (`dooryard_dist`). Feature 287's water W57 counted only the yard, the beds and a band before the front face, so
+    that Kuwabata's lane 5, ending 11 ft behind house 1's back wall, would not read as arrived; 0246 counts every side, as
+    wave 45 did for the scripted tier's twins (`off_the_back`, `settle_ends`), and feature 328 wave 66 took this one there.
 
-    Never by distance to the house itself: 12 ft of the drawn house counted a lane ending behind the BACK wall as
-    arrived (Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard - the backlog (since closed), "A lane end behind a house
-    counts as its dooryard"). `trim_lane_stubs` judges its ends with this, and the test of it reads it.
-
-    Research: a lane reaches the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within the reach of the yard or beds, or in the band before the front face"""
-    rot = float(house.get("rot") or 0.0)
-    g = house.get("geom") or {}
-    for r in [g[k] for k in ("yard",) if g.get(k) is not None] + list(g.get("gardens") or ()):
-        quad = rot_rect(float(r[0]), float(r[1]), float(r[2]), float(r[3]), rot)
-        if point_in_poly(q[0], q[1], quad) or edge_dist(q[0], q[1], quad) <= reach:
-            return True
-    lx, ly = _house_frame(house, q)
-    hh = float(house["h"]) / 2
-    return hh - 1e-6 <= ly <= hh + reach and abs(lx) <= float(house["w"]) / 2 + reach
+    Research: a lane reaches the steading - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its house, byre, shed, threshing yard or garden, on any side"""
+    return dooryard_dist(house, q) <= reach
 
 
 STREET_W_FT = 24.0
@@ -244,10 +217,10 @@ class LanesMixin:
 
         A FARMHOUSE IS REACHED AT ITS DOORYARD (269 B17, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: "a lane that serves a farmhouse ends at
         that house's dooryard ... a lane end that reaches nothing is pulled back to the last house it serves"). An end serves
-        a house when it stands within `dooryard_reach` of the house's drawn footprint, yard or beds, or within `house_reach`
-        of its center while the house still lies ahead of it - never past it. It was 90 ft from the CENTER, in any
-        direction, which let an arm run on past the last steading into the grass (Sawada, Kashikawa). An end on the field's
-        bund has arrived too (`BUND_REACH_FT`, research/questions/0014-bunds-between-the-paddies-aze.drawing.html).
+        a house when it stands within `dooryard_reach` of the steading's built ground (its house, byre, shed, threshing yard
+        or garden) or within `house_reach` of the house, on any side (0246; feature 328 wave 67 retired the dooryard-only
+        and never-past refusals). It was 90 ft from the CENTER, which let an arm run on past the last steading into the
+        grass (Sawada, Kashikawa); 0246's 60 ft is the reach now. An end on the field's bund has arrived too (`BUND_REACH_FT`, research/questions/0014-bunds-between-the-paddies-aze.drawing.html).
 
         MEASURED before it existed: five internal lane ends across the four live scripted hamlets
         (and honda, ubame x4, kikuta x2, tanada, hoshizora among the frozen ones) ended more than
@@ -263,7 +236,7 @@ class LanesMixin:
 
         Research:
             an end reaching nothing is pulled back - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
-            served at the dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the dooryard, or within 60 ft of the center and not past or behind the house
+            served at the dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the steading's built ground or 60 ft of the house's drawn footprint, on any side, at the map's scale
             arrival at the bund - GUESS research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge, at the map's scale (the page gives no figure)
             meeting another way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of it, at 20 degrees or more
             one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
@@ -272,6 +245,8 @@ class LanesMixin:
             a row street stays whole - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it, its ends not pulled back as a lane's are
         """
         way_reach = self.px(60.0) if way_reach is None else way_reach  # 0246: within 60 ft of another way, at the map's scale
+        # 0246's two reaches, at the map's scale (feature 328 wave 67: they were read as pixels, right only at 1 ft/px)
+        house_px, dooryard_px = self.px(house_reach), self.px(dooryard_reach)
         lanes = self.M.get("lanes") or []
         houses = self.M.get("houses") or []
         # the worked ground a lane may end on: the fields' outlines and the dry plots (hamletgen reads the drawn rice too)
@@ -281,7 +256,7 @@ class LanesMixin:
         _drop: set[int] = set()
 
         def _fan_rival(q: Pt, bearing: float, house: Pt, mine: float, me: int) -> bool:
-            return fan_rival(lanes, q, bearing, house, mine, me, fan_spread, fan_bearing)
+            return fan_rival(lanes, q, bearing, house, mine, me, self.px(fan_spread), fan_bearing)  # the 60 ft at the map's scale (feature 328 wave 67)
 
         for i, ln in enumerate(lanes):
             # THE FIELD SPUR IS NOT A STUB (feature 261): its outer end reaches the FIELD, which is neither a lane nor a
@@ -294,7 +269,7 @@ class LanesMixin:
             if len(pts) < 2:
                 continue
 
-            def _reaches(q: Pt, me: int = i, run: Any = None, back: Pt | None = None) -> tuple[Any, ...] | None:
+            def _reaches(q: Pt, me: int = i, run: Any = None) -> tuple[Any, ...] | None:
                 """WHAT this end reaches - a way, a house or a field, named - or None: `_pull_back` holds an end to the one
                 thing it served last (0246), so it has to know which (feature 328 wave 66)."""
                 for k, other in enumerate(lanes):
@@ -326,15 +301,15 @@ class LanesMixin:
                 # house from opposite quarters is a house on a corner - a real thing that reads as
                 # one. It is only ends arriving ALONGSIDE each other that the eye merges.
                 _my = math.degrees(math.atan2(run[1][1] - run[0][1], run[1][0] - run[0][0])) if run else None
-                for h in houses_meeting(houses, (q[0] - house_reach, q[1] - house_reach, q[0] + house_reach, q[1] + house_reach)):
-                    _d = math.hypot(q[0] - h["x"], q[1] - h["y"])
-                    # AT ITS DOORYARD, OR BESIDE THE HOUSE AND NOT PAST IT (269 B17): within the serving reach of the center
-                    # only while the house still lies ahead of the end or level with it - an end that has walked on past
-                    # its last house is pulled back to it, as `_trim_to_service` cuts one at its closest approach
-                    _from = back if back is not None else (run[0] if run is not None else None)
-                    # ...AND NEVER BEHIND IT (feature 287, water W57): the dooryard is the yard and the front, not 12 ft of
-                    # any wall, and an end abreast of the back wall is not "beside the house" either - it is behind it.
-                    if not reaches_dooryard(h, q, dooryard_reach) and (_d > house_reach or behind_house(h, q) or (_from is not None and walked_past(_from, q, (h["x"], h["y"])))):
+                # the index files each house by its whole steading's extent (`house_extent`: house, yard, shed, byre, beds),
+                # so a box of the larger reach round the end meets every house either reach could find
+                _box = max(house_px, dooryard_px)
+                for h in houses_meeting(houses, (q[0] - _box, q[1] - _box, q[0] + _box, q[1] + _box)):
+                    _d = math.hypot(q[0] - h["x"], q[1] - h["y"])  # from the center: the fan rule's measure, not the reach's
+                    # WITHIN 60 FT OF THE HOUSE - its drawn footprint - OR 12 FT OF ITS BUILT GROUND, ON ANY SIDE (0246): the
+                    # dooryard-only and never-past refusals of feature 287 (water W57, 269 B17) are retired (feature 328 wave 67)
+                    _house = {"x": h["x"], "y": h["y"], "w": h["w"], "h": h["h"], "rot": h.get("rot")}
+                    if not reaches_dooryard(h, q, dooryard_px) and dooryard_dist(_house, q) > house_px:
                         continue
                     if _my is None or not _fan_rival(q, _my, (h["x"], h["y"]), _d, me):
                         return ("house", id(h))
@@ -346,7 +321,7 @@ class LanesMixin:
 
             for _ in range(2):  # each end in turn; a 2-point lane can lose at most one
                 if len(pts) >= 2 and not _reaches(pts[-1], run=(pts[-2], pts[-1])):
-                    pts = _pull_back(pts, lambda q, _p=pts: _reaches(q, run=(_p[-2], _p[-1]), back=vertex_behind(q, _p)), min_len=_junction_floor(pts))
+                    pts = _pull_back(pts, lambda q, _p=pts: _reaches(q, run=(_p[-2], _p[-1])), min_len=_junction_floor(pts))
                     trimmed += 1
                 pts.reverse()
             # ...and a lane too SHORT to front anybody is not a lane at all, it is clipping debris.

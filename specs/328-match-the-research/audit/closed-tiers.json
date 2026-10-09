@@ -516,6 +516,8 @@
  "l7r/diagram/settlement/water_ways/_helpers.py::_pull_back#trim floor": "E2",
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": "E1",
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": "E1",
+ "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard": "E2",
+ "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the dooryard": "E2",
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#stream width": "E1",
  "l7r/diagram/waterfields/banks.py::_TINT_MAX_AREA_RATIO#outsized plot left green": "E2",
  "l7r/diagram/waterfields/banks.py::_TINT_MAX_ASPECT#channel-shaped plot left green": "E2",

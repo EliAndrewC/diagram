@@ -11,7 +11,7 @@ import pytest
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import bearing as B
 from l7r.diagram.settlement.rolling.fit import house_box, part_box
-from l7r.diagram.settlement.water_ways._helpers import DOORYARD_REACH_FT, HOUSE_SERVE_FT, dooryard_dist, vertex_behind, walked_past
+from l7r.diagram.settlement.water_ways._helpers import DOORYARD_REACH_FT, HOUSE_SERVE_FT, dooryard_dist
 from tests.settlement._builders import _nuc_village
 
 
@@ -125,17 +125,16 @@ def test_a_quarter_turned_homestead_draws_its_yard_beside_the_house_with_the_edg
         assert local[0][1] == pytest.approx(local[1][1], abs=0.2), "the yard's edge toward the house is level in the house's frame"
 
 
-def test_an_end_serves_a_house_at_its_dooryard_or_beside_it_and_never_past_it() -> None:
+def test_an_end_serves_a_house_within_reach_of_its_built_ground_on_any_side() -> None:
+    """0246 (feature 328 wave 67): within 12 ft of the steading's built ground - its house, byre, shed, threshing yard or
+    garden - on any side, the byre and shed read from the record's `geom.boxes`."""
     house = {"x": 0.0, "y": 0.0, "w": 46.0, "h": 28.0, "rot": 0.0}
     assert dooryard_dist(house, (0.0, 0.0)) == 0.0
     assert dooryard_dist(house, (0.0, 24.0)) == pytest.approx(10.0)
-    turned = {**house, "geom": {"yard": (0.0, 30.0, 30.0, 20.0), "gardens": [(40.0, 0.0, 10.0, 10.0)]}}
+    assert dooryard_dist(house, (0.0, -24.0)) == pytest.approx(10.0), "behind the back wall counts as much as before the front"
+    turned = {**house, "geom": {"yard": (0.0, 30.0, 30.0, 20.0), "gardens": [(40.0, 0.0, 10.0, 10.0)], "boxes": {"byre": (-40.0, 0.0, 10.0, 10.0), "shed": None}}}
     assert dooryard_dist(turned, (0.0, 45.0)) == pytest.approx(5.0), "the yard is the dooryard too"
-    assert not walked_past((-50.0, 30.0), (0.0, 30.0), (0.0, 0.0)), "level with the house"
-    assert walked_past((-50.0, 30.0), (40.0, 30.0), (0.0, 0.0)), "40 ft on past it"
-    assert not walked_past((0.0, 0.0), (0.0, 0.0), (5.0, 5.0)), "a leg of no length walks nowhere"
-    assert vertex_behind((150.0, 0.0), [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]) == (100.0, 0.0)
-    assert vertex_behind((50.0, 0.0), [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]) == (0.0, 0.0)
+    assert dooryard_dist(turned, (-50.0, 0.0)) == pytest.approx(5.0), "and the byre"
     assert DOORYARD_REACH_FT < HOUSE_SERVE_FT
 
 
@@ -149,7 +148,7 @@ def test_the_dooryard_figures_are_the_scripted_tiers_own() -> None:
 def _lanes_past_a_house(end_x: float) -> Settlement:
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    s.M["houses"] = [{"x": 500.0, "y": 540.0, "w": 46.0, "h": 28.0, "rot": 180.0}]  # facing north, onto the arm: a lane behind a house serves it not at all (feature 287, water W57)
+    s.M["houses"] = [{"x": 500.0, "y": 540.0, "w": 46.0, "h": 28.0, "rot": 180.0}]  # facing north, onto the arm: the arm runs before its front
     s.lane([(100.0, 100.0), (100.0, 900.0)], width=4)
     s.lane([(100.0, 500.0), (end_x, 500.0)], width=4)  # an arm off the first, running east past the house 40 ft north of it, before its front
     return s
@@ -162,7 +161,9 @@ def test_trim_lane_stubs_pulls_an_arm_back_to_the_last_house_it_serves() -> None
     s.trim_lane_stubs()
     end = s.M["lanes"][1]["pts"][-1]
     assert end[0] <= 500.0 + 8.0, f"the arm stops beside the house, not {end[0] - 500.0:.0f} ft past it"
-    assert end[0] >= 440.0, "...and not short of it"
+    # ...and not short of it: within 60 ft of the house's drawn footprint (0246, measured from the walls since feature 328
+    # wave 67 - the arm runs 26 ft off the house's near wall, so the reach runs to 54 ft before its west end)
+    assert end[0] >= 477.0 - 54.0 - 8.0, "...and not short of it"
 
 
 def test_trim_lane_stubs_counts_an_end_on_the_bund() -> None:
@@ -170,3 +171,23 @@ def test_trim_lane_stubs_counts_an_end_on_the_bund() -> None:
     s.M["fields"] = [{"outline": [(704.0, 400.0), (900.0, 400.0), (900.0, 600.0), (704.0, 600.0)]}]
     s.trim_lane_stubs()
     assert s.M["lanes"][1]["pts"][-1] == [700.0, 500.0], "an end 4 ft off the field's edge has arrived on the bund"
+
+
+def test_trim_lane_stubs_reads_its_reaches_in_feet_at_the_maps_scale() -> None:
+    """Feature 328 wave 67 (impl-drift): the 60 ft and 12 ft reaches were read as pixels, right only at 1 ft/px. At 2 ft/px
+    an end 25 px (50 ft) beyond a house's wall is within 60 ft and stays; one 40 px (80 ft) beyond it is pulled back (here
+    to the lane it left, and then dropped as a stub)."""
+
+    def end_after_trim(end_y: float) -> float | None:
+        s = Settlement(1000, 1000, seed=1)
+        s.meta(name="V", scale="hamlet", ftpx=2, toscale=True)
+        s.M["houses"] = [{"x": 500.0, "y": 500.0, "w": 24.0, "h": 14.0, "rot": 0.0}]
+        s.lane([(100.0, 100.0), (900.0, 100.0)], width=2)
+        s.lane([(500.0, 100.0), (500.0, end_y)], width=2)  # down from the first lane toward the house's north wall (y 493)
+        s.trim_lane_stubs()
+        arm = [ln for ln in s.M["lanes"] if ln["pts"][0] == [500.0, 100.0]]
+        return float(arm[0]["pts"][-1][1]) if arm else None
+
+    assert end_after_trim(493.0 - 25.0) == 493.0 - 25.0
+    pulled = end_after_trim(493.0 - 40.0)
+    assert pulled is None or pulled < 493.0 - 40.0 - 1.0, pulled

@@ -1856,3 +1856,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T162 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 66, round 2); the lane end pulled back to the last house it serves with no 40% floor, held to the first thing it reached; the field graves' reason restated; the spec linter's table-valued record fixed; claims in step over two impl-drift rounds; maps and cohort unchanged
+
+## Phase 68 - wave 67 (amendment 66): a lane end reaches its farmhouse on any side
+
+- `settlement/water_ways/lanes.py` (`reaches_dooryard`, `trim_lane_stubs`' reach); `settlement/water_ways/_helpers.py`
+  (`dooryard_dist`'s byre and shed; the retired `walked_past`, `vertex_behind`, `PAST_GRAIN_FT`).
+
+- [x] T163 wave 67's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 67); a lane end reaches its farmhouse within 60 ft of the house's footprint or 12 ft of its built ground, on any side, at the map's scale; W57's refusals retired; claims in step over four impl-drift rounds; maps and cohort unchanged
+- [x] T164 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 67); a lane end reaches its farmhouse within 60 ft of the house's footprint or 12 ft of its built ground, on any side, at the map's scale; W57's refusals retired; claims in step over four impl-drift rounds; maps and cohort unchanged

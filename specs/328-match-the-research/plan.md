@@ -1039,6 +1039,34 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `test_pull_back_reaches_the_last_house_however_far_back_it_stands`,
   `test_a_figure_appears_in_a_table_valued_record`; `impl-drift`; `spec-fidelity`.
 
+## Wave 67 (amendment 66, 2026-10-09) - batch 6
+
+- **Scope**: the two dooryard rows (0246: "A lane end counts as reaching a farmhouse when it comes within 60 ft of the house, or
+  within 12 ft of the steading's built ground - its house, byre, shed, threshing yard or garden", both figures its GUESS),
+  fixed to the page's any-side rule as wave 45 fixed the scripted tier's twins (`off_the_back`, `settle_ends`).
+  `reaches_dooryard` is the 12 ft test of the steading's built ground on any side (`dooryard_dist`, now reading the byre and
+  shed from `geom.boxes`), where it counted the yard, the beds and a band before the front face; `trim_lane_stubs` counts an
+  end within 60 ft of the house or 12 ft of its built ground, dropping feature 287 water W57's behind-the-house and
+  walked-past refusals - so `behind_house`, `walked_past`, `vertex_behind` and `PAST_GRAIN_FT` go with them. No MODE 1
+  exception was sought: the page is the research the claims cite, and wave 45 already took the same page's rule.
+- **Measured** (m:wave67-dooryard-any-side): the five hamlets reroll byte-identical (the scripted tier settles its own lane
+  ends by the same rule, so this trim moves no shipped end); the 48-seed cohort unchanged (the same six refused seeds); the
+  unit tests - an end 11 ft behind a back wall has arrived and stays; 13 ft behind it, it has not; a byre counts.
+- **impl-drift round 1**: `dooryard_dist` now claims 0246's built ground (it was the module's "lane geometry - NONE"), and
+  `trim_lane_stubs`' claim and docstring restated for the any-side rule (they still said "not past or behind the house").
+- **impl-drift round 2**: the 60 ft was measured from the house's CENTER (0246: "within 60 ft of the house") and neither
+  reach was scaled (pixels, right only at 1 ft/px): the 60 ft is now measured from the drawn footprint and both reaches are
+  `px(...)` (`test_trim_lane_stubs_reads_its_reaches_in_feet_at_the_maps_scale`, red on the unscaled code); its third point,
+  the house prefilter, already meets every house by its whole steading's extent (`house_extent`), now said at the call.
+  The bearing test's arm stops within 60 ft of the footprint (430), where it stopped within 60 ft of the center (440+).
+- **impl-drift round 3**: the one-end-per-house rule's 60 ft (`fan_spread`) was also read as pixels - scaled now (`self.px`).
+- **spec-fidelity (CLEAR)**: the reach comment in `_helpers.py` restated to the footprint; the scripted tier's twin still reads
+  0246's 60 ft from the house's CENTER (`end_serves`), so the two tiers now read one figure two ways - filed as a found row
+  (found-wave67.jsonl, E1) for the next wave.
+- **Verification**: `test_a_lane_ending_behind_a_house_has_reached_it`,
+  `test_an_end_serves_a_house_within_reach_of_its_built_ground_on_any_side`, the bearing test's arm; `impl-drift`;
+  `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

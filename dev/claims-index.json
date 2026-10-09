@@ -62112,10 +62112,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::DOORYARD_REACH_FT#dooryard reach": {
-  "code": "76d68893961059c4",
+  "code": "7f49757ecc4431a7",
   "core": "e558226d98ba699d",
-  "date": "2026-10-05",
-  "note": "12 ft, the page's GUESS",
+  "date": "2026-10-09",
+  "note": "12 ft of house, byre, shed, threshing yard or garden on any side; 0246 records the figure as part of its GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -62126,10 +62126,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::HOUSE_SERVE_FT#beside-the-house reach": {
-  "code": "c8fb45acce98430a",
+  "code": "9475aabd39e463c2",
   "core": "c0101826cceee8b7",
-  "date": "2026-10-05",
-  "note": "60 ft, the page's GUESS",
+  "date": "2026-10-09",
+  "note": "60 ft of the house, on any side; 0246 records the figure as part of its GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -62137,14 +62137,6 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/water_ways/_helpers.py::PAST_GRAIN_FT#lane geometry": {
-  "code": "d2e607a2025421c9",
-  "core": "eab5cc0df856d783",
-  "date": "2026-10-03",
-  "note": "walking tolerance",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::_FRAY_DEG#fraying track": {
@@ -62208,12 +62200,18 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/water_ways/_helpers.py::dooryard_dist#lane geometry": {
-  "code": "84e88f1a7709d6cf",
-  "core": "099698a89ce643e0",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
+ "l7r/diagram/settlement/water_ways/_helpers.py::dooryard_dist#the steading's built ground": {
+  "code": "673c5ee6902004a4",
+  "core": "50f66f39ae2403a1",
+  "date": "2026-10-09",
+  "note": "measures to the footprint, yard, shed, byre and garden quads, zero inside one; this is §6's \"its house, byre, shed, threshing yard or garden\"",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::fan_rival#one approach per house": {
@@ -62244,22 +62242,6 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
   ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/water_ways/_helpers.py::vertex_behind#lane geometry": {
-  "code": "67667826c155f27f",
-  "core": "2478419eb090d1f6",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/water_ways/_helpers.py::walked_past#lane geometry": {
-  "code": "83353f391c785829",
-  "core": "c3e03ee46fbc5806",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin#mouths drawn as joins": {
@@ -62754,10 +62736,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#a row street stays whole": {
-  "code": "ff5c12b165076682",
-  "core": "83f41f59448a4d09",
+  "code": "a614eca9f4c3c67d",
+  "core": "430adfad460cfc83",
   "date": "2026-10-09",
-  "note": "`ln.get(\"street\")` is skipped, so the street is never pulled back",
+  "note": "the pass skips `ln.get(\"street\")`, so the street runs on off the map as the road into it",
   "pages": {
    "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
   },
@@ -62768,24 +62750,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#an end reaching nothing is pulled back": {
-  "code": "5fd269f0095317f8",
-  "core": "83f41f59448a4d09",
+  "code": "f6a941104c81ce19",
+  "core": "430adfad460cfc83",
   "date": "2026-10-09",
-  "note": "each end that reaches no house, way or field edge goes to `_pull_back`",
+  "note": "`_pull_back` holds the end to the last house, way or field it reaches; the page names a bund or another way as things an end may reach, and an end that reaches nothing is pulled back",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": {
-  "code": "14e66b8d84e37746",
-  "core": "83f41f59448a4d09",
+  "code": "7997f7c93d6febc8",
+  "core": "430adfad460cfc83",
   "date": "2026-10-09",
-  "note": "the 6 ft from a field or dry plot edge is a guess; the page sends the path onto the bund but gives no reach figure",
+  "note": "the page has the path join the outer bund but gives no reach, so `px(BUND_REACH_FT)` (6 ft at the map's scale) is honestly a GUESS",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -62796,10 +62779,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": {
-  "code": "4cd3b3a6bdd36dba",
-  "core": "83f41f59448a4d09",
+  "code": "413f04bdc8a909cf",
+  "core": "430adfad460cfc83",
   "date": "2026-10-09",
-  "note": "60 ft is the page's GUESS figure; the 20 degree fray test is a guess the page is silent on",
+  "note": "`way_reach = px(60)` matches the page's \"another way within 60 ft of it\", which it calls part of the GUESS; the page is silent on the 20 deg fray test, so GUESS is the right label for it too",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -62810,20 +62793,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#one end per house and bearing": {
-  "code": "14f576018b7ce8e6",
-  "core": "83f41f59448a4d09",
+  "code": "70142ce68b568786",
+  "core": "430adfad460cfc83",
   "date": "2026-10-09",
-  "note": "none of the cited pages answers the 60 ft / 25 degree fan-rival rule, so UNRESEARCHED holds",
+  "note": "the rule now gets `self.px(fan_spread)`, so the 60 ft is at the map's scale and the 25 deg bearing goes through unchanged; 0081's 25 ft end-join rule is a different rule and does not answer this one",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard": {
-  "code": "c995c3d7976780a9",
-  "core": "83f41f59448a4d09",
+  "code": "f0a8e36dc014f017",
+  "core": "430adfad460cfc83",
   "date": "2026-10-09",
-  "note": "the page counts an end \"within 60 ft of the house, or within 12 ft of the steading's built ground - its house, byre, shed, threshing yard or garden\", on any side; the code's `reaches_dooryard` covers only yard, beds and front band, and the 60 ft from the center is refused when `behind_house` or `walked_past`. Either the code takes the page's any-side test, or the page records the dooryard-only, not-past, not-behind rule as a DEVIATION",
+  "note": "`reaches_dooryard(h, q, dooryard_px)` or `dooryard_dist <= house_px` gives 12 ft from the built ground or 60 ft from the house, on any side, at the map's scale, as the page states, and the page records both figures as GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -62831,30 +62816,35 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#short lanes dropped": {
-  "code": "89869a08e109cb8d",
-  "core": "83f41f59448a4d09",
+  "code": "aa6f5c0fac2f4c68",
+  "core": "430adfad460cfc83",
   "date": "2026-10-09",
-  "note": "the cited pages are silent on the 71 ft drop (0081's 40 ft rule is about tails past a crossing, a different rule)",
+  "note": "the 71 ft floor is divided by ftpx, so it is at the map's scale; no cited page sets a shortest length for an internal lane (0081's 40 ft rules cover tails and hairpin legs, not whole lanes)",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#the track out and the field spur stay whole": {
-  "code": "ff6e35606c25108a",
-  "core": "83f41f59448a4d09",
+  "code": "f8a29807e43ace9f",
+  "core": "430adfad460cfc83",
   "date": "2026-10-09",
-  "note": "connector and spur are skipped; the track out runs off the map, and spur and track are one through-route",
+  "note": "connector and spur are skipped; the track out runs off the map and never stops in open country, and the spur and track out are the two ends of one through-route",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6",
+   "0081-village-lanes.drawing.html:f2368e271306e3c2"
   ],
   "verdict": "IN-STEP"
  },
@@ -62873,41 +62863,19 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/water_ways/lanes.py::_house_frame#lane records and their ink": {
-  "code": "e2e2476e50f3f707",
-  "core": "8401792aa3b5bfb9",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
+ "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the steading": {
+  "code": "ad7f1274e5771369",
+  "core": "e4520a3bab5e62c8",
+  "date": "2026-10-09",
+  "note": "`dooryard_dist <= 12`, on any side",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/water_ways/lanes.py::behind_house#behind the back wall is not the dooryard": {
-  "code": "e60e2b56e5e829fa",
-  "core": "2aaceed2a93404a0",
-  "date": "2026-10-05",
-  "note": "0246 has no behind-the-back-wall zone, and its rule counts an end within 12 ft of the house itself, or 60 ft of it, as reaching it on any side; record this zone on 0246 (a GUESS)",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the dooryard": {
-  "code": "7884830020612bac",
-  "core": "4032346f53092479",
-  "date": "2026-10-05",
-  "note": "only the yard, beds and the band before the front face count, where the page's built ground is \"its house, byre, shed, threshing yard or garden\" within 12 ft",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/water_ways/wards.py::WardsMixin#quarter zones and reserve kinds": {
   "code": "326be938cd6de17f",

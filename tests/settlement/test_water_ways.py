@@ -881,27 +881,24 @@ def test_a_rounded_stream_also_redraws_a_late_or_clipped_entry():
     assert "L400,100 " not in entry["bed"] and entry["sheen"] is None and entry["clip"]["pts"] and entry["clip"]["pts"][0] == (100.0, 100.0)
 
 
-def test_a_lane_ending_behind_a_house_is_not_at_its_dooryard() -> None:
-    """Feature 287, water W57: a lane end 11 ft behind a farmhouse's back wall does not reach it - the dooryard is the
-    yard and the front, never 12 ft of any wall (Kuwabata's lane 5) - so the trim pulls that end back; the same end in
-    front of the house, or in its yard, has arrived."""
-    from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
+def test_a_lane_ending_behind_a_house_has_reached_it() -> None:
+    """0246 (feature 328 wave 67): an end within 12 ft of the steading's built ground reaches the house on ANY side - the
+    dooryard-only rule of feature 287's water W57 (Kuwabata's lane 5, 11 ft behind house 1's back wall, judged not arrived)
+    is retired - so that end is not pulled back."""
+    from l7r.diagram.settlement.water_ways.lanes import reaches_dooryard
 
     house = {"x": 500.0, "y": 500.0, "w": 46.0, "h": 28.0, "rot": 0.0, "geom": {"yard": (500.0, 537.0, 40.0, 30.0), "gardens": [(540.0, 500.0, 12.0, 20.0)]}}
     back = (500.0, 500.0 - 14.0 - 11.0)
-    assert behind_house(house, back) and not reaches_dooryard(house, back)
-    assert reaches_dooryard(house, (500.0, 525.0)) and reaches_dooryard(house, (500.0, 560.0)) and reaches_dooryard(house, (552.0, 500.0))
-    assert not behind_house(house, (500.0, 525.0))
-    turned = dict(house, rot=180.0, geom={})  # turned about: its front now faces north, and a bare house has no yard
-    assert reaches_dooryard(turned, back) and not behind_house(turned, back)
+    assert reaches_dooryard(house, back) and reaches_dooryard(house, (500.0, 560.0)) and reaches_dooryard(house, (552.0, 500.0))
+    assert not reaches_dooryard(house, (500.0, 500.0 - 14.0 - 13.0))
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    s.M["houses"] = [house, {"x": 530.0, "y": 300.0, "w": 46.0, "h": 28.0, "rot": 0.0}]  # a second house the lane passes on its way
+    s.M["houses"] = [house, {"x": 530.0, "y": 300.0, "w": 46.0, "h": 28.0, "rot": 0.0}]
     s.lane([(500.0, 100.0), (500.0, 475.0)], width=4)  # runs down to the back wall and stops 11 ft behind it
     s.lane([(100.0, 100.0), (900.0, 100.0)], width=4)
     s.trim_lane_stubs()
     end = s.M["lanes"][0]["pts"][-1]
-    assert 280.0 <= end[1] <= 330.0, f"the end behind the house is pulled back to the last house it serves: {end}"
+    assert end[1] == pytest.approx(475.0), f"the end behind the house has arrived and stays: {end}"
 
 
 def test_a_lane_is_asked_of_the_registry_before_it_is_recorded_or_inked() -> None:
