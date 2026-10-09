@@ -543,5 +543,6 @@
   "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the dooryard": "67",
   "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard": "67",
   "l7r/diagram/settlement/structures/fixtures/board_seat.py::WayFacing.turn#board squared to its nearest way": "68",
-  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms": "70"
+  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms": "70",
+  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#the windbreak's hover region": "71"
 }

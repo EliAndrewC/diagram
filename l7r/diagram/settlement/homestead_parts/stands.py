@@ -16,6 +16,7 @@ from .grove_blocks import BankNear, GroveBlocks, Seats
 from .grove_rules import EAST_REACH_FT
 from .groves import RANK_JITTER_FT, crown_lift
 from .stocking import Box as Box
+from .stocking import crown_cover
 from .stocking import grove_extent as grove_extent
 from .stocking import grove_stocked as grove_stocked
 from .stocking import main_stand as main_stand
@@ -270,7 +271,8 @@ class StandsMixin:
             copse stragglers dropped to its stocking - UNRESEARCHED: `stocked_copse` drops the farthest clumps until the copse holds half a clump plus 4 px
             one grove off another's - UNRESEARCHED: one grove's clumps kept off another's by the sum of their canopy reaches
             belt alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: belt clumps standing in the toe or waterside marsh drawn as alder
-            water-mouth grove drawn in the conifer-backed windbreak mix - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: big old trees, Huangling's mainly yew"""
+            water-mouth grove drawn in the conifer-backed windbreak mix - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: big old trees, Huangling's mainly yew
+            the belt's hit region - CONVENTION: the page lights the crowns drawn - each windbreak clump's seat out to its crown reach plus 0.3 of a clump for a crown's spread, the conifer ranks at their drawn radius, the alder clumps (their own class) left out"""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -881,6 +883,7 @@ class StandsMixin:
         form = self._windbreak_belt() if role == "windbreak" and seated else None
         crowns: dict[str, int] = {}
         rows_ink = ""
+        _rows: list[Any] = []  # the conifer-led belt's rank crowns (x, y, r), for its hit region below
         if form == "conifer_led":
             _rows, rows_ink = self._belt_ranks(seated, clump, _wet)
             crowns["conifer"] = len(_rows)
@@ -939,6 +942,19 @@ class StandsMixin:
                     "form": form,  # the village belt's rolled form (269 B30, meta.windbreak_belt); None off the belt
                     "crowns": crowns,  # the crowns drawn, by kind (conifer / broadleaf; the alder clumps are not counted)
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
+                    # THE BELT'S HIT REGION IS ITS DRAWN CROWNS (feature 328 wave 71): each windbreak clump's crowns reach
+                    # `crown_reach` from its seat plus a crown's own spread, and a conifer-led belt's ranks their drawn radius
+                    # - the page lit the belt's whole box, an empty arm included (Inashiro's glyph check, batch 3's close)
+                    **(
+                        {
+                            "cover": crown_cover(
+                                [(jx, jy, crown_reach(clump, self.px(RANK_JITTER_FT), crown_lift(bs)) + clump * 0.3) for jx, jy in seated if [jx, jy] not in alder_clumps]
+                                + [(float(x), float(y), float(r)) for x, y, r in _rows]
+                            )
+                        }
+                        if role == "windbreak"
+                        else {}
+                    ),
                 }
             )
         return len(clumps)

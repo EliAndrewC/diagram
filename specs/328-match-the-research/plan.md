@@ -1129,6 +1129,24 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: quote-check, record-format, modal-depiction (rounds to clean), the claims triage and `impl-drift`;
   `spec-fidelity`.
 
+## Wave 71 (amendment 70, 2026-10-09) - batch 7
+
+- **Scope**: `village_grove#the windbreak's hover region` (batch 3's glyph check, F3: Inashiro's page lit 'windbreak' over an
+  empty arm of the belt). The page's hit region for a stand is its record's `cover` where it has one, else its `poly`
+  (`interactive/page.py` `hit_regions`), and the belt's `poly` is its whole stocked box. The belt now records `cover`, the
+  union of its drawn crowns (`stocking.crown_cover`: each windbreak clump's seat out to `crown_reach` plus 0.3 of a clump for a
+  crown's spread, and a conifer-led belt's rank crowns at their drawn radius; the alder clumps, a class of their own, left
+  out) - a CONVENTION: what the page lights is what the map draws.
+- **Measured** (m:wave71-belt-cover): the box's ground with no crown, which the page lit, was 69% of Kuwabata's belt box,
+  17% of Inashiro's and 0% of Sawada's; the cover is the crowns alone. The maps move only in the record (Inashiro,
+  Kuwabata and Sawada carry the field; nothing drawn changes); the 48-seed cohort unchanged (the same six refused seeds).
+- **Held on measure**: `village_grove#water-mouth grove drawn in the conifer-backed windbreak mix` (E2) - `village_grove`
+  runs on every kept hamlet, but no kept map lays a grove of role water_mouth (no hamlet spec names one, no pool manifest
+  records one), so its mix is read by no kept map: DEFERRED_ON_MEASURE in `audit/scope.py`, as the fork band's depth was.
+  The re-derivation also moved `_pull_back`, `junction_floor` and `placer._strict_seat` to deferred: no kept map's roll
+  reaches them (the scripted tier settles its own lane ends), which is why waves 66 and 67 moved no shipped map.
+- **Verification**: `test_a_belts_cover_is_the_ground_its_crowns_draw`; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

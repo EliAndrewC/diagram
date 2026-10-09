@@ -1901,3 +1901,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T169 the claims re-checked by `impl-drift` and the record checks answered (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 70, round 3); 0044's drawing page states the bath room's counted shares (the main-door share this project's choice); the bath modals and three claims follow it; record checks clean; claims in step; no map moved
+
+## Phase 72 - wave 71 (amendment 70): the windbreak's hover region from its drawn crowns
+
+- `homestead_parts/stocking.py` (`crown_cover`); `homestead_parts/stands.py` (the belt's `cover`); `audit/scope.py` (the
+  water-mouth grove deferred on measure).
+
+- [x] T170 wave 71's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 71); the belt's hit region from its drawn crowns (the old box lit 69% bare ground on Kuwabata, 17% on Inashiro); the water-mouth grove deferred on measure; claims in step; cohort unchanged
+- [x] T171 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 71); the belt's hit region from its drawn crowns (the old box lit 69% bare ground on Kuwabata, 17% on Inashiro); the water-mouth grove deferred on measure; claims in step; cohort unchanged

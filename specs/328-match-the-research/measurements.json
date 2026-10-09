@@ -1312,5 +1312,35 @@
         "quiet pair 2": "2.05 -> 2.11 s (the one stage its report flags)"
       }
     }
+  },
+  "wave71-belt-cover": {
+    "quantity": "wave 71 (2026-10-09): the windbreak's hit region - its box's crownless ground against the cover of its drawn crowns",
+    "observed": "2026-10-09",
+    "source": "pool/hamlets/<m>/<m>.json village_groves (role windbreak): poly (the box) and cover (rings), shapely areas (rings repaired with buffer(0))",
+    "command": "make map for the five hamlets; box.difference(union(cover)).area per belt",
+    "method": "the five hamlets rerolled; for each windbreak, the area of its recorded box with no drawn crown (what the page lit before) and its cover's area",
+    "value": {
+      "inashiro": {
+        "box": 108546,
+        "cover": 125995,
+        "box ground with no crown": "17946 (17%)",
+        "rings": 3
+      },
+      "kuwabata": {
+        "box": 149412,
+        "cover": 61355,
+        "box ground with no crown": "102921 (69%)",
+        "rings": 1
+      },
+      "sawada": {
+        "box": 51103,
+        "cover": 85280,
+        "box ground with no crown": "0 (0%)",
+        "rings": 1
+      },
+      "maps": "Inashiro, Kuwabata and Sawada carry the new field; nothing drawn moves",
+      "cohort_48": "48/54, the same six refused seeds",
+      "water-mouth grove": "no kept hamlet spec names role water_mouth and no pool manifest records one - deferred on measure"
+    }
   }
 }

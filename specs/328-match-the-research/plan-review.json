@@ -1,46 +1,39 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "fb029e52a79d9a31e78be4e7c7db7cd66fcd91c4403716da24f4f878f137d21d",
+ "plan_sha256": "e5950a653d019072746b484b1e516dd728f6e5a60175fe4e0750b9500f798d44",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W70-1",
-   "summary": "Row 114 (E1) fixed by stating on 0044's drawing page the shares the code already rolls (0.8 beyond the stable wing, 0.03 joined to the floored rooms); code unchanged",
+   "id": "W71-D1",
+   "summary": "The belt's hit region is its record's `cover`: the union of a disc per drawn windbreak clump (seat out to crown_reach + 0.3 clump) plus a conifer-led belt's rank crowns at their drawn radius (stocking.crown_cover), which the page already prefers over `poly`",
+   "class": "within",
+   "why": "Row 144's fix is literally 'build the belt's hover region from the clumps the page draws'; the region is built from exactly those clumps and the rank crowns painted over them. Re-derived from the manifests: the box ground the page lit with no cover is 17946 (17%) Inashiro, 102921 (69%) Kuwabata, 0 Sawada, as m:wave71-belt-cover records, so the empty arm of F3 is no longer lit. The disc is an envelope of where a clump's crowns can stand rather than each crown's own disc; that is a precision choice inside the fix, not a departure from it (the crown ink keeps its own widened hit copies)."
+  },
+  {
+   "id": "W71-D2",
+   "summary": "Alder clumps (belt seats in the marsh) are left out of the windbreak's cover",
+   "class": "within",
+   "why": "They are drawn under their own class `alder`, not `windbreak`, so they are not windbreak clumps the page draws; none of the three belts has an alder clump today (alder 0 on each)."
+  },
+  {
+   "id": "W71-D3",
+   "summary": "The region's rule recorded as a CONVENTION at the claim line in stands.py and crown_cover's docstring",
+   "class": "within",
+   "why": "A hover region is a map drawing convention; constitution XII requires the class, and it is labeled."
+  },
+  {
+   "id": "W71-D4",
+   "summary": "Row 145 (water-mouth grove drawn in the windbreak mix) DEFERRED_ON_MEASURE in audit/scope.py: village_grove runs on every kept hamlet but no kept map lays a role water_mouth grove",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Unchanged from rounds 1-2. The code's 0.8 and 0.03 come from 0044.html's own counted registers, and the drawing page's GUESS label was out of date. Moving the code to match that label would move the implementation away from the research."
+   "why": "Implied by the GM's own amendment 8 ('limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets') as the accepted FR-010 operationalizes it: 'a claim whose value no kept map reads though its unit runs is deferred with its measured reason'. Measured here: the five hamlets' records carry roles windbreak/copse or none, the country shrine's is role shrine, no pool file names water_mouth (Mizuguchi only by its name), and the only callers pass windbreak or copse (hinterland stages) or windbreak (the legacy roller). The claim is the mix of a grove no kept map draws, so the fix would change no kept map. Same mechanism as the fork band (wave 65)."
   },
   {
-   "id": "W70-2",
-   "summary": "The main-door share (the rest) recorded on the drawing page and the bath-room modal as this project's choice",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Unchanged. The record does not place the remaining baths, so there is no research target. The doctrine requires a choice to be labeled as one, and drawing page line 9 now does so."
-  },
-  {
-   "id": "W70-3",
-   "summary": "bath_room_seats#bath room seat fallback and bath_room_slides' spot along a wall labeled GUESS",
+   "id": "W71-D5",
+   "summary": "scope.json and dev/claims-deferred.json re-derived: besides row 145, found rows from waves 64-65 enter as kept, and units the kept maps no longer execute (_pull_back, junction_floor, placer._strict_seat) move to deferred, with row 179 (_pull_back#trim floor) kept->deferred",
    "class": "within",
-   "why": "Unchanged. 0044 gives the walls and the shares, not a fallback order or a spot."
-  },
-  {
-   "id": "W70-4",
-   "summary": "hamletgen/homesteads/fixtures.py::BATH_STABLE_SHARE split: 'bath room wall' cites 0044.html for the counts only; 'the main door the rest' cites the drawing page's choice sentence; the comment above it says the floored rooms are rolled at 0.03 and the main door takes the rest as this project's choice",
-   "class": "within",
-   "why": "Round-2 item confirmed. Confirmed in fixtures.py:150-161 and in claims-index.json, where both claims are IN-STEP, dated 2026-10-09, and the main-door claim's page is the drawing page. A grep over l7r/ finds no claim that cites 0044.html for the main door. The remaining main-door claims (fixture_seats.py:139, 489) cite the drawing page's choice. The narrowing this decision carried is gone: the claim now records a choice, not research."
-  },
-  {
-   "id": "W70-5",
-   "summary": "The drawn seats (16 / 6 / 0 of 22) left to ranked row 154 (lay_fixtures#a main-door bath drawn, E3)",
-   "class": "within",
-   "why": "Unchanged. Ranking row 154 carries the measured counts, and the plan names the row."
-  },
-  {
-   "id": "W70-6",
-   "summary": "Whether the bath_seat settlement choice should exist is held for the GM",
-   "class": "within",
-   "why": "Unchanged. It is not a ranked finding, no kept map sets it, and it is held in claims-followup.md."
+   "why": "The mechanical FR-010 derivation from the kept maps' gen-cache, re-run when a wave lands, as FR-010 requires; row 179 was already closed at wave 66 (waves.json), so no open work leaves scope."
   }
  ],
  "verdict": "CLEAR"

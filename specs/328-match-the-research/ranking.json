@@ -8892,7 +8892,7 @@
   "flag": "",
   "found": "batch 3's close, glyph-check--windbreak F3",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "71",
   "scope": "kept"
  },
  {
@@ -8910,7 +8910,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default",
@@ -9421,7 +9421,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "66",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/water_ways/kido.py::KidoMixin.kido#barred opening",

@@ -283,3 +283,15 @@ def test_no_coppice_crown_stands_in_a_marsh() -> None:
     crowns = [(s.M["tree_crowns"][i], s.M["tree_crowns"][i + 1]) for i in range(0, len(s.M["tree_crowns"]), 3)]
     assert len(crowns) > 20, "non-vacuity: the dry half is stocked"
     assert not any(Polygon(marsh).contains(Point(c)) for c in crowns), "a crown in the marsh"
+
+
+def test_a_belts_cover_is_the_ground_its_crowns_draw() -> None:
+    """Feature 328 wave 71: the page's hit region for a belt is the union of its drawn crowns, not its whole box - two clumps
+    far apart give two rings, the bare ground between them in neither; none drawn gives none."""
+    from l7r.diagram.settlement.homestead_parts.stocking import crown_cover
+
+    rings = crown_cover([(0.0, 0.0, 10.0), (100.0, 0.0, 10.0)])
+    assert len(rings) == 2
+    assert all(max(abs(x - cx) for x, _y in ring) <= 10.5 for ring, cx in zip(sorted(rings), (0.0, 100.0), strict=True))
+    assert len(crown_cover([(0.0, 0.0, 10.0), (12.0, 0.0, 10.0)])) == 1, "touching crowns are one region"
+    assert crown_cover([]) == [] and crown_cover([(0.0, 0.0, 0.0)]) == []

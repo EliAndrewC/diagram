@@ -454,6 +454,7 @@
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the bamboo": "E0",
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the whole marsh": "E0",
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#off the plots' sun": "E2",
+ "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#the windbreak's hover region": "E2",
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#wellhead canopy keep-out": "E0",
  "l7r/diagram/settlement/homestead_parts/tree_shade.py::map_trees#which trees are canopy": "E0",
  "l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane": "E1",

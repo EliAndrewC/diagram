@@ -89,3 +89,20 @@ def record_box(g: dict[str, Any], box: Box) -> None:
     """Write `box` (x0, y0, x1, y1) into a grove record's `x`, `y`, `w`, `h`, at the record's grain."""
     g["x"], g["y"] = round((box[0] + box[2]) / 2, 1), round((box[1] + box[3]) / 2, 1)
     g["w"], g["h"] = round(box[2] - box[0], 1), round(box[3] - box[1], 1)
+
+
+def crown_cover(seats: Sequence[tuple[float, float, float]]) -> list[list[list[float]]]:
+    """The ground a stand's DRAWN crowns cover, as rings: the union of a disc per seat `(x, y, reach)` - the page's hit region
+    for the stand (feature 328 wave 71: Inashiro's page lit 'windbreak' over the belt's whole box, an empty arm included,
+    where no crown stood; the page takes a record's `cover` over its `poly`).
+
+    Research: hit region of the crowns drawn - CONVENTION: what the page lights is what the map draws"""
+    from shapely.geometry import Point
+    from shapely.ops import unary_union
+
+    discs = [Point(x, y).buffer(r, 12) for x, y, r in seats if r > 0]
+    if not discs:
+        return []
+    shape = unary_union(discs)
+    parts = getattr(shape, "geoms", [shape])
+    return [[[round(px, 1), round(py, 1)] for px, py in part.exterior.coords] for part in parts]

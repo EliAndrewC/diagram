@@ -160,6 +160,9 @@ def strings_used(skill: Path, ran: set[tuple[str, str]], read: set[str] = frozen
 
 
 DEFERRED_ON_MEASURE = {
+    # the water-mouth grove: `village_grove` runs on every kept hamlet, but no kept map lays a grove of role water_mouth (no
+    # hamlet spec names one, no pool manifest records one), so its mix is read by no kept map (wave 71's measure, 2026-10-09)
+    "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#water-mouth grove drawn in the conifer-backed windbreak mix",
     # the fork band: laid only at a city's coarse grain (`grain < 1.0`); every kept hamlet draws at 1 ft/px (grain 2), so no
     # kept map lays it (wave 65's measure, 2026-10-09: inashiro, kashikawa and sawada ftpx 1.0); the found row
     # `fork band skipped on villages` would lay it at hamlet grain - taking that row ends this entry
