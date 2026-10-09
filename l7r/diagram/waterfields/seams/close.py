@@ -63,8 +63,10 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
     """The seam pass's last word on the rings (feature 287, water W16-W27): after it, every plot ring - judged AS THE
     MANIFEST RECORDS IT, rounded to 0.1 px - keeps every rule `ring_rules.ring_violations` asks in `ctx`.
 
-    A ring that breaks one is not kept as it stands, whatever made it (a carved ring no seam step touched, a weld the
-    ladder had no clean host for, a repair). Its ground goes one of three ways, in this order:
+    Since feature 302 retired the seam pass, its one caller is the grave cut (`settlement/fields/features.py`), which asks it
+    of the rings it touched and made (`only`), held at the placer's lines (`held_faults`). A ring that breaks one is not kept
+    as it stands. Its ground goes one of three ways, in this order (a refused point first cut off into a headland,
+    `blunt_points`):
 
     1. SPLIT, where the ring is a staircase (W23, one of the GM's five): cut along the line that continues the step's
        hop across the basin - the GM's own description of the right form, the wall "continuing on and meeting at the
@@ -85,6 +87,8 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
         scrap welded to its neighbor - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: into the basin it shares the most bund with
         scrap left bare - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: what no weld makes lawful stays bare, the fan floor drawn under it
         judged at the placer's lines - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a ring it keeps, split or welded, holds `held_faults` - the gate's rules and the placer's 25 deg, quarter cell and arrowhead under them
+        a point cut off - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a piece failing the placer's lines has its points sharper than the placer's 25 deg cut off into a headland (`blunt_points`), and is kept if it then holds them
+        cut before welded - DEVIATION research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the cut is tried before the weld, an order recorded there as this project's, on the rings something cut into a basin after its fan was laid out leaves - the only rings the re-hold is asked of (its one caller, the grave cut, `settlement/fields/features.py`, passes the rings it touched and made)
     """
     _load_shapely()
     bad = [k for k in (range(len(plots)) if only is None else sorted(only)) if held_faults(as_recorded(plots[k]["poly"]), ctx)]
@@ -97,8 +101,9 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
         p = plots[k]
         ring = as_recorded(p["poly"])
         pieces = [q for part in (_parts(Polygon(ring).buffer(0)) if len(ring) >= 3 else []) for q in (_split_steps(part, ctx) if ctx.g else [part])]
-        kept = [q for q in pieces if not held_faults(_ring(q), ctx)]
-        scraps += [q for q in pieces if q not in kept]
+        kept = [q if not held_faults(_ring(q), ctx) else blunt_points(q, _TOE_MIN_APEX) for q in pieces]
+        kept = [q for q in kept if q is not None and not held_faults(_ring(q), ctx)]
+        scraps += [q for q in pieces if q not in kept and not any(k.equals(q) or k.within(q) for k in kept)]
         if kept:
             p["poly"] = _ring(kept[0])
             added += [{**p, "poly": _ring(q)} for q in kept[1:]]
@@ -109,6 +114,43 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
     tree = GeomTree(geoms)
     for scrap in sorted(scraps, key=lambda q: (round(q.bounds[0], 1), round(q.bounds[1], 1))):
         _weld_within_rules(scrap, plots, geoms, tree, ctx)
+
+
+HEADLAND_PX = 4.0
+"""Research: the headland's width - UNRESEARCHED: a refused point is cut off where the basin is this many px across"""
+
+
+def blunt_points(poly: Polygon, min_deg: float) -> Polygon | None:
+    """`poly` with every convex point sharper than `min_deg` cut off square to its bisector, where the basin is `HEADLAND_PX`
+    across - the cut leaves two corners of 90 deg plus half the point, so it makes no new one. None where no point is that
+    sharp, or the cut leaves no simple polygon. A needle is cut like any other point: what is left is judged by `held_faults`,
+    and a sliver it refuses goes to the weld or bare (spec-fidelity's measure, wave 82: W18's 7-degree spike blunts to a lawful
+    533 px² basin).
+
+    Research:
+        a point cut off - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a point the maps refuse is cut off into a headland (along the drain, on the page)
+        cut off away from the drain - DEVIATION research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the same cut at a refused point something cut into a basin after its fan was laid out leaves (a grave island's corner), recorded there as this project's choice
+    """
+    from shapely.geometry.polygon import orient
+
+    ring = list(orient(poly, 1.0).exterior.coords)[:-1]
+    n, out, cut = len(ring), [], False
+    for i in range(n):
+        a, b, c = ring[i - 1], ring[i], ring[(i + 1) % n]
+        u, v = (a[0] - b[0], a[1] - b[1]), (c[0] - b[0], c[1] - b[1])
+        lu, lv = math.hypot(*u), math.hypot(*v)
+        convex = (b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]) > 0
+        ang = math.acos(max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / ((lu * lv) or 1.0))))
+        if not convex or lu < 1e-9 or lv < 1e-9 or math.degrees(ang) >= min_deg:
+            out.append(b)
+            continue
+        d = min(HEADLAND_PX / (2 * math.sin(ang / 2)), 0.45 * lu, 0.45 * lv)
+        out += [(b[0] + u[0] / lu * d, b[1] + u[1] / lu * d), (b[0] + v[0] / lv * d, b[1] + v[1] / lv * d)]
+        cut = True
+    if not cut:
+        return None
+    q = Polygon(out)
+    return q if q.is_valid and not q.is_empty else None
 
 
 def held_faults(ring: Any, ctx: RingContext) -> set[str]:

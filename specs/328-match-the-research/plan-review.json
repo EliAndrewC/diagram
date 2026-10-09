@@ -1,44 +1,51 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "5a04e0b36748659492e6c1b7abecd1bab0f82876aa0690f8ea86a49ff4988073",
+ "plan_sha256": "95e7290c738ade20a7b7a23276ae4bbad19521723e3b140ba942460fd093200f",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W81-a revert and re-tier E2 -> E3",
-   "summary": "the run-on (each thread continued past its end along its own last heading) is reverted because the 48-seed cohort traded seed 03 (newly passing) for seed 42 (newly refused); both partition.py rows stay open (scope kept) at E3, their work the layout that broke",
+   "id": "W82-a blunt before drop",
+   "summary": "when a piece fails the placer's lines, the grave cut's re-hold first cuts every convex point under 25 deg off square to its bisector (blunt_points(q, _TOE_MIN_APEX)). It keeps the piece if held_faults then passes it, instead of dropping a whole 2,179 px2 basin bare",
    "class": "within",
-   "why": "Re-measured this round in a detached worktree with audit/reverted/wave81-run-on.patch applied, against the clone (engine = HEAD): seed 42 passes at HEAD and is REFUSED with the patch (WebRefused: lane 2 breaks the lane law, needle_loops at [2730, 2316]); seed 03 the reverse (refused at HEAD, off_ford). XIII names this exact case: a cohort seed that passed and now fails is a regression, and neither 'the change fixes more than it breaks' nor 'the residue rotated' excuses it, so the 48/54 net does not. The spec's Edge Case 'a fix that changes many maps' gives the route: where making the failing map pass takes more than the row's tier, the row takes that work's tier and its claim stays as found. The failure is in the lane web, outside partition.py, so the fix is a change across modules: E3 by FR-003, as wave 74 was ruled. Ranking by measured work is the request's own principle ('rank all of the findings by how mych implementation work we expect'); the rows are re-ordered, not deferred or dropped, so 'fix all of it' still reaches them in E3 order. The Edge Case's 'waits on a found row' is met by the rows' own fix text, as for waves 69 and 74. Note for when the rows are retaken: XIII's FIX remains the expected exit then - the needle loop on seed 42 is the work, not a reason to leave the rows unfixed."
+   "why": "This repairs a regression from wave 78 (XIII), using the form 0005's page states: 'a point the maps refuse is cut off into a headland'. Dropping a whole basin bare matches no form on that page. Round 2 confirmed it in the diff: the call site passes _TOE_MIN_APEX and nothing else, and the 14 tests in tests/waterfields/test_ring_guarantees.py pass (make test-file, this round)."
   },
   {
-   "id": "W81-b the first run's crash guarded",
-   "summary": "a first cohort run crashed five seeds on a one-point thread (pts[-2]); run_on falls back to the fall for a thread of one point before the second run",
+   "id": "W82-b HEADLAND_PX UNRESEARCHED",
+   "summary": "the headland is cut where the basin is HEADLAND_PX (4 px) across. The width is claimed UNRESEARCHED",
    "class": "within",
-   "why": "A defect in the session's own change, fixed in the work (XIV) before the measurement the revert rests on; the revert is judged on the guarded run, so the crash does not inflate the case for reverting. Nothing of it ships."
+   "why": "0005 names the headland but gives it no width, and a cut needs some width. An honestly UNRESEARCHED value is outside the accepted 565 findings. Wave 80's hairpin margin is the precedent."
   },
   {
-   "id": "W81-c run_on's UNRESEARCHED heading floor (cos 70 deg)",
-   "summary": "in the reverted patch, a last heading falling at under 0.34 of the fall gives way to the fall, claimed UNRESEARCHED",
-   "class": "within",
-   "why": "Reverted with the patch: nothing of it is in the code this wave leaves. It is a narrowing of 0005's convergence and is to be put to spec-fidelity as one when the E3 rows are retaken; it carries no ruling here."
+   "id": "W82-c cut off the drain, cut before take-in",
+   "summary": "a refused point is cut into a headland at the grave corner, although 0005 puts the headland along the drain, and the cut comes before the whole piece goes to the weld. The spec row classes this as this project's GUESS, recorded on 0005's drawing page as a DEVIATION",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 1's ruling stands, now with the needle floor gone. (1) A grave corner has no drain, so 'along the drain' is physically impossible there. The bullet itself rests on an absence note (note 7), so no source is departed from. (2) The page gives the cut for a POINT and the take-in for 'the odd corner'. The code's weld merges a whole piece, so cutting the point first and welding what is left applies each form to its own object. (3) The literal alternative measured in wave 82, a whole basin left bare, contradicts the page more than the cut does. Raise this with the GM at the wave's end."
   },
   {
-   "id": "W81-d the failed fix recorded and the patch kept",
-   "summary": "Sectors.bound's docstring records the failed fix; the patch and its test are kept in audit/reverted/wave81-run-on.patch; the measurement is m:wave81-run-on-reverted",
+   "id": "W82-d needle floor removed",
+   "summary": "round 1's NOT LEGITIMATE needle floor is gone: blunt_points takes (poly, min_deg) only, a needle is cut like any other point, and held_faults decides. W18's spike test now expects the point cut off, the basin kept and its neighbor untouched. The needle clause is off 0005's page, and no 'needle not blunted' claim remains",
    "class": "within",
-   "why": "Constitution XIV (a fix that failed is recorded at the point of change) and the wave 69/74 precedent. The Research: claim lines are unchanged; make claims-owed reports no claim owed (run this round)."
+   "why": "Confirmed in the diff. close.py has no floor_deg or NEEDLE_DEG reference and no needle-exempt claim. test_a_needle_has_its_point_cut_off_and_its_neighbor_is_left_as_it_was asserts that the kept ring is not a needle and that held_faults is empty, and it passes this round. The page's new sentence carries no needle carve-out. The change now does what the page says, with no exception."
   },
   {
-   "id": "W81-e no Decisions Recorded row",
-   "summary": "the code and the pool are as wave 80 left them",
+   "id": "W82-e polder relabel UNRESEARCHED",
+   "summary": "polder.py::unpoint_parcels#pointed parcel left as bank is relabeled UNRESEARCHED, with the code unchanged",
    "class": "within",
-   "why": "FR-008 binds a fix that changes what a map draws or states; git status shows no pool file moved and the only engine edit is a docstring. Waves 69 and 74, reverted, took none."
+   "why": "impl-drift named UNRESEARCHED as the correct label: 0005's bare strip is a fan's, and polder plots stand apart. This is an E0 correction under FR-003."
   },
   {
-   "id": "W81-f verification: the cohort's runs and spec-fidelity; Phase 82 T190/T191",
-   "summary": "the wave's boxes appended as the amendment, T191 the impl-drift re-check",
+   "id": "W82-f hold_ring_rules docstring",
+   "summary": "the docstring names the grave cut as its one caller",
    "class": "within",
-   "why": "FR-005/FR-006. With no claim owed (claims-owed, this round), T191 has nothing to dispatch; tick it on that output rather than a fresh impl-drift."
+   "why": "A stale statement is corrected and no behavior changes. Round 1 confirmed the only call site is settlement/fields/features.py:153."
+  },
+  {
+   "id": "W82-g PLOT_SIZES found row",
+   "summary": "PLOT_SIZES#paddy plot size, re-judged NEEDS-RESEARCH, is filed in audit/found-wave77.jsonl at E4",
+   "class": "within",
+   "why": "The spec's Edge Cases tier a NEEDS-RESEARCH finding E4, and the found row now does. The row is ranked, so nothing is deferred. One gap remains, reported with the spec findings rather than as a plan narrowing: ranking.json and ranking.md were not regenerated from the found row by audit/merge.py, so the committed ranking still lists the row as E1, row 11 of E1."
   }
  ],
  "verdict": "CLEAR"

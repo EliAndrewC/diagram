@@ -1338,6 +1338,35 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   patch is kept in the spec's `audit/reverted/`; the code and the maps are as wave 80 left them.
 - **Verification**: the cohort's runs (m:wave81-run-on-reverted); `spec-fidelity`.
 
+## Wave 82 (amendment 81, 2026-10-09) - batch 9
+
+- **Scope**: a defect wave 78 introduced, caught by batch 9's gate (`test_a_corner_grave_has_its_basin_bund_carried_round_it_to_the_corner`:
+  1 plot where 2). Held at the placer's lines, the grave cut's re-hold dropped a whole 2,179 px² basin bare: the corner bite
+  left a point between the gate's 15 deg and the placer's 25 deg (`held_faults` ['needle'], `ring_violations` none), and no
+  split or weld clears a point. 0005 gives the step the re-hold lacked - "a point the maps refuse is cut off into a headland
+  ... or taken into the basin beside it" - so a failing piece now first has every point under 25 deg cut off square to its
+  bisector where the basin is `HEADLAND_PX` across (`blunt_points`: two new corners of 90 deg plus half the point, none
+  sharper), and is kept if it then holds every line (`held_faults` decides; a sliver it refuses goes to the weld or bare).
+- **Recorded on 0005's drawing page** (impl-drift: the page attests the headland only along the drain and gives cutting off and
+  taking in as alternatives): "Where something cut into a basin after its fan was laid out, such as the corner of a grave
+  island, leaves a point the maps refuse, the maps cut the point off into a headland before they try the basin beside it. That
+  order is this project's choice, a DEVIATION". Its record checks answered (quote-check; record-format, which reworded it; the
+  ten modal-depiction units 0005's Drawing: names, one of which - `choice/plot_size--small_irregular` - now says a sharp point
+  "is cut off into a headland or taken in").
+- **spec-fidelity round 1** (BLOCKED, fixed): the first draft spared a needle under 15 deg from the cut ("cutting it would leave
+  a sliver") - measured by the reviewer, a blunted 7-degree spike is a lawful 533 px² basin; the floor is gone, W18's spike
+  test now expects the point cut off and the basin kept, and the page's needle clause is removed. The Decisions Recorded row
+  reclassed (the cut off the drain and its order this project's GUESS, recorded as a DEVIATION); the PLOT_SIZES found row
+  tiered E4 (a NEEDS-RESEARCH verdict, the spec's Edge Cases).
+- **impl-drift**: after the claims' records were reset to HEAD's where their code was unchanged (an uncommitted intermediate
+  wording had forced every claim resting on the page on), the change's 18 claims - 16 IN-STEP; `_WELD_MIN_APEX` DRIFTED as at
+  HEAD (its own ranked row); `PLOT_SIZES` NEEDS-RESEARCH on unchanged text, IN-STEP at HEAD - the E4 found row. Relabeled
+  where found: `polder.py::unpoint_parcels#pointed parcel left as bank` UNRESEARCHED; `hold_ring_rules`' docstring brought to
+  its one caller.
+- **Measured** (m:wave82-point-cut-off): the gate's test passes again; the new test (a 20-degree wedge blunted and kept); the
+  pool byte-identical; the 48-seed cohort unchanged.
+- **Verification**: the waterfields and settlement suites; the cohort; `impl-drift`; `spec-fidelity`; the gate re-run.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

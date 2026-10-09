@@ -4917,14 +4917,15 @@
   "date": "2026-10-05",
   "note": "patchwork on jori ground recorded as a deviation",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
-  "research": "4e46aabd0d57fa31",
+  "research": "d79a89e5dea9602a",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:914c46003720293e",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:ea4f43ad90e14d1d"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": {
@@ -5212,19 +5213,20 @@
  "l7r/diagram/hamletgen/consts.py::PLOT_SIZES#paddy plot size": {
   "code": "467eff87c9bf6ea1",
   "core": "0ab0921740b16870",
-  "date": "2026-10-05",
-  "note": "basin sizes rolled within the page's 0.02-0.25 acre band, a degree",
+  "date": "2026-10-09",
+  "note": "0005 gives no mix of plot classes, so the 1:2:1 weights are unattested; it names only the usual basin and a larger one \"On a valley hamlet's map\", and no small class. Split the claim into UNRESEARCHED weights and classes that cite 0005 (the split w82d made)",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:7236c739a7e738d7",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a1eff65b097cc456",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cbd7bb1f74a11a17"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/consts.py::POLDER_ARCHETYPES#dike-pond built as a polder": {
   "code": "7055efd8b156b0be",
@@ -44222,10 +44224,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#dry rows": {
@@ -44348,13 +44350,14 @@
   "date": "2026-10-05",
   "note": "46 px at 2 ft/px is about 0.19 acre, the parcel the page gives",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:79b169263a5fb7c3",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a1eff65b097cc456"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.paddy_field#resting plots": {
@@ -44492,13 +44495,14 @@
   "date": "2026-10-05",
   "note": "about 0.08-0.21 acre at 2 ft/px, inside the 0.02-0.25 band",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:79b169263a5fb7c3",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a1eff65b097cc456"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#ripe share": {
@@ -50583,12 +50587,12 @@
   "date": "2026-10-05",
   "note": "sizes bracket the norm, the grid only evens the rows, no jori squares",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
-  "research": "5a5506840de89109",
+  "research": "a91331dc3c66271b",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:218358b82a0824e2",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:79b169263a5fb7c3",
@@ -50596,6 +50600,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.try_place#placement, index and corridor plumbing": {
@@ -63555,10 +63560,10 @@
   "date": "2026-10-03",
   "note": "0005: \"a point sharper than 40 degrees\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_CHEVRON_MIN_SOLIDITY#arrowhead notch": {
@@ -63567,10 +63572,10 @@
   "date": "2026-10-03",
   "note": "0005: \"solidity under 0.90\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_EDGE_EPS#bank geometry": {
@@ -63587,10 +63592,10 @@
   "date": "2026-10-03",
   "note": "checker tolerance below the placer's 40; draws nothing",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_GATE_CHEVRON_SOLIDITY#arrowhead notch at the rule": {
@@ -63599,22 +63604,24 @@
   "date": "2026-10-03",
   "note": "checker tolerance below the placer's 0.90; draws nothing",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_GATE_MIN_APEX#needle at the rule": {
   "code": "3fa263f4e07aad0f",
   "core": "588c8e4f50bc3927",
-  "date": "2026-10-03",
-  "note": "checker tolerance below the placer's attested 25 deg; draws nothing",
+  "date": "2026-10-09",
+  "note": "a check's line under the placer's 25 deg refusal",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_GATE_MIN_AREA#area floor at the rule": {
@@ -63623,10 +63630,10 @@
   "date": "2026-10-03",
   "note": "checker tolerance below the placer's attested 0.25; draws nothing",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_JOG_CORNER_DEG#a step turns hard": {
@@ -63727,10 +63734,10 @@
   "date": "2026-10-03",
   "note": "0005: \"The maps refuse a point sharper than 25 degrees\"",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_TOE_MIN_AREA#a quarter of the design cell": {
@@ -63739,15 +63746,16 @@
   "date": "2026-10-09",
   "note": "0.25 of the cell, applied only on the valley-floor fan, is the page's quarter-cell floor and its reasoning",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a6d71d623dedcce0"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_TOE_MIN_THICKNESS#least thickness": {
@@ -63756,30 +63764,31 @@
   "date": "2026-10-05",
   "note": "the placer refuses a basin under 0.16 plot widths thick, but the paddy page says \"the maps set no least width for a basin\" and neither page states 0.16 (the bund page's \"same least width as the narrow toe\" is a GUESS with no figure); reconcile the pages and state the figure, or drop the rule",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
-  "research": "52dd4ab6c239d5e7",
+  "research": "20234e9ed57bafef",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_WELD_MIN_APEX#weld apex": {
   "code": "41a49a4bdebb2035",
   "core": "14aaee2fbe7c7694",
   "date": "2026-10-09",
-  "note": "`_WELD_MIN_APEX = 18.0` lets a welded basin keep an 18-25 deg point, but the page says \"The maps refuse a point sharper than 25 degrees\", and §18 gives a refused point three fates (cut off, taken into the basin beside it, left bare), none of them keeping it; either a 0005 block records the band (then relabel DEVIATION) or the weld is held at 25 deg",
+  "note": "`_WELD_MIN_APEX = 18.0` lets a welded basin keep an 18-25 deg point, but 0005 says \"No basin narrows to a point sharper than 25 degrees\" and \"The maps refuse a point sharper than 25 degrees\". Record the allowance as a DEVIATION on 0005's drawing page, or hold welds to 25",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
   "verdict": "DRIFTED"
  },
@@ -63953,10 +63962,10 @@
   "date": "2026-10-03",
   "note": "0005 arrowhead: point and notch together",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::jog_steps#sideways steps": {
@@ -64005,10 +64014,10 @@
   "date": "2026-10-03",
   "note": "interior-angle test of 0005's point",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::polyline_cum#bank geometry": {
@@ -64849,10 +64858,10 @@
   "date": "2026-10-03",
   "note": "two plot widths (0005)",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::_comb_threads#second supply canal": {
@@ -64925,12 +64934,13 @@
   "date": "2026-10-05",
   "note": "48 px across and 26-36 px along is the hamlet basin at 1 ft/px",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::build_comb#default skeleton": {
@@ -64990,12 +65000,13 @@
   "date": "2026-10-05",
   "note": "48 px across and 26-36 px along is the hamlet basin at 1 ft/px",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::carve_comb#default skeleton": {
@@ -66234,12 +66245,13 @@
   "date": "2026-10-05",
   "note": "0.05 acre, about 47 ft square, in real feet",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::RICE_GREENS#one green": {
@@ -66319,12 +66331,13 @@
   "date": "2026-10-05",
   "note": "the target area in real feet, converted at the map's scale",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::paddy_grain#basin proportion": {
@@ -66409,10 +66422,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::ROW_CELL_SHARE#basin size where the sector narrows": {
@@ -66463,10 +66476,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#column wobble": {
@@ -66487,13 +66500,14 @@
   "date": "2026-10-05",
   "note": "a warped, irregular lattice of rows down a converging fan, never a tidy grid",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#no jori grid on the old plains": {
@@ -66516,12 +66530,13 @@
   "date": "2026-10-05",
   "note": "rows a random 26-36 apart, the design cell's depth",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.grid_lines#row wander": {
@@ -66552,10 +66567,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors.sector_of#partition plumbing": {
@@ -66700,10 +66715,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::region_rings#partition plumbing": {
@@ -66762,14 +66777,13 @@
  "l7r/diagram/waterfields/polder.py::POLDER_APEX_DEG#no parcel tapers to a point": {
   "code": "05cfd1ab9b83c59d",
   "core": "1956a2a68f21c5fe",
-  "date": "2026-10-07",
-  "note": "25 degrees, as the page",
+  "date": "2026-10-09",
+  "note": "the 25 deg refusal is 0005's",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
   ],
   "verdict": "IN-STEP"
@@ -66785,16 +66799,14 @@
  "l7r/diagram/waterfields/polder.py::_apex#no parcel tapers to a point": {
   "code": "249a60f4af5644aa",
   "core": "f691056d61861369",
-  "date": "2026-10-07",
-  "note": "25 degrees, the sharpest convex corner first",
+  "date": "2026-10-09",
+  "note": "finds a convex apex under 25 deg; taking the sharpest first is iteration order",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
   ],
   "verdict": "IN-STEP"
  },
@@ -67395,31 +67407,28 @@
  "l7r/diagram/waterfields/polder.py::unpoint_parcels#no parcel tapers to a point": {
   "code": "f6764f56a06ca4ca",
   "core": "69300ec9b866f374",
-  "date": "2026-10-07",
-  "note": "a convex apex under 25 degrees is cut off, and a ring still pointed is left bare",
+  "date": "2026-10-09",
+  "note": "a refused convex point is cut off until none is left",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::unpoint_parcels#pointed parcel left as bank": {
-  "code": "0e2fbe75684d86c6",
+  "code": "2733d8ee08d1bb3d",
   "core": "69300ec9b866f374",
   "date": "2026-10-09",
-  "note": "polder parcels share no bund, so after the apex cut, dropping to bank is §18's bare fate",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
-  },
-  "research": "d717a3e31d236e53",
+  "note": "neither page speaks to a polder parcel left as bank",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:d65c9b5327e2b353",
+   "0014-bunds-between-the-paddies-aze.drawing.html:de5f537983379a58"
   ],
   "verdict": "IN-STEP"
  },
@@ -67429,10 +67438,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::BASIN_MIN_WIDTH_FT#no least basin width": {
@@ -67441,10 +67450,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::CHEVRON_APEX#arrowhead point": {
@@ -67453,10 +67462,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::CHEVRON_SOLIDITY#arrowhead notch": {
@@ -67465,10 +67474,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::COLLECTOR_REACH#ring plumbing": {
@@ -67485,10 +67494,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::DART_MIN_APEX#dart tip": {
@@ -67497,10 +67506,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps": {
@@ -67522,13 +67531,15 @@
  "l7r/diagram/waterfields/ring_rules.py::NEEDLE_DEG#no basin tapers to a point": {
   "code": "10c9a7906899c659",
   "core": "5a324ee9614072a2",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "date": "2026-10-09",
+  "note": "a check's line under the placer's 25 deg refusal",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::OVERCOUNT_CEILING#lapped plots allowed": {
@@ -67621,10 +67632,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::as_recorded#ring plumbing": {
@@ -67675,10 +67686,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::fan_context#ring plumbing": {
@@ -67695,22 +67706,24 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::needle#needle": {
   "code": "6f91d87515912bcc",
   "core": "9b1ccd085b326d0d",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "date": "2026-10-09",
+  "note": "an interior angle under the check's line, the page's tapered point",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::overcount#ring plumbing": {
@@ -67735,10 +67748,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::ring_violations#bund rules": {
@@ -67775,10 +67788,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::self_crossing#ring plumbing": {
@@ -67838,10 +67851,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::under_island#paddy around a grave island": {
@@ -67865,6 +67878,19 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/seams/close.py::HEADLAND_PX#the headland's width": {
+  "code": "1dd8a01bdec0b9dc",
+  "core": "eab5cc0df856d783",
+  "date": "2026-10-09",
+  "note": "0005 names a headland but gives it no width; UNRESEARCHED is the right label",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::_SHAPELY_LOADED#re-hold plumbing": {
@@ -67932,33 +67958,93 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/seams/close.py::blunt_points#a point cut off": {
+  "code": "6ed4a3d65177fbee",
+  "core": "3a16b2f22f5111ae",
+  "date": "2026-10-09",
+  "note": "every refused point under 25 deg, needles included, is cut off into a headland",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/seams/close.py::blunt_points#cut off away from the drain": {
+  "code": "3bbd799a6529550a",
+  "core": "3a16b2f22f5111ae",
+  "date": "2026-10-09",
+  "note": "cutting off a point a later cut leaves (a grave island's corner) is recorded in 0005 as a DEVIATION",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/seams/close.py::held_faults#held at the placer's lines": {
   "code": "31a3b38f61de1b22",
   "core": "f73d9afefe82b75b",
   "date": "2026-10-09",
   "note": "_TOE_MIN_APEX 25.0, _TOE_MIN_AREA 0.25 of ctx.cell and is_chevron's arrowhead match \"sharper than 25 degrees\", \"a quarter of the design cell\" and the 40 deg / 0.90 arrowhead; is_chevron's thresholds are not inline, so the docstring's 40/0.90 is taken as given",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
   ],
+  "triaged": "2026-10-09",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#a point cut off": {
+  "code": "177cd6127986a9b7",
+  "core": "eed04b53b4a5d134",
+  "date": "2026-10-09",
+  "note": "points under 25 deg are cut off, and the piece is kept only if it then holds every line",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#cut before welded": {
+  "code": "7d749a1781379465",
+  "core": "eed04b53b4a5d134",
+  "date": "2026-10-09",
+  "note": "cut before weld, recorded as a DEVIATION for later-cut rings; the grave cut is the one caller",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
+  },
+  "research": "18b908bbb50f7c1f",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the placer's lines": {
-  "code": "434a033412c0dd3a",
-  "core": "896272f2abf9bb2e",
+  "code": "dd950f66fabeb5fd",
+  "core": "eed04b53b4a5d134",
   "date": "2026-10-09",
-  "note": "held_faults now picks the bad rings and the kept pieces, and through _weld_within_rules the weld hosts, so no kept ring can carry a 15-25 deg point or 0.20-0.25 of a cell",
+  "note": "held_faults carries the 25 deg, quarter-cell and arrowhead rules",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
@@ -67966,41 +68052,41 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#scrap left bare": {
-  "code": "f5806753e3c66dbc",
-  "core": "896272f2abf9bb2e",
+  "code": "b534292fb381b0b8",
+  "core": "eed04b53b4a5d134",
   "date": "2026-10-09",
-  "note": "a scrap no lawful weld takes is not re-added and stays bare over the fan floor, as \"stays bare, with the fan's floor drawn under it\"",
+  "note": "ground no lawful weld takes stays bare with the fan floor under it",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#scrap welded to its neighbor": {
-  "code": "45c0c5cb51542a6d",
-  "core": "896272f2abf9bb2e",
+  "code": "d3f50aaaaffd5313",
+  "core": "eed04b53b4a5d134",
   "date": "2026-10-09",
-  "note": "each scrap goes to _weld_within_rules, the basin sharing the most bund, matching \"taken into the basin beside it\" and \"the paddy it shares the most bund with\"",
+  "note": "into the basin it shares the most bund with, per both pages",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
-  "research": "52dd4ab6c239d5e7",
+  "research": "20234e9ed57bafef",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#staircase split on its hop": {
-  "code": "33cecca5ed95ab42",
-  "core": "896272f2abf9bb2e",
+  "code": "b396541fbf2bb965",
+  "core": "eed04b53b4a5d134",
   "date": "2026-10-09",
-  "note": "when ctx.g is set, a failing ring is cut by _split_steps along the step's hop, matching \"never hops sideways and carries on\"",
+  "note": "the step is carried straight across; a bund never hops sideways and carries on",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -68281,20 +68367,16 @@
   "code": "6b223c14fa1571c6",
   "core": "0e9312b188559409",
   "date": "2026-10-09",
-  "note": "the set {area, toe, steps} is exactly what the new label names. Size is the quarter-cell floor, toe is the 25-degree point and the arrowhead, and steps is the sideways hop. A union is only kept growing while it carries these faults, which matches scraps and odd corners being \"taken into the basin beside it\".",
+  "note": "small, thin or pointed cells grow by merging and are kept only once lawful",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
-  "research": "1389cdb18c5e644c",
+  "research": "dbb210ac3e4187e8",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
-   "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
   "verdict": "IN-STEP"
@@ -68329,16 +68411,13 @@
   "code": "83c3749fe360db71",
   "core": "cebb15c85eb2df67",
   "date": "2026-10-09",
-  "note": "with lawful unions no longer refused for plumbing reasons, a scrap stays bare only when every union breaks a ring rule, which is §18's strip generalized to the shapes the page refuses",
+  "note": "failing cells are merged into neighbors, and only what no lawful union takes stays bare",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
+  "research": "18b908bbb50f7c1f",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a6d71d623dedcce0",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:c98636cac67c0c83",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
   ],
   "verdict": "IN-STEP"
@@ -68357,10 +68436,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "18b908bbb50f7c1f",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::takes#merge kept when lawful": {
@@ -68389,11 +68468,11 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
-  "research": "1389cdb18c5e644c",
-  "triaged": "2026-10-05",
+  "research": "dbb210ac3e4187e8",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::verdict#toe discipline": {
@@ -68402,10 +68481,10 @@
   "date": "2026-10-09",
   "note": "thin strip at the toe's least width (0014 §38), quarter-cell floor, 25 deg point, arrowhead, all attested; that 0005 §16 sets no least width while 0014 §38 gives the toe one is a disagreement between the two pages, not drift in this code",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "6351da50cbfa3c28",
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
-  "research": "1389cdb18c5e644c",
+  "research": "dbb210ac3e4187e8",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
@@ -68415,6 +68494,7 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::welded#welded union": {

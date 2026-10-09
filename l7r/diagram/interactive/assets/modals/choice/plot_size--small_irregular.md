@@ -20,7 +20,7 @@ Guesses:
 
 Depiction: The map draws a small-plotted field with smaller basins and more of them, each at its real size in feet.
 Since a real terraced paddy could be a few feet across, the map sets no least width or area for a basin; only a scrap far
-smaller than the basin its field was cut to, or one narrowing to a sharp point, is taken into the basin beside it.
+smaller than the basin its field was cut to is taken into the basin beside it, and a sharp point is cut off into a headland or taken in the same way.
 
 Name: The paddy plots' size: small and irregular
 Covers: `meta.plot_size = small_irregular`

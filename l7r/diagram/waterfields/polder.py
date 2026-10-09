@@ -931,7 +931,7 @@ def unpoint_parcels(plots: list[dict[str, Any]]) -> None:
 
     Research:
         no parcel tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a convex apex under 25 deg (`POLDER_APEX_DEG`) cut off until none is left
-        pointed parcel left as bank - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a ring still pointed is dropped from the crop
+        pointed parcel left as bank - UNRESEARCHED: a polder parcel still pointed after its apex is cut is dropped into the bank fill (0005's bare strip is a fan's; polder plots stand apart, so none is taken in)
     """
     kept: list[dict[str, Any]] = []
     for p in plots:

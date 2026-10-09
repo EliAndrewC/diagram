@@ -1667,5 +1667,20 @@
       "cohort_passed": 48,
       "reading": "one seed that passed before fails after: a regression (XIII); the change ripples into placement, E3 as wave 69's and 74's"
     }
+  },
+  "wave82-point-cut-off": {
+    "quantity": "wave 82 (2026-10-09): the re-hold cuts a 15-25 degree point off into a headland before dropping a piece",
+    "observed": "2026-10-09",
+    "source": "batch 9's gate (tests/settlement/test_field_guarantees.py::test_a_corner_grave_has_its_basin_bund_carried_round_it_to_the_corner failed: 1 plot where 2); a probe of the carved basin's faults; tests/waterfields/test_ring_guarantees.py::test_a_sharp_point_is_cut_off_into_a_headland_before_the_piece_is_dropped; the pool rerolled; make cohort N=48",
+    "command": "make done (the gate); make test-file FILE=tests/waterfields/ and tests/settlement/test_field_guarantees.py; make map for the five hamlets; make cohort N=48",
+    "method": "the grave-corner fixture's carved basin judged by held_faults and ring_violations; a 20-degree wedge and a 7-degree spike through blunt_points and the re-hold",
+    "value": {
+      "grave_basin_area_px2": 2179,
+      "grave_basin_faults": "held_faults ['needle'], ring_violations [] - a point between the gate's 15 deg and the placer's 25 deg, dropped whole under wave 78",
+      "after": "the grave-corner test passes; a 20-degree wedge blunted and kept; W18's 7-degree spike blunted to a lawful 533 px² basin (spec-fidelity's probe), its neighbor untouched",
+      "pool_maps_moved": 0,
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 80",
+      "blunted_spike_px2": 533
+    }
   }
 }

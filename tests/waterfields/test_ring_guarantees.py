@@ -98,14 +98,21 @@ def test_a_part_of_a_staircase_too_small_to_stand_is_welded_or_left_bare() -> No
     assert not [p for p in plots if staircase(p["poly"], G)]
 
 
-def test_a_needle_no_neighbor_can_take_is_left_bare() -> None:
-    """W18: a basin tapering to a point is not kept. Its only neighbor would take it on as a spike - the union is a needle
-    too - so the weld is refused and the ground stays bare under the fan floor. The neighbor is left as it was."""
+def test_a_needle_has_its_point_cut_off_and_its_neighbor_is_left_as_it_was() -> None:
+    """W18 (0005: "a point the maps refuse is cut off into a headland ... or taken into the basin beside it"; feature 328 wave
+    82): a basin tapering to a needle is not kept as it stands - its point is cut off into a headland, and what is left, a
+    narrow basin the page allows ("the maps set no least width"), is kept. Its only neighbor is left as it was."""
+    from l7r.diagram.waterfields.seams.close import held_faults
+
     spike = [(0.0, 0.0), (100.0, -6.0), (100.0, 6.0)]
     host = _rect(100.0, -30.0, 160.0, 30.0)
     assert needle(spike)
-    plots = _hold([spike, host], RingContext(cell=1500.0, g=G))
-    assert [p["poly"] for p in plots] == [host], "the needle is gone and the neighbor untouched"
+    ctx = RingContext(cell=1500.0, g=G)
+    plots = _hold([spike, host], ctx)
+    assert [p["poly"] for p in plots][1:] == [host], "the neighbor untouched"
+    kept = as_recorded(plots[0]["poly"])
+    assert not needle(kept) and not held_faults(kept, ctx), "the needle's point cut off, the basin left keeps every line"
+    assert ring_area(kept) < ring_area(spike), "the headland taken from it"
 
 
 def test_a_needle_hidden_from_the_deduplicated_ring_is_judged_raw() -> None:
@@ -222,3 +229,26 @@ def test_the_re_hold_keeps_a_ring_only_at_the_placers_lines_not_the_gates() -> N
     assert held_faults(_rect(0.0, 0.0, 48.0, 31.0), ctx) == set(), "a basin at the design cell keeps them all"
     plots = _hold([wedge], ctx)
     assert all("needle" not in held_faults(as_recorded(p["poly"]), ctx) for p in plots), "the re-hold keeps no 20-degree point"
+
+
+def test_a_sharp_point_is_cut_off_into_a_headland_before_the_piece_is_dropped() -> None:
+    """Feature 328 batch 9's gate (0005: "a point the maps refuse is cut off into a headland ... or taken into the basin
+    beside it"): held at the placer's 25 degrees, a grave-cut basin with a 15-25 degree point was dropped whole; the re-hold
+    now cuts the point off square to its bisector first - two corners of 90 deg and more - and keeps the basin."""
+    import math
+
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.waterfields.banks import pointed_ring
+    from l7r.diagram.waterfields.seams.close import HEADLAND_PX, _load_shapely, blunt_points, held_faults
+
+    _load_shapely()
+    tip = 60.0 * math.tan(math.radians(10.0))
+    wedge = Polygon([(0.0, 0.0), (60.0, -tip), (90.0, -tip), (90.0, tip), (60.0, tip)])
+    cut = blunt_points(wedge, 25.0)
+    assert cut is not None and not pointed_ring(list(cut.exterior.coords)[:-1], 25.0), "the 20-degree point is gone"
+    assert wedge.area - cut.area < HEADLAND_PX**2 * 3, "and only a small headland went with it"
+    assert blunt_points(Polygon(_rect(0.0, 0.0, 48.0, 31.0)), 25.0) is None, "no point that sharp: nothing to cut"
+    ctx = RingContext(cell=1500.0, g=G)
+    plots = _hold([as_recorded(list(wedge.exterior.coords)[:-1])], ctx)
+    assert len(plots) == 1 and not held_faults(as_recorded(plots[0]["poly"]), ctx), "the re-hold keeps the blunted basin"

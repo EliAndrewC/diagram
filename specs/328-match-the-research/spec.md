@@ -225,6 +225,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 | The grave cut's re-hold keeps a ring only at the placer's lines: no point under 25 deg, nothing under a quarter cell, no arrowhead (wave 78) | historically accurate: 0005's drawing page | it kept welds at the gate's 15 deg and 0.20 margin; a 20-degree wedge is now refused (m:wave78-rehold-placer-lines) | `waterfields/seams/close.py` `held_faults` |
 | A vertex in the bank of a drain running with the fall steps off at right angles onto its own side (wave 79) | historically accurate: 0055 ("never into its water") | lifting up the fall cannot clear such a drain; 0 shipped maps moved (m:wave79-off-with-the-fall) | `waterfields/banks.py` `off_with_the_fall` |
 | A channel's bend is a circular arc of 0054's radius, the radius under 0054's cap on the shorter run; a hairpin's radius tightened further so its tangent point stays on its run (wave 80) | the radius a GUESS 0054 records (from the meander ratio, for a dug ditch), the cap 0054's rule, the hairpin's margin this project's guess (claimed UNRESEARCHED in `swept_bend`) | the code used 2.5 widths as the cut-back on a quadratic; a 20-degree turn now cuts back 1.76 for radius 10 (m:wave80-swept-bends) | `waterfields/banks.py` `swept_bend` |
+| The grave cut's re-hold cuts a refused point off square into a headland before it tries the basin beside it or drops the piece (wave 82) | the cut off the drain, and its order before the weld, this project's GUESS, recorded on 0005's drawing page as a DEVIATION; the headland's width UNRESEARCHED | a 2,179 px² grave-cut basin was dropped whole under wave 78 (m:wave82-point-cut-off) | `waterfields/seams/close.py` `blunt_points` |
 
 ## Assumptions
 
@@ -383,3 +384,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   states; the hairpin margin ruled a LEGITIMATE narrowing. Round 2: the rows added (66-68, 70-73, 75-80; 69 and 74 reverted),
   two corrected at the round's CHANGES REQUIRED (wave 70: the bath shares ROLLED, not yet drawn - ranking row 154 - and the main
   door's share this project's choice; wave 68: the entrance-board limit UNRESEARCHED); FAITHFUL, plan CLEAR (8 decisions).
+- Amendment 81 (wave 82, the gate's finding at batch 9's close), round 1 (spec-fidelity MODE 4, 2026-10-09): plan BLOCKED - the
+  needle floor NOT LEGITIMATE (the reviewer's probe: a blunted 7-degree spike is a lawful basin); the cut off the drain and before
+  the weld LEGITIMATE (to raise with the GM at the feature's end); the Decisions Recorded row reclassed; PLOT_SIZES tiered E4.
+  Round 2: plan CLEAR (7 decisions); the amendment CHANGES REQUIRED for the ranking rebuild, done (PLOT_SIZES at E4); FAITHFUL.

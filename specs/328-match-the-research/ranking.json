@@ -13716,6 +13716,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/consts.py::PLOT_SIZES#paddy plot size",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "settle the three plot-size classes against 0005: the page attests the middling basin (about 1,500 sq ft on a hamlet map) and a larger one on a valley hamlet (0.07 acre), no separate small class; check what each class draws in feet, whether large_block rolls only on valley hamlets, and label the 1:2:1 weights; judged IN-STEP at HEAD and NEEDS-RESEARCH on the same text in wave 82's re-check; tiered E4 as the spec's Edge Cases tier a NEEDS-RESEARCH verdict",
+  "files": [
+   "l7r/diagram/hamletgen/consts.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 82 re-check (a re-judgment of unchanged text; tier provisional)",
+  "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#off crop and water",
   "tier": "E4",
   "fix": "the 3 ft off a watercourse rests on no page; research a bamboo stand's set-back from water, or claim it UNRESEARCHED with the pads",
