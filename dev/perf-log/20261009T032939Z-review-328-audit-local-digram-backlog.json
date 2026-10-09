@@ -1,0 +1,66 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "50bcf4385",
+    "label": "328-start",
+    "utc": "20261009T031413Z"
+  },
+  "binding": "7d9865d4f2e3e3d86ba59aa92ba8a3320dc620abd8b03f2f74116611945dbfdf",
+  "criteria": {
+    "commensurate": "Unprofiled cost: seed 39 +0.3 s on a 2.5 s map (10hh) and +1.2 s on 10.3 s (40hh). The reference total is -2.9% and every size is within +2.6%. For a fix that saved more than 5 s on seed 4 and lets Audit-10/20 draw, that size would be proportionate, but only once the explanation owns it",
+    "necessary": "Not established. The fix itself (privy slides toward its own end only) is necessary: it removed a band-3 16.3 -> 1.5 s web cost on seed 4. But seed 39's crossing at 10hh (homesteads 1.6 -> 2.35 s cProfile) and its hinterland growth at 40hh (3.0 -> 4.1 s) arrive with that fix. They come from the changed privy placement making the track-out connector sweep work harder, not from any rule the explanation names, and the explanation does not acknowledge them. Wave 56's seat rule does account for +1.1 s cProfile of homesteads at 40hh, and that rule was asked for (rows 580/582/583)",
+    "no_way_around": "Probably not. At the fix, the growth is in connector_track -> _fabric_hits, which calls _crosses_fabric once per fabric polygon per candidate (42 sweeps, 13488 calls), and the fabric does not change during the sweep. That is the static-geometry per-candidate scan in dev/performance.md. Prefiltering the fabric once per sweep (cached poly boxes or an STRtree) looks like a cheaper way that has not been tried. What would settle it: a re-explanation attributing seed 39 to the fix's track-out cost, plus a measurement of _fabric_hits with fabric boxes hoisted out of the sweep"
+  },
+  "end": {
+    "commit": "1cbebc558",
+    "label": "328-end",
+    "utc": "20261009T031718Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T032939Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -12.9,
+          "39": 12.0,
+          "4": 7.1,
+          "47": -3.3
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": -1.5,
+          "39": -3.8,
+          "4": 10.0,
+          "47": 5.6
+        },
+        "total_pct": 2.6
+      },
+      "40": {
+        "seeds": {
+          "39": 11.7,
+          "4": 5.7,
+          "47": -7.7
+        },
+        "total_pct": 2.2
+      }
+    },
+    "seeds": {
+      "25": -4.8,
+      "39": 0.0,
+      "4": -5.8,
+      "47": 0.0
+    },
+    "total_pct": -2.9
+  },
+  "note": "Reviewer's numbers: seed 39 bisection by make perf-profile in detached worktrees at 50bcf4385, 71726fa46, 23d8f2a1f, 7093acac0, fdada289e, 55bcf18d6, c0feb4b8e, 1cbebc558; fix-adjacent legs repeated x3",
+  "verdict": "cannot-determine"
+}

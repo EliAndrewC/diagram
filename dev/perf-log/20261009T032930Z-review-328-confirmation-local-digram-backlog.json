@@ -1,0 +1,61 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "50bcf4385",
+    "label": "328-start",
+    "utc": "20261009T031413Z"
+  },
+  "binding": "7d9865d4f2e3e3d86ba59aa92ba8a3320dc620abd8b03f2f74116611945dbfdf",
+  "end": {
+    "commit": "1cbebc558",
+    "label": "328-end",
+    "utc": "20261009T031718Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T032930Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -12.9,
+          "39": 12.0,
+          "4": 7.1,
+          "47": -3.3
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": -1.5,
+          "39": -3.8,
+          "4": 10.0,
+          "47": 5.6
+        },
+        "total_pct": 2.6
+      },
+      "40": {
+        "seeds": {
+          "39": 11.7,
+          "4": 5.7,
+          "47": -7.7
+        },
+        "total_pct": 2.2
+      }
+    },
+    "seeds": {
+      "25": -4.8,
+      "39": 0.0,
+      "4": -5.8,
+      "47": 0.0
+    },
+    "total_pct": -2.9
+  },
+  "note": "Control batch4-pair-and-slide-fix is genuine but covers only seed 4 10hh web. The band-2 crossings are seed 39 (10hh +12.0%, 40hh +11.7%), which the explanation pins on waves 56/57/59/61 in homesteads/hinterland. Reviewer bisection (seed 39, make perf-profile in detached worktrees, cProfile s): homesteads 10hh is flat 1.5-1.7 from 50bcf4385 through c0feb4b8e and jumps to 2.3-2.4 only at the fix 1cbebc558 (x3 runs). hinterland 40hh: 2.9-3.3 at base, 3.4 w56, 2.8 w57 (no wave-57 growth), 2.7-3.0 w61, and 4.0-4.3 only at the fix (x3). homesteads 40hh 7.0 -> 8.1 w56, about 8.3-8.8 w57-60, 8.6-9.5 w61, 9.8-10.2 fix. At the fix, +0.7 s of the 10hh homesteads growth is chose_the_track/connector_track/_fabric_hits (13488 _crosses_fabric calls), none of the named rules. The explanation presents the fix only as a saving (web 16.3 -> 1.5) and says nothing about its cost on seed 39. Rewrite, attributing seed 39's crossings to the fix's privy placement (track-out connector sweep) plus wave 56/61 homesteads at 40hh",
+  "verdict": "inconsistent"
+}

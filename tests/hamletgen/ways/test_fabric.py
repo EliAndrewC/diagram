@@ -203,3 +203,15 @@ def test_a_join_link_is_refused_outright_when_it_would_cross_a_farmhouse() -> No
     assert len(s.M["lanes"]) == before, "nothing was drawn"
     # the same run, not declared a join, is judged by the debris floor instead - and is long enough
     assert hg.ways._draw_web(s, [(60.0, 300.0), (140.0, 300.0)], 3, joins=True) is True
+
+
+def test_fabric_hits_with_the_boxes_taken_once_counts_as_the_plain_count_does() -> None:
+    """`fabric_hits_boxed` (batch 4's perf audit: the sweep boxes the steadings once): the same count as `_fabric_hits`, a
+    steading whose box misses the run's skipped untested."""
+    from l7r.diagram.hamletgen.ways.fabric import fabric_hits_boxed, poly_box
+
+    run = [(0.0, 0.0), (100.0, 0.0)]
+    near = [(40.0, 5.0), (60.0, 5.0), (60.0, 20.0), (40.0, 20.0)]
+    far = [(400.0, 400.0), (420.0, 400.0), (420.0, 420.0), (400.0, 420.0)]
+    fabric = [near, far]
+    assert fabric_hits_boxed(run, fabric, [poly_box(p) for p in fabric], 16.0) == _fabric_hits(run, fabric, 16.0) == 1

@@ -460,7 +460,19 @@ def _fabric_hits(run: Poly, fabric: Sequence[Poly], gap: float) -> int:
     passes a garden without crossing it still puts the tread through the vegetables. Mizuguchi's
     connector crossed nothing at all and was 0.2 px from a garden rect; every bearing in the sweep
     scored a clean zero, and the ranking this was added to make had nothing to rank."""
-    return sum(1 for poly in fabric if _crosses_fabric(run, [poly], gap))
+    return fabric_hits_boxed(run, fabric, [poly_box(p) for p in fabric], gap)
+
+
+def fabric_hits_boxed(run: Poly, fabric: Sequence[Poly], boxes: Sequence[tuple[float, float, float, float]], gap: float) -> int:
+    """`_fabric_hits` with each polygon's box taken ONCE for a whole sweep (`poly_box`, in `boxes`): the fabric does not change
+    while a sweep ranks its 41 bearings, and every bearing re-boxed every steading, then tested each whose box the run's could
+    not meet (batch 4's perf-audit: 13,488 `_crosses_fabric` calls on seed 39 at 10 households). A polygon whose box, widened
+    by `gap`, misses the run's cannot be fouled - the same box test `_crosses_fabric` opens with - so it is skipped here.
+
+    Research: plumbing - NONE: the steadings' count, each polygon boxed once per sweep"""
+    rx0, ry0 = min(p[0] for p in run) - gap, min(p[1] for p in run) - gap
+    rx1, ry1 = max(p[0] for p in run) + gap, max(p[1] for p in run) + gap
+    return sum(1 for poly, (px0, py0, px1, py1) in zip(fabric, boxes, strict=True) if not (px1 < rx0 or px0 > rx1 or py1 < ry0 or py0 > ry1) and _crosses_fabric(run, [poly], gap))
 
 
 def poly_box(poly: Poly) -> tuple[float, float, float, float]:

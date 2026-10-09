@@ -36,7 +36,7 @@ from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, g
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
 from .cluster_edge import _cluster_edge_toward, _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
 from .dry_exit import EXIT_CELL_FT, GROVE_EXIT_CELL_FT, clear_of_bands, dry_exit
-from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
+from .fabric import _crosses_fabric, _homestead_polys, fabric_hits_boxed, poly_box
 from .geom import _turn_deg, memo_ground, polyline_len, push_clear_of_fabric, push_out_of, worked_ground
 from .route import _route, set_crossing
 
@@ -700,6 +700,7 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), wet: 
     wet_checks = [PathChecker([w], None, ()) for w in wet_grown]
     ground_check = PathChecker(avoid or [plan.envelope], pond, brook, waters)
     best: tuple[tuple[int, int, int], Poly] | None = None
+    fabric_boxes = [poly_box(p) for p in fabric]  # the steadings do not move while the sweep ranks its bearings
     for swing in sorted((9.0 * k for k in range(-20, 21)), key=abs):
         theta = math.radians(base + swing)
         # THE CANDIDATE IS THE PATH THAT WILL BE DRAWN - a probe measures what the check will measure. It is TAUT (feature 328
@@ -731,7 +732,7 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), wet: 
         # wet still outranks everything. A crop clip CAN - `route_around` bends the drawn track round
         # the hem, which is what that call exists for. A farmstead cannot be nudged either, and it is
         # somebody's house, so it sits directly under wet and above the crop.
-        steaded = _fabric_hits(path, fabric, TRACK_FABRIC_GAP)
+        steaded = fabric_hits_boxed(path, fabric, fabric_boxes, TRACK_FABRIC_GAP)  # the boxes taken once, before the sweep
         # PRUNE BEFORE THE EXPENSIVE HALF. `violations` tests every crop polygon on the map and is by
         # far the costliest term here; `soaked` and `steaded` are cheap by comparison. The rank is
         # lexicographic, so a candidate already behind on the first two terms cannot win no matter
