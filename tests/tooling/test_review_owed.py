@@ -429,3 +429,9 @@ def test_a_previous_snapshot_of_the_same_unit_is_cleared(tmp_path: Path) -> None
 def test_every_check_has_its_ask(check: str, tmp_path: Path) -> None:
     rec = snap.snapshot(tmp_path, None, [owed.Unit(check, "s", "", "o")])[0]
     assert Path(rec["dispatch"]).read_text().startswith(f"UNIT: {check}--s\n{check} - ")
+
+
+def test_the_ci_dispatcher_is_not_drawing_or_placement_code() -> None:
+    """A refusal-text edit in l7r/diagram/ci/ was asked to declare its occasions (2026-10-09); it draws nothing."""
+    assert not owed._CODE.match("l7r/diagram/ci/features.py")
+    assert owed._CODE.match("l7r/diagram/overlap/taxonomy.py") and owed._CODE.match("pool/hamlet/x/x.gen.py")
