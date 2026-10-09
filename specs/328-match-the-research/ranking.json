@@ -9810,7 +9810,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "73",
   "scope": "kept"
  },
  {
@@ -9826,21 +9826,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/waterfields/polder.py::_polder_channels#channel widths",
-  "tier": "E2",
-  "fix": "set every polder channel width in feet through chan_px from the 0068 ladder, the drain widening from ~1.2 ft at its head",
-  "files": [
-   "l7r/diagram/waterfields/polder.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "73",
   "scope": "kept"
  },
  {
@@ -13536,6 +13522,22 @@
   "verdict": "UNCLAIMED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/waterfields/polder.py::_polder_channels#channel widths",
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 73, 2026-10-09): every polder channel now drawn in feet through chan_px from 0068's ladder - the feeder 4.5 ft at its inlet to 1.5, the toes and laterals 2.5 -> 1.2 with each lateral's and toe's head capped at 0.8 of the feeder where it leaves (m:wave73-polder-widths-r2) - but the drain cannot widen 1.2 -> 5.5 ft to its outfall: the outfall taps it MID-run (`out_t = span_t * 0.5`), and the outfall brook, `_polder_close` (`_dw`), the comb draw and the footbridge sides each read the drain as one channel - drawing it as two runs from its corners to the outfall is a change across modules. Meanwhile it is drawn at its 5.5 ft outfall width throughout. The same work scales the inlet stub's 52 and the outfall leg's 40 grid units and the notch at _RING * 0.9 to feet",
+  "files": [
+   "l7r/diagram/waterfields/polder.py",
+   "l7r/diagram/hamletgen/water/polder.py",
+   "l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/waterfields/seams/pockets.py::_water#bund abuts the water",

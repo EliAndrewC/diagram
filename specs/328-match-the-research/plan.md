@@ -1162,6 +1162,33 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   onto the fall); its docstring and claims, which still called it a brook and gave it a course that is not drawn, are restated. No map moves.
 - **Verification**: the hole law's measurement; `impl-drift`; `spec-fidelity`.
 
+## Wave 73 (amendment 72, 2026-10-09) - batch 7
+
+- **Scope**: the polder's three E2 rows (two closed; `channel widths` done but for its drain, re-tiered E3). `_polder_channels#channel widths` (0068: every channel's width stored in feet and drawn
+  at the map's scale, placed on the ladder by what it waters): the ring's widths were fixed pixels (feeder 5.0 -> 4.0, toes
+  3.4 -> 3.0, laterals 3.2 -> 2.4, drain 5.0 flat); each is now `chan_px` of its rung - the feeder the supply canal's 4.5 ->
+  1.5 ft, the toes and the interior laterals the delivery ditch's 2.5 -> 1.2 ft, the drain widening 1.2 -> 5.5 ft.
+  `BERM#bank beside a polder ditch` and `_plots_clear_of_channels#parcel stops at its ditch's bank`: the crop kept 5.5 px
+  past every ditch alike; it now keeps each channel's own bank in feet (`channel_berm`) - beside an interior lateral its 8
+  ft corridor (0022) less the ditch there, split per side - the band 4 ft each side all along - beside the feeder a supply
+  canal's 5 ft bank, beside a toe a delivery ditch's 1.5 ft bund, beside the drain half a bund (0055).
+- **Measured** (m:wave73-polder-widths, taken again as m:wave73-polder-widths-r2 after spec-fidelity round 1): Kuwabata's ditches at the ladder's widths (the 1.2 ft tails held at the hamlet's
+  1.5 ft floor), its 35 parcels kept; the other four hamlets byte-identical (no polder); the 48-seed cohort unchanged.
+- **impl-drift round 1** (found and fixed): the tapers ran the wrong way - the feeder is recorded far end first, so its
+  4.5 ft head now stands at the inlet; the west toe runs drain -> feeder, its head now at the feeder; each lateral's head is
+  capped at 0.8 of the feeder's width where it leaves it (0068), Kuwabata's at 2.5, 2.5, 2.4 and 1.9 ft. The bank is each
+  channel's per 0055 - the feeder's 5 ft (a supply canal), a toe's 1.5 ft delivery bund, half a bund beside the drain - and is
+  read at the ditch's half-width at each segment (`_nearest_band`), not its widest. Left open, re-tiered E3 on measure through
+  `audit/overrides.json`: the row `channel widths`' remainder - the drain widening to an outfall that taps it mid-run (two
+  runs, which the outfall brook, `_polder_close`, the comb draw and the footbridge sides each read as one channel), drawn
+  meanwhile at its outfall width - with the unscaled inlet stub, outfall leg and notch (claimed UNRESEARCHED).
+- **spec-fidelity round 1** (fixed): the east toe's head, which leaves the feeder at its narrow far end, is capped at 0.8 of
+  the feeder there as the laterals' are (1.5 ft, the floor); a lateral's bank is the corridor less the ditch WHERE IT IS, so its
+  band is 4 ft each side all along (`test_a_laterals_band_is_its_corridor_all_along`); a stale closed-tier entry for
+  `channel widths` removed (the row is open at E3).
+- **Occasions**: glyph-redrawn, polder ditches on kuwabata - batch 7's close.
+- **Verification**: the waterfields and hamletgen suites; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

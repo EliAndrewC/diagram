@@ -5,13 +5,13 @@ Research: polder plumbing - NONE: projections onto polylines, densified outlines
 
 import math
 import random
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import Any
 
 from l7r.diagram.settlement._geom import seg_closest
 
 from .banks import hem_to_bank, round_channel_joints
-from .frame import Poly, Pt, _poly_area
+from .frame import MIN_CHANNEL_PX, Poly, Pt, _poly_area, chan_px, taper_w
 from .palette import FLOODED, RICE_GREENS, organic_parcel
 from .ring_rules import needle as _needle
 
@@ -19,8 +19,46 @@ _RING = 18.0  # the inner-toe ring-canal corridor width in (s, t) px (see _polde
 """Research: ring canal corridor - UNRESEARCHED: 18 px reserved inside the dike on all four sides"""
 
 
-BERM = 5.5  # px of bank the crop keeps back from a ditch it abuts (feature 150 T55). Measured off this fabric: the block's uncut parcels stand a median 7.2 px off the water (range to 9.3), and a channel half-width is 1.6-2.5, so 5.5 + w/2 lands a cut edge inside that band. At 1.5 the cut edge met the waterline and read as tilled ground with no bank.
-"""Research: bank beside a polder ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: 5.5 px past the ditch's half-width, calibrated to the block's own uncut parcels"""
+BANK_FT = 5.0
+"""Research: bank beside a polder ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: about 5 ft of bare bank between a canal and the fields beside it, feet at the map's scale (feature 328 wave 73: it was 5.5 px past every ditch alike)"""
+LATERAL_CORRIDOR_FT = 8.0
+"""Research: a lateral's corridor - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: between one column of modules and the next, a ditch corridor of about 8 ft, the ditch with its spoil banks either side"""
+DELIVERY_BUND_FT = 1.5
+"""Research: a delivery ditch's bund - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: about 1.5 ft between plots or along a delivery ditch"""
+
+
+def channel_berm(c: dict[str, Any], ftpx: float, w: float | None = None) -> float:
+    """The bank the crop keeps back from ONE polder channel, in pixels past its half-width (feature 328 wave 73): beside an
+    interior lateral, its 8 ft corridor (0022) less the ditch's own width, split per side; beside the feeder, a supply canal's
+    5 ft bank; beside a toe, a delivery ditch's 1.5 ft bund; beside the drain, half a bund (0055).
+
+    Research: the bank by the channel - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html, research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the lateral's corridor less its ditch, the supply canal's 5 ft bank, a delivery ditch's 1.5 ft bund and half of one beside the drain"""
+    seg = c.get("seg")
+    if seg == "lateral":  # the corridor less the ditch WHERE IT IS (`w`, the local width), so the band is the corridor all along
+        here = max(float(c.get("w", 0.0)), float(c.get("w_tail", 0.0))) if w is None else w
+        return max(0.0, (LATERAL_CORRIDOR_FT / ftpx - here) / 2.0)
+    if seg in ("e_toe", "w_toe"):
+        return DELIVERY_BUND_FT / ftpx  # a delivery ditch's bund (0055)
+    if seg == "drain":
+        return DELIVERY_BUND_FT / 2.0 / ftpx  # half a bund past the ditch's half-width (0055)
+    return BANK_FT / ftpx  # the supply canal's - the feeder's - bare bank (0055)
+
+
+def arc_fraction(pts: Sequence[Sequence[float]], q: Sequence[float]) -> float:
+    """How far along a polyline (0 at its first point, 1 at its last) its nearest point to `q` lies - where a channel's
+    taper is read at a point on it (feature 328 wave 73).
+
+    Research: plumbing - NONE"""
+    lens = [math.dist(a, b) for a, b in zip(pts, pts[1:], strict=False)]
+    total = sum(lens) or 1.0
+    best, at, run = math.inf, 0.0, 0.0
+    for (a, b), ln in zip(zip(pts, pts[1:], strict=False), lens, strict=True):
+        f = seg_closest(q[0], q[1], (float(a[0]), float(a[1])), (float(b[0]), float(b[1])))
+        d = math.hypot(q[0] - f[0], q[1] - f[1])
+        if d < best:
+            best, at = d, run + math.dist(a, f)
+        run += ln
+    return min(1.0, at / total)
 
 
 def build_polder(
@@ -113,7 +151,7 @@ def build_polder(
     plots = _polder_parcels(R, seed, grid, nodes, rows, cols, cell, gap, split_gap, parcel_mix, organic)
     envelope = _polder_envelope(grid, span_s, span_t)
     sides_st, fi, di, sluice = _polder_ring(R, grid, span_s, span_t)
-    channels, brook, dike_sluices, floor, out_t = _polder_channels(grid, sides_st, nodes, rows, cols, tt, span_s, span_t, fi, di)
+    channels, brook, dike_sluices, floor, out_t = _polder_channels(grid, sides_st, nodes, rows, cols, tt, span_s, span_t, fi, di, ftpx)
     _drn = _polder_close(plots, channels, sides_st, grid, down_deg)
     round_channel_joints(channels)  # earthen water turns on a swept bend, not a mitred corner
     # THE RING CLOSES (feature 150 T52, GM 2026-08-28: "a spot close to the top left of the rectangular boundary
@@ -144,7 +182,7 @@ def build_polder(
                     _nb = c["pts"][1] if _k == 0 else c["pts"][-2]
                     c["pts"][_k] = along_trunk(_on, _best, (_best[0] - _nb[0], _best[1] - _nb[1]), 3.0 / ftpx)  # 3 ft at the map's scale
     if clean_parcels:  # after the channels are FINAL - the rounding and the toe snap both move them
-        _plots_clear_of_channels(plots, channels)
+        _plots_clear_of_channels(plots, channels, ftpx)
     unpoint_parcels(plots)  # the LAST ring writer (feature 287, water W19) - whether or not the channel cleanup ran
     acres = sum(_poly_area(p["poly"]) for p in plots) * ftpx * ftpx / 43560  # ...and after the parcels are, so the acreage is the ground actually cropped
     return {
@@ -515,6 +553,7 @@ def _polder_channels(
     span_t: float,
     fi: float,
     di: float,
+    ftpx: float = 1.0,
 ) -> tuple[list[dict[str, Any]], list[Pt], list[Pt], list[Pt], float]:
     """The ring is a CLOSED loop (feeder top + two toe sides + drain bottom), all 4 corners FILLETED. The
     INLET is the source->field hairline itself: draw_comb_field draws it from the pond to channels[0]'s far
@@ -524,12 +563,13 @@ def _polder_channels(
     a hard corner) and runs off-map south through the dike (the south sluice).
 
     Research:
-        channel widths - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: feeder 5.0 to 4.0, toes 3.4 to 3.0, drain 5.0, laterals 3.2 to 2.4, in px rather than feet
+        channel widths - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: in feet at the map's scale through `chan_px` - the feeder the supply canal's 4.5 to 1.5 ft, the toes and the laterals the delivery ditch's 2.5 to 1.2 ft, the drain widening 1.2 to 5.5 ft (0068's ladder)
         one lateral a module line - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a lateral on every interior column line, feeder to drain
         laterals join on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each tip set on the trunk's drawn line
         sluices through the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: an inlet stub to the pond and an outfall brook from the drain's middle, the dike notched at each
         settlement-side toe - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the east toe, the village on the dry ground just off the dike to the east
         crossings cluster - UNRESEARCHED: the settlement-side toe tagged as the side crossings cluster on
+        inlet stub and sluice notch - UNRESEARCHED: the stub 52 grid units past the ring, the outfall's first leg 40, the notch _RING * 0.9 in - grid units, not feet at the map's scale (the ranked row `channel widths`' E3 work)
         floor inside the ring - CONVENTION: the green floor drawn to the ring canal, not the dike
     """
 
@@ -551,13 +591,24 @@ def _polder_channels(
         d["seg"] = seg
         return d
 
+    g = 2.0 / ftpx  # the grain `chan_px` reads (0068: every width in feet at the map's scale, feature 328 wave 73)
     channels = [
-        _seg(feeder_rev, "main", 5.0, 4.0, "feeder"),  # feeder (top), NW-end LAST so the source->field hairline anchors at the pond side
-        _seg(sides_st[1], "lateral", 3.4, 3.0, "e_toe"),  # east toe collector (the SETTLEMENT side)
-        _seg(sides_st[2], "drain", 5.0, 5.0, "drain"),  # bottom = drain collector (cross-slope)
-        _seg(sides_st[3], "lateral", 3.4, 3.0, "w_toe"),  # west toe collector
+        _seg(
+            feeder_rev, "main", chan_px(1.5, g), chan_px(4.5, g), "feeder"
+        ),  # recorded far-end first: its head, 4.5 ft, at the inlet (the last point)  # feeder (top), NW-end LAST so the source->field hairline anchors at the pond side
+        _seg(sides_st[1], "lateral", chan_px(2.5, g), chan_px(1.2, g), "e_toe"),  # east toe collector (the SETTLEMENT side)
+        _seg(
+            sides_st[2], "drain", chan_px(5.5, g), chan_px(5.5, g), "drain"
+        ),  # its outfall width throughout: the outfall taps it mid-run, which one stroke cannot widen to (ranked row `channel widths`, E3)  # bottom = drain collector (cross-slope)
+        _seg(sides_st[3], "lateral", chan_px(1.2, g), chan_px(2.5, g), "w_toe"),  # it runs drain -> feeder: its head at the feeder end  # west toe collector
     ]
 
+    # ...AND A TOE'S HEAD NEVER WIDER THAN THE FEEDER WHERE IT LEAVES IT (0068: a delivery ditch capped at 0.8 of its canal's
+    # local width) - the east toe heads at its first point, the west toe at its last; both leave the feeder at its corners
+    for _toe, _at in ((channels[1], 0), (channels[3], -1)):
+        _fw = taper_w(float(channels[0]["w"]), float(channels[0]["w_tail"]), arc_fraction(channels[0]["pts"], _toe["pts"][_at]))
+        _key = "w" if _at == 0 else "w_tail"
+        _toe[_key] = min(float(_toe[_key]), max(MIN_CHANNEL_PX, 0.8 * _fw))
     _s_on_side = s_on_side
 
     # SNAP the lateral ends onto the feeder (top) + drain (bottom) centerlines so each lateral FEEDS the
@@ -591,7 +642,10 @@ def _polder_channels(
         lat_pts = [(_s_on_side(sides_st[0], tc), tc), *[nodes[r][c] for r in range(rows + 1)], (_s_on_side(sides_st[2], tc), tc)]
         lat_xy = [grid(s, t) for s, t in lat_pts]
         lat_xy[0], lat_xy[-1] = _onto(lat_xy[0], feeder_xy), _onto(lat_xy[-1], drain_xy)
-        d = {"pts": [(round(x, 1), round(y, 1)) for x, y in lat_xy], "role": "lateral", "w": 3.2, "w_tail": 2.4, "seg": "lateral"}
+        # A DELIVERY HEAD NEVER WIDER THAN ITS CANAL WHERE IT LEAVES IT (0068: capped at 0.8 of the canal's local width)
+        _fw = taper_w(float(channels[0]["w"]), float(channels[0]["w_tail"]), arc_fraction(channels[0]["pts"], lat_xy[0]))
+        _head = min(chan_px(2.5, g), max(MIN_CHANNEL_PX, 0.8 * _fw))
+        d = {"pts": [(round(x, 1), round(y, 1)) for x, y in lat_xy], "role": "lateral", "w": _head, "w_tail": chan_px(1.2, g), "seg": "lateral"}
         channels.append(d)
     out_t = span_t * 0.5  # the outfall taps the drain at mid-south and runs off-map downhill
     brook_start, brook_dir = grid(di, out_t), grid(di + 40, out_t)
@@ -609,7 +663,7 @@ def _polder_channels(
     return channels, brook, dike_sluices, floor, out_t
 
 
-def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[str, Any]], margin: float = BERM, step: float = 4.0) -> None:
+def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[str, Any]], ftpx: float = 1.0, step: float = 4.0) -> None:
     """A PARCEL STOPS AT THE DITCH THAT BOUNDS IT (feature 150 T55, GM 2026-08-29: "one of the vegetable
     grounds overlaps with the irrigated channels which run between the vegetable grounds and the ponds").
 
@@ -626,13 +680,13 @@ def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[st
     other sample is moved to the band's edge on that side, so the new boundary follows the CHANNEL'S OWN
     CURVE and the parcel keeps its organic outline everywhere else.
 
-    `margin` is the BERM the crop keeps back from the water, and it is a degree rather than a form: a
+    The bank the crop keeps back from the water is each channel's own (`channel_berm`, feature 328 wave 73), and it is a degree rather than a form: a
     hand-cleaned ditch has its spoil piled on the bank, so the tilled ground starts a pace back from the
     lip. The first cut used 1.5 px and the review measured what that reads as - the cut parcels kept
     1.2-1.5 px of berm where the block's own uncut parcels keep a median 7.2, so at 200% the vegetable
     ground's west side met the waterline with no bank at all while its east side and its three neighbors
-    all had a green verge. `BERM` is set from that fabric measurement, so a cut edge is indistinguishable
-    from an uncut one.
+    all had a green verge. (It was one `BERM`, 5.5 px past every ditch, set from that fabric measurement; it is now the
+    record's bank in feet per channel.)
 
     Two cuts of this were tried and measured first, both recorded because either would be reached for
     again. PUSHING every point off the band made it worse - the boundary moved off the water on both
@@ -641,16 +695,26 @@ def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[st
     replaced the wandered edges with straight cuts and failed `polder_parcels_are_organic`, and cost
     3.4% of the block's acreage.
 
-    Research: parcel stops at its ditch's bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: an outline sample in the band moved to its edge, BERM past the ditch's half-width
+    Research: parcel stops at its ditch's bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: an outline sample in the band - the channel's half-width plus its own bank (`channel_berm`) - moved to its edge
     """
-    chans: list[tuple[Poly, float, float, float, float, float]] = []
+    chans: list[tuple[Poly, float, float, float, float, float, list[float]]] = []
     for c in channels:
-        hw = max(float(c.get("w", 0.0)), float(c.get("w_tail", 0.0))) / 2 + margin
         pts = [(float(x), float(y)) for x, y in c["pts"]]
         if len(pts) < 2:
             continue
+        # THE BAND AT EACH SEGMENT IS THE DITCH'S HALF-WIDTH THERE (feature 328 wave 73, 0055: "half the ditch's drawn width at
+        # that point"): the taper read at the segment's wider end, plus the channel's own bank
+        w0 = float(c.get("w") or 0.0)
+        w1, berm = float(c.get("w_tail") or w0), channel_berm(c, ftpx)
+        cum = [0.0]
+        for a_, b_ in zip(pts, pts[1:], strict=False):
+            cum.append(cum[-1] + math.dist(a_, b_))
+        tot = cum[-1] or 1.0
+        _wid = [max(taper_w(w0, w1, cum[i] / tot), taper_w(w0, w1, cum[i + 1] / tot)) for i in range(len(pts) - 1)]
+        seg_hw = [wd / 2 + (channel_berm(c, ftpx, wd) if c.get("seg") == "lateral" else berm) for wd in _wid]
+        hw = max(seg_hw)
         xs, ys = [q[0] for q in pts], [q[1] for q in pts]
-        chans.append((pts, hw, min(xs) - hw, min(ys) - hw, max(xs) + hw, max(ys) + hw))
+        chans.append((pts, hw, min(xs) - hw, min(ys) - hw, max(xs) + hw, max(ys) + hw, seg_hw))
     if not chans:
         return
     for p in plots:
@@ -669,18 +733,22 @@ def _plots_clear_of_channels(plots: list[dict[str, Any]], channels: list[dict[st
             dense += [
                 ((q[0] + (nxt[0] - q[0]) * k / n, q[1] + (nxt[1] - q[1]) * k / n), k == 0) for k in range(n)
             ]  # the parcel's OWN vertices are locked too: they carry the wander the archetype is checked on
-        for pts, hw, *_ in near:
+        for pts, hw, *_box, seg_hw in near:
             # ONLY THE SEGMENTS THIS PARCEL CAN REACH: a trunk runs the whole block (500 segments) and
             # this asks a nearest-point question per boundary sample - unpruned it cost 18 s of gen.
-            segs = [(a, b) for a, b in zip(pts, pts[1:], strict=False) if not (min(a[0], b[0]) - hw > rx1 or max(a[0], b[0]) + hw < rx0 or min(a[1], b[1]) - hw > ry1 or max(a[1], b[1]) + hw < ry0)]
+            segs = [
+                (a, b, h)
+                for (a, b), h in zip(zip(pts, pts[1:], strict=False), seg_hw, strict=True)
+                if not (min(a[0], b[0]) - h > rx1 or max(a[0], b[0]) + h < rx0 or min(a[1], b[1]) - h > ry1 or max(a[1], b[1]) + h < ry0)
+            ]
             if not segs:
                 continue
-            marks = [_nearest_on(q, segs) for q, _lk in dense]  # (foot, distance, signed side) per sample
-            if not any(d < hw for _f, d, _s in marks):
+            marks = [_nearest_band(q, segs) for q, _lk in dense]  # (foot, distance, signed side, the band there) per sample
+            if not any(d < h for _f, d, _s, h in marks):
                 continue  # this channel passes the parcel's box but not the parcel
-            keep_side = 1.0 if sum(1 for _f, _d, s in marks if s > 0) >= len(marks) / 2 else -1.0
+            keep_side = 1.0 if sum(1 for _f, _d, s, _h in marks if s > 0) >= len(marks) / 2 else -1.0
             moved: list[tuple[Pt, bool]] = []
-            for (q, lock), (f, d, s) in zip(dense, marks, strict=True):
+            for (q, lock), (f, d, s, hw) in zip(dense, marks, strict=True):
                 if d >= hw and s * keep_side > 0:
                     moved.append((q, lock))
                     continue
@@ -712,15 +780,16 @@ def _thin(ring: list[tuple[Pt, bool]], tol: float = 0.4) -> Poly:
     return out if len(out) >= 3 else [q for q, _lk in ring]
 
 
-def _nearest_on(q: Pt, segs: list[tuple[Pt, Pt]]) -> tuple[Pt, float, float]:
-    """The nearest point of a polyline to `q`, its distance, and which SIDE of the run `q` lies on (+/-1)."""
-    best: tuple[Pt, float, float] | None = None
-    for a, b in segs:
+def _nearest_band(q: Pt, segs: list[tuple[Pt, Pt, float]]) -> tuple[Pt, float, float, float]:
+    """The nearest point of a polyline whose segments each carry their band's half-width: the nearest point, its distance, the side, and the
+    band THERE (feature 328 wave 73: the ditch's half-width at that point, 0055)."""
+    best: tuple[Pt, float, float, float] | None = None
+    for a, b, h in segs:  # one pass, as `_nearest_on`'s
         f = seg_closest(q[0], q[1], a, b)
         d = math.hypot(q[0] - f[0], q[1] - f[1])
         if best is None or d < best[1]:
             cross = (b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0])
-            best = (f, d, 1.0 if cross >= 0 else -1.0)
+            best = (f, d, 1.0 if cross >= 0 else -1.0, h)
     assert best is not None
     return best
 
@@ -797,7 +866,7 @@ def clean_polder_parcels(net: dict[str, Any]) -> dict[str, Any]:  # noqa: D401
     acreage (feature 150 T55). `fit_polder` bisects with up to 45 candidate blocks and only one of them
     is drawn, so the cleanup - which densifies every outline against every nearby channel - runs on the
     WINNER rather than on all 45: measured, 15 s of gen became 41 s when every candidate paid for it."""
-    _plots_clear_of_channels(net["plots"], net["channels"])
+    _plots_clear_of_channels(net["plots"], net["channels"], float(net.get("ftpx", 1.0)))
     unpoint_parcels(net["plots"])  # the cleanup moves outlines, so the apex pass runs again after it (feature 287, water W19)
     net["acres"] = sum(_poly_area(p["poly"]) for p in net["plots"]) * float(net.get("ftpx", 1.0)) ** 2 / 43560
     return net

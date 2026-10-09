@@ -546,5 +546,7 @@
   "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms": "70",
   "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#the windbreak's hover region": "71",
   "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#Kuwabata's bare runs": "72",
-  "l7r/diagram/waterfields/comb.py::_comb_brook#a brook from the outfall": "72"
+  "l7r/diagram/waterfields/comb.py::_comb_brook#a brook from the outfall": "72",
+  "l7r/diagram/waterfields/polder.py::BERM#bank beside a polder ditch": "73",
+  "l7r/diagram/waterfields/polder.py::_plots_clear_of_channels#parcel stops at its ditch's bank": "73"
 }

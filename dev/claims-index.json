@@ -66510,17 +66510,50 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/polder.py::BERM#bank beside a polder ditch": {
-  "code": "e5a0e5ca6b20e301",
-  "core": "cc497174078a09b4",
-  "date": "2026-10-03",
-  "note": "BERM 5.5 px is applied past every polder channel incl. the laterals, but 0055's ~5 ft bank is a supply-canal bank (a bund along a delivery ditch abuts it at 1.5 ft) and 0022 gives a lateral's whole corridor \"about 8 ft\" with both banks; also px, not feet",
+ "l7r/diagram/waterfields/polder.py::BANK_FT#bank beside a polder ditch": {
+  "code": "652c211ddf3239e8",
+  "core": "f7b8474fd73a4ae7",
+  "date": "2026-10-09",
+  "note": "5 ft bare bank beside a supply canal",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:db56eaba6ec79cd4"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::DELIVERY_BUND_FT#a delivery ditch's bund": {
+  "code": "b35c1e800b3d2e4b",
+  "core": "233bdca142f022b6",
+  "date": "2026-10-09",
+  "note": "\"about 1.5 ft between plots or along a delivery ditch\"",
+  "pages": {
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
+  },
+  "research": "39036ea15e57c448",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:8e61ea509b376ceb",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:d0ef52fff21446f2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::LATERAL_CORRIDOR_FT#a lateral's corridor": {
+  "code": "1b23e4727ecd6e05",
+  "core": "232d3ac8ac8b4b8c",
+  "date": "2026-10-09",
+  "note": "8 ft ditch corridor with spoil banks between module columns",
+  "pages": {
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
+  },
+  "research": "5b339210163f008f",
+  "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::POLDER_APEX_DEG#no parcel tapers to a point": {
   "code": "05cfd1ab9b83c59d",
@@ -66561,12 +66594,14 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/polder.py::_nearest_on#polder plumbing": {
-  "code": "337b9b8fc207a38c",
-  "core": "f8b37abe73fc8918",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+ "l7r/diagram/waterfields/polder.py::_nearest_band#polder plumbing": {
+  "code": "78a408bf7d0b0746",
+  "core": "bbfce30542164bb2",
+  "date": "2026-10-09",
+  "note": "nearest-point projection; it carries the band but decides nothing itself",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_onto_poly#polder plumbing": {
@@ -66578,68 +66613,101 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_plots_clear_of_channels#parcel stops at its ditch's bank": {
-  "code": "5b34686e90ce19dc",
-  "core": "b33ac21fac6c4a2e",
-  "date": "2026-10-03",
-  "note": "pushes every parcel BERM past each ditch's half-width, laterals included; 0055's 5 ft bank is for a supply canal, and 0022's lateral corridor is ~8 ft in all",
+  "code": "c47ed80a9bfdc387",
+  "core": "76d769aca81b92b2",
+  "date": "2026-10-09",
+  "note": "samples inside the band (the ditch's half-width at the segment's wider end plus `channel_berm`) are moved to its edge, so a lateral's band is a steady 4 ft and the drain's is half its width plus half a bund",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:d0ef52fff21446f2",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_channels#channel widths": {
-  "code": "e19e9b33eb68095c",
-  "core": "da7361bad05a8708",
-  "date": "2026-10-05",
-  "note": "widths hard-set in px (feeder 5.0-4.0, drain a constant 5.0), where the ladder stores every width \"in feet\" so a channel is \"the same real size on every map\", and a drain widens from a ~1.2 ft head; set them in feet through chan_px, with a widening drain",
+  "code": "f43a7cb2fb13fca4",
+  "core": "25e2018cda700745",
+  "date": "2026-10-09",
+  "note": "the drain is `chan_px(5.5, g), chan_px(5.5, g)`, 5.5 ft all along, where the claim and the research say it widens (\"starts as narrow as the delivery ditches end, about 1.2 ft\", 1.2 -> 5.5); taper it 1.2 -> 5.5 or re-label it. The feeder (4.5 -> 1.5), the toes and laterals (2.5 -> 1.2) and the 0.8 cap on their heads are in step; the east toe's head is capped against the feeder's 1.5 ft far end and the floor lifts it to 1.5",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "f92e0a94674d2241",
   "rests": [
-   "0060-field-drains-akusuiro.drawing.html:59546d4f9be5c411",
    "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
+   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:510345478efc1edf",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:5dad73ad1b493d62",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:603250935c007233",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:63187b43a25fbf8f",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:9002217b9f41f63a",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a2bbc3411bf2a387",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
   ],
-  "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/polder.py::_polder_channels#crossings cluster": {
-  "code": "ea69831954054d27",
-  "core": "da7361bad05a8708",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle answers it",
+  "code": "fa2f845c74c31751",
+  "core": "25e2018cda700745",
+  "date": "2026-10-09",
+  "note": "no cited question places footbridges or crossings; tagging the east toe is unresearched as labeled (the code comment cites a 2026-07-22 research finding that is not in the bundle)",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_channels#floor inside the ring": {
-  "code": "1c5d61dd0fbe59f9",
-  "core": "da7361bad05a8708",
-  "date": "2026-10-03",
-  "note": "purely how it is shown",
+  "code": "eb1ea04ba8f8911a",
+  "core": "25e2018cda700745",
+  "date": "2026-10-09",
+  "note": "the green fill bounded by the ring canal is how it is shown, consistent with the order dike, ring canal, fields",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/polder.py::_polder_channels#inlet stub and sluice notch": {
+  "code": "d99a10a45531af43",
+  "core": "25e2018cda700745",
+  "date": "2026-10-09",
+  "note": "the cited questions give no stub length, outfall leg or notch inset; 52, 40 and _RING*0.9 grid units are unresearched as labeled",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_channels#laterals join on the trunk": {
-  "code": "c6c13a8fa689a59c",
-  "core": "da7361bad05a8708",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "20ed262e4ef473f6",
+  "core": "25e2018cda700745",
+  "date": "2026-10-09",
+  "note": "each lateral's tip is snapped with `_onto` onto the feeder's and the drain's drawn lines",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c7c19378534d318a"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_channels#one lateral a module line": {
-  "code": "092cf105fb9cc400",
-  "core": "da7361bad05a8708",
-  "date": "2026-10-05",
-  "note": "a field ditch on every line between module columns",
+  "code": "8f02ee7140f63389",
+  "core": "25e2018cda700745",
+  "date": "2026-10-09",
+  "note": "one lateral on each interior column line, feeder to drain, as the field ditch between columns of modules",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
@@ -66651,27 +66719,33 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_channels#settlement-side toe": {
-  "code": "4c57ab0c0672e69c",
-  "core": "da7361bad05a8708",
-  "date": "2026-10-03",
-  "note": "0019 \"village is drawn on the dry ground just off the dike, to the east\"",
+  "code": "850b87382931496d",
+  "core": "25e2018cda700745",
+  "date": "2026-10-09",
+  "note": "the east toe is tagged as the settlement side, the village on the dry ground to the east",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_channels#sluices through the dike": {
-  "code": "cbe69e941f7adc8f",
-  "core": "da7361bad05a8708",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "d5818141460fbcee",
+  "core": "25e2018cda700745",
+  "date": "2026-10-09",
+  "note": "an inlet at the NW (pond) corner and an outfall south from the drain, the dike notched at each; two sluices for a village polder",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_close#no acute stub": {
@@ -66900,21 +66974,31 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/polder.py::arc_fraction#plumbing": {
+  "code": "8dcc4aec2792de93",
+  "core": "99d4818f26ec09f3",
+  "date": "2026-10-09",
+  "note": "finds where along a polyline a point lies",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/polder.py::build_polder#acreage reckoned": {
-  "code": "d12792d3ecb9a226",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "measures area, decides nothing",
+  "code": "90a904e6186c26bf",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "reckons area at the map's scale and decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#gaps": {
-  "code": "1b0bd2abdd6d2654",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "3 ft bund between rows and strips, 8 ft ditch corridor between columns",
+  "code": "b7034c132b81ddb2",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "(1.5, 4.0)/ftpx per side gives a 3 ft bund and an 8 ft corridor; split lines take the bund width",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
@@ -66928,10 +67012,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#hand-piled outlines": {
-  "code": "b322f2b1f9ebb393",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "corners rounded where plots stand apart, from all but square to a broad sweep",
+  "code": "bbbed089e8ee30ff",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "polder plot corners rounded, from all but square to a broad sweep",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -66943,16 +67027,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default": {
-  "code": "c160d17a5c31c21f",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "`mosaic` and `edge_wander` default to 0, so a rice polder keeps its surveyed grid; the dike-pond block passes its own mosaic, and the page records the chessboard pond layout as a known gap",
+  "code": "c6bbe59b81252af3",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "`mosaic` 0 keeps the rice polder's surveyed grid",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
@@ -66960,70 +67043,68 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#low rows wet": {
-  "code": "653c013af364fb29",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "a polder tints every low plot; two rows is a calibration within that",
+  "code": "7300d409d5a43448",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "the tint (\"the two lowest rows\", no merge across the band) is decided in `_polder_parcels`/`_polder_close`, which the bundle does not include; I need their source",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
   "research": "45d05a93011e034b",
   "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#module line bow": {
-  "code": "5449eed7777ba8ef",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "bow of 0.10 of the module, kept off the boundary lines",
+  "code": "d4602df5cf35e0a9",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "`line_wander` 0.10 of the module, kept off the boundary lines",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922"
+   "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#module size": {
-  "code": "1321b15dd72a772e",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "190 ft module divided by ftpx",
+  "code": "608ef09c68b5a60a",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "190 ft at the map's scale",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
   "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#parcel mix": {
-  "code": "25f1e811704eb286",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "most modules split into 2-3 strips, a few merged; the mean parcel is near half an acre",
+  "code": "e5bd39cff8f160e7",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "(0.52, 0.16, 0.12): most modules split into strips, a few merged",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
   "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:12a3ae71eb49cdf8",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#polder layout": {
-  "code": "4c5f856a9379ce39",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "diked block, ring canal at the inside foot of the dike, inlet and outfall sluices",
+  "code": "8db8a6651e816474",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "diked block, ring canal inside the dike, water crosses only at an inlet and an outfall",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
@@ -67035,36 +67116,54 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#polder size": {
-  "code": "34ad3a5c325680ff",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "11x6 modules; the questions are silent on block size",
+  "code": "40b84eff4bccf948",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "nothing in the bundle gives a module count",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#toe ends on the trunk": {
-  "code": "f345591ccefc2cc0",
-  "core": "d51f5c127b6edb32",
-  "date": "2026-10-07",
-  "note": "tips set on the trunk's drawn line and run on inside its width as one body",
+  "code": "326aece275899d8e",
+  "core": "27c1ff09bae5d2d2",
+  "date": "2026-10-09",
+  "note": "end snapped onto the nearer trunk and run 3 ft on along it, so it reads as a junction",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:1c4ab4cdec854bfe",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c7c19378534d318a"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/polder.py::channel_berm#the bank by the channel": {
+  "code": "97b786a8c8dcab26",
+  "core": "9668e8b071787509",
+  "date": "2026-10-09",
+  "note": "the 8 ft lateral corridor less the local ditch width, split per side (4 ft each side of the centerline); a 5 ft supply-canal bank; a 1.5 ft delivery bund on the toes; half a bund beside the drain",
+  "pages": {
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
+  },
+  "research": "74cd3f908db6116e",
+  "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:d0ef52fff21446f2",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/polder.py::clean_polder_parcels#polder plumbing": {
-  "code": "ce45142b33715d13",
-  "core": "1b7913abc5b94299",
-  "date": "2026-10-07",
-  "note": "it composes callees and re-measures; it decides nothing itself",
+  "code": "0234f862b662ac55",
+  "core": "f8182f8ec2134ac5",
+  "date": "2026-10-09",
+  "note": "re-runs the cleanup and re-measures the acreage",
   "pages": {},
   "research": "",
   "rests": [],

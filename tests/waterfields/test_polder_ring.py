@@ -208,3 +208,44 @@ def test_a_parcel_blunt_unrounded_but_a_needle_as_recorded_is_re_hemmed() -> Non
     unpoint_parcels(plots)
     assert all(not needle([(round(x, 1), round(y, 1)) for x, y in p["poly"]]) for p in plots)
     assert plots and len(plots[0]["poly"]) == 4, "re-hemmed without the apex, not dropped"
+
+
+def test_a_polder_channels_bank_is_its_own_in_feet() -> None:
+    """Feature 328 wave 73 (0022, 0055): the bank a parcel keeps from a polder channel is the channel's own - a supply canal's
+    5 ft beside the feeder, a delivery ditch's 1.5 ft bund beside a toe, half a bund beside the drain, and beside an interior
+    lateral its 8 ft corridor less the ditch, split per side - in feet at the map's scale."""
+    from l7r.diagram.waterfields.polder import channel_berm
+
+    assert channel_berm({"seg": "feeder", "w": 4.5}, 1.0) == 5.0 and channel_berm({"seg": "feeder", "w": 4.5}, 2.0) == 2.5
+    assert channel_berm({"seg": "e_toe", "w": 2.5}, 1.0) == 1.5 and channel_berm({"seg": "drain", "w": 5.5}, 1.0) == 0.75
+    assert channel_berm({"seg": "lateral", "w": 2.5, "w_tail": 1.5}, 1.0) == 2.75
+    assert channel_berm({"seg": "lateral", "w": 9.0}, 1.0) == 0.0, "a ditch wider than its corridor keeps no extra bank"
+
+
+def test_arc_fraction_reads_where_a_point_lies_along_a_run() -> None:
+    from l7r.diagram.waterfields.polder import arc_fraction
+
+    run = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)]
+    assert arc_fraction(run, (50.0, 5.0)) == 0.25 and arc_fraction(run, (100.0, 100.0)) == 1.0 and arc_fraction(run, (0.0, 0.0)) == 0.0
+
+
+def test_the_band_narrows_with_the_ditch() -> None:
+    """Feature 328 wave 73 (0055: half the ditch's drawn width at that point): a parcel beside a tapering ditch's narrow end is
+    kept back by the narrow end's half-width, not the wide end's."""
+    from l7r.diagram.waterfields.polder import _plots_clear_of_channels
+
+    plot = {"poly": [(0.0, 0.0), (40.0, 0.0), (40.0, 100.0), (0.0, 100.0)]}
+    ditch = {"pts": [(43.0, float(y)) for y in range(1000, -1, -20)], "w": 20.0, "w_tail": 2.0, "seg": "e_toe"}  # wide far off, 2 ft beside the plot
+    _plots_clear_of_channels([plot], [ditch])
+    # beside the plot the ditch is 2 to ~3 ft wide: its band (half of that plus the toe's 1.5 ft bund) reaches x ~40.0-40.5,
+    # where the far end's 20 ft would have cut the parcel back to x 31.5
+    assert max(x for x, _y in plot["poly"]) >= 39.0, plot["poly"]
+
+
+def test_a_laterals_band_is_its_corridor_all_along() -> None:
+    """Feature 328 wave 73 (0022: a ditch corridor of about 8 ft): beside an interior lateral the bank is the corridor less the
+    ditch WHERE IT IS, so the band reaches 4 ft each side of the centerline at the head and the tail alike."""
+    from l7r.diagram.waterfields.polder import channel_berm
+
+    lat = {"seg": "lateral", "w": 2.5, "w_tail": 1.5}
+    assert 2.5 / 2 + channel_berm(lat, 1.0, 2.5) == 4.0 and 1.5 / 2 + channel_berm(lat, 1.0, 1.5) == 4.0

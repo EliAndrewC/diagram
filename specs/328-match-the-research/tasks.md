@@ -5,6 +5,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
+- glyph-redrawn: polder ditches on kuwabata - wave 73: every polder channel at 0068's widths in feet (the feeder 4.5 ft at its inlet to 1.5, the toes and laterals 2.5 -> 1.2 floored 1.5 with their heads capped by the feeder, the drain at its 5.5 ft outfall width) and each parcel's bank per channel (m:wave73-polder-widths-r2); batch 7's close
 - (reviewed PASS at batch 6's close, 2026-10-09) placement-changed: notice board on inashiro - wave 68: an entrance board on its approach squared to the approach, not to a nearer access lane (0190; m:wave68-board-faces-the-way-out); batch 6's close
 - (the same change judged on inashiro at batch 6's close, PASS - the review tool takes one map per element; sawada's board measured square to its track out, m:wave68-board-faces-the-way-out) placement-changed: notice board on sawada - wave 68: its entrance board squared to its track out, 76.4 degrees off it before (0190; m:wave68-board-faces-the-way-out); batch 6's close
 - (reviewed PASS at batch 4's close, 2026-10-09) glyph-redrawn: scrub and rough grazing on kashikawa - wave 57: the band under a wood's edge drawn grass only, no brush (0077); batch 4's close
@@ -1924,3 +1925,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T173 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 72); the belt's bare runs re-measured - the hole law finds none on any hamlet; the outfall's run named the drain's ditch it is drawn as, its course claims corrected; claims in step over three impl-drift rounds; no map moved
+
+## Phase 74 - wave 73 (amendment 72): the polder's channels and banks in feet
+
+- `waterfields/polder.py` (`_polder_channels`' widths through `chan_px`; `channel_berm`, `BANK_FT`, `LATERAL_CORRIDOR_FT`;
+  `ftpx` to `_plots_clear_of_channels`).
+
+- [x] T174 wave 73's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 73, round 2); the polder's banks per channel in feet and its channels on 0068's ladder, tapers the right way, heads capped by the feeder; channel widths re-tiered E3 for the drain's mid outfall; claims in step but that drift; only Kuwabata moves; cohort unchanged
+- [x] T175 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 73, round 2); the polder's banks per channel in feet and its channels on 0068's ladder, tapers the right way, heads capped by the feeder; channel widths re-tiered E3 for the drain's mid outfall; claims in step but that drift; only Kuwabata moves; cohort unchanged

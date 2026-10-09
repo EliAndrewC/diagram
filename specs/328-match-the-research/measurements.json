@@ -1366,5 +1366,119 @@
       "mizuguchi": "no village belt",
       "before": "feature 287 measured three bare runs of 40-50 ft on Kuwabata"
     }
+  },
+  "wave73-polder-widths": {
+    "quantity": "wave 73 (2026-10-09): Kuwabata's polder channels at 0068's widths in feet",
+    "observed": "2026-10-09",
+    "source": "pool/hamlets/kuwabata/kuwabata.json field_ditches (w, w_tail) against HEAD's; the other four hamlets compared with git diff",
+    "command": "make map for the five hamlets; field_ditches widths before (git show HEAD) and after; make cohort N=48",
+    "method": "Kuwabata (1 ft/px) rerolled; the other hamlets byte-compared to HEAD; the cohort against wave 72's run",
+    "value": {
+      "field_ditches_px": {
+        "feeder (far end -> inlet)": {
+          "before": [
+            5.0,
+            4.0
+          ],
+          "after": [
+            1.5,
+            4.5
+          ]
+        },
+        "e_toe (feeder -> drain)": {
+          "before": [
+            3.4,
+            3.0
+          ],
+          "after": [
+            2.5,
+            1.5
+          ]
+        },
+        "w_toe (drain -> feeder)": {
+          "before": [
+            3.4,
+            3.0
+          ],
+          "after": [
+            1.5,
+            2.5
+          ]
+        },
+        "laterals' heads": {
+          "before": [
+            3.2,
+            3.2,
+            3.2,
+            3.2
+          ],
+          "after": [
+            2.5,
+            2.5,
+            2.4,
+            1.9
+          ],
+          "note": "capped at 0.8 of the feeder where each leaves it"
+        },
+        "drain": {
+          "before": [
+            5.0,
+            5.0
+          ],
+          "after": [
+            5.5,
+            5.5
+          ],
+          "note": "its outfall width throughout - the outfall taps it mid-run (found-wave73, E3)"
+        }
+      },
+      "floor": "the 1.2 ft tails drawn at the hamlet's 1.5 ft floor (MIN_CHANNEL_PX)",
+      "parcels": "35 before and after",
+      "other hamlets": "byte-identical (no polder)",
+      "cohort_48": "48/54, the same six refused seeds",
+      "banks": "feeder 5 ft, toes 1.5 ft, drain 0.75 ft, laterals (8 ft - ditch) / 2, past the ditch's half-width at each segment"
+    }
+  },
+  "wave73-polder-widths-r2": {
+    "quantity": "wave 73 (2026-10-09), taken again after spec-fidelity round 1: Kuwabata's polder channels and banks",
+    "observed": "2026-10-09",
+    "source": "pool/hamlets/kuwabata/kuwabata.json field_ditches (w, w_tail) after the toes' cap and the per-segment lateral bank",
+    "command": "make map GEN=pool/hamlets/kuwabata/kuwabata.gen.py; read field_ditches; make cohort N=48",
+    "method": "Kuwabata rerolled; the other four compared to HEAD with git; the cohort against the wave's earlier run",
+    "value": {
+      "feeder (far end -> inlet)": [
+        1.5,
+        4.5
+      ],
+      "e_toe (feeder -> drain)": {
+        "before": [
+          2.5,
+          1.5
+        ],
+        "after": [
+          1.5,
+          1.5
+        ],
+        "note": "its head capped at 0.8 of the feeder's 1.5 ft far end, floored at 1.5"
+      },
+      "w_toe (drain -> feeder)": [
+        1.5,
+        2.5
+      ],
+      "laterals' heads": [
+        2.5,
+        2.5,
+        2.4,
+        1.9
+      ],
+      "drain": [
+        5.5,
+        5.5
+      ],
+      "banks": "feeder 5 ft, toes 1.5 ft, drain 0.75 ft past the half-width there; a lateral's band 4 ft each side all along (8 ft corridor less the ditch where it is)",
+      "other hamlets": "byte-identical to HEAD",
+      "cohort_48": "48/54, the same six refused seeds"
+    },
+    "supersedes": "wave73-polder-widths"
   }
 }
