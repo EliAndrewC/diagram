@@ -872,7 +872,62 @@
         "cause": "on wave 61's seating the village grove seated 7 clumps; on the re-seated ground it seats and draws 313 - the belt and copse planted, the stage's added time is that planting"
       },
       "homesteads_40hh": "the audit's bisection: wave 56 +1.1 s (the seats' 50 ft sun strips, rows 580/582/583), the rest wave 61 and the fix",
-      "maps": "byte-identical after both index fixes"
+      "maps": "byte-identical after both index fixes",
+      "seed4_after_the_index_fixes": {
+        "pair": "50bcf4385 -> a67389b82 (load 2.5 during the legs): reference TOTAL -6.2%; 10 hh 0.0%, 20 hh -0.8%, 40 hh -0.9%; crossings seed 4 +10.7% at 10 hh, +11.5% at 20 hh",
+        "homesteads_20hh": {
+          "base": {
+            "stage_s": 4.1,
+            "lay_the_ways": 1.18,
+            "_way_for": [
+              20,
+              0.89
+            ]
+          },
+          "head": {
+            "stage_s": 5.2,
+            "lay_the_ways": 1.94,
+            "_way_for": [
+              20,
+              1.59
+            ],
+            "_first_admitted": [
+              57,
+              1.27
+            ]
+          },
+          "cause": "the households' ways laid in the gaps between re-placed homestead parts (waves 56, 59, 61): more candidate ways tried before one is admitted"
+        },
+        "hinterland_20hh": {
+          "base": {
+            "stage_s": 1.7,
+            "village_grove_s": 0.39
+          },
+          "head": {
+            "stage_s": 2.6,
+            "village_grove_s": 1.28,
+            "_draw_grove_calls": 298
+          },
+          "cause": "the village grove seats and draws more clumps on the re-placed ground, as on seed 39"
+        },
+        "web_10hh": {
+          "base": {
+            "stage_s": 0.9
+          },
+          "head": {
+            "stage_s": 1.5,
+            "settle_reach": [
+              3,
+              0.52
+            ],
+            "settle_field": [
+              1,
+              0.35
+            ]
+          },
+          "cause": "the web settles more reaches on the re-placed ground"
+        }
+      }
     }
   }
 }
