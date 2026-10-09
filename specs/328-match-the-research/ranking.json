@@ -7981,22 +7981,6 @@
   "scope": "deferred"
  },
  {
-  "key": "l7r/diagram/settlement/_geom/curves.py::fillet_polyline#interior bends",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "fillet_polyline (called by water_ways/clipping.py with 2.5 * width) takes the value as the cut-back, not the radius 0054 gives - the drain's interior bends on Kuwabata come out 74-140 ft in radius, 13-25 widths, against about 2.5; derive the cut-back from the radius and the turn as swept_bend does (wave 80), and correct its claim, which calls the value a radius; it moves every channel's interior bends, so the cohort decides",
-  "files": [
-   "l7r/diagram/settlement/_geom/curves.py",
-   "l7r/diagram/settlement/water_ways/clipping.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "batch 9's glyph check of the drainage ditch on Kuwabata (F4, questionable), after wave 80",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/settlement/_knobs.py::<module>#settlement_form forms",
   "tier": "E2",
   "fix": "give settlement_form weights nucleated 0.5, dispersed 0.3, linear 0.2 per 0031 drawing; label water_town UNRESEARCHED in the claim",
@@ -11955,6 +11939,21 @@
   "moved": "wave 5: the mill race is a new element (spec-fidelity's note on amendment 4)",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/_geom/curves.py::fillet_polyline#interior bends",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the drift: fillet_polyline takes 0054's 2.5-width radius as the cut-back, so a gentle turn's bend draws 13-25 widths wide (Kuwabata's drain: 74-140 ft against 13.75); re-tiered E2 -> E3 on measure (wave 83, 2026-10-09): draw each corner as a circular arc of the radius given (0054), the radius capped at 35% of the shorter leg - built, tested and REVERTED: every pool map moved and the 48-seed cohort went 48 -> 45 (23, 40, 902, 904 newly refused; 33 newly passing); the work is the layouts that broke (m:wave83-fillet-radius-reverted); when retaken, seeds 23, 40, 902 and 904 are the work",
+  "files": [
+   "l7r/diagram/settlement/_geom/curves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "batch 9's glyph check of the drainage ditch on Kuwabata (F4, questionable), after wave 80",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/_knobs.py::<module>#hamlet default values",

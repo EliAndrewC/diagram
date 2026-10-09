@@ -3178,5 +3178,12 @@
   "files": [
    "l7r/diagram/waterfields/partition.py"
   ]
+ },
+ "l7r/diagram/settlement/_geom/curves.py::fillet_polyline#interior bends": {
+  "tier": "E3",
+  "fix": "the drift: fillet_polyline takes 0054's 2.5-width radius as the cut-back, so a gentle turn's bend draws 13-25 widths wide (Kuwabata's drain: 74-140 ft against 13.75); re-tiered E2 -> E3 on measure (wave 83, 2026-10-09): draw each corner as a circular arc of the radius given (0054), the radius capped at 35% of the shorter leg - built, tested and REVERTED: every pool map moved and the 48-seed cohort went 48 -> 45 (23, 40, 902, 904 newly refused; 33 newly passing); the work is the layouts that broke (m:wave83-fillet-radius-reverted); when retaken, seeds 23, 40, 902 and 904 are the work",
+  "files": [
+   "l7r/diagram/settlement/_geom/curves.py"
+  ]
  }
 }

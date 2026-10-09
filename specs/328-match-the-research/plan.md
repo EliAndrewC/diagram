@@ -1367,6 +1367,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   pool byte-identical; the 48-seed cohort unchanged.
 - **Verification**: the waterfields and settlement suites; the cohort; `impl-drift`; `spec-fidelity`; the gate re-run.
 
+## Wave 83 (amendment 82, 2026-10-09) - batch 10
+
+- **Row `curves.py::fillet_polyline#interior bends` HELD, re-tiered E2 -> E3 on measure** (filed at batch 9's close from the
+  drainage-ditch glyph check). 0054 gives a bend a radius of about 2.5 channel widths; `fillet_polyline` takes the value its
+  callers pass (2.5 widths for a field ditch, `BROOK_BEND_WIDTHS` for a brook) as the cut-back on a quadratic, so a gentle
+  turn's bend is drawn 13 to 25 widths wide. Each corner drawn as a circular arc of that radius, the radius capped at 35% of the
+  shorter leg (the arc wave 80 drew at the seams, lifted into one body), was built, unit-tested and REVERTED
+  (m:wave83-fillet-radius-reverted): every pool map moved, and the 48-seed cohort went 48 -> 45 (seeds 23, 40, 902 and 904
+  newly refused - the web, a farm off its street; 33 newly passing). The bends feed every seat's clearance of the water, so the
+  change ripples into placement: E3, as waves 69, 74 and 81. The failed fix is recorded at `fillet_polyline`; the patch kept in
+  the spec's `audit/reverted/`; the code and the maps as wave 82 left them.
+- **Verification**: the cohort (m:wave83-fillet-radius-reverted); `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

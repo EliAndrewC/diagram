@@ -1,0 +1,138 @@
+diff --git a/l7r/diagram/settlement/_geom/curves.py b/l7r/diagram/settlement/_geom/curves.py
+index 643e528ef..51c15426c 100644
+--- a/l7r/diagram/settlement/_geom/curves.py
++++ b/l7r/diagram/settlement/_geom/curves.py
+@@ -17,6 +17,32 @@ from typing import Any
+ from .base import Poly, Pt
+ 
+ 
++def arc_corner(P: Pt, u0: Pt, u1: Pt, interior: float, radius: float, run: float, steps: int) -> Poly:
++    """The arc that rounds a corner at `P` between the unit directions `u0` (back along the incoming leg) and `u1` (on along the
++    outgoing one), meeting at `interior` radians: a CIRCULAR arc tangent to both legs, its radius `radius` capped at 35% of the
++    shorter leg `run` (0054), its cut-back from the corner radius x tan(turn / 2) for the turn the water makes (pi less the
++    interior angle). A sharp turn's cut-back is also kept within 90% of the leg - the arc must leave the leg something to start
++    from - by tightening the radius further. `steps + 1` points from the incoming tangent point to the outgoing. The one body
++    `fillet_polyline` and `waterfields.banks.swept_bend` share (feature 328 wave 83).
++
++    Research:
++        swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a bend of about 2.5 channel widths' radius, the radius capped at 35% of the straight run on either side
++        cut-back within its run - UNRESEARCHED: a hairpin (a turn over ~137 deg) drawn tighter than the 2.5-width radius so its tangent point stays within 90% of its run; the 90% is this project's margin
++    """
++    half = (math.pi - interior) / 2
++    r = min(radius, 0.35 * run, 0.9 * run / math.tan(half))
++    d = r * math.tan(half)
++    a = (P[0] + u0[0] * d, P[1] + u0[1] * d)
++    b = (P[0] + u1[0] * d, P[1] + u1[1] * d)
++    bx, by = u0[0] + u1[0], u0[1] + u1[1]
++    bl = math.hypot(bx, by) or 1.0
++    reach = r / math.sin(interior / 2)
++    c = (P[0] + bx / bl * reach, P[1] + by / bl * reach)
++    t0, t1 = math.atan2(a[1] - c[1], a[0] - c[0]), math.atan2(b[1] - c[1], b[0] - c[0])
++    sweep = (t1 - t0 + math.pi) % (2 * math.pi) - math.pi  # the short way round, the side the corner turns
++    return [(c[0] + r * math.cos(t0 + sweep * s / steps), c[1] + r * math.sin(t0 + sweep * s / steps)) for s in range(steps + 1)]
++
++
+ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: float = 8.0) -> Poly:
+     """Round every interior corner of a drawn watercourse, returning a densified polyline (so callers
+     keep building plain `M ... L ...` paths and the taper/piece machinery is unaffected).
+@@ -31,15 +57,16 @@ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: floa
+     ~2.5x the drawn width and the bend scales with the ditch instead of being a fixed drawing quirk -
+     a big head-race sweeps, a thin lateral turns tight, both at the same real ratio.
+ 
+-    `radius` is the target cut-back along each leg, capped at 35% of either adjacent segment, so two
+-    neighboring corners can never eat the segment between them (0.35 + 0.35 < 1) and a short offtake
+-    stub keeps its shape. Corners gentler than `min_turn_deg` are left alone - there is no visible
+-    elbow to round, and rounding them would only add points.
++    `radius` is the bend's RADIUS, each corner a circular arc tangent to both legs (`arc_corner`), the radius capped at 35% of
++    the shorter adjacent segment, so two neighboring corners can never eat the segment between them and a short offtake stub
++    keeps its shape. It was taken as the cut-back on a quadratic until feature 328 wave 83, which drew a gentle turn's bend 13 to
++    25 widths in radius (batch 9's glyph check of Kuwabata's drain). Corners gentler than `min_turn_deg` are left alone -
++    there is no visible elbow to round, and rounding them would only add points.
+ 
+     Research:
+         earth channel bends on a sweep - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: every interior corner filleted
+-        bend radius scales with width - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: callers pass ~2.5x the drawn width
+-        fillet cap and threshold - NONE: 35% of each leg, corners under 8 degrees left alone"""
++        bend radius scales with width - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the radius about 2.5 channel widths, capped at 35% of the straight run on either side; callers pass the radius
++        fillet threshold - NONE: corners under 8 degrees left alone"""
+     if len(pts) < 3 or radius <= 0:
+         return [(float(x), float(y)) for x, y in pts]
+     out: Poly = [(float(pts[0][0]), float(pts[0][1]))]
+@@ -53,13 +80,7 @@ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: floa
+         if 180.0 - math.degrees(math.acos(cosang)) < min_turn_deg:
+             out.append((float(p1[0]), float(p1[1])))
+             continue
+-        d = min(radius, 0.35 * l0, 0.35 * l1)
+-        a = (p1[0] + v0[0] / l0 * d, p1[1] + v0[1] / l0 * d)
+-        b = (p1[0] + v1[0] / l1 * d, p1[1] + v1[1] / l1 * d)
+-        for s in range(steps + 1):  # quadratic bend, the corner itself as the control point
+-            t = s / steps
+-            mt = 1 - t
+-            out.append((mt * mt * a[0] + 2 * mt * t * p1[0] + t * t * b[0], mt * mt * a[1] + 2 * mt * t * p1[1] + t * t * b[1]))
++        out += arc_corner((float(p1[0]), float(p1[1])), (v0[0] / l0, v0[1] / l0), (v1[0] / l1, v1[1] / l1), math.acos(cosang), radius, min(l0, l1), steps)
+     out.append((float(pts[-1][0]), float(pts[-1][1])))
+     return out
+ 
+diff --git a/l7r/diagram/waterfields/banks.py b/l7r/diagram/waterfields/banks.py
+index 156a48aaf..bd12c9ae7 100644
+--- a/l7r/diagram/waterfields/banks.py
++++ b/l7r/diagram/waterfields/banks.py
+@@ -750,28 +750,13 @@ def round_channel_joints(channels: list[dict[str, Any]], min_turn_deg: float = 8
+ 
+ 
+ def swept_bend(P: Pt, u0: Pt, u1: Pt, interior: float, radius: float, run: float, steps: int) -> list[Pt]:
+-    """The arc that rounds a corner at `P` between the unit directions `u0` (back along the upstream run) and `u1` (on along the
+-    downstream run), meeting at `interior` radians: a CIRCULAR arc tangent to both runs, its radius `radius` capped at 35% of
+-    the shorter run `run` (0054), its cut-back from the corner radius x tan(turn / 2) for the turn the water makes (pi less the
+-    interior angle). A sharp turn's cut-back is also kept within 90% of the run - the arc must leave the run something to
+-    start from - by tightening the radius further. `steps + 1` points from the upstream tangent point to the downstream.
++    """`settlement._geom.curves.arc_corner` (the one body, feature 328 wave 83), rounded to the manifest's 0.1.
+ 
+-    Research:
+-        swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a bend of about 2.5 channel widths' radius, the radius capped at 35% of the straight run on either side
+-        cut-back within its run - UNRESEARCHED: a hairpin (a turn over ~137 deg) drawn tighter than the 2.5-width radius so its tangent point stays within 90% of its run; the 90% is this project's margin
++    Research: swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: as `arc_corner`
+     """
+-    half = (math.pi - interior) / 2
+-    r = min(radius, 0.35 * run, 0.9 * run / math.tan(half))
+-    d = r * math.tan(half)
+-    a = (P[0] + u0[0] * d, P[1] + u0[1] * d)
+-    b = (P[0] + u1[0] * d, P[1] + u1[1] * d)
+-    bx, by = u0[0] + u1[0], u0[1] + u1[1]
+-    bl = math.hypot(bx, by) or 1.0
+-    reach = r / math.sin(interior / 2)
+-    c = (P[0] + bx / bl * reach, P[1] + by / bl * reach)
+-    t0, t1 = math.atan2(a[1] - c[1], a[0] - c[0]), math.atan2(b[1] - c[1], b[0] - c[0])
+-    sweep = (t1 - t0 + math.pi) % (2 * math.pi) - math.pi  # the short way round, the side the corner turns
+-    return [(round(c[0] + r * math.cos(t0 + sweep * s / steps), 1), round(c[1] + r * math.sin(t0 + sweep * s / steps), 1)) for s in range(steps + 1)]
++    from ..settlement._geom.curves import arc_corner
++
++    return [(round(x, 1), round(y, 1)) for x, y in arc_corner(P, u0, u1, interior, radius, run, steps)]
+ 
+ 
+ def straight_ring(poly: Poly, max_turn: float = 4.0) -> Poly:
+diff --git a/tests/settlement/test_geom.py b/tests/settlement/test_geom.py
+index f6033fa37..492dd474d 100644
+--- a/tests/settlement/test_geom.py
++++ b/tests/settlement/test_geom.py
+@@ -949,3 +949,20 @@ def test_seg_dists_is_seg_dist_for_every_pair() -> None:
+     for i, p in enumerate(pts):
+         for j, (a, b) in enumerate(segs):
+             assert d[i, j] == pytest.approx(seg_dist(p[0], p[1], a, b), abs=1e-9)
++
++
++def test_a_filleted_bend_is_a_circular_arc_of_the_radius_given() -> None:
++    """Feature 328 wave 83 (0054: a bend of about 2.5 channel widths' radius): `fillet_polyline`'s `radius` is the bend's
++    radius - a gentle 20-degree turn on long legs is an arc 10 px in radius, not the 10 px cut-back whose quadratic bent it
++    ~57 px wide - and the radius is capped at 35% of the shorter leg."""
++    import math
++
++    from l7r.diagram.settlement._geom.curves import fillet_polyline
++
++    turn = math.radians(20.0)
++    pts = [(0.0, 0.0), (200.0, 0.0), (200.0 + 200.0 * math.cos(turn), 200.0 * math.sin(turn))]
++    arc = fillet_polyline(pts, 10.0)[1:-1]
++    cx, cy = 200.0 - 10.0 * math.tan(turn / 2), 10.0  # the center: one radius in from the first leg, at the tangent point
++    assert all(abs(math.dist(q, (cx, cy)) - 10.0) < 1e-6 for q in arc), "every arc point one radius from its center"
++    short = fillet_polyline([(0.0, 0.0), (20.0, 0.0), (20.0, 200.0)], 10.0)[1:-1]
++    assert abs(math.dist(short[0], (20.0, 0.0)) - 7.0) < 1e-6, "a right angle on a 20 px leg: the radius capped at 7"

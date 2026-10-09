@@ -31,6 +31,12 @@ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: floa
     ~2.5x the drawn width and the bend scales with the ditch instead of being a fixed drawing quirk -
     a big head-race sweeps, a thin lateral turns tight, both at the same real ratio.
 
+    A FIX THAT FAILED (feature 328 wave 83, 2026-10-09): 0054 gives the bend a RADIUS of about 2.5 widths, and `radius` here is
+    the cut-back, so a gentle turn's quadratic bends 13 to 25 widths wide (batch 9's glyph check of Kuwabata's drain). Drawn
+    as a circular arc of that radius (the arc `waterfields.banks.swept_bend` draws), every pool map moved and the 48-seed cohort
+    went 48 -> 45 (seeds 23, 40, 902, 904 newly refused - the web, a farm off its street; 33 newly passing). Reverted; the row
+    is E3, its work the layouts that broke (m:wave83-fillet-radius-reverted; the patch is in the spec's audit/reverted/).
+
     `radius` is the target cut-back along each leg, capped at 35% of either adjacent segment, so two
     neighboring corners can never eat the segment between them (0.35 + 0.35 < 1) and a short offtake
     stub keeps its shape. Corners gentler than `min_turn_deg` are left alone - there is no visible

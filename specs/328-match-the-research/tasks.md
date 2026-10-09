@@ -2044,3 +2044,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T193 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 82, round 2); the grave cut's re-hold cuts a refused point off into a headland before it welds or drops a piece (0005, the order a recorded DEVIATION); the gate's test green; pool byte-identical, cohort unchanged; claims in step but the ranked _WELD_MIN_APEX and the E4 PLOT_SIZES row
+
+## Phase 84 - wave 83 (amendment 82): the fillet's radius, built and reverted (E3)
+
+- `settlement/_geom/curves.py` (`fillet_polyline`'s docstring: the fix that failed); the reverted change kept as
+  `specs/328-match-the-research/audit/reverted/wave83-fillet-radius.patch`.
+
+- [x] T194 wave 83's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 83); fillet_polyline drawn as a circular arc of 0054's radius built and REVERTED on the cohort (48 -> 45), re-tiered E3; no claim owed (make claims-owed: none)
+- [x] T195 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 83); fillet_polyline drawn as a circular arc of 0054's radius built and REVERTED on the cohort (48 -> 45), re-tiered E3; no claim owed (make claims-owed: none)

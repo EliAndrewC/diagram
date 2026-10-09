@@ -1698,5 +1698,25 @@
       "largest": "40 households seed 4 +0.6%, its windbreak stage +0.1 s",
       "reading": "batch 9 changed the grave cut's re-hold, the drain hem with the fall, the seam bends and the cut-off of refused points (waves 81's run-on reverted) - none in the windbreak stage; every other seed and size unchanged"
     }
+  },
+  "wave83-fillet-radius-reverted": {
+    "quantity": "wave 83 (2026-10-09): fillet_polyline drawing a circular arc of the radius 0054 gives - the cohort it broke",
+    "observed": "2026-10-09",
+    "source": "specs/328-match-the-research/audit/reverted/wave83-fillet-radius.patch; make map for the five hamlets; make cohort N=48",
+    "command": "make map; make cohort N=48",
+    "method": "the change built and unit-tested (a 20-degree corner on long legs an arc 10 px in radius; a right angle on a 20 px leg capped at 7), the pool rerolled, the cohort run once",
+    "value": {
+      "pool": "all five hamlets moved (brooks and field ditches alike)",
+      "cohort_48": "45/54 (refused 03, 10, 20, 22, 23, 40, 902, 904, 906)",
+      "cohort_passed": 45,
+      "newly refused": {
+        "23": "WebRefused",
+        "40": "row_rules farm_not_on_its_street",
+        "902": "WebRefused",
+        "904": "WebRefused, a farmhouse off the way network"
+      },
+      "newly passing": "33",
+      "reading": "the bend radius ripples into placement through the channels every seat clears; E3 as waves 69, 74 and 81"
+    }
   }
 }
