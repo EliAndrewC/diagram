@@ -1246,5 +1246,71 @@
       ],
       "outcome": "reverted; row re-tiered E3"
     }
+  },
+  "glyph-notice-board-r6-F1-faces-the-way-out": {
+    "verifies": "F1",
+    "subject": "glyph-check--notice-board",
+    "answers": "004abd0d7984",
+    "quantity": "Inashiro's entrance board, degrees off the connector it stands by",
+    "observed": "2026-10-09",
+    "source": "pool/hamlets/inashiro/inashiro.json kosatsuba[0].rot against its connector's nearest segment (m:wave68-board-faces-the-way-out)",
+    "method": "wave 68: an approach seat turned to its route; the board's rot against the connector's bearing before (HEAD of wave 67) and after",
+    "value": {
+      "before": 43.5,
+      "after": 0.0,
+      "record": "m:wave68-board-faces-the-way-out"
+    }
+  },
+  "batch6-pair": {
+    "quantity": "batch 6's timing pair (7fd78f9a1 -> dc7def24b, waves 66-69), taken twice",
+    "observed": "2026-10-09",
+    "source": "dev/perf-log 328-start/328-end, both legs in scratch worktrees back to back; scratchpad/pairs/b6.out and b6q.out (the load before, mid and after each)",
+    "command": "PAIRS='b6:7fd78f9a1:dc7def24b' bash scratchpad/pairs/run.sh; again as b6q with nothing else running; make perf-report AGAINST=328-start; again as b6q2",
+    "method": "the first pair ran beside two map renders (make map for Inashiro and Kashikawa, to fill review snapshots) and two glyph-check agents - load 4.44 / 3.86 / 2.43; the second on a quiet host - load 1.59 / 1.14 / 1.10",
+    "value": {
+      "first (loaded)": {
+        "band": 2,
+        "TOTAL": "+8.7%",
+        "growth": "every stage of every seed a little (homesteads, hinterland, field, web) - stages batch 6 never touched"
+      },
+      "second (quiet)": {
+        "band": 1,
+        "TOTAL": "-0.6%",
+        "10 households": "-0.9%",
+        "20 households": "+0.9%",
+        "40 households": "-0.2%",
+        "largest": "seed 47 at 20 households +1.9%"
+      },
+      "reading": "the first pair's growth was load, not code: batch 6 changed lane-end trimming, the dooryard reach and the entrance board's facing - none of the stages that grew - and the quiet pair shows no growth",
+      "third (quiet, again)": {
+        "load": "0.62 / 1.28 / 1.16",
+        "seed 47 homesteads s": {
+          "20 households": {
+            "start": 2.15,
+            "end": 2.15
+          },
+          "40 households": {
+            "start": 4.61,
+            "end": 4.63
+          }
+        }
+      },
+      "run-to-run": {
+        "seed 47 homesteads at 20 households, the SAME end commit": {
+          "quiet pair 1": 2.23,
+          "quiet pair 2": 2.15
+        },
+        "reading": "the +0.07 s homesteads growth of quiet pair 1 is within one commit's own run-to-run spread (0.08 s); the second quiet pair shows homesteads flat"
+      },
+      "diff reaches": "7fd78f9a1 -> HEAD changes lanes.py and _helpers.py (`trim_lane_stubs`, run at the web stage, hamletgen/ways/web.py), siting.py (the notice stage) and docstring-only text in comb.py and taxonomy.py - nothing the homesteads stage runs",
+      "loaded pair": "every stage grew in proportion - the untouched (homesteads, hinterland, field, windbreak) and the touched (web) alike - the shape of load, not of code",
+      "field run-to-run": {
+        "seed 47 field at 40 households, the SAME end commit": {
+          "quiet pair 1": 2.07,
+          "quiet pair 2": 2.11
+        },
+        "quiet pair 2": "2.05 -> 2.11 s (the one stage its report flags)"
+      }
+    }
   }
 }

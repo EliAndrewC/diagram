@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "7fd78f9a1",
+    "label": "328-start",
+    "utc": "20261009T093453Z"
+  },
+  "binding": "b8808d3691fb62dc4154fe229c232100eef44a7a8dbfc67419743d9ecaeb2d56",
+  "end": {
+    "commit": "dc7def24b",
+    "label": "328-end",
+    "utc": "20261009T093757Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T094245Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 1.7,
+          "47": 0.0
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": -0.7,
+          "39": -1.7,
+          "4": -0.6,
+          "47": 0.8
+        },
+        "total_pct": -0.5
+      }
+    },
+    "seeds": {
+      "25": -2.3,
+      "39": 0.0,
+      "4": -2.3,
+      "47": -2.2
+    },
+    "total_pct": -1.8
+  },
+  "note": "Round 3, against 094207Z (supersedes 094235Z, whose last sentence wrongly called each seed's total flat or down where web rose). This explanation is tied to the second quiet pair (093453Z/093757Z, TOTAL -1.8%, load 0.62/1.28/1.16). It names the one stage that pair's report flags, field at 47@40 (2.05->2.11 s, checked). The batch's only waterfields change is a comb.py docstring with _canal_ft's return line unchanged, so the diff does not reach field. The same end commit read 2.07 s (pair 1) vs 2.11 s (pair 2) there - run-to-run covers +0.06 s. Seed 47@40 +0.8% is under the 1.7% floor. Seed 4@20 +1.7% is at the floor (5.8->5.9 s, no stage moving 0.03 s or more - checked). The first quiet pair's homesteads account is labeled and its figures check (2.23 vs 2.15 s; this pair 2.15->2.15, 4.61->4.63). The control batch6-pair matches measurements.json. One imprecision that does not change the verdict: 'web is flat or down' holds for the first quiet pair, but in this pair web rose +0.02 s at 4@20 (seed +1.7%), +0.04 at 4@40 (seed -0.6%), +0.02 at 25@40 (-0.7%) and +0.01 at 47@40 (+0.8%). Each rise is under 0.03 s at 20 households and under 1.3% of the stage at 40, none is flagged, and each sits inside a seed reading at or under the floor.",
+  "verdict": "consistent"
+}

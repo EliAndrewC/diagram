@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "7fd78f9a1",
+    "label": "328-start",
+    "utc": "20261009T093453Z"
+  },
+  "binding": "b8808d3691fb62dc4154fe229c232100eef44a7a8dbfc67419743d9ecaeb2d56",
+  "end": {
+    "commit": "dc7def24b",
+    "label": "328-end",
+    "utc": "20261009T093757Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T094127Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 1.7,
+          "47": 0.0
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": -0.7,
+          "39": -1.7,
+          "4": -0.6,
+          "47": 0.8
+        },
+        "total_pct": -0.5
+      }
+    },
+    "seeds": {
+      "25": -2.3,
+      "39": 0.0,
+      "4": -2.3,
+      "47": -2.2
+    },
+    "total_pct": -1.8
+  },
+  "note": "Round 2. The figures it cites all check out (2.23 vs 2.15 s for the same end commit; the second quiet pair's homesteads 2.15->2.15 and 4.61->4.63; the control matches measurements.json). But this explanation is bound to the second quiet pair (093453Z/093757Z, TOTAL -1.8%), and that pair's report flags FIELD, not homesteads: 'grew: field +0.1s' at seed 47@40 (2.05->2.11 s). The narrative says 'the one stage the quiet report flags is HOMESTEADS', which is false for the report this record carries, and its +0.03 to +0.05 s at 39@20, 4@40 and 25@40 are first-quiet-pair deltas (the second pair reads +0.05, +0.02, -0.09 there). Field is never named. Rewrite: name field at 47@40. Say the diff's only waterfields change (comb.py) is docstring only, with _canal_ft's formula unchanged. Give the same end commit's field at 47@40 in both quiet pairs (2.07 vs 2.11 s). Seed 47@40 is +0.8%, under the 1.7% floor; seed 4@20 is +1.7%, at the floor, one 0.1 s step (5.8->5.9) with no stage moving 0.03 s or more - say both. Keep the homesteads account (the control still carries the first quiet pair), but label which pair each figure comes from.",
+  "verdict": "inconsistent"
+}

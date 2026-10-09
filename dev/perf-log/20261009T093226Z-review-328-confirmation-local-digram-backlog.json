@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "7fd78f9a1",
+    "label": "328-start",
+    "utc": "20261009T092509Z"
+  },
+  "binding": "94a6a98839f8c0883e9e5c08fc63b20412dc40bca29b1dfa68cce2034957a888",
+  "end": {
+    "commit": "dc7def24b",
+    "label": "328-end",
+    "utc": "20261009T092813Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T093226Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -3.7,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": -0.9
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 1.7,
+          "47": 1.9
+        },
+        "total_pct": 0.9
+      },
+      "40": {
+        "seeds": {
+          "25": -0.7,
+          "39": -0.9,
+          "4": 0.0,
+          "47": 0.8
+        },
+        "total_pct": -0.2
+      }
+    },
+    "seeds": {
+      "25": -2.3,
+      "39": 0.0,
+      "4": 0.0,
+      "47": 0.0
+    },
+    "total_pct": -0.6
+  },
+  "note": "The quiet pair's only flagged growth is homesteads (+0.07s seed 47 at 20 and at 40 households, the report's 'grew: homesteads +0.1s'; +0.03-0.05s at 39@20, 4@40, 25@40) and the explanation is silent on it. The diff reaches only web (trim_lane_stubs, web.py:670: lane-end trimming and the dooryard reach) and notice (siting.py: the board's facing); comb.py and taxonomy.py change docstrings only. In the quiet pair web is flat or down (-0.03 to -0.06s at 40 hh) and notice +0.01s (rounding). Seed 47 at 20 is +1.9%, over the 1.7% identical-run floor, and the explanation does not invoke the floor. The explanation also calls the loaded pair's growth 'stages the batch never touched', but web, which the batch touched, grew there too (+0.21s 4@40, +0.15s 25@40) - in proportion to the untouched stages, so the load reading stands, but it must say so. Rewrite: name homesteads, say the diff does not reach it, and give the numbers.",
+  "verdict": "inconsistent"
+}

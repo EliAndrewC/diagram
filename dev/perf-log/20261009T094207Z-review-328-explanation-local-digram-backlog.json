@@ -1,0 +1,432 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "7fd78f9a1",
+    "label": "328-start",
+    "utc": "20261009T093453Z"
+  },
+  "binding": "b8808d3691fb62dc4154fe229c232100eef44a7a8dbfc67419743d9ecaeb2d56",
+  "control": "batch6-pair",
+  "control_record": {
+    "command": "PAIRS='b6:7fd78f9a1:dc7def24b' bash scratchpad/pairs/run.sh; again as b6q with nothing else running; make perf-report AGAINST=328-start; again as b6q2",
+    "file": "/diagram/.clones/digram-backlog/specs/328-match-the-research/measurements.json",
+    "key": "batch6-pair",
+    "method": "the first pair ran beside two map renders (make map for Inashiro and Kashikawa, to fill review snapshots) and two glyph-check agents - load 4.44 / 3.86 / 2.43; the second on a quiet host - load 1.59 / 1.14 / 1.10",
+    "observed": "2026-10-09",
+    "quantity": "batch 6's timing pair (7fd78f9a1 -> dc7def24b, waves 66-69), taken twice",
+    "source": "dev/perf-log 328-start/328-end, both legs in scratch worktrees back to back; scratchpad/pairs/b6.out and b6q.out (the load before, mid and after each)",
+    "value": {
+      "diff reaches": "7fd78f9a1 -> HEAD changes lanes.py and _helpers.py (`trim_lane_stubs`, run at the web stage, hamletgen/ways/web.py), siting.py (the notice stage) and docstring-only text in comb.py and taxonomy.py - nothing the homesteads stage runs",
+      "field run-to-run": {
+        "quiet pair 2": "2.05 -> 2.11 s (the one stage its report flags)",
+        "seed 47 field at 40 households, the SAME end commit": {
+          "quiet pair 1": 2.07,
+          "quiet pair 2": 2.11
+        }
+      },
+      "first (loaded)": {
+        "TOTAL": "+8.7%",
+        "band": 2,
+        "growth": "every stage of every seed a little (homesteads, hinterland, field, web) - stages batch 6 never touched"
+      },
+      "loaded pair": "every stage grew in proportion - the untouched (homesteads, hinterland, field, windbreak) and the touched (web) alike - the shape of load, not of code",
+      "reading": "the first pair's growth was load, not code: batch 6 changed lane-end trimming, the dooryard reach and the entrance board's facing - none of the stages that grew - and the quiet pair shows no growth",
+      "run-to-run": {
+        "reading": "the +0.07 s homesteads growth of quiet pair 1 is within one commit's own run-to-run spread (0.08 s); the second quiet pair shows homesteads flat",
+        "seed 47 homesteads at 20 households, the SAME end commit": {
+          "quiet pair 1": 2.23,
+          "quiet pair 2": 2.15
+        }
+      },
+      "second (quiet)": {
+        "10 households": "-0.9%",
+        "20 households": "+0.9%",
+        "40 households": "-0.2%",
+        "TOTAL": "-0.6%",
+        "band": 1,
+        "largest": "seed 47 at 20 households +1.9%"
+      },
+      "third (quiet, again)": {
+        "load": "0.62 / 1.28 / 1.16",
+        "seed 47 homesteads s": {
+          "20 households": {
+            "end": 2.15,
+            "start": 2.15
+          },
+          "40 households": {
+            "end": 4.63,
+            "start": 4.61
+          }
+        }
+      }
+    }
+  },
+  "end": {
+    "commit": "dc7def24b",
+    "label": "328-end",
+    "utc": "20261009T093757Z"
+  },
+  "environment": "local",
+  "explanation": "batch 6 (waves 66-69), band 1, this record pair being the SECOND quiet pair (load 0.62 / 1.28 / 1.16; TOTAL -1.8%). Its report flags one stage: FIELD at seed 47 with 40 households, 2.05 -> 2.11 s. The only waterfields change in the batch is a docstring in comb.py (the _canal_ft formula is unchanged - wave 69 square-root taper was reverted), so the diff does not reach field; the same END commit timed that field at 2.07 s in quiet pair 1 and 2.11 s in quiet pair 2, run-to-run spread covering the growth. Seed 47 at 40 households is +0.8%, under the 1.7% noise floor; seed 4 at 20 households is +1.7%, at the floor, one 0.1 s step (5.8 -> 5.9 s) with no stage moving 0.03 s or more. The first quiet pair flagged homesteads instead (seed 47 +0.07 s at 20 and 40 households) - also run-to-run: the same end commit read 2.23 s there and 2.15 s in this pair, which reads homesteads flat (2.15 -> 2.15, 4.61 -> 4.63). The diff reaches only web (trim_lane_stubs) and notice (siting.py); web is flat or down. A loaded first pair (load 4.4, beside renders and review agents) read band 2 with every stage, touched and untouched, grown in proportion - load, not code.",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T094207Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 1.7,
+          "47": 0.0
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": -0.7,
+          "39": -1.7,
+          "4": -0.6,
+          "47": 0.8
+        },
+        "total_pct": -0.5
+      }
+    },
+    "seeds": {
+      "25": -2.3,
+      "39": 0.0,
+      "4": -2.3,
+      "47": -2.2
+    },
+    "total_pct": -1.8
+  },
+  "render": "perf bands [local]: 328-end vs 328-start -> band 1\n  seed   4    -2.3%\n  seed  25    -2.3%\n  seed  39    +0.0%\n  seed  47    -2.2%\n  TOTAL       -1.8%\n  10 households: TOTAL   +0.0% -> band 0\n    seed   4    +0.0%\n    seed  25    +0.0%\n    seed  39    +0.0%\n    seed  47    +0.0%\n  20 households: TOTAL   +0.4% -> band 1\n    seed   4    +1.7%\n    seed  25    +0.0%\n    seed  39    +0.0%\n    seed  47    +0.0%\n  40 households: TOTAL   -0.5% -> band 1\n    seed   4    -0.6%\n    seed  25    -0.7%\n    seed  39    -1.7%\n    seed  47    +0.8%; grew: field +0.1s\n  owes: a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.08,
+        0.08
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.65,
+        0.65
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.61,
+        0.6
+      ],
+      "homesteads": [
+        1.54,
+        1.47
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.05,
+        0.05
+      ],
+      "track": [
+        0.09,
+        0.09
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.82,
+        0.82
+      ],
+      "windbreak": [
+        0.41,
+        0.41
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.07,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.6,
+        0.61
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.58,
+        0.58
+      ],
+      "homesteads": [
+        1.17,
+        1.17
+      ],
+      "labels": [
+        0.0,
+        0.0
+      ],
+      "notice": [
+        0.08,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.06,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.58,
+        0.58
+      ],
+      "windbreak": [
+        0.39,
+        0.39
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.09,
+        0.09
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.9,
+        0.87
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.74,
+        0.73
+      ],
+      "homesteads": [
+        1.22,
+        1.21
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.08,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.13,
+        0.13
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.74,
+        0.73
+      ],
+      "windbreak": [
+        0.44,
+        0.43
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.07,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.62,
+        0.61
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.7,
+        0.69
+      ],
+      "homesteads": [
+        1.57,
+        1.57
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.27,
+        0.27
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.09,
+        0.08
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.74,
+        0.73
+      ],
+      "windbreak": [
+        0.41,
+        0.41
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "verdict": "pending"
+}
