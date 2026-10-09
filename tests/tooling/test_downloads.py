@@ -213,7 +213,7 @@ def test_marks_the_gm_resolved_are_recorded_as_the_one_state_they_named(tmp_path
 
 
 def test_a_sync_recorded_before_329_reads_the_list_at_its_old_path(tmp_path: pathlib.Path) -> None:
-    """The first ingest after feature 329 was refused: the synced commit holds the list under `.claude/skills/diagram/`."""
+    """The first ingest after feature 329 was refused: the synced commit holds the list under the old prefix."""
     root = _clone(tmp_path / "a")
     old = root / dl.PRE_329 / dl.CANON
     old.parent.mkdir(parents=True)
