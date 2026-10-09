@@ -13,8 +13,16 @@ import re
 
 REPO = pathlib.Path(__file__).resolve().parents[1]
 # the scripts live by purpose since 2026-10-08 (scripts/CLAUDE.md), so every directory under scripts/ is a root a bare name may name
-ROOTS = (REPO, REPO / "scripts", *sorted(p for p in (REPO / "scripts").rglob("*") if p.is_dir() and p.name != "__pycache__"),
-         REPO / "l7r" / "diagram" / "interactive", REPO / "l7r" / "diagram" / "interactive" / "record", REPO / "research", REPO / "tests" / "interactive", REPO / "tests" / "hooks")
+ROOTS = (
+    REPO,
+    REPO / "scripts",
+    *sorted(p for p in (REPO / "scripts").rglob("*") if p.is_dir() and p.name != "__pycache__"),
+    REPO / "l7r" / "diagram" / "interactive",
+    REPO / "l7r" / "diagram" / "interactive" / "record",
+    REPO / "research",
+    REPO / "tests" / "interactive",
+    REPO / "tests" / "hooks",
+)
 _PATH = re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|sh|md|json|jsonl))(?:::[A-Za-z0-9_]+)?`")
 
 
