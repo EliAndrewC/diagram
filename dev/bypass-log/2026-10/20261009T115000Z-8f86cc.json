@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-09T11:50:00Z",
+  "target": "record-checked",
+  "commit": "1a12a168c",
+  "why": "record-format on record-format:0037: record-format read the longer note with 0 findings; the cut removed one clause and added no word"
+}

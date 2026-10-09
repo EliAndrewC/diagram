@@ -49859,11 +49859,11 @@
   "date": "2026-10-03",
   "note": "south, then E/W, never in the house's own shadow, per 0038",
   "pages": {
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.html": "fa06d2cfeddb046e",
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.html": "83d6bcc566130b73",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
-  "research": "de44ff9f7619722c",
-  "triaged": "2026-10-08",
+  "research": "1bd45caa2bdc9698",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._find_yard_spot#yard tucked under its house's wall": {
