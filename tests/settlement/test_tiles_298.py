@@ -118,12 +118,15 @@ def test_the_grass_under_a_woods_edge_carries_no_brush() -> None:
     from l7r.diagram.settlement.land.tiles import grass_tile, wood_fringe_tile
 
     assert "<circle" in grass_tile(1.0) and "<circle" not in wood_fringe_tile(1.0), "the brush dot is the scrub's alone"
+    from l7r.diagram.settlement.land.tiles import wood_fringe_thin_tile
+
+    assert 0 < wood_fringe_thin_tile(1.0).count("M") < wood_fringe_tile(1.0).count("M"), "the inner half thins (0077)"
     s = Settlement(W=800, H=800, seed=4)
     s.meta(name="T", scale="hamlet", ftpx=1)
     wood = [(300.0, 100.0), (700.0, 100.0), (700.0, 600.0), (300.0, 600.0)]
     s.commons([(60.0, 60.0), (560.0, 60.0), (560.0, 640.0), (60.0, 640.0)], role="pasture", woods=[wood])
     kinds = [c.kind for c in s._covers]
-    assert kinds == ["grass", "wood-fringe"], kinds
+    assert kinds == ["grass", "wood-fringe", "wood-fringe-thin"], kinds
     scrub = shapely_cover(s, "grass")
     assert not scrub.contains(Point(300.0 + WOOD_FRINGE_FT / 2, 350.0)), "the scrub's brush tile stops at the wood's edge"
     s.flush_covers()

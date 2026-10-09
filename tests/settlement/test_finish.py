@@ -310,7 +310,7 @@ def test_flush_covers_draws_each_zone_less_its_bare_ground_in_its_slot_above_the
 
     s = Settlement(W=1000, H=1000, seed=1)
     land = next(i for i, c in enumerate(s.out_cls) if c == "-")
-    assert s._cover_slots["defs"] == land + 1 and s._cover_slots[("reed", "marsh")] == land + 6, "the covers sit right above the land (the two grass slots, the two wood-fringe slots, then the marsh)"
+    assert s._cover_slots["defs"] == land + 1 and s._cover_slots[("reed", "marsh")] == land + 8, "the covers sit right above the land (the two grass slots, the four wood-fringe slots, then the marsh)"
     s.set_view(100, 100, 400, 400)
     rec: dict = {}
     s._covers.append(Cover("grass", "scrub and rough grazing", [(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)], [box(200, 200, 300, 300)], rec))

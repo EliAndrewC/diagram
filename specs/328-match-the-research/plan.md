@@ -793,7 +793,10 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   block of grass and brush, repeated, with no outline"); the claim restated, nothing redrawn. (2) The wood's edge: the scrub
   tile, which carries brush dots, ran 8 ft in under every wood's edge, where 0077 says grass only and no brush in a wood. The
   scrub now leaves each wood whole, and a grass-only tile (`wood_fringe_tile`: the scrub's tufts, no brush dot) fills the
-  `WOOD_FRINGE_FT` band under its edge, in the scrub's slot and class.
+  `WOOD_FRINGE_FT` band under its edge, in the scrub's slot and class - in two steps, the grass thinning inward as 0077 has it
+  ("thinning out over the first few paces under the crowns"): the outer half at the tile's density, the inner half at
+  `WOOD_FRINGE_THIN_KEEP` (0.5, a convention) of its tufts (impl-drift round 1: a uniform band stopped on a hard line). And
+  the header's tiles and slots claimed as conventions, the coppice's thinning into a marsh and a scrub pine's reach claimed.
 - **Measured**: the five hamlets' manifests move by their cover records only.
 - **Occasions**: glyph-redrawn scrub and rough grazing on Kashikawa (its woods' edges) - batch 4's close.
 - **Verification**: tests (no brush dot in the fringe tile; the scrub tile stops at the wood's edge; the band drawn with the

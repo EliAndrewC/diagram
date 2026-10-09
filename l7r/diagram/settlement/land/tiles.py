@@ -76,10 +76,11 @@ def _wrapped(side_w: float, side_h: float, glyph: Callable[[float, float], str],
     return "".join(out)
 
 
-def grass_tile(bs: float, brush: bool = True) -> str:
+def grass_tile(bs: float, brush: bool = True, keep: float = 1.0, name: str | None = None) -> str:
     """The scrub's tile: brush dots and three-bladed tufts of grass at the commons' density (`commons`, `grass_scatter` as it
     was): a dot `#94A063` r 1.5-2.4, a tuft three `#A7A860` blades 2.4-4.2 long within 0.45 rad of upright. `brush=False` is
-    the grass under a wood's edge: the same tufts, no brush dot (0077: no brush in a wood; feature 328 wave 57)."""
+    the grass under a wood's edge: the same tufts, no brush dot (0077: no brush in a wood; feature 328 wave 57); `keep` the share
+    of the tufts kept (the inner half of that band, where the grass thins), `name` the pattern's kind."""
     import numpy as np
 
     side = COVER_TILE_FT * bs
@@ -88,9 +89,12 @@ def grass_tile(bs: float, brush: bool = True) -> str:
     xs, ys, kind = rng.uniform(0, side, n), rng.uniform(0, side, n), rng.random(n)
     r_dot = rng.uniform(1.5, 2.4, n) * bs
     ang, blen = rng.uniform(-0.45, 0.45, (n, 3)), rng.uniform(2.4, 4.2, (n, 3)) * bs
+    kept = rng.random(n) < keep  # drawn after the tufts' own draws, so the full tile is unchanged
     dots, blades = [], []
     for i in range(n):
         x, y = float(xs[i]), float(ys[i])
+        if not kept[i]:
+            continue
         if kind[i] < GRASS_DOT_SHARE:
             if not brush:
                 continue
@@ -100,7 +104,7 @@ def grass_tile(bs: float, brush: bool = True) -> str:
         tips = [(math.sin(float(ang[i, k])) * float(blen[i, k]), -math.cos(float(ang[i, k])) * float(blen[i, k])) for k in range(3)]
         blades.append(_wrapped(side, side, lambda px, py, tips=tips: "".join(f"M{px:.1f},{py:.1f}l{tx:.1f},{ty:.1f}" for tx, ty in tips), x, y, 4.2 * bs))
     return (
-        f'<pattern id="{pattern_id("grass" if brush else "wood-fringe", bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
+        f'<pattern id="{pattern_id(name or ("grass" if brush else "wood-fringe"), bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
         f'<g fill="#94A063" fill-opacity="0.85">{"".join(dots)}</g>'
         f'<path d="{"".join(blades)}" stroke="#A7A860" stroke-width="0.8" fill="none"/></pattern>'
     )
@@ -111,6 +115,18 @@ def wood_fringe_tile(bs: float) -> str:
 
     Research: grass under a wood's edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: grass only, no brush in a wood"""
     return grass_tile(bs, brush=False)
+
+
+WOOD_FRINGE_THIN_KEEP = 0.5
+"""Research: grass thinning under a wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: thinning out over the first few paces; the half density of the inner half a CONVENTION"""
+
+
+def wood_fringe_thin_tile(bs: float) -> str:
+    """The inner half of the band under a wood's edge: the grass-only tile at `WOOD_FRINGE_THIN_KEEP` of its tufts, where the
+    grass thins out under the crowns (0077, feature 328 wave 57's impl-drift: a uniform band stopped on a hard line).
+
+    Research: grass thinning under a wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the grass thins over the first few paces"""
+    return grass_tile(bs, brush=False, keep=WOOD_FRINGE_THIN_KEEP, name="wood-fringe-thin")
 
 
 def reed_tile(bs: float) -> str:
@@ -325,6 +341,7 @@ OVERLAYS: dict[str, str] = {"grass": "grass-clumps", "reed": "reed-clumps"}
 TILES: dict[str, Callable[[float], str]] = {
     "grass": grass_tile,
     "wood-fringe": wood_fringe_tile,
+    "wood-fringe-thin": wood_fringe_thin_tile,
     "reed": reed_tile,
     "bamboo": bamboo_tile,
     "grass-clumps": grass_overlay_tile,

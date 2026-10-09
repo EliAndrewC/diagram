@@ -41500,12 +41500,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement._header#drawing engine plumbing": {
-  "code": "0963879d693f0395",
-  "core": "c821041f41055850",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
+  "code": "c20043b1da7998ab",
+  "core": "b786feab521b3d4a",
+  "date": "2026-10-08",
+  "note": "the header draws the drycrop and fallow pattern tiles (their fills, rule lines and dots) and sets the covers' stacking slots, which are decisions about how the map looks; the label should be CONVENTION (the dry-crop and fallow tiles, the covers drawn right above the land), not NONE",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/core.py::Settlement._partition_grove_clumps#a clump wholly off the view is off the page": {
   "code": "79db16b2895ffdb7",
@@ -50156,58 +50158,79 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#claimed but undrawn": {
-  "code": "2727f92a3fe38eca",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#a scrub pine's crown reach PINE_SPREAD_BS (4.6 ft), used as its radius in the sun test": {
+  "code": "c44ab2ea0ce3eabc",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "a scrub pine's crown reach PINE_SPREAD_BS (4.6 ft), used as its radius in the sun test",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#claimed but undrawn": {
+  "code": "cf9ab0819902208d",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "the bare render records the ground and returns with nothing drawn",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#commons beyond the grove": {
-  "code": "7f91cd18e8e1a592",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "open scrub with a few pines, per 0078",
+  "code": "3665c3d9cf11d263",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "open grass-and-brush tile with a few pines, no forest",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
   "research": "448b6fd5149183a1",
+  "rests": [
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:6b58d2945bf79d57",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b99bf3bf216fee9d"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#coppice stocking": {
-  "code": "e51a5990fc328f6f",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "per 0080",
+  "code": "17ea9d6bf43d481e",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "the formula matches (target = area / COMMONS_SPACING_FT squared, radius drawn from COMMONS_CROWN_R_FT), but the bundle does not inline the values of Settlement.COMMONS_SPACING_FT and COMMONS_CROWN_R_FT; need those to check against ~8 ft centers and 8-9 ft across",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:0dafa8d8a7ffcc86",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#crown and pine ink": {
-  "code": "e25b257206b473a3",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "43a8d577c9ac8b5a",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "flat discs, a trunk and three branch pairs",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#edge feather": {
-  "code": "1a3ebaac93e8f03d",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "b5936cc2fc2378b9",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "feather = 42 * bs",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#grass ground forms": {
-  "code": "00000a1b4b0a3778",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-05",
-  "note": "the page attests three forms (grass hill, floodplain, small grass plot by one paddy) and says \"the form is a knob\", but only the hill scrub is drawn and none is rolled",
+  "code": "06223142ba8f286c",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "the claim fixes one form (hill scrub), but 0078 says \"Three forms are attested, so the form is a knob\" (hill, floodplain, a small plot beside one paddy), and the drawing page records no deliberate departure; roll the forms per settlement, or relabel DEVIATION once the drawing page records it",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
@@ -50219,46 +50242,54 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#marsh edge": {
-  "code": "82c281844c4cd7fc",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "0074 attests two forms of edge (cut and open, or an uncut alder-and-willow wet wood) and says \"Each settlement should take one or the other\"; the code draws only the cut edge on every map (the page itself calls it \"a shortfall\"), so the form should be a seeded knob",
+  "code": "f7ead5d59323125a",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "the grass-and-brush tile leaves every marsh bare (the mixed band does the grading), and pines are excluded outright by _in_soft",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
   "research": "a44790630d28af23",
-  "triaged": "2026-10-04",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#no crown in a yard's sun": {
-  "code": "89bf100f884ca64c",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "woodland crowns and scrub pines both refused by _sun_keepouts/_crown_covers, as 0038 lists them",
+  "code": "ac65cda7d4c55fea",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "woodland throws, the fallback room and pines are all tested by _crown_covers against _sun_keepouts",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#no crown under another": {
-  "code": "c74fda1449f28fb9",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "per 0080",
+  "code": "474c1adffb9d4f01",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "the throw path tests _wd_seated.clear, but the under-stocked fallback seats woodland_room crowns with no seated-crown test; need to know whether woodland_room's grid is already tested against crowns seated earlier (this wood's and its neighbors')",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color": {
-  "code": "f8367ca6bd760d92",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-05",
-  "note": "the claim draws the tufts over a solid straw-gold ground, but the page says the commons has \"no solid fill and no outline\"; drop the fill or record the change on 0078.drawing",
+  "code": "a15dc29ec85248e3",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "Cover(\"grass\") with its bare ground; the pattern has no background rect and no outline",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
@@ -50266,48 +50297,68 @@
   "rests": [
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:6b58d2945bf79d57"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub pines": {
-  "code": "17addb2a14054ee2",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "a calibrated \"few\", per 0078",
+  "code": "d12a98d5a924f036",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "max(2, area/6000 sq ft) throws, skipped when role is pasture; a few scattered pines, a calibrated choice",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
   "research": "448b6fd5149183a1",
+  "rests": [
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:398659af373db58f",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:6b58d2945bf79d57",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b491c355bd1b4903",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b99bf3bf216fee9d",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:eb9b7a22b230877f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge": {
-  "code": "3122ff94a455b1b9",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "the grass tile laid WOOD_FRINGE_FT inside each wood (_cover_bare buffer(-WOOD_FRINGE_FT)) carries brush dots (GRASS_DOT_SHARE 0.14, and the overlay's dots), so brush stands under the crowns where 0077 has \"no brush or pines inside\"; the fringe should be grass only",
+  "code": "1422216876663d94",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "the fringe band (wd minus wd.buffer(-WOOD_FRINGE_FT*bs)) is filled with the grass-only tile at full scrub density and stops on a hard inner line, where 0077 has grass \"thinning out over the first few paces under the crowns\"; the band should thin toward its inner edge, or the claim should record a uniform band as a convention. The no-brush/no-pine part is right",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
   "research": "24afacf28c5d0294",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d81577f543205810"
+  ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#woodland no-build": {
-  "code": "b6b59d470cc4b80b",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "record silent",
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#woodland coppice crowns thin into a marsh over the 46 ft feather (_sparse's soft ramp) instead of stopping at its edge": {
+  "code": "c44ab2ea0ce3eabc",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "woodland coppice crowns thin into a marsh over the 46 ft feather (_sparse's soft ramp) instead of stopping at its edge",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#woodland no-build": {
+  "code": "818c25311a445b7f",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "the cited questions are silent on building under a coppice",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#woodland stocked to read": {
-  "code": "86b4ade0af927dbd",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-05",
-  "note": "a reading floor that binds only below the coppice target",
+  "code": "8cecd6808b34bc38",
+  "core": "c44ab2ea0ce3eabc",
+  "date": "2026-10-08",
+  "note": "the fallback stocks to WOODLAND_MIN_CROWNS (5)",
   "pages": {},
   "research": "",
-  "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.fill_the_holes#unclaimed ground grazed": {
@@ -51420,11 +51471,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::TILES#cover tiles": {
-  "code": "990ebe0b9e56c70e",
-  "core": "43e67df5e74d8529",
-  "date": "2026-10-03",
-  "note": "registry",
+  "code": "c048f41db68a9169",
+  "core": "23192e3df24fb123",
+  "date": "2026-10-08",
+  "note": "registry of tile makers",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::_SEED#tile seeds": {
@@ -51472,11 +51525,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::cover_defs#plumbing": {
-  "code": "a746ebc0a9c4f99b",
-  "core": "88b1321cf5449cec",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "49aa288b5aefd1b6",
+  "core": "43b1fb8aa46c1b63",
+  "date": "2026-10-08",
+  "note": "defs assembly",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::cover_path#plumbing": {
@@ -51516,11 +51571,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::grass_tile#cover tiles": {
-  "code": "3e13ea7a3757b85a",
-  "core": "f677fb11f98057df",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "efae55bad436356a",
+  "core": "418b03e69a1b2165",
+  "date": "2026-10-08",
+  "note": "one repeated block of the scatter's tufts and dots",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:6b58d2945bf79d57"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::pattern_id#plumbing": {
@@ -51557,6 +51616,21 @@
   "date": "2026-10-03",
   "note": "drawing convention",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/tiles.py::wood_fringe_tile#grass under a wood's edge": {
+  "code": "2055b89cdeb3d6a2",
+  "core": "5d3e3ffba4a0388e",
+  "date": "2026-10-08",
+  "note": "grass_tile with brush=False: tufts only",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+  },
+  "research": "24afacf28c5d0294",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d81577f543205810"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::MARSH_FEATHER_BS#reed feather": {

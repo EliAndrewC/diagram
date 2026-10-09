@@ -460,6 +460,11 @@ class Settlement(
         return f'{prefix}{self._clip}'
 
     def _header(self: Settlement) -> None:
+        """The sheet's head: the pattern tiles, the land, and the covers' slots right above it.
+
+        Research:
+            the dry-crop and fallow tiles - CONVENTION: their fills, rule lines and dots, the way a legend shows a kind of ground
+            the covers right above the land - CONVENTION: the tiles' slots drawn first, so every feature drawn after draws over them"""
         self.add(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {self.W} {self.H}" font-family="Georgia, \'Times New Roman\', serif">')
         self.add('<defs>')
         self.add(
@@ -487,6 +492,8 @@ class Settlement(
             (("grass", None), None),
             (("wood-fringe", "scrub and rough grazing"), "scrub and rough grazing"),
             (("wood-fringe", None), None),
+            (("wood-fringe-thin", "scrub and rough grazing"), "scrub and rough grazing"),
+            (("wood-fringe-thin", None), None),
             (("reed", "marsh"), "marsh"),
         ):
             self._cover_slots[key] = self.add("", cls=cls)
