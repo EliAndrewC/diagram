@@ -1962,3 +1962,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T179 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 75, round 2); the whole farmstead - house, yard, storehouse, byre, well, beds - held off every paddy polygon exactly (0124), beds-off-ditch its own UNRESEARCHED claim; the pool byte-identical, cohort unchanged; impl-drift in step, no claim owed
+
+## Phase 77 - wave 76 (amendment 75): a settled tract kept to the two ways
+
+- `waterfields/furrows.py` (`settle_tract_seams` takes the contour and caps the turn; `tract_heading`, `way_lean`);
+  `waterfields/hem.py` (passes the contour).
+
+- [x] T180 wave 76's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 76); a settled tract's turn kept within TRACT_LEAN_RAD of the contour or the fall (0006), else it joins a neighbor; pool byte-identical, cohort unchanged; impl-drift 13 IN-STEP
+- [x] T181 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 76); a settled tract's turn kept within TRACT_LEAN_RAD of the contour or the fall (0006), else it joins a neighbor; pool byte-identical, cohort unchanged; impl-drift 13 IN-STEP

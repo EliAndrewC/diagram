@@ -1,32 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "dcc7bb9c5e701d21c928863211a0a5eaf69d1193b1698e23d5ca542cb7de157a",
+ "plan_sha256": "c3d8495624c7347b95c9159fe4fefa042d8ecfc80640bb638cd83bec256522ca",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W75-a: the parts beside the house held off exactly",
-   "summary": "_parts_fit holds the yard, the storehouse (shed), the byre, the well and every garden bed off every paddy polygon by overlap (fit_index.farmstead_boxes), where the beds and the storehouse were asked only at the envelope's nine points",
+   "id": "W76-1 lean cap on the settle's turn",
+   "summary": "settle_tract_seams admits a turn only where the tract's resulting heading stays within TRACT_LEAN_RAD of the contour or the fall (way_lean <= TRACT_LEAN_RAD), searching the same shifts and seam floors as before",
    "class": "within",
-   "why": "Unchanged from round 1: the ranked row's fix and 0124's drawing page ('the whole farmstead (house, yard, garden and storehouse plot) is tested against the whole of each field'). Re-run round 2 in a detached worktree carrying the clone's three changed files: make test-file tests/settlement/test_fit_287.py, 10 passed."
+   "why": "This is the ranked row 197's fix as worded ('cap each tract's settled turn at TRACT_LEAN_RAD off the contour or the fall'), moving the implementation to 0006's rows along the contour or down to the outfall, leaned a little. Implementation-to-research is the GM's direction; nothing is excepted."
   },
   {
-   "id": "W75-b: the byre and the well in the held set",
-   "summary": "the held set adds the byre and the well, which 0124's parenthesis does not name",
+   "id": "W76-2 a tract no lawful turn clears joins a neighbor",
+   "summary": "when no capped turn clears the seam, the tract takes the nearest neighbor's number and heading, the existing hemmed-in fallback",
    "class": "within",
-   "why": "Unchanged from round 1: it widens the rule toward 0124's 'the whole farmstead' and narrows nothing. git diff HEAD --stat touches no pool/ file."
+   "why": "The row's fix names this fallback verbatim; the neighbor it joins was itself settled under the cap, and the unit test asserts every tract of the fixture within the lean."
   },
   {
-   "id": "W75-c: the house held off exactly (round 1 BLOCKED item, resolved)",
-   "summary": "farmstead_boxes now returns part_box(geom, 'house') first, so _parts_fit holds the house's drawn box off every paddy polygon by _rect_hits like the other parts; _wall_on_the_bund's corner test is kept as 0029's further set-back",
+   "id": "W76-3 the contour passed from _comb_dry_and_beans",
+   "summary": "theta0 = atan2(F.c) + grain_drift, the same expression carve.py::_dry_fields lays its contour from (carve.py:122)",
    "class": "within",
-   "why": "Round 1 ruled leaving the house to the corner test NOT LEGITIMATE. The diff (fit_index.py farmstead_boxes; fit.py _parts_fit's any(_rect_hits(b, field_polys) for b in farmstead_boxes(geom))) puts the house in the exact test, which is the fix asked for. Confirmed by re-run, not read: in a scratch worktree with the house removed from farmstead_boxes and the test's direct list assertion disabled, the test fails at the first probe case ('a paddy's corner 4 ft inside the house's north wall at x 400.0', _parts_fit True); with the house restored all 10 pass. So the three probe cases are refused BY the house box, not by the envelope or the corner test. Keeping the corner test adds a rule and removes none. Record note for the session (not a ruling): m:wave75-farmstead-off-paddy's source still names the test by its old name (test_a_garden_bed_or_the_storehouse_lapping_a_paddy_refuses_the_farmstead), and its method's 'the yard alone (farmstead_boxes(geom)[:1])' now selects the house, since the house is first; both should be updated to the current test name and order."
+   "why": "Checked: hem.py:98 passes exactly carve.py:122's expression, so 'the contour' the cap measures from is the one the tracts were laid along. Hem.py's call is the only production caller of settle_tract_seams, so the optional theta0=None (no cap) is reached only by the older unit tests, not by any map - no case is carved out of the fix."
   },
   {
-   "id": "W75-d: the beds-off-ditch rule labeled UNRESEARCHED",
-   "summary": "the beds-off-every-ditch half of the old claim becomes its own claim labeled UNRESEARCHED; the code keeps the rule",
+   "id": "W76-4 tract_heading as the plots' doubled-angle mean",
+   "summary": "a tract's one heading is its plots' headings averaged as lines (modulo pi), labeled Research: NONE",
    "class": "within",
-   "why": "Unchanged from round 1: the ranked row's fix prescribes the separate label, and no page in research/questions/ backs the rule (round 1's search)."
+   "why": "A computational means of reading 'the tract's heading' that the row's fix presupposes; it narrows nothing the request or spec asks for and is labeled at its claim line."
+  },
+  {
+   "id": "W76-5 fork-band disagreement left open",
+   "summary": "impl-drift judged the open row _comb_dry_and_beans#fork band skipped on villages IN-STEP where the ranking had it DRIFTED/MISLABELED; the row stays open for its own wave to settle against 0010",
+   "class": "within",
+   "why": "Not a narrowing: the row is neither closed nor dropped nor re-tiered out of scope; it remains a ranked open row of this feature (ranking.md row 198) to be fixed in its own wave, consistent with D1 (only the current wave's rows are boxes) and the GM's 'fix all of it'."
   }
  ],
  "verdict": "CLEAR"

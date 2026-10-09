@@ -95,7 +95,7 @@ def _comb_dry_and_beans(
         _tract0 = 1 + max((p["tract"] for p in dry_plots), default=-1)
         reserve = middle_reserve(R, F, a_pts, fork, plots, dry_plots, W, H, dry_keepout, grain, furrow_spread, grain_drift, _supply_strokes, _tract0, mix, crops)
     if furrow_spread >= STEEP_SPREAD_RAD:  # the patchwork's seams read tract against tract, every band and the reserve (feature 287, W35)
-        settle_tract_seams(dry_plots + reserve)
+        settle_tract_seams(dry_plots + reserve, math.atan2(F.c[1], F.c[0]) + math.radians(grain_drift))  # the contour `_dry_fields` lays from
     dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * (2.0 / grain) ** 2 / 43560  # at the map's own scale: grain is 2 / ftpx
     return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels), reserve
 

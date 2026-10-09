@@ -123,7 +123,7 @@ def tract_seams(plots: Sequence[dict[str, Any]], side: float | None = None) -> t
     return within, seams, split, blurred
 
 
-def settle_tract_seams(plots: list[dict[str, Any]]) -> None:
+def settle_tract_seams(plots: list[dict[str, Any]], theta0: float | None = None) -> None:
     """Hold every seam of a fan's dry hem to W35, in place, by turning whole tracts - never a plot's outline.
 
     `tract_ways` turns each tract off the ONE before it, which holds every seam along a straight hem; but a hem that
@@ -137,7 +137,13 @@ def settle_tract_seams(plots: list[dict[str, Any]]) -> None:
     neighbors than fit round the half-circle has no such turn; it joins the neighbor whose rows it is closest to, taking
     that tract's number and heading - a larger tract, which the record allows (its sizes are open).
 
+    WITHIN THE TWO WAYS (feature 328 wave 76): given the contour's heading `theta0`, a turn is taken only where it leaves the
+    tract's heading within `TRACT_LEAN_RAD` of the contour or the fall - 0006's rows run along the contour or down to the
+    outfall, leaned a little - and a tract no lawful turn clears joins a neighbor as a hemmed-in one does. Uncapped, a
+    settled tract could end some 45 degrees off both.
+
     Research:
+        turn kept to the two ways - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each tract along the contour or down to its outfall, leaned by up to TRACT_LEAN_RAD
         every seam reads - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract whose seam with an earlier neighbor would not read is turned whole
         hemmed-in tract joins a neighbor - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: it takes the closest neighbor's number and heading, a larger tract
     """
@@ -155,7 +161,9 @@ def settle_tract_seams(plots: list[dict[str, Any]]) -> None:
         floors = (TRACT_SEAM_MIN_RAD - 2 * TRACT_PLOT_TURN_RAD, SEAM_READS_RAD + THETA_ROUNDING_RAD)
         if _seams_clear(ps, pairs, 0.0, floors[0]):
             continue
-        delta = next((d for floor in floors for d in shifts if _seams_clear(ps, pairs, d, floor)), None)
+        head = tract_heading([float(ps[i]["theta"]) for i in mine])
+        lawful = [d for d in shifts if theta0 is None or way_lean(head + d, theta0) <= TRACT_LEAN_RAD]
+        delta = next((d for floor in floors for d in lawful if _seams_clear(ps, pairs, d, floor)), None)
         if delta is not None:
             for i in mine:
                 ps[i]["theta"] = float(ps[i]["theta"]) + delta
@@ -163,6 +171,22 @@ def settle_tract_seams(plots: list[dict[str, Any]]) -> None:
         host = min(pairs, key=lambda ij: furrow_turn(float(ps[ij[0]]["theta"]), float(ps[ij[1]]["theta"])))[1]
         for i in mine:
             ps[i]["tract"], ps[i]["theta"] = ps[host]["tract"], ps[host]["theta"]
+
+
+def tract_heading(thetas: Sequence[float]) -> float:
+    """A tract's one row heading from its plots' own: their mean as furrows, modulo pi (the doubled-angle mean).
+
+    Research: tract heading - NONE: the plots' headings averaged as lines
+    """
+    return math.atan2(sum(math.sin(2 * a) for a in thetas), sum(math.cos(2 * a) for a in thetas)) / 2
+
+
+def way_lean(heading: float, theta0: float) -> float:
+    """How far a row heading leans off the nearer of the two ways, the contour `theta0` and the fall a right angle off it.
+
+    Research: the two ways - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: along the contour or down to its outfall
+    """
+    return min(furrow_turn(heading, theta0), furrow_turn(heading, theta0 + math.pi / 2))
 
 
 def _seams_clear(ps: Sequence[dict[str, Any]], pairs: Sequence[tuple[int, int]], delta: float, floor: float) -> bool:

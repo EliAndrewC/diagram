@@ -1230,6 +1230,23 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   the parts it returns (MISLABELED); round 2 all three IN-STEP; round 3 (the house added) IN-STEP, no claim owed.
 - **Verification**: the settlement suite; `impl-drift`; `spec-fidelity`.
 
+## Wave 76 (amendment 75, 2026-10-09) - batch 8
+
+- **Scope**: the E2 row `furrows.py::settle_tract_seams#every seam reads`. 0006 runs a tract's rows along the contour or
+  down to the outfall, leaned up to about 17 degrees (`TRACT_LEAN_RAD`); the settle that turns a tract whose seam would not
+  read searched turns to +/-1.575 rad with no cap, so a settled tract could end some 45 degrees off both ways. It now takes
+  the contour heading (`theta0`, the one `_dry_fields` lays from, passed by `_comb_dry_and_beans`) and admits a turn only
+  where the tract's heading (`tract_heading`, its plots' mean as furrows) stays within `TRACT_LEAN_RAD` of a way
+  (`way_lean`); a tract no lawful turn clears joins a neighbor, as a hemmed-in one already did.
+- **Measured** (m:wave76-tract-lean-cap): the unit fixture's tract leans past the cap uncapped and within it capped, with
+  every tract of the fixture within the lean; the five hamlets byte-identical to HEAD (no shipped tract leaned past it); the
+  48-seed cohort unchanged.
+- **impl-drift**: 13 claims IN-STEP (the hem's owed only for the call's changed line). One disagreement noted, not acted on:
+  `_comb_dry_and_beans#fork band skipped on villages`, an open E2 row ranked from an earlier DRIFTED verdict, was judged
+  IN-STEP on the same text (0010 plants the fork triangle only on a city map). Two readings of one claim differ, so the row
+  stays open for its own wave to settle against 0010.
+- **Verification**: the waterfields suite; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

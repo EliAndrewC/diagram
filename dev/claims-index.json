@@ -65405,27 +65405,57 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::settle_tract_seams#every seam reads": {
-  "code": "89a175e31ec1639d",
-  "core": "d85a98005f5a91ea",
-  "date": "2026-10-03",
-  "note": "`shifts` reach +/-1.575 rad with no cap, so a settled tract can end ~45 deg off both the contour and the fall; 0006 rows run \"along the contour or down to its outfall ... turned up to about 17 degrees\" - bound the turn to TRACT_LEAN_RAD of a way, else join a neighbor",
+  "code": "c3c6d0403bd90694",
+  "core": "1972452ae8a3df1e",
+  "date": "2026-10-09",
+  "note": "the tract turns as a whole; it tries the 20-degree seam less two plot turns first, then the 6-degree line; with theta0 every turn stays within a way",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
   "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::settle_tract_seams#hemmed-in tract joins a neighbor": {
-  "code": "1442066b7d8732bf",
-  "core": "d85a98005f5a91ea",
-  "date": "2026-10-03",
-  "note": "larger tract; 0006's 2-4 is a GUESS",
+  "code": "02fe0f454b4d0b96",
+  "core": "1972452ae8a3df1e",
+  "date": "2026-10-09",
+  "note": "takes the number and heading of the neighbor with the closest rows; 0006 leaves tract size open",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
   "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/furrows.py::settle_tract_seams#turn kept to the two ways": {
+  "code": "33123d7d5f00dd63",
+  "core": "1972452ae8a3df1e",
+  "date": "2026-10-09",
+  "note": "a turn is admitted only where way_lean(head+d, theta0) <= 0.3 rad (17.2 deg), against the contour or the fall a right angle off it; this matches \"turned up to about 17 degrees\"",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+  },
+  "research": "b094712e0b419276",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/furrows.py::tract_heading#tract heading": {
+  "code": "c4da1175e47833db",
+  "core": "456a845278ea0139",
+  "date": "2026-10-09",
+  "note": "plumbing: the plots' headings averaged as lines (doubled-angle mean)",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_seams#tracts and their seams": {
@@ -65476,6 +65506,20 @@
   "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/furrows.py::way_lean#the two ways": {
+  "code": "100d21de5c890ffe",
+  "core": "ac4783cb56aef85e",
+  "date": "2026-10-09",
+  "note": "the smaller lean off the contour or the fall at theta0 + pi/2, \"the two a right angle apart\"",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+  },
+  "research": "b094712e0b419276",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/hem.py::BoxedRings#hem plumbing": {
   "code": "a19f45e2477441fe",
   "core": "f55d459674d5b9c8",
@@ -65520,10 +65564,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#bund beans": {
-  "code": "018c4d91cf8bed0f",
-  "core": "4a57012d0aadd840",
+  "code": "8cdee7cd57054f8a",
+  "core": "a970d48d45b25faa",
   "date": "2026-10-09",
-  "note": "passes bean_frac on to the beads along a share of the bunds",
+  "note": "beans beaded along a bean_frac share of the paddy bunds",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -65535,20 +65579,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#dry acreage scale": {
-  "code": "a2c5e5f81db9ccac",
-  "core": "4a57012d0aadd840",
+  "code": "bc9870c5b1407621",
+  "core": "a970d48d45b25faa",
   "date": "2026-10-09",
-  "note": "a reporting figure that places nothing",
+  "note": "a reported figure at the map's own scale; it decides nothing drawn",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#dry hem above the canal": {
-  "code": "07f2a211b42c66bf",
-  "core": "4a57012d0aadd840",
+  "code": "4529429d8ff345f2",
+  "core": "a970d48d45b25faa",
   "date": "2026-10-09",
-  "note": "the hem is laid upslope of canal A",
+  "note": "_dry_fields lays the hem upslope of supply canal A, keeping to the dry side of the supply strokes",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
@@ -65557,40 +65601,37 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
-  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band depth": {
-  "code": "3b2062f1b6d05a28",
-  "core": "4a57012d0aadd840",
+  "code": "73f38c712d72034f",
+  "core": "a970d48d45b25faa",
   "date": "2026-10-09",
-  "note": "no page gives the fork band's depth",
+  "note": "0010's 140-265 ft depth is for the hem across a field's head, not this second band, so the 0.6 factor is unresearched",
   "pages": {},
   "research": "",
   "rests": [
-   "0010-farmland-around-towns-and-cities.drawing.html:2f19d581d6b3c8ad",
-   "0010-farmland-around-towns-and-cities.drawing.html:3493e7b3a94673f1"
+   "0010-farmland-around-towns-and-cities.drawing.html:2f19d581d6b3c8ad"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band skipped on villages": {
-  "code": "4e26e10ccd9af6fb",
-  "core": "4a57012d0aadd840",
+  "code": "418de7aa8dee2189",
+  "core": "a970d48d45b25faa",
   "date": "2026-10-09",
-  "note": "0010 does address this ground. It calls the fork triangle \"the well-drained high ground that dry crops take\" and plants it only \"On a city map\". Leaving it to scrub at grain >= 1.0 (the code comment says this is for byte-stability) departs from that finding. The label should be DEVIATION 0010 (or 0006), with the drawing page recording the village and hamlet departure.",
+  "note": "0010 plants the fork triangle only on a city map and is silent on village and hamlet maps",
   "pages": {},
   "research": "",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0010-farmland-around-towns-and-cities.drawing.html:3493e7b3a94673f1"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork triangle planted dry": {
-  "code": "2846c25b1c953c64",
-  "core": "4a57012d0aadd840",
+  "code": "f0b51004948247e5",
+  "core": "a970d48d45b25faa",
   "date": "2026-10-09",
-  "note": "city grain only, a band along canal B up to its first offtake",
+  "note": "at grain < 1.0, a second band along canal B's stretch up to its first offtake, on ground its own canals cannot water",
   "pages": {
    "0010-farmland-around-towns-and-cities.drawing.html": "a6ecbb2065f500ff"
   },
@@ -65601,10 +65642,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#seams settled": {
-  "code": "45b89829db82aef2",
-  "core": "4a57012d0aadd840",
+  "code": "f36bf8b20e8d3871",
+  "core": "a970d48d45b25faa",
   "date": "2026-10-09",
-  "note": "seams are settled only at the full spread, and steep ground needs none",
+  "note": "only when furrow_spread >= STEEP_SPREAD_RAD (steep ground runs the contour, so no seam is needed); covers every band and the reserve, and now passes the contour heading _dry_fields lays from",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
@@ -65614,23 +65655,20 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#wild middle": {
-  "code": "09f541bc44c4a74c",
-  "core": "4a57012d0aadd840",
+  "code": "e99a4afedbd370a9",
+  "core": "a970d48d45b25faa",
   "date": "2026-10-09",
-  "note": "a wild fan keeps the toe's strip of hem and holds the middle in reserve",
+  "note": "on a wild fan only the toe's share of the a-side hem is drawn, and the middle goes to middle_reserve",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
   "research": "b094712e0b419276",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:79c616b0b0fbbeb4",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
   ],
-  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_ring_mean#hem plumbing": {

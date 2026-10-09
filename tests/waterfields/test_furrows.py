@@ -96,6 +96,28 @@ def test_a_second_band_tract_turns_off_every_tract_it_abuts() -> None:
     settle_tract_seams(plots[:1])  # a lone plot has no seam
 
 
+def test_a_settled_tract_stays_within_the_lean_of_the_contour_or_the_fall() -> None:
+    """Feature 328 wave 76 (0006: rows along the contour or down to the outfall, leaned a little): neighbors on both ways and
+    beside each leave no full seam turn within the lean, so uncapped the tract swings past the lean (0.30 rad) off both; capped
+    (`theta0`, the contour) it takes a lawful heading at the lesser seam floor, or joins a neighbor."""
+    from l7r.diagram.waterfields.furrows import TRACT_LEAN_RAD, settle_tract_seams, tract_heading, way_lean
+
+    heads = [0.0, 0.25, -0.2, math.pi / 2, math.pi / 2 - 0.25, math.pi / 2 + 0.2]
+
+    def fixture() -> list[dict]:
+        return [_sq(0, 0, h, k, side=10.0) for k, h in enumerate(heads)] + [_sq(0, 0, 0.05, 9, side=10.0)]  # one spot: all neighbors
+
+    free = fixture()
+    settle_tract_seams(free)
+    assert way_lean(free[-1]["theta"], 0.0) > TRACT_LEAN_RAD, "uncapped, the tract leans past the lean (the drift)"
+    capped = fixture()
+    settle_tract_seams(capped, 0.0)
+    assert way_lean(capped[-1]["theta"], 0.0) <= TRACT_LEAN_RAD + 1e-9, "capped, it stays within the lean of a way"
+    assert all(way_lean(p["theta"], 0.0) <= TRACT_LEAN_RAD + 1e-9 for p in capped), "and so does every tract the fixture settles"
+    assert abs(tract_heading([0.1, 0.1 + math.pi]) - 0.1) < 1e-9, "a heading and its reverse are one furrow"
+    assert abs(way_lean(math.pi / 2 + 0.1, 0.0) - way_lean(0.1, 0.0)) < 1e-9, "the fall leans as the contour does"
+
+
 def test_a_tract_hemmed_in_on_every_heading_joins_its_nearest_neighbor() -> None:
     """Feature 287 (water W35), the fallback: a furrow is modulo pi and each neighbor rules out a window round its own
     heading, so a tract with more neighbors than fit round the half-circle has no heading left. It joins the neighbor

@@ -1554,5 +1554,18 @@
       "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 73",
       "reading": "the rule now holds by construction and moves nothing it did not have to"
     }
+  },
+  "wave76-tract-lean-cap": {
+    "quantity": "wave 76 (2026-10-09): a settled tract's heading held within TRACT_LEAN_RAD of the contour or the fall - what it moved",
+    "observed": "2026-10-09",
+    "source": "tests/waterfields/test_furrows.py::test_a_settled_tract_stays_within_the_lean_of_the_contour_or_the_fall; git diff HEAD on the five pool manifests after make map; make cohort N=48",
+    "command": "make test-file FILE=tests/waterfields/; make map for the five hamlets; make cohort N=48",
+    "method": "a fixture of six tracts on one spot (headings 0, 0.25, -0.2 and a right angle, less 0.25 and plus 0.2) and a seventh at 0.05: settled without theta0 (the old search) and with the contour at 0",
+    "value": {
+      "fixture": "uncapped, the seventh tract leans more than 0.30 rad off both ways (the drift); capped, every tract within 0.30 rad of a way",
+      "pool": "all five hamlets byte-identical to HEAD (no shipped tract leaned past the cap)",
+      "reading": "the cap bounds what the settle may do; on the shipped maps it had not yet done it",
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 75"
+    }
   }
 }
