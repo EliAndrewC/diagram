@@ -1,0 +1,66 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "50bcf4385",
+    "label": "328-start",
+    "utc": "20261009T034346Z"
+  },
+  "binding": "202797a1efaccda84876d3714af292b1fbb7b56140df779a8d967f4c168ba15b",
+  "criteria": {
+    "commensurate": "Reference TOTAL -6.2%; every size total is at or below 0.0% (10hh 0.0, 20hh -0.8, 40hh -0.9). Only seed 4 crosses, barely: +10.7% at 10hh (web +0.2 s wall) and +11.5% at 20hh (homesteads +0.5 s, hinterland +0.3 s wall). For that, seed 4 at 20hh now draws its village belt and copse (298 grove pieces, where the base drew none), and the batch's sun and privy rules hold on all five maps. Sub-second cost on one seed against a whole stand of trees and a faster reference is proportionate",
+    "necessary": "The extra work is unchanged search code (gap_ways/_first_admitted, ways/tree judge, ways/reach settle_field, groves/_draw_grove: none of them in the 50bcf4385..a67389b82 l7r diff) running on ground that the batch's requested rules re-placed: wave 56's 50 ft sun strips (0038, rows 580/582/583), wave 59's bands, wave 61's rolled privy and the slide fix the previous audit required (it removed a band-3 16 s web cost). Call counts show it is more trials, not slower code: _first_admitted 35->57, judge 33->57, settle_field 0->1, _draw_grove 0->298",
+    "no_way_around": "Reviewer looked for a static-geometry per-candidate scan and found none left that is material. Last round's (connector sweep re-testing every steading per bearing) is fixed and measured: fabric_hits_boxed 13,488->3,969 _crosses_fabric calls, 0.47->0.33 s; its skip matches _crosses_fabric's own gap-widened box test, so it is equivalent. Sun boxes memoized: 0.71->0.42 s. In the 20hh homesteads profile the top tottime deltas are now spread thinly over geometry primitives (_samples +0.24, seg_closest +0.14, square_waters +0.14 s cProfile), not one repeated scan. What remains concentrated (tree judge ~20 ms x 57 corridors, already memoized per corridor; village_grove grid re-seats scaling with 298 seats) is the base's algorithms running more trials. Minor residue, not required: _sun_keepouts still rebuilds plot boxes for its memo key (plot_box 27k calls, ~0.16 s cProfile of 3.7 s)"
+  },
+  "end": {
+    "commit": "a67389b82",
+    "label": "328-end",
+    "utc": "20261009T034657Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T040144Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -12.9,
+          "39": 7.7,
+          "4": 10.7,
+          "47": -3.2
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": -5.7,
+          "39": -5.5,
+          "4": 11.5,
+          "47": -3.3
+        },
+        "total_pct": -0.8
+      },
+      "40": {
+        "seeds": {
+          "39": 8.3,
+          "4": -2.9,
+          "47": -4.9
+        },
+        "total_pct": -0.9
+      }
+    },
+    "seeds": {
+      "25": -4.8,
+      "39": -7.5,
+      "4": -9.4,
+      "47": -2.4
+    },
+    "total_pct": -6.2
+  },
+  "note": "",
+  "verdict": "justified"
+}

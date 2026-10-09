@@ -1,0 +1,61 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "50bcf4385",
+    "label": "328-start",
+    "utc": "20261009T034346Z"
+  },
+  "binding": "202797a1efaccda84876d3714af292b1fbb7b56140df779a8d967f4c168ba15b",
+  "end": {
+    "commit": "a67389b82",
+    "label": "328-end",
+    "utc": "20261009T034657Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T040133Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -12.9,
+          "39": 7.7,
+          "4": 10.7,
+          "47": -3.2
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": -5.7,
+          "39": -5.5,
+          "4": 11.5,
+          "47": -3.3
+        },
+        "total_pct": -0.8
+      },
+      "40": {
+        "seeds": {
+          "39": 8.3,
+          "4": -2.9,
+          "47": -4.9
+        },
+        "total_pct": -0.9
+      }
+    },
+    "seeds": {
+      "25": -4.8,
+      "39": -7.5,
+      "4": -9.4,
+      "47": -2.4
+    },
+    "total_pct": -6.2
+  },
+  "note": "Control batch4-seed39-causes found; its seed4_after_the_index_fixes leg covers the two crossings, against the pre-batch base 50bcf4385. Reviewer re-ran both legs in detached worktrees (50bcf4385, a67389b82; load ~4.5, so call counts are cited, not seconds). Seed 4 10hh web: settle_field 0->1 call, settle_tree 3->4, field_runs/run_on_target 0->2992; settle_reach 0.13->0.57 s cProfile. settle_field (0.36) is INSIDE settle_reach (0.57), so the explanation's 0.52+0.35 double-counts; stage and function are right. Seed 4 20hh homesteads: _first_admitted 35->57, tree judge 33->57 (memo misses), trace 99->165, taut 103->149; lay_the_ways ~+1.5-2.4 s cProfile across 3 runs per leg. Hinterland: village_grove _draw_grove 0->298 (the base drew no grove on this map), static_clear 7.6k->25.7k, _sun_keepouts 6->603. None of the grown functions (gap_ways, access, ways/tree, reach, settle, groves) is in the batch's l7r diff: the same search code doing more work on re-placed ground, as stated",
+  "verdict": "consistent"
+}

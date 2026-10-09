@@ -929,5 +929,29 @@
         }
       }
     }
+  },
+  "glyph-privy-F2-rolled-place-kept": {
+    "verifies": "F2",
+    "subject": "glyph-check--privy",
+    "answers": "6e51955a8d25",
+    "quantity": "privies off the sunny side standing at the yard seat behind the house, and at the stable end, over the five hamlets",
+    "value": {
+      "behind the house": [
+        37,
+        30
+      ],
+      "stable end": [
+        4,
+        8
+      ],
+      "sawada behind": [
+        7,
+        6
+      ]
+    },
+    "unit": "privies",
+    "observed": "2026-10-09",
+    "source": "pool/hamlets/*/*.json farm_fixtures (privy) classed in each house's turned frame",
+    "method": "wave 61 (row 564): the rolled place offered first, slid along its wall toward its own end, then stepped out, before another place (m:wave61-privy-rolled-place, m:batch4-pair-and-slide-fix); the five maps rerolled"
   }
 }
