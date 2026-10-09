@@ -1986,3 +1986,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T183 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 77, round 2); merges weld a hairline or pinhole union (settle and the grave-cut re-hold), so no scrap is left bare on the four comb-fan hamlets; Sawada and Kashikawa moved, cohort unchanged; claims in step, no record check owed
+
+## Phase 79 - wave 78 (amendment 77): the grave cut's re-hold at the placer's lines
+
+- `waterfields/seams/close.py` (`held_faults`; the re-hold picks, keeps and welds by it).
+
+- [x] T184 wave 78's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 78); the grave cut's re-hold picks, keeps and welds by held_faults - the gate's rules and the placer's 25 deg, quarter cell and arrowhead under them (0005); pool byte-identical, cohort unchanged; impl-drift 6 IN-STEP
+- [x] T185 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 78); the grave cut's re-hold picks, keeps and welds by held_faults - the gate's rules and the placer's 25 deg, quarter cell and arrowhead under them (0005); pool byte-identical, cohort unchanged; impl-drift 6 IN-STEP

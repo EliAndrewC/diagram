@@ -13,10 +13,14 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
     from shapely.geometry import Polygon
 
 from ..banks import (
+    _TOE_MIN_APEX,
+    _TOE_MIN_AREA,
+    is_chevron,
     jog_vertices,
+    pointed_ring,
 )
 from ..frame import Pt
-from ..ring_rules import MAX_STEPS, RingContext, as_recorded, ring_violations
+from ..ring_rules import MAX_STEPS, RingContext, as_recorded, ring_area, ring_violations
 from ..settle import PINHOLE, welded
 from .geoms import GeomTree, ring_polygons
 from .pockets import _parts, _ring
@@ -80,10 +84,10 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
         staircase split on its hop - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a bund never steps sideways and carries on, so the step is carried straight across
         scrap welded to its neighbor - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: into the basin it shares the most bund with
         scrap left bare - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: what no weld makes lawful stays bare, the fan floor drawn under it
-        judged at the gate's lines - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: split pieces and welds held to `ring_violations`' lines (a point under 15 deg, under 0.20 of a cell), not the placer's 25 deg and quarter cell, so a kept basin may carry a 15-25 deg point or 0.20-0.25 of a cell
+        judged at the placer's lines - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a ring it keeps, split or welded, holds `held_faults` - the gate's rules and the placer's 25 deg, quarter cell and arrowhead under them
     """
     _load_shapely()
-    bad = [k for k in (range(len(plots)) if only is None else sorted(only)) if ring_violations(as_recorded(plots[k]["poly"]), ctx)]
+    bad = [k for k in (range(len(plots)) if only is None else sorted(only)) if held_faults(as_recorded(plots[k]["poly"]), ctx)]
     if not bad:
         return
     scraps: list[Polygon] = []
@@ -93,7 +97,7 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
         p = plots[k]
         ring = as_recorded(p["poly"])
         pieces = [q for part in (_parts(Polygon(ring).buffer(0)) if len(ring) >= 3 else []) for q in (_split_steps(part, ctx) if ctx.g else [part])]
-        kept = [q for q in pieces if not ring_violations(_ring(q), ctx)]
+        kept = [q for q in pieces if not held_faults(_ring(q), ctx)]
         scraps += [q for q in pieces if q not in kept]
         if kept:
             p["poly"] = _ring(kept[0])
@@ -105,6 +109,24 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
     tree = GeomTree(geoms)
     for scrap in sorted(scraps, key=lambda q: (round(q.bounds[0], 1), round(q.bounds[1], 1))):
         _weld_within_rules(scrap, plots, geoms, tree, ctx)
+
+
+def held_faults(ring: Any, ctx: RingContext) -> set[str]:
+    """What a ring the re-hold keeps must not break: every rule `ring_violations` asks (the gate's lines), and the placer's own
+    lines under them - no point sharper than `_TOE_MIN_APEX`, no basin under `_TOE_MIN_AREA` of the design cell, no
+    arrowhead at `is_chevron`'s 40 deg and 0.90 (feature 328 wave 78: the re-hold kept welds and split pieces at the gate's
+    15 deg and 0.20, which leave the margin a checker needs, not the basin 0005 draws).
+
+    Research: held at the placer's lines - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: no basin tapers to a point sharper than 25 degrees, none is under a quarter of its design cell, none is an arrowhead
+    """
+    faults = set(ring_violations(ring, ctx))
+    if len(ring) >= 3 and pointed_ring(ring, _TOE_MIN_APEX):
+        faults.add("needle")
+    if ctx.cell and ring_area(ring) < _TOE_MIN_AREA * ctx.cell:
+        faults.add("area")
+    if len(ring) >= 3 and is_chevron(ring):
+        faults.add("arrowhead")
+    return faults
 
 
 def _weld_within_rules(scrap: Polygon, plots: list[dict[str, Any]], geoms: list[Any], tree: GeomTree, ctx: RingContext) -> bool:
@@ -129,7 +151,7 @@ def _weld_within_rules(scrap: Polygon, plots: list[dict[str, Any]], geoms: list[
         simplified = merged.simplify(0.05)
         candidate = simplified if isinstance(simplified, Polygon) and simplified.is_valid and not simplified.interiors else merged
         ring = _ring(candidate)
-        if ring_violations(ring, ctx):
+        if held_faults(ring, ctx):
             continue
         plots[j]["poly"] = ring
         geoms[j] = Polygon(ring).buffer(0)

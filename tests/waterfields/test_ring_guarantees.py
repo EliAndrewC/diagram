@@ -203,3 +203,22 @@ def test_a_scrap_is_welded_into_a_host_whose_union_holds_only_a_pinhole() -> Non
         assert _weld_within_rules(scrap, plots, geoms, GeomTree(geoms), ctx) is taken
         if taken:
             assert abs(_poly(plots[0]["poly"]).area - 56.0 * 31.0) < 1.0, "the host now holds the scrap, its pinhole filled"
+
+
+def test_the_re_hold_keeps_a_ring_only_at_the_placers_lines_not_the_gates() -> None:
+    """Feature 328 wave 78 (0005: no point sharper than 25 degrees, no basin under a quarter of its cell): `held_faults` flags a
+    20-degree point and a basin of 0.22 of the cell that the gate's own lines (15 degrees, 0.20) let through, and the re-hold
+    after a later cut keeps neither as it stands."""
+    import math
+
+    from l7r.diagram.waterfields.seams.close import held_faults
+
+    ctx = RingContext(cell=1500.0, g=G)
+    tip = 60.0 * math.tan(math.radians(10.0))  # a 20-degree apex over a 60 px run
+    wedge = [(0.0, 0.0), (60.0, -tip), (90.0, -tip), (90.0, tip), (60.0, tip)]
+    assert not needle(as_recorded(wedge)) and "needle" in held_faults(as_recorded(wedge), ctx), "past the gate, not the placer"
+    small = _rect(0.0, 0.0, 33.0, 10.0)  # 330 px², 0.22 of the 1,500 px² cell
+    assert not too_small(small, 1500.0) and "area" in held_faults(small, ctx), "over the gate's 0.20, under the placer's quarter"
+    assert held_faults(_rect(0.0, 0.0, 48.0, 31.0), ctx) == set(), "a basin at the design cell keeps them all"
+    plots = _hold([wedge], ctx)
+    assert all("needle" not in held_faults(as_recorded(p["poly"]), ctx) for p in plots), "the re-hold keeps no 20-degree point"

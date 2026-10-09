@@ -67843,74 +67843,97 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::_weld_within_rules#weld host": {
-  "code": "ef72a11d77906f20",
-  "core": "440c93139a2b5691",
+  "code": "9270e372119638b2",
+  "core": "c4a17c6e4a194681",
   "date": "2026-10-09",
-  "note": "the code ranks hosts by how much bund they share with the scrap, takes the first whose union keeps every ring rule, and leaves the scrap bare when no host does. That matches \"goes to the paddy it shares the most bund with\" and a strip that \"stays bare\". Filling a pinhole under PINHOLE before the hole test is plumbing that keeps a lawful host, in line with \"no bare strip is left between two paddies\".",
+  "note": "takes the neighbor sharing the most bund among those whose union passes held_faults, and leaves the scrap bare when none does; the 0.4/0.02/0.05 px reach, growth and simplify tolerances and the 1 sq px PINHOLE are plumbing",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
-   "0014-bunds-between-the-paddies-aze.drawing.html:2a1d49cf625d6922",
    "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the gate's lines": {
-  "code": "e225ad458cae8651",
-  "core": "81b849d7ddf804a8",
+ "l7r/diagram/waterfields/seams/close.py::held_faults#held at the placer's lines": {
+  "code": "31a3b38f61de1b22",
+  "core": "f73d9afefe82b75b",
   "date": "2026-10-09",
-  "note": "the claim itself says a kept basin may carry a 15-25 deg point or 0.20-0.25 of a cell, against \"No basin tapers to a point sharper than 25 degrees\" and \"No basin is smaller than a quarter of the design cell\"; no block records that band, so a page block must record it as a DEVIATION or the split pieces and welds must be held to 25 deg and a quarter cell",
+  "note": "_TOE_MIN_APEX 25.0, _TOE_MIN_AREA 0.25 of ctx.cell and is_chevron's arrowhead match \"sharper than 25 degrees\", \"a quarter of the design cell\" and the 40 deg / 0.90 arrowhead; is_chevron's thresholds are not inline, so the docstring's 40/0.90 is taken as given",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
   },
   "research": "d717a3e31d236e53",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#scrap left bare": {
-  "code": "ce9d5f2d1a4dee9e",
-  "core": "81b849d7ddf804a8",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+ "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the placer's lines": {
+  "code": "434a033412c0dd3a",
+  "core": "896272f2abf9bb2e",
+  "date": "2026-10-09",
+  "note": "held_faults now picks the bad rings and the kept pieces, and through _weld_within_rules the weld hosts, so no kept ring can carry a 15-25 deg point or 0.20-0.25 of a cell",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
   },
   "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#scrap left bare": {
+  "code": "f5806753e3c66dbc",
+  "core": "896272f2abf9bb2e",
+  "date": "2026-10-09",
+  "note": "a scrap no lawful weld takes is not re-added and stays bare over the fan floor, as \"stays bare, with the fan's floor drawn under it\"",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+  },
+  "research": "d717a3e31d236e53",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#scrap welded to its neighbor": {
-  "code": "334147242bad226f",
-  "core": "81b849d7ddf804a8",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "45c0c5cb51542a6d",
+  "core": "896272f2abf9bb2e",
+  "date": "2026-10-09",
+  "note": "each scrap goes to _weld_within_rules, the basin sharing the most bund, matching \"taken into the basin beside it\" and \"the paddy it shares the most bund with\"",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "52dd4ab6c239d5e7",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
+   "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#staircase split on its hop": {
-  "code": "3578bc05957cec0f",
-  "core": "81b849d7ddf804a8",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "33cecca5ed95ab42",
+  "core": "896272f2abf9bb2e",
+  "date": "2026-10-09",
+  "note": "when ctx.g is set, a failing ring is cut by _split_steps along the step's hop, matching \"never hops sideways and carries on\"",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
+   "0014-bunds-between-the-paddies-aze.drawing.html:21b87f2594b3ec18",
+   "0014-bunds-between-the-paddies-aze.drawing.html:d7ca85f575a7671c"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/geoms.py::GeomTree#geometry index": {

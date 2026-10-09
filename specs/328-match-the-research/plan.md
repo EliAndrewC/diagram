@@ -1281,6 +1281,20 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: the waterfields suite (`welded` tested on a hairline, a pinhole, a real hole and a real gap); the cohort;
   `impl-drift`; `spec-fidelity`.
 
+## Wave 78 (amendment 77, 2026-10-09) - batch 9
+
+- **Scope**: the found row `seams/close.py::hold_ring_rules#judged at the gate's lines` (wave 77, E2). The re-hold a later cut
+  calls (the grave island's, `settlement/fields/features.py`) kept split pieces and welds when `ring_violations` passed - the
+  gate's 15 deg and 0.20-cell lines, a checker's margin - so a kept basin could carry a 15-25 deg point or 0.20-0.25 of a cell,
+  against 0005's "no point sharper than 25 degrees" and "none under a quarter of the basin its field was cut to". A new
+  `held_faults` adds the placer's lines under the gate's (`pointed_ring` at `_TOE_MIN_APEX`, `_TOE_MIN_AREA` of the cell,
+  `is_chevron` at 40 deg / 0.90), and the re-hold uses it to pick the rings it re-holds, the pieces it keeps and the hosts it
+  welds into. `_split_steps`' choice of cut, shared with the settle, is unchanged.
+- **Measured** (m:wave78-rehold-placer-lines): the unit test - a 20-degree wedge and a 0.22-cell basin pass the gate's lines and
+  fail `held_faults`, and the re-hold keeps no 20-degree point; the five hamlets byte-identical to HEAD; the 48-seed cohort
+  unchanged. impl-drift: the six claims of the re-hold IN-STEP, no claim owed.
+- **Verification**: the waterfields and settlement suites; the cohort; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

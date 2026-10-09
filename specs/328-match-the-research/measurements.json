@@ -1609,5 +1609,17 @@
       "40 households": "-1.6%",
       "owes": "nothing - no increase above this environment's band-1 line"
     }
+  },
+  "wave78-rehold-placer-lines": {
+    "quantity": "wave 78 (2026-10-09): the grave cut's re-hold judged at the placer's lines - what it moved",
+    "observed": "2026-10-09",
+    "source": "tests/waterfields/test_ring_guarantees.py::test_the_re_hold_keeps_a_ring_only_at_the_placers_lines_not_the_gates; git diff HEAD on the five pool manifests after make map; make cohort N=48",
+    "command": "make test-file FILE=tests/waterfields/; make map for the five hamlets; make cohort N=48",
+    "method": "a 20-degree wedge and a 0.22-cell basin judged by ring_violations (the gate's lines) and by held_faults; the wedge held by hold_ring_rules",
+    "value": {
+      "test": "both pass the gate's lines and fail held_faults; the re-hold keeps no 20-degree point",
+      "pool": "all five hamlets byte-identical to HEAD (no shipped grave cut left a ring between the gate's lines and the placer's)",
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 77"
+    }
   }
 }
