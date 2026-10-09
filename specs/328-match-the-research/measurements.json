@@ -1193,5 +1193,33 @@
       "cohort_48": "48/54, the same six refused seeds (03, 10, 20, 22, 33, 906)",
       "unit": "an end 11 ft behind a back wall: arrived (was pulled back); 13 ft behind: not; a byre 10 ft off: arrived"
     }
+  },
+  "wave68-board-faces-the-way-out": {
+    "quantity": "wave 68 (2026-10-09): an entrance board on its approach squared to it",
+    "observed": "2026-10-09",
+    "source": "pool/hamlets/<m>/<m>.json kosatsuba[0].rot against its connector's nearest segment, HEAD (git show) and after",
+    "command": "make map GEN=pool/hamlets/inashiro/inashiro.gen.py; the board's rot against the connector's nearest segment's bearing (off_parallel); make test-file FILE=tests/gate/test_board_facing.py; make cohort N=48",
+    "method": "Inashiro's manifest before and after; the other four compared byte for byte; the cohort against wave 67's run",
+    "value": {
+      "inashiro_off_connector_deg": {
+        "before": 43.5,
+        "after": 0.0
+      },
+      "inashiro_ft_from_connector": {
+        "before": 15.0,
+        "after": 14.0
+      },
+      "other hamlets": "kashikawa, kuwabata, mizuguchi byte-identical to HEAD (Kashikawa's and Mizuguchi's entrance boards square already; Kuwabata's at the center)",
+      "cohort_48": "48/54, the same six refused seeds",
+      "gate test": "4 entrance boards pass; 2 (Inashiro, Sawada) would have failed at HEAD; Kuwabata's (center) skipped",
+      "sawada_off_connector_deg": {
+        "before": 76.4,
+        "after": 0.0
+      },
+      "sawada_ft_from_connector": {
+        "before": 14.1,
+        "after": 14.0
+      }
+    }
   }
 }

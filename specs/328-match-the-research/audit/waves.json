@@ -541,5 +541,6 @@
   "l7r/diagram/waterfields/carve.py::_dry_fields#end plot split at every scale": "65",
   "l7r/diagram/settlement/water_ways/_helpers.py::_pull_back#trim floor": "66",
   "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard#a lane reaches the dooryard": "67",
-  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard": "67"
+  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard": "67",
+  "l7r/diagram/settlement/structures/fixtures/board_seat.py::WayFacing.turn#board squared to its nearest way": "68"
 }

@@ -291,6 +291,7 @@ class FixtureSitingMixin:
 
         Research:
             long axis along the route - research/questions/0190-notice-boards-kosatsuba.drawing.html: broadside to the traffic
+            an approach seat faces the approach - research/questions/0190-notice-boards-kosatsuba.drawing.html: squared to the road it faces, here the way out every departure passes
             off the tread, out of water, in view - research/questions/0190-notice-boards-kosatsuba.drawing.html: never in the roadbed
             seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat, the nearer counted double
             traffic radii - UNRESEARCHED: 260 px and 150 px, in pixels at every scale
@@ -335,8 +336,11 @@ class FixtureSitingMixin:
                             and self._fits(x, y, w, h, corridors=False, top=26.0)
                             # TURNED TO ITS NEAREST WAY, and refused where that board cannot face it (labels L12, feature 287
                             # wave 6): beside a lane's corner both arms are as near, and a board turned to one stood 55 and 86
-                            # degrees off the other (cohort seeds 25 and 42) - asked last, of a seat every cheaper test kept
-                            and (turn := env.facing.turn(x, y, rot)) is not None
+                            # degrees off the other (cohort seeds 25 and 42) - asked last, of a seat every cheaper test kept.
+                            # A SEAT ON THE APPROACH FACES THE APPROACH (feature 328 wave 68, 0190: squared to the road it
+                            # faces): the entrance board stands there for the way out every departure passes, and turned to a
+                            # nearer access lane it stood 43.5 degrees off it (Inashiro, batch 5's glyph check)
+                            and (turn := rot if approach else env.facing.turn(x, y, rot)) is not None
                             # ...and the registry of what stands admits the board as `kosatsuba` will record it, turned
                             # (feature 287, water W53): a seat on a field ditch or a stranger's yard is not offered
                             and self.admits("kosatsuba", self.board_record(x, y, turn))
@@ -378,7 +382,8 @@ class FixtureSitingMixin:
             anchor reach - UNRESEARCHED: lanes within 120 ft of the anchor admitted
             recorded widths - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: each road at the width it was drawn (the highway 30 ft on every sheet, a lesser one at its own); a record with none at the 30 ft `road` draws by default
             street fallback width - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: a main street with no recorded width at the 24 ft `street` draws by default
-            lane fallback width - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width taken at the footpath's 3 ft"""
+            lane fallback width - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width taken at the footpath's 3 ft
+            the approach flagged for an entrance only - UNRESEARCHED: the track out counts as the approach a seat is squared to only for an entrance board at a handover; 0190 squares a board to the road it faces but names no entrance placement"""
         routes: list[tuple[list[Pt], float, bool]] = []
         if self.M.get("road"):  # each road at its RECORDED width (`road`'s `road_width`, every `roads` record's `w`, in pixels)
             routes.append(([(p[0], p[1]) for p in self.M["road"]], float(self.M.get("road_width") or self.lw(ROAD_W_FT)), False))
@@ -392,9 +397,12 @@ class FixtureSitingMixin:
         main = [ln for ln in ways if not ln.get("web") and not ln.get("connector")] or ways
         if widen:
             main = main + [ln for ln in ways if ln not in main and not ln.get("connector")]
+        # THE APPROACH is the track out an ENTRANCE board stands on at a handover - only there (feature 328 wave 68: an
+        # approach seat is squared to its route, so a connector offered to a center or frontage board, where a map has no
+        # other lane, is a way like any other)
+        hand = anchor is not None and placement == "entrance" and kosatsuba_handover(self.M) is not None
         if anchor is not None:
             reach = 2.0 * KOSATSUBA_ANCHOR_BAND_FT / ftpx
-            hand = placement == "entrance" and kosatsuba_handover(self.M) is not None
             main = main + [
                 ln
                 for ln in ways
@@ -402,7 +410,7 @@ class FixtureSitingMixin:
                 and (hand or not ln.get("connector"))
                 and any(seg_dist(anchor[0], anchor[1], (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) <= reach for a, b in zip(ln["pts"], ln["pts"][1:], strict=False))
             ]
-        routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", self.px(3.0))), bool(ln.get("connector"))) for ln in main)
+        routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", self.px(3.0))), hand and bool(ln.get("connector"))) for ln in main)
         routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w") or self.lw(STREET_W_FT)), False) for st in self.M.get("town_streets") or [])
         return routes
 

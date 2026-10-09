@@ -1,50 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "bc794e042bc3eea4c9aacca5a360e82de4f496104952907ab9a20c97a30b7563",
+ "plan_sha256": "7a57499ff97ac01b5729dfae3be6407d99b80663a30d2de04e0721cf831740a2",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W67-1",
-   "summary": "reaches_dooryard is 0246's 12 ft of the steading's built ground (house, byre, shed, threshing yard, garden) on any side, via dooryard_dist now reading byre and shed from geom.boxes",
+   "id": "W68-a",
+   "summary": "A seat on the approach is turned to that route's own bearing (rot) instead of its nearest way",
    "class": "within",
-   "why": "ranking row 182 verbatim; 0246's own sentence; the literal fix the request (fix every in-scope finding to its research) asks for"
+   "why": "The found row's fix as filed (0190: 'squared to the road it faces'). Round 1's caveat is closed in code: siting.py now sets `hand` only when anchor is not None, placement == 'entrance' and a handover exists, and a route carries approach=True only as `hand and connector`, so a connector offered to a center or frontage board is a way like any other."
   },
   {
-   "id": "W67-2",
-   "summary": "trim_lane_stubs counts an end within 60 ft of the house or 12 ft of its built ground, any side; feature 287 W57's behind-the-house and walked-past refusals and their helpers (behind_house, walked_past, vertex_behind, PAST_GRAIN_FT) removed",
+   "id": "W68-b",
+   "summary": "An approach seat is not subject to WayFacing.turn's L12 refusal",
    "class": "within",
-   "why": "ranking row 181 ('drop the behind/past refusal'); wave 66's direction that W57 stays only by a MODE 1 ruling; none sought, so the literal rule is built"
+   "why": "Unchanged from round 1: the approach seat's road is chosen by construction, so L12's corner ambiguity does not arise; 0190's 'the road it faces' is singular."
   },
   {
-   "id": "W67-3",
-   "summary": "the 60 ft reach measured from the house's drawn footprint, not its center (impl-drift round 2)",
+   "id": "W68-c",
+   "summary": "Every other seat still faces its nearest way and is refused at an ambiguous corner",
    "class": "within",
-   "why": "the plainer reading of 0246's 'within 60 ft of the house'; widens, never narrows. Not fully recorded: _helpers.py line 47 still says 'within this of the house's center', and the scripted tier (hamletgen/ways/geom.py:490, math.dist from center; 0246's session comment 'to a farmhouse's center') now reads the same figure the other way, while the plan says this wave matches wave 45's twins"
+   "why": "Unchanged behavior outside the found row's case."
   },
   {
-   "id": "W67-4",
-   "summary": "both reaches and the fan rule's 60 ft read at the map's scale via px() (were pixels, right only at 1 ft/px), with a test red on the unscaled code",
+   "id": "W68-d",
+   "summary": "Measured/Occasions: Inashiro 43.5 -> 0.0 and Sawada 76.4 -> 0.0 degrees off the track out, the other three byte-identical to HEAD; placement-changed occasions on inashiro and sawada",
    "class": "within",
-   "why": "a defect found in the code under fix (constitution XIV); 0246's figures are feet"
+   "why": "Round 1's NOT LEGITIMATE narrowing is gone. Re-measured against git show HEAD: Inashiro off its connector 43.5 -> 0.0 (15.0 -> 14.0 ft), Sawada 76.4 -> 0.0 (14.1 -> 14.0 ft); kashikawa, kuwabata, mizuguchi carry no diff against HEAD; m:wave68-board-faces-the-way-out records both; tasks.md Occasions names both boards for batch 6's close."
   },
   {
-   "id": "W67-5",
-   "summary": "the house prefilter boxes the end by the larger reach and relies on house_extent filing each house by its whole steading",
+   "id": "W68-e",
+   "summary": "found-wave67's center-reading row re-estimated to E3",
    "class": "within",
-   "why": "checked: house_extent reads byre and shed through part_box, which reads geom.boxes, so no byre-only reach is lost"
+   "why": "Now E3 in found-wave67.jsonl and ranking.json with the nine call sites in seven modules and serves' keep test, as round 1 asked; the request's own ranking procedure."
   },
   {
-   "id": "W67-6",
-   "summary": "the fan rule keeps its center distance (_d) as its measure",
+   "id": "W68-f",
+   "summary": "The gate test test_an_entrance_board_on_its_approach_is_squared_to_it, its distance read in feet at the map's scale",
    "class": "within",
-   "why": "the fan rule is its own UNRESEARCHED row, untouched by this wave"
-  },
-  {
-   "id": "W67-7",
-   "summary": "bearing test's arm threshold moved to within 60 ft of the footprint (>= 415); Kuwabata-style test inverted (an end 11 ft behind the back wall stays)",
-   "class": "within",
-   "why": "tests enforcing the requested rule; arithmetic checked (26 ft off the wall, 54 ft reach)"
+   "why": "Enforcement of the requested fix (it fails only when an entrance board on its track out is not squared to it); it multiplies by meta.ftpx, present on all five hamlets (1.0 there), against KOSATSUBA_WAY_REACH_FT."
   }
  ],
  "verdict": "CLEAR"

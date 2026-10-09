@@ -1067,6 +1067,29 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `test_an_end_serves_a_house_within_reach_of_its_built_ground_on_any_side`, the bearing test's arm; `impl-drift`;
   `spec-fidelity`.
 
+## Wave 68 (amendment 67, 2026-10-09) - batch 6
+
+- **Scope**: batch 5's found row `WayFacing.turn#board squared to its nearest way` (0190: a board is squared to the road it
+  faces, "within 30 degrees of some stretch of that road"). An entrance board stands for the way out every departure passes,
+  and at a handover the siting already prefers a seat on the approach (`c.approach`) - but every seat was turned to its
+  NEAREST way, so Inashiro's board, on its connector, was turned to an access lane 2.5 ft nearer and stood 43.5 degrees off
+  the track the other twelve households leave by. A seat on the approach is now turned to the approach itself (`rot`, its
+  route's bearing); every other seat still faces its nearest way and is refused at an ambiguous corner (labels L12).
+- **Measured** (m:wave68-board-faces-the-way-out, against HEAD): two entrance boards stood off their track out - Inashiro's
+  43.5 -> 0.0 degrees (15.0 -> 14.0 ft from it) and Sawada's 76.4 -> 0.0 (14.1 -> 14.0 ft); Kashikawa's and Mizuguchi's were
+  square already, Kuwabata's is at the center; those three byte-identical; the 48-seed cohort unchanged (the same six refused
+  seeds); the gate's new `test_an_entrance_board_on_its_approach_is_squared_to_it` passes on the four entrance boards, and
+  would have failed on two. (The first record said the four others were byte-identical: their before-images were taken
+  after the gate test had already regenerated them - spec-fidelity round 1 caught Sawada.)
+- **Found and fixed (spec-fidelity round 1)**: a route was flagged the approach whenever it was the connector, so where a
+  map has no plain lane the connector offered to a center or frontage board would also have been squared to; the flag now
+  marks the approach only for an entrance board at a handover (claimed UNRESEARCHED: 0190 names no entrance placement -
+  impl-drift rounds 2-4). The gate test reads its distance in feet at the map's
+  scale. The scripted twin's row (found-wave67) is E3: nine call sites in seven modules pass house centers, and `serves`'
+  own keep test reads them.
+- **Occasions**: placement-changed, notice board on inashiro and on sawada - batch 6's close.
+- **Verification**: `tests/gate/test_board_facing.py`; the board-seat and fixture tests; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

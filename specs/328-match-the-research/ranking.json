@@ -4488,21 +4488,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/hamletgen/ways/geom.py::end_serves#an end reaches something seen",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "the scripted tier counts an end as reaching a farmhouse within 60 ft of the house's CENTER (`math.dist(q, h)` over house points), where 0246 says 'within 60 ft of the house' and the settlement tier now measures from the drawn footprint (feature 328 wave 67): measure from the house's footprint here too, so the two tiers read one figure one way (spec-fidelity, wave 67)",
-  "files": [
-   "l7r/diagram/hamletgen/ways/geom.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 67, spec-fidelity",
-  "tier_as_ranked": "E1",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#gateway clearance",
   "tier": "E1",
   "fix": "TRACK_FABRIC_GAP 16 -> 7 ft in push_clear_of_fabric (0081/0246 lane-to-fence clearance)",
@@ -9242,7 +9227,7 @@
   "flag": "",
   "found": "wave 65 (batch 5's close), glyph-check",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "68",
   "scope": "kept"
  },
  {
@@ -11526,6 +11511,21 @@
   "tier_as_ranked": "E2",
   "moved": "wave 34 (amendment 33 round 1 asked the evidence): `_pull_back_to_service(run, segs, houses, inside, fabric, gap)` (hamletgen/ways/fabric.py:360) is handed no hard ground, walls or water - a joined end however far needs a ROUTED run past them (`route._route(start, goal, hard, walls, water)`), so its caller in web.py (line 344, `kept_connector`) must pass the hard set down and the route search be called: three modules, E3 by FR-003",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/geom.py::end_serves#an end reaches something seen",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the scripted tier counts an end as reaching a farmhouse within 60 ft of the house's CENTER (`math.dist(q, h)` over house points), where 0246 says 'within 60 ft of the house' and the settlement tier now measures from the drawn footprint (feature 328 wave 67): measure from the house's footprint here too, so the two tiers read one figure one way (spec-fidelity, wave 67); E3 (spec-fidelity, wave 68): a change across modules that ripples into placement - house points passed at nine call sites in seven modules (serve.py 182 and 505, web.py 365 and 421, settle.py 435, law.py 612, bund.py 250, sweeps.py 693, geom.py 544), and `serves`' own keep test (geom.py) reads house centers too",
+  "files": [
+   "l7r/diagram/hamletgen/ways/geom.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 67, spec-fidelity",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },

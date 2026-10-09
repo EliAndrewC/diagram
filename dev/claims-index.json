@@ -60015,20 +60015,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#anchor reach": {
-  "code": "d0375223f1166f7b",
-  "core": "edab1f3125200683",
+  "code": "5118bbabea66ffc4",
+  "core": "b24e7464d2552701",
   "date": "2026-10-09",
-  "note": "2 x 60 ft = 120 ft; no question answers it",
+  "note": "reach = 2 x 60 ft band = 120 ft, as claimed; no cited question gives the anchor's reach",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#lane fallback width": {
-  "code": "a5f8ff60a84bc6dd",
-  "core": "edab1f3125200683",
+  "code": "af41973f7278680d",
+  "core": "b24e7464d2552701",
   "date": "2026-10-09",
-  "note": "px(3.0), the footpath's 3 ft",
+  "note": "a lane with no `w` (and the street_runs fallback) is taken at px(3.0), the footpath's 3 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -60040,74 +60040,87 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#main ways only": {
-  "code": "97fd77bd0b38269c",
-  "core": "edab1f3125200683",
+  "code": "d251a1b6a76a2372",
+  "core": "b24e7464d2552701",
   "date": "2026-10-09",
-  "note": "roads plus main streets, returned alone when any exist",
+  "note": "only roads and main town streets are sampled when any exist, as the page says (\"the search looks only along those\")",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
   "research": "f69092eeadc87044",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
-   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#no main way, the whole network": {
-  "code": "9856d1b77cc21c3b",
-  "core": "edab1f3125200683",
-  "date": "2026-10-09",
-  "note": "lanes and every town street are the fallback",
-  "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
-  },
-  "research": "f69092eeadc87044",
-  "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
    "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#recorded widths": {
-  "code": "e2f775df8ab5c518",
-  "core": "edab1f3125200683",
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#no main way, the whole network": {
+  "code": "e49832b181bd33d2",
+  "core": "b24e7464d2552701",
   "date": "2026-10-09",
-  "note": "the recorded w, else lw(ROAD_W_FT) 30 ft, the drawer's default",
+  "note": "with no main way the code falls back to the lanes and every town street, matching \"nothing 'main' to stand on\"",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+  },
+  "research": "f69092eeadc87044",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#recorded widths": {
+  "code": "1cc4bc27d666a8e5",
+  "core": "b24e7464d2552701",
+  "date": "2026-10-09",
+  "note": "each road at its recorded width, or the 30 ft ROAD_W_FT when it has none; this sits within 30 ft for the Imperial road and 15-24 ft for a lesser one",
   "pages": {
    "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58"
   },
   "research": "0f270480aae97519",
   "rests": [
    "0088-highways-and-what-lines-them-kaido.drawing.html:7336b6f855fd2b4c",
-   "0088-highways-and-what-lines-them-kaido.drawing.html:7b5b5f842665a66e"
+   "0088-highways-and-what-lines-them-kaido.drawing.html:7b5b5f842665a66e",
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:4484f2c57f891f5b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#service lanes last": {
-  "code": "718617f612ee7438",
-  "core": "edab1f3125200683",
+  "code": "222c0af4bbdb7241",
+  "core": "b24e7464d2552701",
   "date": "2026-10-09",
-  "note": "§4 does not say which lane classes count; still unresearched",
+  "note": "web lanes and the connector are left out unless there is no other lane, `widen` is set, or an anchor or handover needs them; the record is silent on service lanes",
   "pages": {},
   "research": "",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#street fallback width": {
-  "code": "a9b5904d006bdec2",
-  "core": "edab1f3125200683",
+  "code": "39f2e35939599d68",
+  "core": "b24e7464d2552701",
   "date": "2026-10-09",
-  "note": "lw(STREET_W_FT) 24 ft, in both the main-way and fallback routes",
+  "note": "a main street with no recorded width is taken at STREET_W_FT 24 ft, the main street's drawn width",
   "pages": {
    "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html": "7a79c51cdfe860c9"
   },
   "research": "f1e4d380dfc31239",
   "rests": [
-   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:49b334a481b4ed37",
-   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:9d41257b1ae9db42"
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:49b334a481b4ed37"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#the approach flagged for an entrance only": {
+  "code": "13f0c1b7b587dda4",
+  "core": "b24e7464d2552701",
+  "date": "2026-10-09",
+  "note": "0190 squares a board to the road it faces (§7). It also names approach boards only for a city's gates, within 800 ft of each gate (§8). Nothing on the page counts the track out as the approach for an entrance board at a handover, so UNRESEARCHED is the right label for the `hand` gate",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
+   "0190-notice-boards-kosatsuba.drawing.html:2c118eb5b4942dc7",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
   ],
   "verdict": "IN-STEP"
  },
@@ -60126,25 +60139,41 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat off the road": {
-  "code": "e8c2dd8a26a04b57",
-  "core": "c351e5b791581d5e",
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#an approach seat faces the approach": {
+  "code": "5541b9972ca1b698",
+  "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-09",
-  "note": "the page calls the 60 ft the project's own figure, \"not a finding\"; the code caps the road-edge-to-footing gap at it",
+  "note": "an approach seat takes its own segment's bearing (`rot`), so it is 0 degrees off the road it stands for, well inside \"squared to the road it faces ... within 30 degrees\"; the board on the approach is the one the page sets \"on the approach to every main gate\"",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
   "research": "f69092eeadc87044",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62"
+   "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
+   "0190-notice-boards-kosatsuba.drawing.html:2c118eb5b4942dc7"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat off the road": {
+  "code": "882e018186562ab3",
+  "core": "1ee9fffb5e43d3f9",
+  "date": "2026-10-09",
+  "note": "the 60 ft is measured from the road's edge to the footing; the page records it as \"this project's own figure, not a finding\", so it is a guess; the roadside-only cut keeps a hamlet or village at the verge",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+  },
+  "research": "f69092eeadc87044",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#least offset off the tread": {
-  "code": "92816972fe0fc269",
-  "core": "c351e5b791581d5e",
+  "code": "55611981ac4ea072",
+  "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-09",
-  "note": "search starts at rw/2+dh/2+6 ft, the gap to the drawn board's near edge; verge_only refuses gaps past 6 ft",
+  "note": "the offset starts at road half-width plus the drawn depth's half plus 6 ft, which is \"6 ft from the edge of the road\" to the drawn footing and not to the 7 by 3 ft face the search tests",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
@@ -60152,16 +60181,15 @@
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235",
-   "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a"
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#long axis along the route": {
-  "code": "500bd3b1a01d3420",
-  "core": "c351e5b791581d5e",
+  "code": "654737655741abcc",
+  "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-09",
-  "note": "rot is the segment's bearing, so the long side runs parallel to the road, broadside to the traffic",
+  "note": "`rot` is the segment bearing, so the long side runs along the road (\"broadside to the traffic\", \"long side runs parallel to the road it faces\"); a seat that is not on the approach is turned to its nearest way and refused where it cannot face it",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
@@ -60174,45 +60202,44 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#nearness tie-break": {
-  "code": "e0e88d17e3e09717",
-  "core": "c351e5b791581d5e",
+  "code": "6f407f7c2b13b84e",
+  "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-09",
-  "note": "busy*10 - off/3; the page does not say how near seats rank against far ones",
+  "note": "the page says nothing on weighing traffic against offset; `busy*10 - off/3` is unresearched as claimed",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#off the tread, out of water, in view": {
-  "code": "710eb3f7a5752b4d",
-  "core": "c351e5b791581d5e",
+  "code": "06d794fa56abef8e",
+  "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-09",
-  "note": "the seat is kept off every way's bed, beside the road and never on it; water, view and placard tests decide nothing the page addresses",
+  "note": "every seat stands off every way's tread, at a verge site \"on a road or street\" and never in it; the water, view and title-placard tests are rules any map needs, not findings",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
   "research": "f69092eeadc87044",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235",
-   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#sampling lattice": {
-  "code": "b290ce25e08f99ac",
-  "core": "c351e5b791581d5e",
+  "code": "5f52d88e694b6526",
+  "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-09",
-  "note": "12 px / 5 px is sampling resolution, plumbing",
+  "note": "the 12 px step along the road and the 5 px step outward only set how finely the search samples; no map reader reads either off the map",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#seat scored by traffic": {
-  "code": "b0174c006f4b0fb7",
-  "core": "c351e5b791581d5e",
+  "code": "2c466b1302ce0c13",
+  "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-09",
-  "note": "seats are scored by the buildings near them, the passers-by the board would meet; the double weight for near ones is a calibration the page does not contradict",
+  "note": "each seat is scored by the buildings near it, the nearer counted double, which is the page's \"the passers-by it would meet\" and \"most buildings stand nearby\"",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
@@ -60225,14 +60252,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#traffic radii": {
-  "code": "d4dc50b84ccb2199",
-  "core": "c351e5b791581d5e",
+  "code": "1fc52d2e55afe758",
+  "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-09",
-  "note": "the page's \"within 250 ft\" is a statistic it uses to compare sites, not a rule for how near counts as busy; the radii are honestly UNRESEARCHED",
+  "note": "the page gives no counting radius; its \"within 250 ft\" only measures sites after placement, so 260 and 150 px are unresearched as claimed",
   "pages": {},
   "research": "",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171",
    "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09"
   ],
   "verdict": "IN-STEP"

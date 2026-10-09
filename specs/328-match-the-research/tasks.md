@@ -5,6 +5,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
+- placement-changed: notice board on inashiro - wave 68: an entrance board on its approach squared to the approach, not to a nearer access lane (0190; m:wave68-board-faces-the-way-out); batch 6's close
+- placement-changed: notice board on sawada - wave 68: its entrance board squared to its track out, 76.4 degrees off it before (0190; m:wave68-board-faces-the-way-out); batch 6's close
 - (reviewed PASS at batch 4's close, 2026-10-09) glyph-redrawn: scrub and rough grazing on kashikawa - wave 57: the band under a wood's edge drawn grass only, no brush (0077); batch 4's close
 - (reviewed PASS at batch 5's close, 2026-10-09, round 2) placement-changed: privy on kashikawa - wave 61, then wave 62: the rolled place slid along its wall only while it stands by the wall (0047; m:wave62-slide-bounded); batch 5's close, round 2 (batch 4's round NEEDS-WORK, F1: slides past the gable - answered by wave 62)
 - (reviewed PASS at batch 5's close, 2026-10-09; F1 nitpick filed as a found row) glyph-redrawn: notice board on inashiro - wave 63: drawn on its stone footing inside a fence line, 2 ft wider all round (0190); batch 5's close
@@ -1868,3 +1870,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T164 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 67); a lane end reaches its farmhouse within 60 ft of the house's footprint or 12 ft of its built ground, on any side, at the map's scale; W57's refusals retired; claims in step over four impl-drift rounds; maps and cohort unchanged
+
+## Phase 69 - wave 68 (amendment 67): the entrance board squared to the way out
+
+- `structures/fixtures/siting.py` (`_route_seats`' turn for an approach seat); `tests/gate/test_board_facing.py`.
+
+- [x] T165 wave 68's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 68, round 2); an entrance board on its approach squared to the way out (Inashiro 43.5 and Sawada 76.4 degrees off -> 0.0); the approach flagged only for an entrance at a handover; claims in step over four impl-drift rounds; cohort unchanged
+- [x] T166 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 68, round 2); an entrance board on its approach squared to the way out (Inashiro 43.5 and Sawada 76.4 degrees off -> 0.0); the approach flagged only for an entrance at a handover; claims in step over four impl-drift rounds; cohort unchanged
