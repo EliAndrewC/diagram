@@ -296,15 +296,15 @@ def privy_places(forms: FixtureForms) -> tuple[str, ...]:
 
 
 def along_its_wall(seat: Rect, step: float, n: int) -> Iterator[Rect]:
-    """`seat` slid along the wall it stands off (the house frame's x), `step` at a time, alternately toward its own end and
-    away, `n` times each way.
+    """`seat` slid along the wall it stands off (the house frame's x), `step` at a time toward its own end of the wall, `n`
+    times - never back across the middle, where the door's way out leaves (batch 4's timing pair: slid both ways, a front
+    privy stood across a door's way on seed 4 at 10 households, and the web's orphan joins took 1.2 -> 16 s).
 
     Research: a seat slid along its wall - NONE: the geometry of `rolled_first`'s slide, whose claim carries the page"""
     x, y, w, d = seat
     sign = 1.0 if x >= 0 else -1.0
     for k in range(1, n + 1):
         yield (x + sign * step * k, y, w, d)
-        yield (x - sign * step * k, y, w, d)
 
 
 def rolled_first(seats: Sequence[Rect], k: int, step: float, n: int) -> Iterator[Rect]:

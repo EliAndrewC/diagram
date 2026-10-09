@@ -262,9 +262,9 @@ def test_the_rolled_place_and_its_paces_come_before_the_other_places() -> None:
     """`rolled_first`: the rolled place (its first `k` seats) and their paces outward, then the others and theirs."""
     seats = [(-10.0, 0.0, 2.0, 2.0), (0.0, 10.0, 2.0, 2.0), (10.0, 0.0, 2.0, 2.0)]
     got = list(fs.rolled_first(seats, 1, 5.0, 2))
-    assert got[:5] == [seats[0], (-15.0, 0.0, 2.0, 2.0), (-5.0, 0.0, 2.0, 2.0), (-20.0, 0.0, 2.0, 2.0), (0.0, 0.0, 2.0, 2.0)], "along its wall first"
-    assert got[5:7] == [(-15.0, 0.0, 2.0, 2.0), (-20.0, 0.0, 2.0, 2.0)], "then out"
-    assert got[7:9] == seats[1:] and got[9:] == [(0.0, 15.0, 2.0, 2.0), (15.0, 0.0, 2.0, 2.0), (0.0, 20.0, 2.0, 2.0), (20.0, 0.0, 2.0, 2.0)]
+    assert got[:3] == [seats[0], (-15.0, 0.0, 2.0, 2.0), (-20.0, 0.0, 2.0, 2.0)], "along its wall toward its own end first, never across the middle"
+    assert got[3:5] == [(-15.0, 0.0, 2.0, 2.0), (-20.0, 0.0, 2.0, 2.0)], "then out"
+    assert got[5:7] == seats[1:] and got[7:] == [(0.0, 15.0, 2.0, 2.0), (15.0, 0.0, 2.0, 2.0), (0.0, 20.0, 2.0, 2.0), (20.0, 0.0, 2.0, 2.0)]
     sector = list(fs.rolled_first(seats, 2, 5.0, 1))
     assert sector == [*seats, (-15.0, 0.0, 2.0, 2.0), (0.0, 15.0, 2.0, 2.0), (15.0, 0.0, 2.0, 2.0)], "a sunny roll: the sector, the attested places, then every pace"
     assert fs.privy_places(fs.FixtureForms()) == ("stable", "yard", "front")

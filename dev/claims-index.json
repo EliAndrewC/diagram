@@ -45842,10 +45842,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::along_its_wall#a seat slid along its wall": {
-  "code": "e94670a9359f1234",
-  "core": "82f34fb22b9a64d2",
+  "code": "33d7592c27434821",
+  "core": "d9c0416677365d43",
   "date": "2026-10-08",
-  "note": "pure geometry",
+  "note": "this only generates candidate positions by stepping outward along x; step and n come from the caller, so the physical choice and its page sit with rolled_first's claim",
   "pages": {},
   "research": "",
   "rests": [],

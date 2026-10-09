@@ -764,5 +764,45 @@
         "Audit-06": "draws when the stages are run directly; refused in generate's later steps, a byre recorded on a lane at (2868, 1349) - the nearest privy and wood shed 20-50 px off it; the existing byre-on-lane class (Audit-906 at 55bcf18d6)"
       }
     }
+  },
+  "batch4-pair-and-slide-fix": {
+    "quantity": "batch 4's timing pair (50bcf4385, before wave 56's first engine change -> 58f275f44), the bisection of its one growth, and the fix",
+    "observed": "2026-10-08",
+    "method": "PAIRS=b4:start:end, both legs in scratch worktrees back to back; make perf-report AGAINST=328-start; make perf-profile SEED=4 HOUSEHOLDS=10 STAGE=web at each batch-4 engine commit in a third worktree; the fix measured the same way; make cohort N=48 against the wave-60 run",
+    "value": {
+      "report": {
+        "10 households": "+54.0% band 3 (seed 4 +217.9%: web +5.8 s)",
+        "20 households": "+8.6% band 2",
+        "40 households": "-8.1% band 1; seed 25 refused in the base, draws at the end (T140)",
+        "reference": "TOTAL -4.0%"
+      },
+      "bisection_web_s_seed4_10hh": {
+        "71726fa46 (wave 56)": 1.3,
+        "23d8f2a1f (57)": 1.3,
+        "7093acac0 (58)": 1.3,
+        "fdada289e (59)": 1.3,
+        "55bcf18d6 (60)": 1.2,
+        "c0feb4b8e (61)": 16.3
+      },
+      "cause": "wave 61's along_its_wall slid a rolled privy both ways along its wall; on seed 4 at 10 households a front privy slid back across the house's middle stood across a door's way out, and stage_web's _join_orphan_ways ran 37 lattice searches (14.6 s of 16 s under cProfile)",
+      "fix_web_s": {
+        "no slide": 1.5,
+        "slide toward the seat's own end only (kept)": 1.5
+      },
+      "cohort_48": {
+        "wave 60": "48/54",
+        "fix": "50/54 - Audit-10 and Audit-20 draw now, none newly refused"
+      },
+      "privies_over_the_five_maps": {
+        "behind the house": [
+          37,
+          30
+        ],
+        "stable end": [
+          4,
+          8
+        ]
+      }
+    }
   }
 }
