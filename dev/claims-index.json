@@ -18322,8 +18322,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold at a joint becomes a T": {
-  "code": "30f96692d991e072",
-  "core": "a3ce8db7f0c18473",
+  "code": "90e2bb0f7fc2ba14",
+  "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
   "note": "a fold past the 140 degree hairpin becomes a T; a Z is pulled straight or its joint moved back",
   "pages": {
@@ -18337,8 +18337,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a jog across a joint pulled straight": {
-  "code": "e17dd48461e266f4",
-  "core": "a3ce8db7f0c18473",
+  "code": "1ba2a1a97639f3bb",
+  "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
   "note": "string-pulled where clear; a building touch is allowed only with every dropped vertex within _JOG_FT 6 ft",
   "pages": {
@@ -18352,8 +18352,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pulled lane's clearance": {
-  "code": "a06e8d651a9aaf7b",
-  "core": "a3ce8db7f0c18473",
+  "code": "670077b52968767a",
+  "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
   "note": "the page gives no clearance figure and calls its lane distances drawing conventions; the 5 ft default is the main lane's width",
   "pages": {},
@@ -18366,8 +18366,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#all but the buildings keep the usual clearance": {
-  "code": "b71da2a556758d0b",
-  "core": "a3ce8db7f0c18473",
+  "code": "f940f941d25cc9e4",
+  "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
   "note": "only buildings are dropped from the _clear_link test; everything else keeps the usual margins",
   "pages": {
@@ -18380,8 +18380,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no new kink from a pull": {
-  "code": "3f05c76661a08c56",
-  "core": "a3ce8db7f0c18473",
+  "code": "ab52a5aa63f23d28",
+  "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
   "note": "a pull that leaves more kink_spans than before is refused",
   "pages": {
@@ -18395,10 +18395,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no pull moves an arriving end off its farm": {
-  "code": "0902f5975789ebd9",
-  "core": "a3ce8db7f0c18473",
+  "code": "b9eb143e88468736",
+  "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
-  "note": "a pull between two lane kinds is refused where the split's foot would no longer reach the farm the joint reached",
+  "note": "the split between two kinds is taken only where `not arrives_off`; a refusal falls through to the Z fallback, as the separate branch did",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -18409,8 +18409,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
-  "code": "1772c33b86ef1603",
-  "core": "a3ce8db7f0c18473",
+  "code": "b23e30847cc221ba",
+  "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
   "note": "the page makes the fold a T but does not say which lane is the stem",
   "pages": {},
@@ -18422,8 +18422,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
-  "code": "c655640d79ffda3c",
-  "core": "a3ce8db7f0c18473",
+  "code": "bf8de543d3969437",
+  "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
   "note": "pulled like any jog, then split back into two records that keep their own widths",
   "pages": {

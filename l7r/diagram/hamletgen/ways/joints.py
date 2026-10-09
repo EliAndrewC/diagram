@@ -348,18 +348,14 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
             if z and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
                 return True
             continue
-        # ...NEVER MOVING A JOINT THAT ARRIVES AT A FARM OUT OF ITS REACH (cohort seed 902, feature 328 wave 90): a door path met
-        # end to end at its door was pulled straight and split back at the joint's foot on the new line, 4 px off, and the
-        # door end stood 12.1 ft off its yard - a dangling end to the law (`end_serves`), on a tree lane no repair may cut
-        if two and arrives_off(s, x[-1], new):
-            if z and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
-                return True
-            continue
         if two:
             # A CART ROUTE AND A FOOTPATH MEETING END TO END are pulled straight like any joint (0081: "a jog across the meeting
             # point is pulled straight like any other"; feature 328 - they were left), then split back at the joint: two
             # records, each keeping its own rank's width
-            if _split_committed(s, lanes, (i, ei, j, ej), new, x[-1], hard, walls, water):
+            # ...NEVER MOVING A JOINT THAT ARRIVES AT A FARM OUT OF ITS REACH (cohort seed 902, feature 328 wave 90): a door path
+            # met end to end at its door was pulled straight and split back at the joint's foot on the new line, 4 px off, and
+            # the door end stood 12.1 ft off its yard - a dangling end to the law (`end_serves`), on a tree lane no repair cuts
+            if not arrives_off(s, x[-1], new) and _split_committed(s, lanes, (i, ei, j, ej), new, x[-1], hard, walls, water):
                 return True
         elif commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane, admits_lane(s)):
             commit_lane(lanes, j, [], hard, walls, water, s.reink_lane)

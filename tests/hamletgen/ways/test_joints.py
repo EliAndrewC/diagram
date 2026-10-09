@@ -405,3 +405,14 @@ def test_a_joint_that_arrives_at_a_farm_is_not_pulled_out_of_its_reach() -> None
     assert arrives_off(s, joint, [(-100.0, 62.0), (100.0, 62.0)]), "its foot 62 ft off: out of reach"
     assert not arrives_off(s, joint, [(-100.0, 59.0), (100.0, 59.0)]), "its foot 59 ft off: still in reach"
     assert not arrives_off(s, (0.0, 200.0), [(-100.0, 210.0), (100.0, 210.0)]), "a joint that never arrived is not held"
+
+
+def test_a_two_kind_joint_that_would_move_an_arriving_end_off_its_farm_is_not_pulled(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 328 wave 90: where splitting back at the joint's foot would move an end that arrives at a farm out of reach
+    (`arrives_off`), the cart route and the footpath are left as they met."""
+    from l7r.diagram.hamletgen.ways import joints
+
+    s = _webbed([{"pts": [[100.0, 500.0], [300.0, 500.0]], "w": 5}, {"pts": [[300.0, 500.0], [310.0, 503.0], [500.0, 500.0]], "w": 3}])
+    monkeypatch.setattr(joints, "arrives_off", lambda *a: True)
+    assert straighten_joints(s, [], [], []) == 0
+    assert [len(ln["pts"]) for ln in s.M["lanes"]] == [2, 3], "the jog left as it was"
