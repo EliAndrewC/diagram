@@ -1404,6 +1404,22 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   offset's CONVENTION claim waits for the row, so that the unit's claims are re-checked once.
 - **Verification**: the two cohorts (m:wave85-thread-floor-reverted); `spec-fidelity`.
 
+## Wave 86 (amendment 85, 2026-10-09) - batch 10
+
+- **Row `pondstock.py::stage_pond_stock#privy over the sty` FIXED.** The claim cited 0047's drawing page for "the sty drawn
+  alone", which the page never says, and the record attests the pig toilet: an outhouse mounted over a pigsty, once common in
+  rural China (0048, `pig-toilet-enwiki`), latrines customarily built above a pigsty in Han grave models (0047,
+  `artic-pigsty-latrine`). The exception first proposed (the sty left alone as a DEVIATION) was ruled NOT LEGITIMATE by
+  `spec-fidelity` (2026-10-09): it left out 0048 and misread the 1639 pen, which held sheep. The sty glyph (`pig_sty`) now
+  carries the privy over its shed, marked with the privy's night-soil circle (0047's convention), inside the sty's own 8 x 6 ft
+  footprint, so no seat or clearance moves; only Kuwabata, the dike-pond hamlet, changes, in its glyph. The farmsteads keep
+  their own privies: a bank sty is drawn as no one farmstead's, so no house can be shown giving its privy up - a GUESS, as is
+  a privy on every sty (the custom was common, not universal). Recorded as a new bullet on 0025's drawing page with both notes;
+  the claim re-cited to it; the pig-sty modal's Depiction and Guesses say the same.
+- **Verification**: `tests/settlement/test_farm_fixtures.py` (the sty carries the privy's mark); the cohort held at 48/54
+  (the same six refused); the record checks and modal checks owed; `impl-drift` on the claims owed; a glyph-check of the
+  sty on Kuwabata at batch 10's close (a redrawn glyph); `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

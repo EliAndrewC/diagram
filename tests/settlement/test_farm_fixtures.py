@@ -38,6 +38,7 @@ def test_pond_stock_glyphs_record_and_class_themselves():
     s = Settlement(W=400, H=400, seed=1)
     s.pig_sty(100.0, 100.0, rot=10.0, pond=3)
     assert s.M["pig_sties"][0]["pond"] == 3 and s.top_cls[-1] == "pig sty"
+    assert '<circle' in s.top[-1] and 'fill="#3E2A12"' in s.top[-1], "the privy built over the sty carries the privy's night-soil mark (0025 drawing, feature 328 wave 86)"
     assert not hasattr(s, "duck_pen") and "duck_pens" not in s.M
     assert s.pond_fixture_fits(300.0, 300.0, 0.0) and not s.pond_fixture_fits(100.0, 100.0, 0.0)
 
