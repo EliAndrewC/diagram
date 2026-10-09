@@ -1418,9 +1418,9 @@
   "note": "capital staff housing outside (Edo's yoriki) or inside (a domain's Edo estate), down to the checkpoint post",
   "pages": {
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html": "b3f95cfe064ecbb5",
-   "0114-the-imperial-magistrates-compound-in-a-capital.html": "151ec0a20c28dab8"
+   "0114-the-imperial-magistrates-compound-in-a-capital.html": "07bcb4912ab6fa24"
   },
-  "research": "526dfb94bc33d3d0",
+  "research": "66eba31c9c4f213a",
   "rests": [
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:ae79afce1ebb08ba",
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:b24bcf640dc2cb0f",
@@ -1430,6 +1430,7 @@
    "0114-the-imperial-magistrates-compound-in-a-capital.html:a325a11b4634b47d",
    "0114-the-imperial-magistrates-compound-in-a-capital.html:bb14a65377ab7b59"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
@@ -4448,13 +4449,14 @@
   "date": "2026-10-07",
   "note": "the body of band_extent and its pitch per household are not in the bundle; I need them to check against the yard size the page gives (~890 sq ft)",
   "pages": {
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
-  "research": "5ec937f597c66c34",
+  "research": "4cd9ea0eb987d90e",
   "rests": [
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:9084510422afaec6"
   ],
+  "triaged": "2026-10-09",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas": {
@@ -4616,14 +4618,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#seat standoff from the field": {
-  "code": "78b7d91ed706f699",
-  "core": "4b1fd706e859aff3",
+  "code": "32b9bc56191a6050",
+  "core": "945cf2071cfdf50a",
   "date": "2026-10-09",
-  "note": "0031 seats the cluster beside the paddy but gives no gap; the 12 ft is a true GUESS",
+  "note": "the code sets the seat at `mid + n*(dep + 12.0)`, and the belt check uses the same point; no cited page gives a gap between the field's edge and the houses (0031 says only \"higher, drier ground beside its paddy\"), so GUESS is the right label",
   "pages": {},
   "research": "",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6",
+   "0058-ground-too-wet-to-build-on.drawing.html:32fa9821335681fb"
   ],
   "verdict": "IN-STEP"
  },
@@ -11996,6 +11999,32 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#fallback seats along the street": {
+  "code": "6aed246f8cccb4a0",
+  "core": "478bc9e62f7db0c6",
+  "date": "2026-10-09",
+  "note": "neither page gives fallback offsets",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:18c4dc9ae3cbd807",
+   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#no well in a street bend": {
+  "code": "8202c27f0c6dcbe3",
+  "core": "478bc9e62f7db0c6",
+  "date": "2026-10-09",
+  "note": "neither page has a bend rule for wells",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:18c4dc9ae3cbd807",
+   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#off the tread": {
   "code": "651301ff5fdd2423",
   "core": "478bc9e62f7db0c6",
@@ -15227,13 +15256,14 @@
   "date": "2026-10-08",
   "note": "a yard wherever grain is grown; only a dike-pond hamlet whose leftover parcels are ponds has none",
   "pages": {
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
-  "research": "5ec937f597c66c34",
+  "research": "4cd9ea0eb987d90e",
   "rests": [
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#compact bundle for the clustered form only": {
@@ -15311,13 +15341,14 @@
   "date": "2026-10-08",
   "note": "`work_yards=grows_grain(plan)`; the GM's ruling is named in the claim",
   "pages": {
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
-  "research": "5ec937f597c66c34",
+  "research": "4cd9ea0eb987d90e",
   "rests": [
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/arcs.py::arc_at#arc-length plumbing": {
@@ -32852,6 +32883,37 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/overlap/taxonomy.py::OVERLAP_CLASS#ward fence a barrier": {
+  "code": "b451eef39399e328",
+  "core": "353906e14bfb6594",
+  "date": "2026-10-09",
+  "note": "the fence runs unbroken, with a gate at every crossing",
+  "pages": {
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965"
+  },
+  "research": "e5a2b084c87905c5",
+  "rests": [
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:8ebc97c527ee4eac",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:acc680f54deffd47",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:dcd25bf8ea2758a1"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/overlap/taxonomy.py::OVERLAP_CLASS#ward gate's guard box": {
+  "code": "acb529460a0fa80a",
+  "core": "353906e14bfb6594",
+  "date": "2026-10-09",
+  "note": "the one solid building at the gate, on the verge and never in a roadbed",
+  "pages": {
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965"
+  },
+  "research": "e5a2b084c87905c5",
+  "rests": [
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:a50d3843ee482516",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:b40027c0aa16d652"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/overlap/taxonomy.py::OVERLAP_CLASS#worked ground": {
   "code": "32dcab061ec2cb56",
   "core": "353906e14bfb6594",
@@ -32924,6 +32986,16 @@
   },
   "research": "d49c6d64224dce4f",
   "verdict": "DRIFTED"
+ },
+ "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#only the mounts listed": {
+  "code": "eb073952d8272131",
+  "core": "d924b55270b4d04f",
+  "date": "2026-10-09",
+  "note": "a no-overlap legibility rule",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#sluice and water gate": {
   "code": "0098b8978e0b94f0",
@@ -33495,13 +33567,13 @@
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627",
-   "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450",
+   "0148-towers-along-the-city-wall-mamian.drawing.html": "27ca7d42e46e076e",
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965",
    "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html": "676ecd28f9b1d116",
    "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90",
    "0210-timber-yards-and-log-booms-kiba.drawing.html": "f17b51f2d5f34284"
   },
-  "research": "1472590ddc98794f",
+  "research": "35671e697dc865db",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd",
@@ -33517,7 +33589,7 @@
    "0210-timber-yards-and-log-booms-kiba.drawing.html:4ef8408e54f82f55",
    "0210-timber-yards-and-log-booms-kiba.drawing.html:eac260ce154f9535"
   ],
-  "triaged": "2026-10-08",
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#copse and bamboo against a house": {
@@ -33527,9 +33599,9 @@
   "note": "against a house, never on it",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
-  "research": "66e8d696e33eb19d",
+  "research": "383588539ff096b4",
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
@@ -33537,6 +33609,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#in-field ditches": {
@@ -33560,19 +33633,19 @@
   "code": "28489cb4b67331d8",
   "core": "c8bdbf8d42ad3c39",
   "date": "2026-10-09",
-  "note": "each sunk into one plot, the field tiled round it",
+  "note": "the ponds' and rocks' reasons match §479/§482, but the `field_graves` reason still describes only \"a rare in-field grave island ... the flat paddy tiles around\". The page now draws a grave as an island or in a plot's corner against its bunds (§485), with the bund carried round a corner grave (§486), and puts graves on terraces and valley strips, not just flat valley paddy (§484). The exemption itself still holds; its reason should name both forms and the field kinds",
   "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "e9d276aa6210b718"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
-  "research": "175c93aa350e3f45",
+  "research": "2b8a8213b9c89d51",
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:07108ce9127e5e0d",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:7c3e3563d5367b62",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:af167399c98dd6b3",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#inspection post on the gate": {
   "code": "48b8a3c3b8a0d986",
@@ -33706,6 +33779,21 @@
   ],
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard persimmon near its house": {
+  "code": "0d3e0daf5ca352e1",
+  "core": "c8bdbf8d42ad3c39",
+  "date": "2026-10-09",
+  "note": "in front of the house or behind it, the crown's edge within about 30 ft",
+  "pages": {
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
+  },
+  "research": "1640adf91280aca1",
+  "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297",
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house": {
   "code": "8d3ed0ef8419d1d6",
   "core": "c8bdbf8d42ad3c39",
@@ -33713,13 +33801,13 @@
   "note": "the yard, the bed, the fixtures and the joined bath match their pages, but the account's wood shed \"about 9.5 ft off a wall\" contradicts 0043's \"about 6 ft (a ken) off a wall\"; either record the held 9.5 ft on 0043's drawing page as a deviation, or seat the shed at the page's ken",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8",
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html": "bef5d458385c0006",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129",
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
   },
-  "research": "a7a327f1b47a3a00",
+  "research": "562bde00d1c873bf",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
@@ -33727,6 +33815,7 @@
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53"
   ],
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_LINEAR#ground kept clear": {
@@ -38993,6 +39082,22 @@
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/city/walls.py::WallsMixin._gate_tower#clear of the gate furniture": {
+  "code": "d535395ed151dd6a",
+  "core": "e348237571e77bb5",
+  "date": "2026-10-09",
+  "note": "the gate's buildings only never overlap; the 36 ft is a setback from houses, and the claim names the 62 ft and 3 px as a margin no page gives",
+  "pages": {
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
+  },
+  "research": "1e01770d340670bb",
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:9825dafa2be7c1f4",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:ec3f0e008c8c4528"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/city/walls.py::WallsMixin._gate_tower#gate tower beside the opening": {
   "code": "df5478375d660192",
   "core": "e348237571e77bb5",
@@ -39013,6 +39118,36 @@
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
   },
   "research": "1e01770d340670bb",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/city/walls.py::WallsMixin._gate_tower#gate tower square to the wall": {
+  "code": "e9c41a687f7697d2",
+  "core": "e348237571e77bb5",
+  "date": "2026-10-09",
+  "note": "turned to the wall's tangent",
+  "pages": {
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
+  },
+  "research": "1e01770d340670bb",
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:a62d0cd05508754b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/city/walls.py::WallsMixin._gate_tower#nudged onto the berm": {
+  "code": "6c39a3447075230f",
+  "core": "e348237571e77bb5",
+  "date": "2026-10-09",
+  "note": "set on the patrol road's center",
+  "pages": {
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
+  },
+  "research": "1e01770d340670bb",
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:a62d0cd05508754b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/walls.py::WallsMixin._gate_tower#search along the wall": {
@@ -41572,13 +41707,14 @@
   "date": "2026-10-08",
   "note": "`_work_yards = True` unless the generator declares no grain",
   "pages": {
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
-  "research": "5ec937f597c66c34",
+  "research": "4cd9ea0eb987d90e",
   "rests": [
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#no house racks by default": {
@@ -49629,6 +49765,18 @@
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._find_yard_spot#yard tucked under its house's wall": {
+  "code": "43369e30f6d8c36b",
+  "core": "40fc29cfde047e64",
+  "date": "2026-10-09",
+  "note": "a drawing seam",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._yard_area_ft2#allotted yards": {
   "code": "93e4c2cfc58a0ce1",
   "core": "c76ff7e035e88e1d",
@@ -49723,6 +49871,16 @@
   },
   "research": "4cd9ea0eb987d90e",
   "triaged": "2026-10-08",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._yard_fits#yard off every lane": {
+  "code": "db03612f16b161e4",
+  "core": "aa24cfe365e5c9b2",
+  "date": "2026-10-09",
+  "note": "0037 says nothing on lanes and yards",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._yard_fits#yard on dry ground": {
@@ -51354,6 +51512,18 @@
   "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#basin rows and bounds": {
+  "code": "4aae494611e206b2",
+  "core": "4b6c4985eb05ddea",
+  "date": "2026-10-09",
+  "note": "true GUESSes",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0010-farmland-around-towns-and-cities.drawing.html:2f19d581d6b3c8ad"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#basin size": {
   "code": "3c33009a1a8c4cfd",
   "core": "4b6c4985eb05ddea",
@@ -51364,6 +51534,18 @@
   },
   "research": "547d1c1f54d952f0",
   "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#farm rings round a city basin": {
+  "code": "fcc70f2516962b5d",
+  "core": "4b6c4985eb05ddea",
+  "date": "2026-10-09",
+  "note": "0010 sets a floor, not a ring count",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0010-farmland-around-towns-and-cities.drawing.html:3eed0aaffa28dda8"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#farmhouses round a city field": {
   "code": "ff84d6a8505f65b3",
@@ -51421,6 +51603,18 @@
   },
   "research": "547d1c1f54d952f0",
   "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#well seats off a basin": {
+  "code": "58387cd541e0d900",
+  "core": "4b6c4985eb05ddea",
+  "date": "2026-10-09",
+  "note": "no offset off a field",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#wells beside the basins": {
   "code": "a77aa63dc181562c",
@@ -53388,6 +53582,20 @@
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#outer stable off the wall": {
+  "code": "d6f3ad60aeb66347",
+  "core": "ba96e4c83570a50d",
+  "date": "2026-10-09",
+  "note": "`byre_part(..., self.px(YARD_SHED_GAP_FT[0]))` gives 6 ft, the near end of the page's 6 to 12 ft, which the page records as a GUESS; a fixed point on that range is allowed",
+  "pages": {
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
+  },
+  "research": "a75e3ada6edbbc9b",
+  "rests": [
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:4890be592fed3ca4"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip": {
   "code": "5bc6392c5b540874",
   "core": "ba96e4c83570a50d",
@@ -53446,6 +53654,18 @@
   ],
   "verdict": "MISLABELED"
  },
+ "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse seam": {
+  "code": "851c70205e0ad0ed",
+  "core": "ba96e4c83570a50d",
+  "date": "2026-10-09",
+  "note": "`kura_rect(hw, hh, \"N\", self.px(1.0))` keeps a 1 ft seam on the nucleated farm's north wall; the page calls the annex against the wall a drawing convention, and puts it on the north wall in a clustered village",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#thin band": {
   "code": "a70a401f3931dca2",
   "core": "ba96e4c83570a50d",
@@ -53482,14 +53702,15 @@
   "note": "the yard is centered on the south front",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2",
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
-  "research": "7f515517afb95add",
+  "research": "f7766e25e198d64d",
   "rests": [
    "0029-farmhouses-minka.drawing.html:a708d49b4d686be7",
    "0029-farmhouses-minka.drawing.html:b92993f15df1f795",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_template#box and template plumbing": {
@@ -53607,6 +53828,19 @@
   "date": "2026-10-03",
   "note": "unanswered in the bundle",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_well_pocket#pocket size and depth": {
+  "code": "b6ef7ac242fc5276",
+  "core": "8a6839abb69eda18",
+  "date": "2026-10-09",
+  "note": "no depth given",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
+   "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._rake_parts#homestead turns as one piece": {
@@ -53919,13 +54153,14 @@
   "note": "yard before the south wall, beside the house",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2",
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
-  "research": "a016354285005c18",
+  "research": "59bf4fc9b488ee60",
   "rests": [
    "0029-farmhouses-minka.drawing.html:a708d49b4d686be7",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut out of a bed's morning sun": {
@@ -57965,6 +58200,18 @@
   "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#fallback seat off the house": {
+  "code": "fc65929f1963ff99",
+  "core": "1f41d4681719b877",
+  "date": "2026-10-09",
+  "note": "no minimum given",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#seated in a steading's dooryard": {
   "code": "c85ff69d2a8e0899",
   "core": "1f41d4681719b877",
@@ -61727,6 +61974,18 @@
   },
   "research": "d00af765891ca129",
   "triaged": "2026-10-08",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/trades.py::TradesMixin.tanning_yard#drying racks": {
+  "code": "20a82d14aefb68b4",
+  "core": "a1475f11f4c952b5",
+  "date": "2026-10-09",
+  "note": "0193 does not describe the racks",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0193-tanning-yards.drawing.html:82a6c4200722334d"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/trades.py::TradesMixin.tanning_yard#pit count by territory": {
@@ -68078,255 +68337,6 @@
    "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
   },
   "research": "6c5761492b0d7655",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#fallback seats along the street": {
-  "code": "6aed246f8cccb4a0",
-  "core": "478bc9e62f7db0c6",
-  "date": "2026-10-09",
-  "note": "neither page gives fallback offsets",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:18c4dc9ae3cbd807",
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#no well in a street bend": {
-  "code": "8202c27f0c6dcbe3",
-  "core": "478bc9e62f7db0c6",
-  "date": "2026-10-09",
-  "note": "neither page has a bend rule for wells",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:18c4dc9ae3cbd807",
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/overlap/taxonomy.py::OVERLAP_CLASS#ward fence a barrier": {
-  "code": "b451eef39399e328",
-  "core": "353906e14bfb6594",
-  "date": "2026-10-09",
-  "note": "the fence runs unbroken, with a gate at every crossing",
-  "pages": {
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965"
-  },
-  "research": "e5a2b084c87905c5",
-  "rests": [
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:8ebc97c527ee4eac",
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:acc680f54deffd47",
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:dcd25bf8ea2758a1"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/overlap/taxonomy.py::OVERLAP_CLASS#ward gate's guard box": {
-  "code": "acb529460a0fa80a",
-  "core": "353906e14bfb6594",
-  "date": "2026-10-09",
-  "note": "the one solid building at the gate, on the verge and never in a roadbed",
-  "pages": {
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965"
-  },
-  "research": "e5a2b084c87905c5",
-  "rests": [
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:a50d3843ee482516",
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:b40027c0aa16d652"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#only the mounts listed": {
-  "code": "eb073952d8272131",
-  "core": "d924b55270b4d04f",
-  "date": "2026-10-09",
-  "note": "a no-overlap legibility rule",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard persimmon near its house": {
-  "code": "0d3e0daf5ca352e1",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-09",
-  "note": "in front of the house or behind it, the crown's edge within about 30 ft",
-  "pages": {
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
-  },
-  "research": "1640adf91280aca1",
-  "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297",
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/city/walls.py::WallsMixin._gate_tower#clear of the gate furniture": {
-  "code": "d535395ed151dd6a",
-  "core": "e348237571e77bb5",
-  "date": "2026-10-09",
-  "note": "the gate's buildings only never overlap; the 36 ft is a setback from houses, and the claim names the 62 ft and 3 px as a margin no page gives",
-  "pages": {
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
-  },
-  "research": "1e01770d340670bb",
-  "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:9825dafa2be7c1f4",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:ec3f0e008c8c4528"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/city/walls.py::WallsMixin._gate_tower#gate tower square to the wall": {
-  "code": "e9c41a687f7697d2",
-  "core": "e348237571e77bb5",
-  "date": "2026-10-09",
-  "note": "turned to the wall's tangent",
-  "pages": {
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
-  },
-  "research": "1e01770d340670bb",
-  "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:a62d0cd05508754b"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/city/walls.py::WallsMixin._gate_tower#nudged onto the berm": {
-  "code": "6c39a3447075230f",
-  "core": "e348237571e77bb5",
-  "date": "2026-10-09",
-  "note": "set on the patrol road's center",
-  "pages": {
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
-  },
-  "research": "1e01770d340670bb",
-  "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:a62d0cd05508754b"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._find_yard_spot#yard tucked under its house's wall": {
-  "code": "43369e30f6d8c36b",
-  "core": "40fc29cfde047e64",
-  "date": "2026-10-09",
-  "note": "a drawing seam",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._yard_fits#yard off every lane": {
-  "code": "db03612f16b161e4",
-  "core": "aa24cfe365e5c9b2",
-  "date": "2026-10-09",
-  "note": "0037 says nothing on lanes and yards",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#basin rows and bounds": {
-  "code": "4aae494611e206b2",
-  "core": "4b6c4985eb05ddea",
-  "date": "2026-10-09",
-  "note": "true GUESSes",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0010-farmland-around-towns-and-cities.drawing.html:2f19d581d6b3c8ad"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#farm rings round a city basin": {
-  "code": "fcc70f2516962b5d",
-  "core": "4b6c4985eb05ddea",
-  "date": "2026-10-09",
-  "note": "0010 sets a floor, not a ring count",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0010-farmland-around-towns-and-cities.drawing.html:3eed0aaffa28dda8"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#well seats off a basin": {
-  "code": "58387cd541e0d900",
-  "core": "4b6c4985eb05ddea",
-  "date": "2026-10-09",
-  "note": "no offset off a field",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#outer stable off the wall": {
-  "code": "c3f3a442000227d0",
-  "core": "6a622104086192e7",
-  "date": "2026-10-09",
-  "note": "6 ft is the near end of the page's guessed 6 to 12 ft",
-  "pages": {
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
-  },
-  "research": "a75e3ada6edbbc9b",
-  "rests": [
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:4890be592fed3ca4"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse seam": {
-  "code": "b749e2a92557836d",
-  "core": "6a622104086192e7",
-  "date": "2026-10-09",
-  "note": "part of the annex convention",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_well_pocket#pocket size and depth": {
-  "code": "b6ef7ac242fc5276",
-  "core": "8a6839abb69eda18",
-  "date": "2026-10-09",
-  "note": "no depth given",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
-   "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#fallback seat off the house": {
-  "code": "fc65929f1963ff99",
-  "core": "1f41d4681719b877",
-  "date": "2026-10-09",
-  "note": "no minimum given",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/trades.py::TradesMixin.tanning_yard#drying racks": {
-  "code": "20a82d14aefb68b4",
-  "core": "a1475f11f4c952b5",
-  "date": "2026-10-09",
-  "note": "0193 does not describe the racks",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0193-tanning-yards.drawing.html:82a6c4200722334d"
-  ],
   "verdict": "IN-STEP"
  }
 }
