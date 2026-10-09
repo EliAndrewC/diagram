@@ -176,33 +176,46 @@ def consulted_urls(root: pathlib.Path) -> list[str]:
             urls.setdefault(src.norm(url), rec.clean(url))
     for row in src.read(home):
         n = row.get("url", "")
-        if n:
-            urls.setdefault(n, "https://" + n)
+        if n:  # its spelling as read: the normalized form drops `www.`, which some hosts need (J-STAGE, feature 312)
+            urls.setdefault(n, rec.clean(row["raw"]) if str(row.get("raw", "")).startswith("http") else "https://" + n)
     return sorted(u for n, u in urls.items() if n not in seen_norm)
 
 
+def kept_urls(root: pathlib.Path) -> list[str]:
+    """The pages feature 312's filter kept: its work list and every uncited entry's URL (plan D8)."""
+    import uncited as un  # noqa: PLC0415 - _uncited imports this module
+
+    out = [x["raw"] for x in un.at.read(root, un.KEPT)]
+    d = un.at.base(root) / un.at.UNCITED
+    for f in sorted(d.glob("*.html")) if d.is_dir() else []:
+        out += [u for u in src._URL.findall(f.read_text(encoding="utf-8"))]
+    return out
+
+
+def kept_only(root: pathlib.Path, urls: list[str]) -> list[str]:
+    """FR-011: of `urls`, the kept ones with no archive row - a page the filter did not keep is never archived."""
+    keep = {src.norm(u) for u in kept_urls(root)}
+    return [u for u in unarchived(root, urls) if src.norm(u) in keep]
+
+
 def consulted(
-    root: pathlib.Path, limit: int = 0
+    root: pathlib.Path, limit: int = 0, workers: int = 4
 ) -> (
     int
-):  # pragma: no cover - the live run; `consulted_urls` and `archive_url` are tested
-    todo = consulted_urls(root)
+):  # pragma: no cover - the live run; `consulted_urls`, `lanes` and `archive_url` are tested
+    """The kept uncited pages archived in lanes, as the cited backfill is: one lane ran 1,086 pages at about 30 s each,
+    some nine hours (2026-10-02), where the backfill's lanes - one host to a lane - share the waiting."""
+    todo = kept_only(root, consulted_urls(root) + kept_urls(root))
     todo = todo[:limit] if limit else todo
-    print(f"archive: {len(todo)} consulted URL(s) with no copy yet", flush=True)
-    store = ar.Archive(ar.home_of(root), env=ar.git_env(ar.token(root)))
-    browser = ar.Browser()
-    try:
-        for n, url in enumerate(todo, 1):
-            if n % ar.RECYCLE_EVERY == 0:
-                browser.close()
-                browser = ar.Browser()
-            row = ar.archive_url(root, url, rec.Cited(), browser, store, push=False)
-            print(f"{row['outcome']:26} {url}", flush=True)
-            if store.unpushed() >= ar.PUSH_EVERY:
-                with store.locked():
-                    store.push()
-    finally:
-        browser.close()
+    print(f"archive: {len(todo)} kept uncited URL(s) with no copy yet, in up to {workers} lane(s) (feature 312: only what the filter kept)", flush=True)
+    home = ar.home_of(root)
+    store = ar.Archive(home, env=ar.git_env(ar.token(root)))
+    with store.locked():
+        store.ensure()
+    jobs = [(str(root), lane, str(home)) for lane in ar.lanes(sorted(todo), workers)]
+    with ar.multiprocessing.get_context("spawn").Pool(len(jobs) or 1) as pool:
+        for _ in pool.imap_unordered(ar._lane, jobs):
+            pass
     with store.locked():
         failure = store.push()
     ar.settle(root)
@@ -254,6 +267,10 @@ def find(
     hits = 0
     rows = [json.loads(p.read_text(encoding="utf-8")) for p in ar.row_files(root)]
     want = src.norm(url) if url else ""
+    if url:  # feature 312 FR-017, FR-018: what was tried before, then this look recorded
+        log = src._attempts_mod()
+        print("\n".join(log.report(root, url=url)), file=out)
+        log.add(root, url, "unknown", "is it in the archive (make archive-find)", route="archive-find")
     for row in rows:
         if (want and src.norm(row["url"]) == want) or (
             key and key in row.get("keys", [])
@@ -266,6 +283,8 @@ def find(
             )
             for gm in row.get("gm_copies", []):
                 print(f"  the GM's copy: {store.dir / gm}", file=out)
+            if not want:  # feature 312 FR-018: a source found by its key shows what it was tried for, too
+                print("\n".join(src._attempts_mod().report(root, url=row["url"])), file=out)
     if key:
         for name, entry in sorted(ar.gm_table(root).items()):
             if key in entry.get("keys", []) and entry.get("archived"):
@@ -303,6 +322,8 @@ def find(
                 + (f"\n  url: {url_of[d]}" if d in url_of else ""),
                 file=out,
             )
+            if d in url_of:  # feature 312 FR-018
+                print("\n".join(src._attempts_mod().report(root, url=url_of[d])), file=out)
     if not hits:
         print(
             "archive: nothing held - search the web (a page you cite is archived by `make source-outcome OUTCOME=cited:<key>`)",
@@ -407,6 +428,7 @@ def main(
     )
     c = sub.add_parser("consulted")
     c.add_argument("--limit", type=int, default=0)
+    c.add_argument("--workers", type=int, default=4)
     f = sub.add_parser("find")
     f.add_argument("--url", default="")
     f.add_argument("--key", default="")
@@ -422,7 +444,7 @@ def main(
     if args.cmd == "find":
         return find(root, store, args.url, args.key, args.terms)
     if args.cmd == "consulted":
-        return consulted(root, args.limit)
+        return consulted(root, args.limit, args.workers)
     if args.cmd == "relayout":
         print(f"archive: {relayout(root, store)} row(s) moved to the sharded layout")
         return 0

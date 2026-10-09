@@ -244,9 +244,10 @@ def kind_anchor(section: Section, kind: Label) -> str:
     return f"{section.id}-{kind.id}"
 
 
-def kind_heading(section: Section, kind: Label, level: int) -> str:
-    """A kind's heading inside a section's run of works, its explanation as the heading's tooltip."""
-    return f'<h{level} class="works-kind" id="{kind_anchor(section, kind)}" title="{html.escape(kind.description, quote=True)}">{html.escape(kind.name)}</h{level}>'
+def kind_heading(section: Section, kind: Label, level: int, prefix: str = "") -> str:
+    """A kind's heading inside a section's run of works, its explanation as the heading's tooltip; `prefix` scopes its id
+    to a registry group other than the works cited (feature 312: the uncited sources stand under the same sections)."""
+    return f'<h{level} class="works-kind" id="{prefix}{kind_anchor(section, kind)}" title="{html.escape(kind.description, quote=True)}">{html.escape(kind.name)}</h{level}>'
 
 
 class Catalog:

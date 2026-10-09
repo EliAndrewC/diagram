@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:48:58+00:00",
+ "final_url": "https://web.archive.org/web/20260307124019id_/https://www.city.suzu.lg.jp/uploaded/attachment/2772.pdf",
+ "first": "51/51c95ae9d2b7/20261003T014857Z",
+ "gm_copies": [],
+ "keys": [
+  "suzu-shingu-sugi"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "51/51c95ae9d2b7/20261003T014857Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND city.suzu.lg.jp",
+ "revision": "",
+ "sha256": "212e3bc7c04f18ad27f2189f6afccc1385db26a33d8271be95e66aa567a7c183",
+ "url": "https://city.suzu.lg.jp/uploaded/attachment/2772.pdf"
+}

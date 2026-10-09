@@ -33,7 +33,7 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 
 OLD = ".claude/skills/" + "diagram"  # split so this file is not its own finding
-EXEMPT = re.compile(r"^(specs/|tests/hooks/fixtures/|dev/[a-z]+-log/|scripts/gates/check-old-layout\.py$)")  # the last: it names the forms it looks for
+EXEMPT = re.compile(r"^(specs/|tests/hooks/fixtures/|dev/[a-z]+-log/|research/source-attempts\.jsonl$|scripts/gates/check-old-layout\.py$)")  # the last: it names the forms it looks for
 LEDGER = "dev/review-ledger.md"
 
 

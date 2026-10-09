@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:19:01+00:00",
+ "final_url": "https://president.jp/articles/-/75048?page=1",
+ "first": "d8/d8cacec2c223/20261003T011901Z",
+ "gm_copies": [],
+ "keys": [
+  "president-nagai-kenjutsu-dojo-p1"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "d8/d8cacec2c223/20261003T011901Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "34145f2655d0a3d8f006de296626696f013bf93844bc8cbe93a61e1bc992f92c",
+ "url": "https://president.jp/articles/-/75048?page=1"
+}

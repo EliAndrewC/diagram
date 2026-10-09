@@ -1,11 +1,12 @@
 {
- "captured": "2026-10-02T15:29:17+00:00",
+ "captured": "2026-10-03T04:37:47+00:00",
  "final_url": "https://www.city.takayama.lg.jp/kurashi/1000021/1000119/1000847/1000954/1000956.html",
  "first": "58/581ecfc0c54f/20261002T152917Z",
  "gm_copies": [],
  "keys": [
   "takayama-jinya-city",
-  "takayama-coverage-summary"
+  "takayama-coverage-summary",
+  "takayama-city-jinya-ato"
  ],
  "notes": [
   "0090-magistrates-compounds-jinya-and-yamen.drawing.notes.html",
@@ -26,7 +27,7 @@
   "0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.notes.html"
  ],
  "outcome": "archived",
- "path": "58/581ecfc0c54f/20261002T152917Z",
+ "path": "58/581ecfc0c54f/20261003T043745Z",
  "reason": "",
  "revision": "",
  "sha256": "51bf636f936a971d1ed4e18e8df346e5a9dc5578976af14ce202b2952cd2de1d",

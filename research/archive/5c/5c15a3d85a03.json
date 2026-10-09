@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:09:16+00:00",
+ "final_url": "https://www.jstage.jst.go.jp/article/aijsaxx/327/0/327_KJ00003750793/_article/-char/ja/",
+ "first": "5c/5c15a3d85a03/20261003T010916Z",
+ "gm_copies": [],
+ "keys": [
+  "sakamoto-1983-okinawa-kaoku-haichi"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "5c/5c15a3d85a03/20261003T010916Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "05559d070af4868ff882ac2f3d7e3487c515888033527449effc80880e2a7920",
+ "url": "https://www.jstage.jst.go.jp/article/aijsaxx/327/0/327_KJ00003750793/_article/-char/ja/"
+}

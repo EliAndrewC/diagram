@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:35:44+00:00",
+ "final_url": "https://web.archive.org/web/20260607134942id_/https://ekoin.or.jp/history/",
+ "first": "eb/ebe34fef3149/20261003T013544Z",
+ "gm_copies": [],
+ "keys": [
+  "ekoin-kaiso"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "eb/ebe34fef3149/20261003T013544Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "ca56e159774613675b878ace2e1d108d3c24870391099d73a98b92ed04c77634",
+ "url": "https://ekoin.or.jp/history/"
+}

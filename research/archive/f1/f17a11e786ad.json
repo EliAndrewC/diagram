@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:47:14+00:00",
+ "final_url": "",
+ "first": "f1/f17a11e786ad/20261003T004714Z",
+ "gm_copies": [],
+ "keys": [
+  "shirobito-88-sogamae"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "f1/f17a11e786ad/20261003T004714Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://shirobito.jp/article/1056"
+}

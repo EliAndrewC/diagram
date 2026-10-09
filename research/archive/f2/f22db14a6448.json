@@ -2,7 +2,10 @@
  "captured": "2026-10-02T18:12:49+00:00",
  "final_url": "https://www.tandfonline.com/doi/full/10.1179/pma.1996.002",
  "first": "f2/f22db14a6448/20261002T123601Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton_ Post-Medieval Archaeology_ Vol 30, No 1.html",
+  "gm-copies/The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton_ Post-Medieval Archaeology_ Vol 30, No 1_files"
+ ],
  "keys": [
   "northampton-tannery-1996"
  ],
@@ -10,7 +13,7 @@
   "0193-tanning-yards.drawing.notes.html",
   "0193-tanning-yards.notes.html"
  ],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "f2/f22db14a6448/20261002T181248Z",
  "reason": "HTTP 403",
  "revision": "",

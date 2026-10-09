@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:59:59+00:00",
+ "final_url": "https://online.bunka.go.jp/heritages/detail/170002",
+ "first": "44/44a32fccff8f/20261003T005959Z",
+ "gm_copies": [],
+ "keys": [
+  "bunka-shinmeisha-inari-torii"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "44/44a32fccff8f/20261003T005959Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "26a2701518820986421f03a2851876a5765f60f3f72947b9a2d82e6c87d6c1e2",
+ "url": "https://online.bunka.go.jp/heritages/detail/170002"
+}

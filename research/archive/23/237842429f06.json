@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:54:49+00:00",
+ "final_url": "https://web.archive.org/web/20251226092127id_/http://hldm.05236.com/index.php?m=content&c=index&a=show&catid=35&id=89",
+ "first": "23/237842429f06/20261003T015449Z",
+ "gm_copies": [],
+ "keys": [
+  "taizhou-hailing-chenghe"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "23/237842429f06/20261003T015449Z",
+ "reason": "APIRequestContext.get: socket hang up",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://hldm.05236.com/index.php?m=content&c=index&a=show&catid=35&id=89"
+}

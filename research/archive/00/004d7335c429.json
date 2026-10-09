@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:00:13+00:00",
+ "final_url": "",
+ "first": "00/004d7335c429/20261003T010013Z",
+ "gm_copies": [],
+ "keys": [
+  "bunka-hinomisaki-tamagaki"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "00/004d7335c429/20261003T010013Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://bunka.nii.ac.jp/heritages/detail/207926"
+}

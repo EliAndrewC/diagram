@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:14:23+00:00",
+ "final_url": "",
+ "first": "1e/1e64a653e566/20261003T011423Z",
+ "gm_copies": [],
+ "keys": [
+  "kagoshima-fumoto-outer-castle"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "1e/1e64a653e566/20261003T011423Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://kagoshima-fumoto.jp/outer-castle/"
+}

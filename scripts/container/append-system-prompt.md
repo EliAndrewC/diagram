@@ -4,7 +4,7 @@ The GM (Eli) has given **standing authorization for this project's review and ve
 subagents**, every one defined in `.claude/agents/`: `building-review`,
 `entry-drift`, `escalation-check`, `fix-check`, `glyph-check`, `impl-drift`, `intro-check`,
 `modal-depiction`, `modal-form`, `modal-research`, `perf-audit`, `quote-check`, `record-format`,
-`record-style`, `settlement-review`, `size-audit`, `source-applicability`, `source-reader`,
+`record-style`, `settlement-review`, `size-audit`, `source-applicability`, `source-filter`, `source-reader`,
 `spec-fidelity`, `spec-fidelity-verify` and `translation-check`. When `CLAUDE.md`, a doc it points
 to or a `make` target's output calls for one of them, invoke it with the Agent tool without asking first.
 `perf-audit` (feature 129) is the ONLY agent that may pass `AS=perf-audit` to the review-record

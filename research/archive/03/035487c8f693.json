@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:37:11+00:00",
+ "final_url": "https://web.archive.org/web/20260315150325id_/https://k-rain.repo.nii.ac.jp/record/2000416/files/kokushigaku_222_002.pdf",
+ "first": "03/035487c8f693/20261003T013711Z",
+ "gm_copies": [],
+ "keys": [
+  "inamatsu-2024-shimo-kurosawa-kenchicho"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "03/035487c8f693/20261003T013711Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://k-rain.repo.nii.ac.jp/record/2000416/files/kokushigaku_222_002.pdf"
+}

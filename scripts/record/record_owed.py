@@ -62,9 +62,9 @@ def changed_sources(root: pathlib.Path, base: str, head: str | None) -> set[str]
     """The write-ups that differ between `base` and `head` (None: the working tree, untracked files included) - the only
     ones a source-applicability unit can be owed on, so the other two thousand are never read (plan D2)."""
     if head is None:
-        names = _git(root, "diff", "--name-only", base, "--", ru.SOURCES).split() + _git(root, "ls-files", "--others", "--exclude-standard", "--", ru.SOURCES).split()
+        names = _git(root, "diff", "--name-only", base, "--", *ru.SOURCE_DIRS).split() + _git(root, "ls-files", "--others", "--exclude-standard", "--", *ru.SOURCE_DIRS).split()
     else:
-        names = _git(root, "diff", "--name-only", base, head, "--", ru.SOURCES).split()
+        names = _git(root, "diff", "--name-only", base, head, "--", *ru.SOURCE_DIRS).split()
     return {n.rsplit("/", 1)[1] for n in names}
 
 
@@ -72,15 +72,16 @@ def read_at(root: pathlib.Path, rev: str | None, sources: set[str] | None = None
     """The record at `rev` (None: the working tree), read with ONE ls-tree and ONE cat-file batch (plan D2); of the source
     write-ups, only those named in `sources` (None: all)."""
     if rev is None:
-        qdir, sdir = root / ru.QUESTIONS, root / ru.SOURCES
+        qdir = root / ru.QUESTIONS
         files = {p.name: p.read_text(encoding="utf-8") for p in qdir.glob("*.html")} if qdir.is_dir() else {}
-        src = {p.name: p.read_text(encoding="utf-8") for p in sdir.glob("*.html") if sources is None or p.name in sources} if sdir.is_dir() else {}
+        src = {p.name: p.read_text(encoding="utf-8") for d in ru.SOURCE_DIRS for p in (root / d).glob("*.html") if sources is None or p.name in sources}
     else:
-        names = _git(root, "ls-tree", "-r", "--name-only", rev, "--", ru.QUESTIONS, ru.SOURCES).split("\n")
-        names = [n for n in names if n.endswith(".html") and (sources is None or not n.startswith(ru.SOURCES + "/") or n.rsplit("/", 1)[1] in sources)]
+        names = _git(root, "ls-tree", "-r", "--name-only", rev, "--", ru.QUESTIONS, *ru.SOURCE_DIRS).split("\n")
+        is_src = lambda n: n.startswith(tuple(d + "/" for d in ru.SOURCE_DIRS))  # noqa: E731
+        names = [n for n in names if n.endswith(".html") and (sources is None or not is_src(n) or n.rsplit("/", 1)[1] in sources)]
         blobs = _cat(root, [f"{rev}:{n}" for n in names])
         files = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if n.startswith(ru.QUESTIONS + "/")}
-        src = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if n.startswith(ru.SOURCES + "/")}
+        src = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if is_src(n)}
     sources = {m.group(1): text for name, text in src.items() if (m := _SOURCE_FILE.match(name))}
     return ru.Record.of(files, sources)
 
@@ -208,10 +209,31 @@ def command(u: ru.Unit, now: ru.Record | None = None) -> str:
     if check.startswith("modal-"):  # feature 319: a modal's units; the three research units are one modal-research dispatch
         agent = check if check in ("modal-form", "modal-depiction") else "modal-research"
         return f"make modal-bundle KIND=\"{u.subject}\" FOR={agent}  then  make record-checked CHECK={check} BUNDLE=<its bundle> RESULT=..."
-    if check == "entry-drift":  # its subject is the modal's key, not a question: the section it moved under is named in the occasion
-        sec = re.search(r"\((\d{4})-", u.occasion)
-        return f"make check-bundle Q={sec.group(1) if sec else '<its section>'} FOR=entry-drift KIND=<the class of {u.subject}>  then  make record-checked CHECK=entry-drift KIND=\"{u.subject}\" RESULT=..."
+    if check == "entry-drift":
+        found = re.search(r"\b(\d{4})-", u.occasion)  # the subject is a modal key ("threshing yard"), never a question
+        kinds = modal_classes(u.subject) or [f"<the class of {u.subject}>"]
+        qq = found.group(1) if found else "<its section>"
+        return " ; ".join(f'make check-bundle Q={qq} FOR=entry-drift KIND="{k}"' for k in kinds) + \
+            f'  then  make record-checked CHECK=entry-drift KIND="{u.subject}" BUNDLE=<its bundle> RESULT=<verdict>'
     return f"make check-bundle Q={q} FOR={check}"
+
+
+_KINDS = pathlib.Path(__file__).resolve().parents[2] / "l7r/diagram/interactive"
+
+
+def modal_classes(key: str, base: pathlib.Path = _KINDS) -> list[str]:
+    """The modal class(es) whose `key` is this one, as `make check-bundle KIND=` takes them - module-qualified when the
+    key lives in more than one module (the map's Well and the sheet's). A tip that left `<the class of ...>` for the
+    session to look up sent it searching three files (2026-10-03)."""
+    hits = []
+    for path in sorted([*base.glob("classes/*.py"), *base.glob("compound_kinds/*.py")]):
+        cls = ""
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if m := re.match(r"class (\w+)\(", line):
+                cls = m.group(1)
+            elif cls and re.match(rf"\s+key = ['\"]{re.escape(key)}['\"]\s*$", line):
+                hits.append((path.stem, cls))
+    return [f"{mod}.{cls}" if len(hits) > 1 else cls for mod, cls in hits]
 
 
 def report(rows: Sequence[ru.Unit], now: ru.Record | None = None) -> str:

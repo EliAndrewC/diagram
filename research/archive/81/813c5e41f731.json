@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:36:22+00:00",
+ "final_url": "",
+ "first": "81/813c5e41f731/20261003T003622Z",
+ "gm_copies": [],
+ "keys": [
+  "wujunzhi-zhwiki"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "81/813c5e41f731/20261003T003622Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://zh.wikipedia.org/wiki/吳郡志"
+}

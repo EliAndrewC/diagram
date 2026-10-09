@@ -62,6 +62,11 @@ def _registry(root: pathlib.Path, entries: dict[str, str]) -> None:
 # ---- normalization, context, home ----
 
 
+def test_a_colon_after_a_url_in_parentheses_is_not_the_url() -> None:
+    """Feature 312: "(https://...?id=18666): 「...」" in a registry entry cited the page the filter then judged uncited."""
+    assert src.norm("https://1073shoso.jp/www/sankyo/detail.jsp?id=18666):") == "1073shoso.jp/www/sankyo/detail.jsp?id=18666"
+
+
 @pytest.mark.parametrize(
     "spelling",
     ["https://www.example.org/a/b/", "http://example.org/a/b#part", "https://example.org/A/B", "example.org/a/%62"],
@@ -417,3 +422,20 @@ def test_the_import_command(tmp_path: pathlib.Path, capsys: pytest.CaptureFixtur
     assert "seeded 1 ledger line(s)" in out and '"imported": 1' in out
     assert src.main(["import", "--per-url", str(tmp_path / "none.json"), "--scratch", str(tmp_path / "none")]) == 0
     assert "seeded 0" in capsys.readouterr().out
+
+
+# ---- blocked domains (feature 312 FR-002, FR-003) ----
+
+GROK = "https://grokipedia.com/page/Kaifeng"
+
+
+def test_a_blocked_url_is_never_fetched_cached_or_put_on_the_ledger() -> None:
+    fake = _Fake()
+    got = src.CachedPages(fake, _home()).get(GROK)
+    assert got["state"] == "UNFETCHABLE" and got["blocked"] and "blocked-domains.json" in got["why"]
+    assert fake.calls == []
+    with pytest.raises(Exception, match="the page cache refused: https://grokipedia.com"):
+        src.put(_home(), GROK, "text")
+    with pytest.raises(Exception, match="ledger line refused"):
+        src.append(_home(), [src.line(CTX, GROK, "pending")])
+    assert not src.earlier(_home(), GROK)

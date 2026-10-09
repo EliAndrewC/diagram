@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:59:39+00:00",
+ "final_url": "https://www.dpm.org.cn/explore/building/236530.html",
+ "first": "c7/c7ffcbc41144/20261003T015824Z",
+ "gm_copies": [],
+ "keys": [
+  "palace-museum-yuhuayuan-east-well-pavilion"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "c7/c7ffcbc41144/20261003T015824Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "699c58c6cb15ddb1efca7de6c0a8e3389f8829b6d39082e5fe002363d1c6b118",
+ "url": "https://www.dpm.org.cn/explore/building/236530.html"
+}

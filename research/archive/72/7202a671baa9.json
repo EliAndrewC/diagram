@@ -2,14 +2,17 @@
  "captured": "2026-10-02T18:10:18+00:00",
  "final_url": "https://l5r.fandom.com/wiki/Seid%C5%8D",
  "first": "72/7202a671baa9/20261002T133645Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/Seidō _ L5r_ Legend of the Five Rings Wiki _ Fandom.html",
+  "gm-copies/Seidō _ L5r_ Legend of the Five Rings Wiki _ Fandom_files"
+ ],
  "keys": [
   "l5r-fandom-seido"
  ],
  "notes": [
   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.notes.html"
  ],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "72/7202a671baa9/20261002T181017Z",
  "reason": "HTTP 403",
  "revision": "",

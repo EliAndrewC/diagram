@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:12:21+00:00",
+ "final_url": "",
+ "first": "65/65495f5e7b36/20261003T011221Z",
+ "gm_copies": [],
+ "keys": [
+  "sugimoto-2024-osaka-chaya"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "65/65495f5e7b36/20261003T011221Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND jstage.jst.go.jp",
+ "revision": "",
+ "sha256": "",
+ "url": "https://jstage.jst.go.jp/article/omhbull/22/0/22_55/_pdf/-char/ja"
+}

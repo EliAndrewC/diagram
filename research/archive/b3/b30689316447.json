@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:12:16+00:00",
+ "final_url": "https://web.archive.org/web/20241218070401id_/https://www.jstage.jst.go.jp/article/jscejhe/67/4/67_4_I_673/_pdf",
+ "first": "b3/b30689316447/20261003T011216Z",
+ "gm_copies": [],
+ "keys": [
+  "saito-fukuoka-2011-ara-fan-levees"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "b3/b30689316447/20261003T011216Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND jstage.jst.go.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://jstage.jst.go.jp/article/jscejhe/67/4/67_4_i_673/_pdf"
+}

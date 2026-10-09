@@ -307,6 +307,10 @@ push_cmd() {
   # built page; here as well as at the gate because a docs-only or spec-only delta takes the DIRECT route. Selftest first.
   python3 "$ROOT/scripts/gates/check-research-pointers.py" --selftest >/dev/null || die "check-research-pointers selftest failed - the guard itself is broken; fix scripts/gates/check-research-pointers.py before pushing"
   python3 "$ROOT/scripts/gates/check-research-pointers.py" "$ROOT" || die "a pointer to the research does not resolve, or names a built page (above) - feature 301; \`make fragment-move\` moves a fragment with its pointers"
+  # GUARD_EDIT_OK: feature 312 FR-020 - a NEW check: a footnote citing a source no one can wholly read (paywalled,
+  # gm-partial, never-read) stands only on a passage quote-check confirmed in the readable part; here and at make quick.
+  # GUARD_EDIT_OK: feature 312 - `-B`: the check imports a sibling module, and its bytecode left the tree dirty for the next push (test-sync-with-main 7b, 10)
+  python3 -B "$ROOT/scripts/gates/check-partial-citations.py" "$ROOT" || die "a footnote cites a source no one can wholly read with no confirmed passage (above) - feature 312 FR-020; confirm the passage (quote-check) and record it in research/partial-confirmations.jsonl, or make the note an absence note"
   # GUARD_EDIT_OK: feature 313 FR-010 - a NEW check: the canonical download list stays append-only against main (no entry
   # lost, moved or inserted, no id reused, every entry with its mark lines). Selftest first, as the pointer check's.
   python3 "$ROOT/scripts/record/downloads.py" selftest || die "the download-list check's selftest failed - the guard itself is broken; fix scripts/record/downloads.py before pushing"

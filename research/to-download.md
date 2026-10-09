@@ -42,9 +42,10 @@ says what the footnotes quote.
 
 ### H1. Tokyo Museum Collection (ToMuCo), "炭俵" (charcoal bale), Edo-Tokyo Museum accession 90007940 (`edo-tokyo-sumidawara`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://museumcollection.tokyo/works/6531424/)**
 - Fallback: [Google: Tokyo Museum Collection (ToMuCo), "炭俵" (charcoal bale), Edo-Tokyo Museum accessi](https://www.google.com/search?q=Tokyo%20Museum%20Collection%20%28ToMuCo%29%2C%20%22%E7%82%AD%E4%BF%B5%22%20%28charcoal%20bale%29%2C%20Edo-Tokyo%20Museum%20accession%2090007940)
@@ -54,9 +55,10 @@ says what the footnotes quote.
 
 ### H2. IRRI Rice Knowledge Bank, sun drying and drying-floor area (`irri-drying-floor`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](http://web.archive.org/web/20230624043456/http://www.knowledgebank.irri.org/grainQuality/module_4/popups/pu_drying.htm)**
 - Fallback: [Google: IRRI Rice Knowledge Bank, sun drying and drying-floor area](https://www.google.com/search?q=IRRI%20Rice%20Knowledge%20Bank%2C%20sun%20drying%20and%20drying-floor%20area)
@@ -66,9 +68,10 @@ says what the footnotes quote.
 
 ### H3. Storozum et al., "Geoarchaeological evidence of the AD 1642 Yellow River flood that destroyed Kaifeng", Scientific Reports 2020 (PMC 7048742) (`kaifeng-pmc7048742`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7048742/)**
 - Fallback: [Google: Storozum et al., "Geoarchaeological evidence of the AD 1642 Yellow River flood t](https://www.google.com/search?q=Storozum%20et%20al.%2C%20%22Geoarchaeological%20evidence%20of%20the%20AD%201642%20Yellow%20River%20flood%20that%20destroyed%20Kaifeng%22%2C%20Scientific%20Repor)
@@ -78,9 +81,10 @@ says what the footnotes quote.
 
 ### H4. L5R Wiki (Fandom), "Seidō" (`l5r-fandom-seido`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://l5r.fandom.com/wiki/Seid%C5%8D)**
 - Fallback: [Google: L5R Wiki (Fandom), "Seidō"](https://www.google.com/search?q=L5R%20Wiki%20%28Fandom%29%2C%20%22Seid%C5%8D%22)
@@ -90,9 +94,10 @@ says what the footnotes quote.
 
 ### H5. "Drought characteristics and their impact on vegetation net primary productivity in the climate-sensitive transition zone", PLOS ONE (2026), doi 10.1371/journal.pone.0343746 (`plos-transition-zone-drought`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://pmc.ncbi.nlm.nih.gov/articles/PMC12935246/)**
 - Fallback: [Google: "Drought characteristics and their impact on vegetation net primary productivity](https://www.google.com/search?q=%22Drought%20characteristics%20and%20their%20impact%20on%20vegetation%20net%20primary%20productivity%20in%20the%20climate-sensitive%20transition%20zon)
@@ -102,9 +107,10 @@ says what the footnotes quote.
 
 ### H6. Kojima Nobuyasu, 「How the acting superintendent of Sensoji was appointed in the late early-modern period」 (translated; original: 「近世後期における浅草寺別当代の就任過程」), Soka University institutional repository (`kojima-sensoji-bettodai`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://soka.repo.nii.ac.jp/record/35917/files/sokahogaku28_1_2.pdf)**
 - Fallback: [Google: Kojima Nobuyasu, 「How the acting superintendent of Sensoji was appointed in the ](https://www.google.com/search?q=Kojima%20Nobuyasu%2C%20%E3%80%8CHow%20the%20acting%20superintendent%20of%20Sensoji%20was%20appointed%20in%20the%20late%20early-modern%20period%E3%80%8D%20%28translated%3B%20o)
@@ -114,9 +120,10 @@ says what the footnotes quote.
 
 ### H7. Shaw, "The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton", Post-Medieval Archaeology 30(1), 1996 (`northampton-tannery-1996`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [x] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://doi.org/10.1179/pma.1996.002)**
 - Fallback: [Google: Shaw, "The excavation of a late 15th- to 17th-century tanning complex at The Gre](https://www.google.com/search?q=Shaw%2C%20%22The%20excavation%20of%20a%20late%2015th-%20to%2017th-century%20tanning%20complex%20at%20The%20Green%2C%20Northampton%22%2C%20Post-Medieval%20Archaeol)
@@ -131,9 +138,10 @@ it could not be read. What could be wrong is the registry entry's own descriptio
 
 ### H8. Kushiro Mire alder invasion, Ecohydrology & Hydrobiology 2014 (`kushiro-mire-2014`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [x] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://www.sciencedirect.com/science/article/abs/pii/S1642359314000706)**
 - Fallback: [Google: Kushiro Mire alder invasion, Ecohydrology & Hydrobiology 2014](https://www.google.com/search?q=Kushiro%20Mire%20alder%20invasion%2C%20Ecohydrology%20%26%20Hydrobiology%202014)
@@ -143,9 +151,10 @@ it could not be read. What could be wrong is the registry entry's own descriptio
 
 ### H9. Studies in Chinese Religions 5(2), "Giving while keeping: inexhaustible treasuries and inalienable wealth in medieval China" (`inexhaustible-treasuries`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [x] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://doi.org/10.1080/23729988.2019.1639463)**
 - Fallback: [Google: Studies in Chinese Religions 5(2), "Giving while keeping: inexhaustible treasuri](https://www.google.com/search?q=Studies%20in%20Chinese%20Religions%205%282%29%2C%20%22Giving%20while%20keeping%3A%20inexhaustible%20treasuries%20and%20inalienable%20wealth%20in%20medieval%20Ch)
@@ -155,9 +164,10 @@ it could not be read. What could be wrong is the registry entry's own descriptio
 
 ### H10. Baidu Baike, 村庙 (village temple) (`cunmiao-baike`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://baike.baidu.com/item/%E6%9D%91%E5%BA%99/3494869)**
 - Fallback: [Google: Baidu Baike, 村庙 (village temple)](https://www.google.com/search?q=Baidu%20Baike%2C%20%E6%9D%91%E5%BA%99%20%28village%20temple%29)
@@ -167,9 +177,10 @@ it could not be read. What could be wrong is the registry entry's own descriptio
 
 ### H11. Kinoshita, "Household Size, Household Structure, and Developmental Cycle of a Japanese Village: Eighteenth to Nineteenth Centuries", Journal of Family History 20(3), 1995 (`kinoshita-1995`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [x] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://journals.sagepub.com/doi/abs/10.1177/036319909502000302)**
 - Fallback: [Google: Kinoshita, "Household Size, Household Structure, and Developmental Cycle of a Ja](https://www.google.com/search?q=Kinoshita%2C%20%22Household%20Size%2C%20Household%20Structure%2C%20and%20Developmental%20Cycle%20of%20a%20Japanese%20Village%3A%20Eighteenth%20to%20Nineteenth)
@@ -179,9 +190,10 @@ it could not be read. What could be wrong is the registry entry's own descriptio
 
 ### H12. G. William Skinner, Marketing and Social Structure in Rural China (1964-65) - consulted at secondhand via retrospectives and reviews (`skinner-marketing`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [x] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://doi.org/10.2307/2050412)**
 - Fallback: [Google: G. William Skinner, Marketing and Social Structure in Rural China (1964-65) - co](https://www.google.com/search?q=G.%20William%20Skinner%2C%20Marketing%20and%20Social%20Structure%20in%20Rural%20China%20%281964-65%29%20-%20consulted%20at%20secondhand%20via%20retrospectives)
@@ -191,9 +203,10 @@ it could not be read. What could be wrong is the registry entry's own descriptio
 
 ### H13. Steven B. Miles, "From Small Fry to Big Fish: Representing the Rise of Jiujiang Township, Nanhai County, 1395-1657", Ming Studies 48 (2003) (`miles-2003`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [x] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://doi.org/10.1179/014703703788762953)**
 - Fallback: [Google: Steven B. Miles, "From Small Fry to Big Fish: Representing the Rise of Jiujiang ](https://www.google.com/search?q=Steven%20B.%20Miles%2C%20%22From%20Small%20Fry%20to%20Big%20Fish%3A%20Representing%20the%20Rise%20of%20Jiujiang%20Township%2C%20Nanhai%20County%2C%201395-1657%22%2C%20Min)
@@ -203,9 +216,10 @@ it could not be read. What could be wrong is the registry entry's own descriptio
 
 ### H14. Qing local-government scholarship on the 六房三班 ("Six Bureaus and Three Bands", title translated) organization; Pingyao county yamen documentation (`liufang-yamen`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://zhuanlan.zhihu.com/p/660442182)**
 - Fallback: [Google: Qing local-government scholarship on the 六房三班 ("Six Bureaus and Three Bands", ti](https://www.google.com/search?q=Qing%20local-government%20scholarship%20on%20the%20%E5%85%AD%E6%88%BF%E4%B8%89%E7%8F%AD%20%28%22Six%20Bureaus%20and%20Three%20Bands%22%2C%20title%20translated%29%20organization%3B%20Pingyao%20co)
@@ -215,9 +229,10 @@ it could not be read. What could be wrong is the registry entry's own descriptio
 
 ### H15. Diversion-angle hydraulics (a 30° angle cutting sediment entry by up to 64%; no paper read) (`offtake-angle-studies`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [x] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://www.sciencedirect.com/science/article/abs/pii/S1001627920300706)**
 - Fallback: [Google: Diversion-angle hydraulics (a 30° angle cutting sediment entry by up to 64%; no ](https://www.google.com/search?q=Diversion-angle%20hydraulics%20%28a%2030%C2%B0%20angle%20cutting%20sediment%20entry%20by%20up%20to%2064%25%3B%20no%20paper%20read%29)
@@ -231,9 +246,10 @@ The cited URLs the archive found unreachable, retried 2026-10-02 (see each).
 
 ### H16. 陈朝云 / 张晓芊, 「A study of Song-dynasty louzeyuan (漏泽园, the pauper burial grounds) and of social relief」 (translated; original: 「宋代漏泽园及社会救助研究」), 史学月刊 (Henan University), the journal's own listing page - 「The name "louzeyuan" is first seen in the third year of the Chongning era of Emperor Huizong of Song (1104).」 (translated; original: 「"漏泽园"名称始见于宋徽宗崇宁三年（1104年）」) (`shixue-yuekan-louzeyuan`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [x] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://sxyk.henu.edu.cn/info/1014/7333.htm)**
 - Fallback: [Google: 陈朝云 / 张晓芊, 「A study of Song-dynasty louzeyuan (漏泽园, the pauper burial grounds) a](https://www.google.com/search?q=%E9%99%88%E6%9C%9D%E4%BA%91%20/%20%E5%BC%A0%E6%99%93%E8%8A%8A%2C%20%E3%80%8CA%20study%20of%20Song-dynasty%20louzeyuan%20%28%E6%BC%8F%E6%B3%BD%E5%9B%AD%2C%20the%20pauper%20burial%20grounds%29%20and%20of%20social%20relief%E3%80%8D%20%28translated%3B%20origin)
@@ -243,9 +259,10 @@ The cited URLs the archive found unreachable, retried 2026-10-02 (see each).
 
 ### H17. 刘炜, 黄茜, 徐腾, "A study of the building of mid-Northern-Song military cities based on the Wujing zongyao" (title translated; original: 「基于《武经总要》的北宋中期军事城池营建研究」), 『建筑史学刊』 (Journal of Architectural History) 2026(2): 122-132 (`jah-song-military-cities`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://www.jgcm.ac.cn/jah/cn/article/pdf/preview/10.12329/20969368.2026.02011.pdf)**
 - Fallback: [Google: 刘炜, 黄茜, 徐腾, "A study of the building of mid-Northern-Song military cities based ](https://www.google.com/search?q=%E5%88%98%E7%82%9C%2C%20%E9%BB%84%E8%8C%9C%2C%20%E5%BE%90%E8%85%BE%2C%20%22A%20study%20of%20the%20building%20of%20mid-Northern-Song%20military%20cities%20based%20on%20the%20Wujing%20zongyao%22%20%28title%20translated)
@@ -255,9 +272,10 @@ The cited URLs the archive found unreachable, retried 2026-10-02 (see each).
 
 ### H18. History of Irrigation - irrigation tools (URL: none - the page it was read at, irripro.net, is gone) with Baidu Baike Lulu (a weaker reference) (`irripro-jiegao-lulu`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [x] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](http://www.irripro.net/en/nd.jsp?id=113)**
 - Fallback: [Google: History of Irrigation - irrigation tools (URL: none - the page it was read at, i](https://www.google.com/search?q=History%20of%20Irrigation%20-%20irrigation%20tools%20%28URL%3A%20none%20-%20the%20page%20it%20was%20read%20at%2C%20irripro.net%2C%20is%20gone%29%20with%20Baidu%20Baike%20Lu)
@@ -267,9 +285,10 @@ The cited URLs the archive found unreachable, retried 2026-10-02 (see each).
 
 ### H19. 旅色 (Tabiiro, a travel guide), 高山陣屋 ("Takayama Jin'ya", title translated) (`tabiiro-takayama-jinya`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [x] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://tabiiro.jp/leisure/s/200247-takayama-takayamajinya/)**
 - Fallback: [Google: 旅色 (Tabiiro, a travel guide), 高山陣屋 ("Takayama Jin'ya", title translated)](https://www.google.com/search?q=%E6%97%85%E8%89%B2%20%28Tabiiro%2C%20a%20travel%20guide%29%2C%20%E9%AB%98%E5%B1%B1%E9%99%A3%E5%B1%8B%20%28%22Takayama%20Jin%27ya%22%2C%20title%20translated%29)
@@ -279,9 +298,10 @@ The cited URLs the archive found unreachable, retried 2026-10-02 (see each).
 
 ### H20. 陈凌 (Chen Ling), 建筑空间与礼制文化：宋代地方衙署建筑象征性功能诠释 ("Architectural Space and Ritual-System Culture: An Interpretation of the Symbolic Function of Song-Dynasty Local Yamen Architecture", title translated), 西南大学学报（社会科学版） ("Journal of Southwest University (Social Science Edition)", title translated) 42(5): 182-187, September 2016 (`chen-2016-song-yamen`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [x] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://xbgjxt.swu.edu.cn/data/article/preview-pdf?doi=10.13718/j.cnki.xdsk.2016.05.023)**
 - Fallback: [Google: 陈凌 (Chen Ling), 建筑空间与礼制文化：宋代地方衙署建筑象征性功能诠释 ("Architectural Space and Ritual-Syste](https://www.google.com/search?q=%E9%99%88%E5%87%8C%20%28Chen%20Ling%29%2C%20%E5%BB%BA%E7%AD%91%E7%A9%BA%E9%97%B4%E4%B8%8E%E7%A4%BC%E5%88%B6%E6%96%87%E5%8C%96%EF%BC%9A%E5%AE%8B%E4%BB%A3%E5%9C%B0%E6%96%B9%E8%A1%99%E7%BD%B2%E5%BB%BA%E7%AD%91%E8%B1%A1%E5%BE%81%E6%80%A7%E5%8A%9F%E8%83%BD%E8%AF%A0%E9%87%8A%20%28%22Architectural%20Space%20and%20Ritual-System%20Culture%3A%20An%20Interpretation%20of%20the%20Symb)
@@ -303,9 +323,10 @@ The cited URLs the archive found unreachable, retried 2026-10-02 (see each).
 
 ### H22. The Shunde (顺德) dike-pond figures: 40,084 mu of ponds in 1581 (万历九年) and 58,094 mu in 1642 - 广州日报 and the Shunde Archives timeline; the 4.6% / 6.7% shares are those figures over the 8,700 顷 (870,000 mu) of cultivated land 吴建新 gives from 广东通志 ; 「By the end of the Guangxu era, the grain fields within the county made up less than one tenth of the total cultivated area, most of it having become fish ponds.」 (translated; original: 「至光绪末年，县境禾田占总耕地面积不到十分之一，大部分成为鱼塘」); the late-1980s survey - the main dyke-pond area 86,632 ha, 35% fishponds, 25% irrigated rice; the 1581 taxable fishponds of Nanhai, Shunde and Panyu, ~160,000 mu, from 珠江三角洲农业志. Longshan (龙山) had 8,124 of 44,947 mu in ponds in 1581, 18%; "over half" (75%, 乡之塘倍于田) is the Qianlong-Jiaqing figure; (`wanli-fishpond-summary`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [x] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-03
 
 - **[The cited page](https://gzdaily.dayoo.com/h5/html5/2023-07/05/content_871_829964.htm)**
 - Fallback: [Google: The Shunde (顺德) dike-pond figures: 40,084 mu of ponds in 1581 (万历九年) and 58,094 ](https://www.google.com/search?q=The%20Shunde%20%28%E9%A1%BA%E5%BE%B7%29%20dike-pond%20figures%3A%2040%2C084%20mu%20of%20ponds%20in%201581%20%28%E4%B8%87%E5%8E%86%E4%B9%9D%E5%B9%B4%29%20and%2058%2C094%20mu%20in%201642%20-%20%E5%B9%BF%E5%B7%9E%E6%97%A5%E6%8A%A5%20and%20the%20Shunde%20Archive)

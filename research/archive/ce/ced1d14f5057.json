@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:09:50+00:00",
+ "final_url": "https://web.archive.org/web/20260413050927id_/https://www.soumu.metro.tokyo.lg.jp/01soumu-archives/07edo_tokyo/0703kaidoku/0703kaidoku_03/0703kaidoku_03_2",
+ "first": "ce/ced1d14f5057/20261003T020843Z",
+ "gm_copies": [],
+ "keys": [
+  "tokyo-archives-hachiman-kokubunji"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "ce/ced1d14f5057/20261003T020843Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND soumu.metro.tokyo.lg.jp",
+ "revision": "",
+ "sha256": "8cf76f80038bd3c269529ca2d8bcc532b4b0af0fff2adc2e2f98a2622da78707",
+ "url": "https://soumu.metro.tokyo.lg.jp/01soumu-archives/07edo_tokyo/0703kaidoku/0703kaidoku_03/0703kaidoku_03_2"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:53:00+00:00",
+ "final_url": "https://online.bunka.go.jp/heritages/detail/124654",
+ "first": "28/2884e9518d41/20261003T005253Z",
+ "gm_copies": [],
+ "keys": [
+  "bunka-senshoji-kuri-iwaki"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "28/2884e9518d41/20261003T005253Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "b6ce958829579f23d1d57daa498045b6a5ed085b5da5b4d1f7925aa7b674bda2",
+ "url": "https://bunka.nii.ac.jp/heritages/detail/124654"
+}

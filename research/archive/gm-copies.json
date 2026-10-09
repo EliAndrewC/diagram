@@ -8,6 +8,14 @@
    "evidence": "title/DOI/URL matched registry entry",
    "archived": "gm-copies/1-s2.0-S1389934121000836-main.pdf"
   },
+  "10854794.pdf": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "conghua-2026-design"
+   ],
+   "download": "H21",
+   "archived": "gm-copies/10854794.pdf"
+  },
   "13467581.2021.1972810.pdf": {
    "keys": [
     "wang-ochiai-2022"
@@ -29,6 +37,22 @@
    "evidence": "AIC object 1971.867 Model of a Pigsty and Latrines; entry cites artic.edu/artworks/37716",
    "archived": "gm-copies/1971.867 - Model of a Pigsty and Latrines.jpg"
   },
+  "20969368.2026.02011.pdf": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "jah-song-military-cities"
+   ],
+   "download": "H17",
+   "archived": "gm-copies/20969368.2026.02011.pdf"
+  },
+  "41598_2020_Article_60169.pdf": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "kaifeng-pmc7048742"
+   ],
+   "download": "H3",
+   "archived": "gm-copies/41598_2020_Article_60169.pdf"
+  },
   "A Study on the analysis of location on the traditional rural village forest in South Korea.pdf": {
    "keys": [
     "park-2013-maeulsup"
@@ -43,12 +67,44 @@
    "evidence": "title/DOI/URL matched registry entry",
    "archived": "gm-copies/ABELE-DISSERTATION-2018.pdf"
   },
+  "Drying.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "irri-drying-floor"
+   ],
+   "download": "H2",
+   "archived": "gm-copies/Drying.html"
+  },
+  "Drying_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "irri-drying-floor"
+   ],
+   "download": "H2",
+   "archived": "gm-copies/Drying_files"
+  },
   "Ecological Research - 2010 - Takeuchi - Rebuilding the relationship between people and nature  the Satoyama Initiative.pdf": {
    "keys": [
     "takeuchi-2010-satoyama"
    ],
    "evidence": "title/DOI/URL matched registry entry",
    "archived": "gm-copies/Ecological Research - 2010 - Takeuchi - Rebuilding the relationship between people and nature  the Satoyama Initiative.pdf"
+  },
+  "FROM SMALL FRY TO BIG FISH_ REPRESENTING THE RISE OF JIUJIANG TOWNSHIP, NANHAI COUNTY, 1395–1657_ Ming Studies_ Vol 2003, No 1.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "miles-2003"
+   ],
+   "download": "H13",
+   "archived": "gm-copies/FROM SMALL FRY TO BIG FISH_ REPRESENTING THE RISE OF JIUJIANG TOWNSHIP, NANHAI COUNTY, 1395–1657_ Ming Studies_ Vol 2003, No 1.html"
+  },
+  "FROM SMALL FRY TO BIG FISH_ REPRESENTING THE RISE OF JIUJIANG TOWNSHIP, NANHAI COUNTY, 1395–1657_ Ming Studies_ Vol 2003, No 1_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "miles-2003"
+   ],
+   "download": "H13",
+   "archived": "gm-copies/FROM SMALL FRY TO BIG FISH_ REPRESENTING THE RISE OF JIUJIANG TOWNSHIP, NANHAI COUNTY, 1395–1657_ Ming Studies_ Vol 2003, No 1_files"
   },
   "FULLTEXT01.pdf": {
    "keys": [
@@ -100,6 +156,70 @@
    "keys": [],
    "evidence": "'House forest' book pp.315-318, kimori along Ome Kaido; grepped kimori/Ome Kaido/zelkova/house forest: no entry matches this book (related yashikirin entries are other works)",
    "archived": "gm-copies/ForestSurroundingTheHouse.txt"
+  },
+  "Giving while keeping_ inexhaustible treasuries and inalienable wealth in medieval China_ Studies in Chinese Religions_ Vol 5 , No 2 - Get Access.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "inexhaustible-treasuries"
+   ],
+   "download": "H9",
+   "archived": "gm-copies/Giving while keeping_ inexhaustible treasuries and inalienable wealth in medieval China_ Studies in Chinese Religions_ Vol 5 , No 2 - Get Access.html"
+  },
+  "Giving while keeping_ inexhaustible treasuries and inalienable wealth in medieval China_ Studies in Chinese Religions_ Vol 5 , No 2 - Get Access_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "inexhaustible-treasuries"
+   ],
+   "download": "H9",
+   "archived": "gm-copies/Giving while keeping_ inexhaustible treasuries and inalienable wealth in medieval China_ Studies in Chinese Religions_ Vol 5 , No 2 - Get Access_files"
+  },
+  "Household Size, Household Structure, and Developmental Cycle of a Japanese Village_ Eighteenth to Nineteenth Centuries - Futoshi Kinoshita, 1995.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "kinoshita-1995"
+   ],
+   "download": "H11",
+   "archived": "gm-copies/Household Size, Household Structure, and Developmental Cycle of a Japanese Village_ Eighteenth to Nineteenth Centuries - Futoshi Kinoshita, 1995.html"
+  },
+  "Household Size, Household Structure, and Developmental Cycle of a Japanese Village_ Eighteenth to Nineteenth Centuries - Futoshi Kinoshita, 1995_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "kinoshita-1995"
+   ],
+   "download": "H11",
+   "archived": "gm-copies/Household Size, Household Structure, and Developmental Cycle of a Japanese Village_ Eighteenth to Nineteenth Centuries - Futoshi Kinoshita, 1995_files"
+  },
+  "Hydrological influences on the distribution of vegetation and tree height of Alnus japonica (Thunb.) Steud. in the Kushiro Mire, Japan - ScienceDirect.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "kushiro-mire-2014"
+   ],
+   "download": "H8",
+   "archived": "gm-copies/Hydrological influences on the distribution of vegetation and tree height of Alnus japonica (Thunb.) Steud. in the Kushiro Mire, Japan - ScienceDirect.html"
+  },
+  "Hydrological influences on the distribution of vegetation and tree height of Alnus japonica (Thunb.) Steud. in the Kushiro Mire, Japan - ScienceDirect_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "kushiro-mire-2014"
+   ],
+   "download": "H8",
+   "archived": "gm-copies/Hydrological influences on the distribution of vegetation and tree height of Alnus japonica (Thunb.) Steud. in the Kushiro Mire, Japan - ScienceDirect_files"
+  },
+  "Influence of diversion angle on water and sediment flow into diversion channel - ScienceDirect.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "offtake-angle-studies"
+   ],
+   "download": "H15",
+   "archived": "gm-copies/Influence of diversion angle on water and sediment flow into diversion channel - ScienceDirect.html"
+  },
+  "Influence of diversion angle on water and sediment flow into diversion channel - ScienceDirect_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "offtake-angle-studies"
+   ],
+   "download": "H15",
+   "archived": "gm-copies/Influence of diversion angle on water and sediment flow into diversion channel - ScienceDirect_files"
   },
   "Iron production in three Ming texts.html": {
    "keys": [
@@ -156,6 +276,38 @@
    ],
    "evidence": "title/DOI/URL matched registry entry",
    "archived": "gm-copies/Seeing from Above Observation of Contemporary Dike-Pond Landsca pe.pdf"
+  },
+  "Seidō _ L5r_ Legend of the Five Rings Wiki _ Fandom.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "l5r-fandom-seido"
+   ],
+   "download": "H4",
+   "archived": "gm-copies/Seidō _ L5r_ Legend of the Five Rings Wiki _ Fandom.html"
+  },
+  "Seidō _ L5r_ Legend of the Five Rings Wiki _ Fandom_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "l5r-fandom-seido"
+   ],
+   "download": "H4",
+   "archived": "gm-copies/Seidō _ L5r_ Legend of the Five Rings Wiki _ Fandom_files"
+  },
+  "The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton_ Post-Medieval Archaeology_ Vol 30, No 1.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "northampton-tannery-1996"
+   ],
+   "download": "H7",
+   "archived": "gm-copies/The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton_ Post-Medieval Archaeology_ Vol 30, No 1.html"
+  },
+  "The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton_ Post-Medieval Archaeology_ Vol 30, No 1_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "northampton-tannery-1996"
+   ],
+   "download": "H7",
+   "archived": "gm-copies/The excavation of a late 15th- to 17th-century tanning complex at The Green, Northampton_ Post-Medieval Archaeology_ Vol 30, No 1_files"
   },
   "Traditional Chinese fining and puddling.html": {
    "keys": [
@@ -225,12 +377,28 @@
    "evidence": "title/DOI/URL matched registry entry",
    "archived": "gm-copies/mukoyama-2022-the-eastern-cousins-of-european-sovereign-states-the-development-of-linear-borders-in-early-modern-japan.pdf"
   },
+  "pone.0343746.pdf": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "plos-transition-zone-drought"
+   ],
+   "download": "H5",
+   "archived": "gm-copies/pone.0343746.pdf"
+  },
   "s12685-022-00302-1.pdf": {
    "keys": [
     "kabu-ido-commons"
    ],
    "evidence": "title/DOI/URL matched registry entry",
    "archived": "gm-copies/s12685-022-00302-1.pdf"
+  },
+  "sokahogaku28_1_2.pdf": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "kojima-sensoji-bettodai"
+   ],
+   "download": "H6",
+   "archived": "gm-copies/sokahogaku28_1_2.pdf"
   },
   "suitou-2.pdf": {
    "keys": [
@@ -266,6 +434,70 @@
    ],
    "evidence": "title/DOI/URL matched registry entry",
    "archived": "gm-copies/中山市风水林的药用植物资源.pdf"
+  },
+  "宋代漏泽园及社会救助研究-河南大学《史学月刊》编辑部.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "shixue-yuekan-louzeyuan"
+   ],
+   "download": "H16",
+   "archived": "gm-copies/宋代漏泽园及社会救助研究-河南大学《史学月刊》编辑部.html"
+  },
+  "宋代漏泽园及社会救助研究-河南大学《史学月刊》编辑部_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "shixue-yuekan-louzeyuan"
+   ],
+   "download": "H16",
+   "archived": "gm-copies/宋代漏泽园及社会救助研究-河南大学《史学月刊》编辑部_files"
+  },
+  "村庙（民间信仰性质的公共性庙宇）_百度百科.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "cunmiao-baike"
+   ],
+   "download": "H10",
+   "archived": "gm-copies/村庙（民间信仰性质的公共性庙宇）_百度百科.html"
+  },
+  "村庙（民间信仰性质的公共性庙宇）_百度百科_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "cunmiao-baike"
+   ],
+   "download": "H10",
+   "archived": "gm-copies/村庙（民间信仰性质的公共性庙宇）_百度百科_files"
+  },
+  "炭俵 _ ToMuCo - Tokyo Museum Collection.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "edo-tokyo-sumidawara"
+   ],
+   "download": "H1",
+   "archived": "gm-copies/炭俵 _ ToMuCo - Tokyo Museum Collection.html"
+  },
+  "炭俵 _ ToMuCo - Tokyo Museum Collection_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "edo-tokyo-sumidawara"
+   ],
+   "download": "H1",
+   "archived": "gm-copies/炭俵 _ ToMuCo - Tokyo Museum Collection_files"
+  },
+  "麻雀虽小五脏俱全：解剖清朝县衙组织结构 - 知乎.html": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "liufang-yamen"
+   ],
+   "download": "H14",
+   "archived": "gm-copies/麻雀虽小五脏俱全：解剖清朝县衙组织结构 - 知乎.html"
+  },
+  "麻雀虽小五脏俱全：解剖清朝县衙组织结构 - 知乎_files": {
+   "evidence": "matched by the session at the inbox (feature 309 FR-012)",
+   "keys": [
+    "liufang-yamen"
+   ],
+   "download": "H14",
+   "archived": "gm-copies/麻雀虽小五脏俱全：解剖清朝县衙组织结构 - 知乎_files"
   }
  }
 }

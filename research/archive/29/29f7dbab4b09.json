@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:23:17+00:00",
+ "final_url": "https://tabi.jtb.or.jp/res/110426-",
+ "first": "29/29f7dbab4b09/20261003T012316Z",
+ "gm_copies": [],
+ "keys": [
+  "jtb-sanmi-shinden"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "29/29f7dbab4b09/20261003T012316Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "379ad7ff1c0e787d0ea4c38b58452b659abc10a192018434ce9c7f7e193b7175",
+ "url": "https://tabi.jtb.or.jp/res/110426-"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:39:43+00:00",
+ "final_url": "https://web.archive.org/web/20250907143159id_/https://guide.jr-odekake.net/spot/10714",
+ "first": "55/55ced064539a/20261003T013842Z",
+ "gm_copies": [],
+ "keys": [
+  "jr-odekake-ushikatayado"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "55/55ced064539a/20261003T013842Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND guide.jr-odekake.net",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://guide.jr-odekake.net/spot/10714"
+}

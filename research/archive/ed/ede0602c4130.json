@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:35:30+00:00",
+ "final_url": "",
+ "first": "ed/ede0602c4130/20261003T003530Z",
+ "gm_copies": [],
+ "keys": [
+  "kotobank-nureen"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "ed/ede0602c4130/20261003T003530Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://kotobank.jp/word/%E6%BF%A1%E7%B8%81"
+}

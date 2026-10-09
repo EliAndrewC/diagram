@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:53:03+00:00",
+ "final_url": "https://dfz.nanjing.gov.cn/gzdt/202404/t20240425_4216465.html",
+ "first": "8e/8e8c9cc87b93/20261003T015303Z",
+ "gm_copies": [],
+ "keys": [
+  "nanjing-dfz-dingmazhang"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "8e/8e8c9cc87b93/20261003T015303Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "e11bea57699b5d78ecd6e732d0ddab2f454a9693a03de0f1abd99b4523c809d8",
+ "url": "https://dfz.nanjing.gov.cn/gzdt/202404/t20240425_4216465.html"
+}

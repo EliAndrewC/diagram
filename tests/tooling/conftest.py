@@ -11,5 +11,6 @@ def _sources_home(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.
     """Every tooling test's sources-consulted ledger and page cache are its own (feature 288, `_sources.home`): a
     test that saves a page or reserves an entry never writes the host's `.specify/`, and never reads its cache."""
     monkeypatch.setenv("L7R_SOURCES_HOME", str(tmp_path_factory.mktemp("sources-home")))
+    monkeypatch.setenv("L7R_ATTEMPTS_ROOT", str(tmp_path_factory.mktemp("attempts-root")))  # the attempts log (feature 312)
     monkeypatch.setenv("L7R_ARCHIVE_READS", "0")  # a page read in a test is never archived to the real archive (feature 309)
     monkeypatch.delenv("REFRESH", raising=False)

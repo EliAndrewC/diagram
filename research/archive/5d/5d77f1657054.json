@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:47:19+00:00",
+ "final_url": "https://mobile.reginfo.gov/public/do/eoDownloadDocument?eodoc=true&documentID=7716",
+ "first": "5d/5d77f1657054/20261003T014719Z",
+ "gm_copies": [],
+ "keys": [
+  "downing-2012-stream-widths"
+ ],
+ "notes": [],
+ "outcome": "archived",
+ "path": "5d/5d77f1657054/20261003T014719Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "33f3a9a0ba917160e654074f835500db473a163e1143cb5df2997fba9457f510",
+ "url": "https://mobile.reginfo.gov/public/do/eoDownloadDocument?eodoc=true&documentID=7716"
+}

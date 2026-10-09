@@ -147,7 +147,7 @@ def test_a_registry_url_writes_the_stub_and_marks_the_source_cited(tmp_path, cap
     assert rp.reserve("registry", "plain", a).read_text(encoding="utf-8") == '<h3 id="plain"><code>plain</code></h3>\n' + rp.TAGS_PLACEHOLDER + "\n", "without URL= no pointer"
     assert len(src.read(where)) == 1
     assert rp.main(["glossary", "a term", "--root", str(a), "--url", "https://example.org"]) == 2
-    assert "KIND=registry only" in capsys.readouterr().err
+    assert "KIND=registry or KIND=uncited only" in capsys.readouterr().err
     assert rp.main(["registry", "kyo-jawiki", "--root", str(a), "--url", "https://ja.wikipedia.org/wiki/Kyo"]) == 0
     assert src.read(where)[-1]["outcome"] == "cited:kyo-jawiki"
     assert archived == [("https://ja.wikipedia.org/wiki/Kyo", "kyo-jawiki")]
@@ -182,7 +182,7 @@ def test_registry_tags_are_written_checked_and_refused_by_name(tmp_path, capsys)
     assert rp.main(["registry", "bad-one", "--root", str(a), "--tags", "period=medieval; region=japan; kind=primary"]) == 2
     assert "`period=medieval` - not a period value; the values are premodern, modern-preindustrial" in capsys.readouterr().err
     assert rp.main(["glossary", "a term", "--root", str(a), "--tags", "period=premodern"]) == 2
-    assert "KIND=registry only" in capsys.readouterr().err
+    assert "KIND=registry or KIND=uncited only" in capsys.readouterr().err
     assert rp.main(["registry", "good-one", "--root", str(a), "--tags", "period=timeless; region=general; kind=reference"]) == 0
 
 
@@ -206,3 +206,16 @@ def test_a_registry_entry_reserved_with_its_url_is_archived_and_a_failure_never_
     assert cmd[1].endswith("archive.py") and cmd[2:] == ["url", "https://a.org/p", "--key", "a-key"] and cwd == tmp_path
     assert rp.archive_at_cite(tmp_path, "https://a.org/p", "a-key", runner(1)) == 1
     assert "make archive URL='https://a.org/p' KEY=a-key" in capsys.readouterr().err
+
+
+def test_an_uncited_entry_shares_the_registrys_numbers_and_keys(tmp_path) -> None:
+    """Feature 312 FR-012: a kept page's write-up is numbered in the registry's one sequence, so it keeps its number when
+    it moves to the works cited; and a key is one work whichever part holds it."""
+    mirror, a = _world(tmp_path)
+    reg = rp.reserve("registry", "edo-enwiki", a)
+    unc = rp.reserve("uncited", "kotobank-goningumi", a, url="https://kotobank.jp/word/x", tags="")
+    assert (reg.name, unc.name) == ("0010-edo-enwiki.html", "0020-kotobank-goningumi.html")
+    assert unc.parent.name == "040-uncited-works" and "(https://kotobank.jp/word/x)" in unc.read_text(encoding="utf-8")
+    assert rp.reserve("registry", "next-one", a).name == "0030-next-one.html"
+    assert rp.main(["registry", "kotobank-goningumi", "--root", str(a)]) == 2, "an uncited key is a registry key too"
+    assert rp.main(["uncited", "edo-enwiki", "--root", str(a)]) == 2

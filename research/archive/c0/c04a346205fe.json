@@ -2,14 +2,16 @@
  "captured": "2026-10-02T18:11:52+00:00",
  "final_url": "https://soka.repo.nii.ac.jp/record/35917/files/sokahogaku28_1_2.pdf",
  "first": "c0/c04a346205fe/20261002T151021Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/sokahogaku28_1_2.pdf"
+ ],
  "keys": [
   "kojima-sensoji-bettodai"
  ],
  "notes": [
   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.notes.html"
  ],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "c0/c04a346205fe/20261002T181150Z",
  "reason": "HTTP 406",
  "revision": "",

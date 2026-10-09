@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:59:39+00:00",
+ "final_url": "https://web.archive.org/web/20240223110036id_/https://karuchibe.jp/read/10528/",
+ "first": "16/1648ca9ef00a/20261003T015749Z",
+ "gm_copies": [],
+ "keys": [
+  "karuchibe-kariki-kachiki"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "16/1648ca9ef00a/20261003T015749Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND karuchibe.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://karuchibe.jp/read/10528"
+}

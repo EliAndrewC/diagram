@@ -64,13 +64,30 @@ context. Which checks a change owes: [`record-checks.md`](record-checks.md).
 `<g>b-write.md`); at the eleventh key, finish the question in hand, write the unreached items to `$L7R_CONTINUE` as a
 brief of the same shape, commit and stop. Escapes, logged: `WRITE_CAP_OK='<reason>'`, `KEY_CAP_OK='<reason>'`.
 
-**Every page read is on the sources-consulted ledger** (feature 288). `make source-pages OUT=<dir> URL=<u>
-QUESTION=<NNNN>` prints each page's earlier reads BEFORE it fetches, and caches each page (`REFRESH=1` fetches a copy
-under seven days old again). A page already `rejected` for the same question is not re-read without a reason. Record
-every outcome with `make source-outcome URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable
-[QUESTION=<NNNN>]` (`make reserve KIND=registry KEY=<k> URL=<u>` marks its source `cited:<k>` itself); `make
-sources-consulted URL=<u>` (or `KEY=<regex>`) looks a page up without fetching it. A URL cited any other way is archived
-with `make archive URL=<u>` ([`downloads.md`](downloads.md)).
+**Every page read is on the sources-consulted ledger and the attempts log** (features 288, 312). `make source-pages
+OUT=<dir> URL=<u> QUESTION=<NNNN, or none> SOUGHT="<what you look for>"` prints each page's earlier reads, its earlier
+ATTEMPTS (`research/source-attempts.jsonl`: what each read sought and what came of it) and the filter's verdict on it -
+BEFORE it fetches; it refuses a read with no `SOUGHT=`, and a page already judged `not-found` or `not-applicable` for the
+same question unless `REREAD="<what changed>"` says why. It caches each page (`REFRESH=1` fetches a copy under seven days
+old again). Record every outcome with `make source-outcome URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable
+[QUESTION=<NNNN>]` (`make reserve KIND=registry KEY=<k> URL=<u>` marks its source `cited:<k>` itself); `make attempts
+URL=<u> | KEY=<k> | Q=<NNNN>` and `make sources-consulted URL=<u>` look a page up without fetching it. A WebFetch or a shell
+fetch is recorded too, by `scripts/hooks/blocked-fetch-hooks.sh`, which shows its earlier attempts and says when the archive
+already holds a copy. A URL cited any other way is archived with `make archive URL=<u>` ([`downloads.md`](downloads.md)).
+
+**Blocked and banned sources** (feature 312, the GM 2026-10-02). A domain on `research/blocked-domains.json` (AI-generated
+sites; Grokipedia the first) is refused at every fetch route and every store, and the build refuses a citation of one; a
+pattern on `research/banned-citations.json` is refused at the citation only. Only the GM adds an entry, with the approval
+recorded in it.
+
+**The uncited sources** (feature 312). A page read and never cited is judged once by the `source-filter` (`make uncited
+DO=...`): not kept, with its reasons, as a line of `research/not-kept.jsonl` - never archived; or kept, archived and written
+up in `research/sources/040-uncited-works/` exactly as a cited work is (no `Used for:` line), checked by
+`source-applicability`, and shown in the record's "Uncited sources". When a footnote first cites one, `make cite-uncited
+KEY=<k>` moves it to the works cited; the build refuses a footnote citing it where it stands. A footnote citing a source no
+one can wholly read (`paywalled`, `gm-partial`, `never-read`) stands only on a passage `quote-check` confirmed in the
+readable part, recorded in `research/partial-confirmations.jsonl` - the push and `make quick` refuse it otherwise
+(`scripts/gates/check-partial-citations.py`).
 
 ## A question has a size (feature 250 D14, GM 2026-09-26)
 

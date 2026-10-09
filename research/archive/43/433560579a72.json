@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:11:04+00:00",
+ "final_url": "",
+ "first": "43/433560579a72/20261003T021104Z",
+ "gm_copies": [],
+ "keys": [
+  "mizumaki-museum-mushiro"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "43/433560579a72/20261003T021104Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND town.mizumaki.lg.jp",
+ "revision": "",
+ "sha256": "",
+ "url": "https://town.mizumaki.lg.jp/museum/040/020/020/470/1249.html"
+}

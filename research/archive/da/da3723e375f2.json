@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:40:48+00:00",
+ "final_url": "https://web.archive.org/web/20260824180026id_/https://ja.wikipedia.org/wiki/%E6%B5%85%E8%8D%89%E5%AF%BA",
+ "first": "da/da3723e375f2/20261003T004048Z",
+ "gm_copies": [],
+ "keys": [
+  "sensoji-jawiki"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "da/da3723e375f2/20261003T004048Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://ja.wikipedia.org/wiki/浅草寺"
+}

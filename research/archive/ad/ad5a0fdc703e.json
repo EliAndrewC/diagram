@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:18:39+00:00",
+ "final_url": "",
+ "first": "ad/ad5a0fdc703e/20261003T011839Z",
+ "gm_copies": [],
+ "keys": [
+  "touken-world-ishidoro"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "ad/ad5a0fdc703e/20261003T011839Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://touken-world.jp/tips/127831"
+}

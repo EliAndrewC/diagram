@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:48:12+00:00",
+ "final_url": "https://web.archive.org/web/20250813191213id_/https://www.city.ageo.lg.jp/uploaded/attachment/9862.pdf",
+ "first": "5c/5cb4de076a99/20261003T014812Z",
+ "gm_copies": [],
+ "keys": [
+  "ageo-shukuba-koho-2012"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "5c/5cb4de076a99/20261003T014812Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND city.ageo.lg.jp",
+ "revision": "",
+ "sha256": "b9094f155cbd14db60a5fed64d0810ada3364f9df86e3d9fbf14a5be2ce734fc",
+ "url": "https://city.ageo.lg.jp/uploaded/attachment/9862.pdf"
+}
