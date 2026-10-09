@@ -1594,5 +1594,20 @@
       "cohort_48 after the close.py weld": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 76; the pool as after settle's weld (Kashikawa and Sawada moved, the other three byte-identical to HEAD)",
       "after the weld note": "the planted figures are the settle's kept cells (the sum of settle_cells' lawful polygons, read in the probe before the finish rounds them into plot_rings), not the manifest's rings: Kashikawa's 1,085,783 px² is that sum, its manifest rings 1,085,553; the deltas (+345 Sawada, +1 Kashikawa) agree on both surfaces. The claim's 'every other scrap is taken into a neighbor' holds on the pool by this measurement, not by construction: a scrap with no lawful union would still stay bare, and is a found row if a roll ever leaves one"
     }
+  },
+  "batch8-pair": {
+    "quantity": "batch 8's timing pair (43fe6fde0 -> 856bceb76, waves 74-77)",
+    "observed": "2026-10-09",
+    "source": "dev/perf-log 328-start/328-end, both legs in scratch worktrees back to back; scratchpad/pairs/b8.out (load 1.48 / 1.27 / 1.15)",
+    "command": "PAIRS='b8:43fe6fde0:856bceb76' bash scratchpad/pairs/run.sh; make perf-report AGAINST=328-start",
+    "method": "one pair on a quiet host",
+    "value": {
+      "band": 0,
+      "TOTAL": "-1.2%",
+      "10 households": "-0.9%",
+      "20 households": "-1.7%",
+      "40 households": "-1.6%",
+      "owes": "nothing - no increase above this environment's band-1 line"
+    }
   }
 }
