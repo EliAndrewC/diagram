@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-09T14:11:28Z",
+  "target": "review-accept",
+  "commit": "077e47717",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--barley F5: a confirmation; no action asked"
+}

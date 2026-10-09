@@ -6748,7 +6748,7 @@
   "flag": "",
   "found": "wave 77 re-check (MISLABELED in round 1, its pointer given 0014, DRIFTED in round 2; tier provisional, by verdict)",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "wave": "77",
   "scope": "kept"
  },
  {

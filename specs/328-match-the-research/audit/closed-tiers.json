@@ -553,6 +553,7 @@
  "l7r/diagram/waterfields/polder.py::unpoint_parcels#no parcel tapers to a point": "E1",
  "l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps": "E1",
  "l7r/diagram/waterfields/settle.py::settle_cells#unlawful scraps left bare": "E2",
+ "l7r/diagram/waterfields/settle.py::verdict#toe discipline": "E1",
  "l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least": "E2",
  "l7r/diagram/waterfields/tint.py::judge_tint#tint reads as a basin": "E2",
  "l7r/diagram/waterfields/tint.py::mark_low#wet plots on the drain": "E2",

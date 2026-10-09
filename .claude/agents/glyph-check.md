@@ -58,7 +58,7 @@ Find every instance of the element on the map first (the manifest's records, the
    existing mark is exactly this case.
 3. **Does its FORM read?** Where the element is correct only in its shape: a windbreak is a long narrow belt along a fringe,
    not a blob; a precinct (temple, shrine, burial, market) reads as one composed group; a channel's width depicts RANK, not
-   discharge (research/contents.json#water "Drawn width is RANK" - widths at a junction are never a finding).
+   discharge (research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: "A stroke's width shows its rank in that order, not the water it carries" - widths at a junction are never a finding).
 4. **Does it look right where it now stands?** Judged by what the element IS:
    - ground cover or open ground: is it there for a reason the place supplies, or does it look check-shaped (hugging computed
      gaps, tiling leftovers)?
