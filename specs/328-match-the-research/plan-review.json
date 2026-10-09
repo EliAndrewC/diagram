@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "6c21b9b2177899f0a5a30097bdeb7c0d17b2f3bebf6672e9c56a9e743cd83b17",
+ "plan_sha256": "75d537eaed952fec5ea9edc1e111cede6a7b7173f200f804dc4ff78a6ed7d6e9",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -33,6 +33,42 @@
    "summary": "ranked rows continue in the clone while batch 3's band-3 sign-off and T137/T140 wait for the GM; batch 4's bookend is measured from batch 3's end",
    "class": "within",
    "why": "The GM's standing goal (request.md amendment, 2026-10-07): 'please don't stop working until you hit the cap or the feature is done. If you need to ask me a question then please defer it to the end of the feature'. Stopping would be the departure from it. Constitution XIII keeps the regressed state unpushed, and that still holds: nothing from batch 3 or 4 lands until the sign-off and T137/T140 are settled. Batch 4's bookend is measured from batch 3's end, so that band-3 cause is not mixed into this batch."
+  },
+  {
+   "id": "W56-6 east lanes down to the south-east corner",
+   "summary": "village_grove's and copse_keepouts' east lane over each yard and bed now runs to 50 ft below the plot's south edge",
+   "class": "within",
+   "why": "0038's drawing rule: no crown 'within 50 ft east, west or south of a yard or bed, from the plot's north edge down'; the old rectangle stopped at the south edge and left the south-east corner open. This closes a gap in the rule, carves nothing out."
+  },
+  {
+   "id": "W56-7 Inashiro off _KNOTS_WAITING",
+   "summary": "test_pool_261's waiting list drops Inashiro, since the re-laid ground gathers its lane knot",
+   "class": "within",
+   "why": "It removes a waiver, so the test now holds Inashiro to the no-knot rule; measured (m:wave56-sun-strips knots_and_refusal). Tightening, not narrowing."
+  },
+  {
+   "id": "W56-8 T140 held open until batch 4's pair",
+   "summary": "seed 25 at 40 households draws again after wave 56, but T140 is not closed until batch 4's pair confirms it",
+   "class": "within",
+   "why": "Not closing a task on one roll is what the request needs (the findings fixed). Nothing is excepted, and the regressed state stays unpushed as before."
+  },
+  {
+   "id": "W57-1 scrub ground claim restated, nothing redrawn",
+   "summary": "row 151's 'drop the straw-gold solid fill' is met by restating the claim: the code draws the tile pattern alone",
+   "class": "within",
+   "why": "Measured, not assumed: tiles.cover_path writes fill=url(#pattern) with no stroke, grass_tile has no background rect, cover.py says 'NO solid fill', and no straw-gold fill is in settlement/. The code already matches 0078 ('no solid fill and no outline'), so the drift was in the claim. Fixing the claim makes code and research match, which is what the request asks for."
+  },
+  {
+   "id": "W57-2 woods whole for the scrub, grass-only tile in the fringe",
+   "summary": "the scrub tile (brush dots) now leaves each wood whole; a wood_fringe_tile (the same tufts, no brush dot) fills the WOOD_FRINGE_FT band in the scrub's slot and class",
+   "class": "within",
+   "why": "Row 152's fix as written ('the wood-edge fringe tile carries grass only, no brush dots, inside WOOD_FRINGE_FT'); 0077: grass about 8 ft in under a wood's edge, and 'no brush or pines stand inside a coppice wood'."
+  },
+  {
+   "id": "W57-3 glyph occasion on Kashikawa",
+   "summary": "the redrawn scrub edge is reviewed on Kashikawa at batch 4's close",
+   "class": "within",
+   "why": "Review routing under feature 294's occasions. It does not change which findings are fixed or how."
   }
  ],
  "verdict": "CLEAR"

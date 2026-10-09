@@ -778,7 +778,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Measured** (m:wave56-sun-strips): Inashiro 624 -> 690 crowns, Kuwabata 738 -> 673, Sawada 905 -> 907; the grove farms
   unchanged.
 - **The south-east corner** (impl-drift round 2): both east lanes run down to 50 ft below the plot's south edge, as the west
-  lane does (0038, "from the plot's north edge down"); Inashiro 661, Kuwabata 672, Sawada 920 crowns.
+  lane does (0038, "from the plot's north edge down"); Inashiro 661, Kuwabata 672, Sawada 920 crowns (m:wave56-sun-strips).
 - **Side effects measured** (m:wave56-sun-strips): Inashiro's lane knot, on main's waiting list too, is gathered (off
   `_KNOTS_WAITING`); seed 25 at 40 households draws its web again (T140's refusal), to be confirmed in batch 4's pair before
   T140 is closed - the web moves with the seats.
