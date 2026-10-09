@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "a6004fdc6",
+    "label": "328-start",
+    "utc": "20261009T071450Z"
+  },
+  "binding": "5d07fbede34470a64e6260a07e678dd2dc62b1cc921c6ff118ef0a20a08f9f3e",
+  "criteria": {
+    "commensurate": "Yes. TOTAL +2.4% (16.7 -> 17.1 s); 10 households -5.2%, 20 households -3.8%, 40 households +3.7%. Seed 47 +11.9%: its web returns to the 0.80-0.86 s it held for most of feature 328, from batch 4's 0.45 s dip. 40 households seed 25 +15.0% (web +1.4 s) is one roll; the other 40-household seeds are +5.5%, +5.3% and -9.0%. The gain is a fixture no longer drawn wrong on every shipped map, not a cosmetic change. A few percent overall, with two seeds just over the line, is in proportion.",
+    "necessary": "Yes. Wave 62 (fe203d8bc) stops the privy's slide at its gable. That is a correctness fix: two stable privies stood 38 ft past their gable on Kashikawa, against research 0047's 'while the whole privy still stands along the wall'. Wave 63 draws the 2 ft stone footing research 0190 records. Every measured cost is downstream of the privies now standing where they belong. The ways out try more candidates (seed 25 homesteads, admitted 28 -> 301 calls). The web routes round them (seed 47, _route 2 -> 5). The board's caption seats meet them (seed 47, 2 -> 15 proofs). One roll's web is re-settled after straighten_joints (seed 25 at 40 households). No web, label or way-out code changed in the batch.",
+    "no_way_around": "None shown. (1) Caption proof: it is already indexed. I read labels/obstacles.py ObstacleIndex.score: obstacles and way segments filed in a grid, box-gap pruned, each segment measured once (features 286, 287). The cost scales with seats tried, 2 -> 15 different captions, each memoized by seat. (2) Seed 25 second web pass: resettle_straightened runs the full settle_the_web only when straighten_joints rewrites a joint (the start leg's call did 0.12 s; here it is 3.19 s). A rule-targeted settle was measured slower on 2 of 3 pool maps and withdrawn (specs/297 research R12: Inashiro 0.40 vs 0.45 s, Sawada 0.51 vs 0.60 s, Kashikawa 1.22 vs 1.14 s, full vs targeted). A re-settle scoped to the rewritten joint's area has not been measured. It is a possible future saving in shared web code that this batch did not touch, not a cheaper version of this batch's change. (3) The cheaper alternative to wave 62 itself is privies drawn past their gables, which is wrong."
+  },
+  "end": {
+    "commit": "bf7558093",
+    "label": "328-end",
+    "utc": "20261009T071752Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T073419Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -7.4,
+          "39": -6.9,
+          "4": -6.7,
+          "47": 0.0
+        },
+        "total_pct": -5.2
+      },
+      "20": {
+        "seeds": {
+          "25": -7.7,
+          "39": 10.0,
+          "4": -11.9,
+          "47": -1.8
+        },
+        "total_pct": -3.8
+      },
+      "40": {
+        "seeds": {
+          "25": 15.0,
+          "39": 5.3,
+          "4": 5.5,
+          "47": -9.0
+        },
+        "total_pct": 3.7
+      }
+    },
+    "seeds": {
+      "25": 10.0,
+      "39": -2.7,
+      "4": -8.3,
+      "47": 11.9
+    },
+    "total_pct": 2.4
+  },
+  "note": "Round 2, after the explanation was re-recorded (20261009T073231Z). Reviewer bisect in detached worktrees aud-b5/{start,w62,w63,w64,end}. Band 2; no band 3 crossing.",
+  "verdict": "justified"
+}

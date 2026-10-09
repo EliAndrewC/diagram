@@ -1088,5 +1088,86 @@
       "stream": "drawing the crops from R refused Kashikawa (WebRefused, needle_loops); from crop_stream, R unchanged, all five draw; the first crop_stream (eight state words) repeated itself after R drew - reseeded from the whole state, one stream per map threaded through every band; the cohort re-run: 48/54, the same six",
       "end_split_on_hamlets": "none moves: every kept hamlet draws at grain 2 (ftpx 1.0), where the split already ran; it changes only a map at grain 1 (2 ft/px)"
     }
+  },
+  "glyph-notice-board-F1-footing-drawn": {
+    "verifies": "F1",
+    "subject": "glyph-check--notice-board",
+    "answers": "8f4d4c87758f",
+    "quantity": "the notice board's stone footing and fence line, drawn",
+    "observed": "2026-10-09",
+    "method": "wave 63's own test and the five hamlets rerolled (m:wave63-board-footing)",
+    "value": {
+      "drawn box at 1 ft/px": [
+        20,
+        10
+      ],
+      "footing": "KOSATSUBA_FOOTING_FT 2.0 all round, a dashed fence line at its edge, the roofed frame on it",
+      "record": "m:wave63-board-footing"
+    },
+    "source": "pool/hamlets/inashiro/inashiro.json kosatsuba (vw, vh) and structures/fixtures/boards.py KOSATSUBA_FOOTING_FT, wave 63's test"
+  },
+  "glyph-privy-F1-slide-bounded": {
+    "verifies": "F1",
+    "subject": "glyph-check--privy",
+    "answers": "f2318e909ff7",
+    "quantity": "privies slid past their gable on Kashikawa",
+    "observed": "2026-10-09",
+    "method": "wave 62: the slide runs only while the whole seat stands along its wall; per-household probe (m:wave62-slide-bounded)",
+    "value": {
+      "slid past the gable": 0,
+      "households whose rolled stable or front place is refused": "16 of 16, the threshing yard covering the spot - they take another attested place; laying the yard so the privy keeps its place is row 564 (E3)",
+      "record": "m:wave62-slide-bounded"
+    },
+    "source": "pool/hamlets/kashikawa/kashikawa.json privies against their houses' walls, and the wave 62 per-household probe (privy_places)"
+  },
+  "batch5-pair-causes": {
+    "quantity": "batch 5's timing pair (a6004fdc6 -> bf7558093, waves 62-65): band 2, and the causes of its two crossings",
+    "observed": "2026-10-09",
+    "source": "dev/perf-log 328-start/328-end (the pair, both legs in scratch worktrees back to back); make perf-profile in a scratch worktree at each of the batch's commits",
+    "method": "make perf-report AGAINST=328-start; make perf-profile SEED=47 STAGE=notice on both legs; make perf-profile SEED=25 HOUSEHOLDS=40 STAGE=web on both legs and at fe203d8bc, d5e626eee and f39fcea65",
+    "value": {
+      "pair": {
+        "reference TOTAL": "+2.4% (16.7 -> 17.1 s)",
+        "10 households": "-5.2%",
+        "20 households": "-3.8%",
+        "40 households": "+3.7%",
+        "crossed": [
+          "seed 47 +11.9% (web +0.3 s, notice +0.2 s)",
+          "40 households seed 25 +15.0% (web +1.4 s)"
+        ]
+      },
+      "notice_seed47_cprofile_s": {
+        "a6004fdc6": 0.22,
+        "fe203d8bc (wave 62)": 0.77,
+        "d5e626eee (wave 63)": 0.88,
+        "f39fcea65 (wave 64)": 0.85,
+        "bf7558093": 0.83,
+        "caption proofs": {
+          "a6004fdc6": 2,
+          "fe203d8bc": 15,
+          "d5e626eee": 17,
+          "f39fcea65": 17,
+          "bf7558093": 17
+        },
+        "cause": "wave 62's privy move (the privies no longer slid past their gables stand at other attested places, near more of the board's candidate seats, so 15 seats' captions are proved before one is clean, against 2) - and about 0.1 s wave 63's larger drawn footing; wave 64's proof against the drawn board costs nothing measurable (perf-audit, batch 5, round 1, which corrected this record's first attribution to wave 64)",
+        "no way around": "the proof is already indexed (ObstacleIndex: obstacles filed in a grid, way segments filed and box-pruned, each segment measured once - features 286, 287); the cost is the number of seats tried, each a different caption"
+      },
+      "web_seed25_hh40_cprofile_s": {
+        "a6004fdc6": 4.8,
+        "fe203d8bc (wave 62)": 8.7,
+        "d5e626eee (wave 63)": 8.7,
+        "f39fcea65 (wave 64)": 8.8,
+        "bf7558093": 8.6,
+        "cause": "wave 62: the privy no longer slides past its gable and stands at another attested place, and on this roll the web takes a second settling pass (resettle_straightened, settle_knots) the start leg never needed - no web code changed in the batch; an input-driven path",
+        "no way around": "the second pass is the whole settle_the_web after straighten_joints rewrites a joint; re-settling only what the law names broken was measured SLOWER on two of three pool maps and withdrawn (feature 297, research R12, recorded at settle.py's settle loop)"
+      },
+      "web_seed47_cprofile_s": {
+        "a6004fdc6": 1.17,
+        "fe203d8bc (wave 62)": 1.96,
+        "bf7558093": 1.95,
+        "cause": "wave 62's privy move: `_route` and `lattice_search` run 5 times against 2 (identical call counts at wave 62 and the end); seed 47's web returns to the 0.80-0.86 s band it held for most of feature 328 after batch 4's dip to 0.45 s (perf-audit, batch 5)"
+      },
+      "open_saving": "a re-settle limited to the area around the joint straighten_joints rewrote has never been measured (R12 measured re-settling only the steps for the rules found broken); a possible saving in shared web code (perf-audit, batch 5 round 2)"
+    }
   }
 }

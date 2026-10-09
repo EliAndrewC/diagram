@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-09T07:20:42Z",
+  "target": "review-accept",
+  "commit": "a638ae0fb",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--notice-board F6: a nitpick on an earlier disposition record; its F1 is now answered by the footing drawn (m:glyph-notice-board-F1-footing-drawn)"
+}

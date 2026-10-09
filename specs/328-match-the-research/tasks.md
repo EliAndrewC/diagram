@@ -5,10 +5,10 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
-- glyph-redrawn: scrub and rough grazing on kashikawa - wave 57: the band under a wood's edge drawn grass only, no brush (0077); batch 4's close
-- (reviewed NEEDS-WORK at batch 4's close, F1: slides past the gable) placement-changed: privy on kashikawa - wave 61, then wave 62: the rolled place slid along its wall only while it stands by the wall (0047; m:wave62-slide-bounded); batch 5's close, round 2
-- glyph-redrawn: notice board on inashiro - wave 63: drawn on its stone footing inside a fence line, 2 ft wider all round (0190); batch 5's close
-- placement-changed: copse on kuwabata - wave 56: the seats off every yard's and bed's sun at the tree's 50 ft south and east (0038); batch 4's close
+- (reviewed PASS at batch 4's close, 2026-10-09) glyph-redrawn: scrub and rough grazing on kashikawa - wave 57: the band under a wood's edge drawn grass only, no brush (0077); batch 4's close
+- (reviewed PASS at batch 5's close, 2026-10-09, round 2) placement-changed: privy on kashikawa - wave 61, then wave 62: the rolled place slid along its wall only while it stands by the wall (0047; m:wave62-slide-bounded); batch 5's close, round 2 (batch 4's round NEEDS-WORK, F1: slides past the gable - answered by wave 62)
+- (reviewed PASS at batch 5's close, 2026-10-09; F1 nitpick filed as a found row) glyph-redrawn: notice board on inashiro - wave 63: drawn on its stone footing inside a fence line, 2 ft wider all round (0190); batch 5's close
+- (reviewed PASS at batch 4's close, 2026-10-09) placement-changed: copse on kuwabata - wave 56: the seats off every yard's and bed's sun at the tree's 50 ft south and east (0038); batch 4's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
 - (reviewed PASS at batch 3's close round 2, 2026-10-08) glyph-redrawn: homestead grove on mizuguchi - wave 53: the crown density one to ~180 sq ft real (0080), drawn crowns 546 -> 337; wave 55: topped up to that density as DRAWN (round 1 NEEDS-WORK: ~400 sq ft a crown drawn); batch 3's close, round 2
