@@ -613,7 +613,7 @@ class GroundCoverMixin:
                 # the outer half at the tile's density, the inner half at `WOOD_FRINGE_THIN_KEEP` of it
                 _fringe = [wd.difference(wd.buffer(-WOOD_FRINGE_FT * bs / 2.0)) for wd in _woods]
                 _fringe_in = [wd.buffer(-WOOD_FRINGE_FT * bs / 2.0).difference(wd.buffer(-WOOD_FRINGE_FT * bs)) for wd in _woods]
-                _cover_bare += [Point(cp["cx"], cp["cy"]).buffer(cp["r"] + 2.0) for cp in crescents]
+                _cover_bare += [Point(cp["cx"], cp["cy"]).buffer(cp["r"] + 2.0 * bs) for cp in crescents]  # 2 ft at the map's grain
                 if pond:
                     _cover_bare.append(shapely.affinity.scale(Point(pond[0], pond[1]).buffer(1.0), pond[2], pond[3]))
                 if role != "pasture":  # the SCRAGGLY pines belong to cut-over scrub, NOT to open pasture

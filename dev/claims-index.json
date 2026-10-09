@@ -50308,14 +50308,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#no coppice crown on a pond or a crescent pond (the woodland throws go through the same water test, `_sparse`; the \"off the ponds\" claim names only scrub and pine)": {
-  "code": "9b8c8452602f1490",
-  "core": "9b8c8452602f1490",
-  "date": "2026-10-08",
-  "note": "no coppice crown on a pond or a crescent pond (the woodland throws go through the same water test, `_sparse`; the \"off the ponds\" claim names only scrub and pine)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#no crown in a yard's sun": {
   "code": "78df1009f98fd2cc",
   "core": "9b8c8452602f1490",
@@ -50347,16 +50339,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#off the ponds' open water": {
-  "code": "6f63d275460f1ae5",
+  "code": "81fcf9cbaf27b363",
   "core": "9b8c8452602f1490",
   "date": "2026-10-08",
-  "note": "UNRESEARCHED holds: none of the cited pages says where scrub stands against a pond or a crescent pond (0074 sends only the reeds to the water's edge); the code keeps every scatter throw off both, and leaves the grass bare 2 ft past a crescent pond's rim",
+  "note": "UNRESEARCHED is correct; the claim now covers what the code does: `_sparse` keeps woodland crowns and scrub pines off the pond and the crescent ponds, and the grass is left bare over the pond and over a crescent pond out to its radius + 2.0 past the rim; none of the cited pages mentions ponds",
   "pages": {},
   "research": "",
-  "rests": [
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1",
-   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:6b58d2945bf79d57"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color": {
