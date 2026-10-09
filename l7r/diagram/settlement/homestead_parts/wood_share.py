@@ -95,7 +95,7 @@ def copse_keepouts(
             half the diagonal plus the clump's radius and 2 px
         copse off the wellhead - UNRESEARCHED: its drawn half-size plus 1.05 clumps
         plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the copse's own SEAT keep-outs
-            (`village_grove`): a tree's 50 ft (`CANOPY_SHADE_FT`) south of each yard and bed, `EAST_LANE_FT` (50 ft) east of each yard and bed, and west and southwest
+            (`village_grove`): a tree's 50 ft (`CANOPY_SHADE_FT`) south of each yard and bed, `EAST_LANE_FT` (50 ft) east of each yard and bed down to 50 ft below it, and west and southwest
             of each yard and bed at the map's afternoon lane; the page's 50 ft round every crown is held at the planting
             (`_sun_keepouts`)
     """
@@ -117,7 +117,7 @@ def copse_keepouts(
         if g is None:
             continue
         east, half = g[0] + g[2] / 2.0, g[3] / 2.0 + cr + 2.0
-        rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_FT * ppf + cr + m, g[1] + half + m))
+        rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_FT * ppf + cr + m, g[1] + half + EAST_LANE_FT * ppf + m))  # and the southeast corner
     # ...AND THE AFTERNOON LANE WEST AND SOUTHWEST OF A YARD OR A BED, where the map declares one (feature 310 put it on the copse,
     # `village_grove`'s `west`, and not here: a seat reserved in it was never planted - the shipped hamlets lost 16-34 seats
     # each, and on Inashiro a neighbor's path routed round two of them bulged 27 ft round bare scrub; feature 317)

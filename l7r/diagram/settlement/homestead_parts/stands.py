@@ -266,7 +266,7 @@ class StandsMixin:
             clumps off the road - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the copse and the groves kept off the main road
             clumps off lanes - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: where a lane crosses the belt the planting resumes on both sides
             clump crown-reach margin off a way - UNRESEARCHED: the crown reach kept clear of lanes, streets and the road, the margin's width
-            clumps off the gardens' east - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft (`EAST_REACH_FT`) east of a yard or bed
+            clumps off the gardens' east - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft (`EAST_REACH_FT`) east of a yard or bed, from its north edge down to 50 ft below its south edge
             copse stragglers dropped to its stocking - UNRESEARCHED: `stocked_copse` drops the farthest clumps until the copse holds half a clump plus 4 px
             one grove off another's - UNRESEARCHED: one grove's clumps kept off another's by the sum of their canopy reaches
             belt alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: belt clumps standing in the toe or waterside marsh drawn as alder
@@ -445,7 +445,9 @@ class StandsMixin:
             circles=occ,
             displacers=occ_grove,
             rects=[(sx - shw, se - cr - 2, sx + shw, se + _sun_depth + 2 + cr) for sx, se, shw in sun]
-            + [(ex - cr - 2, ey - ehh, ex + self.px(EAST_REACH_FT) + cr, ey + ehh) for ex, ey, ehh in east]
+            + [
+                (ex - cr - 2, ey - ehh, ex + self.px(EAST_REACH_FT) + cr, ey + ehh + self.px(EAST_REACH_FT)) for ex, ey, ehh in east
+            ]  # down past the south edge too: the southeast corner (0038, "from the plot's north edge down")
             + [(wx0 - wl - cr - 3, wy0 - cr - 1, wx0 + cr + 1, wy1 + wl + cr + 1) for wx0, wy0, wy1 in west]
             # ...AND OFF GROUND SOMETHING ELSE HAS RESERVED (settlement-review, feature 230 pass 12). `reserved`
             # is a rectangle a later stage is holding - today the pocket the map's own NAME will stand in. The

@@ -48206,19 +48206,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east": {
-  "code": "f7dc4e4a080745b1",
+  "code": "a35d9ac9e6212176",
   "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "claim says \"east of a bed\" but `east` now covers threshing_yards and gardens (in step with 0038's \"50 ft east ... of a yard or bed\"); label should read: no crown within 50 ft (`EAST_REACH_FT`) east of a yard or bed",
+  "note": "the 50 ft east lane is right and covers yards too, but `(ex - cr - 2, ey - ehh, ex + px(EAST_REACH_FT) + cr, ey + ehh)` stops at the plot's south edge. The page keeps every crown \"within 50 ft east, west or south of a yard or bed, from the plot's north edge down\", and the west lane already runs to 50 ft below the south edge. Nothing keeps a seat out of the 50 ft southeast corner, so either the east lane should run to `ey + ehh + 50 ft` or the claim should record the corner as a deviation. Separately, the claim's label says \"gardens' east\" when the code covers yards and beds.",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:0f20160d442c6378",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the road": {
   "code": "e7c546b25509d466",
@@ -48864,17 +48866,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": {
-  "code": "e45e00a2f06e94a1",
+  "code": "e428639ae27e5c4d",
   "core": "c49c058705369a69",
   "date": "2026-10-08",
-  "note": "code now sets `self.sun_depth = CANOPY_SHADE_FT` (50 ft) always, with no 22 ft default and no map-declared corridor; claim should be 0038 drawing: a tree's 50 ft south of a yard or bed",
-  "pages": {},
-  "research": "",
+  "note": "`sun_depth = CANOPY_SHADE_FT` (50 ft), applied in feet by `copse_keepouts`. That is the tree's 50 ft south and matches `village_grove`'s `px(CANOPY_SHADE_FT)` strip; no 22 ft default is left.",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.commit#plumbing": {
   "code": "35922c8d9fdc90bb",
@@ -49011,19 +49015,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": {
-  "code": "c699deec6d765dbb",
+  "code": "d723bb9f3d6b4d5b",
   "core": "5938399161dd5f72",
   "date": "2026-10-08",
-  "note": "claim says `EAST_LANE_FT` \"east of each bed\" but the loop now covers the yard too (0038: \"east, west or south of a yard or bed\"); label should read east of each yard and bed",
+  "note": "the 50 ft south strip, the 50 ft east lane and the west/southwest lane match `village_grove`'s seat keep-outs. But the east rect `(east - cr - 2 - m, g[1] - half - m, east + EAST_LANE_FT*ppf + cr + m, g[1] + half + m)` ends at the plot's south edge, and the south strip is only the plot's width. So the 50 ft southeast corner, which the page counts as \"from the plot's north edge down\", is open to a reserved seat. If `_sun_keepouts` holds crowns there, such a seat is reserved and never planted (the same mismatch feature 328 fixed for the south depth).",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::crown_cells#plumbing": {
   "code": "761ccaa8f2401896",

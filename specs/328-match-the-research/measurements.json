@@ -588,7 +588,16 @@
     ]
    },
    "kashikawa": "unchanged (no village grove)",
-   "mizuguchi": "unchanged (no village grove)"
+   "mizuguchi": "unchanged (no village grove)",
+   "after_southeast_corner": {
+    "inashiro": 661,
+    "kuwabata": 672,
+    "sawada": 920
+   },
+   "knots_and_refusal": {
+    "inashiro_knot": "gathered (off _KNOTS_WAITING)",
+    "seed25_40hh": "draws (make cohort N=1 SEED=25 HOUSEHOLDS=40: clean)"
+   }
   }
  }
 }

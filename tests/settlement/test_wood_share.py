@@ -52,7 +52,9 @@ def test_the_keepouts_are_the_copses_own_figures_a_hair_stricter() -> None:
     assert (60.0, 150.0, 12.0 + 22.0 * 1.05 + 1.0 + BAR_MARGIN_PX) in circles, "the wellhead: its drawn half-size and 1.05 clumps"
     yard_sun = (100.0 - 33.0 - BAR_MARGIN_PX, 150.0 - 13.0 - BAR_MARGIN_PX, 100.0 + 33.0 + BAR_MARGIN_PX, 150.0 + 39.0 + 13.0 + BAR_MARGIN_PX)
     assert rects[0] == yard_sun, "the yard's sunny strip, 39 ft deep"
-    assert rects[-1] == (150.0 - 13.0 - BAR_MARGIN_PX, 100.0 - 23.0 - BAR_MARGIN_PX, 150.0 + 50.0 + 11.0 + BAR_MARGIN_PX, 100.0 + 23.0 + BAR_MARGIN_PX), "the bed's morning lane, 50 ft"
+    assert rects[-1] == (150.0 - 13.0 - BAR_MARGIN_PX, 100.0 - 23.0 - BAR_MARGIN_PX, 150.0 + 50.0 + 11.0 + BAR_MARGIN_PX, 100.0 + 23.0 + 50.0 + BAR_MARGIN_PX), (
+        "the bed's morning lane, 50 ft, down past its south edge (wave 56)"
+    )
     assert in_keepouts(100.0, 140.0, circles, rects) and in_keepouts(160.0, 100.0, circles, rects)
     assert not in_keepouts(100.0, 30.0, circles, rects), "behind the house, clear of every keep-out"
     assert not in_keepouts(100.0, 100.0 - 38.5, [(100.0, 100.0, 38.5)], []), "a disc's edge is not inside it (the planting's strict test)"
@@ -386,4 +388,4 @@ def test_the_seats_keep_a_trees_fifty_feet_south_and_east_of_every_plot() -> Non
     _c, rects = copse_keepouts(parts, 22.0, CANOPY_SHADE_FT, 12.0)
     m = BAR_MARGIN_PX
     assert rects[0][3] == 150.0 + 50.0 + 13.0 + m, "the yard's strip 50 ft deep"
-    assert (120.0 - 13.0 - m, 140.0 - 23.0 - m, 120.0 + 50.0 + 11.0 + m, 140.0 + 23.0 + m) in rects, "the yard's morning lane, 50 ft east"
+    assert (120.0 - 13.0 - m, 140.0 - 23.0 - m, 120.0 + 50.0 + 11.0 + m, 140.0 + 23.0 + 50.0 + m) in rects, "the yard's morning lane, 50 ft east and down to its southeast corner"

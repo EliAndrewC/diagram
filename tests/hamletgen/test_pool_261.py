@@ -271,7 +271,9 @@ def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, t
 # starts on the spur 9.4 ft from where it leaves lane 10, 16.1 ft from that house's door, and every gather of the spur onto
 # the door splits the web (the field way hangs on it). Main carries Inashiro here too. (Kuwabata's knot of the same wave was
 # fixed at seating, `gap_ways.KNOTTED_TRIES`.)
-_KNOTS_WAITING = {"sawada", "inashiro"}
+# Wave 56 (the copse's seats off the plots' sun at the tree's 50 ft) re-laid Inashiro's homesteads' ground, and its knot is
+# gathered: off the list (main still carries it).
+_KNOTS_WAITING = {"sawada"}
 
 
 @pytest.mark.parametrize(
