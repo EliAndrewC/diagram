@@ -813,8 +813,11 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   plain houses keep a byre) excludes nothing a scripted hamlet seats, every house plain; row 584 (the storehouse) re-tiered
   E3 on measure - its no-lot clause runs only on the legacy roller, and its live clause (a scattered farm's kura drawn on the
   north wall unreserved, its bundle laid with shed=False) is a change across the bundle, the scattered layout's turn, the
-  fixtures and the house record. Row 594 (the inner stable's mirror forms) runs on Mizuguchi (courtyard byres) and is wave
-  59: a knob, with its title-card choices and modals.
+  fixtures and the house record. Row 594 (the inner stable's mirror forms, run on Mizuguchi) re-tiered E3 on measure: a knob
+  for the wing's end was written and reverted - 0048 joins the stable to the house's lower (doma) end and its mirror forms
+  mirror the whole house plan; our houses keep the doma at -x, so the left end tried first is the lower end, in step, and the
+  mirror form needs the plan mirrored (doma, stable, privy's stable seat, bath walls) as one knob. The never-arriving approach
+  of `kosatsuba_anchor` claimed (impl-drift).
 - **Occasions**: none - nothing a hamlet draws moves.
 - **Verification**: the anchor test (red on the old signature); `impl-drift`; `spec-fidelity`.
 

@@ -216,6 +216,7 @@ def kosatsuba_anchor(M: Any, placement: str, ftpx: float = 1.0) -> tuple[float, 
         board placements - research/questions/0190-notice-boards-kosatsuba.html: center, entrance, or the headman's gate (frontage)
         entrance anchor - research/questions/0190-notice-boards-kosatsuba.html: the handover, else where the approach first reaches a dwelling
         reaching the houses - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way reaches a farmhouse within 60 ft of it; the code counts the approach within `KOSATSUBA_ENTRANCE_REACH_FT`, 60 ft
+        an approach that never arrives - UNRESEARCHED: anchored at its point nearest the houses
     """
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
     if not houses or placement == "center":

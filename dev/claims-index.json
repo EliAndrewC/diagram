@@ -58709,28 +58709,34 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#an approach that never comes within reach of a dwelling is anchored at its point nearest the houses": {
+  "code": "2c257913dea874dd",
+  "core": "2c257913dea874dd",
+  "date": "2026-10-08",
+  "note": "an approach that never comes within reach of a dwelling is anchored at its point nearest the houses",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements": {
-  "code": "caf9177e2b2975d7",
-  "core": "c293f1e89963bfd8",
-  "date": "2026-10-07",
-  "note": "the question attests bridge ends as a fourth village form (\"as well as bridge ends\", \"at the foot of bridges\"), but the code offers only center/entrance/frontage; the knob should add a bridge-end form or the claim should record leaving it out",
+  "code": "af349b08c2b57ffa",
+  "core": "2c257913dea874dd",
+  "date": "2026-10-08",
+  "note": "the three forms (center, entrance, headman's gate) are the attested sites, and the placement comes in as a knob",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
-   "0190-notice-boards-kosatsuba.html:cd8d9ce0b74bb55f",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#entrance anchor": {
-  "code": "9334289228003073",
-  "core": "c293f1e89963bfd8",
-  "date": "2026-10-07",
-  "note": "boards attested at village and town entrances; the handover-or-first-arrival point is how the code finds that entrance",
+  "code": "195cc30641de9f8a",
+  "core": "2c257913dea874dd",
+  "date": "2026-10-08",
+  "note": "the entrance is the attested site; anchoring it at the handover, or else at the approach's first reach, is a calibrated choice within that finding",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
@@ -58743,10 +58749,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses": {
-  "code": "a807e45bc12633ed",
-  "core": "c293f1e89963bfd8",
-  "date": "2026-10-07",
-  "note": "`math.hypot(...) <= KOSATSUBA_ENTRANCE_REACH_FT` compares map-pixel distances from M's house x/y with a constant in feet, with no px() conversion, so the reach is 60 ft only at 1 ft/px (120 ft on a 2 ft/px village); it should be s.px(60) against the page's 60 ft GUESS",
+  "code": "045f9ecf90ca16fd",
+  "core": "2c257913dea874dd",
+  "date": "2026-10-08",
+  "note": "the drawing page records 60 ft to a farmhouse as part of the GUESS; the reach is now compared in px (reach / ftpx)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -58754,7 +58760,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
   "code": "0187fe9520777fec",
@@ -59271,20 +59277,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#anchored board band": {
-  "code": "a57f5454954483d1",
-  "core": "28abbbfc2b8762ae",
-  "date": "2026-10-07",
-  "note": "60 ft band; the research is silent",
+  "code": "57aadfb90d252248",
+  "core": "367f9dea6d71f505",
+  "date": "2026-10-08",
+  "note": "the pages are silent on a 60 ft band around the anchor",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#board may stand in shade": {
-  "code": "d9d0cb981efa6e8d",
-  "core": "28abbbfc2b8762ae",
-  "date": "2026-10-07",
-  "note": "shaded seats admitted",
+  "code": "a60a54a47b5bf203",
+  "core": "367f9dea6d71f505",
+  "date": "2026-10-08",
+  "note": "shaded seats are admitted, as the drawing page allows",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
@@ -59297,79 +59303,81 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#entrance board on the approach": {
-  "code": "5f7dbabea220379b",
-  "core": "28abbbfc2b8762ae",
-  "date": "2026-10-07",
-  "note": "the research is silent",
+  "code": "48b1fb17737c1b90",
+  "core": "367f9dea6d71f505",
+  "date": "2026-10-08",
+  "note": "the pages are silent on preferring approach seats at a handover",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#handover band": {
-  "code": "fb926f882ef9c805",
-  "core": "28abbbfc2b8762ae",
-  "date": "2026-10-07",
-  "note": "20 ft; the research is silent",
+  "code": "072d62cd0c623ef6",
+  "core": "367f9dea6d71f505",
+  "date": "2026-10-08",
+  "note": "the pages are silent on a 20 ft band at the handover",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#open ground preferred": {
-  "code": "f9e635a411099c17",
-  "core": "28abbbfc2b8762ae",
-  "date": "2026-10-07",
-  "note": "the research is silent on boards and trees",
+  "code": "4f5d704a1f0520fd",
+  "core": "367f9dea6d71f505",
+  "date": "2026-10-08",
+  "note": "nothing says whether open ground was preferred to shade, so GUESS holds",
   "pages": {},
   "research": "",
   "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0",
    "0190-notice-boards-kosatsuba.html:ca444adc7dad6cb2"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#placement chooses the ground": {
-  "code": "edac66fbda0547a6",
-  "core": "28abbbfc2b8762ae",
-  "date": "2026-10-07",
-  "note": "the knob takes entrance/frontage/center, but the question also attests bridge ends for villages; the bridge-end form is never offered",
+  "code": "f5c9b54d2e9fbd6f",
+  "core": "367f9dea6d71f505",
+  "date": "2026-10-08",
+  "note": "entrance, frontage and center are the attested sites, and the anchor chooses the ground",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#roadside first": {
-  "code": "cc3913ce6cf2d9d3",
-  "core": "28abbbfc2b8762ae",
-  "date": "2026-10-07",
-  "note": "verge seats within 6 ft at the lane tiers, widened only where none fit",
+  "code": "fec7f585564c60eb",
+  "core": "367f9dea6d71f505",
+  "date": "2026-10-08",
+  "note": "at the lane tiers only seats within the 6 ft verge (KOSATSUBA_VERGE_FT / ftpx) compete when any fit, as the drawing page says",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
    "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235",
    "0190-notice-boards-kosatsuba.html:c1b40e481f7a5b1c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#traffic floor": {
-  "code": "000c94471c8cb50a",
-  "core": "28abbbfc2b8762ae",
-  "date": "2026-10-07",
-  "note": "the 60% floor is unresearched",
+  "code": "ab4e6893bd6eb49f",
+  "core": "367f9dea6d71f505",
+  "date": "2026-10-08",
+  "note": "the pages say the busiest site wins but give no 60% floor, so UNRESEARCHED holds",
   "pages": {},
   "research": "",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
-   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171"
+   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171",
+   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764"
   ],
   "verdict": "IN-STEP"
  },

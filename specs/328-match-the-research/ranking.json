@@ -9080,20 +9080,6 @@
   "scope": "deferred"
  },
  {
-  "key": "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._courtyard_byre_seat#a side wall, toward the work yard",
-  "tier": "E2",
-  "fix": "roll which side wall (left or right) the inner stable tries first, per settlement, for 0048's two mirror forms",
-  "files": [
-   "l7r/diagram/settlement/shrines_wells/byres.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#only plain houses keep a byre",
   "tier": "E2",
   "fix": "let the headman's and large houses keep a byre (stable wing common among upper households), not kind == 'plain' only (wave 58, measured: every house a scripted hamlet seats is kind 'plain' with no role - the five hamlets 15/20/16/12/19 plain - so the filter excludes nothing in scope; only the deferred legacy roller seats a big or headman house)",
@@ -13017,6 +13003,20 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._courtyard_byre_seat#a side wall, toward the work yard",
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 59, 2026-10-08): 0048 has the stable join the house's LOWER end (the doma, the earth-floored work end) and records both mirror forms of the L - mirror images of the whole house plan, doma left or right. Our maps draw every farmhouse with its doma at -x (fixture_seats: 'the shed end of the house, where the doma and its stable are'), so the wing tried at the left (-x) end first IS the lower end, in step; rolling the end alone would put the stable at the upper end. The mirror form needs the house plan mirrored per settlement - the doma end, the stable, the privy's stable seat and the bath room's walls together - a knob with its title-card choice and modals",
+  "files": [
+   "l7r/diagram/settlement/shrines_wells/byres.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._yard_shed_seat#outer stable a ken off the back wall or a flank",
