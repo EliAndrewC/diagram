@@ -178,6 +178,7 @@ def fixture_ft(kind: str, forms: FixtureForms, roll: Callable[[float], float] | 
     size (`FIXTURE_FT`), the pit's, the crown's or the retirement house's.
 
     Research:
+        one-ken default - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html, research/questions/0044-baths-on-the-farm-furo.drawing.html: a privy or bath room with no size rolled (a caller passing no roll) is 6 x 6 ft (`FIXTURE_FT`) - one of the sixteen privy sizes, and the bath page's one tsubo, the low end of its range; a hamlet always rolls its own
         privy size - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: rolled from the sixteen
         bath room size - research/questions/0044-baths-on-the-farm-furo.drawing.html: 6 ft out by 6 to 12 ft along
         persimmon crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:

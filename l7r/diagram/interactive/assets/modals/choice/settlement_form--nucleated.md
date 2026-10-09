@@ -19,8 +19,8 @@ Guesses:
 
 Depiction: The map gathers the houses together on the dry ground at the edge of the fields, each house reached by a
 lane, and shelters the houses behind a belt of trees along their windward edge rather than a grove at each farm, a belt that runs on past the edge of the map where it meets it;
-clumps of trees, the dooryard copse, stand in the gaps between the farms. The houses are drawn as a compact cluster,
-whatever its shape, never strung out in a wide, hollow arc that leaves houses stranded from the fields; a village is held to a least packing, which a hamlet is not; how densely
+clumps of trees, the dooryard copse, stand in the gaps between the farms; the map counts the copse as the farms' own woods, each of which really stood on its own farm's lot. The houses are drawn as a compact cluster,
+whatever its shape; a village of a dozen houses or more is held to a least packing, so it is not strung out in a wide, hollow arc that leaves houses stranded from the fields, while a hamlet is not held to it; how densely
 a real village was built is not recorded. The title card says where this cluster sits and what
 shape it takes.
 

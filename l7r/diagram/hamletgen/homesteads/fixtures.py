@@ -371,6 +371,9 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
 
     Research:
         a lane between pit and house allowed - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the pit stands at the field or road, the laid seat where none is clear
+        field pit's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: within `PIT_FIELD_REACH_FT` (160 ft) of the house, the page's GUESS
+        field pit off a lane - UNRESEARCHED: 3 ft clear of a lane's edge (its half-width plus 3 ft), so the pit stands beside the way, not on it
+        field pit off the edge - UNRESEARCHED: set `_PIT_EDGE_CLEAR_FT` (8 ft) in from the paddy or road edge - the placer's 6 ft paddy margin plus two, on the bund-side ground; no page says how far from the field a pit stood
         field pit size - UNRESEARCHED: drawn 3.5 ft square
     """
     if not pending:

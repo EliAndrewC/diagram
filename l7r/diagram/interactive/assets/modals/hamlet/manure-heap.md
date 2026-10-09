@@ -25,7 +25,7 @@ Guesses:
 - That a settlement keeps its muck in heaps or in sunk jars at even odds: both forms are recorded, but not how many
   villages used each.
 
-Depiction: The map draws a heap as a small dark-brown mound streaked with straw, just beyond the privy on the side away from
+Depiction: The map draws a heap as a small dark-brown mound with a few light strokes of straw and a plain outline, so it does not read as a bush; the real heap was dung trodden into straw and fallen leaves. It stands just beyond the privy on the side away from
 the house, or behind or beside the house where there is no privy. Where the privy stands on the sunny side and a neighbor
 lies that way too, a heap may stand nearer the neighbor's house than its own; a click on it says whose it is.
 

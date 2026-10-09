@@ -389,3 +389,12 @@ def test_the_seats_keep_a_trees_fifty_feet_south_and_east_of_every_plot() -> Non
     m = BAR_MARGIN_PX
     assert rects[0][3] == 150.0 + 50.0 + 13.0 + m, "the yard's strip 50 ft deep"
     assert (120.0 - 13.0 - m, 140.0 - 23.0 - m, 120.0 + 50.0 + 11.0 + m, 140.0 + 23.0 + 50.0 + m) in rects, "the yard's morning lane, 50 ft east and down to its southeast corner"
+
+
+def test_a_farm_with_no_yard_keeps_only_its_beds_sun_strips() -> None:
+    """A homestead recorded with no threshing yard (`yard` None) keeps the south strip and the east lane of its bed alone:
+    neither loop over the yard and the beds reads a missing yard (feature 328 wave 56's east lanes)."""
+    bed = (100.0, 50.0, 20.0, 20.0)
+    _c, rects = copse_keepouts({"house": (0.0, 0.0, 40.0, 24.0), "yard": None, "gardens": [bed]}, 22.0, 39.0, 12.0)
+    assert len(rects) == 2, rects  # the bed's south strip and its east lane, nothing for the yard
+    assert all(r[2] > bed[0] for r in rects), "both stand off the bed"

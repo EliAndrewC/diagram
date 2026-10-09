@@ -21,7 +21,7 @@ Guesses:
   as its own house's.
 
 Depiction: The map draws a privy on most farmsteads as a small roofed building at one of the sixteen privy sizes counted in
-one village, with a dark circle at one end for the night-soil jar, so it does not read as a wood shed; the real night soil was kept
+one village, with a dark circle at one end standing for its night soil, so it does not read as a wood shed; the real night soil was kept
 in a tank or a buried jar beside it. A privy is sought first on the house's sunny side, as about three real privies in four stood,
 but the work yard takes much of that ground, so fewer than half end up there; the rest stand under the stable's eaves,
 behind the house or in the front yard.
@@ -30,4 +30,4 @@ Name: privy
 Covers: `farm_fixtures[kind=privy]`
 Sources: kotobank-benjo, suzuki-1959-noson-benjo, sinyoken-madori, sugiura-1977-tohoku, kotobank-hyakusho-denki, sakurasha-hyakusho-denki, wang-ochiai-2022, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, tsuda-1991-nikko-shasan-minka, shimogoe-jawiki, takizawa-sonshi-yashiki
 Entry: research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0042-manure-heaps-and-compost-kyuhi.html, research/questions/0034-landless-and-tenant-households-mizunomi-nago.html
-Drawing: research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+Drawing: research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html

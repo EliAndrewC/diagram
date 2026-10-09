@@ -21,7 +21,7 @@ Guesses:
 - That the heap stands just beyond the privy, and its size, 8 by 6 ft: no account says where in the yard a heap stood or
   measures one.
 
-Depiction: The map draws each heap as a small open mound just beyond its farmstead's privy, on the side away from the house,
+Depiction: The map draws each heap as a small dark-brown mound with a few light strokes of straw across it, its outline kept plain so it does not read as a bush; a real heap was dung and straw piled layer on layer to rot. It stands just beyond its farmstead's privy, on the side away from the house,
 or behind or beside the house where there is no privy. Where the privy stands on the sunny side with a neighbor that way too,
 a heap may stand nearer the neighbor's house than its own; a click on it says whose it is.
 

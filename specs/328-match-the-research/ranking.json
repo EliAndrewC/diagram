@@ -5797,6 +5797,7 @@
   ],
   "after": [],
   "flag": "",
+  "found": "wave 61, impl-drift",
   "tier_as_ranked": "E1",
   "wave": "",
   "scope": "kept"
@@ -7352,6 +7353,7 @@
   ],
   "after": [],
   "flag": "deviation-tempting: 0047 calls the Japanese farmstead's privy-sty pairing a GUESS from Han practice",
+  "found": "wave 61, impl-drift",
   "tier_as_ranked": "E2",
   "wave": "",
   "scope": "kept"
@@ -12389,6 +12391,7 @@
    "l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall"
   ],
   "flag": "",
+  "found": "wave 61, impl-drift",
   "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
@@ -12861,6 +12864,7 @@
    "l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#east reach below the bed"
   ],
   "flag": "",
+  "found": "wave 59, impl-drift",
   "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
@@ -14222,6 +14226,7 @@
   ],
   "after": [],
   "flag": "",
+  "found": "wave 60, impl-drift",
   "tier_as_ranked": "E4",
   "wave": "",
   "scope": "kept"
