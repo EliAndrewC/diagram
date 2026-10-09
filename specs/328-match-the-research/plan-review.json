@@ -1,57 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "908c62cc3673e9736ef27cfc3e96b98b940588f4256b36c60d66cb79d7b4aeee",
+ "plan_sha256": "5a04e0b36748659492e6c1b7abecd1bab0f82876aa0690f8ea86a49ff4988073",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W80-1 circular arc of 2.5 widths' radius",
-   "summary": "swept_bend draws a circular arc of radius 2.5 channel widths tangent to both runs, cut-back radius x tan(turn/2), replacing a quadratic whose cut-back was 2.5 widths",
+   "id": "W81-a revert and re-tier E2 -> E3",
+   "summary": "the run-on (each thread continued past its end along its own last heading) is reverted because the 48-seed cohort traded seed 03 (newly passing) for seed 42 (newly refused); both partition.py rows stay open (scope kept) at E3, their work the layout that broke",
    "class": "within",
-   "why": "0054's drawing page: 'About 2.5 channel widths in radius'. The implementation moved to the research, as the request and FR-004 ask. The unit test re-run by this reviewer (4 passed); a 20-degree turn's cut-back 1.76 at radius 10 is 10 tan(10 deg)."
+   "why": "Re-measured this round in a detached worktree with audit/reverted/wave81-run-on.patch applied, against the clone (engine = HEAD): seed 42 passes at HEAD and is REFUSED with the patch (WebRefused: lane 2 breaks the lane law, needle_loops at [2730, 2316]); seed 03 the reverse (refused at HEAD, off_ford). XIII names this exact case: a cohort seed that passed and now fails is a regression, and neither 'the change fixes more than it breaks' nor 'the residue rotated' excuses it, so the 48/54 net does not. The spec's Edge Case 'a fix that changes many maps' gives the route: where making the failing map pass takes more than the row's tier, the row takes that work's tier and its claim stays as found. The failure is in the lane web, outside partition.py, so the fix is a change across modules: E3 by FR-003, as wave 74 was ruled. Ranking by measured work is the request's own principle ('rank all of the findings by how mych implementation work we expect'); the rows are re-ordered, not deferred or dropped, so 'fix all of it' still reaches them in E3 order. The Edge Case's 'waits on a found row' is met by the rows' own fix text, as for waves 69 and 74. Note for when the rows are retaken: XIII's FIX remains the expected exit then - the needle loop on seed 42 is the work, not a reason to leave the rows unfixed."
   },
   {
-   "id": "W80-2 radius capped at 35% of the shorter run",
-   "summary": "the RADIUS (not the cut-back) is capped at 0.35 x min(l0, l1)",
+   "id": "W81-b the first run's crash guarded",
+   "summary": "a first cohort run crashed five seeds on a one-point thread (pts[-2]); run_on falls back to the fall for a thread of one point before the second run",
    "class": "within",
-   "why": "0054: 'A bend's radius is capped at 35% of the straight run on either side'; the shorter run is 'either side'."
+   "why": "A defect in the session's own change, fixed in the work (XIV) before the measurement the revert rests on; the revert is judged on the guarded run, so the crash does not inflate the case for reverting. Nothing of it ships."
   },
   {
-   "id": "W80-3 hairpin cut-back within 90% of the run",
-   "summary": "where the capped radius would put the tangent point past 90% of the run, the radius is tightened to 0.9 run / tan(turn/2); claimed UNRESEARCHED",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "It draws a radius under 0054's figure. The literal rule cannot be drawn there: at r = 0.35 run the cut-back passes the run's whole length near 141 deg and is unbounded at 180 deg, and a tangent point past the run's far end has no straight to stand on. It serves 0054's own purpose for the cap ('Two neighboring bends never swallow the straight between them'), and a smaller radius still meets the cap, an upper bound. The 90% margin is labeled this project's guess at the point of change and in the Decisions Recorded row."
+   "id": "W81-c run_on's UNRESEARCHED heading floor (cos 70 deg)",
+   "summary": "in the reverted patch, a last heading falling at under 0.34 of the fall gives way to the fall, claimed UNRESEARCHED",
+   "class": "within",
+   "why": "Reverted with the patch: nothing of it is in the code this wave leaves. It is a narrowing of 0005's convergence and is to be put to spec-fidelity as one when the E3 rows are retaken; it carries no ruling here."
   },
   {
-   "id": "W80-4 junctions and turns under 8 deg left sharp",
-   "summary": "round_channel_joints' choice of which joints to round is unchanged",
+   "id": "W81-d the failed fix recorded and the patch kept",
+   "summary": "Sectors.bound's docstring records the failed fix; the patch and its test are kept in audit/reverted/wave81-run-on.patch; the measurement is m:wave81-run-on-reverted",
    "class": "within",
-   "why": "0054's claim already names it; the wave changes only how a selected bend is drawn."
+   "why": "Constitution XIV (a fix that failed is recorded at the point of change) and the wave 69/74 precedent. The Research: claim lines are unchanged; make claims-owed reports no claim owed (run this round)."
   },
   {
-   "id": "W80-5 occasions: glyph-redrawn pond canal and drainage ditch on kuwabata at batch 9's close",
-   "summary": "two Occasions lines in tasks.md",
+   "id": "W81-e no Decisions Recorded row",
+   "summary": "the code and the pool are as wave 80 left them",
    "class": "within",
-   "why": "git diff HEAD on the pool (re-measured this round): only pool/hamlets/kuwabata/kuwabata.json moved. Taking them at the batch close is FR-005's batching ruling."
+   "why": "FR-008 binds a fix that changes what a map draws or states; git status shows no pool file moved and the only engine edit is a docstring. Waves 69 and 74, reverted, took none."
   },
   {
-   "id": "W80-6 verification per wave; gate and pair at the batch close",
-   "summary": "the waterfields and settlement suites, the cohort, impl-drift, spec-fidelity",
+   "id": "W81-f verification: the cohort's runs and spec-fidelity; Phase 82 T190/T191",
+   "summary": "the wave's boxes appended as the amendment, T191 the impl-drift re-check",
    "class": "within",
-   "why": "FR-005 (GM 2026-10-08)."
-  },
-  {
-   "id": "W80-7 Phase 81 T188/T189 as the current wave's only boxes",
-   "summary": "tasks appended as the amendment",
-   "class": "within",
-   "why": "FR-006."
-  },
-  {
-   "id": "W80-8 Decisions Recorded rows for wave 80 and the waves 66-79 owed",
-   "summary": "spec.md gains one row per wave 66-80 that changed a drawing rule or what a map states (66, 67, 68, 70, 71, 72, 73, 75, 76, 77, 78, 79, 80); 69 and 74, reverted, none",
-   "class": "within",
-   "why": "FR-008, which round 1 found unmet, now carried for every wave since 65; the plan's Wave 80 section points at the rows. The wave 70 row's CONTENT is wrong (it says the maps draw shares they measurably do not, and classes the main-door share, which 0044 and the code call this project's choice, as historically accurate). That is a spec-amendment finding, reported as CHANGES REQUIRED on spec.md; it is not a plan decision and changes nothing in plan.md."
+   "why": "FR-005/FR-006. With no claim owed (claims-owed, this round), T191 has nothing to dispatch; tick it on that output rather than a fresh impl-drift."
   }
  ],
  "verdict": "CLEAR"

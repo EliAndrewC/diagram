@@ -2021,3 +2021,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T189 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 80, round 2), amendment FAITHFUL; channel bends circular arcs of 0054's 2.5-width radius capped at 35% of the run, a hairpin's within its run (UNRESEARCHED margin); Kuwabata's ditch bends moved, cohort unchanged; impl-drift in step; Decisions Recorded rows 66-80 added
+
+## Phase 82 - wave 81 (amendment 80): threads run on as they head, built and reverted (E3)
+
+- `waterfields/partition.py` (`Sectors.bound`'s docstring: the fix that failed); the reverted change kept as
+  `specs/328-match-the-research/audit/reverted/wave81-run-on.patch`.
+
+- [x] T190 wave 81's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 81); threads run on along their heading built and REVERTED on the cohort (seed 42 newly refused for 03), both rows re-tiered E3; no claim owed (make claims-owed: none)
+- [x] T191 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 81); threads run on along their heading built and REVERTED on the cohort (seed 42 newly refused for 03), both rows re-tiered E3; no claim owed (make claims-owed: none)

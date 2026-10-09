@@ -1326,6 +1326,18 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   wave 65 had been added; 69 and 74 were reverted and change nothing).
 - **Verification**: the waterfields and settlement suites; the cohort; `impl-drift`; `spec-fidelity`.
 
+## Wave 81 (amendment 80, 2026-10-09) - batch 9
+
+- **Rows `Sectors.bound#past a thread's end` and `Sectors.thread_lines#sector pieces` HELD, re-tiered E2 -> E3 on measure**
+  (as waves 69 and 74). Both MISLABELED: past its end a thread's column bund runs straight down the fall, where 0005's bunds
+  "converge with" the fan toward its drain. Each thread was run on along its own last heading (`run_on`, falling back to the
+  fall for a contour heading or a one-point thread), unit-tested and REVERTED (m:wave81-run-on-reverted): the reshaped cells
+  re-seated Kashikawa's homesteads, and the 48-seed cohort, 48/54 both ways, traded seed 03 for seed 42 (the web refused); a
+  first run also crashed five seeds on a one-point thread, guarded before the second. One seed newly refused is a regression
+  (XIII); a change that ripples into placement is E3, its work that layout. The failed fix is recorded at `Sectors.bound`; the
+  patch is kept in the spec's `audit/reverted/`; the code and the maps are as wave 80 left them.
+- **Verification**: the cohort's runs (m:wave81-run-on-reverted); `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

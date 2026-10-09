@@ -1653,5 +1653,19 @@
       "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 79",
       "gentle_turn_cutback": 1.76
     }
+  },
+  "wave81-run-on-reverted": {
+    "quantity": "wave 81 (2026-10-09): threads run on along their own heading past their ends - what it moved and the cohort it broke",
+    "observed": "2026-10-09",
+    "source": "specs/328-match-the-research/audit/reverted/wave81-run-on.patch; the pool manifests after make map; make cohort N=48 twice",
+    "command": "make map for the five hamlets; make cohort N=48 (twice: before and after the one-point-thread guard)",
+    "method": "the change built and unit-tested (a thread leaning 0.5 across per 1 down runs on at that heading; run_on falls back to the fall for a contour heading, a zero-length segment and a one-point thread)",
+    "value": {
+      "pool": "Inashiro, Kashikawa, Mizuguchi and Sawada moved; Sawada 1,261 -> 1,230 basins; Kashikawa's homesteads re-seated; Kuwabata unchanged",
+      "cohort_first": "44/54: five seeds crashed (IndexError, a one-point thread's pts[-2]) and seeds 37, 41, 42, 44 newly refused",
+      "cohort_after_guard": "48/54 (refused 10, 20, 22, 33, 42, 906): seed 03 newly passing, seed 42 newly refused (WebRefused, the lane law)",
+      "cohort_passed": 48,
+      "reading": "one seed that passed before fails after: a regression (XIII); the change ripples into placement, E3 as wave 69's and 74's"
+    }
   }
 }

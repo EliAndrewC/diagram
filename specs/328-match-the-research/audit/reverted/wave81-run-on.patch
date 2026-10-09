@@ -1,0 +1,104 @@
+diff --git a/l7r/diagram/waterfields/partition.py b/l7r/diagram/waterfields/partition.py
+index d20b4830f..4afa11530 100644
+--- a/l7r/diagram/waterfields/partition.py
++++ b/l7r/diagram/waterfields/partition.py
+@@ -128,6 +128,25 @@ def _extend(pts: list[Pt], by: float) -> list[Pt]:
+     return [head, *pts, (xb + (xb - xa) / d * by, yb + (yb - ya) / d * by)]
+ 
+ 
++def run_on(pts: list[Pt], down: Pt) -> Pt:
++    """The unit heading a thread runs on past its end: its last segment's, where that descends at least a third as steeply as
++    the fall itself (cos 70 deg); else the fall (`down`), as for a thread of one point - a thread that ends running along the contour has no convergence to
++    carry, and a heading that barely falls would carry it off the fan.
++
++    Research:
++        run on as it heads - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the bunds converge with the fan toward its drain
++        the heading's floor - UNRESEARCHED: a last heading falling at under cos 70 deg (0.34) of the fall gives way to the fall
++    """
++    if len(pts) < 2:
++        return down
++    (ax, ay), (bx, by) = pts[-2], pts[-1]
++    lx, ly = bx - ax, by - ay
++    ln = math.hypot(lx, ly)
++    if ln < 1e-9 or (lx * down[0] + ly * down[1]) / ln < 0.34:
++        return down
++    return (lx / ln, ly / ln)
++
++
+ class Sectors:
+     """The fan's sectors - the ground between adjacent threads - as the partition cuts them (see the module docstring).
+ 
+@@ -144,20 +163,24 @@ class Sectors:
+         self.narrow = False
+ 
+     def bound(self, T: _Thread, fv: float) -> Pt:
+-        """A thread's boundary at fall `fv`: `carve._bnd` down to its own end, then straight down the fall from where it stopped.
++        """A thread's boundary at fall `fv`: `carve._bnd` down to its own end, then on along the thread's own last heading
++        (`run_on`), converging with the fan as its bunds do, rather than straight down the fall.
+ 
+-        Research: past a thread's end - UNRESEARCHED: the column bund runs straight down the fall rather than converging along the drain
++        Research: past a thread's end - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a fan narrows toward its drain and its bunds converge with it; the column bund runs on as its thread heads
+         """
+         end = T.pts[-1]
+         f_end = self.F.to_uf(*end)[1]
+         if fv <= f_end:
+             return _bnd(T, fv, self.F)
+-        return (end[0] + self.F.d[0] * (fv - f_end), end[1] + self.F.d[1] * (fv - f_end))
++        h = run_on(T.pts, self.F.d)
++        dfall = h[0] * self.F.d[0] + h[1] * self.F.d[1]
++        s = (fv - f_end) / dfall
++        return (end[0] + h[0] * s, end[1] + h[1] * s)
+ 
+     def thread_lines(self) -> list[Any]:
+-        """Every thread, and each continued straight down the fall past its own end until it meets another thread.
++        """Every thread, and each continued past its own end on its own last heading (`run_on`) until it meets another thread.
+ 
+-        Research: sector pieces - UNRESEARCHED: each thread continued straight down the fall until it meets another
++        Research: sector pieces - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: each thread runs on as it heads, converging with the fan, until it meets another
+         """
+         import shapely
+         from shapely.geometry import LineString
+@@ -166,8 +189,9 @@ class Sectors:
+         out = list(own)
+         for k, th in enumerate([th for th in self.threads if len(th.pts) >= 2]):
+             end = th.pts[-1]
+-            reach = max(0.0, self.f_bottom - self.F.to_uf(*end)[1]) + 40.0
+-            ext = LineString([end, (end[0] + self.F.d[0] * reach, end[1] + self.F.d[1] * reach)])
++            h = run_on(th.pts, self.F.d)
++            reach = (max(0.0, self.f_bottom - self.F.to_uf(*end)[1]) + 40.0) / (h[0] * self.F.d[0] + h[1] * self.F.d[1])
++            ext = LineString([end, (end[0] + h[0] * reach, end[1] + h[1] * reach)])
+             hit = ext.intersection(shapely.union_all([g for m, g in enumerate(own) if m != k]))
+             stops = [ext.project(p) for p in shapely.get_parts(hit)] if not hit.is_empty else []
+             stops = [s for s in stops if s > 0.5]
+diff --git a/tests/waterfields/test_partition.py b/tests/waterfields/test_partition.py
+index b86983c99..7e1f1504a 100644
+--- a/tests/waterfields/test_partition.py
++++ b/tests/waterfields/test_partition.py
+@@ -72,7 +72,26 @@ def test_a_threads_bound_runs_straight_down_the_fall_past_its_own_end() -> None:
+     sec = _sectors(region, [_thread(100.0, 0.0, 300.0), _thread(300.0, 0.0, 300.0)])
+     assert sec.bound(sec.threads[0], 150.0) == (100.0, 150.0), "within its course, its own course"
+     x, y = sec.bound(sec.threads[0], 420.0)
+-    assert abs(x - 100.0) < 1e-9 and abs(y - 420.0) < 1e-9, "past its end, straight down the fall - not along the drain"
++    assert abs(x - 100.0) < 1e-9 and abs(y - 420.0) < 1e-9, "a thread heading down the fall runs on down the fall"
++
++
++def test_a_converging_thread_runs_on_as_it_heads_past_its_end() -> None:
++    """Feature 328 wave 81 (0005: a fan narrows toward its drain and its bunds converge with it): past its end a thread's
++    column bund runs on along its own last heading, not straight down the fall; a heading that barely falls gives way to the
++    fall (`run_on`)."""
++    region = _box(0, 0, 400, 500)
++    lean = _Thread(100.0, 0.0, 0.0, 0.0)
++    lean.pts = [(100.0 + 0.5 * 30.0 * k, 30.0 * k) for k in range(11)]  # 0.5 px across for every px down: converging east
++    sec = _sectors(region, [lean, _thread(300.0, 0.0, 300.0)])
++    x, y = sec.bound(lean, 420.0)
++    assert abs(y - 420.0) < 1e-9 and abs(x - (250.0 + 0.5 * 120.0)) < 1e-6, "on along its heading, 0.5 across per 1 down"
++    assert pt.run_on([(0.0, 0.0), (10.0, 1.0)], (0.0, 1.0)) == (0.0, 1.0), "a heading along the contour gives way to the fall"
++    assert pt.run_on([(0.0, 0.0), (0.0, 0.0)], (0.0, 1.0)) == (0.0, 1.0), "a zero-length last segment too"
++    assert pt.run_on([(5.0, 5.0)], (0.0, 1.0)) == (0.0, 1.0), "and a thread of one point (cohort seeds 07, 33, 37, 41, 44)"
++    lines = sec.thread_lines()
++    ext = lines[2].coords  # the leaning thread's run-on past its end
++    (ex, ey), (fx, fy) = ext[0], ext[-1]
++    assert abs((fx - ex) / (fy - ey) - 0.5) < 1e-6, "the run-on keeps the thread's heading"
+ 
+ 
+ def test_a_thread_is_continued_until_it_meets_another_thread() -> None:

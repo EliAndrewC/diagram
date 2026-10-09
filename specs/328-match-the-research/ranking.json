@@ -9664,7 +9664,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "80",
   "scope": "kept"
  },
  {
@@ -9814,36 +9814,6 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
- },
- {
-  "key": "l7r/diagram/waterfields/partition.py::Sectors.bound#past a thread's end",
-  "tier": "E2",
-  "fix": "past its end, continue a thread's column bund converging toward the drain with the fan (0005) instead of straight down the fall",
-  "files": [
-   "l7r/diagram/waterfields/partition.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "MISLABELED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/waterfields/partition.py::Sectors.thread_lines#sector pieces",
-  "tier": "E2",
-  "fix": "continue each thread past its end on the converging course bound() gives, not straight down the fall",
-  "files": [
-   "l7r/diagram/waterfields/partition.py"
-  ],
-  "after": [
-   "l7r/diagram/waterfields/partition.py::Sectors.bound#past a thread's end"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "MISLABELED",
-  "wave": "",
-  "scope": "kept"
  },
  {
   "key": "l7r/diagram/waterfields/polder.py::BERM#bank beside a polder ditch",
@@ -13569,6 +13539,36 @@
   "verdict": "UNCLAIMED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/waterfields/partition.py::Sectors.bound#past a thread's end",
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 81, 2026-10-09): run each thread on past its end along its own last heading (0005: the bunds converge with the fan) - built, tested and REVERTED: the reshaped cells re-seated Kashikawa's homesteads and the 48-seed cohort traded seed 03 for seed 42 (WebRefused); the work is the layout that broke (m:wave81-run-on-reverted); when retaken, attempt seed 42's needle loop (lane 2 at (2730, 2316)) inside partition.py first, the cos 70 deg heading floor included, before any second revert, and put that floor to spec-fidelity as an exception (spec-fidelity, wave 81)",
+  "files": [
+   "l7r/diagram/waterfields/partition.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "MISLABELED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/waterfields/partition.py::Sectors.thread_lines#sector pieces",
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 81, 2026-10-09): run each thread on past its end along its own last heading (0005: the bunds converge with the fan) - built, tested and REVERTED: the reshaped cells re-seated Kashikawa's homesteads and the 48-seed cohort traded seed 03 for seed 42 (WebRefused); the work is the layout that broke (m:wave81-run-on-reverted); when retaken, attempt seed 42's needle loop (lane 2 at (2730, 2316)) inside partition.py first, the cos 70 deg heading floor included, before any second revert, and put that floor to spec-fidelity as an exception (spec-fidelity, wave 81)",
+  "files": [
+   "l7r/diagram/waterfields/partition.py"
+  ],
+  "after": [
+   "l7r/diagram/waterfields/partition.py::Sectors.bound#past a thread's end"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "MISLABELED",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/waterfields/polder.py::_polder_channels#channel widths",

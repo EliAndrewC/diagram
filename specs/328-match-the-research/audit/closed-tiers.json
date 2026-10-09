@@ -530,6 +530,7 @@
  "l7r/diagram/waterfields/banks.py::_TINT_MIN_SOLIDITY#lobed plot left green": "E2",
  "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall left alone": "E2",
  "l7r/diagram/waterfields/banks.py::hem_to_bank#drain with the fall left alone": "E2",
+ "l7r/diagram/waterfields/banks.py::round_channel_joints#swept bends": "E2",
  "l7r/diagram/waterfields/carve.py::_dry_fields#crop per plot": "E2",
  "l7r/diagram/waterfields/carve.py::_dry_fields#end plot split": "E0",
  "l7r/diagram/waterfields/carve.py::_dry_fields#end plot split at every scale": "E2",

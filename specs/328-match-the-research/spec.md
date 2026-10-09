@@ -380,6 +380,6 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 49 (wave 50), round 1 (spec-fidelity MODE 4, 2026-10-08): plan CLEAR, ten decisions within. Its notes: rows 514-522 are not all town, city, castle and ministry entries - rows 79-81 (the wood shed's exemption text, the `settlement_form` and land-use knobs) are deferred by the same scope rule; and for the GM at the feature's end, a rolled dike-pond hamlet whose leftover parcels stand in rice now draws threshing yards (`grows_grain`, the 2026-08-28 ruling's own basis), where that build drew none - no kept map changes.
 - Amendment 79 (wave 80, and the Decisions Recorded rows waves 66-79 owed), round 1 (spec-fidelity MODE 4, 2026-10-09): plan
   BLOCKED on FR-008 - no Decisions Recorded row for wave 80, nor for the waves since 65 that changed what a map draws or
-  states; the 90% hairpin margin ruled a LEGITIMATE narrowing. Round 2: the rows added (66-68, 70-73, 75-80; 69 and 74 reverted),
+  states; the hairpin margin ruled a LEGITIMATE narrowing. Round 2: the rows added (66-68, 70-73, 75-80; 69 and 74 reverted),
   two corrected at the round's CHANGES REQUIRED (wave 70: the bath shares ROLLED, not yet drawn - ranking row 154 - and the main
   door's share this project's choice; wave 68: the entrance-board limit UNRESEARCHED); FAITHFUL, plan CLEAR (8 decisions).

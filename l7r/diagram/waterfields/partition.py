@@ -146,6 +146,12 @@ class Sectors:
     def bound(self, T: _Thread, fv: float) -> Pt:
         """A thread's boundary at fall `fv`: `carve._bnd` down to its own end, then straight down the fall from where it stopped.
 
+        A FIX THAT FAILED (feature 328 wave 81, 2026-10-09): 0005's bunds "converge with" the fan toward its drain, so past its end
+        a thread's column bund was run on along the thread's own last heading (`run_on`, with `thread_lines` alike) - but the
+        reshaped cells re-seated Kashikawa's homesteads, and the 48-seed cohort, 48/54 both ways, traded seed 03 for seed 42 (the
+        web refused); a first run also crashed five seeds on a one-point thread. Reverted; the row is E3 (a change that ripples
+        into placement), its work the layout that broke (m:wave81-run-on-reverted; the patch is in the spec's audit/reverted/).
+
         Research: past a thread's end - UNRESEARCHED: the column bund runs straight down the fall rather than converging along the drain
         """
         end = T.pts[-1]
