@@ -796,7 +796,10 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `WOOD_FRINGE_FT` band under its edge, in the scrub's slot and class - in two steps, the grass thinning inward as 0077 has it
   ("thinning out over the first few paces under the crowns"): the outer half at the tile's density, the inner half at
   `WOOD_FRINGE_THIN_KEEP` (0.5, a convention) of its tufts (impl-drift round 1: a uniform band stopped on a hard line). And
-  the header's tiles and slots claimed as conventions, the coppice's thinning into a marsh and a scrub pine's reach claimed.
+  the header's tiles and slots claimed as conventions, a scrub pine's reach and the crops' lean claimed. Round 2: no coppice
+  crown is seated in a marsh (0074: woody growth stops at the marsh's edge; the crowns had thinned 46 ft into it). Rounds 3-4:
+  the scrub pines' account restated to throws, the ponds' open water claimed (scrub, pines and coppice alike), and the
+  crescent pond's grass margin scaled by the map's grain (`2.0 * bs`; the maps byte-identical at 1 ft/px).
 - **Measured**: the five hamlets' manifests move by their cover records only.
 - **Occasions**: glyph-redrawn scrub and rough grazing on Kashikawa (its woods' edges) - batch 4's close.
 - **Verification**: tests (no brush dot in the fringe tile; the scrub tile stops at the wood's edge; the band drawn with the

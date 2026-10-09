@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "75d537eaed952fec5ea9edc1e111cede6a7b7173f200f804dc4ff78a6ed7d6e9",
+ "plan_sha256": "d556340c21b2b4a5c09b315555fa9645535bdbb9123a90e3b8af14d8e16b7179",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -69,6 +69,36 @@
    "summary": "the redrawn scrub edge is reviewed on Kashikawa at batch 4's close",
    "class": "within",
    "why": "Review routing under feature 294's occasions. It does not change which findings are fixed or how."
+  },
+  {
+   "id": "W57-4 wood fringe thins in two steps",
+   "summary": "the WOOD_FRINGE_FT band under a wood's edge split into an outer half at the grass-only tile's density and an inner half at WOOD_FRINGE_THIN_KEEP (0.5) of its tufts, in the scrub's slot and class",
+   "class": "within",
+   "why": "0077 says the grass is 'thinning out over the first few paces under the crowns'; a uniform band was the drift impl-drift found. Two steps at half density is a calibrated degree along a continuum, labeled a CONVENTION at the constant, inside the research's thinning - it carves nothing out of the request to make the implementation match the research."
+  },
+  {
+   "id": "W57-5 no coppice crown in a marsh",
+   "summary": "the coppice placer skips a crown whose center is inside any marsh polygon (soft_idx[:len(soft)], the marshes only)",
+   "class": "within",
+   "why": "0074: woody growth stops at the marsh's edge (the belt's alder excepted, which this placer does not draw). The crowns had thinned 46 ft into the marsh over the grass's ramp - a drift, fixed, with a test red on the old code. Exactly the request's 'make the implementation match the referenced research'."
+  },
+  {
+   "id": "W57-6 header tiles and slots, crops' lean, scrub pine reach, ponds' open water claimed",
+   "summary": "Research: claims added - header fills/rule lines and draw-first slots as CONVENTION; crowns and pines clear of the crops, PINE_SPREAD_BS reach, and nothing on a pond or crescent pond as UNRESEARCHED",
+   "class": "within",
+   "why": "Labeling existing behavior with its true class is how the claims-report surfaces what matches and what does not; the record's rule is that an unlabeled guess is the one failure. No behavior is exempted from a researched rule by these labels."
+  },
+  {
+   "id": "W57-7 scrub pines' account restated to throws",
+   "summary": "the scrub-pines claim now says one THROW per 6,000 sq ft, at least two throws, a refused throw seating none",
+   "class": "within",
+   "why": "A description brought in step with what the code does under 0078's 'a few scraggly pines'; nothing redrawn, no case carved out."
+  },
+  {
+   "id": "W57-8 crescent pond grass margin scaled by bs",
+   "summary": "the bare margin round a crescent pond is 2.0 * bs rather than a flat 2.0 units",
+   "class": "within",
+   "why": "A unit correction (2 ft at the map's grain); equal at a hamlet's 1 ft/px, maps byte-identical. Tightens consistency, narrows nothing."
   }
  ],
  "verdict": "CLEAR"
