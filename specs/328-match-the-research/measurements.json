@@ -1169,5 +1169,17 @@
       },
       "open_saving": "a re-settle limited to the area around the joint straighten_joints rewrote has never been measured (R12 measured re-settling only the steps for the rules found broken); a possible saving in shared web code (perf-audit, batch 5 round 2)"
     }
+  },
+  "wave66-pull-back": {
+    "quantity": "wave 66 (2026-10-09): a lane end pulled back to the last house it serves, with no 40% floor",
+    "observed": "2026-10-09",
+    "source": "tests/settlement/test_water_ways.py; the five hamlets' manifests against HEAD's; make cohort N=48",
+    "method": "the unit tests; the five hamlets rerolled and compared byte for byte; make cohort N=48 against wave 65's run",
+    "value": {
+      "hamlets": "byte-identical, all five",
+      "cohort_48": "48/54, the same six refused seeds (03, 10, 20, 22, 33, 906)",
+      "unit": "a 200 ft lane served 40-70 ft from its start: whole before, ends 40-48 ft now"
+    },
+    "command": "for g in pool/hamlets/*/*.gen.py; do make map GEN=$g; done; cmp each pool/hamlets/<m>/<m>.json against HEAD's; make cohort N=48; make test-file FILE=tests/settlement/test_water_ways.py"
   }
 }

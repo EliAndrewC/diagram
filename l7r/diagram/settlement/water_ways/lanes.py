@@ -294,7 +294,9 @@ class LanesMixin:
             if len(pts) < 2:
                 continue
 
-            def _reaches(q: Pt, me: int = i, run: Any = None, back: Pt | None = None) -> bool:
+            def _reaches(q: Pt, me: int = i, run: Any = None, back: Pt | None = None) -> tuple[Any, ...] | None:
+                """WHAT this end reaches - a way, a house or a field, named - or None: `_pull_back` holds an end to the one
+                thing it served last (0246), so it has to know which (feature 328 wave 66)."""
                 for k, other in enumerate(lanes):
                     if k == me or len(other["pts"]) < 2:
                         continue
@@ -310,7 +312,7 @@ class LanesMixin:
                     # adjacency that constitutes the defect was satisfying the test for it.
                     if run is not None and _angle_between(run, _near) < _FRAY_DEG:
                         continue  # near-parallel: this is the same track fraying, not a junction
-                    return True
+                    return ("way", k)
                 # A FARMHOUSE DISCHARGES ONE LANE END'S OBLIGATION, NOT THREE.
                 #
                 # Nothing said a house could only be claimed once, so three ends standing within 40
@@ -335,8 +337,8 @@ class LanesMixin:
                     if not reaches_dooryard(h, q, dooryard_reach) and (_d > house_reach or behind_house(h, q) or (_from is not None and walked_past(_from, q, (h["x"], h["y"])))):
                         continue
                     if _my is None or not _fan_rival(q, _my, (h["x"], h["y"]), _d, me):
-                        return True
-                return any(edge_dist(q[0], q[1], f) <= self.px(BUND_REACH_FT) for f in fields)
+                        return ("house", id(h))
+                return next((("field", fi) for fi, f in enumerate(fields) if edge_dist(q[0], q[1], f) <= self.px(BUND_REACH_FT)), None)
 
             def _junction_floor(_p: list[Pt], me: int = i) -> float:
                 """This lane's junction floor - see `junction_floor`, which holds the body."""

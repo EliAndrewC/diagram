@@ -1,93 +1,62 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "8aae86d4495239429d8766a30551b9168003e13861f53142916e886df0aa24e5",
+ "plan_sha256": "f683a41dabb902516690ea138ef402b6908edf50aabf8fd82e0af3d39d9d2944",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W65-1 per-map crop mix",
-   "summary": "dry_crop_mix rolls one weight per crop (uniform 0.1-1.0, GUESS) once per map in _comb_dry_and_beans, shared by every band and the reserve; each plot's crop drawn on it, the 55% neighbor keep unchanged",
+   "id": "W66-1 trim floor removed",
+   "summary": "_pull_back's 40% keep_frac floor dropped; only a junction (min_len) and two points hold a lane",
    "class": "within",
-   "why": "ranked row 192 and 0006 ('each map picks its mix of the four crops at random') done literally; the weight range is labeled GUESS where 0006 calls the proportions a guess"
+   "why": "the ranked fix verbatim ('drop the 40% trim floor: a lane end reaching nothing is pulled back to the last house it serves (0246)'); unit test passes (re-run 2026-10-09, make test-file)"
   },
   {
-   "id": "W65-2 crops on their own stream",
-   "summary": "the mix and the picks draw from crop_stream (seeded from R's state without advancing it); R keeps the draws it always took so the geometry is unchanged",
+   "id": "W66-2 walk held to the first thing reached",
+   "summary": "the walk stops at the first point past the last thing served; _reaches names way/house/field so chained reach zones do not carry it to the next house in",
    "class": "within",
-   "why": "an implementation choice, not a carve-out: the row's 'R.choices' names a method, not a research constraint; every map still rolls its own mix at random and every plot is drawn on it. Keeping a fill color off the geometry stream (measured: Kashikawa's web refused otherwise) narrows nothing asked"
+   "why": "without the floor, 'shortest end that reaches anything' would run back to whatever stands nearest the start; stopping at the first thing reached walking back IS 0246's 'the last house it serves'. Call site (lanes.py:348) pulls back only an end that reaches nothing, so a lane ending on a way is not trimmed"
   },
   {
-   "id": "W65-3 end plot split at every grain",
-   "summary": "drop g != 1.0 from the end-cell split condition",
+   "id": "W66-3 a lane reaching nothing left whole",
+   "summary": "a lane whose whole run serves nothing is returned unchanged",
    "class": "within",
-   "why": "ranked row 193's fix applied literally"
+   "why": "pre-existing behavior; 0246 pulls an end back to the last house it serves and such a lane has none, so the page names no target to pull to"
   },
   {
-   "id": "W65-4 fork band depth DEFERRED_ON_MEASURE",
-   "summary": "the fork band is laid only at grain < 1.0; every kept hamlet is ftpx 1.0 (grain = 2/ftpx = 2), so no kept map lays it",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "implied by the GM's own words (amendment 8: limit to code actually executed by magistracies, country shrines and scripted hamlets; legacy findings DEFERRED). Measured: all five hamlet manifests ftpx 1.0; grain = 2/ftpx in frame.py, comb.py, consts.py"
+   "id": "W66-4 field graves exemption reason restated",
+   "summary": "taxonomy.py's field_graves reason restated to 0008's island-or-corner forms",
+   "class": "within",
+   "why": "the code already rolls both forms (settlement/fields/features.py: 'island' or 'corner', even odds), so the reason moves to what the code and 0008 both say; a claim re-owed by the merge of main, no behavior change"
   },
   {
-   "id": "W65-5 hem depth restated UNRESEARCHED",
-   "summary": "the default band 70-132 px restated UNRESEARCHED at the kept maps' 1 ft/px, the 0010 citation withdrawn; measuring line and a caller's band claimed UNRESEARCHED",
+   "id": "W66-5 spec linter table-valued record",
+   "summary": "spec_figures.appears crashed on a dict-valued measurement; recorded_numbers takes every nested number; tested",
    "class": "within",
-   "why": "not a ranked row and the label it had at HEAD; 0010's 140-265 ft is stated for 'a field around a city' (read), which no kept map draws. Labeling a guess honestly is recording, not narrowing"
+   "why": "a defect found in the work at hand (constitution XIV); a verification tool, no behavior on maps"
   },
   {
-   "id": "W65-6 dry_acres at the map's scale",
-   "summary": "manifest dry_acres computed at (2/grain)^2 ft per px^2, not a fixed 2 ft/px",
+   "id": "W66-6 Decisions rows 56-65 restated without bare figures",
+   "summary": "spec.md Decisions rows point at pages or m: records in place of unpointed figures",
    "class": "within",
-   "why": "a defect found in the work (constitution XIV), fixing a figure toward correctness"
+   "why": "the figure contract (feature 239); the m: keys named (wave62-slide-bounded, wave63-board-footing, wave64-board-widths-and-caption) exist; the rows' meaning is unchanged"
   },
   {
-   "id": "W65-7 off the water and the frame left to row 213",
-   "summary": "the DRIFTED claim impl-drift found stays with its own ranked row",
+   "id": "W66-7 dooryard rows held for their own wave",
+   "summary": "reaches_dooryard and trim_lane_stubs#served at the dooryard (E2) left to a later wave with a lane review",
    "class": "within",
-   "why": "the GM's easiest-to-hardest order; the row stays open and ranked"
+   "why": "sequencing inside E2; the rows stay ranked and open, and SC-003 bars any E3 row while they stand"
   },
   {
-   "id": "W65-8 crop stream from R's whole state, one per map",
-   "summary": "crop_stream seeds from hash of R's whole state (index included) without advancing R; hem.py makes ONE crop stream per map and continues it through every band and the reserve (crop_rng)",
+   "id": "W66-8 held dooryard rows fixed to 0246's any-side rule",
+   "summary": "reaches_dooryard and trim_lane_stubs#served at the dooryard to be fixed to 0246's any-side rule (60 ft of the house or 12 ft of house, byre, shed, threshing yard or garden) in their own wave with its lane review; W57's dooryard-only rule kept only on a MODE 1 LEGITIMATE ruling",
    "class": "within",
-   "why": "round 1's two fixes done; a fill color kept off the geometry stream narrows nothing asked - every map still rolls its own mix and every plot draws on it (0006)"
+   "why": "round 1's NOT LEGITIMATE answered: the direction is now implementation to research per FR-004, matching the ranked fix lines and wave 45's hamletgen precedent; keeping the code's rule is routed to the Edge Cases exception path, not framed as an open choice. Deferral to a later wave is sequencing inside E2"
   },
   {
-   "id": "W65-9 end plot floor claimed UNRESEARCHED",
-   "summary": "the tiling's stop 0.6 of a plot short of the canal's end newly claimed UNRESEARCHED",
+   "id": "W66-9 board facing row held at E2",
+   "summary": "WayFacing.turn#board squared to its nearest way stays E2 in found-wave65.jsonl and ranking.json, its one predicate WayFacing.turn fed the placement kind at its call in _route_seats",
    "class": "within",
-   "why": "labeling an existing guess honestly is recording, not narrowing"
-  },
-  {
-   "id": "W65-10 0006 drawing page: a hamlet's plot about 0.15 acre",
-   "summary": "the drawing page's stale 'hamlet garden-scale strips about 0.04' (unscaled days) corrected to the measured 0.15 (medians 0.152 Inashiro, 0.17 Sawada)",
-   "class": "within",
-   "why": "the drawing page describes what the map draws; the figure is measured, and 0.15 sits inside the question page's own range (single dry fields averaging 0.12-0.16 acre), so the record is not moved to fit the code; quote-check SUPPORTS"
-  },
-  {
-   "id": "W65-11 nine modals' depiction corrections",
-   "summary": "buckwheat color reason, winter barley overclaims, grain drift, farm holding's dry edge, soy, fan_middle--cleared linking 0009 corrected after the 0006 page edit; each re-checked",
-   "class": "within",
-   "why": "the record checks the page edit owed; each makes a modal say what the map and the record say"
-  },
-  {
-   "id": "W65-12 fork triangle at village/hamlet grain filed as a found row (E2)",
-   "summary": "impl-drift's MISLABELED finding on 'fork band skipped on villages' (0010: the fork triangle is the high ground dry crops take) recorded in the ranking, scope kept, not fixed this wave",
-   "class": "within",
-   "why": "not introduced by this wave: hamlets lost the fork band in wave 10 (ranked row 'fork triangle planted dry', grain != 1.0 -> grain < 1.0 on 0010's drawing page 'on a city map'); this wave only restated the claim's description to name hamlets, label unchanged, code unchanged. Spec Edge Cases: new findings are recorded in the ranking under their tier; the fix needs 0010's drawing page and an applicability reading (0010 is towns and cities), not this wave's 0006 rows. REQUIRED FIX (not a block): the row must name its dependency - if it is fixed by laying the band at hamlet grain, the 'fork band depth' entry in audit/scope.py DEFERRED_ON_MEASURE (and dev/claims-deferred.json) must come out, since W65-4's deferral rests on no kept map laying the band; the row's 'after'/fix text names neither"
-  },
-  {
-   "id": "W65-13 cleared fan middle filed as a found row (E4)",
-   "summary": "modal-depiction's finding that a cleared middle is drawn only as the hem, with no recorded deviation, filed E4",
-   "class": "within",
-   "why": "the record does not yet say what the implementation should draw; E4 is research first (FR-003); ranked and open"
-  },
-  {
-   "id": "W65-14 feature 368 items 4-5 filed",
-   "summary": "0006's visible pointer to the row village's holdings, and what the dry plot's outline stroke stands for, appended to filed feature 368",
-   "class": "within",
-   "why": "neither is a claims-report finding, so the request (fix the claims-report findings) does not reach them; filed where open work lives, as W61's record loose ends were; item 4's link predates this wave (farm-holding's diff changes only the dike text)"
+   "why": "round 1's NOT LEGITIMATE answered: the E3 re-tier and its 'admits both readings' argument are dropped; tier and tier_as_ranked both E2; the call is at siting.py:339 inside _route_seats (siting.py:287), and kosatsuba_faces_the_road has no test under tests/ beyond the legacy name fixtures"
   }
  ],
  "verdict": "CLEAR"

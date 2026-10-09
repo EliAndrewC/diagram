@@ -97,26 +97,27 @@ def _lane_len(pts: list[Pt]) -> float:
     return sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(pts, pts[1:], strict=False))
 
 
-def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, keep_frac: float = 0.4, min_len: float = 0.0) -> list[Pt]:
+def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, min_len: float = 0.0) -> list[Pt]:
     """Shorten a polyline from its LAST vertex until that end reaches something, or the guard stops it.
 
     Walks the final segment inward in `step` px, dropping a whole vertex when one is consumed and
-    more than two remain. NEVER trims below `keep_frac` of the original length and never below two
-    points: a lane whose whole run serves nothing is a siting problem, not something to delete - the
-    map still needs the way it drew, and silently removing one would trade a visible stub for an
-    invisible missing lane.
+    more than two remain, as far as the end still reaches something - back to the last thing the lane
+    serves (0246), however far that is - never past a junction (`min_len`) and never below two points.
+    A lane whose whole run serves nothing is left whole: a siting problem, not something to delete -
+    the map still needs the way it drew, and silently removing one would trade a visible stub for an
+    invisible missing lane. (A 40% floor held the trim until feature 328 wave 66: it stopped a lane
+    short of the last house it serves, where 0246 pulls it back to that house.)
 
     Research:
         end pulled back to what it serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the shortest end that still reaches something
-        trim floor - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never below 40% of the lane's length, which can stop short of the last house served; a lane reaching nothing is left whole, where the page pulls it back to the last house it serves
+        no trim floor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back as far as the last house it serves, held only at a junction; a lane reaching nothing at all is left whole (no house to pull it back to)
     """
-    full = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(pts, pts[1:], strict=False))
-    # `min_len` is the HARD floor a junction sets - see `_junction_floor`. It is a maximum with the
-    # proportional guard rather than a replacement for it: a lane may not be trimmed past a way that
-    # ties into it, whatever fraction of its length that leaves.
-    floor = max(full * keep_frac, min_len)
+    # `min_len` is the one floor, the one a junction sets - see `_junction_floor`: a lane may not be trimmed past a way that
+    # ties into it, whatever fraction of its length that leaves
+    floor = min_len
     out = list(pts)
-    best: list[Pt] | None = None  # the SHORTEST end seen that still reaches something
+    best: list[Pt] | None = None  # the SHORTEST end seen that still reaches the last thing served
+    served: Any = None  # what the end reached first, walking back - the last thing the lane serves
     while len(out) >= 2:
         a, b = out[-2], out[-1]
         seg = math.hypot(b[0] - a[0], b[1] - a[1])
@@ -137,8 +138,14 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, keep_frac: float 
         # and Sawada reviews raised it independently). Walking on while it STILL reaches, and keeping
         # the shortest such point, ends the lane at the homestead instead - and where the end also
         # ran alongside a sibling arm, it shortens that parallel run by the same amount.
-        if reaches(cand):
-            best = list(trial)
+        got = reaches(cand)
+        if got and (served is None or got == served):
+            best, served = list(trial), (got if served is None else served)
+        elif best is not None:
+            # PAST THE LAST THING SERVED, walking back: the end stops there (0246) - not at whatever lies nearer the start,
+            # and not at the next house along where reach zones chain (a predicate that NAMES what it reached is held to the
+            # first thing named; one that answers only yes or no to any reaching run)
+            break
     # NO REACHING END FOUND MEANS LEAVE THE LANE ALONE, not "return the floor-truncated one". `out`
     # at this point is the run cut back as far as the guard allowed, and its end reaches nothing by
     # construction - so returning it MANUFACTURES the exact defect `lanes_reach_something` exists to

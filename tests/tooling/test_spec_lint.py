@@ -379,3 +379,12 @@ def test_make_figures_refuses_a_named_spec_it_cannot_re_run(tmp_path: pathlib.Pa
     monkeypatch.setattr(figures_cli, "ROOT", tmp_path)
     assert figures_cli.main(["specs/240-x"]) == 1
     assert "nothing was re-run" in capsys.readouterr().err
+
+
+def test_a_figure_appears_in_a_table_valued_record() -> None:
+    """Feature 328: `appears` crashed (float() of a dict) when a paragraph cited a record whose value is a table; a figure
+    now appears when any number nested in the record matches it, and a record with no matching number is still missed."""
+    value = {"drawn box at 1 ft/px": {"before": [16, 6], "after": [20, 10]}, "note": "the footing", "flag": True}
+    assert _f5mod.appears(value, "the frame 20 x 10 ft on its footing")
+    assert not _f5mod.appears(value, "a 2 ft margin")
+    assert _f5mod.appears(3.26, "about 3.3 acres") and not _f5mod.appears("n/a", "3 ft")

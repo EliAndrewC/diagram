@@ -1844,3 +1844,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T160 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 65, re-recorded); each map's own crop mix on its own stream, the end plot split at every grain; 0006's hamlet plot size corrected and its record checks answered; claims in step over five impl-drift rounds; cohort unchanged
+
+## Phase 67 - wave 66 (amendment 65): the lane end pulled back to the last house it serves
+
+- `settlement/water_ways/_helpers.py` (`_pull_back`); `overlap/taxonomy.py` (the field graves' reason);
+  `scripts/gates/spec_figures.py` (a table-valued record).
+
+- [x] T161 wave 66's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 66, round 2); the lane end pulled back to the last house it serves with no 40% floor, held to the first thing it reached; the field graves' reason restated; the spec linter's table-valued record fixed; claims in step over two impl-drift rounds; maps and cohort unchanged
+- [x] T162 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 66, round 2); the lane end pulled back to the last house it serves with no 40% floor, held to the first thing it reached; the field graves' reason restated; the spec linter's table-valued record fixed; claims in step over two impl-drift rounds; maps and cohort unchanged

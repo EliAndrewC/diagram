@@ -513,6 +513,7 @@
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#probe size": "E1",
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#the caption proved against the board": "E2",
  "l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth": "E0",
+ "l7r/diagram/settlement/water_ways/_helpers.py::_pull_back#trim floor": "E2",
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": "E1",
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": "E1",
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#stream width": "E1",

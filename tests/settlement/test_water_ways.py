@@ -653,7 +653,7 @@ def test_pull_back_will_not_consume_the_last_segment_of_a_two_point_lane() -> No
     """The loop shortens a lane from its last vertex, dropping a whole vertex when one is consumed.
     When only TWO points remain and the final segment is already shorter than a step, there is
     nothing left to drop - popping would leave a single point, which is not a lane at all - so it
-    stops. That is the floor beneath the proportional guard, and it is reached by a lane that was
+    stops. That is the floor beneath every trim, and it is reached by a lane that was
     always short rather than by one trimmed down to short.
 
     And when nothing the walk passed ever reached anything, the ORIGINAL run comes back untouched:
@@ -675,7 +675,20 @@ def test_pull_back_will_not_consume_the_last_segment_of_a_two_point_lane() -> No
     dogleg = [(0.0, 0.0), (100.0, 0.0), (104.0, 0.0)]
     assert _pull_back(dogleg, lambda _q: False) == dogleg
     shortened = _pull_back(dogleg, lambda _q: True)
-    assert len(shortened) == 2 and 40.0 <= shortened[-1][0] < 100.0, shortened
+    assert len(shortened) == 2 and 0.0 <= shortened[-1][0] < 100.0, shortened
+
+
+def test_pull_back_reaches_the_last_house_however_far_back_it_stands() -> None:
+    """Feature 328 wave 66 (0246: "a lane end that reaches nothing is pulled back to the last house it serves"): a 200 ft
+    lane whose only house is served 40 to 70 ft from its start was held at 40% of its length (80 ft), short of the house,
+    and so came back whole; with no floor but a junction's it ends at the house."""
+    from l7r.diagram.settlement.water_ways import _pull_back
+
+    run = [(0.0, 0.0), (200.0, 0.0)]
+    out = _pull_back(run, lambda q: 40.0 <= q[0] <= 70.0)
+    assert len(out) == 2 and 40.0 <= out[-1][0] <= 48.0, out
+    # a junction still holds it: no trim past the tie at 120 ft
+    assert _pull_back(run, lambda q: 40.0 <= q[0] <= 70.0, min_len=120.0) == run
 
 
 def test_junction_floor_protects_a_crossing_and_ignores_a_fraying_neighbor() -> None:
@@ -906,3 +919,14 @@ def test_a_lane_is_asked_of_the_registry_before_it_is_recorded_or_inked() -> Non
     with pytest.raises(OverlapRefused):
         s.lane([(400.0, 500.0), (600.0, 500.0)], width=3, worn=True)
     assert len(s.M["lanes"]) == 1 and len(s._lane_ink) == ink, "nothing recorded, nothing inked"
+
+
+def test_pull_back_stops_at_the_last_house_where_reach_zones_chain() -> None:
+    """Feature 328 wave 66 (impl-drift): where two houses' reach zones touch, a walk that kept every point reaching ANYTHING
+    passed the last house served and stopped at the next one in; a predicate that names what it reached holds the end to
+    the first thing named, walking back - the last house the lane serves (0246)."""
+    from l7r.diagram.settlement.water_ways import _pull_back
+
+    run = [(0.0, 0.0), (200.0, 0.0)]
+    out = _pull_back(run, lambda q: "A" if 150.0 <= q[0] <= 190.0 else ("B" if 90.0 <= q[0] < 150.0 else None))
+    assert 150.0 <= out[-1][0] <= 158.0, out

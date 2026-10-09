@@ -75,13 +75,34 @@ def is_check5(message: str) -> bool:
 
 
 
-def appears(value: float, paragraph: str) -> bool:
-    """FR-009a: some number token equals the recorded value, exactly or at the token's own precision."""
+def recorded_numbers(value: object) -> list[float]:
+    """Every number a recorded value holds: the value itself, or each number nested in a dict or list of them (most of
+    feature 328's records are tables; a dict value crashed `appears` the first time a paragraph cited one)."""
+    if isinstance(value, bool):
+        return []
+    if isinstance(value, (int, float)):
+        return [float(value)]
+    if isinstance(value, str):
+        try:
+            return [float(value.replace(",", ""))]
+        except ValueError:
+            return []
+    if isinstance(value, dict):
+        return [n for v in value.values() for n in recorded_numbers(v)]
+    if isinstance(value, (list, tuple)):
+        return [n for v in value for n in recorded_numbers(v)]
+    return []
+
+
+def appears(value: object, paragraph: str) -> bool:
+    """FR-009a: some number token equals the recorded value - or one of the numbers a table-valued record holds - exactly
+    or at the token's own precision."""
+    numbers = recorded_numbers(value)
     for raw in _TOKEN.findall(paragraph):
         token = raw.replace(",", "")
         decimals = len(token.split(".", 1)[1]) if "." in token else 0
         try:
-            if round(float(value), decimals) == float(token):
+            if any(round(n, decimals) == float(token) for n in numbers):
                 return True
         except ValueError:
             continue

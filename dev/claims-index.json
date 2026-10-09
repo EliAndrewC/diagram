@@ -33502,20 +33502,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_CLASSIFIED#geometry and bookkeeping": {
-  "code": "751e835297241a73",
-  "core": "c35ad709dbbd9868",
-  "date": "2026-10-07",
-  "note": "a set union",
+  "code": "e6237009835467e9",
+  "core": "69d8ee368f76d464",
+  "date": "2026-10-09",
+  "note": "a set union of the class tuples, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house": {
-  "code": "b9fb1e007750dc64",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "farm_sheds on the west wall (scattered) or north wall (clustered) as the page's convention; groves on the rolled 2-4 sides, only the thin bands beside the house",
+  "code": "362b810cd0d46b35",
+  "core": "5701bcea7ee18ef8",
+  "date": "2026-10-09",
+  "note": "kura on the west wall (scattered) or north wall (clustered) is the recorded drawing convention; the grove takes its rolled 2-4 sides, the windward stand about 24 ft off the house, thin bands beside it",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
@@ -33524,30 +33524,32 @@
   "research": "a131ceba7d0c42fd",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:072f98d7b458fdcb",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:5a291a9ef87d894c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ab7093914db746be",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386",
-   "0040-farm-storehouses-kura.drawing.html:90057266aa2f2fa5",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#bookkeeping records": {
-  "code": "665b40f8323c1426",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "records with no drawn footprint of their own",
+  "code": "aa40dcf7327fb627",
+  "core": "5701bcea7ee18ef8",
+  "date": "2026-10-09",
+  "note": "region, row-plan and tree records, none of them drawn features",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#border as a line": {
-  "code": "842d56caeaba7d58",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "d9c74755bc7b6b21",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "0083 finds borders marked with earth mounds, and no drawing page records not drawing them as a deliberate choice; the departure is recorded only in the code's own string",
+  "note": "the claim departs from 0083's mound markers, but cites only the research page, which holds findings and no project choice; need 0083's .drawing.html to see whether it records the departure (or CANON, if the ubame parley-room sheet is the GM's ruling)",
   "pages": {
    "0083-clan-borders-and-their-markers.html": "7bcbae135f67997c"
   },
@@ -33557,13 +33559,13 @@
    "0083-clan-borders-and-their-markers.html:9175fc63b8eb09dc",
    "0083-clan-borders-and-their-markers.html:eeb497393e38ae19"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#built on what it serves": {
-  "code": "b82ae75f5ddf7612",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "log_booms is exempted as \"a cabled chain of floating logs ... it FLOATS on the river\", but 0210 says \"No floating log boom is drawn round the stock\" (rafts moored or a pond only). Bridges, weirs, water gates, kido, jetties, wall towers and sluices agree with their pages; drop log_booms or relabel it as rafts moored along the bank",
+  "code": "c45364ae523a14ab",
+  "core": "5701bcea7ee18ef8",
+  "date": "2026-10-09",
+  "note": "the log_booms reason describes \"a cabled chain of floating logs\", but 0210 says the stock is \"never as a floating log boom\" and \"No floating log boom is drawn\"; the entry should be the moored raft-mats of §324, or the key is a leftover; bridges, weirs, water gates, sluices, kido, jetties and towers match",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627",
@@ -33575,11 +33577,14 @@
   },
   "research": "35671e697dc865db",
   "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:8e97e1a3baf26730",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966",
+   "0148-towers-along-the-city-wall-mamian.drawing.html:aea6376952328921",
    "0148-towers-along-the-city-wall-mamian.drawing.html:d568b9cefbaa02c3",
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:9207886934569766",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:50ee2d7cf62adfdb",
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:dcd25bf8ea2758a1",
    "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html:c6491b5671cda144",
    "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
@@ -33589,14 +33594,13 @@
    "0210-timber-yards-and-log-booms-kiba.drawing.html:4ef8408e54f82f55",
    "0210-timber-yards-and-log-booms-kiba.drawing.html:eac260ce154f9535"
   ],
-  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#copse and bamboo against a house": {
-  "code": "3c1647c9460e3bf1",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "64e21e8c92aaa84c",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "against a house, never on it",
+  "note": "a clump stands against a house, never on it; the copse in the gaps draws no bamboo, the bamboo is a stand of its own, the belt is on the windward side",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
@@ -33605,18 +33609,18 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:8869ee12a8b6d77d",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
-  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#in-field ditches": {
-  "code": "8b9c16e4fa6032a3",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "delivery ditches and drains run within and along the field",
+  "code": "50b3d3d004c9ff06",
+  "core": "5701bcea7ee18ef8",
+  "date": "2026-10-09",
+  "note": "delivery ditches drawn on the paddy and ending in the field",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
@@ -33625,15 +33629,15 @@
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0fc478156a744cc7",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:101ade123bbcfda0",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228"
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:91496625dcb2cb2c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#in-field ponds, rocks and graves": {
-  "code": "28489cb4b67331d8",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "65ae041ef62f8035",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "the ponds' and rocks' reasons match §479/§482, but the `field_graves` reason still describes only \"a rare in-field grave island ... the flat paddy tiles around\". The page now draws a grave as an island or in a plot's corner against its bunds (§485), with the bund carried round a corner grave (§486), and puts graves on terraces and valley strips, not just flat valley paddy (§484). The exemption itself still holds; its reason should name both forms and the field kinds",
+  "note": "pond sunk in one low plot; outcrop off-center, on terrace or strip only; the restated grave is an island or in a plot's corner against its bunds, the bund carried round it, on valley, terrace or strip",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
@@ -33642,34 +33646,33 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:07108ce9127e5e0d",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:7c3e3563d5367b62",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#inspection post on the gate": {
-  "code": "48b8a3c3b8a0d986",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "the exemption lets the inspection post overlap the gate furniture (and _FIXTURE_MOUNTS mounts it on gate_structs), but 0147 says \"The buildings at a gate never overlap\" (the hall steps out about 66 ft until clear, with about 36 ft clear round each); only its run along the patrol road is attested",
+  "code": "65e3d9bf3a809e36",
+  "core": "5701bcea7ee18ef8",
+  "date": "2026-10-09",
+  "note": "\"may overlap the gate furniture\" contradicts 0147: \"The buildings at a gate never overlap\", each with about 36 ft clear; if inspection_stations is the bansho rather than the gate's inspection hall, the pointer is wrong instead of the code",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
   },
   "research": "1e01770d340670bb",
   "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:94f63315ef481c6c",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:9825dafa2be7c1f4",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:a62d0cd05508754b",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:ec3f0e008c8c4528"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant estate court": {
-  "code": "13c3475fa258478d",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "50a9185296d07175",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "a walled court round its house",
+  "note": "a court round its inner building matches, but §548 keeps the whole court clear of temples, offices, houses and other courts, and a blanket exemption cannot catch a breach; need to know whether another check holds §548 or the exemption is only against the inner building",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html": "8bbd1b525592811a"
   },
@@ -33678,20 +33681,18 @@
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:1b43d2f683a78fe0",
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:ef188e7005fcd323"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant storehouses": {
-  "code": "1ac0b03a3f30b2e1",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "the code draws merchant kura \"as an annex deliberately abutting its shop\"; the research puts them \"at the back of the lot\" in a row or hook behind the main house (one beside the entrance at Hasegawa), never as an annex on the shop; reseat them, or record a deviation on the drawing page",
+  "code": "4c70c952989835ba",
+  "core": "5701bcea7ee18ef8",
+  "date": "2026-10-09",
+  "note": "\"an annex abutting its shop\": 0155 puts the storehouses in \"a row ... at the back of the lot\", behind the main house and never on the street, while the shop is at the front; the reason (and placer) should seat them at the lot's back",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html": "125c108c12eec337"
   },
   "research": "bbd5f6847264a04c",
   "rests": [
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:7530d6929c18e36d",
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:82f49a687751d9b3",
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:3eb6dc26135ce630",
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:52553628b1cd5a2c",
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:6d547dbe1da596cf",
@@ -33701,10 +33702,10 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream": {
-  "code": "1b6abbcf198e1aff",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "be40fb9c2da02a50",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "on the bank, its wheel in a race led off the stream",
+  "note": "the code's wheel is \"dipping into the drain/stream\"; 0064 sets the wheel \"in a short channel (a mill race) led off the stream\", below the intake, and says nothing of a drain",
   "pages": {
    "0064-water-mills-suisha.drawing.html": "e3fdbcecc090b29c"
   },
@@ -33713,77 +33714,78 @@
    "0064-water-mills-suisha.drawing.html:1946071a82e55259",
    "0064-water-mills-suisha.drawing.html:db27160685f8811d"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#pig sty on the dike": {
-  "code": "3be30494a3b584fd",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "0cef299f86ff50b0",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "on the bank itself, half the bank's width in",
+  "note": "on the bank, half the bank's width in from the plot's edge, on the side facing the houses",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed",
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146",
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:de063a6450bfc6d1"
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#polder dike crossed": {
-  "code": "61e21d78279fde00",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "f18853c5901ab9cf",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "a bank you can walk along, channels through a cut",
+  "note": "a walkable bank, cut where a channel crosses; the page is silent on the footbridges",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
   },
   "research": "aaf76ce9023b39a0",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:232a60c6a51c5109",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:2cc72ae0abe5dbce",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#stable yard round its stables": {
-  "code": "c7794f34087f989d",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "d07d116844dadfd1",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "beaten earth over the open ground round the stables",
+  "note": "beaten earth over the open ground round the stables, no animals; troughs within 40 ft of a well; well, troughs and rails never overlap",
   "pages": {
    "0195-stable-yards-and-watering-troughs.drawing.html": "15451a48113d9f9d"
   },
   "research": "d16baad4c6a0e9f3",
   "rests": [
-   "0195-stable-yards-and-watering-troughs.drawing.html:010b3d0aa1acb7d1",
+   "0195-stable-yards-and-watering-troughs.drawing.html:0a2763c6f9d1e772",
    "0195-stable-yards-and-watering-troughs.drawing.html:4ae2e1d99a78ba2e",
-   "0195-stable-yards-and-watering-troughs.drawing.html:ab7e3ee60728257b"
+   "0195-stable-yards-and-watering-troughs.drawing.html:656163c15c9086c3",
+   "0195-stable-yards-and-watering-troughs.drawing.html:6c7db703ddaf2c7a",
+   "0195-stable-yards-and-watering-troughs.drawing.html:b6a954ac88aa4a4c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#wellhead among the houses": {
-  "code": "803c99f335e0599c",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-07",
-  "note": "the exemption lets a well's footprint \"kiss a dense-city building\"; 0196 has city wellheads sit \"clear of the lanes and off every building and compound\", the houses placed after them; drop the dense-city allowance or record it as a convention of the larger-than-life marker",
+  "code": "d8e449a2c1cdcd40",
+  "core": "5701bcea7ee18ef8",
+  "date": "2026-10-09",
+  "note": "among the dwellings, inside a city's blocks off every building; the marker is larger than life, so its nominal footprint may touch",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "85fc1e4c2a7f3a2a"
   },
   "research": "47e13325a5aa6f26",
   "rests": [
    "0196-communal-wells-ido.drawing.html:6d02204b060e2a7f",
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard persimmon near its house": {
-  "code": "0d3e0daf5ca352e1",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "831499a47686e7ee",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "in front of the house or behind it, the crown's edge within about 30 ft",
+  "note": "in front of the house or behind it, its crown edge within about 30 ft",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -33795,10 +33797,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house": {
-  "code": "8d3ed0ef8419d1d6",
-  "core": "c8bdbf8d42ad3c39",
-  "date": "2026-10-08",
-  "note": "the yard, the bed, the fixtures and the joined bath match their pages, but the account's wood shed \"about 9.5 ft off a wall\" contradicts 0043's \"about 6 ft (a ken) off a wall\"; either record the held 9.5 ft on 0043's drawing page as a deviation, or seat the shed at the page's ken",
+  "code": "30110d7bf2196ac6",
+  "core": "5701bcea7ee18ef8",
+  "date": "2026-10-09",
+  "note": "the claim's wood shed \"about 9.5 ft off a wall\" against 0043's \"about 6 ft (a ken) off a wall\" and 0036's \"a step off the wall\"; the figure is the placer's, not this constant's, so check the placer and fix it or the claim; the yard, bed sides, fixtures and bath match",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72",
@@ -33810,12 +33812,12 @@
   "research": "562bde00d1c873bf",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:b4f6885af6bd959a",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53"
   ],
-  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_LINEAR#ground kept clear": {
@@ -62178,10 +62180,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::_pull_back#end pulled back to what it serves": {
-  "code": "3647a853f2f4e49e",
-  "core": "267fb6d2ff51fbe0",
-  "date": "2026-10-05",
-  "note": "shortest end that still reaches something",
+  "code": "fa1c0aa9817ec7f9",
+  "core": "9ea4fc2aa76e60f3",
+  "date": "2026-10-09",
+  "note": "walks back while the end reaches the same named thing it first reached and keeps the shortest such end, which is the last thing served under the page's own reach figures",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -62191,19 +62193,20 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/water_ways/_helpers.py::_pull_back#trim floor": {
-  "code": "ee8187713c8205fe",
-  "core": "267fb6d2ff51fbe0",
-  "date": "2026-10-05",
-  "note": "labeled DEVIATION but 0246 records no 40% floor and no lane left whole; the page says \"a lane end that reaches nothing is pulled back to the last house it serves\" - record the departure on 0246 or drop it",
+ "l7r/diagram/settlement/water_ways/_helpers.py::_pull_back#no trim floor": {
+  "code": "28427e3cd6f1a496",
+  "core": "9ea4fc2aa76e60f3",
+  "date": "2026-10-09",
+  "note": "the junction floor (`min_len`) is the only limit, so the end goes back to the last house served; a run serving nothing is returned whole",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/_helpers.py::dooryard_dist#lane geometry": {
   "code": "84e88f1a7709d6cf",
@@ -62751,10 +62754,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#a row street stays whole": {
-  "code": "7f76091f36c75d3e",
-  "core": "270bd3f98abca1be",
-  "date": "2026-10-07",
-  "note": "`street` is skipped",
+  "code": "ff5c12b165076682",
+  "core": "83f41f59448a4d09",
+  "date": "2026-10-09",
+  "note": "`ln.get(\"street\")` is skipped, so the street is never pulled back",
   "pages": {
    "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
   },
@@ -62762,14 +62765,13 @@
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
-  "triaged": "2026-10-07",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#an end reaching nothing is pulled back": {
-  "code": "ffefc2dc5d8ff122",
-  "core": "270bd3f98abca1be",
-  "date": "2026-10-07",
-  "note": "pull-back to last house, way or bund",
+  "code": "5fd269f0095317f8",
+  "core": "83f41f59448a4d09",
+  "date": "2026-10-09",
+  "note": "each end that reaches no house, way or field edge goes to `_pull_back`",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -62780,25 +62782,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": {
-  "code": "8aa3d3c8eaf0d507",
-  "core": "270bd3f98abca1be",
-  "date": "2026-10-07",
-  "note": "the page gives no figure; 6 ft is a guess",
+  "code": "14e66b8d84e37746",
+  "core": "83f41f59448a4d09",
+  "date": "2026-10-09",
+  "note": "the 6 ft from a field or dry plot edge is a guess; the page sends the path onto the bund but gives no reach figure",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": {
-  "code": "85345b9aa555d69e",
-  "core": "270bd3f98abca1be",
-  "date": "2026-10-07",
-  "note": "the page records 60 ft as a guess; the 20 degree fray rule is a guess",
+  "code": "4cd3b3a6bdd36dba",
+  "core": "83f41f59448a4d09",
+  "date": "2026-10-09",
+  "note": "60 ft is the page's GUESS figure; the 20 degree fray test is a guess the page is silent on",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -62809,22 +62810,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#one end per house and bearing": {
-  "code": "2d97719be2432be3",
-  "core": "270bd3f98abca1be",
-  "date": "2026-10-07",
-  "note": "unanswered; 0081's 25 ft joining of ends is a different rule",
+  "code": "14f576018b7ce8e6",
+  "core": "83f41f59448a4d09",
+  "date": "2026-10-09",
+  "note": "none of the cited pages answers the 60 ft / 25 degree fan-rival rule, so UNRESEARCHED holds",
   "pages": {},
   "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard": {
-  "code": "2e7dd86a746eb0d0",
-  "core": "270bd3f98abca1be",
-  "date": "2026-10-07",
-  "note": "the page counts an end \"within 60 ft of the house, or within 12 ft of the steading's built ground - its house, byre, shed, threshing yard or garden\"; the code accepts 12 ft only of the dooryard (W57, \"not 12 ft of any wall\") and refuses ends behind the house or walked past it; update the page's guess or the code",
+  "code": "c995c3d7976780a9",
+  "core": "83f41f59448a4d09",
+  "date": "2026-10-09",
+  "note": "the page counts an end \"within 60 ft of the house, or within 12 ft of the steading's built ground - its house, byre, shed, threshing yard or garden\", on any side; the code's `reaches_dooryard` covers only yard, beds and front band, and the 60 ft from the center is refused when `behind_house` or `walked_past`. Either the code takes the page's any-side test, or the page records the dooryard-only, not-past, not-behind rule as a DEVIATION",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -62835,30 +62834,27 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#short lanes dropped": {
-  "code": "3f32fbfdace26eaf",
-  "core": "270bd3f98abca1be",
-  "date": "2026-10-07",
-  "note": "unanswered; 0081's 40 ft tail rule is a different rule",
+  "code": "89869a08e109cb8d",
+  "core": "83f41f59448a4d09",
+  "date": "2026-10-09",
+  "note": "the cited pages are silent on the 71 ft drop (0081's 40 ft rule is about tails past a crossing, a different rule)",
   "pages": {},
   "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#the track out and the field spur stay whole": {
-  "code": "95823a8084d97f74",
-  "core": "270bd3f98abca1be",
-  "date": "2026-10-07",
-  "note": "connector and spur are skipped",
+  "code": "ff6e35606c25108a",
+  "core": "83f41f59448a4d09",
+  "date": "2026-10-09",
+  "note": "connector and spur are skipped; the track out runs off the map, and spur and track are one through-route",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:df440690bbce9cb6",
-   "0081-village-lanes.drawing.html:f2368e271306e3c2"
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
   "verdict": "IN-STEP"
  },

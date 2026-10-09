@@ -1013,6 +1013,32 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `test_the_crop_stream_moves_with_the_geometry_stream_and_leaves_it_alone`;
   `impl-drift`; `spec-fidelity`.
 
+## Wave 66 (amendment 65, 2026-10-09) - batch 6
+
+- **Scope**: `_pull_back#trim floor` (0246: "a lane end that reaches nothing is pulled back to the last house it serves"):
+  the trim never cut a lane below 40% of its length, so a lane whose last house stood nearer its start than that came back
+  whole, its end in the open. The floor is gone; a junction still holds a lane (`min_len`), and a lane that reaches nothing
+  is still left whole. Without the floor the walk ran back to whatever stood nearest the start (in the test, the crossing
+  way), so it now stops at the first point past the last thing served - walking back from the free end, the end stops at
+  that house, as 0246 says - and, impl-drift's round 1, where two houses' reach zones chain, the walk is held to the FIRST
+  thing it reached: `trim_lane_stubs`' predicate now names what an end reaches (a way, a house, a field), and the walk goes
+  on only while the end reaches that same one (`test_pull_back_stops_at_the_last_house_where_reach_zones_chain`). The overlap exemption's reason for field graves restated to 0008 (impl-drift after the merge
+  of main: an island or in a plot's corner against its bunds, on valley, terrace or strip paddy).
+- **Measured** (m:wave66-pull-back): the five hamlets reroll byte-identical (no shipped lane ended inside the old floor);
+  the 48-seed cohort unchanged (the same six refused seeds); the unit test - a 200 ft lane whose only house stands 40 to 70
+  ft from its start - came back whole and now ends at the house.
+- **Found and fixed**: the spec linter crashed (`spec_figures.appears`: float() of a dict) the first time a spec paragraph
+  cited a measurement whose value is a table - every number nested in the record now counts (`recorded_numbers`), tested;
+  the Decisions rows of waves 56-65 restated without bare figures (each points at its page or its `m:` record).
+- **Left to their rows**: `reaches_dooryard` and `trim_lane_stubs#served at the dooryard` - to be fixed to 0246's any-side
+  rule (an end within 60 ft of the house or 12 ft of its house, byre, shed, threshing yard or garden, on any side), as wave 45
+  fixed the hamletgen twins (`off_the_back`, `settle_ends`: "reaches it on any side"), in a wave of their own with the lane
+  review it owes; the dooryard-only rule of feature 287's water W57 stays only if a MODE 1 check rules it a legitimate
+  exception (FR-004). The notice board's facing at an entrance (batch 5's found row) stays E2: its one predicate is
+  `WayFacing.turn` (the gate test was retired at feature 287), fed the placement at the siting call.
+- **Verification**: `test_pull_back_reaches_the_last_house_however_far_back_it_stands`,
+  `test_a_figure_appears_in_a_table_valued_record`; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

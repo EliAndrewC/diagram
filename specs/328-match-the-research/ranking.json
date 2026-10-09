@@ -9218,7 +9218,7 @@
   "key": "l7r/diagram/settlement/structures/fixtures/board_seat.py::WayFacing.turn#board squared to its nearest way",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "at an entrance seat the board is squared to the NEAREST way (Inashiro: lane 3, an access lane of three households, 2.5 ft nearer), 43.5 degrees off the connector every other departure takes - past 0190's 'within 30 degrees of some stretch of that road'; an entrance board faces the way out its placement exists for: turn it to the anchor's way where the placement is `entrance` (glyph-check notice board, batch 5's close, F1)",
+  "fix": "at an entrance seat the board is squared to the NEAREST way (Inashiro: lane 3, an access lane of three households, 2.5 ft nearer), 43.5 degrees off the connector every other departure takes - past 0190's 'within 30 degrees of some stretch of that road'; an entrance board faces the way out its placement exists for: turn it to the anchor's way where the placement is `entrance` (glyph-check notice board, batch 5's close, F1); the one predicate is `WayFacing.turn` (board_seat.py), fed the placement kind at its call in `_route_seats`",
   "files": [
    "l7r/diagram/settlement/structures/fixtures/board_seat.py",
    "l7r/diagram/settlement/structures/fixtures/siting.py"
@@ -9420,7 +9420,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "66",
   "scope": "kept"
  },
  {
