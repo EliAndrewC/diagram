@@ -390,7 +390,7 @@ class GroundCoverMixin:
             coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
             no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
             scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: a few scraggly pines - one throw to 6,000 sq ft, at least two throws (a throw the keep-outs refuse seats none), none on pasture
-            off the ponds' open water - UNRESEARCHED: no scrub or pine on a pond or a crescent pond, the grass bare 2 ft past a crescent pond's rim
+            off the ponds' open water - UNRESEARCHED: no scrub, pine or coppice crown on a pond or a crescent pond (one water test, `_sparse`), the grass bare 2 ft past a crescent pond's rim
             marsh edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass thins into the reeds, brush and pines stop at the marsh
             wood edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no brush or pine in a wood, grass only WOOD_FRINGE_FT under its edge, thinning inward (its inner half at `WOOD_FRINGE_THIN_KEEP`)
             coppice stops at the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: no woody growth inside a marsh but the belt's alder, so no coppice crown is seated in one
