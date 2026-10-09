@@ -1735,16 +1735,20 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 - `stands.py::village_grove` (the south strip and the yards' east lane), `wood_share.py` (`WoodShares.sun_depth`, `copse_keepouts`).
 
-- [ ] T141 wave 56's rows (FR-003, FR-004)
+- [x] T141 wave 56's rows (FR-003, FR-004)
       research: rendering
-- [ ] T142 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
+      verify: DONE. verified 2026-10-08: plan CLEAR (wave 57 later rounds); impl-drift recorded (claims-owed none; the one DRIFTED is ranked row 819); record-owed none
+- [x] T142 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan CLEAR (wave 57 later rounds); impl-drift recorded (claims-owed none; the one DRIFTED is ranked row 819); record-owed none
 
 ## Phase 58 - wave 57 (amendment 56): the commons' look - no fill, grass only under a wood's edge
 
 - `land/cover.py` (the scrub's claim; the woods whole, the fringe zone), `land/tiles.py` (`grass_tile(brush=)`, `wood_fringe_tile`), `core.py` (the slots).
 
-- [ ] T143 wave 57's rows (FR-003, FR-004)
+- [x] T143 wave 57's rows (FR-003, FR-004)
       research: rendering
-- [ ] T144 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
+      verify: DONE. verified 2026-10-08: plan CLEAR (wave 57 later rounds); impl-drift recorded (claims-owed none; the one DRIFTED is ranked row 819); record-owed none
+- [x] T144 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan CLEAR (wave 57 later rounds); impl-drift recorded (claims-owed none; the one DRIFTED is ranked row 819); record-owed none
