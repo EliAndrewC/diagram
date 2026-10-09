@@ -17436,11 +17436,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_fabric_hits#plumbing and geometry": {
-  "code": "8fa71941fb7498b7",
-  "core": "ea0e8ec59e2c4594",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "code": "6819168b3bef1b55",
+  "core": "155ca83069ce85b0",
+  "date": "2026-10-08",
+  "note": "counts the steadings a run fouls; the gap is the caller's, so this decides nothing physical",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_hits_a_steading#no house on a tread": {
@@ -17596,6 +17598,16 @@
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/fabric.py::fabric_hits_boxed#plumbing": {
+  "code": "e4b4fcdbe68d5310",
+  "core": "48b88b98dc3fc814",
+  "date": "2026-10-08",
+  "note": "boxes each steading once and skips ones whose box, widened by the gap, the run's cannot meet; the same count, nothing physical decided",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::house_hit#no house on a tread": {
@@ -23944,10 +23956,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#leaning downslope": {
-  "code": "84272b1954ac630a",
-  "core": "f2076a65ab4d08ef",
+  "code": "fbac8db4a9dab3d7",
+  "core": "8c18acae0e41368f",
   "date": "2026-10-08",
-  "note": "the page gives the downslope exit but not the 0.55/0.85 weights",
+  "note": "the page says only that the track leaves downslope; nothing gives the 0.55/0.85 weights",
   "pages": {},
   "research": "",
   "rests": [
@@ -23956,34 +23968,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#the three ranked": {
-  "code": "0d029d5347f46f6e",
-  "core": "f2076a65ab4d08ef",
+  "code": "b1c36d5e0790e981",
+  "core": "8c18acae0e41368f",
   "date": "2026-10-08",
-  "note": "search order; wet and steaded both refused in the end",
+  "note": "search order only; the end accepts only a bearing with no wet ground and no steading hit, so ranking wet before steadings changes no outcome",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track drawn taut": {
-  "code": "5f312ee6b6a0a75a",
-  "core": "f2076a65ab4d08ef",
+  "code": "cde8debecb77dfa1",
+  "core": "8c18acae0e41368f",
   "date": "2026-10-08",
-  "note": "straight candidate from the gateway, \"pulled taut like a string\"",
+  "note": "each candidate is one straight line from the gateway to past the frame, which is \"pulled taut like a string\"",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track off the steadings": {
-  "code": "6fe09fdf774a6147",
-  "core": "f2076a65ab4d08ef",
+  "code": "8052306586e016ca",
+  "core": "8c18acae0e41368f",
   "date": "2026-10-08",
-  "note": "the 7 ft fence clearance, nothing built on a lane",
+  "note": "steadings are scored for nearness at the gap, matching the 7 ft from a lane's middle to a garden fence (the 7 ft value is the claim's; the bundle shows the constant only as WEB_FABRIC_GAP)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -23996,10 +24009,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track out off the wet": {
-  "code": "4eefcc7fa93355d5",
-  "core": "f2076a65ab4d08ef",
+  "code": "ddcd5bf9fb6ae080",
+  "core": "8c18acae0e41368f",
   "date": "2026-10-08",
-  "note": "wet refused, leaves downslope, runs off the map",
+  "note": "wet ground is ranked first and a wet bearing is refused in the end; the ideal bearing leans downslope; the run goes past the frame",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -24010,11 +24023,19 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::connector_track#wet, then steadings, then crop": {
-  "code": "8717249ebb61adeb",
-  "core": "f2076a65ab4d08ef",
+ "l7r/diagram/hamletgen/ways/track.py::connector_track#track steered clear of the pond, the drain brook and the watercourses (ranked with the crop; a crossing is tolerated in the fallback)": {
+  "code": "8c18acae0e41368f",
+  "core": "8c18acae0e41368f",
   "date": "2026-10-08",
-  "note": "no crop crossing, no wet ground, nothing built on a lane",
+  "note": "track steered clear of the pond, the drain brook and the watercourses (ranked with the crop; a crossing is tolerated in the fallback)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::connector_track#wet, then steadings, then crop": {
+  "code": "38a11341fee79066",
+  "core": "8c18acae0e41368f",
+  "date": "2026-10-08",
+  "note": "wet ground is refused, steadings kept off the tread, and a crop clip is left for route_around to bend away from the plots",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"

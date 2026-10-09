@@ -653,7 +653,8 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), wet: 
         wet, then steadings, then crop - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: wet ground and crop refused (0081), no tread on a steading (0246)
         the three ranked - NONE: search order; wet and steaded bearings are both refused in the end
         track drawn taut - research/questions/0081-village-lanes.drawing.html: every lane pulled taut like a string - the candidate a straight run from the gateway past the frame
-        track off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings"""
+        track off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings
+        track clear of the pond and the brook - UNRESEARCHED: the pond, the drain brook and the watercourses scored with the crop, a crossing tolerated only in the fallback"""
     # PAST THE FRAME ON EVERY BEARING: a fixed 4,000 ft stopped short of a 5,600 ft canvas's far edge (feature 328 wave 46,
     # found when the taut track first took an eastward bearing). The canvas' diagonal reached it, but every later pass samples
     # the whole connector (`field_runs` asked `run_on_target` 53% more often, batch 1's pair), so each bearing runs to the

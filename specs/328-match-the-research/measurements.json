@@ -804,5 +804,75 @@
         ]
       }
     }
+  },
+  "batch4-seed39-causes": {
+    "quantity": "batch 4's perf audit: seed 39's crossings (10 households +12.0%, 40 households +11.7%) traced function by function at wave 61 (c0feb4b8e) and after the slide fix, and the two index fixes measured",
+    "observed": "2026-10-09",
+    "method": "make perf-profile SEED=39 HOUSEHOLDS=10|40 STAGE=homesteads|hinterland in a worktree at each commit; call counts and cumulative seconds read from the raw .prof (cProfile, ~+225%); the five hamlets rerolled after each fix and compared byte for byte",
+    "value": {
+      "homesteads_10hh": {
+        "wave 61": {
+          "stage_s": 1.9,
+          "connector_track": [
+            1,
+            0.011
+          ],
+          "_crosses_fabric_calls": 431
+        },
+        "slide fix": {
+          "stage_s": 2.3,
+          "connector_track": [
+            2,
+            0.658
+          ],
+          "_fabric_hits": [
+            42,
+            0.47
+          ],
+          "_crosses_fabric_calls": 13488
+        },
+        "boxed once (fabric_hits_boxed)": {
+          "stage_s": 2.1,
+          "connector_track": [
+            2,
+            0.523
+          ],
+          "fabric_hits_boxed": [
+            42,
+            0.33
+          ],
+          "_crosses_fabric_calls": 3969
+        },
+        "cause": "the slide fix re-seats the households; on the new seating a steading stands on the track-out's ideal bearing, so the sweep ranks all 41 bearings instead of stopping at the first clean one"
+      },
+      "hinterland_40hh": {
+        "wave 61": {
+          "stage_s": 3.3,
+          "village_grove_s": 0.83,
+          "_draw_grove_calls": 7,
+          "_sun_keepouts_calls": 21
+        },
+        "slide fix": {
+          "stage_s": 4.3,
+          "village_grove_s": 2.01,
+          "_draw_grove_calls": 313,
+          "_sun_keepouts": [
+            633,
+            0.708
+          ],
+          "sun_box_calls": 111408
+        },
+        "sun boxes memoized": {
+          "village_grove_s": 1.88,
+          "_sun_keepouts": [
+            633,
+            0.415
+          ]
+        },
+        "cause": "on wave 61's seating the village grove seated 7 clumps; on the re-seated ground it seats and draws 313 - the belt and copse planted, the stage's added time is that planting"
+      },
+      "homesteads_40hh": "the audit's bisection: wave 56 +1.1 s (the seats' 50 ft sun strips, rows 580/582/583), the rest wave 61 and the fix",
+      "maps": "byte-identical after both index fixes"
+    }
   }
 }

@@ -231,8 +231,17 @@ class KeepoutsMixin:
             boxes = g.get("boxes") or {}
             yard = boxes.get("yard", g.get("yard"))
             plots += [p for p in ([yard] if yard is not None else []) + list(boxes.get("gardens", g.get("gardens")) or ())]
+        # THE SUN BOXES TAKEN ONCE FOR THE SAME GROUND (batch 4's perf audit: `village_grove` asked this 633 times on cohort seed 39 at
+        # 40 households, each rebuilding every plot's sun box - 112,000 `sun_box` calls): keyed on the reach and the plots themselves,
+        # so a plot moved or added is a new key, never a stale answer
+        key = (reach, tuple(tuple(map(float, p)) for p in plots))
+        memo = self.__dict__.setdefault("_sun_box_memo", {})
+        sun = memo.get(key)
+        if sun is None:
+            memo.clear()  # one ground at a time: the plots only grow while a map is drawn
+            sun = memo[key] = [sun_box(p, reach) for p in plots]
         bx0, by0, bx1, by1 = bbox
-        return [b for b in (sun_box(p, reach) for p in plots) if b[0] + b[2] >= bx0 and b[0] - b[2] <= bx1 and b[1] + b[3] >= by0 and b[1] - b[3] <= by1]
+        return [b for b in sun if b[0] + b[2] >= bx0 and b[0] - b[2] <= bx1 and b[1] + b[3] >= by0 and b[1] - b[3] <= by1]
 
     def _plant_run(self: Settlement, kind: str, pieces: Sequence[str], trees: Sequence[tuple[float, float, float] | None], cls: Any) -> int:  # type: ignore[misc]
         """Emit a dike's planted string - `pieces`, of which those with a `trees` entry (x, y, r) are canopy trees (a willow, a
