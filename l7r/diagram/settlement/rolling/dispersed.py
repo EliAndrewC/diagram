@@ -214,19 +214,27 @@ def clear_east_of_beds(groves: list[Rect], beds: list[Rect], reach: float) -> li
 
     The bands are drawn unraked and the bed is turned with its house about the house's center (`_rake_parts`), so at a rake a
     bed laid wholly south of the band's end can rise past it by its distance from the house times the rake's sine - 1.3 ft
-    on cohort seed 906 at -8 degrees (feature 315). A band left shorter than it is wide is not cut (its run would be a stub).
+    on cohort seed 906 at -8 degrees (feature 315). A band whose cut run would be shorter than it is wide is DROPPED (feature 328
+    wave 59: it was kept whole, standing in the bed's east reach, where 0038 keeps every crown out).
 
-    Research: rect helpers - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: grove bands cut back out of a bed's east (morning-sun) reach, short bands left uncut"""
+    Research: band cut out of a bed's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft east of a bed - a band cut back out of the reach, a band whose cut run would be a stub dropped"""
     out = []
     for r in groves:
         x, y, w, h = r
+        dropped = False
         for bx, by, bw, bh in beds:
             east = bx + bw / 2
             top, bottom = by - bh / 2, by + bh / 2
-            if not (east - 2 <= x - w / 2 < east + reach and y - h / 2 < bottom and top < y + h / 2):
+            if not (
+                east - 2 <= x - w / 2 < east + reach and y - h / 2 < bottom + 1.0 and top - 1.0 < y + h / 2
+            ):  # within a pixel: a band ending AT the bed's edge overlaps it once both are rounded (328 wave 59, cohort seed 901: 0.015 px)
                 continue
             y0, y1 = (y - h / 2, top - 1.0) if y < by else (bottom + 1.0, y + h / 2)  # a pixel clear: both records are rounded to 0.1
             if y1 - y0 >= w:
                 x, y, w, h = x, (y0 + y1) / 2, w, y1 - y0
-        out.append((x, y, w, h))
+            else:
+                dropped = True
+                break
+        if not dropped:
+            out.append((x, y, w, h))
     return out

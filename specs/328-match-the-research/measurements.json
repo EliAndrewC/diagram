@@ -1,603 +1,621 @@
 {
- "inashiro-glyph-lane-F1-knot": {
-  "verifies": "F1",
-  "subject": "glyph-check--village-lane",
-  "answers": "01d76e22140a",
-  "quantity": "lane-end pairs within the knot reach (smooth._KNOT_FT) and not joined, near the track's head (2330, 1750)",
-  "value": 0,
-  "unit": "pairs",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/inashiro/inashiro.json lanes, after the knot fix (gap_ways gather + ways/knots.py)",
-  "method": "tests/hamletgen/test_pool_261.py test_no_lane_ends_knot_short_of_a_join on the regenerated manifest (green): lane 7 gathered onto the track's head; lane 1 is a 15 ft lane from the head to the point lane 3 arrives - one way joining the two, not two arrivals"
- },
- "inashiro-glyph-lane-F2-knot": {
-  "verifies": "F2",
-  "subject": "glyph-check--village-lane",
-  "answers": "01d76e22140a",
-  "quantity": "lane-end pairs within the knot reach and not joined, near lane 4's south-west corner (2245, 2150)",
-  "value": 0,
-  "unit": "pairs",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/inashiro/inashiro.json lanes, after the knot fix",
-  "method": "the same test, green; and a direct count of distinct lane ends 1-25 ft apart within 60 ft of the corner: 0 (lane 11's end moved clear of lane 9's)"
- },
- "inashiro-glyph-lane-r2-F2-widths": {
-  "verifies": "F2",
-  "subject": "glyph-check--village-lane",
-  "answers": "cc7748da784c",
-  "quantity": "Inashiro's lane widths by role after the rank fix (the field route's household way no longer widened to the track's 6 ft)",
-  "value": "access: 3.0; connector: 6.0; field way: 5",
-  "unit": "ft",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/inashiro/inashiro.json lanes[].w grouped by role, after the regenerate",
-  "method": "joints.rank_width / at_rank hold each lane at its role's 0081 width (3 ft footpath, 5 ft spine and field spur, 6 ft track out) and settle_widths keeps it; tests/hamletgen/test_pool_261.py test_every_lane_is_drawn_at_its_own_rank green on all five pool maps"
- },
- "wave4-perf-control-no-gather": {
-  "subject": "perf 328-end vs 328-start, band 2 (40 households)",
-  "quantity": "40-household roll time with the knot gather removed (settle_knots out of settle.STEPS, gathered_foot returning no junction), against the bookend pair taken back to back",
-  "value": "seed 4: start 15.3, end 17.5, control 16.1; seed 25: start 11.9, end 13.2, control 11.4; seed 39: 12.2 / 12.0 / 11.2; seed 47: 11.4 / 12.3 / 11.1",
-  "unit": "s",
-  "observed": "2026-10-07",
-  "source": "dev/perf-log/20261007T095624Z-328-start-perfbase.json, 20261007T095926Z-328-end-digram-backlog.json, 20261007T100305Z-328-control-perfbase.json",
-  "method": "make perf in a detached worktree at origin/main (start), the clone at 9a89f10ed (end), then the same worktree at 9a89f10ed with the two gather calls removed (control), run one after another on the same host",
-  "finding": "the knot gather is 1.1-1.8 s of each 40-household map (seed 4 1.4 s, seed 25 1.8 s, seed 47 1.2 s); with it removed the lane law alone runs within 0.8 s of the start on every seed, and faster on three of four"
- },
- "w9-perf-yard-step-released": {
-  "verifies": "perf band 3 (wave 9)",
-  "subject": "perf-bookends--328-w9",
-  "answers": "20261007T165934Z-review-328-audit-local-digram-backlog",
-  "quantity": "wall time of the reference at 40 households seed 39, 10 households seed 39 and 15 households seed 47 with the yard privy's step released to the page's value (everything else as 6870097cd)",
-  "value": "40 hh seed 39: 12.6-12.7 s (held 14.6-14.8, start 12.0-12.2); 10 hh seed 39: 2.6-2.7 s (held 3.1-3.2, start 2.7); ref seed 47: 3.8 s (held 4.6-4.7, start 4.0-4.2)",
-  "unit": "s",
-  "observed": "2026-10-07",
-  "source": "the perf-audit's detached worktrees at 6870097cd: scratchpad audit11/{start,end,yard}.{0,1}.json, perf_snapshot.measure, 2 reps each",
-  "method": "perf_snapshot.measure on the four legs and four seeds, start (6ca2f5ccf), end (6870097cd) and end with PRIVY_YARD_STEP_FT = 6.0 - WALL_GAP_FT, back to back; repeats agree within about 2%"
- },
- "w10-perf-fork-and-ring-released": {
-  "verifies": "perf band 3 (wave 10)",
-  "subject": "perf-bookends--328-w10",
-  "answers": "perf-audit of wave 10 (af0a88e0e99ef3f59), scratchpad pa10/res.jsonl",
-  "quantity": "wall time with wave 10's fork-triangle row (hem.py grain < 1.0) and ring-step row (MAX_STEPS 0) reverted, everything else as wave 10",
-  "value": "reference seed 25: 4.0 s (end 5.0, start 4.0); reference seed 39: 3.7 s (end 4.1, start 3.7); 20 hh seed 4: 6.5 s (end 8.8, start 6.5); 20 hh seed 25: 6.3 s (end 7.1, start 6.3); the other seven value groups measure zero",
-  "unit": "s",
-  "observed": "2026-10-07",
-  "source": "the perf-audit's detached worktrees at 9099b942d (start) and 7cf6c9ec0 (end), perf_snapshot.measure, 2-3 rounds, per-leg spread about 0.1 s",
-  "method": "each of wave 10's value groups reverted alone and the fork and ring together; the field-way search (reach.settle_field) ran 242 candidates deep against 10 on 20 hh seed 4; a crossing_deck memo would hit 18 of 245 calls (measured), the rings' bounding boxes computed once recovered 0.15 of 2.4 s"
- },
- "mizuguchi-glyph-woodland-F1-side": {
-  "subject": "glyph-check--woodland-commons",
-  "answers": "f0a88a5acd8a",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/mizuguchi/mizuguchi.json commons (role woodland) and meta.woodland_offsheet, regenerated after the fix (parcels.py: crossed_through on every tier)",
-  "method": "count the drawn woodland rings; read the off-sheet record",
-  "verifies": "F1",
-  "quantity": "woodland rings drawn on the houses' side of the field (a walk from the houses that does not run through the field)",
-  "value": 0,
-  "unit": "rings",
-  "note": "Mizuguchi draws no wood on the sheet; the wood is recorded beyond the sheet to the W (woodland_offsheet), as no seat through and beyond its field fits the canvas"
- },
- "mizuguchi-glyph-woodland-F2-measured": {
-  "subject": "glyph-check--woodland-commons",
-  "answers": "f0a88a5acd8a",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/mizuguchi/mizuguchi.json commons (role woodland) and meta.woodland_offsheet, regenerated after the fix (parcels.py: crossed_through on every tier)",
-  "method": "count the drawn woodland rings; read the off-sheet record",
-  "verifies": "F2",
-  "quantity": "woodland rings drawn on the houses' side, measured on the regenerated manifest (the previous close was an acceptance only)",
-  "value": 0,
-  "unit": "rings"
- },
- "kashikawa-glyph-woodland-F1-through": {
-  "verifies": "F1",
-  "subject": "glyph-check--woodland-commons",
-  "answers": "f0a88a5acd8a",
-  "quantity": "share of the walk from the house centroid to Kashikawa's one drawn wood that runs inside the field, of the field's depth along the walk (the drawn outline)",
-  "value": 0.49,
-  "unit": "share",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/kashikawa/kashikawa.json fields[0].outline, commons (role woodland), houses - regenerated after the fix",
-  "method": "400 samples along the straight walk tested in the outline; depth as the outline's extent along the walk",
-  "note": "a drawn wood reached through the field (520 of 1,057 ft): the code's test reads the planning envelope at 0.5; the drawn outline differs slightly from it"
- },
- "kashikawa-glyph-farm-holding-F1-width": {
-  "subject": "glyph-check--farm-holding",
-  "answers": "5aacbed543c6",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
-  "verifies": "F1",
-  "quantity": "width of every row holding along the street (round 1: 209 ft on a 240 ft lot spacing)",
-  "value": 240,
-  "unit": "ft"
- },
- "kashikawa-glyph-farm-holding-F1-gap": {
-  "subject": "glyph-check--farm-holding",
-  "answers": "5aacbed543c6",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
-  "verifies": "F1",
-  "quantity": "largest nearest-neighbor gap between row holdings (round 1: 31 ft of scrub)",
-  "value": 0.0,
-  "unit": "ft"
- },
- "kashikawa-glyph-farm-holding-F4-depth": {
-  "subject": "glyph-check--farm-holding",
-  "answers": "5aacbed543c6",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
-  "verifies": "F4",
-  "quantity": "depth of every row holding (3 lots of 240 ft)",
-  "value": 720,
-  "unit": "ft"
- },
- "kashikawa-glyph-farm-holding-F5": {
-  "subject": "glyph-check--farm-holding",
-  "answers": "5aacbed543c6",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
-  "verifies": "F5",
-  "quantity": "every strip behind its own farm; confirmation, unchanged by the width fix",
-  "value": 1,
-  "unit": "confirmation"
- },
- "kashikawa-glyph-farm-holding-F6": {
-  "subject": "glyph-check--farm-holding",
-  "answers": "5aacbed543c6",
-  "observed": "2026-10-07",
-  "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
-  "verifies": "F6",
-  "quantity": "confusable with nothing; confirmation",
-  "value": 1,
-  "unit": "confirmation"
- },
- "wave22-perf-control-nucleated-crossings": {
-  "quantity": "homesteads stage median change, 3c997ab6b against 58f07ada3 (wave 22's holding change), on the four crossing rolls (10 hh seeds 4 and 39, 40 hh seeds 25 and 47), 6 interleaved runs each in detached worktrees; all four nucleated, seat_rows never runs; identical maps (dry_plots 49, 17, 36, 38)",
-  "value": [
-   0.005,
-   0.002,
-   0.002,
-   -0.07
-  ],
-  "unit": "s",
-  "observed": "2026-10-08",
-  "source": "perf-audit wave 22 counterfactual, dev/perf-log/20261008T003813Z-review-328-confirmation-local-digram-backlog.json; hinterland median change at most +0.013 s"
- },
- "wave24-perf-control-nucleated-crossings": {
-  "quantity": "end vs stages.py+pondstock.py reverted to 397c005fb, 6 interleaved runs each, median total and homesteads stage, on the crossing seeds (10 hh 39, 20 hh 4, 40 hh 47); all nucleated (the perf spec's form), the rank step never used, pond_stock 0.00 s; map hashes identical",
-  "value": {
-   "total_s": [
-    [
-     3.12,
-     3.11
-    ],
-    [
-     7.72,
-     7.68
-    ],
-    [
-     13.08,
-     13.28
-    ]
-   ],
-   "homesteads_s": [
-    [
-     0.8,
-     0.78
-    ],
-    [
-     1.86,
-     1.91
-    ],
-    [
-     5.13,
-     5.23
-    ]
-   ]
+  "inashiro-glyph-lane-F1-knot": {
+    "verifies": "F1",
+    "subject": "glyph-check--village-lane",
+    "answers": "01d76e22140a",
+    "quantity": "lane-end pairs within the knot reach (smooth._KNOT_FT) and not joined, near the track's head (2330, 1750)",
+    "value": 0,
+    "unit": "pairs",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/inashiro/inashiro.json lanes, after the knot fix (gap_ways gather + ways/knots.py)",
+    "method": "tests/hamletgen/test_pool_261.py test_no_lane_ends_knot_short_of_a_join on the regenerated manifest (green): lane 7 gathered onto the track's head; lane 1 is a 15 ft lane from the head to the point lane 3 arrives - one way joining the two, not two arrivals"
   },
-  "unit": "s",
-  "observed": "2026-10-08",
-  "source": "perf-audit wave 24 counterfactual, dev/perf-log/20261008T013819Z-review-328-confirmation-local-digram-backlog.json"
- },
- "wave33-perf-control-fabric-interleaved": {
-  "quantity": "HEAD against HEAD with hamletgen/ways/fabric.py reverted to 51da9771f, interleaved, alternating leg order, 3 reps (2 at 40 hh); paired medians",
-  "value": {
-   "15hh": -2.9,
-   "10hh": -1.0,
-   "20hh": -1.9,
-   "40hh": -15.4
+  "inashiro-glyph-lane-F2-knot": {
+    "verifies": "F2",
+    "subject": "glyph-check--village-lane",
+    "answers": "01d76e22140a",
+    "quantity": "lane-end pairs within the knot reach and not joined, near lane 4's south-west corner (2245, 2150)",
+    "value": 0,
+    "unit": "pairs",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/inashiro/inashiro.json lanes, after the knot fix",
+    "method": "the same test, green; and a direct count of distinct lane ends 1-25 ft apart within 60 ft of the corner: 0 (lane 11's end moved clear of lane 9's)"
   },
-  "unit": "% HEAD vs reverted",
-  "observed": "2026-10-08",
-  "source": "perf-audit wave 33, dev/perf-log/20261008T050014Z-review-328-confirmation-local-digram-backlog.json and its audit record"
- },
- "wave34-kuwabata-inlet-outside-dike": {
-  "quantity": "length of the reservoir's inlet channel lying outside the perimeter dike's drawn outline and the pond, on Kuwabata",
-  "value": {
-   "before": 63.8,
-   "after": 14.7
+  "inashiro-glyph-lane-r2-F2-widths": {
+    "verifies": "F2",
+    "subject": "glyph-check--village-lane",
+    "answers": "cc7748da784c",
+    "quantity": "Inashiro's lane widths by role after the rank fix (the field route's household way no longer widened to the track's 6 ft)",
+    "value": "access: 3.0; connector: 6.0; field way: 5",
+    "unit": "ft",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/inashiro/inashiro.json lanes[].w grouped by role, after the regenerate",
+    "method": "joints.rank_width / at_rank hold each lane at its role's 0081 width (3 ft footpath, 5 ft spine and field spur, 6 ft track out) and settle_widths keeps it; tests/hamletgen/test_pool_261.py test_every_lane_is_drawn_at_its_own_rank green on all five pool maps"
   },
-  "unit": "ft",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/kuwabata/kuwabata.json channels (frm pond -> field), dikes[0].outline, pond; shapely difference; HEAD vs the regenerated map. The remainder lies in the sluice's gap in the drawn outline"
- },
- "wave38-perf-pair-quiet": {
-  "quantity": "328-start (989dbd862, wave 37's close) against 328-end (the buildings-only touch), taken back to back on a quiet host (loadavg 1.40 then 1.23); totals",
-  "value": {
-   "10hh": 0.8,
-   "20hh": -0.4,
-   "40hh": 0.4
+  "wave4-perf-control-no-gather": {
+    "subject": "perf 328-end vs 328-start, band 2 (40 households)",
+    "quantity": "40-household roll time with the knot gather removed (settle_knots out of settle.STEPS, gathered_foot returning no junction), against the bookend pair taken back to back",
+    "value": "seed 4: start 15.3, end 17.5, control 16.1; seed 25: start 11.9, end 13.2, control 11.4; seed 39: 12.2 / 12.0 / 11.2; seed 47: 11.4 / 12.3 / 11.1",
+    "unit": "s",
+    "observed": "2026-10-07",
+    "source": "dev/perf-log/20261007T095624Z-328-start-perfbase.json, 20261007T095926Z-328-end-digram-backlog.json, 20261007T100305Z-328-control-perfbase.json",
+    "method": "make perf in a detached worktree at origin/main (start), the clone at 9a89f10ed (end), then the same worktree at 9a89f10ed with the two gather calls removed (control), run one after another on the same host",
+    "finding": "the knot gather is 1.1-1.8 s of each 40-household map (seed 4 1.4 s, seed 25 1.8 s, seed 47 1.2 s); with it removed the lane law alone runs within 0.8 s of the start on every seed, and faster on three of four"
   },
-  "unit": "% end vs start",
-  "observed": "2026-10-08",
-  "source": "dev/perf-log/20261008T071309Z-328-start-perfbase.json and 20261008T071615Z-328-end-digram-backlog.json; the first pair (06:51/07:03, taken while a review agent and a peer session ran) read +13 to +65% with the growth in homesteads and field, stages the change never runs"
- },
- "sawada-glyph-wetpaddy-r1-F1": {
-  "subject": "glyph-check--wet-paddy",
-  "answers": "6240efb2b784",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
-  "verifies": "F1",
-  "quantity": "blue plots tapering to a point behind a short tip (the two the round-2 check measured at 22.8 and 18.8 deg, at (3327, 2881) and (3586, 2761)), still blue after the fix",
-  "value": 0,
-  "unit": "plots",
-  "method": "match each named plot's center to flooded_plots within 12 ft; the blunt low-fill triangles keep the tint, which is 0007's rule (only the draw or a pointed shape leaves a low plot green)"
- },
- "sawada-glyph-wetpaddy-r1-F2": {
-  "subject": "glyph-check--wet-paddy",
-  "answers": "6240efb2b784",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
-  "verifies": "F2",
-  "quantity": "largest aspect (long side over short) among the blue plots (round 1's F2: none reads as a channel)",
-  "value": 1.56,
-  "unit": "ratio",
-  "method": "w/h of each blue plot's record"
- },
- "sawada-glyph-wetpaddy-r1-F3": {
-  "subject": "glyph-check--wet-paddy",
-  "answers": "6240efb2b784",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
-  "verifies": "F3",
-  "quantity": "largest blue plot over the map's median plot (round 1's F3: no plot lobed or oversized)",
-  "value": 1.78,
-  "unit": "ratio",
-  "method": "area w*h of each blue plot against the median of every plot"
- },
- "sawada-glyph-wetpaddy-r1-F4": {
-  "subject": "glyph-check--wet-paddy",
-  "answers": "6240efb2b784",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
-  "verifies": "F4",
-  "quantity": "touching blue plots whose shared bund is not drawn (round 1's F4: touching groups read as neighboring plots)",
-  "value": 0,
-  "unit": "plots",
-  "method": "the round-2 check found the inner bunds of every touching group visible at fit zoom (largest group 1852 sq ft); the fix only turned two plots green"
- },
- "sawada-glyph-wetpaddy-r1-F5": {
-  "subject": "glyph-check--wet-paddy",
-  "answers": "6240efb2b784",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
-  "verifies": "F5",
-  "quantity": "blue plots off the drain-side row",
-  "value": 0,
-  "unit": "plots",
-  "method": "the round-2 check counted 18 of 18 on the drain-side row before the two pointed plots went green; none is added off it"
- },
- "sawada-glyph-wetpaddy-r1-F6": {
-  "subject": "glyph-check--wet-paddy",
-  "answers": "6240efb2b784",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
-  "verifies": "F6",
-  "quantity": "legend classes a blue plot can be taken for",
-  "value": 0,
-  "unit": "classes",
-  "method": "the round-2 check's comparison against every class in ink_classes, unchanged by the fix (no class added)"
- },
- "sawada-glyph-wetpaddy-r1-F7": {
-  "subject": "glyph-check--wet-paddy",
-  "answers": "6240efb2b784",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
-  "verifies": "F7",
-  "quantity": "blue plots fused with the drain's outlet (a blue body with no bund between it and the drain's end)",
-  "value": 0,
-  "unit": "plots",
-  "method": "the round-2 check sampled 87 pixel lines from the plots within 76 ft of the drain's end to the drain; every one crossed a bund; three plots stand within 76 ft now"
- },
- "wave41-perf-pair-quiet": {
-  "quantity": "328-start (bb2471b36, wave 40's close) against 328-end (wave 41: the mouth's tolerance, the feed's recorded width), back to back on a host under load 1.0; totals",
-  "value": {
-   "10hh": 0.0,
-   "20hh": 1.2,
-   "40hh": 0.6
+  "w9-perf-yard-step-released": {
+    "verifies": "perf band 3 (wave 9)",
+    "subject": "perf-bookends--328-w9",
+    "answers": "20261007T165934Z-review-328-audit-local-digram-backlog",
+    "quantity": "wall time of the reference at 40 households seed 39, 10 households seed 39 and 15 households seed 47 with the yard privy's step released to the page's value (everything else as 6870097cd)",
+    "value": "40 hh seed 39: 12.6-12.7 s (held 14.6-14.8, start 12.0-12.2); 10 hh seed 39: 2.6-2.7 s (held 3.1-3.2, start 2.7); ref seed 47: 3.8 s (held 4.6-4.7, start 4.0-4.2)",
+    "unit": "s",
+    "observed": "2026-10-07",
+    "source": "the perf-audit's detached worktrees at 6870097cd: scratchpad audit11/{start,end,yard}.{0,1}.json, perf_snapshot.measure, 2 reps each",
+    "method": "perf_snapshot.measure on the four legs and four seeds, start (6ca2f5ccf), end (6870097cd) and end with PRIVY_YARD_STEP_FT = 6.0 - WALL_GAP_FT, back to back; repeats agree within about 2%"
   },
-  "unit": "% end vs start",
-  "observed": "2026-10-08",
-  "source": "dev/perf-log/20261008T095827Z-328-start-perfbase.json and 20261008T100133Z-328-end-digram-backlog.json; a first pair at 09:41/09:44 (load near 2.8 from a peer session) read +11.7% at 40 hh, its growth in homesteads, windbreak and web - stages wave 41 does not change - and was discarded"
- },
- "wave42-perf-pair-quiet": {
-  "quantity": "328-start (2022b293b, wave 41's close) against 328-end (4a9b7c077, wave 42: the joiner's confluence tested from either end at half the brook's drawn width), back to back on a host under load 1.4 to 2.4; totals",
-  "value": {
-   "15hh": 1.8,
-   "10hh": 0.0,
-   "20hh": -3.6,
-   "40hh": 0.0
+  "w10-perf-fork-and-ring-released": {
+    "verifies": "perf band 3 (wave 10)",
+    "subject": "perf-bookends--328-w10",
+    "answers": "perf-audit of wave 10 (af0a88e0e99ef3f59), scratchpad pa10/res.jsonl",
+    "quantity": "wall time with wave 10's fork-triangle row (hem.py grain < 1.0) and ring-step row (MAX_STEPS 0) reverted, everything else as wave 10",
+    "value": "reference seed 25: 4.0 s (end 5.0, start 4.0); reference seed 39: 3.7 s (end 4.1, start 3.7); 20 hh seed 4: 6.5 s (end 8.8, start 6.5); 20 hh seed 25: 6.3 s (end 7.1, start 6.3); the other seven value groups measure zero",
+    "unit": "s",
+    "observed": "2026-10-07",
+    "source": "the perf-audit's detached worktrees at 9099b942d (start) and 7cf6c9ec0 (end), perf_snapshot.measure, 2-3 rounds, per-leg spread about 0.1 s",
+    "method": "each of wave 10's value groups reverted alone and the fork and ring together; the field-way search (reach.settle_field) ran 242 candidates deep against 10 on 20 hh seed 4; a crossing_deck memo would hit 18 of 245 calls (measured), the rings' bounding boxes computed once recovered 0.15 of 2.4 s"
   },
-  "unit": "% end vs start",
-  "observed": "2026-10-08",
-  "source": "dev/perf-log/20261008T120941Z-328-start-perfbase.json and 20261008T121252Z-328-end-base.json, both legs in scratch worktrees at their commits; a first attempt at 11:45 was discarded (load 1.98 -> 12.90 during the end leg)"
- },
- "wave44-perf-pair-loaded": {
-  "quantity": "328-start (717e0218f, wave 43's last engine commit) against 328-end (1935f49dd, wave 44: a near join at a single point, the steading reach to the house's center), back to back in scratch worktrees on a host under load 6.3 to 7.5 falling to 2.6 by the end leg's close; totals",
-  "value": {
-   "15hh": -2.2,
-   "10hh": -9.6,
-   "20hh": -36.1,
-   "40hh": -6.2
+  "mizuguchi-glyph-woodland-F1-side": {
+    "subject": "glyph-check--woodland-commons",
+    "answers": "f0a88a5acd8a",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/mizuguchi/mizuguchi.json commons (role woodland) and meta.woodland_offsheet, regenerated after the fix (parcels.py: crossed_through on every tier)",
+    "method": "count the drawn woodland rings; read the off-sheet record",
+    "verifies": "F1",
+    "quantity": "woodland rings drawn on the houses' side of the field (a walk from the houses that does not run through the field)",
+    "value": 0,
+    "unit": "rings",
+    "note": "Mizuguchi draws no wood on the sheet; the wood is recorded beyond the sheet to the W (woodland_offsheet), as no seat through and beyond its field fits the canvas"
   },
-  "unit": "% end vs start",
-  "observed": "2026-10-08",
-  "source": "dev/perf-log/20261008T122441Z-328-start-perfbase.json and 20261008T122842Z-328-end-base.json; the load fell while the end leg ran, so its faster legs are the host, not the change - read only as: no seed more than 5% slower"
- },
- "batch1-perf-pair-and-reach-control": {
-  "quantity": "batch 1's pair, 328-start (4a9b7c077, before wave 43) against 328-end (2e3153b4e, batch 1's last commit), back to back in scratch worktrees on a host under load 0.9 to 1.9; and the control, seed 4's web stage under cProfile at the start, at the batch end and in the clone with wave 47's past_the_frame (the track out to the canvas edge and 400 ft beyond, not the canvas diagonal)",
-  "value": {
-   "15hh_total_pct": 4.2,
-   "10hh_total_pct": 2.4,
-   "10hh_seed4_pct": 12.1,
-   "20hh_total_pct": -1.6,
-   "40hh_total_pct": 2.8,
-   "web_s_cprofile": {
-    "start": 1.902,
-    "batch_end": 2.155,
-    "clone_with_fix": 1.845
-   },
-   "run_on_target_calls": {
-    "start": 3577,
-    "batch_end": 5481,
-    "clone_with_fix": 3489
-   }
+  "mizuguchi-glyph-woodland-F2-measured": {
+    "subject": "glyph-check--woodland-commons",
+    "answers": "f0a88a5acd8a",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/mizuguchi/mizuguchi.json commons (role woodland) and meta.woodland_offsheet, regenerated after the fix (parcels.py: crossed_through on every tier)",
+    "method": "count the drawn woodland rings; read the off-sheet record",
+    "verifies": "F2",
+    "quantity": "woodland rings drawn on the houses' side, measured on the regenerated manifest (the previous close was an acceptance only)",
+    "value": 0,
+    "unit": "rings"
   },
-  "unit": "% end vs start; s under cProfile; calls",
-  "observed": "2026-10-08",
-  "source": "dev/perf-log/20261008T142706Z-328-start-perfbase.json and 20261008T143016Z-328-end-base.json; dev/perf-log/20261008T143238Z-profile-adhoc-seed4-web.txt (end) and the start's and the clone's seed-4 web profiles (dev/perf-raw, archived to mapgen-perflogs)"
- },
- "batch2-perf-pair-and-track-control": {
-  "quantity": "batch 2's pair, 328-start (2e3153b4e, batch 1's close) against 328-end (3f91becf2, wave 50's close), back to back in scratch worktrees on a host under load 1.96 to 1.66; and the control: 10 households seed 39's homesteads and web stages at the start, at the end and at the end with wave 47's past_the_frame undone (perf-audit's own worktrees, two runs each)",
-  "value": {
-   "total": -3.5,
-   "10hh": -3.1,
-   "20hh": -4.3,
-   "40hh": -3.2,
-   "seed39_10hh_homesteads_s": {
-    "start": 0.86,
-    "end": 1.1,
-    "control": 0.8
-   },
-   "seed39_10hh_web_s": {
-    "start": 1.01,
-    "end": 0.76,
-    "control": 0.94
-   }
+  "kashikawa-glyph-woodland-F1-through": {
+    "verifies": "F1",
+    "subject": "glyph-check--woodland-commons",
+    "answers": "f0a88a5acd8a",
+    "quantity": "share of the walk from the house centroid to Kashikawa's one drawn wood that runs inside the field, of the field's depth along the walk (the drawn outline)",
+    "value": 0.49,
+    "unit": "share",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/kashikawa/kashikawa.json fields[0].outline, commons (role woodland), houses - regenerated after the fix",
+    "method": "400 samples along the straight walk tested in the outline; depth as the outline's extent along the walk",
+    "note": "a drawn wood reached through the field (520 of 1,057 ft): the code's test reads the planning envelope at 0.5; the drawn outline differs slightly from it"
   },
-  "unit": "% end vs start (totals); s (stages)",
-  "observed": "2026-10-08",
-  "source": "dev/perf-log/20261008T165220Z-328-start-perfbase.json and 20261008T165526Z-328-end-base.json; profiles 20261008T185926Z-profile-328-seed39-homesteads-perfbase.txt and 20261008T185931Z-...-base.txt; perf-audit's record 20261008T192314Z-review-328-confirmation-local-digram-backlog.json"
- },
- "wave53-grove-density": {
-  "quantity": "wave 53 (2026-10-08): drawn tree crowns per hamlet manifest (len(tree_crowns)/3) before (58de4e648) and after the density moved to ~180 sq ft a crown; the windbreak's drawn conifer share in test_a_windbreak_draws_about_half_its_crowns_conifer (256 clumps of 60 x 60 px at 1 ft/px, seed 1); the conifer-led belt on Inashiro: its recorded crowns over its poly's area",
-  "value": {
-   "crowns": {
-    "inashiro": [
-     641,
-     528
+  "kashikawa-glyph-farm-holding-F1-width": {
+    "subject": "glyph-check--farm-holding",
+    "answers": "5aacbed543c6",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+    "verifies": "F1",
+    "quantity": "width of every row holding along the street (round 1: 209 ft on a 240 ft lot spacing)",
+    "value": 240,
+    "unit": "ft"
+  },
+  "kashikawa-glyph-farm-holding-F1-gap": {
+    "subject": "glyph-check--farm-holding",
+    "answers": "5aacbed543c6",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+    "verifies": "F1",
+    "quantity": "largest nearest-neighbor gap between row holdings (round 1: 31 ft of scrub)",
+    "value": 0.0,
+    "unit": "ft"
+  },
+  "kashikawa-glyph-farm-holding-F4-depth": {
+    "subject": "glyph-check--farm-holding",
+    "answers": "5aacbed543c6",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+    "verifies": "F4",
+    "quantity": "depth of every row holding (3 lots of 240 ft)",
+    "value": 720,
+    "unit": "ft"
+  },
+  "kashikawa-glyph-farm-holding-F5": {
+    "subject": "glyph-check--farm-holding",
+    "answers": "5aacbed543c6",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+    "verifies": "F5",
+    "quantity": "every strip behind its own farm; confirmation, unchanged by the width fix",
+    "value": 1,
+    "unit": "confirmation"
+  },
+  "kashikawa-glyph-farm-holding-F6": {
+    "subject": "glyph-check--farm-holding",
+    "answers": "5aacbed543c6",
+    "observed": "2026-10-07",
+    "source": "pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+    "verifies": "F6",
+    "quantity": "confusable with nothing; confirmation",
+    "value": 1,
+    "unit": "confirmation"
+  },
+  "wave22-perf-control-nucleated-crossings": {
+    "quantity": "homesteads stage median change, 3c997ab6b against 58f07ada3 (wave 22's holding change), on the four crossing rolls (10 hh seeds 4 and 39, 40 hh seeds 25 and 47), 6 interleaved runs each in detached worktrees; all four nucleated, seat_rows never runs; identical maps (dry_plots 49, 17, 36, 38)",
+    "value": [
+      0.005,
+      0.002,
+      0.002,
+      -0.07
     ],
-    "kashikawa": [
-     3102,
-     2673
-    ],
-    "kuwabata": [
-     790,
-     576
-    ],
-    "mizuguchi": [
-     546,
-     337
-    ],
-    "sawada": [
-     961,
-     704
-    ]
-   },
-   "windbreak_drawn_conifer_share": {
-    "before": 0.463,
-    "after": 0.508,
-    "sample_crowns": 2791
-   },
-   "inashiro_conifer_led_belt": {
-    "crowns": 160,
-    "conifer": 125,
-    "area_sqft": 130910,
-    "sqft_per_crown": 818
-   }
-  }
- },
- "wave55-grove-density-as-drawn": {
-  "quantity": "wave 55 (2026-10-08): drawn tree crowns per hamlet manifest (len(tree_crowns)/3) before the top-up (f17480a38's rerolls, wave 54) and after; Mizuguchi's 24 homestead-grove bands: the union of their boxes over the crowns standing in it (keep-out ground included)",
-  "value": {
-   "crowns": {
-    "inashiro": [
-     528,
-     631
-    ],
-    "kashikawa": [
-     2675,
-     3264
-    ],
-    "kuwabata": [
-     575,
-     746
-    ],
-    "mizuguchi": [
-     339,
-     601
-    ],
-    "sawada": [
-     704,
-     915
-    ]
-   },
-   "mizuguchi_bands": {
-    "area_sqft": 135987,
-    "crowns": 561,
-    "sqft_per_crown": 242
-   }
-  }
- },
- "glyph-homestead-grove-F1-density-as-drawn": {
-  "verifies": "F1",
-  "subject": "glyph-check--homestead-grove",
-  "answers": "6e51955a8d25",
-  "quantity": "Mizuguchi's homestead-grove bands: the union of their 24 boxes over the crowns standing in it, keep-out ground included",
-  "value": 242,
-  "unit": "sq ft per crown",
-  "observed": "2026-10-08",
-  "source": "pool/hamlets/mizuguchi/mizuguchi.json groves and tree_crowns, after wave 55's top-up",
-  "method": "shapely union of the groves' boxes, crowns counted by containment (m:wave55-grove-density-as-drawn); round 1 measured ~401 on the same reading; the open ground is held to GROVE_CROWN_SQFT by the top-up, test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain (an open clump drawn at 0.9-1.0 of its density)"
- },
- "batch3-pair-and-controls": {
-  "quantity": "batch 3's pair, 328-start (3f91becf2, batch 2's close) against 328-end (the field-height speedup's HEAD), back to back in scratch worktrees (load 1.3 / 2.5); and the 40-household stage totals (make perf-profile SEED= HOUSEHOLDS=40 STAGE=labels, 'the stages before it took') at each wave's commit and under three controls at HEAD before the speedup: the grove top-up off (TOPUP_TRIES 0), KNOTTED_TRIES 1, and wave 52's fixture_seats.py (the barn seat restored); and the end leg re-taken after the close's three speedups (field_height_near in one vector pass, the privy's reach at its far corner, the bund run-on's clear passing over blocks whose box cannot reach), with the perf-audit's own per-commit times for seed 47",
-  "observed": "2026-10-08",
-  "method": "make perf LABEL=328-start / -end and make perf-report AGAINST=328-start; make perf-profile per commit with the current profiler copied in (commits before 3aa752419 lack beyond_the_band and rolled the default size - not counted)",
-  "value": {
-   "total": 6.0,
-   "10hh": -7.2,
-   "20hh": -1.3,
-   "40hh": 5.7,
-   "40hh_seed47_s": {
-    "start": 13.0,
-    "end": 16.1
-   },
-   "40hh_seed25": "refused at the end (WebRefused: fourteen access lanes' first leg within 7 ft of owner-less fabric - each farm's own garden, an obstacle to its own path since this feature; bisected to 19f69655c, the barn seat withdrawn; passes at e4c99b277)",
-   "40hh_seed4_s": {
-    "start": 16.8,
-    "before_speedup": 19.3,
-    "end": 16.2
-   },
-   "seed47_40hh_by_commit_s": {
-    "3aa752419": 13.8,
-    "f5dd7e198": 13.9,
-    "e4c99b277": 14.7,
-    "19f69655c": 15.7,
-    "2d9ad0b19": 15.5,
-    "d7586617f": 15.8
-   },
-   "controls_at_head_s": {
-    "head": {
-     "4": 19.1,
-     "47": 16.0
+    "unit": "s",
+    "observed": "2026-10-08",
+    "source": "perf-audit wave 22 counterfactual, dev/perf-log/20261008T003813Z-review-328-confirmation-local-digram-backlog.json; hinterland median change at most +0.013 s"
+  },
+  "wave24-perf-control-nucleated-crossings": {
+    "quantity": "end vs stages.py+pondstock.py reverted to 397c005fb, 6 interleaved runs each, median total and homesteads stage, on the crossing seeds (10 hh 39, 20 hh 4, 40 hh 47); all nucleated (the perf spec's form), the rank step never used, pond_stock 0.00 s; map hashes identical",
+    "value": {
+      "total_s": [
+        [
+          3.12,
+          3.11
+        ],
+        [
+          7.72,
+          7.68
+        ],
+        [
+          13.08,
+          13.28
+        ]
+      ],
+      "homesteads_s": [
+        [
+          0.8,
+          0.78
+        ],
+        [
+          1.86,
+          1.91
+        ],
+        [
+          5.13,
+          5.23
+        ]
+      ]
     },
-    "no_topup": {
-     "4": 19.0,
-     "47": 15.8
+    "unit": "s",
+    "observed": "2026-10-08",
+    "source": "perf-audit wave 24 counterfactual, dev/perf-log/20261008T013819Z-review-328-confirmation-local-digram-backlog.json"
+  },
+  "wave33-perf-control-fabric-interleaved": {
+    "quantity": "HEAD against HEAD with hamletgen/ways/fabric.py reverted to 51da9771f, interleaved, alternating leg order, 3 reps (2 at 40 hh); paired medians",
+    "value": {
+      "15hh": -2.9,
+      "10hh": -1.0,
+      "20hh": -1.9,
+      "40hh": -15.4
     },
-    "barn_seat_restored": {
-     "4": 19.9,
-     "47": 15.0
+    "unit": "% HEAD vs reverted",
+    "observed": "2026-10-08",
+    "source": "perf-audit wave 33, dev/perf-log/20261008T050014Z-review-328-confirmation-local-digram-backlog.json and its audit record"
+  },
+  "wave34-kuwabata-inlet-outside-dike": {
+    "quantity": "length of the reservoir's inlet channel lying outside the perimeter dike's drawn outline and the pond, on Kuwabata",
+    "value": {
+      "before": 63.8,
+      "after": 14.7
     },
-    "knotted_tries_1_web_profiled": {
-     "47": 10.4,
-     "head": 10.1
+    "unit": "ft",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/kuwabata/kuwabata.json channels (frm pond -> field), dikes[0].outline, pond; shapely difference; HEAD vs the regenerated map. The remainder lies in the sluice's gap in the drawn outline"
+  },
+  "wave38-perf-pair-quiet": {
+    "quantity": "328-start (989dbd862, wave 37's close) against 328-end (the buildings-only touch), taken back to back on a quiet host (loadavg 1.40 then 1.23); totals",
+    "value": {
+      "10hh": 0.8,
+      "20hh": -0.4,
+      "40hh": 0.4
+    },
+    "unit": "% end vs start",
+    "observed": "2026-10-08",
+    "source": "dev/perf-log/20261008T071309Z-328-start-perfbase.json and 20261008T071615Z-328-end-digram-backlog.json; the first pair (06:51/07:03, taken while a review agent and a peer session ran) read +13 to +65% with the growth in homesteads and field, stages the change never runs"
+  },
+  "sawada-glyph-wetpaddy-r1-F1": {
+    "subject": "glyph-check--wet-paddy",
+    "answers": "6240efb2b784",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+    "verifies": "F1",
+    "quantity": "blue plots tapering to a point behind a short tip (the two the round-2 check measured at 22.8 and 18.8 deg, at (3327, 2881) and (3586, 2761)), still blue after the fix",
+    "value": 0,
+    "unit": "plots",
+    "method": "match each named plot's center to flooded_plots within 12 ft; the blunt low-fill triangles keep the tint, which is 0007's rule (only the draw or a pointed shape leaves a low plot green)"
+  },
+  "sawada-glyph-wetpaddy-r1-F2": {
+    "subject": "glyph-check--wet-paddy",
+    "answers": "6240efb2b784",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+    "verifies": "F2",
+    "quantity": "largest aspect (long side over short) among the blue plots (round 1's F2: none reads as a channel)",
+    "value": 1.56,
+    "unit": "ratio",
+    "method": "w/h of each blue plot's record"
+  },
+  "sawada-glyph-wetpaddy-r1-F3": {
+    "subject": "glyph-check--wet-paddy",
+    "answers": "6240efb2b784",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+    "verifies": "F3",
+    "quantity": "largest blue plot over the map's median plot (round 1's F3: no plot lobed or oversized)",
+    "value": 1.78,
+    "unit": "ratio",
+    "method": "area w*h of each blue plot against the median of every plot"
+  },
+  "sawada-glyph-wetpaddy-r1-F4": {
+    "subject": "glyph-check--wet-paddy",
+    "answers": "6240efb2b784",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+    "verifies": "F4",
+    "quantity": "touching blue plots whose shared bund is not drawn (round 1's F4: touching groups read as neighboring plots)",
+    "value": 0,
+    "unit": "plots",
+    "method": "the round-2 check found the inner bunds of every touching group visible at fit zoom (largest group 1852 sq ft); the fix only turned two plots green"
+  },
+  "sawada-glyph-wetpaddy-r1-F5": {
+    "subject": "glyph-check--wet-paddy",
+    "answers": "6240efb2b784",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+    "verifies": "F5",
+    "quantity": "blue plots off the drain-side row",
+    "value": 0,
+    "unit": "plots",
+    "method": "the round-2 check counted 18 of 18 on the drain-side row before the two pointed plots went green; none is added off it"
+  },
+  "sawada-glyph-wetpaddy-r1-F6": {
+    "subject": "glyph-check--wet-paddy",
+    "answers": "6240efb2b784",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+    "verifies": "F6",
+    "quantity": "legend classes a blue plot can be taken for",
+    "value": 0,
+    "unit": "classes",
+    "method": "the round-2 check's comparison against every class in ink_classes, unchanged by the fix (no class added)"
+  },
+  "sawada-glyph-wetpaddy-r1-F7": {
+    "subject": "glyph-check--wet-paddy",
+    "answers": "6240efb2b784",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+    "verifies": "F7",
+    "quantity": "blue plots fused with the drain's outlet (a blue body with no bund between it and the drain's end)",
+    "value": 0,
+    "unit": "plots",
+    "method": "the round-2 check sampled 87 pixel lines from the plots within 76 ft of the drain's end to the drain; every one crossed a bund; three plots stand within 76 ft now"
+  },
+  "wave41-perf-pair-quiet": {
+    "quantity": "328-start (bb2471b36, wave 40's close) against 328-end (wave 41: the mouth's tolerance, the feed's recorded width), back to back on a host under load 1.0; totals",
+    "value": {
+      "10hh": 0.0,
+      "20hh": 1.2,
+      "40hh": 0.6
+    },
+    "unit": "% end vs start",
+    "observed": "2026-10-08",
+    "source": "dev/perf-log/20261008T095827Z-328-start-perfbase.json and 20261008T100133Z-328-end-digram-backlog.json; a first pair at 09:41/09:44 (load near 2.8 from a peer session) read +11.7% at 40 hh, its growth in homesteads, windbreak and web - stages wave 41 does not change - and was discarded"
+  },
+  "wave42-perf-pair-quiet": {
+    "quantity": "328-start (2022b293b, wave 41's close) against 328-end (4a9b7c077, wave 42: the joiner's confluence tested from either end at half the brook's drawn width), back to back on a host under load 1.4 to 2.4; totals",
+    "value": {
+      "15hh": 1.8,
+      "10hh": 0.0,
+      "20hh": -3.6,
+      "40hh": 0.0
+    },
+    "unit": "% end vs start",
+    "observed": "2026-10-08",
+    "source": "dev/perf-log/20261008T120941Z-328-start-perfbase.json and 20261008T121252Z-328-end-base.json, both legs in scratch worktrees at their commits; a first attempt at 11:45 was discarded (load 1.98 -> 12.90 during the end leg)"
+  },
+  "wave44-perf-pair-loaded": {
+    "quantity": "328-start (717e0218f, wave 43's last engine commit) against 328-end (1935f49dd, wave 44: a near join at a single point, the steading reach to the house's center), back to back in scratch worktrees on a host under load 6.3 to 7.5 falling to 2.6 by the end leg's close; totals",
+    "value": {
+      "15hh": -2.2,
+      "10hh": -9.6,
+      "20hh": -36.1,
+      "40hh": -6.2
+    },
+    "unit": "% end vs start",
+    "observed": "2026-10-08",
+    "source": "dev/perf-log/20261008T122441Z-328-start-perfbase.json and 20261008T122842Z-328-end-base.json; the load fell while the end leg ran, so its faster legs are the host, not the change - read only as: no seed more than 5% slower"
+  },
+  "batch1-perf-pair-and-reach-control": {
+    "quantity": "batch 1's pair, 328-start (4a9b7c077, before wave 43) against 328-end (2e3153b4e, batch 1's last commit), back to back in scratch worktrees on a host under load 0.9 to 1.9; and the control, seed 4's web stage under cProfile at the start, at the batch end and in the clone with wave 47's past_the_frame (the track out to the canvas edge and 400 ft beyond, not the canvas diagonal)",
+    "value": {
+      "15hh_total_pct": 4.2,
+      "10hh_total_pct": 2.4,
+      "10hh_seed4_pct": 12.1,
+      "20hh_total_pct": -1.6,
+      "40hh_total_pct": 2.8,
+      "web_s_cprofile": {
+        "start": 1.902,
+        "batch_end": 2.155,
+        "clone_with_fix": 1.845
+      },
+      "run_on_target_calls": {
+        "start": 3577,
+        "batch_end": 5481,
+        "clone_with_fix": 3489
+      }
+    },
+    "unit": "% end vs start; s under cProfile; calls",
+    "observed": "2026-10-08",
+    "source": "dev/perf-log/20261008T142706Z-328-start-perfbase.json and 20261008T143016Z-328-end-base.json; dev/perf-log/20261008T143238Z-profile-adhoc-seed4-web.txt (end) and the start's and the clone's seed-4 web profiles (dev/perf-raw, archived to mapgen-perflogs)"
+  },
+  "batch2-perf-pair-and-track-control": {
+    "quantity": "batch 2's pair, 328-start (2e3153b4e, batch 1's close) against 328-end (3f91becf2, wave 50's close), back to back in scratch worktrees on a host under load 1.96 to 1.66; and the control: 10 households seed 39's homesteads and web stages at the start, at the end and at the end with wave 47's past_the_frame undone (perf-audit's own worktrees, two runs each)",
+    "value": {
+      "total": -3.5,
+      "10hh": -3.1,
+      "20hh": -4.3,
+      "40hh": -3.2,
+      "seed39_10hh_homesteads_s": {
+        "start": 0.86,
+        "end": 1.1,
+        "control": 0.8
+      },
+      "seed39_10hh_web_s": {
+        "start": 1.01,
+        "end": 0.76,
+        "control": 0.94
+      }
+    },
+    "unit": "% end vs start (totals); s (stages)",
+    "observed": "2026-10-08",
+    "source": "dev/perf-log/20261008T165220Z-328-start-perfbase.json and 20261008T165526Z-328-end-base.json; profiles 20261008T185926Z-profile-328-seed39-homesteads-perfbase.txt and 20261008T185931Z-...-base.txt; perf-audit's record 20261008T192314Z-review-328-confirmation-local-digram-backlog.json"
+  },
+  "wave53-grove-density": {
+    "quantity": "wave 53 (2026-10-08): drawn tree crowns per hamlet manifest (len(tree_crowns)/3) before (58de4e648) and after the density moved to ~180 sq ft a crown; the windbreak's drawn conifer share in test_a_windbreak_draws_about_half_its_crowns_conifer (256 clumps of 60 x 60 px at 1 ft/px, seed 1); the conifer-led belt on Inashiro: its recorded crowns over its poly's area",
+    "value": {
+      "crowns": {
+        "inashiro": [
+          641,
+          528
+        ],
+        "kashikawa": [
+          3102,
+          2673
+        ],
+        "kuwabata": [
+          790,
+          576
+        ],
+        "mizuguchi": [
+          546,
+          337
+        ],
+        "sawada": [
+          961,
+          704
+        ]
+      },
+      "windbreak_drawn_conifer_share": {
+        "before": 0.463,
+        "after": 0.508,
+        "sample_crowns": 2791
+      },
+      "inashiro_conifer_led_belt": {
+        "crowns": 160,
+        "conifer": 125,
+        "area_sqft": 130910,
+        "sqft_per_crown": 818
+      }
     }
-   },
-   "field_height_near_profiled_s": {
-    "seed4_hinterland_total": 12.9,
-    "field_height_near": 9.2
-   },
-   "end_leg_after_speedups": {
-    "total": 3.0,
-    "10hh": -8.8,
-    "20hh": -2.9,
-    "40hh": 3.7,
-    "15hh_seed4": 10.9,
-    "40hh_seed47": 21.5,
-    "40hh_seed25": "refused"
-   },
-   "seed47_40hh_by_commit_s_per_perf_audit": {
-    "3f91becf2": 12.9,
-    "f83a9214b": 12.9,
-    "3b4d2fc4d": 13.4,
-    "3aa752419": 13.7,
-    "e4c99b277": 14.7,
-    "19f69655c": 15.7
-   },
-   "speedups_this_close": {
-    "field_height_near_vector": "seed 4 40hh 19.3 -> 16.2 s",
-    "within_reach_of_far_corner": "~150,000 asks, four hypots -> one squared comparison",
-    "bund_clear_boxes": "seed 4 15hh web 4.6 -> 3.7 s profiled"
-   }
-  }
- },
- "t140-seed25-fouled-fabric": {
-  "quantity": "seed 25 at 40 households, at the web's refusal: for each access lane the last resort names, the yard or garden its first leg comes within WEB_FABRIC_GAP (7 ft) of, and that fabric's owner as `fabric._homestead_polys` reads it",
-  "value": {
-   "lanes": 14,
-   "fouled_fabric_owner": "None (a garden) on all 14",
-   "yards_and_gardens_read": 178,
-   "manifest_yards_while_ways_laid": 2
   },
-  "observed": "2026-10-08",
-  "method": "a temporary log in last_resort.lanes_breaking (settle.theirs, fabric._crosses_fabric on the first leg) and in tree.admits, under make cohort N=1 SEED=25 HOUSEHOLDS=40; reverted"
- },
- "wave56-sun-strips": {
-  "quantity": "wave 56 (2026-10-08): drawn tree crowns (len(tree_crowns)/3) and village-grove clumps per hamlet manifest, before (db4b33b65's maps) and after the seats' sun strips moved to the tree's 50 ft south and east of every yard and bed",
-  "observed": "2026-10-08",
-  "method": "the five hamlets rerolled with make map; counted from the manifests",
-  "value": {
-   "inashiro": {
-    "crowns": [
-     624,
-     690
-    ],
-    "clumps": [
-     544,
-     612
-    ]
-   },
-   "kuwabata": {
-    "crowns": [
-     738,
-     673
-    ],
-    "clumps": [
-     513,
-     435
-    ]
-   },
-   "sawada": {
-    "crowns": [
-     905,
-     907
-    ],
-    "clumps": [
-     629,
-     622
-    ]
-   },
-   "kashikawa": "unchanged (no village grove)",
-   "mizuguchi": "unchanged (no village grove)",
-   "after_southeast_corner": {
-    "inashiro": 661,
-    "kuwabata": 672,
-    "sawada": 920
-   },
-   "knots_and_refusal": {
-    "inashiro_knot": "gathered (off _KNOTS_WAITING)",
-    "seed25_40hh": "draws (make cohort N=1 SEED=25 HOUSEHOLDS=40: clean)"
-   }
+  "wave55-grove-density-as-drawn": {
+    "quantity": "wave 55 (2026-10-08): drawn tree crowns per hamlet manifest (len(tree_crowns)/3) before the top-up (f17480a38's rerolls, wave 54) and after; Mizuguchi's 24 homestead-grove bands: the union of their boxes over the crowns standing in it (keep-out ground included)",
+    "value": {
+      "crowns": {
+        "inashiro": [
+          528,
+          631
+        ],
+        "kashikawa": [
+          2675,
+          3264
+        ],
+        "kuwabata": [
+          575,
+          746
+        ],
+        "mizuguchi": [
+          339,
+          601
+        ],
+        "sawada": [
+          704,
+          915
+        ]
+      },
+      "mizuguchi_bands": {
+        "area_sqft": 135987,
+        "crowns": 561,
+        "sqft_per_crown": 242
+      }
+    }
+  },
+  "glyph-homestead-grove-F1-density-as-drawn": {
+    "verifies": "F1",
+    "subject": "glyph-check--homestead-grove",
+    "answers": "6e51955a8d25",
+    "quantity": "Mizuguchi's homestead-grove bands: the union of their 24 boxes over the crowns standing in it, keep-out ground included",
+    "value": 242,
+    "unit": "sq ft per crown",
+    "observed": "2026-10-08",
+    "source": "pool/hamlets/mizuguchi/mizuguchi.json groves and tree_crowns, after wave 55's top-up",
+    "method": "shapely union of the groves' boxes, crowns counted by containment (m:wave55-grove-density-as-drawn); round 1 measured ~401 on the same reading; the open ground is held to GROVE_CROWN_SQFT by the top-up, test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain (an open clump drawn at 0.9-1.0 of its density)"
+  },
+  "batch3-pair-and-controls": {
+    "quantity": "batch 3's pair, 328-start (3f91becf2, batch 2's close) against 328-end (the field-height speedup's HEAD), back to back in scratch worktrees (load 1.3 / 2.5); and the 40-household stage totals (make perf-profile SEED= HOUSEHOLDS=40 STAGE=labels, 'the stages before it took') at each wave's commit and under three controls at HEAD before the speedup: the grove top-up off (TOPUP_TRIES 0), KNOTTED_TRIES 1, and wave 52's fixture_seats.py (the barn seat restored); and the end leg re-taken after the close's three speedups (field_height_near in one vector pass, the privy's reach at its far corner, the bund run-on's clear passing over blocks whose box cannot reach), with the perf-audit's own per-commit times for seed 47",
+    "observed": "2026-10-08",
+    "method": "make perf LABEL=328-start / -end and make perf-report AGAINST=328-start; make perf-profile per commit with the current profiler copied in (commits before 3aa752419 lack beyond_the_band and rolled the default size - not counted)",
+    "value": {
+      "total": 6.0,
+      "10hh": -7.2,
+      "20hh": -1.3,
+      "40hh": 5.7,
+      "40hh_seed47_s": {
+        "start": 13.0,
+        "end": 16.1
+      },
+      "40hh_seed25": "refused at the end (WebRefused: fourteen access lanes' first leg within 7 ft of owner-less fabric - each farm's own garden, an obstacle to its own path since this feature; bisected to 19f69655c, the barn seat withdrawn; passes at e4c99b277)",
+      "40hh_seed4_s": {
+        "start": 16.8,
+        "before_speedup": 19.3,
+        "end": 16.2
+      },
+      "seed47_40hh_by_commit_s": {
+        "3aa752419": 13.8,
+        "f5dd7e198": 13.9,
+        "e4c99b277": 14.7,
+        "19f69655c": 15.7,
+        "2d9ad0b19": 15.5,
+        "d7586617f": 15.8
+      },
+      "controls_at_head_s": {
+        "head": {
+          "4": 19.1,
+          "47": 16.0
+        },
+        "no_topup": {
+          "4": 19.0,
+          "47": 15.8
+        },
+        "barn_seat_restored": {
+          "4": 19.9,
+          "47": 15.0
+        },
+        "knotted_tries_1_web_profiled": {
+          "47": 10.4,
+          "head": 10.1
+        }
+      },
+      "field_height_near_profiled_s": {
+        "seed4_hinterland_total": 12.9,
+        "field_height_near": 9.2
+      },
+      "end_leg_after_speedups": {
+        "total": 3.0,
+        "10hh": -8.8,
+        "20hh": -2.9,
+        "40hh": 3.7,
+        "15hh_seed4": 10.9,
+        "40hh_seed47": 21.5,
+        "40hh_seed25": "refused"
+      },
+      "seed47_40hh_by_commit_s_per_perf_audit": {
+        "3f91becf2": 12.9,
+        "f83a9214b": 12.9,
+        "3b4d2fc4d": 13.4,
+        "3aa752419": 13.7,
+        "e4c99b277": 14.7,
+        "19f69655c": 15.7
+      },
+      "speedups_this_close": {
+        "field_height_near_vector": "seed 4 40hh 19.3 -> 16.2 s",
+        "within_reach_of_far_corner": "~150,000 asks, four hypots -> one squared comparison",
+        "bund_clear_boxes": "seed 4 15hh web 4.6 -> 3.7 s profiled"
+      }
+    }
+  },
+  "t140-seed25-fouled-fabric": {
+    "quantity": "seed 25 at 40 households, at the web's refusal: for each access lane the last resort names, the yard or garden its first leg comes within WEB_FABRIC_GAP (7 ft) of, and that fabric's owner as `fabric._homestead_polys` reads it",
+    "value": {
+      "lanes": 14,
+      "fouled_fabric_owner": "None (a garden) on all 14",
+      "yards_and_gardens_read": 178,
+      "manifest_yards_while_ways_laid": 2
+    },
+    "observed": "2026-10-08",
+    "method": "a temporary log in last_resort.lanes_breaking (settle.theirs, fabric._crosses_fabric on the first leg) and in tree.admits, under make cohort N=1 SEED=25 HOUSEHOLDS=40; reverted"
+  },
+  "wave56-sun-strips": {
+    "quantity": "wave 56 (2026-10-08): drawn tree crowns (len(tree_crowns)/3) and village-grove clumps per hamlet manifest, before (db4b33b65's maps) and after the seats' sun strips moved to the tree's 50 ft south and east of every yard and bed",
+    "observed": "2026-10-08",
+    "method": "the five hamlets rerolled with make map; counted from the manifests",
+    "value": {
+      "inashiro": {
+        "crowns": [
+          624,
+          690
+        ],
+        "clumps": [
+          544,
+          612
+        ]
+      },
+      "kuwabata": {
+        "crowns": [
+          738,
+          673
+        ],
+        "clumps": [
+          513,
+          435
+        ]
+      },
+      "sawada": {
+        "crowns": [
+          905,
+          907
+        ],
+        "clumps": [
+          629,
+          622
+        ]
+      },
+      "kashikawa": "unchanged (no village grove)",
+      "mizuguchi": "unchanged (no village grove)",
+      "after_southeast_corner": {
+        "inashiro": 661,
+        "kuwabata": 672,
+        "sawada": 920
+      },
+      "knots_and_refusal": {
+        "inashiro_knot": "gathered (off _KNOTS_WAITING)",
+        "seed25_40hh": "draws (make cohort N=1 SEED=25 HOUSEHOLDS=40: clean)"
+      }
+    }
+  },
+  "wave59-east-reach-cohort": {
+    "quantity": "wave 59 (2026-10-08): the cohort's verdicts (make cohort N=24: 24 seeds and 6 pinned rows, 30 maps) at HEAD (a detached worktree) and with wave 59 - a stub band dropped from a bed's east reach, every form's own bands cut (not the dispersed alone), and a band within a pixel of the bed's height cut",
+    "observed": "2026-10-08",
+    "method": "make cohort N=24 in a detached worktree at HEAD and in the clone; the FAIL lines diffed; the after run repeated on the final code (cohort59d, the same lines)",
+    "value": {
+      "maps_passing": [
+        24,
+        25
+      ],
+      "maps_failing": [
+        6,
+        5
+      ],
+      "removed": "Audit-901 (pinned linear, street/one/own) gardens_east_shaded: its own thin east band ending at the bed's top edge, 0.015 px of overlap once both records are rounded - the cut tested the unrounded boxes",
+      "added": "none",
+      "pool": "kashikawa's manifest one line: three bands cut a pixel shorter, their trees re-scattered by up to ~12 px (spec-fidelity's aside); inashiro, kuwabata, mizuguchi, sawada unchanged; the notes census current"
+    }
   }
- }
 }

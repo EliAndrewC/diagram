@@ -1763,3 +1763,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T146 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. verified 2026-10-08: plan CLEAR (wave 58); impl-drift 12 in step; claims-owed none
+
+## Phase 60 - wave 59 (amendment 58): a stub band dropped from a bed's morning sun; every form's own bands cut
+
+- `rolling/dispersed.py::clear_east_of_beds` (the drop, the pixel margin), `rolling/bundle.py::_bundle_geom` (every form).
+
+- [x] T147 wave 59's row (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 59); impl-drift 2 in step, 1 DRIFTED ranked row 830 with 804; cohort 24 -> 25 of 30, rerun on final code
+- [x] T148 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 59); impl-drift 2 in step, 1 DRIFTED ranked row 830 with 804; cohort 24 -> 25 of 30, rerun on final code

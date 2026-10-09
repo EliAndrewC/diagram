@@ -165,7 +165,7 @@ class BundleGeomMixin:
 
         Research:
             homestead turns as one piece - research/questions/0029-farmhouses-minka.drawing.html: the yard and beds turn with the house about its center, the ground cleared as drawn
-            grove cleared east of turned beds - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a dispersed farm's grove cut back 50 ft (`EAST_REACH_FT`) east of its turned beds (`clear_east_of_beds`)
+            grove cleared east of turned beds - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a farm's grove, of any form, cut back 50 ft (`EAST_REACH_FT`) east of its turned beds (`clear_east_of_beds`)
         """
         tpl = self._bundle_template(hw, hh, garden_side, shed, getattr(self, "_household_seat", None) or (hx, hy))
 
@@ -179,7 +179,7 @@ class BundleGeomMixin:
         frame = base.pop("_frame", None)
         turn = self._turn_at(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
-        if frame is not None:  # dispersed: no unraked band left standing in a turned bed's morning sun (feature 315, seed 906)
+        if base.get("groves"):  # every form, not the dispersed alone: no band left standing in a bed's morning sun (feature 315 seed 906; 328 wave 59: a linear farm's thin east band, cohort seed 901)
             base["groves"] = clear_east_of_beds(list(base.get("groves") or ()), list(base["gardens"]), self.px(EAST_REACH_FT))
         base["turn"] = turn  # the parts' turn, so a reader of their true sizes (`access.doors_of`) measures them as drawn
         # `turned_box` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)

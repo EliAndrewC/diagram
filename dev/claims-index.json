@@ -52944,25 +52944,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#grove cleared east of turned beds": {
-  "code": "d049d19827877dec",
-  "core": "3cb9f450bf5fa406",
-  "date": "2026-10-07",
-  "note": "clear_east_of_beds at px(EAST_REACH_FT) 50 ft",
+  "code": "bcdc172a41dd5726",
+  "core": "757b3982f0f1be88",
+  "date": "2026-10-08",
+  "note": "every grove form is cut back from the turned beds at 50 ft (EAST_REACH_FT), which follows 0038's rule for a farm's own grove (a GUESS) and its 50 ft figure. Whether the cut is right is judged on clear_east_of_beds.",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#homestead turns as one piece": {
-  "code": "d496a3ecb531b5da",
-  "core": "3cb9f450bf5fa406",
-  "date": "2026-10-07",
-  "note": "the parts turn about the house center and the boxes are the turned boxes as drawn",
+  "code": "5a7b45b4fe6913ce",
+  "core": "757b3982f0f1be88",
+  "date": "2026-10-08",
+  "note": "the yard, beds, shed, byre, well and fixtures are turned about the house center by the seat's rake, and the ground cleared is the turned box.",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
   },
@@ -53619,21 +53619,21 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#rect helpers": {
-  "code": "212cbcb25b59235e",
-  "core": "8a3bfca2b4528b28",
-  "date": "2026-10-07",
-  "note": "keeps the grove's ground off a bed's east",
+ "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut out of a bed's morning sun": {
+  "code": "8281f512d41f9d25",
+  "core": "18b53064006d68d3",
+  "date": "2026-10-08",
+  "note": "the code only counts a band as in the reach when it overlaps the bed's own height (`y - h/2 < bottom + 1.0 and top - 1.0 < y + h/2`). A band below the bed is cut to start at `bottom + 1.0`, so its kept part still stands within 50 ft east of the bed, in the ground south of the bed's south edge. 0038 keeps that ground clear: no crown \"within 50 ft east, west or south of a yard or bed, from the plot's north edge down\", and the clear ground runs \"to 50 ft below its south edge\". The test and the cut should cover the plot's north edge down to 50 ft below its south edge, or the claim should say it clears only the bed's own height.",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:0f20160d442c6378",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:77d35b6c1e079501",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#frame padded for a lane": {
   "code": "5fc02c16f3378398",

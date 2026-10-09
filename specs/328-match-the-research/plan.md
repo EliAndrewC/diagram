@@ -821,6 +821,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Occasions**: none - nothing a hamlet draws moves.
 - **Verification**: the anchor test (red on the old signature); `impl-drift`; `spec-fidelity`.
 
+## Wave 59 (amendment 58, 2026-10-08) - batch 4
+
+- **Scope**: row 588 - `clear_east_of_beds` DROPS a band whose cut run would be shorter than its width (it was kept whole,
+  standing in the bed's 50 ft east reach that 0038 keeps clear); the claim relabeled to cite 0038. Two defects found in the
+  measuring, fixed in the wave (XIV): (1) the cut ran for the dispersed form alone (`if frame is not None`), so a linear or
+  nucleated farm's own thin east band was never cleared - it now runs for every bundle with bands; (2) the cut tested
+  overlap on the unrounded boxes while the rule (`grove_rules.gardens_east_shaded`) reads the records rounded to 0.1, so a
+  band ending AT the bed's edge read as 0.015 px into it (cohort seed 901, pinned linear) - the cut now takes a band within
+  a pixel of the bed's height and leaves it a pixel clear, as its comment already promised.
+- **Measured**: the cohort (30 maps) at HEAD and after, 24 -> 25 passing (m:wave59-east-reach-cohort): Audit-901's `gardens_east_shaded` gone,
+  nothing added; the pool: Kashikawa's manifest one line, the other four unchanged.
+- **Occasions**: none - three of Kashikawa's bands a pixel shorter, their crowns re-scattered within the band (up to ~12 px); the band's glyph and the scatter's rule unchanged, so no element is redrawn or re-placed by a changed rule.
+- **Verification**: `tests/settlement/test_grove_sides.py` (the stub dropped, the touching band cut; red on the old code);
+  the cohort diff; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

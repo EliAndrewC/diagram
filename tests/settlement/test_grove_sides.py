@@ -359,7 +359,7 @@ def test_on_a_map_keeping_the_sun_a_bed_taller_than_its_yard_stands_wholly_south
         assert c["garden"][1] >= c["yard"][1], "never north of the yard's line"
 
 
-def test_a_band_in_a_turned_beds_east_reach_is_cut_back_to_the_beds_edge() -> None:
+def test_a_band_in_a_turned_beds_east_reach_is_cut_back_or_dropped() -> None:
     """Feature 315 (cohort seed 906): a bed turned with its house rises past the unraked east band's end; the band is cut back at
     its near end to the bed's top, a band below the bed to its bottom, one out of reach left whole, a stub never made."""
     from l7r.diagram.settlement.rolling.dispersed import clear_east_of_beds
@@ -372,4 +372,6 @@ def test_a_band_in_a_turned_beds_east_reach_is_cut_back_to_the_beds_edge() -> No
     far = (60.0, -30.0, 17.0, 42.0)
     assert clear_east_of_beds([far], [bed], 22.0) == [far], "out of reach"
     stubby = (24.0, -5.0, 17.0, 20.0)  # cutting it to the bed's top would leave 5 px
-    assert clear_east_of_beds([stubby], [bed], 22.0) == [stubby], "never cut to a stub"
+    assert clear_east_of_beds([stubby], [bed], 22.0) == [], "a band whose cut run would be a stub is dropped, never left in the reach (0038)"
+    touching = (24.0, -30.0, 17.0, 40.0)  # its south end AT the bed's top edge (-10): rounded, the two overlap
+    assert clear_east_of_beds([touching], [bed], 22.0) == [(24.0, -30.5, 17.0, 39.0)], "a band ending at the bed's edge is cut a pixel clear"

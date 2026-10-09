@@ -480,6 +480,7 @@
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#way in through the grove": "E0",
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon may stand in its own grove's bands (fruit=bands; 0046)": "E0",
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon out of the plots' sun": "E0",
+ "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut a pixel clear of a bed's edge within its east reach; a band shorter than its width left uncut": "E2",
  "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#rect helpers": "E0",
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed's sun ground clear of crowns, promised persimmons and bamboo (CANOPY_SHADE_FT, BAMBOO_SHADE_FT)": "E0",
  "l7r/diagram/settlement/rolling/farmsteads.py::beds_sun_clear#bed sun ground clear of crowns and promised trees at reach, bamboo at bamboo_reach": "E0",

@@ -1,44 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "a02e87a2f8a84c8a9b786d64da3dea3d2a06dea5912ddf9770a8f5b0d638bf9a",
+ "plan_sha256": "885589ad499e4691c431ff6e3cb22d0509522f04931cc8e638d3e645b538bcfc",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W58-1 notice board's entrance reach in feet (row 603)",
-   "summary": "kosatsuba_anchor takes ftpx and compares KOSATSUBA_ENTRANCE_REACH_FT / ftpx; siting.py passes self.ftpx; hamlets byte-identical",
+   "id": "W59-row588",
+   "summary": "clear_east_of_beds drops a band whose cut run would be shorter than its width (it used to be kept whole inside the bed's 50 ft east reach), and the claim is relabeled to cite 0038",
    "class": "within",
-   "why": "Exactly the ranked fix of row 603, taken in its E2 turn; the engine diff is the two lines it names. A unit correction narrows nothing."
+   "why": "This is row 588's ranked fix word for word: the band is dropped rather than kept whole, and the cut part cites 0038. The test asserts [] for the stub."
   },
   {
-   "id": "W58-2 row 595 measured, no code this wave",
-   "summary": "only-plain-houses-keep-a-byre: measured every house the five hamlets seat is kind plain, so the filter excludes nothing in scope; row left DRIFTED, scope kept, unassigned",
+   "id": "W59-every-form",
+   "summary": "the cut runs for every bundle that has bands (`if base.get('groves')`), where it used to run for the dispersed form alone (`frame is not None`)",
    "class": "within",
-   "why": "The row is not closed, deferred or excused: ranking.json keeps it DRIFTED/kept at E2 with no wave, so it is still owed in its easiest-to-hardest turn. Recording a measurement against a row narrows nothing. It must end the feature either fixed (the ranked one-file fix) or deferred under FR-010's 'value no kept map reads, deferred with its measured reason' clause - not in neither state."
+   "why": "0038 holds a farm's own grove to the 50 ft east reach whatever the settlement form. A linear or nucleated farm left uncut was a mismatch between the code and the research, and this feature exists to remove those. The defect was found in the wave's own measuring and fixed there (XIV). It widens enforcement and excepts nothing."
   },
   {
-   "id": "W58-3 row 584 re-tiered E2 -> E3 on measure",
-   "summary": "the no-lot clause runs only on the legacy roller (a hamlet's lots already deal the kura largest first); the live clause - a scattered farm's kura on the north wall unreserved (shed=False) - needs the annex reserved in dispersed_layout across bundle.py, dispersed.py, fixture_seats.py, houses.py",
+   "id": "W59-pixel-margin",
+   "summary": "the overlap test takes in a band within 1 px of the bed's height, so a band ending at the bed's edge, which overlaps it once both records are rounded to 0.1 (cohort seed 901, 0.015 px), is cut a pixel clear",
    "class": "within",
-   "why": "The request ranks findings by 'how much implementation work we expect'; measuring the work and moving a row to the tier its measured work meets is the ranking kept honest, not a carve-out. Spec line 114 defines E3 as 'a change across modules', which four modules is. The row stays kept and owed (E3, not deferred). Dropping the no-lot clause is FR-010 (legacy-only code), not a new exception. Precedent: the mill row re-tiered E3 accepted at amendment 4; amendment 26's withdrawn re-tier turned on a literal fix that passed, which is not the case here."
+   "why": "The cut now agrees with the rule that reads the rounded records (gardens_east_shaded). The fix widens the cut and narrows nothing. The cohort logs show Audit-901's gardens_east_shaded gone and no failure added."
   },
   {
-   "id": "W58-4 row 594 re-tiered E2 -> E3 on measure; wing-end knob reverted",
-   "summary": "0048 joins the stable to the house's lower (doma) end and its mirror forms mirror the whole plan; our houses keep the doma at -x so the left-first wing is the lower end; the ranked fix (roll the wing end alone) would put the stable at the upper end, so the remaining drift is a whole-plan mirror knob",
+   "id": "W59-found-830",
+   "summary": "the new DRIFTED claim (the cut tests only the bed's own height, not down to 50 ft below its south edge) is ranked E3 alongside row 804 and kept in scope rather than fixed in this wave",
    "class": "within",
-   "why": "The ranked E2 fix was written and found to contradict 0048 (stable at the upper end half the time), so it does not make the implementation match the research - the amendment 26 test (does the literal fix pass?) fails here and the re-tier stands. The correct fix is a new knob, E3 by spec line 114. The row stays kept and owed, and the reverted code ships nothing that departs from the research."
+   "why": "This is not a carve-out. The drift is the same one row 804 (gardens_east_shaded#east reach below the bed) already records, and row 804's fix already names clear_east_of_beds as its layout twin. Row 804 was tiered E3 at T38b because the rule and the cut must move together across two modules. The GM asked for the findings to be fixed from easiest to hardest, so leaving an E3 to its place in that order follows the request literally. The row stays scope 'kept' and remains owed."
   },
   {
-   "id": "W58-5 never-arriving approach claimed UNRESEARCHED",
-   "summary": "kosatsuba_anchor's fallback (anchored at the approach's point nearest the houses) gains a Research: claim labeled UNRESEARCHED",
+   "id": "W59-occasions",
+   "summary": "no review occasions are declared: the bands move by under a pixel, Kashikawa's manifest is the only pool change",
    "class": "within",
-   "why": "Labeling existing behavior with its true class (FR-005); exempts nothing from a researched rule."
-  },
-  {
-   "id": "W58-6 occasions none; verification by the anchor test, impl-drift, spec-fidelity",
-   "summary": "no review occasion declared because nothing a hamlet draws moves",
-   "class": "within",
-   "why": "Hamlets are 1 ft/px and byte-identical; the occasion rule is the project's, and the test red on the old signature enforces the requested fix."
+   "why": "This is a process decision under feature 294 and narrows nothing the GM asked for. No fidelity ruling is owed."
   }
  ],
  "verdict": "CLEAR"

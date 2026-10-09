@@ -9004,7 +9004,7 @@
   "tier_as_ranked": "E0",
   "second_reader": "ranked E0, second reader E2: the higher taken (plan D4)",
   "verdict": "UNCLAIMED",
-  "wave": "",
+  "wave": "59",
   "scope": "kept"
  },
  {
@@ -12814,6 +12814,23 @@
   "found": "wave 9 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the annex rests on the same contradicted sentence",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut out of a bed's morning sun",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the cut tests a band against the bed's own height only; 0038 keeps clear the ground 'from the plot's north edge down' to 50 ft below its south edge - one change with row 804 (grove_rules.py::gardens_east_shaded#east reach below the bed): the rule and this cut both test y from the bed's north edge to its south edge plus the reach (impl-drift, wave 59)",
+  "files": [
+   "l7r/diagram/settlement/rolling/dispersed.py",
+   "l7r/diagram/settlement/homestead_parts/grove_rules.py"
+  ],
+  "after": [
+   "l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#east reach below the bed"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },
