@@ -291,6 +291,7 @@
  "l7r/diagram/hamletgen/ways/clearance.py::may_write#no nearer the fabric": "kept",
  "l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#origin on the houses' bank": "kept",
  "l7r/diagram/hamletgen/ways/corridors.py::FIELD_ROUTE_GAP_FT#field way off the steadings": "kept",
+ "l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#field path to the bund": "kept",
  "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane's no-build corridor": "kept",
  "l7r/diagram/hamletgen/ways/fabric.py::_hits_a_steading#no house on a tread": "kept",
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard": "kept",

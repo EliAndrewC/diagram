@@ -11459,6 +11459,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#field path to the bund",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "a field on the houses' own bank of a brook is offered no routed field way: every routed run goes over a ford to the far bank and its leg back meets the brook (cohort seed 10, refused 'the field is reached by no way'). Probed 2026-10-09 (diagnosis worktree): offering same-bank routes from the network points nearest the field brings three more faults in turn - field_router's own-dooryard exemption keys on a house within the doorstep reach of the start, so a run from the network beside a house crosses that house's yard (the matrix refuses it); exempting the yard only from inside it leaves the router no cell to start from; and a start on an access lane's first leg near its end meets that lane's end leg in a needle. The fix is all three together: same-bank starts, the yard exempt only where the route starts in it, and a start within the join tolerance of a lane's end snapped to that end so the run carries the lane on (0014: a way runs from the network to the field's bund)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/corridors.py",
+   "l7r/diagram/hamletgen/ways/reach.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 90's diagnosis of baseline cohort seed 10 (feature 328, 2026-10-09)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track meets the lanes",
   "tier": "E3",
   "fix": "_pull_back_to_service joins every track inner end to the network however far, never leaving it in open country (0081) - by routing the inner end to the network (route.py `_route`), the hard ground handed down from the web",
