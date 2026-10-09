@@ -1434,6 +1434,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `tests/hamletgen/ways/test_fabric.py` (red before the fix, a KeyError on `wells`); the cohort; `impl-drift`
   on the claims owed; `spec-fidelity`.
 
+## Wave 88 (amendment 87, 2026-10-09) - batch 11
+
+- **A pre-existing defect fixed (constitution XIV): a road laid over a ford crossed the brook off it.** The baseline refusals
+  are all the lane web (03, 10, 20, 22, 33); 03 and 22 end on `off_ford`. Probed on seed 22: the row road was laid over the
+  ford at (878.7, 676.6) by `ford_crossing`, then `_thread_the_fabric` routed the run from its first point to its last and
+  dropped both landings, so a road running beside its brook crossed it 64 px from the nearest ford, and nothing the last
+  resort may drop could mend it (m:wave88-road-over-its-ford). `thread_over_the_ford` threads each leg to its landing apart
+  and keeps the deck between them, as 0035 has a way cross the brook at a ford; it is taken only where the landing pair's
+  middle is a recorded ford, else the run is threaded whole as before. `stage_track` takes it for the row road and the field
+  spur. Seeds 03 and 22 roll clean; the cohort 49 -> 51/54, none newly failing. Kashikawa's row road runs on taut from its
+  ford, one bend fewer; Sawada's lanes moved in draw order only, its field spur now recorded as folded back short of the field over marsh where it was recorded as isolated.
+- **Occasion**: the row road on Kashikawa (a `village lane`) re-placed - a glyph-check at batch 11's close.
+- **Verification**: `tests/hamletgen/ways/test_track.py` (leg by leg; no recorded ford, whole; a leg clipped short, whole);
+  the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

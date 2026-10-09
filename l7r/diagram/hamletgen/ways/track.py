@@ -320,6 +320,24 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         s.field_face = (float(plan.seat["cx"]), float(plan.seat["cy"]))
 
 
+def thread_over_the_ford(s: Settlement, plan: SitePlan, start: Pt, via: Sequence[Pt], end: Pt) -> Poly:
+    """A run threaded round the steadings that crosses the brook at the ford it was laid over (`ford_crossing`'s two
+    landings, `via`): each leg threaded to its landing apart and the deck between them kept. Threaded whole, the router
+    went from the run's first point to its last and dropped the landings, so a road beside a brook crossed it wherever the
+    thread ran and the settle squared that crossing off every ford (cohort seed 22, feature 328 wave 88). Without a
+    landing pair whose middle is a recorded ford, the run is threaded whole as before.
+
+    Research: crossed at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook at a ford"""
+    fords = getattr(s, "brook_fords", None) or ()
+    if len(via) < 2 or not any(math.dist(((via[0][0] + via[1][0]) / 2, (via[0][1] + via[1][1]) / 2), f) <= 1.0 for f in fords):
+        return _thread_the_fabric(s, plan, [start, *via, end])  # no deck at a recorded ford between them: threaded whole, as before
+    near = _thread_the_fabric(s, plan, [start, via[0]])
+    far = _thread_the_fabric(s, plan, [via[1], end])
+    if len(near) < 2 or len(far) < 2 or math.dist(near[-1], via[0]) > 1.0 or math.dist(far[0], via[1]) > 1.0:
+        return _thread_the_fabric(s, plan, [start, *via, end])  # a leg clipped short of its landing: the whole run, as before
+    return [*near, *far]
+
+
 def recorded_track(s: Settlement) -> Poly | None:
     """The track out the homesteads stage chose once the last house stood (`choose_track_out`, feature 320 FR-008) - the
     track every household's way was laid to, drawn here as chosen - None on a form that records none.
@@ -417,6 +435,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         spur kept however short - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: drawn down to its 5 ft tread
         row road - research/questions/0033-row-villages-resson.drawing.html: the street carried on off the map, over a ford
         row road width - research/questions/0033-row-villages-resson.drawing.html: 6 ft
+        row road over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the ford that makes the walk shortest, each leg threaded to its landing (`thread_over_the_ford`)
         track off the map - research/questions/0081-village-lanes.drawing.html: from the gateway, out of the field, to the frame
         track off the wet - research/questions/0081-village-lanes.drawing.html: the toe band and every drawn marsh are wet
         spur clip margin - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary; the code clips the spur 12 ft off the dry plots
@@ -578,7 +597,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # stopped 60.6 ft short of the field, where the marsh the path may not cross lies between, so it was a lane ending
         # in open ground (`lanes_reach_something`). A folded spur is drawn only when its outward arm still reaches the
         # field; otherwise the map says why it has no path to its rice.
-        _threaded = _thread_the_fabric(s, plan, _spur_pts)
+        _threaded = thread_over_the_ford(s, plan, _spur_pts[0], _spur_pts[1:3], _spur_pts[3]) if len(_spur_pts) == 4 else _thread_the_fabric(s, plan, _spur_pts)
         _drawn_spur, _swept = spur_cut_at_the_fold(_threaded, plan.envelope) if len(_threaded) >= 2 else (_threaded, "no way to the field clear of the steadings - the field path is the web's")
         # ...AND THE DRAWN TIP IS SET ON THE BUND AGAIN (269 B04): the tip was set above, but the threading moves the spur's
         # free bow vertex round the steadings and the fold cut then keeps the arm out to it, so the path drawn can end at a
@@ -622,8 +641,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
             _out = _out[1]
             # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the
             # street's line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
-            _out = [_out[0], *ford_crossing(_out[0], _out[-1], plan.brook or [], getattr(s, "brook_fords", ())), _out[-1]]
-            s.lane(_thread_the_fabric(s, plan, _out), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+            _via = ford_crossing(_out[0], _out[-1], plan.brook or [], getattr(s, "brook_fords", ()))
+            s.lane(thread_over_the_ford(s, plan, _out[0], _via, _out[-1]), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
             if _k:  # ...the far end's run is the road running on, not the way in: the board stands at the entrance (`run_on`)
                 s.M["lanes"][-1]["run_on"] = True
         return

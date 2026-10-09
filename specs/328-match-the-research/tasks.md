@@ -5,6 +5,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
+- placement-changed: village lane on kashikawa - wave 88 (the track out): the row road threaded leg by leg over its ford, the far leg run on taut (0035; m:wave88-road-over-its-ford); batch 11's close
 - glyph-redrawn: pond canal on kuwabata - wave 73 (the dike-pond polder inks its supply channels `pond canal`): the feeder, toes and laterals at 0068's widths in feet (the feeder 4.5 ft at its inlet to 1.5, the toes and laterals 2.5 -> 1.2 floored 1.5 with their heads capped by the feeder) and each parcel's bank per channel (m:wave73-polder-widths-r2); batch 7's close (reviewed PASS at batch 7's close, 2026-10-09)
 - glyph-redrawn: drainage ditch on kuwabata - wave 73: the polder's drain at its 5.5 ft outfall width, and the crop's half-bund bank beside it (m:wave73-polder-widths-r2); batch 7's close (reviewed PASS at batch 7's close, 2026-10-09)
 - glyph-redrawn: pond canal on kuwabata - wave 80: the polder ditches' seam bends drawn as circular arcs of 2.5 widths' radius (0054; m:wave80-swept-bends); batch 9's close (reviewed PASS at batch 9's close, 2026-10-09)
@@ -2103,3 +2104,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T203 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. impl-drift 4 of 4 IN-STEP on _homestead_polys, wells among what 0246 has a lane keep off (sections 4, 7, 13); make claims-owed: none
+
+## Phase 89 - wave 88 (amendment 87): a road over a ford threaded leg by leg (XIV)
+
+- `hamletgen/ways/track.py` (`thread_over_the_ford`, `stage_track`); `tests/hamletgen/ways/test_track.py`.
+
+- [x] T204 wave 88's fix (FR-003, XIV)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 88; its requested Sawada wording applied after); thread_over_the_ford; seeds 03 and 22 clean, cohort 49 -> 51/54 none newly failing (m:wave88-road-over-its-ford)
+- [x] T205 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. impl-drift 19 of 19 IN-STEP on track.py, the row road's ford claimed to 0035; make claims-owed: none

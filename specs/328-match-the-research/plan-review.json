@@ -1,32 +1,56 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "8c393bbc33603ebc22a316ee817e33091ebda4df6239e50046b06cfeb925679c",
+ "plan_sha256": "ebe2768ea0353475368a78c0a7ed3fd31f1a9c6193a79c54d8bebdf9159b3eff",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W87-1",
-   "summary": "Wave 87 takes a pre-existing defect (not a ranked row) under constitution XIV: the fabric every way is threaded by (_homestead_polys) omitted the parts held until drawn, so seed 906's track out was laid over a held well pocket and refused by the matrix",
+   "id": "W88-1",
+   "summary": "Wave 88 takes a pre-existing defect (not a ranked row) under constitution XIV: seed 22's row road, laid over a recorded ford by ford_crossing, was threaded whole by _thread_the_fabric, which dropped the landings, so the road crossed the brook 64 px off any ford and was refused (off_ford); seed 03 the same",
    "class": "within",
-   "why": "Adds work and narrows nothing. The request is to make the implementation match the research; the fabric already counts drawn wells and fixtures and the overlap matrix already forbids a lane on them, so the fix makes an existing rule hold in the window between seating and drawing. The project's standing rule (XIV; GM 2026-10-01) has defects found in the work fixed in that work, and the plan has done so before (waves at plan lines 552, 828). The unit is under hamletgen/, inside FR-010's scope. No ranked row is skipped or re-tiered by it."
+   "why": "Adds work and narrows nothing. The request is to make the implementation match the research; 0035's drawing page already has a way cross the brook square at a ford, and the fix makes that existing rule hold through the threading. XIV (GM 2026-10-01) has defects found in the work fixed in that work, as waves 86 and 87 did. The unit is under hamletgen/, inside FR-010's scope. No ranked row is skipped or re-tiered."
   },
   {
-   "id": "W87-2",
-   "summary": "Held parts enter the fabric as they will be drawn: a well pocket as the octagon at max(r, vr), each other held record with x, y, w, h (farm fixtures, retirement houses) as its box, unrotated",
+   "id": "W88-2",
+   "summary": "thread_over_the_ford threads each leg to its landing apart and keeps the deck between the two landings",
    "class": "within",
-   "why": "The same representation the fabric already uses for the drawn wells, and the held record's own form (held_part_records carries no rot; the matrix judges that same record). Pure implementation of the fix; it narrows nothing."
+   "why": "The direct implementation of 0035's 'a way crosses the brook at a ford' (ford_crossing's own claim cites the same page). It narrows nothing."
   },
   {
-   "id": "W87-3",
-   "summary": "Verification: the test red before the fix, seed 906 and the 48-seed cohort (48 -> 49/54, none newly failing), the pool rerolled (no map moved), impl-drift on the claims owed (T203), spec-fidelity; the gate, timing pair and occasions at batch 11's close",
+   "id": "W88-3",
+   "summary": "Taken only where the landing pair's middle is a recorded ford; otherwise the run is threaded whole as before",
    "class": "within",
-   "why": "FR-005's batched verification exactly. The reviewer re-rolled seed 906 on the uncommitted engine (make cohort N=1 SEED=906: 7/7 passed) and the test file (17 passed). No new element or glyph, so no review occasion is owed."
+   "why": "Not a carve-out in effect: ford_crossing returns landings only at a recorded ford (its midpoint is the ford by construction, checks.py lines 145-150), so the guard is true whenever a ford crossing was laid; where none was laid there is no deck to keep, and the off_ford law still refuses any crossing off a ford. No crossing off a ford is admitted by this branch."
   },
   {
-   "id": "W87-4",
-   "summary": "No Decisions Recorded row for the wave",
+   "id": "W88-4",
+   "summary": "Where a threaded leg is clipped short of its landing, the whole run is threaded as before",
    "class": "within",
-   "why": "FR-008 owes a row for a fix that changes what a map draws or states; the measured result is that no pool map moved (m:wave87-held-parts-fabric), and the fix introduces no new rendering rule, only makes an existing one hold."
+   "why": "A fallback to the pre-existing path, not an exception to the research: that path's output is still judged by off_ford (law.py) and refused if it crosses off a ford, exactly as at HEAD. Nothing that breaks 0035 ships through it; it only keeps a seed from failing differently than before."
+  },
+  {
+   "id": "W88-5",
+   "summary": "Applied to the row road and the field spur in stage_track (the two runs in track.py laid over a ford and then threaded); the web's arms and the connector are not touched this wave",
+   "class": "within",
+   "why": "The scope of a defect fix, not a narrowing of the request: the measured defect is the row road (seeds 03, 22), the spur is the other track.py run built as [start, landings, end] and threaded, and the GM's request does not ask for this defect at all. The off_ford law covers every way, so no unfixed way can ship off a ford; any further instance is a new XIV find for its own wave."
+  },
+  {
+   "id": "W88-6",
+   "summary": "Kashikawa's row road re-placed (runs on taut from its ford, one bend fewer); declared as a placement-changed occasion (village lane on kashikawa) for a glyph-check at batch 11's close; Sawada moved in draw order only",
+   "class": "within",
+   "why": "Feature 294's occasion rule as the plan has applied it every batch; a map move that follows the research needs no ask (GM 2026-09-12). The reviewer did not re-render Kashikawa; the occasion is where it is looked at. Sawada MEASURED (HEAD vs working-tree manifest, order-insensitive): all 20 lanes' geometry identical, only z shifted by one, so no occasion is owed there; but its manifest meta also changed - field_spur_swept 'isolated - no house of its own and no join to the web' -> 'folded back short of the field - the ground between is marsh a path may not cross', and lane_fragments_dropped 1 -> absent. Nothing drawn differs, but 'draw order only' in the plan and m:wave88-road-over-its-ford's pool value understates it; a wording correction, not a narrowing."
+  },
+  {
+   "id": "W88-7",
+   "summary": "A Decisions Recorded row in spec.md, class HISTORICALLY ACCURATE (0035), pointing at thread_over_the_ford, with m:wave88-road-over-its-ford",
+   "class": "within",
+   "why": "FR-008 owes a row for a fix that changes what a map draws (Kashikawa moved); the class follows the cited page, whose drawing note has a way cross square at a ford and bridges() deck it."
+  },
+  {
+   "id": "W88-8",
+   "summary": "Verification: test_track.py (leg by leg; no recorded ford, whole; a leg clipped short, whole), seeds 03 and 22 and the 48-seed cohort (49 -> 51/54, none newly failing), impl-drift on the claims owed (T205), spec-fidelity; gate and occasions at batch 11's close",
+   "class": "within",
+   "why": "FR-005's batched verification. The reviewer re-ran on the uncommitted engine: make test-file tests/hamletgen/ways/test_track.py 30 passed; make cohort N=1 SEED=22 7/7 passed; make cohort N=1 SEED=3 7/7 passed. The 48-seed cohort was not re-run."
   }
  ],
  "verdict": "CLEAR"

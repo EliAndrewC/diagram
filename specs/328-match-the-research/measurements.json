@@ -1881,5 +1881,18 @@
       "cohort_48": "49/54 (refused 03, 10, 20, 22, 33); 906 newly passing, none newly failing",
       "pool": "no map moved"
     }
+  },
+  "wave88-road-over-its-ford": {
+    "quantity": "wave 88 (2026-10-09): a road or field spur laid over a ford threaded leg by leg, its deck kept",
+    "observed": "2026-10-09",
+    "source": "make hamlet for Audit-22 (seed 22, 10 households) with a probe at the row road's draw; make cohort N=48; make map for the five hamlets",
+    "command": "make hamlet; make cohort N=48; make map",
+    "method": "seed 22's road probed before and after threading (laid over the ford at (878.7, 676.6), landings (863, 693) and (894, 661); threaded whole to [(1155, 1051), (423, 265), (389, -49)], the landings dropped, the brook crossed 64 px from the nearest ford and refused off_ford); the fix; the seed, the cohort (on wave 87) and the pool rerolled",
+    "value": {
+      "seed_22": "WebRefused off_ford -> OK",
+      "cohort_passed": 51,
+      "cohort_48": "51/54 (refused 10, 20, 33); 03 and 22 newly passing, none newly failing",
+      "pool": "Kashikawa's row road runs on taut from its ford (one bend fewer); Sawada's lanes unchanged in geometry (draw order only), its field spur's recorded reason now 'folded back short of the field - the ground between is marsh a path may not cross' where it was 'isolated', and lane_fragments_dropped gone; three maps unchanged"
+    }
   }
 }

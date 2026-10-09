@@ -504,3 +504,26 @@ def test_the_track_runs_to_the_canvas_edge_and_a_margin_past_it() -> None:
     assert abs(past_the_frame((500.0, 100.0), math.pi / 2, 1000.0, 1000.0) - (900.0 + TRACK_PAST_FRAME_FT)) < 1e-9, "south"
     assert abs(past_the_frame((500.0, 100.0), -math.pi / 2, 1000.0, 1000.0) - (100.0 + TRACK_PAST_FRAME_FT)) < 1e-9, "north"
     assert past_the_frame((-50.0, 500.0), math.pi, 1000.0, 1000.0) == TRACK_PAST_FRAME_FT, "already outside: the margin alone"
+
+
+def test_a_run_over_a_ford_is_threaded_leg_by_leg_and_keeps_its_deck(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 328 wave 88 (cohort seed 22): threaded whole, the router went from a road's first point to its last and
+    dropped the ford's landings, so the road crossed the brook off every ford. Each leg is threaded to its landing apart."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.ways import track
+
+    calls: list[list[tuple[float, float]]] = []
+    monkeypatch.setattr(track, "_thread_the_fabric", lambda s, plan, run: calls.append(list(run)) or list(run))
+    s = SimpleNamespace(brook_fords=[(50.0, 0.0)])
+    start, via, end = (0.0, 0.0), [(40.0, 0.0), (60.0, 0.0)], (100.0, 0.0)
+    assert track.thread_over_the_ford(s, None, start, via, end) == [start, *via, end]
+    assert calls == [[start, via[0]], [via[1], end]], "each leg threaded to its own landing"
+    calls.clear()
+    s.brook_fords = [(500.0, 0.0)]  # the pair's middle is no recorded ford: the run threaded whole, as before
+    track.thread_over_the_ford(s, None, start, via, end)
+    assert calls == [[start, *via, end]]
+    calls.clear()
+    s.brook_fords = [(50.0, 0.0)]
+    monkeypatch.setattr(track, "_thread_the_fabric", lambda s, plan, run: calls.append(list(run)) or ([run[0], (30.0, 0.0)] if len(run) == 2 and run[-1] == via[0] else list(run)))
+    assert track.thread_over_the_ford(s, None, start, via, end) == [start, *via, end], "a leg clipped short of its landing: threaded whole"
