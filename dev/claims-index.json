@@ -48050,27 +48050,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt a windward hook": {
-  "code": "22dab422bda621d1",
-  "core": "a7b43952d0585eb7",
+  "code": "9490d5d2f750949c",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "`trim_to_the_wind` / `settle_the_belt` trim the ends until the belt bears on the wind's quarter",
+  "note": "ends trimmed until the belt bears on the wind's quarter, on one or two sides, as hooks or strips",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
   "research": "5892781a1ab23bcb",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4523f93a7cad32ee",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt alder in the marsh": {
-  "code": "5de18e850527b874",
-  "core": "a7b43952d0585eb7",
+  "code": "db9ab59c733bb09e",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "windbreak clumps in the toe or waterside marsh drawn as alder",
+  "note": "belt crowns in toe/waterside marsh drawn as alder",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
@@ -48083,26 +48081,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt deep and whole": {
-  "code": "7458318207346f18",
-  "core": "a7b43952d0585eb7",
+  "code": "e952f0190994e953",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "gaps over px(30 ft) filled from both sides of a crossing",
+  "note": "interior gaps over 30 ft filled, 30 ft a convention",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
   "research": "5892781a1ab23bcb",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh": {
-  "code": "40923b0e30d18449",
-  "core": "a7b43952d0585eb7",
+  "code": "7be349df586d5b13",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "belt seated no deeper than the reed edge, where alder stands",
+  "note": "belt trees stand at the reed edge, not deep in the marsh",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
@@ -48114,53 +48111,53 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#canopy kept 0.9 clump off shrines, torii and ponds": {
-  "code": "7237f9e5491bb6c6",
-  "core": "a7b43952d0585eb7",
+  "code": "54172f117c97a838",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "nothing in the bundle answers it",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump crown-reach margin off a way": {
-  "code": "14e3f4261c96a7f5",
-  "core": "a7b43952d0585eb7",
+  "code": "c404dac99bcb56dd",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "nothing in the bundle gives the margin's width",
+  "note": "the margin's width is on no page",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump grid": {
-  "code": "25e39654569c7bfe",
-  "core": "a7b43952d0585eb7",
+  "code": "541a8b6ed03225f9",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "the clump grid is not on any cited page",
+  "note": "grid step and clump size answered by no page in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump inside the page window": {
-  "code": "403bd052486c7acd",
-  "core": "a7b43952d0585eb7",
+  "code": "acbcf5b6bfa296f6",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "kept if any crown is on the page, dropped if none",
+  "note": "partly visible crown kept, wholly off-page dropped",
   "pages": {},
   "research": "",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dc08f0e1620f3363"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:199c787c93386c82",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump off buildings": {
-  "code": "2bdd5af15ff51b3e",
-  "core": "a7b43952d0585eb7",
+  "code": "2d395e9d9d4181db",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "building's circumscribing radius plus the clump's radius",
+  "note": "circumscribing radius plus full clump radius",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
@@ -48171,8 +48168,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps kept 12 px plus a crown off paddies and 12 px off dry plots": {
-  "code": "516d03091aab05f8",
-  "core": "a7b43952d0585eb7",
+  "code": "8545af07a9615286",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
   "note": "the crops stay open; the pads are marked unresearched",
   "pages": {
@@ -48185,52 +48182,49 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off lanes": {
-  "code": "f672c8c386eb925f",
-  "core": "a7b43952d0585eb7",
+  "code": "e368e463740b6263",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "planting resumes on both sides of a crossing lane",
+  "note": "the gap fill resumes planting on both sides of a crossing",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
   "research": "5892781a1ab23bcb",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off streams, channels and the moat": {
-  "code": "1da6047dd06d3566",
-  "core": "a7b43952d0585eb7",
+  "code": "961177c796d857b1",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "nothing in the bundle answers it",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east": {
-  "code": "162f75c7e9d7a43e",
-  "core": "a7b43952d0585eb7",
+  "code": "f7dc4e4a080745b1",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "EAST_REACH_FT 50 ft east of each bed",
+  "note": "claim says \"east of a bed\" but `east` now covers threshing_yards and gardens (in step with 0038's \"50 ft east ... of a yard or bed\"); label should read: no crown within 50 ft (`EAST_REACH_FT`) east of a yard or bed",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:0f20160d442c6378",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the road": {
-  "code": "846171e3c44c5038",
-  "core": "a7b43952d0585eb7",
+  "code": "e7c546b25509d466",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "main road kept open",
+  "note": "groves and copse kept off the main road",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
@@ -48241,16 +48235,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse filled to the homesteads' wood": {
-  "code": "aa4fa8cc883dbdb6",
-  "core": "a7b43952d0585eb7",
+  "code": "c22df5158a5774b6",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "reserved seats first, filled to the farms' woods",
+  "note": "copse filled to the homesteads' woods; seat order is implementation",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
   "research": "8e7d7569cc3f687f",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:25f4f196d0bea56e",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da"
@@ -48258,10 +48251,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse mix": {
-  "code": "f3e4ba6ec43eae52",
-  "core": "a7b43952d0585eb7",
+  "code": "64beae8b44b9dffa",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "dooryard mix, fruit and broadleaf, no bamboo",
+  "note": "fruit and broadleaf, no bamboo, no conifer",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
@@ -48272,10 +48265,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the bamboo": {
-  "code": "67fbec5c44220e6f",
-  "core": "a7b43952d0585eb7",
+  "code": "78770cfa7eded852",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "bamboo is a single-species stand of its own; the copse has none",
+  "note": "bamboo is a stand of its own; copse draws none",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
@@ -48287,77 +48280,77 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the whole marsh": {
-  "code": "14f425b78b3e65e4",
-  "core": "a7b43952d0585eb7",
+  "code": "fb0cc254dcee9348",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "woody growth stops at the marsh edge; only belt alder enters",
+  "note": "edge drawn cut and open, no woody cover in the marsh but the belt's alder",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
   "research": "a44790630d28af23",
   "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:97697d59c9e28e0c",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse stragglers dropped to its stocking": {
-  "code": "b22981e951956535",
-  "core": "a7b43952d0585eb7",
+  "code": "bfb7835b4353c398",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "nothing in the bundle answers it",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#no wind declared": {
-  "code": "876d997de34132bc",
-  "core": "a7b43952d0585eb7",
+  "code": "dfaee46662072d5b",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "defaults to (-0.7071, -0.7071), the northwest",
+  "note": "default (-0.7071, -0.7071) is the northwest",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
   "research": "5892781a1ab23bcb",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#off the plots' sun": {
-  "code": "b1daf20bb7405e8b",
-  "core": "a7b43952d0585eb7",
+  "code": "e13f0a3e92dfd323",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "the seat keep-outs are short of the page: the south strip is `_sun_corridor_ft` (39 ft, the house's figure) or 22 px, and the east lane covers gardens only; the page says no tree within \"50 ft east, west or south of a yard or bed, from the plot's north edge down\". The strip should be 50 ft and the east lane should cover yards too (the crown filter elsewhere drops ink only after the clump is seated)",
+  "note": "south strip now 50 ft (`CANOPY_SHADE_FT`), west lane north edge to below south edge, crowns held at the planting",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:2188f3625fa9dcc2",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#one grove off another's": {
-  "code": "9c69d6e598128c44",
-  "core": "a7b43952d0585eb7",
+  "code": "2a3840b1100686f3",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "nothing in the bundle answers it",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#three groves": {
-  "code": "92718946ab614160",
-  "core": "a7b43952d0585eb7",
+  "code": "8053d2b74218ec0a",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "back grove (windbreak), water-mouth grove and dooryard copse",
+  "note": "back grove, water-mouth grove, dooryard copse",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
@@ -48368,25 +48361,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#water-mouth grove drawn in the conifer-backed windbreak mix": {
-  "code": "6f71873801aaf97e",
-  "core": "a7b43952d0585eb7",
+  "code": "b39bc459a209bd37",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "Huangling mainly yew with camphor, ginkgo and pine; dense trees and bamboo",
+  "note": "Huangling's grove mainly yew with camphor, ginkgo, pine",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html": "5505f4d0f0752806"
   },
   "research": "2b11f5e741f6d139",
   "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:c8329df54a722c5f",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:cf135abe8c5f4d9c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#wellhead canopy keep-out": {
-  "code": "f271a0b170ef9e57",
-  "core": "a7b43952d0585eb7",
+  "code": "cebbc82789f8cf9d",
+  "core": "c7d2bb30ec414927",
   "date": "2026-10-08",
-  "note": "nothing in the bundle answers it",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -48827,10 +48819,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#afternoon lane as the copse plants": {
-  "code": "9825a6685461a870",
-  "core": "bbf53cc85534430c",
-  "date": "2026-10-07",
-  "note": "mirrors the copse's west lane; the 50 ft round every crown is held at the planting",
+  "code": "8fb0980bb9b407e0",
+  "core": "c49c058705369a69",
+  "date": "2026-10-08",
+  "note": "`_west_sun_ft` passed through as the copse plants it, none where undeclared",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -48842,48 +48834,44 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse clump size": {
-  "code": "b04fc91d9b3388c7",
-  "core": "bbf53cc85534430c",
-  "date": "2026-10-07",
-  "note": "no cited page gives a copse clump's size",
+  "code": "64801f6acc07e541",
+  "core": "c49c058705369a69",
+  "date": "2026-10-08",
+  "note": "nothing cited answers the clump size",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse seat pitch": {
-  "code": "64a09d1716835b31",
-  "core": "bbf53cc85534430c",
-  "date": "2026-10-07",
-  "note": "11*sqrt(2) is the 22-unit clump's radius times the square root of two, as claimed; no page gives the pitch",
+  "code": "9bc3d43c57ab3a65",
+  "core": "c49c058705369a69",
+  "date": "2026-10-08",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#seat off a lane": {
-  "code": "0a96b46865e8494c",
-  "core": "bbf53cc85534430c",
-  "date": "2026-10-07",
-  "note": "nothing in the bundle sets a crown's distance from a lane",
+  "code": "dcfcf1586782756f",
+  "core": "c49c058705369a69",
+  "date": "2026-10-08",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
-  "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": {
-  "code": "715bf593dc376ae8",
-  "core": "bbf53cc85534430c",
-  "date": "2026-10-07",
-  "note": "the cited page answers this, so it is not a GUESS: \"no crown ... the copse ... within 50 ft ... south\" (0071 §48 says the same). The 22 ft default feeds `copse_keepouts`' south strip, so the claim's \"held at copse_keepouts\" is false. It should cite 0038, and as written it is DRIFTED from 50 ft",
+  "code": "e45e00a2f06e94a1",
+  "core": "c49c058705369a69",
+  "date": "2026-10-08",
+  "note": "code now sets `self.sun_depth = CANOPY_SHADE_FT` (50 ft) always, with no 22 ft default and no map-declared corridor; claim should be 0038 drawing: a tree's 50 ft south of a yard or bed",
   "pages": {},
   "research": "",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:45d116e0d7359762",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
   ],
   "verdict": "MISLABELED"
@@ -48999,10 +48987,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#clump beside, never on, a building": {
-  "code": "08efd9d85f580964",
-  "core": "e98904a6827bada4",
-  "date": "2026-10-07",
-  "note": "0.5*hypot + cr + 2 + margin",
+  "code": "d99d60baf69227b4",
+  "core": "5938399161dd5f72",
+  "date": "2026-10-08",
+  "note": "circumscribing radius plus clump radius and 2 px",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
@@ -49013,30 +49001,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#copse off the wellhead": {
-  "code": "eb5ab4059096775d",
-  "core": "e98904a6827bada4",
-  "date": "2026-10-07",
-  "note": "matches village_grove; no page gives a distance",
+  "code": "4c56688211c3f9ef",
+  "core": "5938399161dd5f72",
+  "date": "2026-10-08",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": {
-  "code": "47ac7ed25f5352c1",
-  "core": "e98904a6827bada4",
-  "date": "2026-10-07",
-  "note": "the seat keep-outs mirror the copse's; the page's 50 ft is held at the crowns, as the claim states",
+  "code": "c699deec6d765dbb",
+  "core": "5938399161dd5f72",
+  "date": "2026-10-08",
+  "note": "claim says `EAST_LANE_FT` \"east of each bed\" but the loop now covers the yard too (0038: \"east, west or south of a yard or bed\"); label should read east of each yard and bed",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:0a9f4b3b9b0dbbea",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::crown_cells#plumbing": {
   "code": "761ccaa8f2401896",

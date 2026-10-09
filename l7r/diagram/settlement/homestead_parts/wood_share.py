@@ -95,7 +95,7 @@ def copse_keepouts(
             half the diagonal plus the clump's radius and 2 px
         copse off the wellhead - UNRESEARCHED: its drawn half-size plus 1.05 clumps
         plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the copse's own SEAT keep-outs
-            (`village_grove`): south of each yard and bed at the map's sun depth, `EAST_LANE_FT` (50 ft) east of each bed, and west and southwest
+            (`village_grove`): a tree's 50 ft (`CANOPY_SHADE_FT`) south of each yard and bed, `EAST_LANE_FT` (50 ft) east of each yard and bed, and west and southwest
             of each yard and bed at the map's afternoon lane; the page's 50 ft round every crown is held at the planting
             (`_sun_keepouts`)
     """
@@ -247,8 +247,8 @@ class WoodShares:
         """The reservations' state for one seating.
 
         Research:
-            sun strip default - GUESS: 22 ft where the map declares no sun corridor, copied from `village_grove`'s `_sun_depth`, so
-                the reservation keeps what the planting keeps; the 39 ft and 50 ft sun rules (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html) are held at `copse_keepouts`
+            sun strip default - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a tree's 50 ft (`CANOPY_SHADE_FT`) south of a yard or bed,
+                as `village_grove` keeps it, so the reservation keeps what the planting keeps
             afternoon lane as the copse plants - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the map's
                 `west_sun_lane` west and southwest of each yard and bed, as the copse plants it; none where it declares none
             copse clump size - UNRESEARCHED: `COPSE_CLUMP_BS`, 22 bscale units, the copse's clump

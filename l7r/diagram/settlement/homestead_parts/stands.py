@@ -266,7 +266,7 @@ class StandsMixin:
             clumps off the road - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the copse and the groves kept off the main road
             clumps off lanes - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: where a lane crosses the belt the planting resumes on both sides
             clump crown-reach margin off a way - UNRESEARCHED: the crown reach kept clear of lanes, streets and the road, the margin's width
-            clumps off the gardens' east - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft (`EAST_REACH_FT`) east of a bed
+            clumps off the gardens' east - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft (`EAST_REACH_FT`) east of a yard or bed
             copse stragglers dropped to its stocking - UNRESEARCHED: `stocked_copse` drops the farthest clumps until the copse holds half a clump plus 4 px
             one grove off another's - UNRESEARCHED: one grove's clumps kept off another's by the sum of their canopy reaches
             belt alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: belt clumps standing in the toe or waterside marsh drawn as alder
