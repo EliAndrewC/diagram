@@ -17,11 +17,13 @@ so the copy is proven lossless by comparing fingerprints, not by re-rendering.
 
 INGEST is three-way (plan D4): the base is the canonical list at the commit last synced, so a body the GM changed is told
 from a body a session changed (a pointer `make fragment-move` rewrote); a GM text edit is never recorded or dropped without
-`KEEP=` or `DROP=`. SYNC refuses while the copy holds anything not ingested (plan D5). ADD takes the next number under a
-host-wide lock that sees every clone (plan D6), and `check` holds the list append-only at the push (plan D11).
+`KEEP=` or `DROP=`. Marks that contradict themselves are never guessed at; once the GM has said which they meant,
+`MARK=<id>=<downloaded|partial|paywalled|not-found>` records that one (2026-10-09, H21). SYNC refuses while the copy
+holds anything not ingested (plan D5). ADD takes the next number under a host-wide lock that sees every clone (plan
+D6), and `check` holds the list append-only at the push (plan D11).
 
     downloads.py import --gm <file> --high-risk <file>      once: the canonical list from the GM's file and 312's
-    downloads.py ingest [--keep IDS] [--drop IDS]           `make downloads-ingest`
+    downloads.py ingest [--keep IDS] [--drop IDS] [--mark ID=STATE ...]   `make downloads-ingest`
     downloads.py sync                                       `make downloads-sync`
     downloads.py add <draft.md>                             `make download-add FILE=`
     downloads.py check [--base REF]                         at the push; --selftest
@@ -95,6 +97,26 @@ class Marks:
         if self.not_found and (self.downloaded or self.partial or self.paywalled):
             return "not found is ticked with downloaded, partial or paywalled - it means nothing was found"
         return ""
+
+    def resolved(self, state: str) -> Marks:
+        """These marks with the one state the GM named in place of the ones they ticked (`MARK=`); a copy only had leaves
+        where it came from and the file's name."""
+        if state not in RESOLVE_STATES:
+            raise Refusal(f"MARK= takes one of {', '.join(RESOLVE_STATES)}, not {state!r}")
+        have = state in ("downloaded", "partial")
+        return Marks(
+            downloaded=state == "downloaded",
+            partial=state == "partial",
+            paywalled=state == "paywalled",
+            not_found=state == "not-found",
+            elsewhere=self.elsewhere and have,
+            where=self.where if have else "",
+            saved=self.saved if have else "",
+        )
+
+
+#: The states `MARK=<id>=<state>` may name for marks the GM ticked in contradiction.
+RESOLVE_STATES = ("downloaded", "partial", "paywalled", "not-found")
 
 
 def parse_marks(lines: list[str]) -> Marks | None:
@@ -270,8 +292,15 @@ def git(root: pathlib.Path, *args: str) -> subprocess.CompletedProcess:
     return subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True)
 
 
+#: Where the project lived before feature 329 moved it to the repository root: a sync recorded before the move names a
+#: commit that holds the list under this prefix (2026-10-09, the first ingest after 329 was refused).
+PRE_329 = ".claude/skills/" + "diagram/"  # split so check-old-layout does not take the fallback for a stale pointer
+
+
 def at_commit(root: pathlib.Path, commit: str) -> str:
     done = git(root, "show", f"{commit}:{CANON}")
+    if done.returncode:
+        done = git(root, "show", f"{commit}:{PRE_329}{CANON}")
     if done.returncode:
         raise Refusal(f"the canonical list at {commit} cannot be read ({done.stderr.strip()}) - is the clone synced in? scripts/sync-with-main.sh sync-in")
     return done.stdout
@@ -294,9 +323,13 @@ class IngestResult:
         return not (self.pending or self.unknown or self.refused)
 
 
-def merge(canon_text: str, copy_text: str, base_text: str, date: str, keep: set[str], drop: set[str]) -> tuple[str, IngestResult]:
+def merge(
+    canon_text: str, copy_text: str, base_text: str, date: str, keep: set[str], drop: set[str], resolve: dict[str, str] | None = None
+) -> tuple[str, IngestResult]:
     """Ingest's comparison over plain texts (plan D4): the canonical list with the copy's marks recorded and the bodies
-    the session was told to keep, and what happened to each entry."""
+    the session was told to keep, and what happened to each entry. `resolve` names, per entry, the one state the GM said
+    they meant where their marks contradict themselves."""
+    resolve = resolve or {}
     canon_blocks = parse(canon_text)
     canon, base, copy = by_id(canon_blocks), by_id(parse(base_text)), by_id(parse(copy_text))
     out = IngestResult()
@@ -305,6 +338,8 @@ def merge(canon_text: str, copy_text: str, base_text: str, date: str, keep: set[
         if mine is None:
             out.unknown.append(eid)
             continue
+        if c.marks is not None and c.marks.problem() and eid in resolve:
+            c.marks = c.marks.resolved(resolve[eid])
         if c.marks is not None and c.marks != mine.marks:
             why = c.marks.problem()
             if why:
@@ -335,13 +370,15 @@ def merge(canon_text: str, copy_text: str, base_text: str, date: str, keep: set[
     return render(canon_blocks), out
 
 
-def ingest(root: pathlib.Path, copy: pathlib.Path, keep: set[str], drop: set[str], date: str | None = None) -> IngestResult:
+def ingest(
+    root: pathlib.Path, copy: pathlib.Path, keep: set[str], drop: set[str], date: str | None = None, resolve: dict[str, str] | None = None
+) -> IngestResult:
     state = load_state(root)
     if "synced" not in state:
         raise Refusal("the GM's copy has never been synced, so it holds no mark lines to read - run `make downloads-sync` first (on the GM's word)")
     copy_text = copy.read_text(encoding="utf-8")
     canon_path = root / CANON
-    text, out = merge(canon_path.read_text(encoding="utf-8"), copy_text, at_commit(root, state["synced"]["commit"]), date or today(), keep, drop)
+    text, out = merge(canon_path.read_text(encoding="utf-8"), copy_text, at_commit(root, state["synced"]["commit"]), date or today(), keep, drop, resolve)
     canon_path.write_text(text, encoding="utf-8")
     if out.clean():
         state["ingested"] = {"sha256": sha(copy_text), "date": date or today()}
@@ -535,6 +572,7 @@ def main(argv: list[str] | None = None) -> int:
     ing = sub.add_parser("ingest")
     ing.add_argument("--keep", default="")
     ing.add_argument("--drop", default="")
+    ing.add_argument("--mark", default="", help="ID=STATE ..., the state the GM meant where their marks contradict")
     sub.add_parser("sync")
     ad = sub.add_parser("add")
     ad.add_argument("draft")
@@ -578,7 +616,8 @@ def _run(a: argparse.Namespace, root: pathlib.Path) -> int:
         for p in found:
             print(f"downloads: {p}", file=sys.stderr)
         return 1 if found else 0
-    out = ingest(root, GM_COPY, set(a.keep.split()), set(a.drop.split()))
+    resolve = dict(m.split("=", 1) for m in a.mark.split() if "=" in m)
+    out = ingest(root, GM_COPY, set(a.keep.split()), set(a.drop.split()), resolve=resolve)
     code = report_ingest(out, root)
     inbox = [f"--match={name}={eid}" for eid, name in inbox_matches(out.saved, GM_COPY.parent).items()]
     done = subprocess.run([sys.executable, str(pathlib.Path(__file__).parent / "archive_ops.py"), "inbox", *inbox], cwd=root)
@@ -605,7 +644,7 @@ def inbox_matches(saved: dict[str, str], inbox: pathlib.Path) -> dict[str, str]:
 def report_ingest(out: IngestResult, root: pathlib.Path) -> int:
     print(f"downloads: ingest - marks recorded on {len(out.recorded)} entries" + (f" ({', '.join(out.recorded)})" if out.recorded else ""))
     for eid, why in out.refused.items():
-        print(f"  NOT RECORDED {eid}: {why} - ask the GM which they meant")
+        print(f"  NOT RECORDED {eid}: {why} - ask the GM which they meant, then MARK={eid}=<{'|'.join(RESOLVE_STATES)}>")
     for eid in out.unknown:
         print(f"  NOT IN THE LIST {eid}: the GM's copy has an entry the canonical list lacks - bring it in by hand at the end")
     for eid, diff in out.pending.items():

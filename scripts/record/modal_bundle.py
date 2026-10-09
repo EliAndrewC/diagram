@@ -40,7 +40,7 @@ QUESTIONS = pathlib.Path("research/questions")
 VARIANTS = pathlib.Path("research/assets/glossary-variants.txt")
 GUIDELINES = {"standard": pathlib.Path("dev/modals.md"), "particular": pathlib.Path("dev/modals-particular.md")}
 #: the About tab's word band, per form (`dev/modals.md` M3, `dev/modals-particular.md` P3)
-BAND = {"standard": (120, 250), "particular": (80, 200)}
+BAND = {"standard": (120, 500), "particular": (80, 400)}  # raised from 250 / 200 by the GM, 2026-10-09
 #: record talk and the old feature-level label, barred from the About tab (`dev/modals.md` M11, M16)
 BARRED = (
     r"\bthis project\b", r"\bthe record\b", r"\bpages? (we )?read\b", r"\bno page\b", r"\bGUESS\b", r"\bThis is a guess\b",

@@ -196,6 +196,35 @@ def test_contradictory_marks_and_an_unknown_id_are_named_not_recorded(tmp_path: 
     assert out.unknown == ["99"] and not out.recorded and not out.clean()
 
 
+def test_marks_the_gm_resolved_are_recorded_as_the_one_state_they_named(tmp_path: pathlib.Path) -> None:
+    """H21 (2026-10-09): downloaded and not found both ticked; once the GM says which, `MARK=` records that one and the
+    ingest is clean, so sync is allowed again. A state outside the four is refused, naming them."""
+    root, copy = _world(tmp_path)
+    dl.sync(root, copy)
+    _commit(root, "synced")
+    _tick(copy, "H1", downloaded=True, not_found=True)
+    assert set(dl.ingest(root, copy, set(), set()).refused) == {"H1"}
+    out = dl.ingest(root, copy, set(), set(), resolve={"H1": "downloaded"})
+    assert out.recorded == ["H1"] and out.clean()
+    assert dl.by_id(dl.parse((root / dl.CANON).read_text(encoding="utf-8")))["H1"].marks == dl.Marks(downloaded=True)
+    assert dl.Marks(paywalled=True, not_found=True, elsewhere=True, where="x").resolved("not-found") == dl.Marks(not_found=True)
+    with pytest.raises(dl.Refusal, match="downloaded, partial, paywalled, not-found"):
+        dl.Marks().resolved("found")
+
+
+def test_a_sync_recorded_before_329_reads_the_list_at_its_old_path(tmp_path: pathlib.Path) -> None:
+    """The first ingest after feature 329 was refused: the synced commit holds the list under the old prefix."""
+    root = _clone(tmp_path / "a")
+    old = root / dl.PRE_329 / dl.CANON
+    old.parent.mkdir(parents=True)
+    old.write_text("the list before the move\n", encoding="utf-8")
+    _commit(root, "before 329")
+    before = dl.git(root, "rev-parse", "HEAD").stdout.strip()
+    assert dl.at_commit(root, before) == "the list before the move\n"
+    with pytest.raises(dl.Refusal, match="sync-in"):
+        dl.at_commit(root, "0" * 40)
+
+
 def test_ingest_before_any_sync_is_refused(tmp_path: pathlib.Path) -> None:
     root, copy = _world(tmp_path)
     with pytest.raises(dl.Refusal, match="make downloads-sync"):

@@ -40,7 +40,7 @@ def test_env_then_feature_json(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
 
 def test_missing_directory(tmp_path: Path) -> None:
     fs = feature_status(tmp_path, "999-nope")
-    assert not fs.exists and "no specs/999-nope/" in fs.why
+    assert not fs.exists and "no specs/999-nope/" in fs.why and "SPECIFY_FEATURE=<NNN-slug> scripts/sync-with-main.sh done" in fs.why
 
 
 def test_open_tasks_and_no_verdict_are_both_named(tmp_path: Path) -> None:

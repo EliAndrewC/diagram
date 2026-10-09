@@ -33567,20 +33567,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#border as a line": {
-  "code": "d9c74755bc7b6b21",
-  "core": "5701bcea7ee18ef8",
+  "code": "a22f77c82f2d173a",
+  "core": "c8bdbf8d42ad3c39",
   "date": "2026-10-09",
-  "note": "the claim departs from 0083's mound markers, but cites only the research page, which holds findings and no project choice; need 0083's .drawing.html to see whether it records the departure (or CANON, if the ubame parley-room sheet is the GM's ruling)",
+  "note": "the 0083 drawing page records the mound omission as a deliberate deviation and says the border is a line with no width that nothing keeps clear of, with the magistracy wall and parley room standing on it; the code's `borders` entry does exactly that",
   "pages": {
-   "0083-clan-borders-and-their-markers.html": "7bcbae135f67997c"
+   "0083-clan-borders-and-their-markers.drawing.html": "aae7d10697713dff"
   },
-  "research": "0f8cdf207bf2144e",
+  "research": "4acfcf3809873ba2",
   "rests": [
-   "0083-clan-borders-and-their-markers.html:8a1a8f55c00999f0",
-   "0083-clan-borders-and-their-markers.html:9175fc63b8eb09dc",
-   "0083-clan-borders-and-their-markers.html:eeb497393e38ae19"
+   "0083-clan-borders-and-their-markers.drawing.html:0e0382314cbd0076",
+   "0083-clan-borders-and-their-markers.drawing.html:ae415b96bff5fbc3",
+   "0083-clan-borders-and-their-markers.drawing.html:eaec007272de042c"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#built on what it serves": {
   "code": "c45364ae523a14ab",

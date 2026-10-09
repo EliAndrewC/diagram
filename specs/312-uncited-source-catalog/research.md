@@ -145,7 +145,9 @@ between this measurement and the landing.
 The GM marked all 22 on 2026-10-03 and said "ingest". `make downloads-ingest` recorded 21 marks; H21 (`conghua-2026-design`)
 carried both downloaded and not found, which the tool will not guess at, so its mark waits on the GM - but its file was in
 the inbox and is the report its URL names, so it was read like the other downloads. 29 files were archived against their
-entries (`archive inbox --match <file>=H<n>`).
+entries (`archive inbox --match <file>=H<n>`). Resolved 2026-10-09: the GM, told H21's file was in the archive, ruled it downloaded if we have it
+("If we don't have it then it should just be marked as not found"); it is the GM's copy `gm-copies/10854794.pdf`, so
+`make downloads-ingest MARK="H21=downloaded"` recorded it downloaded (the `MARK=` resolution was added for it).
 
 **What rests on them, and what was done** (from each entry's "Rests on it" line):
 - **Nine downloads that carry claims** (H1-H7, H17, H21) were read whole by `source-reader` from the GM's copy - the live

@@ -65,7 +65,9 @@ NOT_ELEMENTS = frozenset({"-", "place"})
 _DATA_KIND = re.compile(r'data-kind="([^"]+)"')
 _OCCASION = re.compile(r"^\s*-\s*(?P<kind>[a-z-]+)\s*:\s*(?P<arg>.+?)\s*$")
 #: drawing or placement code - a change here must declare its occasions (D2)
-_CODE = re.compile(r"^(l7r/.+\.py|(pool|legacy-hand-authored-pool)/.+\.(gen\.py|svg))$")
+#: - never the CodeBuild dispatcher in l7r/diagram/ci/, which draws and places nothing (2026-10-09: a refusal-text edit there
+#: was asked to declare its occasions; `ci/delta.py` keeps the package off the engine paths for the same reason)
+_CODE = re.compile(r"^(l7r/(?!diagram/ci/).+\.py|(pool|legacy-hand-authored-pool)/.+\.(gen\.py|svg))$")
 
 
 @dataclass(frozen=True)

@@ -36,7 +36,11 @@ class FeatureStatus:
         if not self.name:
             return "no spec-kit feature is named (export SPECIFY_FEATURE=NNN-slug, or .specify/feature.json) - diagram engine work always has one"
         if not self.exists:
-            return f"feature {self.name!r} has no specs/{self.name}/ directory with a tasks.md"
+            # `make claim` points .specify/feature.json at a number claimed only to FILE a feature (2026-10-09, 370)
+            return (
+                f"feature {self.name!r} has no specs/{self.name}/ directory with a tasks.md - if it is only filed, name the"
+                " feature this work belongs to: SPECIFY_FEATURE=<NNN-slug> scripts/sync-with-main.sh done"
+            )
         problems = []
         if not self.faithful:
             problems.append("spec.md carries no FAITHFUL verdict (constitution XVI)")

@@ -311,9 +311,10 @@ The cited URLs the archive found unreachable, retried 2026-10-02 (see each).
 
 ### H21. 2026 年度广州市从化区高标准农田改造提升建设项目初步设计报告（评审稿） (Preliminary design report for the 2026 high-standard farmland improvement and upgrading construction project, Conghua District, Guangzhou; client the Conghua District Bureau of Agriculture and Rural Affairs, designer 中联合创设计有限公司 ("Zhonglian Hechuang Design Co., Ltd.", translated)), June 2026 (`conghua-2026-design`)
 
-- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- Mark: [x] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
 - [ ] Found elsewhere (only with downloaded or partial) - where:
 - Saved as (optional, the file's name):
+- Marks recorded 2026-10-09
 
 - **[The cited page](http://nyncj.gz.gov.cn/attachment/8/8037/8037125/10854794.pdf)**
 - Fallback: [Google: 2026 年度广州市从化区高标准农田改造提升建设项目初步设计报告（评审稿） (Preliminary design report for the 2026 hi](https://www.google.com/search?q=2026%20%E5%B9%B4%E5%BA%A6%E5%B9%BF%E5%B7%9E%E5%B8%82%E4%BB%8E%E5%8C%96%E5%8C%BA%E9%AB%98%E6%A0%87%E5%87%86%E5%86%9C%E7%94%B0%E6%94%B9%E9%80%A0%E6%8F%90%E5%8D%87%E5%BB%BA%E8%AE%BE%E9%A1%B9%E7%9B%AE%E5%88%9D%E6%AD%A5%E8%AE%BE%E8%AE%A1%E6%8A%A5%E5%91%8A%EF%BC%88%E8%AF%84%E5%AE%A1%E7%A8%BF%EF%BC%89%20%28Preliminary%20design%20report%20for%20the%202026%20high-standard%20farmland%20improvement%20and%20upg)

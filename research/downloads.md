@@ -49,7 +49,8 @@ Never write the GM's copy, `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` (`do
 The GM marks their copy - downloaded, partial, paywalled, not found, found elsewhere - and says:
 
 - **"ingest"**: run `make downloads-ingest`. It records each changed mark in the canonical list, dated, names
-  contradictory marks and ids it lacks, holds each text edit of the GM's until `KEEP="<ids>"` or `DROP="<ids>"`, then
+  contradictory marks and ids it lacks, holds each text edit of the GM's until `KEEP="<ids>"` or `DROP="<ids>"`, records a contradictory mark once the GM says
+  which they meant with `MARK="<id>=<downloaded|partial|paywalled|not-found>"`, then
   archives the inbox (a saved-as name matches its file). Commit both files it names.
 - **"sync"**: `make downloads-sync` writes the canonical list over the copy - refused while the copy holds anything not
   ingested.
