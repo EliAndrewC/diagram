@@ -1186,8 +1186,30 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   the feeder there as the laterals' are (1.5 ft, the floor); a lateral's bank is the corridor less the ditch WHERE IT IS, so its
   band is 4 ft each side all along (`test_a_laterals_band_is_its_corridor_all_along`); a stale closed-tier entry for
   `channel widths` removed (the row is open at E3).
-- **Occasions**: glyph-redrawn, polder ditches on kuwabata - batch 7's close.
+- **Occasions**: glyph-redrawn, pond canal and drainage ditch on kuwabata (the classes the dike-pond polder inks its channels as) - batch 7's close.
 - **Verification**: the waterfields and hamletgen suites; `impl-drift`; `spec-fidelity`.
+
+## Wave 74 (amendment 73, 2026-10-09) - batch 8
+
+- **Row `_outside_command#set-back from the canal` HELD, re-tiered E2 -> E3 on measure** (as wave 69's canal taper was).
+  0068 stands the paddies "5 ft back from a supply canal's water" - the stroke's local half-width plus a 5.0 ft berm - and
+  0055's drawing page has "a bare earth bank 5 ft wide runs between a supply canal and the fields beside it"; the code bounded
+  the planted ground a flat 4 grain (8 ft) down the fall from canal A's centerline, and canal B kept only a bund's margin. The
+  change was built for EVERY supply canal (the head race and canals A and B, the `main` pieces: canal A alone would be "X
+  except where Y" against 0055's every supply canal), unit-tested and REVERTED (m:wave74-supply-berm-reverted): the bank came
+  out exactly (canal A median 5.04 ft, canal B 5.02, from 3.9 and 1.52), but the narrower planted ground re-fitted the fan
+  (Mizuguchi -8.5%, Sawada +8.6% of their paddy) and the 48-seed cohort went 48 -> 46 - 04 and 901 the web refused, 19 farms
+  without their channel, 42 a farm off its street, 22 and 906 newly passing; canal A's berm alone went to 42. Placement
+  downstream of a re-fitted fan is E3 by the ranking's definition, its work those layouts. impl-drift on the change's ten
+  claims: 9 IN-STEP, the one DRIFTED `_water`'s bund margin, a ranked row of its own. The failed fix is recorded at
+  `_outside_command`; the patch is kept in the spec's `audit/reverted/`; the code and the maps are as wave 73 left them.
+- **Batch 7 closed** (waves 70-73): gate green; the timing pair band 1 on a quiet host, confirmed consistent by `perf-audit`
+  (m:batch7-pair; an earlier pair under another session's gate read band 2 on one seed with identical placer calls); the
+  glyph checks PASS (pond canal and drainage ditch on Kuwabata, barley on Kashikawa), their nitpicks cut by
+  `escalation-check` (its ledger row, 0 keep and 4 cut). `make verify` now refuses a second gate in a tree (`scripts/gates/one-gate.sh`), after a second one
+  started beside the first and, stopped, took the first one's invocation token with it.
+- **Verification**: the cohort's two runs and the bank measured on four hamlets (m:wave74-supply-berm-reverted);
+  `impl-drift`; `spec-fidelity`.
 
 ## Performance bookends (constitution VI)
 
@@ -1206,7 +1228,8 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 | 4 | 56-61 | 50bcf4385 -> a67389b82: band 2 - reference TOTAL -6.2%, sizes 0.0 / -0.8 / -0.9%; the first pair's band 3 (seed 4 at 10 households +217.9%, wave 61's privy slide across a door's way) fixed in the batch, and the audit's per-bearing fabric scan and per-call sun boxes indexed (m:batch4-pair-and-slide-fix, m:batch4-seed39-causes); perf-audit round 2: explanation CONSISTENT, audit JUSTIFIED; T140 confirmed (seed 25 at 40 households draws) | green 2026-10-09 (three runs: the cover-slot test, the uncovered no-yard line, then the fixes) | closing: glyph checks scrub and rough grazing PASS, copse PASS, privy NEEDS-WORK (F1: slides past the gable) - answered by wave 62, its second round at batch 5's close |
 | 5 | 62-65 | a6004fdc6 -> bf7558093: band 2 - reference TOTAL +2.4%, 10 households -5.2%, 20 -3.8%, 40 +3.7%; seed 47 +11.9% and seed 25 at 40 households +15.0%, both wave 62's privy move (privies no longer past their gables stand at other attested places: more caption proofs, a second web settle), about 0.1 s wave 63's footing (m:batch5-pair-causes); perf-audit round 2: explanation CONSISTENT, audit JUSTIFIED (round 1 corrected the first attribution to wave 64) | green 2026-10-09 (after merging main's feature 312) | closed: glyph checks notice board, barley and privy (round 2) PASS; the board's facing at an entrance filed as a found row; 26 earlier glyph-check rows backfilled to the ledger, feature 371 filed |
 | 6 | 66-69 | 7fd78f9a1 -> HEAD, taken three times: beside two renders and two review agents (load 4.4) band 2, every stage grown in proportion - load; on a quiet host twice, band 1 - TOTAL -0.6% and -1.8%, each flagged growth (homesteads in one, field in the other, stages the diff does not reach) within the same commit's run-to-run spread (m:batch6-pair); perf-audit round 3 CONSISTENT | green 2026-10-09 (the second run: the measured-surface test's add-only rule made a set) | closed: glyph checks notice board on inashiro and barley on kashikawa PASS |
-| 7 | 70- | owed at the batch close | at the batch close | open |
+| 7 | 70-73 | c0bf2b4c8 -> 43fe6fde0, taken twice: under another session's gate band 2 on one seed (20 households seed 39 +17.9%, identical placer calls, the growth on stages the batch does not reach); on a quiet host band 1 - TOTAL -2.3%, every households total within one percent, the largest seed 40 households seed 47 +1.5% (m:batch7-pair); perf-audit CONSISTENT | green 2026-10-09 at cc61be373 (the third run: the first broken by a duplicate gate, the second by an abbreviated pointer) | closed: glyph checks pond canal and drainage ditch on kuwabata and barley on kashikawa PASS |
+| 8 | 74- | owed at the batch close | at the batch close | open |
 
 ## Constitution Check
 

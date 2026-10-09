@@ -9830,20 +9830,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/waterfields/seams/pockets.py::_outside_command#set-back from the canal",
-  "tier": "E2",
-  "fix": "set the planted ground back by the stroke's local half-width + 5.0 ft berm measured perpendicular (supply_bank_clearance), not a flat 4 grain down the fall",
-  "files": [
-   "l7r/diagram/waterfields/seams/pockets.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/waterfields/settle.py::settle_cells#unlawful scraps left bare",
   "tier": "E2",
   "fix": "after the rounds, absorb every still-failing scrap into the basin it shares the most bund with; leave bare only the needle strip 0005 names",
@@ -13531,6 +13517,21 @@
    "l7r/diagram/waterfields/polder.py",
    "l7r/diagram/hamletgen/water/polder.py",
    "l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/waterfields/seams/pockets.py::_outside_command#set-back from the canal",
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 74, 2026-10-09): stand the planted ground every supply canal's local half-width plus CANAL_BERM_FT back from it, at right angles (0055, 0068) - built, tested and REVERTED: canal A's bare bank came to a median 5.04 ft and canal B's to 5.02, but the narrower planted ground re-fitted the fan and the 48-seed cohort went 48 -> 46 (04 and 901 WebRefused, 19 farm_without_its_channel, 42 farm_not_on_its_street; 22 and 906 newly passing), and canal A's berm alone 48 -> 42; the work is the layouts that broke (m:wave74-supply-berm-reverted)",
+  "files": [
+   "l7r/diagram/waterfields/seams/pockets.py",
+   "l7r/diagram/waterfields/partition.py"
   ],
   "after": [],
   "flag": "",

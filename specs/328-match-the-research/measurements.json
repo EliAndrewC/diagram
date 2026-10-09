@@ -1506,5 +1506,40 @@
       },
       "reading": "the first pair's crossing was load, not code: its placer calls and houses were identical, the growth fell on stages batch 7 never touched, and the quiet pair shows seed 39 at +0.0% at every size; batch 7 changed the belt's hit region (the page), its bare-run measure, the outfall run's class and the polder's widths (Kuwabata, not a timed seed)"
     }
+  },
+  "wave74-supply-berm-reverted": {
+    "quantity": "wave 74 (2026-10-09): the planted ground stood every supply canal's half-width plus a 5.0 ft berm back from it - the banks it drew and the cohort it broke",
+    "observed": "2026-10-09",
+    "source": "specs/328-match-the-research/audit/reverted/wave74-supply-berm.patch (the engine change and its tests: supply_canals, polygonal, _outside_command's high bound at the centerline with _water(canal, g, CANAL_BERM_FT * g / 2)); the manifests' plot_rings against field_ditches role main, measured at each segment's midpoint as the plot ring's distance less the stroke's half-width",
+    "command": "make map for the five hamlets; make cohort N=48 (all supply canals); make cohort N=48 (canal A's pieces only)",
+    "method": "the change built and unit-tested (waterfields 242 passed, quick clean once two strict xfails Sawada had shed came off), the hamlets rerolled (Inashiro, Kashikawa, Mizuguchi, Sawada moved; Kuwabata has no comb fan), the bank measured on the four, the cohort run twice; impl-drift on the ten claims it touched: 9 IN-STEP, the one DRIFTED (_water's bund margin) a ranked row it did not touch",
+    "value": {
+      "bare bank beside canal A, ft (96 segments)": {
+        "before": "median 3.9, min 2.86, max 5.8",
+        "after": "median 5.04, min 4.95"
+      },
+      "bare bank beside canal B, ft (51 segments)": {
+        "before": "median 1.52",
+        "after": "median 5.02, min 4.97"
+      },
+      "paddy acres": {
+        "inashiro": "19.49 -> 19.55",
+        "kashikawa": "24.92 -> 24.81",
+        "mizuguchi": "16.16 -> 14.78",
+        "sawada": "23.84 -> 25.89"
+      },
+      "cohort_48": {
+        "wave 73": "48/54 (refused 03, 10, 20, 22, 33, 906)",
+        "all supply canals": "46/54 (refused 03, 04, 10, 19, 20, 33, 42, 901)",
+        "canal A only": "42/54 (03, 04, 09, 10, 19 a GEOS side-location conflict, 20, 22, 23, 28, 32, 40, 43)"
+      },
+      "newly refused (all supply canals)": {
+        "04": "WebRefused needle_loops",
+        "19": "water_rules farm_without_its_channel x3",
+        "42": "row_rules farm_not_on_its_street",
+        "901": "WebRefused off_ford"
+      },
+      "reading": "the berm is right by the research and lands exactly; what breaks is placement downstream of a re-fitted fan - the same seed-chaotic rules wave 69's canal taper broke - so the row is E3 and its work those layouts"
+    }
   }
 }

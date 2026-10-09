@@ -1938,3 +1938,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T175 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 73, round 2); the polder's banks per channel in feet and its channels on 0068's ladder, tapers the right way, heads capped by the feeder; channel widths re-tiered E3 for the drain's mid outfall; claims in step but that drift; only Kuwabata moves; cohort unchanged
+
+## Phase 75 - wave 74 (amendment 73): the supply canals' berm, built and reverted (E3)
+
+- `waterfields/seams/pockets.py` (`_outside_command`'s docstring: the fix that failed); the reverted change kept as
+  `specs/328-match-the-research/audit/reverted/wave74-supply-berm.patch`.
+
+- [x] T176 wave 74's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 74); the supply canals' 5 ft berm built for every main piece and measured (canal A 5.04 ft, canal B 5.02 ft median), REVERTED on the cohort 48 -> 46 (canal A alone 48 -> 42), re-tiered E3, failed fix recorded at _outside_command; impl-drift 9 IN-STEP, the one DRIFTED a ranked row
+- [x] T177 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 74); the supply canals' 5 ft berm built for every main piece and measured (canal A 5.04 ft, canal B 5.02 ft median), REVERTED on the cohort 48 -> 46 (canal A alone 48 -> 42), re-tiered E3, failed fix recorded at _outside_command; impl-drift 9 IN-STEP, the one DRIFTED a ranked row

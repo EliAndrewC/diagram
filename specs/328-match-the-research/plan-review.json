@@ -1,52 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "6d35470dee322ee15d5aad9a558e1448749562ef326a7b6e5fb7e770e45f6a7d",
+ "plan_sha256": "6dd3880c596395b1f56c6bdfeab74eb5caf1dda0764c8d270f7ce42d85eb0729",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W73-rungs",
-   "summary": "each polder channel on 0068's ladder: feeder supply canal 4.5->1.5, toes and laterals delivery ditch 2.5->1.2, drain 1.2->5.5",
+   "id": "W74-a every supply canal",
+   "summary": "the berm was built for every supply canal (head race, canals A and B), not canal A alone",
    "class": "within",
-   "why": "0068 places every stroke by the ground it waters; reading the toes as deliveries off the feeder is inside the row's own fix text"
+   "why": "0055 says every supply canal; building for canal A alone would have been the carve-out. Its own cost was measured (canal A only 48 -> 42) and not taken."
   },
   {
-   "id": "W73-delivery-caps",
-   "summary": "every delivery head - the four laterals and both toes - capped at 0.8 of the feeder's local width where it leaves it, floored at the hamlet's 1.5 ft; Kuwabata east toe 1.5/1.5, west toe 1.5->2.5, laterals 2.5, 2.5, 2.4, 1.9",
+   "id": "W74-b revert and re-tier E2 -> E3",
+   "summary": "the built berm (bank median 5.04 / 5.02 ft) is reverted because the 48-seed cohort went 48 -> 46; the row stays open (kept) at E3, its work the layouts that broke",
    "class": "within",
-   "why": "0068 in those words; round 1's east-toe item answered - polder.py applies the cap to channels[1] at its first point and channels[3] at its last, and kuwabata.json field_ditches reads e_toe 1.5/1.5, w_toe 1.5/2.5 (m:wave73-polder-widths-r2)"
+   "why": "The spec's Assumptions say a wave that finds a row harder than ranked moves it down and says so. The Edge Case 'a fix that changes many maps' says the row takes that work's tier and its claim stays as found. The newly refused seeds fail in web, row_rules and water_rules, outside pockets.py, which is a change across modules: E3 by FR-003. Ranking by measured work is the request's own principle, and reverting keeps a measured regression off main (XIII). The row is not deferred or dropped, so the request's 'fix all of it' still reaches it in E3 order. Record note: the Edge Case's 'waits on a found row' is met by the row's own fix text rather than an 'after' entry, the same as wave 69's row."
   },
   {
-   "id": "W73-banks",
-   "summary": "bank per channel: feeder 5 ft, toe 1.5 ft bund, drain half a bund (0.75 ft), lateral (8 ft corridor - the ditch where it is)/2",
+   "id": "W74-c failed fix recorded and patch kept",
+   "summary": "_outside_command's docstring records the failed fix; the patch and its tests are kept in audit/reverted/",
    "class": "within",
-   "why": "0055 and 0022; the plan's Scope bullet now states each channel's own bank (round 1 item 3 answered)"
+   "why": "Constitution XIV (a fix that failed is recorded at the point of change). The patch holds partition.py, pockets.py and the two test files the docstring names."
   },
   {
-   "id": "W73-band-per-segment",
-   "summary": "the band read at the ditch's half-width at each segment (_nearest_band); for a lateral the berm is computed from that same local width, so the band is 4 ft each side all along",
+   "id": "W74-d _water's drift left to its row",
+   "summary": "impl-drift's one DRIFTED on the change's claims (_water's bund margin) is left to its own ranked row, 227 E3",
    "class": "within",
-   "why": "0055 'half the ditch's drawn width at that point' and 0022's 8 ft corridor; round 1's lateral-berm item answered - _plots_clear_of_channels passes the segment width to channel_berm for a lateral (wd/2 + (8 - wd)/2 = 4 ft), pinned by test_a_laterals_band_is_its_corridor_all_along"
+   "why": "It was already a ranked row in tier order, not a finding the wave introduced."
   },
   {
-   "id": "W73-retier-E3",
-   "summary": "_polder_channels#channel widths re-tiered E2 -> E3 on measure, open for the drain (and the stub/leg/notch lengths)",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "measured, not argued: the outfall taps the drain mid-run and the one-taper stroke cannot peak mid-run; the drain is read as one channel across comb.py, polder.py, sink.py and ring_rules.py - E3 by spec FR-003. The row stays DRIFTED and ranked. Its condition (the toes capped, so the remainder is the drain only) is now met, and the stale 'channel widths: E2' closed-tier entry is gone (round 1 item 4 answered)"
-  },
-  {
-   "id": "W73-drain-flat-5.5",
-   "summary": "meanwhile the drain drawn at its 5.5 ft outfall width throughout",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "an interim on an open DRIFTED row, recorded at the code, the claim and the override; not claimed done"
-  },
-  {
-   "id": "W73-stub-leg-notch",
-   "summary": "the inlet stub 52, outfall leg 40 and notch _RING*0.9 claimed UNRESEARCHED and named in the E3 row's remainder",
+   "id": "W73 Occasions correction",
+   "summary": "wave 73's occasion now names the classes Kuwabata's polder inks (pond canal, drainage ditch)",
    "class": "within",
-   "why": "found work recorded in an open ranked row; no page sizes these lengths"
+   "why": "Ledger rows 621-622 are exactly those two glyph checks. A record correction."
+  },
+  {
+   "id": "B7 close and one-gate guard",
+   "summary": "batch 7 closed (gate, pair m:batch7-pair, glyph checks); make verify refuses a second gate in one tree",
+   "class": "within",
+   "why": "FR-005/FR-006 batch close. The guard fixes a tooling defect the work hit (a second gate took the first's token), under XIV. It narrows nothing the GM asked for."
   }
  ],
  "verdict": "CLEAR"

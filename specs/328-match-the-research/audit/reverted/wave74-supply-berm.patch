@@ -1,0 +1,198 @@
+diff --git a/l7r/diagram/waterfields/partition.py b/l7r/diagram/waterfields/partition.py
+index 2ddbb3ff3..67e9d76ec 100644
+--- a/l7r/diagram/waterfields/partition.py
++++ b/l7r/diagram/waterfields/partition.py
+@@ -105,7 +105,32 @@ def planted_region(F: _Frame, envelope: Poly, channels: list[dict[str, Any]], a_
+     from .seams.pockets import _outside_command, _water
+ 
+     field = Polygon(envelope).buffer(0)
+-    return field.difference(_water(channels, g)).difference(_outside_command(F, a_pts, dpts, field, g, bank))
++    canal = supply_canals(channels)
++    region = field.difference(_water(channels, g)).difference(_outside_command(F, a_pts, dpts, field, g, bank, canal))
++    return polygonal(region)
++
++
++def polygonal(geom: Any) -> Any:
++    """`geom` less any zero-area leftovers: a difference can return a GeometryCollection carrying a line where two cut edges
++    meet (the canal's bank against the envelope on cohort seed 7), and the sectors read only polygons.
++
++    Research: polygonal region - NONE: geometry hygiene
++    """
++    if geom.geom_type != "GeometryCollection":
++        return geom
++    from shapely.ops import unary_union
++
++    return unary_union([p for p in geom.geoms if p.geom_type in ("Polygon", "MultiPolygon")])
++
++
++def supply_canals(channels: list[dict[str, Any]]) -> list[dict[str, Any]]:
++    """The fan's supply canals - the head race and canals A and B, every `main` piece - whose banks the planted ground stands
++    back from: the bare earth bank between a supply canal and the fields beside it (0055, 0068). A delivery ditch (`branch`)
++    is bordered by the paddy's own bund, and the drain by the drain's bank.
++
++    Research: the canals with a bank - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a bare earth bank 5 ft wide runs between a supply canal and the fields beside it
++    """
++    return [c for c in channels if c.get("role") == "main"]
+ 
+ 
+ def region_rings(region: Any) -> list[Poly]:
+diff --git a/l7r/diagram/waterfields/seams/pockets.py b/l7r/diagram/waterfields/seams/pockets.py
+index 98ee08293..063e6dfc4 100644
+--- a/l7r/diagram/waterfields/seams/pockets.py
++++ b/l7r/diagram/waterfields/seams/pockets.py
+@@ -5,7 +5,7 @@ Research: pocket plumbing - NONE: lazy shapely binding, polygon parts and record
+ 
+ from __future__ import annotations
+ 
+-from collections.abc import Callable
++from collections.abc import Callable, Sequence
+ from typing import TYPE_CHECKING, Any
+ 
+ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
+@@ -16,7 +16,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
+ from ..banks import (
+     polyline_cum,
+ )
+-from ..frame import BANK_MARGIN, Poly, _f_at_u, _Frame, taper_w
++from ..frame import BANK_MARGIN, CANAL_BERM_FT, Poly, _f_at_u, _Frame, taper_w
+ 
+ _SHAPELY_LOADED = False
+ 
+@@ -70,7 +70,7 @@ def _ring(poly: Polygon) -> Poly:
+     return out
+ 
+ 
+-def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
++def _water(channels: list[dict[str, Any]], g: float, bank_px: float | None = None) -> BaseGeometry:
+     """Every drawn course plus its BANK - the ground a bund may abut but never stand in.
+ 
+     Buffered per SEGMENT at the local width, because the supply canals taper hard (14 px head to a
+@@ -84,6 +84,8 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
+     discs close them without the over-claim a round CAP would add past the head and tail, where
+     `supply_bank_clearance` reports `past` and the stroke governs nothing anyway.
+ 
++    `bank_px` replaces the half bund past the stroke's edge - `_outside_command` asks for the supply canal's berm.
++
+     Research:
+         bund abuts the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: each course's local half-width plus half a bund is ground no bund stands in
+         width along the run - research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: the half-width read from the shared taper law
+@@ -100,7 +102,7 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
+         tot = cum[-1] or 1.0
+ 
+         def half(k: int, w0: float = w0, w1: float = w1, cum: list[float] = cum, tot: float = tot) -> float:
+-            return taper_w(w0, w1, cum[k] / tot) / 2 + BANK_MARGIN * g
++            return taper_w(w0, w1, cum[k] / tot) / 2 + (BANK_MARGIN * g if bank_px is None else bank_px)
+ 
+         for i in range(len(pts) - 1):
+             strokes.append(("seg", LineString([pts[i], pts[i + 1]]), half(i)))
+@@ -132,7 +134,7 @@ def _band(F: _Frame, us: list[float], fs: list[float], f_far: float) -> Polygon:
+     return Polygon(pts).buffer(0)
+ 
+ 
+-def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: float, bank: Callable[[float], float]) -> BaseGeometry:
++def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: float, bank: Callable[[float], float], canal: Sequence[dict[str, Any]] = ()) -> BaseGeometry:
+     """Ground the fan cannot command: below the collector, or upslope of the supply canal.
+ 
+     The collector is extended LEVEL beyond both drawn ends (the same clamp `_fill_wedges` used and
+@@ -141,9 +143,14 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
+     past the outfall does not. Where the canal does not reach a given u there is nothing upslope to
+     exclude, so that sample falls back to a bound outside the fan entirely.
+ 
++    The high bound is the supply canal's CENTERLINE in fall, with every supply canal's own bank cut perpendicular to its
++    stroke: the drawn pieces of the head race and canals A and B (`canal`), each at its local half-width plus
++    `CANAL_BERM_FT` (0055, 0068). It was a flat 4 grain (8 ft) down the fall from canal A's centerline, which neither
++    tracked the canal's narrowing nor stood off at a right angle, and canal B kept only a bund's margin.
++
+     Research:
+         command area - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no paddy below the collector's bank or upslope of the supply canal, a canal watering only the ground below it
+-        set-back from the canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the planted ground starts 4 grain (8 ft) down the fall from the canal's centerline
++        set-back from the canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the planted ground stands the stroke's local half-width plus a 5.0 ft berm back from every supply canal, measured perpendicular
+         collector extended level - UNRESEARCHED: past its drawn ends the command area's low edge runs on at the end's fall
+     """
+     _load_shapely()
+@@ -172,7 +179,7 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
+ 
+     def canal_f(u: float) -> float:
+         fc = _f_at_u(F, a_pts, u)
+-        return flo - span if fc is None else fc + 4 * g
++        return flo - span if fc is None else fc
+ 
+     # The low bound is the collector's BANK IN FALL - `_drain_bank`, the very function `_carve`
+     # hems its closing rank onto - not a flat margin. `_fill_wedges` used a flat 3 * grain, which
+@@ -183,4 +190,4 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
+     # ground this pass plants is ground the carve would have been allowed to plant.
+     below = _band(F, us, [drain_f(u) - bank(u) for u in us], fhi + span)
+     above = _band(F, us, [canal_f(u) for u in us], flo - span)
+-    return unary_union([below, above])
++    return unary_union([below, above, _water(list(canal), g, CANAL_BERM_FT * g / 2.0)])  # grain is 2 / ftpx: ft * g / 2 is px
+diff --git a/tests/hamletgen/test_pool_261.py b/tests/hamletgen/test_pool_261.py
+index 73bd25356..8ee7f9c79 100644
+--- a/tests/hamletgen/test_pool_261.py
++++ b/tests/hamletgen/test_pool_261.py
+@@ -181,8 +181,10 @@ def test_no_two_ways_run_side_by_side_past_a_pitch(gen: str) -> None:
+ # THE ZIGZAG NO SMOOTHING STRAIGHTENS YET (feature 328 wave 52, bisected as the knots above): Sawada's lane 3 runs east to
+ # (4122.4, 2042.1) and turns back 27 ft to lane 1's door, where lane 1 leaves north-east - two turns past 50 degrees inside
+ # 40 ft across the joint. It waits on the found row specs/328-match-the-research/audit/found-wave54.jsonl ("a zigzag across a
+-# joint at a door"). STRICT: the day it is straightened this fails, and its name comes off the list.
+-_ZIGZAGS_WAITING = {"sawada"}
++# joint at a door"). STRICT: the day it is straightened this fails, and its name comes off the list. Sawada came off in
++# wave 74 (its fan re-fitted once every supply canal kept its 5 ft bank, its lanes re-laid): the map no longer carries the
++# zigzag, the ENGINE was not changed for it, so the found row stays open.
++_ZIGZAGS_WAITING: set[str] = set()
+ 
+ 
+ @pytest.mark.parametrize(
+@@ -273,7 +275,9 @@ def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, t
+ # fixed at seating, `gap_ways.KNOTTED_TRIES`.)
+ # Wave 56 (the copse's seats off the plots' sun at the tree's 50 ft) re-laid Inashiro's homesteads' ground, and its knot is
+ # gathered: off the list (main still carries it).
+-_KNOTS_WAITING = {"sawada"}
++# Wave 74 (every supply canal's 5 ft bank) re-fitted Sawada's fan and re-laid its lanes, and its knot is gone: off the list.
++# The engine was not changed for it, so the found row stays open.
++_KNOTS_WAITING: set[str] = set()
+ 
+ 
+ @pytest.mark.parametrize(
+diff --git a/tests/waterfields/test_partition.py b/tests/waterfields/test_partition.py
+index b86983c99..8cd07a8b1 100644
+--- a/tests/waterfields/test_partition.py
++++ b/tests/waterfields/test_partition.py
+@@ -52,6 +52,38 @@ def test_the_planted_region_is_the_envelope_less_its_water_and_what_it_cannot_co
+     assert len(pt.region_rings(_box(0, 0, 10, 10))) == 1, "a single polygon has its one ring"
+ 
+ 
++def test_the_planted_ground_stands_every_supply_canals_half_width_and_its_berm_back() -> None:
++    # Canal A runs across the fan's head at y = 100, the fall +y, in two pieces narrowing 10 -> 4 px; at grain 1 the
++    # 5.0 ft berm is 2.5 px, so the ground starts 7.5 px below the centerline at the wide end and 4.5 px at the narrow.
++    # Canal B leaves it down the fall at x = 300, 4 px wide: 2 + 2.5 px bare each side. A delivery ditch keeps a bund's margin.
++    env = [(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)]
++    a_pts = [(-50.0, 100.0), (450.0, 100.0)]
++    chan = [  # a piece is sampled in several points, as `_comb_canal_pieces` lays them: the bank tapers segment by segment
++        {"pts": [(-50.0 + 25.0 * k, 100.0) for k in range(11)], "w": 10.0, "w_tail": 7.0, "role": "main"},
++        {"pts": [(200.0 + 25.0 * k, 100.0) for k in range(11)], "w": 7.0, "w_tail": 4.0, "role": "main"},
++        {"pts": [(300.0, 100.0 + 31.0 * k) for k in range(11)], "w": 4.0, "w_tail": 4.0, "role": "main"},
++        {"pts": [(100.0, 100.0 + 31.0 * k) for k in range(11)], "w": 2.0, "w_tail": 2.0, "role": "branch"},
++    ]
++    assert pt.supply_canals(chan) == chan[:3], "the supply canals are the main pieces, not a delivery ditch"
++    region = pt.planted_region(_Frame(90.0), env, chan, a_pts, [(-500.0, 900.0), (900.0, 900.0)], 1.0, lambda _u: 2.0)
++    assert not region.intersects(_box(10, 0, 12, 99)), "nothing is planted upslope of the canal"
++    assert not region.intersects(_box(10, 105, 12, 106.5)), "the wide end's half-width and berm are bare"
++    assert region.contains(_box(10, 108, 12, 110)), "and planting starts just past them"
++    assert region.contains(_box(380, 105.5, 382, 107)), "the bank narrows with the canal: the old flat 8 px left this bare"
++    assert not region.intersects(_box(295.6, 200, 304.4, 202)), "canal B keeps its half-width and berm bare on both sides"
++    assert region.contains(_box(304.6, 200, 306, 202)) and region.contains(_box(294, 200, 295.4, 202)), "and planting starts past them"
++    assert region.contains(_box(102.0, 200, 103, 202)), "a delivery ditch is bordered by the bund alone"
++
++
++def test_a_region_keeps_only_its_polygons() -> None:
++    from shapely.geometry import GeometryCollection, LineString
++
++    box = _box(0, 0, 10, 10)
++    assert pt.polygonal(box) is box
++    kept = pt.polygonal(GeometryCollection([box, LineString([(20, 20), (30, 20)])]))
++    assert kept.geom_type == "Polygon" and kept.area == 100.0, "the zero-area line a cut leaves is dropped"
++
++
+ def test_a_sliver_line_in_the_region_is_not_a_ring() -> None:
+     """Feature 304's scaling leg (seed 7, 40 households): the difference that makes the region left a LineString beside its
+     polygons, and reading its exterior raised. A line plants nothing; only the polygons are rings."""

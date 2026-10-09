@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-09T12:33:53Z",
+  "target": "plan-gate tick 328-match-the-research",
+  "commit": "06c6598fb",
+  "why": "the plan edit after the CLEAR applies only the reviewer's own record notes: the bookends row 7 closed, row 8 opened, the escalation-check ledger row cited"
+}

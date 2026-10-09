@@ -3156,5 +3156,13 @@
    "l7r/diagram/hamletgen/water/polder.py",
    "l7r/diagram/settlement/fields/comb.py"
   ]
+ },
+ "l7r/diagram/waterfields/seams/pockets.py::_outside_command#set-back from the canal": {
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 74, 2026-10-09): stand the planted ground every supply canal's local half-width plus CANAL_BERM_FT back from it, at right angles (0055, 0068) - built, tested and REVERTED: canal A's bare bank came to a median 5.04 ft and canal B's to 5.02, but the narrower planted ground re-fitted the fan and the 48-seed cohort went 48 -> 46 (04 and 901 WebRefused, 19 farm_without_its_channel, 42 farm_not_on_its_street; 22 and 906 newly passing), and canal A's berm alone 48 -> 42; the work is the layouts that broke (m:wave74-supply-berm-reverted)",
+  "files": [
+   "l7r/diagram/waterfields/seams/pockets.py",
+   "l7r/diagram/waterfields/partition.py"
+  ]
  }
 }

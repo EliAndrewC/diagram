@@ -141,6 +141,16 @@ def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: floa
     past the outfall does not. Where the canal does not reach a given u there is nothing upslope to
     exclude, so that sample falls back to a bound outside the fan entirely.
 
+    A FIX THAT FAILED (feature 328 wave 74, 2026-10-09): 0055 and 0068 stand the paddies a supply canal's local half-width
+    plus a 5.0 ft berm back from it, measured at right angles. The high bound at the canal's centerline with every `main`
+    piece's bank cut by `_water(..., CANAL_BERM_FT * g / 2)` did exactly that - canal A's bare bank median 5.04 ft (it was
+    3.9, from 2.86 at the wide head to 5.8), canal B's 5.02 (it was a bund's 1.52) - but the narrower planted ground re-fitted
+    the fan, Mizuguchi -8.5% and Sawada +8.6% of their paddy, and the cohort went 48/54 -> 46/54 (seeds 04 and 901 the web
+    refused, 19 farms without their channel, 42 a farm off its street; 22 and 906 newly passing); canal A's berm alone went to
+    42/54 with a GEOS side-location conflict on seed 19. Reverted; the row is E3 (a change that ripples into placement), its
+    work the layouts that broke (m:wave74-supply-berm-reverted; the patch and its tests, `supply_canals` and `polygonal`, are
+    in the measurement's source).
+
     Research:
         command area - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no paddy below the collector's bank or upslope of the supply canal, a canal watering only the ground below it
         set-back from the canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the planted ground starts 4 grain (8 ft) down the fall from the canal's centerline
