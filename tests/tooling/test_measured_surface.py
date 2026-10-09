@@ -61,14 +61,23 @@ def test_an_unreadable_coverage_config_fails_CLOSED() -> None:
 def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
     """FR-001 and FR-003's add-only rule, on the real tree. The derivation may REMOVE an exclusion
     (widening what the gate sees) and must never ADD one: `AREAS["diagram"]`'s `*.py` crosses `/`, so
-    it covers 37 files outside `l7r/` and `tests/` - every pool and legacy `.gen.py`, all of `wip/` -
+    it covers the files outside `l7r/` and `tests/` - every pool and legacy `.gen.py` and the legacy capital's package -
     that coverage does not measure and that the push-time stamp check must keep hashing."""
     gs = _gate_stamp()
     files = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
     assert sum("/l7r/diagram/ci/" in f for f in files) == 17, (
         "ci/ is inside the gate's surface now (was 0; 12 before feature 207 added incremental.py, selection.py and gate_plugin.py; 15 before feature 213 added rollcensus.py and rollverdict.py)"
     )
-    assert sum("/l7r/" not in f and "/tests/" not in f for f in files) == 38, "the add-only rule: these must not be dropped"  # 38 since feature 254: the country shrine's gen joined the pool
+    # THE ADD-ONLY RULE AS A SET, NOT A COUNT (feature 328, 2026-10-09): a hand-kept count went stale when main retired wip/ (38 -> 37)
+    # and miscounted mid-gate, `_area_files` taking the untracked files other tests write (39) - every TRACKED `.py` outside l7r/
+    # and tests/ that the area's patterns reach must still be hashed, however many there are
+    import subprocess
+
+    tracked = subprocess.run(["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, capture_output=True, text=True, check=True).stdout.split("\0")
+    excluded = ("l7r/", "tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "docs/")
+    owed = {str(REPO / t) for t in tracked if t and not t.startswith(excluded)}
+    outside = {f for f in files if "/l7r/" not in f and "/tests/" not in f}
+    assert owed and owed <= outside, f"the add-only rule: these must not be dropped: {sorted(owed - outside)[:5]}"
     assert sum("/tests/" in f for f in files) == 0, "FR-024 is untouched - a tests-only change still owes no gate"
 
 
