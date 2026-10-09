@@ -1682,5 +1682,21 @@
       "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 80",
       "blunted_spike_px2": 533
     }
+  },
+  "batch9-pair": {
+    "quantity": "batch 9's timing pair (856bceb76 -> 277593132, waves 78-82)",
+    "observed": "2026-10-09",
+    "source": "dev/perf-log 328-start/328-end, both legs in scratch worktrees back to back; scratchpad/pairs/b9.out (load 1.26 / 1.41 / 1.33)",
+    "command": "PAIRS='b9:856bceb76:277593132' bash scratchpad/pairs/run.sh; make perf-report AGAINST=328-start",
+    "method": "one pair on a quiet host",
+    "value": {
+      "band": 1,
+      "TOTAL": "-0.6%",
+      "10 households": "+0.0%",
+      "20 households": "+0.0%",
+      "40 households": "+0.2%",
+      "largest": "40 households seed 4 +0.6%, its windbreak stage +0.1 s",
+      "reading": "batch 9 changed the grave cut's re-hold, the drain hem with the fall, the seam bends and the cut-off of refused points (waves 81's run-on reverted) - none in the windbreak stage; every other seed and size unchanged"
+    }
   }
 }

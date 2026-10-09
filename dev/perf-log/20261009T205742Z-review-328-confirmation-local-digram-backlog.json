@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "856bceb76",
+    "label": "328-start",
+    "utc": "20261009T163401Z"
+  },
+  "binding": "a72c82fd08bd2dbf16ead94d97bc88e207c73a0e713319b90e963c437172b947",
+  "end": {
+    "commit": "277593132",
+    "label": "328-end",
+    "utc": "20261009T163705Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261009T205742Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.0
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.6,
+          "47": 0.0
+        },
+        "total_pct": 0.2
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": 0.0,
+      "4": 0.0,
+      "47": -2.2
+    },
+    "total_pct": -0.6
+  },
+  "note": "40hh seed 4 windbreak 1.56->1.62 s (+0.06, shown +0.1; total 17.3->17.4) sits inside the 0.07-0.12 s same-commit jitter perf-log shows for that stage (dc7def24b 1.53-1.65, 4a9b7c077 1.79-1.89, 7fd78f9a1 1.54-1.61); the diff touches only waterfields (banks, seams/close, polder docstring, partition docstring), none imported by stage_windbreak, and houses/placer_calls are identical on every row; CORRECTION: the explanation's clause that timed seeds spend no measurable time in the field is wrong - field is 0.61-0.94 s at reference and 4.43 s at 40/4, and the comb's round_channel_joints/swept_bend runs there - but field stayed flat (4.43->4.44 s), so the attribution holds; control batch9-pair is the pair itself, the counterfactual that tested it is the same-commit repeats above",
+  "verdict": "consistent"
+}
