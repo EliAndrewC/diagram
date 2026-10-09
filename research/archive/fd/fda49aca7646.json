@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:47:09+00:00",
+ "final_url": "https://mdpi.com/2073-445x/11/9/1494",
+ "first": "fd/fda49aca7646/20261003T014709Z",
+ "gm_copies": [],
+ "keys": [
+  "piras-2022-igune"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "fd/fda49aca7646/20261003T014709Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "4be75094572924281fd6e99459f0e900147df24946e7258c56010c76d3837b25",
+ "url": "https://mdpi.com/2073-445x/11/9/1494"
+}

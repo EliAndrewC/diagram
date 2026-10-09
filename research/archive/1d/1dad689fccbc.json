@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:06:40+00:00",
+ "final_url": "https://web.archive.org/web/20260610155628id_/https://sengoku-his.com/1638",
+ "first": "1d/1dad689fccbc/20261003T020640Z",
+ "gm_copies": [],
+ "keys": [
+  "sengoku-his-edo-kinban"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "1d/1dad689fccbc/20261003T020640Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://sengoku-his.com/1638"
+}

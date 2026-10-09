@@ -196,7 +196,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), toe: Poly | Non
         clear ground behind - UNRESEARCHED: refused past 0.30 of the back under dry crop
         not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: seat and anchor off the marsh below the fields
         not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
-        seat standoff from the field - UNRESEARCHED: the seat center set `dep` + 12 ft out from the field margin
+        seat standoff from the field - GUESS: the seat band centered `dep` + 12 ft out from the field margin, the 12 ft the gap between the field's edge and the houses, which no page gives
         reed-fringe share weight - UNRESEARCHED: 2.5 times the band's share in the reeds
         wind and upslope weights - UNRESEARCHED: 1.0 for facing the wind, 0.8 for upslope
         dry hem penalty - UNRESEARCHED: 1.6 within two band depths, plus 2.5 times the back's foul

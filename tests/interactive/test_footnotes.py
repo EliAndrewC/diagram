@@ -199,7 +199,8 @@ def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(pa
 #: as well as Japanese and Chinese. The limit, stated in the spec: a Latin-script foreign quote with no non-ASCII
 #: character reads as English here; the sweep and the quote-check carry those.
 _QUOTE_SPAN = re.compile(r"「([^」]+)」")
-_TRANSLATION_NOTE = re.compile(r"\((?:[^()]*;\s*)?(?:(?:title\s+)?translated\b|machine translation|translation:)", re.I)
+#: `;` or `,` before the mark: the registry's own citation form is `("English title", title translated)` (1,187 cited entries, 2026-10-02)
+_TRANSLATION_NOTE = re.compile(r"\((?:[^()]*[;,]\s*)?(?:(?:title\s+)?translated\b|machine translation|translation:)", re.I)
 _BLOCK = re.compile(r"<(p|li|h[2-4])\b[^>]*>(.*?)</\1>", re.S)
 #: English quotes carry macrons (daimyō), curly quotes and the source's own dashes, so "not ASCII" is not "foreign".
 #: Foreign is a NON-LATIN script (CJK, kana, hangul, Cyrillic, Greek...) or, for a Latin-script language, a run of its

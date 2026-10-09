@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:06:47+00:00",
+ "final_url": "https://web.archive.org/web/20251015225236id_/https://www.jstage.jst.go.jp/article/aija/62/491/62_KJ00004221890/_pdf",
+ "first": "21/21ca719f32ab/20261003T010647Z",
+ "gm_copies": [],
+ "keys": [
+  "chiba-tonuma-1997-teramachi"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "21/21ca719f32ab/20261003T010647Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND jstage.jst.go.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://jstage.jst.go.jp/article/aija/62/491/62_kj00004221890/_pdf"
+}

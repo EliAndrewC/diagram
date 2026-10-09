@@ -484,6 +484,19 @@ def test_grove_fits_rejects_a_belt_over_the_flooded_paddy() -> None:
     assert s._grove_fits(120, 120, 60, 30, own=[]) is True
 
 
+def test_grove_fits_keeps_the_two_sanctioned_abutments() -> None:
+    """Feature 121 T017 (contracts/placement.md C5): two things may TOUCH and must stay allowed when a verdict tightens - a
+    grove hugging the paddy bund (it may abut a field, never overlap it) and neighboring groves abutting into one shared
+    windbreak (a grove is not tested against another farm's grove). A tightening that forbids either breaks a feature."""
+    s = Settlement(1000, 1000, seed=1)
+    s.field_polys.append([(300, 300), (700, 300), (700, 700), (300, 700)])
+    assert s._grove_fits(269.9, 500, 60, 30, own=[]) is True  # its east edge a tenth off the bund at x=300: hugs the paddy
+    assert s._grove_fits(271, 500, 60, 30, own=[]) is False  # one unit further in overlaps the paddy
+    s.grove_rects.append((200, 200, 60, 30))  # a neighbor's grove...
+    assert s._grove_fits(260, 200, 60, 30, own=[]) is True  # ...and this one flush against it: one windbreak
+    assert s._grove_fits(250, 200, 60, 30, own=[]) is True  # even lapping it - the belts merge, nothing refuses
+
+
 def test_bamboo_stand_that_draws_nothing_records_nothing() -> None:
     s = Settlement(1000, 1000, seed=1)
     assert s.bamboo_stand([(500, 500), (500, 500), (500, 500)]) == 0  # zero area: no culm lands, so nothing is drawn

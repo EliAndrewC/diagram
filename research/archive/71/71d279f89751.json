@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:30:38+00:00",
+ "final_url": "http://www.nopss.gov.cn/BIG5/n1/2023/0801/c448883-40048252.html",
+ "first": "71/71d279f89751/20261003T013038Z",
+ "gm_copies": [],
+ "keys": [
+  "qi-2023-agricultural-ethics"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "71/71d279f89751/20261003T013038Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "366c43045652fe870ce88e8386094829a2f9d348e61fc7c5b8fe4001a54e1943",
+ "url": "http://www.nopss.gov.cn/BIG5/n1/2023/0801/c448883-40048252.html"
+}

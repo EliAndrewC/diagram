@@ -2,12 +2,15 @@
  "captured": "2026-10-02T18:24:33+00:00",
  "final_url": "",
  "first": "",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/宋代漏泽园及社会救助研究-河南大学《史学月刊》编辑部.html",
+  "gm-copies/宋代漏泽园及社会救助研究-河南大学《史学月刊》编辑部_files"
+ ],
  "keys": [
   "shixue-yuekan-louzeyuan"
  ],
  "notes": [],
- "outcome": "unreachable",
+ "outcome": "archived-gm-copy",
  "path": "",
  "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
  "revision": "",

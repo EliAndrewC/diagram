@@ -161,7 +161,19 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
    - **Support**: `SUPPORTS` (a reader of the quote alone would grant the assertion); `PARTIAL` (the quote grants
      part - say which part is not in it); `DOES-NOT-SUPPORT` (the quote is about something else, or says the
      opposite - say what it says).
-4. Per section, list the assertions that carry NO footnote and rest on something outside the record - a number,
+4. **The note forms the build cannot judge** (feature 312 FR-005: every citation rule is held by a tool, and these need
+   judgment, so they are yours, owed on every note whose words changed). Flag, one line each with the note's key:
+   - `CLAIM-FROM-UNREAD` - an ABSENCE note (`no publicly readable source...`) carrying a claim of what a named page
+     says: an absence note supports only a stated silence or a labeled GUESS of our own (GM 2026-09-30).
+   - `GROUNDS-MISUSED` - a GROUNDS note (`no source is owed: ...`) on a claim about how a place was built, farmed,
+     planted, governed or lived in, or on a labeled GUESS about the physical world: those owe a citation or an absence
+     note.
+   - `GROUNDS-UNARGUED` - a grounds reason used for the first time on an existing note with no written argument at that
+     note's page; or a note converted from an absence note that dropped its search comment.
+   - `JOINED-WRONG` - a note quoting several passages not joined with `; ` (a passage introducing others ends with `:`).
+   - `UNLINKED-NAME` - a work named in prose, or by its author's surname at its first mention in a section, that is not
+     a link to its registry entry or its read URL.
+5. Per section, list the assertions that carry NO footnote and rest on something outside the record - a number,
    a practice, a date, a "was", a "never" - one line each, quoted. Reasoning from the record's own earlier
    findings, the GM's rulings, a measurement on the map and a labeled GUESS do not need one; say so when you
    skip one for that reason.
@@ -171,5 +183,6 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
 One block per footnote: `fn-n` - key - Readability verdict - Quotation verdict - Support verdict - the page text
 where it differs. Each finding the session must act on ends with its EDIT block(s) or `EDIT: none - <why>`. Put every NOT-READABLE first: under the rule of 2026-09-06 it is the finding that changes the
 record.
-Then, per section, the unfootnoted assertions. Then a summary table: counts of each verdict, and the hosts that
+Then the note-form flags of step 4 (`CLAIM-FROM-UNREAD`, `GROUNDS-MISUSED`, `GROUNDS-UNARGUED`, `JOINED-WRONG`,
+`UNLINKED-NAME`), each with its EDIT. Then, per section, the unfootnoted assertions. Then a summary table: counts of each verdict, and the hosts that
 refused. Never fix anything; never write to a file. Report what you found.

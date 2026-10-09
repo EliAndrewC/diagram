@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:41:51+00:00",
+ "final_url": "",
+ "first": "69/69926ab8e2a7/20261003T004151Z",
+ "gm_copies": [],
+ "keys": [
+  "huiguan-gongsuo-zhwiki"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "69/69926ab8e2a7/20261003T004151Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://zh.wikipedia.org/wiki/會館"
+}

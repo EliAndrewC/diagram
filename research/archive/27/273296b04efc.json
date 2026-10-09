@@ -2,7 +2,10 @@
  "captured": "2026-10-02T18:10:07+00:00",
  "final_url": "http://web.archive.org/web/20230624043456/http://www.knowledgebank.irri.org/grainQuality/module_4/popups/pu_drying.htm",
  "first": "27/273296b04efc/20261002T132314Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/Drying.html",
+  "gm-copies/Drying_files"
+ ],
  "keys": [
   "irri-drying-floor"
  ],
@@ -10,7 +13,7 @@
   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.notes.html",
   "0037-threshing-and-drying-yards-at-farmhouses-niwa.notes.html"
  ],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "27/273296b04efc/20261002T181006Z",
  "reason": "HTTP 429",
  "revision": "",

@@ -119,11 +119,12 @@ def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: py
     fetched.clear()
     whole = tmp_path / "whole"
     assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(whole), "--root", str(REPO)]) == 0
-    assert fetched == [["source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo"]], "source-reader's form: the whole page, no excerpt"
+    sought = ["--sought", "source-reader: the passage behind a new claim on edo-enwiki"]
+    assert fetched == [["source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo", "--question", "none", *sought]], "source-reader's form: the whole page, no excerpt"
     assert not (whole / "quotes.json").exists()
     fetched.clear()
     assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "ways/010", "--out", str(whole), "--root", str(REPO)]) == 0
-    assert fetched == [["source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo", "--question", "ways/010"]], "a WHOLE read carries its question to the ledger"
+    assert fetched == [["source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo", "--question", "ways/010", *sought]], "a WHOLE read carries its question to the ledger"
     assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(REPO)]) == 2
 
 

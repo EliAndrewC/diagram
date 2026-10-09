@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:13:41+00:00",
+ "final_url": "https://www.jstage.jst.go.jp/article/ajg/2016s/0/2016s_100342/_article/-char/ja/",
+ "first": "c1/c1d953af2bda/20261003T011341Z",
+ "gm_copies": [],
+ "keys": [
+  "kotakehara-2016-izumo-tsuijimatsu"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "c1/c1d953af2bda/20261003T011341Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "d313b553f7bd4443d12acc28c882b482a655b201f38661168e726bd3645dd00c",
+ "url": "https://www.jstage.jst.go.jp/article/ajg/2016s/0/2016s_100342/_article/-char/ja/"
+}

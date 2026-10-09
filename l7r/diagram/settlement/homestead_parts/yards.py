@@ -528,6 +528,8 @@ class ThreshingYardsMixin:
             yard on dry ground - UNRESEARCHED: off every paddy and dry plot, corner and vertex tested
             yard abuts its own house - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:
                 clear of every other footprint
+            yard off every lane - GUESS: refused
+                near any lane corridor (`_near_corridor`); no page says whether a lane ever crossed a yard
         """
         if x < 55 or x > self.W - 55 or y < 88 or y > self.H - 26:
             return False
@@ -661,6 +663,8 @@ class ThreshingYardsMixin:
         Research:
             yard before the house - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: south front
                 first, then east or west, never the north back
+            yard tucked under its house's wall - CONVENTION: the yard
+                set 2 px into its house's wall (`hw / 2 + yw / 2 - 2`), the house drawn over the seam
         """
         yw, yh = self._yard_dims(hw, hh, hx, hy)
         for dx, dy in ((0, 1), (1, 0), (-1, 0)):

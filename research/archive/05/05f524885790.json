@@ -2,7 +2,10 @@
  "captured": "2026-10-02T13:25:58+00:00",
  "final_url": "https://web.archive.org/web/20230624043456id_/http://www.knowledgebank.irri.org/grainQuality/module_4/popups/pu_drying.htm",
  "first": "05/05f524885790/20261002T132558Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/Drying.html",
+  "gm-copies/Drying_files"
+ ],
  "keys": [
   "irri-drying-floor"
  ],

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:35:44+00:00",
+ "final_url": "https://k.sina.cn/article_213815211_0cbe8fab02000iswr.html",
+ "first": "a7/a7d2809a750b/20261003T013544Z",
+ "gm_copies": [],
+ "keys": [
+  "xinhua-huzhou-sangji-sina"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "a7/a7d2809a750b/20261003T013544Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "fbbbf2135feea43ac0524e684bc406b2d450a66d5bc02eef966a4b8d5c2ec8fe",
+ "url": "https://k.sina.cn/article_213815211_0cbe8fab02000iswr.html"
+}

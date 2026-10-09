@@ -25,10 +25,11 @@ def test_the_registry_splits_and_assembles_back_to_the_same_bytes() -> None:
 
 
 def test_a_heading_inside_a_comment_is_not_a_section() -> None:
-    """FR-008a on the registry, the file that has one: three sections, not the five a plain count gives."""
+    """FR-008a on the registry, the file that has one: four sections (feature 312 added the uncited works), not every
+    heading a plain count would find."""
     text = record_text("SOURCES.html")
     ids = [section.id for section in sections_of(text)]
-    assert ids == ["works-cited", "attested-instances-anchors-not-works", "setting-canon"]
+    assert ids == ["works-cited", "attested-instances-anchors-not-works", "setting-canon", "uncited-works"]
 
 
 def test_a_heading_is_found_wherever_it_stands_on_its_line() -> None:

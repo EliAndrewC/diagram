@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:07:31+00:00",
+ "final_url": "https://web.archive.org/web/20250531102148id_/https://www.jstage.jst.go.jp/article/arp1982/4/4/4_4_19/_article/-char/ja",
+ "first": "ad/ad488966c980/20261003T010731Z",
+ "gm_copies": [],
+ "keys": [
+  "saiki-1986-settlement-topography"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "ad/ad488966c980/20261003T010731Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND jstage.jst.go.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://jstage.jst.go.jp/article/arp1982/4/4/4_4_19/_article/-char/ja"
+}

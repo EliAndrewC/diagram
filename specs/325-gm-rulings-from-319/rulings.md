@@ -16,3 +16,7 @@ Until the GM rules, the map draws today's form, and the modal says only what is 
   season; (b) one season for the whole sheet (high summer), barley then drawn as stubble or a following crop; (c) a season
   knob rolled per map.
 - **Until ruled:** the map draws (a); the modals say the colors and the real seasons and do not call it deliberate.
+- **RULED (the GM, 2026-10-08):** *"For feature 325 the answer is "spring / summer / autumn" i.e. when there is planting."* -
+  option (c), a season knob rolled per map over the three seasons when fields are planted (no winter); each crop is
+  drawn as it stands in the rolled season. The work is filed as feature 369 (`specs/369-crop-season-knob/`); until it
+  lands, the map still draws (a).

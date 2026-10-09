@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:32:07+00:00",
+ "final_url": "https://www.chunichi.co.jp/article/1141824",
+ "first": "7f/7f2a3d32c607/20261003T013207Z",
+ "gm_copies": [],
+ "keys": [
+  "chunichi-shishigaki-seki"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "7f/7f2a3d32c607/20261003T013207Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "90acd7f3a2ef68f36b36bc2d5e4abada4b1e51772c08815720dee6ad63ccd5c9",
+ "url": "https://chunichi.co.jp/article/1141824"
+}

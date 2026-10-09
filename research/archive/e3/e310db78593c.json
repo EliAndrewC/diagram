@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:11:33+00:00",
+ "final_url": "https://web.archive.org/web/20260105040934id_/https://www.town.kumano.hiroshima.jp/www/contents/1520225343618/index.html",
+ "first": "e3/e310db78593c/20261003T021133Z",
+ "gm_copies": [],
+ "keys": [
+  "kumano-sakakiyama-tamagaki"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "e3/e310db78593c/20261003T021133Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND town.kumano.hiroshima.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://town.kumano.hiroshima.jp/www/contents/1520225343618/index.html"
+}

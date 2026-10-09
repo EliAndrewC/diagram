@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:47:36+00:00",
+ "final_url": "https://web.archive.org/web/20250705170659id_/https://www.chinawater.com.cn/wh/202506/t20250612_1065496.html",
+ "first": "c5/c5ad12ee69f8/20261003T014736Z",
+ "gm_copies": [],
+ "keys": [
+  "chinawater-sangyuanwei"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "c5/c5ad12ee69f8/20261003T014736Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND chinawater.com.cn",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://chinawater.com.cn/wh/202506/t20250612_1065496.html"
+}

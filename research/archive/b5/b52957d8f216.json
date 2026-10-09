@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:04:10+00:00",
+ "final_url": "",
+ "first": "b5/b52957d8f216/20261003T020410Z",
+ "gm_copies": [],
+ "keys": [
+  "nihombashi-uogashi-edo"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "b5/b52957d8f216/20261003T020410Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND nihombashi-tokyo.com",
+ "revision": "",
+ "sha256": "",
+ "url": "https://nihombashi-tokyo.com/jp/history/245.html"
+}

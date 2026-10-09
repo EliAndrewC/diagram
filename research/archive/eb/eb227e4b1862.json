@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:23:15+00:00",
+ "final_url": "https://www.visitbeijing.com.cn/article/47QraNqMfGe",
+ "first": "eb/eb227e4b1862/20261003T022315Z",
+ "gm_copies": [],
+ "keys": [
+  "visitbeijing-siying-lvguan"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "eb/eb227e4b1862/20261003T022315Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "4b8bfa7c11a3b4180586084c725e24cc36eae8677fff029604577d13c179d107",
+ "url": "https://www.visitbeijing.com.cn/article/47QraNqMfGe"
+}

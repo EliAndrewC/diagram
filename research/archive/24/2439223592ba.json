@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:21:13+00:00",
+ "final_url": "",
+ "first": "24/2439223592ba/20261003T012113Z",
+ "gm_copies": [],
+ "keys": [
+  "mano-2016-takada-teramachi-2"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "24/2439223592ba/20261003T012113Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://www.jstage.jst.go.jp/article/kfa/1/1/1_1/_article/-char/ja/"
+}

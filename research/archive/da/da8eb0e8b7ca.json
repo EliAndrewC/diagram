@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:37:28+00:00",
+ "final_url": "https://web.archive.org/web/20260902105613id_/https://www.pref.shiga.lg.jp/file/attachment/1009952.pdf",
+ "first": "da/da8eb0e8b7ca/20261003T013728Z",
+ "gm_copies": [],
+ "keys": [
+  "shiga-tagoshi-kangai"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "da/da8eb0e8b7ca/20261003T013728Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND pref.shiga.lg.jp",
+ "revision": "",
+ "sha256": "e66957a1c16b51584c3a5d7777d48c5ac4619bb4fd2904618326039615c189f0",
+ "url": "https://pref.shiga.lg.jp/file/attachment/1009952.pdf"
+}

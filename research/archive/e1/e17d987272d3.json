@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:49:19+00:00",
+ "final_url": "",
+ "first": "e1/e17d987272d3/20261003T004919Z",
+ "gm_copies": [],
+ "keys": [
+  "bunka-yokota-jutaku-omoya"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "e1/e17d987272d3/20261003T004919Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://bunka.nii.ac.jp/heritages/detail/121724"
+}

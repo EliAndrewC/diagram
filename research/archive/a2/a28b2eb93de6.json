@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:50:25+00:00",
+ "final_url": "https://web.archive.org/web/20250716152508id_/https://tabi-mag.jp/nn130/",
+ "first": "a2/a28b2eb93de6/20261003T015002Z",
+ "gm_copies": [],
+ "keys": [
+  "tabimag-ushikata-yado"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "a2/a28b2eb93de6/20261003T015002Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "a243daec6cf34866b9e012bea0a97f990f09dcf1f267b897c6da69bb065f001b",
+ "url": "https://tabi-mag.jp/nn130"
+}

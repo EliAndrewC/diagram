@@ -799,6 +799,7 @@ class TradesMixin:
             pit size - UNRESEARCHED: pits drawn 9 x 5 ft (0193 gives no pit size; the docstring's 4.6 ft is not the code's)
             yard size from pit count - UNRESEARCHED: 14 + 11 ft per pit column by 9 ft per row + 32 ft, one row up to 5 pits
             work shed - UNRESEARCHED: 14 x 10 ft
+            drying racks - GUESS: two rack rails per yard, each hung with one fewer hide than there are pit columns, the count that clears the shed's corner; no page describes the racks
             staking frames or an intake cut - research/questions/0193-tanning-yards.drawing.html: by the water kind
             yard glyph - CONVENTION
         """

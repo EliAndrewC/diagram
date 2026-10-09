@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:04:05+00:00",
+ "final_url": "https://news.bjd.com.cn/2022/09/20/10163783.shtml",
+ "first": "8c/8c4c2e99fc26/20261003T020405Z",
+ "gm_copies": [],
+ "keys": [
+  "bjd-beijing-wells-hutong"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "8c/8c4c2e99fc26/20261003T020405Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "ee05142188ca785a632403fc14e2ebb59114dde651c1cbac1bb9b2e9fe02cbc9",
+ "url": "https://news.bjd.com.cn/2022/09/20/10163783.shtml"
+}

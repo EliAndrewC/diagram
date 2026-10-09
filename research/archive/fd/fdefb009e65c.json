@@ -2,12 +2,15 @@
  "captured": "2026-10-02T18:13:51+00:00",
  "final_url": "https://www.sciencedirect.com/science/article/abs/pii/S1001627920300706",
  "first": "fd/fdefb009e65c/20261002T124203Z",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/Influence of diversion angle on water and sediment flow into diversion channel - ScienceDirect.html",
+  "gm-copies/Influence of diversion angle on water and sediment flow into diversion channel - ScienceDirect_files"
+ ],
  "keys": [
   "offtake-angle-studies"
  ],
  "notes": [],
- "outcome": "partial",
+ "outcome": "archived-gm-copy",
  "path": "fd/fdefb009e65c/20261002T181349Z",
  "reason": "HTTP 403",
  "revision": "",

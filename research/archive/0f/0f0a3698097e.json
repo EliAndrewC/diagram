@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:53:11+00:00",
+ "final_url": "https://shirobito.jp/article/598",
+ "first": "0f/0f0a3698097e/20261003T005311Z",
+ "gm_copies": [],
+ "keys": [
+  "kamiyu-2018-jokamachi-shirobito"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "0f/0f0a3698097e/20261003T005311Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "c9cc1dda756714ae56eef7e2382ae7187494ce82c70a6b6932980b2366e6737b",
+ "url": "https://shirobito.jp/article/598"
+}

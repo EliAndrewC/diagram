@@ -2,7 +2,9 @@
  "captured": "2026-10-02T18:29:36+00:00",
  "final_url": "",
  "first": "",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/20969368.2026.02011.pdf"
+ ],
  "keys": [
   "jah-song-military-cities"
  ],
@@ -10,7 +12,7 @@
   "0148-towers-along-the-city-wall-mamian.drawing.notes.html",
   "0148-towers-along-the-city-wall-mamian.notes.html"
  ],
- "outcome": "unreachable",
+ "outcome": "archived-gm-copy",
  "path": "",
  "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
  "revision": "",

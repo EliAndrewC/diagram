@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:01:12+00:00",
+ "final_url": "https://web.archive.org/web/20250516083012id_/http://labo.wikidharma.org/index.php/%E5%A4%9A%E5%B1%8B",
+ "first": "37/37b188ebfefc/20261003T020112Z",
+ "gm_copies": [],
+ "keys": [
+  "wikiarc-taya"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "37/37b188ebfefc/20261003T020112Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND labo.wikidharma.org",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://labo.wikidharma.org/index.php/多屋"
+}

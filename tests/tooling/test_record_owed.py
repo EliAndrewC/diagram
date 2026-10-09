@@ -259,6 +259,21 @@ def test_a_write_up_numbered_past_four_digits_owes_its_check(tmp_path: pathlib.P
     assert [u.slug for u in ro.units(d)] == ["source-applicability:some-key"]
 
 
+def test_an_entry_drift_tip_names_its_question_and_the_modal_class(tmp_path: pathlib.Path) -> None:
+    """The subject is a modal key with a space in it; the tip gives the question from the occasion and the class by name,
+    module-qualified where two modules share the key (2026-10-03: it printed `Q=threshing yard` and left the class to find)."""
+    (tmp_path / "classes").mkdir()
+    (tmp_path / "compound_kinds").mkdir()
+    (tmp_path / "classes" / "homestead.py").write_text("class ThreshingYard(Kind):\n    key = 'threshing yard'\n", encoding="utf-8")
+    (tmp_path / "classes" / "water.py").write_text('class Well(Kind):\n    key = "well"\n', encoding="utf-8")
+    (tmp_path / "compound_kinds" / "household.py").write_text('class Well(Kind):\n    key = "well"\n', encoding="utf-8")
+    assert ro.modal_classes("threshing yard", tmp_path) == ["ThreshingYard"]
+    assert ro.modal_classes("well", tmp_path) == ["water.Well", "household.Well"] and ro.modal_classes("none", tmp_path) == []
+    u = ru.Unit("entry-drift:threshing yard", "its section's findings moved (0037-threshing.html)", "f")
+    tip = ro.command(u)
+    assert tip.startswith('make check-bundle Q=0037 FOR=entry-drift KIND="ThreshingYard"') and 'KIND="threshing yard" BUNDLE=' in tip
+
+
 def test_an_entry_drift_unit_names_its_sections_number_and_its_answer() -> None:
     """Its subject is a modal's key, never a question: the hint once read `make check-bundle Q=vegetable garden`, refused."""
     u = ru.Unit("entry-drift:vegetable garden", "its section's findings moved (0038-sunlight-and-shade-on-the-farm.drawing.html)")

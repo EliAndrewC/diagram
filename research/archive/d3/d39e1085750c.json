@@ -1,0 +1,17 @@
+{
+ "captured": "2026-10-03T02:27:27+00:00",
+ "final_url": "https://api.openalex.org/works/doi:10.1179/pma.1996.002",
+ "first": "d3/d39e1085750c/20261003T022725Z",
+ "gm_copies": [],
+ "keys": [],
+ "notes": [
+  "0193-tanning-yards.drawing.notes.html",
+  "0193-tanning-yards.notes.html"
+ ],
+ "outcome": "archived",
+ "path": "d3/d39e1085750c/20261003T022725Z",
+ "reason": "",
+ "revision": "",
+ "sha256": "c9cf3febf7b47815662d7565be2a3be688c1966e80d230e799c20ea311906a14",
+ "url": "https://api.openalex.org/works/doi:10.1179/pma.1996.002"
+}

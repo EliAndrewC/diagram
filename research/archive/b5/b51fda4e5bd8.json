@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:43:41+00:00",
+ "final_url": "",
+ "first": "b5/b51fda4e5bd8/20261003T004341Z",
+ "gm_copies": [],
+ "keys": [
+  "wangzhen-nongshu-zhwiki"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "b5/b51fda4e5bd8/20261003T004341Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://zh.wikipedia.org/wiki/王禎農書"
+}

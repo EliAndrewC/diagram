@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:05:26+00:00",
+ "final_url": "https://web.archive.org/web/20110915153823id_/http://zh.wikisource.org/wiki/%E6%B0%B4%E6%BB%B8%E5%82%B3/%E7%AC%AC010%E5%9B%9E",
+ "first": "da/da574579749b/20261003T010526Z",
+ "gm_copies": [],
+ "keys": [
+  "shi-naian-shuihuzhuan-10-wikisource"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "da/da574579749b/20261003T010526Z",
+ "reason": "HTTP 404",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://zh.wikisource.org/wiki/水滸傳/第010回"
+}

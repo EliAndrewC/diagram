@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T14:20:30Z",
+  "target": "plan-gate push",
+  "commit": "0bcfe303d",
+  "why": "feature 330 rewrote old features' status lines only; they predate the plan review (feature 243) and a status edit implements nothing"
+}

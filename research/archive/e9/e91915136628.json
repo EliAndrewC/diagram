@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:10:29+00:00",
+ "final_url": "https://web.archive.org/web/20240906153554id_/https://teapot.lib.ocha.ac.jp/record/35823/files/003806.pdf",
+ "first": "e9/e91915136628/20261003T021029Z",
+ "gm_copies": [],
+ "keys": [
+  "yamada-1997-osaka-machiyashiki"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "e9/e91915136628/20261003T021029Z",
+ "reason": "HTTP 406",
+ "revision": "",
+ "sha256": "dee43ec254759474e01c098468ddf63154803a4969b379c6da3ece2167202a91",
+ "url": "https://teapot.lib.ocha.ac.jp/record/35823/files/003806.pdf"
+}

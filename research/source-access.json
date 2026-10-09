@@ -43,6 +43,13 @@
   }
  ],
  "recorded": {
+  "chen-2016-song-yamen": [
+   {
+    "state": "down",
+    "date": "2026-10-03",
+    "reason": "host no longer answers since 2026-09-27, no Wayback copy, the GM could not find it (download list H20); no readable copy found, its Song claim removed from 0163"
+   }
+  ],
   "download:113": [
    {
     "state": "paywalled",
@@ -181,6 +188,13 @@
     "state": "paywalled",
     "date": "2026-10-02",
     "reason": "registry write-up of skinner-2002-etudes-rurales: 'The 1964 Journal of Asian Studies article ... is genuinely closed - Unpaywall reports no open location'"
+   }
+  ],
+  "tabiiro-takayama-jinya": [
+   {
+    "state": "gone",
+    "date": "2026-10-03",
+    "reason": "HTTP 404 since 2026-10-02, no Wayback copy, the GM could not find it (download list H19); its grounds figure re-sourced to takayama-jinya-gifu"
    }
   ],
   "tedori-fan-pwe": [

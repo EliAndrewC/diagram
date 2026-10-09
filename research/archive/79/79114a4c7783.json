@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:00:46+00:00",
+ "final_url": "https://www.sohu.com/a/830154589_120596020",
+ "first": "79/79114a4c7783/20261003T010046Z",
+ "gm_copies": [],
+ "keys": [
+  "zhuang-ruojiang-wuxi-yunhe-shuinongtang"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "79/79114a4c7783/20261003T010046Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "9f00029d1fc548432ea250dc4feaf46eb0dd417b8f7f2954ca50d7d7186a2b62",
+ "url": "https://www.sohu.com/a/830154589_120596020"
+}

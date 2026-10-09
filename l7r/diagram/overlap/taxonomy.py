@@ -205,19 +205,20 @@ _OVERLAP_EXEMPT = {
 Research:
     annexes abut their house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the kura against its own farmhouse (west wall scattered, north wall clustered); the grove along the plot edge on its rolled 2-4 sides, its windward stand about 24 ft off the house and only the thinner bands beside it
     yard, garden and fixtures against the house - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0044-baths-on-the-farm-furo.drawing.html, research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the yard drawn beside its house, the bed beside the house (0038 on which sides), fixtures seated on the plot, the bath joined to the main house, the wood shed a ken beyond the wall's clear strip, about 9.5 ft off a wall
-    pig sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: on the bank itself, half the bank's width in, not over the water
+    yard persimmon near its house - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: in front of the house or behind it, its crown's edge within about 30 ft of the house; exempt here because its crown is tested as a tree crown and the placer keeps its trunk off every footprint
+    pig sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: exempt because it stands on the pond dike, on the bank itself, half the bank's width in from the plot's edge, not over the water
     wellhead among the houses - research/questions/0196-communal-wells-ido.drawing.html: in the gaps between dwellings
-    border as a line - DEVIATION research/questions/0083-clan-borders-and-their-markers.html: no mound drawn, nothing keeps clear
+    border as a line - DEVIATION research/questions/0083-clan-borders-and-their-markers.html: a line of law with no footprint, which a frontier magistracy's wall stands on (the parley room with the line across its floor); no mound drawn, nothing keeps clear
     built on what it serves - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html, research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0148-towers-along-the-city-wall-mamian.drawing.html, research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: bridges, weirs, gates, jetties, towers, booms
-    mill beside its stream - research/questions/0064-water-mills-suisha.drawing.html: its wheel in the water
-    in-field ponds, rocks and graves - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: drawn on the paddy
-    copse and bamboo against a house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: vegetation drawn last in open ground; the copse draws no bamboo, the thicket a stand of its own beyond the back row
-    stable yard round its stables - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a ground scatter
-    polder dike crossed - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: a walked bank lanes and channels cross
+    mill beside its stream - research/questions/0064-water-mills-suisha.drawing.html: on the bank beside its watercourse, its wheel dipping into the water
+    in-field ponds, rocks and graves - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: each sunk into one paddy plot, the field tiling round it, drawn on the paddy
+    copse and bamboo against a house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clump stands against a house, never on it, so the village groves and bamboo stands, drawn last in open ground, may abut a house; the copse spread through the gaps between the houses, the belt on the windward north and west; the copse draws no bamboo, the thicket a stand of its own
+    stable yard round its stables - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a ground scatter of beaten earth that surrounds its stables and fills the open pocket
+    polder dike crossed - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: a walked bank the lanes cross, and the channels through a cut in it, with their footbridges
     in-field ditches - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: drawn on the paddy
     inspection post on the gate - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: may overlap the gate furniture
     merchant storehouses - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html: exempt as an annex abutting its shop
-    merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
+    merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its inner building, which is itself an overlap-checked footprint
     bookkeeping records - NONE: districts, quarters, precincts, clearings, row plans and tree records
 """
 
@@ -438,7 +439,8 @@ OVERLAP_CLASS: dict[str, str] = {
     "quarters": "OVERLAY",
     "districts": "OVERLAY",
     "precincts": "OVERLAY",
-    # A WARD IS NOT A QUARTER. A quarter is a zoning word; a ward is a walled enclosure whose FENCE
+    # A WARD IS NOT A QUARTER. A quarter is a zoning word; a ward is an enclosure with no wall round it,
+    # sealed by a FENCE with a gate at every crossing (research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html), and that fence
     # is a physical barrier everything except its own kido must stand clear of. Classed OVERLAY it was
     # never extracted, which is why a guard station, a notice board and an oil press all came to rest
     # on Minami's ward fence with a green gate. Extracted as the STROKE of its boundary (the fence
@@ -482,7 +484,9 @@ Research:
     one class a key - CONVENTION: every drawn key in one class, every pair forbidden unless permitted
     annexes - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: abut their own farmhouse and nothing else
     worked ground - research/questions/0081-village-lanes.drawing.html, research/questions/0196-communal-wells-ido.drawing.html: no lane or well on a dry plot
-    flower beds and resting patches - UNRESEARCHED: worked as a surface, nothing standing on them
+    flower beds and resting patches - research/questions/0015-flower-growing-and-the-chrysanthemum-kiku.drawing.html, research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: the flower field (no street cut through it) and a paddy plot left to rest (a whole plot inside its own bunds) classed GROUND with the dry plots, worked ground nothing may stand in
+    ward fence a barrier - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the fence seals its quarter unbroken with a gate at every crossing, so it is extracted as its fence line, which everything but its own kido stands clear of
+    ward gate's guard box - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: the one solid building at the gate, on the verge beside the opening, never in a roadbed; SOLID, and riding none of the gate's fence or roadbed mounts
 """
 
 # A permissive class may be overlapped by anything, and is never extracted. The reason matters as
@@ -552,7 +556,7 @@ _FIXTURE_MOUNTS: dict[str, frozenset[str]] = {
 """What each fixture stands on.
 
 Research:
-    bridge - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: on water and the way it carries, and on the rampart at a water gate
+    bridge - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: on water and the way it carries, and on the rampart at a water gate, the deck sharing ground with the gate where the ring road crosses a canal a few paces inside the arch
     dock and jetty - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html: at and over the water, a dock reached from the quay
     log boom - research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: on the river
     sluice and water gate - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: a board on its channel, an arch over its canal on the wall
@@ -560,7 +564,8 @@ Research:
     ward gate - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: on the ward fence where a way passes
     gate complex and inspection post - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: on the wall and the road at the gate
     wall tower - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: on the rampart
-    wall tower over water - UNRESEARCHED: the moat and its taps at the rampart's foot may pass under a tower
+    wall tower over water - GUESS: a wall tower may stand over the moat and its irrigation taps at the rampart's foot (no page on towers or moats says whether water passed under one)
+    only the mounts listed - CONVENTION: each fixture - dock, jetty, log boom, sluice, weir, water gate, kido, gate complex, inspection post, bridge, wall tower - stands on the classes and keys listed for it and on nothing else, not even another fixture of its own kind
 """
 
 _MATRIX_SAME_CLASS_OK = {

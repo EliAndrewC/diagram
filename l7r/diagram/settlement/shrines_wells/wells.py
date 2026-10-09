@@ -133,6 +133,7 @@ class WellsMixin:
             seated in a steading's dooryard - research/questions/0196-communal-wells-ido.drawing.html: rings of 20 to 150 px round the densest cluster's houses
             fallback on field-rim ground off the crop - research/questions/0196-communal-wells-ido.drawing.html: a dwelling within about 95 ft on hamlet and town maps; a 6 px grid out to 156 px
             cluster radius - NONE: 0.9 of the reach
+            fallback seat off the house - GUESS: no fallback seat nearer than 18 px to the house center; no page gives it
         """
         reach = self.px(reach_ft)
         edge = self.px(edge_ft)

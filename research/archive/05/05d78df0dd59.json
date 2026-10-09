@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:48:09+00:00",
+ "final_url": "",
+ "first": "05/05d78df0dd59/20261003T004809Z",
+ "gm_copies": [],
+ "keys": [
+  "levee-enwiki"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "05/05d78df0dd59/20261003T004809Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://en.wikipedia.org/wiki/Natural_levee"
+}

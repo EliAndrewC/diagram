@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:40:06+00:00",
+ "final_url": "https://web.archive.org/web/20250409105803id_/https://zh.wikipedia.org/wiki/%E6%95%8C%E6%A5%BC",
+ "first": "c2/c2e51f18f69b/20261003T004006Z",
+ "gm_copies": [],
+ "keys": [
+  "penglou-enemy-tower-zhwiki"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "c2/c2e51f18f69b/20261003T004006Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://zh.wikipedia.org/wiki/敌楼"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:19:06+00:00",
+ "final_url": "https://www.gumumuseum.com/relic/207",
+ "first": "e4/e44431838f18/20261003T021906Z",
+ "gm_copies": [],
+ "keys": [
+  "luoyang-ancient-tombs-song-brick-tomb"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "e4/e44431838f18/20261003T021906Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "e0a53c764d27a24f43b46216c0ac54a3f90a045dc07944aeb6b7ea7cdf0d5c36",
+ "url": "https://www.gumumuseum.com/relic/207"
+}

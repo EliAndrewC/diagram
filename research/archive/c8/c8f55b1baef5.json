@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:00:35+00:00",
+ "final_url": "https://web.archive.org/web/20250701130037id_/https://www.ktr.mlit.go.jp/ktr_content/content/000099135.pdf",
+ "first": "c8/c8f55b1baef5/20261003T020035Z",
+ "gm_copies": [],
+ "keys": [
+  "ktr-hamura-intake-weir"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "c8/c8f55b1baef5/20261003T020035Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND ktr.mlit.go.jp",
+ "revision": "",
+ "sha256": "5cc2823ab9f9937d10277f26a76be665d584a3ef93f960c44203a0f48335e2dc",
+ "url": "https://ktr.mlit.go.jp/ktr_content/content/000099135.pdf"
+}

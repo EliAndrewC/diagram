@@ -213,7 +213,10 @@ class NearRingMixin:
             road and street setback - UNRESEARCHED: 34 px off the road, a street's half-width plus 20 px
             off the hill - UNRESEARCHED: no basin within 1.35x the hill's radii
             farmhouses round a city field - research/questions/0010-farmland-around-towns-and-cities.drawing.html: two rings of farmhouses round each basin on a walled city
-            wells beside the basins - research/questions/0196-communal-wells-ido.drawing.html: up to two a basin, within 90 px of a farmhouse"""
+            wells beside the basins - research/questions/0196-communal-wells-ido.drawing.html: up to two a basin, within 90 px of a farmhouse
+            well seats off a basin - GUESS: seats tried 15 px outside each of a basin's edges and two of its corners, on the basin's own frame; no page gives the offset
+            basin rows and bounds - GUESS: rows rolled 0.85 to 1.2 of the cell; a basin under 24 px a side, or of 79,000 sq px or more, is skipped, the cap keeping it inside `common_fields_vary_orientation`'s exemption; 0010 gives neither
+            farm rings round a city basin - GUESS: at least 12 farmhouses (or `ring_farms`) in a ring at 13 px, then 8 more at 30 px; 0010 gives about seven per 3,000 ft of shown edge, not a ring count"""
         bx0, by0, bx1, by1 = bbox
         bx0, by0 = max(bx0, 12.0), max(by0, 12.0)
         bx1, by1 = min(bx1, self.W - 12.0), min(by1, self.H - 12.0)

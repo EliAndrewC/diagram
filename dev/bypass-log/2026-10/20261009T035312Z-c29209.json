@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-09T03:53:12Z",
+  "target": "plan-gate tick 121-placer-drawn-footprint",
+  "commit": "5371462c1",
+  "why": "feature 121 (2026-08-17) predates the plan gate of feature 243; its plan shipped and was verified at its 2026-08-17 closing, and this tick adds only the test its contract C5 asked for"
+}

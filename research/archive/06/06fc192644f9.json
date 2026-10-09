@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T02:07:16+00:00",
+ "final_url": "",
+ "first": "06/06fc192644f9/20261003T020716Z",
+ "gm_copies": [],
+ "keys": [
+  "tanimoto-2023-utokyo-focus-fertilizer"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "06/06fc192644f9/20261003T020716Z",
+ "reason": "APIRequestContext.get: read ECONNRESET",
+ "revision": "",
+ "sha256": "",
+ "url": "https://www.u-tokyo.ac.jp/focus/ja/features/z1304_00228.html"
+}

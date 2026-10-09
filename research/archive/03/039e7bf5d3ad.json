@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:08:32+00:00",
+ "final_url": "",
+ "first": "03/039e7bf5d3ad/20261003T010832Z",
+ "gm_copies": [],
+ "keys": [
+  "osawa-kinoshita-2023-nishiizu-shrines"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "03/039e7bf5d3ad/20261003T010832Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND jstage.jst.go.jp",
+ "revision": "",
+ "sha256": "",
+ "url": "https://jstage.jst.go.jp/article/jila/86/5/86_511/_article/-char/ja"
+}

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:45:37+00:00",
+ "final_url": "https://journals.sagepub.com/doi/full/10.1177/13540661221133206",
+ "first": "eb/eb3d6b477777/20261003T014537Z",
+ "gm_copies": [],
+ "keys": [
+  "mukoyama-2022-linear-borders"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "eb/eb3d6b477777/20261003T014537Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "0300525db7a6e1502f49ede8381caa1a82aa7dc58d9734d0f7a615fbc814d4e9",
+ "url": "https://journals.sagepub.com/doi/full/10.1177/13540661221133206"
+}

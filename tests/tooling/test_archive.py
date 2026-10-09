@@ -321,3 +321,15 @@ def test_the_report_counts_every_cited_url(tmp_path: pathlib.Path) -> None:
 
 def test_the_mirror_is_a_clones_grandparent(tmp_path: pathlib.Path) -> None:
     assert ar.mirror(tmp_path / ".clones" / "x") == tmp_path and ar.mirror(tmp_path) == tmp_path
+
+
+def test_a_blocked_url_is_refused_before_any_request(tmp_path: pathlib.Path) -> None:
+    """Feature 312 FR-002, FR-003: neither the fetch nor the archive reaches the browser for a blocked domain."""
+    from l7r.diagram.interactive.record import blocked  # noqa: PLC0415
+
+    browser = Stand({})
+    with pytest.raises(blocked.Blocked, match="an archive fetch refused"):
+        ar.fetch(browser, "https://www.grokipedia.com/page/X")
+    with pytest.raises(blocked.Blocked, match="the archive refused"):
+        ar.archive_url(tmp_path, "https://grokipedia.com/page/X", rec.Cited(), browser, None)
+    assert browser.asked == []

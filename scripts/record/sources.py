@@ -61,7 +61,7 @@ def norm(u: str) -> str:
     """The measurement's normalization (`specs/288-*/measurement/extract_norm.py`), so the ledger's URLs and the
     measurement's are one set: scheme, `www.`, the mobile host, a fragment and a trailing slash dropped;
     percent-decoded; lower-cased, except a Wikipedia path, whose case is the article's name."""
-    u = u.strip().strip("'\"<>),.;")
+    u = u.strip().strip("'\"<>),.;:")  # a colon too: prose after a URL in parentheses, "(https://...): 「...」" (feature 312)
     u = urllib.parse.unquote(u)
     u = u.split("#")[0]
     u = re.sub(r"^https?://", "", u)
@@ -72,6 +72,25 @@ def norm(u: str) -> str:
     if "wikipedia" not in u:
         return u.lower()
     return u[: u.find("/")].lower() + u[u.find("/") :] if "/" in u else u.lower()
+
+
+def _blocked():  # noqa: ANN202 - the record's module, imported on first use so this file stays importable alone
+    """`l7r/diagram/interactive/record/blocked.py` (feature 312 FR-001 - FR-003): the one decision on what no route may
+    read or store - this ledger, this cache and every fetch through `CachedPages` ask it."""
+    skill = str(HERE.parents[1])  # the repository root, where l7r/ is
+    if skill not in sys.path:
+        sys.path.insert(0, skill)
+    from l7r.diagram.interactive.record import blocked  # noqa: PLC0415
+
+    return blocked
+
+
+def _attempts_mod():  # noqa: ANN202 - the attempts log (feature 312), which imports this module: imported on use
+    if str(HERE) not in sys.path:
+        sys.path.insert(0, str(HERE))
+    import attempts  # noqa: PLC0415
+
+    return attempts
 
 
 def now() -> str:
@@ -133,6 +152,8 @@ def locked(where: pathlib.Path, timeout: float = 30.0) -> Iterator[None]:
 def append(where: pathlib.Path, rows: list[dict]) -> None:
     if not rows:
         return
+    for r in rows:
+        _blocked().check(r.get("raw") or r.get("url", ""), "a sources-consulted ledger line")
     with locked(where), open(where / LEDGER, "a", encoding="utf-8") as f:
         f.writelines(json.dumps(r, ensure_ascii=False) + "\n" for r in rows)
 
@@ -305,6 +326,7 @@ def _write(path: pathlib.Path, text: str) -> None:
 
 def put(where: pathlib.Path, url: str, text: str, fetched: str | None = None, exact: bool = True, origin: str = "fetch") -> dict:
     """Store one page: its text, its saved form in parts, and `meta.json` last (a reader needs both)."""
+    _blocked().check(url, "the page cache")
     d = entry_dir(where, url)
     d.mkdir(parents=True, exist_ok=True)
     pieces = parts(wrapped(text))
@@ -338,6 +360,11 @@ class CachedPages:
         return getattr(self.inner, "refused", {})
 
     def get(self, url: str) -> dict:
+        """A blocked URL is never fetched (feature 312 FR-002): it comes back UNFETCHABLE with the refusal as its reason,
+        so a run over many pointers reports it beside the rest instead of stopping."""
+        rule = _blocked().blocked(url)
+        if rule is not None:
+            return {"state": "UNFETCHABLE", "why": _blocked().refusal(url, rule, "a fetch"), "blocked": True}
         hit = None if self.refresh else cached(self.where, url, self.max_age, self.exact)
         if hit is not None:
             return {"state": "FETCHED", "text": hit["text"], "cached": hit["fetched"]}
@@ -420,6 +447,7 @@ def main(argv: list[str] | None = None) -> int:
     o.add_argument("url")
     o.add_argument("outcome")
     o.add_argument("--question", default="")
+    o.add_argument("--sought", default="", help="what the read looked for (feature 312); else the latest attempt's")
     q = sub.add_parser("lookup", help="the ledger's lines for a URL, or for the registry keys a regex matches")
     q.add_argument("--url", default="")
     q.add_argument("--key", default="")
@@ -436,6 +464,7 @@ def main(argv: list[str] | None = None) -> int:
         row = line(context(root), args.url, args.outcome.strip(), [args.question] if args.question else [])
         append(where, [row])
         print(f"source-outcome: recorded{show(row)}")
+        _attempts_mod().outcome(root, args.url, args.question, args.outcome.strip(), args.sought)
         if row["outcome"].startswith("cited:"):
             archive_reads(root, [args.url])
         return 0

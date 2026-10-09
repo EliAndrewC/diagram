@@ -138,6 +138,8 @@ def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets
         shared wells spaced - research/questions/0033-row-villages-resson.drawing.html: one at the middle of each stretch of at most 1.6 reaches
         beside the street - research/questions/0196-communal-wells-ido.drawing.html: the lane-side form, on the verge clear of the tread, either side
         off the tread - GUESS: the wellhead's half-extent and 8 ft off the street's centerline
+        no well in a street bend - GUESS: no shared well at a mark where the street turns `BEND_WELL_DEG` (30 degrees) or more within `BEND_LOOK_FT` (40 ft, the zigzag run) on either side; no page gives a bend rule for wells
+        fallback seats along the street - GUESS: a seat tried at the mark, then a half and a quarter lot either way along the street; no page gives the offsets
     """
     if not streets or not houses:
         return 0
@@ -263,7 +265,7 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         neighborhood ladder - research/questions/0196-communal-wells-ido.drawing.html: the third-nearest house within 190, 300, 520 px, then two houses
         wells apart - UNRESEARCHED: 170 px between wells
         no well past the crop - research/questions/0196-communal-wells-ido.drawing.html: every well stands among the houses it serves; refused where the wellhead would widen the crop
-        grove farms take their own water - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a dispersed farm draws from its own channel or well, not the shared-well rule of towns, so it is left out of the communal wells
+        grove farms take their own water - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a dispersed farm draws from its own channel or well, not the shared-well rule of towns, so every grove farm takes its own water (`grove_water`) and is left out of the communal wells
         no well over a household's wood floor - UNRESEARCHED: no well seated over a household's reserved wood-floor seats
     """
     grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]

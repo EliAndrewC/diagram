@@ -21,8 +21,6 @@ import pathlib
 import re
 import urllib.error
 
-import pytest
-
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
@@ -284,8 +282,10 @@ def test_main_writes_the_report_the_agent_is_handed(tmp_path, capsys):
 
 def test_a_scoped_check_names_its_notes_and_fetches_nothing_else(tmp_path, capsys):
     assert qv.wanted("") is None and qv.wanted("fn-2, 4-6") == {"fn-2", "fn-4", "fn-5", "fn-6"}
-    with pytest.raises(SystemExit, match="not a note's name"):
-        qv.wanted("kashima-kainyo-1987")  # a key, once a traceback
+    only = qv.wanted("wanli-fishpond-summary-2, 9")
+    assert qv.is_wanted({"id": "fn-3", "key": "wanli-fishpond-summary"}, only), "a note id names every note citing its key"
+    assert qv.is_wanted({"id": "fn-9", "key": "other"}, only) and not qv.is_wanted({"id": "fn-4", "key": "other"}, only)
+    assert qv.is_wanted({"id": "fn-1", "key": "miles-2003"}, qv.wanted("miles-2003")), "a key ending in digits matches itself"
     _record(tmp_path)
     out = tmp_path / "r.json"
     assert qv.main(["0005", "--root", str(tmp_path), "--offline", str(tmp_path), "--notes", "3-4", "--json", str(out)]) == 0

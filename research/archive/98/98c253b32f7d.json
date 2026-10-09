@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:43:05+00:00",
+ "final_url": "",
+ "first": "98/98c253b32f7d/20261003T004305Z",
+ "gm_copies": [],
+ "keys": [
+  "kotobank-shamusho"
+ ],
+ "notes": [],
+ "outcome": "unreachable",
+ "path": "98/98c253b32f7d/20261003T004305Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "",
+ "url": "https://kotobank.jp/word/社務所-517940"
+}

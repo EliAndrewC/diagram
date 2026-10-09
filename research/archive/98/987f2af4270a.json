@@ -2,14 +2,16 @@
  "captured": "2026-10-02T18:32:19+00:00",
  "final_url": "",
  "first": "",
- "gm_copies": [],
+ "gm_copies": [
+  "gm-copies/10854794.pdf"
+ ],
  "keys": [
   "conghua-2026-design"
  ],
  "notes": [
   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.notes.html"
  ],
- "outcome": "unreachable",
+ "outcome": "archived-gm-copy",
  "path": "",
  "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
  "revision": "",

@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:49:10+00:00",
+ "final_url": "https://web.archive.org/web/20260208040842id_/https://www.city.hasuda.saitama.jp/bunkazai/kyoiku/bunkazai/tenjikan/documents/108fb2696d306e5909976930685e744e2d884c4e8b306e59095316300188709000.pdf",
+ "first": "cf/cfb69c7fd255/20261003T014910Z",
+ "gm_copies": [],
+ "keys": [
+  "hasuda-minggu-nogyo"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "cf/cfb69c7fd255/20261003T014910Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND city.hasuda.saitama.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://city.hasuda.saitama.jp/bunkazai/kyoiku/bunkazai/tenjikan/documents/108fb2696d306e5909976930685e744e2d884c4e8b306e59095316300188709000.pdf"
+}

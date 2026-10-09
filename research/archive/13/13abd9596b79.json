@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T01:33:19+00:00",
+ "final_url": "https://web.archive.org/web/20241010175137id_/https://www.city.sayama.saitama.jp/kurashi/anshin/bosai/bousaitaisei/shobodan/50nenshi/50nensi.files/1-1.pdf",
+ "first": "13/13abd9596b79/20261003T013319Z",
+ "gm_copies": [],
+ "keys": [
+  "sayama-hikeshi-nenshi"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "13/13abd9596b79/20261003T013319Z",
+ "reason": "APIRequestContext.get: getaddrinfo ENOTFOUND city.sayama.saitama.jp",
+ "revision": "",
+ "sha256": "e859c18f0c0cc71ffed35c4e7ebc87cbb4f136116156f2de1588aeb71449533e",
+ "url": "https://city.sayama.saitama.jp/kurashi/anshin/bosai/bousaitaisei/shobodan/50nenshi/50nensi.files/1-1.pdf"
+}

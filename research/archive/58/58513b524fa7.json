@@ -1,0 +1,16 @@
+{
+ "captured": "2026-10-03T00:57:55+00:00",
+ "final_url": "https://web.archive.org/web/20260118235652id_/https://bunka.nii.ac.jp/heritages/detail/185066",
+ "first": "58/58513b524fa7/20261003T005755Z",
+ "gm_copies": [],
+ "keys": [
+  "bunka-yokota-inkyoya"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "58/58513b524fa7/20261003T005755Z",
+ "reason": "APIRequestContext.get: Timeout 60000ms exceeded.",
+ "revision": "",
+ "sha256": "d8eb23709bc612ca71815e1cbfdabace7cd0598c1efb6f06bba6ec8358115c2c",
+ "url": "https://bunka.nii.ac.jp/heritages/detail/185066"
+}

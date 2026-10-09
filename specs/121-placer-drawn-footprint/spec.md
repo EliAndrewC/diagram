@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-17
 
-**Status**: Draft
+**Status**: Done (2026-10-08): all three user stories landed (7a4ca9ec3, ef68b24c7, 44974634a) and T017, the test pinning the two sanctioned grove abutments, on 2026-10-08; the other open boxes carry their reasons in tasks.md "Closing status (2026-08-17)" - T007 went with the fixtures (166), T016/T018/T019/T022 belong to the town-tier conversion (research.md D8), T029 was run, T011/T032/T033 were the gate and stop-work of that landing (feature 330 audit)
 
 **Input**: User description: make the settlement placer test the rotated footprint it actually DRAWS, retire the circumscribed-circle collision as a verdict, and re-derive the two hamletgen density constants that exist only to compensate for those two defects - all in one pool re-roll, before the village tier is built on top of them.
 

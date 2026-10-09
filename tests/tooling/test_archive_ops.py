@@ -100,7 +100,10 @@ def test_the_consulted_backfill_takes_the_caches_urls_and_the_ledgers(tmp_path: 
     src.append(home, [src.line(src.context(root), "ledger-only.org/x", "rejected: not about it"), src.line(src.context(root), "cached.org/page", "pending")])
     ar.write_row(root, "https://done.org/y", {"url": "https://done.org/y", "outcome": "archived"})
     src.append(home, [src.line(src.context(root), "done.org/y", "cited:k")])
-    assert ops.consulted_urls(root) == ["https://Cached.org/Page", "https://ledger-only.org/x"]
+    src.append(home, [src.line(src.context(root), "https://www.jstage.jst.go.jp/article/a/1/0/1/_article", "pending")])
+    assert ops.consulted_urls(root) == ["https://Cached.org/Page", "https://ledger-only.org/x", "https://www.jstage.jst.go.jp/article/a/1/0/1/_article"], (
+        "a ledger URL keeps the spelling it was read at - J-STAGE answers only at www (feature 312)"
+    )
 
 
 def test_the_lookup_answers_by_url_key_and_words_and_says_when_nothing_is_held(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -115,8 +118,10 @@ def test_the_lookup_answers_by_url_key_and_words_and_says_when_nothing_is_held(t
     out = io.StringIO()
     assert ops.find(root, store, key="alpha", out=out) == 0
     assert "the GM's copy:" in out.getvalue() and "the GM's copy of alpha" in out.getvalue()
+    assert "attempts: https://a - " in out.getvalue(), "feature 312 FR-018: a key's source shows its attempts"
     out = io.StringIO()
     assert ops.find(root, store, terms="sixty mats|straw", out=out) == 0 and "url: https://a" in out.getvalue()
+    assert "attempts: https://a - " in out.getvalue()
     out = io.StringIO()
     assert ops.find(root, store, terms="sixty mats|rice", out=out) == 1 and "search the web" in out.getvalue()
 
@@ -156,3 +161,29 @@ def test_the_ledgers_writers_hand_their_urls_to_the_archiver_but_never_in_a_test
     assert src.archive_reads(tmp_path, ["https://a", "https://b"], runner) == 1
     assert calls[0][1].endswith("archive_ops.py") and calls[0][2:] == ["urls", "https://a", "https://b"]
     assert src.archive_reads(tmp_path, [], runner) == 0
+
+
+def test_find_prints_the_attempts_and_records_the_look(tmp_path: pathlib.Path) -> None:
+    """Feature 312 FR-017, FR-018: an archive look by URL prints what was tried before, then is itself an attempt."""
+    import io  # noqa: PLC0415
+
+    att = ops.src._attempts_mod()
+    att.add(tmp_path, "https://a.org/1", "0042", "the dike width", "not-found")
+    out = io.StringIO()
+    ops.find(tmp_path, type("S", (), {"dir": tmp_path})(), url="https://a.org/1", out=out)
+    assert "Q 0042: not-found - the dike width" in out.getvalue()
+    assert att.read(tmp_path)[-1]["route"] == "archive-find"
+
+
+def test_only_the_kept_uncited_pages_are_archived(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 312 FR-011, plan D8: the consulted backfill archives what the filter kept, and nothing else."""
+    import _uncited as un  # noqa: PLC0415
+
+    root, _store, _inbox = _world(tmp_path, monkeypatch)
+    monkeypatch.setenv("L7R_ATTEMPTS_ROOT", str(root))
+    un.kept(root, ["https://kept.org/a"], "source-filter")
+    (root / un.at.UNCITED).mkdir(parents=True)
+    (root / un.at.UNCITED / "0010-k.html").write_text("<p>K (https://written.org/b)</p>", encoding="utf-8")
+    ar.write_row(root, "https://written.org/b", {"url": "https://written.org/b", "outcome": "archived"})
+    got = ops.kept_only(root, ["https://kept.org/a", "https://rejected.org/c", *ops.kept_urls(root)])
+    assert got == ["https://kept.org/a"], "the rejected page is never archived, the written-up one already is"
