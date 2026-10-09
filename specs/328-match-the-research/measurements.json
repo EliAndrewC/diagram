@@ -1813,5 +1813,45 @@
       "readers of a farmstead privy": "undrawn_rolls (privies drawn against farm_fixtures_target), the 0047 seat rules (48 ft reach, four places, the sunny side), each house's fixtures list",
       "reading": "the household's privy over its sty needs a sty-to-household mapping and a privy that leaves its farmstead under every rule that reads one: E3"
     }
+  },
+  "reverts-seed-recurrence": {
+    "quantity": "the seeds newly failing under the reverted waves (69, 74, 81, 83, 84, 85 twice), by how often each recurs",
+    "observed": "2026-10-09",
+    "source": "m:reverts-refusal-census, m:wave84-fork-band-reverted, m:wave85-thread-floor-reverted",
+    "command": "make cohort N=48, once per wave and variant",
+    "method": "the newly failing seeds of each run counted across the seven runs; newly passing seeds (03, 10, 33, 906) noted",
+    "value": {
+      "recurring": {
+        "40": 5,
+        "42": 4,
+        "32": 3,
+        "04": 3,
+        "902": 2,
+        "43": 2,
+        "19": 2,
+        "12": 2
+      },
+      "seeds_counted": 18,
+      "runs": 7,
+      "newly passing across runs": "03, 10, 33, 906",
+      "reading": "a few marginal seeds flip whenever the field's geometry moves at all - 40 in five of seven runs - so the retake list for the whole family is these seeds, and their web and row rules are the work"
+    }
+  },
+  "batch10-pair": {
+    "quantity": "batch 10's timing pair (waves 83-86): 277593132 -> 3197171ce",
+    "observed": "2026-10-09",
+    "source": "dev/perf-log/20261009T221243Z-328-start-perfbase.json, dev/perf-log/20261009T221547Z-328-end-base.json",
+    "command": "make perf in two detached worktrees, back to back; make perf-report AGAINST=328-start",
+    "method": "the pair on a quiet host (load 1.9 -> 1.1); the batch's engine diff read with git diff 277593132 3197171ce -- l7r pool",
+    "value": {
+      "band": 1,
+      "reference_total_pct": -3.4,
+      "households_10_pct": -1.8,
+      "households_20_pct": -0.9,
+      "households_40_pct": 0.4,
+      "largest_growth": "40 households seed 25 +0.7% (homesteads +0.1 s)",
+      "engine_diff": "19 added lines in 4 files, every one a comment or docstring recording a fix that failed or was held: no executed code changed",
+      "reading": "the growth is run-to-run jitter: nothing the roll executes changed between the two commits"
+    }
   }
 }
