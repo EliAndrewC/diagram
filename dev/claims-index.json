@@ -23977,6 +23977,19 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/track.py::connector_track#track clear of the pond and the brook": {
+  "code": "15643d1d8f079a55",
+  "core": "8c18acae0e41368f",
+  "date": "2026-10-08",
+  "note": "neither cited page covers keeping the track out of the pond, the drain brook or a watercourse, so UNRESEARCHED is the right label: 0081 covers only the marsh and the crop, and the tread on a steading is 0246's",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track drawn taut": {
   "code": "cde8debecb77dfa1",
   "core": "8c18acae0e41368f",
@@ -24022,14 +24035,6 @@
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::connector_track#track steered clear of the pond, the drain brook and the watercourses (ranked with the crop; a crossing is tolerated in the fallback)": {
-  "code": "8c18acae0e41368f",
-  "core": "8c18acae0e41368f",
-  "date": "2026-10-08",
-  "note": "track steered clear of the pond, the drain brook and the watercourses (ranked with the crop; a crossing is tolerated in the fallback)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#wet, then steadings, then crop": {
   "code": "38a11341fee79066",
@@ -48134,15 +48139,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._sun_keepouts#every canopy tree out of the plots' sun": {
-  "code": "2cc176e82f06d5fe",
-  "core": "07d4abbd3559cf71",
-  "date": "2026-10-03",
-  "note": "50 ft sun box, bamboo reach on request",
+  "code": "8d4779687ca0abca",
+  "core": "804b7a51874f2bc9",
+  "date": "2026-10-08",
+  "note": "the reach defaults to CANOPY_SHADE_FT, 50 ft, as the page sets; the shape of the clear box is drawn in sun_box, not here; the memo changes nothing about what the method returns",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:c3578d51ce1e884d",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._urban_keepouts#swept halo": {
