@@ -403,6 +403,8 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \
 	    printf '\n\033[1mWHEN THE GATE IS GREEN, dispatch %s review agent(s), ONE PER UNIT\033[0m - each Agent call is the unit'"'"'s check (its slug begins with it) and takes the contents of its prompt file named above (.git/review-snapshot/<unit>/dispatch.md). A dispatch beside a running gate, or naming more than one unit, is refused (feature 294); a turn may not end with the gate green and an owed unit undispatched.\n' "$$n"; \
 	  fi
+	@: "GUARD_EDIT_OK: feature 328 batch 7 - ONE GATE PER TREE (scripts/gates/one-gate.sh says why)."; \
+	  bash "$$(git rev-parse --show-toplevel)/scripts/gates/one-gate.sh"
 	@printf '\nstarting the gate in the background - its verdict arrives as a task notification.\n\n'
 	@root=$$(git rev-parse --show-toplevel); PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$root/.git/verify-gate.log" 2>&1 &
 
