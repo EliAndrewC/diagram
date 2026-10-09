@@ -16,9 +16,10 @@ import pathlib
 import sys
 
 import pytest
+
 from tests._scripts import script
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202

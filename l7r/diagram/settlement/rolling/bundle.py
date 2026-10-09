@@ -271,7 +271,9 @@ class BundleGeomMixin:
             garden side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: southeast, southwest, east or west of the house
             forecourt kept on a no-rice farm - UNRESEARCHED: the yard's ground reserved where no threshing floor is drawn
             storehouse on the north wall - research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall
+            storehouse seam - CONVENTION: the north-wall kura annex reserved 1 ft off the house wall
             byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall on the flank away from the garden
+            outer stable off the wall - GUESS research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the yard-shed byre set `YARD_SHED_GAP_FT[0]` (6 ft) off the house, the near end of the page's guessed 6 to 12 ft
             dispersed farm's grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the farm's own grove on its rolled sides, turned to the wind
             south band kept off the yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: on a sun-keeping map the south band stands `CANOPY_SHADE_FT` plus 1.7 x 1.15 crown radii beyond the yard
         """
@@ -402,6 +404,7 @@ class BundleGeomMixin:
         Research:
             household well where none is near - research/questions/0196-communal-wells-ido.drawing.html: a pocket among the doors it serves
             pocket beside the yard - UNRESEARCHED: on the dooryard side, on the flank away from the garden
+            pocket size and depth - GUESS: the wellhead with a 3 ft margin round it, the pocket set 2 ft below the yard line; no page gives either figure
         """
         if not getattr(self, "_household_well", False):
             return

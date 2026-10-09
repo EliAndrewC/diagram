@@ -18,6 +18,7 @@ import pathlib
 import sys
 
 import pytest
+
 from tests._scripts import script
 
 REPO = pathlib.Path(__file__).resolve().parents[5]

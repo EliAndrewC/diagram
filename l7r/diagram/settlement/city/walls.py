@@ -323,6 +323,9 @@ class WallsMixin:
             gate tower size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 52 x 30 ft
             search along the wall - UNRESEARCHED: 78 to 240 px, both flanks at each step
             clear of a ward gate - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: KIDO_TOWER_KEEPCLEAR
+            clear of the gate furniture - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the tower kept off this gate's guard house and inspection hall, the gate's buildings stepped apart "until nothing overlaps" (its box taken as 62 ft square plus 3 px against each, a margin no page gives); the page's "about 36 ft clear around each" keeps the HOUSES off ("the road's own strip already keeps the houses off one side") and is reserved round all three by `_gate_caption`, not between the gate's own buildings
+            nudged onto the berm - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the tower centered on the patrol road inside the wall, nudged 30 ft inward from the wall line so its footing stands on the berm
+            gate tower square to the wall - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: turned to the wall's own line where it sits (the wall's tangent there), not to the gate's line
         """
         # the gate guard TOWER straddles the WALL beside the gate, tilted to the wall there and NUDGED
         # INWARD so its footing stands on the berm (below). It belongs AT the gate: try the near-gate

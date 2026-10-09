@@ -88,9 +88,9 @@ def _blocked():  # noqa: ANN202 - the record's module, imported on first use so 
 def _attempts_mod():  # noqa: ANN202 - the attempts log (feature 312), which imports this module: imported on use
     if str(HERE) not in sys.path:
         sys.path.insert(0, str(HERE))
-    import _attempts  # noqa: PLC0415
+    import attempts  # noqa: PLC0415
 
-    return _attempts
+    return attempts
 
 
 def now() -> str:
