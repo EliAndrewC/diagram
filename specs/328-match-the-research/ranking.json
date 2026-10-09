@@ -5799,7 +5799,7 @@
   "flag": "",
   "found": "wave 61, impl-drift",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "wave": "70",
   "scope": "kept"
  },
  {
@@ -12436,7 +12436,7 @@
   "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#a main-door bath drawn",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "spec-fidelity, amendment 19 round 1: each house rolls its bath's wall at 0.8 beyond the stable wing (research/questions/0044-baths-on-the-farm-furo.html), but a main-door bath never draws - the threshing yard covers the front wall, so every main-door roll falls to the stable end (0 of 22 baths at the main door on the five pool hamlets; 0 of 10 at the base where Kuwabata and Sawada rolled main_door) - so the maps draw ~100% beyond the stable; seat the main-door bath beside the door clear of the yard (bath_room_seats/bath_room_slides, the yard's placement), and bring research/questions/0044-baths-on-the-farm-furo.drawing.html's 'how often each is drawn is a GUESS' in line",
+  "fix": "spec-fidelity, amendment 19 round 1: each house rolls its bath's wall at 0.8 beyond the stable wing (research/questions/0044-baths-on-the-farm-furo.html), but a main-door bath never draws - the threshing yard covers the front wall, so every main-door roll falls to the stable end (0 of 22 baths at the main door on the five pool hamlets; 0 of 10 at the base where Kuwabata and Sawada rolled main_door) - so the maps draw ~100% beyond the stable; seat the main-door bath beside the door clear of the yard (bath_room_seats/bath_room_slides, the yard's placement), and bring research/questions/0044-baths-on-the-farm-furo.drawing.html's 'how often each is drawn is a GUESS' in line | UPDATED (wave 70, 2026-10-09, measured on the five pool hamlets' meta.bath_seats_drawn): of 22 baths, 16 stand at the stable end, 6 against the floored rooms and 0 by the main door (Kuwabata 4 of 5 at the floored rooms) - against 0044's shares, about 0.8 / 0.03 / the rest; the floored rooms take far more than their 0.03 because a roll that finds its wall taken falls to the other walls (the GUESS fallback, `bath_room_seats`), so seating the main-door bath clear of the yard must also keep the floored rooms to their share",
   "files": [
    "l7r/diagram/settlement/homestead_parts/fixture_seats.py",
    "research/questions/0044-baths-on-the-farm-furo.drawing.html"

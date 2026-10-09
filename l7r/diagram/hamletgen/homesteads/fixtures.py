@@ -151,9 +151,14 @@ _PIT_CANDIDATES = 8  # the nearest edge points tried, nearest first
 # the far end of its stable wing (the house's -x end, where the doma and its stable are), or joined to its floored rooms (the
 # +x end) - three attested places; the registers count the wall house by house - 17 of 21 baths beyond the stable at
 # Shimohasuda, 12 of 15 at Ukiya - so each house rolls its own at that share (feature 328; it was one wall per hamlet at even
-# odds); the third, "found in only a few houses, most of them headmen's", is the last wall offered. The room abuts the wall: joined, not beside (`fixture_seats.bath_room_seats`, `joined_to_house`).
+# odds); the floored rooms are rolled at their own small share (`FixtureForms.bath_floored_share`, 0.03: the one peasant's
+# bath of the registers' 36), and the main door takes the rest, this project's choice (0044's drawing page). The room abuts
+# the wall: joined, not beside (`fixture_seats.bath_room_seats`, `joined_to_house`).
 BATH_STABLE_SHARE = 0.8
-"""Research: bath room wall - research/questions/0044-baths-on-the-farm-furo.html: beyond the stable wing at 17 of 21 and 12 of 15 registered baths, beside the main door the rest; rolled per house"""
+"""Research:
+    bath room wall - research/questions/0044-baths-on-the-farm-furo.html: beyond the stable wing at 17 of 21 and 12 of 15 registered baths; rolled per house
+    the main door the rest - research/questions/0044-baths-on-the-farm-furo.drawing.html: the registers give the rest no place; drawing it by the main door, where the earliest registers' baths stood, is this project's choice
+"""
 # THE PERSIMMON'S SIDE (269 B14, research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html): "the dooryard in front of the house, most often, and behind it" -
 # the front the likelier, by how much no page says, so this hamlet's front share is rolled in this band (calibrated liberty).
 PERSIMMON_FRONT_BAND = (0.60, 0.85)

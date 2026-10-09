@@ -1,44 +1,46 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "0dd06420cfffb2f3f802d1b4b358f9253086bfbf1b2d66b23c311be96ba9fce0",
+ "plan_sha256": "fb029e52a79d9a31e78be4e7c7db7cd66fcd91c4403716da24f4f878f137d21d",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W69-hold-215",
-   "summary": "Row 215 (_canal_ft#canal narrows at each offtake) held and re-tiered E2 -> E3 on measure instead of working the five newly refused layouts in this wave",
-   "class": "within",
-   "why": "The spec's Edge Case 'A fix that changes many maps' provides exactly this route: where making the failing maps pass takes more work than the row's tier, the row takes that work's tier. Five seeds refused by four different rules (row_rules, web needle loops, the brook rule, water_rules) is a change across modules, FR-003's E3. Re-tiering by measured work is the request's own ordering ('rank by how much implementation work... go from easiest to hardest'); the row stays in the ranking, kept in scope, to be fixed in tier order. Same route as the accepted holds of the garden flank (wave 60) and the privy seats (wave 62)."
+   "id": "W70-1",
+   "summary": "Row 114 (E1) fixed by stating on 0044's drawing page the shares the code already rolls (0.8 beyond the stable wing, 0.03 joined to the floored rooms); code unchanged",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged from rounds 1-2. The code's 0.8 and 0.03 come from 0044.html's own counted registers, and the drawing page's GUESS label was out of date. Moving the code to match that label would move the implementation away from the research."
   },
   {
-   "id": "W69-row-is-the-wait",
-   "summary": "The re-tiered row itself carries the layouts' work (its fix names them, after: []) rather than a separate found row",
-   "class": "within",
-   "why": "The layouts' breakage is the row's own fix's work, not a separate departure from research; the accepted precedents (ranking rows for wave 60 and 62) record it the same way."
+   "id": "W70-2",
+   "summary": "The main-door share (the rest) recorded on the drawing page and the bath-room modal as this project's choice",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged. The record does not place the remaining baths, so there is no research target. The doctrine requires a choice to be labeled as one, and drawing page line 9 now does so."
   },
   {
-   "id": "W69-E3-not-E4",
-   "summary": "Tier E3, not E4",
+   "id": "W70-3",
+   "summary": "bath_room_seats#bath room seat fallback and bath_room_slides' spot along a wall labeled GUESS",
    "class": "within",
-   "why": "0069 settles what the implementation should be (the square-root law, frame.taper_w); the open work is placement, not research. FR-003."
+   "why": "Unchanged. 0044 gives the walls and the shares, not a fallback order or a spot."
   },
   {
-   "id": "W69-revert",
-   "summary": "The taper reverted; code and maps as wave 68 left them",
+   "id": "W70-4",
+   "summary": "hamletgen/homesteads/fixtures.py::BATH_STABLE_SHARE split: 'bath room wall' cites 0044.html for the counts only; 'the main door the rest' cites the drawing page's choice sentence; the comment above it says the floored rooms are rolled at 0.03 and the main door takes the rest as this project's choice",
    "class": "within",
-   "why": "Constitution XIII: nothing regressed is kept. The engine delta is a docstring only (comb.py), so no behavior change ships."
+   "why": "Round-2 item confirmed. Confirmed in fixtures.py:150-161 and in claims-index.json, where both claims are IN-STEP, dated 2026-10-09, and the main-door claim's page is the drawing page. A grep over l7r/ finds no claim that cites 0044.html for the main door. The remaining main-door claims (fixture_seats.py:139, 489) cite the drawing page's choice. The narrowing this decision carried is gone: the claim now records a choice, not research."
   },
   {
-   "id": "W69-claim-as-found",
-   "summary": "The Research: claim still states 'equal linear steps' and stays DRIFTED",
+   "id": "W70-5",
+   "summary": "The drawn seats (16 / 6 / 0 of 22) left to ranked row 154 (lay_fixtures#a main-door bath drawn, E3)",
    "class": "within",
-   "why": "The Edge Case: 'its claim stays as found'. No rewrite of the claim toward the code, so no FR-004 exception."
+   "why": "Unchanged. Ranking row 154 carries the measured counts, and the plan names the row."
   },
   {
-   "id": "W69-failed-fix-recorded",
-   "summary": "The failed fix recorded in _canal_ft's docstring with its measurement key",
+   "id": "W70-6",
+   "summary": "Whether the bath_seat settlement choice should exist is held for the GM",
    "class": "within",
-   "why": "XIV as operationalized (CLAUDE.md, docs/spec-kit-and-reviews.md): record a fix that FAILED at the point of change. No rendering decision changed, so spec.md's Decisions Recorded owes no entry."
+   "why": "Unchanged. It is not a ranked finding, no kept map sets it, and it is held in claims-followup.md."
   }
  ],
  "verdict": "CLEAR"

@@ -135,7 +135,8 @@ class FixtureForms:
     Research:
         privy seat weights - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: stable 35, yard 30,
             front 20, barn 15 (the default; a hamlet rolls its own about them, `hamletgen/homesteads/fixtures.py`)
-        bath room beyond the stable wing - research/questions/0044-baths-on-the-farm-furo.html: most baths there, 17 of 21 at Shimohasuda and 12 of 15 at Ukiya, so 0.8; the main door the rest, each house rolled
+        bath room beyond the stable wing - research/questions/0044-baths-on-the-farm-furo.html: most baths there, 17 of 21 at Shimohasuda and 12 of 15 at Ukiya, so 0.8
+        the main door the rest - research/questions/0044-baths-on-the-farm-furo.drawing.html: the registers give the rest no place; drawing it by the main door, where the earliest registers' baths stood, is this project's choice, each house rolled
         bath room joined to the floored rooms - research/questions/0044-baths-on-the-farm-furo.html, research/questions/0044-baths-on-the-farm-furo.drawing.html: of the two registers' 36 baths, one joined to the floored rooms was a peasant's (the other a headman's; a third, at Kozutsumi in 1771, a headman's too) - so 1 in 36, 0.03, on a hamlet, which has no headman
         persimmon front share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
             0.7 by default
@@ -483,7 +484,9 @@ def bath_wall(u: float, forms: FixtureForms) -> str:
     """The wall a house's bath room is joined to, from its roll `u`: beyond the stable wing at `bath_stable_share`, the
     floored rooms at `bath_floored_share` (0.03), else beside the main door (feature 328: the floored rooms were only a fallback).
 
-    Research: the three walls rolled - research/questions/0044-baths-on-the-farm-furo.html: most beyond the stable, a few at the floored rooms, the rest by the main door"""
+    Research:
+        the three walls rolled - research/questions/0044-baths-on-the-farm-furo.html: most beyond the stable, a few at the floored rooms
+        the rest by the main door - research/questions/0044-baths-on-the-farm-furo.drawing.html: this project's choice, where the earliest registers' baths stood"""
     if u < forms.bath_stable_share:
         return "stable_end"
     return "floored_rooms" if u < forms.bath_stable_share + forms.bath_floored_share else "main_door"
@@ -500,8 +503,7 @@ def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float, yard: 
 
     Research:
         three attested walls - research/questions/0044-baths-on-the-farm-furo.drawing.html: the rolled wall first
-        bath room seat fallback - research/questions/0044-baths-on-the-farm-furo.drawing.html: the floored rooms only where
-            neither wall has room
+        bath room seat fallback - GUESS: where the rolled wall has no room the other attested walls are tried in table order; 0044 gives each house's place and its share but no fallback
         places along each wall - UNRESEARCHED: 0.22 of the house either side of the door or just past the yard; an end
             wall's middle and quarters"""
     front, side = hh / 2 + d / 2, hw / 2 + d / 2
@@ -523,7 +525,9 @@ def bath_room_slides(first: str, hw: float, hh: float, w: float, d: float, step:
     ends, `first`'s wall first: offered after the recorded seats, so a house whose recorded seats are taken by its yard,
     beds, byre or retirement house still joins its bath to a wall where the room fits (feature 287: every kind is laid).
 
-    Research: anywhere along the three walls - research/questions/0044-baths-on-the-farm-furo.drawing.html"""
+    Research:
+        the three walls - research/questions/0044-baths-on-the-farm-furo.drawing.html: by the main door, at the far end of the stable wing, joined to the floored rooms
+        anywhere along the walls - GUESS: the spot along a wall slid toward either end, and the fall to the other walls in table order; 0044 gives the walls, not the spot"""
     front, side = hh / 2 + d / 2, hw / 2 + d / 2
     table = {
         "main_door": [(u, front, w, d) for u in along(max(0.0, (hw - w) / 2), step)],

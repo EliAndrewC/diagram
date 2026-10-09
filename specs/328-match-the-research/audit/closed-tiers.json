@@ -406,6 +406,7 @@
  "l7r/diagram/settlement/homestead_parts/belt_law.py::MIN_BELT_DEPTH_FT#least belt depth": "E1",
  "l7r/diagram/settlement/homestead_parts/belt_law.py::the village belt#its west arm on inashiro": "E0",
  "l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._find_appurtenances#garden on a sunny side": "E0",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms": "E1",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights": "E1",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": "E1",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall": "E1",

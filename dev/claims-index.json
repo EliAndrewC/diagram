@@ -8908,29 +8908,50 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_STABLE_SHARE#bath room wall": {
-  "code": "6092ecfad216288a",
+  "code": "4501a66f286d1b11",
   "core": "54fee85181737233",
-  "date": "2026-10-07",
-  "note": "0.8 from 17/21 and 12/15, main door attested",
+  "date": "2026-10-09",
+  "note": "0.8 matches the counts of baths beyond the stable wing: 17 of 21 (0.81) and 12 of 15 (0.80); the drawing page's \"about four in five\", chosen per house",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
-   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_STABLE_SHARE#the main door the rest": {
+  "code": "3be57af9fb6fe638",
+  "core": "54fee85181737233",
+  "date": "2026-10-09",
+  "note": "the drawing page records the main door for the rest as \"a place those registers do not give for them ... this project's choice\", where the earliest registers' baths stood; the 0.03 floored-rooms share in the comment matches \"the one peasant's bath of the two registers' 36\"",
+  "pages": {
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
+  },
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
+   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
+   "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
+   "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#bath room share": {
   "code": "cfbf5e572099fa35",
   "core": "90598b6bce843199",
-  "date": "2026-10-03",
-  "note": "two or three in ten",
+  "date": "2026-10-09",
+  "note": "0.20-0.30 is the page's \"two or three in ten\" from the 1824 and 1842 registers",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:759b142f7e624c2a",
+   "0044-baths-on-the-farm-furo.html:cd48fd2aad413cde"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#coop share": {
@@ -33800,23 +33821,25 @@
   "code": "30110d7bf2196ac6",
   "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "the claim's wood shed \"about 9.5 ft off a wall\" against 0043's \"about 6 ft (a ken) off a wall\" and 0036's \"a step off the wall\"; the figure is the placer's, not this constant's, so check the placer and fix it or the claim; the yard, bed sides, fixtures and bath match",
+  "note": "The claim puts the wood shed \"about 9.5 ft off a wall\", but 0043 stands it \"about 6 ft (a ken) off a wall\". Either the placer's offset should be one ken, or the claim and 0043's drawing page should record the extra clear strip as a GUESS. The other parts of the claim match the pages: the yard beside its house, the bed on the sides 0038 allows, fixtures seated on the plot, and the bath joined to the main house. 0044's new placement shares are all places joined to the house, so the exemption still fits.",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html": "bef5d458385c0006",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129",
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "562bde00d1c873bf",
+  "research": "05857c7127a1c04f",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:0b02f5e3492a4ce2",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:b4f6885af6bd959a",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
-   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53"
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
+   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
+   "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66"
   ],
   "verdict": "DRIFTED"
  },
@@ -45444,34 +45467,45 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::BATH_DEPTH_FT#bath room depth": {
   "code": "7a78e1160f647fde",
   "core": "5efeb905b7d48b3f",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-09",
+  "note": "6 ft out is one tsubo's side, matching the page's \"6 by 6 to 6 by 12 ft\"",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::BATH_LENGTH_FT#bath room length": {
   "code": "84356f925e6fc9a0",
   "core": "c32b961f71751740",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-09",
+  "note": "6-12 ft along the wall, from the registers' 1-2 tsubo",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
+   "0044-baths-on-the-farm-furo.html:cd48fd2aad413cde"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::BATH_WALLS#bath room walls": {
   "code": "ec0a47d65d035e9b",
   "core": "822ec61a0928149f",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-09",
+  "note": "the three attested places; the page records that the fourth place, the back room, is not drawn",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
+   "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::CANOPY_PAD#plumbing": {
@@ -45499,16 +45533,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room beyond the stable wing": {
-  "code": "53fbc36faf2b590f",
+  "code": "61a565c3a231c1c0",
   "core": "91ff5c18d9aea9f4",
-  "date": "2026-10-08",
-  "note": "17/21 and 12/15 give 0.8",
+  "date": "2026-10-09",
+  "note": "17/21 and 12/15 are the research page's counts, 29/36 = 0.81, so `bath_stable_share` 0.8 is right",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
-   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb"
   ],
   "verdict": "IN-STEP"
@@ -45516,20 +45549,20 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms": {
   "code": "a56f51ff924e2d8c",
   "core": "91ff5c18d9aea9f4",
-  "date": "2026-10-08",
-  "note": "code's 0.03 (1 in 36) and 0.8 are calibrated on §59/§61 counts, but the cited drawing page still says \"Which place a bath room takes is chosen at random, and how often each is drawn is a GUESS\"; the drawing page should record the counted shares",
+  "date": "2026-10-09",
+  "note": "0.03 is the page's \"about three in a hundred, the one peasant's bath of the two registers' 36\"; the hamlet has no headman",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f",
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
-  "research": "6e9edb0416109357",
+  "research": "0f57c8c9868911f7",
   "rests": [
    "0044-baths-on-the-farm-furo.drawing.html:23b7ceda518aa3ec",
-   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#manure form": {
   "code": "5ad1170fbb2bf9b6",
@@ -45582,6 +45615,21 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#the main door the rest": {
+  "code": "b7ec438868451a04",
+  "core": "91ff5c18d9aea9f4",
+  "date": "2026-10-09",
+  "note": "the drawing page says the registers give the rest no place and records drawing them by the main door, rolled per house, as this project's choice; the earliest registers do put baths there",
+  "pages": {
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
+  },
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
+   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureUnlaid#plumbing": {
@@ -46082,19 +46130,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#bath room seat fallback": {
-  "code": "3a2e598bdda8ca85",
+  "code": "68c5cf3333bd0035",
   "core": "f5afc70d3cfe7e81",
-  "date": "2026-10-05",
-  "note": "the page rolls the bath room among all three places, and puts a headman's bath joined to the floored rooms; here the floored rooms are only a fallback and never the rolled first seat",
-  "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
-  },
-  "research": "eac07ff70a225610",
+  "date": "2026-10-09",
+  "note": "GUESS is right: 0044 gives each house's place and the shares, and says nothing on what happens when a wall has no room",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0044-baths-on-the-farm-furo.drawing.html:23b7ceda518aa3ec",
-   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf"
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#places along each wall": {
   "code": "d5fd8f8343f0fdb9",
@@ -46107,36 +46152,70 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#three attested walls": {
   "code": "093461e14ef29180",
   "core": "f5afc70d3cfe7e81",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-09",
+  "note": "the house's rolled wall is tried first among the three attested places",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb"
+  ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_slides#anywhere along the three walls": {
-  "code": "67ef8b2db8c3f77e",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_slides#anywhere along the walls": {
+  "code": "13dbe07d3a3de1db",
   "core": "82b8d181a404abde",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-09",
+  "note": "the page names the walls but is silent on the spot along a wall and on the order to try the other walls; correctly marked a GUESS",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_slides#the three walls": {
+  "code": "46346f5470e94429",
+  "core": "82b8d181a404abde",
+  "date": "2026-10-09",
+  "note": "code offers exactly the three attested places (main door, stable end, floored rooms) on the house's walls, joined to the house; the fourth \"back room\" place is left undrawn, as the page says",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
+   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_wall#the rest by the main door": {
+  "code": "5de10166927eed47",
+  "core": "38ba3a12d31b07a5",
+  "date": "2026-10-09",
+  "note": "the `main_door` fallback is the drawing page's recorded choice, where the 1770-71 baths stood",
+  "pages": {
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
+  },
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
+   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_wall#the three walls rolled": {
-  "code": "7a1ae72b14343327",
+  "code": "b74d168ae47546a5",
   "core": "38ba3a12d31b07a5",
-  "date": "2026-10-08",
-  "note": "most beyond the stable, a few at the floored rooms, the rest by the main door",
+  "date": "2026-10-09",
+  "note": "all three walls are attested places (main door, beyond the stable, floored rooms) and each house rolls one; the fourth place, a back room found in one house, is left out, which the drawing page records",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
-   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
+   "0044-baths-on-the-farm-furo.drawing.html:68723ee2addeabeb",
    "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
@@ -46154,12 +46233,15 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#bath room size": {
   "code": "d97bb4ffc8b91cf6",
   "core": "78e76fbc7145679f",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-09",
+  "note": "6 ft out by a length rolled over 6-12 ft and rounded to whole feet, inside \"6 by 6 to 6 by 12 ft\"",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#coop size": {
@@ -46198,12 +46280,12 @@
   "code": "1ae5209dead77eeb",
   "core": "78e76fbc7145679f",
   "date": "2026-10-09",
-  "note": "6x6 is one of the sixteen and the bath's one tsubo",
+  "note": "6 x 6 ft is one tsubo, the low end of the bath's range, and lies within the privy table's 5x5 to 27x15 sizes (PRIVY_SIZES_FT holds (6, 6))",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f",
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
   },
-  "research": "3b133f270a5db096",
+  "research": "3f14ee71151c4b1b",
   "rests": [
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636"
@@ -46300,27 +46382,32 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::joined_to_house#bath room of the house": {
   "code": "cb4d45a92895d511",
   "core": "04eab15772aedfdc",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-09",
+  "note": "the predicate makes the bath a room of the main house: one edge on a house wall, not inside it",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
+   "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66",
+   "0044-baths-on-the-farm-furo.html:6b919ac1dcb9cb1f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
   "code": "88f8fe1cb1a4cacd",
   "core": "6aaf843c03b518fc",
   "date": "2026-10-09",
-  "note": "joined to the main house or refused",
+  "note": "a bath with no room on the house is refused rather than drawn standing on its own, as no bath stood alone before Meiji",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
-  "research": "eac07ff70a225610",
+  "research": "59e9ca3130a28b52",
   "rests": [
-   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
-   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
-   "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66"
+   "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66",
+   "0044-baths-on-the-farm-furo.html:31acf56cd2a3b016",
+   "0044-baths-on-the-farm-furo.html:6b919ac1dcb9cb1f"
   ],
   "verdict": "IN-STEP"
  },

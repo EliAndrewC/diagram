@@ -1889,3 +1889,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T167 wave 69's row held and re-tiered on measure (FR-003, FR-004)
       research: rendering
       verify: DONE. plan CLEAR (wave 69); row 215 held and re-tiered E3 on measure: the square-root canal taper, built and reverted, took the cohort 48/54 -> 45/54 across four rules; the failed fix recorded at _canal_ft
+
+## Phase 71 - wave 70 (amendment 69): the bath room's counted shares on 0044's drawing page
+
+- `research/questions/0044-baths-on-the-farm-furo.drawing.html` (+ notes, originals); the three bath modals;
+  `homestead_parts/fixture_seats.py` (two claim labels).
+
+- [x] T168 wave 70's row (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 70, round 3); 0044's drawing page states the bath room's counted shares (the main-door share this project's choice); the bath modals and three claims follow it; record checks clean; claims in step; no map moved
+- [x] T169 the claims re-checked by `impl-drift` and the record checks answered (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 70, round 3); 0044's drawing page states the bath room's counted shares (the main-door share this project's choice); the bath modals and three claims follow it; record checks clean; claims in step; no map moved

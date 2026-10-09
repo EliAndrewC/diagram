@@ -12,7 +12,7 @@ the stable were joined to it or stood a step off is not recorded, and no farm ba
 own before 1868.
 
 Depiction: The map draws a bath room, at the two or three homesteads in ten that keep one, as a small room joined to the far
-end of the farmhouse's stable wing, and against its floored rooms only where that wall has no space for it; never as a shed standing
+end of the farmhouse's stable wing at about four in five of them and beside the main door at most of the rest, the place drawn house by house; never as a shed standing
 apart in the yard. A tub is drawn inside it so the room reads as a bath from above; the real tub stood under the house's
 roof, unseen.
 

@@ -17,8 +17,8 @@ Guesses:
 - That a headman's house has its bath joined to its floored rooms: two of the three such baths found were in headmen's
   houses, but no record says every headman's bath stood there.
 
-Depiction: The map draws a bath room as a small room joined to the farmhouse - beside its main door, at the far end of its
-stable wing or against its floored rooms - and never as a shed standing apart in the yard. A tub is drawn inside it so the
+Depiction: The map draws a bath room as a small room joined to the farmhouse - beside its main door, at its stable end
+(beyond the stable wing, where the house has one) or against its floored rooms - and never as a shed standing apart in the yard. Two or three farms in ten are given one, the share late in the Edo period rather than the very few of about 1770. Most stand at the stable end, as most stood beyond the stable wing; the rest, save a few at the floored rooms, are drawn by the main door, where the earliest baths stood. A tub is drawn inside it so the
 room reads as a bath from above; the real tub stood under the house's roof, unseen.
 
 Name: bath room

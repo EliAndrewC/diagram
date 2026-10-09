@@ -12,7 +12,7 @@ stood out beyond the house's stable wing rather than by its door. No farm bath i
 its own before 1868.
 
 Depiction: The map draws a bath room, at the two or three homesteads in ten that keep one, as a small room joined to the
-farmhouse beside its main door, and against its floored rooms only where that wall has no space for it; never as a shed standing
+farmhouse beside its main door; never as a shed standing
 apart in the yard. A tub is drawn inside it so the room reads as a bath from above; the real tub stood under the house's
 roof, unseen.
 

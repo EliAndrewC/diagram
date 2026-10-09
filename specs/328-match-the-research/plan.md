@@ -1103,6 +1103,32 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   point of change); the code and the maps are as wave 68 left them.
 - **Verification**: the cohort's two runs (m:wave69-canal-taper-reverted); `spec-fidelity`.
 
+## Wave 70 (amendment 69, 2026-10-09) - batch 7
+
+- **Scope**: the E1 row `FixtureForms#bath room joined to the floored rooms` (found at wave 61): the code's shares for a bath
+  room's place (0.8 beyond the stable wing, 0.03 joined to the floored rooms) are calibrated on 0044's counted registers, but
+  0044's drawing page still said which place a bath takes "is chosen at random, and how often each is drawn is a GUESS". The
+  page now states the shares drawn - beyond the stable wing about four in five, joined to the floored rooms about three in a
+  hundred, by the main door the rest - linking the research page for the counts; the code is unchanged.
+- **The record**: quote-check found the main-door share given no place by those registers (now said to be this project's
+  choice, where the earliest registers' baths stood) and a PARTIAL on the "three houses of two villages" (the furo passage,
+  the research page's own, added to the drawing page's note with its original); record-format clean; the three bath modals'
+  depiction checks: the two settlement-choice modals no longer present the code's floored-rooms fallback (DRIFTED) as the rule
+  and the stable-end one tells the shares house by house; the bath room's own modal tells the later share, the main door's
+  share and the stable END (most map houses have no stable wing). Claims: `bath_room_seats#bath room seat fallback` and
+  `bath_room_slides`' spot along a wall labeled GUESS (0044 gives the walls and the shares, no fallback or spot).
+- **Left for the record**: whether the `bath_seat` settlement choice should exist - no kept map sets `meta.bath_seat`
+  (the hamlets record per-house seats in `meta.bath_seats_drawn`); the measured seats (Kuwabata 4 of 5 at the floored rooms,
+  no main door on any hamlet) are ranked row 154's work (`lay_fixtures#a main-door bath drawn`, E3), its text updated with
+  the measured 16 / 6 / 0 of 22 so the floored rooms' excess survives the main-door fix; the bath_seat question is held for
+  the GM in claims-followup.md. Spec-fidelity round 1: the two claims that still credited the main-door share to the research
+  page (`bath_wall#the three walls rolled`, `FixtureForms#bath room beyond the stable wing`) now cite the drawing page's
+  sentence naming it this project's choice; round 2: the hamlets' own `BATH_STABLE_SHARE` split the same way, and the comment
+  above it no longer calls the floored rooms the last wall offered (rolled at 0.03). A grep finds no other claim crediting the
+  main door to the research page.
+- **Verification**: quote-check, record-format, modal-depiction (rounds to clean), the claims triage and `impl-drift`;
+  `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
