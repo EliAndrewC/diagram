@@ -391,3 +391,17 @@ def test_a_pulled_walk_is_split_at_the_old_joint_and_written_back_as_its_two_rec
     refuse["lane"] = 0
     assert not J._split_committed(S(), lanes, (0, -1, 1, 0), walk, (40.0, 0.0), [], [], [])  # type: ignore[arg-type]
     assert not J._split_committed(S(), lanes, (0, -1, 1, 0), walk, (0.0, 0.0), [], [], [])  # type: ignore[arg-type]
+
+
+def test_a_joint_that_arrives_at_a_farm_is_not_pulled_out_of_its_reach() -> None:
+    """Feature 328 wave 90 (cohort seed 902): a door path met end to end at its door was pulled straight and split back at the
+    joint's foot on the new line, 4 px off, out of the law's arrival reach. `arrives_off` names that move."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.ways.joints import arrives_off
+
+    s = SimpleNamespace(M={"houses": [{"x": 0.0, "y": 0.0, "w": 30.0, "h": 20.0}]})
+    joint = (0.0, 58.0)  # 58 ft from the house: within the 60 ft reach
+    assert arrives_off(s, joint, [(-100.0, 62.0), (100.0, 62.0)]), "its foot 62 ft off: out of reach"
+    assert not arrives_off(s, joint, [(-100.0, 59.0), (100.0, 59.0)]), "its foot 59 ft off: still in reach"
+    assert not arrives_off(s, (0.0, 200.0), [(-100.0, 210.0), (100.0, 210.0)]), "a joint that never arrived is not held"

@@ -297,6 +297,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
     """Rewrite the first joint that can be improved; False when none can.
 
     Research:
+        no pull moves an arriving end off its farm - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: two kinds of way split back at a joint only where the end that arrived still arrives (`arrives_off`)
         a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: a fold at the meeting point made a T; a Z across it pulled straight like any jog, the joint moved back a vertex where the pull cannot clear it
         the shorter link the T's stem - GUESS: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; searched research/questions/0081-village-lanes.drawing.html (a fold at a joint becomes a T, a worn path takes the shortest or easiest way, but not which lane is the stem) and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (ways joined at a T, no stem rule)
         no new kink from a pull - research/questions/0081-village-lanes.drawing.html: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused
@@ -347,6 +348,13 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
             if z and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
                 return True
             continue
+        # ...NEVER MOVING A JOINT THAT ARRIVES AT A FARM OUT OF ITS REACH (cohort seed 902, feature 328 wave 90): a door path met
+        # end to end at its door was pulled straight and split back at the joint's foot on the new line, 4 px off, and the
+        # door end stood 12.1 ft off its yard - a dangling end to the law (`end_serves`), on a tree lane no repair may cut
+        if two and arrives_off(s, x[-1], new):
+            if z and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
+                return True
+            continue
         if two:
             # A CART ROUTE AND A FOOTPATH MEETING END TO END are pulled straight like any joint (0081: "a jog across the meeting
             # point is pulled straight like any other"; feature 328 - they were left), then split back at the joint: two
@@ -360,6 +368,19 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         if z and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
             return True
     return False
+
+
+def arrives_off(s: Settlement, joint: Pt, new: Poly) -> bool:
+    """Would splitting `new` back at `joint`'s foot on it move an end that arrives at a farm (`end_serves`: within reach of a
+    house or a steading's built ground) to one that does not?
+
+    Research: a path's end arrives at its farm - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaches something seen, never moved off it by a pull"""
+    from .geom import end_serves, steading_footprints
+
+    houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
+    steadings = steading_footprints(s.M)
+    foot = min((seg_closest(joint[0], joint[1], a, b) for a, b in zip(new, new[1:], strict=False)), key=lambda q: math.dist(q, joint), default=joint)
+    return end_serves(joint, (), houses, None, steadings) and not end_serves(foot, (), houses, None, steadings)
 
 
 def moved_back(x: Poly, y: Poly) -> list[tuple[Poly, Poly]]:

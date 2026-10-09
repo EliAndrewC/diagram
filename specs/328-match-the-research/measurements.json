@@ -1920,7 +1920,34 @@
         "newly failing": "31, 32 (a dispersed farm without its channel - given its well), 40 (a grove crossed by a lane), 43 (13 of 14 households seated)",
         "newly passing": "10",
         "was": "44/54 against 48, six newly failing"
+      },
+      "wave83-fillet-radius": {
+        "cohort_passed": 48,
+        "newly failing": "23 (needle loops), 40 (a farm off its street), 902 (a touch lane's end dangling), 904 (a farmhouse off the network) - all four linear",
+        "newly passing": "none",
+        "was": "45/54 against 48, the same four newly failing"
+      },
+      "reading": "the hardened web took two of wave 84's six regressions and none of wave 83's; every one of wave 83's is a row village, so the row form's web is where the fillet's moved channels break the layout",
+      "wave83-fillet-radius-with-door-guards": {
+        "cohort_passed": 49,
+        "newly failing": "23, 40, 904",
+        "newly passing": "none",
+        "note": "902's dangling door end mended by two guards: a door stepped off a fixture is kept within the law's arrival reach (door_off_fixtures, arrives), and a joint that arrives at a farm is not pulled out of reach (joints.arrives_off)"
       }
+    }
+  },
+  "wave90-door-ends-arrive": {
+    "quantity": "wave 90 (2026-10-09): two guards keeping a door path's end within the law's arrival reach, found by re-running wave 83's reverted fillet patch",
+    "observed": "2026-10-09",
+    "source": "make hamlet for Audit-902 (seed 902, 10 households, linear street/both/shared) under the fillet patch, probed at the dangling refusal and at each rewrite of the lane (reink_lane); make cohort N=48 with the guards alone and with the fillet patch",
+    "command": "make hamlet; make cohort N=48",
+    "method": "the door path drawn from a door 8.5 ft off its yard; straighten_joints pulled the joint at the door and split back at its foot 4 px off, 12.1 ft off the yard, past STEADING_ARRIVAL_FT (12 ft), so end 0 dangled on a tree lane and the web was refused; the guards built and the cohorts run",
+    "value": {
+      "seed_902_under_fillet": "WebRefused (dangling_ends) -> OK",
+      "cohort_guards_alone": "52/54 (refused 10, 20) - as HEAD, none newly failing",
+      "cohort_passed": 52,
+      "cohort_with_fillet_patch": "49/54 - 902 newly passing against the fillet's own 48; 23, 40, 904 still newly failing",
+      "pool": "no map moved"
     }
   }
 }

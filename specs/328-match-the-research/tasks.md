@@ -2126,3 +2126,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T207 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. impl-drift 2 of 2 IN-STEP on serve.py; make claims-owed: none
+
+## Phase 91 - wave 90 (amendment 89): a door path's end kept where it arrives (XIV)
+
+- `hamletgen/ways/serve.py` (`door_off_fixtures`, `_arrives_at`), `hamletgen/ways/joints.py` (`arrives_off`, `_one_joint`);
+  `tests/hamletgen/ways/test_serve.py`, `test_joints.py`.
+
+- [x] T208 wave 90's fix (FR-003, XIV)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 90); door ends kept within arrival reach (door_off_fixtures arrives, _one_joint arrives_off); cohort 52/54 as HEAD, no pool map moved; the reverted rows re-run (m:retake-after-wave89)
+- [x] T209 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. impl-drift 18 of 18 IN-STEP plus DOOR_STEP_FT's claim, after one re-cite (0036 -> 0246/0081) and a constant's label corrected; make claims-owed: none

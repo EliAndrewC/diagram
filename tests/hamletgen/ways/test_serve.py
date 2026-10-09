@@ -310,6 +310,17 @@ def test_a_door_on_a_fixture_steps_along_the_front_until_clear() -> None:
     assert door_off_fixtures((0.0, 50.0), house, [wall], 5.0) is None
 
 
+def test_a_door_stepped_off_a_fixture_stays_where_its_path_arrives() -> None:
+    """Feature 328 wave 90 (cohort seed 902): stepped along the front past the yard's corner, a door stood out of the law's
+    arrival reach and its path's end dangled. With `arrives`, only a step a path's end would still arrive from is taken."""
+    from l7r.diagram.hamletgen.ways.serve import door_off_fixtures
+
+    house = (0.0, 0.0)
+    trunk = [(-2.0, 48.0), (2.0, 48.0), (2.0, 52.0), (-2.0, 52.0)]
+    assert door_off_fixtures((0.0, 50.0), house, [trunk], 5.0, arrives=lambda q: abs(q[0]) <= 10.0) is not None
+    assert door_off_fixtures((0.0, 50.0), house, [trunk], 5.0, arrives=lambda q: abs(q[0]) <= 3.0) is None, "every clear step stands out of reach"
+
+
 def test_a_door_path_ends_where_it_first_arrives_at_its_way() -> None:
     """`to_first_arrival` (feature 291 on 287): the path is ended at the nearest point of the way where it first comes within
     the touch gap, so it never runs on beside it; a path that never arrives is as it was."""
@@ -366,7 +377,7 @@ def test_a_farm_is_reached_from_a_flank_only_where_the_front_has_no_lawful_path(
         s.M["houses"].append({"x": 300.0, "y": 300.0, "w": 46.0, "h": 28.0, "geom": {}})
         monkeypatch.setattr(serve, "front_door", lambda h, clear: (300.0, 350.0))
         monkeypatch.setattr(serve, "flank_doors", lambda h: [(340.0, 320.0)])
-        monkeypatch.setattr(serve, "door_off_fixtures", lambda d, house, quads, gap: d)
+        monkeypatch.setattr(serve, "door_off_fixtures", lambda d, house, quads, gap, arrives=None: d)
         monkeypatch.setattr(serve, "front_to_flank_open", lambda front, flank, h: open_front)
         monkeypatch.setattr(serve, "door_path", lambda s_, d, segs, *a: None if d == (300.0, 350.0) else [d, (340.0, 100.0)])
         return s

@@ -1462,6 +1462,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `tests/hamletgen/ways/test_doors.py` (the law's-gap route tried where the taut step is refused); the
   cohort; `impl-drift` on the claims owed; `spec-fidelity`.
 
+## Wave 90 (amendment 89, 2026-10-09) - batch 11
+
+- **The reverted rows re-run on the hardened web, and two guards found by it (constitution XIV).** With waves 87-89 in, the
+  cohort stands at 52/54 (refused 10 and 20); the reverted patches were re-run against it (m:retake-after-wave89). Wave 84's
+  fork band now breaks four seeds where it broke six, wave 83's fillet the same four as before - every one of those a row
+  village - so both stay reverted, E3. Probing wave 83's seed 902 found a door path's end pulled out of the law's arrival
+  reach: drawn from a door 8.5 ft off its yard, `straighten_joints` pulled the joint at the door straight and split the lanes
+  back at its foot 4 px off, 12.1 ft off the yard, past `STEADING_ARRIVAL_FT`, and the tree lane's end dangled
+  (m:wave90-door-ends-arrive). Two guards, as 0246 has a way's end reach what it serves: `door_off_fixtures` steps a door only
+  to where a path's end still arrives (`_arrives_at`), and `_one_joint` refuses a pull that would move an arriving joint out
+  of reach (`arrives_off`). Alone on HEAD the cohort holds 52/54, none newly failing, no pool map moved; with the fillet patch
+  902 holds. Seed 10's field way, diagnosed in this wave, is filed as a found row (E3).
+- **Verification**: `tests/hamletgen/ways/test_serve.py` and `test_joints.py` (the two guards); the cohorts; `impl-drift` on the
+  claims owed; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

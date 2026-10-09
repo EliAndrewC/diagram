@@ -324,16 +324,23 @@ def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
 
 
 DOOR_STEP_FT = 4.0
-"""How far a door on a fixture is stepped along the front at a time (`door_off_fixtures`; a map drawing convention)."""
+"""How far a door on a fixture is stepped along the front at a time (`door_off_fixtures`). A placement rule, not a drawing convention: no page gives the step, so it is UNRESEARCHED (feature 328 wave 90, impl-drift).
+
+Research: door step - UNRESEARCHED: 4 ft"""
 
 
-def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, step: float = DOOR_STEP_FT, tries: int = 8) -> Pt | None:
+def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, step: float = DOOR_STEP_FT, tries: int = 8, arrives: Any = None) -> Pt | None:
     """`door` moved along the front - across the line from the house through it - to the nearest point `gap` clear of every
     quad in `quads` (the walls a route keeps off, the fixtures among them; feature 291 on 287: the yard persimmon stands at
     the middle of the yard's front, where the door is, and Kashikawa's door paths began inside its trunk); the door itself
-    where it is clear, None where no step within `tries` is.
+    where it is clear, None where no step within `tries` is. With `arrives`, a step is taken only where a path ending there
+    still arrives at its farm (`end_serves`): stepped past the yard's corner, a door stood 12.1 ft off its own yard, the law
+    read the path's end as dangling and the web was refused (cohort seed 902, feature 328 wave 90).
 
-    Research: no path from inside a fixture - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the door stepped along the front"""
+    Research:
+        no path from inside a fixture - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the door stepped along the front
+        the door's steps - UNRESEARCHED: `DOOR_STEP_FT` (4 ft) at a time, up to `tries` (8) each way
+        a stepped door still arrives - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: taken only where a path's end there still reaches its farm (`arrives`)"""
     from l7r.diagram.settlement import edge_dist
 
     fx, fy = door[0] - house[0], door[1] - house[1]
@@ -342,7 +349,7 @@ def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, st
     for k in range(tries + 1):
         for sgn in (1.0,) if k == 0 else (1.0, -1.0):
             q = (door[0] + sgn * ax * k * step, door[1] + sgn * ay * k * step)
-            if not any(len(p) >= 3 and (point_in_poly(q[0], q[1], p) or edge_dist(q[0], q[1], p) < gap) for p in quads):
+            if not any(len(p) >= 3 and (point_in_poly(q[0], q[1], p) or edge_dist(q[0], q[1], p) < gap) for p in quads) and (arrives is None or arrives(q)):
                 return q
     return None
 
@@ -422,8 +429,8 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     the farm it serves (`serves`); the nearest few points are tried, nearest first. Returns the paths drawn.
 
     Research:
-        every grove farm reached at its door - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
-            a 3 ft footpath where the door stands past the reach
+        every grove farm reached at its door - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html:
+            a 3 ft footpath where the door stands past the 60 ft reach
         round the grove to the street - research/questions/0033-row-villages-resson.drawing.html: a path round the grove,
             a GUESS there
         off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
@@ -459,7 +466,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         if door is not None:
             # ...clear of everything the router keeps off, not the fixtures alone: stepped toward its own well, a door stood in
             # the router's gap off the wellhead and no route left it (Mizuguchi, three farms)
-            door = door_off_fixtures(door, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0)
+            door = door_off_fixtures(door, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0, arrives=_arrives_at(h, steadings))
         streets = [
             [(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street") and ln.get("street_index") is not None
         ]  # a row's own street, not a join
@@ -470,7 +477,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         # ...FROM THE FRONT DOOR, ELSE A FLANK OF THE DOORYARD (`access.doors_of`, the corridors' own doors): a far-row farm
         # fronts its holding, away from its street, and with its grove on the street's side the front had no way round it
         # the law would keep (cohort seed 904: two farms left unreached)
-        doors = [door, *(door_off_fixtures(d, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0) for d in flank_doors(h))]
+        doors = [door, *(door_off_fixtures(d, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0, arrives=_arrives_at(h, steadings)) for d in flank_doors(h))]
         # A FLANK ONLY AS THE FALLBACK (amendment 8; since amendment 9 a preference, FR-019's door clause dropped): the front first;
         # a flank facing no band of the farm's own grove, with open ground between it and the front door, only where no
         # lawful path leaves the front - recorded on the lane (`from_flank`) and on the map (`meta.door_flanks`)
@@ -486,6 +493,15 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
                 n += 1
                 break
     return n
+
+
+def _arrives_at(h: Mapping[str, Any], steadings: Sequence[Poly]) -> Any:
+    """Does a path ending at a point arrive at farm `h` - within the lane law's reach of its house or of a steading's built
+    ground (`end_serves`, the predicate the law reads a path's end by)?
+
+    Research: a door path arrives at its farm - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaches something seen"""
+    c = (float(h["x"]), float(h["y"]))
+    return lambda q: end_serves(q, (), [c], None, steadings)
 
 
 def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]], street: int | None, steadings: Sequence[Poly]) -> bool:

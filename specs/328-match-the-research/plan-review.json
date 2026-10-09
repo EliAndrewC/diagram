@@ -1,50 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "98ed5e948b996efbe94fb35f66d962bc6a22731c577f72580daf2eec966ea02f",
+ "plan_sha256": "ef788de240d76b5d26b2f40914aa0ab7c9eea35038961995742bd4fd346bb707",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W89-1",
-   "summary": "A pre-existing defect fixed under constitution XIV: door_path, where the law refuses the first path (straight step, or the 4 ft route pulled taut), now tries a route at the law's own gap; seed 33's row farm reached",
+   "id": "W90-1",
+   "summary": "Wave 83's fillet radius and wave 84's fork band patches re-run on the hardened web; both stay reverted, their rows held at E3",
    "class": "within",
-   "why": "The GM asked for the implementation to match the research; this moves door_path toward 0081 ('runs straight wherever it can keep its usual clearance from fences') and 0246 (a lane's middle 7 ft off a garden fence) and narrows nothing. A defect found in the work at hand is fixed in it (XIV), as waves 87 and 88 were. Reviewer re-ran make cohort N=1 SEED=33: 7/7 passed."
+   "why": "No finding is dropped: the rows stay open in the ranking at E3 and are taken in tier order (FR-003, SC-003); keeping a patch that breaks seeds out of main is constitution XIII. The figures match m:retake-after-wave89 (49/54 with 31, 32, 40, 43 newly failing and 10 newly passing; 48/54 with 23, 40, 902, 904 newly failing)."
   },
   {
-   "id": "W89-2",
-   "summary": "Order: per target, nearest first (the existing six), the first path is tried before the law's-gap route; the fallback at a nearer target is preferred over the first path at a farther one",
+   "id": "W90-2",
+   "summary": "Two guards under XIV: door_off_fixtures steps a door only to where a path's end still arrives (_arrives_at), and _one_joint refuses a pull that moves an arriving joint out of reach (arrives_off)",
    "class": "within",
-   "why": "Keeps every path the law already accepted at its target; preferring the nearer target serves 0081's 'a worn path takes the shortest way', the claim door_path carries. Not an exception: nothing is excluded from the law."
+   "why": "This is a defect fix that serves an open request row: it was found by probing why the reverted fillet patch failed seed 902, and it removes that seed from the fillet's regressions (m:wave90-door-ends-arrive: 902 WebRefused -> OK under the patch). Alone on HEAD the cohort holds 52/54, nothing is newly failing and no pool map moves, so the implementation is not moved away from any page. It narrows nothing the GM asked for. Both guards use end_serves, the lane law's own predicate on 0246, which this repository uses as its research page, so they do what they say."
   },
   {
-   "id": "W89-3",
-   "summary": "The fallback is routed at WEB_FABRIC_GAP (7 ft) and pulled taut only where Lawful.on_lawful_ground keeps each step",
+   "id": "W90-3",
+   "summary": "Seed 10's field-way refusal diagnosed and filed as a found row (E3)",
    "class": "within",
-   "why": "0246's own figure and the law's own ground half; the taut pull is bounded by the research's clearance rather than overriding it, which is what 0081's drawing page says."
+   "why": "Filing it adds to the ranking and drops nothing. It is tiered by FR-003's definition and fixed in tier order."
   },
   {
-   "id": "W89-4",
-   "summary": "route_from_door takes the gap as a parameter, default FOOTPATH_FABRIC_GAP (4 ft) unchanged; the 4 ft footpath deviation is not moved this wave",
+   "id": "W90-4",
+   "summary": "No Decisions Recorded row for wave 90",
    "class": "within",
-   "why": "Plumbing for W89-3; the 4 ft hold is pre-existing (wave 4, spec Review history item 4) and its own ranking row (119, DRIFTED, kept) stays open for its wave under FR-006 - this wave does not carve it out of scope."
+   "why": "FR-008 requires a row only for a fix that changes what a map draws or states. Measured: no pool map moved, and the cohort is unchanged on HEAD."
   },
   {
-   "id": "W89-5",
-   "summary": "Kashikawa: one door path (lanes[9]) re-placed, added to the declared 'village lane on kashikawa' occasion (now naming waves 88 and 89) for a glyph-check at batch 11's close; four maps unchanged",
+   "id": "W90-5",
+   "summary": "lay_door_paths' MISLABELED claim re-cited from 0036 to 0246/0081 (in the diff, not the plan)",
    "class": "within",
-   "why": "Feature 294's occasion rule as applied every batch. MEASURED by the reviewer (HEAD vs working-tree manifest): only lanes[9] pts[1] and pts[2] moved, 4-5 px; its nearest garden 9.28 -> 10.78 ft, so it was already lawful and 'off a fence' means further off, not a fence fault cured. The Occasions line names wave 89 but its text after the colon still describes only wave 88's road - a wording gap, not a narrowing."
-  },
-  {
-   "id": "W89-6",
-   "summary": "A Decisions Recorded row in spec.md, class HISTORICALLY ACCURATE (0246), pointing at serve.py door_path, with m:wave89-door-path-at-the-law-s-gap; wave 88's row gains its cohort count",
-   "class": "within",
-   "why": "FR-008 owes a row for a fix that changes what a map draws (Kashikawa moved). The claim on door_path rests on 0081's drawing page (claims-index), which states the same clearance rule; the class holds on either page."
-  },
-  {
-   "id": "W89-7",
-   "summary": "Verification: test_doors.py (the law's-gap route tried where the taut step is refused), seed 33 and the 48-seed cohort (51 -> 52/54, none newly failing), impl-drift on the two claims (T207), spec-fidelity; gate and occasion at batch 11's close",
-   "class": "within",
-   "why": "FR-005's batched verification. Reviewer re-ran make test-file on the uncommitted engine (the whole quick selection ran, 9543 passed, test_doors.py among them) and cohort SEED=33 7/7; the 48-seed cohort was not re-run. claims-index shows both serve.py claims IN-STEP dated 2026-10-09."
+   "why": "FR-003's E0 covers a claim whose citation is wrong. The new citations hold the content: 0081 draws a footpath 3 ft wide and 0246 sets the 60 ft reach. Neither page was edited, and the implementation is unchanged."
   }
  ],
  "verdict": "CLEAR"
