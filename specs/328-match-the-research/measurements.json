@@ -551,5 +551,44 @@
   },
   "observed": "2026-10-08",
   "method": "a temporary log in last_resort.lanes_breaking (settle.theirs, fabric._crosses_fabric on the first leg) and in tree.admits, under make cohort N=1 SEED=25 HOUSEHOLDS=40; reverted"
+ },
+ "wave56-sun-strips": {
+  "quantity": "wave 56 (2026-10-08): drawn tree crowns (len(tree_crowns)/3) and village-grove clumps per hamlet manifest, before (db4b33b65's maps) and after the seats' sun strips moved to the tree's 50 ft south and east of every yard and bed",
+  "observed": "2026-10-08",
+  "method": "the five hamlets rerolled with make map; counted from the manifests",
+  "value": {
+   "inashiro": {
+    "crowns": [
+     624,
+     690
+    ],
+    "clumps": [
+     544,
+     612
+    ]
+   },
+   "kuwabata": {
+    "crowns": [
+     738,
+     673
+    ],
+    "clumps": [
+     513,
+     435
+    ]
+   },
+   "sawada": {
+    "crowns": [
+     905,
+     907
+    ],
+    "clumps": [
+     629,
+     622
+    ]
+   },
+   "kashikawa": "unchanged (no village grove)",
+   "mizuguchi": "unchanged (no village grove)"
+  }
  }
 }

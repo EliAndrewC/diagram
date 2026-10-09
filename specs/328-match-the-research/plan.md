@@ -766,6 +766,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: tests red on the old code (the open clump drew under 0.9 of its density); `impl-drift`; `spec-fidelity`;
   glyph-check rounds on the homestead grove and the windbreak.
 
+## Wave 56 (amendment 55, 2026-10-08) - batch 4's first wave
+
+- **Scope**: the copse's and the village grove's SEATS kept off the plots' sun at the tree's 50 ft (0038: "50 ft east, west
+  and south of a plot"; rows 580, 582, 583): the south strip was the farmhouse's 39 ft (`_sun_corridor_ft`) or a 22 default,
+  and the morning lane ran east of the beds only, while the crowns were already held to 50 ft round every yard and bed
+  (`_sun_keepouts`) - so a seat between was reserved and never planted. Now `CANOPY_SHADE_FT` south of every yard and bed and
+  `EAST_REACH_FT` / `EAST_LANE_FT` east of the yard as of a bed, in `village_grove` and `WoodShares` / `copse_keepouts`
+  together (feature 317: the two must move together, or a seat is reserved where the copse will not plant). The west lane
+  is the hamlets' declared 50 ft already (`WEST_SUN_FT`).
+- **Measured** (m:wave56-sun-strips): Inashiro 624 -> 690 crowns, Kuwabata 738 -> 673, Sawada 905 -> 907; the grove farms
+  unchanged.
+- **Occasions**: placement-changed copse on Kuwabata - batch 4's close.
+- **Verification**: a test of the 50 ft strips; `impl-drift`; `spec-fidelity`; the gate, the pair and the occasions at
+  batch 4's close.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
@@ -780,6 +795,7 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 | 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); the batch 4a9b7c077 -> 2e3153b4e band 2, its cause (the track out drawn the canvas' diagonal past the frame, wave 46) removed by wave 47's `past_the_frame` - perf-audit consistent, audit not-justified as measured: batch 2's pair re-measures it, and explains seed 47's +0.19 s web at 40 households | green 2026-10-08 | closed but for the pair |
 | 2 | 47-50 | 2e3153b4e -> 3f91becf2: band 1, TOTAL -3.5%; batch 1's band 2 re-measured and gone. Its one growth (seed 39, 10 households, homesteads +0.24 s, web -0.2 s) is wave 47's past_the_frame candidate sending that roll's track out through the fabric router - perf-audit CONSISTENT on its own control (the candidate undone removes the growth), profiled with the new `make perf-profile HOUSEHOLDS=` | green 2026-10-08 (waves 47-51, the NEEDS-WORK fixes re-gated) | closed: 12 glyph checks PASS (field pond, woodland commons and wet paddy after rounds 2-3) |
 | 3 | 51-55 | 3f91becf2 -> HEAD: band 3 - 40 households +5.7% from seed 47 (+23.8%, web and homesteads: wave 52's privy and heap re-seating, bisected per commit) and seed 25 refused (T140); 10 households -7.2%, 20 -1.3%; seed 4's hinterland growth fixed in the batch (field_height_near in one vector pass) - m:batch3-pair-and-controls; perf-audit round 2: explanation CONSISTENT, audit cannot-determine (re-run once T140's seating is decided); the GM's band-3 sign-off owed | green 2026-10-08 | closing: 7 glyph checks PASS (homestead grove at round 2), the record checks answered; T137 and T140 open for the GM |
+| 4 | 56- | owed at the batch close, from batch 3's end | at the batch close | open |
 
 ## Constitution Check
 

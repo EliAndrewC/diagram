@@ -5,6 +5,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
+- placement-changed: copse on kuwabata - wave 56: the seats off every yard's and bed's sun at the tree's 50 ft south and east (0038); batch 4's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
 - (reviewed PASS at batch 3's close round 2, 2026-10-08) glyph-redrawn: homestead grove on mizuguchi - wave 53: the crown density one to ~180 sq ft real (0080), drawn crowns 546 -> 337; wave 55: topped up to that density as DRAWN (round 1 NEEDS-WORK: ~400 sq ft a crown drawn); batch 3's close, round 2
@@ -1727,4 +1728,13 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       access lanes' first leg within 7 ft of their own garden - m:t140-seed25-fouled-fabric): fix the seating so a door's way
       keeps the fabric gap at 40 households; the route the plan names was attempted and its investigation written (plan,
       batch 3's close) - only now the GM's waiver or go-ahead on the seating rebuild, with batch 3's band-3 sign-off
+      research: rendering
+
+## Phase 57 - wave 56 (amendment 55): the seats off the plots' sun at the tree's 50 ft
+
+- `stands.py::village_grove` (the south strip and the yards' east lane), `wood_share.py` (`WoodShares.sun_depth`, `copse_keepouts`).
+
+- [ ] T141 wave 56's rows (FR-003, FR-004)
+      research: rendering
+- [ ] T142 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering

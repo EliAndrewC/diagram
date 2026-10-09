@@ -23,6 +23,7 @@ from .stocking import record_box as record_box
 from .stocking import stocked_at_grain as stocked_at_grain
 from .stocking import stocked_box as stocked_box
 from .stocking import stocked_copse as stocked_copse
+from .tree_shade import CANOPY_SHADE_FT
 from .wood_goal import canopy_of, trim_to_goal
 
 if TYPE_CHECKING:
@@ -371,11 +372,14 @@ class StandsMixin:
         # The settlement-review of feature 226 (2026-09-12) measured the contradiction: the belt is the tallest thing on
         # the map, the west lane it keeps is 50 ft, a house keeps 39 ft south, and this strip kept 22 - so 7 of
         # Kashikawa's 22 beds had a 10 m clump 24-38 ft south of them with no rule firing.
-        _sun_depth = float(getattr(self, "_sun_corridor_ft", 22.0))
+        # ...AND SINCE FEATURE 328 (wave 56, 0038: "50 ft east, west and south of a plot" for a tree), the tree's own 50 ft
+        # (`CANOPY_SHADE_FT`), not the 39 ft a farmhouse owes a bed: the crowns were held to 50 ft (`_sun_keepouts`) while
+        # the seats kept 39, so a seat in the strip between was reserved and never planted
+        _sun_depth = self.px(CANOPY_SHADE_FT)
         # ... and OUT of the EASTERN sun-lane of every kitchen GARDEN: a tree just east blocks the MORNING sun
         # (the sun rises in the E; +x is east), so a garden on a house's lee/E side keeps clear sky to its east.
         # Entry = (garden east edge, garden cy, half-height + reach). See gardens_unshaded_from_east.
-        east = [(o["x"] + o["w"] / 2, o["y"], o["h"] / 2 + cr + 2) for o in self.M.get("gardens", [])]
+        east = [(o["x"] + o["w"] / 2, o["y"], o["h"] / 2 + cr + 2) for k in ("threshing_yards", "gardens") for o in self.M.get(k, [])]  # every plot (0038), the yard too
         # ... and OUT of the WESTERN / SOUTHWESTERN sun-lane of every yard and garden - the AFTERNOON
         # sun (feature 133 T10, GM 2026-08-25). A belt is the tallest thing on the map: a working
         # igune measures ~10 m, and at 3pm in the shoulder month (sun at 28 deg, azimuth ~232) a

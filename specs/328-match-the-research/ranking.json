@@ -8875,7 +8875,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E2",
   "moved": "T38a: tiered by its work - One keep-out rule in one function changes its depths and the plots it covers.",
-  "wave": "",
+  "wave": "56",
   "scope": "kept"
  },
  {
@@ -8910,7 +8910,7 @@
   "found": "wave 9 re-check (tiered by its work at T38b)",
   "tier_as_ranked": "E2",
   "moved": "T38b: tiered by its work - one value feeds the reservation's south strip; copse_keepouts' logic is unchanged, and widening the reservation to the 50 ft the planting already holds at every crown (_sun_keepouts) removes seats the planting would refuse rather than adding the unplanted seats feature 317 measured.",
-  "wave": "",
+  "wave": "56",
   "scope": "kept"
  },
  {
@@ -8928,7 +8928,7 @@
   "found": "wave 9 re-check (tiered by its work at T38b)",
   "tier_as_ranked": "E2",
   "moved": "T38b: tiered by its work - one function's keep-out rectangles change (which plots get an east lane, how deep the south one runs), matching the planting's crown rule rather than going past it, so feature 317's lost-seat failure does not recur.",
-  "wave": "",
+  "wave": "56",
   "scope": "kept"
  },
  {

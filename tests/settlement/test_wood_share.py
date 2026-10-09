@@ -372,3 +372,18 @@ def test_the_lanes_are_in_feet_at_any_grain() -> None:
     east = [r for r in one if r[0] == 150.0 - 13.0 - BAR_MARGIN_PX][0], [r for r in half if r[0] == 150.0 - 13.0 - BAR_MARGIN_PX][0]
     assert east[0][2] - east[1][2] == 25.0, "50 ft east of the bed at 1 px a foot, 25 px at 2 ft a pixel"
     assert one[-1][0] - half[-1][0] == -10.0, "20 ft west: 20 px, then 10"
+
+
+def test_the_seats_keep_a_trees_fifty_feet_south_and_east_of_every_plot() -> None:
+    """Feature 328 wave 56 (0038: "50 ft east, west and south of a plot"): the copse's seats keep the tree's 50 ft
+    (`CANOPY_SHADE_FT`), not the 39 ft a farmhouse owes a bed, and the morning lane east of the YARD as of a bed - the crowns
+    were already held to it (`_sun_keepouts`), so a seat between was reserved and never planted."""
+    from l7r.diagram.settlement.homestead_parts.tree_shade import CANOPY_SHADE_FT
+    from l7r.diagram.settlement.homestead_parts.wood_share import WoodShares
+
+    assert WoodShares.__init__.__code__.co_names.count("CANOPY_SHADE_FT") >= 1, "the share's south strip is the tree's"
+    parts = {"house": (100.0, 100.0, 40.0, 30.0), "yard": (100.0, 140.0, 40.0, 20.0), "gardens": [(140.0, 100.0, 20.0, 20.0)]}
+    _c, rects = copse_keepouts(parts, 22.0, CANOPY_SHADE_FT, 12.0)
+    m = BAR_MARGIN_PX
+    assert rects[0][3] == 150.0 + 50.0 + 13.0 + m, "the yard's strip 50 ft deep"
+    assert (120.0 - 13.0 - m, 140.0 - 23.0 - m, 120.0 + 50.0 + 11.0 + m, 140.0 + 23.0 + m) in rects, "the yard's morning lane, 50 ft east"

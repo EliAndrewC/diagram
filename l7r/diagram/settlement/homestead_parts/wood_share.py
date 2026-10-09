@@ -48,6 +48,7 @@ from ..shrines_wells.byres import BYRE_FT
 from .grove_blocks import GroveBlocks
 from .groves import crown_lift
 from .stands import crown_reach
+from .tree_shade import CANOPY_SHADE_FT
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -112,7 +113,9 @@ def copse_keepouts(
         if r is not None:  # the sunny strip south of a yard or a bed
             half, south = r[2] / 2.0 + cr + 2.0, r[1] + r[3] / 2.0
             rects.append((r[0] - half - m, south - cr - 2.0 - m, r[0] + half + m, south + sun_depth * ppf + 2.0 + cr + m))  # the strip's depth in feet, at the map's scale
-    for g in parts.get("gardens") or ():  # ...and the morning lane east of a bed
+    for g in [parts.get("yard"), *(parts.get("gardens") or ())]:  # ...and the morning lane east of a yard or a bed (0038: every plot)
+        if g is None:
+            continue
         east, half = g[0] + g[2] / 2.0, g[3] / 2.0 + cr + 2.0
         rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_FT * ppf + cr + m, g[1] + half + m))
     # ...AND THE AFTERNOON LANE WEST AND SOUTHWEST OF A YARD OR A BED, where the map declares one (feature 310 put it on the copse,
@@ -258,7 +261,7 @@ class WoodShares:
         self.floor = floor_ft2 * s.px(1.0) ** 2  # px^2
         self.reach = s.px(reach_ft)
         self.cell = 2.0 * s.bscale  # `wood_canopy`'s raster
-        self.sun_depth = float(getattr(s, "_sun_corridor_ft", 22.0))
+        self.sun_depth = CANOPY_SHADE_FT  # a tree's 50 ft south of a plot (0038; feature 328 wave 56: it read the farmhouse's 39)
         self.ppf = s.px(1.0)  # pixels a foot: the lanes below are in feet
         self.west_ft = float(getattr(s, "_west_sun_ft", 0.0))  # the afternoon lane, where the map declares one (`west_sun_lane`)
         self.well_vr = float(s._well_vr())
