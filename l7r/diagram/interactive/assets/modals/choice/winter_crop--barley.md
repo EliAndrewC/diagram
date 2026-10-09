@@ -20,10 +20,10 @@ Guesses:
 - That a drained paddy's winter barley spares an equal area of dry field for the hamlet's coarse grain: no source gives a
   winter barley crop's yield.
 
-Depiction: The map is set in high summer, so this settlement's drained paddies are drawn under rice, and its barley is not
+Depiction: The map is set in high summer, so this settlement's drained paddies are drawn under rice, and the barley sown on them after the harvest is not
 shown. The paddies that never drain, which could not carry it, are tinted blue-green as wet ground, though on a comb
 field only a sample of them wears the tint. Because the paddy grows the coarse
-grain, the dry fields stay on their narrow hem above the supply canal.
+grain, the dry fields are not widened into an alluvial fan's wild middle but stay on their hem above the supply canal.
 
 Name: The paddies in winter: sown with barley
 Covers: `meta.winter_crop = barley`

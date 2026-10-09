@@ -12,7 +12,7 @@ import random
 from collections.abc import Sequence
 from typing import Any
 
-from .carve import _bund_beans, _dry_fields
+from .carve import _bund_beans, _dry_fields, crop_stream, dry_crop_mix
 from .frame import Poly, Pt, _Frame, _poly_area, _Thread
 from .furrows import STEEP_SPREAD_RAD, settle_tract_seams
 
@@ -42,17 +42,19 @@ def _comb_dry_and_beans(
         dry hem above the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the hem laid upslope of supply canal A
         fork triangle planted dry - research/questions/0010-farmland-around-towns-and-cities.drawing.html: on a city's coarse grain (`grain < 1.0`) a second band along canal B's stretch above its first offtake
         fork band depth - UNRESEARCHED: 0.6 of the hem's depth
-        fork band skipped on villages - UNRESEARCHED: grain 1.0 maps leave the triangle to the scrub
+        fork band skipped on villages - UNRESEARCHED: maps at grain 1.0 or more (a village's and a hamlet's) leave the triangle to the scrub
         wild middle - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a wild fan keeps its drawn hem on the toe, the middle held in reserve
         seams settled - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every band's tracts read apart where the rows spread
         bund beans - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: beads along a share of the paddy bunds
-        dry acreage scale - NONE: measured at a fixed 2 ft/px whatever the grain
+        dry acreage scale - NONE: the manifest's `dry_acres`, at the map's own scale (2 / grain ft a pixel); no stage reads it
     """
     # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
     # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
     # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.
     _supply_strokes = [c for c in channels if c.get("role") != "drain"]
-    dry_plots = _dry_fields(R, F, a_pts, W, H, dry_keepout, band=dry_band, g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes)
+    crops = crop_stream(R)  # ONE crop stream for the map, continued through every band and the reserve, off the geometry's stream
+    mix = dry_crop_mix(crops)  # the map's crop mix, rolled ONCE so every band and the reserve share it (0006)
+    dry_plots = _dry_fields(R, F, a_pts, W, H, dry_keepout, band=dry_band, g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes, crop_mix=mix, crop_rng=crops)
     hem = list(dry_plots)  # the a-side hem whole: a wild middle's share is split off AFTER the seams are settled (feature 287, W36)
     if grain < 1.0:  # a city's grain only (0010), never a hamlet's or a village's
         # the INTER-ARM FORK TRIANGLE (coarse grains only): the ground between the two supply
@@ -83,16 +85,18 @@ def _comb_dry_and_beans(
                 grain_drift=grain_drift,
                 supply=_supply_strokes,
                 tract0=1 + max((p["tract"] for p in dry_plots), default=-1),
+                crop_mix=mix,
+                crop_rng=crops,
             )  # thinner than the a-side hem: it only needs to cover the fork triangle, and a full-depth band crowds the farmhouse ring off the fan's visible edge
     reserve: list[dict[str, Any]] = []
     if fan_middle == "wild":  # the toe's strip is drawn; the whole wild middle is held in reserve (feature 287, W36)
         _toe = {id(d) for d in fan_toe_hem(hem, F, fork, plots)}
         dry_plots = [d for d in dry_plots if id(d) in _toe or all(d is not h for h in hem)]
         _tract0 = 1 + max((p["tract"] for p in dry_plots), default=-1)
-        reserve = middle_reserve(R, F, a_pts, fork, plots, dry_plots, W, H, dry_keepout, grain, furrow_spread, grain_drift, _supply_strokes, _tract0)
+        reserve = middle_reserve(R, F, a_pts, fork, plots, dry_plots, W, H, dry_keepout, grain, furrow_spread, grain_drift, _supply_strokes, _tract0, mix, crops)
     if furrow_spread >= STEEP_SPREAD_RAD:  # the patchwork's seams read tract against tract, every band and the reserve (feature 287, W35)
         settle_tract_seams(dry_plots + reserve)
-    dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * 4 / 43560
+    dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * (2.0 / grain) ** 2 / 43560  # at the map's own scale: grain is 2 / ftpx
     return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels), reserve
 
 
@@ -164,6 +168,8 @@ def middle_reserve(
     grain_drift: float,
     supply: Sequence[dict[str, Any]],
     tract0: int,
+    crop_mix: Sequence[float] | None = None,
+    crop_rng: random.Random | None = None,
 ) -> list[dict[str, Any]]:
     """THE WHOLE WILD MIDDLE, as dry plots the coarse-grain top-up may clear (feature 287, W36; 0011): the hem's
     columns along the canal's run above the toe, laid out to the canvas edge, less any plot on the fan's own paddy or on a
@@ -178,7 +184,22 @@ def middle_reserve(
     if len(run) < 2:
         return []
     depth = math.hypot(W, H) * MIDDLE_DEPTH_OF_CANVAS
-    deep = _dry_fields(random.Random(R.getrandbits(32)), F, run, W, H, keepout, band=(depth, depth), g=g, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=supply, tract0=tract0)
+    deep = _dry_fields(
+        random.Random(R.getrandbits(32)),
+        F,
+        run,
+        W,
+        H,
+        keepout,
+        band=(depth, depth),
+        g=g,
+        furrow_spread=furrow_spread,
+        grain_drift=grain_drift,
+        supply=supply,
+        tract0=tract0,
+        crop_mix=crop_mix,
+        crop_rng=crop_rng,
+    )
     taken = BoxedRings([p["poly"] for p in paddies if len(p["poly"]) >= 3] + [d["poly"] for d in drawn])
     keep = [d for d in deep if not overlaps_any(d["poly"], taken)]
     return sorted(keep, key=lambda d: -F.to_uf(*_ring_mean(d["poly"]))[1])

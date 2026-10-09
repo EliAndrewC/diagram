@@ -103,3 +103,56 @@ def test_a_hem_one_boundary_wide_has_no_shared_normal_and_says_so() -> None:
 
     net = _comb(sluice=(100.0, 700.0), down_deg=210.0, field_fall=900.0, canal_a_len=(1100.0, 700.0), canal_b_len=(1100.0, 700.0))
     assert isinstance(net["plots"], list), "the fan carves instead of raising"
+
+
+def test_dry_plots_draw_the_maps_own_crop_mix() -> None:
+    """Feature 328 wave 65 (0006: "each map picks its mix of the four crops at random"): a plot's crop is drawn on the map's
+    mix, so a mix that weighs one crop alone plants only that crop, and `dry_crop_mix` rolls one weight per crop."""
+    import random
+
+    from l7r.diagram.waterfields.carve import _dry_fields, dry_crop_mix
+    from l7r.diagram.waterfields.frame import _Frame
+    from l7r.diagram.waterfields.palette import DRY_CROPS
+
+    F = _Frame(90.0)
+    canal = [(300.0, 200.0), (300.0, 900.0)]
+    only_soy = [0.0 if c != "soy" else 1.0 for c in DRY_CROPS]
+    plots = _dry_fields(random.Random(1), F, canal, 1400.0, 1400.0, [], crop_mix=only_soy)
+    assert plots and {p["crop"] for p in plots} == {"soy"}
+    mix = dry_crop_mix(random.Random(3))
+    assert len(mix) == len(DRY_CROPS) and all(0.1 <= w <= 1.0 for w in mix)
+
+
+def test_the_end_dry_plot_is_split_at_every_grain() -> None:
+    """Feature 328 wave 65 (0006's plot size): the snap to the canal's length can stretch the END plot to ~1.85 plot widths;
+    it is halved past 1.35 at every grain, the village grain (g = 1) too, so no plot runs past 1.35 widths along the canal."""
+    import random
+
+    from l7r.diagram.waterfields.carve import _dry_fields
+    from l7r.diagram.waterfields.frame import _Frame
+
+    F = _Frame(90.0)
+    canal = [(300.0, 200.0), (300.0, 900.0)]  # along the canal is along y: a plot's near edge is its two least-x corners
+    widest = 0.0
+    for seed in range(40):
+        for p in _dry_fields(random.Random(seed), F, canal, 1400.0, 1400.0, []):
+            near = sorted(p["poly"])[:2]
+            widest = max(widest, abs(near[0][1] - near[1][1]))
+    assert widest <= 1.35 * 46 + 1.0, widest
+
+
+def test_the_crop_stream_moves_with_the_geometry_stream_and_leaves_it_alone() -> None:
+    """Feature 328 wave 65 (spec-fidelity): `crop_stream` seeded from a few words of R's state handed out the SAME stream
+    after R had drawn; seeded from the whole state it moves with R, and it never advances R."""
+    import random
+
+    from l7r.diagram.waterfields.carve import crop_stream
+
+    R = random.Random(5)
+    R.random()  # a stream that has drawn: its state's words regenerate only every 624 outputs
+    first = crop_stream(R).random()
+    before = R.getstate()
+    crop_stream(R)
+    assert R.getstate() == before, "the crop stream never advances the geometry's"
+    R.random()
+    assert crop_stream(R).random() != first, "a draw of R moves the crop stream"

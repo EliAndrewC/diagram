@@ -30,8 +30,8 @@ in autumn.
 [row_line=street] Behind a street laid out first the holding is a strip one lot wide, cut into plots about 150 ft deep, a
 size chosen for the map since the real plots' size is not recorded.
 
-[row_line=edge] Behind a row that follows the field's dry edge, which stands for a levee or a fan's foot, the holding is
-compact and near the house, as on a dike.
+[row_line=edge] Behind a row that follows the field's dry edge, which stands for a dike, a levee or a fan's foot, the holding is
+compact and near the house, as a dike row's was.
 
 Name: farm holding
 Covers: `dry_plots[holding]` and their furrows

@@ -1041,5 +1041,52 @@
         "mechanism": "359 terminal_caption searches x ~2,400 seats scored (877,941 _score calls, poly_seg_gap 63 s of 116 s under cProfile); a degenerate case - one obstacle and one way over the whole frame - that no kept map reaches; the gate's ratchet.py judges this test at the batch 5 close; the timing pair measures the kept maps"
       }
     }
+  },
+  "wave65-crop-mix-and-end-split": {
+    "quantity": "wave 65 (2026-10-09): each map's own mix of the four dry crops, and the end dry plot halved at every grain",
+    "observed": "2026-10-09",
+    "method": "the carve's own tests (grain 1, 40 seeds, a vertical canal: the widest plot's near edge); the five hamlets rerolled and their manifests compared with HEAD's; make cohort N=48 against wave 64's run",
+    "value": {
+      "widest_plot_at_grain_1_px": {
+        "old condition": 77.6,
+        "bound": 62.1
+      },
+      "dry_plots": {
+        "inashiro": [
+          81,
+          81
+        ],
+        "kashikawa": [
+          68,
+          68
+        ],
+        "sawada": [
+          26,
+          26
+        ]
+      },
+      "crops_after": {
+        "inashiro": {
+          "millet": 15,
+          "soy": 24,
+          "barley": 30,
+          "buckwheat": 12
+        },
+        "kashikawa": {
+          "millet": 17,
+          "buckwheat": 19,
+          "soy": 16,
+          "barley": 16
+        },
+        "sawada": {
+          "soy": 13,
+          "barley": 4,
+          "buckwheat": 9
+        }
+      },
+      "cohort_48": "48/54, the same six refused seeds (03, 10, 20, 22, 33, 906)",
+      "stream": "drawing the crops from R refused Kashikawa (WebRefused, needle_loops); from crop_stream, R unchanged, all five draw; the first crop_stream (eight state words) repeated itself after R drew - reseeded from the whole state, one stream per map threaded through every band; the cohort re-run: 48/54, the same six",
+      "end_split_on_hamlets": "none moves: every kept hamlet draws at grain 2 (ftpx 1.0), where the split already ran; it changes only a map at grain 1 (2 ft/px)"
+    }
   }
 }

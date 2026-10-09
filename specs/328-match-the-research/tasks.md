@@ -1832,3 +1832,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T158 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 64); each road at its recorded width, the 30 ft road and 24 ft street the fallbacks; the board's caption proved against the board drawn; claims in step over four impl-drift rounds; cohort unchanged
+
+## Phase 66 - wave 65 (amendment 64): each map's own crop mix, the end plot split at every grain
+
+- `waterfields/carve.py` (`crop_stream`, `dry_crop_mix`, `_dry_fields`' crop picks and end split); `waterfields/hem.py`
+  (the mix rolled once per map and passed to every band and the reserve).
+
+- [x] T159 wave 65's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 65, re-recorded); each map's own crop mix on its own stream, the end plot split at every grain; 0006's hamlet plot size corrected and its record checks answered; claims in step over five impl-drift rounds; cohort unchanged
+- [x] T160 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 65, re-recorded); each map's own crop mix on its own stream, the end plot split at every grain; 0006's hamlet plot size corrected and its record checks answered; claims in step over five impl-drift rounds; cohort unchanged

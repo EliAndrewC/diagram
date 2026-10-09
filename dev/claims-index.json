@@ -4959,14 +4959,15 @@
   "date": "2026-10-05",
   "note": "dry furrows only, up to 8 degrees on a hamlet, paddy never tilted",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
-  "research": "19fedec931d4c147",
+  "research": "95bd9df648285dfa",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::GROSS_ACRES_PER_HOUSEHOLD#paddy per household": {
@@ -14560,10 +14561,10 @@
   "date": "2026-10-03",
   "note": "matches 0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::FAN_MIDDLE#wild weighting": {
@@ -33364,10 +33365,10 @@
   "date": "2026-10-03",
   "note": "0006 neighbors abut continuously",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_KEY_OK#one continuous work": {
@@ -42337,14 +42338,15 @@
   "date": "2026-10-07",
   "note": "each crop's own fill, with furrows",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths": {
@@ -42371,13 +42373,14 @@
   "date": "2026-10-07",
   "note": "drops plots on other rice, on water or on its own ditch",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem placement": {
@@ -42386,14 +42389,15 @@
   "date": "2026-10-07",
   "note": "plots upslope of the supply canal, as the net lays them",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot": {
@@ -42676,10 +42680,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#junction pile size": {
@@ -42798,10 +42802,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::recorded_water#plumbing": {
@@ -43535,10 +43539,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/grain.py::top_up#top-up order": {
@@ -44054,10 +44058,10 @@
   "date": "2026-10-03",
   "note": "theta = uniform(-0.6, 0.6) per plot independently, where 0006 has plots in tracts sharing one direction (\"along the contour or down to its outfall\"), each plot turning \"about 3 degrees\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#row ink": {
@@ -44074,10 +44078,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._split_convex#plumbing": {
@@ -44141,16 +44145,17 @@
   "date": "2026-10-05",
   "note": "dry/soy plots are scattered inside the paddy outline at 5-29%/3-14% rising toward EVERY rim, but the pages put dry crops as \"a hem ... just upslope of the supply canal\" and \"a plot on the upslope margin\"; neither rate is on either page",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
-  "research": "785f129654da9ff2",
+  "research": "526f23bd05fe2333",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:8f11acb4f22cddd3",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:a7401b1ec92e2d4b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.paddy_field#field outline": {
@@ -44249,10 +44254,10 @@
   "date": "2026-10-03",
   "note": "dry also below the drain and at every margin (edgef > 0.6), at a fixed 62% grain / 38% soy, where 0006 puts dry crops only in the hem upslope of the canal and \"Each map picks its mix of the four crops at random\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#flooded near the ditches": {
@@ -51224,6 +51229,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#a near-ring plot's stand-off from roads, streets and lanes (the `_corridor_buffers(3 * self.bscale)` margin)": {
+  "code": "a240a5da45a80627",
+  "core": "a240a5da45a80627",
+  "date": "2026-10-09",
+  "note": "a near-ring plot's stand-off from roads, streets and lanes (the `_corridor_buffers(3 * self.bscale)` margin)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#crop runs": {
   "code": "19f85df3dbeba16d",
   "core": "a240a5da45a80627",
@@ -51278,14 +51291,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#no cropland inside a walled city's wall": {
-  "code": "a240a5da45a80627",
-  "core": "a240a5da45a80627",
-  "date": "2026-10-03",
-  "note": "no cropland inside a walled city's wall",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#off the groves": {
   "code": "b6e4f9ff5af97da2",
   "core": "a240a5da45a80627",
@@ -51297,22 +51302,16 @@
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#plot size": {
   "code": "84c8793227315620",
   "core": "a240a5da45a80627",
-  "date": "2026-10-03",
-  "note": "60 ft cells (~0.08 acre) sit inside 0006's 0.04-0.17 acre band, average under 0.25",
+  "date": "2026-10-09",
+  "note": "`self.px(cell_ft)` with cell_ft=60.0 tiles real 60 x ~60 ft cells, about 0.08 acre. The page says dry plots are \"tiled in real feet at every scale, roughly 92 ft across and 72 ft down a row\", calibrated to registers averaging about 0.12-0.16 acre. Either the cell becomes ~92x72 ft, or the claim becomes a DEVIATION that the page records.",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#plots held 3 bs off every road, street and lane corridor": {
-  "code": "a240a5da45a80627",
-  "core": "a240a5da45a80627",
-  "date": "2026-10-03",
-  "note": "plots held 3 bs off every road, street and lane corridor",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "research": "b094712e0b419276",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#row direction": {
   "code": "13b84746923019ab",
@@ -51320,10 +51319,10 @@
   "date": "2026-10-03",
   "note": "theta = ri*0.9 + cj*1.5 turns every plot from every neighbor; 0006 has \"Neighboring plots form tracts that share one row direction\" (2-4 strips, about 3 degrees within a tract, seams at least 20 degrees)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#basin size": {
@@ -60245,7 +60244,7 @@
   "code": "2e91285cdfda4de5",
   "core": "b9346f3c1f09336f",
   "date": "2026-10-09",
-  "note": "line 290's `off <= lim` measures the way's centreline to the ground's centre, but the page says \"measured edge to edge, never center to center\"; edge to edge the code allows only 60 - rw/2 - h/2 ft; test off - rw/2 - h/2 <= lim",
+  "note": "line 290's `off <= lim` measures the way's centerline to the ground's center, but the page says \"measured edge to edge, never center to center\"; edge to edge the code allows only 60 - rw/2 - h/2 ft; test off - rw/2 - h/2 <= lim",
   "pages": {
    "0191-execution-and-punishment-grounds-keijo.drawing.html": "623d2ba33ede56cd"
   },
@@ -63425,10 +63424,10 @@
   "date": "2026-10-03",
   "note": "0006: a plot that \"would lap onto another canal's rice is dropped\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall left alone": {
@@ -63659,91 +63658,128 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#behind a bare bank": {
-  "code": "53d7660034b516c4",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "the berm is the stroke's local half-width plus CANAL_BERM_FT 5 ft, the page's 5 ft bank",
+  "code": "6d36403a54a35bda",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "the inner edge sits at the stroke's local half-width plus CANAL_BERM_FT, converted correctly by ft*g/2",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
-  "research": "ccb962a855ae9508",
+  "research": "5cb608c6c81f73b4",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#crop per plot": {
-  "code": "c2e17b5e141b59c1",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "the four crops match, but §8 says \"each map picks its mix of the four crops at random\", while this code rolls the four at fixed equal odds per plot; need to know whether a per-map crop-mix weighting is applied elsewhere",
+  "code": "97c08eecfcb1c3db",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "one of the four attested crops, drawn from the map's one mix",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
-  "verdict": "CANNOT-TELL"
+  "triaged": "2026-10-09",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#dry plot size": {
-  "code": "7623562015b8cda6",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "about 92 x 72 ft (x0.9-1.25) comes to about 0.15-0.17 acre, matching the village strips",
+  "code": "202219a0d07c81b4",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "46g x 36g px is 92 x 72 ft at both village and hamlet scale, about 0.15 acre, which matches the page's 0.16-0.17 for the village and about 0.15 for the hamlet.",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:dcc917f58bd99fa2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/carve.py::_dry_fields#end plot floor": {
+  "code": "3a902fc461d3fbc8",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "the page gives an average and no minimum plot size, so UNRESEARCHED stands. A 0.6-wide end plot (~0.09 acre) does not contradict \"average under 0.25 acre\".",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#end plot split": {
-  "code": "addf606d4fb1a66c",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "the page says plots are \"tiled in real feet at every scale, roughly 92 ft across\", but the split runs only when `g != 1.0`. On a village map an end cell snapped to the canal's length can stay up to 1.85 plot widths (about 170 ft, 0.28 acre), so plot size depends on the map's scale. Either split at every scale, or have the claim name the village-grain exemption as a DEVIATION that 0006's drawing page records",
+  "code": "ec3198dda4949384",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "halving any end cell past 1.35 widths, at every grain, caps it near 0.2 acre, inside the page's \"under 0.25 acre\" and \"never dwarfs the rice basins\".",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:dcc917f58bd99fa2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#hem depth": {
-  "code": "28d22e74504127b1",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "no page gives the hem's upslope depth",
+  "code": "762c55f79603822c",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "no page gives a hamlet's hem depth; §54's 140-265 ft is a city calibration",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:dcc917f58bd99fa2",
+   "0010-farmland-around-towns-and-cities.drawing.html:2f19d581d6b3c8ad"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/carve.py::_dry_fields#hem depth from a caller": {
+  "code": "ee084484d04a9b7f",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "the caller's band, at its own depth; no page gives a depth",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#keep-out and frame margin": {
-  "code": "cd201aeed195d8a4",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "a frame margin and caller-given keep-outs: plumbing",
+  "code": "224986ef19529f82",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "collision and frame plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/carve.py::_dry_fields#measuring line": {
+  "code": "602bce10702b9480",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "8 g px is 16 ft at every grain; no page gives this measure",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#neighbor keeps the crop": {
-  "code": "3973b57978bb5f01",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "0.55 + 0.45/4 = 0.66 as claimed; no page gives a figure for neighbors sharing a crop",
+  "code": "e6eda39573347857",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "keep chance 0.55 plus 0.45 times the re-roll landing on the same crop, as stated; no page gives a figure",
   "pages": {},
   "research": "",
   "rests": [
@@ -63752,49 +63788,55 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#off the water and the frame": {
-  "code": "4b218592395048ae",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "`_in_berm`: `gap - halfw < 0.5` lets a hem cell stand 0.5 px from a stroke's painted edge, against \"a bare earth bank 5 ft wide runs between a supply canal and the fields\"; the page does not record the departure, so it is a drift (the claim already names its row), not a DEVIATION",
+  "code": "822c9bf0896df7f0",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "`gap - halfw < 0.5` holds plots only 0.5 px off any other supply stroke's painted edge, but 0055 says \"A bare earth bank 5 ft wide runs between a supply canal and the fields beside it\", and neither drawing page records the 0.5 px floor as a deliberate choice; record it as a DEVIATION on 0055, or move the code to the bank",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
-  "research": "4093f876b21e8ef3",
+  "research": "388f1d7134acd022",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
   ],
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#row direction": {
-  "code": "1158fbf76808341c",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "heading set per tract, each plot turned up to 0.05 rad (about 3 degrees either way)",
+  "code": "bd3b00dc165ddc2f",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "each plot turns up to 0.05 rad (about 2.9 degrees) off its tract's heading, matching \"about 3 degrees either way\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#squared to the canal": {
-  "code": "1748080d30f732aa",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-07",
-  "note": "plots tiled along the canal on shared mitred normals; only the outer edge is ragged",
+  "code": "6834cb8799680f22",
+  "core": "2e369053dd2cb340",
+  "date": "2026-10-09",
+  "note": "laid out along the canal's arc length, squared to it, with shared mitred seams",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_root_f#sector bounds": {
@@ -63815,6 +63857,43 @@
   },
   "research": "9c5292e27312fca8",
   "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/carve.py::crop_stream#crops off the geometry stream": {
+  "code": "032daf61c9da9dbd",
+  "core": "d4d18a8a31ddff36",
+  "date": "2026-10-09",
+  "note": "getstate() does not advance R and the hash is deterministic; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/carve.py::dry_crop_mix#a mix per map": {
+  "code": "7d7cdb8d5a354e9d",
+  "core": "37f490c085340fd0",
+  "date": "2026-10-09",
+  "note": "one weight per crop, rolled once per map.",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+  },
+  "research": "b094712e0b419276",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4"
+  ],
+  "triaged": "2026-10-09",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/carve.py::dry_crop_mix#the weights": {
+  "code": "2ddf17c7ac669bd3",
+  "core": "37f490c085340fd0",
+  "date": "2026-10-09",
+  "note": "the page records the proportions as a GUESS.",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::CombCarve#comb plumbing": {
@@ -64417,10 +64496,10 @@
   "date": "2026-10-03",
   "note": "steep ground owes no seam (0006); literal 0.3 duplicates STEEP_SPREAD_RAD",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::finish_comb#one rice green": {
@@ -64714,10 +64793,10 @@
   "date": "2026-10-03",
   "note": "nothing sheared or stepped (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_pip#frame geometry": {
@@ -64827,10 +64906,10 @@
   "date": "2026-10-03",
   "note": "~6 deg (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::STEEP_SPREAD_RAD#steep ground runs the contour": {
@@ -64839,10 +64918,10 @@
   "date": "2026-10-03",
   "note": "steep rows on the contour (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::THETA_ROUNDING_RAD#row-direction geometry": {
@@ -64883,10 +64962,10 @@
   "date": "2026-10-03",
   "note": "20 deg convention (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::_center#row-direction geometry": {
@@ -64927,10 +65006,10 @@
   "date": "2026-10-03",
   "note": "`shifts` reach +/-1.575 rad with no cap, so a settled tract can end ~45 deg off both the contour and the fall; 0006 rows run \"along the contour or down to its outfall ... turned up to about 17 degrees\" - bound the turn to TRACT_LEAN_RAD of a way, else join a neighbor",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/furrows.py::settle_tract_seams#hemmed-in tract joins a neighbor": {
@@ -64939,10 +65018,10 @@
   "date": "2026-10-03",
   "note": "larger tract; 0006's 2-4 is a GUESS",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_seams#tracts and their seams": {
@@ -64951,10 +65030,10 @@
   "date": "2026-10-03",
   "note": "0006 tract/seam rule",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#seam turn": {
@@ -64963,10 +65042,10 @@
   "date": "2026-10-03",
   "note": "flips to the other way (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#tract lean and size": {
@@ -64975,10 +65054,10 @@
   "date": "2026-10-03",
   "note": "0006 figures",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#two row directions": {
@@ -64987,10 +65066,10 @@
   "date": "2026-10-03",
   "note": "contour or fall, rolled per tract (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::BoxedRings#hem plumbing": {
@@ -65037,10 +65116,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#bund beans": {
-  "code": "c7957167c82abf4c",
-  "core": "7ab0c6b72739ea09",
-  "date": "2026-10-07",
-  "note": "beans on a share of the bunds",
+  "code": "018c4d91cf8bed0f",
+  "core": "4a57012d0aadd840",
+  "date": "2026-10-09",
+  "note": "passes bean_frac on to the beads along a share of the bunds",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -65052,36 +65131,36 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#dry acreage scale": {
-  "code": "3f54ded8e2a44752",
-  "core": "7ab0c6b72739ea09",
-  "date": "2026-10-07",
-  "note": "an area conversion, not a decision",
+  "code": "a2c5e5f81db9ccac",
+  "core": "4a57012d0aadd840",
+  "date": "2026-10-09",
+  "note": "a reporting figure that places nothing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#dry hem above the canal": {
-  "code": "62610918611bdf48",
-  "core": "7ab0c6b72739ea09",
-  "date": "2026-10-07",
-  "note": "hem upslope of canal A",
+  "code": "07f2a211b42c66bf",
+  "core": "4a57012d0aadd840",
+  "date": "2026-10-09",
+  "note": "the hem is laid upslope of canal A",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band depth": {
-  "code": "2ba5513203bc306a",
-  "core": "7ab0c6b72739ea09",
-  "date": "2026-10-07",
-  "note": "no depth given for the fork band",
+  "code": "3b2062f1b6d05a28",
+  "core": "4a57012d0aadd840",
+  "date": "2026-10-09",
+  "note": "no page gives the fork band's depth",
   "pages": {},
   "research": "",
   "rests": [
@@ -65091,22 +65170,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band skipped on villages": {
-  "code": "cc5cdf0c88074471",
-  "core": "7ab0c6b72739ea09",
-  "date": "2026-10-07",
-  "note": "0010 rules only for cities",
+  "code": "4e26e10ccd9af6fb",
+  "core": "4a57012d0aadd840",
+  "date": "2026-10-09",
+  "note": "0010 does address this ground. It calls the fork triangle \"the well-drained high ground that dry crops take\" and plants it only \"On a city map\". Leaving it to scrub at grain >= 1.0 (the code comment says this is for byte-stability) departs from that finding. The label should be DEVIATION 0010 (or 0006), with the drawing page recording the village and hamlet departure.",
   "pages": {},
   "research": "",
   "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0010-farmland-around-towns-and-cities.drawing.html:3493e7b3a94673f1"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork triangle planted dry": {
-  "code": "99ed5e906c96dea1",
-  "core": "7ab0c6b72739ea09",
-  "date": "2026-10-07",
-  "note": "city fork triangle planted dry",
+  "code": "2846c25b1c953c64",
+  "core": "4a57012d0aadd840",
+  "date": "2026-10-09",
+  "note": "city grain only, a band along canal B up to its first offtake",
   "pages": {
    "0010-farmland-around-towns-and-cities.drawing.html": "a6ecbb2065f500ff"
   },
@@ -65117,34 +65197,36 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#seams settled": {
-  "code": "a583ea534571043d",
-  "core": "7ab0c6b72739ea09",
-  "date": "2026-10-07",
-  "note": "seams set where rows spread, none on steep ground",
+  "code": "45b89829db82aef2",
+  "core": "4a57012d0aadd840",
+  "date": "2026-10-09",
+  "note": "seams are settled only at the full spread, and steep ground needs none",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#wild middle": {
-  "code": "32870c3d2d6cda18",
-  "core": "7ab0c6b72739ea09",
-  "date": "2026-10-07",
-  "note": "toe kept, middle held in reserve",
+  "code": "09f541bc44c4a74c",
+  "core": "4a57012d0aadd840",
+  "date": "2026-10-09",
+  "note": "a wild fan keeps the toe's strip of hem and holds the middle in reserve",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
+  "research": "b094712e0b419276",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:79c616b0b0fbbeb4",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_ring_mean#hem plumbing": {
@@ -65161,29 +65243,38 @@
   "date": "2026-10-03",
   "note": "0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::middle_reserve#clearing order": {
-  "code": "356f47402b9f224c",
-  "core": "8e7ecf024cc67792",
-  "date": "2026-10-03",
-  "note": "nearest the toe, GUESS (0011)",
+  "code": "f2722d6072a85574",
+  "core": "2a55d11390c2c3ea",
+  "date": "2026-10-09",
+  "note": "sorted toe first; 0011 records the same order as a GUESS (the claim could name that file)",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::middle_reserve#the wild middle as reserve": {
-  "code": "4b5945543c71bd3a",
-  "core": "8e7ecf024cc67792",
-  "date": "2026-10-03",
-  "note": "0011",
+  "code": "bc2d7c0d254b15aa",
+  "core": "2a55d11390c2c3ea",
+  "date": "2026-10-09",
+  "note": "columns run along the canal above the toe out to the canvas edge, off the paddy and the drawn hem",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
   "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::middle_stretch#hem plumbing": {
@@ -65208,10 +65299,10 @@
   "date": "2026-10-03",
   "note": "0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hill.py::build_ribbon#acreage scale": {
@@ -65543,10 +65634,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
   },
-  "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "research": "b094712e0b419276",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::FLOODED#wet-paddy tint": {

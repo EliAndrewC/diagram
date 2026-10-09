@@ -160,6 +160,10 @@ def strings_used(skill: Path, ran: set[tuple[str, str]], read: set[str] = frozen
 
 
 DEFERRED_ON_MEASURE = {
+    # the fork band: laid only at a city's coarse grain (`grain < 1.0`); every kept hamlet draws at 1 ft/px (grain 2), so no
+    # kept map lays it (wave 65's measure, 2026-10-09: inashiro, kashikawa and sawada ftpx 1.0); the found row
+    # `fork band skipped on villages` would lay it at hamlet grain - taking that row ends this entry
+    "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band depth",
     # only plain houses keep a byre: every house a scripted hamlet seats is kind 'plain' with no role (the five hamlets 15, 20,
     # 16, 12 and 19 plain), so the filter excludes nothing a kept map draws; only the legacy roller seats a big or headman
     # house (wave 58's measure, 2026-10-08)

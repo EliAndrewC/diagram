@@ -24,4 +24,4 @@ Name: The middle of the fan below the hills: cleared for dry fields
 Covers: `meta.fan_middle = cleared`
 Sources: senjochi-jawiki, senjochi-kotobank, mlit-senjochi-kurashi, tabayashi-1987, isawa-senjochi-jawiki
 Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0057-marshes-and-wetlands-shitchi.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html
-Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html
+Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html

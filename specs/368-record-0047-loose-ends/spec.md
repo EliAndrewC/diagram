@@ -17,7 +17,16 @@ noticed during feature 328's wave 61 and that lie outside that feature's scope (
 3. **"Type V1" undefined** (`.notes.html`, `wang-ochiai-2022-2`): the paper's own name for a farmstead layout type, which a
    reader cannot place. Gloss it from the paper's definition where it stands, or cut the quotation at its "..." so the label
    drops out (a quotation change: quote-check).
+4. **0006 never points to the row village's holdings** (added by feature 328 wave 65 - a 0006 loose end, not 0047's): its
+   visible text tells every dry plot as the hem and says "No grain plot is drawn beside a house", while the farm-holding
+   modal links it for its crops - a reader following that link meets a page that seems to rule the holding out. Add a
+   visible clause pointing to 0033's holdings (modal-depiction on farm-holding, 2026-10-09); it re-owes 0006's record checks
+   and its nine modals' depiction checks, so it waits for a batch of 0006 edits.
+5. **The dry plot's outline is untold** (added by feature 328 wave 65): every dry plot is drawn with a tan-brown stroke,
+   the seam between two plots included, and 0006 names only the bare bank between plots and canal; record on 0006's
+   drawing page what the stroke stands for (a field edge, a path, a balk) and whether it is drawn wider than real, so the
+   crop modals can tell it (modal-depiction on soy, 2026-10-09). Batched with item 4.
 
 ## Done when
 
-Each of the three is fixed, and the record checks they owe (`make record-owed`) are answered.
+Each of the five is fixed, and the record checks they owe (`make record-owed`) are answered.

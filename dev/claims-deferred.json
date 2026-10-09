@@ -854,6 +854,7 @@
   "l7r/diagram/settlement/_knobs.py::<module>#water_source_position forms",
   "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#lotus draw",
   "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights",
-  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#only plain houses keep a byre"
+  "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#only plain houses keep a byre",
+  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band depth"
  ]
 }

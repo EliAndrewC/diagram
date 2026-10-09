@@ -38,6 +38,27 @@ def _root_f(t: _Thread, F: _Frame) -> float:
     return t.f0
 
 
+def crop_stream(R: random.Random) -> random.Random:
+    """A random stream for the crops, seeded from R's state WITHOUT advancing R: the crop picks and the map's mix stay off
+    the geometry's stream, so choosing a crop never moves a plot, a lane or a tree (feature 328 wave 65).
+
+    Research:
+        crops off the geometry stream - NONE: how the random draws are kept apart, which places nothing
+    """
+    return random.Random(hash(R.getstate()[1]))  # the whole state, its index too: a tuple of ints hashes the same every run
+
+
+def dry_crop_mix(R: random.Random) -> list[float]:
+    """THE MAP'S MIX OF THE FOUR DRY CROPS (0006: "each map picks its mix of the four crops at random"): one weight per crop,
+    in `DRY_CROPS` order, rolled once per map so its plots lean to its own crops rather than to an even quarter each.
+
+    Research:
+        a mix per map - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each map picks its mix of the four crops at random
+        the weights - GUESS: each crop's weight uniform in 0.1-1.0, so every crop keeps some plots (0006: the proportions a GUESS)
+    """
+    return [R.uniform(0.1, 1.0) for _ in DRY_CROPS]
+
+
 def _dry_fields(
     R: random.Random,
     F: _Frame,
@@ -52,12 +73,15 @@ def _dry_fields(
     grain_drift: float = 0.0,
     supply: Sequence[dict[str, Any]] = (),
     tract0: int = 0,
+    crop_mix: Sequence[float] | None = None,
+    crop_rng: random.Random | None = None,
 ) -> list[dict[str, Any]]:
     """DRY FIELDS (hatake) on the UPSLOPE margin the irrigation cannot command - the band just ABOVE the
     supply canal. Grain and pulses (barley/wheat, millet, buckwheat, field soy) in an irregular PATCHWORK of
     ridge-cultivated plots. Crop is assigned per-PLOT (not per-column) with spatial coherence - historical
-    holdings were fragmented, so adjacent small plots carry different crops. To scale (1px=2ft): plot outlines
-    are real, furrows stylised.
+    holdings were fragmented, so adjacent small plots often carry different crops, though a plot keeps its
+    neighbor's more often than not, each drawn on the map's own mix. To scale (1px=2ft): plot outlines are real,
+    furrows stylized.
 
     The plots are RECTANGLES laid out AGAINST THE CANAL THEY BORDER - one edge runs ALONG the supply canal,
     the other PERPENDICULAR to it, extending upslope. They are NOT oriented to the paddy's fall grid (that gave
@@ -70,17 +94,22 @@ def _dry_fields(
 
     FURROWS run along the CONTOUR (perpendicular to the fall), the traditional ridge-along-contour that dams
     rain and checks runoff - or down to the outfall, set TRACT BY TRACT (`tract_ways`); `theta` per plot, and `tract`
-    numbered from `tract0`, so a caller laying a second band keeps its tracts apart from the first.
+    numbered from `tract0`, so a caller laying a second band keeps its tracts apart from the first. `crop_mix` is the map's
+    mix of the four crops (`dry_crop_mix`), rolled once by the caller so every band of one map shares it, and `crop_rng` the
+    one crop stream the caller rolled it from, continued here; both made here when none is given.
 
     Research:
         dry plot size - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: 46 grain px along the canal (x0.9-1.25) by 36 grain px a row, about 92 by 72 ft on a village map
         squared to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot a rectangle square to the canal, neighbors sharing every seam
         behind a bare bank - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: the hem starts CANAL_BERM_FT past the stroke's local bank
-        hem depth - UNRESEARCHED: a ragged outer edge, each column `band` px deep from the canal line
-        crop per plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one of four crops
-        neighbor keeps the crop - UNRESEARCHED: a plot keeps the last plot's crop with a 55% chance, about 0.66 once a re-roll lands on the same crop
+        hem depth - UNRESEARCHED: the default `band`, 70-132 px past the measuring line, each column a ragged depth within it - at a hamlet's 1 ft/px 70-132 ft; no page gives a hamlet's hem depth (0010's 140 to 265 ft is a city field's head hem, which no kept map draws)
+        measuring line - UNRESEARCHED: the band measured from 8 g px (16 ft) off the canal's line, the berm inside it, so the planted depth is 8 g + band less the berm
+        hem depth from a caller - UNRESEARCHED: a band the caller passes (the fork band, the wild middle) at its own depth
+        crop per plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one of four crops, drawn on the map's own mix (`crop_mix`)
+        neighbor keeps the crop - UNRESEARCHED: a plot keeps the last plot's crop with a 55% chance, more once a re-roll lands on the same crop (about 0.66 on an even mix, up to about 0.8 on a lopsided one)
         row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each column's tract heading, each plot turned up to TRACT_PLOT_TURN_RAD
-        end plot split - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a dry plot's size - an end cell stretched past 1.35 plot widths by the snap to the canal's length is halved (coarse grains only)
+        end plot floor - UNRESEARCHED: the tiling stops 0.6 of a plot short of the canal's end, so the last plot is at least 0.6 of a plot wide
+        end plot split - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a dry plot's size - an end cell stretched past 1.35 plot widths by the snap to the canal's length is halved, at every grain
         off the water and the frame - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: held at 0.5 px of a supply stroke's painted edge, short of the page's bank (its half-width plus `CANAL_BERM_FT`) - at the bank the freed ground re-lays Inashiro's toe marsh with a sharp corner on open ground; the found row waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm
         keep-out and frame margin - NONE: a cell in a keep-out or within 12 px of the frame is dropped
     """
@@ -117,10 +146,11 @@ def _dry_fields(
     while bounds[-1] < total - plot * 0.6:
         bounds.append(bounds[-1] + plot * R.uniform(0.9, 1.25))
     bounds[-1] = total
-    if g != 1.0 and len(bounds) >= 2 and bounds[-1] - bounds[-2] > 1.35 * plot:
+    if len(bounds) >= 2 and bounds[-1] - bounds[-2] > 1.35 * plot:
         # the snap-to-total stretch can hand the END cell up to ~1.85 plot widths (a ~0.38-acre
-        # slab at city grain - the largest-parcel outlier, 2026-07-21); split it. Coarse grains
-        # only: the vetted village maps carry the same (milder, in-band) artifact byte-stably.
+        # slab at city grain - the largest-parcel outlier, 2026-07-21); split it, at every grain
+        # (feature 328 wave 65: it was held off the village grain, 2 ft/px, for those maps'
+        # byte-stability, which left a village map's end plot past the size 0006 draws)
         bounds.insert(-1, (bounds[-1] + bounds[-2]) / 2)
 
     # THE ROW DIRECTION IS SET TRACT BY TRACT (269 B06; research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, 0006). The land set the direction: a run of neighboring plots on one lie of ground
@@ -130,7 +160,14 @@ def _dry_fields(
     # seated each plot's angle in the widest gap between its neighbors': it forbade the neighbors that share a
     # direction, which the record makes the common case. `tract_ways` rolls each tract's heading.
     tracts = tract_ways(R, len(bounds) - 1, theta0, furrow_spread)
-    prev_crop = R.choice(list(DRY_CROPS))
+    # THE CROPS DRAW FROM THEIR OWN STREAM (`crop_stream`), never from R: a crop is a fill color, and drawing it from the
+    # geometry's stream moved every later draw - Kashikawa's web then refused (feature 328 wave 65). R still takes the
+    # draws it always took (`R.choice` below, its pick unused), so the geometry is the geometry it was.
+    crops = list(DRY_CROPS)
+    cr = crop_rng if crop_rng is not None else crop_stream(R)
+    mix = list(crop_mix) if crop_mix is not None else dry_crop_mix(cr)
+    R.choice(crops)  # the geometry stream's draw, kept (see above)
+    prev_crop = cr.choices(crops, weights=mix)[0]
     # THE BERM IS MEASURED FROM THE CANAL'S BANK, NOT ITS CENTERLINE (settlement-review 2026-08-17).
     # This used to be a flat `8 * g` from the centerline, which silently bundled the canal's own
     # half-width into the stand-off - so when the net went to TRUE SIZE the water shrank threefold and
@@ -243,7 +280,8 @@ def _dry_fields(
         for k in range(nrow):
             # per-plot crop with coherence: usually keep the last crop (holdings cluster), sometimes switch
             if R.random() < 0.45:
-                prev_crop = R.choice(list(DRY_CROPS))
+                R.choice(crops)  # the geometry stream's draw, kept
+                prev_crop = cr.choices(crops, weights=mix)[0]
             crop = prev_crop
             fill, furrow = DRY_CROPS[crop]
             # PERPENDICULAR offset from the canal (both edges UPSLOPE of it): near = canal side, far = upslope.

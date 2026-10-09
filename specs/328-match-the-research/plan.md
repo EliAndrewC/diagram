@@ -969,6 +969,50 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `test_a_board_route_with_no_recorded_width_takes_the_ways_drawn_default`, the canopy and web-lane tests restated;
   `impl-drift`; `spec-fidelity`.
 
+## Wave 65 (amendment 64, 2026-10-09) - batch 5
+
+- **Scope**: the dry plots' two kept E2 rows (0006). `_dry_fields#crop per plot` ("each map picks its mix of the four crops
+  at random"): each plot took a uniform choice of the four, so every map leaned to an even quarter each; `dry_crop_mix` now
+  rolls one weight per crop once per map (in `_comb_dry_and_beans`, shared by every band and the wild middle's reserve) and
+  each plot's crop is drawn on it, the 55% neighbor coherence kept. `_dry_fields#end plot split at every scale` (0006's plot
+  size): the end cell the snap to the canal's length stretches past 1.35 plot widths was halved at coarse grains only, held
+  back at the village grain for byte-stability; it is halved at every grain.
+- **Measured** (m:wave65-crop-mix-and-end-split): at grain 1 over 40 seeds the widest plot along the canal 77.6 px with the
+  old condition, at most 1.35 plot widths with the fix (the test goes red on the old condition); the five hamlets' dry-plot
+  counts unchanged (81, 68, 26 on the three that draw a hem), their crop mixes now each map's own (Inashiro 30 barley and 12
+  buckwheat of 81, Sawada no millet of 26); the hamlets draw at grain 2, where the end split already ran, so the split moves
+  only a map at the village grain (2 ft/px); the 48-seed cohort unchanged (the same six refused seeds).
+- **Found and fixed**: the first form drew the crops and the mix from the geometry's stream (`R`), which moved every later
+  draw and Kashikawa's web refused (WebRefused: needle_loops) - a crop is a fill color, so the picks and the mix now draw from
+  `crop_stream`, seeded from R's state without advancing it, and R keeps the draws it always took; Kashikawa draws again.
+  spec-fidelity (round 1, CLEAR with two fixes): `crop_stream` seeded from eight words of R's state, which regenerate only
+  every 624 outputs, handed the mix and the picks the same stream - it now seeds from the whole state, index included
+  (`test_the_crop_stream_moves_with_the_geometry_stream_and_leaves_it_alone`, red on the old seeding), and `hem.py` makes ONE
+  crop stream per map and continues it through every band and the reserve; the end split's comment said a hamlet's end plot
+  was held back - it was the village grain's. A
+  British spelling impl-drift wrote into `dev/claims-index.json` corrected. impl-drift on the wave: the hem's depth first cited
+  to 0010 (the head hem 140 to 265 ft, the 70-132 px band at 2 ft/px), which round 2 found holds only at that scale - it is
+  restated UNRESEARCHED at the scale the kept maps draw it (every kept hamlet at 1 ft/px: 70-132 ft; no page gives a hamlet's
+  hem depth), its measuring line (8 g px off the canal's line) newly claimed, a caller's own band UNRESEARCHED, and the city-grain
+  fork band's depth deferred on measure (`audit/scope.py`: laid only at `grain < 1.0`, no kept map); the neighbor-keep
+  figure restated for a per-map mix (about 0.66 to 0.8, the docstring's "adjacent plots carry different crops" softened);
+  `dry_acres` measured at the map's own scale, not a fixed 2 ft/px (a manifest figure no stage reads). Left to its row:
+  `_dry_fields#off the water and the frame` (ranked row 213). The four crop modals already said each map's mix
+  is rolled at random - now true.
+- **The record**: impl-drift asked what a hamlet's plot comes to - 0006's drawing page said "the hamlet's garden-scale
+  strips about 0.04", which dated from unscaled plots; the plots are tiled in real feet at every scale, so it now reads about
+  0.15 (measured: medians 0.152 Inashiro, 0.17 Sawada; Kashikawa's 0.79-acre strips are its row holdings, `rows.py`). The page
+  edit owed quote-check (SUPPORTS), record-format (clean), a claims triage (one claim sent on: `nearring.py`'s plot size,
+  DRIFTED in a DEFERRED unit) and nine modals' depiction checks, which corrected the buckwheat color's reason, the winter
+  barley choice's two overclaims, the grain-drift choice (the paddy kept untilted, 0031's deviation), the farm holding's dry
+  edge (a dike too) and soy (beans among the greens drawn as the garden; 0011 linked for every map; steep ground's tracts run the contour), and linked 0009 from the
+  cleared fan; each edited modal checked again. Filed, not taken: two found rows - the cleared fan middle drawn only as the
+  hem (E4, a decision for the record) and the fork triangle left to scrub at village and hamlet grain against 0010 (E2, with
+  0010's drawing page) - and feature 368 items 4-5 (0006's visible pointer to the holdings; what the plot outline stands for).
+- **Verification**: `test_dry_plots_draw_the_maps_own_crop_mix`, `test_the_end_dry_plot_is_split_at_every_grain`,
+  `test_the_crop_stream_moves_with_the_geometry_stream_and_leaves_it_alone`;
+  `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

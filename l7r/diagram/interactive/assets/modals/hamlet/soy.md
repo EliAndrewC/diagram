@@ -28,8 +28,8 @@ Guesses:
 Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
 paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
 fan's dry middle is left to scrub and the plots keep to its toe. No grain or bean plot is drawn beside a house: the plot
-a household worked there was its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
-one way, each tract turned well apart from the next so the strips can be told apart. Soybean is drawn green, as it stood
+a household worked there was its kitchen bed, and soybeans grown among its greens are drawn as that garden. Every plot is furrowed, and neighboring plots form a tract whose rows run
+one way, each tract turned well apart from the next so the strips can be told apart; on steep ground every tract runs along the contour instead. Soybean is drawn green, as it stood
 through the summer, against the tan and ochre of the grains.
 
 [winter_crop=none] This settlement's paddies lie bare over the winter, so where its field lies at the toe of a fan whose
@@ -40,4 +40,4 @@ Name: soy
 Covers: `dry_plots[crop=soy]` and their furrows
 Sources: fukui-kenshi-noji, nabunken-azemame, shizen-teibo-jawiki, dankyu-kotobank, senjochi-kotobank, king-forty-centuries, zgkpw-longzuo, nogyo-zensho-joun-sera, cropfarming-soybeans, wikipedia-soybean, maruyanagi-daizu-hatake, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain, ehime-kenshi-seiryoki, nagaokakyo-nengu-jono
 Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0014-bunds-between-the-paddies-aze.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html, research/questions/0098-storehouses-for-the-tax-rice.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html [winter_crop=none]
-Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html [winter_crop=none]
+Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html

@@ -1,63 +1,93 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "35afc35671828eb06aa4091d3b5d7fb17a3c09f810c6912526b5803ed4a0c2df",
+ "plan_sha256": "8aae86d4495239429d8766a30551b9168003e13861f53142916e886df0aa24e5",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W64-row169",
-   "summary": "_board_routes takes each road's recorded width (road_width, roads[i].w, a main street's w, all in px as ground.py records them) instead of a fixed 18 px; the claim re-cited from 0137 (capital) to 0088 (the per-tier road widths)",
+   "id": "W65-1 per-map crop mix",
+   "summary": "dry_crop_mix rolls one weight per crop (uniform 0.1-1.0, GUESS) once per map in _comb_dry_and_beans, shared by every band and the reserve; each plot's crop drawn on it, the 55% neighbor keep unchanged",
    "class": "within",
-   "why": "row 169's fix verbatim: recorded width instead of 18 px, cite the per-tier widths not the capital page; ground.py records the drawn width in px, so no further conversion is owed"
+   "why": "ranked row 192 and 0006 ('each map picks its mix of the four crops at random') done literally; the weight range is labeled GUESS where 0006 calls the proportions a guess"
   },
   {
-   "id": "W64-row170",
-   "summary": "all three caption steps (board_caption_seat, terminal_caption, fallback_caption) proved against board_record's drawn vw x vh, the same box board_subject draws",
+   "id": "W65-2 crops on their own stream",
+   "summary": "the mix and the picks draw from crop_stream (seeded from R's state without advancing it); R keeps the draws it always took so the geometry is unchanged",
    "class": "within",
-   "why": "row 170's fix verbatim; the steps double the half-extents into board_subject/recorded_board, so the proof subject is the drawn footing"
+   "why": "an implementation choice, not a carve-out: the row's 'R.choices' names a method, not a research constraint; every map still rolls its own mix at random and every plot is drawn on it. Keeping a fill color off the geometry stream (measured: Kashikawa's web refused otherwise) narrows nothing asked"
   },
   {
-   "id": "W64-fallbacks",
-   "summary": "a road or main street with no recorded width falls back to the drawers' defaults lw(ROAD_W_FT) 30 ft and lw(STREET_W_FT) 24 ft (STREET_W_FT named in lanes.py, street() reads it) instead of 18 px, in the main-way and whole-network routes",
+   "id": "W65-3 end plot split at every grain",
+   "summary": "drop g != 1.0 from the end-cell split condition",
    "class": "within",
-   "why": "a defect impl-drift found in the unit the row fixes; moves the implementation to 0088/0136 (FR-004, XIV); behavior-preserving where a width is recorded (every hamlet way does, measured)"
+   "why": "ranked row 193's fix applied literally"
   },
   {
-   "id": "W64-punishment-fallbacks",
-   "summary": "the same width fallbacks applied in place_punishment_spot, a DEFERRED unit, with its width, lane-fallback and turn decisions claimed",
-   "class": "within",
-   "why": "deferral (FR-010) permits not fixing legacy-only code; it does not forbid a consistency edit, and the edit moves code toward the research the GM asked for; no hand-rolled map file is edited (FR-009)"
-  },
-  {
-   "id": "W64-new-claims",
-   "summary": "facing search pad NONE, siting default frontage (0190), bed clearance UNRESEARCHED newly claimed on place_kosatsuba",
-   "class": "within",
-   "why": "UNCLAIMED findings are in the feature's scope (FR-001); labeling them is the record the feature exists to complete"
-  },
-  {
-   "id": "W64-web-lane-test",
-   "summary": "the web-lane test holds the board inside the web lane's 60 ft band (KOSATSUBA_WAY_REACH_FT, measured from centerline) instead of within 40 px of its centerline; the board measured at 47.5 ft, caption clean",
-   "class": "within",
-   "why": "the 40 px was the test's own figure, not the research's; the new bound is 0190's reach, measured from the centerline (stricter than the code's edge-to-footing cap), and the test still asserts the web lane is taken and the hemmed main lane is not"
-  },
-  {
-   "id": "W64-row204-left",
-   "summary": "place_kosatsuba#placement knob at the lane tiers left DRIFTED to its ranked E3 row 204",
-   "class": "within",
-   "why": "the GM asked for easiest to hardest; FR-003/SC-003 hold an E3 row until the E2 rows are done, so leaving it to its row is the requested order, not a carve-out"
-  },
-  {
-   "id": "W64-punishment-deferred",
-   "summary": "place_punishment_spot#within 60 ft of a street (DRIFTED) and two unclaimed decisions in that unit left DEFERRED",
+   "id": "W65-4 fork band depth DEFERRED_ON_MEASURE",
+   "summary": "the fork band is laid only at grain < 1.0; every kept hamlet is ftpx 1.0 (grain = 2/ftpx = 2), so no kept map lays it",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "the GM's own words (amendment 8): legacy hand-drawn settlements' findings marked DEFERRED, scope = code executed by magistracies, country shrines and scripted hamlets; dev/claims-deferred.json, derived by audit/scope.py from the run records, lists place_punishment_spot as deferred - a measured scope, not a remembered one"
+   "why": "implied by the GM's own words (amendment 8: limit to code actually executed by magistracies, country shrines and scripted hamlets; legacy findings DEFERRED). Measured: all five hamlet manifests ftpx 1.0; grain = 2/ftpx in frame.py, comb.py, consts.py"
   },
   {
-   "id": "W64-slow-test",
-   "summary": "the every-seat-fouled unit test grows 28.3 -> 36.5 s, profiled (359 terminal searches x ~2,400 seats against the larger subject) and recorded in m:wave64-board-widths-and-caption, left to the batch close",
+   "id": "W65-5 hem depth restated UNRESEARCHED",
+   "summary": "the default band 70-132 px restated UNRESEARCHED at the kept maps' 1 ft/px, the 0010 citation withdrawn; measuring line and a caller's band claimed UNRESEARCHED",
    "class": "within",
-   "why": "the request says nothing of test time; the growth is measured, its mechanism recorded, and the GM's 2026-10-08 batching ruling puts the gate (with ratchet.py) and the timing pair at the batch close. Note: the timing pair measures the kept maps, not this test - the gate's ratchet at the batch close is what judges it"
+   "why": "not a ranked row and the label it had at HEAD; 0010's 140-265 ft is stated for 'a field around a city' (read), which no kept map draws. Labeling a guess honestly is recording, not narrowing"
+  },
+  {
+   "id": "W65-6 dry_acres at the map's scale",
+   "summary": "manifest dry_acres computed at (2/grain)^2 ft per px^2, not a fixed 2 ft/px",
+   "class": "within",
+   "why": "a defect found in the work (constitution XIV), fixing a figure toward correctness"
+  },
+  {
+   "id": "W65-7 off the water and the frame left to row 213",
+   "summary": "the DRIFTED claim impl-drift found stays with its own ranked row",
+   "class": "within",
+   "why": "the GM's easiest-to-hardest order; the row stays open and ranked"
+  },
+  {
+   "id": "W65-8 crop stream from R's whole state, one per map",
+   "summary": "crop_stream seeds from hash of R's whole state (index included) without advancing R; hem.py makes ONE crop stream per map and continues it through every band and the reserve (crop_rng)",
+   "class": "within",
+   "why": "round 1's two fixes done; a fill color kept off the geometry stream narrows nothing asked - every map still rolls its own mix and every plot draws on it (0006)"
+  },
+  {
+   "id": "W65-9 end plot floor claimed UNRESEARCHED",
+   "summary": "the tiling's stop 0.6 of a plot short of the canal's end newly claimed UNRESEARCHED",
+   "class": "within",
+   "why": "labeling an existing guess honestly is recording, not narrowing"
+  },
+  {
+   "id": "W65-10 0006 drawing page: a hamlet's plot about 0.15 acre",
+   "summary": "the drawing page's stale 'hamlet garden-scale strips about 0.04' (unscaled days) corrected to the measured 0.15 (medians 0.152 Inashiro, 0.17 Sawada)",
+   "class": "within",
+   "why": "the drawing page describes what the map draws; the figure is measured, and 0.15 sits inside the question page's own range (single dry fields averaging 0.12-0.16 acre), so the record is not moved to fit the code; quote-check SUPPORTS"
+  },
+  {
+   "id": "W65-11 nine modals' depiction corrections",
+   "summary": "buckwheat color reason, winter barley overclaims, grain drift, farm holding's dry edge, soy, fan_middle--cleared linking 0009 corrected after the 0006 page edit; each re-checked",
+   "class": "within",
+   "why": "the record checks the page edit owed; each makes a modal say what the map and the record say"
+  },
+  {
+   "id": "W65-12 fork triangle at village/hamlet grain filed as a found row (E2)",
+   "summary": "impl-drift's MISLABELED finding on 'fork band skipped on villages' (0010: the fork triangle is the high ground dry crops take) recorded in the ranking, scope kept, not fixed this wave",
+   "class": "within",
+   "why": "not introduced by this wave: hamlets lost the fork band in wave 10 (ranked row 'fork triangle planted dry', grain != 1.0 -> grain < 1.0 on 0010's drawing page 'on a city map'); this wave only restated the claim's description to name hamlets, label unchanged, code unchanged. Spec Edge Cases: new findings are recorded in the ranking under their tier; the fix needs 0010's drawing page and an applicability reading (0010 is towns and cities), not this wave's 0006 rows. REQUIRED FIX (not a block): the row must name its dependency - if it is fixed by laying the band at hamlet grain, the 'fork band depth' entry in audit/scope.py DEFERRED_ON_MEASURE (and dev/claims-deferred.json) must come out, since W65-4's deferral rests on no kept map laying the band; the row's 'after'/fix text names neither"
+  },
+  {
+   "id": "W65-13 cleared fan middle filed as a found row (E4)",
+   "summary": "modal-depiction's finding that a cleared middle is drawn only as the hem, with no recorded deviation, filed E4",
+   "class": "within",
+   "why": "the record does not yet say what the implementation should draw; E4 is research first (FR-003); ranked and open"
+  },
+  {
+   "id": "W65-14 feature 368 items 4-5 filed",
+   "summary": "0006's visible pointer to the row village's holdings, and what the dry plot's outline stroke stands for, appended to filed feature 368",
+   "class": "within",
+   "why": "neither is a claims-report finding, so the request (fix the claims-report findings) does not reach them; filed where open work lives, as W61's record loose ends were; item 4's link predates this wave (farm-holding's diff changes only the dike text)"
   }
  ],
  "verdict": "CLEAR"
