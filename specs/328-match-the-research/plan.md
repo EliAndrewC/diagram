@@ -1308,6 +1308,24 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   unchanged. impl-drift: five claims IN-STEP; the docstring's "along the FALL" prose it noted stale now names the exception.
 - **Verification**: the waterfields suite; the cohort; `impl-drift`; `spec-fidelity`.
 
+## Wave 80 (amendment 79, 2026-10-09) - batch 9
+
+- **Scope**: the E2 row `banks.py::round_channel_joints#swept bends` (DRIFTED: 0054 gives a bend RADIUS of about 2.5 channel
+  widths capped at 35% of the run; the code set the tangent CUT-BACK to 2.5 widths on a quadratic, whose tightest radius is ~0.7
+  of the cut-back at a right angle and varies with the turn). `swept_bend` now draws a circular arc of radius 2.5 widths tangent
+  to both runs: its cut-back is radius x tan(turn / 2) - the radius at a right angle, far less at a gentle turn - and the
+  RADIUS is capped at 35% of the shorter straight run (0054: "A bend's radius is capped at 35% of the straight run on either
+  side"). impl-drift round 1 caught the first draft capping the cut-back instead (a shallow turn on a short run kept the full
+  radius). A hairpin's cut-back is also kept within 90% of its run by tightening the radius further (geometry: a tangent
+  point past the run's far end has nothing to stand on; its 90% margin claimed UNRESEARCHED, impl-drift round 2). impl-drift
+  round 3: all three claims IN-STEP, no claim owed.
+- **Measured** (m:wave80-swept-bends): the unit test; Kuwabata's polder ditches moved at their seam bends and nothing else on it;
+  the other four hamlets byte-identical; the 48-seed cohort unchanged.
+- **Occasions**: glyph-redrawn, pond canal and drainage ditch on kuwabata (the ditches' bends) - batch 9's close.
+- **Decisions Recorded** (spec-fidelity round 1, FR-008): this wave's row in spec.md, and the rows waves 66-79 owed (none since
+  wave 65 had been added; 69 and 74 were reverted and change nothing).
+- **Verification**: the waterfields and settlement suites; the cohort; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

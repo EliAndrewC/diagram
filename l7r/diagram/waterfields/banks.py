@@ -722,7 +722,7 @@ def round_channel_joints(channels: list[dict[str, Any]], min_turn_deg: float = 8
     A node where a branch ALSO leaves is a junction, not a bend - an offtake is a notch cut in the
     bank, and the main running past it is not turning there anyway.
 
-    Research: swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: about 2.5 channel widths, capped at 35% of each run, a turn under 8 deg or a junction left sharp
+    Research: swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a circular arc of about 2.5 channel widths' radius, the radius capped at 35% of the straight run on either side, a turn under 8 deg or a junction left sharp
     """
     ends: dict[tuple[float, float], list[tuple[int, int]]] = {}
     for i, c in enumerate(channels):
@@ -744,16 +744,34 @@ def round_channel_joints(channels: list[dict[str, Any]], min_turn_deg: float = 8
         if 180.0 - math.degrees(math.acos(cosang)) < min_turn_deg:
             continue  # no visible elbow to round
         w = max(A.get("w_tail", A["w"]), B["w"])  # pyrefly: ignore[bad-specialization]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
-        d = min(2.5 * w, 0.35 * l0, 0.35 * l1)  # pyrefly: ignore[unsupported-operation]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
-        a = (P[0] + v0[0] / l0 * d, P[1] + v0[1] / l0 * d)
-        b = (P[0] + v1[0] / l1 * d, P[1] + v1[1] / l1 * d)
-        arc = []
-        for s in range(steps + 1):
-            t = s / steps
-            mt = 1 - t
-            arc.append((round(mt * mt * a[0] + 2 * mt * t * P[0] + t * t * b[0], 1), round(mt * mt * a[1] + 2 * mt * t * P[1] + t * t * b[1], 1)))
+        arc = swept_bend(P, (v0[0] / l0, v0[1] / l0), (v1[0] / l1, v1[1] / l1), math.acos(cosang), 2.5 * w, min(l0, l1), steps)  # pyrefly: ignore[unsupported-operation]  # dict.get(k, Any-default) typed Any|None by pyrefly, Any by mypy - research 142 R5
         A["pts"] = A["pts"][:-1] + arc  # the upstream record carries the whole bend ...
         B["pts"] = [arc[-1]] + B["pts"][1:]  # ... and the downstream one picks up where it ends
+
+
+def swept_bend(P: Pt, u0: Pt, u1: Pt, interior: float, radius: float, run: float, steps: int) -> list[Pt]:
+    """The arc that rounds a corner at `P` between the unit directions `u0` (back along the upstream run) and `u1` (on along the
+    downstream run), meeting at `interior` radians: a CIRCULAR arc tangent to both runs, its radius `radius` capped at 35% of
+    the shorter run `run` (0054), its cut-back from the corner radius x tan(turn / 2) for the turn the water makes (pi less the
+    interior angle). A sharp turn's cut-back is also kept within 90% of the run - the arc must leave the run something to
+    start from - by tightening the radius further. `steps + 1` points from the upstream tangent point to the downstream.
+
+    Research:
+        swept bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a bend of about 2.5 channel widths' radius, the radius capped at 35% of the straight run on either side
+        cut-back within its run - UNRESEARCHED: a hairpin (a turn over ~137 deg) drawn tighter than the 2.5-width radius so its tangent point stays within 90% of its run; the 90% is this project's margin
+    """
+    half = (math.pi - interior) / 2
+    r = min(radius, 0.35 * run, 0.9 * run / math.tan(half))
+    d = r * math.tan(half)
+    a = (P[0] + u0[0] * d, P[1] + u0[1] * d)
+    b = (P[0] + u1[0] * d, P[1] + u1[1] * d)
+    bx, by = u0[0] + u1[0], u0[1] + u1[1]
+    bl = math.hypot(bx, by) or 1.0
+    reach = r / math.sin(interior / 2)
+    c = (P[0] + bx / bl * reach, P[1] + by / bl * reach)
+    t0, t1 = math.atan2(a[1] - c[1], a[0] - c[0]), math.atan2(b[1] - c[1], b[0] - c[0])
+    sweep = (t1 - t0 + math.pi) % (2 * math.pi) - math.pi  # the short way round, the side the corner turns
+    return [(round(c[0] + r * math.cos(t0 + sweep * s / steps), 1), round(c[1] + r * math.sin(t0 + sweep * s / steps), 1)) for s in range(steps + 1)]
 
 
 def straight_ring(poly: Poly, max_turn: float = 4.0) -> Poly:

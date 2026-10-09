@@ -555,5 +555,6 @@
   "l7r/diagram/waterfields/settle.py::verdict#toe discipline": "77",
   "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the gate's lines": "78",
   "l7r/diagram/waterfields/banks.py::hem_to_bank#drain with the fall left alone": "79",
-  "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall left alone": "79"
+  "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall left alone": "79",
+  "l7r/diagram/waterfields/banks.py::round_channel_joints#swept bends": "80"
 }

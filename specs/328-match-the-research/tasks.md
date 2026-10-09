@@ -7,6 +7,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 - glyph-redrawn: pond canal on kuwabata - wave 73 (the dike-pond polder inks its supply channels `pond canal`): the feeder, toes and laterals at 0068's widths in feet (the feeder 4.5 ft at its inlet to 1.5, the toes and laterals 2.5 -> 1.2 floored 1.5 with their heads capped by the feeder) and each parcel's bank per channel (m:wave73-polder-widths-r2); batch 7's close (reviewed PASS at batch 7's close, 2026-10-09)
 - glyph-redrawn: drainage ditch on kuwabata - wave 73: the polder's drain at its 5.5 ft outfall width, and the crop's half-bund bank beside it (m:wave73-polder-widths-r2); batch 7's close (reviewed PASS at batch 7's close, 2026-10-09)
+- glyph-redrawn: pond canal on kuwabata - wave 80: the polder ditches' seam bends drawn as circular arcs of 2.5 widths' radius (0054; m:wave80-swept-bends); batch 9's close
+- glyph-redrawn: drainage ditch on kuwabata - wave 80: the drain's seam bends drawn as circular arcs of 2.5 widths' radius (0054; m:wave80-swept-bends); batch 9's close
 - (reviewed PASS at batch 6's close, 2026-10-09) placement-changed: notice board on inashiro - wave 68: an entrance board on its approach squared to the approach, not to a nearer access lane (0190; m:wave68-board-faces-the-way-out); batch 6's close
 - (the same change judged on inashiro at batch 6's close, PASS - the review tool takes one map per element; sawada's board measured square to its track out, m:wave68-board-faces-the-way-out) placement-changed: notice board on sawada - wave 68: its entrance board squared to its track out, 76.4 degrees off it before (0190; m:wave68-board-faces-the-way-out); batch 6's close
 - (reviewed PASS at batch 4's close, 2026-10-09) glyph-redrawn: scrub and rough grazing on kashikawa - wave 57: the band under a wood's edge drawn grass only, no brush (0077); batch 4's close
@@ -2008,3 +2010,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T187 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 79); a vertex inside a with-the-fall drain's bank stepped off at right angles onto its own side (0055); pool byte-identical, cohort unchanged; impl-drift 5 IN-STEP
+
+## Phase 81 - wave 80 (amendment 79): swept bends as circular arcs of 2.5 widths' radius
+
+- `waterfields/banks.py` (`swept_bend`; `round_channel_joints` uses it).
+
+- [x] T188 wave 80's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 80, round 2), amendment FAITHFUL; channel bends circular arcs of 0054's 2.5-width radius capped at 35% of the run, a hairpin's within its run (UNRESEARCHED margin); Kuwabata's ditch bends moved, cohort unchanged; impl-drift in step; Decisions Recorded rows 66-80 added
+- [x] T189 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 80, round 2), amendment FAITHFUL; channel bends circular arcs of 0054's 2.5-width radius capped at 35% of the run, a hairpin's within its run (UNRESEARCHED margin); Kuwabata's ditch bends moved, cohort unchanged; impl-drift in step; Decisions Recorded rows 66-80 added

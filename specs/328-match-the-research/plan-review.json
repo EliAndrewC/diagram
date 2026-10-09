@@ -1,44 +1,57 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "8564b278690c171dd05d66dabaafa0daaf782cae907be3197b3919c1449abd96",
+ "plan_sha256": "908c62cc3673e9736ef27cfc3e96b98b940588f4256b36c60d66cb79d7b4aeee",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W79-1 fix direction",
-   "summary": "the E2 row hem_to_bank#drain with the fall left alone is fixed by changing the implementation (a vertex in a with-the-fall collector is moved out of the water), not by relabeling the UNRESEARCHED claim",
+   "id": "W80-1 circular arc of 2.5 widths' radius",
+   "summary": "swept_bend draws a circular arc of radius 2.5 channel widths tangent to both runs, cut-back radius x tan(turn/2), replacing a quadratic whose cut-back was 2.5 widths",
    "class": "within",
-   "why": "FR-004 (the implementation moves to the research) and the ranking row's own fix ('lift vertices off a drain running with the fall'); 0055's drawing keeps the field edge 'out of its water'; the GM: 'I'm not sure there's any reason for our implementation to not match for anything'"
+   "why": "0054's drawing page: 'About 2.5 channel widths in radius'. The implementation moved to the research, as the request and FR-004 ask. The unit test re-run by this reviewer (4 passed); a 20-degree turn's cut-back 1.76 at radius 10 is 10 tan(10 deg)."
   },
   {
-   "id": "W79-2 perpendicular step onto its own side",
-   "summary": "where lean < 0.2 the vertex steps off at right angles to the drain's nearest segment, onto the bank of the side it already lies on, ending need off the centerline (off_with_the_fall)",
+   "id": "W80-2 radius capped at 35% of the shorter run",
+   "summary": "the RADIUS (not the cut-back) is capped at 0.35 x min(l0, l1)",
    "class": "within",
-   "why": "the ranking row names exactly this ('perpendicular move when lean < 0.2'); the nearer bank is the least move that clears the water, and nothing in the request or spec settles a different side"
+   "why": "0054: 'A bend's radius is capped at 35% of the straight run on either side'; the shorter run is 'either side'."
   },
   {
-   "id": "W79-3 inside the bank on either side",
-   "summary": "for a with-the-fall drain the move applies where |gap| < need (either side), not gap < need, since gap's up-fall sign means nothing for such a drain",
-   "class": "within",
-   "why": "it moves every vertex standing in the water and none that is clear (the unit test pins both); it narrows nothing - no in-water vertex is left unmoved"
+   "id": "W80-3 hairpin cut-back within 90% of the run",
+   "summary": "where the capped radius would put the tangent point past 90% of the run, the radius is tightened to 0.9 run / tan(turn/2); claimed UNRESEARCHED",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "It draws a radius under 0054's figure. The literal rule cannot be drawn there: at r = 0.35 run the cut-back passes the run's whole length near 141 deg and is unbounded at 180 deg, and a tangent point past the run's far end has no straight to stand on. It serves 0054's own purpose for the cap ('Two neighboring bends never swallow the straight between them'), and a smaller radius still meets the cap, an upper bound. The 90% margin is labeled this project's guess at the point of change and in the Decisions Recorded row."
   },
   {
-   "id": "W79-4 on-centerline tie-break",
-   "summary": "a vertex exactly on the centerline goes to the segment's left",
+   "id": "W80-4 junctions and turns under 8 deg left sharp",
+   "summary": "round_channel_joints' choice of which joints to round is unchanged",
    "class": "within",
-   "why": "an arbitrary but deterministic tie-break inside the requested fix; neither the request nor the spec speaks to it and it leaves no vertex in the water"
+   "why": "0054's claim already names it; the wave changes only how a selected bend is drawn."
   },
   {
-   "id": "W79-5 the array walk changed alike",
-   "summary": "hem_rings_to_bank gets the same branch and its claim the same 0055 citation, though its own row is scope: deferred (dev/claims-deferred.json) and no engine code calls it",
+   "id": "W80-5 occasions: glyph-redrawn pond canal and drainage ditch on kuwabata at batch 9's close",
+   "summary": "two Occasions lines in tasks.md",
    "class": "within",
-   "why": "not a narrowing (it removes no requested work); it keeps the function's own stated contract ('Each ring comes back as hem_to_bank would return it') and the existing equivalence test true, which leaving it would have broken (constitution XIV); it draws no legacy map (no caller), so FR-009 is untouched; waves.json marks only the kept row 79"
+   "why": "git diff HEAD on the pool (re-measured this round): only pool/hamlets/kuwabata/kuwabata.json moved. Taking them at the batch close is FR-005's batching ruling."
   },
   {
-   "id": "W79-6 verification",
-   "summary": "the waterfields suite, the 48-seed cohort, impl-drift and spec-fidelity per wave; the gate, timing pair and occasions at the batch close",
+   "id": "W80-6 verification per wave; gate and pair at the batch close",
+   "summary": "the waterfields and settlement suites, the cohort, impl-drift, spec-fidelity",
    "class": "within",
-   "why": "FR-005's batched verification as the GM ruled 2026-10-08; the pool unchanged (m:wave79-off-with-the-fall), so no map regeneration or FR-008 Decisions Recorded entry is owed"
+   "why": "FR-005 (GM 2026-10-08)."
+  },
+  {
+   "id": "W80-7 Phase 81 T188/T189 as the current wave's only boxes",
+   "summary": "tasks appended as the amendment",
+   "class": "within",
+   "why": "FR-006."
+  },
+  {
+   "id": "W80-8 Decisions Recorded rows for wave 80 and the waves 66-79 owed",
+   "summary": "spec.md gains one row per wave 66-80 that changed a drawing rule or what a map states (66, 67, 68, 70, 71, 72, 73, 75, 76, 77, 78, 79, 80); 69 and 74, reverted, none",
+   "class": "within",
+   "why": "FR-008, which round 1 found unmet, now carried for every wave since 65; the plan's Wave 80 section points at the rows. The wave 70 row's CONTENT is wrong (it says the maps draw shares they measurably do not, and classes the main-door share, which 0044 and the code call this project's choice, as historically accurate). That is a spec-amendment finding, reported as CHANGES REQUIRED on spec.md; it is not a plan decision and changes nothing in plan.md."
   }
  ],
  "verdict": "CLEAR"

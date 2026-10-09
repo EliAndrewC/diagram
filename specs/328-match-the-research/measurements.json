@@ -1178,7 +1178,8 @@
     "value": {
       "hamlets": "byte-identical, all five",
       "cohort_48": "48/54, the same six refused seeds (03, 10, 20, 22, 33, 906)",
-      "unit": "a 200 ft lane served 40-70 ft from its start: whole before, ends 40-48 ft now"
+      "unit": "a 200 ft lane served 40-70 ft from its start: whole before, ends 40-48 ft now",
+      "cohort_passed": 48
     },
     "command": "for g in pool/hamlets/*/*.gen.py; do make map GEN=$g; done; cmp each pool/hamlets/<m>/<m>.json against HEAD's; make cohort N=48; make test-file FILE=tests/settlement/test_water_ways.py"
   },
@@ -1191,7 +1192,8 @@
     "value": {
       "hamlets": "byte-identical, all five",
       "cohort_48": "48/54, the same six refused seeds (03, 10, 20, 22, 33, 906)",
-      "unit": "an end 11 ft behind a back wall: arrived (was pulled back); 13 ft behind: not; a byre 10 ft off: arrived"
+      "unit": "an end 11 ft behind a back wall: arrived (was pulled back); 13 ft behind: not; a byre 10 ft off: arrived",
+      "cohort_passed": 48
     }
   },
   "wave68-board-faces-the-way-out": {
@@ -1552,7 +1554,8 @@
       "test": "red with the yard alone, red without the house, red without the storehouse, green with every part",
       "pool": "all five hamlets byte-identical to HEAD (no shipped farmstead had a bed, storehouse, byre or well on a paddy)",
       "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 73",
-      "reading": "the rule now holds by construction and moves nothing it did not have to"
+      "reading": "the rule now holds by construction and moves nothing it did not have to",
+      "pool_maps_moved": 0
     }
   },
   "wave76-tract-lean-cap": {
@@ -1565,7 +1568,8 @@
       "fixture": "uncapped, the seventh tract leans more than 0.30 rad off both ways (the drift); capped, every tract within 0.30 rad of a way",
       "pool": "all five hamlets byte-identical to HEAD (no shipped tract leaned past the cap)",
       "reading": "the cap bounds what the settle may do; on the shipped maps it had not yet done it",
-      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 75"
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 75",
+      "lean_cap_rad": 0.3
     }
   },
   "wave77-bare-scraps": {
@@ -1592,7 +1596,8 @@
       },
       "cohort_48 after the weld": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 76",
       "cohort_48 after the close.py weld": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 76; the pool as after settle's weld (Kashikawa and Sawada moved, the other three byte-identical to HEAD)",
-      "after the weld note": "the planted figures are the settle's kept cells (the sum of settle_cells' lawful polygons, read in the probe before the finish rounds them into plot_rings), not the manifest's rings: Kashikawa's 1,085,783 px² is that sum, its manifest rings 1,085,553; the deltas (+345 Sawada, +1 Kashikawa) agree on both surfaces. The claim's 'every other scrap is taken into a neighbor' holds on the pool by this measurement, not by construction: a scrap with no lawful union would still stay bare, and is a found row if a roll ever leaves one"
+      "after the weld note": "the planted figures are the settle's kept cells (the sum of settle_cells' lawful polygons, read in the probe before the finish rounds them into plot_rings), not the manifest's rings: Kashikawa's 1,085,783 px² is that sum, its manifest rings 1,085,553; the deltas (+345 Sawada, +1 Kashikawa) agree on both surfaces. The claim's 'every other scrap is taken into a neighbor' holds on the pool by this measurement, not by construction: a scrap with no lawful union would still stay bare, and is a found row if a roll ever leaves one",
+      "sawada_basins_after": 1261
     }
   },
   "batch8-pair": {
@@ -1619,7 +1624,8 @@
     "value": {
       "test": "both pass the gate's lines and fail held_faults; the re-hold keeps no 20-degree point",
       "pool": "all five hamlets byte-identical to HEAD (no shipped grave cut left a ring between the gate's lines and the placer's)",
-      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 77"
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 77",
+      "wedge_apex_deg": 20
     }
   },
   "wave79-off-with-the-fall": {
@@ -1631,7 +1637,21 @@
     "value": {
       "test": "the two in-bank vertices end need (3 + BANK_MARGIN) off the centerline on their own sides; the clear one is not moved; the two walks agree",
       "pool": "all five hamlets byte-identical to HEAD (no shipped collector runs with the fall under a hemmed parcel)",
-      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 78"
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 78",
+      "pool_maps_moved": 0
+    }
+  },
+  "wave80-swept-bends": {
+    "quantity": "wave 80 (2026-10-09): a channel's bend drawn as a circular arc of 2.5 widths' radius - what it moved",
+    "observed": "2026-10-09",
+    "source": "tests/waterfields/test_banks_297.py::test_a_swept_bend_is_a_circular_arc_of_its_radius_cut_back_by_the_turn; git diff HEAD on the five pool manifests after make map; make cohort N=48",
+    "command": "make test-file FILE=tests/waterfields/; make map for the five hamlets; make cohort N=48",
+    "method": "swept_bend at a right angle, a 20-degree turn, a capped right angle, a shallow turn on a short run and a hairpin; the pool rerolled and diffed (after the radius cap)",
+    "value": {
+      "test": "right angle: cut-back = radius 10, every arc point 10 from the center; 20-degree turn: cut-back 1.76; a run of 11.4: radius capped at 4; a 20-degree turn on a 10 ft run: radius 3.5; a hairpin's cut-back within 90% of its run",
+      "pool": "Kuwabata's field_ditches and drawn_channels moved (its polder ditches' seam bends), nothing else on it; the other four hamlets byte-identical (no comb seam turns 8 degrees or more)",
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 79",
+      "gentle_turn_cutback": 1.76
     }
   }
 }
