@@ -653,7 +653,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmhouses: **19**
 - family form: **one_roof**, retirement houses **0**
 - farmstead fixtures: bath **5**, coop **14**, pit **13**, privy **17**, shrine **1**, woodpile **8**
-- notice board at the entrance, **(4229.6, 1933.2)**: **19** of 19 households' ways out pass it
+- notice board at the entrance, **(4207.9, 1944.6)**: **19** of 19 households' ways out pass it
 <!-- /census -->
 
 

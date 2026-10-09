@@ -921,6 +921,28 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `test_a_slide_along_the_wall_stops_at_the_walls_end`, `test_a_rolled_stable_privy_never_stands_past_the_walls_end`,
   `test_the_rolled_place_and_its_paces_come_before_the_other_places`; the cohort; `impl-drift`; the record checks; `spec-fidelity`.
 
+## Wave 63 (amendment 62, 2026-10-09) - batch 5
+
+- **Scope**: the notice board's three E2 rows (0190: "a roofed frame 16 ft long and 6 ft deep, on a stone footing inside a
+  fence ... about 2 ft wider all round, with a fence line at its edge"; "the board clears no ground" beyond its site). The
+  board now draws its stone footing (`KOSATSUBA_FOOTING_FT`, 2 ft all round, scaled with the marker floor) with the fence line
+  at its edge and the roofed frame on it; the record's drawn box (`vw`/`vh`, what the overlap matrix and the siting read) is
+  the footing; the no-build ground is the footing alone, not the frame plus a flat 6 px.
+- **Measured** (m:wave63-board-footing): at 1 ft/px the drawn box 16 x 6 -> 20 x 10 and the no-build ground 28 x 18 -> 20 x 10;
+  the 48-seed cohort unchanged (the same six refused seeds); the three board modals already described the footing and fence,
+  which the map now draws.
+- **Found and fixed (impl-drift)**: the 6 ft off the road was measured to the 3 ft face tested, so with the footing drawn the
+  footing stood 2.5 ft off the tread; `_route_seats` now seats and records the offset to the drawn board's footing - four
+  shipped boards' footings stand 6.0 ft off the way they face (Sawada's 6 ft off the leg it faces, a bend of the same lane
+  3.2 ft off, clear of the tread). 0190's drawing page now names the oversized marker at village AND city scale, as the code
+  and the GM's call of 2026-07-24 draw it (it said city only - two claims DRIFTED on it, now in step); stale comments (a 12 x 5
+  ft plank, a 12:5 aspect) corrected. The board modals tell the footing and fence, the village and city marker, the label above
+  the crowns and a city's set of boards; the seat knob the choice modals describe (center, entrance, frontage) is not on 0190 -
+  that is ranked E3 row `_knobs.py::<module>#kosatsuba_seat forms`, left to it.
+- **Occasions**: glyph-redrawn, notice board on inashiro - batch 5's close.
+- **Verification**: `test_a_notice_board_stands_on_a_fenced_footing_and_claims_only_that_ground`, the marker test restated for
+  the footing; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

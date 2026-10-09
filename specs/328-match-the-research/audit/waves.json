@@ -530,5 +530,9 @@
   "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge": "57",
   "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet": "58",
   "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut a pixel clear of a bed's edge within its east reach; a band shorter than its width left uncut": "59",
-  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights": "61"
+  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights": "61",
+  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#stone footing and fence": "63",
+  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#roof and ridge glyph": "63",
+  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#no-build margin": "63",
+  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor": "63"
 }

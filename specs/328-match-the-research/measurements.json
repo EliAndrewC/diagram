@@ -996,5 +996,35 @@
         "method": "a throwaway probe (deleted) rolling the five hamlets' stages in-process with rolled_first and _first wrapped: each household's final laying, the blocker of its rolled spot and of each slide step classified as house, yard, ground or fixture"
       }
     }
+  },
+  "wave63-board-footing": {
+    "quantity": "wave 63 (2026-10-09): the notice board drawn on its fenced footing - the drawn box, the no-build ground, and the cohort",
+    "observed": "2026-10-09",
+    "method": "the board's own tests (a 1 ft/px board: footing 20 x 10, frame 16 x 6, no-build ground 490-510 x 495-505 about (500, 500)); the five hamlets rerolled; make cohort N=48 against wave 62's run",
+    "value": {
+      "drawn box at 1 ft/px": {
+        "before": [
+          16,
+          6
+        ],
+        "after": [
+          20,
+          10
+        ]
+      },
+      "no-build ground": "the footing alone (was the frame plus a flat 6 px, 28 x 18)",
+      "cohort_48": "48/54, the same six refused seeds as wave 62 (03, 10, 20, 22, 33, 906)",
+      "modals": "the three kosatsuba modals already said 'drawn as a roofed frame on a stone footing inside a fence' - now true",
+      "footing_to_fronted_way_ft": {
+        "inashiro": 6.0,
+        "kashikawa": 6.0,
+        "kuwabata": 6.0,
+        "mizuguchi": 6.0,
+        "sawada": "6 ft off the leg it faces; a bend of the same access lane passes its footing at 3.2 ft, clear of the tread (way_beds)"
+      },
+      "offset_fix": "_route_seats measured the 6 ft to the 3 ft face tested; it now measures to the drawn board's footing (impl-drift on wave 63: the footing had stood 2.5 ft off the tread at 1 ft/px)",
+      "far_cap": "the 60 ft (KOSATSUBA_WAY_REACH_FT) cap now bounds the gap from the road's edge to the footing's edge (off - rw/2 - dh/2), like the 6 ft; it bounded road centerline to board center, so the band widens by rw/2 + dh/2 - 0190's 'up to 60 ft from the road' read as its 6 ft is; the five hamlets byte-identical (their boards on the verge)",
+      "scale_correction": "0190's drawing page now names the oversized marker at village and city scale - the GM's call of 2026-07-24 (commit f8f07e0ac, 'location marker at village/city grain'); this closes the E4 row board_record#marker floor at wave 63 under the GM's 2026-10-08 ruling allowing research passes within the feature; ruled LEGITIMATE by the plan review, and raised with the GM in the wave's report"
+    }
   }
 }

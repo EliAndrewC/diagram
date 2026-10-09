@@ -1,45 +1,81 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "cd765025a6fbaed1b60378ad12205e0acecb8c41777163b74b600a8c629437a9",
+ "plan_sha256": "ff89dfad8a333c9e51ce6d24caae57d264e3e812308bd2a2db5a245dbc3e79d3",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W62-bound",
-   "summary": "the rolled place's slide stops when the seat's OUTER edge would pass the gable (abs(nx) + w/2 > half_wall)",
+   "id": "W63-footing",
+   "summary": "the stone footing drawn under the roofed frame, KOSATSUBA_FOOTING_FT 2 ft wider all round, its edge a dashed fence line",
    "class": "within",
-   "why": "Round 1's NOT LEGITIMATE answered: along_its_wall now yields only seats wholly along the wall, matching 0047's 'under the eaves by the stable', the plan's 'only while the WHOLE seat stands along its wall' and the page's 'while the whole privy still stands along the wall'. test_a_slide_along_the_wall_stops_at_the_walls_end asserts containment for every yielded seat. Nothing is excepted any more, so it is a within decision. Not blocking: test_a_rolled_stable_privy_never_stands_past_the_walls_end still asserts the INNER edge (abs(x) - w/2 <= HW/2), which is weaker than its own name."
+   "why": "Row 'kosatsuba#stone footing and fence' done literally: 0190 drawing page 'on a stone footing inside a fence ... the footing is about 2 ft wider all round, with a fence line at its edge'; boards.py draws the 20 x 10 footing at 1 ft/px with the dashed stroke at its edge; test_a_notice_board_stands_on_a_fenced_footing_and_claims_only_that_ground asserts it."
   },
   {
-   "id": "W62-hold-564",
-   "summary": "row 564 held, re-tiered E2 -> E3 on a per-household measure: 16 of 16 households that rolled the stable or the front are refused it, the yard covering the rolled spot on all 16 and no slide step fitting wholly along the wall on any",
+   "id": "W63-roof",
+   "summary": "the roofed frame and ridge drawn on the footing (was the frame alone, labeled CONVENTION)",
+   "class": "within",
+   "why": "Row 'kosatsuba#roof and ridge glyph' done literally: its ranked fix 'draw the roofed frame on its stone footing inside the fence line'; the 16 x 6 frame and its ridge are drawn inside the footing rect."
+  },
+  {
+   "id": "W63-nobuild",
+   "summary": "the no-build ground is the fenced footing alone, replacing the frame plus a flat 6 px",
+   "class": "within",
+   "why": "Row 'kosatsuba#no-build margin' done literally: ranked fix 'from 6 px to the fenced footing alone, 2 ft wider all round (px(2))'; block_polys is now the footing box; 0190 'the board placed last, clearing no ground'."
+  },
+  {
+   "id": "W63-drawn-box",
+   "summary": "board_record's vw/vh (what the overlap matrix, admits and the siting read) is the footing, and the footing scales with the marker floor at the coarse tiers",
+   "class": "within",
+   "why": "Follows from drawing the footing: the drawn box must be what is drawn (all five hamlet manifests now record vw/vh 20 x 10 over w/h 16 x 6). Every kept map (FR-010) runs at 1 ft/px, where k = 1 and the footing is true size. At village/city grain the footing is drawn relative to the frame, whose 11 px floor and aspect the GM's 2026-07-24 call fixed; scaling it with the frame keeps that call's aspect rule and changes nothing on a kept map."
+  },
+  {
+   "id": "W63-offset",
+   "summary": "the 6 ft off the road measured to the drawn board's footing, not to the 7 x 3 ft face tested",
+   "class": "within",
+   "why": "0190: 'the board stands 6 ft from the edge of the road'. With the footing drawn, measuring to the face would have stood the footing 2.5 ft off (rw/2 + 1.5 + 6 - 5), a drift this wave's own change would have introduced; correcting it moves the implementation to the page (FR-004 direction, XIV). Recorded in plan.md and m:wave63-board-footing (four footings at 6.0 ft, Sawada's bend 3.2 ft clear of the tread)."
+  },
+  {
+   "id": "W63-cap",
+   "summary": "the 60 ft cap now measured from the road's edge to the footing's (was road centerline to board center: while off <= lim)",
+   "class": "within",
+   "why": "0190: 'may stand up to 60 ft from the road' - the same origin as its 6 ft 'from the edge of the road'; the change reads the page literally and widens nothing the page forbids. impl-drift notes it IN-STEP and siting.py carries the pointer comment. NOT RECORDED in plan.md's wave 63 or in m:wave63-board-footing, which name only the 6 ft offset - a recording gap to close (one clause), not a narrowing."
+  },
+  {
+   "id": "W63-0190-marker-scale",
+   "summary": "0190's drawing page reworded from 'at city scale' to 'at village and city scale' for the oversized marker, to match the code (two DRIFTED claims now IN-STEP, among them the E4 ranked row board_record#marker floor)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round 1 asked for exactly this measure, per rolled household and per offered seat. It now shows the yard blocking the rolled spot on every one, and the wall-end bound leaving no slide step, because the spots already stand near the wall's end. That bound is the research's own 'under the eaves'. So no seat order honors the roll, and the remaining fix is a layout change to the yard: real work above E2. Holding it and re-tiering it applies the GM's own ranking ('easiest to hardest'), with the row kept open rather than dropped. The override states the count, and its files now name bundle.py and yards.py."
+   "why": "Rewording a page to fit the code is the spec's Edge Cases exception path ('A fix that seems to need the research changed instead ... goes to spec-fidelity with the GM's request verbatim; if it agrees, it is recorded and raised with the GM once the wave works'), so it is ruled here. LEGITIMATE because the scope is already fixed by the GM's own call, not completed by the session: commit f8f07e0ac (2026-07-24) is titled 'the kosatsuba draws as a location marker at village/city grain' and records 'GM call 2026-07-24'; its town-deep-audit note says 'Towns and hamlets (1 ft/px) are unaffected'; the floor the GM approved 'NEVER shrinks a board' and so by its mechanism lifts the 8 px village frame. The page's 'city scale' understated a GM ruling; the alternative the E4 row named (gate the floor to city grain) would undo part of that ruling. The passage is a map drawing convention, not a historical finding, and no kept map (all 1 ft/px) draws differently either way. The E4 row's own ranked fix names this route, and the GM authorized E4 research passes inside the feature (2026-10-08). Owed: the wave's report raises it with the GM (Edge Cases), and the row board_record#marker floor is closed at 63 in ranking.json/waves.json with that authorization named (it still shows wave '')."
   },
   {
-   "id": "W62-order",
-   "summary": "the rolled place is no longer stepped straight out before the other places: slide (bounded), the other places at their first spots, then every place stepped out",
+   "id": "W63-modals",
+   "summary": "five board modals tell the footing and fence, the village and city marker, the label above the crowns, a city's set of boards, and the post towns' size",
    "class": "within",
-   "why": "Unchanged from round 1: row 564's fix is 'outward (or along its wall)'; the straight step's withdrawal is measured."
+   "why": "Bringing each modal's depiction in step with what the map now draws and with 0190 (the modal is written from the page its Entry names). No new behavior."
   },
   {
-   "id": "W62-cohort",
-   "summary": "the 48-seed cohort: wave 62 refuses exactly wave 60's six seeds by name (03, 10, 20, 22, 33, 906); the baseline argument stated against the merge base",
+   "id": "W63-stale-comments",
+   "summary": "driver.py, frame.py, siting.py and the kosatsuba docstring: the 12 x 5 ft plank and 12:5 aspect corrected to 16 x 6",
    "class": "within",
-   "why": "Round 1's request is met: refused sets at waves 60, 61 and 62 are listed in m:wave62-slide-bounded, so the claim is an identity rather than a count."
+   "why": "Comment and docstring corrections to the size the code already draws (board size rows closed at E1). No behavior."
   },
   {
-   "id": "W62-record",
-   "summary": "0047's drawing page: the place slid 'while the whole privy still stands along the wall'; where the yard covers it the privy takes another, marked open work; the privy modal says most of the rest stand behind the house because the yard covers the front and the stable's eaves",
+   "id": "W63-seat-knob-left",
+   "summary": "the kosatsuba_seat knob (center, entrance, frontage) described on the choice modals left to its own ranked E3 row _knobs.py::<module>#kosatsuba_seat forms",
    "class": "within",
-   "why": "The wording now matches the code's bound, and the yard shortfall is marked open work like the barn, so impl-drift will not read it as the rule. Aside: 'on every farmstead our generator lays out that rolled one of them' generalizes from the five hamlets' 16 households."
+   "why": "Not a narrowing: the request orders the work easiest to hardest and SC-003 forbids fixing an E3 row while E2 rows stand open. The E3 row's fix retires the knob and its modals; rewriting their seat text now would be that row's work done early. The wave touched those modals only for the drawing text (footing, marker), which is this wave's."
   },
   {
-   "id": "W62-corrections",
-   "summary": "plan.md's wave 61 bullet marked WITHDRAWN with a pointer; T151/T152 verify lines marked CORRECTED; batch4-pair-and-slide-fix's privies value split into withdrawn and now",
+   "id": "W63-legacy-placed-last-left",
+   "summary": "'placed last' on the legacy village roller (roll.py::roll_village#notice board) left deferred",
    "class": "within",
-   "why": "Round 1's pointers are in place. Not blocking but a stale figure: the `correction` fields on m:wave61-privy-rolled-place and m:batch4-pair-and-slide-fix say 'behind the house is 36 over the five maps', while m:wave62-slide-bounded (privies.behind [37, 37]) and plan.md's wave 62 ('37 behind the house') say 37. That looks like the inner-edge run's figure; restate it as 37."
+   "why": "The row is scope 'deferred' under FR-010 (the GM's 2026-10-07 amendment: legacy hand-authored settlements' code is DEFERRED). No wave takes it."
+  },
+  {
+   "id": "W63-sheet-board-left",
+   "summary": "the Mode A sheet board's size (docs/buildings.md::Approaches and surroundings#notice board size) left to its own row",
+   "class": "within",
+   "why": "Its own ranked row, E3 (a sheet redrawn, FR-003/FR-009), scope mode-a; taken in tier order, not dropped."
   }
  ],
  "verdict": "CLEAR"

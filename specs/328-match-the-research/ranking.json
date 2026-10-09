@@ -9215,19 +9215,19 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#stone footing and fence",
+  "key": "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#no-build margin",
   "tier": "E2",
-  "fix": "draw a stone footing about 2 ft wider all round with a fence line at its edge under the roofed frame",
+  "fix": "no-build margin from 6 px to the fenced footing alone, 2 ft wider all round (px(2))",
   "files": [
    "l7r/diagram/settlement/structures/fixtures/boards.py"
   ],
   "after": [
-   "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#board size"
+   "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#stone footing and fence"
   ],
   "flag": "",
-  "tier_as_ranked": "E2",
+  "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "63",
   "scope": "kept"
  },
  {
@@ -9243,23 +9243,23 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "63",
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#no-build margin",
+  "key": "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#stone footing and fence",
   "tier": "E2",
-  "fix": "no-build margin from 6 px to the fenced footing alone, 2 ft wider all round (px(2))",
+  "fix": "draw a stone footing about 2 ft wider all round with a fence line at its edge under the roofed frame",
   "files": [
    "l7r/diagram/settlement/structures/fixtures/boards.py"
   ],
   "after": [
-   "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#stone footing and fence"
+   "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#board size"
   ],
   "flag": "",
-  "tier_as_ranked": "E1",
+  "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "63",
   "scope": "kept"
  },
  {
@@ -14333,7 +14333,7 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E2",
   "moved": "T42a: tiered by its work - The floor at boards.py:64/113 lifts village and city grain per a recorded GM call (2026-07-24, boards.py:87-96) while 0190 records the oversized marker at city scale only and calls the village board the post towns' size, so the record contradicts a recorded ruling.",
-  "wave": "",
+  "wave": "63",
   "scope": "kept"
  },
  {

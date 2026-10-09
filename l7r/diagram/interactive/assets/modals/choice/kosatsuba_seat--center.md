@@ -15,8 +15,8 @@ Guesses:
 - That a village's board was the size of a post town's: no village board was measured.
 - How often a settlement's board stands at its center, its way in or an official's frontage: no source counts them.
 
-Depiction: The map seats the board last, once everything else stands, beside a way among the houses, a few feet off its edge and turned broadside to it; which of the center's seats it takes, the
-busiest frontage or the one nearest a well, is the title card's other choice. It is drawn as a roofed frame on a stone footing inside a fence.
+Depiction: The map seats the board last, once everything else stands, beside a way among the houses, a few feet off its edge where the verge has room, farther back where it does not, and turned broadside to it; which of the center's seats it takes, the
+busiest frontage or the one nearest a well, is the title card's other choice. It is drawn as a roofed frame on a stone footing inside a fence. On a village or city map a frame the size of those measured at two post towns, about 16 ft by 6 ft, would be too small to see, so the map draws a larger marker in its place, footing and all, and its label says what it is. A board may stand under a tree, and its label is drawn above every crown, so it shows where the board is even when a crown hides it.
 
 Name: The notice board at the center
 Covers: `meta.kosatsuba_seat = center`

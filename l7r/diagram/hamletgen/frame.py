@@ -72,7 +72,7 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     features already exist ... the real humans that live in the society that decide where the notice board will
     go will look around at the things which already exist and then decide where to put the notice board. They
     may even decide to move a notice board which has already been placed." Every other stage either reserves
-    ground or grows into it; the board does neither. It is a 12 x 5 ft plank a village drives in beside a way
+    ground or grows into it; the board does neither. It is a roofed 16 x 6 ft frame on its footing, which a village sets beside a way
     once the village is there, so it is the one feature that should see the whole map before it chooses. It
     stands ON a way - on the verge, a few feet off the tread (feature 133 T13), because a kosatsu is read where
     people pass - and WHICH way, and where along it, is a per-settlement knob rolled from the map's own seed

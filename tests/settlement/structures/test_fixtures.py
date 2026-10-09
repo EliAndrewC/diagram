@@ -78,7 +78,7 @@ def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     seat = [frag for frag in s.toplabels if "notice board" in frag]
     assert len(seat) == 1, "the caption is drawn all the same"
     rec = s.M["labels"][-1]
-    assert rec[6] == [492.0, 497.0, 508.0, 503.0], "it records the board it names (16 x 6 ft, 0190)"
+    assert rec[6] == [490.0, 495.0, 510.0, 505.0], "it records the board it names, on its footing (20 x 10 ft, 0190)"
     assert "caption_key" not in s.M and rec[5] == "notice board", "its own words, where they cover the least - no key (0241, 0242)"
 
 
@@ -249,7 +249,7 @@ def test_kosatsuba_records_a_blocking_struct():
     z = s.kosatsuba(500, 500, rot=15)
     kb = s.M["kosatsuba"][0]
     assert (kb["x"], kb["y"], kb["w"], kb["h"], kb["rot"]) == (500, 500, 16, 6, 15) and z > 0
-    assert (kb["vw"], kb["vh"]) == (16, 6)  # at 1 ft/px the true frame already clears the marker floor
+    assert (kb["vw"], kb["vh"]) == (20, 10)  # at 1 ft/px the true frame clears the marker floor; drawn on its footing, 2 ft wider all round (0190)
     assert not s._fits(500, 500, 20, 20)
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading M["labels"]
     rec = s.M["labels"][-1]
@@ -456,3 +456,19 @@ def test_a_row_streets_far_run_is_not_the_way_in():
     road = {"pts": [[1000, 0], [1900, 0]], "connector": True}
     on = {"pts": [[0, 0], [-900, 0]], "connector": True, "run_on": True}
     assert kosatsuba_handover({"houses": houses, "lanes": [road, on, street]}) == kosatsuba_handover({"houses": houses, "lanes": [road, street]})
+
+
+def test_a_notice_board_stands_on_a_fenced_footing_and_claims_only_that_ground() -> None:
+    """Feature 328 wave 63 (0190: "a roofed frame 16 ft long and 6 ft deep, on a stone footing inside a fence ... about 2 ft
+    wider all round, with a fence line at its edge"; "the board clears no ground" beyond its site): the footing is drawn under
+    the frame, its edge a fence line, and the no-build ground is the footing alone."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.kosatsuba(500, 500, label="")
+    ink = s.top[-1]
+    assert 'width="20.0" height="10.0"' in ink and "stroke-dasharray" in ink, "the footing, its fence line at the edge"
+    assert 'width="16.0" height="6.0"' in ink, "the roofed frame on it"
+    xs = [p[0] for p in s.block_polys[-1]]
+    ys = [p[1] for p in s.block_polys[-1]]
+    assert (min(xs), max(xs), min(ys), max(ys)) == (490.0, 510.0, 495.0, 505.0), "the no-build ground is the footing alone"

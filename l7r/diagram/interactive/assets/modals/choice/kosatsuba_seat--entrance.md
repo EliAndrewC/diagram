@@ -17,7 +17,7 @@ Guesses:
 
 Depiction: Only a settlement with a way in from outside takes this seat. The map seats the board last, once everything else
 stands, near where the way out leaves the houses, where every household passes on its way out, a few feet off the way's edge
-and turned broadside to it. It is drawn as a roofed frame on a stone footing inside a fence.
+and turned broadside to it. It is drawn as a roofed frame on a stone footing inside a fence. On a village or city map a frame the size of those measured at two post towns, about 16 ft by 6 ft, would be too small to see, so the map draws a larger marker in its place, footing and all, and its label says what it is. A board may stand under a tree, and its label is drawn above every crown, so it shows where the board is even when a crown hides it.
 
 Name: The notice board at the way in
 Covers: `meta.kosatsuba_seat = entrance`

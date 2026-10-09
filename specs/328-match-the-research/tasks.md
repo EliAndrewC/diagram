@@ -7,6 +7,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 - glyph-redrawn: scrub and rough grazing on kashikawa - wave 57: the band under a wood's edge drawn grass only, no brush (0077); batch 4's close
 - (reviewed NEEDS-WORK at batch 4's close, F1: slides past the gable) placement-changed: privy on kashikawa - wave 61, then wave 62: the rolled place slid along its wall only while it stands by the wall (0047; m:wave62-slide-bounded); batch 5's close, round 2
+- glyph-redrawn: notice board on inashiro - wave 63: drawn on its stone footing inside a fence line, 2 ft wider all round (0190); batch 5's close
 - placement-changed: copse on kuwabata - wave 56: the seats off every yard's and bed's sun at the tree's 50 ft south and east (0038); batch 4's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
@@ -1808,3 +1809,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T154 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 62 round 2); row 564 held E3 on measure (16 of 16 households refused the stable or front place: the yard covers it, no slide fits the wall); the slide bounded by the seat's outer edge; cohort refuses exactly wave 60's six seeds; claims 29 in step + 3 known; record checks answered
+
+## Phase 64 - wave 63 (amendment 62): the notice board on its fenced footing
+
+- `structures/fixtures/boards.py` (`KOSATSUBA_FOOTING_FT`, `board_record`'s drawn box, `kosatsuba`'s footing, fence and margin).
+
+- [x] T155 wave 63's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 63); the notice board on its fenced footing, the margin the footing alone; the 6 ft and 60 ft measured to the footing; 0190's marker scales corrected; claims in step, record checks answered
+- [x] T156 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 63); the notice board on its fenced footing, the margin the footing alone; the 6 ft and 60 ft measured to the footing; 0190's marker scales corrected; claims in step, record checks answered

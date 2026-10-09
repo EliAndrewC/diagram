@@ -169,8 +169,8 @@ class FixtureSitingMixin:
         if not meta.get("kosatsuba", True):
             return None
         ftpx = float(meta.get("ftpx") or 1)
-        # probe with the DRAWN marker box, not the true footprint (village grain floors the glyph
-        # to ~11x4.6 px - see kosatsuba): the spot has to hold the pixels that get drawn there
+        # probe with the FACE the search tests, 7 x 3 ft, smaller than the board drawn (0190); the board's drawn footing is
+        # what `admits` and the 6 ft offset read (`board_record`, `_route_seats`)
         w, h = self.px(7.0), self.px(3.0)  # the face the search tests (0190), smaller than the 16 x 6 ft frame drawn
         lane_tier = str(meta.get("scale") or "") in ("hamlet", "village")
         view = meta.get("view")
@@ -287,12 +287,13 @@ class FixtureSitingMixin:
             seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat, the nearer counted double
             traffic radii - UNRESEARCHED: 260 px and 150 px, in pixels at every scale
             nearness tie-break - UNRESEARCHED: score less a third of the offset
-            least offset off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road
+            least offset off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road to the board drawn (its footing), not to the face tested
             farthest seat off the road - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: up to 60 ft (KOSATSUBA_WAY_REACH_FT), the project's own figure
             sampling lattice - NONE: 12 px along, 5 px out"""
         lim = KOSATSUBA_WAY_REACH_FT / ftpx
         verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6
         half = math.hypot(w, h) / 2
+        dh = self.board_record(0.0, 0.0, 0.0)["vh"]  # the DRAWN board's depth, its footing: the 6 ft is to its near edge (feature 328 wave 63)
         out: list[BoardSeat] = []
         for i in range(len(pts) - 1):
             (ax, ay), (bx, by) = pts[i], pts[i + 1]
@@ -307,9 +308,9 @@ class FixtureSitingMixin:
                 f = t * BOARD_ALONG_STEP_PX / seg
                 mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
                 for side in (1.0, -1.0):
-                    off = rw / 2 + h / 2 + self.px(6.0)  # the board 6 ft from the road's edge (0190)
-                    while off <= lim:
-                        if verge_only and off - rw / 2 - h / 2 > verge:  # past the verge: the roadside rule would drop it
+                    off = rw / 2 + dh / 2 + self.px(6.0)  # the board's footing 6 ft from the road's edge (0190), not the smaller face tested
+                    while off - rw / 2 - dh / 2 <= lim:  # the 60 ft, like the 6 ft, from the road's edge to the footing's
+                        if verge_only and off - rw / 2 - dh / 2 > verge:  # past the verge: the roadside rule would drop it
                             break
                         x, y = mx + ux * off * side, my + uy * off * side
                         if near is not None and math.hypot(x - near[0], y - near[1]) > near[2]:  # off the placement's ground (`near`)
@@ -336,7 +337,9 @@ class FixtureSitingMixin:
                             busy = sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 150)
                             # THE BUSIEST BUILT GROUND (feature 328): the drawing-water siting, a knob since feature 152, has no
                             # page behind it (0190's drawing page) and is retired
-                            out.append(BoardSeat(busy, busy * 10 - off / 3, x, y, turn, off - rw / 2 - h / 2, under_canopy(env.canopy, x, y, half), approach))
+                            out.append(
+                                BoardSeat(busy, busy * 10 - off / 3, x, y, turn, off - rw / 2 - dh / 2, under_canopy(env.canopy, x, y, half), approach)
+                            )  # its gap: the footing's edge to the road's
                         off += 5.0
         return out
 

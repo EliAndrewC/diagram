@@ -19,10 +19,12 @@ def test_kosatsuba_draws_a_location_marker_at_the_coarse_tiers():
         s.kosatsuba(500, 500)
         kb = s.M["kosatsuba"][0]
         assert (kb["w"], kb["h"]) == (16 / ftpx, 6 / ftpx)  # true size, unchanged (0190: 16 x 6 ft)
-        assert kb["vw"] == settlement.KOSATSUBA_MARKER_MIN_PX  # floored on the long axis...
-        assert kb["vh"] == round(settlement.KOSATSUBA_MARKER_MIN_PX * 6 / 16, 1)  # ...aspect preserved
-        assert s.placed[-1] == pytest.approx((500, 500, settlement.KOSATSUBA_MARKER_MIN_PX, settlement.KOSATSUBA_MARKER_MIN_PX * 6 / 16))  # the DRAWN box is reserved
-        assert f'width="{kb["vw"]:.1f}"' in s.top[-1]  # and drawn
+        k = settlement.KOSATSUBA_MARKER_MIN_PX / (16 / ftpx)
+        pad = 2 * (2 / ftpx) * k  # the stone footing, about 2 ft wider all round at the marker's scale (feature 328 wave 63)
+        frame_w, frame_h = settlement.KOSATSUBA_MARKER_MIN_PX, settlement.KOSATSUBA_MARKER_MIN_PX * 6 / 16  # floored on the long axis, aspect preserved
+        assert kb["vw"] == round(frame_w + pad, 1) and kb["vh"] == round(frame_h + pad, 1)  # the drawn box is the footing
+        assert s.placed[-1] == pytest.approx((500, 500, frame_w + pad, frame_h + pad))  # the DRAWN box is reserved
+        assert f'width="{frame_w:.1f}"' in s.top[-1]  # the frame drawn on it
 
 
 def test_scope_seed_depends_only_on_seed_name_and_key():

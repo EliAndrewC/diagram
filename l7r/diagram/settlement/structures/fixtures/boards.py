@@ -10,6 +10,9 @@ from ....labels.geom import rect
 from ..._geom import label_tilt, tilt_caption_seat
 from ..._knobs import KOSATSUBA_MARKER_MIN_PX
 
+KOSATSUBA_FOOTING_FT = 2.0
+"""Research: footing wider than the frame - research/questions/0190-notice-boards-kosatsuba.drawing.html: "the footing is about 2 ft wider all round"; the fence line drawn at its edge"""
+
 if TYPE_CHECKING:
     from ...core import Settlement
 
@@ -59,10 +62,12 @@ class BoardsMixin:
 
         Research:
             board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: the frame drawn 16 x 6 ft
+            stone footing and fence - research/questions/0190-notice-boards-kosatsuba.drawing.html: the drawn box is the footing, about 2 ft wider all round than the frame
             marker floor - research/questions/0190-notice-boards-kosatsuba.drawing.html: floored at KOSATSUBA_MARKER_MIN_PX, aspect kept"""
         w, h = self.px(16), self.px(6)
         k = max(1.0, KOSATSUBA_MARKER_MIN_PX / w)  # marker floor, aspect preserved
-        return {"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "vw": round(w * k, 1), "vh": round(h * k, 1), "rot": round(rot, 1)}
+        pad = 2 * self.px(KOSATSUBA_FOOTING_FT) * k  # the stone footing about 2 ft wider all round (feature 328 wave 63)
+        return {"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "vw": round(w * k + pad, 1), "vh": round(h * k + pad, 1), "rot": round(rot, 1)}
 
     def kosatsuba(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "notice board", placement: Placement | None = None) -> int:  # type: ignore[misc]
         """The KOSATSUBA - the settlement's official notice board: a small roofed frame posting
@@ -72,8 +77,8 @@ class BoardsMixin:
         (Edo's principal board stood at Nihonbashi, the bridgehead). NEVER defaulted to the
         magistrate's manor gate: the manor's own board (Mode A program, docs/buildings.md) posts the
         bench's OUTPUT (verdicts, bounties) for people who come to court, and the manor sits at
-        the settlement edge where feet do not pass. True size 16 x 6 ft, the frame drawn (a 7 x 3 ft board under a
-        small roof); the label carries the read.
+        the settlement edge where feet do not pass. True size 16 x 6 ft, the roofed frame drawn on a stone footing about 2 ft wider all
+        round, a fence line at its edge; the label says what it is.
 
         `rot` IS THE ROAD'S BEARING, not a free choice. The glyph's long axis is the board's
         FACE, so a board must stand square to the way it fronts - broadside to the traffic that
@@ -86,10 +91,10 @@ class BoardsMixin:
 
         The DRAWN glyph is a LOCATION MARKER at the coarse tiers (GM call 2026-07-24, taking the
         escape research/questions/0190-notice-boards-kosatsuba.drawing.html documents): the true 16 x 6 ft frame draws 8 x 3 px at village grain
-        and 4x1.7 px at city grain - at city scale, rotated upright, that is a 1.7 px sliver that
+        and about 5 x 2 px at city grain - at city scale, rotated upright, that is a 2 px sliver that
         reads as gate hardware, not a feature (Nagahara: two of its three boards were invisible
         until the GM went looking, and the one that read did so only by its label). So the glyph
-        is floored at KOSATSUBA_MARKER_MIN_PX on its long axis with the 12:5 aspect preserved -
+        is floored at KOSATSUBA_MARKER_MIN_PX on its long axis with the 16:6 aspect preserved -
         the wells' doctrine exactly (SKILL.md 'to scale'): the marker denotes the board's
         TO-SCALE LOCATION with legible pixels that are not themselves claimed to be to scale. The
         floor NEVER shrinks a board, so hamlets and towns (1 ft/px) still draw the true 16 x 6 px;
@@ -105,23 +110,28 @@ class BoardsMixin:
             board broadside to its way - research/questions/0190-notice-boards-kosatsuba.drawing.html: `rot` is the road's bearing
             board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: 16 x 6 ft, from `board_record`
             location marker at coarse tiers - research/questions/0190-notice-boards-kosatsuba.drawing.html: floored on the long axis
-            roof and ridge glyph - CONVENTION
-            stone footing and fence - research/questions/0190-notice-boards-kosatsuba.drawing.html: the frame alone, with no
-                footing and no fence drawn round it
-            no-build margin - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 px kept clear around the drawn box"""
+            roof and ridge glyph - research/questions/0190-notice-boards-kosatsuba.drawing.html: the roofed frame, its ridge along the face, drawn on its stone footing inside the fence line
+            stone footing and fence - research/questions/0190-notice-boards-kosatsuba.drawing.html: a stone footing about 2 ft wider all round, a fence line at its edge (the Kanagawa board's site)
+            no-build margin - research/questions/0190-notice-boards-kosatsuba.drawing.html: the fenced footing alone - the board clears no ground beyond its own site"""
         rec = self.board_record(x, y, rot)
         k = max(1.0, KOSATSUBA_MARKER_MIN_PX / rec["w"])  # marker floor, aspect preserved: drawn unrounded, recorded to 0.1 px
-        vw, vh = rec["w"] * k, rec["h"] * k
+        fw, fh = rec["w"] * k, rec["h"] * k  # the roofed frame
+        pad = self.px(KOSATSUBA_FOOTING_FT) * k
+        vw, vh = fw + 2 * pad, fh + 2 * pad  # ...on its footing, the drawn box
         hw, hh = vw / 2, vh / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
-        g.append(f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{vw:.1f}" height="{vh:.1f}" rx="1" fill="#7A5A30" stroke="#5A3F1E" stroke-width="0.8"/>')  # the little tiled roof, seen from above
-        g.append(f'<line x1="{-hw:.1f}" y1="0" x2="{hw:.1f}" y2="0" stroke="#EFE6CC" stroke-width="0.9"/>')  # the ridge
+        g.append(
+            f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{vw:.1f}" height="{vh:.1f}" fill="#B9B2A3" stroke="#6E5A3C" stroke-width="0.7" stroke-dasharray="1.6,1"/>'
+        )  # the stone footing, the fence line at its edge
+        g.append(f'<rect x="{-fw / 2:.1f}" y="{-fh / 2:.1f}" width="{fw:.1f}" height="{fh:.1f}" rx="1" fill="#7A5A30" stroke="#5A3F1E" stroke-width="0.8"/>')  # the little tiled roof, seen from above
+        g.append(f'<line x1="{-fw / 2:.1f}" y1="0" x2="{fw / 2:.1f}" y2="0" stroke="#EFE6CC" stroke-width="0.9"/>')  # the ridge
         g.append('</g>')
         z = self.add_top(''.join(g), cls="notice board")
         self.M["kosatsuba"].append({**rec, "z": z, "label": label})
         self.placed.append((x, y, vw, vh))
-        bm = 6
-        self.block_polys.append([(x - hw - bm, y - hh - bm), (x + hw + bm, y - hh - bm), (x + hw + bm, y + hh + bm), (x - hw - bm, y + hh + bm)])
+        # THE NO-BUILD GROUND IS THE FENCED FOOTING ALONE (0190: "the board clears no ground" beyond its own site); it was the frame plus
+        # a flat 6 px (feature 328 wave 63: the footing drawn, its fence the edge of the ground the board claims)
+        self.block_polys.append([(x - hw, y - hh), (x + hw, y - hh), (x + hw, y + hh), (x - hw, y + hh)])
         if label:
             # THE BOARD IS PLACED HERE; ITS CAPTION IS SEATED IN THE LABEL PHASE (feature 157, GM
             # 2026-08-29: *"moving label placement so that the notice board itself is placed during a

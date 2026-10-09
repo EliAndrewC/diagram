@@ -15,8 +15,7 @@ Guesses:
 - That a settlement's board seeks the busiest frontage or the place water is drawn at even odds: no source counts where
   village boards stood.
 
-Depiction: Among the seats its other choice on the title card allows, the map takes the one with the most houses and buildings near it, so the board meets the most passers-by. It stands a few feet off the way's
-edge, turned broadside to it, and is placed last, once everything else stands.
+Depiction: Among the seats its other choice on the title card allows, the map takes the one with the most houses and buildings near it, so the board meets the most passers-by. It stands a few feet off the way's edge where the verge has room, farther back where it does not, turned broadside to it, and is placed last, once everything else stands.
 
 Name: Facing the busiest frontage
 Covers: `meta.kosatsuba_siting = frontage`

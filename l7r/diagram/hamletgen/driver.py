@@ -131,8 +131,8 @@ STAGES = (
     # notice board which has already been placed. Therefore ... the notice board should be literally
     # the very last thing that is ever put on the map."
     #
-    # Everything else here reserves ground or grows into it. The board does neither: it is a 12 x 5 ft
-    # plank a village drives in beside a way once the village is there. Placing it last means it can
+    # Everything else here reserves ground or grows into it. The board does neither: it is a 16 x 6 ft roofed frame on its footing,
+    # which a village sets beside a way once the village is there. Placing it last means it can
     # see the whole map, and - the part that fixes the defect by construction - nothing is placed
     # after it for it to displace. It also runs after `crop_to_content`, so the frame is already
     # decided and the board can simply be kept inside it, instead of being sited blind and re-seated
