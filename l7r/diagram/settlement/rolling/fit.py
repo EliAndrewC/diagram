@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-from .fit_index import _extent_boxed, drop_persimmon, house_box, house_extent, houses_meeting, part_box, recorded_box  # noqa: E402,F401 - split at the bar (feature 315)
+from .fit_index import _extent_boxed, drop_persimmon, farmstead_boxes, house_box, house_extent, houses_meeting, part_box, recorded_box  # noqa: E402,F401 - split at the bar (feature 315)
 
 
 def stream_segment_index(streams: Any) -> PointGrid:
@@ -335,7 +335,8 @@ class BundleFitMixin:
         tests of the parts the envelope's nine points can miss - the yard and the fixtures off the paddy, the beds off the
         ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its share of the wood floor (`WoodShares.share`).
 
-        Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch
+        Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the whole farmstead (house, yard, garden beds, storehouse, byre, well) and its fixtures held off every paddy polygon by all the ground it covers
+            beds off every ditch - UNRESEARCHED: each garden bed held off every irrigation line at the corridor `_rect_on_water` keeps
             persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang
             a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where its yard opens onto lane ground of its own (`passage.opens`)
             no path searched while houses are seated - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way is sought for a household while it is seated; the yard's opening onto lane ground the one check
@@ -416,8 +417,10 @@ class BundleFitMixin:
         # chords, and a field corner can reach in between them (seed 31's yard lapped a paddy). The yard as drawn - its
         # jittered quad, turned with the house, inscribed in the turned rect whose box this is - is held off every field
         # polygon exactly, by overlap.
-        yard = part_box(geom, "yard")
-        if yard is not None and self.field_polys and self._rect_hits(yard, self.field_polys):
+        # ...AND THE WHOLE FARMSTEAD (feature 328 wave 75, 0124): the house, the storehouse, the byre, the well and every garden
+        # bed are held off the paddy as exactly as the yard is - the nine points, and the house's four corners, pass a field's
+        # corner between them as readily.
+        if self.field_polys and any(self._rect_hits(b, self.field_polys) for b in farmstead_boxes(geom)):
             return False
         # ...NOR A FARMSTEAD FIXTURE (feature 287, homes H32): a privy or a coop is small enough to stand between the
         # envelope's nine points on a paddy's corner; each is held off every field polygon as the yard is - a persimmon by

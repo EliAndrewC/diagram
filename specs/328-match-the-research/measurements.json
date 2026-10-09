@@ -1541,5 +1541,18 @@
       },
       "reading": "the berm is right by the research and lands exactly; what breaks is placement downstream of a re-fitted fan - the same seed-chaotic rules wave 69's canal taper broke - so the row is E3 and its work those layouts"
     }
+  },
+  "wave75-farmstead-off-paddy": {
+    "quantity": "wave 75 (2026-10-09): every drawn part of a farmstead held off the paddy exactly - what it moved",
+    "observed": "2026-10-09",
+    "source": "tests/settlement/test_fit_287.py::test_a_garden_bed_the_storehouse_or_the_house_lapping_a_paddy_refuses_the_farmstead; git diff HEAD on the five pool manifests after make map; make cohort N=48",
+    "command": "make test-file FILE=tests/settlement/test_fit_287.py (and again with the rule cut back to the yard alone); make map for the five hamlets; make cohort N=48",
+    "method": "the test built a paddy corner poking into a garden bed and, at three places along the north wall between its corners, into the house; with the rule held to the yard alone (farmstead_boxes(geom)[:1], measured before the house was put first in the list) it fails, with the house taken out of farmstead_boxes it fails, and with the storehouse taken out its direct check fails; with every part it passes; the pool rerolled and diffed against HEAD (twice: before and after the house was added)",
+    "value": {
+      "test": "red with the yard alone, red without the house, red without the storehouse, green with every part",
+      "pool": "all five hamlets byte-identical to HEAD (no shipped farmstead had a bed, storehouse, byre or well on a paddy)",
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 73",
+      "reading": "the rule now holds by construction and moves nothing it did not have to"
+    }
   }
 }

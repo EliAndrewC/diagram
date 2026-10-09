@@ -1,44 +1,32 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "6dd3880c596395b1f56c6bdfeab74eb5caf1dda0764c8d270f7ce42d85eb0729",
+ "plan_sha256": "dcc7bb9c5e701d21c928863211a0a5eaf69d1193b1698e23d5ca542cb7de157a",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W74-a every supply canal",
-   "summary": "the berm was built for every supply canal (head race, canals A and B), not canal A alone",
+   "id": "W75-a: the parts beside the house held off exactly",
+   "summary": "_parts_fit holds the yard, the storehouse (shed), the byre, the well and every garden bed off every paddy polygon by overlap (fit_index.farmstead_boxes), where the beds and the storehouse were asked only at the envelope's nine points",
    "class": "within",
-   "why": "0055 says every supply canal; building for canal A alone would have been the carve-out. Its own cost was measured (canal A only 48 -> 42) and not taken."
+   "why": "Unchanged from round 1: the ranked row's fix and 0124's drawing page ('the whole farmstead (house, yard, garden and storehouse plot) is tested against the whole of each field'). Re-run round 2 in a detached worktree carrying the clone's three changed files: make test-file tests/settlement/test_fit_287.py, 10 passed."
   },
   {
-   "id": "W74-b revert and re-tier E2 -> E3",
-   "summary": "the built berm (bank median 5.04 / 5.02 ft) is reverted because the 48-seed cohort went 48 -> 46; the row stays open (kept) at E3, its work the layouts that broke",
+   "id": "W75-b: the byre and the well in the held set",
+   "summary": "the held set adds the byre and the well, which 0124's parenthesis does not name",
    "class": "within",
-   "why": "The spec's Assumptions say a wave that finds a row harder than ranked moves it down and says so. The Edge Case 'a fix that changes many maps' says the row takes that work's tier and its claim stays as found. The newly refused seeds fail in web, row_rules and water_rules, outside pockets.py, which is a change across modules: E3 by FR-003. Ranking by measured work is the request's own principle, and reverting keeps a measured regression off main (XIII). The row is not deferred or dropped, so the request's 'fix all of it' still reaches it in E3 order. Record note: the Edge Case's 'waits on a found row' is met by the row's own fix text rather than an 'after' entry, the same as wave 69's row."
+   "why": "Unchanged from round 1: it widens the rule toward 0124's 'the whole farmstead' and narrows nothing. git diff HEAD --stat touches no pool/ file."
   },
   {
-   "id": "W74-c failed fix recorded and patch kept",
-   "summary": "_outside_command's docstring records the failed fix; the patch and its tests are kept in audit/reverted/",
+   "id": "W75-c: the house held off exactly (round 1 BLOCKED item, resolved)",
+   "summary": "farmstead_boxes now returns part_box(geom, 'house') first, so _parts_fit holds the house's drawn box off every paddy polygon by _rect_hits like the other parts; _wall_on_the_bund's corner test is kept as 0029's further set-back",
    "class": "within",
-   "why": "Constitution XIV (a fix that failed is recorded at the point of change). The patch holds partition.py, pockets.py and the two test files the docstring names."
+   "why": "Round 1 ruled leaving the house to the corner test NOT LEGITIMATE. The diff (fit_index.py farmstead_boxes; fit.py _parts_fit's any(_rect_hits(b, field_polys) for b in farmstead_boxes(geom))) puts the house in the exact test, which is the fix asked for. Confirmed by re-run, not read: in a scratch worktree with the house removed from farmstead_boxes and the test's direct list assertion disabled, the test fails at the first probe case ('a paddy's corner 4 ft inside the house's north wall at x 400.0', _parts_fit True); with the house restored all 10 pass. So the three probe cases are refused BY the house box, not by the envelope or the corner test. Keeping the corner test adds a rule and removes none. Record note for the session (not a ruling): m:wave75-farmstead-off-paddy's source still names the test by its old name (test_a_garden_bed_or_the_storehouse_lapping_a_paddy_refuses_the_farmstead), and its method's 'the yard alone (farmstead_boxes(geom)[:1])' now selects the house, since the house is first; both should be updated to the current test name and order."
   },
   {
-   "id": "W74-d _water's drift left to its row",
-   "summary": "impl-drift's one DRIFTED on the change's claims (_water's bund margin) is left to its own ranked row, 227 E3",
+   "id": "W75-d: the beds-off-ditch rule labeled UNRESEARCHED",
+   "summary": "the beds-off-every-ditch half of the old claim becomes its own claim labeled UNRESEARCHED; the code keeps the rule",
    "class": "within",
-   "why": "It was already a ranked row in tier order, not a finding the wave introduced."
-  },
-  {
-   "id": "W73 Occasions correction",
-   "summary": "wave 73's occasion now names the classes Kuwabata's polder inks (pond canal, drainage ditch)",
-   "class": "within",
-   "why": "Ledger rows 621-622 are exactly those two glyph checks. A record correction."
-  },
-  {
-   "id": "B7 close and one-gate guard",
-   "summary": "batch 7 closed (gate, pair m:batch7-pair, glyph checks); make verify refuses a second gate in one tree",
-   "class": "within",
-   "why": "FR-005/FR-006 batch close. The guard fixes a tooling defect the work hit (a second gate took the first's token), under XIV. It narrows nothing the GM asked for."
+   "why": "Unchanged from round 1: the ranked row's fix prescribes the separate label, and no page in research/questions/ backs the rule (round 1's search)."
   }
  ],
  "verdict": "CLEAR"

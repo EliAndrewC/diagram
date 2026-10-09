@@ -1950,3 +1950,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T177 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 74); the supply canals' 5 ft berm built for every main piece and measured (canal A 5.04 ft, canal B 5.02 ft median), REVERTED on the cohort 48 -> 46 (canal A alone 48 -> 42), re-tiered E3, failed fix recorded at _outside_command; impl-drift 9 IN-STEP, the one DRIFTED a ranked row
+
+## Phase 76 - wave 75 (amendment 74): the whole farmstead off the paddy
+
+- `settlement/rolling/fit.py` (`_parts_fit` holds every drawn part off the paddy exactly); `settlement/rolling/fit_index.py`
+  (`farmstead_boxes`).
+
+- [x] T178 wave 75's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 75, round 2); the whole farmstead - house, yard, storehouse, byre, well, beds - held off every paddy polygon exactly (0124), beds-off-ditch its own UNRESEARCHED claim; the pool byte-identical, cohort unchanged; impl-drift in step, no claim owed
+- [x] T179 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 75, round 2); the whole farmstead - house, yard, storehouse, byre, well, beds - held off every paddy polygon exactly (0124), beds-off-ditch its own UNRESEARCHED claim; the pool byte-identical, cohort unchanged; impl-drift in step, no claim owed

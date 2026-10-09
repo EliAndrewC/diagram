@@ -75,6 +75,30 @@ def test_a_threshing_yard_lapping_a_paddy_is_refused(gap: float) -> None:
     assert s._parts_fit(geom) is (gap > 3.0)
 
 
+def test_a_garden_bed_the_storehouse_or_the_house_lapping_a_paddy_refuses_the_farmstead() -> None:
+    """Feature 328 wave 75 (0124: the whole farmstead - house, yard, garden and storehouse plot - tested against the fields):
+    a paddy's corner poking into a bed, the storehouse plot or the house between its corners refuses the homestead as one in
+    its yard does."""
+    from l7r.diagram.settlement.rolling.fit_index import farmstead_boxes
+
+    s = _village()
+    geom = s._bundle_geom(400.0, 400.0, 46.0, 28.0, "E")
+    assert s._parts_fit(geom)
+    beds = part_box(geom, "gardens") or []
+    assert beds and all(b in farmstead_boxes(geom) for b in beds)
+    gx, gy, gw, gh = beds[0]
+    # a FRESH list each case: `_poly_bboxes` caches the boxes by the list's identity and length
+    s.field_polys = [[(gx + gw / 2 - 2.0, gy + gh / 2), (gx + gw / 2 + 2.0, gy + gh / 2), (gx + gw / 2, gy + gh + 60.0)]]
+    assert not s._parts_fit(geom), "a paddy's corner in a garden bed"
+    parts = {"house": (0, 0, 40, 30), "yard": (0, 30, 30, 20), "shed": (40, 0, 12, 10), "byre": (-40, 0, 14, 10), "well": (0, -30, 6, 6)}
+    assert farmstead_boxes({"boxes": {**parts, "gardens": [(50, 30, 10, 8)]}}) == [*parts.values(), (50, 30, 10, 8)], "every part, the storehouse too"
+    hx, hy, hw, hh = part_box(geom, "house")
+    for ax in (hx, hx - 12.0, hx - 17.0):  # the wall's middle and off center: between the corners `_wall_on_the_bund` asks
+        s.field_polys = [[(ax, hy - hh / 2 + 4.0), (ax + 60.0, hy - hh / 2 - 56.0), (ax - 60.0, hy - hh / 2 - 56.0)]]
+        assert not s._parts_fit(geom), f"a paddy's corner 4 ft inside the house's north wall at x {ax}"
+    assert farmstead_boxes({"boxes": {"house": None, "yard": None, "gardens": []}}) == [], "a farmstead with no parts drawn holds nothing off"
+
+
 def test_a_farmstead_fixture_on_a_paddy_or_across_the_brook_refuses_its_homestead() -> None:
     """Feature 287, homes H32: a household's fixtures are parts of its bundle, so a privy between the envelope's nine
     points on a paddy's corner, or across a brook from its house, refuses the homestead as its yard or bed would."""

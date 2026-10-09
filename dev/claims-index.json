@@ -33567,10 +33567,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#border as a line": {
-  "code": "a22f77c82f2d173a",
-  "core": "c8bdbf8d42ad3c39",
+  "code": "0f71630e29691147",
+  "core": "5701bcea7ee18ef8",
   "date": "2026-10-09",
-  "note": "the 0083 drawing page records the mound omission as a deliberate deviation and says the border is a line with no width that nothing keeps clear of, with the magistracy wall and parley room standing on it; the code's `borders` entry does exactly that",
+  "note": "the border is a line with no footprint, the mound left out deliberately and the wall standing on the line, all recorded on the drawing page",
   "pages": {
    "0083-clan-borders-and-their-markers.drawing.html": "aae7d10697713dff"
   },
@@ -54796,10 +54796,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#a tight seat only by passage": {
-  "code": "42ddb1e4315a7810",
-  "core": "c00ba98ea2c2ff16",
-  "date": "2026-10-05",
-  "note": "tight seat taken only with a walk and refused where the yard opens onto lane ground",
+  "code": "95bea183a3ab3a11",
+  "core": "d75331e89c97a2a8",
+  "date": "2026-10-09",
+  "note": "seated only with a walk across the neighbor's land and refused where its yard `opens` onto lane ground; `own_way` judges the whole holding, as §612 says",
   "pages": {
    "0081-village-lanes.html": "ae63115215c57952",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -54809,14 +54809,23 @@
    "0081-village-lanes.html:777413ac4c586a29",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
-  "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#beds off every ditch": {
+  "code": "208fee4d2e7a3c61",
+  "core": "d75331e89c97a2a8",
+  "date": "2026-10-09",
+  "note": "UNRESEARCHED is the right label: the code holds each garden bed off every irrigation line, and 0124 (and the bundle's lane pages) say nothing about where beds stand relative to ditches",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#no path searched while houses are seated": {
-  "code": "821e86335793a373",
-  "core": "c00ba98ea2c2ff16",
-  "date": "2026-10-05",
-  "note": "only SeatRegion.opens asked while seating where a region stands",
+  "code": "c039ae6701d549c4",
+  "core": "d75331e89c97a2a8",
+  "date": "2026-10-09",
+  "note": "`region.opens` is the one check and no way is sought while seated",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -54825,22 +54834,23 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#persimmon held off the paddy by its trunk": {
-  "code": "4f6e00b81c081ef6",
-  "core": "c00ba98ea2c2ff16",
-  "date": "2026-10-03",
-  "note": "no bundled question answers it",
+  "code": "550427ad6a20b67e",
+  "core": "d75331e89c97a2a8",
+  "date": "2026-10-09",
+  "note": "the 4 ft trunk box, with the crown free to overhang, is a decision no cited page answers",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#the village roll's corridor search": {
-  "code": "af199307ee70b897",
-  "core": "c00ba98ea2c2ff16",
-  "date": "2026-10-05",
-  "note": "village roll keeps the corridor search, the recorded DEVIATION",
+  "code": "b519497340d8490a",
+  "core": "d75331e89c97a2a8",
+  "date": "2026-10-09",
+  "note": "with no seat region the code keeps `access_corridor`, the drawing page's recorded DEVIATION (\"finds each path as it seats a house\")",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -54848,19 +54858,21 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#whole farmstead off the fields": {
-  "code": "7dd7627a73e89578",
-  "core": "c00ba98ea2c2ff16",
-  "date": "2026-10-03",
-  "note": "0124 says nothing of ditches, so \"beds off every ditch\" needs its own label (UNRESEARCHED or a water question); 0124's \"house, yard, garden and storehouse plot ... against the whole of each field\" is held exactly here only for yard and fixtures",
+  "code": "15991e2ce8fcd202",
+  "core": "d75331e89c97a2a8",
+  "date": "2026-10-09",
+  "note": "the yard, storehouse, byre, well and beds (farmstead_boxes) and the privy/coop fixtures are each tested by overlap against every field polygon, as \"the whole farmstead ... is tested against the whole of each field\" requires; the persimmon's trunk-only test has its own claim",
   "pages": {
    "0124-farmsteads-at-a-town.drawing.html": "bd83fd96ec741f38"
   },
   "research": "b88c97a6299d41d0",
-  "verdict": "MISLABELED"
+  "rests": [
+   "0124-farmsteads-at-a-town.drawing.html:f935c3f9c43b0f74"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._persimmon_shades_a_neighbor#persimmon out of a neighbor's sun": {
   "code": "9630267ee8107c2f",
@@ -55094,6 +55106,20 @@
   "date": "2026-10-03",
   "note": "record surgery; the decision is the caller's",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/fit_index.py::farmstead_boxes#whole farmstead off the fields": {
+  "code": "e34f69b1c030dd22",
+  "core": "a5e277ecff978608",
+  "date": "2026-10-09",
+  "note": "the house, yard, storehouse (shed), garden beds, byre and well are each tested as their drawn box, which is \"all the ground it covers\"; the house is now in the list",
+  "pages": {
+   "0124-farmsteads-at-a-town.drawing.html": "bd83fd96ec741f38"
+  },
+  "research": "b88c97a6299d41d0",
+  "rests": [
+   "0124-farmsteads-at-a-town.drawing.html:f935c3f9c43b0f74"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/fit_index.py::house_box#index plumbing": {

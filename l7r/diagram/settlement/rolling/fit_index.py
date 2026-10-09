@@ -58,6 +58,16 @@ def part_box(geom: Any, key: str) -> Any:
     return boxes[key] if key in boxes else geom.get(key)
 
 
+def farmstead_boxes(geom: Any) -> list[Any]:
+    """The boxes of every part of a farmstead - the house, the yard, the storehouse (`shed`), the byre, the well and each garden
+    bed - as drawn (`part_box`): what the fit holds off every paddy polygon exactly. The house's own set-back from a bund
+    (`_wall_on_the_bund`, at its corners) is a further rule; this is the ground it covers.
+
+    Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the house, yard, storehouse plot, byre, well and garden beds, the whole farmstead, held off every paddy polygon
+    """
+    return [b for b in (part_box(geom, "house"), part_box(geom, "yard"), part_box(geom, "shed"), part_box(geom, "byre"), part_box(geom, "well"), *(part_box(geom, "gardens") or ())) if b is not None]
+
+
 def house_box(rec: Any) -> tuple[float, float, float, float]:
     """A placed farmhouse's box AS DRAWN, turned (269 B18) - its record's own rect where it carries no bundle."""
     box = part_box(rec.get("geom") or {}, "house")

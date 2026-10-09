@@ -1211,6 +1211,25 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: the cohort's two runs and the bank measured on four hamlets (m:wave74-supply-berm-reverted);
   `impl-drift`; `spec-fidelity`.
 
+## Wave 75 (amendment 74, 2026-10-09) - batch 8
+
+- **Scope**: the E2 row `_parts_fit#whole farmstead off the fields`. 0124's drawing page tests "the whole farmstead
+  (house, yard, garden and storehouse plot)" against the fields; the fit held only the threshing yard and the fixtures
+  exactly off every paddy polygon, the house at its four corners (`_wall_on_the_bund`) and the beds and the storehouse only
+  at the envelope's nine points. Every part of the farmstead - the house, the yard, the storehouse (`shed`), the byre, the
+  well and each garden bed - is now held off exactly (`fit_index.farmstead_boxes`); the house's corner test stays, as the
+  further set-back it carries (0029). The row's second clause: the beds-off-every-ditch rule, which 0124
+  does not speak to, is a claim of its own labeled UNRESEARCHED.
+- **Measured** (m:wave75-farmstead-off-paddy): the unit test red with the rule held to the yard alone, and red again with
+  the house or the storehouse taken out, green with every part; the five hamlets byte-identical to HEAD; the 48-seed cohort
+  unchanged (48/54, the same six refused).
+- **spec-fidelity round 1** (BLOCKED, fixed): the house was left to its corner test, which admits a paddy's corner 4 ft
+  inside a wall between its corners (the reviewer's probe, at the north wall's middle and 12 and 17 ft off it); its drawn box
+  is now in `farmstead_boxes`, and the test asserts those three cases refused.
+- **impl-drift round 1** (fixed): the beds-off-ditch clause split out (NEEDS-RESEARCH), `farmstead_boxes`' account naming
+  the parts it returns (MISLABELED); round 2 all three IN-STEP; round 3 (the house added) IN-STEP, no claim owed.
+- **Verification**: the settlement suite; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

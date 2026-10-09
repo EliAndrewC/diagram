@@ -548,5 +548,6 @@
   "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#Kuwabata's bare runs": "72",
   "l7r/diagram/waterfields/comb.py::_comb_brook#a brook from the outfall": "72",
   "l7r/diagram/waterfields/polder.py::BERM#bank beside a polder ditch": "73",
-  "l7r/diagram/waterfields/polder.py::_plots_clear_of_channels#parcel stops at its ditch's bank": "73"
+  "l7r/diagram/waterfields/polder.py::_plots_clear_of_channels#parcel stops at its ditch's bank": "73",
+  "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#whole farmstead off the fields": "75"
 }
