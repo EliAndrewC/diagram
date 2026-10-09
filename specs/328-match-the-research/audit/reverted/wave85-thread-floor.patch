@@ -1,0 +1,42 @@
+diff --git a/l7r/diagram/waterfields/comb.py b/l7r/diagram/waterfields/comb.py
+index 91fa9e030..f5f4bb5d6 100644
+--- a/l7r/diagram/waterfields/comb.py
++++ b/l7r/diagram/waterfields/comb.py
+@@ -129,7 +129,7 @@ def carve_comb(
+     fork, a_pts = _comb_skeleton(R, F, DOWN, sluice, canal_a_len, canal_b_len, W, H, grain, channels, head_deg, head_len)
+     threads, bc, spawns = _comb_threads(R, F, DOWN, fork, a_pts, canal_b_len, offtakes_a, offtakes_b, plot_across)
+     # ---- the lockstep march (no thread may cross another or pinch under GAP)
+-    _comb_march(R, F, DOWN, threads, spawns, W, H, field_fall)
++    _comb_march(R, F, DOWN, threads, spawns, W, H, field_fall, plot_across * 40 / 48)
+     dpts = _comb_drain(R, F, threads, W, H, grain, channels)
+     brook = _comb_brook(R, F, dpts, W, H)
+ 
+@@ -527,7 +527,7 @@ def _comb_threads(
+     return threads, bc, spawns
+ 
+ 
+-def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread], spawns: list[list[Any]], W: float, H: float, field_fall: float | None) -> None:
++def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread], spawns: list[list[Any]], W: float, H: float, field_fall: float | None, gap: float = GAP) -> None:
+     """The lockstep march (no thread may cross another or pinch under GAP), spawning children mid-march.
+ 
+     Research:
+@@ -553,7 +553,7 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
+             px, py = par.pts[-1]
+             child = _mk_thread(F, DOWN, px, py, head, dlen, fallback=par)
+             child.head_ft = head_ft  # sized against its parent's local width, never wider than it
+-            child.u0 = child.u = par.u + GAP * 0.55 * side
++            child.u0 = child.u = par.u + gap * 0.55 * side
+             child.pts = [(px, py)]
+             threads.insert(threads.index(par) + (1 if side > 0 else 0), child)
+         prev_u = None
+@@ -561,8 +561,8 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
+             if f <= t.f0:
+                 continue
+             nu = t.step(f, R)
+-            if prev_u is not None and nu < prev_u + GAP:
+-                nu = prev_u + GAP
++            if prev_u is not None and nu < prev_u + gap:
++                nu = prev_u + gap
+             t.u = nu
+             t.pts.append(F.to_xy(nu, f))
+             prev_u = nu

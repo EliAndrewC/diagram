@@ -2068,3 +2068,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T197 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. plan CLEAR (wave 84); the fork band laid at every grain built and REVERTED on the cohort (48 -> 44), re-tiered E3; no claim owed (make claims-owed: none)
+
+## Phase 86 - wave 85 (amendment 84): the thread floor from the basin, built and reverted (E3)
+
+- `waterfields/frame.py` (the comment at `GAP`: the fix that failed); the reverted change kept as
+  `specs/328-match-the-research/audit/reverted/wave85-thread-floor.patch`.
+
+- [x] T198 wave 85's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 85); the thread floor from the basin (48 px and 40 ft) built and REVERTED on the cohort (48 -> 45, 48 -> 44), re-tiered E3; no claim owed (make claims-owed: none)
+- [x] T199 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 85); the thread floor from the basin (48 px and 40 ft) built and REVERTED on the cohort (48 -> 45, 48 -> 44), re-tiered E3; no claim owed (make claims-owed: none)

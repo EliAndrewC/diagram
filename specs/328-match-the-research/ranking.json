@@ -9712,21 +9712,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/waterfields/comb.py::_comb_march#least spacing between ditch threads (GAP 26 px), child offset 0.55 GAP",
-  "tier": "E2",
-  "fix": "derive GAP from the basin size in feet at the map's grain (a plot fits between threads: about one plot width), and claim the 0.55 child offset as a CONVENTION",
-  "files": [
-   "l7r/diagram/waterfields/frame.py",
-   "l7r/diagram/waterfields/comb.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "UNCLAIMED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/waterfields/furrows.py::settle_tract_seams#every seam reads",
   "tier": "E2",
   "fix": "cap each tract's settled turn at TRACT_LEAN_RAD off the contour or the fall; a tract that cannot clear its seam within that joins a neighbor",
@@ -13394,6 +13379,21 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/waterfields/comb.py::_comb_march#least spacing between ditch threads (GAP 26 px), child offset 0.55 GAP",
+  "tier": "E3",
+  "fix": "derive GAP from the basin size in feet at the map's grain (0005: a basin some 40 to 60 ft across its ditch on a hamlet map; the floor is 26 px), and claim the 0.55 child offset as a CONVENTION; re-tiered E2 -> E3 on measure (wave 85, 2026-10-09): the floor set to the basin's width across (`plot_across`, 48 px) and to the research's least width (40/48 of it) - both built and REVERTED: four comb hamlets moved at 48 px (at 40 ft Kashikawa refused, three moved) and the 48-seed cohort went 48 -> 45 (11, 21, 32, 40, 42, 48 newly failing) and 48 -> 44 (04, 19, 32, 40, 41, 42, 43 newly failing; Kashikawa refused by its lane web) (m:wave85-thread-floor-reverted); the thread spacing ripples into the lane web and the seats; when retaken, those seeds are the work",
+  "files": [
+   "l7r/diagram/waterfields/frame.py",
+   "l7r/diagram/waterfields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "UNCLAIMED",
   "wave": "",
   "scope": "kept"
  },

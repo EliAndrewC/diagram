@@ -1,38 +1,32 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "bb44242cdf0766eee056a9d44c61580eaef0ab795a39a1d803b40df50922c80c",
+ "plan_sha256": "08543dae8582177447402297563d5aee8caeb7c2598a2257d8df60ccaaefa0c0",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W84-a revert and re-tier E2 -> E3",
-   "summary": "the grain gate in hem.py::_comb_dry_and_beans dropped so the fork band is laid at every grain (0010's fork triangle planted dry), built and REVERTED on the cohort; the row re-tiered E2 -> E3 in audit/overrides.json and ranking.json, its claim left as found",
+   "id": "W85-a revert and re-tier E2 -> E3",
+   "summary": "the thread floor derived from the basin's width was built in comb.py::_comb_march and REVERTED on the cohort; row 217 re-tiered E2 -> E3 in audit/overrides.json and ranking, its claim left as found",
    "class": "within",
-   "why": "Re-measured this round: the kept patch (audit/reverted/wave84-fork-band-every-grain.patch) is the gate alone (`if grain < 1.0:` -> `if True:`), applied in a detached worktree at HEAD 46a50c54b against a second detached worktree at HEAD, make cohort N=21 SEED=12 JOBS=9 (seeds 12-32 and 901-906). Reference settlement clean both ways. HEAD 24/27, refused 20, 22, 906. Patched 21/27, refused 12, 20, 22, 28 (NoDryExit), 31 and 32 (water_rules farm_without_its_channel); 906 passes. That is m:wave84-fork-band-reverted exactly over the seeds run (40 and 43 lie outside the slice, not re-run). Under XIII a seed that passed and now fails is a regression, so the literal fix cannot ship as it stands. The spec's Edge Case 'a fix that changes many maps' gives the route: where making the failing maps pass takes more than the row's tier, the row takes that work's tier and its claim stays as found. The refusals sit in the lane web, the dry exit, the water rules, the groves and the seating, outside hem.py, so the work is a change across modules, E3 by FR-003. The row is re-ordered, not dropped: the GM's 'fix all of it ... from easiest to hardest' still reaches it in E3 order. Same ruling as waves 69, 74, 81 and 83; this row has not been reverted before, so no retaking rule binds this wave."
+   "why": "Re-measured this round. I applied the kept patch (audit/reverted/wave85-thread-floor.patch, the 40 ft form) in a detached worktree at HEAD a89e40f0a and compared it with a second detached worktree at HEAD, running make cohort N=12 SEED=32 JOBS=5 (seeds 32-43 plus 901-906). Neither worktree carries gitignored artifacts, so the comparison is fair. The reference settlement was clean both ways. HEAD passed 16/18, refusing 33 (WebRefused) and 906 (OverlapRefused). The patched tree passed 13/18 and refused five seeds: 32 (water_rules, farm_without_its_channel), 40 and 41 (WebRefused), 42 (row_rules, farm_not_on_its_street) and 43 (OverlapRefused). Seeds 33 and 906 passed. Over the seeds run, that is m:wave85-thread-floor-reverted floor_40 exactly. Seeds 04 and 19 lie outside the slice and were not re-run, and neither was the 48 px form or Kashikawa's map. Under XIII a seed that passed and now fails is a regression whatever the net, so the patch cannot ship as it stands. The spec's Edge Case 'a fix that changes many maps' gives the route: when making the failing maps pass takes more than the row's tier, the row takes that work's tier and its claim stays as found. The refusals sit in the lane web, the row rules, the water rules and the overlap matrix, all outside comb.py, so the work is a change across modules: E3 by FR-003. The row is re-ordered, not dropped, so the GM's 'fix all of it ... from easiest to hardest' still reaches it in E3 order. This is the same ruling as waves 69, 74, 81, 83 and 84. The row has not been reverted before, so wave 81's retaking note (XIII's FIX is the expected exit) does not bind this wave. It binds when the row is retaken, and the work then is the seeds the override lists."
   },
   {
-   "id": "W84-b the DEVIATION alternative not taken",
-   "summary": "the ranking's alternative (record the village and hamlet departure from 0010 as a DEVIATION on 0010's drawing page) declined; the row held for an implementation fix",
+   "id": "W85-b the attempted forms implement the row's fix",
+   "summary": "the floor passed into _comb_march as plot_across (48 px) and as 40/48 of it, read as 'derive GAP from the basin size in feet at the map's grain'",
    "class": "within",
-   "why": "Declining the alternative is declining a narrowing. Taking it would have bent the record to the implementation, the direction FR-004 sends through the exception path; the GM asked that the implementation match the research. Nothing in the plan writes DEVIATION for this row."
+   "why": "The premise was checked, not assumed. 0005's drawing page says: 'On a hamlet map, drawn at a foot to the pixel, the usual basin is about 48 ft across its canal and 26 to 36 ft along it', and elsewhere 'some 40 to 60 ft across'. GAP constrains u, the spacing across the fall between threads (prev_u + GAP). plot_across lies on the same axis: _comb_threads spaces deliveries 2.0 * plot_across apart in u, and plot_texture says plot_across tiles 'across each canal reach'. The extent between two threads is therefore the basin's 'across its canal' figure (40 to 60 ft), not its 'along it' figure (26 to 36 ft), and GAP's 26 px is below the research's floor. The row is a real drift, not a MISLABELED one. At a hamlet's one foot per pixel, 48 px is 48 ft and 40/48 of it is 40 ft, so the two attempts are the research's nominal width and its least width in feet at the map's grain. The second attempt, the least width the research allows, is the one most likely to pass, and it still regressed. The plan writes 'across its ditch' where the page says 'across its canal'. The threads are the delivery ditches the basins lie along, so the substitution changes nothing."
   },
   {
-   "id": "W84-c fork band depth stays in DEFERRED_ON_MEASURE",
-   "summary": "the claim `hem.py::_comb_dry_and_beans#fork band depth` stays deferred in audit/scope.py because no kept hamlet draws the band",
+   "id": "W85-c the 0.55 CONVENTION claim waits for the row",
+   "summary": "the 0.55 child-offset CONVENTION label, the second half of row 217's fix, is not written now; it is written when the row is retaken, so the unit is re-checked once",
    "class": "within",
-   "why": "A consequence of W84-a, not a new choice. The entry exists because the band runs only at a city's grain and the GM's amendment 8 limits the feature to code that magistracies, country shrines and scripted hamlets actually execute (W65-4). The scope.py comment still says taking the 'fork band skipped on villages' row ends the entry, so the link survives the revert."
+   "why": "The Edge Case says the re-tiered row's 'claim stays as found', and FR-001 makes row 217 one finding with one fix text that carries both halves. Writing the label now would close half a row outside its tier. The label is not dropped: the override's fix text still names it, so it lands with the row. Nothing is narrowed."
   },
   {
-   "id": "W84-d the failed fix recorded at the gate, code and pool as HEAD, no claim owed",
-   "summary": "a comment at the grain gate records the fix that failed and its cohort; the patch is kept under audit/reverted/; the engine change is comment-only; T196/T197 close the wave with no impl-drift owed",
+   "id": "W85-d code and pool as HEAD, the failed fix recorded, the patch kept, no claim owed",
+   "summary": "frame.py gains only a comment at GAP recording the failed fix; the patch is kept in audit/reverted/; make claims-owed owes nothing; tasks T198-T199",
    "class": "within",
-   "why": "Checked in the clone: git diff of hem.py is the four comment lines alone, so no code moved and no claim's text changed. Recording a failed fix at the point of change is constitution XIV's own requirement. Tasks Phase 85 carries the wave's two boxes as for waves 81 and 83."
-  },
-  {
-   "id": "W84-e the ranking row's fix text rewritten",
-   "summary": "the row's fix text and files list replaced with the E3 note; the earlier text's two follow-ups (restate 0010's drawing page, which plants the band 'on a city map'; take `fork band depth` out of DEFERRED_ON_MEASURE) and their two files are no longer listed on the row",
-   "class": "within",
-   "why": "This does not narrow what the GM asked for. The row is still open and still owes its whole fix, and the DEFERRED_ON_MEASURE follow-up is still stated in audit/scope.py. Note for the session (not blocking): when the row is retaken, restore the drawing-page restatement and the scope.py exit to the row's fix text, or name them in that wave's plan. 0010's drawing page says the head of each field is dry 'on a city map', and a band laid at hamlet grain leaves that sentence incomplete."
+   "why": "This follows from W85-a. Constitution XIV asks for a failed fix to be recorded at the point of change, and the comment does that. The comment's figures (48 -> 45, 48 -> 44, Kashikawa refused at the 40 ft floor) match m:wave85-thread-floor-reverted, and the slice above reproduces the 40 ft leg. The comment-only engine edit leaves the pool as HEAD."
   }
  ],
  "verdict": "CLEAR"

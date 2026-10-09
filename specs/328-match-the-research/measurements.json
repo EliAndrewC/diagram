@@ -1767,5 +1767,27 @@
       "newly passing": "10, 906",
       "reading": "the band takes ground below the fork that the seats, lanes and farm channels use; E3 as waves 69, 74, 81 and 83"
     }
+  },
+  "wave85-thread-floor-reverted": {
+    "quantity": "wave 85 (2026-10-09): the comb's thread pinch floor derived from the basin's width - the cohort it broke",
+    "observed": "2026-10-09",
+    "source": "specs/328-match-the-research/audit/reverted/wave85-thread-floor.patch (the 40 ft form); make map for the five hamlets; make cohort N=48, twice",
+    "command": "make map; make cohort N=48",
+    "method": "the floor passed into _comb_march as plot_across (48 px), the pool rerolled and the cohort run; then as plot_across * 40 / 48 (0005's least basin width), the same",
+    "value": {
+      "floor_48": {
+        "pool": "four comb hamlets moved",
+        "cohort_passed": 45,
+        "newly failing": "11, 21, 32, 40, 42, 48",
+        "newly passing": "03, 33, 906"
+      },
+      "floor_40": {
+        "pool": "Kashikawa refused (WebRefused off_ford); three others moved",
+        "cohort_passed": 44,
+        "newly failing": "04, 19, 32, 40, 41, 42, 43",
+        "newly passing": "03, 33, 906"
+      },
+      "reading": "the threads' spacing moves the field's edges, which the lane web and the seats are laid against; E3 as waves 69, 74, 81, 83 and 84"
+    }
   }
 }

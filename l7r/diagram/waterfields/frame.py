@@ -14,6 +14,10 @@ DF = 30.0  # fall step of the lockstep march (px)
 """Research: march step - NONE: the fall step the threads advance by"""
 GAP = 26.0  # threads never pinch closer than this - a plot must fit between them
 """Research: least spacing between ditch threads - UNRESEARCHED: 26 px, a plot's width"""
+# A FIX THAT FAILED (feature 328 wave 85, 2026-10-09): 0005's basin is some 40 to 60 ft across its ditch, so the floor was
+# derived from it - `plot_across` (48 px) and 40/48 of it - and passed into `_comb_march`. Every comb hamlet moved and the
+# 48-seed cohort went 48 -> 45 and 48 -> 44 (Kashikawa refused by its lane web at the 40 ft floor). Reverted; the row is E3,
+# its work the seeds that broke (m:wave85-thread-floor-reverted; the patch is in the spec's audit/reverted/).
 
 # THE CHANNEL LADDER, IN TRUE FEET (GM 2026-08-17: "update the net to be actual size").
 #

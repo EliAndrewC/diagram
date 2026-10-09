@@ -1392,6 +1392,18 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `fork band depth` stays in `DEFERRED_ON_MEASURE` (no hamlet draws the band).
 - **Verification**: the cohort (m:wave84-fork-band-reverted); `spec-fidelity`.
 
+## Wave 85 (amendment 84, 2026-10-09) - batch 10
+
+- **Row `comb.py::_comb_march#least spacing between ditch threads (GAP 26 px), child offset 0.55 GAP` HELD, re-tiered E2 -> E3
+  on measure.** 0005 draws a hamlet basin some 40 to 60 ft across its ditch, and the march lets two ditch threads pinch to
+  26 px. The floor derived from the basin was built twice and REVERTED both times (m:wave85-thread-floor-reverted): at the
+  basin's width across (`plot_across`, 48 px) the cohort went 48 -> 45 (11, 21, 32, 40, 42 and 48 newly failing), and at the
+  research's least width (40/48 of it) 48 -> 44, with Kashikawa refused by its lane web. The threads' spacing moves the field
+  edges the lane web and the seats are laid against: E3, as waves 69, 74, 81, 83 and 84. The failed fix is recorded at `GAP`
+  in `frame.py`; the patch kept in the spec's `audit/reverted/`; the code and the maps as wave 84 left them. The 0.55 child
+  offset's CONVENTION claim waits for the row, so that the unit's claims are re-checked once.
+- **Verification**: the two cohorts (m:wave85-thread-floor-reverted); `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
