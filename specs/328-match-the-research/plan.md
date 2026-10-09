@@ -786,6 +786,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: a test of the 50 ft strips; `impl-drift`; `spec-fidelity`; the gate, the pair and the occasions at
   batch 4's close.
 
+## Wave 57 (amendment 56, 2026-10-08) - batch 4
+
+- **Scope**: the commons' look (rows 587, 588). (1) The scrub's ground: the claim said "a solid straw-gold ground", but the
+  code draws the repeated block alone (`tiles.cover_path`: the pattern, no fill, no stroke) - in step with 0078 ("one small
+  block of grass and brush, repeated, with no outline"); the claim restated, nothing redrawn. (2) The wood's edge: the scrub
+  tile, which carries brush dots, ran 8 ft in under every wood's edge, where 0077 says grass only and no brush in a wood. The
+  scrub now leaves each wood whole, and a grass-only tile (`wood_fringe_tile`: the scrub's tufts, no brush dot) fills the
+  `WOOD_FRINGE_FT` band under its edge, in the scrub's slot and class.
+- **Measured**: the five hamlets' manifests move by their cover records only.
+- **Occasions**: glyph-redrawn scrub and rough grazing on Kashikawa (its woods' edges) - batch 4's close.
+- **Verification**: tests (no brush dot in the fringe tile; the scrub tile stops at the wood's edge; the band drawn with the
+  grass-only tile); `impl-drift`; `spec-fidelity`; the gate, the pair and the occasions at batch 4's close.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

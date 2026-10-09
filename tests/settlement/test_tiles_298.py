@@ -107,3 +107,32 @@ def test_the_grass_leaves_out_a_wood_but_its_fringe() -> None:
     grass = _covered(s)
     assert grass.contains(Point(300.0 + WOOD_FRINGE_FT / 2, 350.0)), "the fringe under the wood's edge is grassed"
     assert not grass.contains(Point(300.0 + WOOD_FRINGE_FT * 3, 350.0)), "deep in the wood is not"
+
+
+def test_the_grass_under_a_woods_edge_carries_no_brush() -> None:
+    """0077 (feature 328 wave 57): no brush stands in a wood - the band under its edge is the grass-only tile (no brush dot), and
+    the scrub's tile, which carries brush, leaves the whole wood bare."""
+    import re
+
+    from l7r.diagram.settlement.land.cover import WOOD_FRINGE_FT
+    from l7r.diagram.settlement.land.tiles import grass_tile, wood_fringe_tile
+
+    assert "<circle" in grass_tile(1.0) and "<circle" not in wood_fringe_tile(1.0), "the brush dot is the scrub's alone"
+    s = Settlement(W=800, H=800, seed=4)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    wood = [(300.0, 100.0), (700.0, 100.0), (700.0, 600.0), (300.0, 600.0)]
+    s.commons([(60.0, 60.0), (560.0, 60.0), (560.0, 640.0), (60.0, 640.0)], role="pasture", woods=[wood])
+    kinds = [c.kind for c in s._covers]
+    assert kinds == ["grass", "wood-fringe"], kinds
+    scrub = shapely_cover(s, "grass")
+    assert not scrub.contains(Point(300.0 + WOOD_FRINGE_FT / 2, 350.0)), "the scrub's brush tile stops at the wood's edge"
+    s.flush_covers()
+    ink = "".join(s.out[z] for k, z in s._cover_slots.items() if k != "defs")
+    assert re.search(r'fill="url\(#cover-wood-fringe', ink), "the band is drawn with the grass-only tile"
+
+
+def shapely_cover(s, kind):
+    from shapely.geometry import Polygon
+
+    c = next(c for c in s._covers if c.kind == kind)
+    return Polygon(c.ring).buffer(0).difference(__import__("shapely").union_all(c.bare))

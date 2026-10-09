@@ -76,9 +76,10 @@ def _wrapped(side_w: float, side_h: float, glyph: Callable[[float, float], str],
     return "".join(out)
 
 
-def grass_tile(bs: float) -> str:
+def grass_tile(bs: float, brush: bool = True) -> str:
     """The scrub's tile: brush dots and three-bladed tufts of grass at the commons' density (`commons`, `grass_scatter` as it
-    was): a dot `#94A063` r 1.5-2.4, a tuft three `#A7A860` blades 2.4-4.2 long within 0.45 rad of upright."""
+    was): a dot `#94A063` r 1.5-2.4, a tuft three `#A7A860` blades 2.4-4.2 long within 0.45 rad of upright. `brush=False` is
+    the grass under a wood's edge: the same tufts, no brush dot (0077: no brush in a wood; feature 328 wave 57)."""
     import numpy as np
 
     side = COVER_TILE_FT * bs
@@ -91,16 +92,25 @@ def grass_tile(bs: float) -> str:
     for i in range(n):
         x, y = float(xs[i]), float(ys[i])
         if kind[i] < GRASS_DOT_SHARE:
+            if not brush:
+                continue
             r = float(r_dot[i])
             dots.append(_wrapped(side, side, lambda px, py, r=r: f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{r:.1f}"/>', x, y, r))
             continue
         tips = [(math.sin(float(ang[i, k])) * float(blen[i, k]), -math.cos(float(ang[i, k])) * float(blen[i, k])) for k in range(3)]
         blades.append(_wrapped(side, side, lambda px, py, tips=tips: "".join(f"M{px:.1f},{py:.1f}l{tx:.1f},{ty:.1f}" for tx, ty in tips), x, y, 4.2 * bs))
     return (
-        f'<pattern id="{pattern_id("grass", bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
+        f'<pattern id="{pattern_id("grass" if brush else "wood-fringe", bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
         f'<g fill="#94A063" fill-opacity="0.85">{"".join(dots)}</g>'
         f'<path d="{"".join(blades)}" stroke="#A7A860" stroke-width="0.8" fill="none"/></pattern>'
     )
+
+
+def wood_fringe_tile(bs: float) -> str:
+    """The grass a few paces in under a wood's edge (`land.cover.WOOD_FRINGE_FT`): the scrub's tufts without its brush.
+
+    Research: grass under a wood's edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: grass only, no brush in a wood"""
+    return grass_tile(bs, brush=False)
 
 
 def reed_tile(bs: float) -> str:
@@ -314,6 +324,7 @@ OVERLAYS: dict[str, str] = {"grass": "grass-clumps", "reed": "reed-clumps"}
 
 TILES: dict[str, Callable[[float], str]] = {
     "grass": grass_tile,
+    "wood-fringe": wood_fringe_tile,
     "reed": reed_tile,
     "bamboo": bamboo_tile,
     "grass-clumps": grass_overlay_tile,

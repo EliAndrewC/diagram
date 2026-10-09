@@ -5,6 +5,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
+- glyph-redrawn: scrub and rough grazing on kashikawa - wave 57: the band under a wood's edge drawn grass only, no brush (0077); batch 4's close
 - placement-changed: copse on kuwabata - wave 56: the seats off every yard's and bed's sun at the tree's 50 ft south and east (0038); batch 4's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
@@ -1737,4 +1738,13 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [ ] T141 wave 56's rows (FR-003, FR-004)
       research: rendering
 - [ ] T142 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
+      research: rendering
+
+## Phase 58 - wave 57 (amendment 56): the commons' look - no fill, grass only under a wood's edge
+
+- `land/cover.py` (the scrub's claim; the woods whole, the fringe zone), `land/tiles.py` (`grass_tile(brush=)`, `wood_fringe_tile`), `core.py` (the slots).
+
+- [ ] T143 wave 57's rows (FR-003, FR-004)
+      research: rendering
+- [ ] T144 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering

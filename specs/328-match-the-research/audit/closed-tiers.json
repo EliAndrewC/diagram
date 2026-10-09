@@ -462,6 +462,8 @@
  "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#south strip in feet": "E1",
  "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._attach_yard#no floor without rice": "E0",
  "l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._yard_area_ft2#yard median": "E0",
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color": "E2",
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge": "E2",
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate glyph at the polder cut": "E0",
  "l7r/diagram/settlement/rolling/access.py::_standing_clear#no path corridor within its half-width of any placed footprint": "E0",
  "l7r/diagram/settlement/rolling/access.py::exit_bearing#track out leaves away from the field": "E0",

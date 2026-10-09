@@ -481,7 +481,14 @@ class Settlement(
         # make sure that that thing appears on top"): the tiles' <defs>, then the scrub, a pasture's (unclassed, as its blades
         # were) and the marsh - filled by `flush_covers` at finish, so every feature drawn after the header draws over them
         self._cover_slots = {"defs": self.add("", cls="-")}
-        for key, cls in ((("grass", "scrub and rough grazing"), "scrub and rough grazing"), (("grass", None), None), (("reed", "marsh"), "marsh")):
+        # (...and the grass-only band under a wood's edge in either class, right after the scrub's: feature 328 wave 57)
+        for key, cls in (
+            (("grass", "scrub and rough grazing"), "scrub and rough grazing"),
+            (("grass", None), None),
+            (("wood-fringe", "scrub and rough grazing"), "scrub and rough grazing"),
+            (("wood-fringe", None), None),
+            (("reed", "marsh"), "marsh"),
+        ):
             self._cover_slots[key] = self.add("", cls=cls)
 
     def meta(self: Settlement, **kw: Any) -> None:

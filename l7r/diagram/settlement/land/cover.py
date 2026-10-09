@@ -385,7 +385,7 @@ class GroundCoverMixin:
 
         Research:
             commons beyond the grove - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub and rough grazing, not forest
-            scrub ground color - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the scrub's tufts drawn over a solid straw-gold ground
+            scrub ground color - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass and brush drawn as one repeated block over the bare ground, no solid fill and no outline (`tiles.cover_path`: the pattern alone)
             grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one form only, the scrub past the grove; the floodplain and the small grass plot beside one paddy are never drawn or rolled
             coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
             no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
@@ -507,6 +507,8 @@ class GroundCoverMixin:
             marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the pines, culled to the frame at finish (feature 225); the woodland crowns stay in `g`
             _wd_crowns = 0
             _cover_bare: list[Any] = []  # the ground the grass tile leaves bare (feature 298): set where the grass would have been thrown
+            _woods: list[Any] = []  # the woods the scrub keeps out of whole, and the grass-only band under each one's edge (wave 57)
+            _fringe: list[Any] = []
             if role == "woodland":
                 # A TARGET, NOT AN ATTEMPT COUNT (settlement-review x3, 2026-08-18 round 2 - Inashiro,
                 # Sawada and Mizuguchi found it independently). `int(area / 540)` looks like a density
@@ -594,7 +596,11 @@ class GroundCoverMixin:
                 _cover_bare += [Polygon(m).buffer(0) for m in soft]  # every marsh (and what the caller hands as soft): no grass in the reeds
                 # ...and every wood but its fringe: grass runs a few paces in under a wood's edge (`WOOD_FRINGE_FT`, the GM
                 # 2026-09-27: not "broad swaths of it under the windbreak")
-                _cover_bare += [Polygon(w).buffer(0).buffer(-WOOD_FRINGE_FT * bs) for w in woods]
+                # ...and every wood WHOLE: the scrub tile carries brush, and no brush stands in a wood (0077); the fringe a few
+                # paces in under its edge is drawn with the grass-only tile instead (`wood_fringe_tile`, feature 328 wave 57)
+                _woods = [Polygon(w).buffer(0) for w in woods]
+                _cover_bare += _woods
+                _fringe = [wd.difference(wd.buffer(-WOOD_FRINGE_FT * bs)) for wd in _woods]
                 _cover_bare += [Point(cp["cx"], cp["cy"]).buffer(cp["r"] + 2.0) for cp in crescents]
                 if pond:
                     _cover_bare.append(shapely.affinity.scale(Point(pond[0], pond[1]).buffer(1.0), pond[2], pond[3]))
@@ -668,6 +674,13 @@ class GroundCoverMixin:
             )
             if role != "woodland":
                 self._covers.append(Cover("grass", _ccls, [(float(a), float(b)) for a, b in poly], _cover_bare, self.M["commons"][-1]))
+                if _fringe:  # the grass under each wood's edge: the zone bare but for the fringe bands, and their own bare ground
+                    from shapely.geometry import Polygon as _Poly
+                    from shapely.ops import unary_union
+
+                    _rest = [g for g in _cover_bare if not any(g is wd for wd in _woods)]
+                    _outside = _Poly([(float(a), float(b)) for a, b in poly]).buffer(0).difference(unary_union(_fringe))
+                    self._covers.append(Cover("wood-fringe", _ccls, [(float(a), float(b)) for a, b in poly], [*_rest, _outside], self.M["commons"][-1]))
 
     def hinterland(  # type: ignore[misc]
         self: Settlement,

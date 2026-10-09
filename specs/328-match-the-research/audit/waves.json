@@ -525,5 +525,7 @@
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share as drawn": "54",
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#off the plots' sun": "56",
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": "56",
- "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": "56"
+ "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": "56",
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color": "57",
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge": "57"
 }
