@@ -188,6 +188,10 @@ def test_the_entrance_anchor_is_the_mouth_and_not_the_nearest_point() -> None:
     assert kosatsuba_anchor(reversed_track, "entrance") == got, "direction of the record must not matter"
 
     assert kosatsuba_anchor({"houses": houses}, "entrance") is None, "no approach recorded, no mouth"
+    # ...THE REACH IN FEET, AT THE MAP'S GRAIN (feature 328 wave 58): at 2 ft a pixel the 60 ft reach is 30 px, so the mouth
+    # arrives 30 px nearer the first house than at 1 ft a pixel
+    at2 = kosatsuba_anchor(track, "entrance", 2.0)
+    assert at2 is not None and abs((at2[0] - got[0]) - 30.0) < 4.5, (got, at2)
 
 
 def test_the_frontage_anchor_is_the_official_s_own_house() -> None:

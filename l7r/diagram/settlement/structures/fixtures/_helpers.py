@@ -195,7 +195,7 @@ def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
     return None
 
 
-def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
+def kosatsuba_anchor(M: Any, placement: str, ftpx: float = 1.0) -> tuple[float, float] | None:
     """The point an anchored placement is measured to, or None when the placement is not anchored.
 
     `center` returns None ON PURPOSE, and that is the whole reason this function has a null case: the
@@ -226,7 +226,7 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
 
     def _at_the_buildings(q: tuple[float, float]) -> bool:
         """Has the approach arrived? Measured to the nearest DWELLING, never to a centroid radius."""
-        return min(math.hypot(q[0] - h[0], q[1] - h[1]) for h in houses) <= KOSATSUBA_ENTRANCE_REACH_FT
+        return min(math.hypot(q[0] - h[0], q[1] - h[1]) for h in houses) <= KOSATSUBA_ENTRANCE_REACH_FT / ftpx  # feet, at the map's grain (feature 328 wave 58: compared in px)
 
     # THE HANDOVER, WHERE THERE IS ONE (feature 261, settlement-review of Kashikawa and Sawada). A hamlet's connector is
     # its only way out, and it hands over to the lanes at its inner end: every departure passes that junction and no

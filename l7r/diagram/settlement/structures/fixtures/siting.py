@@ -418,7 +418,7 @@ class FixtureSitingMixin:
             open ground preferred - GUESS: shaded seats only where no open one fits
             anchored board band - UNRESEARCHED: within `KOSATSUBA_ANCHOR_BAND_FT`, 60 ft, of the nearest seat to the anchor
             handover band - UNRESEARCHED: an entrance board within `KOSATSUBA_HANDOVER_BAND_FT`, 20 ft, of the nearest seat to the handover"""
-        anchor = kosatsuba_anchor(self.M, placement) if lane_tier else None
+        anchor = kosatsuba_anchor(self.M, placement, self.ftpx) if lane_tier else None
         # an entrance board keeps only the ground within its reach (`entrance_seat_ok`): the whole band is fitted there alone
         ground = (anchor[0], anchor[1], (KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT) / ftpx + 1e-6) if ENTRANCE_PRUNE and anchor is not None and placement == "entrance" else None
         cands = sample(self._board_routes(anchor, placement, widen, ftpx), VERGE_FIRST and lane_tier and not widen, ground)

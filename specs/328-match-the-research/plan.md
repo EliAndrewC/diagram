@@ -805,6 +805,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: tests (no brush dot in the fringe tile; the scrub tile stops at the wood's edge; the band drawn with the
   grass-only tile); `impl-drift`; `spec-fidelity`; the gate, the pair and the occasions at batch 4's close.
 
+## Wave 58 (amendment 57, 2026-10-08) - batch 4
+
+- **Scope**: (1) the notice board's entrance reach in feet (row 603): `kosatsuba_anchor` compared the 60 ft
+  `KOSATSUBA_ENTRANCE_REACH_FT` with pixel distances; it now takes the map's `ftpx` (its caller passes `self.ftpx`) - the
+  hamlets (1 ft/px) byte-identical, a 2 ft/px map's mouth 30 px nearer, tested. (2) Measured and noted, no code: row 595 (only
+  plain houses keep a byre) excludes nothing a scripted hamlet seats, every house plain; row 584 (the storehouse) re-tiered
+  E3 on measure - its no-lot clause runs only on the legacy roller, and its live clause (a scattered farm's kura drawn on the
+  north wall unreserved, its bundle laid with shed=False) is a change across the bundle, the scattered layout's turn, the
+  fixtures and the house record. Row 594 (the inner stable's mirror forms) runs on Mizuguchi (courtyard byres) and is wave
+  59: a knob, with its title-card choices and modals.
+- **Occasions**: none - nothing a hamlet draws moves.
+- **Verification**: the anchor test (red on the old signature); `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

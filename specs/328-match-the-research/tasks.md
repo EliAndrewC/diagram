@@ -1752,3 +1752,12 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T144 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
       verify: DONE. verified 2026-10-08: plan CLEAR (wave 57 later rounds); impl-drift recorded (claims-owed none; the one DRIFTED is ranked row 819); record-owed none
+
+## Phase 59 - wave 58 (amendment 57): the notice board's reach in feet; rows 584 and 595 measured
+
+- `structures/fixtures/_helpers.py::kosatsuba_anchor` (`ftpx`), `structures/fixtures/siting.py` (passes it).
+
+- [ ] T145 wave 58's row (FR-003, FR-004)
+      research: rendering
+- [ ] T146 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering

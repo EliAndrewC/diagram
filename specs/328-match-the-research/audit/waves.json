@@ -527,5 +527,6 @@
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": "56",
  "l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": "56",
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color": "57",
- "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge": "57"
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge": "57",
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet": "58"
 }

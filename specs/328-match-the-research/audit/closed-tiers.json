@@ -490,6 +490,7 @@
  "l7r/diagram/settlement/rolling/gap_ways.py::knot_free_foot#a foot slides along the tree at most 2 x the knot reach (50 ft)": "E0",
  "l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._well_vr#wellhead marker larger than life": "E0",
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline (_stand_fringe, outliers)": "E0",
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet": "E2",
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses": "E1",
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling": "E0",
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": "E0",

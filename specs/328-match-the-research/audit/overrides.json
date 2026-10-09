@@ -3115,5 +3115,12 @@
   "flag": "",
   "moved": "T122a (fresh reader): tiered by its work - Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) - a <= _BELT_GAP_FT and b - max(v for _u, v in cross) <= _BELT_GAP_FT` - and its docstring says 'an ",
   "e0_basis": "Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) "
+ },
+ "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#storehouse": {
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 58, 2026-10-08): the no-lot path's positional roll runs only on the legacy roller (a hamlet's seating always carries lots, which already deal the kura largest first - stages.py:411, lot.py), so that clause is not in-scope code; the live clause is the scattered farm: its bundle lays its fixtures with shed=False (bundle.py:401), so a scattered farm's kura (one in eight) is drawn on the north wall UNRESERVED, where its own grove band may stand. Fix: reserve the annex in dispersed_layout on 0040's west wall (the scattered farm's convention), carried through the layout's turn, and record shed_side W - a change across bundle.py, dispersed.py, fixture_seats.py and houses.py"
+ },
+ "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#only plain houses keep a byre": {
+  "fix": "let the headman's and large houses keep a byre (stable wing common among upper households), not kind == 'plain' only (wave 58, measured: every house a scripted hamlet seats is kind 'plain' with no role - the five hamlets 15/20/16/12/19 plain - so the filter excludes nothing in scope; only the deferred legacy roller seats a big or headman house)"
  }
 }

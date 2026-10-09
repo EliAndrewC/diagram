@@ -8932,36 +8932,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#storehouse",
-  "tier": "E2",
-  "fix": "assign storehouses to the largest farmhouses (no kura-less house larger than one with) on the no-lot path, and shed_side W on a scattered farm",
-  "files": [
-   "l7r/diagram/settlement/houses.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/settlement/houses.py::HousesMixin._try_place_legacy#legacy storehouse share",
-  "tier": "E2",
-  "fix": "legacy kura share 0.3 by position -> one in eight to the largest houses, headman always",
-  "files": [
-   "l7r/diagram/settlement/houses.py"
-  ],
-  "after": [
-   "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#storehouse"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "deferred"
- },
- {
   "key": "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._clear_ground#swept verge",
   "tier": "E2",
   "fix": "_clear_ground clears only a precinct's own ground (reach labeled GUESS) and a grave's collar is 0",
@@ -9126,7 +9096,7 @@
  {
   "key": "l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#only plain houses keep a byre",
   "tier": "E2",
-  "fix": "let the headman's and large houses keep a byre (stable wing common among upper households), not kind == 'plain' only",
+  "fix": "let the headman's and large houses keep a byre (stable wing common among upper households), not kind == 'plain' only (wave 58, measured: every house a scripted hamlet seats is kind 'plain' with no role - the five hamlets 15/20/16/12/19 plain - so the filter excludes nothing in scope; only the deferred legacy roller seats a big or headman house)",
   "files": [
    "l7r/diagram/settlement/shrines_wells/byres.py"
   ],
@@ -9254,7 +9224,7 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
   "moved": "T42a: tiered by its work - kosatsuba_anchor is a module function with no scale in hand, so the value fix needs ftpx plumbed through its signature and caller.",
-  "wave": "",
+  "wave": "58",
   "scope": "kept"
  },
  {
@@ -12564,6 +12534,20 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#storehouse",
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 58, 2026-10-08): the no-lot path's positional roll runs only on the legacy roller (a hamlet's seating always carries lots, which already deal the kura largest first - stages.py:411, lot.py), so that clause is not in-scope code; the live clause is the scattered farm: its bundle lays its fixtures with shed=False (bundle.py:401), so a scattered farm's kura (one in eight) is drawn on the north wall UNRESERVED, where its own grove band may stand. Fix: reserve the annex in dispersed_layout on 0040's west wall (the scattered farm's convention), carried through the layout's turn, and record shed_side W - a change across bundle.py, dispersed.py, fixture_seats.py and houses.py",
+  "files": [
+   "l7r/diagram/settlement/houses.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/houses.py::HousesMixin._try_place_legacy#legacy farmhouse size",
   "tier": "E3",
   "fix": "legacy (44, 29) base -> near 35 x 20 for an ordinary house",
@@ -12575,6 +12559,22 @@
   ],
   "flag": "",
   "tier_as_ranked": "E1",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/houses.py::HousesMixin._try_place_legacy#legacy storehouse share",
+  "tier": "E3",
+  "fix": "legacy kura share 0.3 by position -> one in eight to the largest houses, headman always",
+  "files": [
+   "l7r/diagram/settlement/houses.py"
+  ],
+  "after": [
+   "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#storehouse"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
