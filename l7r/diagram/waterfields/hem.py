@@ -64,6 +64,10 @@ def _comb_dry_and_beans(
         # prime dry-crop ground beside the head-race, so quilt it: a second hem band along
         # canal B's SUPPLY stretch, whose upslope normal points INTO the triangle. Village
         # maps skip this (byte-stability; their scrub already covers the same ground).
+        # A FIX THAT FAILED (feature 328 wave 84, 2026-10-09): the band laid at every grain, as 0010's fork triangle
+        # reads; four hamlets moved and the 48-seed cohort went 48 -> 44 (12, 28, 31, 32, 40, 43 newly failing - the
+        # web, a dry exit, farm channels, a grove crossed, a house unseated). Reverted; the row is E3, its work those
+        # seeds (m:wave84-fork-band-reverted; the patch is in the spec's audit/reverted/).
         # ...and the band spans only the stretch that BORDERS the triangle: up to bc's first
         # offtake, where the paddy bc itself commands begins. When canal B carries offtakes
         # (every scripted row since 2026-08-16), running the band to ditch_f strings hem plots

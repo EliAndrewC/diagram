@@ -2056,3 +2056,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T195 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 83); fillet_polyline drawn as a circular arc of 0054's radius built and REVERTED on the cohort (48 -> 45), re-tiered E3; no claim owed (make claims-owed: none)
+
+## Phase 85 - wave 84 (amendment 83): the fork band at every grain, built and reverted (E3)
+
+- `waterfields/hem.py` (the comment at the grain gate: the fix that failed); the reverted change kept as
+  `specs/328-match-the-research/audit/reverted/wave84-fork-band-every-grain.patch`.
+
+- [x] T196 wave 84's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 84); the fork band laid at every grain built and REVERTED on the cohort (48 -> 44), re-tiered E3; no claim owed (make claims-owed: none)
+- [x] T197 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 84); the fork band laid at every grain built and REVERTED on the cohort (48 -> 44), re-tiered E3; no claim owed (make claims-owed: none)

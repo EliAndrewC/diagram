@@ -1380,6 +1380,18 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   the spec's `audit/reverted/`; the code and the maps as wave 82 left them.
 - **Verification**: the cohort (m:wave83-fillet-radius-reverted); `spec-fidelity`.
 
+## Wave 84 (amendment 83, 2026-10-09) - batch 10
+
+- **Row `hem.py::_comb_dry_and_beans#fork band skipped on villages` HELD, re-tiered E2 -> E3 on measure.** 0010 plants the fork
+  triangle between the two supply canals with dry crops; the band that does so is laid only at a city's grain, so a village or
+  hamlet leaves the triangle to the scrub. The grain gate dropped (the band at every grain) was built and REVERTED
+  (m:wave84-fork-band-reverted): four of the five hamlets moved, and the 48-seed cohort went 48 -> 44 (seeds 12, 28, 31, 32, 40
+  and 43 newly failing - the web, a dry exit, farm channels, a grove crossed, a house unseated; 10 and 906 newly passing). The
+  band takes ground below the fork that the seats, lanes and farm channels use: E3, as waves 69, 74, 81 and 83. The failed fix
+  is recorded at the grain gate; the patch kept in the spec's `audit/reverted/`; the code and the maps as wave 83 left them.
+  `fork band depth` stays in `DEFERRED_ON_MEASURE` (no hamlet draws the band).
+- **Verification**: the cohort (m:wave84-fork-band-reverted); `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

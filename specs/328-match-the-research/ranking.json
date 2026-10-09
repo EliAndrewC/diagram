@@ -9741,23 +9741,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band skipped on villages",
-  "verdict": "MISLABELED",
-  "tier": "E2",
-  "fix": "0010 calls the fork triangle between the two supply canals 'the well-drained high ground that dry crops take', but a map at grain 1.0 or more (village and hamlet) leaves it to the scrub, held back for byte-stability: lay the fork band at every grain (drop `grain < 1.0`) and restate 0010's drawing page, which plants it 'on a city map' only - or record the village and hamlet departure as a DEVIATION there (impl-drift, wave 65); WHEN THE BAND IS DRAWN AT HAMLET GRAIN, take `hem.py::_comb_dry_and_beans#fork band depth` out of `DEFERRED_ON_MEASURE` (audit/scope.py) and re-derive dev/claims-deferred.json - it is deferred only because no kept map lays the band (wave 65's W65-4 ruling)",
-  "files": [
-   "l7r/diagram/waterfields/hem.py",
-   "research/questions/0010-farmland-around-towns-and-cities.drawing.html",
-   "specs/328-match-the-research/audit/scope.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 65, impl-drift",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/waterfields/hill.py::build_ribbon#brook down the middle",
   "tier": "E2",
   "fix": "draw the brook (supply) down the whole centerline (center[:]), not only center[: n_bands//2+1]",
@@ -13474,6 +13457,21 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band skipped on villages",
+  "verdict": "MISLABELED",
+  "tier": "E3",
+  "fix": "0010 plants the fork triangle between the two supply canals with dry crops, and maps at grain 1.0 or more (village, hamlet) leave it to the scrub; re-tiered E2 -> E3 on measure (wave 84, 2026-10-09): the fork band laid at every grain - built and REVERTED: four of the five hamlets moved and the 48-seed cohort went 48 -> 44 (12, 28, 31, 32, 40, 43 newly failing; 10 and 906 newly passing), because the band takes the ground below the fork that the farmhouse ring, the lanes and the farm channels seat on (m:wave84-fork-band-reverted); when retaken, those six seeds are the work; when it lands, restate 0010's drawing page (which plants the fork 'on a city map' only) and take `hem.py::_comb_dry_and_beans#fork band depth` out of DEFERRED_ON_MEASURE (audit/scope.py), re-deriving dev/claims-deferred",
+  "files": [
+   "l7r/diagram/waterfields/hem.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 65, impl-drift",
+  "tier_as_ranked": "E2",
   "wave": "",
   "scope": "kept"
  },

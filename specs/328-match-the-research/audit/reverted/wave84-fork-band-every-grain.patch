@@ -1,0 +1,15 @@
+diff --git a/l7r/diagram/waterfields/hem.py b/l7r/diagram/waterfields/hem.py
+index 6422587c3..e061ff116 100644
+--- a/l7r/diagram/waterfields/hem.py
++++ b/l7r/diagram/waterfields/hem.py
+@@ -56,8 +56,8 @@ def _comb_dry_and_beans(
+     mix = dry_crop_mix(crops)  # the map's crop mix, rolled ONCE so every band and the reserve share it (0006)
+     dry_plots = _dry_fields(R, F, a_pts, W, H, dry_keepout, band=dry_band, g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes, crop_mix=mix, crop_rng=crops)
+     hem = list(dry_plots)  # the a-side hem whole: a wild middle's share is split off AFTER the seams are settled (feature 287, W36)
+-    if grain < 1.0:  # a city's grain only (0010), never a hamlet's or a village's
+-        # the INTER-ARM FORK TRIANGLE (coarse grains only): the ground between the two supply
++    if True:  # at every grain (feature 328 wave 84): the fork triangle is dry-crop ground on every map (0010)
++        # the INTER-ARM FORK TRIANGLE: the ground between the two supply
+         # canals just below the fork is commanded by neither (it sits upslope of canal B), and
+         # on a village map the scrub matrix textures it - a city map has no scrub, so it read
+         # as the blank wedge the GM circled at every fan head (2026-07-21). Historically it is

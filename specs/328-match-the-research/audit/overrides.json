@@ -3185,5 +3185,12 @@
   "files": [
    "l7r/diagram/settlement/_geom/curves.py"
   ]
+ },
+ "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band skipped on villages": {
+  "tier": "E3",
+  "fix": "0010 plants the fork triangle between the two supply canals with dry crops, and maps at grain 1.0 or more (village, hamlet) leave it to the scrub; re-tiered E2 -> E3 on measure (wave 84, 2026-10-09): the fork band laid at every grain - built and REVERTED: four of the five hamlets moved and the 48-seed cohort went 48 -> 44 (12, 28, 31, 32, 40, 43 newly failing; 10 and 906 newly passing), because the band takes the ground below the fork that the farmhouse ring, the lanes and the farm channels seat on (m:wave84-fork-band-reverted); when retaken, those six seeds are the work; when it lands, restate 0010's drawing page (which plants the fork 'on a city map' only) and take `hem.py::_comb_dry_and_beans#fork band depth` out of DEFERRED_ON_MEASURE (audit/scope.py), re-deriving dev/claims-deferred",
+  "files": [
+   "l7r/diagram/waterfields/hem.py"
+  ]
  }
 }
