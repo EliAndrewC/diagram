@@ -22,8 +22,10 @@ information that would be most informative to tell you at a high level"*)
 short paragraph, so a reader who stops after the first paragraph still knows what the thing was. (GM: *"a hodgepodge of
 different facts. And there's not really a gestalt to it"*)
 
-**M3. Length.** The About tab runs about 120 to 250 words; a paragraph rarely past four sentences. A guess bullet is one or
-two sentences. (inferred)
+**M3. Length.** The About tab runs about 120 to 500 words; a paragraph rarely past four sentences. A guess bullet is one or
+two sentences. The dialog scrolls past 90% of the window's height, so a modal with more to say says it. (GM 2026-10-09, raising
+the inferred 250: *"I don't think there should be such a small limit. It's okay if the modal scrolls if there's enough to
+say. Maybe some kind of limit is good, but 250 words seems like it's too low."*)
 
 ## The tabs
 

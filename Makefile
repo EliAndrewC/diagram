@@ -1368,8 +1368,8 @@ archive-find: ## [project] does the archive already hold it? by URL, registry ke
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
 
 # GUARD_EDIT_OK: feature 313 - four new operations over the canonical download list and the access tags; no guard changes.
-downloads-ingest: ## [project] on the GM's word "ingest": the marks in the GM's copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP="<ids>"] [DROP="<ids>"]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" ingest --keep "$(KEEP)" --drop "$(DROP)"
+downloads-ingest: ## [project] on the GM's word "ingest": the marks in the GM's copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP="<ids>"] [DROP="<ids>"] [MARK="<id>=<downloaded|partial|paywalled|not-found> ..."]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" ingest --keep "$(KEEP)" --drop "$(DROP)" --mark "$(MARK)"
 
 downloads-sync: ## [project] on the GM's word "sync": the GM's copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" sync
