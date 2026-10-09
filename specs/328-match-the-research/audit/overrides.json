@@ -3139,5 +3139,13 @@
    "l7r/diagram/settlement/rolling/bundle.py",
    "l7r/diagram/settlement/homestead_parts/yards.py"
   ]
+ },
+ "l7r/diagram/waterfields/comb.py::_canal_ft#canal narrows at each offtake": {
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 69, 2026-10-09): taper by the shared square-root law (frame.taper_w on i/n) instead of equal linear steps - built, tested and REVERTED: the wider mid-run canal moved the field's geometry and the 48-seed cohort went 48 -> 45 (04, 12, 40, 902, 905 newly refused - row_rules farm_not_on_its_street x2, a needle loop, farmstead_across_brook, farm_without_its_channel; 22 and 33 newly passing); the work is the layouts that broke (m:wave69-canal-taper-reverted)",
+  "files": [
+   "l7r/diagram/waterfields/comb.py",
+   "l7r/diagram/waterfields/frame.py"
+  ]
  }
 }

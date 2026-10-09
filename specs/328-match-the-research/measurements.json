@@ -1221,5 +1221,30 @@
         "after": 14.0
       }
     }
+  },
+  "wave69-canal-taper-reverted": {
+    "quantity": "wave 69 (2026-10-09): the supply canal tapered by the square-root law at its offtakes - the cohort it broke",
+    "observed": "2026-10-09",
+    "source": "make cohort N=48 with `_canal_ft` = taper_w(head, tail, i/n), against wave 68's run",
+    "command": "make cohort N=48",
+    "method": "the change built and unit-tested (taper_w at the middle cut past an even step), the five hamlets rerolled (four moved), the cohort run once",
+    "value": {
+      "cohort_48": {
+        "wave 68": "48/54 (refused 03, 10, 20, 22, 33, 906)",
+        "wave 69": "45/54 (refused 03, 04, 10, 12, 20, 40, 902, 905, 906)"
+      },
+      "newly refused": {
+        "04": "row_rules farm_not_on_its_street",
+        "12": "WebRefused needle_loops",
+        "40": "farmstead_across_brook",
+        "902": "row_rules farm_not_on_its_street",
+        "905": "water_rules farm_without_its_channel"
+      },
+      "newly passing": [
+        "22",
+        "33"
+      ],
+      "outcome": "reverted; row re-tiered E3"
+    }
   }
 }

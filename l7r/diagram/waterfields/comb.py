@@ -369,6 +369,12 @@ def _canal_ft(tier: tuple[float, float], i: int, n: int) -> float:
     two used to be one formula written out and one written nowhere, which is how a delivery came to
     be drawn wider than the canal feeding it.
 
+    A FIX THAT FAILED (feature 328 wave 69, 2026-10-09): 0069 narrows a canal by the square-root law, not in equal linear
+    steps, and `taper_w(tier[0], tier[1], i / n)` here does exactly that - but the wider mid-run canal moved the field's
+    geometry, and the 48-seed cohort went 48 -> 45 (seeds 04, 12, 40, 902 and 905 newly refused: a farm off its street twice,
+    a needle loop, a farmstead across the brook, a farm without its channel; 22 and 33 newly passing). Reverted; the row is
+    E3 (a change that ripples into placement), its work the layouts that broke (m:wave69-canal-taper-reverted).
+
     Research: canal narrows at each offtake - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: head to tail tier in equal linear steps, one per cut
     """
     return tier[0] - (tier[0] - tier[1]) * i / n

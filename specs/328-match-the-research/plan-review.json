@@ -1,44 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "7a57499ff97ac01b5729dfae3be6407d99b80663a30d2de04e0721cf831740a2",
+ "plan_sha256": "0dd06420cfffb2f3f802d1b4b358f9253086bfbf1b2d66b23c311be96ba9fce0",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W68-a",
-   "summary": "A seat on the approach is turned to that route's own bearing (rot) instead of its nearest way",
+   "id": "W69-hold-215",
+   "summary": "Row 215 (_canal_ft#canal narrows at each offtake) held and re-tiered E2 -> E3 on measure instead of working the five newly refused layouts in this wave",
    "class": "within",
-   "why": "The found row's fix as filed (0190: 'squared to the road it faces'). Round 1's caveat is closed in code: siting.py now sets `hand` only when anchor is not None, placement == 'entrance' and a handover exists, and a route carries approach=True only as `hand and connector`, so a connector offered to a center or frontage board is a way like any other."
+   "why": "The spec's Edge Case 'A fix that changes many maps' provides exactly this route: where making the failing maps pass takes more work than the row's tier, the row takes that work's tier. Five seeds refused by four different rules (row_rules, web needle loops, the brook rule, water_rules) is a change across modules, FR-003's E3. Re-tiering by measured work is the request's own ordering ('rank by how much implementation work... go from easiest to hardest'); the row stays in the ranking, kept in scope, to be fixed in tier order. Same route as the accepted holds of the garden flank (wave 60) and the privy seats (wave 62)."
   },
   {
-   "id": "W68-b",
-   "summary": "An approach seat is not subject to WayFacing.turn's L12 refusal",
+   "id": "W69-row-is-the-wait",
+   "summary": "The re-tiered row itself carries the layouts' work (its fix names them, after: []) rather than a separate found row",
    "class": "within",
-   "why": "Unchanged from round 1: the approach seat's road is chosen by construction, so L12's corner ambiguity does not arise; 0190's 'the road it faces' is singular."
+   "why": "The layouts' breakage is the row's own fix's work, not a separate departure from research; the accepted precedents (ranking rows for wave 60 and 62) record it the same way."
   },
   {
-   "id": "W68-c",
-   "summary": "Every other seat still faces its nearest way and is refused at an ambiguous corner",
+   "id": "W69-E3-not-E4",
+   "summary": "Tier E3, not E4",
    "class": "within",
-   "why": "Unchanged behavior outside the found row's case."
+   "why": "0069 settles what the implementation should be (the square-root law, frame.taper_w); the open work is placement, not research. FR-003."
   },
   {
-   "id": "W68-d",
-   "summary": "Measured/Occasions: Inashiro 43.5 -> 0.0 and Sawada 76.4 -> 0.0 degrees off the track out, the other three byte-identical to HEAD; placement-changed occasions on inashiro and sawada",
+   "id": "W69-revert",
+   "summary": "The taper reverted; code and maps as wave 68 left them",
    "class": "within",
-   "why": "Round 1's NOT LEGITIMATE narrowing is gone. Re-measured against git show HEAD: Inashiro off its connector 43.5 -> 0.0 (15.0 -> 14.0 ft), Sawada 76.4 -> 0.0 (14.1 -> 14.0 ft); kashikawa, kuwabata, mizuguchi carry no diff against HEAD; m:wave68-board-faces-the-way-out records both; tasks.md Occasions names both boards for batch 6's close."
+   "why": "Constitution XIII: nothing regressed is kept. The engine delta is a docstring only (comb.py), so no behavior change ships."
   },
   {
-   "id": "W68-e",
-   "summary": "found-wave67's center-reading row re-estimated to E3",
+   "id": "W69-claim-as-found",
+   "summary": "The Research: claim still states 'equal linear steps' and stays DRIFTED",
    "class": "within",
-   "why": "Now E3 in found-wave67.jsonl and ranking.json with the nine call sites in seven modules and serves' keep test, as round 1 asked; the request's own ranking procedure."
+   "why": "The Edge Case: 'its claim stays as found'. No rewrite of the claim toward the code, so no FR-004 exception."
   },
   {
-   "id": "W68-f",
-   "summary": "The gate test test_an_entrance_board_on_its_approach_is_squared_to_it, its distance read in feet at the map's scale",
+   "id": "W69-failed-fix-recorded",
+   "summary": "The failed fix recorded in _canal_ft's docstring with its measurement key",
    "class": "within",
-   "why": "Enforcement of the requested fix (it fails only when an entrance board on its track out is not squared to it); it multiplies by meta.ftpx, present on all five hamlets (1.0 there), against KOSATSUBA_WAY_REACH_FT."
+   "why": "XIV as operationalized (CLAUDE.md, docs/spec-kit-and-reviews.md): record a fix that FAILED at the point of change. No rendering decision changed, so spec.md's Decisions Recorded owes no entry."
   }
  ],
  "verdict": "CLEAR"

@@ -1881,3 +1881,11 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T166 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 68, round 2); an entrance board on its approach squared to the way out (Inashiro 43.5 and Sawada 76.4 degrees off -> 0.0); the approach flagged only for an entrance at a handover; claims in step over four impl-drift rounds; cohort unchanged
+
+## Phase 70 - wave 69 (amendment 68): the canal's square-root taper, held on measure
+
+- `waterfields/comb.py` (`_canal_ft`: the failed fix recorded; no behavior change); `audit/overrides.json` (row 215 E3).
+
+- [x] T167 wave 69's row held and re-tiered on measure (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 69); row 215 held and re-tiered E3 on measure: the square-root canal taper, built and reverted, took the cohort 48/54 -> 45/54 across four rules; the failed fix recorded at _canal_ft

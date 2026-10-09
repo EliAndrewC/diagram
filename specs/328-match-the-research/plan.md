@@ -1090,6 +1090,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Occasions**: placement-changed, notice board on inashiro and on sawada - batch 6's close.
 - **Verification**: `tests/gate/test_board_facing.py`; the board-seat and fixture tests; `impl-drift`; `spec-fidelity`.
 
+## Wave 69 (amendment 68, 2026-10-09) - batch 6
+
+- **Row 215 HELD, re-tiered E3 on measure** (`comb.py::_canal_ft#canal narrows at each offtake`, the spec's Edge Case, as
+  rows 590 and 564 were). 0069 narrows a supply canal by the square-root law - "the width grows only as the square root of
+  the water" - and `_canal_ft` stepped it down in equal linear steps. `taper_w(tier[0], tier[1], i / n)`, the shared law,
+  was built and unit-tested and REVERTED (m:wave69-canal-taper-reverted): the canal, wider through its middle, moved the
+  field's geometry, four of the five hamlets moved, and the 48-seed cohort went 48 -> 45 - five seeds newly refused (04 and
+  902 a farm off its street, 12 a needle loop, 40 a farmstead across the brook, 905 a farm without its channel), 22 and 33
+  newly passing. Five downstream rules breaking is a change that ripples into placement - E3 by the ranking's own definition
+  - and its work is those layouts. The failed fix is recorded at `_canal_ft` (constitution XIV: a fix that failed, at the
+  point of change); the code and the maps are as wave 68 left them.
+- **Verification**: the cohort's two runs (m:wave69-canal-taper-reverted); `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
