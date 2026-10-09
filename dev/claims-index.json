@@ -20780,15 +20780,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a worn path takes the shortest way": {
-  "code": "01d00fc00821d4b1",
-  "core": "c6667d1950d6a0af",
-  "date": "2026-10-03",
-  "note": "straight where clear, else routed and pulled taut",
+  "code": "5a22a7f90b994011",
+  "core": "0b8cb0750d8055f3",
+  "date": "2026-10-09",
+  "note": "nearest targets first, straight step where clear, else routed and pulled taut; the new fallback route keeps the law's clearance off fences and is pulled taut only as far as that clearance allows, which matches \"wherever it can keep its usual clearance from fences\"; hook unhooked, tail ended at first arrival",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:a857325132f8d4ee",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::flank_doors#a flank door as fallback": {
@@ -20974,11 +20979,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::route_from_door#plumbing": {
-  "code": "57fe321698329358",
-  "core": "a5938a0c05c4571d",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "48e220b81c5972f7",
+  "core": "706a8d800fd81796",
+  "date": "2026-10-09",
+  "note": "lattice routing, with a one- or two-cell escape step out of a boxed-in door cell; the gap is passed in and defined by constants that carry their own claims, and door_path judges the whole path",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::runs_beside#no way drawn twice": {

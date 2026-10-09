@@ -5,7 +5,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
-- placement-changed: village lane on kashikawa - wave 88 (the track out): the row road threaded leg by leg over its ford, the far leg run on taut (0035; m:wave88-road-over-its-ford); batch 11's close
+- placement-changed: village lane on kashikawa - waves 88 and 89: the row road threaded leg by leg over its ford, the far leg run on taut (0035; m:wave88-road-over-its-ford), and one door path moved 4 to 5 px further from its garden (0246; m:wave89-door-path-at-the-law-s-gap); batch 11's close
 - glyph-redrawn: pond canal on kuwabata - wave 73 (the dike-pond polder inks its supply channels `pond canal`): the feeder, toes and laterals at 0068's widths in feet (the feeder 4.5 ft at its inlet to 1.5, the toes and laterals 2.5 -> 1.2 floored 1.5 with their heads capped by the feeder) and each parcel's bank per channel (m:wave73-polder-widths-r2); batch 7's close (reviewed PASS at batch 7's close, 2026-10-09)
 - glyph-redrawn: drainage ditch on kuwabata - wave 73: the polder's drain at its 5.5 ft outfall width, and the crop's half-bund bank beside it (m:wave73-polder-widths-r2); batch 7's close (reviewed PASS at batch 7's close, 2026-10-09)
 - glyph-redrawn: pond canal on kuwabata - wave 80: the polder ditches' seam bends drawn as circular arcs of 2.5 widths' radius (0054; m:wave80-swept-bends); batch 9's close (reviewed PASS at batch 9's close, 2026-10-09)
@@ -2115,3 +2115,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T205 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. impl-drift 19 of 19 IN-STEP on track.py, the row road's ford claimed to 0035; make claims-owed: none
+
+## Phase 90 - wave 89 (amendment 88): a door path routed at the law's own gap (XIV)
+
+- `hamletgen/ways/serve.py` (`door_path`, `route_from_door`); `tests/hamletgen/ways/test_doors.py`.
+
+- [x] T206 wave 89's fix (FR-003, XIV)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 89; its requested wording applied after); door_path routes at the law's own gap where the law refuses the first path; seed 33 clean, cohort 51 -> 52/54 none newly failing (m:wave89-door-path-at-the-law-s-gap)
+- [x] T207 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. impl-drift 2 of 2 IN-STEP on serve.py; make claims-owed: none

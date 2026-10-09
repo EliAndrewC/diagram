@@ -536,14 +536,14 @@ def front_to_flank_open(front: Pt, flank: Pt, h: Mapping[str, Any]) -> bool:
     return not _crosses_fabric([front, flank], rings, 0.0)
 
 
-def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], ok: Any) -> list[Pt]:
+def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], ok: Any, gap: float = FOOTPATH_FABRIC_GAP) -> list[Pt]:
     """The router's way from a door to `q` (`_route`, a footpath's gap) - or, where the door's own lattice cell has no free
     neighbor to leave by, from a step one or two cells out of it, toward `q` first, taken only where the step itself is
     clear (`ok`), the door put back at its head. The router plans its cells at the gap and most of a cell more, so a door
     close against its house wall and its own fixture was boxed in: Kashikawa's farm at (2473, 2937) under feature 302 found
     no route to any of its six targets, where a step of 6-11 px found one (the Diagram performance session, 2026-10-01).
     The law still judges the whole path (`door_path`)."""
-    path = _route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+    path = _route(door, q, hard, walls, water, gap=gap)
     if len(path) >= 2:
         return path
     for r in (ROUTE_CELL, 2.0 * ROUTE_CELL):
@@ -551,7 +551,7 @@ def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], wa
         for st in sorted(steps, key=lambda p: math.dist(p, q)):
             if not ok(door, st):
                 continue
-            path = _route(st, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+            path = _route(st, q, hard, walls, water, gap=gap)
             if len(path) >= 2:
                 return [door, *path]
     return []
@@ -584,10 +584,22 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
             and forbidden_segment(s.M, "lanes", [a, b], 3.0) is None
         )
 
-    for q in sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]:
-        path = [door, q] if ok(door, q) else pulled(door_unhooked(route_from_door(door, q, hard, walls, water, ok), ok), ok)
-        path = to_first_arrival(path, segs, _TOUCH_GAP, ok)
+    def kept(path: list[Pt], clear: Any) -> list[Pt] | None:
+        path = to_first_arrival(path, segs, _TOUCH_GAP, clear)
         path = square_run(s.M, path) if len(path) >= 2 else path
-        if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0):
+        return path if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0) else None
+
+    def lawful_step(a: Pt, b: Pt) -> bool:
+        # a step the footpath's own test passes and the law's ground half keeps (`Lawful.on_lawful_ground`): 7 ft off a fence
+        return ok(a, b) and lawful.on_lawful_ground([a, b], 3.0)
+
+    for q in sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]:
+        first = [door, q] if ok(door, q) else pulled(door_unhooked(route_from_door(door, q, hard, walls, water, ok), ok), ok)
+        if (path := kept(first, ok)) is not None:
+            return path
+        # ...AND WHERE THE LAW REFUSES THAT - a step or a route pulled taut 1 ft past a garden bed the law keeps 7 ft off (cohort
+        # seed 33: a row farm's straight step to its street along its own bed) - a route at the law's own gap
+        # (`WEB_FABRIC_GAP`), pulled taut only as far as the law's ground half keeps each step
+        if (path := kept(pulled(door_unhooked(route_from_door(door, q, hard, walls, water, lawful_step, gap=WEB_FABRIC_GAP), lawful_step), lawful_step), lawful_step)) is not None:
             return path
     return None

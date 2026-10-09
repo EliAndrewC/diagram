@@ -1449,6 +1449,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `tests/hamletgen/ways/test_track.py` (leg by leg; no recorded ford, whole; a leg clipped short, whole);
   the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
 
+## Wave 89 (amendment 88, 2026-10-09) - batch 11
+
+- **A pre-existing defect fixed (constitution XIV): a door path the law refused was never tried another way.** Seed 33 was
+  refused with a row farm off the network. Probed: its door path's straight step to the street was clear at the footpath's
+  test (a zero gap) but passed 1 ft from the farm's own garden bed, and the law keeps a lane 7 ft off a fence (0246,
+  `WEB_FABRIC_GAP`); `door_path` tried only that step, or the route where the step was blocked, so all six candidates were
+  refused and the farm got no path (m:wave89-door-path-at-the-law-s-gap). Where the law refuses the first path, a route at
+  the law's own gap is now tried, pulled taut only as far as the law's ground half keeps each step. Seed 33 rolls clean; the
+  cohort 51 -> 52/54, none newly failing. Kashikawa: one door path, already lawful, moved 4 to 5 px further from its garden (the declared
+  `village lane` occasion); four maps unchanged.
+- **Verification**: `tests/hamletgen/ways/test_doors.py` (the law's-gap route tried where the taut step is refused); the
+  cohort; `impl-drift` on the claims owed; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

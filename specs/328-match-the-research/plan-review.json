@@ -1,56 +1,50 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "ebe2768ea0353475368a78c0a7ed3fd31f1a9c6193a79c54d8bebdf9159b3eff",
+ "plan_sha256": "98ed5e948b996efbe94fb35f66d962bc6a22731c577f72580daf2eec966ea02f",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W88-1",
-   "summary": "Wave 88 takes a pre-existing defect (not a ranked row) under constitution XIV: seed 22's row road, laid over a recorded ford by ford_crossing, was threaded whole by _thread_the_fabric, which dropped the landings, so the road crossed the brook 64 px off any ford and was refused (off_ford); seed 03 the same",
+   "id": "W89-1",
+   "summary": "A pre-existing defect fixed under constitution XIV: door_path, where the law refuses the first path (straight step, or the 4 ft route pulled taut), now tries a route at the law's own gap; seed 33's row farm reached",
    "class": "within",
-   "why": "Adds work and narrows nothing. The request is to make the implementation match the research; 0035's drawing page already has a way cross the brook square at a ford, and the fix makes that existing rule hold through the threading. XIV (GM 2026-10-01) has defects found in the work fixed in that work, as waves 86 and 87 did. The unit is under hamletgen/, inside FR-010's scope. No ranked row is skipped or re-tiered."
+   "why": "The GM asked for the implementation to match the research; this moves door_path toward 0081 ('runs straight wherever it can keep its usual clearance from fences') and 0246 (a lane's middle 7 ft off a garden fence) and narrows nothing. A defect found in the work at hand is fixed in it (XIV), as waves 87 and 88 were. Reviewer re-ran make cohort N=1 SEED=33: 7/7 passed."
   },
   {
-   "id": "W88-2",
-   "summary": "thread_over_the_ford threads each leg to its landing apart and keeps the deck between the two landings",
+   "id": "W89-2",
+   "summary": "Order: per target, nearest first (the existing six), the first path is tried before the law's-gap route; the fallback at a nearer target is preferred over the first path at a farther one",
    "class": "within",
-   "why": "The direct implementation of 0035's 'a way crosses the brook at a ford' (ford_crossing's own claim cites the same page). It narrows nothing."
+   "why": "Keeps every path the law already accepted at its target; preferring the nearer target serves 0081's 'a worn path takes the shortest way', the claim door_path carries. Not an exception: nothing is excluded from the law."
   },
   {
-   "id": "W88-3",
-   "summary": "Taken only where the landing pair's middle is a recorded ford; otherwise the run is threaded whole as before",
+   "id": "W89-3",
+   "summary": "The fallback is routed at WEB_FABRIC_GAP (7 ft) and pulled taut only where Lawful.on_lawful_ground keeps each step",
    "class": "within",
-   "why": "Not a carve-out in effect: ford_crossing returns landings only at a recorded ford (its midpoint is the ford by construction, checks.py lines 145-150), so the guard is true whenever a ford crossing was laid; where none was laid there is no deck to keep, and the off_ford law still refuses any crossing off a ford. No crossing off a ford is admitted by this branch."
+   "why": "0246's own figure and the law's own ground half; the taut pull is bounded by the research's clearance rather than overriding it, which is what 0081's drawing page says."
   },
   {
-   "id": "W88-4",
-   "summary": "Where a threaded leg is clipped short of its landing, the whole run is threaded as before",
+   "id": "W89-4",
+   "summary": "route_from_door takes the gap as a parameter, default FOOTPATH_FABRIC_GAP (4 ft) unchanged; the 4 ft footpath deviation is not moved this wave",
    "class": "within",
-   "why": "A fallback to the pre-existing path, not an exception to the research: that path's output is still judged by off_ford (law.py) and refused if it crosses off a ford, exactly as at HEAD. Nothing that breaks 0035 ships through it; it only keeps a seed from failing differently than before."
+   "why": "Plumbing for W89-3; the 4 ft hold is pre-existing (wave 4, spec Review history item 4) and its own ranking row (119, DRIFTED, kept) stays open for its wave under FR-006 - this wave does not carve it out of scope."
   },
   {
-   "id": "W88-5",
-   "summary": "Applied to the row road and the field spur in stage_track (the two runs in track.py laid over a ford and then threaded); the web's arms and the connector are not touched this wave",
+   "id": "W89-5",
+   "summary": "Kashikawa: one door path (lanes[9]) re-placed, added to the declared 'village lane on kashikawa' occasion (now naming waves 88 and 89) for a glyph-check at batch 11's close; four maps unchanged",
    "class": "within",
-   "why": "The scope of a defect fix, not a narrowing of the request: the measured defect is the row road (seeds 03, 22), the spur is the other track.py run built as [start, landings, end] and threaded, and the GM's request does not ask for this defect at all. The off_ford law covers every way, so no unfixed way can ship off a ford; any further instance is a new XIV find for its own wave."
+   "why": "Feature 294's occasion rule as applied every batch. MEASURED by the reviewer (HEAD vs working-tree manifest): only lanes[9] pts[1] and pts[2] moved, 4-5 px; its nearest garden 9.28 -> 10.78 ft, so it was already lawful and 'off a fence' means further off, not a fence fault cured. The Occasions line names wave 89 but its text after the colon still describes only wave 88's road - a wording gap, not a narrowing."
   },
   {
-   "id": "W88-6",
-   "summary": "Kashikawa's row road re-placed (runs on taut from its ford, one bend fewer); declared as a placement-changed occasion (village lane on kashikawa) for a glyph-check at batch 11's close; Sawada moved in draw order only",
+   "id": "W89-6",
+   "summary": "A Decisions Recorded row in spec.md, class HISTORICALLY ACCURATE (0246), pointing at serve.py door_path, with m:wave89-door-path-at-the-law-s-gap; wave 88's row gains its cohort count",
    "class": "within",
-   "why": "Feature 294's occasion rule as the plan has applied it every batch; a map move that follows the research needs no ask (GM 2026-09-12). The reviewer did not re-render Kashikawa; the occasion is where it is looked at. Sawada MEASURED (HEAD vs working-tree manifest, order-insensitive): all 20 lanes' geometry identical, only z shifted by one, so no occasion is owed there; but its manifest meta also changed - field_spur_swept 'isolated - no house of its own and no join to the web' -> 'folded back short of the field - the ground between is marsh a path may not cross', and lane_fragments_dropped 1 -> absent. Nothing drawn differs, but 'draw order only' in the plan and m:wave88-road-over-its-ford's pool value understates it; a wording correction, not a narrowing."
+   "why": "FR-008 owes a row for a fix that changes what a map draws (Kashikawa moved). The claim on door_path rests on 0081's drawing page (claims-index), which states the same clearance rule; the class holds on either page."
   },
   {
-   "id": "W88-7",
-   "summary": "A Decisions Recorded row in spec.md, class HISTORICALLY ACCURATE (0035), pointing at thread_over_the_ford, with m:wave88-road-over-its-ford",
+   "id": "W89-7",
+   "summary": "Verification: test_doors.py (the law's-gap route tried where the taut step is refused), seed 33 and the 48-seed cohort (51 -> 52/54, none newly failing), impl-drift on the two claims (T207), spec-fidelity; gate and occasion at batch 11's close",
    "class": "within",
-   "why": "FR-008 owes a row for a fix that changes what a map draws (Kashikawa moved); the class follows the cited page, whose drawing note has a way cross square at a ford and bridges() deck it."
-  },
-  {
-   "id": "W88-8",
-   "summary": "Verification: test_track.py (leg by leg; no recorded ford, whole; a leg clipped short, whole), seeds 03 and 22 and the 48-seed cohort (49 -> 51/54, none newly failing), impl-drift on the claims owed (T205), spec-fidelity; gate and occasions at batch 11's close",
-   "class": "within",
-   "why": "FR-005's batched verification. The reviewer re-ran on the uncommitted engine: make test-file tests/hamletgen/ways/test_track.py 30 passed; make cohort N=1 SEED=22 7/7 passed; make cohort N=1 SEED=3 7/7 passed. The 48-seed cohort was not re-run."
+   "why": "FR-005's batched verification. Reviewer re-ran make test-file on the uncommitted engine (the whole quick selection ran, 9543 passed, test_doors.py among them) and cohort SEED=33 7/7; the 48-seed cohort was not re-run. claims-index shows both serve.py claims IN-STEP dated 2026-10-09."
   }
  ],
  "verdict": "CLEAR"

@@ -1894,5 +1894,18 @@
       "cohort_48": "51/54 (refused 10, 20, 33); 03 and 22 newly passing, none newly failing",
       "pool": "Kashikawa's row road runs on taut from its ford (one bend fewer); Sawada's lanes unchanged in geometry (draw order only), its field spur's recorded reason now 'folded back short of the field - the ground between is marsh a path may not cross' where it was 'isolated', and lane_fragments_dropped gone; three maps unchanged"
     }
+  },
+  "wave89-door-path-at-the-law-s-gap": {
+    "quantity": "wave 89 (2026-10-09): a door path the law refuses taut routed again at the law's own gap from the fabric",
+    "observed": "2026-10-09",
+    "source": "make hamlet for Audit-33 (seed 33, 10 households) with probes in lay_door_paths, door_path and fouled_segment; make cohort N=48; make map for the five hamlets",
+    "command": "make hamlet; make cohort N=48; make map",
+    "method": "seed 33's unreached farm (1256, 2866) probed: its front door (1254, 2912) 150 ft from its street; every one of door_path's six candidates refused by the law's ground half for passing within 7 ft of the farm's own garden bed (box 1272-1292 by 2885-2911), the straight step clear at the footpath's zero gap; a route at 7 ft found the detour and the pull at the zero gap undid it; the fix; the seed, the cohort (on wave 88) and the pool rerolled",
+    "value": {
+      "seed_33": "WebRefused (a farmhouse off the network) -> OK",
+      "cohort_passed": 52,
+      "cohort_48": "52/54 (refused 10, 20); 33 newly passing, none newly failing",
+      "pool": "Kashikawa: one door path (lane 9), already lawful, moved 4 to 5 px further from its nearest garden (9.3 to 10.8 ft); four maps unchanged"
+    }
   }
 }

@@ -97,3 +97,36 @@ def test_a_household_reached_across_its_neighbor_s_yard_gets_no_door_path() -> N
     s.M["houses"] = [h]
     s.M["lanes"] = [{"pts": [[100.0, 700.0], [1300.0, 700.0]], "w": 6, "connector": True}]
     assert lay_door_paths(s, [], [], []) == 0 and len(s.M["lanes"]) == 1
+
+
+def test_a_door_path_the_law_refuses_taut_is_routed_at_the_law_s_own_gap(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Cohort seed 33 (feature 328 wave 89): a row farm's straight step to its street ran 1 ft past its own garden bed, which
+    the law keeps 7 ft off, and the door path tried nothing else. Where the law refuses the first path, a route at the law's
+    own gap (`WEB_FABRIC_GAP`) is tried, pulled taut only as far as the law's ground half keeps each step."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.consts import WEB_FABRIC_GAP
+    from l7r.diagram.hamletgen.ways import serve, settle
+
+    gaps: list[float] = []
+    detour = [(0.0, 0.0), (5.0, 20.0), (100.0, 20.0)]
+    monkeypatch.setattr(serve, "route_from_door", lambda door, q, hard, walls, water, ok, gap=FOOTPATH_FABRIC_GAP: gaps.append(gap) or list(detour))
+    monkeypatch.setattr(serve, "pulled", lambda p, ok: list(p))
+    monkeypatch.setattr(serve, "door_unhooked", lambda p, ok: list(p))
+    monkeypatch.setattr(serve, "to_first_arrival", lambda p, segs, gap, ok: list(p))
+    monkeypatch.setattr(settle, "square_run", lambda M, p: list(p))
+    asked: list[list] = []
+
+    class _Law:
+        def __call__(self, path, width):  # the taut step is refused, the routed one kept
+            asked.append(list(path))
+            return len(path) == 3
+
+        def on_lawful_ground(self, run, width):
+            return True
+
+    s = SimpleNamespace(M={"lanes": []})
+    got = serve.door_path(s, (0.0, 0.0), [((100.0, -50.0), (100.0, 50.0))], [], [], [], [], _Law())
+    assert got == detour
+    assert gaps == [WEB_FABRIC_GAP], "the straight step was clear, so only the law's-gap route was asked of the router"
+    assert asked[0] == [(0.0, 0.0), (100.0, 0.0)], "the straight step first"
