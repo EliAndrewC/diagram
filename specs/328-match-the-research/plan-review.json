@@ -1,75 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "c943e9bb2d6b45bb79bedb78d220d61f819aa1b4b8000dac79956e1a85d36dc5",
+ "plan_sha256": "6c21b9b2177899f0a5a30097bdeb7c0d17b2f3bebf6672e9c56a9e743cd83b17",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "B3-1 modal depiction rounds g-j edits taken",
-   "summary": "dispersed (one grove shape per settlement; no lanes a convention; channel off the nearest ditch, brook or a neighbor's channel, nearest a convention), nucleated (belt runs on past the map edge; a compact cluster, never a hollow arc; a village held to a least packing, a hamlet not), conifer_led (edge past the belt's inner side, front row whole), mixed_broadleaf (back grove band on the windward side, one or two sides; taken up again either side of a lane, its passage unrecorded), alder (sentence trimmed)",
+   "id": "W56-1 south strip at the tree's 50 ft in both placers",
+   "summary": "village_grove's seat strip and WoodShares.sun_depth / copse_keepouts read CANOPY_SHADE_FT (50 ft) south of every yard and bed, replacing the farmhouse's 39 ft (_sun_corridor_ft) and the 22 default (rows 144, 146, 147)",
    "class": "within",
-   "why": "Each edit makes a modal say what the map draws and labels conventions and unrecorded facts as such. No research claim is rewritten to match a drift, and nothing the research requires is written out."
+   "why": "This is what 0038 says ('50 ft east, west and south of a plot' for a tree) and what the rows' fixes name. The crowns were already held to it (_sun_keepouts), so the seats now agree with the crowns. Both placers move together, as feature 317 requires."
   },
   {
-   "id": "B3-2 conifer-led 'smaller' lesser crowns kept (LESSER_BROADLEAF_S)",
-   "summary": "depiction finding declined: the modal keeps 'smaller broadleaf crowns' because LESSER_BROADLEAF_S draws 0.75-0.85 of the mean radius",
+   "id": "W56-2 the yard's morning lane east",
+   "summary": "the east lane (EAST_REACH_FT / EAST_LANE_FT, 50 ft) is now run over the threshing yard as well as the beds, in village_grove and copse_keepouts",
    "class": "within",
-   "why": "The modal describes what is drawn. The range sits inside 0080's 0.75-1.4 and its rows were closed E0 in wave 39 (overrides.json). No new carve-out is made here. The decline is now written in plan.md under batch 3's close."
+   "why": "Rows 144 and 147 say 'every threshing yard and bed', and 0038 says 'a plot'. The test pins the yard's 50 ft east lane and its 50 ft south strip."
   },
   {
-   "id": "B3-3 mixed belt's wind side at the village tier not taken",
-   "summary": "depiction finding declined: the village roller's belt side (RollVillageMixin._roll_windbreak) left to the deferred legacy tier",
+   "id": "W56-3 west lane left at the declared WEST_SUN_FT",
+   "summary": "copse_keepouts keeps its west lane conditional on west_ft rather than '50 ft regardless of west_ft' (row 147's suggested fix)",
    "class": "within",
-   "why": "Amendment 8 (GM: limit the feature to code run by magistracies, country shrines and scripted hamlets; legacy settlements DEFERRED) and spec line 155 already settle this. The hamlet engine keeps 0072's bearing. The decline is now written in plan.md under batch 3's close."
+   "why": "Measured, not assumed: hamletgen/homesteads/stages.py:156 calls s.west_sun_lane(WEST_SUN_FT), and consts.py:373 sets WEST_SUN_FT = 50.0. WoodShares is installed only on the scripted hamlets. So on in-scope code the seats keep 50 ft west of every plot, which is the row's substance. The 0-ft case remains only on the legacy roller and the frozen pool, which amendment 8 DEFERRED. This is a different route to the same result, not a narrowing."
   },
   {
-   "id": "B3-4 homestead grove PASS at round 2, windbreak PASS again",
-   "summary": "glyph-check rounds past round 1 on the grove's density as drawn",
+   "id": "W56-4 shared village_grove change reaches the legacy roller",
+   "summary": "the 50 ft south strip and the yard's east lane also apply where roll.py:457 calls village_grove",
    "class": "within",
-   "why": "Round 1's NEEDS-WORK was answered by measurement (m:wave55-grove-density-as-drawn) and passed. Extra rounds are the GM's 2026-10-08 ruling (spec Decisions row, wave 46)."
+   "why": "It applies the research more widely and carves nothing out. Amendment 8 defers fixing legacy findings and does not forbid shared code from matching the research. No legacy pool map is regenerated in this commit."
   },
   {
-   "id": "B3-5 three speedups",
-   "summary": "field_height_near in one vector pass; the privy's reach tested at its far corner alone; the bund run-on's clear prunes blocks by box",
+   "id": "W56-5 batch 4 begins while batch 3 waits for the GM",
+   "summary": "ranked rows continue in the clone while batch 3's band-3 sign-off and T137/T140 wait for the GM; batch 4's bookend is measured from batch 3's end",
    "class": "within",
-   "why": "Each one gives the same answer: the five hamlets are byte-identical. The far-corner test is exact (each axis gap is largest at the far corner). The box prune pads by the stroke width and the fixture pad, and start lies on a-b, so it prunes nothing that could touch. This is VI's 'no good way around it' work, with no change to behavior."
-  },
-  {
-   "id": "B3-6 feet-vs-px impl-drift fixes",
-   "summary": "open_ground_patches' parcel size and commons floor, and the wood's 'beside' reach, converted to the map's px",
-   "class": "within",
-   "why": "These are unit bugs that impl-drift found. They are fixed where found (XIV) and are identical at a hamlet's 1 ft/px."
-  },
-  {
-   "id": "B3-7 the pair band 3, batch 3 held for the GM's sign-off",
-   "summary": "TOTAL +6.0% (+3.0% after the speedups); seed 47 at 40 households +23.8%; seed 25 at 40 refused; m:batch3-pair-and-controls",
-   "class": "within",
-   "why": "VI: band 3 is the GM's personal sign-off before the work reaches main. Holding the batch is the rule, not a narrowing."
-  },
-  {
-   "id": "B3-8 perf-audit: explanation CONSISTENT, audit cannot-determine",
-   "summary": "dev/perf-log/20261008T234039Z audit: no_way_around 'not settled by the data' until a seating that keeps 0042/0047 and leaves no knot or stranded way is tried",
-   "class": "within",
-   "why": "The plan does not treat the inconclusive audit as passed. VI: an inconclusive verdict never lets the work proceed, and the GM's band-3 sign-off stands above the audit and does not replace it. The batch table row 3 now reads 'perf-audit round 2: explanation CONSISTENT, audit cannot-determine (re-run once T140's seating is decided)'."
-  },
-  {
-   "id": "B3-9 T140 held for the GM after the named route was attempted",
-   "summary": "the seating's admission (tree.admits, which the gap pass asks of each household's way) asked the settle's 7 ft fabric reading in two forms: the manifest's yard lists only, which had no effect; then the seated yards and gardens from geom, after which the reference roll Inashiro refused its web. Earlier, a way-out strip was tried and also refused at the reference. All reverted. The cause found was each farm's own garden. The remaining route is a seating that lays the garden, the fixtures and the way out together (E3, row 748). T140 stays open and the batch is held; the GM is asked for a waiver or a go-ahead at band-3 sign-off",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Round 1 required the route the plan itself named to be tried before any waiver: the seating's own search asking each household's way out with its fixtures in place. That route has now been tried at the place named. tree.admits is the predicate the gap pass asks of each way before it admits it (gap_ways, feature 318). It was tried in two forms, measured, and reverted, and that meets XIII's 'genuinely attempted'. The same pattern was ruled LEGITIMATE at W54-7 round 3. What is left is a layout change across the seating's modules. That is XIV's overhaul exception, delivered with the measurement (fourteen first legs, the fabric an owner-less garden), the mechanism (each change moves the exit, and the web's outcome moves chaotically with it) and a sketch. A wrong guess at that change would take hours to unwind. Nothing is narrowed: T140 stays open, the batch stays off main, and band 3 owes the GM's personal sign-off anyway. Deferring the question to the feature's end is what the GM's request asks for ('defer it to the end of the feature'). A waiver is still the GM's to grant and is not presumed."
-  },
-  {
-   "id": "B3-10 T137 still held for the GM",
-   "summary": "Sawada's zigzag on _ZIGZAGS_WAITING, T137 open",
-   "class": "within",
-   "why": "W54-7 round 3 already ruled the hold LEGITIMATE after the re-lay was tried twice. Nothing new is decided here."
-  },
-  {
-   "id": "B3-11 the unreproduced 39-vs-38 hashed-file count recorded",
-   "summary": "test_measured_surface's one-off at batch 3's gate, searched and recorded",
-   "class": "within",
-   "why": "A record of an observation, with the search done. It changes no behavior."
+   "why": "The GM's standing goal (request.md amendment, 2026-10-07): 'please don't stop working until you hit the cap or the feature is done. If you need to ask me a question then please defer it to the end of the feature'. Stopping would be the departure from it. Constitution XIII keeps the regressed state unpushed, and that still holds: nothing from batch 3 or 4 lands until the sign-off and T137/T140 are settled. Batch 4's bookend is measured from batch 3's end, so that band-3 cause is not mixed into this batch."
   }
  ],
  "verdict": "CLEAR"

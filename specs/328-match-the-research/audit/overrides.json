@@ -2521,7 +2521,7 @@
   "files": [
    "l7r/diagram/settlement/homestead_parts/wood_share.py"
   ],
-  "fix": "in copse_keepouts (wood_share.py:111-127): the south strip at 50 ft (CANOPY_SHADE_FT * ppf) rather than sun_depth, the east-lane loop (line 116) run over the yard as well as the gardens, and the west lane at 50 ft regardless of west_ft, so the seat keep-outs equal _sun_keepouts' 50 ft round every yard and bed",
+  "fix": "in copse_keepouts (wood_share.py:111-127): the south strip at 50 ft (CANOPY_SHADE_FT * ppf) rather than sun_depth, the east-lane loop (line 116) run over the yard as well as the gardens, and the west lane at 50 ft regardless of west_ft, so the seat keep-outs equal _sun_keepouts' 50 ft round every yard and bed (wave 56: the west lane is met on in-scope code through WEST_SUN_FT, 50 ft, which every scripted hamlet declares; only the deferred legacy roller keeps 0)",
   "flag": "",
   "found": "wave 9 re-check (tiered by its work at T38b)",
   "moved": "T38b: tiered by its work - one function's keep-out rectangles change (which plots get an east lane, how deep the south one runs), matching the planting's crown rule rather than going past it, so feature 317's lost-seat failure does not recur.",
