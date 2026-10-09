@@ -1421,6 +1421,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   spec's `audit/reverted/`; the code, record and maps as wave 85 left them; the claim stays as found.
 - **Verification**: the measurement (m:wave86-privy-over-the-sty-held); `spec-fidelity`.
 
+## Wave 87 (amendment 86, 2026-10-09) - batch 11
+
+- **A pre-existing defect fixed (constitution XIV), found by the null-perturbation measurement** (m:null-perturbation-cohort:
+  every basin 1% wider flipped one seed, 43, refused for a lane on a well, as tripwire seed 906 is at HEAD). Probed on seed
+  906: on a form that records no track out, `stage_track` chooses one from a gateway that stood on a household's well pocket,
+  held in the registry since the seating (`hold_laid_parts`) but on no manifest list until drawn, so the fabric the track is
+  threaded by (`_homestead_polys`) did not see it and the matrix refused the lane. The held parts - each well pocket as its
+  drawn wellhead, each fixture seat as its box - now count in that fabric, as 0246's drawing page has wells and fixtures be
+  fabric a lane keeps off. Seed 906 rolls clean; the cohort 48 -> 49/54, none newly failing; no pool map moved
+  (m:wave87-held-parts-fabric).
+- **Verification**: `tests/hamletgen/ways/test_fabric.py` (red before the fix, a KeyError on `wells`); the cohort; `impl-drift`
+  on the claims owed; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

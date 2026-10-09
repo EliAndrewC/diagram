@@ -219,6 +219,16 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     # ...AND, ONCE THE LAST HOUSE STANDS AND BEFORE ANY FARMSTEAD IS DRAWN, THE HOMESTEADS AS SEATED (feature 320,
     # `household_ways.seated_parts`): the track out is chosen then, and must keep off what will be drawn
     out += list(getattr(s, "_seated_parts", None) or ())
+    # ...AND THE PARTS HELD UNTIL THEY ARE DRAWN (`homesteads.holds.hold_laid_parts`): a well pocket and a fixture's seat stand
+    # in the registry from the seating's end, but on no manifest list until `stage_appurtenances` draws them, so a way threaded
+    # by this fabric alone was laid over them and refused by the matrix (cohort seed 906: the track out from a gateway on a
+    # held well pocket; feature 328, m:null-perturbation-cohort)
+    for (key, *_id), rec in (getattr(s, "_held_parts", None) or {}).items():
+        if key == "wells":
+            r = max(float(rec.get("r", 8.0)), float(rec.get("vr", 0.0)))
+            out.append(([(float(rec["x"]) + r * math.cos(math.pi * k / 4), float(rec["y"]) + r * math.sin(math.pi * k / 4)) for k in range(8)], None, "wells"))
+        elif all(k in rec for k in ("x", "y", "w", "h")):
+            out.append((rot_rect(float(rec["x"]), float(rec["y"]), float(rec["w"]), float(rec["h"]), 0.0), None, key))
     return out
 
 

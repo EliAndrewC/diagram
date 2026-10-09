@@ -75,6 +75,22 @@ def test_homestead_polys_carries_the_per_house_groves() -> None:
     assert "groves" in kinds
 
 
+def test_homestead_polys_carries_the_parts_held_until_drawn() -> None:
+    """A well pocket and a fixture seat stand in the registry from the seating's end but on no manifest list until they are
+    drawn (`hold_laid_parts`); a way threaded by the fabric must keep off them too (feature 328: cohort seed 906's track out
+    started on a held well pocket and the matrix refused it)."""
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s._held_parts = {  # type: ignore[attr-defined]
+        ("wells", 100.0, 100.0): {"x": 100.0, "y": 100.0, "r": 8, "vr": 11.0},
+        ("farm_fixtures", 1): {"x": 50.0, "y": 60.0, "w": 6.0, "h": 5.0, "of": [40.0, 40.0]},
+    }
+    polys = {kind: poly for poly, _owner, kind in hg.ways._homestead_polys(s)}
+    assert max(math.dist(q, (100.0, 100.0)) for q in polys["wells"]) == pytest.approx(11.0), "the wellhead as drawn, its curb's radius"
+    xs = [q[0] for q in polys["farm_fixtures"]]
+    assert min(xs) == pytest.approx(47.0) and max(xs) == pytest.approx(53.0)
+
+
 def test_a_path_leaves_its_own_dooryard_but_goes_round_its_own_beds_and_sheds() -> None:
     """0246 (feature 328): the owner's dooryard is not a wall to its own path; its garden beds and sheds are."""
     plan = a_plan()

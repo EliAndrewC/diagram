@@ -1853,5 +1853,33 @@
       "engine_diff": "19 added lines in 4 files, every one a comment or docstring recording a fix that failed or was held: no executed code changed",
       "reading": "the growth is run-to-run jitter: nothing the roll executes changed between the two commits"
     }
+  },
+  "null-perturbation-cohort": {
+    "quantity": "how many cohort seeds flip under a change no research would notice: every basin 1% wider (plot_across * 1.01 in carve_comb)",
+    "observed": "2026-10-09",
+    "source": "a detached worktree at 3197171ce with the one line, never committed; make cohort N=48",
+    "command": "make cohort N=48",
+    "method": "the cohort run once on the perturbed engine, compared against HEAD's 48/54 (refused 03, 10, 20, 22, 33, 906)",
+    "value": {
+      "cohort_passed": 47,
+      "newly failing": {
+        "43": "OverlapRefused: lanes would be recorded on a well at (301, 2610)"
+      },
+      "newly passing": "none",
+      "reading": "the noise floor of a small field change is about one seed; the reverted waves flipped four to seven, so they were real regressions; the one flip is the lane-over-a-well refusal tripwire seed 906 already shows at HEAD - a defect to fix"
+    }
+  },
+  "wave87-held-parts-fabric": {
+    "quantity": "wave 87 (2026-10-09): the parts held until drawn (well pockets, fixture seats) counted in the fabric every way is threaded by",
+    "observed": "2026-10-09",
+    "source": "make hamlet for Audit-906 (seed 906, 16 households, dispersed, well) before and after; make cohort N=48; make map for the five hamlets",
+    "command": "make hamlet; make cohort N=48; make map",
+    "method": "seed 906 rolled with a probe at the track's draw (the track started at (1257, 1450), a held well pocket at (1253, 1455), M['wells'] empty); the fix in _homestead_polys; the seed, the cohort and the pool rerolled",
+    "value": {
+      "seed_906": "OverlapRefused (lanes on a held well) -> OK",
+      "cohort_passed": 49,
+      "cohort_48": "49/54 (refused 03, 10, 20, 22, 33); 906 newly passing, none newly failing",
+      "pool": "no map moved"
+    }
   }
 }

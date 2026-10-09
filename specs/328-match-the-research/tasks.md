@@ -2092,3 +2092,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T201 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. plan CLEAR (wave 86, round 2); the privy over the sty held, re-tiered E3 on measure (a sty-to-household mapping and a privy off its farmstead under undrawn_rolls and 0047's rules); the glyph-only form reverted; no claim owed (make claims-owed: none)
+
+## Phase 88 - wave 87 (amendment 86): the parts held until drawn are fabric (XIV)
+
+- `hamletgen/ways/fabric.py` (`_homestead_polys`); `tests/hamletgen/ways/test_fabric.py`.
+
+- [x] T202 wave 87's fix (FR-003, XIV)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 87); held parts counted in the fabric; seed 906 clean, cohort 48 -> 49/54 none newly failing, no pool map moved (m:wave87-held-parts-fabric)
+- [x] T203 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. impl-drift 4 of 4 IN-STEP on _homestead_polys, wells among what 0246 has a lane keep off (sections 4, 7, 13); make claims-owed: none
