@@ -1913,3 +1913,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T171 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 71); the belt's hit region from its drawn crowns (the old box lit 69% bare ground on Kuwabata, 17% on Inashiro); the water-mouth grove deferred on measure; claims in step; cohort unchanged
+
+## Phase 73 - wave 72 (amendment 71): the belt's bare runs re-measured; the outfall's run named a ditch
+
+- `research/questions/0072-...drawing.html` (a comment); `waterfields/comb.py` (`_comb_brook`'s docstring and claim).
+
+- [x] T172 wave 72's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 72); the belt's bare runs re-measured - the hole law finds none on any hamlet; the outfall's run named the drain's ditch it is drawn as, its course claims corrected; claims in step over three impl-drift rounds; no map moved
+- [x] T173 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 72); the belt's bare runs re-measured - the hole law finds none on any hamlet; the outfall's run named the drain's ditch it is drawn as, its course claims corrected; claims in step over three impl-drift rounds; no map moved

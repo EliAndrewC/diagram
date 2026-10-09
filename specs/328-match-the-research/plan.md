@@ -1147,6 +1147,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   reaches them (the scripted tier settles its own lane ends), which is why waves 66 and 67 moved no shipped map.
 - **Verification**: `test_a_belts_cover_is_the_ground_its_crowns_draw`; `impl-drift`; `spec-fidelity`.
 
+## Wave 72 (amendment 71, 2026-10-09) - batch 7
+
+- **Closed on measure**: `BeltReading.holes#Kuwabata's bare runs` (0072: the planting continuous along the side it holds, a
+  bare run past 30 ft a hole) asked to re-measure Kuwabata's three bare runs of 40-50 ft and fill them where they stand. The
+  hole law over the five shipped manifests finds none on any belt (m:wave72-belt-holes: Inashiro, Kuwabata and Sawada 0;
+  Kashikawa and Mizuguchi draw no village belt) - the waves since feature 287 closed them. 0072's drawing page's comment,
+  which still recorded the runs, now records the re-measure (a comment: no record check is owed). The mixed-broadleaf
+  belt's modal ("drawn unbroken") holds.
+- **Closed as a stale label**: `_comb_brook#a brook from the outfall` (0060: "A drain is a dug channel that reaches a
+  watercourse, never a brook of its own"). The settlement layer already draws the outfall's run as the drain's dug ditch -
+  the collector's tail width, its hue and class, recorded in `channels`, to the map's edge (`settlement/fields/comb.py`,
+  feature 230) - and only its start and first heading are read from `_comb_brook` (`outfall_run` draws the rest, curving
+  onto the fall); its docstring and claims, which still called it a brook and gave it a course that is not drawn, are restated. No map moves.
+- **Verification**: the hole law's measurement; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

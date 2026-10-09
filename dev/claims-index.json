@@ -64300,38 +64300,47 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/waterfields/comb.py::_comb_brook#a brook from the outfall": {
-  "code": "ac79c5b165b32430",
+ "l7r/diagram/waterfields/comb.py::_comb_brook#a run on from the outfall": {
+  "code": "8767bcc0ff557b5d",
   "core": "2bfcd4e258b23d77",
-  "date": "2026-10-05",
-  "note": "grows \"a natural valley BROOK\" from the outfall, against \"A drain is a dug channel that reaches a watercourse, never a brook of its own ... the drain runs on as a ditch to the edge of the map\"; draw and label the run as the drain's dug ditch, or record the brook on 0060",
+  "date": "2026-10-09",
+  "note": "traces the run on only when the outfall is inside the frame and returns none where the drain already reaches the edge; the course heads downhill (fall step 72-105) until it leaves the map, as §5 and §11 say; whether the run joins the brook or reaches the pond is decided outside this unit",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e"
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
+   "0060-field-drains-akusuiro.drawing.html:67ea8aced3960b08"
   ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/waterfields/comb.py::_comb_brook#brook course": {
-  "code": "cc2b5ed12442b768",
-  "core": "2bfcd4e258b23d77",
-  "date": "2026-10-03",
-  "note": "no figure in the bundle",
-  "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/comb.py::_comb_brook#brook curves out of the collector": {
-  "code": "8eb895a875a3349f",
+ "l7r/diagram/waterfields/comb.py::_comb_brook#brook course": {
+  "code": "06ea34224aecf3d1",
   "core": "2bfcd4e258b23d77",
-  "date": "2026-10-05",
-  "note": "eases from the exit heading to downhill over four steps, each turn under 55 degrees",
+  "date": "2026-10-09",
+  "note": "the first step (i=0, w=0) is the drain's exit heading; the step lengths (88), the downhill jitter (uniform -22..40, 72..105), the 40-step cap and the 12-unit stop margin only shape points past it, which are not drawn, so NONE is right for them; the 14-unit inside-frame test is covered by the \"a run on from the outfall\" claim",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/comb.py::_comb_brook#the run's first heading": {
+  "code": "a6d67a87a61e55ae",
+  "core": "2bfcd4e258b23d77",
+  "date": "2026-10-09",
+  "note": "the run's first step goes along the drain's exit heading at the outfall (from dpts[-2] to dpts[-1]; at i=0, w=0, so the step is pure exit heading); the drawing page records the run curving out of the collector's exit heading, a turn held to 55 degrees or less, which the claim places in outfall_run",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
+   "0060-field-drains-akusuiro.drawing.html:bf7bb8a238b01bbb",
    "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
   ],
   "verdict": "IN-STEP"

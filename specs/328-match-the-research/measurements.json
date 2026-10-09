@@ -1342,5 +1342,29 @@
       "cohort_48": "48/54, the same six refused seeds",
       "water-mouth grove": "no kept hamlet spec names role water_mouth and no pool manifest records one - deferred on measure"
     }
+  },
+  "wave72-belt-holes": {
+    "quantity": "wave 72 (2026-10-09): holes in each hamlet's village belt by the hole law",
+    "observed": "2026-10-09",
+    "source": "pool/hamlets/<m>/<m>.json read by belt_law.belt_holes (BeltReading.holes: an opening across the wind wider than 30 ft that no way crossing explains, not a page cut or a run break)",
+    "command": "a throwaway test calling belt_law.belt_holes on each of the five pool manifests (deleted after)",
+    "method": "the hole law over the shipped manifests at 0ab48ed82",
+    "value": {
+      "inashiro": {
+        "form": "conifer_led",
+        "holes": 0
+      },
+      "kuwabata": {
+        "form": "mixed_broadleaf",
+        "holes": 0
+      },
+      "sawada": {
+        "form": "mixed_broadleaf",
+        "holes": 0
+      },
+      "kashikawa": "no village belt",
+      "mizuguchi": "no village belt",
+      "before": "feature 287 measured three bare runs of 40-50 ft on Kuwabata"
+    }
   }
 }

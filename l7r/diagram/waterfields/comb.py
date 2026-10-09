@@ -647,17 +647,18 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
 
 
 def _comb_brook(R: random.Random, F: _Frame, dpts: Poly, W: float, H: float) -> Poly:
-    """The akusui does NOT just stop: it empties at its outfall into a natural valley BROOK that
-    carries the water off the map downhill (reused by the next village downstream / rejoining the
-    river). Water IN (the pond feeder) and water OUT (this brook). BUT a brook is only added when
-    the outfall sits INSIDE the frame - if the field itself already runs to the map edge, the drain
-    discharges off-map directly (a brook grown from there would just run back through the field, as
-    the streams_avoid_fields check correctly flags). A field bounded within the frame gets the brook.
+    """The akusui does NOT just stop: past its outfall the drain RUNS ON to the edge of the map - a run the settlement layer
+    draws from this one's start and first heading as the drain's own dug ditch, at the collector's tail width, its hue and class, recorded in `channels`
+    (`settlement/fields/comb.py`, feature 230: "A DRAINAGE DITCH, not a stream"), never as a brook of its own (0060). Only its
+    start and first heading are read there - `outfall_run` traces the rest, curving onto the fall and then straight down it - so the course below is not drawn. The run
+    is only traced when the outfall sits INSIDE the frame - where the field already reaches the map edge the drain leaves
+    the map directly (a run grown from there would turn back through the field, as `streams_avoid_fields` flags). The name
+    is the old one; what is drawn is a ditch (feature 328 wave 72).
 
     Research:
-        a brook from the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a brook grown from an outfall inside the frame, none where the drain reaches the edge
-        brook curves out of the collector - research/questions/0060-field-drains-akusuiro.drawing.html: from the drain's exit heading toward pure downhill over four steps
-        brook course - UNRESEARCHED: 88 px steps, then 72-105 px down the fall with -22 to +40 across, until it leaves the map
+        a run on from the outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a drain is a dug channel that reaches a watercourse, never a brook of its own - it runs on as a ditch to the map's edge from an outfall inside the frame, none where the drain reaches the edge
+        the run's first heading - research/questions/0060-field-drains-akusuiro.drawing.html: the drain's own exit heading at the outfall, from which the drawn run curves out of the collector (`outfall_run`, at most 55 degrees a turn)
+        brook course - NONE: the course traced past the first heading is not drawn - the settlement layer reads only the start and first heading (`outfall_run` draws the rest straight downhill)
     """
     outfall = dpts[-1]  # the drain's downhill (highest-u) end
     brook = []
