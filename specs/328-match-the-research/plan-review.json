@@ -1,32 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "08543dae8582177447402297563d5aee8caeb7c2598a2257d8df60ccaaefa0c0",
+ "plan_sha256": "7cceda30f52382e8299fed26335c8b19f0016d15c455e09f8181a56827c69cb8",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W85-a revert and re-tier E2 -> E3",
-   "summary": "the thread floor derived from the basin's width was built in comb.py::_comb_march and REVERTED on the cohort; row 217 re-tiered E2 -> E3 in audit/overrides.json and ranking, its claim left as found",
+   "id": "W86-H1 hold and re-tier",
+   "summary": "Row pondstock.py::stage_pond_stock#privy over the sty HELD, re-tiered E2 -> E3 on measure (m:wave86-privy-over-the-sty-held), not marked FIXED; the row stays DRIFTED in ranking.md (row 81) and audit/overrides.json with its full fix text unchanged: the household's privy over its sty with that farmstead's own privy dropped, the pair's place weighed and recorded as a GUESS, the claim re-cited.",
    "class": "within",
-   "why": "Re-measured this round. I applied the kept patch (audit/reverted/wave85-thread-floor.patch, the 40 ft form) in a detached worktree at HEAD a89e40f0a and compared it with a second detached worktree at HEAD, running make cohort N=12 SEED=32 JOBS=5 (seeds 32-43 plus 901-906). Neither worktree carries gitignored artifacts, so the comparison is fair. The reference settlement was clean both ways. HEAD passed 16/18, refusing 33 (WebRefused) and 906 (OverlapRefused). The patched tree passed 13/18 and refused five seeds: 32 (water_rules, farm_without_its_channel), 40 and 41 (WebRefused), 42 (row_rules, farm_not_on_its_street) and 43 (OverlapRefused). Seeds 33 and 906 passed. Over the seeds run, that is m:wave85-thread-floor-reverted floor_40 exactly. Seeds 04 and 19 lie outside the slice and were not re-run, and neither was the 48 px form or Kashikawa's map. Under XIII a seed that passed and now fails is a regression whatever the net, so the patch cannot ship as it stands. The spec's Edge Case 'a fix that changes many maps' gives the route: when making the failing maps pass takes more than the row's tier, the row takes that work's tier and its claim stays as found. The refusals sit in the lane web, the row rules, the water rules and the overlap matrix, all outside comb.py, so the work is a change across modules: E3 by FR-003. The row is re-ordered, not dropped, so the GM's 'fix all of it ... from easiest to hardest' still reaches it in E3 order. This is the same ruling as waves 69, 74, 81, 83 and 84. The row has not been reverted before, so wave 81's retaking note (XIII's FIX is the expected exit) does not bind this wave. It binds when the row is retaken, and the work then is the seeds the override lists."
+   "why": "This is the second exit round 1 named. Re-tiering defers the row in the order the GM asked for (easiest to hardest); it narrows nothing, because the row is still owed in full and the fix recorded against it is the one the exception ruling required. The E3 grounds are structural, not a matter of taste: no sty-to-household mapping exists (a sty is seated from the house centroid), and moving a privy off its farmstead touches farm_fixtures, the homestead fixture seats and the finished-map gate undrawn_rolls. That is several modules and a new relation, which is FR-003's own E3 definition. Waves 83-85 set the precedent."
   },
   {
-   "id": "W85-b the attempted forms implement the row's fix",
-   "summary": "the floor passed into _comb_march as plot_across (48 px) and as 40/48 of it, read as 'derive GAP from the basin size in feet at the map's grain'",
+   "id": "W86-H2 glyph-only form reverted",
+   "summary": "The glyph-only form (the privy's mark on the shed, the farmsteads keeping their privies, the 0025 drawing-page bullet, the modal, the test, Kuwabata's reroll) reverted to wave 85's state; the patch kept at audit/reverted/wave86-privy-over-the-sty.patch.",
    "class": "within",
-   "why": "The premise was checked, not assumed. 0005's drawing page says: 'On a hamlet map, drawn at a foot to the pixel, the usual basin is about 48 ft across its canal and 26 to 36 ft along it', and elsewhere 'some 40 to 60 ft across'. GAP constrains u, the spacing across the fall between threads (prev_u + GAP). plot_across lies on the same axis: _comb_threads spaces deliveries 2.0 * plot_across apart in u, and plot_texture says plot_across tiles 'across each canal reach'. The extent between two threads is therefore the basin's 'across its canal' figure (40 to 60 ft), not its 'along it' figure (26 to 36 ft), and GAP's 26 px is below the research's floor. The row is a real drift, not a MISLABELED one. At a hamlet's one foot per pixel, 48 px is 48 ft and 40/48 of it is 40 ft, so the two attempts are the research's nominal width and its least width in feet at the map's grain. The second attempt, the least width the research allows, is the one most likely to pass, and it still regressed. The plan writes 'across its ditch' where the page says 'across its canal'. The threads are the delivery ditches the basins lie along, so the substitution changes nothing."
+   "why": "It removes the partial fix that round 1 found NOT LEGITIMATE (W86-d, W86-e). Measured: the working tree differs from a039f605c (wave 85) under l7r, pool, research, tests and scripts only by the held-fix comment in pondstock.py and four ledger lines in research/source-attempts.jsonl; the patch file is present."
   },
   {
-   "id": "W85-c the 0.55 CONVENTION claim waits for the row",
-   "summary": "the 0.55 child-offset CONVENTION label, the second half of row 217's fix, is not written now; it is written when the row is retaken, so the unit is re-checked once",
+   "id": "W86-H3 held fix recorded at the point of change",
+   "summary": "A comment in stage_pond_stock records the held fix, why the glyph-only form was blocked, and what the whole fix needs, with a pointer to the measurement and the kept patch.",
    "class": "within",
-   "why": "The Edge Case says the re-tiered row's 'claim stays as found', and FR-001 makes row 217 one finding with one fix text that carries both halves. Writing the label now would close half a row outside its tier. The label is not dropped: the override's fix text still names it, so it lands with the row. Nothing is narrowed."
+   "why": "Constitution XIV's record of a failed fix at the point of change; it leaves behavior unchanged."
   },
   {
-   "id": "W85-d code and pool as HEAD, the failed fix recorded, the patch kept, no claim owed",
-   "summary": "frame.py gains only a comment at GAP recording the failed fix; the patch is kept in audit/reverted/; make claims-owed owes nothing; tasks T198-T199",
+   "id": "W86-H4 claim left as found",
+   "summary": "The claim is not re-cited in this wave; it keeps citing 0047's drawing page for 'the sty drawn alone' and stays a DRIFTED finding.",
    "class": "within",
-   "why": "This follows from W85-a. Constitution XIV asks for a failed fix to be recorded at the point of change, and the comment does that. The comment's figures (48 -> 45, 48 -> 44, Kashikawa refused at the 40 ft floor) match m:wave85-thread-floor-reverted, and the slice above reproduces the 40 ft leg. The comment-only engine edit leaves the pool as HEAD."
+   "why": "Re-citing to 0048 and the Han note while the code still draws the sty alone would produce a claim that misstates the code. Left as found, it stays DRIFTED in claims-report, which is accurate, and the re-cite remains part of the row's owed fix in overrides.json."
+  },
+  {
+   "id": "W86-H5 glyph-check occasion withdrawn",
+   "summary": "No glyph-check occasion declared for wave 86.",
+   "class": "within",
+   "why": "The map draws nothing new once the glyph-only form is reverted, so there is nothing to check."
+  },
+  {
+   "id": "W86-H6 ruling recorded in claims-followup",
+   "summary": "The 2026-10-09 exception ruling (NOT LEGITIMATE) recorded in claims-followup.md in its own terms, the row held at E3, and 'not for the GM unless the E3 work finds a real impossibility'.",
+   "class": "within",
+   "why": "Round 1 asked for the ruling to be recorded. Not raising it with the GM is correct: only an exception that was upheld is raised, and this one was not."
   }
  ],
  "verdict": "CLEAR"

@@ -1406,19 +1406,20 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 86 (amendment 85, 2026-10-09) - batch 10
 
-- **Row `pondstock.py::stage_pond_stock#privy over the sty` FIXED.** The claim cited 0047's drawing page for "the sty drawn
-  alone", which the page never says, and the record attests the pig toilet: an outhouse mounted over a pigsty, once common in
-  rural China (0048, `pig-toilet-enwiki`), latrines customarily built above a pigsty in Han grave models (0047,
-  `artic-pigsty-latrine`). The exception first proposed (the sty left alone as a DEVIATION) was ruled NOT LEGITIMATE by
-  `spec-fidelity` (2026-10-09): it left out 0048 and misread the 1639 pen, which held sheep. The sty glyph (`pig_sty`) now
-  carries the privy over its shed, marked with the privy's night-soil circle (0047's convention), inside the sty's own 8 x 6 ft
-  footprint, so no seat or clearance moves; only Kuwabata, the dike-pond hamlet, changes, in its glyph. The farmsteads keep
-  their own privies: a bank sty is drawn as no one farmstead's, so no house can be shown giving its privy up - a GUESS, as is
-  a privy on every sty (the custom was common, not universal). Recorded as a new bullet on 0025's drawing page with both notes;
-  the claim re-cited to it; the pig-sty modal's Depiction and Guesses say the same.
-- **Verification**: `tests/settlement/test_farm_fixtures.py` (the sty carries the privy's mark); the cohort held at 48/54
-  (the same six refused); the record checks and modal checks owed; `impl-drift` on the claims owed; a glyph-check of the
-  sty on Kuwabata at batch 10's close (a redrawn glyph); `spec-fidelity`.
+- **Row `pondstock.py::stage_pond_stock#privy over the sty` HELD, re-tiered E2 -> E3 on measure.** The record attests the pig
+  toilet: an outhouse mounted over a pigsty, once common in rural China (0048, `pig-toilet-enwiki`), latrines customarily built
+  above a pigsty in Han grave models (0047, `artic-pigsty-latrine`); the claim cites 0047's drawing page for "the sty drawn
+  alone", which the page never says. An exception first proposed (the sty left alone as a DEVIATION) was ruled NOT LEGITIMATE
+  by `spec-fidelity` (2026-10-09): it left out 0048 and read the 1639 pen, which held sheep, as a sty; it required the
+  household's privy over its sty, the pair's place weighed and recorded as a GUESS, and the claim re-cited. A glyph-only form
+  (the privy's mark on the sty's shed, the farmsteads keeping their own privies, recorded on 0025's drawing page) was built,
+  checked and the cohort held at 48/54, but its plan was BLOCKED: keeping the farmstead privy leaves the household's privy
+  where it was, and the reason given (a bank sty drawn as no one's) contradicts 0025's "it reads as a household's". Reverted.
+  The whole fix needs a sty-to-household mapping (none exists) and a privy that leaves its farmstead under every rule that
+  reads one - the finished-map gate `undrawn_rolls`, 0047's 48 ft reach, its four places and the sunny side; Kuwabata's two
+  sties stand 186 and 195 ft from their nearest farmhouses (m:wave86-privy-over-the-sty-held). E3. The patch kept in the
+  spec's `audit/reverted/`; the code, record and maps as wave 85 left them; the claim stays as found.
+- **Verification**: the measurement (m:wave86-privy-over-the-sty-held); `spec-fidelity`.
 
 ## Performance bookends (constitution VI)
 

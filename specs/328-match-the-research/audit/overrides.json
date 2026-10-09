@@ -3200,5 +3200,14 @@
    "l7r/diagram/waterfields/frame.py",
    "l7r/diagram/waterfields/comb.py"
   ]
+ },
+ "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty": {
+  "tier": "E3",
+  "fix": "draw each sty-keeping household's privy over its sty (the pig toilet: 0048 pig-toilet-enwiki, rural China; 0047 artic-pigsty-latrine, Han grave models) and drop that farmstead's own privy; weigh where the pair stands (the bank, 0025, or the farmstead, as 0049 seats a paddy hamlet's sty) and record it as a GUESS; re-cite the claim, which cites 0047 for 'the sty drawn alone', a thing the page never says. Re-tiered E2 -> E3 on measure (wave 86, 2026-10-09): the glyph alone (a privy's mark on the shed, the farmsteads keeping theirs) was built and its plan BLOCKED by spec-fidelity (the household's privy left where it was, against 0025's 'it reads as a household's'), and reverted. The whole fix needs a sty-to-household mapping (none exists: a sty is seated from the house centroid within 320 ft of any farmhouse), and moving a privy off its farmstead meets the finished-map gate `undrawn_rolls` (privies drawn against rolled, farm_fixtures_target) and every rule 0047 holds a farmstead privy to (48 ft reach, the four attested places, the sunny side); Kuwabata's two sties stand 186 and 195 ft from their nearest farmhouses (m:wave86-privy-over-the-sty-held)",
+  "files": [
+   "l7r/diagram/hamletgen/pondstock.py",
+   "l7r/diagram/settlement/farm_fixtures.py",
+   "l7r/diagram/hamletgen/homesteads/fixtures.py"
+  ]
  }
 }

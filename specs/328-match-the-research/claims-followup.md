@@ -548,4 +548,9 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
   corner) leaves a point the maps refuse, the maps cut it off into a headland before they try the basin beside it - 0005 gives
   cutting off ("along the drain") and taking in as alternatives; the order and the cut away from a drain are recorded on 0005's
   drawing page as a DEVIATION (m:wave82-point-cut-off). Raised for the GM's information.
-
+- Wave 86 (`hamletgen/pondstock.py::stage_pond_stock#privy over the sty`), the exception ruling of 2026-10-09 (spec-fidelity,
+  NOT LEGITIMATE), recorded here in its own terms: leaving the sty alone as a DEVIATION rested on evidence that left out
+  0048's "Rural China set the privy over the pigsty" (`pig-toilet-enwiki`) and read the 1639 pen, which held sheep, as a sty;
+  the fix required is the household's privy over its sty, the pair's place weighed and recorded as a GUESS, the claim
+  re-cited to 0048 and the Han note. A glyph-only form was then BLOCKED at plan review (the farmstead privy kept) and the row
+  held at E3 (m:wave86-privy-over-the-sty-held). Not for the GM unless the E3 work finds a real impossibility.

@@ -7390,21 +7390,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "replaces ranked row out2 (E3, the same key) at E2: draw the privy built over the sty (0047 drawing: the latrine over the pigsty; the China finding 'latrines were customarily built above a pigsty', Han), seating the farmstead's privy on the sty; the claim meanwhile cites 0047's drawing page for 'the sty drawn alone', which the page never says (impl-drift, wave 61). Leaving it out as a DEVIATION goes to spec-fidelity under the plan's Exception path first (the flag)",
-  "files": [
-   "l7r/diagram/hamletgen/pondstock.py"
-  ],
-  "after": [],
-  "flag": "deviation-tempting: 0047 calls the Japanese farmstead's privy-sty pairing a GUESS from Han practice",
-  "found": "wave 61, impl-drift",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/hamletgen/sink.py::drain_run#no-build corridor",
   "tier": "E2",
   "fix": "register the 33 ft no-build corridor only on town and city maps; on a hamlet the drain's rule is the marsh and the ground below it (0058)",
@@ -11242,6 +11227,23 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "draw each sty-keeping household's privy over its sty (the pig toilet: 0048 pig-toilet-enwiki, rural China; 0047 artic-pigsty-latrine, Han grave models) and drop that farmstead's own privy; weigh where the pair stands (the bank, 0025, or the farmstead, as 0049 seats a paddy hamlet's sty) and record it as a GUESS; re-cite the claim, which cites 0047 for 'the sty drawn alone', a thing the page never says. Re-tiered E2 -> E3 on measure (wave 86, 2026-10-09): the glyph alone (a privy's mark on the shed, the farmsteads keeping theirs) was built and its plan BLOCKED by spec-fidelity (the household's privy left where it was, against 0025's 'it reads as a household's'), and reverted. The whole fix needs a sty-to-household mapping (none exists: a sty is seated from the house centroid within 320 ft of any farmhouse), and moving a privy off its farmstead meets the finished-map gate `undrawn_rolls` (privies drawn against rolled, farm_fixtures_target) and every rule 0047 holds a farmstead privy to (48 ft reach, the four attested places, the sunny side); Kuwabata's two sties stand 186 and 195 ft from their nearest farmhouses (m:wave86-privy-over-the-sty-held)",
+  "files": [
+   "l7r/diagram/hamletgen/pondstock.py",
+   "l7r/diagram/settlement/farm_fixtures.py",
+   "l7r/diagram/hamletgen/homesteads/fixtures.py"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: 0047 calls the Japanese farmstead's privy-sty pairing a GUESS from Han practice",
+  "found": "wave 61, impl-drift",
+  "tier_as_ranked": "E2",
   "wave": "",
   "scope": "kept"
  },

@@ -271,7 +271,6 @@ class PondStockMixin:
         Research:
             sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: raked along the bank
             sty glyph - CONVENTION: a ridged shed on 0.62 of the length and a railed pen
-            privy over the sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: the shed carries a privy over its closed end, marked with the privy's dark circle (a CONVENTION, as on every privy)
         """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         x0, y0 = -w / 2, -h / 2
@@ -280,7 +279,6 @@ class PondStockMixin:
             f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">',
             f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w * 0.62:.1f}" height="{h:.1f}" rx="1" fill="#8F7548" stroke="{edge}" stroke-width="1.1"/>',  # the shed
             f'<line x1="{x0 + 1:.1f}" y1="0" x2="{x0 + w * 0.62 - 1:.1f}" y2="0" stroke="#D8C08C" stroke-width="1"/>',  # its ridge
-            f'<circle cx="{x0 + min(w * 0.62, h) * 0.4:.1f}" cy="{h * 0.22:.1f}" r="{min(w * 0.62, h) * 0.2:.1f}" fill="#3E2A12" stroke="#D8C08C" stroke-width="0.5"/>',  # the privy over it: the pig toilet (0025 drawing), its night-soil mark as every privy's
             f'<rect x="{x0 + w * 0.62:.1f}" y="{y0:.1f}" width="{w * 0.38:.1f}" height="{h:.1f}" fill="none" stroke="{edge}" stroke-width="0.8" stroke-dasharray="1.2,1.2"/>',  # the railed pen
             "</g>",
         ]

@@ -1789,5 +1789,29 @@
       },
       "reading": "the threads' spacing moves the field's edges, which the lane web and the seats are laid against; E3 as waves 69, 74, 81, 83 and 84"
     }
+  },
+  "wave86-privy-over-the-sty-held": {
+    "quantity": "wave 86 (2026-10-09): a privy drawn over each dike-pond sty - what the whole fix touches",
+    "observed": "2026-10-09",
+    "source": "pool/hamlets/kuwabata/kuwabata.json; specs/328-match-the-research/audit/reverted/wave86-privy-over-the-sty.patch; make cohort N=48",
+    "command": "make map; make cohort N=48",
+    "method": "the glyph-only form built, the pool rerolled and the cohort run; Kuwabata's manifest read for its sties, privies and houses; the gate tests that read farm_fixtures privies listed",
+    "value": {
+      "glyph_only": {
+        "pool": "Kuwabata alone moved",
+        "cohort_passed": 48
+      },
+      "kuwabata": {
+        "houses": 16,
+        "privies": 14,
+        "sties": 2,
+        "sty_to_nearest_farmhouse_ft": [
+          186,
+          195
+        ]
+      },
+      "readers of a farmstead privy": "undrawn_rolls (privies drawn against farm_fixtures_target), the 0047 seat rules (48 ft reach, four places, the sunny side), each house's fixtures list",
+      "reading": "the household's privy over its sty needs a sty-to-household mapping and a privy that leaves its farmstead under every rule that reads one: E3"
+    }
   }
 }

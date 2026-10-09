@@ -5,7 +5,6 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
-- glyph-redrawn: pig sty on kuwabata - wave 86: the shed carries a privy built over it, marked with the privy's night-soil circle, inside the sty's own 8 x 6 ft footprint (0025 drawing; 0048 pig-toilet-enwiki); batch 10's close
 - glyph-redrawn: pond canal on kuwabata - wave 73 (the dike-pond polder inks its supply channels `pond canal`): the feeder, toes and laterals at 0068's widths in feet (the feeder 4.5 ft at its inlet to 1.5, the toes and laterals 2.5 -> 1.2 floored 1.5 with their heads capped by the feeder) and each parcel's bank per channel (m:wave73-polder-widths-r2); batch 7's close (reviewed PASS at batch 7's close, 2026-10-09)
 - glyph-redrawn: drainage ditch on kuwabata - wave 73: the polder's drain at its 5.5 ft outfall width, and the crop's half-bund bank beside it (m:wave73-polder-widths-r2); batch 7's close (reviewed PASS at batch 7's close, 2026-10-09)
 - glyph-redrawn: pond canal on kuwabata - wave 80: the polder ditches' seam bends drawn as circular arcs of 2.5 widths' radius (0054; m:wave80-swept-bends); batch 9's close (reviewed PASS at batch 9's close, 2026-10-09)
@@ -2082,12 +2081,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       research: rendering
       verify: DONE. DONE. plan CLEAR (wave 85); the thread floor from the basin (48 px and 40 ft) built and REVERTED on the cohort (48 -> 45, 48 -> 44), re-tiered E3; no claim owed (make claims-owed: none)
 
-## Phase 87 - wave 86 (amendment 85): a privy built over each sty
+## Phase 87 - wave 86 (amendment 85): the privy over the sty, held (E3)
 
-- `settlement/farm_fixtures.py` (`pig_sty`), `hamletgen/pondstock.py` (the claim), 0025's drawing page and notes, the
-  pig-sty modal; `tests/settlement/test_farm_fixtures.py`.
+- The glyph-only form reverted and kept as `specs/328-match-the-research/audit/reverted/wave86-privy-over-the-sty.patch`;
+  `hamletgen/pondstock.py` (the comment at the claim: the fix that was held).
 
-- [ ] T200 wave 86's rows (FR-003, FR-004)
+- [x] T200 wave 86's rows (FR-003, FR-004)
       research: rendering
-- [ ] T201 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      verify: DONE. DONE. plan CLEAR (wave 86, round 2); the privy over the sty held, re-tiered E3 on measure (a sty-to-household mapping and a privy off its farmstead under undrawn_rolls and 0047's rules); the glyph-only form reverted; no claim owed (make claims-owed: none)
+- [x] T201 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 86, round 2); the privy over the sty held, re-tiered E3 on measure (a sty-to-household mapping and a privy off its farmstead under undrawn_rolls and 0047's rules); the glyph-only form reverted; no claim owed (make claims-owed: none)

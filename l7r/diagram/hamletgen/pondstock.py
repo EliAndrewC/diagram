@@ -177,8 +177,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         sties at the dike-pond only - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the pig as the dike-pond district's animal; no sty on a plain paddy hamlet
-        privy over the sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: each sty drawn with a
-            privy built over it (the pig toilet), the farmsteads keeping their own privies (a GUESS)
+        privy over the sty - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the sty drawn alone, never
+            with a privy built over it
         no duck pen - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: ducks herded in the rice, the pen modern
         sty count - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a quarter to a half of households
         at least one sty - UNRESEARCHED: the floor of one is not on the page
@@ -186,6 +186,11 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         sty on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html
         sty within reach - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: 320 ft of a farmhouse
     """
+    # A FIX HELD (feature 328 wave 86, 2026-10-09): the pig toilet (0048, 0047) puts the household's privy over its sty. A
+    # glyph-only form - the privy's mark on the shed, the farmsteads keeping their own privies - was built and its plan
+    # BLOCKED (the household's privy left where it was), then reverted. The whole fix needs a sty-to-household mapping and a
+    # privy off its farmstead under `undrawn_rolls` and 0047's seat rules: E3 (m:wave86-privy-over-the-sty-held; the patch
+    # is in the spec's audit/reverted/).
     ponds = s.M.get("dikeponds") or []
     houses = s.M.get("houses") or []
     if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not houses:
