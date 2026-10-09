@@ -8991,12 +8991,17 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#privy share": {
   "code": "9e1076f70b42a8e6",
   "core": "90598b6bce843199",
-  "date": "2026-10-03",
-  "note": "85-95 in 100",
+  "date": "2026-10-08",
+  "note": "0.85-0.95 rolled per hamlet, as the page gives",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2648f7d12e71c15a",
+   "0047-farm-privies-and-their-night-soil-benjo.html:0f0a9861c802bd62",
+   "0047-farm-privies-and-their-night-soil-benjo.html:826f70b36bc0df78"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#wood shed share": {
@@ -9025,24 +9030,32 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::PIT_FIELD_REACH_FT#field pit reach": {
   "code": "57fdcb7f54b13022",
   "core": "6ae4a6f6b1967646",
-  "date": "2026-10-03",
-  "note": "160 ft, labeled GUESS",
+  "date": "2026-10-08",
+  "note": "nearest paddy or road within 160 ft, the page's guess",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::PIT_FIELD_SHARE_BAND#field pit share": {
   "code": "2732c8e2407f6993",
   "core": "6973edc4716800d1",
-  "date": "2026-10-03",
-  "note": "2/83 to 15/18, rolled per hamlet",
+  "date": "2026-10-08",
+  "note": "2 to 85 in 100 per hamlet, spanning 2/83 to 15/18",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "05f7b7ce80c206bd",
+  "research": "298716b2d229f1cf",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
+   "0047-farm-privies-and-their-night-soil-benjo.html:1a8a94917bee238f",
+   "0047-farm-privies-and-their-night-soil-benjo.html:ddf6bf2590cee847"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PIT_CANDIDATES#fixture drawing plumbing": {
@@ -9064,15 +9077,15 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats": {
   "code": "9d1d2a81886ad34e",
   "core": "3a40e4adf7b51ed3",
-  "date": "2026-10-07",
-  "note": "the four attested seats, weighted 35/30/20/15 in the page's order",
+  "date": "2026-10-08",
+  "note": "stable 35, yard 30, front 20, barn 15, in the page's order",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "05f7b7ce80c206bd",
+  "research": "298716b2d229f1cf",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:f398f584edd549cc",
    "0047-farm-privies-and-their-night-soil-benjo.html:2448eb7f2dfe9d3a",
    "0047-farm-privies-and-their-night-soil-benjo.html:b8871624fb928e66",
    "0047-farm-privies-and-their-night-soil-benjo.html:d9b8f2f66a035aff"
@@ -9082,23 +9095,26 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_WEIGHT_SPREAD#privy weights per hamlet": {
   "code": "9b826d5fab665da7",
   "core": "a604501e941b3723",
-  "date": "2026-10-03",
-  "note": "\"up or down by as much as half\"",
+  "date": "2026-10-08",
+  "note": "\"up or down by as much as half\", rolled",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:f398f584edd549cc"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_laid#which pits go to the field": {
   "code": "b4832ac8022a0a22",
   "core": "556e6e67165db4c8",
-  "date": "2026-10-07",
-  "note": "share rolled 0.02-0.85 per hamlet, per-house hash against it",
+  "date": "2026-10-08",
+  "note": "each house's hash against the hamlet's rolled field share",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
@@ -9107,12 +9123,17 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#a lane between pit and house allowed": {
   "code": "8612a92111e256e7",
   "core": "87dc01b73a5adabc",
-  "date": "2026-10-03",
-  "note": "pit at field or roadside",
+  "date": "2026-10-08",
+  "note": "field or road edge first, the laid seat beside the privy otherwise",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8",
+   "0047-farm-privies-and-their-night-soil-benjo.html:1a8a94917bee238f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#field pit size": {
@@ -9197,24 +9218,33 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::farmstead_fixtures#field pit, else beside the privy": {
   "code": "ceddf1c291551339",
   "core": "0c6f4faca035b3b8",
-  "date": "2026-10-03",
-  "note": "both attested seats",
+  "date": "2026-10-08",
+  "note": "the field seat first, the seat beside the privy as fallback",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8",
+   "0047-farm-privies-and-their-night-soil-benjo.html:1a8a94917bee238f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::field_edge_seats#pit at the field or road edge": {
   "code": "d029c4075d8da473",
   "core": "21e5f73cc3c43e97",
-  "date": "2026-10-03",
-  "note": "nearest paddy or road edge",
+  "date": "2026-10-08",
+  "note": "the nearest paddy or road edge, on the house's side",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "05f7b7ce80c206bd",
+  "research": "298716b2d229f1cf",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
+   "0047-farm-privies-and-their-night-soil-benjo.html:1a8a94917bee238f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_form#fixture drawing plumbing": {
@@ -9256,14 +9286,14 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#privy seats": {
   "code": "d6a1b6befa76c290",
   "core": "0653ed944b810711",
-  "date": "2026-10-07",
-  "note": "weights rolled per hamlet (privy_seat_weights)",
+  "date": "2026-10-08",
+  "note": "the hamlet's weights rolled once from the seed",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:f398f584edd549cc"
   ],
   "verdict": "IN-STEP"
  },
@@ -9295,14 +9325,14 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::privy_seat_weights#privy seat weights": {
   "code": "bdb67874bd321618",
   "core": "b613ef17ed85d7d0",
-  "date": "2026-10-07",
-  "note": "each weight scaled 0.5-1.5 from the seed, then renormalized, as in \"scales up or down by as much as half\"",
+  "date": "2026-10-08",
+  "note": "each base weight scaled 0.5-1.5, then renormalized",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:f398f584edd549cc"
   ],
   "verdict": "IN-STEP"
  },
@@ -12608,15 +12638,16 @@
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty": {
   "code": "c0196d64ba68f951",
   "core": "5249cd0c46d6058b",
-  "date": "2026-10-05",
-  "note": "0047's drawing page attests the latrine \"built over the pigsty\" and records no reason the sty is drawn without one; record the exclusion or draw it",
+  "date": "2026-10-08",
+  "note": "(known, found row E2) 0047 drawing page never says \"the sty drawn alone\"; it uses the Han latrine \"customarily built above a pigsty\" only for the manure heap, and 0025/0049 never mention a privy; either the page records not drawing the privy over the sty as a deviation (claim becomes DEVIATION) or the form is drawn",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:de063a6450bfc6d1",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:65691607dc814b44"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:65691607dc814b44",
+   "0047-farm-privies-and-their-night-soil-benjo.html:a2ec8017c3a5d9fe",
+   "0047-farm-privies-and-their-night-soil-benjo.html:dc8975b86787f773"
   ],
   "verdict": "DRIFTED"
  },
@@ -45220,25 +45251,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room beyond the stable wing": {
-  "code": "5e716efb7dc8b998",
-  "core": "8d31976e685f0d1a",
+  "code": "53fbc36faf2b590f",
+  "core": "91ff5c18d9aea9f4",
   "date": "2026-10-08",
-  "note": "29 of 36 is 0.8, the rest rolled to the other walls",
+  "note": "17/21 and 12/15 give 0.8",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
-   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
+   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms": {
-  "code": "692ddd2416e0716d",
-  "core": "8d31976e685f0d1a",
+  "code": "a56f51ff924e2d8c",
+  "core": "91ff5c18d9aea9f4",
   "date": "2026-10-08",
-  "note": "the registers give 36 baths and one floored-room bath in a peasant's house (the other two were headmen's), so 0.03 holds for a hamlet with no headman",
+  "note": "code's 0.03 (1 in 36) and 0.8 are calibrated on §59/§61 counts, but the cited drawing page still says \"Which place a bath room takes is chosen at random, and how often each is drawn is a GUESS\"; the drawing page should record the counted shares",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f",
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
@@ -45248,16 +45279,15 @@
    "0044-baths-on-the-farm-furo.drawing.html:23b7ceda518aa3ec",
    "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
-   "0044-baths-on-the-farm-furo.html:cd48fd2aad413cde",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#manure form": {
-  "code": "959157a1dc2a5f34",
-  "core": "8d31976e685f0d1a",
+  "code": "5ad1170fbb2bf9b6",
+  "core": "91ff5c18d9aea9f4",
   "date": "2026-10-08",
-  "note": "heap or pit, one form rolled per hamlet",
+  "note": "heap or pit, one per hamlet",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "8b458f42d4e2cbac"
   },
@@ -45268,10 +45298,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#persimmon front share": {
-  "code": "7258a98ad084a993",
-  "core": "8d31976e685f0d1a",
+  "code": "ff1c53046001ea0e",
+  "core": "91ff5c18d9aea9f4",
   "date": "2026-10-08",
-  "note": "the front is the likelier, rolled per hamlet; the weight is a GUESS",
+  "note": "front the likelier; the amount is a GUESS",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -45282,26 +45312,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights": {
-  "code": "15380ea57219e832",
-  "core": "8d31976e685f0d1a",
+  "code": "2c63900614bb4b29",
+  "core": "91ff5c18d9aea9f4",
   "date": "2026-10-08",
-  "note": "the page names the places in the order \"under the eaves by the stable, ... in the yard, the front yard, and inside the barn\" with \"base weights of 35, 30, 20 and 15\", which gives the stable 35 and the yard 30. The code has yard 0.35, front 0.30, stable 0.20, barn 0.15. Reconcile the pairing",
+  "note": "default 35/30/20/15 in the page's order",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:a72ca65b434d4335",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:f398f584edd549cc"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#retirement house size and gaps": {
-  "code": "eb5de56b2f2f6413",
-  "core": "8d31976e685f0d1a",
+  "code": "e3e71584ded3f5ee",
+  "core": "91ff5c18d9aea9f4",
   "date": "2026-10-08",
-  "note": "no cited page bears on it",
+  "note": "nothing in the bundle sizes a retirement house or its gap",
   "pages": {},
   "research": "",
   "rests": [],
@@ -45345,12 +45373,12 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": {
   "code": "1dd5b3fce9fc2afa",
   "core": "9095d1abff122e93",
-  "date": "2026-10-07",
-  "note": "8 ft edge off the front wall (8 - WALL_GAP_FT, plus g), recorded as a GUESS",
+  "date": "2026-10-08",
+  "note": "the edge 8 ft off the front wall (4.5 plus the 3.5 gap), the page's guess",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920"
   ],
@@ -45359,56 +45387,71 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SIZES_FT#privy sizes": {
   "code": "df5cbbc948837247",
   "core": "35cdc7d65f772833",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-08",
+  "note": "all sixteen sizes: ten at 18x12 or smaller, five at 24x12, one at 27x15; equally likely",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636",
+   "0047-farm-privies-and-their-night-soil-benjo.html:8c542eb54d993acb"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SUNNY_SHARE#privies on the sunny side": {
   "code": "ce8fc895c1705508",
   "core": "40544b8f0f4079ec",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-08",
+  "note": "72.7% used literally",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
+   "0047-farm-privies-and-their-night-soil-benjo.html:35abd67f717910e2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SUN_MAX_FT#sun-side search reach": {
   "code": "1c3a608c7da1d8bc",
   "core": "8eb43ce07ccbc755",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-08",
+  "note": "48 ft, the project's measured choice",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SUN_MIN_FT#sun-side search start": {
   "code": "100671416b5ce21a",
   "core": "14aaee2fbe7c7694",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-08",
+  "note": "stepping out from 18 ft",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall": {
   "code": "d8695fc477d80848",
   "core": "5efeb905b7d48b3f",
-  "date": "2026-10-07",
-  "note": "§55 says \"a ken (about 6 ft) off the back wall\"; the code sets the edge at a ken plus the wall gap, and the drawing page does not record that departure; record it on the page as a DEVIATION, or return the code to a ken",
+  "date": "2026-10-08",
+  "note": "(known, held E3) the edge stands 6 + 3.5 = 9.5 ft off the back wall, where the page says \"a ken (about 6 ft) off the back wall\"; the page does not record the hold",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
@@ -45542,10 +45585,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#coop seats": {
-  "code": "3db86202bab6d7c6",
-  "core": "aef1e425950fc5df",
+  "code": "966ec60ae63ca81a",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "east flank, back wall or west flank, rolled; all are \"beside the house\"",
+  "note": "east flank, back or west flank, rolled per household; the page puts the coop beside the house as a GUESS",
   "pages": {
    "0045-chickens-and-chicken-coops.drawing.html": "09fa83d177b6f5e9"
   },
@@ -45557,99 +45600,94 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": {
-  "code": "1cb50d4209bc1163",
-  "core": "aef1e425950fc5df",
+  "code": "0795531339482955",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "the heap goes away from the house along the line from the house's center, jittered about 4.5 ft either way (\"a few feet\"); behind or beside the house where there is no privy",
-  "pages": {
-   "0042-manure-heaps-and-compost-kyuhi.drawing.html": "8b458f42d4e2cbac"
-  },
-  "research": "9222f4ebf6feae10",
-  "rests": [
-   "0042-manure-heaps-and-compost-kyuhi.drawing.html:69009a6eaa9aef08",
-   "0042-manure-heaps-and-compost-kyuhi.drawing.html:770a6419fbce2b73",
-   "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots": {
-  "code": "abd4a00f3f824929",
-  "core": "aef1e425950fc5df",
-  "date": "2026-10-08",
-  "note": "the page records eight set spots and gives no offsets, so the offsets are a guess",
+  "note": "placed away from the house along the line from the house's center through the privy, jitter of plus or minus 4.5 ft; with no privy it goes behind the house or at its side",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "8b458f42d4e2cbac"
   },
   "research": "9222f4ebf6feae10",
   "rests": [
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:024dcb0df80d6346",
-   "0042-manure-heaps-and-compost-kyuhi.drawing.html:69009a6eaa9aef08"
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:770a6419fbce2b73",
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots": {
+  "code": "5b86e6133690e446",
+  "core": "62143069f58bff5f",
+  "date": "2026-10-08",
+  "note": "the page's eight set spots; it records the heap's place as a GUESS",
+  "pages": {
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html": "8b458f42d4e2cbac"
+  },
+  "research": "9222f4ebf6feae10",
+  "rests": [
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:024dcb0df80d6346",
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:69009a6eaa9aef08",
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:8e601beb0aeb9bd6",
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy in the yard off the back wall": {
-  "code": "885c0aaadd886b57",
-  "core": "aef1e425950fc5df",
+  "code": "4648d3d94fb6e4bb",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "`-(hh/2 + g + px(PRIVY_YARD_STEP_FT) + d/2)` puts the privy's edge 9.5 ft off the back wall, where the page says \"a ken (about 6 ft) off the back wall\"; record the hold on 0047's drawing page or seat it at the ken",
+  "note": "(known, held E3) the yard seat's -(hh/2 + g + px(PRIVY_YARD_STEP_FT)) puts it 9.5 ft out, where the page says \"a ken (about 6 ft)\"",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": {
-  "code": "a7ec66922ab62227",
-  "core": "aef1e425950fc5df",
+  "code": "67fba84e98373c16",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "the 72.7% sun roll and the walk from 18 ft match, but the code drops the barn seat, while the drawing page still draws the privy against the barn's wall and falls back to \"the four places ... the barn\"; 0047's drawing page must record that a hamlet without a barn spreads the barn's share over the other three (then claim DEVIATION)",
+  "note": "(behind the open row `_seats#privy seats - the barn 0047 names`, E3) the record attests four places, but `privy_places` drops \"inside the barn\" on every hamlet; the page calls drawing the barn \"open work\", not a deviation; draw the barn seat, or the page records the omission",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:7b9b2969354351f9",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:a72ca65b434d4335",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2697271aa3082865",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:f398f584edd549cc",
+   "0047-farm-privies-and-their-night-soil-benjo.html:2448eb7f2dfe9d3a"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#retirement house": {
-  "code": "592bdb29c735de1f",
-  "core": "aef1e425950fc5df",
+  "code": "8f1c3db9399e82af",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "no cited question places the retirement house",
+  "note": "no cited question answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#seat positions along each wall": {
-  "code": "56a83478b3a56d5c",
-  "core": "aef1e425950fc5df",
+  "code": "cd2a08e530c7a3a0",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "all the listed width and depth figures match the code; the pages record the privy, coop and shed only by which wall and how far out (each a GUESS), never where along it",
+  "note": "the code's fractions match the claim; the pages are silent",
   "pages": {},
   "research": "",
-  "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
-   "0045-chickens-and-chicken-coops.drawing.html:94909ee119011e40",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine corner": {
-  "code": "0a306959ba4ff07f",
-  "core": "aef1e425950fc5df",
+  "code": "57683af35b70a12c",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "NW, NE or SW, rolled 45/35/20",
+  "note": "NW/NE/SW rolled at 45/35/20",
   "pages": {
    "0219-household-shrines-yashikigami.drawing.html": "b8ac74762f0906b7"
   },
@@ -45661,10 +45699,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine off its corner": {
-  "code": "65390ff77ab1729d",
-  "core": "aef1e425950fc5df",
+  "code": "4b7f463518172373",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "0219 names the corner and gives no distance, so the 14 ft is unresearched",
+  "note": "the page names the corner but gives no distance",
   "pages": {},
   "research": "",
   "rests": [
@@ -45673,10 +45711,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
-  "code": "de643e2154a65ec0",
-  "core": "aef1e425950fc5df",
+  "code": "29936932a84bf71c",
+  "core": "62143069f58bff5f",
   "date": "2026-10-08",
-  "note": "back wall and flanks, never the front (the distance is judged on WOODSHED_STEP_FT)",
+  "note": "the back and flank seats stand g + WOODSHED_STEP_FT = 9.5 ft off the wall (`back - st`, `hw/2 + g + st`), but the page says \"about 6 ft (a ken) off a wall\". Either the step should be 6 - WALL_GAP_FT, or the page records 9.5 ft and the claim names the distance. The sides match (behind or beside, never the front)",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
   },
@@ -45684,17 +45722,22 @@
   "rests": [
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_sun_sector#sunny-side sector": {
   "code": "d774b6df80942db3",
   "core": "f9ffe087ec94f06b",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-08",
+  "note": "the SE and S octants (112.5-202.5 degrees), nearest radius first",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
+   "0047-farm-privies-and-their-night-soil-benjo.html:35abd67f717910e2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_sunlit#persimmon out of the plots' sun": {
@@ -45759,6 +45802,16 @@
   "date": "2026-10-03",
   "note": "plumbing, nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::along_its_wall#a seat slid along its wall": {
+  "code": "e94670a9359f1234",
+  "core": "82f34fb22b9a64d2",
+  "date": "2026-10-08",
+  "note": "pure geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#bath room seat fallback": {
@@ -45900,12 +45953,16 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#privy size": {
   "code": "5e60330fac41420b",
   "core": "78e76fbc7145679f",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-08",
+  "note": "one of the sixteen, rolled per house",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636",
+   "0047-farm-privies-and-their-night-soil-benjo.html:8c542eb54d993acb"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#retirement house size": {
@@ -45969,10 +46026,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
-  "code": "2cf3776cd44454ec",
-  "core": "8376e07cbd4b972e",
+  "code": "59fa10f0fcc6311a",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "the bath room is joined to the house or refused; no free-standing shed is drawn",
+  "note": "must touch the house, raises otherwise",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
   },
@@ -45984,15 +46041,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
-  "code": "22d6e728ba61d090",
-  "core": "8376e07cbd4b972e",
+  "code": "f6485c0f4aaf6c94",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "each house rolls among the three attested walls",
+  "note": "the wall is rolled per house among the three attested places",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
+   "0044-baths-on-the-farm-furo.html:31acf56cd2a3b016",
    "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
@@ -46000,20 +46058,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
-  "code": "e0fd75cad4c470a2",
-  "core": "8376e07cbd4b972e",
+  "code": "ae3147d197baf8b2",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "the cited questions give no gap or slide",
+  "note": "the pages are silent on both",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
-  "code": "356d988b796765de",
-  "core": "8376e07cbd4b972e",
+  "code": "118d856726c140be",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "a farm with no dooryard seat keeps no persimmon",
+  "note": "matches",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -46024,10 +46082,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon front or behind": {
-  "code": "d96745f0a6e58279",
-  "core": "8376e07cbd4b972e",
+  "code": "2977bd8cbbae85fc",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "the house rolls against the hamlet's front share",
+  "note": "per-house roll at a per-hamlet front share, kept out of yard sun",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -46039,10 +46097,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in its own grove bands": {
-  "code": "a7ab4cdf6a2a35b9",
-  "core": "8376e07cbd4b972e",
+  "code": "44f4937c7d8d0681",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "its own farm's grove bands are opened to the persimmon alone",
+  "note": "only its own farm's grove bands are opened to it",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -46053,46 +46111,46 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
-  "code": "c7afa07dab87c75e",
-  "core": "8376e07cbd4b972e",
+  "code": "6c88d911b96ce145",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "no cited question gives an order",
+  "note": "the pages are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
-  "code": "71278591ee429a91",
-  "core": "8376e07cbd4b972e",
+  "code": "7583aa93e3779711",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "no cited question addresses the fallback pace",
+  "note": "the pages are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too": {
-  "code": "cf9651313104cf4d",
-  "core": "8376e07cbd4b972e",
+  "code": "53714691098b3338",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "0043 is silent on the kura",
+  "note": "the page does not say which walls count",
   "pages": {},
   "research": "",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the privy's reach": {
-  "code": "cf63785d0ef82f9c",
-  "core": "8376e07cbd4b972e",
+  "code": "0fc205c6d1c4f887",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "48 ft reach; a privy with no seat within it is refused by name",
+  "note": "offered seats filtered to 48 ft of the house",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
@@ -46100,17 +46158,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
-  "code": "14785eb5d80330fc",
-  "core": "8376e07cbd4b972e",
+  "code": "da3b13d614b7440a",
+  "core": "72242f4e5ff7d126",
   "date": "2026-10-08",
-  "note": "the house's own walls, \"a short step off the house\"",
+  "note": "the walls are the house and kura only (steading_rects); the step distance itself is in `_wood_shed`, which is not in the bundle",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
   },
   "research": "862d7c9fcd1644d6",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
   ],
   "verdict": "IN-STEP"
  },
@@ -46122,18 +46179,49 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_places#privy places": {
+  "code": "a227be307190f2b5",
+  "core": "6c189e919aef6115",
+  "date": "2026-10-08",
+  "note": "(behind the open row `_seats#privy seats - the barn 0047 names`, E3) it returns only stable, yard and front, a form the record attests (\"a tub buried in a barn\") fixed out on every hamlet; the page says \"drawing the barn the record names is open work\", not a deviation",
+  "pages": {
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
+  },
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2697271aa3082865",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:f398f584edd549cc",
+   "0047-farm-privies-and-their-night-soil-benjo.html:2448eb7f2dfe9d3a"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size": {
   "code": "5ceba220cd4f8b04",
   "core": "0216772b2aa00eb2",
-  "date": "2026-10-07",
+  "date": "2026-10-08",
   "note": "48 ft whatever the size",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::rolled_first#privy's rolled place kept": {
+  "code": "6f9d89d24b44a993",
+  "core": "196ab86fc89eaa84",
+  "date": "2026-10-08",
+  "note": "the sunny side first, then the rolled place slid along its wall and stepped out, then the other places",
+  "pages": {
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
+  },
+  "research": "8e397cadf86062e0",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:f398f584edd549cc"
   ],
   "verdict": "IN-STEP"
  },
@@ -46204,11 +46292,11 @@
   "code": "b59794a0558577f3",
   "core": "f4c0645d63bb6465",
   "date": "2026-10-08",
-  "note": "the far-corner gap per axis, max(0, |d|+r/2-h/2), squared against reach; same answer as the four corners",
+  "note": "the far corner within 48 ft of the house's outline",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "6ec8b46292f8c266"
   },
-  "research": "fa621c85688c72b2",
+  "research": "8e397cadf86062e0",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"

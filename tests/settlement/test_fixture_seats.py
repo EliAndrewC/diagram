@@ -244,3 +244,27 @@ def test_a_hamlet_farm_has_no_barn_so_its_privy_never_takes_the_barn_seat() -> N
         seats = fs._seats("privy", HW, HH, 6.0, 6.0, 3.5, None, None, lambda _s: 0.99, u, forms, _px)
         assert all(not (q[0] > HW / 2 and abs(q[1] + HH * 0.25) < 1e-6) for q in seats), "no seat at the house's east end"
         assert len(seats) == 3
+
+
+def test_the_privys_rolled_seat_is_stepped_out_before_the_next_seat_is_tried() -> None:
+    """Feature 328 wave 61 (0047: the privy's place rolled per house over the attested places; glyph-check of batch 3's close:
+    on Sawada all 8 privies off the sunny side stood at the yard seat behind the house, since every seat was tried at its first
+    spot before any was stepped out, and the stable's and the front's first spots fall on the work yard). At roll 0.9 the
+    household's place is the stable (u spread over the stable 35, yard 30, front 20) - its first spot on the yard here - so the
+    privy steps out from the stable end, never falling back to the yard behind the house while the stable can be had."""
+    stable = lambda salt: 0.9 if salt == fs.SALT["privy"] + 0.25 else 0.2  # off the sunny side; u 0.2 of the weights: the stable (35 of 85)  # noqa: E731
+    privy = fs.lay_fixtures(("privy",), HW, HH, [HOUSE, KURA], [YARD, GARDEN], YARD, True, stable, fs.FixtureForms(), _px)["privy"]
+    assert privy[0] < 0.0 and privy[1] > HH / 2, ("by the stable, the house's west end of the front", privy)
+    assert fs.within_reach_of(privy, HOUSE, 48.0)
+
+
+def test_the_rolled_place_and_its_paces_come_before_the_other_places() -> None:
+    """`rolled_first`: the rolled place (its first `k` seats) and their paces outward, then the others and theirs."""
+    seats = [(-10.0, 0.0, 2.0, 2.0), (0.0, 10.0, 2.0, 2.0), (10.0, 0.0, 2.0, 2.0)]
+    got = list(fs.rolled_first(seats, 1, 5.0, 2))
+    assert got[:5] == [seats[0], (-15.0, 0.0, 2.0, 2.0), (-5.0, 0.0, 2.0, 2.0), (-20.0, 0.0, 2.0, 2.0), (0.0, 0.0, 2.0, 2.0)], "along its wall first"
+    assert got[5:7] == [(-15.0, 0.0, 2.0, 2.0), (-20.0, 0.0, 2.0, 2.0)], "then out"
+    assert got[7:9] == seats[1:] and got[9:] == [(0.0, 15.0, 2.0, 2.0), (15.0, 0.0, 2.0, 2.0), (0.0, 20.0, 2.0, 2.0), (20.0, 0.0, 2.0, 2.0)]
+    sector = list(fs.rolled_first(seats, 2, 5.0, 1))
+    assert sector == [*seats, (-15.0, 0.0, 2.0, 2.0), (0.0, 15.0, 2.0, 2.0), (15.0, 0.0, 2.0, 2.0)], "a sunny roll: the sector, the attested places, then every pace"
+    assert fs.privy_places(fs.FixtureForms()) == ("stable", "yard", "front")

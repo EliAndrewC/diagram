@@ -1,6 +1,7 @@
 """Merge the nine batch outputs into specs/328-match-the-research/ranking.json and ranking.md (feature 328, T03)."""
 
 import json
+import re
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -20,7 +21,20 @@ for n in range(1, 10):
             r["tier_as_ranked"] = r["tier"]  # the batch's tier, before the re-check and the second reader
             rows[r["key"]] = r
 # Findings a wave's re-check exposed (spec Edge Cases: "recorded in the ranking under the tier they take").
-for extra in sorted(AUDIT.glob("found-*.jsonl")):
+BATCH_CLOSE = {3: 55}  # a batch's close follows its last wave (batch 3: waves 51-55)
+
+
+def found_order(path: Path) -> tuple[float, str]:
+    """A found file's place in time: `found-wave<N><suffix>` at wave N, `found-batch<N>` after the batch's last wave - so a
+    later row replaces an earlier one with its key (sorted by name, wave9 overrode wave52 and wave2b/3 overrode 13/15)."""
+    m = re.fullmatch(r"found-(wave|batch)(\d+)([a-z]*)", path.stem)
+    if not m:
+        return (float("inf"), path.stem)
+    n = int(m.group(2))
+    return (BATCH_CLOSE[n] + 0.5 if m.group(1) == "batch" else float(n), m.group(3))
+
+
+for extra in sorted(AUDIT.glob("found-*.jsonl"), key=found_order):
     for line in extra.read_text().splitlines():
         if line.strip():
             r = json.loads(line)

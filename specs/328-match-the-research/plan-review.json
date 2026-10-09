@@ -1,57 +1,68 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "859b6d59dfe2ae49b4edb70633a5e1a8f0397384c2bf159a62be1340e13ad6ed",
+ "plan_sha256": "8e7a267116de817831430e18055dd6ba2b7f77e57ed4d4373e9c2b2cd1351f83",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W60-hold590",
-   "summary": "row 590 held: the garden_west change reverted, the row re-tiered E2 -> E3 on measure (refusals 3 -> 4 of 48 declared-wind rolls, undiagnosed), its claim left DRIFTED",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "This is the spec's Edge Case route: where the fix costs more than the row's tier, the row takes that tier and its claim stays as found. XIII forbids landing the extra refusal. The hold now rests only on the undiagnosed refusals and the work to fix them, and claims-index keeps the claim DRIFTED (held E3)."
+   "id": "W61-1 the rolled place slid, then stepped, before another place",
+   "summary": "rolled_first: off the sunny side the rolled place is offered at its first spot, slid along its wall, then stepped out, before the other attested places",
+   "class": "within",
+   "why": "Row 564's fix as written ('step the ROLLED seat outward (or along its wall) before trying the next seat'); tests pin the order. Unchanged since round 1."
   },
   {
-   "id": "W60-sun-settled",
-   "summary": "override, docstring and plan record that the windward band giving up ~21% of its ground to the moved bed's 50 ft reach is 0038 applied (crowns culled by _sun_keepouts), not an open choice",
+   "id": "W61-2 a sunny roll keeps sector, places, then paces",
+   "summary": "on a sunny roll the sector leads, then the attested places, then every pace; the sector-paces-first variant withdrawn (cohort seeds 4 and 23)",
    "class": "within",
-   "why": "Round 2 item 1 is fixed. The wording now follows 0038.drawing ('no canopy tree in a yard's or bed's sun, whatever stand it belongs to') and no longer leaves a band-versus-bed choice open. A grep for \"row's decision\" and \"covers both\" over the plan, the audit, the ranking, dispersed.py and claims-index finds nothing."
+   "why": "The sector already offers every radius to its reach; nothing the row asks is dropped. Unchanged since round 1."
   },
   {
-   "id": "W60-yard-north-row",
-   "summary": "the turns' yard-north finding (0036's front off the wind against 0029's yard before the south wall) filed as its own row: found-wave60.jsonl, dispersed_layout#homestead turned to the map's wind, E4 NEEDS-RESEARCH; ranking re-merged (E4 61 -> 62)",
+   "id": "W61-3 the barn left out behind an OPEN row (was: labeled DEVIATION)",
+   "summary": "merge.py reads found files in found_order (wave number; batch 3 after wave 55); wave 52's draw-the-barn row re-keyed `_seats#privy seats - the barn 0047 names` and present in ranking.json open (wave '', scope kept, E3); claims `_seats#privy seats` and `privy_places#privy places` DRIFTED behind it; 0047's drawing page says 'draw no barn yet ... drawing the barn the record names is open work', evidence comment 'open'",
    "class": "within",
-   "why": "Round 2 item 2 is fixed. This is the spec's Edge Case followed literally: a new finding is ranked under its own tier, and a conflict between two cited pages is NEEDS-RESEARCH. Row 590's override no longer claims to cover the finding."
+   "why": "Round 1's NOT LEGITIMATE is answered as asked: the omission is no longer closed by relabeling - the fix (draw the barn) is a ranked open row, the claims stay DRIFTED behind it (claims-index verified), and the page describes the maps' current state rather than a deliberate deviation. Verified the ranking diff by key against HEAD: 3 added (the barn, the wood shed seats, 0044's bath shares), none removed; the found_order change also rewrites the history fields (found/reopened) of two magistrate's-manor rows, which stay closed at waves 15 and 16 per waves.json - so 5 rows differ, not the 3 the dispatch stated, but no open/closed state moved besides wave 61's own two closures."
   },
   {
-   "id": "W60-closed-tiers",
-   "summary": "audit/closed-tiers.json restored to HEAD (no garden key)",
+   "id": "W61-4 FixtureForms default weights corrected",
+   "summary": "default privy weights reordered to 0047's stable 35 / yard 30 / front 20 / barn 15; named as ranked row FixtureForms#privy seat weights and closed at 61 (waves.json, closed-tiers E1)",
    "class": "within",
-   "why": "Round 2 item 3 is fixed. git status shows the file unmodified, and it holds no 'garden beside the yard' key."
+   "why": "Matches the page; the round-1 record note (name it as the ranked row and close it) is done."
   },
   {
-   "id": "W60-claim-thin-bands",
-   "summary": "thin bands' claim restated to name both yard_sun paths",
+   "id": "W61-5 the sty without its privy (replaces ranked row out2)",
+   "summary": "found-wave61 row stage_pond_stock#privy over the sty at E2 carries the deviation-tempting flag and its clause, says it replaces ranked row out2 (E3), and sends any DEVIATION exit to spec-fidelity under the Exception path first; the plan says the same",
    "class": "within",
-   "why": "It corrects the claim's wording to match the code (the E0 route under FR-004)."
+   "why": "Round 1's NOT LEGITIMATE was the flag dropped in the edit that added a DEVIATION exit. The flag is restored in ranking.json and the fix text routes the deviation through the Exception path, so the guard stands; the re-tier E3 -> E2 is a ranking estimate, within."
   },
   {
-   "id": "W60-unresearched-22ft",
-   "summary": "UNRESEARCHED claim for the 22 ft YARD_SUN_STRIP default at canonical_farmstead",
+   "id": "W61-6 found row: wood shed seats' 9.5 ft",
+   "summary": "_seats#wood shed seats DRIFTED, E3, after WOODSHED_STEP_FT#wood shed off its wall",
    "class": "within",
-   "why": "It states the mismatch honestly and carves nothing out. Its twin at bundle.py was ranked E0 in wave 10."
+   "why": "A new key ranked behind the row with the same cause; nothing waived."
   },
   {
-   "id": "W60-guess-claims",
-   "summary": "service strip, way in through a ring, deep bands off the works claimed as GUESS",
+   "id": "W61-7 found row: 0044's bath shares",
+   "summary": "FixtureForms#bath room joined to the floored rooms DRIFTED, E1 (the drawing page still calls the counted shares a GUESS)",
    "class": "within",
-   "why": "These carry the words of ranked rows 231 and 234, labeled as guesses."
+   "why": "A new key ranked at E1; nothing excused."
   },
   {
-   "id": "W60-occasions",
-   "summary": "no review occasions: claim lines and a docstring only; the five hamlets cached or byte-identical",
+   "id": "W61-8 the cohort and the new refusals",
+   "summary": "48 of 54 before and after; seeds 10 and 20 draw, 06 and 09 refused, each diagnosed to a pre-existing class not at a fixture; two variants withdrawn",
    "class": "within",
-   "why": "A feature 294 process decision that narrows nothing asked."
+   "why": "Unchanged since round 1: the rate did not drop and each new refusal is diagnosed (m:wave61-privy-rolled-place)."
+  },
+  {
+   "id": "W61-9 record items filed as feature 368",
+   "summary": "the 48 ft paragraph against its table, 'earthfloored'/'earth-floored', 'Type V1' undefined: filed as specs/368-record-0047-loose-ends (Status: Filed)",
+   "class": "within",
+   "why": "Record-internal defects, not claims-report findings; now durable where open work lives. Narrows nothing the GM asked for."
+  },
+  {
+   "id": "W61-10 occasion declared",
+   "summary": "placement-changed: privy on kashikawa at batch 4's close (tasks.md ## Occasions)",
+   "class": "within",
+   "why": "Adds the review the re-placing owes; narrows nothing."
   }
  ],
  "verdict": "CLEAR"

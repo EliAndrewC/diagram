@@ -128,7 +128,8 @@ Research:
 # THE FOUR ATTESTED PRIVY SEATS (269 B10, research/questions/0047-farm-privies-and-their-night-soil-benjo.html "Farm privies and their night soil (benjo)"): under the eaves by the
 # stable beside the entrance (sinyoken), a separate outhouse in the yard (sinyoken), the front yard (Sugiura 1977, northern
 # Miyagi, "usually"), and inside the barn (Suzuki 1959, "several farms"). The record says how often each is drawn is a
-# GUESS, so these base weights are one, and each hamlet re-weights them (`privy_seat_weights`) - a degree along a
+# GUESS, so these base weights (35/30/20/15) are that GUESS - the barn's share spread over the other three on our hamlets,
+# which draw no barn (`fixture_seats.privy_places`) - and each hamlet re-weights them (`privy_seat_weights`) - a degree along a
 # continuum, rolled from the seed. Where in the yard the separate outhouse stands no page says: behind the house, a step
 # off the wall, is a GUESS. A privy inside the barn is a tub under its floor, which a top-down map cannot show; it is
 # drawn as the privy glyph against the barn's outer wall - a MAP DRAWING CONVENTION.

@@ -219,7 +219,7 @@
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role",
-  "verdict": "MISLABELED",
+  "verdict": "DRIFTED",
   "tier": "E0",
   "fix": "buildings/programs.md line 113 (knob 3): replace 'An upland county's granary also shifts CONTENTS: more in-kind goods (soybeans, barley, local products) and a partial strongbox role, since less of its tax is rice (see grounding).' with 'An upland county's granary also shifts CONTENTS: more in-kind goods (soybeans, barley, local products), since less of its tax is rice and the dry-field share arrives in kind (see grounding); the county's coin and valuables stay in the tax archive.'; delete the claim at line 53 (the 'upland granary contents' DEVIATION claim at line 52 stands).",
   "files": [
@@ -227,8 +227,9 @@
   ],
   "after": [],
   "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 3",
+  "tier_as_ranked": "E2",
   "moved": "T53a: a reopened row tiered by its work by a fresh reader - The role conflicts with the project's own in-kind deviation and no sheet draws it: a grep of every magistracy sheet's notes finds no strongbox or coin in a granary (Ubame, the one upland county, keeps a modest kura on posts and its wealth in the sealed charcoal store; the strongroom role is the tax archive's, buildings.md line 109), so dropping one clause of one procedure paragraph matches the research.",
   "wave": "15",
   "scope": "deferred"
@@ -5787,6 +5788,20 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the code's shares (0.8 beyond the stable wing, 0.03 joined to the floored rooms) are calibrated on 0044's counted registers (17 of 21 at Shimohasuda, 12 of 15 at Ukiya; 1 of 36), but 0044's drawing page still says which place a bath room takes is 'chosen at random, and how often each is drawn is a GUESS': record the counted shares on the drawing page (impl-drift, wave 61)",
+  "files": [
+   "research/questions/0044-baths-on-the-farm-furo.drawing.html"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights",
   "tier": "E1",
   "fix": "privy seat weights to stable 35 / yard 30 / front 20 / barn 15 as 0047 drawing lists them",
@@ -5797,7 +5812,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "61",
   "scope": "deferred"
  },
  {
@@ -6777,7 +6792,8 @@
   ],
   "after": [],
   "flag": "",
-  "found": "wave 3 re-check",
+  "found": "wave 15 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 13",
   "tier_as_ranked": "E2",
   "moved": "T56a: tiered by its work by a fresh reader - One procedure paragraph's rule changes to agree with 0104's drawing page and with the program's own residence bullet (line 69, 'the visitors' way runs on through the office to the house'); the divider gate still sits behind the hall, so no sheet changes.",
   "wave": "16",
@@ -7324,6 +7340,20 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "24",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "replaces ranked row out2 (E3, the same key) at E2: draw the privy built over the sty (0047 drawing: the latrine over the pigsty; the China finding 'latrines were customarily built above a pigsty', Han), seating the farmstead's privy on the sty; the claim meanwhile cites 0047's drawing page for 'the sty drawn alone', which the page never says (impl-drift, wave 61). Leaving it out as a DEVIATION goes to spec-fidelity under the plan's Exception path first (the flag)",
+  "files": [
+   "l7r/diagram/hamletgen/pondstock.py"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: 0047 calls the Japanese farmstead's privy-sty pairing a GUESS from Han practice",
+  "tier_as_ranked": "E2",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -8617,7 +8647,7 @@
   "flag": "",
   "found": "batch 3's close, glyph-check--privy F2",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "61",
   "scope": "kept"
  },
  {
@@ -11239,21 +11269,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty",
-  "tier": "E3",
-  "fix": "draw the privy built over the sty (0047 drawing: the latrine over the pigsty), seating the farmstead's privy on the sty",
-  "files": [
-   "l7r/diagram/hamletgen/pondstock.py",
-   "l7r/diagram/hamletgen/homesteads/fixtures.py"
-  ],
-  "after": [],
-  "flag": "deviation-tempting: 0047 calls the Japanese farmstead's privy-sty pairing a GUESS from Han practice",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sties at the dike-pond only",
   "tier": "E3",
   "fix": "draw sties on plain paddy hamlets: about two households in three, the share rolled per hamlet, against the farmhouse or an outbuilding on its own plot (0049 drawing)",
@@ -12343,6 +12358,38 @@
   "tier_as_ranked": "E1",
   "moved": "wave 9 bookends: held - at a ken three scaling rolls refuse their web (bisected by row over the held state: the shed step alone; holding the privy's sun reach instead does it too, the smaller hold chosen); waits on the web row",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats - the barn 0047 names",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "0047 puts the privy inside or against the barn (naya), a building of its own; a hamlet farm draws no barn, so the barn seat was withdrawn (spec-fidelity W52-3) and its share spread over the yard, the front and the stable. The fix is to draw the barn the record describes (0040/0028: the free-standing storage shed), a new element with its own glyph check, and then offer its outer wall to the privy (re-keyed at wave 61: it shared its key with wave 9's row, which wave 52 closed, and was lost from the ranking - spec-fidelity W61-3)",
+  "files": [
+   "l7r/diagram/settlement/farm_fixtures.py",
+   "l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 52, impl-drift round 2",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the back and flank seats stand the wall gap plus `WOODSHED_STEP_FT`, 9.5 ft, off the wall where 0043 says a ken (6 ft) - the same cause and the same fix as ranked row WOODSHED_STEP_FT#wood shed off its wall (impl-drift, wave 61; IN-STEP at its previous check, the code unchanged)",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [
+   "l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },

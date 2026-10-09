@@ -133,8 +133,8 @@ class FixtureForms:
     left, the wood shed (feature 280 M21: the eaves stack and the kizuma are modern-only), so it rolls none.
 
     Research:
-        privy seat weights - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: yard 35, front 30,
-            stable 20, barn 15
+        privy seat weights - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: stable 35, yard 30,
+            front 20, barn 15 (the default; a hamlet rolls its own about them, `hamletgen/homesteads/fixtures.py`)
         bath room beyond the stable wing - research/questions/0044-baths-on-the-farm-furo.html: most baths there, 17 of 21 at Shimohasuda and 12 of 15 at Ukiya, so 0.8; the main door the rest, each house rolled
         bath room joined to the floored rooms - research/questions/0044-baths-on-the-farm-furo.html, research/questions/0044-baths-on-the-farm-furo.drawing.html: of the two registers' 36 baths, one joined to the floored rooms was a peasant's (the other a headman's; a third, at Kozutsumi in 1771, a headman's too) - so 1 in 36, 0.03, on a hamlet, which has no headman
         persimmon front share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
@@ -142,7 +142,7 @@ class FixtureForms:
         manure form - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: heap by default, or pit
         retirement house size and gaps - UNRESEARCHED: 18 x 15 ft, 6 or 12 ft off the house"""
 
-    privy_weights: tuple[tuple[str, float], ...] = (("yard", 0.35), ("front", 0.30), ("stable", 0.20), ("barn", 0.15))
+    privy_weights: tuple[tuple[str, float], ...] = (("stable", 0.35), ("yard", 0.30), ("front", 0.20), ("barn", 0.15))  # the page's order (feature 328 wave 61: the places were misassigned)
     bath_stable_share: float = 0.8
     bath_floored_share: float = 0.03
     persimmon_front: float = 0.7
@@ -286,6 +286,43 @@ def outward(seats: Sequence[Rect], step: float, n: int) -> Iterator[Rect]:
             yield (lx + lx / r * step * k, ly + ly / r * step * k, w, d)
 
 
+def privy_places(forms: FixtureForms) -> tuple[str, ...]:
+    """The attested places a hamlet farm's privy is rolled over (`_seats`): the yard, the front and the stable - never the barn,
+    which a hamlet draws none of.
+
+    Research: privy places - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the page's four places less the barn, its share spread over the yard, the front and the stable while a hamlet draws no barn (`farm_fixtures.py`) - drawing the barn is the open found row `_seats#privy seats - the barn 0047 names`"""
+    return tuple(k for k, _p in forms.privy_weights if k in ("stable", "yard", "front"))
+
+
+def along_its_wall(seat: Rect, step: float, n: int) -> Iterator[Rect]:
+    """`seat` slid along the wall it stands off (the house frame's x), `step` at a time, alternately toward its own end and
+    away, `n` times each way.
+
+    Research: a seat slid along its wall - NONE: the geometry of `rolled_first`'s slide, whose claim carries the page"""
+    x, y, w, d = seat
+    sign = 1.0 if x >= 0 else -1.0
+    for k in range(1, n + 1):
+        yield (x + sign * step * k, y, w, d)
+        yield (x - sign * step * k, y, w, d)
+
+
+def rolled_first(seats: Sequence[Rect], k: int, step: float, n: int) -> Iterator[Rect]:
+    """The seats as offered when the first `k` are the household's ROLLED place - the sun-side sector on a sunny roll, else the
+    one attested place it rolled. The sector already offers every radius to its reach, so it is followed by the attested
+    places and then every pace (its paces put ahead of them carried a privy and its heap past the threshing yard onto the
+    household's way out - cohort seeds 4 and 23, refused). One attested place slides ALONG ITS WALL, then steps out, before
+    the other places are tried: stepped straight out, a front privy whose first spot fell on the threshing yard was
+    carried through the yard to its far edge, the household's way out (cohort seed 23: a needle loop round it). Every seat at
+    its first spot before any was stepped out let the work yard and the beds, which the stable's and the front's first spots
+    fall on, send 8 of 8 of Sawada's privies off the sunny side to the yard seat (glyph-check of batch 3's close, 2026-10-08).
+
+    Research: privy's rolled place kept - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the place rolled per house, slid along its wall, then stepped out, before another place is tried (the order the page records for our maps; no source gives one)"""
+    head, rest = list(seats[:k]), list(seats[k:])
+    if k > 1:  # the sun-side sector already offers every radius to its reach: its paces are the attested places' turn
+        return chain(head, rest, outward(seats, step, n))
+    return chain(head, along_its_wall(head[0], step, n), outward(head, step, n), rest, outward(rest, step, n))
+
+
 def lay_fixtures(
     kinds: Sequence[str],
     hw: float,
@@ -362,7 +399,11 @@ def lay_fixtures(
                 notes["bath_seat"] = got[1]
         else:
             seats = _seats(kind, hw, hh, w, d, g, yard, laid.get("privy"), roll, u, forms, px)
-            offered = chain(seats, outward(seats, px(STEP_FT), OUT_STEPS))
+            if kind == "privy":  # the household's rolled place stepped out before the next place is tried (feature 328 wave 61)
+                sun = len(seats) - len(privy_places(forms))  # the sun-side sector's seats lead the list on a sunny household's roll
+                offered = rolled_first(seats, sun or 1, px(STEP_FT), OUT_STEPS)
+            else:
+                offered = chain(seats, outward(seats, px(STEP_FT), OUT_STEPS))
             if kind == "privy":  # its own farmstead's: no further than 48 ft from its house (0047), never stepped past it
                 offered = (q for q in offered if within_reach_of(q, roofs[0], px(PRIVY_SUN_MAX_FT)))
             found = _first(offered, taken, g)
@@ -520,8 +561,8 @@ def _seats(
 
     Research:
         privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the sun-side sector on
-            72.7%, else the attested places a hamlet farm has - the yard, the front, by the stable; never the barn, which a
-            hamlet draws none of
+            72.7%, else the attested places a hamlet farm has - the yard, the front, by the stable; not the barn while a hamlet
+            draws none (the open found row `_seats#privy seats - the barn 0047 names`)
         privy in the yard off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: held at a ken plus the wall gap (`PRIVY_YARD_STEP_FT`), past the page's ken, behind the found row at the constant
         shrine off its corner - UNRESEARCHED: 14 ft (`SHRINE_CORNER_FT`) out from the house's corner on both axes
         manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: on the side of the privy away from the house, along the line from its center; jittered a few feet;
@@ -544,7 +585,7 @@ def _seats(
         }
         # NO BARN, NO BARN SEAT (feature 328; 0047 puts the privy "inside the barn", a building of its own, and a hamlet draws
         # no barn - `farm_fixtures.py`): the barn's share goes to the three places a hamlet farm has, at their own weights
-        weights = tuple((k, p) for k, p in forms.privy_weights if k in seat)
+        weights = tuple((k, p) for k, p in forms.privy_weights if k in privy_places(forms))
         first = weighted(weights, u * sum(p for _k, p in weights))  # the roll spread over the places left
         attested = [seat[first]] + [seat[k] for k, _ in weights if k != first]
         # THE OUTHOUSE FACES THE SUN, AT THE RATE THE RECORD GIVES (feature 152 T07): SE to S on 72.7% of households, the

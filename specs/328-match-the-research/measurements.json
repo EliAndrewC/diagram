@@ -651,5 +651,118 @@
       "cohort": "30 maps, 25 passing before and after, the same FAIL lines",
       "windward_band_emptied": "spec-fidelity's computation (2026-10-08, the test's dimensions as feet, back 24, sun_band on): under SW/SE the moved bed's 50 ft south reach covers about 21% of the windward deep band's area, held empty of trees; under NW none"
     }
+  },
+  "wave61-privy-rolled-place": {
+    "quantity": "wave 61 (2026-10-08): the five hamlets' privies by place in their house's frame (behind = the yard seat; front-west = the stable end; front-east = the front or the sun side; flank), before (55bcf18d6's maps) and after; and the cohort's verdicts at 55bcf18d6 and after",
+    "observed": "2026-10-08",
+    "method": "the five hamlets rerolled with make map, the privies classed from the manifests; make cohort N=24 and N=48 at 55bcf18d6 (a detached worktree) and in the clone; the newly refused seeds probed (the stages run by hand to the refusal, a throwaway test, deleted)",
+    "value": {
+      "privies": {
+        "inashiro": [
+          {
+            "behind": 4,
+            "front-west": 0,
+            "front-east": 8,
+            "flank": 1
+          },
+          {
+            "behind": 4,
+            "front-west": 0,
+            "front-east": 7,
+            "flank": 2
+          }
+        ],
+        "kashikawa": [
+          {
+            "behind": 13,
+            "front-west": 1,
+            "front-east": 3,
+            "flank": 0
+          },
+          {
+            "behind": 10,
+            "front-west": 3,
+            "front-east": 4,
+            "flank": 0
+          }
+        ],
+        "kuwabata": [
+          {
+            "behind": 6,
+            "front-west": 1,
+            "front-east": 5,
+            "flank": 2
+          },
+          {
+            "behind": 5,
+            "front-west": 2,
+            "front-east": 5,
+            "flank": 2
+          }
+        ],
+        "mizuguchi": [
+          {
+            "behind": 7,
+            "front-west": 0,
+            "front-east": 4,
+            "flank": 0
+          },
+          {
+            "behind": 5,
+            "front-west": 2,
+            "front-east": 4,
+            "flank": 0
+          }
+        ],
+        "sawada": [
+          {
+            "behind": 7,
+            "front-west": 2,
+            "front-east": 6,
+            "flank": 2
+          },
+          {
+            "behind": 6,
+            "front-west": 3,
+            "front-east": 6,
+            "flank": 2
+          }
+        ],
+        "totals": [
+          {
+            "behind": 37,
+            "stable_end": 4
+          },
+          {
+            "behind": 30,
+            "stable_end": 10
+          }
+        ]
+      },
+      "cohort_48": {
+        "passing": [
+          48,
+          48
+        ],
+        "of": 54,
+        "refused_before_only": [
+          "Audit-10",
+          "Audit-20"
+        ],
+        "refused_after_only": [
+          "Audit-06",
+          "Audit-09"
+        ],
+        "seeds_24_to_48": "identical"
+      },
+      "tried_and_withdrawn": [
+        "the rolled place's paces ahead of the other places for a SUNNY roll too (the sun-side sector stepped out before the attested places): behind 37 -> 20, but cohort seeds 4 and 23 refused - the sector's paces carried a privy and its heap past the threshing yard onto the household's way out (seed 4: unreached; seed 23: a needle loop round them)",
+        "a non-sunny privy stepped straight out (no slide along its wall first): the same seeds' failure on a front privy"
+      ],
+      "new_refusals_diagnosed": {
+        "Audit-09": "WebRefused: nine access lanes across the web break the lane law - the seating's corridor tree as a whole, no fixture at it; the seating reshuffled (fixture fits move the houses)",
+        "Audit-06": "draws when the stages are run directly; refused in generate's later steps, a byre recorded on a lane at (2868, 1349) - the nearest privy and wood shed 20-50 px off it; the existing byre-on-lane class (Audit-906 at 55bcf18d6)"
+      }
+    }
   }
 }

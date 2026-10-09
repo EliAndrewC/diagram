@@ -861,6 +861,46 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Occasions**: none - no engine behavior changes (claim lines and a docstring).
 - **Verification**: the five hamlets cached or byte-identical; `impl-drift`; `spec-fidelity`.
 
+## Wave 61 (amendment 60, 2026-10-08) - batch 4
+
+- **Scope**: row 564 - a privy off the sunny side (the 27.3% of households, 0047) now keeps its ROLLED place: `rolled_first`
+  offers that place, slid along its wall (`along_its_wall`) and then stepped out, before the other attested places are
+  tried; before, every place was tried at its first spot, and the stable's and the front's first spots fall on the work
+  yard and the beds, so they went to the yard seat behind the house (Sawada 8 of 8 at batch 3's close). A sunny roll is
+  offered as before - the sun-side sector, the attested places, every pace. `privy_places` names the three places once.
+- **Measured** (m:wave61-privy-rolled-place): privies behind the house 37 -> 30 and at the stable end 4 -> 10 over the five
+  hamlets (Sawada behind 7 -> 6, stable end 2 -> 3). The cohort at 48 of 54 before and after (N=48); seeds 10 and 20 draw
+  now, 06 and 09 are refused, 24-48 identical - fixture fits move the houses, and the existing refusal classes land on other
+  seeds; each new one probed: 09 nine access lanes across the web break the lane law (no fixture at it), 06 a byre recorded on
+  a lane after the stages (its nearest privy and wood shed 20-50 px off).
+- **Tried and withdrawn** (recorded in `rolled_first`'s docstring): the sun-side sector stepped out ahead of the attested
+  places (behind 37 -> 20, but cohort seeds 4 and 23 refused - the paces carried a privy and its heap past the threshing yard
+  onto the household's way out), and a rolled place stepped straight out without the slide.
+- **Claims (impl-drift)**: the privy places without the barn (`_seats#privy seats`, `privy_places`) say what the maps draw
+  now - the barn left out while a hamlet draws none - behind the OPEN found row `_seats#privy seats - the barn 0047 names` (E3,
+  wave 52's, re-keyed here: plan review W61-3 found it lost from the ranking - it shared its key with wave 9's closed row, and
+  `merge.py` read the found files by name, so `found-wave9` overrode `found-wave52`, as `found-wave2b`/`3` overrode `13`/`15`'s
+  magistrate's-manor rows; `merge.py` now reads them in the order they were found, `found_order`). 0047's drawing page says
+  the same: "draw no barn yet ... drawing the barn the record names is open work". The slide-then-step order is recorded on the
+  page and cited. FOUND AND FIXED: `FixtureForms`' default privy weights gave 35/30/20/15 to the yard, front, stable and barn
+  where 0047 gives them to the stable, yard, front and barn - ranked row `FixtureForms#privy seat weights` (E1), closed at
+  this wave (the hamlets roll their own from `_PRIVY_SEATS`, which was right: the five maps byte-identical after the fix).
+  Ranked or filed, not fixed here: the yard privy's 9.5 ft (row 832, E3, held); the wood shed seats' 9.5 ft (found row after
+  row 799, E3); the dike-pond sty drawn without the privy over it (`found-wave61`, which REPLACES ranked row `out2`'s by key at
+  E2, keeping its `deviation-tempting` flag - plan review W61-5); 0044's drawing page calling the bath room's counted shares a
+  GUESS (found row, E1).
+- **Record (0047)**: the page edits checked - quote-check (5 notes SUPPORTS), record-format (the generated hamlets defined where
+  they stand), and, on sugiura-1973-fuzoku-8, a fifth translated quotation from p.145 for the block's "three Miyagi hamlets"
+  (quote-check's PARTIAL), its original corrected to the page's words on source-reader's read, a visible duplicate of a
+  Japanese original removed, a gloss of the tables' privy mark "be" added; translation-check FAITHFUL. Three pre-existing
+  record defects noticed, outside this feature's scope, FILED as feature 368 (`specs/368-record-0047-loose-ends/`): the 48 ft
+  paragraph against its table, "earthfloored" against "earth-floored", "Type V1" undefined. The privy's and the manure's
+  modal-depiction run at batch 4's close.
+- **Occasions**: placement-changed, privy on kashikawa (the map where the most moved), at batch 4's close - the privies re-placed
+  by the new order (the plan review's aside).
+- **Verification**: `test_the_privys_rolled_seat_is_stepped_out_before_the_next_seat_is_tried` (red before),
+  `test_the_rolled_place_and_its_paces_come_before_the_other_places`; the cohort pair; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
