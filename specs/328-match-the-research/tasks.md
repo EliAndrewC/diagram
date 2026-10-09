@@ -1757,7 +1757,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 - `structures/fixtures/_helpers.py::kosatsuba_anchor` (`ftpx`), `structures/fixtures/siting.py` (passes it).
 
-- [ ] T145 wave 58's row (FR-003, FR-004)
+- [x] T145 wave 58's row (FR-003, FR-004)
       research: rendering
-- [ ] T146 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      verify: DONE. verified 2026-10-08: plan CLEAR (wave 58); impl-drift 12 in step; claims-owed none
+- [x] T146 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan CLEAR (wave 58); impl-drift 12 in step; claims-owed none
