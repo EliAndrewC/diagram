@@ -371,7 +371,7 @@ def _canal_ft(tier: tuple[float, float], i: int, n: int) -> float:
 
     A FIX THAT FAILED (feature 328 wave 69, 2026-10-09): 0069 narrows a canal by the square-root law, not in equal linear
     steps, and `taper_w(tier[0], tier[1], i / n)` here does exactly that - but the wider mid-run canal moved the field's
-    geometry, and the 48-seed cohort went 48 -> 45 (seeds 04, 12, 40, 902 and 905 newly refused: a farm off its street twice,
+    geometry, and the cohort went 48/54 -> 45/54 (seeds 04, 12, 40, 902 and 905 newly refused: a farm off its street twice,
     a needle loop, a farmstead across the brook, a farm without its channel; 22 and 33 newly passing). Reverted; the row is
     E3 (a change that ripples into placement), its work the layouts that broke (m:wave69-canal-taper-reverted).
 
