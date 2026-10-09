@@ -392,7 +392,8 @@ class GroundCoverMixin:
             scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one to 6,000 sq ft, at least two, none on pasture
             marsh edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass thins into the reeds, brush and pines stop at the marsh
             wood edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no brush or pine in a wood, grass only WOOD_FRINGE_FT under its edge, thinning inward (its inner half at `WOOD_FRINGE_THIN_KEEP`)
-            coppice thinning into a marsh - CONVENTION: the coppice's crowns thin over the marsh's feather (`_sparse`'s soft ramp) rather than stopping at its edge
+            coppice stops at the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: no woody growth inside a marsh but the belt's alder, so no coppice crown is seated in one
+            crowns and pines clear of the crops - UNRESEARCHED: a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
             a scrub pine's reach - UNRESEARCHED: `PINE_SPREAD_BS` (4.6 ft) as the pine's crown radius in the sun test
             edge feather - CONVENTION: the scatter thins over 42 bs at the parcel's edge
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
@@ -549,6 +550,10 @@ class GroundCoverMixin:
                         break
                     cx, cy = random.uniform(x0, x1), random.uniform(y0, y1)
                     if _sparse(cx, cy, 0.6, _r_hi):  # lean = the largest crown radius, so no canopy overhangs a crop
+                        continue
+                    # ...AND NONE IN A MARSH (feature 328 wave 57, impl-drift; 0074: woody growth stops at the marsh's edge, the
+                    # trees standing in one are the belt's alder): the coppice's crowns thinned 46 ft into it over the grass's ramp
+                    if any(si.inside(cx, cy) for si in soft_idx[: len(soft)]):
                         continue
                     r = random.uniform(_r_lo, _r_hi)
                     if self._crown_covers(cx, cy, r, _wd_sun, (), self.CANOPY_PAD):

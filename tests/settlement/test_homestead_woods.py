@@ -270,3 +270,16 @@ def test_no_crown_is_topped_up_over_the_bamboo_patch() -> None:
     xs = [s.M["tree_crowns"][i] for i in range(0, len(s.M["tree_crowns"]), 3)]
     assert len(xs) > 20, "non-vacuity: the east half drawn"
     assert all(x >= 400.0 - 1e-6 for x in xs), min(xs)
+
+
+def test_no_coppice_crown_stands_in_a_marsh() -> None:
+    """0074 (feature 328 wave 57): woody growth stops at the marsh's edge - the coppice's crowns thinned 46 ft into it over the
+    grass's ramp; none is seated inside it now."""
+    from shapely.geometry import Point, Polygon
+
+    s = _hamlet()
+    marsh = [(400.0, 300.0), (500.0, 300.0), (500.0, 500.0), (400.0, 500.0)]
+    s.commons([(300.0, 300.0), (500.0, 300.0), (500.0, 500.0), (300.0, 500.0)], role="woodland", soft=[marsh])
+    crowns = [(s.M["tree_crowns"][i], s.M["tree_crowns"][i + 1]) for i in range(0, len(s.M["tree_crowns"]), 3)]
+    assert len(crowns) > 20, "non-vacuity: the dry half is stocked"
+    assert not any(Polygon(marsh).contains(Point(c)) for c in crowns), "a crown in the marsh"
