@@ -1,38 +1,86 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "c3d8495624c7347b95c9159fe4fefa042d8ecfc80640bb638cd83bec256522ca",
+ "plan_sha256": "ca93c06d4dda8f651688180ef7e025dc9496feaa7fd1196cad6107d0aa384780",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W76-1 lean cap on the settle's turn",
-   "summary": "settle_tract_seams admits a turn only where the tract's resulting heading stays within TRACT_LEAN_RAD of the contour or the fall (way_lean <= TRACT_LEAN_RAD), searching the same shifts and seam floors as before",
+   "id": "W77-scope",
+   "summary": "wave 77 takes the E2 ranked row settle_cells#unlawful scraps left bare, measured first",
    "class": "within",
-   "why": "This is the ranked row 197's fix as worded ('cap each tract's settled turn at TRACT_LEAN_RAD off the contour or the fall'), moving the implementation to 0006's rows along the contour or down to the outfall, leaned a little. Implementation-to-research is the GM's direction; nothing is excepted."
+   "why": "the next ranked row in tier order (FR-003, FR-006); unchanged from round 1"
   },
   {
-   "id": "W76-2 a tract no lawful turn clears joins a neighbor",
-   "summary": "when no capped turn clears the seam, the tract takes the nearest neighbor's number and heading, the existing hemmed-in fallback",
+   "id": "W77-weld (round-1 W77-EXCEPTION and W77-needle answered)",
+   "summary": "opened_union welds a union that is not one polygon or holds a hole under PINHOLE (welded: closed by GRID, pinholes filled) before it is judged; a clean union untouched; both of Sawada's scraps taken in, none left bare",
    "class": "within",
-   "why": "The row's fix names this fallback verbatim; the neighbor it joins was itself settled under the cap, and the unit test asserts every tract of the fixture within the lean."
+   "why": "This is the remedy round 1 named for both blocked items, and the exception is gone rather than re-argued. Confirmed against the diff: Fabric.merge's only union path is opened_union (settle.py:232), so takes() judges the welded union; the 0005 drawing page is byte-identical to HEAD (git diff HEAD -- research/ empty), so the page sentence and its comment are reverted; the first plan's fallback claim is gone. Re-measured independently from the manifests (reviewer, 2026-10-09, plot_rings summed with shapely, HEAD vs working copy): Sawada 1,258 -> 1,261 basins, +344.7 px^2; Kashikawa 761 -> 761, +1.5; Inashiro and Mizuguchi identical - the counts m:wave77-bare-scraps states (Kashikawa's recorded absolute 1,085,783 differs from the manifest's 1,085,553, presumably taken at the settle rather than after the later passes; the delta matches). Tests cover hairline, pinhole, a real hole kept and a real gap kept."
   },
   {
-   "id": "W76-3 the contour passed from _comb_dry_and_beans",
-   "summary": "theta0 = atan2(F.c) + grain_drift, the same expression carve.py::_dry_fields lays its contour from (carve.py:122)",
+   "id": "W77-residual-bare",
+   "summary": "the weld absorbs a scrap only where the union keeps every rule; a scrap with no lawful union at all would still stay bare, needle or not (unlabeled by the plan)",
    "class": "within",
-   "why": "Checked: hem.py:98 passes exactly carve.py:122's expression, so 'the contour' the cap measures from is the one the tracts were laid along. Hem.py's call is the only production caller of settle_tract_seams, so the optional theta0=None (no cap) is reached only by the older unit tests, not by any map - no case is carved out of the fix."
+   "why": "Classified here because the author did not name it. The ranked fix's literal words are 'absorb every still-failing scrap', but the same row's caveat says unconditional absorption recreates the needles and lumps the rules refuse, and 0005's line 28 gives exactly two outcomes - the odd corner into the basin beside it, the needle strip bare - so absorbing into an unlawful union would trade one drift from 0005 for another. Measured on every kept comb-fan hamlet (the GM's amended scope: code executed by scripted hamlets), the conditional path leaves nothing bare, so implementation and research coincide where the scope reaches. Caveat recorded for later rounds: the settle_cells claim's second clause ('every other scrap is taken into a neighbor') states the research rule, which the code meets on the pool by measurement, not by construction; a future roll that leaves a non-needle scrap bare would make that claim DRIFTED, and the right response then is a found row, not a reworded claim. The cohort entry records refusals, not bare scraps."
   },
   {
-   "id": "W76-4 tract_heading as the plots' doubled-angle mean",
-   "summary": "a tract's one heading is its plots' headings averaged as lines (modulo pi), labeled Research: NONE",
+   "id": "W77-close-weld",
+   "summary": "seams/close.py::_weld_within_rules welds the same way (settle.welded), since a pinhole refused a lawful host there too; red-without-it test",
    "class": "within",
-   "why": "A computational means of reading 'the tract's heading' that the row's fix presupposes; it narrows nothing the request or spec asks for and is labeled at its claim line."
+   "why": "the same fault, found by impl-drift, fixed where found (constitution XIV); hold_ring_rules is a kept unit (audit/scope.json); it only lets a lawful host take a scrap it wrongly refused"
   },
   {
-   "id": "W76-5 fork-band disagreement left open",
-   "summary": "impl-drift judged the open row _comb_dry_and_beans#fork band skipped on villages IN-STEP where the ranking had it DRIFTED/MISLABELED; the row stays open for its own wave to settle against 0010",
+   "id": "W77-PINHOLE-GRID",
+   "summary": "PINHOLE = 1.0 px^2 and the GRID close, labeled 'NONE: grid hygiene'",
    "class": "within",
-   "why": "Not a narrowing: the row is neither closed nor dropped nor re-tiered out of scope; it remains a ranked open row of this feature (ranking.md row 198) to be fixed in its own wave, consistent with D1 (only the current wave's rows are boxes) and the GM's 'fix all of it'."
+   "why": "plumbing in the module's own 'settle plumbing - NONE' class, with its why beside it (no cell is near that small); no basin rule moved"
+  },
+  {
+   "id": "W77-SIZE_ONLY-relabel",
+   "summary": "SIZE_ONLY's claim restated: it admits toe discipline and a staircase as well as size, pointer adds 0014",
+   "class": "within",
+   "why": "code unchanged; the claim made honest about what the code does, the feature's established MISLABELED practice"
+  },
+  {
+   "id": "W77-modal-medium",
+   "summary": "choice/plot_size--medium's hamlet basin corrected to 0005's 1,500 sq ft, 48 by 31 ft",
+   "class": "within",
+   "why": "carried over from round 1: a pre-existing error found by the owed modal check, fixed toward the research (XIV, FR-004); still in the diff"
+  },
+  {
+   "id": "W77-modal-small-irregular",
+   "summary": "plot_size--small_irregular's 'no least width' left to its own open row",
+   "class": "within",
+   "why": "carried over: nothing narrowed; it waits for the _TOE_MIN_THICKNESS row, in order"
+  },
+  {
+   "id": "W77-unresearched-relabels",
+   "summary": "MIN_ROW, ROW_CELL_SHARE, _rows_kept labeled UNRESEARCHED",
+   "class": "within",
+   "why": "carried over: 0005 gives no such width or share; the code's statement made honest (partition.py diff confirms)"
+  },
+  {
+   "id": "W77-found-rows-and-claimed",
+   "summary": "verdict#toe discipline pointer adds 0014; hold_ring_rules#judged at the gate's lines and verdict#toe discipline filed as found rows (E2, E1); three UNCLAIMED decisions claimed (water_field's canals, column bund wander, straight row bunds; the gate's lines)",
+   "class": "within",
+   "why": "carried over: re-check findings filed into the ranking rather than closed (FR-001, FR-006); diff confirms the claims in paddy.py, close.py, settle.py"
+  },
+  {
+   "id": "W77-toe-thickness-disagreement",
+   "summary": "_TOE_MIN_THICKNESS left open in the ranking with its own row",
+   "class": "within",
+   "why": "carried over: settled in its own wave"
+  },
+  {
+   "id": "W77-water-field-deferred",
+   "summary": "water_field's two new DRIFTED rows DEFERRED",
+   "class": "within",
+   "why": "carried over: FR-010, water_field is deferred in audit/scope.json and dev/claims-deferred.json"
+  },
+  {
+   "id": "W77-page-size",
+   "summary": "round 1's 0005 page-size item",
+   "class": "within",
+   "why": "moot: the 0005 page is byte-identical to HEAD. Note for the author: the Wave 77 passage's '57 claims', '42 claims' and 'ten modal-depiction units' carry no m: key or one-shot label; label them (bookkeeping counts, not reviewed as figures here)"
   }
  ],
  "verdict": "CLEAR"

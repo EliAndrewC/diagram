@@ -1247,6 +1247,40 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   stays open for its own wave to settle against 0010.
 - **Verification**: the waterfields suite; `impl-drift`; `spec-fidelity`.
 
+## Wave 77 (amendment 76, 2026-10-09) - batch 8
+
+- **Scope**: the E2 row `settle.py::settle_cells#unlawful scraps left bare` (ranking fix: "after the rounds, absorb every
+  still-failing scrap into the basin it shares the most bund with; leave bare only the needle strip 0005 names"). Measured
+  first (m:wave77-bare-scraps): of the four pool hamlets with a comb fan only Sawada left scraps - two, 340 sq ft. The merge
+  refused both, and running it to convergence (100 passes against `ROUNDS` 6) left the same two.
+- **The fix** (after spec-fidelity round 1 BLOCKED the first plan, which recorded the second scrap as an unplaceable
+  fallback): the reviewer's probe found each scrap had a neighbor whose union keeps every rule, refused only by the merge's
+  plumbing - the union came out two polygons across a hairline bund the snapping left unfused, or held a 0.5 px² hole no
+  cell fills. `opened_union` now WELDS such a union first (`welded`: closed by `GRID`, holes under `PINHOLE` filled); a union
+  already one clean polygon is untouched. Measured after: no scrap left bare on any of the four (Sawada +345 sq ft planted,
+  Kashikawa +1 where a pinhole filled; Inashiro and Mizuguchi byte-identical). The first plan's page sentence and narrowed
+  claim are reverted; the claim keeps 0005's needle strip as the one bare ground.
+- **The same fault in the grave-cut re-hold**: impl-drift round 5 asked whether `seams/close.py::_weld_within_rules` (the weld
+  `hold_ring_rules` uses after a later cut) shared it. It did - a union holding any hole, a pinhole too, refused its host - so
+  it welds the same way (`settle.welded`, now imported there); a test of a host whose union holds a 0.5 px² hole is red
+  without it. `SIZE_ONLY`'s claim relabeled (MISLABELED: it admits the toe discipline and a staircase as well as size, a union
+  still growing). The two `hold_ring_rules` CANNOT-TELLs that asked the question carry HEAD's records again (their unit's code
+  and page unchanged).
+- **impl-drift**: the first plan's page edit sent 0005's 57 claims through four rounds (counts as the impl-drift replies gave them, 2026-10-09). Fixed where found and kept:
+  `MIN_ROW`, `ROW_CELL_SHARE` and `_rows_kept` labeled UNRESEARCHED (NEEDS-RESEARCH: 0005 gives no such width or share);
+  `verdict#toe discipline`'s pointer adds 0014 (MISLABELED); three decisions found UNCLAIMED now claimed (`water_field`'s
+  canals set in from the edges and its column bund's wander and straight row bunds; `hold_ring_rules` judging welds at the
+  gate's lines). New DRIFTED verdicts became found rows (audit/found-wave77.jsonl): `hold_ring_rules#judged at the gate's
+  lines` (E2, kept), `verdict#toe discipline` (E1, kept, with `_TOE_MIN_THICKNESS`), and `water_field`'s wander and straight
+  rows (DEFERRED: no kept map executes `water_field`). With the page reverted, the 42 claims whose code did not change (the restore's count, 2026-10-09) carry
+  HEAD's records again (judged on the page as it now stands); the rest are judged on the fix in round 5.
+- **Record checks**: the first plan's page edit was checked (quote-check, record-format, and the ten modal-depiction units `make record-owed` named, 2026-10-09) and is
+  now reverted; one pre-existing error those checks found stays fixed (`choice/plot_size--medium`: the hamlet basin "about 39
+  ft square" against 0005's 48 by 31 ft, 1,500 sq ft), and one pre-existing conflict is left to its open row
+  (`choice/plot_size--small_irregular`'s "no least width" against `_TOE_MIN_THICKNESS`).
+- **Verification**: the waterfields suite (`welded` tested on a hairline, a pinhole, a real hole and a real gap); the cohort;
+  `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

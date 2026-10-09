@@ -182,3 +182,24 @@ def test_a_hop_whose_continuations_both_leave_the_basin_is_not_cut() -> None:
     square = _poly(_rect(0.0, 0.0, 40.0, 40.0))
     assert _cut_on_hop(square, (0.0, 0.0), (10.0, 0.0)) == []
     assert _split_steps(square, RingContext(g=G)) == [square]
+
+
+def test_a_scrap_is_welded_into_a_host_whose_union_holds_only_a_pinhole() -> None:
+    """Feature 328 wave 77: `_weld_within_rules` took a host only where the union had no hole at all, so a sub-pixel hole the
+    grid left (no cell fills it) refused a lawful host and the scrap stayed bare. The union is now welded first: a pinhole is
+    filled and the scrap taken in; a hole a cell could fill still refuses the host."""
+    from shapely.geometry import Polygon, box
+
+    from l7r.diagram.waterfields.seams.close import _load_shapely, _weld_within_rules
+    from l7r.diagram.waterfields.seams.geoms import GeomTree
+
+    _load_shapely()  # the pass binds shapely's names on first use; this test calls the weld directly
+    ctx = RingContext(cell=1500.0, g=G)
+    for hole, taken in (((20.0, 10.0, 20.5, 10.5), True), ((15.0, 10.0, 25.0, 20.0), False)):
+        host = box(0, 0, 48, 31).difference(box(*hole))
+        plots = [{"poly": [(0.0, 0.0), (48.0, 0.0), (48.0, 31.0), (0.0, 31.0)], "fill": "#A6C398"}]
+        geoms: list[Any] = [host]
+        scrap = Polygon([(48.0, 0.0), (56.0, 0.0), (56.0, 31.0), (48.0, 31.0)])
+        assert _weld_within_rules(scrap, plots, geoms, GeomTree(geoms), ctx) is taken
+        if taken:
+            assert abs(_poly(plots[0]["poly"]).area - 56.0 * 31.0) < 1.0, "the host now holds the scrap, its pinhole filled"

@@ -164,3 +164,22 @@ def test_a_needle_whose_every_merge_would_stay_a_needle_is_left_bare() -> None:
     assert len(kept) == 1 and round(kept[0].area) == 48 * 31, "the basin is kept as it was"
     assert len(scraps) == 1
     _lawful(kept, ctx)
+
+
+def test_a_union_split_by_a_hairline_or_holding_a_pinhole_is_welded_before_it_is_judged() -> None:
+    """Feature 328 wave 77 (spec-fidelity's probe on Sawada): two cells touching along a hairline the grid left unfused, or
+    a union holding a sub-pixel hole no cell fills, come out ONE clean polygon; a union already clean is untouched, and a
+    real gap stays a gap."""
+    a = _box(0, 0, 40, 30)
+    b = _poly([(40.0, 0.0), (80.0, 0.0), (80.0, 30.0), (40.00004, 30.0), (40.00004, 0.00001)])  # a hairline off a's edge
+    u = st.opened_union(a, b)
+    assert u is not None and u.geom_type == "Polygon" and abs(u.area - 2400) < 1.0, "the hairline fused"
+    holed = _poly([(0.0, 0.0), (80.0, 0.0), (80.0, 30.0), (0.0, 30.0)]).difference(_box(20, 10, 20.5, 10.5))
+    w = st.welded(holed)
+    assert w.geom_type == "Polygon" and not len(w.interiors), "a pinhole under PINHOLE px² filled"
+    keep = _poly([(0.0, 0.0), (80.0, 0.0), (80.0, 30.0), (0.0, 30.0)]).difference(_box(20, 10, 30, 20))
+    assert len(st.welded(keep).interiors) == 1, "a hole a cell could fill is kept"
+    apart = st.welded(_box(0, 0, 10, 10).union(_box(20, 0, 30, 10)))
+    assert apart.geom_type == "MultiPolygon", "two cells a real gap apart stay two"
+    clean = st.opened_union(_box(0, 0, 40, 30), _box(40, 0, 80, 30))
+    assert clean is not None and clean.geom_type == "Polygon" and abs(clean.area - 2400) < 1e-6, "a clean union as before"

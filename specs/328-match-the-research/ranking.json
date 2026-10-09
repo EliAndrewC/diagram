@@ -5760,6 +5760,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#column bund wanders",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "cut a column bund's wander (5 px + 3 px sines, up to 8 px against 31-46 px column spacing) to about a tenth of its column's width, 0014's one figure for how far a bund bows, or record this field's larger wander on 0014's drawing page",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 77 re-check, round 3 (tier provisional, by verdict)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "deferred"
+ },
+ {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#ripe share",
   "tier": "E1",
   "fix": "ripe threshold from ro > 0.975 to ro > 0.95 (one in twenty)",
@@ -5770,6 +5785,21 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds run straight",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the bunds across the fall run straight while 0014 has every row and column line bow and a fan's rows drift: wander them as the columns do, or record the straight rows on 0014's drawing page",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 77 re-check, round 3 (UNCLAIMED; claimed the same wave; tier provisional)",
+  "tier_as_ranked": "E1",
   "wave": "",
   "scope": "deferred"
  },
@@ -6703,6 +6733,22 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "10",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/waterfields/settle.py::verdict#toe discipline",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "label the 'too thin' clause (2A/P under _TOE_MIN_THICKNESS = 0.16 plot widths) a GUESS and record the toe's least width on 0014's drawing page, where the thin strip 'takes the same least width as the narrow toe' gives no figure; 0005 itself sets no least width. Settle with the ranked _TOE_MIN_THICKNESS row",
+  "files": [
+   "l7r/diagram/waterfields/settle.py",
+   "l7r/diagram/waterfields/banks.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 77 re-check (MISLABELED in round 1, its pointer given 0014, DRIFTED in round 2; tier provisional, by verdict)",
+  "tier_as_ranked": "E1",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -9035,7 +9081,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "75",
   "scope": "kept"
  },
  {
@@ -9691,7 +9737,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "76",
   "scope": "kept"
  },
  {
@@ -9811,7 +9857,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "73",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/waterfields/polder.py::_plots_clear_of_channels#parcel stops at its ditch's bank",
@@ -9830,6 +9876,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the gate's lines",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "hold the split pieces and welds hold_ring_rules keeps to the placer's lines (no point under 25 deg, no basin under a quarter of the design cell, 0005) rather than ring_violations' gate lines (15 deg, 0.20), or record the looser line on 0005's drawing page as a DEVIATION and relabel the claim",
+  "files": [
+   "l7r/diagram/waterfields/seams/close.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 77 re-check (UNCLAIMED in round 1, claimed and judged DRIFTED in round 2; tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/waterfields/settle.py::settle_cells#unlawful scraps left bare",
   "tier": "E2",
   "fix": "after the rounds, absorb every still-failing scrap into the basin it shares the most bund with; leave bare only the needle strip 0005 names",
@@ -9840,7 +9901,7 @@
   "flag": "absorbing every failing cell can recreate the lumps and needles the rules refuse",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "77",
   "scope": "kept"
  },
  {
@@ -14483,22 +14544,6 @@
   "fix": "as HUG_COL: the record gives no least strip depth and its two pages disagree; neither gives 0.5 row steps",
   "files": [
    "l7r/diagram/waterfields/partition.py"
-  ],
-  "after": [
-   "l7r/diagram/waterfields/banks.py::_TOE_MIN_THICKNESS#least thickness"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E4",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/waterfields/settle.py::verdict#toe discipline",
-  "tier": "E4",
-  "fix": "0005 sets no least width, 0014 says a thin strip takes the toe's least width (no figure); the thickness clause waits on that record",
-  "files": [
-   "l7r/diagram/waterfields/settle.py"
   ],
   "after": [
    "l7r/diagram/waterfields/banks.py::_TOE_MIN_THICKNESS#least thickness"

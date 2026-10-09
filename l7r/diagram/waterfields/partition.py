@@ -51,7 +51,7 @@ MIN_ROW = 0.45
 own median width): past that the tip is one basin, not a stack of slivers cut and then merged (specs/302 research R2, a map
 drawing convention).
 
-Research: narrow tip left one basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: no row cut where the sector is under 0.45 plot widths
+Research: narrow tip left one basin - UNRESEARCHED: no row cut where the sector is under 0.45 plot widths (0005 gives no such width)
 """
 
 HUG_ROW = 0.5
@@ -72,7 +72,7 @@ ROW_CELL_SHARE = 0.6
 """A row is cut where the cell it closes reaches this share of a design cell at the sector's local width (`_rows_kept`): every row
 on ground a plot wide or wider, fewer where it narrows - a map drawing convention, so a strip's cells are basins, not slivers.
 
-Research: basin size where the sector narrows - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a row cut once its cell reaches 0.6 of the design cell
+Research: basin size where the sector narrows - UNRESEARCHED: a row cut once its cell reaches 0.6 of the design cell (0005 gives no such share)
 """
 
 CROSS = 0.5
@@ -285,7 +285,7 @@ def _rows_kept(rows: list[float], widths: list[float], nsub: int, across: float,
     still wider than `tip`. Wide ground keeps every row; a strip half a plot wide keeps every other one. (A spacing set once per
     sector, from its median width, spaced the rows three steps apart down a sector that was narrow for only half its span.)
 
-    Research: rows where the sector narrows - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a row kept once its cell reaches ROW_CELL_SHARE of a design cell
+    Research: rows where the sector narrows - UNRESEARCHED: a row kept once its cell reaches ROW_CELL_SHARE of a design cell
     """
     design = across * sum(row_step) / 2
     kept = {0}

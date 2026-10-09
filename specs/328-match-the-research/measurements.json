@@ -1567,5 +1567,32 @@
       "reading": "the cap bounds what the settle may do; on the shipped maps it had not yet done it",
       "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 75"
     }
+  },
+  "wave77-bare-scraps": {
+    "quantity": "wave 77 (2026-10-09): the scraps settle_cells leaves bare on the pool's comb fans, and whether any could be taken in",
+    "observed": "2026-10-09",
+    "source": "scratch probes under make test-file (deleted after the run): settle_cells wrapped while generate() rolled the four comb-fan pool specs into a temp directory; for each bare scrap, its verdict and the verdict of its union with each neighbor; again with ROUNDS patched from 6 to 100",
+    "command": "make test-file FILE=tests/test_zz_scrap_probe.py (three probes); again after the weld (the same probe)",
+    "method": "the settle's own Fabric, merges and verdict, read after the rounds",
+    "value": {
+      "inashiro": "0 scraps",
+      "kashikawa": "0 scraps",
+      "mizuguchi": "0 scraps",
+      "sawada": "2 scraps, 340.4 sq ft, 0.033% of its paddy",
+      "sawada scrap 1": "0.23 design cell, breaks needle and toe: the strip 0005 leaves bare; its one neighbor union that breaks no ring rule is refused by takes (not a simple polygon: it holds a hole), the other is an arrowhead",
+      "sawada scrap 2": "0.104 design cell, breaks area and toe; its unions break toe, or are not one polygon (two neighbors)",
+      "rounds 100": "the same two scraps: the merge had converged; the round cap is not why they stay",
+      "reading": "spec-fidelity's probe (round 1) showed both of Sawada's scraps had a lawful neighbor, refused only because the union came out two polygons across a hairline bund or held a 0.5 px² hole; with opened_union welding such a union (closed by GRID, holes under PINHOLE filled) every scrap is taken in and none is left bare",
+      "sawada scrap 2 area": "about 106 sq ft: the two scraps' 340.4 sq ft over their 0.334 cell (0.23 + 0.104) makes Sawada's design cell 1,019 sq ft at 1 ft/px, and 0.104 of it is 106",
+      "after the weld": {
+        "inashiro": "0 scraps, 622 basins, 848,911 px²",
+        "kashikawa": "0 scraps, 761 basins, 1,085,783 px² (+1: a pinhole filled)",
+        "mizuguchi": "0 scraps, 519 basins, 703,745 px²",
+        "sawada": "0 scraps, 1,261 basins, 1,038,757 px² (+345: both scraps taken in)"
+      },
+      "cohort_48 after the weld": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 76",
+      "cohort_48 after the close.py weld": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 76; the pool as after settle's weld (Kashikawa and Sawada moved, the other three byte-identical to HEAD)",
+      "after the weld note": "the planted figures are the settle's kept cells (the sum of settle_cells' lawful polygons, read in the probe before the finish rounds them into plot_rings), not the manifest's rings: Kashikawa's 1,085,783 px² is that sum, its manifest rings 1,085,553; the deltas (+345 Sawada, +1 Kashikawa) agree on both surfaces. The claim's 'every other scrap is taken into a neighbor' holds on the pool by this measurement, not by construction: a scrap with no lawful union would still stay bare, and is a found row if a roll ever leaves one"
+    }
   }
 }

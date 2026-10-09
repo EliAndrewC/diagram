@@ -44424,6 +44424,37 @@
   "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#canals set in from the edges": {
+  "code": "38135357310fe49e",
+  "core": "aedd6f67c66f07aa",
+  "date": "2026-10-09",
+  "note": "0053 puts the supply along the high margin and the last ditch on its plot's edge but gives no set-in distance; the 1.4-plot line (line 61) and the 0.7-plot lateral set-in (line 148) are unanswered, so UNRESEARCHED is right",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:b2e18eb0b3415e20",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#column bund wanders": {
+  "code": "10b423157e6fff38",
+  "core": "aedd6f67c66f07aa",
+  "date": "2026-10-09",
+  "note": "the wander's form matches the page: each column bund has its own phase, bends without stepping sideways, the two edge columns stay straight, and the laterals follow uline. The amount does not: uline's 5.0*sin + 3.0*sin peaks at 8 px, while plot*uniform(0.9,1.35) spaces the columns 31-46 px apart. That is about 1/6 to 1/4 of the spacing, against the page's only figure for how far a bund bows, \"up to about a tenth of the grid's spacing\" (§37 speaks of polders, and the page gives no other figure). Either cut the wander to about a tenth of a column's width, or add a block to 0014's drawing page recording this field's larger wander as the project's own setting",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+  },
+  "research": "9c5292e27312fca8",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
+   "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922",
+   "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8",
+   "0014-bunds-between-the-paddies-aze.drawing.html:d7ca85f575a7671c"
+  ],
+  "verdict": "DRIFTED"
+ },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#dry where water fails": {
   "code": "098f4d11a8dd86ee",
   "core": "aedd6f67c66f07aa",
@@ -44479,6 +44510,24 @@
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
   "research": "7b19741c5250f0fe",
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds run straight": {
+  "code": "54224a2da9a71374",
+  "core": "aedd6f67c66f07aa",
+  "date": "2026-10-09",
+  "note": "code draws each row bund as a straight segment at a fixed f (quad edges `_uf_xy(uline(k, fa), fa)`→`_uf_xy(uline(k+1, fa), fa)`; only `uline` wobbles the column lines), but the cited drawing page does not record straight row bunds anywhere: it says \"No bund on our maps is ruled straight\", the walls \"bend and wander as a hand-piled bund does\", and \"each row and column line ... takes its own gentle bow\". So either the row bunds should wander too, or the claim should be a DEVIATION that this page records (it records none today)",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+  },
+  "research": "9c5292e27312fca8",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
+   "0014-bunds-between-the-paddies-aze.drawing.html:59cd42eeeea80de5",
+   "0014-bunds-between-the-paddies-aze.drawing.html:74104d02e5bfdbab",
+   "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922",
+   "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#water-first network": {
@@ -63687,13 +63736,18 @@
  "l7r/diagram/waterfields/banks.py::_TOE_MIN_AREA#a quarter of the design cell": {
   "code": "cac04611da4a1e4a",
   "core": "4334a4dcc62d7738",
-  "date": "2026-10-03",
-  "note": "0005: \"No basin is smaller than a quarter of the design cell\"",
+  "date": "2026-10-09",
+  "note": "0.25 of the cell, applied only on the valley-floor fan, is the page's quarter-cell floor and its reasoning",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
   },
   "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a6d71d623dedcce0"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_TOE_MIN_THICKNESS#least thickness": {
@@ -63716,13 +63770,17 @@
  "l7r/diagram/waterfields/banks.py::_WELD_MIN_APEX#weld apex": {
   "code": "41a49a4bdebb2035",
   "core": "14aaee2fbe7c7694",
-  "date": "2026-10-03",
-  "note": "0005: \"No basin tapers to a point sharper than 25 degrees\", but the weld keeps 18-25 deg points; the drawing page records no exception, so the claim should be a DEVIATION recorded on 0005",
+  "date": "2026-10-09",
+  "note": "`_WELD_MIN_APEX = 18.0` lets a welded basin keep an 18-25 deg point, but the page says \"The maps refuse a point sharper than 25 degrees\", and §18 gives a refused point three fates (cut off, taken into the basin beside it, left bare), none of them keeping it; either a 0005 block records the band (then relabel DEVIATION) or the weld is held at 25 deg",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
   },
   "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump": {
@@ -66248,15 +66306,17 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/partition.py::MIN_ROW#narrow tip left one basin": {
-  "code": "aff40a4aa3d17f30",
+  "code": "8da258000c2154b1",
   "core": "85c28034fb2fbc33",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
-  },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "date": "2026-10-09",
+  "note": "0005 gives no row-cut width; §69's \"no least width\" is about refusing basins, not about where rows are cut, so it does not answer this",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::OUTER_REACH#partition plumbing": {
@@ -66280,15 +66340,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::ROW_CELL_SHARE#basin size where the sector narrows": {
-  "code": "e7c183ed925961e9",
+  "code": "5c6d78e210a48757",
   "core": "1d6b70823f288449",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
-  },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "date": "2026-10-09",
+  "note": "0005 gives basin sizes and a quarter-cell floor but no 0.6 share at which a row is cut",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::Sectors#sectors between the ditch threads": {
@@ -66473,15 +66535,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::_rows_kept#rows where the sector narrows": {
-  "code": "f0bca9c43d29bc5b",
+  "code": "b1d5a4a49bd5cb1b",
   "core": "a1fd17d9ddf87fa0",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
-  },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "date": "2026-10-09",
+  "note": "the cell-share row-keeping rule is unanswered by 0005",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/partition.py::cut#one shared bund": {
@@ -67270,13 +67334,17 @@
  "l7r/diagram/waterfields/polder.py::unpoint_parcels#pointed parcel left as bank": {
   "code": "0e2fbe75684d86c6",
   "core": "69300ec9b866f374",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "date": "2026-10-09",
+  "note": "polder parcels share no bund, so after the apex cut, dropping to bank is §18's bare fate",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
   },
   "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/ring_rules.py::AREA_FLOOR#smallest basin": {
@@ -67775,16 +67843,38 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/seams/close.py::_weld_within_rules#weld host": {
-  "code": "da8ab9637d926c45",
-  "core": "aaad49cdd942eda0",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "ef72a11d77906f20",
+  "core": "440c93139a2b5691",
+  "date": "2026-10-09",
+  "note": "the code ranks hosts by how much bund they share with the scrap, takes the first whose union keeps every ring rule, and leaves the scrap bare when no host does. That matches \"goes to the paddy it shares the most bund with\" and a strip that \"stays bare\". Filling a pinhole under PINHOLE before the hole test is plumbing that keeps a lawful host, in line with \"no bare strip is left between two paddies\".",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
+   "0014-bunds-between-the-paddies-aze.drawing.html:2a1d49cf625d6922",
+   "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
+  ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the gate's lines": {
+  "code": "e225ad458cae8651",
+  "core": "81b849d7ddf804a8",
+  "date": "2026-10-09",
+  "note": "the claim itself says a kept basin may carry a 15-25 deg point or 0.20-0.25 of a cell, against \"No basin tapers to a point sharper than 25 degrees\" and \"No basin is smaller than a quarter of the design cell\"; no block records that band, so a page block must record it as a DEVIATION or the split pieces and welds must be held to 25 deg and a quarter cell",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+  },
+  "research": "d717a3e31d236e53",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#scrap left bare": {
   "code": "ce9d5f2d1a4dee9e",
@@ -68062,6 +68152,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/settle.py::PINHOLE#pinhole": {
+  "code": "39a9fc41e8d5540a",
+  "core": "7276802b5dc226e3",
+  "date": "2026-10-09",
+  "note": "a sub-pixel hole threshold, grid hygiene",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/settle.py::ROUNDS#settle plumbing": {
   "code": "733de3b4912e3fc1",
   "core": "3e65c247a0c8f861",
@@ -68079,23 +68179,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::SIZE_ONLY#scraps grow into a basin": {
-  "code": "a2b581b826ccac28",
+  "code": "6b223c14fa1571c6",
   "core": "0e9312b188559409",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or label",
+  "date": "2026-10-09",
+  "note": "the set {area, toe, steps} is exactly what the new label names. Size is the quarter-cell floor, toe is the 25-degree point and the arrowhead, and steps is the sideways hop. A union is only kept growing while it carries these faults, which matches scraps and odd corners being \"taken into the basin beside it\".",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
+  "research": "1389cdb18c5e644c",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221",
+   "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
+   "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::opened_union#settle plumbing": {
-  "code": "74bbac96cf1d4deb",
-  "core": "6552abde1f6603f0",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "770ae07f867bef0e",
+  "core": "84676a997cfe13ee",
+  "date": "2026-10-09",
+  "note": "sub-pixel opening, simplify and weld; a union already one clean polygon is untouched",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::polygons#settle plumbing": {
@@ -68115,16 +68227,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::settle_cells#unlawful scraps left bare": {
-  "code": "c409c7a5da7acaab",
+  "code": "83c3749fe360db71",
   "core": "cebb15c85eb2df67",
-  "date": "2026-10-03",
-  "note": "code leaves bare every cell still failing ANY rule after ROUNDS passes; 0005 attests bare ground only for \"a strip that would draw every basin it touches out to a needle point\", says size scraps are all absorbed (\"planted acreage ... unchanged\"), and 0014 says \"no bare strip is left between two paddies\"; narrow the claim or record the broader fallback",
+  "date": "2026-10-09",
+  "note": "with lawful unions no longer refused for plumbing reasons, a scrap stays bare only when every union breaks a ring rule, which is §18's strip generalized to the shapes the page refuses",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
   },
   "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a6d71d623dedcce0",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::shared_length#settle plumbing": {
   "code": "b4cdd9bbb1d33f29",
@@ -68180,16 +68298,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/settle.py::verdict#toe discipline": {
-  "code": "b80ac3416edd470c",
+  "code": "3217303e04a10882",
   "core": "0a524a615ad01ce2",
-  "date": "2026-10-03",
-  "note": "the thickness clause `2 * area / per < _TOE_MIN_THICKNESS * plot_across` is a least width, which 0005 says the maps do not set (\"the maps set no least width for a basin\"); 0014 says the opposite (\"takes the same least width as the narrow toe\"), so cite 0014 for it and reconcile the two pages (apex 25 deg and quarter-cell area are in step)",
+  "date": "2026-10-09",
+  "note": "thin strip at the toe's least width (0014 §38), quarter-cell floor, 25 deg point, arrowhead, all attested; that 0005 §16 sets no least width while 0014 §38 gives the toe one is a disagreement between the two pages, not drift in this code",
   "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8",
+   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
-  "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "research": "1389cdb18c5e644c",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a6d71d623dedcce0",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2",
+   "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/settle.py::welded#welded union": {
+  "code": "925ec4427f5e8fdf",
+  "core": "56828bdd266021bd",
+  "date": "2026-10-09",
+  "note": "a 0.1 px closing and filling holes under 1 px², plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::FLOOD_SAMPLE#wet-paddy sample": {
   "code": "9f0389206127d9e0",

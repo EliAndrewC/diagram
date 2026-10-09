@@ -1974,3 +1974,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T181 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 76); a settled tract's turn kept within TRACT_LEAN_RAD of the contour or the fall (0006), else it joins a neighbor; pool byte-identical, cohort unchanged; impl-drift 13 IN-STEP
+
+## Phase 78 - wave 77 (amendment 76): every scrap taken in, the merge welding the grid's hairlines
+
+- `waterfields/settle.py` (`opened_union` welds a hairline or pinhole union, `welded`, `PINHOLE`); `waterfields/seams/close.py` (`_weld_within_rules` welds the same way);
+  `interactive/assets/modals/choice/plot_size--medium.md` (the hamlet basin's size corrected).
+
+- [x] T182 wave 77's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 77, round 2); merges weld a hairline or pinhole union (settle and the grave-cut re-hold), so no scrap is left bare on the four comb-fan hamlets; Sawada and Kashikawa moved, cohort unchanged; claims in step, no record check owed
+- [x] T183 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 77, round 2); merges weld a hairline or pinhole union (settle and the grave-cut re-hold), so no scrap is left bare on the four comb-fan hamlets; Sawada and Kashikawa moved, cohort unchanged; claims in step, no record check owed

@@ -455,6 +455,9 @@ class PaddyMixin:
         Research:
             water-first network - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: a main along the high edge, laterals down the fall, a drain at the low edge
             lateral spacing - UNRESEARCHED: a lateral every 4-6 columns
+            column bund wanders - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each column's bund wanders off its line by two sines (5 px over a 66 px period, 3 px over 29) as it runs down the fall
+            row bunds run straight - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the bunds across the fall drawn straight, only the column bunds wandering
+            canals set in from the edges - UNRESEARCHED: the main and the drain 1.4 plots inside the field's high and low edges, a lateral's ends 0.7 plot in
             dry where water fails - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: above the main, below the drain and at the margins, 62% dry grain and the rest soy
             flooded near the ditches - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 30% of plots near the main or drain painted flooded
             plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns 0.9-1.35 and rows 0.85-1.5 of the grain, 34 px by default

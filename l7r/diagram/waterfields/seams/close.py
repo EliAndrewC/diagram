@@ -17,6 +17,7 @@ from ..banks import (
 )
 from ..frame import Pt
 from ..ring_rules import MAX_STEPS, RingContext, as_recorded, ring_violations
+from ..settle import PINHOLE, welded
 from .geoms import GeomTree, ring_polygons
 from .pockets import _parts, _ring
 
@@ -79,6 +80,7 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
         staircase split on its hop - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a bund never steps sideways and carries on, so the step is carried straight across
         scrap welded to its neighbor - research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: into the basin it shares the most bund with
         scrap left bare - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: what no weld makes lawful stays bare, the fan floor drawn under it
+        judged at the gate's lines - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: split pieces and welds held to `ring_violations`' lines (a point under 15 deg, under 0.20 of a cell), not the placer's 25 deg and quarter cell, so a kept basin may carry a 15-25 deg point or 0.20-0.25 of a cell
     """
     _load_shapely()
     bad = [k for k in (range(len(plots)) if only is None else sorted(only)) if ring_violations(as_recorded(plots[k]["poly"]), ctx)]
@@ -108,7 +110,8 @@ def hold_ring_rules(plots: list[dict[str, Any]], ctx: RingContext, only: Collect
 def _weld_within_rules(scrap: Polygon, plots: list[dict[str, Any]], geoms: list[Any], tree: GeomTree, ctx: RingContext) -> bool:
     """Weld `scrap` into the plot it shares the most bund with, among those whose union keeps every ring rule; False,
     and the scrap left bare, when none does. The union is taken as `_absorb` takes it - the scrap grown by 0.02 px so
-    two polygons that only touch merge, and simplified at 0.05 px only when that stays a simple polygon.
+    two polygons that only touch merge, welded where a hairline or a pinhole remains (`settle.welded`), and simplified at 0.05
+    px only when that stays a simple polygon.
 
     Research: weld host - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the lawful neighbor sharing the most bund, else bare
     """
@@ -119,6 +122,8 @@ def _weld_within_rules(scrap: Polygon, plots: list[dict[str, Any]], geoms: list[
         if neg >= 0.0:
             break  # sorted: every host after this one shares no bund with the scrap either
         merged = geoms[j].union(grown).buffer(0)
+        if not isinstance(merged, Polygon) or any(Polygon(r).area < PINHOLE for r in merged.interiors):
+            merged = welded(merged)  # a hairline or a pinhole the grid left is not a gap between basins (feature 328 wave 77)
         if not isinstance(merged, Polygon) or merged.interiors:
             continue
         simplified = merged.simplify(0.05)

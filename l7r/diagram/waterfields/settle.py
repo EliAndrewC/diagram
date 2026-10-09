@@ -39,13 +39,20 @@ OPEN = 0.3
 SIMPLIFY = 0.25
 """The merged outline simplified by this many px: the opening's own collinear vertices, not a bund's course."""
 
+PINHOLE = 1.0
+"""A hole under this many px² in a merged union is the snapped grid's leftover, filled before the union is judged: no cell is
+that small (the area floor is a fifth of a design cell, hundreds of px²).
+
+Research: pinhole - NONE: grid hygiene
+"""
+
 ROUNDS = 6
 """The merge repeats until nothing merges, at most this many passes (a cluster of scraps grows one neighbor a pass)."""
 
 SIZE_ONLY = frozenset({"area", "toe", "steps"})
-"""The faults a union of two failing cells may still carry and be kept: it is growing, and only its size is short.
+"""The faults a union of two failing cells may still carry and be kept growing: its size, the toe discipline, a staircase.
 
-Research: scraps grow into a basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: two failing cells may merge while only size is short
+Research: scraps grow into a basin - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: two failing cells may merge while the union's faults are only its size, the toe discipline (thin, pointed, an arrowhead) or a staircase - a union still growing, never kept on the map until it keeps every rule
 """
 
 
@@ -61,7 +68,7 @@ def verdict(poly: Any, ctx: RingContext, plot_across: float, cell: float) -> set
 
     Research:
         ring rules - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: every `ring_violations` rule
-        toe discipline - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: too thin, under the area floor, pointed under 25 deg, or an arrowhead
+        toe discipline - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: too thin (0014: the thin strip takes the fan toe's least width), under the area floor, pointed under 25 deg, or an arrowhead
     """
     ring = ring_of(poly)
     found = set(ring_violations(ring, ctx))
@@ -93,13 +100,35 @@ def valid(poly: Any) -> Any:
 
 
 def opened_union(a: Any, b: Any) -> Any | None:
-    """`a` and `b` merged, opened by `OPEN` and simplified by `SIMPLIFY` - or None where shapely refuses the geometry."""
+    """`a` and `b` merged, opened by `OPEN` and simplified by `SIMPLIFY` - or None where shapely refuses the geometry.
+
+    A union that does not come out one polygon, or carries a hole under `PINHOLE`, is WELDED first (`welded`): two cells
+    that touch along a hairline bund the snapping left unfused, or a sub-pixel hole no cell fills, are the grid's artifacts,
+    not a gap between basins (feature 328 wave 77, spec-fidelity: Sawada's two bare scraps each had a lawful neighbor so
+    refused). A union already one clean polygon is not touched, so every merge that held before holds the same.
+    """
     import shapely
 
     try:
-        return shapely.simplify(shapely.union(a, b).buffer(-OPEN, join_style="mitre").buffer(OPEN, join_style="mitre"), SIMPLIFY)
+        u = shapely.union(a, b)
+        if u.geom_type != "Polygon" or any(shapely.Polygon(r).area < PINHOLE for r in u.interiors):
+            u = welded(u)
+        return shapely.simplify(u.buffer(-OPEN, join_style="mitre").buffer(OPEN, join_style="mitre"), SIMPLIFY)
     except shapely.errors.GEOSException:
         return None
+
+
+def welded(u: Any) -> Any:
+    """`u` closed by `GRID` (a hairline between two touching cells fused) and rid of every hole under `PINHOLE` px².
+
+    Research: welded union - NONE: the snapped grid's hairlines and pinholes closed before a merge is judged
+    """
+    import shapely
+
+    c = u.buffer(GRID, join_style="mitre").buffer(-GRID, join_style="mitre")
+    parts = [p for p in getattr(c, "geoms", [c]) if p.geom_type == "Polygon" and not p.is_empty]
+    out = [shapely.Polygon(p.exterior, [r for r in p.interiors if shapely.Polygon(r).area >= PINHOLE]) for p in parts]
+    return out[0] if len(out) == 1 else shapely.MultiPolygon(out)
 
 
 def shared_length(a: Any, b: Any) -> float:
@@ -215,7 +244,7 @@ class Fabric:
 def settle_cells(cells: list[Any], ctx: RingContext, plot_across: float, cell: float) -> tuple[list[Any], list[Any]]:
     """The partition's cells held to the rules: (the lawful cells, the scraps left bare). See the module docstring.
 
-    Research: unlawful scraps left bare - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a cell no merge makes lawful is not planted
+    Research: unlawful scraps left bare - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a strip that would draw every basin it touches out to a needle point stays bare; every other scrap is taken into a neighbor
     """
     fab = Fabric(cells, ctx, plot_across, cell)
     for _round in range(ROUNDS):
