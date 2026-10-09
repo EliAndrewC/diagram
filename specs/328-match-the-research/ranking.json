@@ -8638,21 +8638,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats as rolled",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "0047: the privy's seat is rolled per house over the attested places (the barn's share spread over the yard, the front and the stable since wave 52). On Sawada all 8 privies off the sunny side stand at the yard seat behind the house, none at the stable or the front (glyph-check of batch 3's close, 2026-10-08: at the weights, 8 of 8 at the yard is about 0.3% likely) - every seat is tried at its first spot before the rolled seat is stepped outward, and the stable and front spots fall on the work yard and the beds. Fix: step the ROLLED seat outward (or along its wall) before trying the next seat, so the roll is honored where its place can be had",
-  "files": [
-   "l7r/diagram/settlement/homestead_parts/fixture_seats.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "batch 3's close, glyph-check--privy F2",
-  "tier_as_ranked": "E2",
-  "wave": "61",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -12376,6 +12361,23 @@
   "flag": "",
   "found": "wave 52, impl-drift round 2",
   "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats as rolled",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 62, 2026-10-09; the glyph-check of batch 4's close and wave 62's plan review): of the 16 households on the five hamlets whose privy rolled the stable or the front place, all 16 are refused it - the drawn threshing yard (with the house beside it on 4, a bed on 1) covers the rolled spot on 16 of 16, and no slide step fits wholly along the wall on any of them, the attested spots standing near the wall's end already (m:wave62-slide-bounded). No order of the seats honors the roll: the fix lays the threshing yard and the privy's attested seat out together (the yard leaving room under the stable's eaves, or the seat taken before the yard). Wave 61's apparent gain was privies slid past the gable",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/fixture_seats.py",
+   "l7r/diagram/settlement/rolling/bundle.py",
+   "l7r/diagram/settlement/homestead_parts/yards.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "batch 3's close, glyph-check--privy F2",
+  "tier_as_ranked": "E2",
   "wave": "",
   "scope": "kept"
  },

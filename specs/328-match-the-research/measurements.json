@@ -763,7 +763,8 @@
         "Audit-09": "WebRefused: nine access lanes across the web break the lane law - the seating's corridor tree as a whole, no fixture at it; the seating reshuffled (fixture fits move the houses)",
         "Audit-06": "draws when the stages are run directly; refused in generate's later steps, a byre recorded on a lane at (2868, 1349) - the nearest privy and wood shed 20-50 px off it; the existing byre-on-lane class (Audit-906 at 55bcf18d6)"
       }
-    }
+    },
+    "correction": "CORRECTED at wave 62 (2026-10-09): the gain recorded here came from slides past the end of the wall (the glyph-check of batch 4's close, F1: two stable privies 38 ft past their gable); bounded to the wall, behind the house is 37 over the five maps, as at wave 60 and the stable end 4 - m:wave62-slide-bounded"
   },
   "batch4-pair-and-slide-fix": {
     "quantity": "batch 4's timing pair (50bcf4385, before wave 56's first engine change -> 58f275f44), the bisection of its one growth, and the fix",
@@ -794,16 +795,14 @@
         "fix": "50/54 - Audit-10 and Audit-20 draw now, none newly refused"
       },
       "privies_over_the_five_maps": {
-        "behind the house": [
+        "withdrawn": "[37, 30] counted privies slid past the gable - see `correction`",
+        "now": [
           37,
-          30
-        ],
-        "stable end": [
-          4,
-          8
+          37
         ]
       }
-    }
+    },
+    "correction": "CORRECTED at wave 62 (2026-10-09): the gain recorded here came from slides past the end of the wall (the glyph-check of batch 4's close, F1: two stable privies 38 ft past their gable); bounded to the wall, behind the house is 37 over the five maps, as at wave 60 and the stable end 4 - m:wave62-slide-bounded; the 48-seed cohort with the bounded slide 48/54, Audit-10 and Audit-20 refused again in the same classes as at wave 60"
   },
   "batch4-seed39-causes": {
     "quantity": "batch 4's perf audit: seed 39's crossings (10 households +12.0%, 40 households +11.7%) traced function by function at wave 61 (c0feb4b8e) and after the slide fix, and the two index fixes measured",
@@ -930,28 +929,72 @@
       }
     }
   },
-  "glyph-privy-F2-rolled-place-kept": {
-    "verifies": "F2",
-    "subject": "glyph-check--privy",
-    "answers": "6e51955a8d25",
-    "quantity": "privies off the sunny side standing at the yard seat behind the house, and at the stable end, over the five hamlets",
-    "value": {
-      "behind the house": [
-        37,
-        30
-      ],
-      "stable end": [
-        4,
-        8
-      ],
-      "sawada behind": [
-        7,
-        6
-      ]
-    },
-    "unit": "privies",
+  "wave62-slide-bounded": {
+    "quantity": "wave 62 (2026-10-09): the privy's rolled place slid only while it stands along its wall, no straight step out before the other places; the drawn threshing yard against the two attested front seats; privies by place; the cohort",
     "observed": "2026-10-09",
-    "source": "pool/hamlets/*/*.json farm_fixtures (privy) classed in each house's turned frame",
-    "method": "wave 61 (row 564): the rolled place offered first, slid along its wall toward its own end, then stepped out, before another place (m:wave61-privy-rolled-place, m:batch4-pair-and-slide-fix); the five maps rerolled"
+    "method": "the five hamlets rerolled; the privies classed in each house's turned frame; the yard's box tested against the stable spot (and its slide steps) and the front spot at a one-ken privy, a scratch script over the five manifests; make cohort N=48 against HEAD's run (c48-b4fix) and wave 60's (c48-base); make perf-profile SEED=4 HOUSEHOLDS=10 STAGE=web; the bound tightened to the seat's OUTER edge after the plan review (W62-bound: the inner-edge stop let a privy stand its whole width past the gable)",
+    "value": {
+      "yard_covers": {
+        "houses": 82,
+        "stable spot": 71,
+        "every stable slide step": 19,
+        "front spot": 60
+      },
+      "privies": {
+        "behind the house": [
+          37,
+          37
+        ],
+        "stable end": [
+          4,
+          4
+        ],
+        "note": "wave 60 and wave 62 (outer-edge bound) alike: the slide never fires on the shipped hamlets"
+      },
+      "cohort_48": {
+        "wave 60 (55bcf18d6)": [
+          "Audit-03",
+          "Audit-10",
+          "Audit-20",
+          "Audit-22",
+          "Audit-33",
+          "Audit-906"
+        ],
+        "wave 61 (c0feb4b8e)": [
+          "Audit-03",
+          "Audit-06",
+          "Audit-09",
+          "Audit-22",
+          "Audit-33",
+          "Audit-906"
+        ],
+        "wave 62, outer-edge bound": [
+          "Audit-03",
+          "Audit-10",
+          "Audit-20",
+          "Audit-22",
+          "Audit-33",
+          "Audit-906"
+        ],
+        "passing": "48/54 at each",
+        "reading": "wave 62 refuses exactly wave 60's six seeds by name: against the merge base, waves 61 and 62 together change no seed's verdict"
+      },
+      "seed4_web_10hh_s": 1.4,
+      "why_withdrawn": {
+        "unbounded slide": "privies past the gable (glyph F1)",
+        "bounded slide then a straight step out": "Kashikawa, Kuwabata, Mizuguchi and Sawada refused (an unreached house: the stepped privy on the way out)"
+      },
+      "households_rolling_stable_or_front": {
+        "rolled": 16,
+        "refused": 16,
+        "first_spot_blocked": {
+          "yard": 11,
+          "house and yard": 4,
+          "ground (a bed) and yard": 1
+        },
+        "no slide step fits along the wall (outer edge within the gable)": 16,
+        "method": "a throwaway probe (deleted) rolling the five hamlets' stages in-process with rolled_first and _first wrapped: each household's final laying, the blocker of its rolled spot and of each slide step classified as house, yard, ground or fixture"
+      }
+    }
   }
 }

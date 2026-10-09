@@ -246,15 +246,14 @@ def test_a_hamlet_farm_has_no_barn_so_its_privy_never_takes_the_barn_seat() -> N
         assert len(seats) == 3
 
 
-def test_the_privys_rolled_seat_is_stepped_out_before_the_next_seat_is_tried() -> None:
-    """Feature 328 wave 61 (0047: the privy's place rolled per house over the attested places; glyph-check of batch 3's close:
-    on Sawada all 8 privies off the sunny side stood at the yard seat behind the house, since every seat was tried at its first
-    spot before any was stepped out, and the stable's and the front's first spots fall on the work yard). At roll 0.9 the
-    household's place is the stable (u spread over the stable 35, yard 30, front 20) - its first spot on the yard here - so the
-    privy steps out from the stable end, never falling back to the yard behind the house while the stable can be had."""
-    stable = lambda salt: 0.9 if salt == fs.SALT["privy"] + 0.25 else 0.2  # off the sunny side; u 0.2 of the weights: the stable (35 of 85)  # noqa: E731
+def test_a_rolled_stable_privy_never_stands_past_the_walls_end() -> None:
+    """Feature 328 wave 61 / wave 62 (0047: "under the eaves by the stable"): the rolled stable place is slid along the front
+    wall toward its own end, and only while it still stands along the wall. Here the stable spot falls on the work yard and
+    the wall has no room left beside it, so the privy takes another place - never a seat past the gable (batch 4's
+    glyph-check F1: slid on unbounded, two stable privies stood 38 ft past their gable on Kashikawa)."""
+    stable = lambda salt: 0.9 if salt == fs.SALT["privy"] + 0.25 else 0.2  # off the sunny side; u 0.2 of the weights: the stable  # noqa: E731
     privy = fs.lay_fixtures(("privy",), HW, HH, [HOUSE, KURA], [YARD, GARDEN], YARD, True, stable, fs.FixtureForms(), _px)["privy"]
-    assert privy[0] < 0.0 and privy[1] > HH / 2, ("by the stable, the house's west end of the front", privy)
+    assert abs(privy[0]) + privy[2] / 2 <= HW / 2 + 1e-6 or privy[1] < -HH / 2, ("wholly along the wall or at another place, never past the gable", privy)
     assert fs.within_reach_of(privy, HOUSE, 48.0)
 
 
@@ -263,8 +262,19 @@ def test_the_rolled_place_and_its_paces_come_before_the_other_places() -> None:
     seats = [(-10.0, 0.0, 2.0, 2.0), (0.0, 10.0, 2.0, 2.0), (10.0, 0.0, 2.0, 2.0)]
     got = list(fs.rolled_first(seats, 1, 5.0, 2))
     assert got[:3] == [seats[0], (-15.0, 0.0, 2.0, 2.0), (-20.0, 0.0, 2.0, 2.0)], "along its wall toward its own end first, never across the middle"
-    assert got[3:5] == [(-15.0, 0.0, 2.0, 2.0), (-20.0, 0.0, 2.0, 2.0)], "then out"
-    assert got[5:7] == seats[1:] and got[7:] == [(0.0, 15.0, 2.0, 2.0), (15.0, 0.0, 2.0, 2.0), (0.0, 20.0, 2.0, 2.0), (20.0, 0.0, 2.0, 2.0)]
+    assert got[3:5] == seats[1:], "then the other places at their first spots - no straight step out across the dooryard first"
+    assert got[5:8] == [(-15.0, 0.0, 2.0, 2.0), (0.0, 15.0, 2.0, 2.0), (15.0, 0.0, 2.0, 2.0)], "then every place stepped out"
     sector = list(fs.rolled_first(seats, 2, 5.0, 1))
     assert sector == [*seats, (-15.0, 0.0, 2.0, 2.0), (0.0, 15.0, 2.0, 2.0), (15.0, 0.0, 2.0, 2.0)], "a sunny roll: the sector, the attested places, then every pace"
     assert fs.privy_places(fs.FixtureForms()) == ("stable", "yard", "front")
+
+
+def test_a_slide_along_the_wall_stops_at_the_walls_end() -> None:
+    """Batch 4's glyph-check of the privy (F1) and wave 62's plan review (W62-bound): the slide had no stop, then stopped only
+    once the seat's INNER edge passed the gable. A seat slides only while it stands wholly along the wall: its outer edge
+    never past `half_wall`."""
+    seat = (10.0, 20.0, 4.0, 4.0)
+    got = list(fs.along_its_wall(seat, 5.0, 6, half_wall=20.0))
+    assert got == [(15.0, 20.0, 4.0, 4.0)], "x 15 reaches 17; x 20 would reach 22, past the wall's end at 20"
+    assert all(abs(q[0]) + q[2] / 2 <= 20.0 for q in got)
+    assert len(list(fs.along_its_wall(seat, 5.0, 6))) == 6, "unbounded by default"

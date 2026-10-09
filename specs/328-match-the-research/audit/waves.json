@@ -530,6 +530,5 @@
   "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge": "57",
   "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet": "58",
   "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut a pixel clear of a bed's edge within its east reach; a band shorter than its width left uncut": "59",
-  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats as rolled": "61",
   "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights": "61"
 }

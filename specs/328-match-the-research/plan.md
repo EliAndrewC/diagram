@@ -868,8 +868,8 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   tried; before, every place was tried at its first spot, and the stable's and the front's first spots fall on the work
   yard and the beds, so they went to the yard seat behind the house (Sawada 8 of 8 at batch 3's close). A sunny roll is
   offered as before - the sun-side sector, the attested places, every pace. `privy_places` names the three places once.
-- **Measured** (m:wave61-privy-rolled-place): privies behind the house 37 -> 30 and at the stable end 4 -> 10 over the five
-  hamlets (Sawada behind 7 -> 6, stable end 2 -> 3). The cohort at 48 of 54 before and after (N=48); seeds 10 and 20 draw
+- **Measured** (m:wave61-privy-rolled-place; WITHDRAWN at wave 62 - the gain was privies slid past the gable, see wave 62):
+  privies behind the house 37 -> 30 and at the stable end 4 -> 10 over the five hamlets as first counted. The cohort at 48 of 54 before and after (N=48); seeds 10 and 20 draw
   now, 06 and 09 are refused, 24-48 identical - fixture fits move the houses, and the existing refusal classes land on other
   seeds; each new one probed: 09 nine access lanes across the web break the lane law (no fixture at it), 06 a byre recorded on
   a lane after the stages (its nearest privy and wood shed 20-50 px off).
@@ -901,6 +901,26 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `test_the_privys_rolled_seat_is_stepped_out_before_the_next_seat_is_tried` (red before),
   `test_the_rolled_place_and_its_paces_come_before_the_other_places`; the cohort pair; `impl-drift`; `spec-fidelity`.
 
+## Wave 62 (amendment 61, 2026-10-09) - batch 5
+
+- **Row 564 HELD, re-tiered E3 on measure** (the glyph-check of batch 4's close, NEEDS-WORK F1; plan review W62-bound and
+  W62-hold-564). Wave 61's slide had no stop at the wall's end: two stable privies on Kashikawa stood 38 ft past their gable,
+  and that was where its gain came from. The slide now runs only while the WHOLE seat stands along its wall (its outer edge
+  within the gable), and the rolled place is no longer stepped straight out before the other places (that step put privies
+  on four shipped hamlets' ways out). Measured per household (m:wave62-slide-bounded): of the 16 households whose privy rolled
+  the stable or the front place, all 16 are refused it - the drawn threshing yard covers the rolled spot on 16 of 16 (with the
+  house beside it on 4, a bed on 1), and no slide step fits wholly along the wall on any of them. The privies stand as at wave
+  60 (37 behind the house, 4 at the stable end). The fix - the yard and the privy's seat laid out together - is the held
+  row's (`overrides.json`, its files the bundle and the yard).
+- **The cohort (XIII)**: against the merge base, waves 61 and 62 together leave the 48-seed cohort as wave 60 had it; the
+  refused seeds are listed by name in m:wave62-slide-bounded (wave 60, wave 61, now) so the same count is shown to be the
+  same seeds.
+- **Record**: 0047's drawing page says the place is slid along its wall as far as the wall runs, and where the yard covers it
+  the privy takes another; `rolled_first`'s docstring records the two orders withdrawn.
+- **Occasions**: placement-changed, privy on kashikawa - batch 5's close (the second round of the glyph-check of batch 4's close).
+- **Verification**: `test_a_slide_along_the_wall_stops_at_the_walls_end`, `test_a_rolled_stable_privy_never_stands_past_the_walls_end`,
+  `test_the_rolled_place_and_its_paces_come_before_the_other_places`; the cohort; `impl-drift`; the record checks; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
@@ -915,7 +935,8 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 | 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); the batch 4a9b7c077 -> 2e3153b4e band 2, its cause (the track out drawn the canvas' diagonal past the frame, wave 46) removed by wave 47's `past_the_frame` - perf-audit consistent, audit not-justified as measured: batch 2's pair re-measures it, and explains seed 47's +0.19 s web at 40 households | green 2026-10-08 | closed but for the pair |
 | 2 | 47-50 | 2e3153b4e -> 3f91becf2: band 1, TOTAL -3.5%; batch 1's band 2 re-measured and gone. Its one growth (seed 39, 10 households, homesteads +0.24 s, web -0.2 s) is wave 47's past_the_frame candidate sending that roll's track out through the fabric router - perf-audit CONSISTENT on its own control (the candidate undone removes the growth), profiled with the new `make perf-profile HOUSEHOLDS=` | green 2026-10-08 (waves 47-51, the NEEDS-WORK fixes re-gated) | closed: 12 glyph checks PASS (field pond, woodland commons and wet paddy after rounds 2-3) |
 | 3 | 51-55 | 3f91becf2 -> HEAD: band 3 - 40 households +5.7% from seed 47 (+23.8%, web and homesteads: wave 52's privy and heap re-seating, bisected per commit) and seed 25 refused (T140); 10 households -7.2%, 20 -1.3%; seed 4's hinterland growth fixed in the batch (field_height_near in one vector pass) - m:batch3-pair-and-controls; perf-audit round 2: explanation CONSISTENT, audit cannot-determine (re-run once T140's seating is decided); the GM's band-3 sign-off owed | green 2026-10-08 | closing: 7 glyph checks PASS (homestead grove at round 2), the record checks answered; T137 and T140 open for the GM |
-| 4 | 56-61 | 50bcf4385 -> a67389b82: band 2 - reference TOTAL -6.2%, sizes 0.0 / -0.8 / -0.9%; the first pair's band 3 (seed 4 at 10 households +217.9%, wave 61's privy slide across a door's way) fixed in the batch, and the audit's per-bearing fabric scan and per-call sun boxes indexed (m:batch4-pair-and-slide-fix, m:batch4-seed39-causes); perf-audit round 2: explanation CONSISTENT, audit JUSTIFIED; T140 confirmed (seed 25 at 40 households draws) | green 2026-10-09 (three runs: the cover-slot test, the uncovered no-yard line, then the fixes) | closing: glyph checks scrub and rough grazing PASS, copse PASS, privy pending |
+| 4 | 56-61 | 50bcf4385 -> a67389b82: band 2 - reference TOTAL -6.2%, sizes 0.0 / -0.8 / -0.9%; the first pair's band 3 (seed 4 at 10 households +217.9%, wave 61's privy slide across a door's way) fixed in the batch, and the audit's per-bearing fabric scan and per-call sun boxes indexed (m:batch4-pair-and-slide-fix, m:batch4-seed39-causes); perf-audit round 2: explanation CONSISTENT, audit JUSTIFIED; T140 confirmed (seed 25 at 40 households draws) | green 2026-10-09 (three runs: the cover-slot test, the uncovered no-yard line, then the fixes) | closing: glyph checks scrub and rough grazing PASS, copse PASS, privy NEEDS-WORK (F1: slides past the gable) - answered by wave 62, its second round at batch 5's close |
+| 5 | 62- | owed at the batch close, from a6004fdc6 | at the batch close | open |
 
 ## Constitution Check
 

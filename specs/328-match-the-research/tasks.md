@@ -6,7 +6,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 ## Occasions
 
 - glyph-redrawn: scrub and rough grazing on kashikawa - wave 57: the band under a wood's edge drawn grass only, no brush (0077); batch 4's close
-- placement-changed: privy on kashikawa - wave 61: a privy off the sunny side keeps its rolled place, slid along its wall then stepped out (behind the house 13 -> 10, by the stable 1 -> 3 there; 37 -> 30 and 4 -> 10 over the five maps; 0047); batch 4's close
+- (reviewed NEEDS-WORK at batch 4's close, F1: slides past the gable) placement-changed: privy on kashikawa - wave 61, then wave 62: the rolled place slid along its wall only while it stands by the wall (0047; m:wave62-slide-bounded); batch 5's close, round 2
 - placement-changed: copse on kuwabata - wave 56: the seats off every yard's and bed's sun at the tree's 50 ft south and east (0038); batch 4's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
@@ -1793,7 +1793,18 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 - [x] T151 wave 61's row (FR-003, FR-004)
       research: rendering
-      verify: DONE. plan CLEAR (wave 61 round 2); privy keeps its rolled place (behind the house 37 -> 30, stable end 4 -> 10); cohort 48/54 before and after, new refusals diagnosed; impl-drift round 5 recorded, claims-owed none; 0047 record checks answered
+      verify: DONE. plan CLEAR (wave 61 round 2); privy keeps its rolled place (behind the house 37 -> 30, stable end 4 -> 10); cohort 48/54 before and after, new refusals diagnosed; impl-drift round 5 recorded, claims-owed none; 0047 record checks answered [CORRECTED at wave 62: the privy gain was slides past the gable - m:wave62-slide-bounded]
 - [x] T152 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
-      verify: DONE. plan CLEAR (wave 61 round 2); privy keeps its rolled place (behind the house 37 -> 30, stable end 4 -> 10); cohort 48/54 before and after, new refusals diagnosed; impl-drift round 5 recorded, claims-owed none; 0047 record checks answered
+      verify: DONE. plan CLEAR (wave 61 round 2); privy keeps its rolled place (behind the house 37 -> 30, stable end 4 -> 10); cohort 48/54 before and after, new refusals diagnosed; impl-drift round 5 recorded, claims-owed none; 0047 record checks answered [CORRECTED at wave 62: the privy gain was slides past the gable - m:wave62-slide-bounded]
+
+## Phase 63 - wave 62 (amendment 61): the privy's slide bounded to its wall; row 564 held E3 on measure
+
+- `homestead_parts/fixture_seats.py` (`along_its_wall`'s `half_wall`, `rolled_first`'s order); 0047's drawing page; `audit/overrides.json` (row 564 E3).
+
+- [x] T153 wave 62's row (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 62 round 2); row 564 held E3 on measure (16 of 16 households refused the stable or front place: the yard covers it, no slide fits the wall); the slide bounded by the seat's outer edge; cohort refuses exactly wave 60's six seeds; claims 29 in step + 3 known; record checks answered
+- [x] T154 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 62 round 2); row 564 held E3 on measure (16 of 16 households refused the stable or front place: the yard covers it, no slide fits the wall); the slide bounded by the seat's outer edge; cohort refuses exactly wave 60's six seeds; claims 29 in step + 3 known; record checks answered

@@ -295,33 +295,44 @@ def privy_places(forms: FixtureForms) -> tuple[str, ...]:
     return tuple(k for k, _p in forms.privy_weights if k in ("stable", "yard", "front"))
 
 
-def along_its_wall(seat: Rect, step: float, n: int) -> Iterator[Rect]:
+def along_its_wall(seat: Rect, step: float, n: int, half_wall: float = math.inf) -> Iterator[Rect]:
     """`seat` slid along the wall it stands off (the house frame's x), `step` at a time toward its own end of the wall, `n`
     times - never back across the middle, where the door's way out leaves (batch 4's timing pair: slid both ways, a front
     privy stood across a door's way on seed 4 at 10 households, and the web's orphan joins took 1.2 -> 16 s).
 
-    Research: a seat slid along its wall - NONE: the geometry of `rolled_first`'s slide, whose claim carries the page"""
+    Research:
+        slid only while along its wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: "while the whole privy still stands along the wall"
+        slid toward its own end only - UNRESEARCHED: never back across the house's middle, where the door's way out leaves (batch 4's timing pair)"""
     x, y, w, d = seat
     sign = 1.0 if x >= 0 else -1.0
     for k in range(1, n + 1):
-        yield (x + sign * step * k, y, w, d)
+        nx = x + sign * step * k
+        if abs(nx) + w / 2 > half_wall + 1e-9:  # ...and only while the WHOLE seat stands along the wall: its outer edge never past the gable
+            return  # (batch 4's glyph-check: slid on unbounded, two stable privies stood 38 ft past their gable on Kashikawa)
+        yield (nx, y, w, d)
 
 
-def rolled_first(seats: Sequence[Rect], k: int, step: float, n: int) -> Iterator[Rect]:
+def rolled_first(seats: Sequence[Rect], k: int, step: float, n: int, half_wall: float = math.inf) -> Iterator[Rect]:
     """The seats as offered when the first `k` are the household's ROLLED place - the sun-side sector on a sunny roll, else the
     one attested place it rolled. The sector already offers every radius to its reach, so it is followed by the attested
-    places and then every pace (its paces put ahead of them carried a privy and its heap past the threshing yard onto the
-    household's way out - cohort seeds 4 and 23, refused). One attested place slides ALONG ITS WALL, then steps out, before
-    the other places are tried: stepped straight out, a front privy whose first spot fell on the threshing yard was
-    carried through the yard to its far edge, the household's way out (cohort seed 23: a needle loop round it). Every seat at
-    its first spot before any was stepped out let the work yard and the beds, which the stable's and the front's first spots
-    fall on, send 8 of 8 of Sawada's privies off the sunny side to the yard seat (glyph-check of batch 3's close, 2026-10-08).
+    places and then every pace. One attested place is SLID ALONG ITS WALL toward its own end, while it still stands along the
+    wall (`half_wall`), then the other places at their first spots, then every place stepped out.
 
-    Research: privy's rolled place kept - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the place rolled per house, slid along its wall, then stepped out, before another place is tried (the order the page records for our maps; no source gives one)"""
+    Two orders were tried and withdrawn (feature 328 wave 61, batch 4's close): stepping the rolled place straight out before
+    the other places carried a front or stable privy and its heap across the threshing yard onto the household's way out
+    (cohort seeds 4 and 23, refused; Kashikawa's ways unreached once the slide was bounded), and a slide with no stop at the
+    wall's end stood two stable privies 38 ft past their gable (the glyph-check of batch 4's close). Bounded, the slide honors
+    no roll on the shipped hamlets: the 16 households whose privy rolled the stable or the front are all refused it, the drawn
+    threshing yard covering the rolled spot and no step fitting along the wall (row 564, held E3: the yard and the privy's seat
+    laid out together).
+
+    Research: privy's rolled place kept - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: a privy not seated on the sunny side takes the place rolled per house, slid along its wall while it stands by the wall, before another place is tried; a sunny roll that finds no room on the sunny side falls back to the places at their first spots (the page's bullets for each; no source gives an order)"""
     head, rest = list(seats[:k]), list(seats[k:])
     if k > 1:  # the sun-side sector already offers every radius to its reach: its paces are the attested places' turn
         return chain(head, rest, outward(seats, step, n))
-    return chain(head, along_its_wall(head[0], step, n), outward(head, step, n), rest, outward(rest, step, n))
+    return chain(
+        head, along_its_wall(head[0], step, n, half_wall), rest, outward(seats, step, n)
+    )  # no straight step out first: across the dooryard it stood on a way out (seeds 4, 23; Kashikawa once the slide stopped at the wall's end)
 
 
 def lay_fixtures(
@@ -402,7 +413,7 @@ def lay_fixtures(
             seats = _seats(kind, hw, hh, w, d, g, yard, laid.get("privy"), roll, u, forms, px)
             if kind == "privy":  # the household's rolled place stepped out before the next place is tried (feature 328 wave 61)
                 sun = len(seats) - len(privy_places(forms))  # the sun-side sector's seats lead the list on a sunny household's roll
-                offered = rolled_first(seats, sun or 1, px(STEP_FT), OUT_STEPS)
+                offered = rolled_first(seats, sun or 1, px(STEP_FT), OUT_STEPS, hw / 2)
             else:
                 offered = chain(seats, outward(seats, px(STEP_FT), OUT_STEPS))
             if kind == "privy":  # its own farmstead's: no further than 48 ft from its house (0047), never stepped past it

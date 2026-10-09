@@ -1,68 +1,45 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "8e7a267116de817831430e18055dd6ba2b7f77e57ed4d4373e9c2b2cd1351f83",
- "reviewed": "2026-10-08",
+ "plan_sha256": "cd765025a6fbaed1b60378ad12205e0acecb8c41777163b74b600a8c629437a9",
+ "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W61-1 the rolled place slid, then stepped, before another place",
-   "summary": "rolled_first: off the sunny side the rolled place is offered at its first spot, slid along its wall, then stepped out, before the other attested places",
+   "id": "W62-bound",
+   "summary": "the rolled place's slide stops when the seat's OUTER edge would pass the gable (abs(nx) + w/2 > half_wall)",
    "class": "within",
-   "why": "Row 564's fix as written ('step the ROLLED seat outward (or along its wall) before trying the next seat'); tests pin the order. Unchanged since round 1."
+   "why": "Round 1's NOT LEGITIMATE answered: along_its_wall now yields only seats wholly along the wall, matching 0047's 'under the eaves by the stable', the plan's 'only while the WHOLE seat stands along its wall' and the page's 'while the whole privy still stands along the wall'. test_a_slide_along_the_wall_stops_at_the_walls_end asserts containment for every yielded seat. Nothing is excepted any more, so it is a within decision. Not blocking: test_a_rolled_stable_privy_never_stands_past_the_walls_end still asserts the INNER edge (abs(x) - w/2 <= HW/2), which is weaker than its own name."
   },
   {
-   "id": "W61-2 a sunny roll keeps sector, places, then paces",
-   "summary": "on a sunny roll the sector leads, then the attested places, then every pace; the sector-paces-first variant withdrawn (cohort seeds 4 and 23)",
-   "class": "within",
-   "why": "The sector already offers every radius to its reach; nothing the row asks is dropped. Unchanged since round 1."
+   "id": "W62-hold-564",
+   "summary": "row 564 held, re-tiered E2 -> E3 on a per-household measure: 16 of 16 households that rolled the stable or the front are refused it, the yard covering the rolled spot on all 16 and no slide step fitting wholly along the wall on any",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 1 asked for exactly this measure, per rolled household and per offered seat. It now shows the yard blocking the rolled spot on every one, and the wall-end bound leaving no slide step, because the spots already stand near the wall's end. That bound is the research's own 'under the eaves'. So no seat order honors the roll, and the remaining fix is a layout change to the yard: real work above E2. Holding it and re-tiering it applies the GM's own ranking ('easiest to hardest'), with the row kept open rather than dropped. The override states the count, and its files now name bundle.py and yards.py."
   },
   {
-   "id": "W61-3 the barn left out behind an OPEN row (was: labeled DEVIATION)",
-   "summary": "merge.py reads found files in found_order (wave number; batch 3 after wave 55); wave 52's draw-the-barn row re-keyed `_seats#privy seats - the barn 0047 names` and present in ranking.json open (wave '', scope kept, E3); claims `_seats#privy seats` and `privy_places#privy places` DRIFTED behind it; 0047's drawing page says 'draw no barn yet ... drawing the barn the record names is open work', evidence comment 'open'",
+   "id": "W62-order",
+   "summary": "the rolled place is no longer stepped straight out before the other places: slide (bounded), the other places at their first spots, then every place stepped out",
    "class": "within",
-   "why": "Round 1's NOT LEGITIMATE is answered as asked: the omission is no longer closed by relabeling - the fix (draw the barn) is a ranked open row, the claims stay DRIFTED behind it (claims-index verified), and the page describes the maps' current state rather than a deliberate deviation. Verified the ranking diff by key against HEAD: 3 added (the barn, the wood shed seats, 0044's bath shares), none removed; the found_order change also rewrites the history fields (found/reopened) of two magistrate's-manor rows, which stay closed at waves 15 and 16 per waves.json - so 5 rows differ, not the 3 the dispatch stated, but no open/closed state moved besides wave 61's own two closures."
+   "why": "Unchanged from round 1: row 564's fix is 'outward (or along its wall)'; the straight step's withdrawal is measured."
   },
   {
-   "id": "W61-4 FixtureForms default weights corrected",
-   "summary": "default privy weights reordered to 0047's stable 35 / yard 30 / front 20 / barn 15; named as ranked row FixtureForms#privy seat weights and closed at 61 (waves.json, closed-tiers E1)",
+   "id": "W62-cohort",
+   "summary": "the 48-seed cohort: wave 62 refuses exactly wave 60's six seeds by name (03, 10, 20, 22, 33, 906); the baseline argument stated against the merge base",
    "class": "within",
-   "why": "Matches the page; the round-1 record note (name it as the ranked row and close it) is done."
+   "why": "Round 1's request is met: refused sets at waves 60, 61 and 62 are listed in m:wave62-slide-bounded, so the claim is an identity rather than a count."
   },
   {
-   "id": "W61-5 the sty without its privy (replaces ranked row out2)",
-   "summary": "found-wave61 row stage_pond_stock#privy over the sty at E2 carries the deviation-tempting flag and its clause, says it replaces ranked row out2 (E3), and sends any DEVIATION exit to spec-fidelity under the Exception path first; the plan says the same",
+   "id": "W62-record",
+   "summary": "0047's drawing page: the place slid 'while the whole privy still stands along the wall'; where the yard covers it the privy takes another, marked open work; the privy modal says most of the rest stand behind the house because the yard covers the front and the stable's eaves",
    "class": "within",
-   "why": "Round 1's NOT LEGITIMATE was the flag dropped in the edit that added a DEVIATION exit. The flag is restored in ranking.json and the fix text routes the deviation through the Exception path, so the guard stands; the re-tier E3 -> E2 is a ranking estimate, within."
+   "why": "The wording now matches the code's bound, and the yard shortfall is marked open work like the barn, so impl-drift will not read it as the rule. Aside: 'on every farmstead our generator lays out that rolled one of them' generalizes from the five hamlets' 16 households."
   },
   {
-   "id": "W61-6 found row: wood shed seats' 9.5 ft",
-   "summary": "_seats#wood shed seats DRIFTED, E3, after WOODSHED_STEP_FT#wood shed off its wall",
+   "id": "W62-corrections",
+   "summary": "plan.md's wave 61 bullet marked WITHDRAWN with a pointer; T151/T152 verify lines marked CORRECTED; batch4-pair-and-slide-fix's privies value split into withdrawn and now",
    "class": "within",
-   "why": "A new key ranked behind the row with the same cause; nothing waived."
-  },
-  {
-   "id": "W61-7 found row: 0044's bath shares",
-   "summary": "FixtureForms#bath room joined to the floored rooms DRIFTED, E1 (the drawing page still calls the counted shares a GUESS)",
-   "class": "within",
-   "why": "A new key ranked at E1; nothing excused."
-  },
-  {
-   "id": "W61-8 the cohort and the new refusals",
-   "summary": "48 of 54 before and after; seeds 10 and 20 draw, 06 and 09 refused, each diagnosed to a pre-existing class not at a fixture; two variants withdrawn",
-   "class": "within",
-   "why": "Unchanged since round 1: the rate did not drop and each new refusal is diagnosed (m:wave61-privy-rolled-place)."
-  },
-  {
-   "id": "W61-9 record items filed as feature 368",
-   "summary": "the 48 ft paragraph against its table, 'earthfloored'/'earth-floored', 'Type V1' undefined: filed as specs/368-record-0047-loose-ends (Status: Filed)",
-   "class": "within",
-   "why": "Record-internal defects, not claims-report findings; now durable where open work lives. Narrows nothing the GM asked for."
-  },
-  {
-   "id": "W61-10 occasion declared",
-   "summary": "placement-changed: privy on kashikawa at batch 4's close (tasks.md ## Occasions)",
-   "class": "within",
-   "why": "Adds the review the re-placing owes; narrows nothing."
+   "why": "Round 1's pointers are in place. Not blocking but a stale figure: the `correction` fields on m:wave61-privy-rolled-place and m:batch4-pair-and-slide-fix say 'behind the house is 36 over the five maps', while m:wave62-slide-bounded (privies.behind [37, 37]) and plan.md's wave 62 ('37 behind the house') say 37. That looks like the inner-edge run's figure; restate it as 37."
   }
  ],
  "verdict": "CLEAR"
