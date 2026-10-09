@@ -19,7 +19,9 @@ from ..._geom import (
     way_beds,
 )
 from ..._knobs import KNOBS, PUNISHMENT_SPOT_FT
+from ...water_ways.lanes import STREET_W_FT
 from ..captions import tree_crown_discs
+from ..ground import ROAD_W_FT
 from ._helpers import (
     KOSATSUBA_ANCHOR_BAND_FT,
     KOSATSUBA_ENTRANCE_REACH_FT,
@@ -164,14 +166,20 @@ class FixtureSitingMixin:
             every settlement carries a board - research/questions/0190-notice-boards-kosatsuba.drawing.html: hamlets included
             board placed last - research/questions/0190-notice-boards-kosatsuba.drawing.html: after the crop, against the view
             placement knob at the lane tiers - research/questions/0190-notice-boards-kosatsuba.html: towns and cities take `center` only
-            probe size - research/questions/0190-notice-boards-kosatsuba.drawing.html: the search tests a 7 x 3 ft face, smaller than the frame drawn"""
+            probe size - research/questions/0190-notice-boards-kosatsuba.drawing.html: the search tests a 7 x 3 ft face, smaller than the frame drawn
+            facing search pad - NONE: `WayFacing`'s index radius (the 60 ft band plus the probe's full diagonal, generous) prunes the nearest-way search and never decides it - a seat with no way inside it scans every segment
+            siting default - research/questions/0190-notice-boards-kosatsuba.drawing.html: `frontage`, the busiest frontage, where a map rolled no `kosatsuba_siting` (a scripted hamlet always rolls one)
+            off every way's bed - UNRESEARCHED: the probe kept h/2 + 3 px off each way's bed
+            the caption proved against the board - research/questions/0190-notice-boards-kosatsuba.drawing.html: proved clear of the board DRAWN (its footing, `vw` x `vh`, passed as the half-extents `vw / 2`, `vh / 2` the three caption steps take), so a caption drawn as proved never stands on it"""
         meta = self.M["meta"]
         if not meta.get("kosatsuba", True):
             return None
         ftpx = float(meta.get("ftpx") or 1)
         # probe with the FACE the search tests, 7 x 3 ft, smaller than the board drawn (0190); the board's drawn footing is
-        # what `admits` and the 6 ft offset read (`board_record`, `_route_seats`)
+        # what `admits`, the 6 ft offset and the caption proof read (`board_record`, `_route_seats`)
         w, h = self.px(7.0), self.px(3.0)  # the face the search tests (0190), smaller than the 16 x 6 ft frame drawn
+        _drawn = self.board_record(0.0, 0.0, 0.0)
+        cw, ch = _drawn["vw"] / 2, _drawn["vh"] / 2  # the caption is proved clear of the board DRAWN, its footing (feature 328 wave 64)
         lane_tier = str(meta.get("scale") or "") in ("hamlet", "village")
         view = meta.get("view")
         frame = (view[0], view[1], view[0] + view[2], view[1] + view[3]) if view else None
@@ -191,7 +199,7 @@ class FixtureSitingMixin:
 
         def proof(c: BoardSeat) -> tuple[bool, Placement | None]:
             if (c.x, c.y, c.rot) not in proved:
-                p = board_caption_seat(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame) if label and index is not None else None
+                p = board_caption_seat(self.M, c.x, c.y, cw, ch, c.rot, label, index, frame) if label and index is not None else None
                 proved[c.x, c.y, c.rot] = (not label or p is not None, p)
             return proved[c.x, c.y, c.rot]
 
@@ -205,12 +213,12 @@ class FixtureSitingMixin:
         def lax(c: BoardSeat) -> tuple[bool, Placement | None]:
             assert index is not None  # a board with no caption proves every seat, so only a captioned one gets here
             if (c.x, c.y, c.rot) not in terminal:
-                terminal[c.x, c.y, c.rot] = terminal_caption(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame)
+                terminal[c.x, c.y, c.rot] = terminal_caption(self.M, c.x, c.y, cw, ch, c.rot, label, index, frame)
             return terminal[c.x, c.y, c.rot] is not None, terminal[c.x, c.y, c.rot]
 
         def loose(c: BoardSeat) -> tuple[bool, Placement | None]:
             assert index is not None
-            return True, fallback_caption(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame)
+            return True, fallback_caption(self.M, c.x, c.y, cw, ch, c.rot, label, index, frame)
 
         # EVERY PLACEMENT THE MAP AFFORDS, each asked whether it can be SITED - in the siting band first, then (1) the whole
         # band with the web lanes admitted - before the knob is committed (labels L1, L4 fallback steps 1-2)
@@ -368,13 +376,14 @@ class FixtureSitingMixin:
             no main way, the whole network - research/questions/0190-notice-boards-kosatsuba.drawing.html
             service lanes last - UNRESEARCHED: web lanes and the connector only where nothing else stands or an anchor needs them
             anchor reach - UNRESEARCHED: lanes within 120 ft of the anchor admitted
-            nominal widths - research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html: every road taken at 18 px, its recorded width ignored
+            recorded widths - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: each road at the width it was drawn (the highway 30 ft on every sheet, a lesser one at its own); a record with none at the 30 ft `road` draws by default
+            street fallback width - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: a main street with no recorded width at the 24 ft `street` draws by default
             lane fallback width - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width taken at the footpath's 3 ft"""
         routes: list[tuple[list[Pt], float, bool]] = []
-        if self.M.get("road"):
-            routes.append(([(p[0], p[1]) for p in self.M["road"]], 18.0, False))
-        routes.extend(([(p[0], p[1]) for p in r["pts"]], 18.0, False) for r in (self.M.get("roads") or [])[1:])
-        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18)), False) for st in self.M.get("town_streets") or [] if st.get("main"))
+        if self.M.get("road"):  # each road at its RECORDED width (`road`'s `road_width`, every `roads` record's `w`, in pixels)
+            routes.append(([(p[0], p[1]) for p in self.M["road"]], float(self.M.get("road_width") or self.lw(ROAD_W_FT)), False))
+        routes.extend(([(p[0], p[1]) for p in r["pts"]], float(r.get("w") or self.lw(ROAD_W_FT)), False) for r in (self.M.get("roads") or [])[1:])
+        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w") or self.lw(STREET_W_FT)), False) for st in self.M.get("town_streets") or [] if st.get("main"))
         if routes:
             return routes
         if not (self.M.get("lanes") or []):
@@ -394,7 +403,7 @@ class FixtureSitingMixin:
                 and any(seg_dist(anchor[0], anchor[1], (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) <= reach for a, b in zip(ln["pts"], ln["pts"][1:], strict=False))
             ]
         routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", self.px(3.0))), bool(ln.get("connector"))) for ln in main)
-        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18)), False) for st in self.M.get("town_streets") or [])
+        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w") or self.lw(STREET_W_FT)), False) for st in self.M.get("town_streets") or [])
         return routes
 
     def _board_for(  # type: ignore[misc]
@@ -471,6 +480,9 @@ class FixtureSitingMixin:
             ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: PUNISHMENT_SPOT_FT
             nearness tie-break - UNRESEARCHED: score less a third of the offset
             least offset off the tread - UNRESEARCHED: 4 px past the tread edge
+            way widths - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: each way at its recorded width; a road with none at 30 ft, a street at 24 ft
+            lane fallback width - UNRESEARCHED: a lane with no recorded width at 8 px
+            turned to its way - UNRESEARCHED: the ground's long side along the way's bearing
             out from under captions - CONVENTION: a preference, the busiest seat where none is clear
             caption seat - CONVENTION"""
         if not self.M["meta"].get("punishment_spot", True):
@@ -480,8 +492,8 @@ class FixtureSitingMixin:
         w, h = self.px(PUNISHMENT_SPOT_FT[0]), self.px(PUNISHMENT_SPOT_FT[1])
         routes: list[tuple[list[Pt], float]] = []
         if self.M.get("road"):
-            routes.append(([(p[0], p[1]) for p in self.M["road"]], float(self.M.get("road_width") or 18)))
-        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [])
+            routes.append(([(p[0], p[1]) for p in self.M["road"]], float(self.M.get("road_width") or self.lw(ROAD_W_FT))))
+        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w") or self.lw(STREET_W_FT))) for st in self.M.get("town_streets") or [])
         routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in self.M.get("lanes") or [])
         if not routes:
             return None

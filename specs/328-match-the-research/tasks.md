@@ -1820,3 +1820,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T156 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 63); the notice board on its fenced footing, the margin the footing alone; the 6 ft and 60 ft measured to the footing; 0190's marker scales corrected; claims in step, record checks answered
+
+## Phase 65 - wave 64 (amendment 63): the notice board's widths and its caption's proof
+
+- `structures/fixtures/siting.py` (`_board_routes`' recorded widths and fallbacks, `place_kosatsuba`'s caption proof,
+  `place_punishment_spot`'s fallbacks); `water_ways/lanes.py` (`STREET_W_FT`).
+
+- [x] T157 wave 64's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 64); each road at its recorded width, the 30 ft road and 24 ft street the fallbacks; the board's caption proved against the board drawn; claims in step over four impl-drift rounds; cohort unchanged
+- [x] T158 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 64); each road at its recorded width, the 30 ft road and 24 ft street the fallbacks; the board's caption proved against the board drawn; claims in step over four impl-drift rounds; cohort unchanged

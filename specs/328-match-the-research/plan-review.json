@@ -1,81 +1,63 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "ff89dfad8a333c9e51ce6d24caae57d264e3e812308bd2a2db5a245dbc3e79d3",
+ "plan_sha256": "35afc35671828eb06aa4091d3b5d7fb17a3c09f810c6912526b5803ed4a0c2df",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W63-footing",
-   "summary": "the stone footing drawn under the roofed frame, KOSATSUBA_FOOTING_FT 2 ft wider all round, its edge a dashed fence line",
+   "id": "W64-row169",
+   "summary": "_board_routes takes each road's recorded width (road_width, roads[i].w, a main street's w, all in px as ground.py records them) instead of a fixed 18 px; the claim re-cited from 0137 (capital) to 0088 (the per-tier road widths)",
    "class": "within",
-   "why": "Row 'kosatsuba#stone footing and fence' done literally: 0190 drawing page 'on a stone footing inside a fence ... the footing is about 2 ft wider all round, with a fence line at its edge'; boards.py draws the 20 x 10 footing at 1 ft/px with the dashed stroke at its edge; test_a_notice_board_stands_on_a_fenced_footing_and_claims_only_that_ground asserts it."
+   "why": "row 169's fix verbatim: recorded width instead of 18 px, cite the per-tier widths not the capital page; ground.py records the drawn width in px, so no further conversion is owed"
   },
   {
-   "id": "W63-roof",
-   "summary": "the roofed frame and ridge drawn on the footing (was the frame alone, labeled CONVENTION)",
+   "id": "W64-row170",
+   "summary": "all three caption steps (board_caption_seat, terminal_caption, fallback_caption) proved against board_record's drawn vw x vh, the same box board_subject draws",
    "class": "within",
-   "why": "Row 'kosatsuba#roof and ridge glyph' done literally: its ranked fix 'draw the roofed frame on its stone footing inside the fence line'; the 16 x 6 frame and its ridge are drawn inside the footing rect."
+   "why": "row 170's fix verbatim; the steps double the half-extents into board_subject/recorded_board, so the proof subject is the drawn footing"
   },
   {
-   "id": "W63-nobuild",
-   "summary": "the no-build ground is the fenced footing alone, replacing the frame plus a flat 6 px",
+   "id": "W64-fallbacks",
+   "summary": "a road or main street with no recorded width falls back to the drawers' defaults lw(ROAD_W_FT) 30 ft and lw(STREET_W_FT) 24 ft (STREET_W_FT named in lanes.py, street() reads it) instead of 18 px, in the main-way and whole-network routes",
    "class": "within",
-   "why": "Row 'kosatsuba#no-build margin' done literally: ranked fix 'from 6 px to the fenced footing alone, 2 ft wider all round (px(2))'; block_polys is now the footing box; 0190 'the board placed last, clearing no ground'."
+   "why": "a defect impl-drift found in the unit the row fixes; moves the implementation to 0088/0136 (FR-004, XIV); behavior-preserving where a width is recorded (every hamlet way does, measured)"
   },
   {
-   "id": "W63-drawn-box",
-   "summary": "board_record's vw/vh (what the overlap matrix, admits and the siting read) is the footing, and the footing scales with the marker floor at the coarse tiers",
+   "id": "W64-punishment-fallbacks",
+   "summary": "the same width fallbacks applied in place_punishment_spot, a DEFERRED unit, with its width, lane-fallback and turn decisions claimed",
    "class": "within",
-   "why": "Follows from drawing the footing: the drawn box must be what is drawn (all five hamlet manifests now record vw/vh 20 x 10 over w/h 16 x 6). Every kept map (FR-010) runs at 1 ft/px, where k = 1 and the footing is true size. At village/city grain the footing is drawn relative to the frame, whose 11 px floor and aspect the GM's 2026-07-24 call fixed; scaling it with the frame keeps that call's aspect rule and changes nothing on a kept map."
+   "why": "deferral (FR-010) permits not fixing legacy-only code; it does not forbid a consistency edit, and the edit moves code toward the research the GM asked for; no hand-rolled map file is edited (FR-009)"
   },
   {
-   "id": "W63-offset",
-   "summary": "the 6 ft off the road measured to the drawn board's footing, not to the 7 x 3 ft face tested",
+   "id": "W64-new-claims",
+   "summary": "facing search pad NONE, siting default frontage (0190), bed clearance UNRESEARCHED newly claimed on place_kosatsuba",
    "class": "within",
-   "why": "0190: 'the board stands 6 ft from the edge of the road'. With the footing drawn, measuring to the face would have stood the footing 2.5 ft off (rw/2 + 1.5 + 6 - 5), a drift this wave's own change would have introduced; correcting it moves the implementation to the page (FR-004 direction, XIV). Recorded in plan.md and m:wave63-board-footing (four footings at 6.0 ft, Sawada's bend 3.2 ft clear of the tread)."
+   "why": "UNCLAIMED findings are in the feature's scope (FR-001); labeling them is the record the feature exists to complete"
   },
   {
-   "id": "W63-cap",
-   "summary": "the 60 ft cap now measured from the road's edge to the footing's (was road centerline to board center: while off <= lim)",
+   "id": "W64-web-lane-test",
+   "summary": "the web-lane test holds the board inside the web lane's 60 ft band (KOSATSUBA_WAY_REACH_FT, measured from centerline) instead of within 40 px of its centerline; the board measured at 47.5 ft, caption clean",
    "class": "within",
-   "why": "0190: 'may stand up to 60 ft from the road' - the same origin as its 6 ft 'from the edge of the road'; the change reads the page literally and widens nothing the page forbids. impl-drift notes it IN-STEP and siting.py carries the pointer comment. NOT RECORDED in plan.md's wave 63 or in m:wave63-board-footing, which name only the 6 ft offset - a recording gap to close (one clause), not a narrowing."
+   "why": "the 40 px was the test's own figure, not the research's; the new bound is 0190's reach, measured from the centerline (stricter than the code's edge-to-footing cap), and the test still asserts the web lane is taken and the hemmed main lane is not"
   },
   {
-   "id": "W63-0190-marker-scale",
-   "summary": "0190's drawing page reworded from 'at city scale' to 'at village and city scale' for the oversized marker, to match the code (two DRIFTED claims now IN-STEP, among them the E4 ranked row board_record#marker floor)",
+   "id": "W64-row204-left",
+   "summary": "place_kosatsuba#placement knob at the lane tiers left DRIFTED to its ranked E3 row 204",
+   "class": "within",
+   "why": "the GM asked for easiest to hardest; FR-003/SC-003 hold an E3 row until the E2 rows are done, so leaving it to its row is the requested order, not a carve-out"
+  },
+  {
+   "id": "W64-punishment-deferred",
+   "summary": "place_punishment_spot#within 60 ft of a street (DRIFTED) and two unclaimed decisions in that unit left DEFERRED",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Rewording a page to fit the code is the spec's Edge Cases exception path ('A fix that seems to need the research changed instead ... goes to spec-fidelity with the GM's request verbatim; if it agrees, it is recorded and raised with the GM once the wave works'), so it is ruled here. LEGITIMATE because the scope is already fixed by the GM's own call, not completed by the session: commit f8f07e0ac (2026-07-24) is titled 'the kosatsuba draws as a location marker at village/city grain' and records 'GM call 2026-07-24'; its town-deep-audit note says 'Towns and hamlets (1 ft/px) are unaffected'; the floor the GM approved 'NEVER shrinks a board' and so by its mechanism lifts the 8 px village frame. The page's 'city scale' understated a GM ruling; the alternative the E4 row named (gate the floor to city grain) would undo part of that ruling. The passage is a map drawing convention, not a historical finding, and no kept map (all 1 ft/px) draws differently either way. The E4 row's own ranked fix names this route, and the GM authorized E4 research passes inside the feature (2026-10-08). Owed: the wave's report raises it with the GM (Edge Cases), and the row board_record#marker floor is closed at 63 in ranking.json/waves.json with that authorization named (it still shows wave '')."
+   "why": "the GM's own words (amendment 8): legacy hand-drawn settlements' findings marked DEFERRED, scope = code executed by magistracies, country shrines and scripted hamlets; dev/claims-deferred.json, derived by audit/scope.py from the run records, lists place_punishment_spot as deferred - a measured scope, not a remembered one"
   },
   {
-   "id": "W63-modals",
-   "summary": "five board modals tell the footing and fence, the village and city marker, the label above the crowns, a city's set of boards, and the post towns' size",
+   "id": "W64-slow-test",
+   "summary": "the every-seat-fouled unit test grows 28.3 -> 36.5 s, profiled (359 terminal searches x ~2,400 seats against the larger subject) and recorded in m:wave64-board-widths-and-caption, left to the batch close",
    "class": "within",
-   "why": "Bringing each modal's depiction in step with what the map now draws and with 0190 (the modal is written from the page its Entry names). No new behavior."
-  },
-  {
-   "id": "W63-stale-comments",
-   "summary": "driver.py, frame.py, siting.py and the kosatsuba docstring: the 12 x 5 ft plank and 12:5 aspect corrected to 16 x 6",
-   "class": "within",
-   "why": "Comment and docstring corrections to the size the code already draws (board size rows closed at E1). No behavior."
-  },
-  {
-   "id": "W63-seat-knob-left",
-   "summary": "the kosatsuba_seat knob (center, entrance, frontage) described on the choice modals left to its own ranked E3 row _knobs.py::<module>#kosatsuba_seat forms",
-   "class": "within",
-   "why": "Not a narrowing: the request orders the work easiest to hardest and SC-003 forbids fixing an E3 row while E2 rows stand open. The E3 row's fix retires the knob and its modals; rewriting their seat text now would be that row's work done early. The wave touched those modals only for the drawing text (footing, marker), which is this wave's."
-  },
-  {
-   "id": "W63-legacy-placed-last-left",
-   "summary": "'placed last' on the legacy village roller (roll.py::roll_village#notice board) left deferred",
-   "class": "within",
-   "why": "The row is scope 'deferred' under FR-010 (the GM's 2026-10-07 amendment: legacy hand-authored settlements' code is DEFERRED). No wave takes it."
-  },
-  {
-   "id": "W63-sheet-board-left",
-   "summary": "the Mode A sheet board's size (docs/buildings.md::Approaches and surroundings#notice board size) left to its own row",
-   "class": "within",
-   "why": "Its own ranked row, E3 (a sheet redrawn, FR-003/FR-009), scope mode-a; taken in tier order, not dropped."
+   "why": "the request says nothing of test time; the growth is measured, its mechanism recorded, and the GM's 2026-10-08 batching ruling puts the gate (with ratchet.py) and the timing pair at the batch close. Note: the timing pair measures the kept maps, not this test - the gate's ratchet at the batch close is what judges it"
   }
  ],
  "verdict": "CLEAR"

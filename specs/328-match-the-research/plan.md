@@ -943,6 +943,32 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `test_a_notice_board_stands_on_a_fenced_footing_and_claims_only_that_ground`, the marker test restated for
   the footing; `impl-drift`; `spec-fidelity`.
 
+## Wave 64 (amendment 63, 2026-10-09) - batch 5
+
+- **Scope**: the notice board's two remaining kept E2 rows. `_board_routes#nominal widths` (0088: the highway "drawn 30 ft
+  wide on every sheet"): each road was taken at 18 px whatever it was drawn at, so the 6 ft off its edge was measured from
+  the wrong edge on any other width; each road now carries its recorded width. `place_kosatsuba#the caption proved against
+  the board` (0190): the caption was proved against the 7 x 3 ft face the seat search tests while the board is drawn 16 x 6
+  ft on its footing, so a caption drawn as proved could stand on the drawn board; all three steps (`board_caption_seat`,
+  `terminal_caption`, `fallback_caption`) now prove it against `board_record`'s drawn box (`vw` x `vh`).
+- **Measured** (m:wave64-board-widths-and-caption): the five hamlets reroll (each caption re-proved; the maps move a little,
+  as a different subject does), the 48-seed cohort unchanged (the same six refused seeds); the canopy test replays the proof on
+  the drawn board; the web-lane test now holds its board inside the web lane's 60 ft band (`KOSATSUBA_WAY_REACH_FT`), not
+  within 40 px of its centerline, because the caption proved against the drawn board takes a seat 47.5 ft out where the verge
+  seat's caption would foul a roof; the every-seat-fouled unit test grows 28.3 -> 36.5 s (359 terminal searches of about
+  2,400 seats each, scored against a larger subject) - a degenerate case no kept map reaches, judged by the gate's `ratchet.py` at the batch close.
+- **Found and fixed (impl-drift)**: the fallback for a road or a main street with no recorded width was 18 PIXELS (a width in
+  feet that moved with the scale, below every width the record attests); it is now the drawer's own default - the 30 ft road
+  (`lw(ROAD_W_FT)`, 0088) and the 24 ft town street (`lw(STREET_W_FT)`, 0136, a named constant in `lanes.py`) - in the
+  main-way routes, the whole-network fallback and the punishment ground's routes alike; the board's search pad (an index radius that prunes the nearest-way search and never decides it, NONE), its siting default
+  (`frontage`, 0190) and its bed clearance (UNRESEARCHED) newly claimed; the punishment ground's width fallbacks claimed. Left to their rows: the town tier's board placement knob (ranked E3 row 204), and the
+  punishment ground's 60 ft measured center to center (`place_punishment_spot#within 60 ft of a street`, DRIFTED) -
+  DEFERRED: only the legacy towns and cities run it. Two decisions impl-drift found unclaimed in that deferred unit (the ground's bed
+  clearance, and its standing inside a lane's setback corridor) are left with it.
+- **Verification**: `test_a_board_route_takes_each_roads_recorded_width`,
+  `test_a_board_route_with_no_recorded_width_takes_the_ways_drawn_default`, the canopy and web-lane tests restated;
+  `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

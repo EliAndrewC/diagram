@@ -1026,5 +1026,20 @@
       "far_cap": "the 60 ft (KOSATSUBA_WAY_REACH_FT) cap now bounds the gap from the road's edge to the footing's edge (off - rw/2 - dh/2), like the 6 ft; it bounded road centerline to board center, so the band widens by rw/2 + dh/2 - 0190's 'up to 60 ft from the road' read as its 6 ft is; the five hamlets byte-identical (their boards on the verge)",
       "scale_correction": "0190's drawing page now names the oversized marker at village and city scale - the GM's call of 2026-07-24 (commit f8f07e0ac, 'location marker at village/city grain'); this closes the E4 row board_record#marker floor at wave 63 under the GM's 2026-10-08 ruling allowing research passes within the feature; ruled LEGITIMATE by the plan review, and raised with the GM in the wave's report"
     }
+  },
+  "wave64-board-widths-and-caption": {
+    "quantity": "wave 64 (2026-10-09): the notice board's routes at each way's recorded width, and its caption proved against the board drawn",
+    "observed": "2026-10-09",
+    "method": "the board's own tests (recorded widths 30 and 12 px kept; no recorded width at 2 ft/px -> lw(30), lw(30), lw(24)); the five hamlets rerolled; make cohort N=48 against wave 63's run; the slow unit test timed alone at a67389b82 and on the clone, then profiled",
+    "value": {
+      "maps": "all five hamlets reroll with the caption re-proved; none moves on the width fallbacks (every hamlet way records its width)",
+      "cohort_48": "48/54, the same six refused seeds as wave 63 (03, 10, 20, 22, 33, 906)",
+      "web_lane_test": "board at (452.5, 396.0): 47.5 ft off the web lane's centerline, inside its 60 ft band; the test held it within 40 px",
+      "every_seat_fouled_test_s": {
+        "a67389b82": 28.26,
+        "wave 64": 36.48,
+        "mechanism": "359 terminal_caption searches x ~2,400 seats scored (877,941 _score calls, poly_seg_gap 63 s of 116 s under cProfile); a degenerate case - one obstacle and one way over the whole frame - that no kept map reaches; the gate's ratchet.py judges this test at the batch 5 close; the timing pair measures the kept maps"
+      }
+    }
   }
 }

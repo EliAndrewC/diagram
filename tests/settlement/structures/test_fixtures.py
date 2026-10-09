@@ -313,9 +313,10 @@ def test_a_board_under_one_wide_canopy_is_sited_without_measuring_a_seat_it_cann
     assert caption_clears_ways(proved.block, index.ways), "its caption, where it covers the least, clears the road"
     during = len(scored)
     scored.clear()
-    # replayed on the face the siter proves a caption against (7 x 3 ft, `place_kosatsuba`'s `w, h`), not the 16 x 6 ft frame
-    # drawn - the key mark at the board's center hid the difference until feature 328 wave 49 (filed: the proof's face)
-    again = place("notice board", BOARD_CAPTION_SIZE, board_subject(board["x"], board["y"], board["rot"], 7.0, 3.0), index, (0.0, 0.0, 600.0, 600.0))
+    # replayed on the board the siter proves a caption against: the board DRAWN, its footing (`board_record`'s vw x vh), not
+    # the 7 x 3 ft face the seat search tests (feature 328 wave 64)
+    drawn = s.board_record(0.0, 0.0, 0.0)
+    again = place("notice board", BOARD_CAPTION_SIZE, board_subject(board["x"], board["y"], board["rot"], drawn["vw"], drawn["vh"]), index, (0.0, 0.0, 600.0, 600.0))
     assert again == proved and during == len(scored), f"{during} seats scored: the strict proofs measured a seat under the crown"
     assert math.dist(spot, (board["x"], board["y"])) == 0.0
 
@@ -472,3 +473,32 @@ def test_a_notice_board_stands_on_a_fenced_footing_and_claims_only_that_ground()
     xs = [p[0] for p in s.block_polys[-1]]
     ys = [p[1] for p in s.block_polys[-1]]
     assert (min(xs), max(xs), min(ys), max(ys)) == (490.0, 510.0, 495.0, 505.0), "the no-build ground is the footing alone"
+
+
+def test_a_board_route_takes_each_roads_recorded_width() -> None:
+    """Feature 328 wave 64 (`_board_routes#nominal widths`): every road was taken at 18 px whatever it was drawn at, so a
+    board's 6 ft from the road's edge was measured from the wrong edge on any road not 18 px wide."""
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1000, 1000, seed=1)
+    s.road([(0, 500), (1000, 500)], width=30.0)
+    s.road([(500, 0), (500, 1000)], width=12.0)
+    widths = [rw for _pts, rw, _approach in s._board_routes(None, "center", False, 1.0)]
+    assert widths[:2] == [30.0, 12.0], widths
+
+
+def test_a_board_route_with_no_recorded_width_takes_the_ways_drawn_default() -> None:
+    """Feature 328 wave 64 (impl-drift): a road or main street with no recorded width fell back to 18 PIXELS, a width in
+    feet that moved with the scale and stood below every width the record attests; it takes the 30 ft road and the 24 ft
+    street the drawers use by default."""
+    from l7r.diagram.settlement import Settlement
+    from l7r.diagram.settlement.structures.ground import ROAD_W_FT
+    from l7r.diagram.settlement.water_ways.lanes import STREET_W_FT
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="town", ftpx=2)
+    s.M["road"] = [[0, 500], [1000, 500]]
+    s.M["roads"] = [{"pts": [[0, 500], [1000, 500]]}, {"pts": [[500, 0], [500, 1000]]}]
+    s.M["town_streets"] = [{"main": True, "pts": [[0, 0], [1000, 1000]]}]
+    widths = [rw for _pts, rw, _approach in s._board_routes(None, "center", False, 2.0)]
+    assert widths == [s.lw(ROAD_W_FT), s.lw(ROAD_W_FT), s.lw(STREET_W_FT)], widths

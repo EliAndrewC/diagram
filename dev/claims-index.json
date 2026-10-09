@@ -59752,20 +59752,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#anchor reach": {
-  "code": "c7379590a910fee5",
-  "core": "635c833090022f76",
-  "date": "2026-10-07",
-  "note": "2 x 60 = 120 ft; the research is silent",
+  "code": "d0375223f1166f7b",
+  "core": "edab1f3125200683",
+  "date": "2026-10-09",
+  "note": "2 x 60 ft = 120 ft; no question answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#lane fallback width": {
-  "code": "2403e257374e7cb4",
-  "core": "635c833090022f76",
-  "date": "2026-10-07",
-  "note": "footpath 3 ft",
+  "code": "a5f8ff60a84bc6dd",
+  "core": "edab1f3125200683",
+  "date": "2026-10-09",
+  "note": "px(3.0), the footpath's 3 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -59777,56 +59777,74 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#main ways only": {
-  "code": "4d4ece23dfbb7e88",
-  "core": "635c833090022f76",
+  "code": "97fd77bd0b38269c",
+  "core": "edab1f3125200683",
   "date": "2026-10-09",
-  "note": "only roads and main streets where any exist",
+  "note": "roads plus main streets, returned alone when any exist",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
   "research": "f69092eeadc87044",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#no main way, the whole network": {
-  "code": "cd942e2fde388c50",
-  "core": "635c833090022f76",
+  "code": "9856d1b77cc21c3b",
+  "core": "edab1f3125200683",
   "date": "2026-10-09",
-  "note": "falls back to lanes and streets; putting web lanes last is covered by the unit's UNRESEARCHED claim",
+  "note": "lanes and every town street are the fallback",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
   "research": "f69092eeadc87044",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#nominal widths": {
-  "code": "22c47d4a9dc96dd0",
-  "core": "635c833090022f76",
-  "date": "2026-10-07",
-  "note": "0137 gives no 18 px nominal (it gives roads 30 ft, the avenue 45 ft) and is about capitals, not board siting; relabel UNRESEARCHED/GUESS, or read each road's recorded width",
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#recorded widths": {
+  "code": "e2f775df8ab5c518",
+  "core": "edab1f3125200683",
+  "date": "2026-10-09",
+  "note": "the recorded w, else lw(ROAD_W_FT) 30 ft, the drawer's default",
   "pages": {
-   "0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html": "76f19657d541ffff"
+   "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58"
   },
-  "research": "281e638162646bea",
+  "research": "0f270480aae97519",
   "rests": [
-   "0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html:c80ced0799d0328d"
+   "0088-highways-and-what-lines-them-kaido.drawing.html:7336b6f855fd2b4c",
+   "0088-highways-and-what-lines-them-kaido.drawing.html:7b5b5f842665a66e"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#service lanes last": {
-  "code": "92cfb5a775ae619d",
-  "core": "635c833090022f76",
-  "date": "2026-10-07",
-  "note": "the research is silent",
+  "code": "718617f612ee7438",
+  "core": "edab1f3125200683",
+  "date": "2026-10-09",
+  "note": "§4 does not say which lane classes count; still unresearched",
   "pages": {},
   "research": "",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#street fallback width": {
+  "code": "a9b5904d006bdec2",
+  "core": "edab1f3125200683",
+  "date": "2026-10-09",
+  "note": "lw(STREET_W_FT) 24 ft, in both the main-way and fallback routes",
+  "pages": {
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html": "7a79c51cdfe860c9"
+  },
+  "research": "f1e4d380dfc31239",
+  "rests": [
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:49b334a481b4ed37",
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:9d41257b1ae9db42"
   ],
   "verdict": "IN-STEP"
  },
@@ -59965,10 +59983,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#board placed last": {
-  "code": "c2a05c18dd7fc0b1",
-  "core": "8601b73bf75c19c3",
+  "code": "e1e25f793d75b844",
+  "core": "74ebfe35e64f1cca",
   "date": "2026-10-09",
-  "note": "sited against the view after the crop",
+  "note": "sited against meta.view after the crop",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
@@ -59979,10 +59997,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#every settlement carries a board": {
-  "code": "c4d42702f4ef478c",
-  "core": "8601b73bf75c19c3",
+  "code": "4ccb825851289797",
+  "core": "74ebfe35e64f1cca",
   "date": "2026-10-09",
-  "note": "hamlets included",
+  "note": "no tier is excluded",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
@@ -59993,27 +60011,51 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#facing search pad": {
+  "code": "9b0d1c41f8982710",
+  "core": "74ebfe35e64f1cca",
+  "date": "2026-10-09",
+  "note": "the pad only limits which index cells are queried, falls back to scanning every segment, and never decides the bearing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#off every way's bed": {
+  "code": "5f16102e34583527",
+  "core": "74ebfe35e64f1cca",
+  "date": "2026-10-09",
+  "note": "the page sets the 6 ft offset from the board's own road, but says nothing on a minimum clearance off every way's bed",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#placement knob at the lane tiers": {
-  "code": "b8645cc6eaab7b2c",
-  "core": "8601b73bf75c19c3",
-  "date": "2026-10-07",
-  "note": "towns are fixed to \"center\", but 0190 attests \"the entrances and centers of towns\" and a post town's board \"at the town's southern entrance\"; the town tier should roll the forms",
+  "code": "e64abbaeec884512",
+  "core": "74ebfe35e64f1cca",
+  "date": "2026-10-09",
+  "note": "line 177 fixes [\"center\"] for towns, but the research attests town boards \"at its entrances, at the foot of bridges\" too, and Ogose's at its southern entrance; roll the form at the town tier, or relabel DEVIATION with the drawing page recording it (cities: §8 is separate)",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:2c118eb5b4942dc7",
    "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
-   "0190-notice-boards-kosatsuba.html:cd8d9ce0b74bb55f",
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#probe size": {
-  "code": "543609098db6165a",
-  "core": "8601b73bf75c19c3",
+  "code": "1a9e6e1be98c2ba8",
+  "core": "74ebfe35e64f1cca",
   "date": "2026-10-09",
-  "note": "7 x 3 ft face tested, the project's own figure",
+  "note": "px(7.0) x px(3.0)",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
@@ -60023,81 +60065,196 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#siting default": {
+  "code": "dd29d8e647be795f",
+  "core": "74ebfe35e64f1cca",
+  "date": "2026-10-09",
+  "note": "when no knob was rolled, the default is the busiest frontage, which matches \"where traffic was heaviest\" and the passers-by weighing",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+  },
+  "research": "f69092eeadc87044",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
+   "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09",
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#the caption proved against the board": {
+  "code": "41d9b79c2f2cabd8",
+  "core": "74ebfe35e64f1cca",
+  "date": "2026-10-09",
+  "note": "the caption is proved against the drawn footing (vw x vh passed as half-extents, rebuilt at full size); this matches the caption room search and the footing as drawn",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+  },
+  "research": "f69092eeadc87044",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
+   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171",
+   "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#caption seat": {
-  "code": "48cb5ad870bead72",
-  "core": "cde9754559a40806",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "9b229e168c07bc36",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "label probe order: below, above, left, right",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#ground size": {
-  "code": "43c1feba7ecf38b2",
-  "core": "cde9754559a40806",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "96861723ddb15fb5",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "30 x 12 ft",
   "pages": {
    "0191-execution-and-punishment-grounds-keijo.drawing.html": "623d2ba33ede56cd"
   },
   "research": "5216b7d49e93a00a",
+  "rests": [
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:289a630b93187e43"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#inside the rampart": {
-  "code": "6ebcccbc767e1fcc",
-  "core": "cde9754559a40806",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "2d8f1c251125f869",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "point_in_poly against the wall",
   "pages": {
    "0191-execution-and-punishment-grounds-keijo.drawing.html": "623d2ba33ede56cd"
   },
   "research": "5216b7d49e93a00a",
+  "rests": [
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:5c884125315de956"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#lane fallback width": {
+  "code": "d2494fde21997e65",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "no cited question gives a lane with no recorded width a figure; the town pages give a side lane about 12 ft (a GUESS) and a back alley 10 ft, neither of which is this fallback",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:8f4ac2a1fa1fffe8",
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:e1259668cdfc8ded"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#least offset off the tread": {
-  "code": "becd449e0f348977",
-  "core": "cde9754559a40806",
-  "date": "2026-10-03",
-  "note": "no bundled question answers it",
+  "code": "eb88955676340bf3",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "rw/2 + h/2 + 4 px; the page sets no minimum",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:5c884125315de956"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#nearness tie-break": {
-  "code": "cefa25760b763e98",
-  "core": "cde9754559a40806",
-  "date": "2026-10-03",
-  "note": "no bundled question answers it",
+  "code": "8d52eaff40b09ab7",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "busy*10 - off/3; not answered",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#out from under captions": {
-  "code": "c788fff383a68660",
-  "core": "cde9754559a40806",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "84bbdc7232b485b2",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "best_clear preferred, falls back to best",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#sited by foot traffic": {
-  "code": "b98791c659ef2022",
-  "core": "cde9754559a40806",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "3d5e07da8176b475",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "scored by buildings within 260 px",
   "pages": {
    "0191-execution-and-punishment-grounds-keijo.drawing.html": "623d2ba33ede56cd"
   },
   "research": "5216b7d49e93a00a",
+  "rests": [
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:5077bb24e2849662",
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:5c884125315de956"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#the ground kept h/2 + 3 px off every way's bed (place_kosatsuba claims its twin as UNRESEARCHED)": {
+  "code": "b9346f3c1f09336f",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "the ground kept h/2 + 3 px off every way's bed (place_kosatsuba claims its twin as UNRESEARCHED)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#the ground may stand inside a lane's house-setback corridor (`_fits(..., corridors=False)`)": {
+  "code": "b9346f3c1f09336f",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "the ground may stand inside a lane's house-setback corridor (`_fits(..., corridors=False)`)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#turned to its way": {
+  "code": "f7e5e5c463df428e",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "0191 turns only the EXECUTION ground's road side to the road and says nothing on how the punishment ground is turned",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:55849e1196c7b09c",
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:d89767afd1b20a7b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#way widths": {
+  "code": "6bff53c12e626201",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "the road at 30 ft \"on every sheet\" and the main street at 24 ft match the pages; both are used only where no width is recorded",
+  "pages": {
+   "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58",
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html": "7a79c51cdfe860c9"
+  },
+  "research": "bd20cf6922d8569b",
+  "rests": [
+   "0088-highways-and-what-lines-them-kaido.drawing.html:7b5b5f842665a66e",
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:4484f2c57f891f5b",
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:49b334a481b4ed37"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#within 60 ft of a street": {
-  "code": "334cc8fe8d055389",
-  "core": "cde9754559a40806",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "2e91285cdfda4de5",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-09",
+  "note": "line 290's `off <= lim` measures the way's centreline to the ground's centre, but the page says \"measured edge to edge, never center to center\"; edge to edge the code allows only 60 - rw/2 - h/2 ft; test off - rw/2 - h/2 <= lim",
   "pages": {
    "0191-execution-and-punishment-grounds-keijo.drawing.html": "623d2ba33ede56cd"
   },
   "research": "5216b7d49e93a00a",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:55849e1196c7b09c",
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:5c884125315de956"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::VERGE_FIRST#siting plumbing": {
   "code": "1e78b70a650f287d",
@@ -62274,33 +62431,44 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.street#buildings front the street": {
-  "code": "f51ac5d9d364b58f",
-  "core": "66124c28ac41fb7e",
-  "date": "2026-10-03",
-  "note": "corners kept just off the bed; buildings front it",
+  "code": "d1af937e4cc70c55",
+  "core": "189545545223ccf1",
+  "date": "2026-10-09",
+  "note": "the corridor margin is a dwelling's half-diagonal, so houses stand at the street edge",
   "pages": {
    "0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html": "dbff42eb0226dcdc"
   },
   "research": "203a3fc87bd91a46",
+  "rests": [
+   "0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html:6cfaf0a499ec4963",
+   "0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html:abf491acf2a5681b",
+   "0119-how-a-town-is-zoned-shops-on-the-street-housing-behind.html:c1d6bb165ad0079c"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.street#street strokes": {
-  "code": "a7011bfeb4784e31",
-  "core": "66124c28ac41fb7e",
-  "date": "2026-10-03",
-  "note": "strokes",
+  "code": "1e209ceb19dc74d0",
+  "core": "189545545223ccf1",
+  "date": "2026-10-09",
+  "note": "edge and bed strokes and colors only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.street#street width": {
-  "code": "e8baddd504b02ac1",
-  "core": "66124c28ac41fb7e",
-  "date": "2026-10-03",
-  "note": "24 ft main street",
+  "code": "368921f6fb9ffea0",
+  "core": "189545545223ccf1",
+  "date": "2026-10-09",
+  "note": "lw(STREET_W_FT) 24 ft when no width is given",
   "pages": {
    "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html": "7a79c51cdfe860c9"
   },
   "research": "f1e4d380dfc31239",
+  "rests": [
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:49b334a481b4ed37",
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:9d41257b1ae9db42"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#a row street stays whole": {
@@ -62412,6 +62580,21 @@
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:df440690bbce9cb6",
    "0081-village-lanes.drawing.html:f2368e271306e3c2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/water_ways/lanes.py::STREET_W_FT#street width": {
+  "code": "8d82a99401e2919b",
+  "core": "ffee4490a92ad90e",
+  "date": "2026-10-09",
+  "note": "24.0",
+  "pages": {
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html": "7a79c51cdfe860c9"
+  },
+  "research": "f1e4d380dfc31239",
+  "rests": [
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:49b334a481b4ed37",
+   "0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html:9d41257b1ae9db42"
   ],
   "verdict": "IN-STEP"
  },

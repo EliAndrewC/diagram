@@ -388,7 +388,9 @@ def test_the_web_lanes_are_offered_when_no_main_way_takes_a_clean_caption() -> N
         for dy in (-72.0, -48.0, -24.0, 24.0, 48.0, 72.0):  # the main lane hemmed through its whole 60 ft band
             _house(s, float(x), 300.0 + dy, 20.0, 16.0)
     spot = s.place_kosatsuba()
-    assert spot is not None and abs(spot[0] - 500.0) < 40.0 and spot[1] > 385.0, spot
+    # by the web lane, inside its 60 ft band (the caption proved against the board drawn, footing and all, may take a seat
+    # out in the band rather than at the verge - feature 328 wave 64), and off the hemmed main lane
+    assert spot is not None and seg_dist(spot[0], spot[1], (500.0, 300.0), (500.0, 700.0)) <= KOSATSUBA_WAY_REACH_FT and spot[1] > 385.0, spot
 
 
 def test_with_no_clean_caption_anywhere_the_verge_takes_the_board_and_its_caption_clears_the_road() -> None:

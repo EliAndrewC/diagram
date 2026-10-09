@@ -72,6 +72,10 @@ def reaches_dooryard(house: Any, q: Pt, reach: float = DOORYARD_REACH_FT) -> boo
     return hh - 1e-6 <= ly <= hh + reach and abs(lx) <= float(house["w"]) / 2 + reach
 
 
+STREET_W_FT = 24.0
+"""Research: street width - research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html: a town street 24 ft by default"""
+
+
 class LanesMixin:
     def lane(self: Settlement, pts: Any, width: float = 16, clearance: float = 22, worn: bool = False, connector: bool = False, spur: bool = False) -> None:  # type: ignore[misc]
         """A village lane or connecting path. `worn=True` draws it as UNPAVED TRODDEN EARTH: a NARROW
@@ -378,7 +382,7 @@ class LanesMixin:
             street strokes - CONVENTION: an earth edge and a lighter bed
         """
         if width is None:
-            width = self.lw(24)
+            width = self.lw(STREET_W_FT)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         self.corridors.append(
             (pts, width / 2 + max(32 * self.bscale, 17))

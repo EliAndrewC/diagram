@@ -719,7 +719,6 @@
   "l7r/diagram/settlement/structures/ground.py::GroundMixin._finish_road_label",
   "l7r/diagram/settlement/structures/ground.py::GroundMixin.pasture",
   "l7r/diagram/settlement/structures/ground.py::GroundMixin.road",
-  "l7r/diagram/settlement/structures/ground.py::ROAD_W_FT",
   "l7r/diagram/settlement/structures/packing.py::PackingMixin",
   "l7r/diagram/settlement/structures/packing.py::PackingMixin._shortfall",
   "l7r/diagram/settlement/structures/packing.py::PackingMixin.pack",
