@@ -617,5 +617,39 @@
       "added": "none",
       "pool": "kashikawa's manifest one line: three bands cut a pixel shorter, their trees re-scattered by up to ~12 px (spec-fidelity's aside); inashiro, kuwabata, mizuguchi, sawada unchanged; the notes census current"
     }
+  },
+  "wave60-garden-flank": {
+    "quantity": "wave 60 (2026-10-08): dispersed hamlets declaring a SW or SE wind (12 households, seeds 1-24 each wind, 48 rolls), beds whose south edge stands north of their house's center, and the rolls refused - at fdada289e's predecessor (a detached worktree) and with wave 60's garden_west (built, measured, then reverted: the row held E3)",
+    "observed": "2026-10-08",
+    "method": "a throwaway probe test run through make test-file in both trees (deleted after); the five hamlets rerolled; make cohort N=24",
+    "value": {
+      "beds_north_of_house": [
+        [
+          540,
+          540
+        ],
+        [
+          0,
+          528
+        ]
+      ],
+      "refused": {
+        "before": [
+          "6 SW UndeckableCrossing",
+          "9 SW SiteRefused",
+          "20 SE OverlapRefused"
+        ],
+        "after": [
+          "5 SE NoDryExit",
+          "14 SE SiteRefused",
+          "14 SW OverlapRefused",
+          "23 SW NoDryExit"
+        ]
+      },
+      "undeclared_wind": "12 dispersed seeds with no declared wind roll the regional NW (DEFAULT_WINDWARD): unchanged, 0 of 144 beds north",
+      "pool": "the five hamlets unchanged (none declares a wind)",
+      "cohort": "30 maps, 25 passing before and after, the same FAIL lines",
+      "windward_band_emptied": "spec-fidelity's computation (2026-10-08, the test's dimensions as feet, back 24, sun_band on): under SW/SE the moved bed's 50 ft south reach covers about 21% of the windward deep band's area, held empty of trees; under NW none"
+    }
   }
 }

@@ -53557,66 +53557,149 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#deep bands off the works": {
+  "code": "05564cbd1a204936",
+  "core": "b80c7eb2000bacc0",
+  "date": "2026-10-08",
+  "note": "offset off the works is the recorded service-strip GUESS; crowns kept out of the plots' sun as 0038 requires",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:784ca5d6e795312e"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#garden placement": {
   "code": "16132ba6ca305291",
   "core": "b80c7eb2000bacc0",
-  "date": "2026-10-03",
-  "note": "east wall, or beside the yard on a sun-keeping map (0038, 0036)",
+  "date": "2026-10-08",
+  "note": "east wall or beside the yard (southeast of the house), both seats the page allows; beside the yard on a map keeping the sun",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:0a9f4b3b9b0dbbea",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:b4f6885af6bd959a"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#grove sides and depths": {
   "code": "b920162e1b2a46e3",
   "core": "b80c7eb2000bacc0",
-  "date": "2026-10-03",
-  "note": "deep N+W at 1.57 house depths, thin E on 3, thin S on 4 broken for the way in (0036)",
+  "date": "2026-10-08",
+  "note": "deep N+W at 1.57 house depths, thin E then S, front left open away from the wind, east band ending at the house on a sun map",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
   "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:784ca5d6e795312e",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a2869616958ab3d2",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a33deb5f90d7f688",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#service strip": {
+  "code": "7c821acb8df76d98",
+  "core": "b80c7eb2000bacc0",
+  "date": "2026-10-08",
+  "note": "24 ft off the back and windward end walls, recorded as a GUESS",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#south strip off an unkept yard": {
+  "code": "77f3b403aeb5119b",
+  "core": "b80c7eb2000bacc0",
+  "date": "2026-10-08",
+  "note": "the 22 ft default runs only on maps that never opted into the sun corridor. 0038 exempts hand-drawn maps from its placement rules (§112), and its 39 ft yard strip and 50 ft canopy reach bind only the maps a generator draws, so the bundle has nothing that answers 22 ft for this farm's own south band; UNRESEARCHED is the right label",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:6cec157693d897b8",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:c3578d51ce1e884d",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:d3a563a684496e84",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb3e7c6b3e5d24bf"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#thin bands clear of the plots' sun": {
-  "code": "e29251514f63b59e",
+  "code": "497ac051ed7671ab",
   "core": "b80c7eb2000bacc0",
-  "date": "2026-10-03",
-  "note": "east band past sun_east, south band past yard_sun; with sun_band the east band ends at the house front (0036)",
+  "date": "2026-10-08",
+  "note": "east band past 50 ft from the bed; south band past 50 ft plus a crown on every scripted map",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "0e2c0ccedd2f9c0f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:c3578d51ce1e884d",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#way in through a ring": {
+  "code": "5f279d2ce449b6d0",
+  "core": "b80c7eb2000bacc0",
+  "date": "2026-10-08",
+  "note": "one 36 ft break at the middle of the farm's front (centered on the yard and house), recorded as a GUESS",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#well pocket in the dooryard": {
   "code": "3986c9fdb240c02b",
   "core": "b80c7eb2000bacc0",
-  "date": "2026-10-03",
-  "note": "beside the yard, off the way in; place a GUESS (0031)",
+  "date": "2026-10-08",
+  "note": "in the dooryard beside the yard, off the way in; its place is a GUESS",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b326e625eaeec6d4"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#yard on the south front": {
   "code": "08a9174ecbd06fac",
   "core": "b80c7eb2000bacc0",
-  "date": "2026-10-03",
-  "note": "\"the ground in front of the house's south wall\"",
+  "date": "2026-10-08",
+  "note": "yard before the south wall, beside the house",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
   },
   "research": "a016354285005c18",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:a708d49b4d686be7",
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut out of a bed's morning sun": {
@@ -53638,37 +53721,45 @@
  "l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#frame padded for a lane": {
   "code": "5fc02c16f3378398",
   "core": "ad883923fc825c76",
-  "date": "2026-10-03",
-  "note": "half of 32 ft each side",
+  "date": "2026-10-08",
+  "note": "half the lane room on each side gives the whole gap between neighbors' groves",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
   "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#garden beside the yard when turned": {
   "code": "c8a9ba72eb55684b",
   "core": "ad883923fc825c76",
-  "date": "2026-10-03",
-  "note": "garden_by_yard=moved is as claimed, but the turn also carries the yard; whether a mirrored or turned frame (e.g. a south-west wind) puts the yard, and so the garden beside it, on the house's north needs bundle_turn/_carried/turns_axes, not in the bundle",
+  "date": "2026-10-08",
+  "note": "garden_by_yard=moved carries the canonical bed (east of a yard south of the house) to the house's NE/NW under the SW/SE turns, against \"a bed may stand to the southeast, southwest, east or west of its house\"; the same drift as before (held E3)",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
-  "triaged": "2026-10-05",
-  "verdict": "CANNOT-TELL"
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:0a9f4b3b9b0dbbea",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:b4f6885af6bd959a"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#homestead turned to the map's wind": {
   "code": "b80f3ce2adb39cfa",
   "core": "ad883923fc825c76",
-  "date": "2026-10-03",
-  "note": "per-map windward knob",
+  "date": "2026-10-08",
+  "note": "the canonical NW frame carried to the map's windward quarter (S+W for a Tonami-like wind), front away from the wind",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
   "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:effd653c04180008"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin#draw-order and footprint plumbing": {

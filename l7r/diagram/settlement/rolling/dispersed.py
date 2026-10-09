@@ -94,7 +94,11 @@ def canonical_farmstead(
         grove sides and depths - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: deep bands on the two windward sides, a thin band on a third and fourth rolled side, the corners closed
         yard on the south front - research/questions/0029-farmhouses-minka.drawing.html, research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: the yard before the house's south wall, 3 ft (`gap`) off it
         garden placement - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: against the east wall, or beside the yard when the map keeps the sun
-        thin bands clear of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: east band past the garden's reach, south band past the yard's strip
+        thin bands clear of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: east band past the garden's reach (`sun_east`, 50 ft), south band past the yard's strip (`yard_sun`: the 50 ft canopy reach and a crown on a map keeping the sun - every scripted hamlet opts in, `stages.py`'s `sun_corridor`; the 22 ft `YARD_SUN_STRIP` default only where a hand map never opted in)
+        south strip off an unkept yard - UNRESEARCHED: the 22 ft `YARD_SUN_STRIP` default, run only on a hand map that never opted into the sun corridor (0038 exempts those maps and gives 39 ft and 50 ft, never 22)
+        service strip - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand `back` (`SERVICE_STRIP_FT`, 24 ft) off the back and windward end walls, sized to seat a wood shed
+        deep bands off the works - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the west and north bands `gap` + `back` off the westmost and northmost house, yard, bed or well; where that ground lies in a plot's 50 ft reach (0038) its crowns are culled where the band is drawn (`groves.py`, `_sun_keepouts`), so the band's GROUND may lie there and its trees never do
+        way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one `way_in` (`WAY_IN_FT`, 36 ft) break at the front band's middle, sized so a lane can be routed through
         well pocket in the dooryard - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside the yard on its west, off the way in (where on the lot is a GUESS)
     """
     gw, gh = garden
@@ -184,6 +188,11 @@ def dispersed_layout(
     grove and ground, unraked). In every frame but the unchanged
     northwest one the garden goes beside the yard (plan D3): turned or mirrored, the east wall it stands against would be
     the house's north wall or its west, where the house takes its sun.
+    A FIX THAT FAILED (feature 328 wave 60, row 590 held E3): under the SW and SE turns this carries the bed to the house's
+    northeast or northwest. Laying it on the yard's canonical west flank (carried south; the well pocket the other flank) was
+    built and reverted: on 48 declared-wind rolls the refusals rose 3 -> 4 on other seeds, undiagnosed. The windward band
+    giving up the moved bed's sun ground is 0038 applied (no canopy tree in a bed's sun, `_sun_keepouts`), not a conflict.
+    Only a hamlet declaring a SW or SE wind runs it.
 
     Research:
         homestead turned to the map's wind - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the canonical northwest frame carried by a symmetry of the square

@@ -836,6 +836,31 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `tests/settlement/test_grove_sides.py` (the stub dropped, the touching band cut; red on the old code);
   the cohort diff; `impl-drift`; `spec-fidelity`.
 
+## Wave 60 (amendment 59, 2026-10-08) - batch 4
+
+- **Row 590 HELD, re-tiered E3 on measure** (the spec's Edge Case; plan review W60-refusals). Under the SW and SE turns
+  `canonical_farmstead`'s bed beside the yard is carried to the house's northeast or northwest. A `garden_west` flank (the bed
+  on the yard's canonical west flank, which those turns carry south; the well pocket the other flank) was built, tested and
+  REVERTED: on 48 declared-wind dispersed rolls the refusals went 3 -> 4 on other seeds, undiagnosed (m:wave60-garden-flank) -
+  diagnosing and fixing them is the row's work. The sun is settled by 0038 (no canopy tree in a bed's sun, whatever stand it
+  belongs to; a bed SE, SW, E or W): the windward band giving up about 21% of its ground to the moved bed's reach is 0038
+  applied, and the code already culls those crowns (`_sun_keepouts`). The path runs only for a hamlet that DECLARES a SW or SE
+  wind (`DEFAULT_WINDWARD` is the regional northwest). Recorded at the point of change as a fix that failed.
+- **Found (impl-drift round 4)**: under a southern wind the turn puts the front, and the yard, away from the wind - off the
+  house's south - where 0029 has the yard before the south wall and 0036 the front away from the wind: a conflict between
+  two cited pages, filed as its own row (`found-wave60.jsonl`, `dispersed_layout#homestead turned to the map's wind`, E4,
+  NEEDS-RESEARCH).
+- **Claims (impl-drift)**: `canonical_farmstead#thin bands clear of the plots' sun` DRIFTED on its wording - it named the
+  22 ft `YARD_SUN_STRIP` default where every scripted hamlet passes the 50 ft canopy reach and a crown (`sun_corridor`, opted in
+  at `hamletgen/homesteads/stages.py`; the default runs only on a hand map that never opted in, deferred): restated to name
+  both. Three UNCLAIMED decisions claimed as GUESS: the service strip and the way in through a ring (the words of ranked rows
+  231 and 234, which claim the same at `_bundle_layout`), and the deep bands set `gap` + `back` off the works, their ground
+  inside a plot's reach and their crowns culled there where the band is drawn (`groves.py`, `_sun_keepouts`).
+  Round 4 (the revert): 10 in step, the garden row drifted as held - and the same turns put the yard north of the house
+  (0036's front off the wind against 0029's south front), filed as its own E4 row; the 22 ft default claimed UNRESEARCHED.
+- **Occasions**: none - no engine behavior changes (claim lines and a docstring).
+- **Verification**: the five hamlets cached or byte-identical; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

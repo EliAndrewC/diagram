@@ -1774,3 +1774,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T148 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 59); impl-drift 2 in step, 1 DRIFTED ranked row 830 with 804; cohort 24 -> 25 of 30, rerun on final code
+
+## Phase 61 - wave 60 (amendment 59): row 590 held E3 on measure; canonical_farmstead's claims
+
+- `rolling/dispersed.py::canonical_farmstead` (claims), `dispersed_layout` (the failed fix recorded); `audit/overrides.json` (row 590 E3).
+
+- [x] T149 wave 60's row (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 60 round 3); row 590 held E3 on measure (garden_west reverted: refusals 3 -> 4 undiagnosed); impl-drift rounds 1-5 recorded, claims-owed none
+- [x] T150 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 60 round 3); row 590 held E3 on measure (garden_west reverted: refusals 3 -> 4 undiagnosed); impl-drift rounds 1-5 recorded, claims-owed none

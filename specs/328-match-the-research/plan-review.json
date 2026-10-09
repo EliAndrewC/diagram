@@ -1,38 +1,57 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "885589ad499e4691c431ff6e3cb22d0509522f04931cc8e638d3e645b538bcfc",
+ "plan_sha256": "859b6d59dfe2ae49b4edb70633a5e1a8f0397384c2bf159a62be1340e13ad6ed",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W59-row588",
-   "summary": "clear_east_of_beds drops a band whose cut run would be shorter than its width (it used to be kept whole inside the bed's 50 ft east reach), and the claim is relabeled to cite 0038",
-   "class": "within",
-   "why": "This is row 588's ranked fix word for word: the band is dropped rather than kept whole, and the cut part cites 0038. The test asserts [] for the stub."
+   "id": "W60-hold590",
+   "summary": "row 590 held: the garden_west change reverted, the row re-tiered E2 -> E3 on measure (refusals 3 -> 4 of 48 declared-wind rolls, undiagnosed), its claim left DRIFTED",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "This is the spec's Edge Case route: where the fix costs more than the row's tier, the row takes that tier and its claim stays as found. XIII forbids landing the extra refusal. The hold now rests only on the undiagnosed refusals and the work to fix them, and claims-index keeps the claim DRIFTED (held E3)."
   },
   {
-   "id": "W59-every-form",
-   "summary": "the cut runs for every bundle that has bands (`if base.get('groves')`), where it used to run for the dispersed form alone (`frame is not None`)",
+   "id": "W60-sun-settled",
+   "summary": "override, docstring and plan record that the windward band giving up ~21% of its ground to the moved bed's 50 ft reach is 0038 applied (crowns culled by _sun_keepouts), not an open choice",
    "class": "within",
-   "why": "0038 holds a farm's own grove to the 50 ft east reach whatever the settlement form. A linear or nucleated farm left uncut was a mismatch between the code and the research, and this feature exists to remove those. The defect was found in the wave's own measuring and fixed there (XIV). It widens enforcement and excepts nothing."
+   "why": "Round 2 item 1 is fixed. The wording now follows 0038.drawing ('no canopy tree in a yard's or bed's sun, whatever stand it belongs to') and no longer leaves a band-versus-bed choice open. A grep for \"row's decision\" and \"covers both\" over the plan, the audit, the ranking, dispersed.py and claims-index finds nothing."
   },
   {
-   "id": "W59-pixel-margin",
-   "summary": "the overlap test takes in a band within 1 px of the bed's height, so a band ending at the bed's edge, which overlaps it once both records are rounded to 0.1 (cohort seed 901, 0.015 px), is cut a pixel clear",
+   "id": "W60-yard-north-row",
+   "summary": "the turns' yard-north finding (0036's front off the wind against 0029's yard before the south wall) filed as its own row: found-wave60.jsonl, dispersed_layout#homestead turned to the map's wind, E4 NEEDS-RESEARCH; ranking re-merged (E4 61 -> 62)",
    "class": "within",
-   "why": "The cut now agrees with the rule that reads the rounded records (gardens_east_shaded). The fix widens the cut and narrows nothing. The cohort logs show Audit-901's gardens_east_shaded gone and no failure added."
+   "why": "Round 2 item 2 is fixed. This is the spec's Edge Case followed literally: a new finding is ranked under its own tier, and a conflict between two cited pages is NEEDS-RESEARCH. Row 590's override no longer claims to cover the finding."
   },
   {
-   "id": "W59-found-830",
-   "summary": "the new DRIFTED claim (the cut tests only the bed's own height, not down to 50 ft below its south edge) is ranked E3 alongside row 804 and kept in scope rather than fixed in this wave",
+   "id": "W60-closed-tiers",
+   "summary": "audit/closed-tiers.json restored to HEAD (no garden key)",
    "class": "within",
-   "why": "This is not a carve-out. The drift is the same one row 804 (gardens_east_shaded#east reach below the bed) already records, and row 804's fix already names clear_east_of_beds as its layout twin. Row 804 was tiered E3 at T38b because the rule and the cut must move together across two modules. The GM asked for the findings to be fixed from easiest to hardest, so leaving an E3 to its place in that order follows the request literally. The row stays scope 'kept' and remains owed."
+   "why": "Round 2 item 3 is fixed. git status shows the file unmodified, and it holds no 'garden beside the yard' key."
   },
   {
-   "id": "W59-occasions",
-   "summary": "no review occasions are declared: the bands move by under a pixel, Kashikawa's manifest is the only pool change",
+   "id": "W60-claim-thin-bands",
+   "summary": "thin bands' claim restated to name both yard_sun paths",
    "class": "within",
-   "why": "This is a process decision under feature 294 and narrows nothing the GM asked for. No fidelity ruling is owed."
+   "why": "It corrects the claim's wording to match the code (the E0 route under FR-004)."
+  },
+  {
+   "id": "W60-unresearched-22ft",
+   "summary": "UNRESEARCHED claim for the 22 ft YARD_SUN_STRIP default at canonical_farmstead",
+   "class": "within",
+   "why": "It states the mismatch honestly and carves nothing out. Its twin at bundle.py was ranked E0 in wave 10."
+  },
+  {
+   "id": "W60-guess-claims",
+   "summary": "service strip, way in through a ring, deep bands off the works claimed as GUESS",
+   "class": "within",
+   "why": "These carry the words of ranked rows 231 and 234, labeled as guesses."
+  },
+  {
+   "id": "W60-occasions",
+   "summary": "no review occasions: claim lines and a docstring only; the five hamlets cached or byte-identical",
+   "class": "within",
+   "why": "A feature 294 process decision that narrows nothing asked."
   }
  ],
  "verdict": "CLEAR"

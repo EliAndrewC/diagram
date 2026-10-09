@@ -9008,22 +9008,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#garden beside the yard when turned",
-  "tier": "E2",
-  "fix": "under the SW and SE turns canonical_farmstead's garden (east of the yard, canonical SE) carries to NE/NW of the house; put the moved garden on the yard flank the turn carries south (x sign -1 for the quarter-turn/anti-diagonal frames) so it lands SE/SW",
-  "files": [
-   "l7r/diagram/settlement/rolling/dispersed.py"
-  ],
-  "after": [],
-  "flag": "",
-  "e0_basis": "",
-  "e0_rechecked": true,
-  "tier_as_ranked": "E0",
-  "verdict": "CANNOT-TELL",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#whole farmstead off the fields",
   "tier": "E2",
   "fix": "test garden and storehouse plot (not only yard and fixtures) exactly against every paddy polygon per 0124; give the beds-off-ditch rule its own label",
@@ -12835,6 +12819,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#garden beside the yard when turned",
+  "tier": "E3",
+  "fix": "re-tiered E2 -> E3 on measure (wave 60, 2026-10-08; plan review W60-refusals): under the SW and SE turns the bed beside the yard lands NE or NW of the house; laying it on the yard's canonical WEST flank, which those turns carry south (the well pocket the other flank), was built and REVERTED because on 48 declared-wind dispersed rolls the refusals went 3 -> 4 on other seeds (5 SE and 23 SW NoDryExit, 14 SE SiteRefused, 14 SW OverlapRefused) - undiagnosed, and diagnosing and fixing them is the row's work. The sun is settled by 0038 (no canopy tree in a yard's or bed's sun, its own farm's or a neighbor's; a bed SE, SW, E or W): under a southern wind the moved bed's 50 ft reach takes about 21% of the windward deep band's ground out of its trees, and the code already culls them there (`groves.py` `_sun_keepouts`) - that is 0038 applied, not a conflict. The path runs only for a hamlet DECLARING a SW or SE wind (DEFAULT_WINDWARD is the regional NW). Measured: m:wave60-garden-flank",
+  "files": [
+   "l7r/diagram/settlement/rolling/dispersed.py"
+  ],
+  "after": [],
+  "flag": "",
+  "e0_basis": "",
+  "e0_rechecked": true,
+  "tier_as_ranked": "E0",
+  "verdict": "CANNOT-TELL",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a household whose only ways zigzag re-seated",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -14161,6 +14161,21 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E0",
   "moved": "amendment 9 round 1 (spec-fidelity): a NEEDS-RESEARCH finding is E4 with the research pass first (spec Edge Cases), not a relabel",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#homestead turned to the map's wind",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "under a southern (SW or SE) wind the canonical frame's turn puts the front, and so the work yard, away from the wind - east or west, and on some turns north of the house - where 0029 has the house facing south over its yard before the south wall; 0036 puts the front 'away from the wind' and Tonami's front is east, not north. A conflict between two cited pages: a research pass first (which way a farmhouse faces, and where its yard lies, under a southern prevailing wind), then the turn. Found by impl-drift round 4 of wave 60; runs only for a hamlet declaring a southern wind",
+  "files": [
+   "l7r/diagram/settlement/rolling/dispersed.py",
+   "l7r/diagram/settlement/homestead_parts/grove_sides.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E4",
   "wave": "",
   "scope": "kept"
  },
