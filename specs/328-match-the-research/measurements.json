@@ -1480,5 +1480,31 @@
       "cohort_48": "48/54, the same six refused seeds"
     },
     "supersedes": "wave73-polder-widths"
+  },
+  "batch7-pair": {
+    "quantity": "batch 7's timing pair (c0bf2b4c8 -> 43fe6fde0, waves 70-73 and the merge of main), taken twice",
+    "observed": "2026-10-09",
+    "source": "dev/perf-log 328-start/328-end, both legs in scratch worktrees back to back; scratchpad/pairs/b7.out and b7q.out (the load before, mid and after each)",
+    "command": "PAIRS='b7:c0bf2b4c8:43fe6fde0' bash scratchpad/pairs/run.sh; again as b7q with nothing of this session's running; make perf-report AGAINST=328-start after each",
+    "method": "the first pair ran while another session's gate loaded the host - load 2.67 / 3.44 / 1.45; the second on a quieter host - load 1.27 / 1.23 / 1.22",
+    "value": {
+      "first (loaded)": {
+        "band": 2,
+        "TOTAL": "-1.7%",
+        "10 households": "-28.1%",
+        "20 households": "-18.1%",
+        "40 households": "-7.2%",
+        "crossing": "20 households seed 39 +17.9%: 64 placer calls and 20 houses on both legs, the added second spread over homesteads 1.60->1.90 s, web 1.23->1.41 s, hinterland 0.88->1.09 s, windbreak 0.58->0.72 s"
+      },
+      "second (quiet)": {
+        "band": 1,
+        "TOTAL": "-2.3%",
+        "10 households": "-0.9%",
+        "20 households": "-0.9%",
+        "40 households": "+0.2%",
+        "largest": "40 households seed 47 +1.5%, web +0.1 s"
+      },
+      "reading": "the first pair's crossing was load, not code: its placer calls and houses were identical, the growth fell on stages batch 7 never touched, and the quiet pair shows seed 39 at +0.0% at every size; batch 7 changed the belt's hit region (the page), its bare-run measure, the outfall run's class and the polder's widths (Kuwabata, not a timed seed)"
+    }
   }
 }
