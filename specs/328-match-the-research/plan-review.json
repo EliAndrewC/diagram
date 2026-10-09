@@ -1,56 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "74786b487703868849e7cba747cb86d9e903995baa0769ab599aae874d2ab143",
+ "plan_sha256": "8564b278690c171dd05d66dabaafa0daaf782cae907be3197b3919c1449abd96",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W78-1 fix direction",
-   "summary": "The found row hold_ring_rules#judged at the gate's lines is fixed by moving the re-hold to 0005's placer lines (25 deg, a quarter of the design cell), not by the row's alternative of recording the looser line as a DEVIATION and relabeling the claim.",
+   "id": "W79-1 fix direction",
+   "summary": "the E2 row hem_to_bank#drain with the fall left alone is fixed by changing the implementation (a vertex in a with-the-fall collector is moved out of the water), not by relabeling the UNRESEARCHED claim",
    "class": "within",
-   "why": "FR-004: a fix moves the implementation to the research. The GM's request: 'I'm not sure there's any reason for our implementation to not match for anything.'"
+   "why": "FR-004 (the implementation moves to the research) and the ranking row's own fix ('lift vertices off a drain running with the fall'); 0055's drawing keeps the field edge 'out of its water'; the GM: 'I'm not sure there's any reason for our implementation to not match for anything'"
   },
   {
-   "id": "W78-2 which rings are re-held",
-   "summary": "The re-hold's choice of rings to re-hold (bad), the pieces it keeps and the weld hosts it accepts are all judged by held_faults (ring_violations plus the placer's lines) instead of ring_violations alone.",
+   "id": "W79-2 perpendicular step onto its own side",
+   "summary": "where lean < 0.2 the vertex steps off at right angles to the drain's nearest segment, onto the bank of the side it already lies on, ending need off the centerline (off_with_the_fall)",
    "class": "within",
-   "why": "This is the found row's fix as written. It is bounded by the only= set the grave cut passes (settlement/fields/features.py:153), and it is what 0005's drawing page requires of every basin drawn ('No basin narrows to a point sharper than 25 degrees, none is a scrap under a quarter of the basin its field was cut to')."
+   "why": "the ranking row names exactly this ('perpendicular move when lean < 0.2'); the nearer bank is the least move that clears the water, and nothing in the request or spec settles a different side"
   },
   {
-   "id": "W78-3 arrowhead added",
-   "summary": "held_faults also refuses an arrowhead (is_chevron at 40 deg / 0.90), a third line the found row's fix text did not name.",
+   "id": "W79-3 inside the bank on either side",
+   "summary": "for a with-the-fall drain the move applies where |gap| < need (either side), not gap < need, since gap's up-fall sign means nothing for such a drain",
    "class": "within",
-   "why": "The same sentence of 0005 the claim points at names all three: '...and none is shaped like an arrowhead' (drawing page line 5; line 35 'The maps refuse a basin shaped like an arrowhead'). Moving the implementation closer to the research is the request's direction. 0005's comment that close_seams accepted a chevron as a last resort does not conflict: here a refused host leaves the scrap bare under the fan floor (the existing 'scrap left bare' claim), not a doubled bund."
+   "why": "it moves every vertex standing in the water and none that is clear (the unit test pins both); it narrows nothing - no in-water vertex is left unmoved"
   },
   {
-   "id": "W78-4 _split_steps unchanged",
-   "summary": "_split_steps' choice of cut, shared with the settle, still ranks candidate cuts by ring_violations' faults.",
+   "id": "W79-4 on-centerline tie-break",
+   "summary": "a vertex exactly on the centerline goes to the segment's left",
    "class": "within",
-   "why": "It picks a cut and keeps nothing itself. Every piece the re-hold keeps and every weld it makes passes held_faults, so no kept basin escapes the placer's lines. A cut chosen at the gate's lines can only send more pieces to the weld or to the bare-scrap path, which is a cost or quality question and not a narrowing of what was asked. Measured: the pool is byte-identical."
+   "why": "an arbitrary but deterministic tie-break inside the requested fix; neither the request nor the spec speaks to it and it leaves no vertex in the water"
   },
   {
-   "id": "W78-5 claim relabel",
-   "summary": "The claim 'judged at the gate's lines' (which recorded the drift) is rewritten as 'judged at the placer's lines', and held_faults carries its own Research: claim to 0005.",
+   "id": "W79-5 the array walk changed alike",
+   "summary": "hem_rings_to_bank gets the same branch and its claim the same 0055 citation, though its own row is scope: deferred (dev/claims-deferred.json) and no engine code calls it",
    "class": "within",
-   "why": "The claim now states what the fixed code does, the code now matches 0005, and impl-drift found the re-hold's claims IN-STEP. This is FR-005's re-check, not the XVI rewrite path, because the code moved."
+   "why": "not a narrowing (it removes no requested work); it keeps the function's own stated contract ('Each ring comes back as hem_to_bank would return it') and the existing equivalence test true, which leaving it would have broken (constitution XIV); it draws no legacy map (no caller), so FR-009 is untouched; waves.json marks only the kept row 79"
   },
   {
-   "id": "W78-6 verification and figures",
-   "summary": "m:wave78-rehold-placer-lines: the unit test, the five hamlets byte-identical, the 48-seed cohort as wave 77, impl-drift six IN-STEP with no claim owed.",
+   "id": "W79-6 verification",
+   "summary": "the waterfields suite, the 48-seed cohort, impl-drift and spec-fidelity per wave; the gate, timing pair and occasions at the batch close",
    "class": "within",
-   "why": "Re-run by this reviewer: the test file passes 13/13. The pool manifests (pool/hamlets/*, 10:32-10:33) postdate the close.py edit (10:26) and git diff HEAD on pool/ is empty, so 'byte-identical' was measured on the fix. The cohort figure stands on the entry's record, not re-run. Tier order (SC-003): ranking.json holds no open E0 or E1 row that is not deferred, so an E2 row is next in order."
-  },
-  {
-   "id": "Bookends row 8 closed",
-   "summary": "Batch 8 (waves 74-77) closed: pair 43fe6fde0 -> 856bceb76 at band 0, TOTAL -1.2%, nothing owed (m:batch8-pair), the gate green at 077e47717, the glyph checks re-owed by the engine's move PASS.",
-   "class": "within",
-   "why": "This is the GM's batching ruling of 2026-10-08 (FR-005/FR-006: one pair per batch of 4-5 waves). The figures carry m:batch8-pair, and that entry's value matches the row: band 0, TOTAL -1.2%, 'owes nothing'."
-  },
-  {
-   "id": "Bookends row 9 opened",
-   "summary": "Batch 9 opens at wave 78, its pair and gate owed at the batch close.",
-   "class": "within",
-   "why": "This is the same batching ruling, and the pair is still owed, so nothing is waived."
+   "why": "FR-005's batched verification as the GM ruled 2026-10-08; the pool unchanged (m:wave79-off-with-the-fall), so no map regeneration or FR-008 Decisions Recorded entry is owed"
   }
  ],
  "verdict": "CLEAR"

@@ -283,7 +283,7 @@ def floor_overhang(pts: Poly, dpts: Poly, down_deg: float) -> list[float]:
 
 def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -> Poly:
     """Lift any vertex of `ring` that lies inside the collector's drawn stroke - or past its
-    centerline - up-fall onto the ditch's BANK. Returns a new ring; vertices already clear are
+    centerline - up-fall (at right angles, beside a drain running with the fall) onto the ditch's BANK. Returns a new ring; vertices already clear are
     returned untouched.
 
     `build_comb` needs none of this: it hems onto the bank BY CONSTRUCTION (see `_drain_bank`). The
@@ -304,11 +304,12 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
     deliberate trade: it enforces one physical invariant (a basin's wall cannot stand in the ditch)
     on geometry those engines have finished with, in the same spirit as the comb's own terminal
     thin-plot drop. The move is along the FALL, so a lifted vertex slides up its own column and the
-    parcel keeps its shape.
+    parcel keeps its shape - except against a collector running WITH the fall (lean under 0.2), where up-fall buys nothing and
+    the vertex steps off at right angles instead (`off_with_the_fall`).
 
     Research:
         no wall in the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a vertex inside the collector's bank lifted up the fall onto it
-        drain with the fall left alone - UNRESEARCHED: a collector within ~12 deg of the fall (lean under 0.2) leaves vertices in its water unmoved
+        drain with the fall - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a vertex in a collector running within ~12 deg of the fall (lean under 0.2) stepped off at right angles onto its own side's bank, never left in the water
     """
     dv = (math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg)))
     cum = polyline_cum(dpts)
@@ -316,12 +317,37 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
     for q in ring:  # one ring: the scalar walk (a plot's few corners cost less than an array's fixed cost); many rings at once:
         # `hem_rings_to_bank` (feature 297)
         gap, need, lean, past = drain_bank_clearance(q, dpts, dv, w0, w1, cum)
-        if past or gap >= need or lean < 0.2:  # clear, off the collector's span, or a drain running WITH the fall
+        if past or gap >= need:  # clear, or off the collector's span
             out.append(q)
+            continue
+        if lean < 0.2:  # a drain running WITH the fall: up-fall buys nothing, so the vertex steps off at right angles - where it
+            # is inside the bank on EITHER side (the up-fall side `gap` is signed toward does not exist for such a drain)
+            out.append(off_with_the_fall(q, dpts, gap, need) if abs(gap) < need else q)
             continue
         shift = (need - gap) / lean
         out.append((round(q[0] - dv[0] * shift, 1), round(q[1] - dv[1] * shift, 1)))
     return out
+
+
+def off_with_the_fall(q: Pt, dpts: Poly, gap: float, need: float) -> Pt:
+    """`q`, inside the bank of a collector running with the fall, moved out at right angles to its nearest segment until it
+    stands `need` off the centerline, on the side it already lies (`gap`'s sign; the segment's left where it lies on it).
+
+    Research: off at right angles - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a bund abuts the ditch and never stands in its water
+    """
+    best, foot, nrm = 1e9, (0.0, 0.0), (0.0, 1.0)
+    for i in range(len(dpts) - 1):
+        ax, ay = dpts[i]
+        vx, vy = dpts[i + 1][0] - ax, dpts[i + 1][1] - ay
+        t = max(0.0, min(1.0, ((q[0] - ax) * vx + (q[1] - ay) * vy) / ((vx * vx + vy * vy) or 1.0)))
+        sx, sy = ax + t * vx, ay + t * vy
+        d = math.hypot(q[0] - sx, q[1] - sy)
+        if d < best:
+            nl = math.hypot(vx, vy) or 1.0
+            best, foot, nrm = d, (sx, sy), (-vy / nl, vx / nl)
+    side = 1.0 if (q[0] - foot[0]) * nrm[0] + (q[1] - foot[1]) * nrm[1] >= 0 else -1.0
+    step = need - abs(gap)
+    return (round(q[0] + side * nrm[0] * step, 1), round(q[1] + side * nrm[1] * step, 1))
 
 
 def hem_rings_to_bank(rings: Sequence[Poly], dpts: Poly, down_deg: float, w0: float, w1: float) -> list[Poly]:
@@ -331,7 +357,7 @@ def hem_rings_to_bank(rings: Sequence[Poly], dpts: Poly, down_deg: float, w0: fl
 
     Research:
         no wall in the ditch - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: as `hem_to_bank`, for many rings
-        drain with the fall left alone - UNRESEARCHED: a collector within ~12 deg of the fall (lean under 0.2) leaves vertices in its water unmoved
+        drain with the fall - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: a vertex in a collector running within ~12 deg of the fall (lean under 0.2) stepped off at right angles onto its own side's bank, never left in the water
     """
     flat = [q for ring in rings for q in ring]
     if not flat or len(dpts) < 2:
@@ -343,8 +369,10 @@ def hem_rings_to_bank(rings: Sequence[Poly], dpts: Poly, down_deg: float, w0: fl
     for ring in rings:
         moved: Poly = []
         for q in ring:
-            if past[k] or gap[k] >= need[k] or lean[k] < 0.2:
+            if past[k] or gap[k] >= need[k]:
                 moved.append(q)
+            elif lean[k] < 0.2:  # with the fall: off at right angles where inside the bank either side, as `hem_to_bank`
+                moved.append(off_with_the_fall(q, dpts, float(gap[k]), float(need[k])) if abs(gap[k]) < need[k] else q)
             else:
                 shift = (need[k] - gap[k]) / lean[k]
                 moved.append((round(q[0] - dv[0] * shift, 1), round(q[1] - dv[1] * shift, 1)))

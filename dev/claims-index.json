@@ -63883,44 +63883,68 @@
   "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall left alone": {
-  "code": "9476adb1651f9182",
-  "core": "b9a361db00daef3a",
-  "date": "2026-10-03",
-  "note": "leaving vertices in the drain's water departs from 0055 \"never into its water\"; label DEVIATION 0055 (recorded on that page), not UNRESEARCHED",
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#no wall in the ditch": {
-  "code": "7294073872465a23",
-  "core": "b9a361db00daef3a",
-  "date": "2026-10-03",
-  "note": "as hem_to_bank",
+ "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall": {
+  "code": "3c8bf6e5bea26974",
+  "core": "ad0aaecdf721c91e",
+  "date": "2026-10-09",
+  "note": "a vertex inside the bank of a drain that runs with the fall is stepped off at right angles to `need` (bank edge to bund edge), so it is never left in the water; the logic matches `hem_to_bank` line for line",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
+  ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/banks.py::hem_to_bank#drain with the fall left alone": {
-  "code": "55873d6513c70ceb",
-  "core": "169a2b4df9829b16",
-  "date": "2026-10-03",
-  "note": "leaving vertices in the drain's water departs from 0055 \"never into its water\"; label DEVIATION 0055 (recorded on that page), not UNRESEARCHED",
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/waterfields/banks.py::hem_to_bank#no wall in the ditch": {
-  "code": "bd66c37b2bd11266",
-  "core": "169a2b4df9829b16",
-  "date": "2026-10-03",
-  "note": "bund moved upslope onto the drain's bank (0055)",
+ "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#no wall in the ditch": {
+  "code": "4f592ad8e9416363",
+  "core": "ad0aaecdf721c91e",
+  "date": "2026-10-09",
+  "note": "the array walk lifts a vertex up the fall by (need-gap)/lean, as the scalar walk does",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:63df982a8a8be353",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/banks.py::hem_to_bank#drain with the fall": {
+  "code": "40218dd19239fc42",
+  "core": "b3b033e100b201df",
+  "date": "2026-10-09",
+  "note": "`abs(gap) < need` sends a vertex in the bank on either side to `off_with_the_fall`, giving \"never into its water\" for a drain where moving up the fall cannot clear it",
+  "pages": {
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
+  },
+  "research": "39036ea15e57c448",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/banks.py::hem_to_bank#no wall in the ditch": {
+  "code": "0f0e124287b3f2b3",
+  "core": "b3b033e100b201df",
+  "date": "2026-10-09",
+  "note": "a vertex inside the stroke plus half a bund is moved upslope until it clears, so the two meet edge to edge",
+  "pages": {
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
+  },
+  "research": "39036ea15e57c448",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:63df982a8a8be353",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::is_chevron#arrowhead": {
@@ -63957,6 +63981,22 @@
   },
   "research": "9c5292e27312fca8",
   "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/banks.py::off_with_the_fall#off at right angles": {
+  "code": "11b64b56e3a96814",
+  "core": "093e94f29a11029a",
+  "date": "2026-10-09",
+  "note": "the vertex moves along the nearest segment's normal, on the side it already lies, until it stands `need` off the centerline, so the bund meets the ditch and stays out of its water",
+  "pages": {
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
+  },
+  "research": "39036ea15e57c448",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::pointed_ring#tapers to a point": {

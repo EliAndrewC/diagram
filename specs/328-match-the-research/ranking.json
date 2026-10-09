@@ -9634,7 +9634,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "79",
   "scope": "deferred"
  },
  {
@@ -9650,7 +9650,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "79",
   "scope": "kept"
  },
  {
@@ -9887,7 +9887,7 @@
   "flag": "",
   "found": "wave 77 re-check (UNCLAIMED in round 1, claimed and judged DRIFTED in round 2; tier provisional, by verdict)",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "78",
   "scope": "kept"
  },
  {

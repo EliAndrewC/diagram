@@ -553,5 +553,7 @@
   "l7r/diagram/waterfields/furrows.py::settle_tract_seams#every seam reads": "76",
   "l7r/diagram/waterfields/settle.py::settle_cells#unlawful scraps left bare": "77",
   "l7r/diagram/waterfields/settle.py::verdict#toe discipline": "77",
-  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the gate's lines": "78"
+  "l7r/diagram/waterfields/seams/close.py::hold_ring_rules#judged at the gate's lines": "78",
+  "l7r/diagram/waterfields/banks.py::hem_to_bank#drain with the fall left alone": "79",
+  "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall left alone": "79"
 }

@@ -34,3 +34,18 @@ def test_the_hem_lifts_a_vertex_in_the_drain_and_keeps_the_rest():
     other = [(200.0, 40.0), (260.0, 40.0), (260.0, 104.0)]
     assert hem_rings_to_bank([ring, other], drain, 90.0, 4.0, 4.0) == [out, hem_to_bank(other, drain, 90.0, 4.0, 4.0)], "every ring at once, as one at a time"
     assert hem_rings_to_bank([ring], [(0.0, 0.0)], 90.0, 4.0, 4.0) == [ring] and hem_rings_to_bank([], drain, 90.0, 4.0, 4.0) == []
+
+
+def test_a_vertex_in_a_drain_running_with_the_fall_steps_off_at_right_angles() -> None:
+    """Feature 328 wave 79 (0055: a bund abuts the ditch and never stands in its water): lifting up the fall buys nothing
+    against a collector running WITH the fall, which used to leave such a vertex in the water. It now steps off at right
+    angles onto its own side's bank, the scalar and the array walk alike; a vertex already clear is not moved."""
+    from l7r.diagram.waterfields.banks import BANK_MARGIN, hem_rings_to_bank, hem_to_bank, off_with_the_fall
+
+    drain = [(100.0, 0.0), (100.0, 400.0)]  # straight down the fall (down_deg 90: the fall is +y)
+    need = 6.0 / 2 + BANK_MARGIN
+    ring = [(101.0, 200.0), (98.0, 210.0), (150.0, 220.0)]
+    moved = hem_to_bank(ring, drain, 90.0, 6.0, 6.0)
+    assert moved == [(round(100.0 + need, 1), 200.0), (round(100.0 - need, 1), 210.0), (150.0, 220.0)]
+    assert hem_rings_to_bank([ring], drain, 90.0, 6.0, 6.0) == [moved], "the array walk agrees with the scalar"
+    assert off_with_the_fall((100.0, 50.0), drain, 0.0, need) == (round(100.0 - need, 1), 50.0), "on the line: the segment's left (-x for a segment running +y)"

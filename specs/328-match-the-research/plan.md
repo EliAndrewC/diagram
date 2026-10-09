@@ -1295,6 +1295,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   unchanged. impl-drift: the six claims of the re-hold IN-STEP, no claim owed.
 - **Verification**: the waterfields and settlement suites; the cohort; `impl-drift`; `spec-fidelity`.
 
+## Wave 79 (amendment 78, 2026-10-09) - batch 9
+
+- **Scope**: the E2 row `banks.py::hem_to_bank#drain with the fall left alone` (MISLABELED: a vertex inside a collector
+  running within about 12 degrees of the fall - lean under 0.2 - was left in its water under an UNRESEARCHED label, against
+  0055's bank, "never into its water"). Lifting up the fall buys nothing against such a drain, so the vertex now steps
+  off at RIGHT ANGLES to the drain's nearest segment, onto the bank of the side it already lies on (`off_with_the_fall`), where
+  it lies inside the bank on either side - `|gap| < need`, since the up-fall side `gap` is signed toward does not exist for a
+  drain running with the fall (a clear vertex read as across the line was the first draft's bug, caught by the test). The
+  scalar walk (`hem_to_bank`) and the array walk (`hem_rings_to_bank`) both; the claim cites 0055.
+- **Measured** (m:wave79-off-with-the-fall): the unit test; the five hamlets byte-identical to HEAD; the 48-seed cohort
+  unchanged. impl-drift: five claims IN-STEP; the docstring's "along the FALL" prose it noted stale now names the exception.
+- **Verification**: the waterfields suite; the cohort; `impl-drift`; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

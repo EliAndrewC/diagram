@@ -1621,5 +1621,17 @@
       "pool": "all five hamlets byte-identical to HEAD (no shipped grave cut left a ring between the gate's lines and the placer's)",
       "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 77"
     }
+  },
+  "wave79-off-with-the-fall": {
+    "quantity": "wave 79 (2026-10-09): a vertex in a with-the-fall drain stepped off at right angles - what it moved",
+    "observed": "2026-10-09",
+    "source": "tests/waterfields/test_banks_297.py::test_a_vertex_in_a_drain_running_with_the_fall_steps_off_at_right_angles; git diff HEAD on the five pool manifests after make map; make cohort N=48",
+    "command": "make test-file FILE=tests/waterfields/; make map for the five hamlets; make cohort N=48",
+    "method": "a drain straight down the fall (down_deg 90), 6 px wide; vertices 1 px and 2 px either side of its centerline and one 50 px clear, through hem_to_bank and hem_rings_to_bank",
+    "value": {
+      "test": "the two in-bank vertices end need (3 + BANK_MARGIN) off the centerline on their own sides; the clear one is not moved; the two walks agree",
+      "pool": "all five hamlets byte-identical to HEAD (no shipped collector runs with the fall under a hemmed parcel)",
+      "cohort_48": "48/54 (refused 03, 10, 20, 22, 33, 906), as wave 78"
+    }
   }
 }

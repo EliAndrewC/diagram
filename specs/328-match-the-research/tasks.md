@@ -1997,3 +1997,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T185 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. plan CLEAR (wave 78); the grave cut's re-hold picks, keeps and welds by held_faults - the gate's rules and the placer's 25 deg, quarter cell and arrowhead under them (0005); pool byte-identical, cohort unchanged; impl-drift 6 IN-STEP
+
+## Phase 80 - wave 79 (amendment 78): a vertex in a with-the-fall drain stepped off at right angles
+
+- `waterfields/banks.py` (`off_with_the_fall`; `hem_to_bank` and `hem_rings_to_bank` use it).
+
+- [x] T186 wave 79's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 79); a vertex inside a with-the-fall drain's bank stepped off at right angles onto its own side (0055); pool byte-identical, cohort unchanged; impl-drift 5 IN-STEP
+- [x] T187 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. plan CLEAR (wave 79); a vertex inside a with-the-fall drain's bank stepped off at right angles onto its own side (0055); pool byte-identical, cohort unchanged; impl-drift 5 IN-STEP
