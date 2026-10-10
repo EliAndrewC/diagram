@@ -82,3 +82,24 @@ tokens, little: the quote-check re-fetches of held pages carried about 1.1 M, th
 archive's text of that URL before giving up. A quotation found VERBATIM there is reported VERBATIM, marked as read from
 the archive. One not found there stays NOT-CHECKED for the agent, because PDF text extraction can split words and a miss
 proves nothing. READABLE still needs the live link to have answered. No gap here needs an overhaul.
+
+**Validation** (observed 2026-10-10; method: `make quote-verbatim` on questions 0059, 0235, 0009, 0080 and 0033, the
+five whose notes cite the most PDFs, once at HEAD in a detached worktree and once with plan D4; the reports are in
+`measure/validation/`).
+
+| verdict before -> after (observed 2026-10-10; method: the ten reports) | passages |
+|---|---|
+| VERBATIM -> VERBATIM | 213 |
+| NOT-CHECKED -> NOT-CHECKED | 153 |
+| **NOT-CHECKED -> VERBATIM** (confirmed on the archive's text) | **39** |
+| **UNFETCHABLE -> VERBATIM** | **2** |
+| NOT-ON-PAGE -> NOT-ON-PAGE | 6 |
+| NOT-CHECKED -> UNFETCHABLE | 4 |
+| UNFETCHABLE -> UNFETCHABLE | 2 |
+
+- **41 passages** that sent quote-check to the web are now settled by the script.
+- **11 notes** went from `-` to READABLE. No verdict was sunk: no VERBATIM or READABLE was lost, and nothing new became
+  NOT-ON-PAGE or NOT-READABLE.
+- **The four NOT-CHECKED -> UNFETCHABLE** are one PDF of maff.go.jp in question 0009. The script used to mark a PDF
+  NOT-CHECKED without asking. It now asks, the host answers 403 to an automated fetch, and the archive holds no text of
+  it. The new verdict says what happened; quote-check takes either as residue.

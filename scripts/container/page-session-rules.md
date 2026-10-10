@@ -46,8 +46,11 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   prints each page's earlier reads and their outcomes before it fetches: check them - a page already `rejected` for
   the same question is not re-read without a reason. Record every page's outcome with `make source-outcome URL=<u>
   OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable`; `make sources-consulted URL=<u>` looks one up.
-- **Coordination files are read by line, never whole** (feature 274): the claims file, a group's handoff and a checks
-  report are read with `make lines FILE=<f> KEY=<regex>` and written with `make append FILE=<f> LINE="<text>"`.
+- **The claims sheet is claimed and asked through its tool** (feature 376): `make research-claims Q="0060 0246"` says who
+  holds your questions; `make research-claim Q="0060 0246" FEATURE=<n>` claims them (refused if another session holds
+  one) and `STATUS=done` releases them. The sheet itself is never opened.
+- **Other coordination files are read by line, never whole** (feature 274): a group's handoff and a checks report are
+  read with `make lines FILE=<f> KEY=<regex>` and written with `make append FILE=<f> LINE="<text>"`.
 - **A write session takes at most four questions and at most ten new registry keys** (feature 274). The runner
   refused any larger brief before you started. When `make reserve` refuses your eleventh registry key, finish the
   question in hand, write the items you have not reached to `$L7R_CONTINUE` as a brief of the same shape (the same

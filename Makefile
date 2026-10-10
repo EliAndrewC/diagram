@@ -1342,6 +1342,17 @@ append: ## [project] append ONE line to a coordination file without reading or p
 	@if [ -z "$(FILE)" ]; then printf 'make append: FILE=<file> LINE="<text>" are required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/coord.py" append "$(FILE)"
 
+# GUARD_EDIT_OK: feature 376 FR-001 - two new operations: the research claims sheet claimed and asked through one tool,
+# never opened by hand (the GM 2026-10-10: "any time we have a process that requires editing a potentially large file,
+# then we should use tooling to edit the file"). claims-file-hooks.sh makes them the way in.
+research-claim: ## [project] claim research questions for this clone, refused when another session holds one; STATUS=done releases (feature 376)   Q="0060 0246" FEATURE=<n> [STATUS="in progress"] [RELEASE=<owner> WHY="<reason>"]
+	@if [ -z "$(Q)" ] || [ -z "$(FEATURE)" ]; then printf 'make research-claim: Q="<question numbers>" FEATURE=<n> are required - e.g. make research-claim Q="0060 0246" FEATURE=376\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/claims.py" claim "$(Q)" --feature "$(FEATURE)" $(if $(STATUS),--status "$(STATUS)",) $(if $(RELEASE),--release "$(RELEASE)" --why "$$WHY",)
+
+research-claims: ## [project] the live claims on research questions, and nothing else of the sheet (feature 376)   Q="0060 0246"
+	@if [ -z "$(Q)" ]; then printf 'make research-claims: Q="<question numbers>" is required - e.g. make research-claims Q="0060 0246"\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/claims.py" query "$(Q)"
+
 # GUARD_EDIT_OK: feature 265 FR-010 - a new operation (reserve a glossary or registry prefix under a host-wide lock); new-file-hooks.sh makes it the way in.
 # GUARD_EDIT_OK: feature 274 D4 - KEY_CAP_OK='<reason>' passes a write session's key cap; make exports it to the recipe as it is, so no change below.
 # GUARD_EDIT_OK: feature 303 - KIND=question: a new question's identity number, reserved under the same lock.

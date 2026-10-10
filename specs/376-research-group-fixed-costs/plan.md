@@ -88,8 +88,9 @@ N/A: no generator change.
   archive can confirm a quotation but never sink one.
 
 **D5 - Validation.** `make quote-verbatim` is run on real questions whose notes cite PDFs, before and after D4. The
-NOT-CHECKED that became VERBATIM, and any verdict that changed otherwise, are recorded in R2. A changed verdict other
-than NOT-CHECKED -> VERBATIM is a bug.
+NOT-CHECKED that became VERBATIM, and any verdict that changed otherwise, are recorded in R2. A verdict that LOSES
+ground - a VERBATIM or READABLE lost, a new NOT-ON-PAGE or NOT-READABLE - is a bug. A PDF that is now asked and
+refused moves from NOT-CHECKED to UNFETCHABLE, the truer of two residue verdicts.
 
 ## Project Structure
 
