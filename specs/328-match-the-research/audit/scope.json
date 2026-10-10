@@ -374,6 +374,8 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_keep_the_route_wide#through-route keeps its width": "kept",
  "l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut": "kept",
  "l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut": "kept",
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a house served": "kept",
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut": "kept",
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach": "kept",
  "l7r/diagram/hamletgen/ways/track.py::SPUR_REACH_FT#spur reaches the field": "kept",
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings": "kept",

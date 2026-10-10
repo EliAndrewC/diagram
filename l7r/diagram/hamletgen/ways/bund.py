@@ -470,7 +470,10 @@ def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
 def cut_stub_ends(p: list[Pt], others: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], ground: WorkedGround, touch: float = 4.0) -> list[Pt]:
     """`p` with each free end's short run past its first junction cut off (see `cut_past_the_junction`); plain inputs.
 
-    Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: unless it serves a house or the bund"""
+    Research:
+        no stub past a junction - research/questions/0081-village-lanes.drawing.html: a tail under 40 ft past a junction cut
+        a stub that serves a house kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 60 ft (`HOUSE_SERVE_FT`), the page's reach for a way serving a farmhouse
+        a stub that reaches the bund kept - UNRESEARCHED: within 6 ft of the worked ground's edge"""
     from l7r.diagram.settlement import seg_dist
     from l7r.diagram.settlement.water_ways._helpers import HOUSE_SERVE_FT
 

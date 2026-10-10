@@ -4543,12 +4543,13 @@
   "date": "2026-10-07",
   "note": "a track keeps off wet ground and leaves past its end; a walled-in head is refused",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#no drain rule at the seat": {
@@ -4648,15 +4649,15 @@
   "date": "2026-10-04",
   "note": "dry ground, off the wet, out to the map's edge",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#tameike berth": {
@@ -5097,15 +5098,15 @@
  "l7r/diagram/hamletgen/consts.py::LANE_JOIN_FT#two lanes as one network": {
   "code": "50407c4bd5ccff95",
   "core": "1956a2a68f21c5fe",
-  "date": "2026-10-07",
-  "note": "25 ft is the page's join reach",
+  "date": "2026-10-09",
+  "note": "25 ft, the page's join reach",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -5198,16 +5199,16 @@
   "date": "2026-10-05",
   "note": "7 + 4 + 7 = 18 ft, the 2 ft parting separate",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::PLOT_SIZES#paddy plot size": {
@@ -5396,14 +5397,15 @@
   "date": "2026-10-07",
   "note": "the tip stops off the paddy, as the page says a lane stops at the flooded paddy; the 17 ft figure is correctly marked UNRESEARCHED",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::STEADING_ARRIVAL_FT#a lane end arrives at a steading": {
@@ -5505,10 +5507,10 @@
   "date": "2026-10-03",
   "note": "WEB_HARD_GAP = 8.0 holds the lane 8 ft off the crop; the page has it run on the bund and \"may touch a plot's boundary\"; the 8 ft off toe/marsh is not on the page - claim it as a CONVENTION/GUESS figure or record it on the page",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/consts.py::WEB_REACH_FT#every farmhouse reached by a way": {
@@ -15412,10 +15414,10 @@
   "date": "2026-10-03",
   "note": "spur to the fields 5 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::OVER_THE_WATER_FT#end on the far bund": {
@@ -15451,13 +15453,14 @@
   "date": "2026-10-05",
   "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks#plumbing": {
@@ -15484,12 +15487,13 @@
   "date": "2026-10-08",
   "note": "crop_polys read as blocks, lane never crosses row crops",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the steadings": {
@@ -15513,12 +15517,13 @@
   "date": "2026-10-08",
   "note": "marsh and toe band read as blocks; no causeway drawn",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#water crossed only by plank": {
@@ -15541,12 +15546,13 @@
   "date": "2026-10-08",
   "note": "tread quad touching a dry plot refused; box prune with pad=width covers the half-width tread",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
@@ -15570,12 +15576,13 @@
   "date": "2026-10-08",
   "note": "an end inside or an edge crossing of marsh/toe refused; the box prune cannot skip a hit",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#water crossed on a plank": {
@@ -15617,13 +15624,14 @@
   "date": "2026-10-05",
   "note": "under 40 ft cut, a convention",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::_box#plumbing": {
@@ -15668,13 +15676,14 @@
   "date": "2026-10-08",
   "note": "spur rank 5 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path's corridor": {
@@ -15768,13 +15777,14 @@
   "date": "2026-10-08",
   "note": "spur rank 5 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor": {
@@ -15797,25 +15807,54 @@
   "date": "2026-10-05",
   "note": "free end's short run past its junction cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
+  ],
+  "triaged": "2026-10-09",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#a stub that reaches the bund kept": {
+  "code": "75563146679a9abc",
+  "core": "b7d171c92f55a503",
+  "date": "2026-10-09",
+  "note": "the 6 ft reach is on no page; keeping a stub that runs on to the bund agrees with the pages",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#a stub that serves a house kept": {
+  "code": "d775329a4d1105fa",
+  "core": "b7d171c92f55a503",
+  "date": "2026-10-09",
+  "note": "an end within 60 ft of a house is kept",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::cut_stub_ends#no stub past a junction": {
-  "code": "929cce10031566ce",
+  "code": "817a40462abf08ab",
   "core": "b7d171c92f55a503",
-  "date": "2026-10-05",
-  "note": "40 ft tail cut unless the end serves a house or the bund",
+  "date": "2026-10-09",
+  "note": "a tail of 40 ft or less past the first junction is cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -15866,10 +15905,10 @@
   "note": "lane stops at the paddy; path ends on the bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54",
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "d768fd03e878b4f3",
-  "triaged": "2026-10-05",
+  "research": "1f230dd02520cf90",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#connector left alone": {
@@ -15878,10 +15917,10 @@
   "date": "2026-10-03",
   "note": "track out runs off the map",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::run_lanes_on_to_the_bund#lane end runs on to the bund": {
@@ -15941,12 +15980,13 @@
   "date": "2026-10-05",
   "note": "",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::water_between#plumbing": {
@@ -16014,10 +16054,10 @@
   "date": "2026-10-03",
   "note": "\"A lane never crosses row crops\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::PathChecker.violations#pond kept off": {
@@ -16200,10 +16240,10 @@
   "date": "2026-10-03",
   "note": "never crosses row crops",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::path_violations#pond kept off": {
@@ -16332,12 +16372,13 @@
   "date": "2026-10-05",
   "note": "40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_HAIRPIN_DEG#hairpin": {
@@ -16346,13 +16387,14 @@
   "date": "2026-10-05",
   "note": "140 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_LINK_EPS#plumbing": {
@@ -16385,12 +16427,13 @@
   "date": "2026-10-08",
   "note": "12 ft, as the page sets it",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_NUB_TURN#nub turn": {
@@ -16399,12 +16442,13 @@
   "date": "2026-10-08",
   "note": "90 degrees or more",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_ZIGZAG_DEG#zigzag turn": {
@@ -16413,10 +16457,10 @@
   "date": "2026-10-03",
   "note": "50 deg",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_ZIGZAG_RUN_FT#zigzag run": {
@@ -16425,10 +16469,10 @@
   "date": "2026-10-03",
   "note": "40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_bends_badly#bends like a path": {
@@ -16437,14 +16481,15 @@
   "date": "2026-10-05",
   "note": "hairpin and zigzag limits via kink_spans",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the crop and wet ground": {
@@ -16453,10 +16498,10 @@
   "date": "2026-10-03",
   "note": "WEB_HARD_GAP 8 ft off the crop and 14 ft off water are recorded nowhere, and the page says a lane \"may touch a plot's boundary\"; record the margins or relabel GUESS/CONVENTION",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the fabric": {
@@ -16494,12 +16539,13 @@
   "date": "2026-10-05",
   "note": "tail under 40 ft past the crossing cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#a lane keeps 14 ft off water lines by default (`line_margin=14.0`)": {
@@ -16516,14 +16562,15 @@
   "date": "2026-10-07",
   "note": "the margin is the caller's; needs the callers' values to judge against \"may touch a plot's boundary, since the bund ... is heaped up on the boundary\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:7237abd9ead63ebe",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#shortest lane": {
@@ -16559,10 +16606,10 @@
   "date": "2026-10-03",
   "note": "\"A lane stops at the flooded paddy\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear#default 14 ft off water lines": {
@@ -16587,12 +16634,13 @@
   "date": "2026-10-08",
   "note": "drops the vertex after the foot when la <= 12 ft and the turn is >= 90 deg",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::existing_walk#plumbing": {
@@ -16609,12 +16657,13 @@
   "date": "2026-10-05",
   "note": "140 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::kink_spans#no zigzag": {
@@ -16623,10 +16672,10 @@
   "date": "2026-10-03",
   "note": "two 50 deg turns within 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::link_index#plumbing": {
@@ -16665,13 +16714,14 @@
   "date": "2026-10-07",
   "note": "refuses a rewrite that adds a hairpin or zigzag",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::may_write#no tread on the fabric": {
@@ -16694,10 +16744,10 @@
   "date": "2026-10-03",
   "note": "never crosses crops; shortest way",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::stroke_hits#plumbing": {
@@ -16738,15 +16788,14 @@
   "code": "0863d7c36adcd4fe",
   "core": "10d0e09755cff95b",
   "date": "2026-10-09",
-  "note": "the origin is on the edge facing the target, so the run is short and straight",
+  "note": "origin on the side facing the field, the shortest way",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
   "verdict": "IN-STEP"
  },
@@ -16768,12 +16817,13 @@
   "date": "2026-10-07",
   "note": "downslope edge, or a turned bearing where there is no dry way",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/cluster_edge.py::gate_out_of_the_field#connector starts off the crop": {
@@ -16782,13 +16832,14 @@
   "date": "2026-10-05",
   "note": "start pushed out of the field envelope",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/cluster_edge.py::gate_out_of_the_field#setback from the field": {
@@ -16815,14 +16866,14 @@
   "date": "2026-10-04",
   "note": "3 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::FIELD_ROLE#roles and indexing": {
@@ -17073,14 +17124,15 @@
   "date": "2026-10-07",
   "note": "field, hem and marsh are hard",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#the brook at its fords": {
@@ -17104,14 +17156,14 @@
   "date": "2026-10-04",
   "note": "the run stops at the ground's edge, paddy first",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:f2368e271306e3c2"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_runs#field path to the bund": {
@@ -17164,17 +17216,17 @@
   "date": "2026-10-05",
   "note": "connector, access, target, field ways kept",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:df440690bbce9cb6",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#field path to the bund": {
@@ -17234,10 +17286,10 @@
   "date": "2026-10-03",
   "note": "shortest or easiest way",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::strands_only_ordinary#one network": {
@@ -17286,10 +17338,10 @@
   "date": "2026-10-03",
   "note": "overshoot is trimmed by the view",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/dry_exit.py::GROVE_EXIT_CELL_FT#flood fill and rasterizing": {
@@ -17354,10 +17406,10 @@
   "date": "2026-10-03",
   "note": "\"A track keeps off wet ground\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/dry_exit.py::dry_exit#the track out runs off the map": {
@@ -17366,24 +17418,24 @@
   "date": "2026-10-03",
   "note": "ends off the canvas",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_LANE_JOIN_FT#join tolerance": {
   "code": "4d1dadf2039e1698",
   "core": "1956a2a68f21c5fe",
-  "date": "2026-10-07",
-  "note": "25 ft is the page's join reach",
+  "date": "2026-10-09",
+  "note": "25 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -17451,13 +17503,14 @@
   "date": "2026-10-07",
   "note": "3 ft is the footpath's width",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane's no-build corridor": {
@@ -17613,29 +17666,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the connector's snap kept only where it passes _TOUCH_GAP (4 ft) clear of the fabric (0246 §41 gives 7 ft)": {
-  "code": "03ea209072fa3b09",
-  "core": "03ea209072fa3b09",
-  "date": "2026-10-07",
-  "note": "the connector's snap kept only where it passes _TOUCH_GAP (4 ft) clear of the fabric (0246 §41 gives 7 ft)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track meets the lanes": {
   "code": "4e0c4b7dce97cae0",
   "core": "03ea209072fa3b09",
-  "date": "2026-10-07",
-  "note": "the code leaves alone an inner end that comes within 25 ft of no way (its docstring: \"LEFT ALONE rather than deleted\", the tread ending \"in open ground\"), but the page says the track \"never stops in open country\"; the claim should name this exception as a DEVIATION the page records, or the code must reach a way",
+  "date": "2026-10-09",
+  "note": "inner end walked to its closest approach and snapped onto the way; off-map end untouched",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
+   "0081-village-lanes.drawing.html:34425c991aa27503",
    "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track out runs off the map": {
   "code": "9cb4e46a84cdc61a",
@@ -17643,12 +17688,13 @@
   "date": "2026-10-07",
   "note": "only an end inside the canvas is walked",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::fabric_hits_boxed#plumbing": {
@@ -17724,13 +17770,13 @@
   "date": "2026-10-04",
   "note": "runs off the map",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/gateway.py::turned_gateway_track#the nearest turn first": {
@@ -17811,13 +17857,14 @@
   "date": "2026-10-05",
   "note": "90 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::_HOOK_FT#hook leg": {
@@ -17826,13 +17873,14 @@
   "date": "2026-10-05",
   "note": "12 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::_TOUCH_GAP#a junction link may brush a fence": {
@@ -17918,12 +17966,12 @@
  "l7r/diagram/hamletgen/ways/geom.py::_stop_at_network#no stub past a junction": {
   "code": "acc37ec1a938041f",
   "core": "16df75eeda9cfdb3",
-  "date": "2026-10-05",
-  "note": "",
+  "date": "2026-10-09",
+  "note": "a joining link is cut at its first contact, whatever the tail",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
@@ -17971,13 +18019,14 @@
   "date": "2026-10-05",
   "note": "out-and-back collapsed",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::door_unhooked#a lane's end loses its hook": {
@@ -17986,12 +18035,13 @@
   "date": "2026-10-05",
   "note": "12 ft, 90 degrees at the door",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/geom.py::end_serves#an end reaches something seen": {
@@ -18204,10 +18254,10 @@
   "date": "2026-10-03",
   "note": "paddy outlines plus dry-hem plots",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::RANK_WIDTHS#a width by rank": {
@@ -18216,13 +18266,14 @@
   "date": "2026-10-07",
   "note": "footpath 3 ft, field spur 5 ft as the page sets them, chosen as drawing conventions",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_BUILDINGS#what a pull may touch": {
@@ -18231,12 +18282,13 @@
   "date": "2026-10-08",
   "note": "the touch is limited to buildings (houses, farm sheds, byres, retirement houses), as \"may come right up to the buildings\" says; the second page it cites (0246) was not in the bundle, so its quote about fixtures was not checked",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_JOINT_FT#plumbing": {
@@ -18250,14 +18302,15 @@
  "l7r/diagram/hamletgen/ways/joints.py::_MEET_FT#ends that nearly meet": {
   "code": "dbc13edad798fbc3",
   "core": "1956a2a68f21c5fe",
-  "date": "2026-10-07",
-  "note": "25 ft, as the page gives it",
+  "date": "2026-10-09",
+  "note": "25 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -18275,12 +18328,13 @@
   "date": "2026-10-07",
   "note": "40 ft returning leg",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_joint_moved_back#no zigzag at a joint": {
@@ -18289,10 +18343,10 @@
   "date": "2026-10-03",
   "note": "mends a Z, \"A lane does not zigzag\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_key#plumbing": {
@@ -18311,13 +18365,14 @@
   "date": "2026-10-05",
   "note": "connector read at its web end only",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold at a joint becomes a T": {
@@ -18326,13 +18381,14 @@
   "date": "2026-10-09",
   "note": "a fold past the 140 degree hairpin becomes a T; a Z is pulled straight or its joint moved back",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:749ae9cb0e81f22d",
    "0081-village-lanes.drawing.html:eda0c7d2466e6298"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a jog across a joint pulled straight": {
@@ -18341,13 +18397,14 @@
   "date": "2026-10-09",
   "note": "string-pulled where clear; a building touch is allowed only with every dropped vertex within _JOG_FT 6 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:eda0c7d2466e6298"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pulled lane's clearance": {
@@ -18370,12 +18427,13 @@
   "date": "2026-10-09",
   "note": "only buildings are dropped from the _clear_link test; everything else keeps the usual margins",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no new kink from a pull": {
@@ -18384,13 +18442,14 @@
   "date": "2026-10-09",
   "note": "a pull that leaves more kink_spans than before is refused",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:749ae9cb0e81f22d",
    "0081-village-lanes.drawing.html:dca8eed834f55f38"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no pull moves an arriving end off its farm": {
@@ -18424,14 +18483,14 @@
   "code": "bf8de543d3969437",
   "core": "55a36ef52fd2e342",
   "date": "2026-10-09",
-  "note": "pulled like any jog, then split back into two records that keep their own widths",
+  "note": "jog pulled straight, then split back by rank width",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:eda0c7d2466e6298",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
@@ -18465,13 +18524,14 @@
   "date": "2026-10-08",
   "note": "writes the pulled walk back as two records, each keeping its own width",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::arrives_off#a path's end arrives at its farm": {
@@ -18494,10 +18554,10 @@
   "date": "2026-10-03",
   "note": "\"read as one\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::at_rank#a width by rank": {
@@ -18506,12 +18566,13 @@
   "date": "2026-10-07",
   "note": "tests whether a lane is drawn at its rank's width",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::center_lane_ends#the cap at a T": {
@@ -18536,13 +18597,14 @@
   "date": "2026-10-08",
   "note": "the arriving lane is re-laid to meet the connector's side as a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::hairpin_over_a_short_leg#no hairpin": {
@@ -18551,12 +18613,13 @@
   "date": "2026-10-07",
   "note": "turn over 140 degrees across a leg of 40 ft or less",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::joints#plumbing": {
@@ -18598,17 +18661,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::meet_end_to_end#ends that nearly meet are joined": {
-  "code": "2cfbd00cbbe6a228",
-  "core": "ee6b8855aceb94e2",
-  "date": "2026-10-07",
-  "note": "ends within 25 ft meet at one point; a worse bend is refused",
+  "code": "763bf1881d59c674",
+  "core": "8072396d4e74e6a4",
+  "date": "2026-10-09",
+  "note": "ends within 25 ft are joined; the teed door pair is now excluded either way round, so it is left as drawn",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -18642,13 +18705,14 @@
   "date": "2026-10-07",
   "note": "connector 6, spur 5, footpath 3, as the page sets them",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::split_at#plumbing": {
@@ -18677,12 +18741,13 @@
   "date": "2026-10-08",
   "note": "hands the hook to `_one_hook`",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::straighten_joints#lanes met end to end are one": {
@@ -18691,13 +18756,14 @@
   "date": "2026-10-08",
   "note": "hands the joint to `_one_joint`, using the building set",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::tee#a fold at a joint becomes a T": {
@@ -18706,10 +18772,10 @@
   "date": "2026-10-03",
   "note": "meets y's first leg at its foot",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::unhooked#a lane's end loses its hook": {
@@ -18718,12 +18784,13 @@
   "date": "2026-10-05",
   "note": "12 ft, 90 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/keeper.py::KEEP#verdict cache": {
@@ -18862,14 +18929,14 @@
   "code": "691f7a87a25046c4",
   "core": "7276802b5dc226e3",
   "date": "2026-10-09",
-  "note": "margin 1.0 is the page's 25 ft reach with nothing added; the page says its distances are drawing conventions, so citing the drawing page is right",
+  "note": "1.0, the page's 25 ft and no margin past it",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -18913,6 +18980,21 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::_teed_pair#a door end teed on its own lane": {
+  "code": "2963954989b9f134",
+  "core": "0216733fcbd3e4a0",
+  "date": "2026-10-09",
+  "note": "the lone door end and a node on its lane, asked either way round",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::carried#plumbing": {
   "code": "d3f81038a1ab8e65",
   "core": "a42b930822a2eeaf",
@@ -18928,103 +19010,116 @@
  "l7r/diagram/hamletgen/ways/knots.py::contracted#lane ends gathered": {
   "code": "b792b0b98c20112d",
   "core": "30ed559d2a61bf15",
-  "date": "2026-10-07",
-  "note": "gathered ends joined at one point, the knot's corner taken out",
+  "date": "2026-10-09",
+  "note": "the knot's corner taken out when its ends gather",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::door_end_teed#a door end teed on its own lane": {
+  "code": "35e7773a76aa85c0",
+  "core": "5dd8dee261d52c39",
+  "date": "2026-10-09",
+  "note": "the tests are reordered but the verdict is unchanged: an access lane's lone end 0 on no other lane's side, the other point on its own lane, recorded as a convention",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::end_nodes#a joint is one point": {
   "code": "6e54d17a14a23848",
   "core": "5cac9e0306feb43a",
-  "date": "2026-10-07",
-  "note": "ends that meet are grouped as one node",
+  "date": "2026-10-09",
+  "note": "ends within 1 ft are one node, a plumbing tolerance",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::knots#lane ends gathered": {
-  "code": "5062c63f839958aa",
-  "core": "7163eb5891533fd9",
-  "date": "2026-10-07",
-  "note": "the code joins ends within the page's 25 ft reach; the margin is 1.0, so it adds nothing to the reach, and the page calls these limits drawing conventions",
+  "code": "5e937e09dd419cac",
+  "core": "60fe608166d1624e",
+  "date": "2026-10-09",
+  "note": "pairs within 25 ft, excluding a lane's own span and the teed door pair",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::lane_knots#lane ends gathered": {
-  "code": "dc3ee3690ea34ca8",
-  "core": "70009a22597e829d",
+  "code": "7e4be1595363b89d",
+  "core": "933828f986f5037d",
   "date": "2026-10-09",
-  "note": "reports two lane ends within the knot reach that were not joined at one point (a lane's own two ends excepted), which is the page's rule for gathering ends",
+  "note": "ends within 25 ft, or two junctions on one lane within 25 ft, minus spans and teed door ends",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::moved_onto#lane ends gathered": {
   "code": "ff693ac1103e3ee2",
   "core": "81667b85f6725eeb",
-  "date": "2026-10-07",
-  "note": "the end is re-aimed onto the junction; inner vertices within the knot are dropped",
+  "date": "2026-10-09",
+  "note": "the end re-aimed onto the junction, inner vertices within 25 ft taken out",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#a lone end teed onto the other lane": {
   "code": "4a22601d521e6c9e",
   "core": "14a0f272a0051bd1",
-  "date": "2026-10-08",
-  "note": "a lone end meets the other lane's side as a T where the gather is refused",
+  "date": "2026-10-09",
+  "note": "the arriving lane meets the other's side as a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
   "code": "c3e7eb17518875b3",
   "core": "14a0f272a0051bd1",
-  "date": "2026-10-08",
-  "note": "knot ends moved onto one node",
+  "date": "2026-10-09",
+  "note": "gathers only the pairs `knots` yields, so the teed door pair is excluded",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
@@ -19046,41 +19141,42 @@
   "date": "2026-10-07",
   "note": "`lanes[i].get(\"w\") or 3.0` falls back to the footpath's drawn 3 ft width",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#lane ends gathered": {
   "code": "a99d224bdc6b0245",
   "core": "505825967fb8ee5d",
-  "date": "2026-10-07",
-  "note": "knots gathered at one node, a gather refused if it splits the web or breaks a rule",
+  "date": "2026-10-09",
+  "note": "knots gathered at one node; door ends `_fixed`",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::teed_onto#lane ends gathered": {
   "code": "71b281777b6c1f1a",
   "core": "03c1be0bb30950b6",
-  "date": "2026-10-08",
-  "note": "the end is joined to the other lane's side, not left a few feet off",
+  "date": "2026-10-09",
+  "note": "a T-foot on the other lane's side",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
@@ -19220,10 +19316,10 @@
   "date": "2026-10-03",
   "note": "40 ft matches",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::BREAK_SPAN_FT#no tread through a building": {
@@ -19276,12 +19372,13 @@
   "date": "2026-10-05",
   "note": "140 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#a way reaches the field": {
@@ -19329,15 +19426,15 @@
  "l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short": {
   "code": "f2993a3c86e0b72c",
   "core": "8513e2c25050981f",
-  "date": "2026-10-07",
-  "note": "25 ft; an end meeting a way's side as a T is attested",
+  "date": "2026-10-09",
+  "note": "25 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -19355,10 +19452,10 @@
   "date": "2026-10-03",
   "note": "50 deg matches",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::LAW#plumbing and wrappers": {
@@ -19525,12 +19622,13 @@
   "date": "2026-10-07",
   "note": "uses the 140 degree / 40 ft hairpin test",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::connector_hairpins#plumbing and wrappers": {
@@ -19632,10 +19730,10 @@
   "date": "2026-10-03",
   "note": "140 deg at the joint",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::folded_joints#plumbing and wrappers": {
@@ -19723,12 +19821,13 @@
   "date": "2026-10-05",
   "note": "12 ft, 90 degrees as written",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::hooked_ends#plumbing and wrappers": {
@@ -19761,14 +19860,15 @@
   "date": "2026-10-05",
   "note": "doubles back past the hairpin angle, two kink turns within the bend run (140; 50 within 40 ft, per _unjog's \"the check's own\" thresholds)",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::lane_networks#one network": {
@@ -19799,15 +19899,16 @@
   "date": "2026-10-08",
   "note": "kinks over every lane, the track out included",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::meets_clean#plumbing and wrappers": {
@@ -19856,16 +19957,15 @@
  "l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined": {
   "code": "9b553fc7e316ed47",
   "core": "7f3e1a8cf8fbafa6",
-  "date": "2026-10-07",
-  "note": "an end within the join reach is met at one point on the way, a T",
+  "date": "2026-10-09",
+  "note": "25 ft; a household's door end skipped, consistent with §21's reading",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -19885,10 +19985,10 @@
   "date": "2026-10-03",
   "note": "\"meets the other's side as a T\"; 20 ft and 20 degrees are within the page's convention limits",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::needle_joins#plumbing and wrappers": {
@@ -19981,10 +20081,10 @@
   "date": "2026-10-07",
   "note": "off water, crop, marsh and houses matches the page, as does 7 ft off gardens; the 7 ft off threshing_yards is on no page (the page calls a yard \"open ground\")",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
@@ -19993,6 +20093,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
+  "triaged": "2026-10-09",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/law.py::unreached_targets#a path runs to the graves": {
@@ -20046,13 +20147,14 @@
   "date": "2026-10-07",
   "note": "a width step is allowed only where one rank meets another; lanes meeting end to end read as one",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::DECK_NEAR_FT#plumbing and wrappers": {
@@ -20415,13 +20517,14 @@
   "date": "2026-10-05",
   "note": "BRANCH_WIDTH 5, the field spur's 5 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/reach.py::settle_field#over the brook at a ford": {
@@ -20501,10 +20604,10 @@
   "date": "2026-10-03",
   "note": "140 degree hairpin bound; apex side kept",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::_new_crossing#routing machinery": {
@@ -20521,10 +20624,10 @@
   "date": "2026-10-03",
   "note": "least-cost lattice, then string-pulled (\"pulled taut like a string\")",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::_route#clear of the crop": {
@@ -20569,13 +20672,14 @@
   "date": "2026-10-05",
   "note": "a turn of 140 degrees taken out by chord or easing",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::_unjog#no zigzag": {
@@ -20584,10 +20688,10 @@
   "date": "2026-10-03",
   "note": "two turns of 50 degrees or more within 40 ft are chorded",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::in_brook_band#routing machinery": {
@@ -20680,12 +20784,12 @@
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a tail past the junction cut": {
   "code": "fcdf7ee13385890b",
   "core": "ad673e9ba8b0dace",
-  "date": "2026-10-08",
-  "note": "the shorter half past the meeting point is cut when under 40 ft, as the page says",
+  "date": "2026-10-09",
+  "note": "`tail < 40.0`",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
@@ -20710,14 +20814,15 @@
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#arrived at the network": {
   "code": "24a9002e6a0ee753",
   "core": "ad673e9ba8b0dace",
-  "date": "2026-10-08",
-  "note": "within 25 ft it is joined at a single point, otherwise linked or not drawn",
+  "date": "2026-10-09",
+  "note": "within 25 ft, joined at a point or not drawn",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:34425c991aa27503",
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
@@ -20812,16 +20917,14 @@
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#web lane width": {
   "code": "0e2ec72192800cff",
   "core": "ad673e9ba8b0dace",
-  "date": "2026-10-08",
-  "note": "footpath drawn 3 ft",
+  "date": "2026-10-09",
+  "note": "drawn 3 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
@@ -20877,15 +20980,13 @@
   "code": "5a22a7f90b994011",
   "core": "0b8cb0750d8055f3",
   "date": "2026-10-09",
-  "note": "nearest targets first, straight step where clear, else routed and pulled taut; the new fallback route keeps the law's clearance off fences and is pulled taut only as far as that clearance allows, which matches \"wherever it can keep its usual clearance from fences\"; hook unhooked, tail ended at first arrival",
+  "note": "straight where clear, else routed and pulled taut",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
-   "0081-village-lanes.drawing.html:a857325132f8d4ee",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
   "verdict": "IN-STEP"
@@ -20957,15 +21058,14 @@
  "l7r/diagram/hamletgen/ways/serve.py::joined_link#a near end joined": {
   "code": "bd3290b9af5ac9cc",
   "core": "0b650974e20acfd8",
-  "date": "2026-10-08",
-  "note": "joined to its foot on the way when walkable, otherwise not drawn",
+  "date": "2026-10-09",
+  "note": "straight join, else a clear run, else None",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
@@ -20985,15 +21085,16 @@
   "date": "2026-10-09",
   "note": "a 3 ft path (_draw_web width 3) where the door stands more than DOOR_REACH_FT 60 from the ways; every other farmhouse gets a lane of its own",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "aa14ee267555a4d0",
+  "research": "6fb4907c78047f34",
   "rests": [
    "0081-village-lanes.drawing.html:654fea8f5e845503",
    "0081-village-lanes.drawing.html:df440690bbce9cb6",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#no path to a household reached across a yard": {
@@ -21124,19 +21225,18 @@
  "l7r/diagram/hamletgen/ways/serve.py::to_first_arrival#a door path meets its way as a T": {
   "code": "4f53ae2551cf3fac",
   "core": "21a6f6e87b40a3bb",
-  "date": "2026-10-05",
-  "note": "ends at its first arrival, joined at a T",
+  "date": "2026-10-09",
+  "note": "ended square at its first arrival",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::CROSSING_GAP_FT#a cut crossing ends on the bank": {
@@ -21183,13 +21283,14 @@
   "date": "2026-10-08",
   "note": "refuses a run that makes a needle, fold or hairpin",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#no doubled tail": {
@@ -21239,9 +21340,9 @@
   "date": "2026-10-07",
   "note": "the run is refused when it is hooked or has a kink span, as the page's no-hairpin, no-zigzag and no-end-hook rules require",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:65ad16eace199d92",
@@ -21249,6 +21350,7 @@
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.on_lawful_ground#crossings": {
@@ -21290,14 +21392,15 @@
   "date": "2026-10-07",
   "note": "`open_ground` keeps the run off row crops, the flooded paddy and wet ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.squared#settle plumbing": {
@@ -21465,14 +21568,15 @@
   "date": "2026-10-08",
   "note": "this is not a GUESS: 0081 answers the question, and the code goes against its answer. §19 cuts only \"a returning leg under 40 ft\" and names its one exception (\"A folded field spur is cut at the fold\"), so a longer leg is not cut. The code keeps the longer arm whatever the lengths, which makes the 40 ft threshold do nothing. 0081 records no guess for this, so the claim should be a DEVIATION that 0081.drawing records (resting on §17 \"never doubling back on itself\"), or §19 should be amended to say any returning leg is cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/settle.py::_unkinked#no hairpin or zigzag": {
@@ -21481,13 +21585,14 @@
   "date": "2026-10-08",
   "note": "drops the shorter arm of a doubled-back run, and pulls a zigzag straight from the vertex before its first turn to the vertex after its second",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::apply_pieces#a split piece with no width is drawn 3 ft wide": {
@@ -21646,10 +21751,10 @@
   "date": "2026-10-03",
   "note": "field outlines, dry plots and marsh",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::reaimed#a lane meets another as a T": {
@@ -21658,10 +21763,10 @@
   "date": "2026-10-03",
   "note": "\"meets the other's side as a T\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::rewidth#settle plumbing": {
@@ -21707,13 +21812,14 @@
   "date": "2026-10-08",
   "note": "re-laid as a T with reaimed; two bare folded legs lose the shorter",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#no doubled tail": {
@@ -21766,13 +21872,15 @@
  "l7r/diagram/hamletgen/ways/settle.py::settle_joins#ends that nearly meet are joined": {
   "code": "fa2ec0c5fd3465bc",
   "core": "06e8b97d8c27146f",
-  "date": "2026-10-03",
-  "note": "carried onto the way; the reach drift is reported at near_misses",
+  "date": "2026-10-09",
+  "note": "carried onto the way; door ends excluded through `near_misses`",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_needles#a sliver welded shut": {
@@ -21862,13 +21970,14 @@
   "date": "2026-10-05",
   "note": "hook re-laid as a T on the way it joins, else cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_shapes#crossings and fouls": {
@@ -21885,13 +21994,14 @@
   "date": "2026-10-05",
   "note": "cut as _unkinked cuts it: a hairpin's shorter arm cut at any length (§1342 says under 40 ft) and a zigzag's middle removed, splitting the lane, where §1343 pulls it straight",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_street_ends#an end reaches something seen": {
@@ -21935,13 +22045,14 @@
   "date": "2026-10-07",
   "note": "ranked lanes at their rank, a chain at one width",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::theirs#a lane arrives at its own dooryard": {
@@ -21981,37 +22092,39 @@
   "date": "2026-10-03",
   "note": "\"within 6 ft of the old one\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_KNOT_FT#lane ends gathered": {
   "code": "ba502523420b1131",
   "core": "33d192d2c915ce83",
-  "date": "2026-10-07",
-  "note": "25 ft as the page gives it",
+  "date": "2026-10-09",
+  "note": "25 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_STUB_REACH_FT#stub link reach": {
   "code": "855c8d8bb1ad5890",
   "core": "1956a2a68f21c5fe",
-  "date": "2026-10-07",
-  "note": "25 ft join reach",
+  "date": "2026-10-09",
+  "note": "25 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -22021,184 +22134,182 @@
   "date": "2026-10-08",
   "note": "string-pull to the furthest clear vertex",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a hairpin arm cut at the only contact": {
-  "code": "cafe5c258c4fc763",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "arms under 40 ft are cut whatever their contact; a refused cut falls back to the lane string-pulled uncut, left for the settle; the 25 ft join reach agrees with the knot figure",
+  "code": "50ad464275910ac9",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "an arm under 40 ft is cut; the cut is left to the touch pass or the settle",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a longer hairpin arm": {
-  "code": "155bec086a560ac3",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "`_arm_cuttable` cuts only an arm under `_ARM_FT` (40 ft) past `_HAIRPIN_DEG` (140), so a longer returning leg is kept, as the page says; the folded field spur exception is named as cut upstream in `track.spur_cut_at_the_fold`, outside this unit",
+  "code": "d31889a3ef114191",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "`_arm_cuttable` is `< 40`; a longer arm is kept",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#bow-tie tail cut": {
-  "code": "a2ddd60291675e7d",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "a crossing mid-run hands the cut to `bowtie_cut`; this unit reads `_ARM_FT` (40 ft), which matches the page's under-40-ft tail",
+  "code": "9021320961c1d872",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "a tail past a crossing under the arm length is cut",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#hairpin cut": {
-  "code": "9b7084269014639f",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "a turn of 140 degrees or more with the shorter arm under 40 ft is cut",
+  "code": "a0b023c6d00fabc6",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "a turn of 140 degrees or more loses an arm under 40 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3"
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#knots gathered": {
-  "code": "08749b47833de9a6",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "ends of different lanes within `_KNOT_FT` (25 ft) are moved to one node",
+  "code": "f44bc6cd0b5568bd",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "ends within 25 ft meet at one node; the cluster now leaves out the teed door pair (`door_end_teed` either way round)",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#lane pulled taut": {
-  "code": "62334499d88a103d",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "`_pulled` jumps to the furthest vertex a clear chord reaches",
+  "code": "93b87a67b182e6f1",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "each lane is pulled to the furthest clear chord",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:d30e15716180fbf5"
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#shadow lane dropped": {
-  "code": "a5dd1ec1c798c6b7",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "takes out a duplicate record of one way that lies inside another's stroke; plumbing",
+  "code": "b18e004a62f89196",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "a duplicate record lying inside another lane's stroke; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the knot's node at the centroid": {
-  "code": "28886410527b7ca6",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "the page says \"a single point\" but not where it stands; the centroid is a fair GUESS",
+  "code": "dedff8bbfceeae08",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "the pages give a single point but not where it stands",
   "pages": {},
   "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the knot's node on a through lane": {
-  "code": "c05a55a41402f84b",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "the end within 4 ft of a lane outside the cluster becomes the node, so a T stays a T",
+  "code": "f854d74911c8151d",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "the node is set on a through lane's tread, so the arriving lane meets it as a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the string-pull chord's keep-out": {
-  "code": "0eb63ea935f1ab23",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "max(WEB_FABRIC_GAP 7 ft, w/2 + 2 ft) matches 7 ft from fence to the lane's middle, more for a lane over 10 ft wide",
+  "code": "23262c8d6a3369e7",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "max(7 ft, w/2 + 2 ft)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+   "0033-row-villages-resson.drawing.html:64088e4ad721724e",
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the track out and the streets left whole": {
-  "code": "116c54a5d650cd80",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "connector and street lanes are skipped by every pass here, though still used as through lanes and crossings",
+  "code": "a2d74dd15fb1c832",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "the connector and streets are skipped by every step",
   "pages": {
    "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e",
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "e17f748e9243d856",
+  "research": "11e1a0f33c40ee46",
   "rests": [
-   "0033-row-villages-resson.drawing.html:4f85f319664ea57f",
-   "0033-row-villages-resson.drawing.html:d41ee4495f2368b5",
-   "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+   "0033-row-villages-resson.drawing.html:8c303daeddea6496",
+   "0081-village-lanes.drawing.html:16df95fc169329f7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#web kept one network": {
-  "code": "34fff0d026c8f377",
-  "core": "111d4e22c0090e80",
-  "date": "2026-10-08",
-  "note": "every rewrite goes through `commit_lane`, which refuses one that adds a piece to the web",
+  "code": "a8d89fc3a604a203",
+  "core": "b169fd810bd7b252",
+  "date": "2026-10-09",
+  "note": "`commit_lane` refuses a rewrite that splits the web",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+   "0033-row-villages-resson.drawing.html:d41ee4495f2368b5",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
   ],
   "verdict": "IN-STEP"
  },
@@ -22231,10 +22342,10 @@
   "date": "2026-10-03",
   "note": "clearance or within 6 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::web_pieces#lane web plumbing": {
@@ -22361,12 +22472,13 @@
   "date": "2026-10-08",
   "note": "the leg reaches 21 ft each side, so its turns stand more than 40 ft apart",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/squaring.py::squared_against#square crossing": {
@@ -22571,10 +22683,10 @@
   "date": "2026-10-03",
   "note": "end hook rule applied",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join width": {
@@ -22667,14 +22779,14 @@
   "note": "runs straight on off the map from the nearer end, a calibrated choice within the finding",
   "pages": {
    "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e",
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "f412857f6e91f139",
+  "research": "f564b58f75e7bb6b",
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496",
    "0081-village-lanes.drawing.html:16df95fc169329f7"
   ],
-  "triaged": "2026-10-07",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::street_runs_out#street runs on off the map": {
@@ -22779,13 +22891,14 @@
   "date": "2026-10-07",
   "note": "a hook is cut at both ends using the page's 12 ft / 90 degree rule",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_BREAK_BEARING_DEG#break collinearity": {
@@ -22842,12 +22955,13 @@
   "date": "2026-10-07",
   "note": "12 ft, 90 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_LINK_DIRECTNESS#network link directness": {
@@ -22864,12 +22978,13 @@
   "date": "2026-10-07",
   "note": "40 ft tail",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_PATH_DIRECTNESS#path directness": {
@@ -22897,14 +23012,15 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_ROUTE_JOIN_FT#wide ends joined": {
   "code": "351f648d25d79c50",
   "core": "8513e2c25050981f",
-  "date": "2026-10-07",
+  "date": "2026-10-09",
   "note": "25 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -22914,10 +23030,10 @@
   "date": "2026-10-03",
   "note": "5 ft spine and up, 3 ft footpath below",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_SERVE_FT#a way serves a house": {
@@ -22951,14 +23067,14 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#a short gap closed at any bearing": {
   "code": "2a9f9026c449f20b",
   "core": "55096ee863b47413",
-  "date": "2026-10-07",
-  "note": "gaps of 25 ft or less are closed at any bearing",
+  "date": "2026-10-09",
+  "note": "gap of 25 ft or less closed on proximity; the teed door pair is spared by `existing_walk`",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
@@ -23016,12 +23132,13 @@
   "date": "2026-10-05",
   "note": "drop_end_nubs's body (what counts as a nub) is not in the bundle; need it to compare with 12 ft and 90 degrees",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link crosses the brook at a crossing place": {
@@ -23045,12 +23162,13 @@
   "date": "2026-10-07",
   "note": "the page sets widths by role (3/5/6 ft) and has no rule that a link takes the width of the way it joins; the code takes the widest lane within 25 ft of either end; claim it UNRESEARCHED",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#no out-and-back over the brook": {
@@ -23095,16 +23213,16 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_keep_the_route_wide#through-route keeps its width": {
   "code": "bf5dcec0febd513e",
   "core": "2f75c822956bbc0f",
-  "date": "2026-10-07",
-  "note": "wide ends within 25 ft meet directly; the spur and track are one through-route",
+  "date": "2026-10-09",
+  "note": "wide ends within 25 ft joined directly at their width",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
-   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
@@ -23322,13 +23440,14 @@
   "date": "2026-10-07",
   "note": "a loose tail under 40 ft is cut, never a house's only way",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:34425c991aa27503"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::held_at#lane sweep plumbing": {
@@ -23361,12 +23480,13 @@
   "date": "2026-10-07",
   "note": "12 ft, 90 degrees or more",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tails.py::_ALONG_DEG#running with the way": {
@@ -23399,13 +23519,14 @@
   "date": "2026-10-05",
   "note": "40 ft, the page's tail and returning-leg bar",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tails.py::_DOUBLED_DEG#doubled tail angle": {
@@ -23462,14 +23583,15 @@
   "date": "2026-10-05",
   "note": "ends at a crossing within 40 ft, no hook back onto the way",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tails.py::cut_keeps_network#web kept one network": {
@@ -23618,55 +23740,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a foot beside its own lane's other end left": {
+  "code": "43c971ad34d4e871",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "the pages are silent on this 6 ft guard",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a house served": {
-  "code": "7652dee02045ffb7",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "the claim's own account departs from the page's 60 ft (_SERVE_FT is 100) and the page records no such departure; re-cite the page's 100 ft back-lane figure if it fits, or use 60",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#connector never dropped": {
-  "code": "fe9b6a82ae3d03dd",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "the track out is kept",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:16df95fc169329f7"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#end meets end": {
-  "code": "421921e6b945eda6",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "the other lane's end is moved onto this one, with the bend checked",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#ends touch the way they near": {
-  "code": "ecbbeb008c2d0286",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "joined where treads meet",
+  "code": "88e0e5a466d86dc7",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "`_SERVE_FT` is 100 ft, but the page records its guess as \"within 60 ft of the house\"; use 60 ft (and the 12 ft from built ground), or have the page record 100 ft",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -23674,77 +23762,127 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut": {
-  "code": "b2a1c777eba8d91a",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "a short tail ends where it first meets the way",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach": {
-  "code": "e1619eb0447d5b17",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "free ends within 25 ft are run onto the way",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#link directness: a touch or orphan link up to _LINK_DIRECTNESS (4) times the gap": {
-  "code": "08d598f2ce951ab8",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "link directness: a touch or orphan link up to _LINK_DIRECTNESS (4) times the gap",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan piece dropped": {
-  "code": "c0cf07551ea8d2d5",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "dropped only when no farmhouse is stranded",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan reach": {
-  "code": "fcb4dadfb9e5b89e",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "the page is silent",
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a roundabout link refused": {
+  "code": "8c09777d593b1476",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "the pages are silent on this 4x limit",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#the orphan-link fallback (_detour_links, _fine_lattice_links): per its comment it routes at the 4 ft _TOUCH_GAP fence margin, against the page's 7 ft (§56); the routing code is not in the bundle": {
-  "code": "08d598f2ce951ab8",
-  "core": "08d598f2ce951ab8",
-  "date": "2026-10-07",
-  "note": "the orphan-link fallback (_detour_links, _fine_lattice_links): per its comment it routes at the 4 ft _TOUCH_GAP fence margin, against the page's 7 ft (§56); the routing code is not in the bundle",
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a straight link off the fabric": {
+  "code": "c6e73b3c78606109",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "all three straight links keep max(WEB_FABRIC_GAP 7 ft, w/2 + 2 ft)",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#connector never dropped": {
+  "code": "c75e3b356f8c2537",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "the connector and streets are skipped by the drop",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#end meets end": {
+  "code": "cb49feffe1c38e05",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "the other lane's end is run onto this one; the teed lane is excluded by `_by_way`",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#ends touch the way they near": {
+  "code": "04cd307851fedb95",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "ends are joined where the treads meet, one network",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut": {
+  "code": "ac076baeb144b8bf",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "the page says \"a tail of under 40 ft beyond a crossing is cut\"; the code cuts only `6.0 < len <= 40.0`, a 6 ft floor that is on no page",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach": {
+  "code": "552c6534e9241009",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "a free end within 25 ft is extended to the way",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan piece dropped": {
+  "code": "fcd9374410fccf2e",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "a piece is dropped only where no house it serves is stranded; households reached across a neighbor are owed no way",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:71315c33d0ad6f37",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan reach": {
+  "code": "9cb323fdbc1ea2fd",
+  "core": "6019d59221a05ddc",
+  "date": "2026-10-09",
+  "note": "the pages are silent on this 150 ft reach",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::CONNECTOR_WIDTH#connector width": {
   "code": "11520353a0c32704",
@@ -23752,10 +23890,10 @@
   "date": "2026-10-03",
   "note": "6 ft is the page's width for the track out",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::NoDryExit#track plumbing": {
@@ -23784,10 +23922,10 @@
   "date": "2026-10-03",
   "note": "5 ft is the page's width for the spur to the fields",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::TRACK_PAST_FRAME_FT#track past the frame": {
@@ -23808,17 +23946,17 @@
   "date": "2026-10-05",
   "note": "bent round the field, threaded clear of steadings, else the dry exit off wet ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_connector_through#connector's berth off the field": {
@@ -23916,14 +24054,15 @@
   "date": "2026-10-07",
   "note": "the grove fallback's second and third routes, `(bands, lines), (bands, [])`, wall only the grove bands. The field envelope, crops, toe band and wet ground are no longer walled, and `around` is checked only against the fabric, so the track can cross row crops, the paddy or wet ground, against \"A lane never crosses row crops\", \"A lane stops at the flooded paddy\" and \"A track keeps off wet ground\"; every route should keep `obstacles` walled",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#track round the steadings": {
@@ -23954,14 +24093,14 @@
   "date": "2026-10-04",
   "note": "leaves downslope out of the field, off the wet, and runs off the frame",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook not crossed": {
@@ -23986,13 +24125,14 @@
   "date": "2026-10-07",
   "note": "walled by the wet, the field and the steadings",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#grove band gap": {
@@ -24032,14 +24172,15 @@
   "date": "2026-10-08",
   "note": "bends_badly on the connector",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#each brook crossed at most once": {
@@ -24077,14 +24218,15 @@
   "date": "2026-10-08",
   "note": "no dry plot, well or steading part on the way",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_through#track plumbing": {
@@ -24138,13 +24280,14 @@
   "date": "2026-10-08",
   "note": "each candidate is one straight line from the gateway to past the frame, which is \"pulled taut like a string\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track off the steadings": {
@@ -24169,13 +24312,14 @@
   "date": "2026-10-08",
   "note": "wet ground is ranked first and a wet bearing is refused in the end; the ideal bearing leans downslope; the run goes past the frame",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#wet, then steadings, then crop": {
@@ -24184,15 +24328,16 @@
   "date": "2026-10-08",
   "note": "wet ground is refused, steadings kept off the tread, and a crop clip is left for route_around to bend away from the plots",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::past_the_frame#track past the frame": {
@@ -24240,13 +24385,14 @@
   "date": "2026-10-05",
   "note": "the page records the folded spur cut at the fold as the exception to the 40 ft rule; 140 deg hairpin matches",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:f2368e271306e3c2"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_seat#brook crossed only at crossing places": {
@@ -24310,13 +24456,14 @@
   "date": "2026-10-09",
   "note": "CONNECTOR_WIDTH 6 ft on both the valley and polder branches; the page's track out is 6 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#field spur tip on the bund": {
@@ -24339,13 +24486,14 @@
   "date": "2026-10-09",
   "note": "SPUR_WIDTH 5 ft, the spur's rank",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance": {
@@ -24435,17 +24583,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
-  "code": "32bcdddcb1b48601",
+  "code": "c1e729b4421bafa5",
   "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
-  "note": "the page allows a lane to touch a plot's boundary but does not require it; the 12 ft clip is then carried on to the bund",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
+  "note": "the page lets a lane touch a plot but gives no clearance",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653",
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
+   "0081-village-lanes.drawing.html:f2368e271306e3c2",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
   "verdict": "IN-STEP"
  },
@@ -24453,13 +24599,13 @@
   "code": "c6435fff12a3ed33",
   "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
-  "note": "straight from the cluster's edge to the field, or through the two ford landings",
+  "note": "`[_s, edge]` straight, or over a ford",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
   "verdict": "IN-STEP"
  },
@@ -24507,16 +24653,15 @@
   "code": "59934bcd0e12b5e2",
   "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
-  "note": "candidates are ranked by fewest crossings, then shortest, and the winner is clipped off the dry plots and the marsh",
+  "note": "fewest violations then shortest, clipped off the crops and the marsh",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653",
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
   "verdict": "IN-STEP"
  },
@@ -24536,13 +24681,14 @@
   "code": "3cb0ff01e7e96203",
   "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
-  "note": "the connector runs out to the frame",
+  "note": "the connector runs to the frame",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
   "verdict": "IN-STEP"
  },
@@ -24550,13 +24696,13 @@
   "code": "142f79892f604bc6",
   "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
-  "note": "the spur is clipped off the toe band and trim_off_marsh takes it off every marsh",
+  "note": "the toe band and marsh treated as wet",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875"
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
   "verdict": "IN-STEP"
  },
@@ -24589,10 +24735,10 @@
   "date": "2026-10-03",
   "note": "20 ft, past the page's 12 ft hook leg",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::DEFER_GAP_FT#defer cut extent": {
@@ -24737,30 +24883,32 @@
   "date": "2026-10-07",
   "note": "stub w 6.0, the track out's 6 ft at the hamlet's 1 ft/px",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
   "code": "6a94afe0b447e6ff",
   "core": "92c77771287305a5",
-  "date": "2026-10-07",
-  "note": "each way is laid after the last house and refused for a hook, hairpin or dangling end, as the pages say",
+  "date": "2026-10-09",
+  "note": "lane law asked of each household's way laid after the houses",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
    "0081-village-lanes.drawing.html:a857325132f8d4ee",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
@@ -24840,13 +24988,13 @@
   "date": "2026-10-04",
   "note": "3 ft footpath, 5 ft lane",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::lanes_of#tree lanes assembled": {
@@ -25163,13 +25311,14 @@
   "date": "2026-10-08",
   "note": "5.0 is the page's \"cluster's spine ... 5 ft\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_drop_collapsed#web plumbing": {
@@ -25186,16 +25335,17 @@
   "date": "2026-10-08",
   "note": "the arm is clipped and routed off the field outline, the crops, the toe band and the marsh; it never crosses row crops and keeps off wet ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#no accidental crossing": {
@@ -25318,13 +25468,14 @@
   "date": "2026-10-08",
   "note": "the clip is SKELETON_ARM_WIDTH/2 off the outline and the crops, so the tread may touch a plot's boundary",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the wet and the ditches": {
@@ -25359,12 +25510,13 @@
   "date": "2026-10-08",
   "note": "width SKELETON_ARM_WIDTH 5 ft, the spine's width",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#spine along the houses": {
@@ -25418,13 +25570,14 @@
   "date": "2026-10-07",
   "note": "the 12 ft/90 degree hook and the 40 ft tail live in trim_free_stub and cut_past_connector, which are not in the bundle; I need those two bodies",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
+  "triaged": "2026-10-09",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/web.py::kept_connector#web plumbing": {
@@ -25449,10 +25602,10 @@
   "date": "2026-10-03",
   "note": "\"Two lanes that meet end to end are read as one\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::seat_wall_reach#web plumbing": {
@@ -25493,16 +25646,17 @@
   "date": "2026-10-07",
   "note": "MIN_WEB_GAP = 2x7+4 = 18 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:81f9a92fe1d97af1",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span": {
@@ -25739,15 +25893,16 @@
   "date": "2026-10-07",
   "note": "clear_runs cuts out field, crop and wet ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "aa14ee267555a4d0",
+  "research": "6fb4907c78047f34",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the water": {
@@ -32751,16 +32906,16 @@
   "date": "2026-10-05",
   "note": "built and worked ground kept off a corridor",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/reserved.py::Reservations#reservation bookkeeping": {
@@ -33060,11 +33215,11 @@
   "date": "2026-10-03",
   "note": "dry_plots GROUND matches \"A lane never crosses row crops\" and a well \"never out in the fields\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0196-communal-wells-ido.drawing.html": "85fc1e4c2a7f3a2a"
   },
-  "research": "03387cc0d65120eb",
-  "triaged": "2026-10-05",
+  "research": "f255c1305cf1a51d",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::TEMPLE_EXCEPTIONS#temple exceptions": {
@@ -52911,12 +53066,13 @@
   "date": "2026-10-05",
   "note": "more than 140 degrees is a hairpin",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::LANE_MIDDLE_CLEAR_FT#a lane's middle off the fence": {
@@ -52979,15 +53135,16 @@
   "date": "2026-10-05",
   "note": "3 ft, the field road's 3 shaku",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0081-village-lanes.html": "ae63115215c57952"
   },
-  "research": "ec4dc351e934cd4c",
+  "research": "2ef890e55529e181",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0081-village-lanes.html:7d0600c0e1d8620a"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::TREAD_WALL_FT#tread clear of a wall": {
@@ -53012,10 +53169,10 @@
   "date": "2026-10-03",
   "note": "\"as few turns as the plots allow\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::_house_candidates#path leaves its own yard": {
@@ -53157,13 +53314,14 @@
   "date": "2026-10-05",
   "note": "refuses a turn at 140 degrees or more",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::drawn_corridor#corridor geometry, memo and search plumbing": {
@@ -53180,14 +53338,15 @@
   "date": "2026-10-07",
   "note": "outward bearing, else the nearest turn onto lawful ground",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::fixtures_clear#a persimmon by its trunk alone": {
@@ -53291,17 +53450,17 @@
   "date": "2026-10-05",
   "note": "tread off beds, shed, byre, well; margin labeled UNRESEARCHED",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::past_the_yard#path not drawn on its own yard": {
@@ -53394,25 +53553,19 @@
  "l7r/diagram/settlement/rolling/access.py::tree_admits#lane law over the whole tree": {
   "code": "16c90feb4387dca9",
   "core": "6ed225836f530670",
-  "date": "2026-10-05",
-  "note": "ways laid after the last house, admitted by the lane law",
+  "date": "2026-10-09",
+  "note": "delegates to the tree's predicate",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:a857325132f8d4ee",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
-   "0081-village-lanes.drawing.html:d30e15716180fbf5",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/access.py::yard_quad#corridor geometry, memo and search plumbing": {
@@ -55420,43 +55573,44 @@
  "l7r/diagram/settlement/rolling/gap_ways.py::KNOTTED_TRIES#ways out tried before a knotted foot is kept": {
   "code": "5caaa13ba30065c5",
   "core": "c35ad46f1990d395",
-  "date": "2026-10-08",
-  "note": "a wider search for a join with no knot serves the single-point join; the breadth of 3 is a search count, not a fact about the place",
+  "date": "2026-10-09",
+  "note": "a knotted foot is the last resort; the breadth is a search figure",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::KNOT_FT#lane ends gathered": {
   "code": "c22facb9bef05296",
   "core": "1956a2a68f21c5fe",
-  "date": "2026-10-07",
-  "note": "25 ft as the page gives it",
+  "date": "2026-10-09",
+  "note": "25 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::KNOT_MARGIN#a knot's margin": {
   "code": "bd2296b92d864a23",
   "core": "7276802b5dc226e3",
-  "date": "2026-10-07",
-  "note": "1.0 keeps the page's own 25 ft reach with no margin past it; the comment above the constant still describes a margin past the reach (stale prose)",
+  "date": "2026-10-09",
+  "note": "1.0, no margin past the page",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
@@ -55547,17 +55701,17 @@
  "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a foot gathered at a junction": {
   "code": "b96657ef8697eb63",
   "core": "c26beeb2586c30b6",
-  "date": "2026-10-08",
-  "note": "the gather at 25 ft (KNOT_FT * KNOT_MARGIN) matches, but `return _first_admitted(s, knotted, ...)` keeps a foot within 25 ft of a junction unjoined, which the page forbids (\"Ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot\"); where no lawful way exists the page's fallback is \"reached across the yard of its nearest neighbor\", not a knotted way; either record the knotted fallback as a DEVIATION on 0081.drawing or drop it",
+  "date": "2026-10-09",
+  "note": "foot gathered within 25 ft, the traced foot kept only as a last resort",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a way leaves its own homestead from its dooryard": {
   "code": "df40ed409731b008",
@@ -55603,27 +55757,28 @@
   "date": "2026-10-05",
   "note": "cheapest walk weighted away from blocked ground, the page's GUESS",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::gathered_foot#lane ends gathered": {
   "code": "c3b78f2540d49b69",
   "core": "fc24fde7ae16cff7",
-  "date": "2026-10-07",
-  "note": "the foot moves to the nearest junction within 25 ft",
+  "date": "2026-10-09",
+  "note": "nearest junction within the reach",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
@@ -55784,15 +55939,15 @@
   "date": "2026-10-05",
   "note": "joins at the foot on the tree, a T",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::way_out#a way leaves its own homestead from its dooryard": {
@@ -56825,10 +56980,10 @@
   "date": "2026-10-03",
   "note": "`trim_off_marsh`; \"does not cross the reeds\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance": {
@@ -56837,17 +56992,17 @@
   "date": "2026-10-05",
   "note": "width=5 and clearance=40 are unscaled px (lane(): clearance is the no-build half-width); on the village tier at 2 ft/px (this file's own note) that is a 10 ft lane, past the 3/5/6 ft widths and under-9 ft ceiling, and an 80 ft half-width against the 7 ft and 18 ft room - state each in ft per tier or scale it",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "f8c602624f8df558",
+  "research": "330236631d459a7a",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#seed pool": {
@@ -57234,10 +57389,10 @@
   "date": "2026-10-03",
   "note": "\"pulled taut like a string\", no doubling back",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/route.py::tree_in_reach#search breadth": {
@@ -60326,13 +60481,14 @@
   "date": "2026-10-09",
   "note": "a lane with no `w` (and the street_runs fallback) is taken at px(3.0), the footpath's 3 ft",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#main ways only": {
@@ -62953,16 +63109,17 @@
   "date": "2026-10-05",
   "note": "the default worn=False still draws the \"wide dashed lane\" with a center marking, which the page rules out for every hamlet and village lane and a town's back lane; the docstring still assigns it to \"the dispersed pool maps\", against the claim's \"town tier\" - retire the form or record it as a DEVIATION",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd",
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0081-village-lanes.html": "ae63115215c57952"
   },
-  "research": "ec4dc351e934cd4c",
+  "research": "2ef890e55529e181",
   "rests": [
    "0081-village-lanes.drawing.html:3bff0ae7110c4bb0",
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0081-village-lanes.html:538ebcdd23ce5eac",
    "0081-village-lanes.html:6779c143bf44c5ba"
   ],
+  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.lane#lane width": {
@@ -62994,10 +63151,10 @@
   "date": "2026-10-03",
   "note": "the connector flag",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "research": "f3435a8848f6237e",
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.reink_lane#lane records and their ink": {
@@ -63159,15 +63316,16 @@
   "date": "2026-10-09",
   "note": "connector and spur are skipped; the track out runs off the map and never stops in open country, and the spur and track out are the two ends of one through-route",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:df440690bbce9cb6",
    "0081-village-lanes.drawing.html:f2368e271306e3c2"
   ],
+  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/lanes.py::STREET_W_FT#street width": {

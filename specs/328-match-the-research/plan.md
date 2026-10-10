@@ -1514,7 +1514,20 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   test and the cohort) ask, as the ruling's third condition requires. Measured (its fourth): every one of the 26 pairs it
   exempts is that class (17 access-access, 9 access-field way), and the 14 knotted seeds of wave 93 were all of it - the
   cohort 38 -> 52/54, none newly failing; no pool map moved, and Sawada's waiting knot (its field way 9.4 ft from lane 10's
-  door end) comes off the list (m:wave94-door-end-teed). Raised with the GM at the feature's end, per XVI.
+  door end) comes off the list (m:wave94-door-end-teed). Raised with the GM at the feature's end, per XVI. 0081's drawing
+  page records the reading as a map drawing convention, and the spec's Decisions and review history carry the ruling.
+- **The reading's reach, in the code (impl-drift on the claims resting on 0081's changed bullet).** Two more gather passes
+  moved a teed door end off its door - `joints.meet_end_to_end` (a free end moved onto an end within 25 ft) and
+  `smooth._smooth_web`'s step 4 (ends within 25 ft gathered to a node): both now skip the teed pair, as the ruling's one
+  predicate. Labels found on the way, fixed (E0): `bund.cut_stub_ends` re-cited (the house exception is 0246's 60 ft, the
+  bund reach UNRESEARCHED), `stage_track#spur clip margin` UNRESEARCHED (MISLABELED), three unclaimed decisions in
+  `touch._touch_junctions` claimed; `sweeps._join_orphan_ways#link width` (NEEDS-RESEARCH, an open E4 row) keeps its 0081
+  citation and its row. One was a drift, fixed: `_touch_junctions`' straight links kept
+  only max(4 ft, w/2 + 2 ft) off a garden fence where 0246 asks 7 ft (`WEB_FABRIC_GAP`), as `_smooth_web`'s chord already
+  keeps. No pool map moved; the cohort holds 52/54 (m:wave94-gather-passes). Two older drifts are filed as open E1 found
+  rows: `touch._touch_junctions#a house served` (100 ft against 0246's 60) and `#final overrun cut` (a 6 ft floor on no
+  page). Three modals' Depiction tabs were corrected where a modal check found them claiming what no page
+  shows (back lane parallel to the field's edge, not the main lane; no uphill placement for the T's crossbar or the Y's arms).
 - **Verification**: `tests/hamletgen/test_pool_261.py` (a teed door end no knot; a door end beside another lane's end, and a
   door end that is a junction, still knots); the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
 

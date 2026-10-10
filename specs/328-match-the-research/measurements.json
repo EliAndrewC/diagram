@@ -2072,5 +2072,21 @@
       "exempted_classes": "all a lone access door end with the other point on its own lane: 17 access-access, 9 access-field way",
       "pool": "no map moved; Sawada's waiting knot (its field way 9.4 ft from lane 10's door end) cleared, the waiting list empty"
     }
+  },
+  "wave94-gather-passes": {
+    "quantity": "wave 94's later changes (the teed pair skipped in meet_end_to_end and _smooth_web step 4; the three straight links in _touch_junctions at 7 ft; door_end_teed reordered) - the pool and the cohort after them",
+    "observed": "2026-10-10",
+    "source": "the clone with every change, the cohort in a detached worktree on the same patch",
+    "command": "make map GEN=pool/hamlets/<map>/<map>.gen.py for the five hamlets; make test-file FILE=tests/hamletgen/test_pool_261.py; make cohort N=48",
+    "method": "the pool rerolled and compared with HEAD, its knot test run; the cohort run after the touch.py change (the reorder after it is logically equivalent; Kashikawa's roll timed before and after it)",
+    "value": {
+      "cohort_passed": 52,
+      "cohort_48": "52/54 (refused 10, 20), none newly failing",
+      "pool": "no map moved; the pool's knot test 42 passed, 1 xfailed (the zigzag list)",
+      "kashikawa_roll_s": {
+        "before_reorder": 35.7,
+        "after_reorder": 9.6
+      }
+    }
   }
 }

@@ -285,7 +285,13 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     for i, e, q in _ends:
         if (i, e) in _seen:
             continue
-        cluster = [(j, f, r) for j, f, r in _ends if j != i and (j, f) not in _seen and math.dist(q, r) <= _KNOT_FT]
+        # ...but never a household way's lone door end with the other end on that same lane (`knots.door_end_teed`, 0081: such
+        # a pair is one path, left as drawn - feature 328 wave 94, impl-drift: this step moved the door end off its door)
+        from .knots import door_end_teed  # local: knots sits above this module
+
+        cluster = [
+            (j, f, r) for j, f, r in _ends if j != i and (j, f) not in _seen and math.dist(q, r) <= _KNOT_FT and not (door_end_teed(lanes, i, e, True, r) or door_end_teed(lanes, j, f, True, q))
+        ]
         if not cluster:
             continue
         cluster.append((i, e, q))

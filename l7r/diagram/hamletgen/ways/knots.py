@@ -95,10 +95,10 @@ def door_end_teed(lanes: Sequence[Mapping[str, Any]], i: int, end: int, alone: b
     pts = _pts(ln)
     if len(pts) < 2:
         return False
-    q = pts[0]
-    if any(k != i and len(_pts(o)) >= 2 and _on(_pts(o), q) for k, o in enumerate(lanes)):
+    if not _on(pts, other):  # the one-lane test first: it settles almost every pair a gather asks about (feature 328 wave 94, perf)
         return False
-    return _on(pts, other)
+    q = pts[0]
+    return not any(k != i and len(_pts(o)) >= 2 and _on(_pts(o), q) for k, o in enumerate(lanes))
 
 
 def _teed_pair(lanes: Sequence[Mapping[str, Any]], na: Node, nb: Node) -> bool:

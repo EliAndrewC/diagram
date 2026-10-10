@@ -438,7 +438,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         row road over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the ford that makes the walk shortest, each leg threaded to its landing (`thread_over_the_ford`)
         track off the map - research/questions/0081-village-lanes.drawing.html: from the gateway, out of the field, to the frame
         track off the wet - research/questions/0081-village-lanes.drawing.html: the toe band and every drawn marsh are wet
-        spur clip margin - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary; the code clips the spur 12 ft off the dry plots
+        spur clip margin - UNRESEARCHED: the spur clipped 12 ft off the dry plots (0081 lets a lane touch a plot's boundary, and gives no clearance)
         toe-band margin - UNRESEARCHED: the spur clipped 12 ft off the toe band
         spur tip set back - UNRESEARCHED: SPUR_SETBACK, 17 ft off the field outline's vertex
         connector width - research/questions/0081-village-lanes.drawing.html: the track out 6 ft (`CONNECTOR_WIDTH`), valley and polder alike

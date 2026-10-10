@@ -137,6 +137,9 @@ def _touch_junctions(
         final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut
         join reach - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the code extends a free end within 25 ft (`_LANE_JOIN_FT`, and `_STUB_REACH_FT` on the final pass) of another way to it
         orphan reach - UNRESEARCHED: a stranded piece linked back to the network from up to `_ORPHAN_REACH` (150 ft)
+        a foot beside its own lane's other end left - UNRESEARCHED: a foot within 6 ft of the lane's other end is not joined
+        a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
+        a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served by it, where the page says 60 ft"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
     # Every rung here tests the LINK it is about to draw, and none of them looks at the lane that comes
@@ -224,7 +227,7 @@ def _touch_junctions(
                 _oe = 0 if math.dist(foot, _op[0]) <= 4.0 else (-1 if math.dist(foot, _op[-1]) <= 4.0 else None)
                 if _oe is not None and len(_op) >= 2 and not (lanes[k].get("connector") or lanes[k].get("street")):
                     _nb = _op[1] if _oe == 0 else _op[-2]
-                    if _clear_touch(_nb, q, hard, walls, water, max(_TOUCH_GAP, float(lanes[k].get("w") or 5.0) / 2.0 + 2.0)) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
+                    if _clear_touch(_nb, q, hard, walls, water, max(WEB_FABRIC_GAP, float(lanes[k].get("w") or 5.0) / 2.0 + 2.0)) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
                         _np = list(_op)
                         _np[_oe] = q
                         if not _may_write(k, _np, lanes):
@@ -240,7 +243,7 @@ def _touch_junctions(
                 # a farmhouse corner and the check reads a house standing in the lane (cohort seed 6).
                 link = (
                     [q, foot]
-                    if _clear_touch(q, foot, hard, walls, water, max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0))
+                    if _clear_touch(q, foot, hard, walls, water, max(WEB_FABRIC_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0))
                     else _route(q, foot, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=None)
                 )
                 if not link and d <= _LANE_JOIN_FT:
@@ -332,7 +335,11 @@ def _touch_junctions(
             for d, v, q in cands[:12]:
                 if d > _ORPHAN_REACH:
                     break
-                link = [v, q] if _clear_touch(v, q, hard, walls, water) else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=None)
+                link = (
+                    [v, q]
+                    if _clear_touch(v, q, hard, walls, water, max(WEB_FABRIC_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0))
+                    else _route(v, q, hard, walls, water, gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=None)
+                )
                 if link and polyline_len(link) <= _LINK_DIRECTNESS * max(d, 1.0):
                     _join_piece(s, lanes, i, ways[i], v, link, hard, walls, water, main_segs)
                     joined = True

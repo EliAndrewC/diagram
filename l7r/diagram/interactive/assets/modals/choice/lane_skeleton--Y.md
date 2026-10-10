@@ -14,8 +14,8 @@ Guesses:
 - That a village's lanes took one of a few shapes - a spine, a T, a Y, a crossroads or a lane along the water - and that a Y formed where two approaches merged, as a worn path takes the shortest or the easiest way and two such ways join where their walkers' routes run together: no source names these shapes or says where each formed.
 - How often each shape comes up: no source counts them.
 
-Depiction: The map seats the houses first and lays the Y after, fitted to where they stand: two arms from the upper side of
-the cluster joining in a stem that runs down to its foot; the households' own ways join it. Each arm is drawn as a track of
+Depiction: The map seats the houses first and lays the Y after, fitted to where they stand: two arms joining in a stem that runs on through
+the cluster; the households' own ways join it. Each arm is drawn as a track of
 bare earth a little wider than a footpath - a width of the map's choosing, since no village lane's width is recorded - pulled
 as straight as the plots allow.
 

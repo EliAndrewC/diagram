@@ -2167,7 +2167,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 - `hamletgen/ways/knots.py` (`door_end_teed`, `knots`, `lane_knots`); `tests/hamletgen/test_pool_261.py`.
 
-- [ ] T214 wave 94's row (FR-003, FR-004)
+- [x] T214 wave 94's row (FR-003, FR-004)
       research: rendering
-- [ ] T215 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      verify: DONE. DONE. plan CLEAR (wave 94, round 3); door_end_teed in every gather pass and the knot verdict (spec-fidelity's ruling, narrow form); the cohort 38 -> 52/54, Sawada's waiting knot cleared, no map moved (m:wave94-door-end-teed, m:wave94-gather-passes); 0081 records the reading; touch's straight links at 0246's 7 ft
+- [x] T215 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
+      verify: DONE. DONE. impl-drift over every claim resting on 0081's changed bullet: IN-STEP but two older drifts filed as open E1 rows and one NEEDS-RESEARCH row left open; make claims-owed: none

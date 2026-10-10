@@ -4761,6 +4761,36 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a house served",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "`_SERVE_FT` counts a house within 100 ft of a lane as served by it, where 0246's drawing page records its GUESS as within 60 ft of the house (and 12 ft of its built ground): use 60 ft and the 12 ft, or have the page record 100 ft; the figure is read by several passes (touch, joints.keeps_the_web), so the cohort decides",
+  "files": [
+   "l7r/diagram/hamletgen/ways/touch.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 94's impl-drift of the claims resting on 0081 (feature 328, 2026-10-10)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "0081 cuts a tail of under 40 ft beyond a crossing; the final pass cuts only 6 < len <= 40, so a tail under 6 ft stands - drop the 6 ft floor, or record it on 0081's drawing page",
+  "files": [
+   "l7r/diagram/hamletgen/ways/touch.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 94's impl-drift of the claims resting on 0081 (feature 328, 2026-10-10)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach",
   "tier": "E1",
   "fix": "_touch_junctions reach 25 ft on every pass (30 and final 48 -> 25)",

@@ -550,7 +550,16 @@ def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
             others = [(j, _pts(o)) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2]
             if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for _j, op in others for a, b in _segs(op)):
                 continue  # already on a way
-            near = [(math.dist(q, op[e]), op[e]) for _j, op in others for e in (0, -1) if _TOUCH_GAP < math.dist(q, op[e]) <= _MEET_FT]
+            # ...never a household way's lone door end and an end on its own lane (`knots.door_end_teed`, 0081: one path, left as
+            # drawn - feature 328 wave 94, impl-drift: the door end was moved onto the foot along its own tread)
+            from .knots import door_end_teed  # local: knots imports this module
+
+            near = [
+                (math.dist(q, op[e]), op[e])
+                for _j, op in others
+                for e in (0, -1)
+                if _TOUCH_GAP < math.dist(q, op[e]) <= _MEET_FT and not (door_end_teed(lanes, i, k, True, op[e]) or door_end_teed(lanes, _j, e, True, q))
+            ]
             if not near:
                 continue
             _d, to = min(near)

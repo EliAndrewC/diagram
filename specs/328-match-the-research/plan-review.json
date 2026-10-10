@@ -1,47 +1,82 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "0ba3b1f9950b671a6f0aa2d7b8c24bfdfe7bf3a549d3d0feae86e5b13ea7505f",
+ "plan_sha256": "674c5728691f5f3a0931cf88ea813c491c43401c89014b68ec39c92f51df7f7b",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W94-a",
-   "summary": "Row knots.py::next_gather#knots no lawful gather reaches closed as FIXED by door_end_teed: an access lane's lone door end (end 0, alone at its node, on no other lane's side) with the other point on that same lane is no knot, asked by both the gather search (knots via _teed_pair) and the verdict (lane_knots, read by the pool test and the cohort)",
+   "summary": "Row knots.py::next_gather#knots no lawful gather reaches FIXED by door_end_teed (a lone access-lane door end teed on its own lane is no knot), asked by the gather search and the verdict",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "It narrows the literal reach of 0081's 'ends within 25 ft are joined at a single point', and is the exception spec-fidelity ruled LEGITIMATE in a narrow form on 2026-10-10. Conditions 1-4 checked against the diff: (1) door_end_teed returns True only for end 0 of an ACCESS lane, alone, its point on no other lane, the other point on its own polyline; both call sites encode the end as the code builds it (lane_knots: 0 if x % 2 == 0 else -1). (2) A lone door end on no other lane is by construction not a junction, so no junction pair is exempted; three lanes arriving (two feet on lane i near its door end) still knot on the feet's own pair; the new test pins the loose-end and junction cases. (3) One predicate, both sites. (4) Re-measured this round: make cohort N=48 52/54, refused only 10 and 20 (WebRefused), no lane_knots failure (wave 93: 38/54, 14 knotted); make test-file test_pool_261.py 42 passed, 1 xfailed (the zigzag list, unrelated); Sawada rerolled with the diff, tree unchanged. The purpose of the rule - three lanes never arriving a few feet apart - is not reached by a two-lane T near a door, which one drawn lane already joins (the module docstring's own reading)."
+   "why": "Unchanged from round 1: the exception spec-fidelity ruled LEGITIMATE in its narrow form on 2026-10-10; the predicate still returns True only for end 0 of an access lane, alone, on no other lane, with the other point on its own polyline. Round 1's W94-d is resolved: spec.md carries the Decisions Recorded row (m:wave94-door-end-teed) and the review-history line with the five conditions."
   },
   {
    "id": "W94-b",
-   "summary": "Sawada removed from _KNOTS_WAITING (the strict-xfail list emptied)",
+   "summary": "Sawada off _KNOTS_WAITING",
    "class": "within",
-   "why": "Follows from W94-a's verdict: Sawada's waiting pair (its field way 9.4 ft from lane 10's door end) is of the exempted class; a strict xfail that now passes must come off. Measured: the pool test file green."
+   "why": "Follows from W94-a, as in round 1."
   },
   {
    "id": "W94-c",
-   "summary": "test_a_lone_door_end_teed_on_its_own_lane_is_no_knot_but_a_door_end_beside_another_lane_is in tests/hamletgen/test_pool_261.py",
+   "summary": "The pool test pinning the narrow form (teed door end no knot; door end beside another lane's end, or a junction door end, still knots)",
    "class": "within",
-   "why": "Enforcement of the ruling's narrow form: it fails if the exemption widens to a loose end or a junction door end. Serves the request; not unrequested scope."
+   "why": "Enforcement of the ruling's narrow form."
   },
   {
    "id": "W94-d",
-   "summary": "No Decisions Recorded row in spec.md for the exception, on the grounds that no map's drawing changes",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-008 records every fix that changes what a map draws OR STATES, in its class, in spec.md's Decisions Recorded, added by the wave's amendment. This wave changes the generator's own rule for what is a lawful drawing: the gather search (knots) no longer tries to gather these pairs, so what a roll draws can change (wave 92's measurement showed the gather-side exemption changing outcomes), and a configuration the ranking called a DRIFTED defect is now drawn as lawful on 14 cohort seeds and Sawada. 'No pool map moved' is not FR-008's test: the table already carries wave 16 rows whose Why says 'it moved nothing drawn', and amendment 79 round 1 was BLOCKED on exactly this omission. It is also an XVI exception, which the table's first row names as the only path by which the reading of the research moves, and the caller's own statement of condition 5 places it in the spec's Decisions. The exception check of 2026-10-10 itself also has no line in spec.md's review history (the 2026-10-08 MODE 1 check does), so its five conditions exist only as summaries. Fix: add a Decisions Recorded row (decision: a household way's lone door end teed on its own lane is no knot; class: the XVI exception reading of 0081, ruled LEGITIMATE in a narrow form by spec-fidelity 2026-10-10, to be raised with the GM; why: one drawn lane joins the two, three lanes do not arrive; recorded at hamletgen/ways/knots.py door_end_teed, m:wave94-door-end-teed) and a review-history line recording the 2026-10-10 exception check and its conditions."
+   "summary": "Decisions Recorded row and review-history line for the door-end exception",
+   "class": "within",
+   "why": "Round 1's BLOCKED item, now done (spec.md Decisions table, wave 94 row; review history, the 2026-10-10 exception check with its five conditions)."
   },
   {
    "id": "W94-e",
-   "summary": "Raised with the GM at the feature's end via claims-followup.md (XVI)",
+   "summary": "joints.meet_end_to_end and smooth._smooth_web step 4 skip the teed pair with the same door_end_teed predicate",
    "class": "within",
-   "why": "XVI's procedure for an exception that an independent check agreed: carry on and raise it with the GM once it works."
+   "why": "The ruling's own reading carried to every gather pass: under it the pair is one drawn lane, not two ends that nearly meet, so a pass that slid the door end onto the foot was applying 0081's joining rule to a pair the ruling says it does not reach. The same predicate is asked, so the class cannot widen. Round 2's wording note done: the wave 94 Decisions row's 'Recorded at' now names joints.py meet_end_to_end and smooth.py _smooth_web."
   },
   {
    "id": "W94-f",
-   "summary": "Bookkeeping: the row's tier E3 into audit/closed-tiers.json, wave 94 into audit/waves.json and ranking.md/json; Phase 95 tasks T214 and T215 (impl-drift on the claims owed)",
+   "summary": "door_end_teed reordered (the one-lane test first) for speed",
    "class": "within",
-   "why": "The program's standing process (FR-005, FR-006)."
+   "why": "Logically equivalent conjunction; the guard on end, alone and role unchanged."
+  },
+  {
+   "id": "W94-g",
+   "summary": "E0 labels: spur clip margin UNRESEARCHED, cut_stub_ends split and re-cited (0081 40 ft tail, 0246 60 ft house, bund reach UNRESEARCHED), three unclaimed decisions in _touch_junctions claimed",
+   "class": "within",
+   "why": "spur clip margin's ranked row is MISLABELED E0 (impl-drift's own verdict; 0081 permits touching and gives no clearance); the cut_stub_ends split states honestly a claim that was IN-STEP; claiming UNCLAIMED code decisions is the E0 work this feature has done throughout."
+  },
+  {
+   "id": "W94-h",
+   "summary": "sweeps._join_orphan_ways#link width keeps its 0081 citation and its open E4 row (NEEDS-RESEARCH); out of the plan's E0 list",
+   "class": "within",
+   "why": "Round 2's BLOCKED item, done as set out: sweeps.py is unchanged (line 265 still cites 0081), the claims-index record keeps verdict NEEDS-RESEARCH (a triage of the changed 0081 block, 2026-10-09), ranking.json's row is untouched (E4, NEEDS-RESEARCH, wave '', scope kept), and the plan names it as an open E4 row, not an E0 fix. Nothing is narrowed: the ranked finding stays open for its research pass."
+  },
+  {
+   "id": "W94-i",
+   "summary": "_touch_junctions' three straight links held max(WEB_FABRIC_GAP 7 ft, w/2 + 2 ft) off the fabric instead of max(4 ft, ...): a drift fixed in the generator",
+   "class": "within",
+   "why": "Implementation moved to 0246's 7 ft at a garden fence - the direction the request asks for."
+  },
+  {
+   "id": "W94-j",
+   "summary": "Decisions Recorded row for the touch pass's straight links at the web's fabric gap (MAP DRAWING CONVENTION, 0246; recorded at touch.py _touch_junctions; m:wave94-gather-passes)",
+   "class": "within",
+   "why": "Round 2's BLOCKED item, done as set out: spec.md's Decisions Recorded table carries the wave 94 row, classed by 0246's own words as wave 89's near-identical row was, with its consequence and measurement key (m:wave94-gather-passes, whose knot-test count 42 passed / 1 xfailed this round re-ran and matched). FR-008 is met."
+  },
+  {
+   "id": "W94-k",
+   "summary": "Three modals' Depiction tabs corrected (back lane parallel to the field's edge; no uphill crossbar or uphill Y arms)",
+   "class": "within",
+   "why": "The statements brought to what the page and the code say (0246: back lanes 'parallel to the field's edge'; no page or code places the T's crossbar or the Y's arms uphill); nothing drawn changes."
+  },
+  {
+   "id": "W94-l",
+   "summary": "Two older drifts filed as open E1 found rows (touch 'a house served' 100 ft vs 0246's 60; 'final overrun cut' 6 ft floor), not fixed in this wave",
+   "class": "within",
+   "why": "Edge Cases: new findings are recorded in the ranking under the tier they take; both are in found-wave94.jsonl and scope.json (kept) for a later wave. Round 2's wording note done: the plan names both rows."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
