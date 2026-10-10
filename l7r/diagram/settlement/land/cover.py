@@ -23,6 +23,7 @@ Research: plumbing - NONE: footprints, the bare-ground grid, keep-out indexing a
 
 import math
 import random
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 # THE GRASS IS A TILE (feature 298): the blades and brush dots this scatter threw one by one - 55-68% of four pool hamlets'
@@ -387,20 +388,16 @@ class GroundCoverMixin:
             commons beyond the grove - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub and rough grazing, not forest
             scrub ground color - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass and brush drawn as one repeated block over the bare ground, no solid fill and no outline (`tiles.cover_path`: the pattern alone)
             grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one form only, the scrub past the grove; the floodplain and the small grass plot beside one paddy are never drawn or rolled
-            coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
-            no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
             scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: a few scraggly pines - one throw to 6,000 sq ft, at least two throws (a throw the keep-outs refuse seats none), none on pasture
             off the ponds' open water - UNRESEARCHED: no scrub, pine or coppice crown on a pond or a crescent pond (one water test, `_sparse`), the grass bare 2 ft past a crescent pond's rim
             marsh edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass thins into the reeds, brush and pines stop at the marsh
             wood edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no brush or pine in a wood, grass only WOOD_FRINGE_FT under its edge, thinning inward (its inner half at `WOOD_FRINGE_THIN_KEEP`)
-            coppice stops at the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: no woody growth inside a marsh but the belt's alder, so no coppice crown is seated in one
             crowns and pines clear of the crops - UNRESEARCHED: a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
             a scrub pine's reach - UNRESEARCHED: `PINE_SPREAD_BS` (4.6 ft) as the pine's crown radius in the sun test
             edge feather - CONVENTION: the scatter thins over 42 bs at the parcel's edge
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
             claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
             woodland no-build - UNRESEARCHED: a woodland parcel made no-build ground
-            woodland stocked to read - CONVENTION: a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
         # show ... small pine trees and such growing out of the marshland in exactly the same pattern as
@@ -515,77 +512,7 @@ class GroundCoverMixin:
             _fringe: list[Any] = []
             _fringe_in: list[Any] = []
             if role == "woodland":
-                # A TARGET, NOT AN ATTEMPT COUNT (settlement-review x3, 2026-08-18 round 2 - Inashiro,
-                # Sawada and Mizuguchi found it independently). `int(area / 540)` looks like a density
-                # and is not: it is the number of THROWS, and `_sparse` rejects a share of them, so the
-                # realized spacing depends on how much of a parcel lies near a keep-out. Small parcels
-                # are proportionally more edge, so they came out both smaller AND thinner - measured
-                # 691-768 sq ft per crown on the big stands against 981 on Sawada's and 1101 on
-                # Inashiro's smallest, which at ~31% canopy reads as scattered trees on grass rather
-                # than a wood. The size-variance work made that worse rather than better: growing
-                # Sawada's parcel 125 -> 136 ft added no crowns at all, so the sparsest object on the
-                # sheet got sparser.
-                #
-                # A coppice is a worked thicket cut on rotation, and the sources describe the SMALL
-                # parcels near a settlement as the intensively worked ones - so density must not fall
-                # away with size. Throwing until the target is MET (capped, so a parcel that genuinely
-                # cannot hold its quota still terminates) makes the realized density the stated one on
-                # every parcel. The draws stay inside this function's `random.setstate` scope, so the
-                # extra throws cannot ripple into anything drawn later.
-                # THE COMMONS' OWN STOCKING (269 B28; research/vegetation/230): one crown to `COMMONS_SPACING_FT`
-                # squared (~63 sq ft, 1,700 stems/ha), each 8-9 ft across so neighbors just meet. It was one crown to
-                # 540 sq ft at 13-23 ft across, the hill wood's figures (0080) that no page gave for a coppice.
-                _wd_target = int(area / self.px(self.COMMONS_SPACING_FT) ** 2)
-                _r_lo, _r_hi = (self.px(v) for v in self.COMMONS_CROWN_R_FT)
-                # ...AND NO CROWN IN A YARD'S OR BED'S SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"), throws and
-                # the room's grid alike: the commons are laid after every plot, so the keep-out is whole here
-                _wd_sun = self._sun_keepouts(
-                    (x0 - _r_hi - self.CANOPY_PAD, y0 - _r_hi - self.CANOPY_PAD, x1 + _r_hi + self.CANOPY_PAD, y1 + _r_hi + self.CANOPY_PAD)
-                )  # the reach the crown test asks: radius AND pad
-                # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear) -
-                # asked of an index, because a coppice at its real stocking seats hundreds of crowns (dev/performance.md)
-                _wd_seated = CrownIndex(self._crowns_near(min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
-                _tc0, _g0 = len(self.M["tree_crowns"]), len(g)  # where this wood's crowns start, for the stocking below
-                for _ in range(_wd_target * 6):
-                    if _wd_crowns >= _wd_target:
-                        break
-                    cx, cy = random.uniform(x0, x1), random.uniform(y0, y1)
-                    if _sparse(cx, cy, 0.6, _r_hi):  # lean = the largest crown radius, so no canopy overhangs a crop
-                        continue
-                    # ...AND NONE IN A MARSH (feature 328 wave 57, impl-drift; 0074: woody growth stops at the marsh's edge, the
-                    # trees standing in one are the belt's alder): the coppice's crowns thinned 46 ft into it over the grass's ramp
-                    if any(si.inside(cx, cy) for si in soft_idx[: len(soft)]):
-                        continue
-                    r = random.uniform(_r_lo, _r_hi)
-                    if self._crown_covers(cx, cy, r, _wd_sun, (), self.CANOPY_PAD):
-                        continue
-                    col = random.choice(("#6E8B4A", "#7C9856", "#87A45C"))
-                    # RECORD the crown (known-open ledger 2026-08-16, both review rounds
-                    # independently): these used to be SVG ink only, so no manifest check could
-                    # count a stand's canopy - which is how a zero-crown "woodland" parcel could
-                    # ship green. Same flat [x, y, r] run the homestead groves use.
-                    if not _wd_seated.clear(cx, cy, r):
-                        continue  # centered under an already-seated crown: an understory stem, not canopy
-                    _wd_seated.add(cx, cy, r)
-                    self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
-                    _wd_crowns += 1
-                    # ONE FLAT DISC PER CROWN (GM 2026-09-28), as in groves.py and woods.py. A pale "sun highlight"
-                    # disc inside each crown and a soft ground shadow under it were a shading convention that
-                    # the GM read as a second tree or a trunk, worse under the page's highlighting; color alone
-                    # tells one kind of tree from another.
-                    g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#4C6234" stroke-width="0.7"/>')
-                # ...AND NEVER UNDER-STOCKED (feature 287, woods W13): where the throws seat fewer than `WOODLAND_MIN_CROWNS` -
-                # a parcel mostly over the padded crop, most throws refused - they are taken back and the parcel is stocked
-                # from its room instead (`woodland_room`, the grid the scan asked before offering it), so a parcel the scan
-                # offered always records at least the floor it was offered at
-                if _wd_crowns < WOODLAND_MIN_CROWNS:
-                    del self.M["tree_crowns"][_tc0:]
-                    del g[_g0:]
-                    room = [t for t in self.woodland_room(poly) if not self._crown_covers(t[0], t[1], t[2], _wd_sun, (), self.CANOPY_PAD)][: max(_wd_target, WOODLAND_MIN_CROWNS)]
-                    for cx, cy, r in room:
-                        self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
-                        g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#7C9856" stroke="#4C6234" stroke-width="0.7"/>')
-                    _wd_crowns = len(room)
+                _wd_crowns = self._stock_woodland(poly, area, (x0, y0, x1, y1), _sparse, soft_idx[: len(soft)], g)
             else:
                 # A THROW OUTSIDE THE PREDICTED FRAME COSTS ITS TWO DRAWS AND NOTHING ELSE (feature 224): ~90% of a hamlet's
                 # throws land where the frame will clip them, and each used to pay the keep-out test and its marks' draws
@@ -695,6 +622,96 @@ class GroundCoverMixin:
                     for _kind, _band in (("wood-fringe", _fringe), ("wood-fringe-thin", _fringe_in)):
                         _outside = _zone.difference(unary_union(_band))
                         self._covers.append(Cover(_kind, _ccls, [(float(a), float(b)) for a, b in poly], [*_rest, _outside], self.M["commons"][-1]))
+
+    def _stock_woodland(  # type: ignore[misc]
+        self: Settlement, poly: Any, area: float, box: tuple[float, float, float, float], sparse: Callable[..., bool], marsh_idx: list[RingIndex], g: list[str]
+    ) -> int:
+        """Stock a woodland commons with its coppice crowns, drawn into `g` and recorded in `tree_crowns`; returns how many.
+        `sparse` is the parcel's own throw filter, `marsh_idx` its marshes' rings (lifted out of `commons` by feature 370, the
+        100-statement cap; the same draws in the same order, inside the caller's random scope).
+
+        Research:
+            coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
+            no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
+            coppice stops at the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: no woody growth inside a marsh but the belt's alder, so no coppice crown is seated in one
+            crowns and pines clear of the crops - UNRESEARCHED: a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
+            crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
+            woodland stocked to read - CONVENTION: a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
+            no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
+        x0, y0, x1, y1 = box
+        _wd_crowns = 0
+        # A TARGET, NOT AN ATTEMPT COUNT (settlement-review x3, 2026-08-18 round 2 - Inashiro,
+        # Sawada and Mizuguchi found it independently). `int(area / 540)` looks like a density
+        # and is not: it is the number of THROWS, and `_sparse` rejects a share of them, so the
+        # realized spacing depends on how much of a parcel lies near a keep-out. Small parcels
+        # are proportionally more edge, so they came out both smaller AND thinner - measured
+        # 691-768 sq ft per crown on the big stands against 981 on Sawada's and 1101 on
+        # Inashiro's smallest, which at ~31% canopy reads as scattered trees on grass rather
+        # than a wood. The size-variance work made that worse rather than better: growing
+        # Sawada's parcel 125 -> 136 ft added no crowns at all, so the sparsest object on the
+        # sheet got sparser.
+        #
+        # A coppice is a worked thicket cut on rotation, and the sources describe the SMALL
+        # parcels near a settlement as the intensively worked ones - so density must not fall
+        # away with size. Throwing until the target is MET (capped, so a parcel that genuinely
+        # cannot hold its quota still terminates) makes the realized density the stated one on
+        # every parcel. The draws stay inside this function's `random.setstate` scope, so the
+        # extra throws cannot ripple into anything drawn later.
+        # THE COMMONS' OWN STOCKING (269 B28; research/vegetation/230): one crown to `COMMONS_SPACING_FT`
+        # squared (~63 sq ft, 1,700 stems/ha), each 8-9 ft across so neighbors just meet. It was one crown to
+        # 540 sq ft at 13-23 ft across, the hill wood's figures (0080) that no page gave for a coppice.
+        _wd_target = int(area / self.px(self.COMMONS_SPACING_FT) ** 2)
+        _r_lo, _r_hi = (self.px(v) for v in self.COMMONS_CROWN_R_FT)
+        # ...AND NO CROWN IN A YARD'S OR BED'S SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"), throws and
+        # the room's grid alike: the commons are laid after every plot, so the keep-out is whole here
+        _wd_sun = self._sun_keepouts(
+            (x0 - _r_hi - self.CANOPY_PAD, y0 - _r_hi - self.CANOPY_PAD, x1 + _r_hi + self.CANOPY_PAD, y1 + _r_hi + self.CANOPY_PAD)
+        )  # the reach the crown test asks: radius AND pad
+        # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear) -
+        # asked of an index, because a coppice at its real stocking seats hundreds of crowns (dev/performance.md)
+        _wd_seated = CrownIndex(self._crowns_near(min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
+        _tc0, _g0 = len(self.M["tree_crowns"]), len(g)  # where this wood's crowns start, for the stocking below
+        for _ in range(_wd_target * 6):
+            if _wd_crowns >= _wd_target:
+                break
+            cx, cy = random.uniform(x0, x1), random.uniform(y0, y1)
+            if sparse(cx, cy, 0.6, _r_hi):  # lean = the largest crown radius, so no canopy overhangs a crop
+                continue
+            # ...AND NONE IN A MARSH (feature 328 wave 57, impl-drift; 0074: woody growth stops at the marsh's edge, the
+            # trees standing in one are the belt's alder): the coppice's crowns thinned 46 ft into it over the grass's ramp
+            if any(si.inside(cx, cy) for si in marsh_idx):
+                continue
+            r = random.uniform(_r_lo, _r_hi)
+            if self._crown_covers(cx, cy, r, _wd_sun, (), self.CANOPY_PAD):
+                continue
+            col = random.choice(("#6E8B4A", "#7C9856", "#87A45C"))
+            # RECORD the crown (known-open ledger 2026-08-16, both review rounds
+            # independently): these used to be SVG ink only, so no manifest check could
+            # count a stand's canopy - which is how a zero-crown "woodland" parcel could
+            # ship green. Same flat [x, y, r] run the homestead groves use.
+            if not _wd_seated.clear(cx, cy, r):
+                continue  # centered under an already-seated crown: an understory stem, not canopy
+            _wd_seated.add(cx, cy, r)
+            self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
+            _wd_crowns += 1
+            # ONE FLAT DISC PER CROWN (GM 2026-09-28), as in groves.py and woods.py. A pale "sun highlight"
+            # disc inside each crown and a soft ground shadow under it were a shading convention that
+            # the GM read as a second tree or a trunk, worse under the page's highlighting; color alone
+            # tells one kind of tree from another.
+            g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#4C6234" stroke-width="0.7"/>')
+        # ...AND NEVER UNDER-STOCKED (feature 287, woods W13): where the throws seat fewer than `WOODLAND_MIN_CROWNS` -
+        # a parcel mostly over the padded crop, most throws refused - they are taken back and the parcel is stocked
+        # from its room instead (`woodland_room`, the grid the scan asked before offering it), so a parcel the scan
+        # offered always records at least the floor it was offered at
+        if _wd_crowns < WOODLAND_MIN_CROWNS:
+            del self.M["tree_crowns"][_tc0:]
+            del g[_g0:]
+            room = [t for t in self.woodland_room(poly) if not self._crown_covers(t[0], t[1], t[2], _wd_sun, (), self.CANOPY_PAD)][: max(_wd_target, WOODLAND_MIN_CROWNS)]
+            for cx, cy, r in room:
+                self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
+                g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#7C9856" stroke="#4C6234" stroke-width="0.7"/>')
+            _wd_crowns = len(room)
+        return _wd_crowns
 
     def hinterland(  # type: ignore[misc]
         self: Settlement,
