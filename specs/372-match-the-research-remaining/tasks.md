@@ -136,3 +136,10 @@ in 328's ranking and this spec.
 - [x] T13 wave 110's row (FR-001)
       research: rendering
       verify: DONE. DONE. wave 110: the 0105 absence note's Matsue sentence removed (CLAIM-FROM-UNREAD cleared); quote-check and record-format clean; plan review CLEAR
+
+## Phase 14 - wave 111 (amendment 8): the kitchen well's two seats recorded
+
+- Record and procedure (FR-001): 0105's drawing page, `docs/buildings.md` Wells, the well pop-up.
+
+- [ ] T14 wave 111's row (FR-001)
+      research: rendering

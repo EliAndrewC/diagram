@@ -261,6 +261,16 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   (quote-check, CLAIM-FROM-UNREAD); the sentence removed from both 0105 notes files, the note's stated silence unchanged.
 - **Records**: the note's quote-check and record-format; its source-reader answered as an absence note citing no page.
 
+## Wave 111 (amendment 8, 2026-10-10) - batch 7
+
+- **Scope**: the found row `docs/buildings.md::Wells#kitchen well` (E1). The procedure set the kitchen well "inside or immediately
+  adjacent to the kitchen"; 0105's drawing page set it "past the bath, as far as 20 ft out". The hand sheets draw it inside the
+  kitchen on its earth floor (Ochiba's "on the doma since pass 3"), the generated plans past the bath. No page places a samurai
+  kitchen's well, so neither form is research-backed and the ranked fix's "follow the drawing page" would move three wells on no
+  evidence: the drawing page now records both seats, a GUESS, and the procedure and its claim say the same. The well pop-up says
+  the kitchen's well stands inside the kitchen on its earth floor or past the bath. No sheet, no engine code.
+- **Records**: the claims' impl-drift; the record checks the page edit owes.
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |

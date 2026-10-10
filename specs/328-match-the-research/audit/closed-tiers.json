@@ -96,6 +96,7 @@
  "docs/buildings.md::Walls and gates#threshold stones": "E0",
  "docs/buildings.md::Walls and gates#threshold wards": "E2",
  "docs/buildings.md::Wells#bath-area well": "E0",
+ "docs/buildings.md::Wells#kitchen well": "E1",
  "l7r/diagram/hamletgen/cluster.py::below_drain#wet side of the drain": "E2",
  "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt distance upwind": "E0",
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas": "E1",
