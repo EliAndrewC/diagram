@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - amendment 1 (the GM 2026-10-10, request.md): reopened by this session to do it and close it again
+**Status**: Done 2026-10-10 - amendment 1 landed: spec FAITHFUL, plan CLEAR, every task ticked; suite 44/44
 
 **Affects**: tooling, review process
 
