@@ -38,3 +38,79 @@ much searching an item needs.
   group. Merging the 66 groups in pairs saves about 30 M of 738 M, about 4%.
 - **A claims lookup that answers only the claim** saves part of the 16 M `make lines` carried on the claims file, at
   most about 2%.
+
+## R2 - do sessions look at what we have before searching the web? (FR-005, 2026-10-10)
+
+**Method** (observed 2026-10-10; method: `measure/local_first.py`, output `measure/local-first.txt`). Every session
+transcript under `~/.claude/projects/-diagram*/`, each main thread and each subagent its own actor, over the calls made
+since the source archive landed (feature 309, 2026-10-02T17:37Z). A LOCAL look is a read or grep of `research/`, `make
+notes`, `make canon`, `make archive-find`, a check bundle, or, for a subagent, a dispatch naming one. A fetch is HELD when
+the archive's manifest (`research/archive/*/*.json`) has a capture of that URL from before the call. A search is ASKED
+ALREADY when at least two of its words, and 60% of them, sit in one question's heading id.
+
+**Main sessions look first** (observed 2026-10-10; method: as above). All 23 main threads that searched the web had
+looked locally before their first web call. Their 39 fetches included 12 of held URLs, and none of their 20 searches was
+on a subject a record question names.
+
+**Agents re-fetch what the archive holds** (observed 2026-10-10; method: as above). 618 of 625 agents that went to the
+web started from a bundle. But of their 1,213 web fetches, 946 were of a URL the archive already held:
+
+| agent (observed 2026-10-10; method: `local_first.py`, by agent type) | web fetches | of a URL already archived |
+|---|---|---|
+| quote-check | 812 | 773 |
+| source-applicability | 206 | 68 |
+| source-reader | 129 | 91 |
+| general-purpose | 57 | 14 |
+
+**Why** (observed 2026-10-10; method: quote-check's surviving bundles and `scripts/record/quote_verbatim.py`,
+`check_bundle.py`, `sources.py`). quote-check is handed a script's verdict per footnote. It fetches only the residue,
+the pages the script could not read. Two gaps fill that residue with pages the archive holds:
+- **The script cannot read a PDF.** `quote_verbatim.py` marks every PDF `NOT-CHECKED`. 512 of quote-check's 775
+  re-fetches of held URLs were PDFs, whose archived capture carries the extracted text (`text.txt`).
+- **The page cache never asks the archive.** `CachedPages` (`sources.py`) goes from the cache straight to the web.
+  `check_bundle.residue_pages` fills a bundle's `pages/` from the cache alone, so a page the archive holds and the cache
+  does not arrives marked NOT-CACHED, "fetch it yourself".
+
+So the agent's own `WebFetch` reads the PDF. That is a model-written summary of the page, not its text, which is a weak
+basis for a character-for-character check.
+
+**What it costs** (observed 2026-10-10; method: each re-fetch's result length and the turns it was carried over). In
+tokens, little: the quote-check re-fetches of held pages carried about 1.1 M, the three checking agents' together about
+1.5 M. The cost is in what the check can see. Of the 946 fetches, 572 were PDFs, read through a summary.
+
+**The other held fetches** (observed 2026-10-10; method: each of the 26 fetches outside the checking agents, its
+tool, its result and its URL). 10 were main sessions' `make source-pages` served from the page cache, so they never
+reached the web; the count above overcounts them. 2 were a PDF and a full text read through `source-pages`, which the fix
+below covers. 14 were ad-hoc agents' own `WebFetch` of pages the archive held (a Gutenberg text, Japanese Wikipedia, two
+PDFs). Nothing had told those agents the archive existed: plan D6.
+
+**Searches the record already answers** (observed 2026-10-10; method: as above): none of the agents' 207 searches, and
+none of the main sessions' 20, matched a record question's heading by the 60% rule.
+
+**The fix** (FR-006, plan D4 and D6). When the live page cannot be read (a PDF, a refused host), `CachedPages` reads the
+archive's text of that URL before giving up. A quotation found VERBATIM there is reported VERBATIM, marked as read from
+the archive. One not found there stays NOT-CHECKED for the agent, because PDF text extraction can split words and a miss
+proves nothing. READABLE still needs the live link to have answered. Plan D6 adds a hook: an agent's first fetch of
+a page the archive holds is refused with the archived text's path, and its second fetch passes. No gap here needs an
+overhaul.
+
+**Validation** (observed 2026-10-10; method: `make quote-verbatim` on questions 0059, 0235, 0009, 0080 and 0033, the
+five whose notes cite the most PDFs, once at HEAD in a detached worktree and once with plan D4; the reports quote
+the sources at length and are not committed - `make quote-verbatim Q=<n> OUT=<json>` at each commit remakes them).
+
+| verdict before -> after (observed 2026-10-10; method: the ten reports) | passages |
+|---|---|
+| VERBATIM -> VERBATIM | 213 |
+| NOT-CHECKED -> NOT-CHECKED | 153 |
+| **NOT-CHECKED -> VERBATIM** (confirmed on the archive's text) | **39** |
+| **UNFETCHABLE -> VERBATIM** | **2** |
+| NOT-ON-PAGE -> NOT-ON-PAGE | 6 |
+| NOT-CHECKED -> UNFETCHABLE | 4 |
+| UNFETCHABLE -> UNFETCHABLE | 2 |
+
+- **41 passages** that sent quote-check to the web are now settled by the script.
+- **11 notes** went from `-` to READABLE. No verdict was sunk: no VERBATIM or READABLE was lost, and nothing new became
+  NOT-ON-PAGE or NOT-READABLE.
+- **The four NOT-CHECKED -> UNFETCHABLE** are one PDF of maff.go.jp in question 0009. The script used to mark a PDF
+  NOT-CHECKED without asking. It now asks, the host answers 403 to an automated fetch, and the archive holds no text of
+  it. The new verdict says what happened; quote-check takes either as residue.

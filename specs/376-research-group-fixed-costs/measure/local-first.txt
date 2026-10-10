@@ -1,0 +1,26 @@
+     1    by type: building-review web searches
+     3    by type: claude-code-guide web fetches
+    57    by type: general-purpose web fetches
+    14    by type: general-purpose web fetches already held
+    97    by type: general-purpose web searches
+   812    by type: quote-check web fetches
+   773    by type: quote-check web fetches already held
+    22    by type: quote-check web searches
+     6    by type: size-audit web fetches
+     5    by type: size-audit web searches
+   206    by type: source-applicability web fetches
+    68    by type: source-applicability web fetches already held
+    55    by type: source-applicability web searches
+   129    by type: source-reader web fetches
+    91    by type: source-reader web fetches already held
+    27    by type: source-reader web searches
+   625  agent actors searching the web
+   618  agent actors whose first web call came after a local look
+  1213  agent web fetches
+   946  agent web fetches of a URL the archive already held
+   207  agent web searches
+    23  main actors searching the web
+    23  main actors whose first web call came after a local look
+    39  main web fetches
+    12  main web fetches of a URL the archive already held
+    20  main web searches

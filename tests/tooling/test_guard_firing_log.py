@@ -422,6 +422,7 @@ _ESCAPES = {
         "The live-run refusal's release is its once-per-run marker instead (GM 2026-09-12)",
     ),
     "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
+    "CLAIMS_FILE_OK": ("not-an-escape", "feature 376's claims-file guard has NO escape (its plan review); the token is named only to prove it changes nothing (test-claims-file-hooks.sh)"),
     "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup-hooks.sh) and in the header saying why there is none"),
     "CRON_OK": ("command", "routes through hookmatch.py escape (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
     "X_OK": ("not-an-escape", "Python's os.X_OK in finished-run-hooks.sh's files_named (an executable is never a log; feature 295 item 1)"),

@@ -351,8 +351,11 @@ def refresh_wanted() -> bool:
 class CachedPages:
     """A `_quote_verbatim.Pages` that asks the cache first and stores what it fetches (FR-008 - FR-010)."""
 
-    def __init__(self, inner, where: pathlib.Path, refresh: bool = False, exact: bool = False, max_age_days: float = MAX_AGE_DAYS) -> None:  # noqa: ANN001
+    def __init__(self, inner, where: pathlib.Path, refresh: bool = False, exact: bool = False, max_age_days: float = MAX_AGE_DAYS,  # noqa: ANN001
+                 archive: tuple[pathlib.Path, pathlib.Path] | None = None) -> None:
         self.inner, self.where, self.refresh, self.exact, self.max_age = inner, where, refresh, exact, max_age_days
+        # (the manifest's root, the archive's working copy): the repository and `<mirror>/.specify/source-archive/`
+        self.archive = archive or (repo_root(), where / "source-archive")
 
     @property
     def refused(self) -> dict:
@@ -371,7 +374,38 @@ class CachedPages:
         got = self.inner.get(url)
         if got["state"] == "FETCHED":
             put(self.where, url, got["text"])
+            return got
+        # THE ARCHIVE BEHIND A PAGE THAT CANNOT BE READ (feature 376 FR-006, research.md R2): the checking agents
+        # re-fetched 946 pages the archive held - 512 of quote-check's 775 were PDFs this fetcher cannot read - and read
+        # each through a model's summary. The live page is still asked first, so READABLE keeps meaning the link
+        # answers; its archived text is only the text. Not cached: the cache holds what was fetched.
+        if got["state"] in ("NOT-CHECKED", "UNFETCHABLE"):
+            kept = archived_text(url, *self.archive)
+            if kept is not None:
+                return {"state": "FETCHED", "text": kept[0], "archived": kept[1], "live": bool(got.get("live"))}
         return got
+
+
+def archived_text(url: str, manifest_root: pathlib.Path, store: pathlib.Path) -> tuple[str, str] | None:
+    """(the readable text of the archive's capture of `url`, its capture date), or None: the manifest row
+    (`research/archive/<id[:2]>/<id>.json`) names the capture's `path` in the archive's working copy, whose `text.txt`
+    is the page's readable text, a PDF's extracted (feature 309)."""
+    uid = hashlib.sha256(_cited(url).encode("utf-8")).hexdigest()[:12]
+    try:
+        row = json.loads((manifest_root / "research" / "archive" / uid[:2] / f"{uid}.json").read_text(encoding="utf-8"))
+        text = (store / row["path"] / "text.txt").read_text(encoding="utf-8", errors="replace")
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
+    return (text, str(row.get("captured", ""))[:10]) if text.strip() else None
+
+
+def _cited(url: str) -> str:
+    """A URL as the archive's manifest ids it - `l7r/diagram/interactive/record/archive.py:clean`, the one rule (a test
+    holds the two together)."""
+    url = html.unescape(url).split("#")[0]
+    while url.endswith((".", ",", ";", ":")) or (url.endswith(")") and url.count(")") > url.count("(")):
+        url = url[:-1]
+    return url
 
 
 # ---- the one-time seed and import ------------------------------------------------------------------------------
