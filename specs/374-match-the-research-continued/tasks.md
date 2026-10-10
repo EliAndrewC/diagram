@@ -8,7 +8,9 @@ in 328's ranking and this spec.
 - glyph-redrawn: engawa on hayakawa-magistracy - wave 112: the veranda turned round the east block's south-east corner (two or three faces, rolled), 9-12 px
 - glyph-redrawn: engawa on ochiba-magistracy - wave 112: the garden-face veranda at 12 px (Ubame's the same glyph)
 - layout-revised: hayakawa-magistracy - wave 113: the kitchen at 24 x 18 ft joined to the house as an ell, the covered way gone
-- glyph-redrawn: kitchen on ochiba-magistracy - wave 113: the kitchen at 24 x 18 ft (Ubame's the same change)
+- layout-revised: ubame-magistracy - wave 113: the kitchen at 24 x 18 ft joined to the house as an ell, the covered way gone
+- layout-revised: county-magistracy-example - wave 113: the draft's kitchen abuts the house as an ell, no corridor
+- glyph-redrawn: kitchen on ochiba-magistracy - wave 113: the kitchen at 24 x 18 ft
 
 ## Phase 1 - wave 112: the veranda at 0102's widths, its faces rolled
 

@@ -87,8 +87,22 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
 - **What stands in the kitchen moves with it**: the kamado range, a well drawn inside the kitchen (0105's drawing page: inside
   the kitchen on a hand plan), its door, the two tubs at its door (wave 106's rule, `tubs_off_their_doors`), the bath abutting it.
   The ground the smaller kitchen frees is left as the court or service ground it opens onto. Each move audited.
-- **Occasions**: layout-revised: hayakawa-magistracy (the kitchen joined as an ell, the corridor gone); glyph-redrawn: kitchen on
-  ochiba-magistracy (Ubame's the same change).
+- **Amendment 1 (2026-10-10, found in the work)**: (a) Ubame joins its kitchen by a covered corridor too (an L across its service
+  alley, tagged a residence corridor), so its kitchen becomes an ell as Hayakawa's does: it projects south from the west block under
+  the shuttered wing, its door on its west face toward the kitchen postern, the bath on its south face; the west block's veranda
+  starts at the kitchen's east face. Hayakawa's ell projects south from its west block's family end, the bath on its west face, the
+  door on its south face; Ochiba's is the ell it was, shrunk into the house's corner. (b) The generated draft
+  (`compound_parts._point_features`) also joins its kitchen by a covered corridor (`_corridor`, `CORRIDOR_W_FT`) across the 7 ft
+  fire-gap the placer leaves: the procedure now drops that form, so the draft draws the ell - a `BuildingSpec.joins` names the
+  building an ell projects from, the placer abuts the two with no fire-gap (`_place_one`), and the corridor code goes. Its
+  occasion: layout-revised: county-magistracy-example. (c) Knock-ons in the tooling, each fixed where found: `pack_audit` read a
+  kamado tagged `hearth` as a door glyph adrift (`floating_doors`) once a small kitchen put it within a door's reach of a wall -
+  a rect inside a `hearth` element is no door (a test); the round-trip sheet's program kitchen 18 x 24 ft (its court face then
+  seats the bath; at 24 x 18 the bath found no clear run); the frozen red fixtures' kitchens brought to 72 x 54 px against their
+  houses, their contents and baths moved with them, so each fires only its own check (the two whose check counts tubs at the old
+  kitchen keep it).
+- **Occasions**: layout-revised: hayakawa-magistracy and ubame-magistracy (the kitchen joined as an ell, the corridor gone);
+  layout-revised: county-magistracy-example (the draft's ell); glyph-redrawn: kitchen on ochiba-magistracy.
 
 ### Wave 114 (T03) - the residence's rooms
 
