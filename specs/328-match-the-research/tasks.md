@@ -2138,3 +2138,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T209 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. impl-drift 18 of 18 IN-STEP plus DOOR_STEP_FT's claim, after one re-cite (0036 -> 0246/0081) and a constant's label corrected; make claims-owed: none
+
+## Phase 92 - wave 91 (amendment 90): a household's way kept off its own beds at the fence clearance, built and held (E3)
+
+- The change reverted and kept as `specs/328-match-the-research/audit/reverted/wave91-own-beds-at-the-fence.patch`; filed as a
+  found row.
+
+- [x] T210 wave 91's row, held (FR-003)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 91, round 2); parts_clear's beds at 7 ft built (cohort 54/54) and HELD: a lane knot on Inashiro (test_no_lane_ends_knot_short_of_a_join); reverted, filed as an E3 found row (m:wave91-own-beds-at-the-fence)
+- [x] T211 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. no claim owed: the change reverted (make claims-owed: none)

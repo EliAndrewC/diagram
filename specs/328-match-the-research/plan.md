@@ -1477,6 +1477,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `tests/hamletgen/ways/test_serve.py` and `test_joints.py` (the two guards); the cohorts; `impl-drift` on the
   claims owed; `spec-fidelity`.
 
+## Wave 91 (amendment 90, 2026-10-10) - batch 12
+
+- **A pre-existing defect found, its fix built and HELD (E3): the seating admits a household's way the lane law then refuses.**
+  Seed 20 was refused with seven access lanes breaking the law. Probed: every one was "fouled" - within 7 ft of a garden bed
+  the law does not exempt, and lane 4's was its own household's bed beside its own corridor. The law keeps a lane's middle
+  7 ft off every garden fence (0246, the gap a map drawing convention), exempting only the gardens at the lane's doorstep
+  (`settle.theirs`, UNRESEARCHED), which a way's own beds beside its corridor are not; but `parts_clear` held a way only the
+  tread's half and 0.5 ft (2 ft) off its own beds (m:wave91-own-beds-at-the-fence). Holding the beds at `ACCESS_HALF_FT`
+  (7 ft) took the cohort 52 -> 54/54 (seed 20, and seed 10 because its households' ways changed - the found row for its field
+  way stays open), but it re-chose Inashiro's ways and left two of them knotted - lane 10's foot on lane 7 20.7 ft from lane
+  7's door end, inside the 25 ft knot reach, the gather refused - and the pool test `test_no_lane_ends_knot_short_of_a_join`
+  failed on the reference map. Reverted, the patch kept in the spec's `audit/reverted/`; filed as a found row, its work the
+  gap pass's gather at a door end. The code and maps as wave 90 left them.
+- **Verification**: the cohort and the pool test (m:wave91-own-beds-at-the-fence); `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

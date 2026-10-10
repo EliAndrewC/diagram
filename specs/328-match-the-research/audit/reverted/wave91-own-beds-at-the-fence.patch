@@ -1,0 +1,49 @@
+diff --git a/l7r/diagram/settlement/rolling/access.py b/l7r/diagram/settlement/rolling/access.py
+index 2756e3707..1b5fc1bac 100644
+--- a/l7r/diagram/settlement/rolling/access.py
++++ b/l7r/diagram/settlement/rolling/access.py
+@@ -287,12 +287,18 @@ def parts_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
+     The tread, not the corridor's reserved strip, keeps off them: the strip is the web's room to draw in, and the line is
+     what it draws. The yard is the door's own ground; the web leaves it at its edge (`corridors.door_ends`).
+ 
+-    Research: path off its own beds and outbuildings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED
++    Research:
++        path off its own beds and outbuildings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED
++        its own beds at the fence clearance - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`ACCESS_HALF_FT`) from a garden fence, its own household's too
+     """
+     boxes = own.get("boxes") or {}
+     gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
+-    parts = [boxes.get(k) for k in ("shed", "byre", "well")] + list(boxes.get("gardens") or ())
+-    return not any(seg_box_within(a, b, box, gap) for box in parts if box is not None)
++    # ...AND ITS OWN BEDS AT THE LANE LAW'S FENCE CLEARANCE (feature 328 wave 91): the law keeps a lane's middle `ACCESS_HALF_FT`
++    # (7 ft, the web's own fabric gap) off every garden fence, its own household's too (`settle.theirs`), so a way admitted
++    # here 2 ft off its own bed was drawn and then refused - seven at once on cohort seed 20
++    beds = s.px(ACCESS_HALF_FT)
++    parts = [boxes.get(k) for k in ("shed", "byre", "well")]
++    return not any(seg_box_within(a, b, box, gap) for box in parts if box is not None) and not any(seg_box_within(a, b, box, beds) for box in boxes.get("gardens") or () if box is not None)
+ 
+ 
+ def standing_clear(s: Settlement, a: Pt, b: Pt, memo: dict[Any, Any] | None = None) -> bool:
+diff --git a/tests/hamletgen/test_seat_region_297.py b/tests/hamletgen/test_seat_region_297.py
+index 65394e0c1..fdf061786 100644
+--- a/tests/hamletgen/test_seat_region_297.py
++++ b/tests/hamletgen/test_seat_region_297.py
+@@ -152,3 +152,18 @@ def test_lane_ground_grows_the_taken_cells_by_one_and_paints_the_water_courses()
+     s._site_corridors = SimpleNamespace(water=[((0.0, 700.0), (1400.0, 700.0), 30.0)])
+     region = SeatRegion(s, (0.0, 0.0, 1400.0, 1400.0))
+     assert region.lane.taken(700.0, 700.0) and not region.lane.taken(700.0, 300.0)
++
++
++def test_a_household_s_way_keeps_its_own_beds_at_the_lane_law_s_fence_clearance() -> None:
++    """Feature 328 wave 91 (cohort seed 20): the law keeps a lane's middle 7 ft off every garden fence, its own household's
++    too, but `parts_clear` held a way 2 ft off its own beds, so seven admitted ways were drawn and then refused. A bed is now
++    kept at `ACCESS_HALF_FT`; a shed, byre or well pocket still at the tread's half and its margin."""
++    from l7r.diagram.settlement.rolling.access import parts_clear
++
++    s = SimpleNamespace(px=lambda ft: ft)
++    bed = {"boxes": {"gardens": [(0.0, 10.0, 10.0, 6.0)]}}  # a bed 10 x 6 ft centered 10 ft off the way's line: its fence 7 ft off
++    assert parts_clear(s, (-50.0, 0.0), (50.0, 0.0), {"boxes": {"gardens": [(0.0, 12.0, 10.0, 6.0)]}}), "a fence 9 ft off"
++    assert not parts_clear(s, (-50.0, 0.0), (50.0, 0.0), {"boxes": {"gardens": [(0.0, 8.0, 10.0, 6.0)]}}), "a fence 5 ft off"
++    shed = {"boxes": {"shed": (0.0, 6.0, 10.0, 6.0)}}  # its wall 3 ft off: past the tread's 2 ft
++    assert parts_clear(s, (-50.0, 0.0), (50.0, 0.0), shed)
++    assert bed["boxes"]["gardens"]

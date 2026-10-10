@@ -12825,6 +12825,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/rolling/access.py::parts_clear#path off its own beds and outbuildings",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "parts_clear holds a household's way 2 ft (the tread's half and 0.5 ft) off its own garden beds, where the lane law holds a lane's middle 7 ft off every garden fence (0246) bar the doorstep's; the seating admits ways the web refuses (cohort seed 20: seven access lanes fouled). Holding beds at ACCESS_HALF_FT took the cohort to 54/54 but re-chose Inashiro's ways and left lane 10's foot 20.7 ft from lane 7's door end, a knot the gap pass's gather refused (pool test test_no_lane_ends_knot_short_of_a_join). The work: the beds at 7 ft and the gap pass able to gather a foot at a neighbor's door end, or a later exit taken (m:wave91-own-beds-at-the-fence; the patch in audit/reverted/)",
+  "files": [
+   "l7r/diagram/settlement/rolling/access.py",
+   "l7r/diagram/settlement/rolling/gap_ways.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 91's diagnosis of baseline cohort seed 20 (feature 328, 2026-10-10)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/rolling/bearing.py::MarginBearing.__call__#lane turn from the margin",
   "tier": "E3",
   "fix": "houses are seated before lanes (GM rule), so turning a hamlet house with the lane it actually stands on (0029) needs a post-lane re-turn pass of house, yard and beds in the hamlet stages",

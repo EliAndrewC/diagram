@@ -1,38 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "ef788de240d76b5d26b2f40914aa0ab7c9eea35038961995742bd4fd346bb707",
+ "plan_sha256": "5fad8018cbb970f3683c9d6bcb6255b71b0b94b288a8e18eac4ac7c0bff2533a",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W90-1",
-   "summary": "Wave 83's fillet radius and wave 84's fork band patches re-run on the hardened web; both stay reverted, their rows held at E3",
+   "id": "W91-1",
+   "summary": "Seed 20's refusal diagnosed as parts_clear holding a household's way 2 ft off its own garden beds where 0246 holds a lane's middle 7 ft off a garden fence; the fix (own beds at ACCESS_HALF_FT) built, then reverted because it re-chose Inashiro's ways into a lane knot the pool test refuses; the patch kept in audit/reverted/",
    "class": "within",
-   "why": "No finding is dropped: the rows stay open in the ranking at E3 and are taken in tier order (FR-003, SC-003); keeping a patch that breaks seeds out of main is constitution XIII. The figures match m:retake-after-wave89 (49/54 with 31, 32, 40, 43 newly failing and 10 newly passing; 48/54 with 23, 40, 902, 904 newly failing)."
+   "why": "Nothing is narrowed: code and maps are exactly as wave 90 left them (the working diff touches no engine file; the patch applies cleanly to HEAD), so the plan departs from no page. Keeping a change that fails a pool test on the reference map out of main is constitution XIII, and the defect is not dropped (W91-2)."
   },
   {
-   "id": "W90-2",
-   "summary": "Two guards under XIV: door_off_fixtures steps a door only to where a path's end still arrives (_arrives_at), and _one_joint refuses a pull that moves an arriving joint out of reach (arrives_off)",
+   "id": "W91-2",
+   "summary": "The defect filed as a found row, E3, files access.py and gap_ways.py, its work the beds at 7 ft together with the gap pass gathering a foot at a neighbor's door end; the row is in ranking.json (scope kept) and found-wave77.jsonl",
    "class": "within",
-   "why": "This is a defect fix that serves an open request row: it was found by probing why the reverted fillet patch failed seed 902, and it removes that seed from the fillet's regressions (m:wave90-door-ends-arrive: 902 WebRefused -> OK under the patch). Alone on HEAD the cohort holds 52/54, nothing is newly failing and no pool map moves, so the implementation is not moved away from any page. It narrows nothing the GM asked for. Both guards use end_serves, the lane law's own predicate on 0246, which this repository uses as its research page, so they do what they say."
+   "why": "Adds a row to the ranking and drops none; the stated work moves the implementation to 0246's fence clearance (FR-004). E3 matches FR-003's own definition (a change across modules: the seating's parts_clear and the gap pass), and the row is taken in tier order with the rest (SC-003), as the request orders the work easiest to hardest. The measurement (m:wave91-own-beds-at-the-fence) names seed 20 in its command."
   },
   {
-   "id": "W90-3",
-   "summary": "Seed 10's field-way refusal diagnosed and filed as a found row (E3)",
+   "id": "W91-3",
+   "summary": "The 7 ft fence gap classed MAP DRAWING CONVENTION; wave 89's Decisions Recorded row relabeled from HISTORICALLY ACCURATE to the same",
    "class": "within",
-   "why": "Filing it adds to the ranking and drops nothing. It is tiered by FR-003's definition and fixed in tier order."
+   "why": "0246's drawing page says it in its own words (line 25: 'The gap is a map drawing convention, not a measured figure'; its Evidence comment lists the 7 ft gap under convention). A label corrected toward the page; no behavior changes."
   },
   {
-   "id": "W90-4",
-   "summary": "No Decisions Recorded row for wave 90",
+   "id": "W91-4",
+   "summary": "settle.theirs' doorstep exemption (gardens within DOORSTEP_FT of a lane's end) stated as UNRESEARCHED and left as it is",
    "class": "within",
-   "why": "FR-008 requires a row only for a fix that changes what a map draws or states. Measured: no pool map moved, and the cohort is unchanged on HEAD."
+   "why": "A statement of the existing law, not a change: the function's own claim already labels the exemption UNRESEARCHED, and UNRESEARCHED claims are outside this feature's findings by the spec's ruling. The plan neither widens nor relies on it."
   },
   {
-   "id": "W90-5",
-   "summary": "lay_door_paths' MISLABELED claim re-cited from 0036 to 0246/0081 (in the diff, not the plan)",
+   "id": "W91-5",
+   "summary": "Seed 10's field-way found row (routed_field_runs) stays open",
    "class": "within",
-   "why": "FR-003's E0 covers a claim whose citation is wrong. The new citations hold the content: 0081 draws a footpath 3 ft wide and 0246 sets the 60 ft reach. Neither page was edited, and the implementation is unchanged."
+   "why": "The reverted patch only made seed 10 roll clean by re-choosing its ways; the code path the row names is unchanged, so closing it would close a finding with no fix. Keeping it open drops nothing."
+  },
+  {
+   "id": "W91-6",
+   "summary": "No Decisions Recorded row and no review occasion for wave 91; verification the cohort and pool test under the measurement, and spec-fidelity",
+   "class": "within",
+   "why": "FR-008 owes a row only for a fix that changes what a map draws or states, and feature 294 owes an occasion only for a drawn change; with the change reverted no map moves. Withdrawing the round-1 row and occasion follows from the revert."
   }
  ],
  "verdict": "CLEAR"

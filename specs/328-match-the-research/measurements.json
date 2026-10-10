@@ -2000,5 +2000,36 @@
       "households_40_pct": -0.2,
       "reading": "with the spur's fabric built once (m:batch11-track-fabric-once) the first pair's band 1, audited inconsistent, is gone; nothing owed"
     }
+  },
+  "wave91-own-beds-at-the-fence": {
+    "quantity": "wave 91 (2026-10-10): a household's way held 7 ft off its own garden beds at seating, as the lane law holds it",
+    "observed": "2026-10-10",
+    "source": "make hamlet for Audit-20 (seed 20, 18 households, nucleated) with a probe at the last resort's refusal; make cohort N=48; make map for the five hamlets",
+    "command": "make hamlet ARGS=\"--name Audit-20 --seed 20 --households 18 --form nucleated --out <dir>\"; make cohort N=48; make map GEN=pool/hamlets/<map>/<map>.gen.py for inashiro, kashikawa, kuwabata, mizuguchi and sawada",
+    "method": "each of the seven refused access lanes classed by the law's clause (all 'fouled': within 7 ft of a garden the law does not exempt); lane 4 compared with its reserved corridor (identical) and the fouled polygon read (its own household's bed); parts_clear found holding a way 2 ft off its own beds; the fix; the seed, the cohort and the pool rerolled",
+    "value": {
+      "seed_20": "WebRefused (seven access lanes fouled) -> OK",
+      "cohort_passed": 54,
+      "cohort_48": "54/54 - 10 and 20 newly passing, none failing",
+      "pool": "Inashiro, Kuwabata and Sawada re-chose their households' ways; on Inashiro lane 10's foot landed on lane 7 20.7 ft from lane 7's door end and the pool test test_no_lane_ends_knot_short_of_a_join failed - reverted",
+      "outcome": "reverted (E3, found row)"
+    }
+  },
+  "retake-after-wave91": {
+    "quantity": "the reverted rows' patches re-run on the 54/54 base (HEAD with wave 91)",
+    "observed": "2026-10-10",
+    "source": "a detached worktree at HEAD with wave 91's parts_clear and each patch from specs/328-match-the-research/audit/reverted/; make cohort N=48",
+    "command": "make cohort N=48, once a patch",
+    "method": "each patch's cohort compared with the 54/54 base",
+    "value": {
+      "wave84-fork-band": {
+        "cohort_passed": 50,
+        "newly failing": "31, 32 (a dispersed farm without its channel: the channel router walls every dry plot as crop, an UNRESEARCHED rule), 40 (a grove crossed by a lane), 43 (13 of 14 households seated)"
+      },
+      "wave85-thread-floor": {
+        "cohort_passed": 49,
+        "newly failing": "04, 19, 32, 41, 42 (the base still 52/54 in the clone; the 54/54 base with wave 91 held)"
+      }
+    }
   }
 }

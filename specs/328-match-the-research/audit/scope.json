@@ -740,6 +740,7 @@
  "l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water": "kept",
  "l7r/diagram/settlement/rolling/access.py::_standing_clear#no path corridor within its half-width of any placed footprint": "kept",
  "l7r/diagram/settlement/rolling/access.py::exit_bearing#track out leaves away from the field": "kept",
+ "l7r/diagram/settlement/rolling/access.py::parts_clear#path off its own beds and outbuildings": "kept",
  "l7r/diagram/settlement/rolling/bearing.py::MarginBearing.__call__#lane turn from the margin": "kept",
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#grove cleared east of turned beds": "kept",
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre beside the house": "kept",
