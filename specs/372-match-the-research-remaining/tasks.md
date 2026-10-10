@@ -125,5 +125,6 @@ in 328's ranking and this spec.
 
 - Claims only (FR-001): `docs/buildings.md`'s wells and inner court sections.
 
-- [ ] T12 wave 109's rows (FR-001)
+- [x] T12 wave 109's rows (FR-001)
       research: rendering
+      verify: DONE. DONE. wave 109: the bath-area well GUESS 0105 drawing (the fourth well UNRESEARCHED), the residence on the north range on 0091's drawing page, the karo's house GUESS 0106 drawing; impl-drift IN-STEP 4; plan review CLEAR

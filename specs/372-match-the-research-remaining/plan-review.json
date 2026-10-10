@@ -1,41 +1,32 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "8240eea7aea7d8775f3fe469d0699568effa1714fbf6e2cf6a6b08a375cb99cc",
+ "plan_sha256": "80db078981d40aaecf62169463c02f9347e47b9edb896ede1ad9cc6606026d05",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W108-ochiba-ubame-10x8",
-   "summary": "Ochiba's bath (13.3 x 11 ft) and Ubame's (10 x 11 ft) redrawn 10 x 8 ft against their kitchens, each tub moved to its yard side; the procedure's claim and text say 10 x 8 ft; the draft unchanged at 10 x 8",
+   "id": "W109-scope",
+   "summary": "Wave 109 fixes three rows (328 ranking 25, 26, 46) by the docs/buildings.md claim lines alone; no sheet, no engine code",
    "class": "within",
-   "why": "Carried from round 1; unchanged by the diff from 55b30cb76 except the band's floor. The ranked fix verbatim. make size-table today: Ochiba's bath 10.0 x 8.0 ft."
+   "why": "The three rows are open in-scope Mode A rows (kept, no wave) that FR-001 carries; each is UNCLAIMED or MISLABELED, a finding about a claim, so the claim line is the whole fix the ranking names. Magistracy procedure is in scope under 328's amendment 8."
   },
   {
-   "id": "W108-found-rows",
-   "summary": "Rows impl-drift found in the inner court and wells sections added to 328's ranking, scope kept, no wave yet",
+   "id": "W109-bath-well",
+   "summary": "Wells#bath-area well relabeled GUESS on 0105's drawing page; the optional fourth well 'only for very large compounds' claimed apart as UNRESEARCHED",
    "class": "within",
-   "why": "Carried from round 1. FR-001 carries the found rows into the work list; adding them without fixing them narrows nothing. The enlarged-bath row is dropped from found-wave108.jsonl and ranking.json because it is resolved in this wave (claimed IN-STEP), not deferred."
+   "why": "Exactly the ranking row 46's fix. 0105's drawing page line 8 says the one well filling the bath 'is our reading', so GUESS is what the record holds; no page gives a well count by compound size, so UNRESEARCHED is honest. No rule weakened."
   },
   {
-   "id": "W108-hayakawa-particular",
-   "summary": "Hayakawa's bath kept at 18 x 12 ft as its rolled resident particular (knob 7) and RECORDED, a GUESS, on 0105's drawing page; the procedure's line claimed there (impl-drift IN-STEP); the hold removed; the bath and well pop-ups edited; the spec's Decisions row says so",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "The route round 1 named: a page edit through 328's FR-004 exception path to spec-fidelity, not a hold for the GM. No page gives a bath's size (0105's absence note); the 10 x 8 is itself a GUESS whose stated purpose is the house's size, and that purpose is not reached by drawing Hayakawa's bath small - measured with make size-table on 2026-10-10, Hayakawa's residence blocks 2,429 + 2,042 and kitchen 1,332 sq ft (~163 tsubo) without the bath, which adds 136 sq ft (~3.8 tsubo) over 10 x 8. The particular is a per-sheet knob roll, labeled GUESS and claimed, so the implementation matches the record. The record checks the edit owed are answered (make record-owed UNANSWERED=1: none owed) and make claims-owed reports none. REQUIRED CORRECTION (does not change the ruling): the new bullet's sentence 'Such a house is already larger than the residence the other plans keep to' is false for the hand sheets - make size-table the same day gives Ochiba residence 4,500 + kitchen 1,332 + bath 80 sq ft (~166 tsubo) and Ubame residence 2,581 + 2,277 + kitchen 1,332 (~174 tsubo); only the generated draft keeps to ~50 tsubo (0091's drawing page). Rewrite it to the measured fact - Hayakawa's house, like the other two hand sheets, is already several times the 49-tsubo measure, and the larger bath adds about 4 tsubo - leaving the houses' size to the open E3 row #residence of ~18-25 tatami rooms; that edit re-owes 0105's quote-check and record-format."
+   "id": "W109-north-range",
+   "summary": "The residence along the inner court's north range claimed on 0091's drawing page (garden to the south, the shady north band behind)",
+   "class": "within",
+   "why": "Ranking row 26's first named fix. 0091's drawing page records the garden on the sunny south and the shady north band behind the residence (its lines 31, 34), which places the house on the north range."
   },
   {
-   "id": "W108-bath-band",
-   "summary": "types.json's bath band 8-22 x 8-22 ft tightened to w 8-18 by h 8-12 ft (building-programs.md's row and m:wave108-bath-size with it)",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Round 1 blocked it only because its ceiling rested on the held particular; the particular is now a recorded, claimed GUESS on 0105's drawing page, so the 18 x 12 ceiling admits exactly what the record allows, and the floor is raised to 8 ft as round 1 asked (the 10 x 8 guess either way round). types.json, building-programs.md and the measurement's band_after agree on w 8-18, h 8-12."
-  },
-  {
-   "id": "door-band-held",
-   "summary": "The types.json#door band row (E2, UNCLAIMED) held for the GM: 0117's drawing page records the sheets' 8-8.7 ft doors as a drawing CONVENTION, against the GM's true-size rule",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Carried from round 1; the row is unchanged in the ranking apart from its rank number (21 -> 20, the bath row's removal). A GM ruling against a recorded convention is the GM's decision, deferred to the end by the 2026-10-07 amendment."
+   "id": "W109-karo-house",
+   "summary": "The hand plans' karo's own house inside the compound claimed as the GUESS 0106's drawing page records",
+   "class": "within",
+   "why": "Ranking row 25's fix. 0106's drawing page (line 8) records the small house of the karo's own on the hand-drawn sheets as a GUESS and that no page places a chief retainer's house inside the compound; the claim says the same."
   }
  ],
  "verdict": "CLEAR"
