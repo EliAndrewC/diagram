@@ -2482,42 +2482,6 @@
   "section": "820eca0d767c15d3",
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Inner court (private / sacred)#kitchen": {
-  "code": "ed1f1adf5cda70c1",
-  "core": "820eca0d767c15d3",
-  "date": "2026-10-10",
-  "note": "~40x33 ft (~1,320 sq ft) cannot fit 0091's finding of a kitchen at \"about a sixth\" of the house (~440 sq ft) or the drawing page's house + kitchen + bath of ~1,780 sq ft, and §161 calls a kitchen near the whole house's size wrong; 0107 gives no size (§116 defers to 0091), so the size should cite 0091 and fall within it",
-  "pages": {
-   "0107-kitchens-daidokoro.drawing.html": "d3233f8a13a78830",
-   "0107-kitchens-daidokoro.html": "1eedc5cf7b1adca7"
-  },
-  "research": "045aa137a2fb4926",
-  "rests": [
-   "0107-kitchens-daidokoro.drawing.html:73a3759342f8854c",
-   "0107-kitchens-daidokoro.drawing.html:b9c022b8e45ef642",
-   "0107-kitchens-daidokoro.html:10294f430cd37c5b",
-   "0107-kitchens-daidokoro.html:22e397b7573f5733"
-  ],
-  "section": "820eca0d767c15d3",
-  "verdict": "DRIFTED"
- },
- "docs/buildings.md::Inner court (private / sacred)#kitchen corridor tagged residence corridor": {
-  "code": "b370d8e657c033c1",
-  "core": "820eca0d767c15d3",
-  "date": "2026-10-10",
-  "note": "the \"short covered corridor\" form is not attested for this rank: middle-rank houses \"had almost none\" (corridors between buildings belonged to shogun and daimyo mansions), and only the projecting kitchen (the ell) is attested; record the corridor as a DEVIATION on 0091's drawing page or label it GUESS",
-  "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
-  },
-  "research": "cde11191e2ae3f5f",
-  "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:4adcc0fb43fa63e7",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
-  ],
-  "section": "820eca0d767c15d3",
-  "verdict": "DRIFTED"
- },
  "docs/buildings.md::Inner court (private / sacred)#reception at one end": {
   "code": "74d3a6c7280692cf",
   "core": "820eca0d767c15d3",

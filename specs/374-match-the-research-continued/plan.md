@@ -78,8 +78,8 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
   (~440 sq ft, 5.9 x 6.9 m) by the prefecture's measure, about a sixth of the house; a middle-rank house was one block, its kitchen
   projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens (each kitchen's rect read off the three SVGs, 2026-10-10), and
   Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.
-- **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), its shape a GUESS, the ceiling ACCURATE (0091's measured
-  wing), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in
+- **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), the size of 0091's measured wing taken as the
+  kitchen's - a GUESS, as 0091's drawing page holds a kitchen's size (impl-drift, wave 113: the plan first called it an ACCURATE ceiling), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in
   `buildings/types.json` narrowed so the old size fails it: w 18-24 by h 14-18 ft (either orientation; at most 432 sq ft, under the measured ~440 - the T02 preflight's aside). The procedure's kitchen
   bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; "a large institutional daidokoro" goes (the ranked fix sizes it to
   the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,
@@ -101,6 +101,8 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
   seats the bath; at 24 x 18 the bath found no clear run); the frozen red fixtures' kitchens brought to 72 x 54 px against their
   houses, their contents and baths moved with them, so each fires only its own check (the two whose check counts tubs at the old
   kitchen keep it).
+- **Amendment 3 (2026-10-10, impl-drift)**: the kitchen claim relabeled GUESS on 0091's drawing page (above), and the
+  corridor claim renamed `#kitchen abuts the house, no corridor` - its old name described the corridor the wave removed.
 - **Amendment 2 (2026-10-10, the draft as built)**: with the ell abutting the house's west end, the house's west face keeps 6 ft
   free below the kitchen, short of a door's 8 ft approach, so the draft's inner entrance opens on the house's rear (north)
   face at the kitchen end, onto the rear alley; 0107's drawing page said "on the residence's face toward the kitchen" and now

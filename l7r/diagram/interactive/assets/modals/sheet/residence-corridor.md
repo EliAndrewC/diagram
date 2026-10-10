@@ -10,16 +10,13 @@ How such a corridor was built, how wide or how long it ran, and how Katsura's ow
 
 Guesses:
 - How wide the plan draws the corridor: no account of a watari-roka's width or build was found.
-- That a short covered corridor joined the kitchen to the house, as some plans draw it: no account was found of a kitchen's
-  own way to carry food to the rooms.
 
 Depiction: The plan draws the corridor joining each hall of a residence set in echelon to the hall before it, putting the great
 houses' corridors together with Katsura's stepped halls; a residence drawn as one block has none between its halls. A residence
-drawn this way reads as a house that has been added to. Some plans also draw a short corridor from the kitchen to the house's
-veranda.
+drawn this way reads as a house that has been added to. A kitchen is drawn against the house it serves, with no corridor.
 
 Name: residence corridor
-Covers: the covered corridors between a residence's blocks, and from its kitchen to the house
+Covers: the covered corridors between a residence's blocks
 Sources: watariroka-kotobank, irikawa-kotobank, boso-no-mura-takei, katsura-rikyu-jawiki
-Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0107-kitchens-daidokoro.html
-Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0107-kitchens-daidokoro.drawing.html
+Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html
+Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

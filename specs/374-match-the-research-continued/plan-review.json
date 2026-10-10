@@ -220,6 +220,33 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T03": {
+   "section_sha256": "920bda6203d00acd5ae61608ee2a1b659e7b764907593f0e1de076edbdba0484",
+   "section_text": "### Wave 114 (T03) - the residence's rooms\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms` (E3). The procedure says a real\n  residence of this footprint held ~18-25 tatami rooms; 0091 sizes the residence to the 49-tsubo district magistrate's house, and\n  the one house measured with its rooms, the thousand-koku Kuchiba house of 41-74 tsubo, held six. The fix follows the record:\n  the procedure says the labeled zones TOGETHER compress a house of about six rooms (0091 - the count is the whole house's), and\n  the claim cites it; the sheets label\n  zones, not rooms, so no sheet is redrawn. Searched 2026-10-10: Hayakawa's notes alone state the count (\"a real residence of\n  this footprint holds ~18-25 tatami rooms\"); that line says the house held about six (0091), as the procedure does.\n- **Occasions**: none (no drawn element changes).\n\n",
+   "reviewed": "2026-10-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T03-D1",
+     "summary": "The procedure's ~18-25 tatami rooms becomes 'the labeled zones together compress a house of about six rooms', citing 0091, and the Research: claim cites it",
+     "class": "within",
+     "why": "The ranked row's own fix offers exactly this (the procedure follows the record, about six); 0091 sizes the residence to the 49-tsubo Yokota house and records the 41-74-tsubo Kuchiba house as six rooms. 328's FR-002 rule (fix the code/doc to the research) carried by 374 FR-002."
+    },
+    {
+     "id": "T03-D2",
+     "summary": "No sheet is redrawn: the sheets label zones, not rooms",
+     "class": "within",
+     "why": "Checked: the Hayakawa, Ochiba and Ubame sheets' text carries room/zone labels (inner rooms, private study, guest room, ...) and no room count, and 0091's drawing page records each labeled room as a suite as a convention. The row's 'sheets' room counts follow the record' has nothing to change on the sheets; no requested change is dropped."
+    },
+    {
+     "id": "T03-D3",
+     "summary": "Occasions: none",
+     "class": "within",
+     "why": "No drawn element changes, so feature 294's review occasions are not triggered; nothing the request asks for is skipped."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
