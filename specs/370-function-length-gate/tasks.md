@@ -65,9 +65,9 @@
 - [x] T18 the pool rerolled, `git diff --stat HEAD -- pool/` empty (D5; SC-003)
       research: rendering
       verify: DONE. make maps SCOPE=all (5 hamlets) and make map on all 6 Mode A sheets: REGENERATED, git status -- pool/ empty: byte-identical to HEAD
-- [ ] T19 the claims re-check: claims-owed, a bundle per module, impl-drift, claims-checked (D6; FR-007, SC-006)
+- [x] T19 the claims re-check: claims-owed, a bundle per module, impl-drift, claims-checked (D6; FR-007, SC-006)
       research: rendering
-      verify: make claims-owed names nothing this feature introduced
+      verify: DONE. 13 impl-drift passes over 2 rounds plus 1 on two split claims, all recorded; refusals 39 -> 16, the rest carried in make claims-report for feature 374 (the GM, SC-006 amended); ledger rows written
 - [ ] T20 the whole project under the cap, the gate green, the perf bookends (SC-002)
       research: rendering
       verify: ruff over the five held trees reports no PLR0915; make done green; make perf LABEL=370-end, perf-report AGAINST=370-start
