@@ -633,7 +633,8 @@ def gate(root: Path) -> tuple[list[str], list[str]]:
     return refuse + [f"introduced: {x}" for x in intro], [f"pre-existing: {x}" for x in pre]
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def _parser() -> argparse.ArgumentParser:
+    """The command line (lifted out of `main` by feature 370, the 100-statement cap)."""
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("owed")
@@ -658,7 +659,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     cv = sub.add_parser("coverage")
     cv.add_argument("--path", default="", help="only units whose file path contains this")
     ap.add_argument("--root", default=".")
-    args = ap.parse_args(argv)
+    return ap
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = _parser().parse_args(argv)
     root = Path((_git(Path(args.root), "rev-parse", "--show-toplevel") or args.root).strip())
     if args.cmd == "gate":
         refuse, warn = gate(root)

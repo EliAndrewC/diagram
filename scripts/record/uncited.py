@@ -828,7 +828,8 @@ def report(root: pathlib.Path) -> str:
             f"{unwritten} kept with no entry, {orphans} entr(ies) whose URL is no kept page's (a citation a check corrected)")
 
 
-def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument plumbing over the tested functions
+def _parser() -> argparse.ArgumentParser:  # pragma: no cover - argument plumbing over the tested functions
+    """The command line (lifted out of `main` by feature 370, the 100-statement cap)."""
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("set")
@@ -876,7 +877,11 @@ def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument p
     st = sub.add_parser("stands")
     st.add_argument("url")
     st.add_argument("note")
-    args = ap.parse_args(argv)
+    return ap
+
+
+def main(argv: list[str] | None = None) -> int:  # pragma: no cover - argument plumbing over the tested functions
+    args = _parser().parse_args(argv)
     root = src.repo_root()
     if args.cmd == "set":
         urls = uncited_set(root)
