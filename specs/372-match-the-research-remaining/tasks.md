@@ -107,5 +107,6 @@ in 328's ranking and this spec.
 
 - Claims only (FR-001): `docs/building-programs.md`'s magistrate's manor and country shrine sections.
 
-- [ ] T10 wave 107's rows (FR-001)
+- [x] T10 wave 107's rows (FR-001)
       research: rendering
+      verify: DONE. DONE. wave 107: three claims labeled as the record has them (two-court zoning DEVIATION 0090 drawing; commuting clerks DEVIATION 0113 drawing; the hill shrine's burial ground GUESS 0236 drawing); impl-drift IN-STEP; plan review CLEAR round 2
