@@ -274,5 +274,73 @@
     "value": {
       "bath": "10 x 8 ft on the kitchen's south wall"
     }
+  },
+  "b2-ubame-e1": {
+    "quantity": "the karo's house 12 px east, a 4 ft alley between it and the bath",
+    "observed": "2026-10-10",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "09b4e0ec93b5",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the bath's x2 (372) and the karo's house's x (388) read: 16 px, a 4 ft alley plus the outlines; the audit clean",
+    "value": {
+      "bath_x2_px": 372,
+      "karo_x_px": 388,
+      "alley_ft": 4
+    }
+  },
+  "b2-ubame-n1": {
+    "quantity": "the postern's and the residence group's comments current",
+    "observed": "2026-10-10",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "09b4e0ec93b5",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -n 'kitchen yard west of the kitchen ell\\|with no corridor (feature 374' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "fixed": 3
+    }
+  },
+  "b2-hayakawa-e1": {
+    "quantity": "the notes state the house's drawn size and no longer claim six rooms for it",
+    "observed": "2026-10-10",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "09b4e0ec93b5",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "grep -n '145 tsubo' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "house_tsubo": 145,
+      "house_sq_ft": 5150
+    }
+  },
+  "b2-hayakawa-n1": {
+    "quantity": "the postern's, the karo's door's, its tub's and the west block's comments current",
+    "observed": "2026-10-10",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "09b4e0ec93b5",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -n 'kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "fixed": 4
+    }
+  },
+  "b2-hayakawa-n2": {
+    "quantity": "knob 9: the kitchen door opens onto the lane into the kitchen yard",
+    "observed": "2026-10-10",
+    "verifies": "N2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "09b4e0ec93b5",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "grep -n 'the lane that runs west into the kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "wording": "the lane that runs west into the kitchen yard"
+    }
   }
 }
