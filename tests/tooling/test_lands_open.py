@@ -61,6 +61,8 @@ def test_only_the_plan_named_and_the_gm_boxes_land_open(tmp_path: pathlib.Path) 
     (d / "gm-review.jsonl").write_text('{"row": 1, "reviewed": "2026-10-11"}\n{"row": 2}\n\n')
     assert todo.holding(d) == []
     assert todo.holding(tmp_path / "specs" / "no-such") == []
+    d = _feature(tmp_path, "381-x", "- [ ] T07 build the `[lands-open]` mark and test it\n")
+    assert todo.holding(d) == ["T07 build the `[lands-open]` mark and test it"], "a mention is an ordinary open box, never a mark"
     assert todo.lands_open_ids(_feature(tmp_path, "380-x", "", plan="# plan\n")) == set()
 
 
@@ -75,6 +77,13 @@ def test_make_tick_holds_a_waiting_feature_and_a_hand_typed_mark(tmp_path: pathl
     assert tt.waits_or_marks(tmp_path, gone) == "", "a feature that does not exist holds nothing"
     marked = _feature(tmp_path, "372-w", "- [ ] T01 a [lands-open]\n", plan=None)
     assert tt.waits_or_marks(tmp_path, marked).startswith("a [lands-open] mark the tooling did not put here: T01 a")
+
+
+def test_tick_loads_the_todo_module_as_the_command_does() -> None:
+    """`make tick` runs tick-task.py in a fresh interpreter, where nothing has registered `speckit-todo.py`: loading it there
+    failed on its dataclass (found at batch 1's own first tick), while a test that had loaded it first passed."""
+    sys.modules.pop("speckit_todo", None)
+    assert tt._todo().CLOSING == ("done", "superseded by", "withdrawn")
 
 
 def test_the_holding_command_line(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001

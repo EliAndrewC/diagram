@@ -134,6 +134,7 @@ def _todo():  # noqa: ANN202 - `speckit-todo.py` by path (its name has a hyphen)
     spec = importlib.util.spec_from_file_location("speckit_todo", Path(__file__).resolve().parent / "speckit-todo.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
+    sys.modules["speckit_todo"] = mod  # a dataclass resolves its module by name while the class is built
     spec.loader.exec_module(mod)
     return mod
 

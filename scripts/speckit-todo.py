@@ -136,7 +136,7 @@ def holding(d: Path) -> list[str]:
     ids: set[str] | None = None
     out = []
     for body in _OPEN_BOX.findall(tasks.read_text(errors="replace")):
-        if _LANDS_OPEN in body:
+        if body.rstrip().endswith(_LANDS_OPEN):  # the TAG closing the line; a mention inside a task's words is no mark
             if body.strip() == gm and gm_rows(d):
                 continue
             ids = lands_open_ids(d) if ids is None else ids
