@@ -1,0 +1,64 @@
+{
+ "feature": "372-match-the-research-remaining",
+ "plan_sha256": "d96686bdd78e32ee56757421438e3fffb830ee964cb69f03f4a1619d8561b782",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "W98-scope",
+   "summary": "wave 98 takes 328's ranked row 22 (privy size, E3) and redraws the hand sheets' privies to 0101's 5 ft square",
+   "class": "within",
+   "why": "the next row in 328's ranking order (FR-001); the fix is the ranking's accepted fix text; the sheets are named per 328's FR-009"
+  },
+  {
+   "id": "W98-sheet-count",
+   "summary": "the sheets' privy counts as the plan states them: Hayakawa 5, Ochiba 4, Ubame 4 (13), every privy 15 x 15 px",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Ubame carries FIVE privy rects, not four: data-id latrine-2 (svg line 620, x 234 y 222, 18 x 14 px) shares a <g> with latrine-1 and was not redrawn; counting groups gives 4, counting rects 5. The count was not measured, so the plan's scope leaves one oversize privy while row 22 ('oversize privies on Ochiba, Hayakawa, Ubame resized') is marked wave 98 and m:wave98-privy-size records 13 and 'every privy 15 x 15 px'. Nothing makes the omission impossible, nothing in the request implies it, and it defeats the row's purpose."
+  },
+  {
+   "id": "W98-anchor",
+   "summary": "each resized privy kept against the face it stood on, anchored on the side with the smaller measured gap; a privy between two faces centered",
+   "class": "within",
+   "why": "a drawing rule for carrying out the requested resize without re-siting anything; not a scope change"
+  },
+  {
+   "id": "W98-generated-already",
+   "summary": "the generated sheets (county example, roundtrip test) and Hoshigaoka are not touched because they already draw 15 px",
+   "class": "within",
+   "why": "checked: every latrine rect on county-magistracy-example and ochiba-roundtrip-test is 15 x 15 (the 9x6/6x9 rects are hatches); the engine's PRIVY_FT is 5 ft"
+  },
+  {
+   "id": "W98-away-from-water",
+   "summary": "328's E4 row 'privies away from water' closed by splitting the claim: 15 ft from any well a GUESS on 0101's drawing page, the food-prep distance its own UNRESEARCHED claim, no research pass run",
+   "class": "within",
+   "why": "the ranking's own accepted fix text prescribes exactly this ('15 ft from any well stated (0101.drawing GUESS); ... UNRESEARCHED meanwhile'), 328 closed E4 rows the same way (rows 10, 40, 84, 120, 168 in its E4 table), and its spec rules UNRESEARCHED claims out of scope as not findings; measured: every privy on the three sheets stands 29.5 ft or more from its nearest well, so the 15 ft claim holds. The food-prep question stays on the open-research list through its UNRESEARCHED label."
+  },
+  {
+   "id": "W98-new-claims",
+   "summary": "three unclaimed decisions in the section claimed (privy glyph CONVENTION; rear strip the service zone GUESS on 0091; storehouses in the rear strip on 0091)",
+   "class": "within",
+   "why": "claiming what the procedure already does, labeled as impl-drift read it (FR-004: a MISLABELED fix corrects the claim)"
+  },
+  {
+   "id": "W98-drifted-left",
+   "summary": "'residence privy attached' and 'servants in the rear strip' re-read DRIFTED and left for their place in the ranking",
+   "class": "within",
+   "why": "both are ranked rows of their own (row 23 and later); FR-001 keeps 328's order"
+  },
+  {
+   "id": "W98-occasion",
+   "summary": "one glyph-redrawn occasion, latrine on ubame-magistracy, standing for the three sheets",
+   "class": "within",
+   "why": "docs/reviews.md: glyph-check's unit is 'that element, on one map where it stands'; 328 declared its occasions the same way"
+  },
+  {
+   "id": "W98-decisions-row",
+   "summary": "Decisions Recorded row: the Mode A privy at 0101's one-seat size, a GUESS on 0101's drawing page",
+   "class": "within",
+   "why": "FR-002 carries 328's FR-008; the class matches the page's own label (Evidence comment: 'guess ... the 5 ft privy')"
+  }
+ ],
+ "verdict": "BLOCKED"
+}

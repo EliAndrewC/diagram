@@ -25,7 +25,7 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 
 - **Scope**: `docs/buildings.md::Latrines and the rear service strip#privy size` (328's ranking, E3: the procedure allowed
   14-20 px, ~5-7 ft, and the hand sheets drew up to 22 px; 0101's drawing page draws a privy 5 ft square, a one-seat privy,
-  its size a GUESS). Sheets redrawn (328's FR-009 by FR-002): **Hayakawa** (5 privies), **Ochiba** (4), **Ubame** (4) - every privy 15 x 15 px,
+  its size a GUESS). Sheets redrawn (328's FR-009 by FR-002): **Hayakawa** (5 privies), **Ochiba** (4), **Ubame** (5, two in the residence's one group) - 14 privies, every one 15 x 15 px,
   kept against the wall or house face its nearest edge stood on (each anchored on the side with the smaller measured gap; a
   privy between two faces centered). The generated sheets (the county example, the roundtrip test) and Hoshigaoka already
   draw 15 px.
@@ -37,6 +37,22 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   before and after unchanged on all three sheets (m:wave98-privy-size).
 - **Occasions**: glyph-redrawn: latrine on ubame-magistracy (one map stands for the three; the same glyph, the same size).
 - **Verification**: the three `make map` runs (REGENERATED, no untagged ink), the pack audits, `impl-drift`, `spec-fidelity`.
+
+## Wave 99 (amendment 2, 2026-10-10) - batch 1
+
+- **Scope**: the next Mode A rows that redraw cleanly. `docs/buildings.md::Fire-water tubs#one tub per wooden building`: 0100's
+  drawing page puts a tub at each major wooden building and two at the kitchen, the total following the count - **Ochiba**'s
+  karo's house and senior retainers' quarters had none, so each gets one at an eaves corner (the karo's house SW on its west
+  face, the quarters SE on its east face), 2.2 px off the wall as the procedure seats every tub; Ubame's 19 for its ~19
+  wooden buildings already follows the rule (the claim restated to the rule). `#boundary pillars`: 0083's drawing page gives
+  about 1 to 1.5 ft of shaft, up to about 3 ft with a plinth (a GUESS) - **Ubame**'s two pillars, 3 x 3.7 ft, drawn 3 ft square
+  (the plinth form). Sheets redrawn: Ochiba, Ubame.
+- **Passed over, its place kept**: `Walls and gates#main gate posts` (E3) - 0092's 2 ft post is thinner than the 3 ft wall it
+  ends (6 px against the wall's 9 px), so drawn as written it would vanish into the wall's ink; how a post shows at a wall's
+  end is a drawing question for the row's own wave, not taken here.
+- **Records**: m:wave99-tubs-and-pillars (the pack audit: '10 tubs' -> '12 tubs', none adrift); both claims IN-STEP; each
+  sheet's notes (history lines; Ubame's point-glyph line no longer calls the stones markers).
+- **Occasions**: glyph-redrawn: boundary stones on ubame-magistracy; placement-changed: fire-water tubs on ochiba-magistracy.
 
 ## Performance bookends (constitution VI)
 

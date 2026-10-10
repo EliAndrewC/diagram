@@ -3,7 +3,7 @@
   "docs/buildings.md::Checklist for a new diagram#practice ground sizing": "14",
   "docs/buildings.md::Checklist for a new diagram#size hierarchy": "15",
   "docs/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner": "3",
-  "docs/buildings.md::Fire-water tubs#one tub per wooden building": "4 (IN-STEP on a wave's re-check, no change needed)",
+  "docs/buildings.md::Fire-water tubs#one tub per wooden building": "99",
   "docs/buildings.md::Fire-water tubs#tub clear of the footprint": "3",
   "docs/buildings.md::Fire-water tubs#tub glyph": "2",
   "docs/buildings.md::Outer court (administrative / public)#archery bank": "2",
@@ -566,5 +566,6 @@
   "docs/buildings.md::Outer court (administrative / public)#charcoal weighing floor": "97",
   "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": "97",
   "docs/buildings.md::Latrines and the rear service strip#privy size": "98",
-  "docs/buildings.md::Latrines and the rear service strip#privies away from water": "98"
+  "docs/buildings.md::Latrines and the rear service strip#privies away from water": "98",
+  "docs/buildings.md::Approaches and surroundings#boundary pillars": "99"
 }

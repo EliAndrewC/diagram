@@ -1517,10 +1517,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#boundary pillars": {
-  "code": "256f3908b2001b11",
+  "code": "604d59449d575543",
   "core": "afa1187219969616",
-  "date": "2026-10-08",
-  "note": "Ubame's ~3 x 3.7 ft pillar is over \"about 1 to 1.5 ft of shaft, up to about 3 ft with a plinth\"; the page also records this size as a GUESS",
+  "date": "2026-10-10",
+  "note": "the drawing page records the size as a GUESS; drawing them 3 ft square stays within \"up to about 3 ft with a plinth\"",
   "pages": {
    "0083-clan-borders-and-their-markers.drawing.html": "aae7d10697713dff"
   },
@@ -1528,7 +1528,7 @@
   "rests": [
    "0083-clan-borders-and-their-markers.drawing.html:7c44442ea95237dd"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#canopy glyph": {
   "code": "e697c54a2d7433da",
@@ -1994,19 +1994,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#one tub per wooden building": {
-  "code": "2ed3e4254f208792",
+  "code": "5bfacfa680a7b91e",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-08",
-  "note": "Ochiba draws no tub at its karo's house or senior retainers' quarters, against \"one at each major wooden building\"",
+  "date": "2026-10-10",
+  "note": "one tub at each major wooden building and two at the kitchen, with the total following the count, as the page states; Ubame's 19 follows that rule",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
   "research": "5292b7fa7abf1048",
   "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub against its wall": {
   "code": "7eb6d880b7694c96",
@@ -2417,23 +2418,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- "docs/buildings.md::Latrines and the rear service strip#rear strip the service zone": {
-  "code": "bb5468398fd30013",
-  "core": "a829d4f7caea28ae",
-  "date": "2026-10-10",
-  "note": "0091 finds only that the formal garden lay south. It calls the rest unsettled (\"what stood behind the house is less settled\") and records a privy and servants' range in the shady rear as \"this project guesses ... a GUESS\". The label should be GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html",
-  "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
-  },
-  "research": "cde11191e2ae3f5f",
-  "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:5f52f1f04a224390",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:6218744dea5fe01d",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:ee330933a8458bdd"
-  ],
-  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Latrines and the rear service strip#residence privy attached": {
   "code": "9d237838bc3bc3c2",

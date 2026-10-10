@@ -721,6 +721,10 @@
     <circle cx="651" cy="710" r="3.8"/>
     <circle cx="314" cy="680" r="3.8"/>
     <circle cx="476" cy="165" r="3.8"/>
+    <!-- feature 372 wave 99: one at each major wooden building (0100) - the karo's house at its SW eaves corner on the west
+         face, the senior retainers' quarters at its SE corner on the east face; they had none -->
+    <circle cx="670" cy="280" r="3.8"/>
+    <circle cx="390" cy="644" r="3.8"/>
   </g>
   <text font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs" data-names="fire-water-tubs">fire-water tubs</text>
 </svg>

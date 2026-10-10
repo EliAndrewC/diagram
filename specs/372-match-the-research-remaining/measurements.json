@@ -4,13 +4,13 @@
     "observed": "2026-10-10",
     "source": "pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg before and after; make pack-audit on each",
     "command": "make pack-audit ARGS=<sheet>",
-    "method": "each privy rect read before and after; the pack audit's whole output diffed",
+    "method": "each privy rect counted and read before and after (rects, not groups: Ubame's residence group holds two); the pack audit's whole output diffed",
     "value": {
-      "privies": 13,
+      "privies": 14,
       "size_px": 15,
-      "before": "Hayakawa 18x14, 16x21, 18x14, 16x17.5, 14x22; Ochiba 16x22, 20x14, 18x14, 18x14; Ubame 18x22, 18x22, 18x22, 18x14",
+      "before": "Hayakawa 18x14, 16x21, 18x14, 16x17.5, 14x22; Ochiba 16x22, 20x14, 18x14, 18x14; Ubame 18x22, 18x22, 18x22, 18x14, 18x14 (latrine-2, the family end's, in the same group as latrine-1 - redrawn after the plan review found it)",
       "pack_audit_diff_lines": 0,
-      "reading": "every privy 15 x 15 px (5 ft); the pack audit's output identical before and after on all three sheets"
+      "reading": "every privy 15 x 15 px (5 ft); the pack audit's body identical before and after on all three sheets (Ubame re-run with all five privies: identical)"
     }
   },
   "t140-seed25-at-head": {
@@ -57,6 +57,26 @@
       "cohort_passed": 52,
       "cohort_48": "52/54 (refused 10, 20), none newly failing",
       "pool": "no map moved; the knot test 42 passed, 1 xfailed"
+    }
+  },
+  "wave99-tubs-and-pillars": {
+    "quantity": "wave 99 (2026-10-10): Ochiba's two wooden buildings given their tubs; Ubame's boundary pillars at 0083's plinth",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg and ubame-magistracy.svg before and after; make pack-audit on Ochiba",
+    "command": "make pack-audit ARGS=pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "method": "the tub circles and pillar rects read; the pack audit diffed",
+    "value": {
+      "ochiba_tubs": [
+        10,
+        12
+      ],
+      "tubs_adrift": 0,
+      "pillar_px": 9,
+      "pillar_before_px": [
+        9,
+        11
+      ],
+      "reading": "Ochiba: tubs at the karo's house (670,280) and the senior retainers' quarters (390,644), the audit's one change '10 tubs' -> '12 tubs', every tub within reach of its wall; Ubame: both pillars 9 x 9 px (3 ft, a shaft on its plinth)"
     }
   }
 }

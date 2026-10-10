@@ -231,7 +231,7 @@ A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 
 <!-- Research: tub glyph - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a tub about 2.5 ft across (~r3.8 at 3 px = 1 ft) -->
 <!-- Research: tub glyph colors - CONVENTION: water-blue circle distinct from square wells -->
-<!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12 tubs; Ubame's sheet draws 19, Ochiba's none at its karo's house or senior retainers' quarters -->
+<!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: one at each major wooden building and two at the kitchen, the total following the count (~8-12 for a dozen buildings; Ubame's ~19 wooden buildings draw 19) -->
 <!-- Research: kitchen weighting - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 tubs at the kitchen -->
 <!-- Research: tub against its wall - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: tubs stand at the wooden buildings, at the entrance; the gutter feed at an eaves corner and the ~3.5 ft limit from the building are UNRESEARCHED -->
 <!-- Research: tub clear of the footprint - CANON: the GM's ruling of 2026-07-25, tightened 2026-07-26, no part of a tub glyph in a building's footprint (the downspout discharges and the bucket line forms outside the wall) -->
@@ -325,7 +325,7 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: road at the gate - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: sheets draw Ochiba's Imperial road 8 ft, Hayakawa's street and Ubame's road 12 ft -->
 <!-- Research: cart lane to a side gate - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: sheets draw Ubame's cart lane 9 ft and Hayakawa's 10.7 ft -->
 <!-- Research: notice board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: the sheets draw the gate board ~7 x 3 ft and Ubame's roofed bounty board ~9 x 4 ft -->
-<!-- Research: boundary pillars - research/questions/0083-clan-borders-and-their-markers.drawing.html: Ubame's sheet draws each pillar ~3 x 3.7 ft -->
+<!-- Research: boundary pillars - GUESS research/questions/0083-clan-borders-and-their-markers.drawing.html: about 1 to 1.5 ft of shaft, up to about 3 ft with a plinth; Ubame's sheet draws each 3 ft square -->
 
 - **Road to gate** - two stacked paths (solid translucent + dashed darker) for ~150 px into the gate from the appropriate cardinal direction, running OFF the viewBox edge. NO direction caption: every manor road leads to town and thence the Imperial road, so `to the Imperial road` / `to the town's main street` is always-true clutter - the road glyph leaving the map already says a road departs here.
 - **Town / surroundings outside walls** - by default, leave the surrounding parchment empty. Only add exterior buildings if the surrounding context is itself part of the diagram's subject.
