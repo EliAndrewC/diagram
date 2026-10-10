@@ -48,7 +48,8 @@ commits are read for no feature (`git log --no-merges`).
 first and the commit read second, so a feature that owes nothing pays no claims scan.
 
 **D5 - The text.** The tasks template's standard task, CLAUDE.md's research section, `research/CLAUDE.md`, and a line
-in each of the seven open research-record specs (336, 337, 338, 343, 352, 368, 374).
+in each spec `make speckit-todo AFFECTS="research record"` lists open at landing (seven on 2026-10-10: 336, 337, 338, 343,
+352, 368, 374).
 
 **D6 - Claimed units outside the hamlet scope** (spec FR-009). `l7r/diagram/tools/claims.py:all_units` also yields,
 through `claimed_outside`, every unit of an engine module outside the scope that carries its OWN claim, not one

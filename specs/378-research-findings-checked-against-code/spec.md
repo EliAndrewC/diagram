@@ -39,7 +39,7 @@ yet, it asks for a line saying so, and why.
 **Independent Test**: a fixture feature tagged `research record` whose commits changed one question.
 - With no claim citing the question and no line about it, closing is refused, naming the question.
 - With a claim citing it that `make claims-owed` lists (new, or re-owed by the rewrite), closing is refused, naming it.
-- With the claim checked (IN-STEP or DRIFTED alike), or with a "no code implements it" line, closing passes.
+- With the claim checked (IN-STEP or DRIFTED alike), or with a full (b) line carrying its `searched:` part, closing passes.
 
 **Acceptance Scenarios**:
 1. **Given** a research-record feature whose commits changed a question's findings, **When** its last task is ticked,
@@ -52,8 +52,8 @@ yet, it asks for a line saying so, and why.
 ### User Story 2 - One command says what is owed (Priority: P1)
 
 `make impl-check F=<n>` lists the questions the feature changed. For each it shows the claims that cite it (their unit,
-their index verdict, or "owed its check") or the recorded "no code implements it" reason, and it ends with what is still
-missing.
+their index verdict, or "owed", for any reason `make claims-owed` gives) or the recorded "no code implements it" line, and
+it ends with what is still missing.
 
 ### User Story 3 - Every research feature carries the task (Priority: P2)
 
@@ -77,8 +77,9 @@ research-record feature's spec says the check is owed at its close.
 
 - **FR-001 - What is owed.** A feature tagged `research record` (its `**Affects**:` line) owes, for each question whose
   findings page its commits changed or created, one of:
-  - (a) at least one `Research:` claim, in the engine's code or the Mode A procedures, citing that question, none of
-    which `make claims-owed` lists for any reason (new, code changed, research changed, triage). A claim that cited the
+  - (a) at least one `Research:` claim citing that question that the claims index reads (in the hamlet scope or the
+    Mode A procedures, or a unit's own claim outside the scope, FR-009), none of which `make claims-owed` lists for any
+    reason (new, code changed, research changed, triage). A claim that cited the
     question before the feature rewrote it is re-owed by the rewrite, so it is checked against the NEW finding;
   - (b) only for a question that NO code decides (the thing is not built: a tier, a building, a feature no generator
     draws), a line in its `implementation-check.md`: `- NNNN: no code implements it - <why>; searched: <the units and the
@@ -136,16 +137,20 @@ research-record feature's spec says the check is owed at its close.
   constitution clause would add no enforcement the closing check does not give.
 - **D2 - "Changed" is read from the feature's commits**, by this repository's message convention, so a session cannot
   owe or escape a question by what it chooses to list. Of the 51 commits since 2026-09-25 that touch a question's page,
-  40 open with `Feature NNN` or `NNN:` (observed 2026-10-10; method: `git log` over `research/questions/*.html`, by the
-  plan review); the other 11 are merges and repository-wide moves, which no feature owns, and one direct modal tweak.
+  40 open with `Feature NNN` or `NNN:` (observed 2026-10-10; method: `git log` over `research/questions/*.html`, by spec-fidelity
+  round 1 of this review); the other 11 are merges and repository-wide moves, which no feature owns, and one direct modal tweak.
 - **D3 - The index takes claimed units outside the hamlet scope** (FR-009). It is not widened to every engine module,
-  which would owe a claim on every unit of 96 more modules: only units that carry their own claim enter. Three did on
-  2026-10-10 (`compound.county_magistracy_program`, `compound_model.NOTICE_BOARD_MAX_FT`, `site_pages.frame`; four
-  claims, now owed their `impl-drift` check).
+  which would owe a claim on every unit of 96 more modules (observed 2026-10-10; method: `engine_modules` less `scope` in
+  `l7r/diagram/tools/claims.py`): only units that carry their own claim enter. Three did, with four claims (observed
+  2026-10-10; method: `claimed_outside`): `compound.county_magistracy_program`, `compound_model.NOTICE_BOARD_MAX_FT` and
+  `site_pages.frame`, now owed their `impl-drift` check.
 
 ## Review history
 - spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED. Applied: (a) means not listed by `make claims-owed`
   for any reason, so an existing claim is re-checked against the new finding; (b) is only for a thing no code decides,
   with what was searched; FR-009 and D3 bring a claimed unit outside the hamlet scope into the index (the magistracy's
   code); D2 carries its measurement and leaves merges unattributed; SC-004 names the open features by command.
+- spec-fidelity-verify, round 2 (2026-10-10): CHANGES REQUIRED, wording only. Applied: FR-001(a) counts only a claim
+  the index reads (a module-docstring claim outside the scope does not); US1 and US2 follow FR-001 and FR-003; D2's
+  attribution and D3's figures labeled.
 

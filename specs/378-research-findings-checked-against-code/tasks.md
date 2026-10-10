@@ -14,7 +14,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [ ] T02 Held at every close (plan D4, FR-004): close_check.reasons asks it
       research: rendering
       verify: the closing-check test in test_impl_check.py; test_close_check.py green
-- [ ] T03 The text (plan D5, FR-005, FR-006, FR-007): the template task, CLAUDE.md, research/CLAUDE.md, the seven open specs
+- [ ] T03 The text (plan D5, FR-005, FR-006, FR-007): the template task, CLAUDE.md, research/CLAUDE.md, every spec `make speckit-todo AFFECTS="research record"` lists open at landing
       research: rendering
       verify: SC-004 - each carries the rule
 - [ ] T05 Claimed units outside the hamlet scope (plan D6, FR-009): `tools/claims.py:claimed_outside` in `all_units`; the four claims it brings in checked by impl-drift
