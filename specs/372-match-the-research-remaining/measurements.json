@@ -373,7 +373,8 @@
     "quantity": "the tax archive check's F5: the stables comment gives the fire gap below the smaller archive",
     "verifies": "F5",
     "value": {
-      "comment": "10 ft fire gap below the tax archive (14 ft since feature 372 wave 105 drew the archive at 0100's 24 x 18 ft)"
+      "comment": "10 ft fire gap below the tax archive (14 ft since feature 372 wave 105 drew the archive at 0100's 24 x 18 ft)",
+      "notes_review_log": "feature 267 pass 2's line now reads: a 10 ft fire gap below the tax archive (14 ft since feature 372 wave 105 drew the archive at 24 x 18 ft)"
     }
   }
 }
