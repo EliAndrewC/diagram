@@ -31,11 +31,16 @@ Research features annotate the record; they change no map and no code.
      is drawn beside a house"; add a visible clause pointing to 0033's holdings
      (`research/questions/0033-row-villages-resson.html`), so a reader following the farm-holding modal's link is not
      told the holding is ruled out.
-  5. **The dry plot's outline** (`.drawing.html`). Every dry plot is drawn with a tan-brown stroke (`#A98C58`, 1.4 px:
-     `l7r/diagram/settlement/fields/comb.py`, the dry-crop polygon), the seam between two plots included. Read that code
-     and the plot builder (`l7r/diagram/waterfields/carve.py`, `_dry_fields`) and record what the stroke stands for at
-     the outer edge (a field edge) and at the seam between two plots (a balk, or a path), and whether it is drawn wider
-     than real - a map drawing convention, labeled as one.
+  5. **The dry plot's outline** (`.drawing.html`). Every dry plot is drawn with a tan-brown stroke (`#A98C58`, 1.4 px),
+     the seam between two plots included, at THREE sites, each with its own seams:
+     - the hem: `l7r/diagram/settlement/fields/comb.py` (the dry-crop polygon), plots and seams built by
+       `l7r/diagram/waterfields/carve.py` `_dry_fields`;
+     - the row village's holdings: `l7r/diagram/hamletgen/homesteads/rows.py` (`cls="farm holding"`, seams at
+       `HOLDING_CELL_FT`);
+     - the town near ring: `l7r/diagram/settlement/land/nearring.py` `near_ring_cropland`.
+     Read all three and record, for each, what the stroke stands for at the outer edge (a field edge) and at the seam
+     between two plots (a balk, a path, or only a drawing cut), and whether it is drawn wider than real - a map drawing
+     convention, labeled as one.
 
 Keep each question under the 20,000-byte cap. Change nothing else, and edit no modal, sheet or code.
 

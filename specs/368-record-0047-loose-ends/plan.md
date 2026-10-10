@@ -13,9 +13,14 @@ check. The record edits are `research: physical` where they touch a quotation (i
   write session for 0047 and 0006, one check-and-apply session. Two questions, no new registry key expected.
 - **The figures.** `measure/privy_reach.py` over the five pool hamlets' recorded manifests; its output
   `measure/privy-reach.txt` is the page's source (FR-001). The script is the feature's, kept in its directory.
-- **The stroke.** The dry plot's outline is drawn at `l7r/diagram/settlement/fields/comb.py` (the dry-crop polygon,
-  stroke `#A98C58`, width 1.4); the write session reads it there and in the plot builder (`waterfields/carve.py`) for
-  what the seam between two plots is (FR-005).
+- **The stroke.** The same tan-brown outline (stroke `#A98C58`, width 1.4) is drawn at THREE sites, each with its own
+  seams (FR-005: "every dry plot", read from the code that draws it):
+  - the hem: `l7r/diagram/settlement/fields/comb.py` (the dry-crop polygon), its plots and seams built by
+    `l7r/diagram/waterfields/carve.py` `_dry_fields` (shared column lines that read the family strips apart);
+  - the row village's holdings: `l7r/diagram/hamletgen/homesteads/rows.py` (`cls="farm holding"`), its seams the
+    `HOLDING_CELL_FT` cuts, which the code calls a map drawing convention;
+  - the town near ring: `l7r/diagram/settlement/land/nearring.py` `near_ring_cropland`, its seams the cell tiler's.
+  The write session reads all three.
 
 ## Performance bookends
 
@@ -40,8 +45,8 @@ statement (the lead's "fewer than half", the table, the paragraph, the bullet) a
 there, else cut at the "...". Both owe quote-check.
 
 **D3 - Items 4 and 5** (FR-004, FR-005): 0006 gains a visible clause pointing to 0033's holdings; its drawing page says
-what the dry plot's stroke stands for at the outer edge and at the seam, and whether it is drawn wider than real, read
-from the code in Technical Context.
+what the dry plot's stroke stands for at the outer edge and at the seam AT EACH OF THE THREE SITES in Technical Context
+(the hem, the row village's holdings, the near ring), and whether it is drawn wider than real, read from that code.
 
 **D4 - The checks** (FR-006): `make record-owed` after the write; every owed unit dispatched from its bundle by the check
 session (quote-check, record-format, entry-drift, and the depiction checks of 0006's modals).

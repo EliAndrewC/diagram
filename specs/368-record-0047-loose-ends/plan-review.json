@@ -1,0 +1,72 @@
+{
+ "feature": "368-record-0047-loose-ends",
+ "plan_sha256": "c77d40305334e3238eaef06c8946560cb927b90e6e79776f6e3133fa3e3f3b6d",
+ "plan_text": "# Implementation Plan: loose ends in the privy record (0047), and two of 0006's (feature 368)\n\n**Spec**: `spec.md` | **Request**: `request.md`\n\n## Summary\n\nA research-record feature: five record defects fixed on two questions, their checks answered, and the implementation\ncheck. The record edits are `research: physical` where they touch a quotation (items 2, 3); the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Edits made by FRESH page sessions from briefs (`make page-session BRIEF=\"m2-write.md m2-check.md\"`): one\n  write session for 0047 and 0006, one check-and-apply session. Two questions, no new registry key expected.\n- **The figures.** `measure/privy_reach.py` over the five pool hamlets' recorded manifests; its output\n  `measure/privy-reach.txt` is the page's source (FR-001). The script is the feature's, kept in its directory.\n- **The stroke.** The dry plot's outline is drawn at `l7r/diagram/settlement/fields/comb.py` (the dry-crop polygon,\n  stroke `#A98C58`, width 1.4); the write session reads it there and in the plot builder (`waterfields/carve.py`) for\n  what the seam between two plots is (FR-005).\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the figures are measured on today's maps and the method stated; quotations re-read on the paper.\n- **XIII**: tooling tests green.\n- **XVI**: built as written; the code is not changed (FR-007).\n\n## Decisions\n\n**D1 - Item 1** (FR-001): 0047's drawing page gives `measure/privy-reach.txt`'s figures and its method (privies only;\ncenter to center, not the engine's corner-to-wall reach; the house's own frame; the half-degree tolerance). The August\ntable stays whole and dated, apart from today's rows; the \"15 of 86\" run is marked an unrecorded August run. Every share\nstatement (the lead's \"fewer than half\", the table, the paragraph, the bullet) agrees.\n\n**D2 - Items 2 and 3** (FR-002, FR-003): the Kyoto PDF read for p.2242's spelling (the archive first); both copies of\n`wang-ochiai-2022-5` set to it. `wang-ochiai-2022-2`'s \"Type V1\" glossed from the paper's definition if it stands\nthere, else cut at the \"...\". Both owe quote-check.\n\n**D3 - Items 4 and 5** (FR-004, FR-005): 0006 gains a visible clause pointing to 0033's holdings; its drawing page says\nwhat the dry plot's stroke stands for at the outer edge and at the seam, and whether it is drawn wider than real, read\nfrom the code in Technical Context.\n\n**D4 - The checks** (FR-006): `make record-owed` after the write; every owed unit dispatched from its bundle by the check\nsession (quote-check, record-format, entry-drift, and the depiction checks of 0006's modals).\n\n**D5 - The implementation check** (FR-007): the claims citing 0047's and 0006's findings, re-owed by the change, are\ntriaged or re-checked with `impl-drift`; a claim the new figures contradict is recorded DRIFTED, the code unchanged.\n\n## Project Structure\n\n```text\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo{.html,.notes.html,.drawing.html,.drawing.notes.html}\nresearch/questions/0006-dry-fields-and-their-crops-hatake{.html,.drawing.html}\nspecs/368-record-0047-loose-ends/measure/   the script and its output\n```\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Summary",
+   "summary": "Tasks touching a quotation (items 2, 3) are research: physical; the rest research: rendering.",
+   "class": "within",
+   "why": "Items 1, 4 and 5 are measurements on maps and readings of code; items 2 and 3 change quotations, which owe the physical boxes. Nothing the request asked is dropped."
+  },
+  {
+   "id": "TC-record",
+   "summary": "Edits made by fresh page sessions from briefs: one write session for 0047 and 0006, one check-and-apply; two questions, no new registry key expected.",
+   "class": "within",
+   "why": "The project's standing process for record edits; it narrows nothing in the five items."
+  },
+  {
+   "id": "TC-figures",
+   "summary": "measure/privy_reach.py over the five pool hamlets' recorded manifests; its output measure/privy-reach.txt is the page's source.",
+   "class": "within",
+   "why": "Exactly FR-001 and the spec's D1; the script and output exist in specs/368-record-0047-loose-ends/measure/."
+  },
+  {
+   "id": "TC-stroke",
+   "summary": "The dry plot's outline is drawn at l7r/diagram/settlement/fields/comb.py (stroke #A98C58, width 1.4); the write session reads it there and in waterfields/carve.py for what the seam is.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The comb.py site is real (comb.py:396) and carve.py exists at l7r/diagram/waterfields/carve.py, but the identical polygon (#A98C58, 1.4) round a dry plot recorded in M['dry_plots'] is ALSO drawn at l7r/diagram/hamletgen/homesteads/rows.py:347 (the row village's holdings, cls 'farm holding') and l7r/diagram/settlement/land/nearring.py:185 (the town near ring). The request says EVERY dry plot and FR-005 says read from the code that draws it; reading one emitter of three narrows that. Not impossible, not implied by the GM's words, and it defeats the purpose: the clause exists so the crop modals can tell the stroke, and the farm-holding modal is one of them - item 4 of the same request is about those holdings, and 0006's own page already names homesteads/rows.py for Kashikawa's strips. It would be materially wrong, not only incomplete: rows.py's seam is a HOLDING_CELL_FT 150 ft cut its docstring labels a map drawing convention, while carve.py's seams are the shared column lines that read the family strips apart. Fix: Technical Context names all three emitting sites and the builder behind each (carve.py _dry_fields for the hem's seams, rows.py HOLDING_CELL_FT for the holdings' seams, nearring.py's cell tiler for the near ring), and the page states the stroke's meaning per site, or says which sites it covers and where the others are told."
+  },
+  {
+   "id": "D1",
+   "summary": "0047's drawing page gives privy-reach.txt's figures and method; August table kept whole, dated, apart; the 15 of 86 run MARKED an unrecorded August run; every share statement agrees.",
+   "class": "within",
+   "why": "Matches FR-001 clause for clause; the spec allowed marking or dropping the 72 ft run, and the plan picks one of the two."
+  },
+  {
+   "id": "D2",
+   "summary": "Kyoto PDF p.2242 (archive first) decides wang-ochiai-2022-5's spelling, both copies set to it; Type V1 glossed from the paper's definition if the paper gives one, else the quotation cut at its '...'; both owe quote-check.",
+   "class": "within",
+   "why": "FR-002 and FR-003 as written; the request offers gloss or cut and the plan orders the two options without excluding either."
+  },
+  {
+   "id": "D3",
+   "summary": "0006 gains a visible clause pointing to 0033's holdings; its drawing page says what the dry plot's stroke stands for at the outer edge and the seam, and whether wider than real, read from the code in Technical Context.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The item 4 half is within FR-004. The item 5 half binds the reading to 'the code in Technical Context', which names only the hem's emitter (see TC-stroke), so it inherits that narrowing: the holdings' and near ring's dry plots carry the same stroke and their seams are cut by different code for a different reason. Fix with TC-stroke: read every emitting site and state the stroke per site (or the page's scope, with the others pointed)."
+  },
+  {
+   "id": "D4",
+   "summary": "make record-owed after the write; every owed unit dispatched from its bundle by the check session (quote-check, record-format, entry-drift, depiction checks of 0006's modals).",
+   "class": "within",
+   "why": "FR-006; 'the depiction checks of 0006's modals' covers both the nine item 4 re-owes and those item 5 re-owes, as record-owed computes them."
+  },
+  {
+   "id": "D5",
+   "summary": "Claims citing 0047's and 0006's findings, re-owed by the change, triaged or re-checked with impl-drift; a contradicted claim recorded DRIFTED, code unchanged.",
+   "class": "within",
+   "why": "FR-007 in claims-triage terms; SC-004's make impl-check F=368 still holds it at close."
+  },
+  {
+   "id": "Constitution-XVI",
+   "summary": "Built as written; the code is not changed.",
+   "class": "within",
+   "why": "Matches FR-007 (a DRIFTED claim is shown, the code is fixed only if the spec asks, and it does not)."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
