@@ -21,6 +21,10 @@ execute (328's amendment 8; the legacy hand-drawn settlements' rows stay DEFERRE
   `audit/`, `measurements.json`); a row this feature fixes is marked with its wave there or carried over, as its plan
   decides. Each row's fix text carries what 328 measured and tried (the held E3 rows name their reverted waves and
   measurements: waves 83-86, 91, 96).
+- **The findings the claims gate counted as introduced at 328's landing** (`introduced-at-328-landing.txt`, 25 and the two touch.py findings of its last re-check, against
+  main at wave 8): the re-checks of 328's waves found them, most of them rows of the ranking above, some not ranked (new
+  claims the re-checks asked for, and drifts on rows a wave had closed - `belt_law` holes, the unkept yard's south band,
+  `build_polder`'s low rows). 328 landed with them by the GM's split (`CLAIMS_OK` naming it); each is a row here.
 - **Sawada's zigzag across a joint** (328's T137, lanes 1/3, on the strict `_ZIGZAGS_WAITING`), WAIVED by the GM for 328's
   landing (*"Waive it"*, 328's `request.md`): its fix - re-lay a household's way at seating so it never arrives inside another's
   dooryard (328's plan, wave 54; two seating guards tried and reverted) - is an open E3 row here.

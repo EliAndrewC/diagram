@@ -23654,21 +23654,29 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a door path's free end is extended to any way within reach. The docstring says \"Ends that stop at a house ... are left alone\", but no test in the code does that.": {
+  "code": "75ab3e95057cb594",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "a door path's free end is extended to any way within reach. The docstring says \"Ends that stop at a house ... are left alone\", but no test in the code does that.",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a foot beside its own lane's other end left": {
-  "code": "cc235727c0a7e55b",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "`<= 6.0` against the lane's other end, as claimed; the pages say nothing on it",
+  "code": "ad376b2743963937",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "the questions are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a house served": {
-  "code": "14ee5539f08b1410",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "the orphan drop asks `serves` (60 ft of the house, 12 ft of built ground), and the drawing page records both figures as part of the GUESS",
+  "code": "392dc3440360b0bd",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "the drawing page records 60 ft / 12 ft as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -23679,29 +23687,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a moved end's last stretch kept short": {
-  "code": "88a35fef4e845741",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "`<= 2.0 * dist(_nb, old end) + 4.0`, as claimed; the pages say nothing on it",
+  "code": "8c48d48887c68931",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "the questions are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a roundabout link refused": {
-  "code": "fea1a0657c75e87e",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "`polyline_len(link) > _LINK_DIRECTNESS * d` (4) is refused; the page says paths take the shortest way but gives no ratio",
+  "code": "4640407764b08d1c",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "no figure in the questions",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a straight link off the fabric": {
-  "code": "dac360b6670309d9",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "the straight link and the moved end are cleared at max(WEB_FABRIC_GAP 7, w/2+2), and routes at gap=WEB_FABRIC_GAP; that is the page's 7 ft minimum from a fence to a lane's middle",
+  "code": "790bf0e57adf5de6",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "at least 7 ft to the lane's middle, more allowed",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -23757,10 +23765,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut": {
-  "code": "4f5384dc6efe9b38",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "on the final pass a run past first contact (within _TOUCH_GAP) is cut when `< 40.0` ft; no floor remains, matching \"a tail of under 40 ft beyond a crossing is cut\"",
+  "code": "35a4caae4a2101c1",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "a tail under 40 ft cut at first contact",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -23771,10 +23779,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach": {
-  "code": "6c3c2c0287a18f4c",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "`d > reach` is skipped, reach = _LANE_JOIN_FT 25 (and _STUB_REACH_FT 25 on the final pass); this matches \"Ends within 25 ft of one another are joined\", and the end meets the other's side as a T",
+  "code": "240dd1e868618ed2",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "the 25 ft `_LANE_JOIN_FT` default matches \"Ends within 25 ft of one another are joined\", but the final pass's `_STUB_REACH_FT` is passed in by the caller and its value is not in the bundle; if it is not 25 ft the claim is DRIFTED",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -23783,7 +23791,7 @@
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan piece dropped": {
   "code": "8be9c892f66a50d0",
@@ -23803,10 +23811,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan reach": {
-  "code": "ccb00bf7ba69c3ff",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "a link is tried up to `_ORPHAN_REACH` (150 ft); the 60 ft in §6 is about what counts as reaching a way, not how long a link may be drawn, so nothing answers this",
+  "code": "3b2866fbfa4f200a",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "the questions are silent on 150 ft",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
