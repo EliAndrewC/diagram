@@ -357,6 +357,70 @@ def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
     return ground
 
 
+def _offer_seat(s: Settlement, x: float, y: float) -> bool:
+    """Count a candidate (feature 226 FR-003) and ask the seat region for it. The cheap refusal that stood here - a
+    house-sized box against the boundary and the placed boxes - is the placer's own first test now (feature 227: the whole
+    homestead's ENVELOPE, `_envelope_blocked`). OPEN DEFECT (the 227/230 merge, 2026-09-13): with 230's far-bank rule as the
+    only refusal here, the reference cluster seats 195 px from its fields against the 60 px `cluster_abuts_fields` bar,
+    and 48 of 82 pool farmhouses stand beyond the engine's own `_field_adjacent` 165 px (settlement-review). The
+    fix is NOT to restore the box test - those locals are the envelope's now - it is to assert field adjacency on
+    the PLACED position and to score the envelope for it, which is the next piece of work on this feature.
+
+    THE BROOK'S FAR BANK IS NO LONGER REFUSED HERE (feature 261). Feature 230 refused a house across the brook from
+    the rest because no way could reach it - Kashikawa shipped one 52 ft beyond the water with no bridge anywhere.
+    Ways cross the brook at a ford now and `bridges()` decks the crossing, so a hamlet may stand astride its own
+    small channel, as the record has it (Harie, specs/230 R6); a house the web still cannot reach is caught by the
+    reach check and re-rolled, as any stranded house is. Both forms are attested at a stream's size (269 B23;
+    research/questions/0035-villages-beside-their-stream-one-bank-or-both.html: Hongcun beside its stream, Xidi and Likeng on both banks), so neither bank is refused;
+    each farmstead stays whole on one bank, which the same entry records as a guess. (Lifted out of `_seat_households`,
+    where it was `_pretest`, by feature 370, the 100-statement cap.)"""
+    s._seat_search["candidates"] += 1
+    region = getattr(s, "_seat_region", None)
+    return region is None or region.offer([(x, y)])[0]
+
+
+def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float]) -> tuple[Pt, bool]:
+    """The seat moved once along `n_` by the outline's reach past the homestead's near edge - zero when the box is clear
+    (lifted out of `_seat_households` by feature 370, the 100-statement cap).
+
+    Research:
+        front row across the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_ground_push` (`water_push`) moves a front seat onto the brook's far bank, fronting its field across the water
+        a footpath's room off the outline - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a pushed seat cleared by `WEB_FABRIC_GAP` (7 ft) * 2 + 6 ft (a 4 ft tread and the 2 ft parting) off the outline, the lane's 20 ft room of research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
+    """
+    _bx = s_._bundle_envelope(seat_[0], seat_[1], house_[0], house_[1], shed=True)
+    _pts = [(_bx[0] + dx * _bx[2] / 2, _bx[1] + dy * _bx[3] / 2) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
+    if s_._site_corridors is None or not s_._site_corridors.hit_points(_pts):
+        return seat_, False
+    lx, ly = -n_[1], n_[0]  # the lateral axis
+    half_lat = abs(lx) * _bx[2] / 2 + abs(ly) * _bx[3] / 2
+    near = _bx[0] * n_[0] + _bx[1] * n_[1] - (abs(n_[0]) * _bx[2] / 2 + abs(n_[1]) * _bx[3] / 2)  # the box's near edge along n
+    far = near + (abs(n_[0]) * _bx[2] + abs(n_[1]) * _bx[3])
+    push = 0.0
+    for ring in s_._site_corridors.ring_pts:
+        for x, y in ring:
+            if abs((x - _bx[0]) * lx + (y - _bx[1]) * ly) <= half_lat:
+                d = x * n_[0] + y * n_[1]
+                if near <= d <= far:
+                    push = max(push, d - near)
+    # ...AND ACROSS A BROOK THAT RUNS BETWEEN THE ROW AND ITS FIELD (feature 261, Inashiro's rolled crescent). The
+    # brook skirts the fan 34-44 ft outside its margin, so on a seat facing the wind down that flank every front seat
+    # lay in the water's corridor and was refused; the displaced households were seated by the cloud behind, and a
+    # crescent that drew 4.07:1 on main drew 1.62:1. The row stands on the brook's far bank instead, fronting its field
+    # across the water - the push is the course's reach past the box's near edge, by its own clearance. A row across
+    # its brook from its field is one of the two forms the record gives a hamlet at a stream's size (269 B23,
+    # research/questions/0035-villages-beside-their-stream-one-bank-or-both.html), not an exception to it.
+    wet = water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far)
+    by_water = wet > push
+    push = max(push, wet)
+    if push <= 0.0:
+        return seat_, False
+    # ...cleared by a FOOTPATH's room, not a hair: a homestead pushed to two pixels off a dike's bank left no way a
+    # lane could pass between them, the web stranded it, and the re-roll then forbade the only front seats the
+    # dike heads offer (Kuwabata: front 0 on the kept roll, the cluster 162 px off its polder)
+    push += WEB_FABRIC_GAP * 2.0 + 6.0
+    return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push), by_water
+
+
 def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the exit strip and the field's
     corridor, then - a nucleated cluster - the growth (`growth.grow_the_margin`), or - a dispersed hamlet - the front row,
@@ -365,26 +429,15 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
 
     Research:
         a scattered hamlet's seating - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass
-        front row across the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_ground_push` (`water_push`) moves a front seat onto the brook's far bank, fronting its field across the water
-        a footpath's room off the outline - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a pushed seat cleared by `WEB_FABRIC_GAP` (7 ft) * 2 + 6 ft (a 4 ft tread and the 2 ft parting) off the outline, the lane's 20 ft room of research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
         a row village's rows - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the rows take every household, stepped at a farmstead's width capped at `ROW_FRONTAGE_MAX_FT`, never ranks behind
         a household's wood share - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: seated only where it reserves `HOMESTEAD_WOOD_FT2` of copse within `COPSE_HOUSE_REACH_FT`
-        rank jitter and the cloud's lean - UNRESEARCHED: seats nudged up to a tenth of a pitch along the band; the cloud leaned toward the field at 0.75
         shared byre pockets - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: reserved in the seat band before any house
-        seats kept apart - NONE: a candidate dedupe, not a spacing - a seat within half a pitch of a standing house, or of a seat already offered this round (0.3 of a pitch in the rescue rounds), is not offered; the placer's envelope decides how far apart homesteads stand
-        the front row's gaps and the rescue's widening - UNRESEARCHED: a front-row gap over 1.45 pitches filled at the row's depth; the rescue band widened 22% and 16% a round
         a pushed front seat's retry - UNRESEARCHED: a front seat pushed across the brook retried a quarter pitch either way along the row
         the front row's offer - UNRESEARCHED: at most 12 front-row seats offered on a form other than a row
         the passage share - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each clustered (grown) settlement rolls its share of households reached across a neighbor's land; the other forms roll none
         the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
         the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6
-        the step between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: an envelope's depth and then the larger of the lane's room and the yard's 39 ft of sun, so ranks running north-south stand as the page's rows 92 ft apart (house, yard and 39 ft of sun)
-        a lane's room between ranks - GUESS: `MIN_WEB_GAP` kept between the dispersed form's ranks as a spacing only - no lane is laid there; where the ranks run north-south it falls inside the yard's sun
-        rank depth jitter - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue, on an alleys hamlet only
-        a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
-        the rescue's offer along the field - UNRESEARCHED: in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
-        a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more by the step's north-south share, whichever way the ranks run, so no rank stands in the sun south of another rank's yards
         front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded) - UNRESEARCHED: the front seat stands the core's reach toward the field off its chord, at the largest house the roll can take; the garden's side is chosen later by the sun, so it is not counted
     """
     seat = plan.seat
@@ -411,27 +464,6 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     s._lots = HouseholdLots(plan.spec.seed, plan.spec.households, _share if getattr(s, "_nucleated", False) else 0.0, _quota)
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}  # rounds: lattice rounds run (0 when the front row seated everything; over 4 = the rescue ran)
     _house_max = (s.px(46) * 1.35, s.px(28) * 1.10)  # the LARGEST house `_try_place_bundle` rolls: the front row's computed standoff clears it
-
-    def _pretest(x: float, y: float) -> bool:
-        """Count a candidate (feature 226 FR-003). The cheap refusal that stood here - a house-sized box against the
-        boundary and the placed boxes - is the placer's own first test now (feature 227: the whole homestead's
-        ENVELOPE, `_envelope_blocked`). OPEN DEFECT (the 227/230 merge, 2026-09-13): with 230's far-bank rule as the only
-        refusal here, the reference cluster seats 195 px from its fields against the 60 px `cluster_abuts_fields` bar,
-        and 48 of 82 pool farmhouses stand beyond the engine's own `_field_adjacent` 165 px (settlement-review). The
-        fix is NOT to restore the box test - those locals are the envelope's now - it is to assert field adjacency on
-        the PLACED position and to score the envelope for it, which is the next piece of work on this feature.
-
-        THE BROOK'S FAR BANK IS NO LONGER REFUSED HERE (feature 261). Feature 230 refused a house across the brook from
-        the rest because no way could reach it - Kashikawa shipped one 52 ft beyond the water with no bridge anywhere.
-        Ways cross the brook at a ford now and `bridges()` decks the crossing, so a hamlet may stand astride its own
-        small channel, as the record has it (Harie, specs/230 R6); a house the web still cannot reach is caught by the
-        reach check and re-rolled, as any stranded house is. Both forms are attested at a stream's size (269 B23;
-        research/questions/0035-villages-beside-their-stream-one-bank-or-both.html: Hongcun beside its stream, Xidi and Likeng on both banks), so neither bank is refused;
-        each farmstead stays whole on one bank, which the same entry records as a guess."""
-        s._seat_search["candidates"] += 1
-        region = getattr(s, "_seat_region", None)
-        return region is None or region.offer([(x, y)])[0]
-
     ax, ay = seat["along"]
     ox, oy = seat["out"]
     # THE LATTICE'S DRAW, one per map: the seed's own hash (feature 226's re-roll salt went with the re-roll, feature 287;
@@ -486,9 +518,6 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     #   linear    - strung along the connector, so it grows LONG rather than wide; the bound is a
     #               radius, so a smaller widening buys the length the form needs.
     bound = FORM_BOUND.get(plan.settlement_form, 1.15) * math.hypot(lat, dep)
-
-    def in_band(q: Pt) -> bool:
-        return math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]) <= bound
 
     # THE ACCESS TREE'S FIRST CORRIDOR, THE EXIT STRIP (feature 287, plan M3's seat half): from the cluster's center
     # outward past the furthest seat any round may offer, so every house after is admitted only with a corridor to it
@@ -627,41 +656,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # the first, which under the envelope-first placer (no spiral to slide the seats apart) was two hundred refused
     # candidates per map and a cluster strung along the paddy whatever shape it rolled; a rung of one house depth
     # seated NOBODY on Kuwabata's dike heads (the yard faces the paddy there) and the cluster drifted 112 px off its
-    # field. The ranks behind the front row are proposed behind the standing houses, below.
-    def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float]) -> tuple[Pt, bool]:
-        """The seat moved once along `n_` by the outline's reach past the homestead's near edge - zero when the box is clear."""
-        _bx = s_._bundle_envelope(seat_[0], seat_[1], house_[0], house_[1], shed=True)
-        _pts = [(_bx[0] + dx * _bx[2] / 2, _bx[1] + dy * _bx[3] / 2) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
-        if s_._site_corridors is None or not s_._site_corridors.hit_points(_pts):
-            return seat_, False
-        lx, ly = -n_[1], n_[0]  # the lateral axis
-        half_lat = abs(lx) * _bx[2] / 2 + abs(ly) * _bx[3] / 2
-        near = _bx[0] * n_[0] + _bx[1] * n_[1] - (abs(n_[0]) * _bx[2] / 2 + abs(n_[1]) * _bx[3] / 2)  # the box's near edge along n
-        far = near + (abs(n_[0]) * _bx[2] + abs(n_[1]) * _bx[3])
-        push = 0.0
-        for ring in s_._site_corridors.ring_pts:
-            for x, y in ring:
-                if abs((x - _bx[0]) * lx + (y - _bx[1]) * ly) <= half_lat:
-                    d = x * n_[0] + y * n_[1]
-                    if near <= d <= far:
-                        push = max(push, d - near)
-        # ...AND ACROSS A BROOK THAT RUNS BETWEEN THE ROW AND ITS FIELD (feature 261, Inashiro's rolled crescent). The
-        # brook skirts the fan 34-44 ft outside its margin, so on a seat facing the wind down that flank every front seat
-        # lay in the water's corridor and was refused; the displaced households were seated by the cloud behind, and a
-        # crescent that drew 4.07:1 on main drew 1.62:1. The row stands on the brook's far bank instead, fronting its field
-        # across the water - the push is the course's reach past the box's near edge, by its own clearance. A row across
-        # its brook from its field is one of the two forms the record gives a hamlet at a stream's size (269 B23,
-        # research/questions/0035-villages-beside-their-stream-one-bank-or-both.html), not an exception to it.
-        wet = water_push(s_._site_corridors.water, (_bx[0], _bx[1]), n_, half_lat, near, far)
-        by_water = wet > push
-        push = max(push, wet)
-        if push <= 0.0:
-            return seat_, False
-        # ...cleared by a FOOTPATH's room, not a hair: a homestead pushed to two pixels off a dike's bank left no way a
-        # lane could pass between them, the web stranded it, and the re-roll then forbade the only front seats the
-        # dike heads offer (Kuwabata: front 0 on the kept roll, the cluster 162 px off its polder)
-        push += WEB_FABRIC_GAP * 2.0 + 6.0
-        return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push), by_water
+    # field. The ranks behind the front row are proposed behind the standing houses, below (`_ground_push`).
 
     # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
     # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
@@ -723,7 +718,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
             # split its lane web in two; the extra tries go only where the water moved the seat.
             _tries = [(fx, fy)] + ([(fx - _n[1] * d, fy + _n[0] * d) for d in (BUNDLE_PITCH / 4.0, -BUNDLE_PITCH / 4.0)] if _by_water else [])
             for tx, ty in _tries:
-                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _pretest(tx, ty) and s.try_place(tx, ty, "plain"):
+                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _offer_seat(s, tx, ty) and s.try_place(tx, ty, "plain"):
                     placed += 1
                     break
     # ...then rows FLANKING the lanes, before any shape fill. A lane exists to be fronted, and a
@@ -753,6 +748,43 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # streets its row planned (`rows.py`, research/questions/0033-row-villages-resson.html), and a linear hamlet takes no other pass.
     _cloud_placed = 0
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
+    if not (_rows_seated or _grown):  # NEVER IN RANKS BEHIND A ROW (FR-016), and a grown cluster takes none (feature 308)
+        placed, _cloud_placed = _seat_rank_rounds(s, plan, placed, rng, (lat, dep), bound, _house_max)
+    # THE EXHAUSTIVE PASS (feature 287, homes H14): while the quota is short, every free point of the legal ground on the
+    # canvas, a third of a pitch apart, is offered to the same placer - cohort seed 32 seated 13 of 14 when the
+    # rounds above alone decided.
+    if _grown:
+        # ...and where it may offer a seat, recorded with the boundary for the walk-through's plate: the whole canvas, as (x0, y0, x1,
+        # y1) - no radius and no distance from the field bounds the growth (feature 318)
+        s.M["site_boundary"]["window"] = [0.0, 0.0, round(float(s.W), 1), round(float(s.H), 1)]
+        placed = grow_the_margin(s, plan, placed, _house_max)
+    elif not _rows_seated:  # ...but never behind a row village's rows (FR-016): its next margin is tried instead
+        placed = seat_the_rest(s, plan, placed)
+    return placed, _cloud_placed
+
+
+def _seat_rank_rounds(s: Settlement, plan: SitePlan, placed: int, rng: random.Random, band: tuple[float, float], bound: float, _house_max: tuple[float, float]) -> tuple[int, int]:
+    """The ranks behind the front row, then the rescue rounds - a scattered hamlet's seating after its row (lifted out of
+    `_seat_households` by feature 370, the 100-statement cap; the same rounds, the same draws, in the same order). Returns
+    `(placed, the cloud's share)`.
+
+    Research:
+        rank jitter and the cloud's lean - UNRESEARCHED: seats nudged up to a tenth of a pitch along the band; the cloud leaned toward the field at 0.75
+        seats kept apart - NONE: a candidate dedupe, not a spacing - a seat within half a pitch of a standing house, or of a seat already offered this round (0.3 of a pitch in the rescue rounds), is not offered; the placer's envelope decides how far apart homesteads stand
+        the front row's gaps and the rescue's widening - UNRESEARCHED: a front-row gap over 1.45 pitches filled at the row's depth; the rescue band widened 22% and 16% a round
+        the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground
+        the step between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: an envelope's depth and then the larger of the lane's room and the yard's 39 ft of sun, so ranks running north-south stand as the page's rows 92 ft apart (house, yard and 39 ft of sun)
+        a lane's room between ranks - GUESS: `MIN_WEB_GAP` kept between the dispersed form's ranks as a spacing only - no lane is laid there; where the ranks run north-south it falls inside the yard's sun
+        rank depth jitter - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue, on an alleys hamlet only
+        a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
+        the rescue's offer along the field - UNRESEARCHED: in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
+        a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more by the step's north-south share, whichever way the ranks run, so no rank stands in the sun south of another rank's yards
+    """
+    seat = plan.seat
+    ax, ay = seat["along"]
+    ox, oy = seat["out"]
+    lat, dep = band
+    _cloud_placed = 0
     _row: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]  # the front row as it stands: the lattice's rank 0
     # THE RANKS BEHIND THE FRONT ROW ARE PROPOSED BEHIND THE STANDING HOUSES (feature 227 FR-002/D8). The random cloud
     # deduped to a lattice (feature 226) relied on the placer's spiral to slide its seeds into a fit; the envelope-first
@@ -776,7 +808,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # seed 8, the paddy to the south: the "clear" seats of every rank round failed, 9 of 11 seated)
     _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + max(s.px(MIN_WEB_GAP), abs(oy) * s.px(SUN_CORRIDOR_FT))
     for attempt in range(7):
-        if placed >= plan.spec.households or _rows_seated or _grown:  # NEVER IN RANKS BEHIND A ROW (FR-016): a farm its streets could not hold is reported unseated
+        if placed >= plan.spec.households:  # (a row's or a grown cluster's seating never calls this: see the caller)
             break
         s._seat_search["rounds"] = attempt + 1  # the rounds this roll needed (over 4 = the rescue ran); R2 reads it per map
         wlat, wdep = lat * (1.0 + 0.22 * attempt), dep * (1.0 + 0.16 * attempt)
@@ -854,7 +886,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
                 # one 10 px bucket of nearest-neighbor distance, where the hand-packed maps spread over three). The seat is
                 # nudged along the band by up to a tenth of a pitch, from the map's own position hash - enough to break the
                 # modal spike, far too little to move a rank or to reopen a gap the round above just filled.
-                if not in_band((_sx4, _sy4)) and attempt >= 4:
+                if math.hypot(_sx4 - seat["cx"], _sy4 - seat["cy"]) > bound and attempt >= 4:  # out of the band
                     continue
                 if any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * (0.5 if attempt < 4 else 0.3) for kx, ky in _kept) or any(
                     math.hypot(_sx4 - h["x"], _sy4 - h["y"]) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", [])
@@ -877,23 +909,13 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
                 # 0.18 and 0.25 each tipped Inashiro's rolled crescent under round's ceiling - a knob that moves which map fails.)
                 _dj = (s._hjit(_sx4, _sy4, 14.0) - 0.5) * BUNDLE_PITCH * RANK_DEPTH_JITTER if attempt < 4 and not _along_the_field and plan.lane_web == "alleys" else 0.0
                 for _tx, _ty in ((_sx4 + ox * _dj, _sy4 + oy * _dj), (_sx4, _sy4)) if _dj != 0.0 else ((_sx4, _sy4),):
-                    if _pretest(_tx, _ty) and s.try_place(_tx, _ty, "plain"):
+                    if _offer_seat(s, _tx, _ty) and s.try_place(_tx, _ty, "plain"):
                         placed += 1
                         _cloud_placed += 1
                         break
             if _along_the_field or not (attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households):
                 break
             _offered, _along_the_field = _ends, True
-    # THE EXHAUSTIVE PASS (feature 287, homes H14): while the quota is short, every free point of the legal ground on the
-    # canvas, a third of a pitch apart, is offered to the same placer - cohort seed 32 seated 13 of 14 when the
-    # rounds above alone decided.
-    if _grown:
-        # ...and where it may offer a seat, recorded with the boundary for the walk-through's plate: the whole canvas, as (x0, y0, x1,
-        # y1) - no radius and no distance from the field bounds the growth (feature 318)
-        s.M["site_boundary"]["window"] = [0.0, 0.0, round(float(s.W), 1), round(float(s.H), 1)]
-        placed = grow_the_margin(s, plan, placed, _house_max)
-    elif not _rows_seated:  # ...but never behind a row village's rows (FR-016): its next margin is tried instead
-        placed = seat_the_rest(s, plan, placed)
     return placed, _cloud_placed
 
 
