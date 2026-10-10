@@ -55,3 +55,25 @@ def test_main_finds_the_newest_transcript_or_says_it_has_none(tmp_path: Path, ca
     assert capsys.readouterr().out.strip() == "10 s | 3k in (2k cached) / 0.6k out"
     assert rc.main(["--agent", "zzz", "--root", str(tmp_path)]) == 1
     assert "no transcript" in capsys.readouterr().err
+
+
+def _prompt(ts: str, text: str) -> str:
+    return json.dumps({"timestamp": ts, "message": {"role": "user", "content": text}})
+
+
+def test_a_resumed_agent_is_split_at_each_new_prompt_and_main_prints_a_line_per_return(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 371 (plan review 2): each return of a resumed agent is its own pass with its own cost. A tool result is not a
+    prompt, so a transcript that returned once stays one segment and prints as it always did."""
+    u = {"input_tokens": 100, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 10}
+    tool = json.dumps({"timestamp": "2026-10-10T10:00:10Z", "message": {"role": "user", "content": [{"type": "tool_result", "content": "x"}]}})
+    one = [_prompt("2026-10-10T10:00:00Z", "go"), tool, _line("2026-10-10T10:00:30Z", "r1", u)]
+    assert len(rc.segments(one)) == 1
+    two = [*one, _prompt("2026-10-10T11:00:00Z", "round 2"), _line("2026-10-10T11:00:40Z", "r2", u)]
+    parts = rc.segments(two)
+    assert len(parts) == 2 and rc.cost(parts[1])["wall_s"] == 40 and rc.cost(parts[0])["wall_s"] == 30
+    d = tmp_path / "p" / "s" / "subagents"
+    d.mkdir(parents=True)
+    (d / "agent-r.jsonl").write_text("\n".join(two) + "\n")
+    assert rc.main(["--agent", "r", "--root", str(tmp_path)]) == 0
+    out = capsys.readouterr().out.splitlines()
+    assert out[0].startswith("return 1: 30 s |") and out[1].startswith("return 2: 40 s |")

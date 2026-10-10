@@ -32,6 +32,34 @@ def transcript(agent: str, root: Path = DEFAULT_ROOT) -> Path | None:
     return hits[-1] if hits else None
 
 
+def _is_prompt(line: str) -> bool:
+    """A user record whose content is the agent's instructions - a string, or text parts only - not a tool result."""
+    try:
+        d = json.loads(line)
+    except ValueError:
+        return False
+    msg = d.get("message") if isinstance(d, dict) and isinstance(d.get("message"), dict) else {}
+    if msg.get("role") != "user":
+        return False
+    content = msg.get("content")
+    return isinstance(content, str) or (isinstance(content, list) and bool(content) and all(isinstance(p, dict) and p.get("type") == "text" for p in content))
+
+
+def segments(lines: Sequence[str]) -> list[list[str]]:
+    """The transcript split at each prompt after its first - one segment per RETURN (feature 371, plan review 2): an agent
+    resumed after it returned is given a new prompt, and each return is its own pass with its own cost. A transcript that
+    returned once is one segment, so its cost is the whole transcript's, as it always was."""
+    out: list[list[str]] = [[]]
+    seen_prompt = False
+    for line in lines:
+        if _is_prompt(line):
+            if seen_prompt and out[-1]:
+                out.append([])
+            seen_prompt = True
+        out[-1].append(line)
+    return out
+
+
 def cost(lines: Sequence[str]) -> dict[str, Any]:
     """{"wall_s", "input", "cache_read", "cache_write", "output", "calls"} summed over a transcript's lines."""
     last: dict[str, dict[str, Any]] = {}
@@ -73,7 +101,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     if path is None:
         print(f"_review_cost: no transcript for agent {args.agent} under {args.root}", file=sys.stderr)
         return 1
-    print(cells(cost(path.read_text(encoding="utf-8").splitlines())))
+    parts = segments(path.read_text(encoding="utf-8").splitlines())
+    if len(parts) == 1:
+        print(cells(cost(parts[0])))
+    else:  # a resumed agent: one ledger row per return, each with its own cells (feature 371)
+        for n, part in enumerate(parts, 1):
+            print(f"return {n}: {cells(cost(part))}")
     return 0
 
 

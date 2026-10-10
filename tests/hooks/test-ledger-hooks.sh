@@ -71,6 +71,18 @@ run 'LEDGER_LINT_OK="the row predates its transcript" git commit -m rows'
 [ "$RC" -eq 0 ] && ok "the escape with a reason commits" || no "escape refused" "(rc=$RC)"
 grep -rq "ledger-lint-ok" "$LOGROOT" && ok "...and is recorded" || no "escape not recorded"
 
+echo "6. a check's pass with no row is REPORTED at any commit, never refused (feature 371)"
+git -C "$FIX" reset -q >/dev/null 2>&1
+printf '%s\n' '{"date": "2026-10-10", "check": "glyph-check", "subject": "copse", "agent": "a1", "wall": "80 s", "tokens": "244k in (199k cached) / 7.8k out"}' > "$FIX/.git/check-passes.jsonl"
+printf 'y\n' > "$FIX/other.md"; git -C "$FIX" add other.md
+run 'git commit -m other'
+[ "$RC" -eq 0 ] && ok "an unrelated commit is not refused" || no "the report refused a commit" "(rc=$RC) $OUT"
+case "$OUT" in *"ledger-owed: 1 check pass"*"| 2026-10-10 | glyph-check | copse | ? |"*) ok "...and names the pass with the row to add" ;; *) no "no report" "$OUT" ;; esac
+printf '%s%s\n' "$HEAD_TXT" '| 2026-10-10 | glyph-check | copse | PASS | caught nothing | nothing | - | nothing | 80 s | 244k in (199k cached) / 7.8k out |' > "$FIX/dev/review-ledger.md"
+run 'git commit -m other'
+case "$OUT" in *"ledger-owed"*) no "a pass with its row is still reported" "$OUT" ;; *) ok "a pass with its row is not reported" ;; esac
+rm -f "$FIX/.git/check-passes.jsonl"
+
 echo
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]

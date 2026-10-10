@@ -1,6 +1,6 @@
 # Feature Specification: OPEN 2026-09-30 (feature 293, settlement-review of Kuwabata, round 2): the notes census does not count the storehouse annexes
 
-**Status**: Filed - from future-work/farming-communities.md, "OPEN 2026-09-30 (feature 293, settlement-review of Kuwabata, round 2): the notes census does not count the storehouse annexes", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Done (2026-10-10): `make notes-census` prints `storehouses: **n** of **m** farmhouses` from `farm_sheds` (l7r/diagram/tools/notes_census.py, tested in tests/tools/test_notes_census.py), and the five hamlet notes carry it (Kuwabata 2 of 16). Was: Filed - from future-work/farming-communities.md, "OPEN 2026-09-30 (feature 293, settlement-review of Kuwabata, round 2): the notes census does not count the storehouse annexes", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: hamlet, tooling
 

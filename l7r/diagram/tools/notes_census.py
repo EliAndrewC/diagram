@@ -39,6 +39,9 @@ def census(M: dict[str, Any]) -> str:
         # the family form (269 B42, 0004): a retirement house is its farmhouse's second roof, never a household
         f"- family form: **{(M.get('meta') or {}).get('family_form', 'one_roof')}**, retirement houses **{len(M.get('retirement_houses') or [])}**",
         f"- farmstead fixtures: {', '.join(f'{k} **{v}**' for k, v in sorted(fx.items())) or 'none'}",
+        # THE STOREHOUSE ANNEXES ARE COUNTED HERE TOO (feature 361): they were a hand-typed dated entry, the kind of line that
+        # went stale on Kuwabata (feature 293's settlement-review, round 1, F1); `farm_sheds` is what the map draws
+        f"- storehouses: **{len(M.get('farm_sheds') or [])}** of **{len(houses)}** farmhouses",
     ]
     boards = [b for b in (M.get("kosatsuba") or []) if isinstance(b, dict)]
     for b in boards:

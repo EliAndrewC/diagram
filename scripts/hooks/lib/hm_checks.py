@@ -43,10 +43,7 @@ import hm_arbiter  # noqa: E402
 
 STATE = "checks-open.json"
 #: the checks whose subject is a question page or a pop-up, and so freeze it while they run
-PAGE_CHECKS = frozenset(
-    "quote-check record-format source-reader intro-check record-style translation-check entry-drift "
-    "modal-form modal-research modal-depiction".split()
-)
+PAGE_CHECKS = frozenset("quote-check record-format source-reader intro-check record-style translation-check entry-drift modal-form modal-research modal-depiction".split())
 #: rounds a check may have on one subject in one feature before the round arbiter rules (FR-010, as the review checks' cap)
 ROUND_CAP = 2
 #: a check silent this long is reported stale and may be closed by hand (the no-poll guard's wait ceiling)
@@ -88,7 +85,7 @@ def subject_of_path(path: str) -> str:
 def load(path: Path) -> dict[str, Any]:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return {}
 
 
@@ -107,19 +104,16 @@ def _live(d: Mapping[str, Any], now: float) -> bool:
 
 def running(state: Mapping[str, Any], subject: str, now: float | None = None) -> list[dict]:
     now = time.time() if now is None else now
-    return [d for d in state.get("dispatches", {}).values()
-            if subject in d.get("subjects", []) and d.get("state") in ("running", "pending") and _live(d, now)]
+    return [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", []) and d.get("state") in ("running", "pending") and _live(d, now)]
 
 
 def open_round(state: Mapping[str, Any], subject: str, now: float | None = None) -> list[dict]:
     """The dispatches of the subject's current round: dispatched and not yet answered."""
     now = time.time() if now is None else now
-    return [d for d in state.get("dispatches", {}).values()
-            if subject in d.get("subjects", []) and d.get("state") != "answered" and _live(d, now)]
+    return [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", []) and d.get("state") != "answered" and _live(d, now)]
 
 
-def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None,
-             freeze_ok: bool = False, arbiter_ok: bool = False) -> str:
+def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None, freeze_ok: bool = False, arbiter_ok: bool = False) -> str:
     """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap and the tripwires, which
     the round arbiter rules on - `hm_arbiter.py`)."""
     subjects = subjects_of_manifest(text) if check in PAGE_CHECKS else []
@@ -130,8 +124,10 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
     for s in subjects:
         same = [] if freeze_ok else [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
         if same and [d for d in running(state, s, now) if d.get("state") == "running"]:  # launched, not a refused call's record
-            return (f"`{check}` is already in {s}'s round and that round has a check still running - all of a round's checks "
-                    "return, their edits go in in one pass, then the page is checked once (feature 375 FR-003c)")
+            return (
+                f"`{check}` is already in {s}'s round and that round has a check still running - all of a round's checks "
+                "return, their edits go in in one pass, then the page is checked once (feature 375 FR-003c)"
+            )
         n = state.setdefault("rounds", {}).get(f"{check}|{s}", 0)
         unit = f"{check}|{s}"
         if root is not None and not arbiter_ok:
@@ -221,14 +217,17 @@ def edit_refusal(state: Mapping[str, Any], path: str, old: str, new: str, now: f
     if live:
         names = ", ".join(sorted({d["check"] for d in live}))
         stale = [d for d in live if now - d["t"] > STALE_S]
-        tail = (f" ({len(stale)} silent past 90 minutes: `make check-closed SUBJECT={s} REASON=...` closes it)" if stale else "")
+        tail = f" ({len(stale)} silent past 90 minutes: `make check-closed SUBJECT={s} REASON=...` closes it)" if stale else ""
         return f"{s} is frozen while its checks run ({names}) - edit it once every check of the round has returned{tail} (feature 375 FR-003b)"
     if proposed(state, s, old, new):
         return ""
     blocks = state.get("edits", {}).get(s, [])
-    return (f"{s}'s checks have returned, and this edit is none of the {len(blocks)} edit(s) they proposed - apply those (`make "
-            "apply-edits REPLY=<the reply>`, or by hand), answer the checks, and make any other change after (FR-003b)"
-            if blocks else f"{s}'s checks returned no edit to apply; answer them (`make record-checked`) before editing it (FR-003b)")
+    return (
+        f"{s}'s checks have returned, and this edit is none of the {len(blocks)} edit(s) they proposed - apply those (`make "
+        "apply-edits REPLY=<the reply>`, or by hand), answer the checks, and make any other change after (FR-003b)"
+        if blocks
+        else f"{s}'s checks returned no edit to apply; answer them (`make record-checked`) before editing it (FR-003b)"
+    )
 
 
 def state_path(cwd: str) -> Path | None:
@@ -280,7 +279,7 @@ def _blocks(reply: str) -> list[tuple[str, str, str]]:
     out = []
     for m in _EDIT.finditer(reply):
         ind = m.group("ind")
-        undent = lambda t: "\n".join(line[len(ind):] if line.startswith(ind) else line for line in t.split("\n"))  # noqa: E731
+        undent = lambda t: "\n".join(line[len(ind) :] if line.startswith(ind) else line for line in t.split("\n"))  # noqa: E731
         out.append((m.group("path").strip(), undent(m.group("old")), undent(m.group("new"))))
     return out
 
@@ -337,7 +336,7 @@ def oscillation(versions: list[list[str]]) -> str:
             for a in vi:
                 wa = _words(a)
                 if len(wa) >= 5 and len(wa & wb) >= SIMILAR * len(wa):
-                    gone = any(not any(len(wa & _words(c)) >= SIMILAR * len(wa) for c in vj) for vj in versions[i + 1:-1])
+                    gone = any(not any(len(wa & _words(c)) >= SIMILAR * len(wa) for c in vj) for vj in versions[i + 1 : -1])
                     if gone:
                         return " ".join(b.split()[:12])
     return ""
@@ -361,7 +360,7 @@ def subject_blocks(root: Path, subject: str) -> list[str]:
 def _feature(root: Path) -> str:
     try:
         return Path(str(json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", ""))).name
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return ""
 
 
@@ -378,8 +377,7 @@ def escaped(token: str, text: str) -> bool:
     import subprocess  # noqa: PLC0415
 
     here = Path(__file__).resolve().parent
-    subprocess.run(["bash", "-c", '. "$1/guardlog.sh"; guard_log checks escaped "$2" "$3"', "_", str(here), m.group(1)[:200],
-                    token.lower().replace("_", "-")], capture_output=True, check=False)
+    subprocess.run(["bash", "-c", '. "$1/guardlog.sh"; guard_log checks escaped "$2" "$3"', "_", str(here), m.group(1)[:200], token.lower().replace("_", "-")], capture_output=True, check=False)
     return True
 
 
@@ -407,12 +405,81 @@ def changed_lines(root: Path) -> int:
     return total
 
 
+#: the pass log feature 371 keeps beside the state: one line per check's return, read by `scripts/reviews/ledger_owed.py`
+PASS_LOG = "check-passes.jsonl"
+
+
+def _reviews() -> tuple[Any, Any]:
+    """`ledger_lint` (its CHECKS) and `review_cost` (the cost cells), from `scripts/reviews/` - imported when first needed."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "reviews"))
+    import ledger_lint  # noqa: PLC0415
+    import review_cost  # noqa: PLC0415
+
+    return ledger_lint, review_cost
+
+
+def _first_prompt(lines: list[str]) -> str:
+    """The dispatch's prompt - the transcript's first user message - as a one-line subject a ledger cell can hold."""
+    for line in lines:
+        try:
+            rec = json.loads(line)
+        except ValueError:
+            continue
+        msg = rec.get("message") if isinstance(rec, dict) else None
+        if isinstance(msg, dict) and msg.get("role") == "user":
+            content = msg.get("content")
+            text = content if isinstance(content, str) else " ".join(str(p.get("text", "")) for p in content or [] if isinstance(p, dict))
+            first = next((ln.strip() for ln in text.splitlines() if ln.strip()), "")
+            return re.sub(r"[|\s]+", " ", first)[:100].strip()
+    return ""
+
+
+def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | None = None) -> bool:
+    """Append a check's pass to the log (feature 371, plan D1/D1b): at SubagentStop (`returned`) for an agent whose type is a
+    check, and at PostToolUse (`launched`) for a FOREGROUND one, which has returned by then. The cells are computed over the
+    whole transcript, as `make review-cost` computes them; nothing is held between the two events, so a switch of feature
+    drops nothing; each return of a resumed agent is a pass of its own, its cells this return's segment; the same return
+    seen by both events is logged once. Never raises: a hook that
+    fails here must not take the session's tool call with it."""
+    try:
+        ledger_lint, review_cost = _reviews()
+        if mode == "returned":
+            check, aid, tpath = str(payload.get("agent_type") or ""), str(payload.get("agent_id") or ""), str(payload.get("agent_transcript_path") or "")
+        else:
+            resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
+            ti = payload.get("tool_input") if isinstance(payload.get("tool_input"), Mapping) else {}
+            if resp.get("status") != "completed":
+                return False  # a background check is logged at its return
+            check, aid = str(ti.get("subagent_type") or ""), str(resp.get("agentId") or "")
+            found = review_cost.transcript(aid) if aid else None
+            tpath = str(found or "")
+        if check not in ledger_lint.CHECKS or not tpath or not Path(tpath).is_file():
+            return False
+        lines = Path(tpath).read_text(encoding="utf-8", errors="replace").splitlines()
+        # THIS RETURN's cells: the transcript's last segment (a resumed agent's earlier returns are passes of their own,
+        # logged at their own stops - plan review 2), as `make review-cost` prints them
+        wall, tokens = review_cost.cells(review_cost.cost(review_cost.segments(lines)[-1])).split(" | ", 1)
+        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid, "wall": wall, "tokens": tokens}
+        log = git_dir / PASS_LOG
+        prior = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()] if log.is_file() else []
+        mine = [r for r in prior if r.get("agent") == aid]
+        if mine and (mine[-1].get("wall"), mine[-1].get("tokens")) == (wall, tokens):
+            return False  # the same return seen by both events (a foreground check): one pass, logged once
+        with log.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(rec) + "\n")
+        return True
+    except Exception:  # noqa: BLE001 - the hook's own failure never blocks the session (see the docstring)
+        return False
+
+
 def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> str:
     """One hook event. Returns a refusal message (the hook exits 2 with it) or ''."""
     now = time.time() if now is None else now
     path = state_path(str(payload.get("cwd") or os.getcwd()))
     if path is None:
         return ""
+    if mode in ("returned", "launched"):
+        log_pass(path.parent, mode, payload, now)  # every check's pass, apart from the page-check state (feature 371)
     state = load(path)
     feature = _feature(path.parent.parent if path.parent.name == ".git" else Path(str(payload.get("cwd") or ".")))
     if state.get("feature") != feature:  # the round cap counts per feature (FR-010): a new feature starts its own count
@@ -455,9 +522,7 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
         resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
         launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched")
     elif mode == "returned":
-        returned(state, str(payload.get("agent_id") or ""), _reply_of(str(payload.get("agent_transcript_path") or ""),
-                                                                       str(payload.get("last_assistant_message") or "")),
-                 path.parent / "check-replies")
+        returned(state, str(payload.get("agent_id") or ""), _reply_of(str(payload.get("agent_transcript_path") or ""), str(payload.get("last_assistant_message") or "")), path.parent / "check-replies")
     elif mode == "edit" and payload.get("tool_name") == "Bash":
         command = str(ti.get("command") or "")
         root = _root(payload)
@@ -487,16 +552,14 @@ def close(root: Path, subject: str, reason: str, now: float) -> int:
     if not escaped("CHECK_CLOSED", f'CHECK_CLOSED="{reason}"'):
         print("check-closed: REASON needs two words and eight characters - it is what a later audit reads", file=sys.stderr)
         return 2
-    silent = [d for d in state.get("dispatches", {}).values()
-              if subject in d.get("subjects", []) and d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S]
+    silent = [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", []) and d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S]
     for d in silent:
         d["state"] = "answered"
         d["closed"] = reason
     if path and silent:
         save(path, state)
     live = len(running(state, subject, now))
-    print(f"check-closed: {len(silent)} silent dispatch(es) on {subject} closed - {reason}"
-          + (f"; {live} still running and not silent: wait for them" if live else ""))
+    print(f"check-closed: {len(silent)} silent dispatch(es) on {subject} closed - {reason}" + (f"; {live} still running and not silent: wait for them" if live else ""))
     return 0
 
 

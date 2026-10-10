@@ -439,3 +439,61 @@ def test_a_blocked_url_is_never_fetched_cached_or_put_on_the_ledger() -> None:
     with pytest.raises(Exception, match="ledger line refused"):
         src.append(_home(), [src.line(CTX, GROK, "pending")])
     assert not src.earlier(_home(), GROK)
+
+
+# ---- feature 376 FR-006: the archive behind a page that cannot be read ------------------------------------------------
+
+
+class _Unread:
+    """A live fetcher that answers a PDF but cannot read it, or is refused - the two cases research.md R2 measured."""
+
+    def __init__(self, state: str, live: bool) -> None:
+        self.state, self.live, self.calls = state, live, []
+
+    def get(self, url: str) -> dict:
+        self.calls.append(url)
+        return {"state": self.state, "why": "a PDF - no text layer can be read here", "live": self.live}
+
+
+def _archive(tmp: pathlib.Path, url: str, text: str) -> tuple[pathlib.Path, pathlib.Path]:
+    import hashlib  # noqa: PLC0415
+
+    uid = hashlib.sha256(url.encode("utf-8")).hexdigest()[:12]
+    row = tmp / "repo" / "research" / "archive" / uid[:2] / f"{uid}.json"
+    row.parent.mkdir(parents=True)
+    row.write_text(json.dumps({"url": url, "path": f"{uid[:2]}/{uid}/20261002T120000Z", "captured": "2026-10-02T12:00:00+00:00"}))
+    cap = tmp / "store" / uid[:2] / uid / "20261002T120000Z"
+    cap.mkdir(parents=True)
+    (cap / "text.txt").write_text(text)
+    return tmp / "repo", tmp / "store"
+
+
+def test_a_pdf_the_live_fetch_cannot_read_is_read_from_the_archive(tmp_path: pathlib.Path) -> None:
+    # the gap R2 measured: a PDF came back NOT-CHECKED though the archive held its text, so quote-check fetched it itself
+    url = "https://example.org/paper.pdf"
+    pages = src.CachedPages(_Unread("NOT-CHECKED", live=True), _home(), archive=_archive(tmp_path, url, "Kept text.\n"))
+    got = pages.get(url)
+    assert got == {"state": "FETCHED", "text": "Kept text.\n", "archived": "2026-10-02", "live": True}
+    assert src.cached(_home(), url) is None, "an archived text is not put in the page cache, which holds what was fetched"
+
+
+def test_a_refused_host_falls_back_to_the_archive_marked_not_live(tmp_path: pathlib.Path) -> None:
+    url = "https://refusing.example/page"
+    got = src.CachedPages(_Unread("UNFETCHABLE", live=False), _home(), archive=_archive(tmp_path, url, "Kept.\n")).get(url)
+    assert got["state"] == "FETCHED" and got["live"] is False
+
+
+def test_a_page_the_archive_does_not_hold_stays_as_the_live_fetch_left_it(tmp_path: pathlib.Path) -> None:
+    pages = src.CachedPages(_Unread("NOT-CHECKED", live=True), _home(), archive=(tmp_path / "none", tmp_path / "none"))
+    assert pages.get("https://example.org/other.pdf")["state"] == "NOT-CHECKED"
+
+
+def test_the_archive_ids_a_url_as_the_record_does() -> None:
+    # one rule: sources._cited must agree with the record's own `clean`, or a fallback would miss every row it should hit
+    import sys  # noqa: PLC0415
+
+    sys.path.insert(0, str(REPO))
+    from l7r.diagram.interactive.record import archive as rec  # noqa: PLC0415
+
+    for url in ("https://x.org/a?b=1&amp;c=2#frag", "https://ja.wikipedia.org/wiki/町屋_(商家)", "(https://x.org/Edo).", "https://x.org/p;"):
+        assert src._cited(url) == rec.clean(url), url

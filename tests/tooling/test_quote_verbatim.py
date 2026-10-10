@@ -361,3 +361,41 @@ def test_with_no_offline_directory_the_page_cache_serves_an_exact_copy_only(tmp_
     src.put(where, "https://ja.example/wiki/アブラナ", "秋に種をまき、\n冬を越す。\n", exact=False)
     assert qv.main(["0005", "--root", str(tmp_path), "--notes", "1", "--json", str(out)]) == 0
     assert len(calls) == 1, "an imported copy is fetched afresh"
+
+
+# ---- feature 376 FR-006: an archived text confirms a quotation and never sinks one ------------------------------------
+
+
+class _ArchivedPages:
+    def __init__(self, text: str, live: bool) -> None:
+        self.text, self.live = text, live
+
+    def get(self, url: str) -> dict:
+        return {"state": "FETCHED", "text": self.text, "archived": "2026-10-02", "live": self.live}
+
+
+def _note(quote: str) -> dict:
+    return {"links": ["https://example.org/paper.pdf"], "class": "citation", "passages": [{"quote": quote, "original": ""}]}
+
+
+def test_a_quote_verbatim_on_the_archived_text_of_a_live_pdf_is_verbatim_and_readable() -> None:
+    got = qv.judge_note(_note("the grove stands north of the house"), _ArchivedPages("In the plain, the grove stands north of the house.", live=True))
+    assert got["passages"][0]["quotation"] == "VERBATIM" and got["passages"][0]["archived"] == "2026-10-02"
+    assert got["readability"] == "READABLE"
+
+
+def test_a_quote_confirmed_only_on_the_archive_of_a_dead_link_leaves_readability_to_the_reader() -> None:
+    got = qv.judge_note(_note("the grove stands north of the house"), _ArchivedPages("the grove stands north of the house", live=False))
+    assert got["passages"][0]["quotation"] == "VERBATIM" and got["readability"] == "-"
+
+
+def test_a_quote_missing_from_the_archived_text_is_not_checked_never_not_readable() -> None:
+    # PDF extraction splits words: a miss on an archived text proves nothing, so it is the reader's, not a NOT-READABLE
+    got = qv.judge_note(_note("the grove stands north of the house"), _ArchivedPages("the gr-\nove stands north", live=True))
+    assert got["passages"][0]["quotation"] == "NOT-CHECKED" and "archived text of 2026-10-02" in got["passages"][0]["why"]
+    assert got["readability"] == "-"
+
+
+def test_a_pdf_link_is_asked_so_its_liveness_is_known() -> None:
+    pages = qv.Pages(opener=lambda req, timeout: _Resp(b"%PDF-1.7", "application/pdf"))
+    assert pages.get("https://ok.example/paper.pdf") == {"state": "NOT-CHECKED", "why": "a PDF - no text layer can be read here", "live": True}

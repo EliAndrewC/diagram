@@ -213,6 +213,26 @@
         ]
       },
       {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/archive-first-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/archive-first-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 376 plan D6 - a NEW guard: the archive's copy is read before the web",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Read|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/claims-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/claims-file-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 376 - a NEW guard, the GM 2026-10-10: the claims sheet is edited through tooling, never by hand",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Bash|Edit|Write|NotebookEdit",
         "hooks": [
           {

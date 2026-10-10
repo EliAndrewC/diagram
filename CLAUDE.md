@@ -211,6 +211,10 @@ The machinery in one picture, with the GM's rulings and the measurements: `docs/
   (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says how it is
   indexed.
 - Edit with `Edit`, not heredoc'd Python; a mechanical sweep uses `scripts/patch.py`.
+- A potentially large file is edited through tooling, never opened and edited by hand (feature 376, GM 2026-10-10: *"any
+  time we have a process that requires editing a potentially large file, then we should use tooling to edit the file"*),
+  as `make tick` edits `tasks.md`: the research claims sheet through `make research-claim` / `research-claims`. A new
+  process that needs one gets its make target with it.
   Foreground-regenerate only the motivating map. Read derived data from the recorded manifest, not by
   re-running the generator.
 - Batch: send the lookups you already know you need in one message; the batching hook blocks a run
@@ -255,8 +259,10 @@ doctrine for writing a guard: `docs/guards.md`.
 | `main-tree-hooks.sh` | a write that would land in the mirror is moved to the clone; one naming it is refused | `MAIN_TREE_OK` |
 | `discard-hooks.sh` | a checkout or restore that would discard uncommitted work | `DISCARD_OK` |
 | `conflict-marker-hooks.sh` | a `git add` or commit that would stage conflict markers | `CONFLICT_MARKERS_OK` |
+| `archive-first-hooks.sh` | an actor's FIRST `WebFetch` of a page the source archive holds, naming the archived text; the same actor's second fetch passes (feature 376) | the second fetch |
+| `claims-file-hooks.sh` | a Read, Edit, Write or shell command acting on the research claims sheet; `make research-claim` / `research-claims` is the way in (feature 376) | none - the tool does everything |
 | `feature-approval-hooks.sh` + spec-lint check 6 | a `git add` or commit staging a NEW feature (377 on) whose `spec.md` lacks the GM's `**Approved**:` line, or quotes words the GM did not write in this session (feature 377); a `sync-with-main.sh done/push` landing a closed feature OPEN without one added (any number); the push re-checks the line's form | none - the GM's approval |
-| `ledger-hooks.sh` | a commit staging the review ledger with a measured row short of its check, class or cost | `LEDGER_LINT_OK` |
+| `ledger-hooks.sh` | a commit staging the review ledger with a measured row short of its check, class or cost; every check's pass logged with its cost cells, the commit told which have no row, the push refusing until each has one (feature 371, `make ledger-owed`) | `LEDGER_LINT_OK`, `LEDGER_ROWS_OK` |
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
 | `no-branch-hooks.sh` | no local branches. The remote-only `backup/<clone-name>` branches on GitHub are not local branches: `sync-with-main.sh` pushes the clone's HEAD there (fast-forward, never forced) at every `done`/`push`, landed or refused, and deletes each once `main` contains it - its own at landing, any other by the sweep at the same step (feature 321) | `NO_BRANCH_OK` |
 | `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4); a backgrounded periodic report is refused with its exact `CronCreate` call | `POLL_OK`, `CRON_OK` |

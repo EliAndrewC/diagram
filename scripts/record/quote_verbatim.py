@@ -360,9 +360,9 @@ class Pages:
         host = urllib.parse.urlsplit(url).netloc
         if not url.lower().startswith(("http://", "https://")):
             return {"state": "OWN", "why": "a link into this project, not a public page"}
-        if is_pdf(url):
-            return {"state": "NOT-CHECKED", "why": "a PDF - no text layer can be read here"}
         if self.offline is not None:
+            if is_pdf(url):
+                return {"state": "NOT-CHECKED", "why": "a PDF - no text layer can be read here"}
             path = self.offline / self.name_for(url)
             if not path.is_file():
                 return {"state": "UNFETCHABLE", "why": "no offline copy"}
@@ -380,7 +380,9 @@ class Pages:
                 self.refused[host] = f"{type(err).__name__}: {err}"[:160]
                 return {"state": "UNFETCHABLE", "why": self.refused[host]}
         if is_pdf(url, ctype):
-            return {"state": "NOT-CHECKED", "why": "a PDF - no text layer can be read here"}
+            # the link ANSWERED (feature 376): a PDF is asked like any page, its body left unread, so that the archive's
+            # text of it (sources.CachedPages) can be judged and READABLE still means the link is live
+            return {"state": "NOT-CHECKED", "why": "a PDF - no text layer can be read here", "live": True}
         text = decode(raw, declared)
         if text is None:
             return {"state": "NOT-CHECKED", "why": "the page would not decode in any charset tried"}
@@ -391,11 +393,19 @@ def judge_note(note: dict, pages: Pages) -> dict:
     """The quotation and readability verdicts of one citation, over every passage and every link it carries."""
     results, states = [], [pages.get(u) for u in note["links"]]
     fetched = [s["text"] for s in states if s["state"] == "FETCHED"]
+    archived = [s.get("archived") for s in states if s["state"] == "FETCHED"]
     for p in note["passages"]:
         target = p["original"] or p["quote"]
         if fetched:
-            per_page = [verdict(target, t) for t in fetched]
+            # an ARCHIVED text (feature 376: a PDF's extraction, a page whose host refused) confirms a quotation and
+            # never sinks one - extraction splits words, so a miss there proves nothing and is left for a reader
+            per_page = [verdict(target, t) if not a or verdict(target, t)["quotation"] == "VERBATIM"
+                        else {"quotation": "NOT-CHECKED", "why": f"not found verbatim in the archived text of {a} - check by hand"}
+                        for t, a in zip(fetched, archived, strict=True)]
             best = next((v for v in per_page if v["quotation"] == "VERBATIM"), None) or next((v for v in per_page if v["quotation"] == "DIFFERS"), per_page[0])
+            at = per_page.index(best)
+            if best["quotation"] == "VERBATIM" and archived[at]:
+                best = {**best, "archived": archived[at]}  # read from the archive's capture of that date (feature 376)
             unread = [u for u, s in zip(note["links"], states, strict=True) if s["state"] != "FETCHED"]
             if best["quotation"] == "NOT-ON-PAGE" and unread:
                 # NOTHING ON THE PAGES READ RESEMBLES IT, AND A LINK WENT UNREAD: in a two-link note each quote belongs to
@@ -412,7 +422,10 @@ def judge_note(note: dict, pages: Pages) -> dict:
     elif all(s["state"] == "OWN" for s in states):
         readable = "NOT-READABLE (the link is this project's own page)"
     elif all(r["quotation"] == "VERBATIM" or r.get("only_reference_markers") for r in results):
-        readable = "READABLE"
+        # READABLE is the LIVE link's verdict (feature 195): a quotation confirmed on an archived text counts only where
+        # that link answered this run; where it did not, whether it is public is left to the reader (feature 376)
+        dead = any(s.get("archived") and not s.get("live") for s in states if s["state"] == "FETCHED")
+        readable = "-" if dead and any(r.get("archived") for r in results) else "READABLE"
     elif fetched and any(w in ("NOT-ON-PAGE", "DIFFERS") for w in words):
         readable = "NOT-READABLE (the page was read and does not carry the passage as quoted)"
     else:

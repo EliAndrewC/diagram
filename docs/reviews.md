@@ -42,7 +42,10 @@ already judged owes nothing and gets no report - the GM looks at the map.
 
 **The ledger measures it.** Every pass is a row of the ledger's measured table - the check, each finding's class, whether the
 author had missed it, and the run's cost from `make review-cost AGENT=<id>`; `make review-census` totals them per check, so a
-check that never finds anything is a number.
+check that never finds anything is a number. The row is OWED (feature 371): every return of a check is logged with its cost
+cells, a commit is told which passes have no row (`make ledger-owed` prints each row to add, its judgment cells `?`), and the
+push refuses until each has one (`LEDGER_ROWS_OK="<reason>"`). A resumed agent's `make review-cost` prints a line per return,
+one row each.
 
 ## Invoking a review agent: launch it EARLY, in the background, and never wait on it
 
