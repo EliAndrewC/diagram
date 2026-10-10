@@ -58,6 +58,14 @@ for i, w in enumerate(words):
 ROOT=$(git -C "$ROOT" rev-parse --show-toplevel 2>/dev/null) || exit 0
 LEDGER="dev/review-ledger.md"
 [ -f "$ROOT/$LEDGER" ] || exit 0
+# GUARD_EDIT_OK: feature 371 - a NEW report, never a refusal: every check pass logged in this clone with no row in the measured
+# table is named at each commit, with the row to add (`ledger_owed.py`); the push is where it refuses (sync-with-main.sh).
+OWED_PY="$ROOT/scripts/reviews/ledger_owed.py"
+[ -f "$OWED_PY" ] || OWED_PY="$LH_HERE/../reviews/ledger_owed.py"
+OWED=$(cd "$ROOT" && python3 "$OWED_PY" --ledger "$ROOT/$LEDGER" 2>/dev/null)
+if [ -n "$OWED" ]; then
+  printf '%s' "$OWED" | python3 -c 'import json,sys; print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "additionalContext": sys.stdin.read()}}))'
+fi
 STAGED=$(git -C "$ROOT" diff --cached --name-only 2>/dev/null)
 case " $CMD " in *" -a "*|*" -am "*|*" --all "*) STAGED="$STAGED $(git -C "$ROOT" diff --name-only 2>/dev/null)" ;; esac
 case " $STAGED " in *"$LEDGER"*) ;; *) exit 0 ;; esac

@@ -301,6 +301,19 @@ push_cmd() {
   # scripts/ alone takes the DIRECT route and runs no gate, and the cap holds those trees too.
   python3 "$ROOT/scripts/gates/check-function-cap.py" --selftest >/dev/null || die "check-function-cap selftest failed - fix scripts/gates/check-function-cap.py before pushing"
   python3 "$ROOT/scripts/gates/check-function-cap.py" "$ROOT" || die "a function is past the 100-statement cap, or a suppression of it says not why (above) - feature 370"
+  # GUARD_EDIT_OK: feature 371 - a NEW refusal: a check's pass logged in this clone with no row in the review ledger's measured
+  # table does not land (the GM 2026-10-10: "so that we can see how often they are paying off"); the row to add is printed.
+  if [ -n "${LEDGER_ROWS_OK:-}" ]; then
+    if ! python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$LEDGER_ROWS_OK" >/dev/null; then
+      guard_log sync-with-main blocked "$LEDGER_ROWS_OK" LEDGER_ROWS_OK-no-reason
+      die "LEDGER_ROWS_OK needs a REASON: two words and eight characters, saying why these passes land without their rows"
+    fi
+    guard_log sync-with-main escaped "$LEDGER_ROWS_OK" ledger-rows-ok
+    echo "sync-with-main: ledger-row guard BYPASSED - $LEDGER_ROWS_OK" >&2
+  else
+    ( cd "$ROOT" && python3 "$ROOT/scripts/reviews/ledger_owed.py" --ledger "$ROOT/dev/review-ledger.md" --refuse ) \
+      || die "a check's pass has no row in dev/review-ledger.md (above) - add the row printed, its ?s filled; feature 371"
+  fi
   # GUARD_EDIT_OK: feature 234 - both halves of "the record and the modals stay in step" run HERE for
   # the same reason the three above do: the delta that breaks either is a research-page edit touching
   # no Python, which takes the DIRECT route and runs no gate at all, so a gate-only check would surface
