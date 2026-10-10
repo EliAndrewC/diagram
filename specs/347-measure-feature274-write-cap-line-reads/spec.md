@@ -2,7 +2,7 @@
 
 **Status**: Filed - from future-work/cross-cutting.md, "MEASURE feature 274's write cap and line reads on the groups that run after it landed (owed by 274 FR-004)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: now
+**Affects**: research process
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

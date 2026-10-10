@@ -2,7 +2,9 @@
 
 **Status**: Filed - from future-work/cross-cutting.md, "The push-time `roll-review` agent (deferred by feature 217, 2026-09-08)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: village - its own trigger: "if a village-tier feature lands rows" that should have been unit tests
+**Affects**: review process, tooling
+
+**Owed at**: village - its own trigger is "if a village-tier feature lands rows" that should have been unit tests
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

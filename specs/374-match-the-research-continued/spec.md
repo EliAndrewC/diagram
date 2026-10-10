@@ -4,7 +4,7 @@
 **Created**: 2026-10-10
 **Status**: Filed - the open work of feature 372 (itself 328's remainder), moved here at the GM's word for a fresh session
 
-**Owed at**: now
+**Affects**: hamlet, magistracy, research record
 
 **Input**: `request.md` (the GM, 2026-10-10); feature 328's request and feature 372's carry over unchanged.
 

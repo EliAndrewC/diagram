@@ -4,7 +4,7 @@
 **Created**: 2026-10-10
 **Status**: In progress - spec accepted (spec-fidelity round 2, FAITHFUL); taken before feature 374's first task; it applies to every feature
 
-**Owed at**: now
+**Affects**: review process, tooling
 
 **Input**: `request.md` (the GM, 2026-10-10)
 

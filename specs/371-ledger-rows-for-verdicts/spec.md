@@ -2,7 +2,7 @@
 
 **Status**: Filed (2026-10-09, by feature 328's session) - not started.
 
-**Owed at**: now
+**Affects**: review process, tooling
 
 ## What and why
 

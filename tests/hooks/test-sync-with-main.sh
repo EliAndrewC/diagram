@@ -127,13 +127,13 @@ expect_out "could not decide the route"
 
 echo "7d. A FEATURE IN PROGRESS LANDS NOTHING (feature 133): open tasks refuse both routes; the spec directory alone is the one exception"
 D=$(topology fp)
-( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n\n**Owed at**: now\n' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: open tasks + an unrelated file -> refused on the DIRECT route" 1 $?
 expect_out "IN PROGRESS"
 expect_out "note.md"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a feature in progress landed"; FAIL=$((FAIL+1)); }
 D=$(topology fq)
-( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n\n**Owed at**: now\n' > specs/140-x/spec.md && git add -A && git commit -qm "the claim" )
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && git add -A && git commit -qm "the claim" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "the spec directory ALONE (the number claim) is allowed" 0 $?
 expect_out "the claim), allowed"
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
@@ -161,7 +161,7 @@ D=$(topology fr)
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
   && echo docs > note.md && git add -A && git commit -qm "closed by its status line" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: an open box under a closing status line (Done) -> lands" 0 $?
-( cd "$D/main/.clones/c" && printf -- '# Feature Specification: x\n\n**Status**: Implemented, mostly\n\n**Owed at**: now\n' > specs/140-x/spec.md && echo more > note.md && git add -A && git commit -qm "not closed" )
+( cd "$D/main/.clones/c" && printf -- '# Feature Specification: x\n\n**Status**: Implemented, mostly\n' > specs/140-x/spec.md && echo more > note.md && git add -A && git commit -qm "not closed" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the same open box under a status that closes nothing -> refused" 1 $?
 expect_out "IN PROGRESS"
 # plan review round 4: the closing-status exemption must not change how boxes are READ - an indented open task, or a
@@ -293,7 +293,7 @@ no_() { echo "FAIL  $1"; FAIL=$((FAIL+1)); }
 rref() { git -C "$1/github.git" rev-parse -q --verify "refs/heads/$2"; }
 in_progress() { # $1 = topology dir: a feature with an open task plus an unrelated file, so a stop is refused
   ( cd "$1/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md \
-    && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n\n**Owed at**: now\n' > specs/140-x/spec.md \
+    && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md \
     && echo "${2:-docs}" > note.md && git add -A && git commit -qm "feature plus docs ${2:-}" )
 }
 
@@ -387,13 +387,17 @@ grep -qx B "$C/dev/x.md" 2>/dev/null && yes_ || no_ "the clone's edit did not la
 [ ! -e "$C/$OLDP" ] && yes_ || no_ "the old directory was left behind"
 [ -z "$(git -C "$C" status --porcelain)" ] && yes_ || no_ "the merge left the clone dirty: $(git -C "$C" status --porcelain | head -3)"
 
-echo "16. an open feature with no **Owed at** stage is refused at the push, a specs/-only DIRECT one included (the GM, 2026-10-10)"
+echo "16. an open feature with no **Affects** tag, or an unknown one, is refused at the push, a specs/-only DIRECT one included (the GM, 2026-10-10)"
 D=$(topology ow)
-( cd "$D/main/.clones/c" && mkdir -p specs/400-x && printf -- '# Feature Specification: x\n\n**Status**: Filed - deferred work\n' > specs/400-x/spec.md && git add -A && git commit -qm "filed, no stage" )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a filed spec with no stage -> refused" 1 $?
-expect_out "**Owed at**: now | village | town | provincial city | capital"
-( cd "$D/main/.clones/c" && printf -- '\n**Owed at**: town\n' >> specs/400-x/spec.md && git add -A && git commit -qm "staged" )
-OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the same spec with its stage -> lands" 0 $?
+( cd "$D/main/.clones/c" && mkdir -p specs/400-x .specify && cp "$HERE/../../.specify/affects.json" .specify/ \
+  && printf -- '# Feature Specification: x\n\n**Status**: Filed - deferred work\n' > specs/400-x/spec.md && git add -A && git commit -qm "filed, no tag" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a filed spec with no tag -> refused" 1 $?
+expect_out "**Affects**: hamlet, magistracy"
+( cd "$D/main/.clones/c" && printf -- '\n**Affects**: towns\n' >> specs/400-x/spec.md && git add -A && git commit -qm "a typo" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: an unknown tag -> refused" 1 $?
+expect_out "unknown: towns"
+( cd "$D/main/.clones/c" && sed -i 's/^\*\*Affects\*\*: towns$/**Affects**: town, capital/' specs/400-x/spec.md && git add -A && git commit -qm "tagged" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the same spec with known tags -> lands" 0 $?
 
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

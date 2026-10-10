@@ -2,7 +2,7 @@
 
 **Status**: Filed - from future-work/farming-communities.md, "RESEARCH OWED (feature 287's woods review, 2026-09-29): did a village lane ever run between a house and its own grove?", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: now
+**Affects**: hamlet, research record
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

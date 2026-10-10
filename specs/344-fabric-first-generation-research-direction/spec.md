@@ -2,7 +2,7 @@
 
 **Status**: Filed - from future-work/cross-cutting.md, "2. Fabric-first generation (the GM's ordering question, 2026-08-10) - RESEARCH DIRECTION", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: provincial city
+**Affects**: provincial city, capital
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

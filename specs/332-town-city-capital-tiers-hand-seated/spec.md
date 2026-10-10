@@ -2,7 +2,7 @@
 
 **Status**: Filed - from future-work/cities.md, "The town, city and capital tiers' hand-seated captions go through the one placer when their tier is scripted (feature 266, spec D8)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: town
+**Affects**: town, provincial city, capital
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

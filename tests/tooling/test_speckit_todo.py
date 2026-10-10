@@ -7,6 +7,7 @@ reads `specs/` alone; these tests build a fixture tree holding one feature in ea
 from __future__ import annotations
 
 import importlib.util
+import json
 import subprocess
 import sys
 import time
@@ -134,47 +135,121 @@ def test_closed_by_status_reads_the_status_line_alone(tmp_path: Path, status: st
         ("**Owed at**: town", "town"),
         ("**Owed at**: Provincial city - the governor's mansion", "provincial city"),
         ("**Owed at:** now", "now"),
-        ("**Owed at**: [now | village | town | provincial city | capital - the earliest stage that needs it]", ""),
         ("**Owed at**: cities", ""),
         ("**Owed at**: townhouse", ""),
         ("no line at all", ""),
     ],
 )
-def test_the_stage_is_read_from_its_line(line: str, stage: str) -> None:
-    """The template's placeholder and a word that only begins like a stage name no stage (the GM, 2026-10-10)."""
+def test_an_overriding_stage_is_read_from_its_line(line: str, stage: str) -> None:
+    """A word that only begins like a stage name names no stage."""
     assert st.owed_at(f"# Feature: x\n\n**Status**: Filed\n\n{line}\n") == stage
 
 
+_VOCAB = {
+    "stages": list(st.STAGES),
+    "aliases": {"all settlements": ["hamlet", "village", "town", "provincial city", "capital"]},
+    "tags": {
+        "hamlet": {"stage": "now"},
+        "village": {"stage": "village"},
+        "town": {"stage": "town"},
+        "provincial city": {"stage": "provincial city"},
+        "capital": {"stage": "capital"},
+        "magistracy": {"stage": "now"},
+        "tooling": {"stage": "now"},
+    },
+}
+
+
+def _tagged(root: Path, name: str, affects: str | None, extra: str = "") -> Path:
+    if not (root / st.AFFECTS).is_file():
+        (root / st.AFFECTS).parent.mkdir(parents=True, exist_ok=True)
+        (root / st.AFFECTS).write_text(json.dumps(_VOCAB))
+    d = _feature(root, name, "Filed", None, name)
+    if affects is not None:
+        (d / "spec.md").write_text((d / "spec.md").read_text() + f"\n**Affects**: {affects}\n{extra}")
+    return d
+
+
+@pytest.mark.parametrize(
+    ("affects", "known", "unknown", "stage"),
+    [
+        ("town, provincial city", ("town", "provincial city"), (), "town"),
+        ("Capital,  provincial city", ("capital", "provincial city"), (), "provincial city"),
+        ("all settlements", ("hamlet", "village", "town", "provincial city", "capital"), (), "now"),
+        ("magistracy, village", ("magistracy", "village"), (), "now"),
+        ("village, villages", ("village",), ("villages",), "village"),
+        ("town, town", ("town",), (), "town"),
+    ],
+)
+def test_the_stage_is_the_earliest_among_the_tags(tmp_path: Path, affects: str, known: tuple[str, ...], unknown: tuple[str, ...], stage: str) -> None:
+    """The GM, 2026-10-10: a farmhouse change touches every tier, so it is owed now; towns-and-cities is owed at towns."""
+    f = st.feature(_tagged(tmp_path, "001-x", affects))
+    assert (f.affects, f.unknown, f.owed) == (known, unknown, stage)
+
+
+def test_an_owed_at_line_overrides_the_derived_stage(tmp_path: Path) -> None:
+    f = st.feature(_tagged(tmp_path, "001-x", "tooling", "\n**Owed at**: village - its trigger is a village feature\n"))
+    assert f.owed == "village"
+
+
 def test_the_report_groups_each_state_by_stage_in_the_order_the_work_reaches_it(tmp_path: Path) -> None:
-    for name, owed in (("001-city", "capital"), ("002-town", "town"), ("003-now", "now"), ("004-none", None)):
-        d = _feature(tmp_path, name, "Filed", None, name)
-        if owed:
-            (d / "spec.md").write_text((d / "spec.md").read_text() + f"\n**Owed at**: {owed}\n")
+    for name, affects in (("001-city", "capital"), ("002-town", "town, capital"), ("003-now", "magistracy"), ("004-none", None)):
+        _tagged(tmp_path, name, affects)
     out = st.report(tmp_path / "specs")
     assert out.index("owed at now (1)") < out.index("003-now") < out.index("owed at town (1)") < out.index("002-town")
     assert out.index("002-town") < out.index("owed at capital (1)") < out.index("001-city") < out.index("NO STAGE") < out.index("004-none")
     assert "owed at village" not in out, "an empty stage prints no heading"
+    assert "002-town  002-town  [town, capital]" in out, "each line shows its tags"
 
 
-def test_check_names_the_open_features_with_no_stage_and_the_line_to_add(tmp_path: Path) -> None:
-    _feature(tmp_path, "001-open", "Filed", None)
-    _feature(tmp_path, "002-closed", "Withdrawn (GM)", None)
-    d = _feature(tmp_path, "003-staged", "Filed", None)
-    (d / "spec.md").write_text((d / "spec.md").read_text() + "\n**Owed at**: village\n")
+def test_by_affects_lists_a_feature_under_each_of_its_tags(tmp_path: Path) -> None:
+    _tagged(tmp_path, "001-both", "magistracy, town")
+    _tagged(tmp_path, "002-none", None)
+    out = st.report(tmp_path / "specs", by_affects=True)
+    assert out.index("affects town (1)") < out.index("affects magistracy (1)") < out.index("NOTHING NAMED")
+    assert out.count("001-both  001-both") == 2 and "affects hamlet" not in out
+    r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--root", str(tmp_path), "--by-affects"], capture_output=True, text=True, check=False)
+    assert r.returncode == 0 and "affects town (1)" in r.stdout
+
+
+def test_check_names_the_open_features_with_no_tag_or_an_unknown_one_and_the_line_to_add(tmp_path: Path) -> None:
+    _tagged(tmp_path, "001-open", None)
+    _tagged(tmp_path, "002-typo", "hamlets")
+    _tagged(tmp_path, "003-tagged", "village")
+    _feature(tmp_path, "004-closed", "Withdrawn (GM)", None)
     r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--root", str(tmp_path), "--check"], capture_output=True, text=True, check=False)
     assert r.returncode == 1
-    assert "specs/001-open/spec.md" in r.stderr and "002-closed" not in r.stderr and "003-staged" not in r.stderr
-    assert "**Owed at**: now | village | town | provincial city | capital" in r.stderr
-    assert "a thing two tiers need is owed at the earlier one" in r.stderr
-    (tmp_path / "specs" / "001-open" / "spec.md").write_text("# Feature: x\n\n**Status**: Filed\n\n**Owed at**: now\n")
+    assert "specs/001-open/spec.md  (no **Affects** line)" in r.stderr and "specs/002-typo/spec.md  (unknown: hamlets)" in r.stderr
+    assert "003-tagged" not in r.stderr and "004-closed" not in r.stderr
+    assert "**Affects**: hamlet, magistracy" in r.stderr and "Tags: hamlet, village, town" in r.stderr and "all settlements" in r.stderr
+    assert "A new tag is one entry in .specify/affects.json" in r.stderr
+    for name in ("001-open", "002-typo"):
+        (tmp_path / "specs" / name / "spec.md").write_text("# Feature: x\n\n**Status**: Filed\n\n**Affects**: hamlet\n")
     r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--root", str(tmp_path), "--check"], capture_output=True, text=True, check=False)
     assert (r.returncode, r.stderr) == (0, "")
 
 
-def test_every_open_feature_in_the_repository_names_its_stage() -> None:
-    """The GM, 2026-10-10: every open feature says when it is owed, so the list can be read by stage."""
-    assert st.check_message(st.unstaged(REPO / "specs")) == ""
+def test_a_spec_with_no_spec_md_is_told_to_write_one(tmp_path: Path) -> None:
+    _tagged(tmp_path, "001-tagged", "hamlet")
+    d = tmp_path / "specs" / "002-bare"
+    d.mkdir()
+    msg = st.check_message(st.untagged(tmp_path / "specs"), st.vocabulary(tmp_path))
+    assert "specs/002-bare/spec.md  (no spec.md - write one first)" in msg
 
 
-def test_a_tree_with_no_specs_directory_has_nothing_owed(tmp_path: Path) -> None:
-    assert st.features(tmp_path / "specs") == [] and st.check_message(st.unstaged(tmp_path / "specs")) == ""
+def test_every_open_feature_in_the_repository_names_known_tags() -> None:
+    """The GM, 2026-10-10: every open feature says what it affects, so the list can be read by stage and by tag."""
+    assert st.check_message(st.untagged(REPO / "specs"), st.vocabulary(REPO)) == ""
+
+
+def test_the_vocabulary_names_only_known_stages_and_its_aliases_only_known_tags() -> None:
+    v = st.vocabulary(REPO)
+    assert set(v.stage.values()) <= set(st.STAGES) and v.stage
+    assert all(set(ts) <= set(v.stage) for ts in v.aliases.values())
+
+
+def test_a_tree_with_no_specs_or_no_vocabulary_has_nothing_owed(tmp_path: Path) -> None:
+    assert st.features(tmp_path / "specs") == [] and st.untagged(tmp_path / "specs") == []
+    _feature(tmp_path, "001-x", "Filed", None)
+    assert st.untagged(tmp_path / "specs") == [], "a repository without .specify/affects.json does not use the tags"
+    assert st.check_message([]) == ""
