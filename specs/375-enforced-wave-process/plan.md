@@ -85,7 +85,7 @@ check already in the round is refused (`check-bundle-hooks.sh`). Once all have r
 dispatch opens the next round. **Returned** is the first of: SubagentStop for its agent id (it fires for a background agent: `m:subagent-stop-probe`), a foreground PostToolUse, or the
 check's answer (`make record-checked` / `claims-checked` / `modal-triaged`) - so a missing hook event never deadlocks a
 subject. A check silent past the no-poll guard's 90-minute wait ceiling is reported stale by `agent-stall-hooks.sh` and can be
-closed with `make check-closed ID= REASON=`. Escape `FREEZE_OK`.
+closed with `make check-closed SUBJECT= REASON=`. Escape `FREEZE_OK`.
 **What the apply pass admits: the checks' own EDIT blocks.** A check's proposals are already machine-readable: seven
 contracts (quote-check, record-format, entry-drift, source-applicability and the three modal checks) end each finding they
 can word with an `EDIT <path> <<< old === new >>>` block, which `make apply-edits` applies. At SubagentStop the hook reads
@@ -233,6 +233,17 @@ CLEAR plan-stage verdict covers a task section its reviewer read unchanged (D3).
 ruling: its trigger id advances (`cascade@<rulings + 1>`) and it fires again only when CASCADE_MIN further dispatches since the
 last ruling find the ratio still past 1.0 - one round's worth of checks, after a `continue` or an `accept` alike. Batch 4 then
 delivers D12, D13, D14 and D17 as planned.
+
+**Amendment 2 (2026-10-10, batch 4, as built):** `ARBITER_OK` (D10) also re-opens a unit an `accept` or `process-fault` closed;
+`CLOSE_OK` is the fifth escape, from D13's closing check at the push, reason-floored and recorded. D14 as built, two narrowings:
+(1) the preflight keeps the record build (`make record CHECK=1`), which the spec lists among its derived files, though it is
+43 of the phase's 51 s at load 7.4 (`m:preflight-cost`) - every other step takes seconds, and the phase costs about a tenth of
+a gate where a red it prevents costs a whole one; (2) "100% on each" changed engine file is judged on the CHANGED LINES, and
+stops only on a line OFF the hamlet path (`tools/claims.scope`): a line on the path may be reached only by a rolled map, which
+the preflight does not roll, so it is reported and left to the gate's floor; and `ci/`, which the project counts as no engine
+code (feature 132 FR-025) and tests only in the tooling tree, is left to the gate. `PREFLIGHT_OK=1` skips the phase when the
+session has just run `make preflight`. The tree check excludes the tracked files the gate itself writes (`GATE_WRITES`,
+measured on this batch's gate run). D13's list of features closed when the check landed includes 372, closed by its ticks.
 
 A later spec that
 must wait declares `**Waits on**: 375`, and `make tick` refuses a task of it while 375 is open - 374's spec carries the line,
