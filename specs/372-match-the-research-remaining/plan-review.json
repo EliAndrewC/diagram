@@ -1,92 +1,45 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "efaefdfed9c5e577dc673954dccee99beed0537319b7a0a3251736b49970d052",
+ "plan_sha256": "5bf71ee40a130a65eafaba2d6ac7a3959e026e4b82ca30e165ebd5dcda555746",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W105-size",
-   "summary": "Tax archive on Hayakawa, Ochiba, Ubame drawn 24 x 18 ft (72 x 54 px, 432 sq ft)",
+   "id": "B4-fixtures",
+   "summary": "Batch 4's first gate: the 26 frozen red fixtures' copied tax archive brought to 72 x 54 px (east face kept) so each still fires only its own check",
    "class": "within",
-   "why": "0100's drawing page: no more than ~450 sq ft, about 24 x 18 ft a GUESS; rects read at HEAD"
+   "why": "test fixtures kept true to the band wave 105 tightened; no check loosened, each fixture still fires the one check it exists for; changes no drawn map"
   },
   {
-   "id": "W105-door",
-   "summary": "Each archive's door face kept where it stood",
+   "id": "B4-E1-yard",
+   "summary": "E1: the draft's outer-court yard zone starts at the hearing court's east edge (x 141 -> 155.5 ft, its east end 188 kept); test_compound holds that no two of the draft's zones share ground",
    "class": "within",
-   "why": "the door rects sit on each new rect's east face (checked on all three)"
+   "why": "a regression wave 105 introduced (the court re-centered to 75.5-155.5 ft, the yard drawn after it over 141-155.5 ft), fixed in the wave (XIII/XIV); the yard is an unfenced open-ground zone whose bounds are a drawing convention, so shortening it to where the court ends drops nothing asked; the test only fails when the requested drawing is broken (enforcement). Read: compound.py diff, the draft's svg (court rect x 248-488 px), m:batch4-county-yard-off-the-court"
   },
   {
-   "id": "W105-procedure",
-   "summary": "docs/buildings.md bullet and claim rewritten; strongroom role within the same ceiling",
+   "id": "B4-E2-notes",
+   "summary": "E2: the draft's notes brought current (archive size, a wave 105 entry, the middle gate's reason, the archive's proportions labeled GUESS)",
    "class": "within",
-   "why": "the row's prose target; claim IN-STEP"
+   "why": "records matching what is drawn; labels an unlabeled guess (the project's one failure)"
   },
   {
-   "id": "W105-loose-left",
-   "summary": "Pack audit's LOOSE gaps round the smaller archive (Hayakawa 24/14 ft, Ubame 18/13 ft) left as found",
+   "id": "B4-E3-longhouse",
+   "summary": "E3: the staff long-house's squat 50 x 36 ft form against 0097's rowhouse (<=~24 ft deep) filed as a found E3 row in the ranking, not fixed in wave 105",
    "class": "within",
-   "why": "a heuristic note, not a check; the plan's legibility spacing is a recorded convention (0116); figure re-run and reproduces"
+   "why": "predates the wave (pass 6's form, untouched by wave 105); now on FR-001's work list as a found row, scope kept, wave blank, ranking.md row 53, with the full fix written (redraw <=24 ft deep, bays side by side, reseat). The request is fix all of it easiest-first in ranked order; ranking it is that order, not a drop. Nothing narrowed"
   },
   {
-   "id": "W105-modals",
-   "summary": "Four pop-ups citing 0100's drawing page re-checked; tax archive, granary, storehouse given what their Depiction tabs lacked",
+   "id": "B4-E4-barracks",
+   "summary": "E4: the barracks left for its ranked row #barracks",
    "class": "within",
-   "why": "the record checks the page edit owed; fixes where found (XIV)"
+   "why": "an open ranked row (ranking.json: tier E3, scope mode-a, wave blank) already on the work list; FR-001 keeps the ranking's order (same as W105-drifted-left)"
   },
   {
-   "id": "W105-granary-claim",
-   "summary": "One unclaimed decision claimed: kura granary door on the apron, UNRESEARCHED",
-   "class": "within",
-   "why": "claims coverage of an existing decision; no behavior change"
-  },
-  {
-   "id": "W105-drifted-left",
-   "summary": "Five DRIFTED rows in the section (barracks, forecourt, the stables' three) left for their ranked places",
-   "class": "within",
-   "why": "FR-001 keeps the ranking's order"
-  },
-  {
-   "id": "W105-crop-gap",
-   "summary": "modal-bundle glyph crop gap recorded in What it carries; depiction checks judged from the SVG",
-   "class": "within",
-   "why": "a recorded tooling defect; the checks still ran on the right ink"
-  },
-  {
-   "id": "B4-open",
-   "summary": "Batch 4 bookends owed at the close",
-   "class": "within",
-   "why": "FR-003 as written"
-  },
-  {
-   "id": "W105-band",
-   "summary": "tax_archive band in types.json now w 18-24 by h 12-18 ft (rendered in building-programs.md); compound.py draft archive and claim 24 x 18 ft; roundtrip program 24 x 18 ft",
-   "class": "within",
-   "why": "round 1's block resolved: ranking row 37 names the band and prose; the band now admits no archive over 432 sq ft, under 0100's ~450 sq ft ceiling; both generated sheets read 72 x 54 px"
-  },
-  {
-   "id": "W105-page-bullet",
-   "summary": "0100 drawing page's 'our plans draw it larger' bullet stays removed",
-   "class": "within",
-   "why": "its premise is now true: every tax archive in pool/ (three hand sheets, county-magistracy-example, ochiba-roundtrip-test) is 72 x 54 px; no plan draws it larger"
-  },
-  {
-   "id": "W105-coverage-floor",
-   "summary": "pack_audit COVERAGE_FLOOR 0.33 -> 0.30 and its report line, following 0116 as corrected 2026-10-01; new spec Decisions row",
-   "class": "within",
-   "why": "0116's drawing page reads 'About 30-42%', its bottom Takayama's measured ~31%, its correction dated 2026-10-01 in its own comment; the 0.33 predated that and was the check's staleness, not a carve-out. Matching a check to its research page is the request's own aim (328, match the research) and XIV. Decisions row's classes (floor ACCURATE, ceiling GUESS) match the page's Evidence line. Re-run: the draft reads 32%, coverage_band OK"
-  },
-  {
-   "id": "W105-oshirasu",
-   "summary": "draft's fixed hearing-court zone x 59.5 -> 75.5, re-centered on the hall",
-   "class": "within",
-   "why": "a knock-on of the archive's size, holding test_compound's existing centering rule; no new behavior"
-  },
-  {
-   "id": "W105-gatehouse-left",
-   "summary": "draft's gatehouse left 18 x 12 ft (0093 draws ~40 ft), recorded at its code line",
-   "class": "within",
-   "why": "the draft's gatehouse is ranking row 9 (building-programs.md walled enclosure), scope 'deferred' in ranking.json; FR-001 excludes deferred rows from this feature's work list, so not taking it narrows nothing asked. The stated reason (stables find no seat at 40 ft) is not load-bearing for that and is not in m:wave105-draft-and-band - an aside, not a ruling"
+   "id": "B4-no-pair",
+   "summary": "Bookends row 4: no timing pair at batch 4's close because its engine code (types.json band, compound.py draft, the roundtrip gen, pack_audit's coverage floor) is off the pair's path",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "narrows FR-003's literal 'one timing pair' and SC-002's 'its pair band recorded and audited', and supersedes the previous record's B4-open ('bookends owed at the close'). Premise MEASURED, not taken on trust: the pair is make perf (perf_snapshot rolls the reference hamlet via hamletgen); importing hamletgen, its driver and plan loads 245 l7r modules and none of compound, compound_model, compound_parts, pack_audit or buildings.types; no file under hamletgen/ or settlement/ imports them or reads types.json. So the pair would time byte-identical code at both ends: by construction it cannot detect any regression this batch made, and its band could only be load noise - which, read as band 3, FR-003 would send to the GM as a sign-off on nothing. The rule's purpose cannot be served on this batch. Condition: this holds only while a batch's engine code stays off the hamlet roll path; a batch touching code the pair rolls takes its pair"
   }
  ],
  "verdict": "CLEAR"
