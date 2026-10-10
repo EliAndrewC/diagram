@@ -77,8 +77,7 @@ def test_the_command_reports_and_refuses_only_when_asked(tmp_path: Path, ledger:
     log, led = tmp_path / "check-passes.jsonl", tmp_path / "review-ledger.md"
     log.write_text(json.dumps(_pass()) + "\n")
     led.write_text(HEAD + (_row() if ledger else ""))
-    r = subprocess.run([sys.executable, str(script("ledger_owed.py")), "--log", str(log), "--ledger", str(led), *(["--refuse"] if refuse else [])],
-                       capture_output=True, text=True, check=False)
+    r = subprocess.run([sys.executable, str(script("ledger_owed.py")), "--log", str(log), "--ledger", str(led), *(["--refuse"] if refuse else [])], capture_output=True, text=True, check=False)
     assert r.returncode == rc, r.stderr + r.stdout
     if not ledger:
         assert "| 2026-10-10 | glyph-check | copse on inashiro | ? |" in r.stdout + r.stderr
