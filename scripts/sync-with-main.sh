@@ -403,10 +403,10 @@ push_cmd() {
     # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
     # unread or otherwise, as before - unless its spec's status line CLOSES it (Done, Superseded by, Withdrawn: the
     # words `speckit-todo.py` states once). The exemption fails closed: an error or no answer counts as not closed.
-    # GUARD_EDIT_OK: feature 375 plan D18 - a box marked `[lands-open]` (a standing "later batches" task, the GM's review box)
-    # does not hold the landing; every other open box still does, and the feature stays open to `make speckit-todo` and to
-    # every closing route while the marked box is unticked.
-    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && grep -E '^\s*- \[ \]' "$ROOT/$f/tasks.md" | grep -qvF '[lands-open]'; then
+    # GUARD_EDIT_OK: feature 375 plan D18 - an open box marked `[lands-open]` does not hold the landing, but only where the
+    # tooling or a reviewed plan put the mark (the GM-review box; a task the CLEAR plan's `**Lands open**:` line names):
+    # `speckit-todo.py --holding` lists every box that holds it, a hand-typed mark included, and names why.
+    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && [ -n "$(python3 "$ROOT/scripts/speckit-todo.py" --holding "$ROOT/$f" 2>/dev/null || echo fail-closed)" ]; then
       [ "$(python3 "$ROOT/scripts/speckit-todo.py" --closed-by-status "$ROOT/$f" 2>/dev/null)" = yes ] || active="$active $f"
     fi
   done
@@ -416,6 +416,7 @@ push_cmd() {
     outside=$(printf '%s\n' "$ours" | grep -vE "^(${active// /|})/" || true)
     if [ -n "$outside" ] || [ "$(printf '%s\n' $active | wc -l)" -gt 1 ]; then
       printf '\n\033[1mREFUSED: feature %s is IN PROGRESS (open tasks) - nothing lands on main until it is complete.\033[0m\n' "$active" >&2
+      for f in $active; do python3 "$ROOT/scripts/speckit-todo.py" --holding "$ROOT/$f" 2>/dev/null | sed "s|^|  $f holds: |" >&2; done  # GUARD_EDIT_OK: feature 375 D18 - name the boxes that hold it
       printf 'Neither route lands a feature in progress, and there is no flag. The one exception is a push of\n' >&2
       printf 'that feature'"'"'s own specs/ directory ALONE (the spec-number claim); this delta also touches:\n' >&2
       printf '%s\n' "$outside" | sed 's/^/  /' >&2

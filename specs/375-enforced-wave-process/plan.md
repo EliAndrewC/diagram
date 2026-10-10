@@ -218,7 +218,9 @@ D12's GM-review line, written by `make gm-review`'s tooling in its one fixed for
 mark on any other open box is itself refused - at the push (the box holds the landing as an ordinary one, and the refusal
 names the line) and by `make tick` - so the mark cannot become an unlogged escape. This plan's line:
 
-**Lands open**: T99 A later spec that
+**Lands open**: T99
+
+A later spec that
 must wait declares `**Waits on**: 375`, and `make tick` refuses a task of it while 375 is open - 374's spec carries the line,
 so its first task waits for the last batch. Adding a batch's tasks that carry decisions already reviewed is not a plan
 change; a batch that needs a new decision amends this plan and is reviewed again.

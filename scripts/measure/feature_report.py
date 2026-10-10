@@ -151,6 +151,15 @@ def subject(manifest: str) -> str:
     return m.group(1) if m else Path(manifest).parent.name
 
 
+def verdicts(events: Sequence[Mapping[str, Any]]) -> dict[str, Counter[str]]:
+    """Each agent type's returns by verdict (`event_log.verdict_of`): BLOCKED plan reviews, clean check runs."""
+    out: dict[str, Counter[str]] = defaultdict(Counter)
+    for e in events:
+        if e["ev"] == "SubagentStop" and e.get("verdict"):
+            out[str(e.get("agent"))][str(e["verdict"])] += 1
+    return out
+
+
 def dispatches(events: Sequence[Mapping[str, Any]]) -> tuple[Counter[str], Counter[tuple[str, str]]]:
     """(dispatches per agent type, rounds per (check, subject)) - a dispatch is an Agent call's PreToolUse."""
     by_type: Counter[str] = Counter()
@@ -296,15 +305,17 @@ def report(root: Path, feature: str, transcripts: Sequence[Path] = (), since: st
     if detail:
         out += ["", "## Inside `other tool` (the five largest)", "", "| tool or make target | time |", "|---|---|"]
         out += [f"| {k} | {_hm(v)} |" for k, v in detail.most_common(5)]
-    out += ["", "## Dispatches", "", "| agent | dispatches |", "|---|---|"]
-    out += [f"| {k} | {v} |" for k, v in sorted(by_type.items(), key=lambda kv: (-kv[1], kv[0]))]
+    vs = verdicts(events)
+    out += ["", "## Dispatches", "", "| agent | dispatches | returned, by verdict |", "|---|---|---|"]
+    out += [f"| {k} | {v} | {', '.join(f'{w} {n}' for w, n in sorted(vs.get(k, {}).items())) or '-'} |"
+            for k, v in sorted(by_type.items(), key=lambda kv: (-kv[1], kv[0]))]
     out += ["", "## Rounds per checked thing (two or more)", "", "| check | subject | rounds |", "|---|---|---|"]
     out += [f"| {c} | {s} | {n} |" for (c, s), n in sorted(rounds.items(), key=lambda kv: (-kv[1], kv[0])) if n >= 2] or ["| - | - | - |"]
     rv = reversals(events)
     out += ["", "## Process signals", "",
             f"- gates: {', '.join(f'{k} {v}' for k, v in sorted(g.items())) or 'none recorded'}",
             f"- spec rounds: {', '.join(f'{k} {v}' for k, v in sorted(spec_rounds(spec_text).items())) or 'none recorded'}",
-            f"- plan reviews BLOCKED: {plan_blocks(root, name, shas)}",
+            f"- plan reviews BLOCKED: {plan_blocks(root, name, shas)} recorded in commits, {vs.get('spec-fidelity', {}).get('BLOCKED', 0)} returned",
             f"- reversals (A -> B -> A): {len(rv)}" + (" - " + "; ".join(f"{Path(p).name} {t[11:16]}" for p, t in rv[:8]) if rv else ""),
             f"- check dispatches {checks} over {lines} changed lines: cascade ratio {checks / lines if lines else 0:.2f}",
             f"- tasks ticked: {done} of {total}", ""]

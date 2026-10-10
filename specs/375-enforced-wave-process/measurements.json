@@ -25,5 +25,57 @@
    "shell_check_pretool_ms": 74.8,
    "reading": "inside the existing guards' range (below shell-check's); about 25 ms of it is the json and re imports. Claude Code runs a call's matching hooks in parallel, so on Bash and Edit calls it adds little wall time beside the guards already there"
   }
+ },
+ "sc005-372": {
+  "quantity": "SC-005 on feature 372: make feature-report's time, and its figures beside the spec's measured table (Why)",
+  "observed": "2026-10-10",
+  "source": "372's session transcript 8d3395e5-fe32-4f85-9c89-80c344d2ac1a.jsonl converted; the clone's git and dev/run-log",
+  "command": "make feature-report F=372 TRANSCRIPT=<that transcript> SINCE=2026-10-10T11:20:00Z UNTIL=2026-10-10T13:49:00Z (wave 106), SINCE=2026-10-10T14:00:00Z UNTIL=2026-10-10T14:46:00Z (wave 108), SINCE=2026-10-10T11:20:00Z UNTIL=2026-10-10T15:15:00Z (waves 106-111)",
+  "method": "the report's tables read against the spec's Why rows; the waves' windows from their commits' times (EDT -04:00 converted to UTC)",
+  "varies": "the time is a timing (shared container); the counts are counts",
+  "value": {
+   "seconds": {
+    "waves_106_111": 3.3,
+    "wave_106": 2.6,
+    "wave_108": 2.3
+   },
+   "red_gates_wave_106": {
+    "report": 6,
+    "spec": "~6"
+   },
+   "rounds_0100_wave_106": {
+    "report": "4 (quote-check and record-format each)",
+    "spec": "~3"
+   },
+   "rounds_0105_wave_108": {
+    "report": "3 (quote-check, record-format; modal-depiction on bath, well, tubs 3 each)",
+    "spec": "~4"
+   },
+   "plan_review_blocks_waves_106_111": {
+    "report": "5 returned BLOCKED, 5 in commits",
+    "spec": "6 (106 three times, 107, 108, 111)"
+   },
+   "modal_depiction_waves_106_111": {
+    "report": "37 dispatched: 25 clean, 12 with findings",
+    "spec": "~12 clean runs owed only by a drawing page"
+   },
+   "impl_drift_claims_per_dispatch": {
+    "report": "not shown for a transcript: the MANIFEST a dispatch read is gone from /tmp",
+    "spec": "73, 105, 105 in wave 106"
+   },
+   "reading": "every row the transcript can carry is reproduced to within one round or one count of the spec's hand counts, whose wave boundaries were the session's; the claims-per-dispatch row needs the MANIFEST at dispatch, which the live hook reads (batch 3 adds it to the line)"
+  }
+ },
+ "sc005-one-task": {
+  "quantity": "SC-005 on a small feature: make feature-report's time with no event log and no transcript",
+  "observed": "2026-10-10",
+  "source": "feature 182 (three tasks: no feature has exactly one; the fixture feature of tests/tooling/test_event_log.py has two)",
+  "command": "time make feature-report F=182",
+  "method": "wall time of the make run",
+  "varies": "timing; shared container",
+  "value": {
+   "seconds": 0.42,
+   "reading": "under SC-005's ten seconds; the git log over the whole history is the cost"
+  }
  }
 }

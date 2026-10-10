@@ -22,6 +22,13 @@ without one, because a label typed into some titles and not others is what this 
     speckit-todo.py --state <specs/NNN-slug>     one feature's state
     speckit-todo.py --closed-by-status <dir>     `yes` when the spec's status line closes it (CLOSING), else `no` - the
                                                  push's in-progress refusal keeps its own open-box test and asks only this
+    speckit-todo.py --holding <dir>              the open boxes that hold the landing, one a line (none: it may land)
+
+THE BOX THAT LANDS OPEN (feature 375, plan D18). An open box marked `[lands-open]` does not hold the landing and still keeps
+the feature open here - but only where the tooling or a reviewed plan put the mark: the GM-review box in its one fixed form
+(`GM review (make gm-reviewed F=<its number>)`, D12) while the feature has an open row for the GM (`gm-review.jsonl`), or a task a `**Lands open**: <ids>` line of `plan.md` names while
+`plan-review.json` is CLEAR and current for that plan. A mark on any other box is no exemption: the box holds the landing
+and `--holding` says why, so the mark cannot become an escape nobody logged.
 """
 
 from __future__ import annotations
@@ -95,6 +102,52 @@ def closed_by_status(d: Path) -> bool:
     return bool(s) and (s.group(1) or s.group(2)).strip().lower().startswith(CLOSING)
 
 
+_OPEN_BOX = re.compile(r"^\s*- \[ \] (.*)$", re.M)
+_LANDS_OPEN = "[lands-open]"
+_LANDS_OPEN_LINE = re.compile(r"^\*\*Lands open\*\*:\s*(.+)$", re.M)
+
+
+def lands_open_ids(d: Path) -> set[str]:
+    """The task ids `plan.md`'s `**Lands open**:` line names, while its plan review is CLEAR and current - else none."""
+    plan = d / "plan.md"
+    m = _LANDS_OPEN_LINE.search(plan.read_text(errors="replace")) if plan.is_file() else None
+    if m is None:
+        return set()
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
+    import plan_gate  # noqa: PLC0415 - the plan gate decides "CLEAR and current", one rule
+
+    return set(re.findall(r"T\d+\w*", m.group(1))) if plan_gate.owed(d) is None else set()
+
+
+def gm_rows(d: Path) -> int:
+    """The GM's open review rows for the feature (`gm-review.jsonl`, plan D12): its GM-review box is honored only while there
+    is one - a feature with nothing for the GM has no such box (FR-012). A row the GM has reviewed carries `reviewed`."""
+    f = d / "gm-review.jsonl"
+    lines = f.read_text(errors="replace").splitlines() if f.is_file() else []
+    return sum(1 for ln in lines if ln.strip() and '"reviewed"' not in ln)
+
+
+def holding(d: Path) -> list[str]:
+    """The open boxes of `d/tasks.md` that hold the landing: every open box but an honored `[lands-open]` one (module doc)."""
+    tasks = d / "tasks.md"
+    if not tasks.is_file():
+        return []
+    gm = f"GM review (make gm-reviewed F={int(d.name.split('-', 1)[0])}) {_LANDS_OPEN}" if d.name[:1].isdigit() else ""
+    ids: set[str] | None = None
+    out = []
+    for body in _OPEN_BOX.findall(tasks.read_text(errors="replace")):
+        if _LANDS_OPEN in body:
+            if body.strip() == gm and gm_rows(d):
+                continue
+            ids = lands_open_ids(d) if ids is None else ids
+            if body.split(" ", 1)[0] in ids:
+                continue
+            out.append(f"{body.strip()}  <- {_LANDS_OPEN} honored only on the GM-review box of a feature with rows for the GM, or a task the reviewed plan's **Lands open**: line names")
+        else:
+            out.append(body.strip())
+    return out
+
+
 def features(specs: Path) -> list[Feature]:
     """Every feature directory; a tree with no `specs/` has none (the push runs `--check` in any repository)."""
     return [feature(d) for d in sorted(specs.iterdir()) if d.is_dir()] if specs.is_dir() else []
@@ -159,7 +212,11 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--check", action="store_true", help="exit 1 when an open feature names no stage")
     ap.add_argument("--state", metavar="DIR", help="print one feature directory's state and nothing else")
     ap.add_argument("--closed-by-status", metavar="DIR", help="print yes when the spec's status line closes it, else no")
+    ap.add_argument("--holding", metavar="DIR", help="print the open boxes that hold the landing, one a line")
     args = ap.parse_args(argv)
+    if args.holding:
+        sys.stdout.write("".join(f"{line}\n" for line in holding(Path(args.holding))))
+        return 0
     if args.closed_by_status:
         sys.stdout.write(("yes" if closed_by_status(Path(args.closed_by_status)) else "no") + "\n")
         return 0

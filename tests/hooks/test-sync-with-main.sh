@@ -173,10 +173,22 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a t
 # feature 375 plan D18: a `[lands-open]` box does not hold the landing; an ordinary open box beside it still does
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md \
   && printf -- '# Feature Specification: x\n\n**Status**: In progress - batch 2 next\n\n**Owed at**: now\n\n## Review history\n- spec-fidelity round 1: FAITHFUL\n' > specs/140-x/spec.md \
+  && printf '# plan\n\n**Lands open**: T99\n' > specs/140-x/plan.md \
+  && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
   && echo m5 > note.md && git add -A && git commit -qm lands-open )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: only a [lands-open] box open -> lands" 0 $?
 ( cd "$D/main/.clones/c" && printf -- '- [ ] T01 open\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md && echo m6 > note.md && git add -A && git commit -qm "one ordinary box" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: an ordinary open box beside a [lands-open] one -> refused" 1 $?
+expect_out "holds: T01 open"
+# ...and the mark is honored only where the tooling or a reviewed plan put it (plan review round 2): a hand-typed mark on a
+# task the plan does not name holds the landing like any open box; the GM-review box in its fixed form does not
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T02 a task someone marked [lands-open]\n' > specs/140-x/tasks.md && echo m7 > note.md && git add -A && git commit -qm "hand-typed mark" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a [lands-open] mark the plan does not name -> refused" 1 $?
+expect_out "honored only on the GM-review box"
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] GM review (make gm-reviewed F=140) [lands-open]\n' > specs/140-x/tasks.md && echo m8 > note.md && git add -A && git commit -qm "the GM's box, nothing for the GM" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the GM-review box on a feature with no row for the GM -> refused" 1 $?
+( cd "$D/main/.clones/c" && printf '{"kind": "arbiter", "row": "r1"}\n' > specs/140-x/gm-review.jsonl && echo m9 > note.md && git add -A && git commit -qm "a row for the GM" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the GM-review box in its fixed form, a row open -> lands" 0 $?
 
 echo "8. origins are re-pointed at GitHub once, and said so"
 D=$(topology h)

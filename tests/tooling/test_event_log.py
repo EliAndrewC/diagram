@@ -203,3 +203,19 @@ def test_the_report_end_to_end(tmp_path: Path, capsys) -> None:  # noqa: ANN001
         assert "no specs/999-*" in str(exc)
     else:
         raise AssertionError("a missing feature must refuse")
+
+
+def test_a_returned_agent_s_verdict_is_read_from_its_reply() -> None:
+    assert el.verdict_of("**Verdict: CHANGES REQUIRED.** I reviewed") == "CHANGES REQUIRED"
+    assert el.verdict_of("The plan is **BLOCKED**, and the verdict is recorded") == "BLOCKED"
+    assert el.verdict_of("modal-depiction: shrine.SumoRing - COVERAGE 0 findings; TRUTH 0; LINKS 0\n\nmore") == "clean"
+    assert el.verdict_of("modal-depiction: x - COVERAGE 1 findings; TRUTH 0; LINKS 0") == "findings"
+    assert el.verdict_of("No claims are touched.") == ""
+    stop = el.line({"hook_event_name": "SubagentStop", "agent_type": "spec-fidelity", "agent_id": "a", "last_assistant_message": "**FAITHFUL**"})
+    assert stop["verdict"] == "FAITHFUL"
+    rows = [_tool_use("2026-10-10T10:00:00Z", "t1", "Agent", {"subagent_type": "spec-fidelity", "prompt": "p"}),
+            _result("2026-10-10T10:00:01Z", "t1", {"status": "async_launched", "agentId": "ag1"}),
+            {"type": "queue-operation", "operation": "enqueue", "timestamp": "2026-10-10T10:03:00Z", "sessionId": "s",
+             "content": "<task-notification> <task-id>ag1</task-id> <result>**Round 3 verdict: CLEAR.** I recorded it</result>"}]
+    assert el.from_transcript(rows)[-1]["verdict"] == "CLEAR"
+    assert fr.verdicts(el.from_transcript(rows)) == {"spec-fidelity": {"CLEAR": 1}}

@@ -12,7 +12,7 @@ UserPromptSubmit and Stop payload here; one JSON line goes to `<git common dir>/
 being the clone's `.specify/feature.json` (`_unassigned.jsonl` without one). Fields: `t` (UTC), `sid`, `ev`, and where they
 apply `tool`, `id` (tool_use_id), `cat` (`category`), `make` (a Bash call's make target), `path`, `old`/`new` (digests of an
 Edit's strings - the reversal wire), `agent`/`aid`/`manifest` (an agent's type, id and the MANIFEST its prompt names),
-`ms` (PostToolUse's duration). The gap from one PostToolUse to the next PreToolUse is the model's own time. A clone's git dir
+`ms` (PostToolUse's duration), `verdict` (a returned agent's verdict word, or `clean` / `findings`). The gap from one PostToolUse to the next PreToolUse is the model's own time. A clone's git dir
 outlives its sessions and any compaction, and the report reads every clone's log for the feature.
 
 It never refuses and never prints: a hook that adds a line to every tool call must not be able to stop one.
@@ -59,6 +59,22 @@ EDIT_TOOLS = frozenset({"Edit", "Write", "NotebookEdit", "MultiEdit"})
 _MAKE = re.compile(r"(?:^|[;&|(]\s*|\s)make\s+(?:-[CfIjo]\s+\S+\s+|-{1,2}[\w-]+(?:=\S+)?\s+|[A-Z_]+=\S*\s+)*([a-z][\w-]*)")
 _MANIFEST = re.compile(r"(/[^\s`\"'<>)]*MANIFEST\.md)")
 _NOTIFICATION = re.compile(r"<task-id>([^<]+)</task-id>")
+_RESULT = re.compile(r"<result>(.*?)(?:</result>|$)", re.S)
+#: A returned check's verdict word, the first that appears (plan D8: the report counts BLOCKED reviews and clean runs)
+_VERDICT = re.compile(r"\b(NOT-REVIEWABLE|NOT FAITHFUL|CHANGES REQUIRED|BLOCKED|FAITHFUL|CLEAR|NEEDS-WORK|PASS|FAIL)\b")
+
+
+def verdict_of(text: str) -> str:
+    """The verdict a returned agent's reply leads with: a verdict word, else `clean` when every count in its first line is
+    zero ("COVERAGE 0 findings; TRUTH 0; LINKS 0", "0/0/0"), else `findings` when one is not, else ''."""
+    m = _VERDICT.search(text[:600])
+    if m:
+        return m.group(1)
+    first = next((ln for ln in text.strip().splitlines() if ln.strip()), "")
+    nums = re.findall(r"\b\d+\b", first)
+    if nums:
+        return "clean" if all(n == "0" for n in nums) else "findings"
+    return ""
 EVENTS_DIR = "l7r-events"
 
 
@@ -136,6 +152,9 @@ def line(payload: Mapping[str, Any], t: str | None = None) -> dict[str, Any]:
     elif ev in ("SubagentStart", "SubagentStop"):
         out.update(agent=payload.get("agent_type") or "", aid=payload.get("agent_id") or "")
         out["cat"] = agent_category(str(out["agent"]))
+        verdict = verdict_of(str(payload.get("last_assistant_message") or ""))
+        if verdict:
+            out["verdict"] = verdict
     return out
 
 
@@ -236,10 +255,12 @@ def from_transcript(rows: Iterator[Mapping[str, Any]] | list[Mapping[str, Any]])
             if _typed_prompt(content):
                 out.append(line({"hook_event_name": "UserPromptSubmit", "session_id": sid}, t))
         elif kind == "queue-operation" and d.get("operation") == "enqueue":
-            m = _NOTIFICATION.search(str(d.get("content") or ""))
+            content = str(d.get("content") or "")
+            m = _NOTIFICATION.search(content)
             if m and m.group(1) in agent_types:
-                out.append(line({"hook_event_name": "SubagentStop", "session_id": sid,
-                                 "agent_type": agent_types[m.group(1)], "agent_id": m.group(1)}, t))
+                r = _RESULT.search(content)
+                out.append(line({"hook_event_name": "SubagentStop", "session_id": sid, "agent_type": agent_types[m.group(1)],
+                                 "agent_id": m.group(1), "last_assistant_message": r.group(1) if r else ""}, t))
     out.sort(key=lambda e: e["t"])
     return out
 

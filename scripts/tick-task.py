@@ -110,6 +110,34 @@ def tick(text: str, task: str, note: str, boxes: bool = False) -> tuple[str, str
     return "".join(new), block[0].rstrip("\n")
 
 
+_WAITS = re.compile(r"^\*\*Waits on\*\*:\s*(\d+)", re.M)
+
+
+def waits_or_marks(root: Path, d: Path) -> str:
+    """Why `make tick` may not tick in `d`, or '' (feature 375, plan D18): its spec waits on a feature still open
+    (`**Waits on**: NNN`), or its tasks carry a `[lands-open]` mark the tooling did not put there."""
+    todo = _todo()
+    spec = d / "spec.md"
+    m = _WAITS.search(spec.read_text(encoding="utf-8")) if spec.is_file() else None
+    if m:
+        other = spec_dir(root, m.group(1))
+        if other is not None and todo.feature(other).state != "closed":
+            return (f"{d.name} waits on feature {m.group(1)} ({other.name}), which is still open - its spec says "
+                    f"`**Waits on**: {m.group(1)}`; take its tasks once that one has closed")
+    marks = [ln for ln in todo.holding(d) if "[lands-open] honored only" in ln]
+    return ("a [lands-open] mark the tooling did not put here: " + "; ".join(marks)) if marks else ""
+
+
+def _todo():  # noqa: ANN202 - `speckit-todo.py` by path (its name has a hyphen)
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("speckit_todo", Path(__file__).resolve().parent / "speckit-todo.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def main(argv: list[str]) -> int:
     boxes = "--boxes" in argv
     from_env = "--note-from-env" in argv
@@ -138,6 +166,10 @@ def main(argv: list[str]) -> int:
     if message:
         print(message, file=sys.stderr if not permitted else sys.stdout)
     if not permitted:
+        return 2
+    refusal = waits_or_marks(root, d)
+    if refusal:
+        print(f"tick: refused - {refusal}", file=sys.stderr)
         return 2
     try:
         new, line = tick(path.read_text(encoding="utf-8"), task, note, boxes)
