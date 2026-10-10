@@ -240,6 +240,8 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   10 x 8 ft so the house stays at 49 tsubo, and the record checks asked which rule wins - a bullet recording the enlarged bath on
   0105's drawing page was drafted and withdrawn). The procedure still names it, unclaimed, as it did before the wave. The ranked fix named only Ochiba and Ubame; the draft already drew 10 x 8.
 - **Records**: m:wave108-bath-size; the two sheets' notes.
+- **Review**: glyph-check bath (Ochiba) PASS round 1; its nitpicks left - the bath now nearer a door tab in size, its steam arcs
+  drawn for the old room (the east one ~2 px inside the wall's stroke), its tub on the room's center line.
 - **Occasions**: glyph-redrawn: bath on ochiba-magistracy (the same change on Ubame).
 
 ## Performance bookends (constitution VI)

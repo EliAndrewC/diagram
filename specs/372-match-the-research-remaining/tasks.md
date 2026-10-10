@@ -27,7 +27,7 @@ in 328's ranking and this spec.
 
 - (reviewed PASS at batch 5's close, 2026-10-10, round 2) layout-revised: county-magistracy-example - wave 106: the draft seats each tub beside a door of its building
 
-- glyph-redrawn: bath on ochiba-magistracy - wave 108: the bath 10 x 8 ft, 0105's guess, on Ochiba and Ubame
+- (reviewed PASS at batch 6's close, 2026-10-10, round 1) glyph-redrawn: bath on ochiba-magistracy - wave 108: the bath 10 x 8 ft, 0105's guess, on Ochiba and Ubame
 
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
