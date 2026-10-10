@@ -159,3 +159,23 @@ def test_the_hook_entry_points_and_the_state_file(tmp_path: pathlib.Path, monkey
     (tmp_path / ".git" / "worktrees" / "wt" / "commondir").write_text("../..\n")
     assert hc.state_path(str(wt)) == (tmp_path / ".git" / hc.STATE).resolve()
     assert hc.load(tmp_path / "missing.json") == {}
+
+
+def test_a_ruled_trigger_is_never_put_to_the_arbiter_again(tmp_path: pathlib.Path) -> None:
+    """FR-011: one ruling per trigger, binding - the session cannot re-dispatch the arbiter for another answer."""
+    root = _clone(tmp_path)
+    ha = _load("hm_arbiter")
+    m = tmp_path / "MANIFEST.md"
+    m.write_text("# Round arbiter bundle\n\ntrigger: reversal:/a.md\n")
+    agent = {"cwd": str(root), "tool_name": "Agent", "tool_use_id": "a1", "tool_input": {"subagent_type": "round-arbiter", "prompt": f"{m}"}}
+    assert hc.handle("dispatch", agent, 0) == ""
+    ha.trip(root, "reversal:/a.md", "reversal", "/a.md", "d", 0)
+    page = {"cwd": str(root), "tool_name": "Agent", "tool_use_id": "q1", "tool_input": {"subagent_type": "quote-check", "prompt": "x"}}
+    assert "a tripwire is owed its ruling first" in hc.handle("dispatch", page, 1), "a reversal holds every check"
+    ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "the second wording is the right one"}, "round-arbiter")
+    assert "already ruled" in hc.handle("dispatch", agent, 2)
+    assert hc.handle("dispatch", page, 3) == ""
+    ha.trip(root, "red-gate@1", "red-gate", "", "two red gates", 4)
+    gate = {"cwd": str(root), "tool_name": "Bash", "tool_input": {"command": "cd x && make done"}}
+    assert "a tripwire is owed its ruling first (red-gate@1" in hc.handle("edit", gate, 5)
+    assert hc.handle("edit", {**gate, "tool_input": {"command": 'ARBITER_OK="ruled by hand, GM present" make done'}}, 5) == ""

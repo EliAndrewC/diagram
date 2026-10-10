@@ -75,3 +75,57 @@ def test_a_worktree_shares_its_clone_s_state(tmp_path: pathlib.Path) -> None:
     (root / ".git" / "worktrees" / "wt" / "commondir").write_text("../..\n")
     (wt / ".git").write_text(f"gitdir: {root / '.git' / 'worktrees' / 'wt'}\n")
     assert ha.common_dir(wt) == (root / ".git").resolve()
+
+
+ab = _load("arbiter_bundle")
+
+
+def test_findings_are_marked_new_repeated_or_reversing() -> None:
+    r1 = "1. the bath size has no footnote\n2. a tooltip is missing on doma\n\nEDIT a.html\n<<<\n10 by 8 ft\n===\n12 by 9 ft\n>>>\n"
+    r2 = "1. the bath size has no footnote\n2. the well sits wrong now\n\nEDIT a.html\n<<<\n12 by 9 ft\n===\n10 by 8 ft\n>>>\n"
+    m1, m2 = ab.mark_rounds([r1, r2])
+    assert [k for k, _f in m1] == ["NEW", "NEW"]
+    assert [k for k, _f in m2] == ["REPEATED", "NEW", "REVERSING"]
+
+
+def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    import subprocess
+
+    root = tmp_path / "c"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    d = root / "specs" / "375-x"
+    d.mkdir(parents=True)
+    (d / "request.md").write_text("the GM's words")
+    (d / "spec.md").write_text("the spec")
+    q = root / "research" / "questions"
+    q.mkdir(parents=True)
+    (q / "0105-baths.html").write_text("<p>a</p>")
+    reply = tmp_path / "r1.md"
+    reply.write_text("1. the bath size has no footnote at all\n")
+    (root / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": {
+        "t1": {"check": "quote-check", "subjects": ["q:0105"], "t": 1, "state": "answered", "reply": str(reply)},
+        "t2": {"check": "quote-check", "subjects": ["q:0105"], "t": 2, "state": "answered"}}}))
+    ha.trip(root, "round:quote-check|q:0105@3", "round", "quote-check|q:0105", "round 3 of quote-check on q:0105", 3)
+    monkeypatch.delenv("L7R_EVENTS_DIR", raising=False)
+    el = _load("event_log")
+    el.append({"hook_event_name": "PreToolUse", "cwd": str(root), "tool_name": "Edit",
+               "tool_input": {"file_path": str(q / "0105-baths.html"), "old_string": "a", "new_string": "b"}})
+    manifest = ab.bundle(root, "round:quote-check|q:0105@3", tmp_path / "out").read_text()
+    assert "trigger: round:quote-check|q:0105@3" in manifest and "### Round 1" in manifest and "### Round 2" in manifest
+    assert "- NEW: the bath size has no footnote at all" in manifest and "(no findings in the kept reply)" in manifest
+    assert (tmp_path / "out" / "request.md").read_text() == "the GM's words" and (tmp_path / "out" / "edits.diff").is_file()
+    assert "0105-baths.html" in (tmp_path / "out" / "cascade.txt").read_text()
+    assert ab.subject_files(root, "modal:sheet/bath") == ["l7r/diagram/interactive/assets/modals/sheet/bath.md"]
+    assert ab.subject_files(root, "x") == []
+    assert "trigger: red-gate" in ab.bundle(root, "red-gate", tmp_path / "out2").read_text()
+    monkeypatch.chdir(root)
+    assert ab.main(["red-gate", "--root", str(root), "--out", str(tmp_path / "out3")]) == 0
+    v = tmp_path / "v.json"
+    v.write_text(json.dumps({"ruling": "accept", "why": "the finding repeats a wording preference"}))
+    assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "main"]) == 2
+    assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "round-arbiter"]) == 0
+    assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "round-arbiter"]) == 1, "binding: once"
+    assert ha.main(["bogus"]) == 2

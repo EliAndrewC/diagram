@@ -1120,6 +1120,16 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 	@: "GUARD_EDIT_OK: feature 375 FR-003(a) - TASK= records a decision preflight on one task's plan section"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" $(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
+# GUARD_EDIT_OK: feature 375 FR-011 adds two operations - the round arbiter's bundle, and the recording of its ruling
+# (only the `round-arbiter` subagent passes AS=round-arbiter; a ruling is binding, one per trigger).
+arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
+	@if [ -z "$(TRIGGER)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" "$(TRIGGER)" --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",)
+
+arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter
+	@if [ -z "$(TRIGGER)" ] || [ -z "$(FILE)" ]; then printf 'make arbiter-ruled: TRIGGER= and FILE= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py ruled "$(TRIGGER)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
+
 # GUARD_EDIT_OK: feature 375 FR-003(a) adds three operations - decide first: name the active task, print its decision
 # preflight's dispatch, print its section's digest. Read-only but for task-start's `<git dir>/active-task`.
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict (feature 375)   F=375 T=T13

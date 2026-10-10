@@ -176,3 +176,29 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
 
 def env_ok(name: str, text: str) -> bool:
     return bool(re.search(rf'{name}="[^"]{{8,}}"', text)) or len(os.environ.get(name, "").split()) >= 2
+
+
+def main(argv: list[str]) -> int:
+    """`hm_arbiter.py ruled <trigger> <json file> --as <who>` - what `make arbiter-ruled` runs."""
+    import sys  # noqa: PLC0415
+
+    if argv[:1] == ["ruled"] and len(argv) == 5 and argv[3] == "--as":
+        root = Path(".").resolve()
+        try:
+            row = record_ruling(root, argv[1], json.loads(Path(argv[2]).read_text(encoding="utf-8")), argv[4])
+        except PermissionError as e:
+            print(f"arbiter-ruled: {e}", file=sys.stderr)
+            return 2
+        except (OSError, ValueError) as e:
+            print(f"arbiter-ruled: refused - {e}", file=sys.stderr)
+            return 1
+        print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
+        return 0
+    print("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter", file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    import sys
+
+    raise SystemExit(main(sys.argv[1:]))

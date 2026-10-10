@@ -157,10 +157,16 @@ def launched(state: dict[str, Any], tid: str, agent_id: str, background: bool) -
     d["state"] = "running" if background else "returned"
 
 
-def returned(state: dict[str, Any], agent_id: str, reply: str) -> None:
-    for d in state.get("dispatches", {}).values():
+def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None = None) -> None:
+    """A check's return: its state, its EDIT blocks on its subjects, and (with `keep`, the clone's `check-replies/`) its reply,
+    which the round arbiter's bundle compares round to round (FR-011)."""
+    for tid, d in state.get("dispatches", {}).items():
         if d.get("aid") == agent_id and d.get("state") == "running":
             d["state"] = "returned"
+            if keep is not None and reply:
+                keep.mkdir(parents=True, exist_ok=True)
+                (keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md").write_text(reply, encoding="utf-8")
+                d["reply"] = str(keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md")
             for path, old, new in _blocks(reply):
                 for s in d["subjects"]:
                     state.setdefault("edits", {}).setdefault(s, []).append([path, old, new])
@@ -367,7 +373,8 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
         launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched")
     elif mode == "returned":
         returned(state, str(payload.get("agent_id") or ""), _reply_of(str(payload.get("agent_transcript_path") or ""),
-                                                                       str(payload.get("last_assistant_message") or "")))
+                                                                       str(payload.get("last_assistant_message") or "")),
+                 path.parent / "check-replies")
     elif mode == "edit" and payload.get("tool_name") == "Bash":
         command = str(ti.get("command") or "")
         root = _root(payload)
