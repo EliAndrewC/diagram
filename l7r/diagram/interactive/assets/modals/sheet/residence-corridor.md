@@ -4,7 +4,7 @@ townhouses and the houses of middle and lower-ranking samurai had almost none: s
 
 A great house could also grow hall by hall. At the Katsura villa four halls stand stepped back one behind the next,
 like geese in flight, and they went up in three phases over about half a century, in the early Edo period: halls set in
-echelon were how this house grew, hall added to hall, as the great houses' many joined halls did.
+echelon were how this house grew, hall added to hall.
 
 How such a corridor was built, how wide or how long it ran, and how Katsura's own halls are joined, is not recorded.
 
