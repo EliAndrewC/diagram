@@ -80,6 +80,7 @@ many maps; a newly failing cohort seed is a regression, reverted with its measur
 | Ubame's boundary pillars drawn square, the plinth form (wave 99) | GUESS on 0083's drawing page, at the top of its band | they were drawn a little longer than the band allows; now 9 by 9 pixels (m:wave99-pillars) | Ubame's sheet; `docs/buildings.md` Approaches |
 | A cart lane to a side gate drawn at 0082's allowance (wave 100) | GUESS on 0082's drawing page, at the figure it records | Hayakawa's and Ubame's cart lanes were drawn wider; both now at the allowance (m:wave100-cart-lanes) | the two sheets; `docs/buildings.md` Approaches |
 | Gate ranges and gatehouses drawn 2 ken deep; a gatehouse of its own at 0093's length (wave 101) | ACCURATE for the depth (measured for both forms on 0093's drawing page); GUESS for the length | the ranges were drawn deeper and Ochiba's gatehouse at a temple guardroom's size; 3 sheets redrawn (m:wave101-gatehouse) | the three sheets; `docs/buildings.md` Gatehouse |
+| A house drawn with two privies, the guests' and the family's (wave 102) | ACCURATE for the two (0101); GUESS for the family's place | the procedure gave a house one and Ochiba drew one; Ochiba's second added, 2 on each of the 3 sheets (m:wave102-two-privies) | Ochiba's sheet; `docs/buildings.md` Latrines and Checklist |
 
 ## Assumptions
 

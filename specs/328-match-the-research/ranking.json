@@ -10133,6 +10133,22 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Checklist for a new diagram#privies and rear strip",
+  "tier": "E3",
+  "fix": "checklist line: the house carries two privies (guests' behind the reception, family's), the ~3-4 per-zone count cited to 0101.drawing as its GUESS",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [
+   "docs/buildings.md::Latrines and the rear service strip#residence privy attached"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "102",
+  "scope": "mode-a"
+ },
+ {
   "key": "docs/buildings.md::Fire-water tubs#tub against its wall",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -10310,23 +10326,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
-  "key": "docs/buildings.md::Checklist for a new diagram#privies and rear strip",
-  "tier": "E3",
-  "fix": "checklist line: the house carries two privies (guests' behind the reception, family's), the ~3-4 per-zone count cited to 0101.drawing as its GUESS",
-  "files": [
-   "docs/buildings.md"
-  ],
-  "after": [
-   "docs/buildings.md::Latrines and the rear service strip#residence privy attached"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "102",
   "scope": "mode-a"
  },
  {

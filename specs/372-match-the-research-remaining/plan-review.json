@@ -1,68 +1,80 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "e463e357a3aeb319fdba68dd7b52d5d10f6fcd08a5ce300a0c20c43b8299f8db",
+ "plan_sha256": "aa16cdd91bab5ed043e5d1ec142cf03f99f38c8bba06c2e25d4f15a9866273c6",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W101-scope",
-   "summary": "wave 101 takes ranking row 697 (Walls and gates#gatehouse, E3, mode-a) while E3 rows 661-669 stand open",
+   "id": "W102-scope",
+   "summary": "wave 102 takes rows 24 (#residence privy attached) and 14 (#privies and rear strip, after 24), all E3 mode-a; row 26 (#servants in the rear strip) left open as ranked",
    "class": "within",
-   "why": "an order choice within one tier, as W99-gate-posts-passed was ruled: 328's SC-003 binds tier order, no E2/E1 row the session can fix is open (row 479 is held for the GM), the row's 'after' is empty"
+   "why": "an order choice within one tier, as W101-scope was ruled; the checklist row's 'after' is satisfied in the same wave"
   },
   {
-   "id": "W101-follow-the-guess",
-   "summary": "Ochiba's freestanding gatehouse drawn at 0093's ~40 x 12 ft GUESS, not kept at the measured temple guardroom's 18 x 12 (the flagged tempting deviation)",
+   "id": "W102-two-privies-procedure",
+   "summary": "the Latrines bullet, the checklist line and both claims say the house keeps two privies, the guests' behind the reception room and the family's at a back corner (GUESS)",
    "class": "within",
-   "why": "328's FR-004 (by 372's FR-002): a fix changes the implementation to match the research. 0093's drawing page answers 'How long is a gatehouse of its own drawn? About 40 ft, a GUESS' and names the 18 ft guardroom only as the temple comparison; the ranked fix says exactly this. Keeping 18 x 12 would be the exception, owed the exception path. No GM ruling set 18 x 12: it was feature 267's session correction (forms.md R19; Ochiba notes, 267 pass 4), so nothing the GM decided is reversed"
+   "why": "rows 24 and 14's ranked fix texts; 0101's drawing page: 'Our maps give a residence two privies, the guests' and the family's', the family's place 'a GUESS'"
   },
   {
-   "id": "W101-range-depth",
-   "summary": "Hayakawa's and Ubame's gate ranges 14 -> 12 ft deep (42 -> 36 px)",
+   "id": "W102-ochiba-guest-privy",
+   "summary": "Ochiba's guests' privy at (610,282) 15x15, attached to the house's east face at the reception room's rear corner",
    "class": "within",
-   "why": "the ranked fix text; 0093's drawing page: both forms 'about 2 ken (~12 ft) deep', measured. Re-read on the sheets: Hayakawa y 718.5-754.5, Ubame y 718-754, both 36 px"
+   "why": "placement of the requested element: on Ochiba the reception's rear (north) face is interior - the lord's quarters stand behind it at y 212-287 - so the east face at the rear corner (y 287) is the one exposed rear edge; pack audit on the clone every check OK, shared-layer output identical to HEAD's"
   },
   {
-   "id": "W101-south-face-kept",
-   "summary": "the north face moved in, the south face kept on the wall line; doors, Hayakawa's passage and Ubame's roof-edge dash follow",
+   "id": "W102-hayakawa-ubame-unchanged",
+   "summary": "Hayakawa and Ubame not redrawn; they already carry two house privies",
    "class": "within",
-   "why": "how the requested depth is carried out; a nagaya-mon's outer face is the wall line (the sheets' own definition), so it is the face that cannot move"
+   "why": "the ranked fix's end state ('all three sheets get the second privy') already holds: re-derived by grep, Hayakawa family (462,219) + guest (672,219), Ubame latrine-1 (838,241.5) on the reception's east face + latrine-2 (237,221.5) at the family end; 2/1/2 -> 2/2/2 matches m:wave102-two-privies"
   },
   {
-   "id": "W101-ochiba-grows-east",
-   "summary": "Ochiba's gatehouse lengthened eastward into open outer court, its west door toward the passage unchanged",
+   "id": "W102-captions",
+   "summary": "Ochiba's first house privy captioned 'family privy', the new one 'guest privy'",
    "class": "within",
-   "why": "placement of the requested size; it keeps beside, never across, the opening (buildings.md's rule); pack audit OK per m:wave101-gatehouse"
+   "why": "labels the two the fix asks for, as Hayakawa already did"
   },
   {
-   "id": "W101-ubame-tub",
-   "summary": "the existing tub at Ubame's range north face moved 6 px in with the face",
+   "id": "W102-checklist-claim",
+   "summary": "the checklist claim relabeled: two privies built in a finding, the family's place and ~3-4 a GUESS, the rear strip 0091's GUESS",
    "class": "within",
-   "why": "a knock-on keeping an existing check green (fire_water_adrift), no tub added or removed, so row 14's hold behind row 21 and row 663 are untouched"
+   "why": "row 14's ranked fix: '~3-4 per-zone count cited to 0101.drawing as its GUESS'; 0101.drawing labels the count a GUESS"
   },
   {
-   "id": "W101-types-json-untouched",
-   "summary": "the ranked row's files list l7r/diagram/buildings/types.json, the wave does not edit it",
+   "id": "W102-servants-taken-back",
+   "summary": "the round-1 relabel of #servants in the rear strip and the '~10 servants' claim withdrawn: the claim's original text restored (DRIFTED), the separate claim removed, the row's waves.json entry removed, row 26 open as ranked with #second rank behind it",
    "class": "within",
-   "why": "the row's fix text asks for no change there and the band (14-82 by 6-24 ft) already admits 40 x 12; the 18 x 12 why-text in docs/building-programs.md:104 and the county example's 54 x 36 gatehouse belong to the separate building-programs row (scope deferred by 328), not to this row"
+   "why": "undoes the two NOT LEGITIMATE decisions of round 1 and leaves the ranked move for a later wave; verified: docs/buildings.md's servants claim line is HEAD's, 'servants about ten' appears nowhere, ranking.json row 26 has wave '' and the claims index holds it DRIFTED. Residue to remove: specs/328-match-the-research/audit/closed-tiers.json still adds the row at E3 (merge.py writes it only for a row with a wave, so it is left from the withdrawn relabel and would pin the tier when the row really closes)"
   },
   {
-   "id": "W101-decisions-row",
-   "summary": "Decisions row: depth ACCURATE (measured, both forms), length GUESS",
+   "id": "W102-entrance-claim",
+   "summary": "new claim 'an entrance on every lodging', UNRESEARCHED",
    "class": "within",
-   "why": "FR-008 carried; the classes match 0093's own labels"
+   "why": "claims an unclaimed checklist decision with an honest label; changes no behavior"
   },
   {
-   "id": "W101-occasions",
-   "summary": "layout-revised ochiba-magistracy; glyph-redrawn gatehouse on ubame-magistracy",
+   "id": "W102-checklist-tub-claim",
+   "summary": "new claim 'checklist tub seat' cited to 0100.drawing: each tub outside its building, beside its wall, the ~2 px clearance a drawing convention",
    "class": "within",
-   "why": "the occasions the edits open, declared as batch 1's were"
+   "why": "0100.drawing: 'the defense was water kept standing beside them' (the wooden buildings); records the line as it stands and changes no behavior. Row 15 (#tub against its wall, DRIFTED: 0100 seats water at the entrance) stays open and its fix must carry this checklist line with it"
   },
   {
-   "id": "W101-batch-2",
-   "summary": "wave 101 opens batch 2, its pair owed at the close",
+   "id": "W102-ranking-resort",
+   "summary": "ranking.md re-sorted: the checklist row moved 24 -> 14, ahead of the row it is 'after'",
    "class": "within",
-   "why": "FR-003's batch cycle"
+   "why": "a display order of rows already in the ranking, no row's fix or tier changed; noted because 328's Edge Cases say the ranking is not re-sorted mid-wave"
+  },
+  {
+   "id": "W102-decisions-row",
+   "summary": "Decisions row: two privies ACCURATE (0101), the family's place GUESS",
+   "class": "within",
+   "why": "FR-008 carried; classes match 0101.drawing's own labels"
+  },
+  {
+   "id": "W102-occasions",
+   "summary": "placement-changed: latrine on ochiba-magistracy",
+   "class": "within",
+   "why": "the occasion the new privy opens"
   }
  ],
  "verdict": "CLEAR"

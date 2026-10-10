@@ -13,6 +13,8 @@ in 328's ranking and this spec.
 - layout-revised: ochiba-magistracy - wave 101: the gatehouse 40 x 12 ft (0093)
 - glyph-redrawn: gatehouse on ubame-magistracy - wave 101: the gate ranges 12 ft deep on Hayakawa and Ubame (0093)
 
+- placement-changed: latrine on ochiba-magistracy - wave 102: the guests' privy at the reception room's rear (0101)
+
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame** (`pool/magistracies/*/`), their notes; `docs/buildings.md`.
@@ -44,3 +46,11 @@ in 328's ranking and this spec.
 - [x] T04 wave 101's row (FR-001, FR-002)
       research: rendering
       verify: DONE. wave 101: the gate ranges 2 ken deep, Ochiba's gatehouse 40 x 12 ft (0093); impl-drift IN-STEP; spec-fidelity CLEAR
+
+## Phase 5 - wave 102 (amendment 5): the house's two privies
+
+- Sheet redrawn (FR-002, under 328's hand-drawn-maps rule): **Ochiba**, its notes; `docs/buildings.md`.
+
+- [x] T05 wave 102's rows (FR-001, FR-002)
+      research: rendering
+      verify: DONE. wave 102: the house's two privies (Ochiba's guests' added); the section's claims relabeled; the servants relabel taken back; impl-drift IN-STEP; spec-fidelity CLEAR round 2

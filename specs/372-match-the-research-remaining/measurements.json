@@ -3,7 +3,7 @@
     "quantity": "wave 98 (2026-10-10): the hand sheets' privies redrawn to 0101's 5 ft square",
     "observed": "2026-10-10",
     "source": "pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg before and after; make pack-audit on each",
-    "command": "make pack-audit ARGS=<sheet>",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
     "method": "each privy rect counted and read before and after (rects, not groups: Ubame's residence group holds two); the pack audit's whole output diffed",
     "value": {
       "privies": 14,
@@ -63,7 +63,7 @@
     "quantity": "wave 99 (2026-10-10): Ubame's boundary pillars at 0083's plinth",
     "observed": "2026-10-10",
     "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg before and after",
-    "command": "read the two boundary-stones rects",
+    "command": "grep -n 'boundary-stones' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
     "method": "the rects read before and after",
     "value": {
       "pillar_px": 9,
@@ -78,7 +78,7 @@
     "quantity": "wave 100 (2026-10-10): the cart lanes to the side gates at 0082's 6 ft",
     "observed": "2026-10-10",
     "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg and ubame-magistracy.svg; make pack-audit on each",
-    "command": "make pack-audit ARGS=<sheet>",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
     "method": "the lane paths' stroke widths read before and after; the audits' checks read",
     "value": {
       "lane_px": 18,
@@ -91,7 +91,7 @@
     "quantity": "wave 101 (2026-10-10): the gate ranges at 2 ken deep, Ochiba's gatehouse at 0093's 40 ft",
     "observed": "2026-10-10",
     "source": "pool/magistracies/{hayakawa,ubame,ochiba}-magistracy/*.svg before and after; make pack-audit on each",
-    "command": "make pack-audit ARGS=<sheet>",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
     "method": "the gatehouse rects read before and after; the audits diffed",
     "value": {
       "range_depth_px": [
@@ -105,6 +105,27 @@
       "ubame_tub_moved": "(784,706) -> (784,712), back against the range's north face (the audit had flagged it 4.0 ft off)",
       "coverage": "Ubame 39% -> 38%; Hayakawa and Ochiba tiles within 3 points; Ochiba's largest central vacancy 37 x 57 ft -> 37 x 41 ft",
       "reading": "both gate ranges 12 ft deep with their south faces on the wall line; Ochiba's gatehouse 40 x 12 ft, grown east into open court; every audit check OK after the tub's move"
+    }
+  },
+  "wave102-two-privies": {
+    "quantity": "wave 102 (2026-10-10): the house's two privies on every sheet",
+    "observed": "2026-10-10",
+    "source": "the residence-part latrine rects of pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg; make pack-audit on Ochiba",
+    "command": "make pack-audit ARGS=pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "method": "the latrines with data-part-of=residence counted per sheet; the audit diffed",
+    "value": {
+      "house_privies_before": {
+        "hayakawa": 2,
+        "ochiba": 1,
+        "ubame": 2
+      },
+      "house_privies_after": {
+        "hayakawa": 2,
+        "ochiba": 2,
+        "ubame": 2
+      },
+      "pack_audit_diff_lines": 0,
+      "reading": "Ochiba's guests' privy added at the reception room's rear corner on its east face (610,282); Hayakawa (family, guest) and Ubame (latrine-1 at the reception end, latrine-2 at the family end) already drew two"
     }
   }
 }

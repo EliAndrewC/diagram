@@ -1644,44 +1644,64 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Checklist for a new diagram#cell below the barracks": {
-  "code": "9b0a50caa000f701",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "no page ranks a cell against the barracks; GUESS holds",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0096-holding-cells-agariya-and-roya.html:937c7af5507a1c15",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8a9c6454630327b1"
-  ],
-  "verdict": "IN-STEP"
- },
- "docs/buildings.md::Checklist for a new diagram#clear gateways": {
-  "code": "05f5aa14a8e9b189",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "no cited page speaks to what stands in a passage",
+ "docs/buildings.md::Checklist for a new diagram#an entrance on every lodging": {
+  "code": "d2754be0ccc7a702",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "no cited page decides entrances for every lodging block",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Checklist for a new diagram#cell below the barracks": {
+  "code": "48f816ab5d779636",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "no page sizes the cell; 0116 ranks only the stable below the barracks",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Checklist for a new diagram#checklist tub seat": {
+  "code": "1a556b1ba55e816c",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "the page finds water \"kept standing beside\" the wooden buildings, so each tub sits outside its building against the wall; the ~2 px clearance only decides how the tub is shown",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+  },
+  "research": "5292b7fa7abf1048",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Checklist for a new diagram#clear gateways": {
+  "code": "7a33fbc7e5ba9de8",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "the record says nothing about keeping a passage clear; gate posts are only sized",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Checklist for a new diagram#crop and scale bar": {
-  "code": "ad6ae78c7407d71b",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "crop, scale bar and label offsets are only how the sheet is shown",
+  "code": "d61834b50df368b6",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "crop, margins and scale bar are drawing apparatus only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#fire-water tubs": {
-  "code": "df87037161d99bda",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "~8-12 tubs, kitchen 2, none at the kura",
+  "code": "7eb3d24d14e2f3e6",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "~8-12, two at the kitchen, none at the kura, as 0100 draws them",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -1690,28 +1710,25 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#gate hierarchy": {
-  "code": "c5ae3fe624ad5371",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "the pages give each gate form's width but never rank the main gate against the service gates",
+  "code": "b87c8ce0691c1855",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "gate widths are given, but no page ranks one gate against another",
   "pages": {},
   "research": "",
-  "rests": [
-   "0092-compound-walls-neribei-and-tsuijibei.drawing.html:d20df27953806fff",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
-  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#guest and service doors": {
-  "code": "f8d7e458a2292bb4",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "open ground before the entrance (Joge); the garden approach is attested; the kitchen door leads to the kitchen",
+  "code": "ede4e920a701c294",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "guests arrive over open ground or through a garden; the kitchen door leads into the kitchen",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
   },
@@ -1719,49 +1736,53 @@
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#labels and title block": {
-  "code": "8057f79f09080288",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "purely how the sheet is labeled",
+  "code": "b8bb69bce690b05f",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "labels, title and the retired boxes are drawing conventions only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#packing coverage": {
-  "code": "4e25a7919d6a852f",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "30-42% (31% measured, top a guess), fire gaps 6-8 ft, kura 6-10 ft, apron 15-20 ft, walls not shrunk",
+  "code": "193c7d3a5a5ac41d",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "30-42% with Takayama's ~31% as the floor, walls not shrunk, 6-8 / 6-10 / 15-20 ft all match",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:6b2deb010b88db75",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c63fb7818cf50fcb",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:fa6b53e2166eb519"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#practice ground beside the watch, no dojo": {
-  "code": "30973913701243a3",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "outer court beside the watch's lodging, no hall, dojo only as a recorded particular",
+  "code": "7632be0db95cb08b",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "open ground beside the guards' quarters with rack and posts; a dojo only as a place's special feature",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
   "rests": [
+   "0165-martial-training-grounds-and-dojo.drawing.html:6b3ccf7746ee08c1",
    "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
    "0165-martial-training-grounds-and-dojo.drawing.html:de4325f24196505d",
    "0165-martial-training-grounds-and-dojo.drawing.html:eaaa0e49753241f1"
@@ -1769,9 +1790,9 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#practice ground sizing": {
-  "code": "d6cd72d7f4692d49",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
+  "code": "8c33d361003242e0",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
   "note": "90-135 sq ft per drilling samurai, recorded as a GUESS",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
@@ -1783,26 +1804,28 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#privies and rear strip": {
-  "code": "b2ac1722841adc32",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "0101 backs the attached residence privy and the rowhouses' shared privy building, but gives no per-compound count (~3-4) and says nothing of a rear service strip; mark those GUESS/UNRESEARCHED",
+  "code": "a1f83d4c38db8d20",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "the house's two privies attached (the family's place a GUESS), about one per part (3-4), the rear strip a GUESS on 0091",
   "pages": {
-   "0101-privies-setchin.html": "f772eb2b05990168"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "9f2d5a5c6b30a6c8",
+  "research": "ad0c946c19e2af00",
   "rests": [
-   "0101-privies-setchin.html:18e84aa2b3f392ce",
-   "0101-privies-setchin.html:3e6cdef5ad67f277",
-   "0101-privies-setchin.html:989221f59acc042a"
+   "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
+   "0101-privies-setchin.drawing.html:721f2a29c982e0b4",
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1",
+   "0101-privies-setchin.drawing.html:f2dbc20c5097bdd3"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#size hierarchy": {
-  "code": "2dfa3477decbb8ea",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "office hall > residence > rowhouse; residence the largest domestic building; small stores well below the rowhouse; granary ranked by the rice held; stable < barracks",
+  "code": "6358ceb68ec7d2f4",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "office hall > residence > rowhouse, the domestic order, stable < barracks, small stores low, granary by the rice held",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
@@ -1812,15 +1835,16 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:cb8826a5e182c9e9",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6266a6b5f45273e"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#structures clear of wall ink": {
-  "code": "75984021b801e50f",
-  "core": "4974343acce86583",
-  "date": "2026-10-08",
-  "note": "no building is drawn on the wall",
+  "code": "b9788d9cf871084d",
+  "core": "21227ccaac0ab19b",
+  "date": "2026-10-10",
+  "note": "no building stands on the compound wall",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
@@ -2299,10 +2323,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#named rear yard": {
-  "code": "99b3969f04a17416",
-  "core": "a829d4f7caea28ae",
+  "code": "5cc48c0452a40565",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "the Higuchi house: open ground behind the house, the storehouse beyond it",
+  "note": "Higuchi: open niwa behind the house, the storehouse beyond it",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
@@ -2314,36 +2338,34 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#outer privies by service gates": {
-  "code": "e1e101706023968f",
-  "core": "a829d4f7caea28ae",
+  "code": "4c228e7e88f9929c",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "against service walls near a gate, by the barracks, stables and servants' row",
+  "note": "against the service walls near a gate, for the night-soil cart",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
   "rests": [
-   "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privies away from food prep": {
-  "code": "7c9f638de998a563",
-  "core": "a829d4f7caea28ae",
+  "code": "6010cdc6ac8e64ab",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "none of the cited material sets a distance between a privy and a kitchen",
+  "note": "no cited page sets a privy's distance from a kitchen",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privies away from water": {
-  "code": "af35b849c9cbf9a5",
-  "core": "a829d4f7caea28ae",
+  "code": "606d117799e1c5ab",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "the drawing page records the 15 ft distance from a well as a GUESS",
+  "note": "at least 15 ft from a well, recorded as a GUESS",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
@@ -2354,33 +2376,34 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privy count": {
-  "code": "5b4f5b61d059ab6e",
-  "core": "a829d4f7caea28ae",
+  "code": "c857a91125a732df",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "about one per part, 3-4 at a county magistracy",
+  "note": "about one per part, 3-4 at a county compound",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
   "rests": [
-   "0101-privies-setchin.drawing.html:38960fd9975a6f1c"
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privy glyph": {
-  "code": "35f193b06418a5ba",
-  "core": "a829d4f7caea28ae",
+  "code": "2726980edf0c4279",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "the drawing page records the gray square, set apart from the tan buildings, as a map convention",
+  "note": "gray square, a drawing convention",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privy size": {
-  "code": "1ba6be0bb7f3069d",
-  "core": "a829d4f7caea28ae",
+  "code": "14778b8b46e15619",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "the drawing page records 5 ft square as a GUESS",
+  "note": "5 ft square one-seat privy, a GUESS",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
@@ -2391,10 +2414,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#rear kitchen garden by the sun": {
-  "code": "bc8107bc76421f1a",
-  "core": "a829d4f7caea28ae",
+  "code": "a60779a83723c0e5",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "the rear is one of the site knob's sites, ruled out under six hours of autumn sun",
+  "note": "the rear site is one of 0109's sites, used only with six hours of autumn sun",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
@@ -2403,62 +2426,67 @@
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:518902ab7cde51b3",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:42bdf96bf8f0f70f",
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:7ce0bef9ba8bf611",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:ff9d9cf36d9635eb"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#rear service alley": {
-  "code": "45f2c09a32ecdab9",
-  "core": "a829d4f7caea28ae",
+  "code": "b19280fca9d0b989",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "no cited page gives the alley's width",
+  "note": "no cited page gives a rear alley's width",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#residence privy attached": {
-  "code": "9d237838bc3bc3c2",
-  "core": "a829d4f7caea28ae",
+  "code": "11fd4bfd35261571",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "the procedure gives the house one attached privy at a back corner, but the page says \"A house might keep two\", and the drawing page gives two: the guests' privy \"centered behind the reception room\" and the family's at the rear corner (a GUESS); the procedure should draw both, the back corner should be labeled GUESS, and the pit toward the service edge is the project's rule",
+  "note": "guests' privy behind the reception room, family's at a back corner (GUESS), pits toward the service edge (project rule)",
   "pages": {
-   "0101-privies-setchin.html": "f772eb2b05990168"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "9f2d5a5c6b30a6c8",
+  "research": "ad0c946c19e2af00",
   "rests": [
-   "0101-privies-setchin.html:18e84aa2b3f392ce",
-   "0101-privies-setchin.html:3e6cdef5ad67f277",
-   "0101-privies-setchin.html:b7521b5326a035cf"
+   "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
+   "0101-privies-setchin.drawing.html:721f2a29c982e0b4",
+   "0101-privies-setchin.drawing.html:f2dbc20c5097bdd3"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip": {
-  "code": "4841c8e965b2b6b4",
-  "core": "a829d4f7caea28ae",
+  "code": "7d662b983bfda18b",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "0115 puts a household's servants in \"long ranges along the street\" or in the gate range, and a small house's under the main roof, never in a nagaya behind the residence; the ~10 servants is on no page; the rear placement is 0091's GUESS (\"the family privy and any servants' range stood in the shady rear\"), so cite that as a GUESS and give ~10 as a GUESS, or move the range to the street or gate",
+  "note": "the section puts the servants' nagaya in the rear (north) service strip, \"behind the residence\", but 0115 finds the ranges stood along the street, with the front gate cut through one (\"the buildings along the street were long ranges (nagaya) in which the servants lived\"); a smaller house kept its few servants under the main roof. No page puts a servants' range behind the house. The \"~10 servants\" figure is not in 0115 either (§59 says no page gives the stipend below which a house had no range). Either move the servants' quarters to the street or gate range (or under the main roof), or relabel the rear placement and the count as DEVIATION or GUESS.",
   "pages": {
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
   },
   "research": "56857267abb1042e",
   "rests": [
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:0847d626d58b5561",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5960e566a4bd1d74",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5b10f481659ec3b8",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5d741be14a8de53e",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:75a2ed72bd40172c",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:763cb30a671333a1",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8afa91cdfb3579ae",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:90f6ef1941297876",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:da2aded89607344d"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:90f6ef1941297876"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Latrines and the rear service strip#storehouses in the rear strip": {
-  "code": "7f51ce63e814da58",
-  "core": "a829d4f7caea28ae",
+  "code": "4aa24c63f61c2a70",
+  "core": "70ccd133534c2b95",
   "date": "2026-10-10",
-  "note": "\"a storehouse could stand behind the house\", and the Higuchi house's storehouse stood behind the house, beyond open ground",
+  "note": "a storehouse could stand behind the house (Higuchi)",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },

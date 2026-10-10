@@ -76,6 +76,24 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 - **Records**: m:wave101-gatehouse; the procedure's Gatehouse paragraph and claim; three sheets' notes.
 - **Occasions**: layout-revised: ochiba-magistracy (the gatehouse more than doubled); glyph-redrawn: gatehouse on ubame-magistracy.
 
+## Wave 102 (amendment 5, 2026-10-10) - batch 2
+
+- **Scope**: `docs/buildings.md::Latrines and the rear service strip#residence privy attached` and the checklist row that waits
+  on it (`Checklist for a new diagram#privies and rear strip`). 0101's drawing page gives a house two privies, the guests' at
+  the rear of the reception room and the family's at a back corner by the living rooms (a GUESS); the procedure gave one.
+  The bullet, the checklist line and both claims now say two. Sheets: **Ochiba** draws its second, the guests', attached to the
+  reception room's east face at its rear corner, clear of the garden (its first captioned `family privy`); Hayakawa and Ubame
+  already drew both (m:wave102-two-privies).
+- **The section's re-check** (impl-drift, 25 claims, 23 IN-STEP): the checklist claim relabeled (two privies built into the
+  house a finding, the family's place and the ~3-4 count guesses, the rear strip 0091's guess); two unclaimed decisions
+  claimed (an entrance drawn on every lodging, UNRESEARCHED; the checklist's tub seat, 0100). `#servants in the rear strip`
+  (328's E3 row) re-read MISLABELED; a relabel was drafted and taken back at plan review (W102-servants-relabel, NOT
+  LEGITIMATE: the ranked fix is a move - the servants to the street-side ranges, the gate range or under the main roof, the
+  ~10 dropped - and 0115 and 0091 disagree, a NEEDS-RESEARCH question or a knob, not a relabel); the row stays open as ranked,
+  with `#second rank` behind it.
+- **Records**: m:wave102-two-privies; Ochiba's notes.
+- **Occasions**: placement-changed: latrine on ochiba-magistracy (a privy new to the house's formal side).
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |
