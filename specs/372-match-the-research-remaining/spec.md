@@ -99,6 +99,10 @@ many maps; a newly failing cohort seed is a regression, reverted with its measur
 
 ## What it carries
 
+**Moved on 2026-10-10**: what is still open at 372's close (wave 111) is carried by feature 374
+(`specs/374-match-the-research-continued/spec.md`), at the GM's word, for a fresh session.
+
+
 - **The open rows of 328's ranking at wave 97**, in ranking order: 204 rows in scope (`kept` 166, `mode-a` 38) - 161 E3,
   42 E4 (a research pass under the record's own checks before any code change) and 1 E2 held for the GM (`fixture_quota`).
   The ranking, its audit and every record stay in `specs/328-match-the-research/` (`ranking.json`, `ranking.md`,
