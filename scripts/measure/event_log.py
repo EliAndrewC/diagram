@@ -56,7 +56,9 @@ MAKE_CATEGORIES = {
     "plan-verdict": "spec-kit step",
 }
 EDIT_TOOLS = frozenset({"Edit", "Write", "NotebookEdit", "MultiEdit"})
-_MAKE = re.compile(r"(?:^|[;&|(]\s*|\s)make\s+(?:-[CfIjo]\s+\S+\s+|-{1,2}[\w-]+(?:=\S+)?\s+|[A-Z_]+=\S*\s+)*([a-z][\w-]*)")
+#: `make` in COMMAND position - the start of a line, after `;` `&&` `||` `|` `(`, or a shell keyword - never a mention inside
+#: a heredoc or a quoted string ("make gm-reviewed" in a spec being edited read as a make run, 375's first report)
+_MAKE = re.compile(r"(?:^|[;&|(]\s*|\b(?:then|do|else|time)\s+)make\s+(?:-[CfIjo]\s+\S+\s+|-{1,2}[\w-]+(?:=\S+)?\s+|[A-Z_]+=\S*\s+)*([a-z][\w-]*)")
 _MANIFEST = re.compile(r"(/[^\s`\"'<>)]*MANIFEST\.md)")
 _NOTIFICATION = re.compile(r"<task-id>([^<]+)</task-id>")
 _RESULT = re.compile(r"<result>(.*?)(?:</result>|$)", re.S)
@@ -88,7 +90,7 @@ def digest(text: str) -> str:
 
 def make_target(command: str) -> str:
     """The first make target a Bash command runs (`make -C x quick ALL=1` -> `quick`), or ''."""
-    m = _MAKE.search(command)
+    m = _MAKE.search(command.split("<<", 1)[0]) if "<<" in command else _MAKE.search(command)
     return m.group(1) if m else ""
 
 
