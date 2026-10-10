@@ -143,5 +143,27 @@
       "record_checks_round": 3,
       "reading": "both texts say what the sheet draws; the 18 x 12 ft is gone from both"
     }
+  },
+  "wave103-road-at-the-gate": {
+    "quantity": "wave 103 (2026-10-10): the road at each gate at the width of the road the compound stands on, running past the gate (0088)",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/{ochiba,hayakawa,ubame}-magistracy/*.svg before and after; make pack-audit on each",
+    "command": "make pack-audit ARGS=pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "method": "the road paths' stroke widths and ends read; the audits diffed (gate_feeds_its_road, viewbox_cropped)",
+    "value": {
+      "ochiba_imperial_road_px": [
+        24,
+        90
+      ],
+      "street_px": [
+        36,
+        54
+      ],
+      "ochiba_viewbox_height": [
+        752,
+        784
+      ],
+      "reading": "Ochiba's Imperial road 30 ft running past its gate, the gate opening straight onto it; Hayakawa's and Ubame's roads 18 ft, each running past its gate, the gate opening onto it; no road ends at a gate; every audit check OK on all three (gate_feeds_its_road, roads_leave_the_frame, viewbox_cropped), the crop check after pack_audit learned to read a stroke's width (a 90 px road read at its centerline had counted 45 px of its own ink as empty margin)"
+    }
   }
 }

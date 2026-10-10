@@ -94,9 +94,32 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 - **Records**: m:wave102-two-privies; Ochiba's notes.
 - **Occasions**: placement-changed: latrine on ochiba-magistracy (a privy new to the house's formal side).
 
+## Wave 103 (amendment 6, 2026-10-10) - batch 3
+
+- **Scope**: `docs/buildings.md::Approaches and surroundings#road at the gate` - 0088's drawing page draws the road at a
+  compound's gate as the road the compound stands on, at that road's width (the Imperial road 30 ft, a lesser highway 15-24
+  ft), with no wider ground before the gate. **Ochiba**'s approach, labeled the Imperial road but drawn as an 8 ft lane into
+  the gate, becomes the Imperial road at 30 ft running east-west past the gate (its direction a GUESS), the gate opening
+  straight onto it with the threshold stones and the notice board on its near edge; the sheet extends 32 px south.
+  **Hayakawa**'s street and **Ubame**'s road read as the lesser highways their compounds stand on (a GUESS that each is one),
+  12 -> 18 ft, each redrawn the way Ochiba's is: running past the gate across the sheet (Hayakawa's to the bank street,
+  Ubame's turning south off the sheet short of the border wall), the gate opening straight onto it. No road now ends at a
+  gate, so the GM's B23 (2026-10-01, a road no wider than the gate it feeds, `pack_audit`'s `gate_feeds_its_road`) holds
+  with nothing narrowed. A first draft gave Ochiba a 9 ft verge, cited the 15-24 ft as a town street's, and narrowed
+  Hayakawa's and Ubame's streets to their gates for the last 13 ft; impl-drift and plan review round 1 (W103-narrow-to-gate,
+  NOT LEGITIMATE: it put the gate's width back at the gate) took all three back.
+- **A tool defect fixed where found** (XIV): `pack_audit`'s crop check (`shared.ink_bounds`) read a stroked path or line at
+  its centerline, so the 90 px road counted 45 px of its own ink as an empty margin; a stroke is now ink half its width each
+  side (a unit test, red on the old code). Every sheet's crop check stays OK.
+- **Next**: `#notice board size` (row 13, after this row) - the gate board as 0190's roofed frame, 16 x 6 ft, on a stone footing
+  inside a fence, re-laid on the verge and beside the streets.
+- **Records**: m:wave103-road-at-the-gate; the procedure's Road to gate bullet and its two claims; three sheets' notes.
+- **Occasions**: glyph-redrawn: road on ochiba-magistracy (the Imperial road at 30 ft past the gate; the streets on Hayakawa and Ubame the same glyph).
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |
 |---|---|---|---|---|
 | 1 | 98-100 | none owed: the batch changed no engine code (hand sheets, their notes and the procedure only), so the engine key is the landed one and a pair would time the same code | green 2026-10-10 (already verified on the landed engine key) | closed: glyph checks latrine, boundary stones, road PASS; escalation-check |
 | 2 | 101-102 | none owed: no engine code changed (hand sheets, their notes, a modal, the procedure) | green 2026-10-10 on the landed engine key | closed: glyph checks gatehouse (Ubame) and latrine (Ochiba) PASS; Ochiba's building review NEEDS-WORK (E1: the gatehouse's pop-up and building-programs.md gave the old size - fixed, the pop-up's record checks clean on round 3) then PASS round 2 |
+| 3 | 103- | owed at the batch close | at the batch close | open |

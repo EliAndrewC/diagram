@@ -1504,10 +1504,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#boundary pillars": {
-  "code": "604d59449d575543",
-  "core": "afa1187219969616",
+  "code": "93f1ebe6ad6cfb22",
+  "core": "98c24242ed8d6f1b",
   "date": "2026-10-10",
-  "note": "the drawing page records the size as a GUESS; drawing them 3 ft square stays within \"up to about 3 ft with a plinth\"",
+  "note": "the drawing page records the 1-1.5 ft shaft, up to about 3 ft with a plinth, as a GUESS; a 3 ft square fits that range",
   "pages": {
    "0083-clan-borders-and-their-markers.drawing.html": "aae7d10697713dff"
   },
@@ -1518,62 +1518,63 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#canopy glyph": {
-  "code": "e697c54a2d7433da",
-  "core": "afa1187219969616",
-  "date": "2026-10-08",
-  "note": "how a tree is shown",
+  "code": "596d469c00d96f03",
+  "core": "98c24242ed8d6f1b",
+  "date": "2026-10-10",
+  "note": "a rule about how the glyph is shown",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#cart lane to a side gate": {
-  "code": "7d354e095a4a7fb2",
-  "core": "afa1187219969616",
+  "code": "f4bbfe32443ff761",
+  "core": "98c24242ed8d6f1b",
   "date": "2026-10-10",
-  "note": "the 0082 drawing page records the 6 ft cart lane as a GUESS",
+  "note": "the drawing page records \"About 6 ft, a GUESS\"",
   "pages": {
    "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html": "85212996326713e7"
   },
   "research": "e8329e50c8452924",
   "rests": [
-   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:0a998c14d09c7362",
-   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:cae772605b4340ee"
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:0a998c14d09c7362"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#empty surroundings": {
-  "code": "d57055e59ab57406",
-  "core": "afa1187219969616",
-  "date": "2026-10-08",
-  "note": "leaving the parchment empty is a drawing choice",
+  "code": "98a58ac3188b82ec",
+  "core": "98c24242ed8d6f1b",
+  "date": "2026-10-10",
+  "note": "a choice about how the sheet is shown",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#notice board size": {
-  "code": "bb1ca2ec2fbd68f4",
-  "core": "afa1187219969616",
-  "date": "2026-10-09",
-  "note": "the sheets draw the gate board at ~7 x 3 ft and ~9 x 4 ft, but the page draws \"a roofed frame 16 ft long and 6 ft deep\" from frames measured at 16-18 ft, and calls 7 x 3 \"shorter than every frame measured\"; either draw it at 16 x 6 or relabel it GUESS and have the drawing page record the gate board's size",
+  "code": "f5c607796692bf3b",
+  "core": "98c24242ed8d6f1b",
+  "date": "2026-10-10",
+  "note": "the sheets draw the gate board ~7 x 3 ft and Ubame's bounty board ~9 x 4 ft, but the page says \"drawn as a roofed frame 16 ft long and 6 ft deep\", from frames measured at \"about 16 to 18 ft along the road and 5 to 6 ft deep\". Its 7 x 3 ft is only the size the siting search tests, \"shorter than every frame measured\". Either draw the boards at 16 x 6 ft, or record the smaller gate boards as a DEVIATION or GUESS on 0190's drawing page and relabel the claim",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
   "research": "f69092eeadc87044",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
+   "0190-notice-boards-kosatsuba.drawing.html:0d8ca713e70426df",
+   "0190-notice-boards-kosatsuba.drawing.html:2932684d882f47f9",
    "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923",
    "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1",
-   "0190-notice-boards-kosatsuba.drawing.html:cf39d6663b05b586"
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Approaches and surroundings#road at the gate": {
-  "code": "aab3b29d395aca15",
-  "core": "afa1187219969616",
-  "date": "2026-10-08",
-  "note": "Ochiba's Imperial road is 8 ft and the others 12 ft, where the page says the Imperial road is \"at the 30 ft it is drawn everywhere else\" and a lesser highway 15-24 ft",
+  "code": "2b9a902e67eaa84d",
+  "core": "98c24242ed8d6f1b",
+  "date": "2026-10-10",
+  "note": "Imperial road at 30 ft; 18 ft is inside the lesser highway's 15-24 ft; no wider ground before the gate",
   "pages": {
    "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58"
   },
@@ -1581,43 +1582,47 @@
   "rests": [
    "0088-highways-and-what-lines-them-kaido.drawing.html:567067c7560f4325",
    "0088-highways-and-what-lines-them-kaido.drawing.html:7336b6f855fd2b4c",
-   "0088-highways-and-what-lines-them-kaido.drawing.html:7b5b5f842665a66e"
+   "0088-highways-and-what-lines-them-kaido.drawing.html:7b5b5f842665a66e",
+   "0088-highways-and-what-lines-them-kaido.drawing.html:f0fd502c959cebfe"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#road to gate": {
-  "code": "cb49c9df3c82c66b",
-  "core": "afa1187219969616",
-  "date": "2026-10-08",
-  "note": "road glyph and no caption",
+  "code": "4805df2edb349db1",
+  "core": "98c24242ed8d6f1b",
+  "date": "2026-10-10",
+  "note": "how the road is shown (its width is covered by the road-at-the-gate claim)",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#sheet follows its map": {
-  "code": "25738f81ce0587d6",
-  "core": "afa1187219969616",
-  "date": "2026-10-08",
-  "note": "keeping the sheet consistent with the map",
+  "code": "1f0417d5377b8f52",
+  "core": "98c24242ed8d6f1b",
+  "date": "2026-10-10",
+  "note": "the claim names the GM's ruling (2026-09-20, feature 257)",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#subject sized from the record": {
-  "code": "00ce2bd33e409740",
-  "core": "afa1187219969616",
-  "date": "2026-10-08",
-  "note": "building sizes taken from the record's figures",
+  "code": "200fadc77fb86e4b",
+  "core": "98c24242ed8d6f1b",
+  "date": "2026-10-10",
+  "note": "0116 gives the size bands the section sizes buildings from",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
   },
   "research": "ff6f552939c9b1ab",
   "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:22c18195b72a21a8",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:307e1fa85e603c4f",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:4e26eb3612539faf",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:69620b1e79461ecf",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8f475d6fee9c99bf"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:810821d06441c9f0",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8a9c6454630327b1"
   ],
   "verdict": "IN-STEP"
  },

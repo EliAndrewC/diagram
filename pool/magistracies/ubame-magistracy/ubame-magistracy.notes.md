@@ -94,6 +94,7 @@ Ubame's wealth is charcoal and the iron smelted beside it, not rice, so the oute
 
 ## Review log
 
+- **2026-10-10 (feature 372 wave 103)**: the road to the main gate drawn 18 ft (54 px), read as the lesser highway the compound stands on, inside research/questions/0088-highways-and-what-lines-them-kaido.drawing.html's 15-24 ft for one (a GUESS that it is one; it was 12 ft), running past the gate, the gate opening straight onto it with no wider ground before it.
 - **2026-10-10 (feature 372 wave 101)**: the gate range drawn 12 ft deep (36 px), 2 ken, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html's measured depth for both forms; it was 14 ft. Its south face stays on the wall line; the tub at its north face moved in with it.
 - **2026-10-10 (feature 372 wave 100)**: the Fox road's run to the cart gate drawn 6 ft (18 px), a cart lane at research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html's allowance over the hand cart's bed; it was 9 ft.
 - **2026-10-10 (feature 372 wave 99)**: the two boundary pillars drawn 3 ft square (9 x 9 px), a shaft on its plinth at the top of research/questions/0083-clan-borders-and-their-markers.drawing.html's band (1 to 1.5 ft of shaft, up to about 3 ft with a plinth); they were 3 x 3.7 ft.

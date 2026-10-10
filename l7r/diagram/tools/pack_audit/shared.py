@@ -160,8 +160,11 @@ def ink_bounds(text: str, plan: ParsedPlan, canvas_area: float = 0.0) -> tuple[f
                 xs += [x, x + w]
                 ys += [y, y + h]
         elif kind == "line":
-            xs += [_num(el.get("x1")) + dx, _num(el.get("x2")) + dx]
-            ys += [_num(el.get("y1")) + dy, _num(el.get("y2")) + dy]
+            # A STROKE IS INK HALF ITS WIDTH EITHER SIDE of the centerline (feature 372 wave 103: a 90 px road read at its
+            # centerline left 45 px of its own ink counted as an empty margin)
+            hw = _num(el.get("stroke-width")) / 2
+            xs += [min(_num(el.get("x1")), _num(el.get("x2"))) + dx - hw, max(_num(el.get("x1")), _num(el.get("x2"))) + dx + hw]
+            ys += [min(_num(el.get("y1")), _num(el.get("y2"))) + dy - hw, max(_num(el.get("y1")), _num(el.get("y2"))) + dy + hw]
         elif kind in ("circle", "ellipse"):
             rx = _num(el.get("r") or el.get("rx"))
             ry = _num(el.get("r") or el.get("ry"))
@@ -183,8 +186,9 @@ def ink_bounds(text: str, plan: ParsedPlan, canvas_area: float = 0.0) -> tuple[f
                 ys += [y - fs, y]
         elif kind == "path":
             px, py = _path_points(el.get("d") or "")
-            xs += [v + dx for v in px]
-            ys += [v + dy for v in py]
+            hw = _num(el.get("stroke-width")) / 2 if (el.get("stroke") or "none") != "none" else 0.0
+            xs += [v + dx + e for v in px for e in ((-hw, hw) if hw else (0.0,))]
+            ys += [v + dy + e for v in py for e in ((-hw, hw) if hw else (0.0,))]
         for child in el:
             visit(child, dx, dy)
 

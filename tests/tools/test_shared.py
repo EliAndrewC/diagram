@@ -391,3 +391,14 @@ def test_a_kind_item_is_found_by_the_sheet_s_tag_not_by_its_label_text() -> None
 
     found = L.check_bands(big, types, None)
     assert len(found) == 1 and "`store` (granary) is 30 x 15 ft" in found[0] and "(per statement: " + " ".join(COMPOUND_CLASSES["granary"].guesses) in found[0]
+
+
+def test_a_stroke_is_ink_half_its_width_either_side() -> None:
+    """Feature 372 wave 103: a stroked road or line is ink out to half its stroke on each side of its centerline, so a wide
+    road at a sheet's edge is not counted as an empty margin; an unstroked path keeps its points."""
+    text, plan = _plan('<path d="M 20 385 L 380 385" stroke="#B89060" stroke-width="40"/>')
+    assert s.ink_bounds(text, plan, 400 * 400)[3] == 405.0
+    text, plan = _plan('<line x1="380" y1="385" x2="20" y2="385" stroke-width="40"/>')
+    assert s.ink_bounds(text, plan, 400 * 400)[3] == 405.0
+    text, plan = _plan('<path d="M 20 385 L 380 385" fill="#000" stroke="none" stroke-width="40"/>')
+    assert s.ink_bounds(text, plan, 400 * 400)[3] == 385.0

@@ -75,11 +75,12 @@
     <text font-size="10" font-style="italic" fill="#2E4456" data-names="river-1">barges downstream to Nagahara city</text>
   </g>
 
-  <!-- Town street approaching the main gate, 12 ft, matching the passage through the gate range it meets (feature 267
-       pass 2; it was 13.3 ft with the old gate) -->
+  <!-- feature 372 wave 103: the lesser highway the compound stands on (a GUESS that it is one), 18 ft (54 px), inside 0088's 15-24 ft (it was a
+       12 ft street ending at the gate), running past the gate to the bank street, the gate opening straight onto it with no
+       wider ground before it (0088's drawing page) -->
   <g data-kind="road">
-    <path d="M 508 900 L 508 754.5" stroke="#B89060" stroke-width="36" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 508 900 L 508 754.5" stroke="#9C7448" stroke-width="36" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
+    <path d="M 118 781.5 L 1050 781.5" stroke="#B89060" stroke-width="54" stroke-linecap="butt" opacity="0.55"/>
+    <path d="M 118 781.5 L 1050 781.5" stroke="#9C7448" stroke-width="54" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
 
   <!-- Lane from the east postern to the bank street and the landing steps: a cart lane, 6 ft (18 px), 0082's allowance

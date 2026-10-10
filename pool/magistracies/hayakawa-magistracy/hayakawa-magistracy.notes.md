@@ -62,6 +62,7 @@
 
 ## Review log
 
+- **2026-10-10 (feature 372 wave 103)**: the town street to the main gate drawn 18 ft (54 px), read as the lesser highway the compound stands on, inside research/questions/0088-highways-and-what-lines-them-kaido.drawing.html's 15-24 ft for one (a GUESS that it is one; it was 12 ft), running past the gate, the gate opening straight onto it with no wider ground before it.
 - **2026-10-10 (feature 372 wave 101)**: the gate range drawn 12 ft deep (36 px), 2 ken, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html's measured depth for both forms; it was 14 ft. Its south face stays on the wall line; the lodging's door and the passage follow the north face in.
 - **2026-10-10 (feature 372 wave 100)**: the lane from the east postern to the bank street drawn 6 ft (18 px), a cart lane at research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html's allowance over the hand cart's bed; it was 10.7 ft.
 - **2026-10-10 (feature 372 wave 98, the privy matched to its research)**: every privy drawn 5 ft square (15 x 15 px), 0101's one-seat privy (research/questions/0101-privies-setchin.drawing.html); they were drawn 14-22 px a side (up to ~7 ft), each now kept against the wall or house face it stood on.

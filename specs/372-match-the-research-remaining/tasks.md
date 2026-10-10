@@ -15,6 +15,8 @@ in 328's ranking and this spec.
 
 - (reviewed PASS at batch 2's close, 2026-10-10) placement-changed: latrine on ochiba-magistracy - wave 102: the guests' privy at the reception room's rear (0101)
 
+- glyph-redrawn: road on ochiba-magistracy - wave 103: the Imperial road at 30 ft past the gate (0088); Hayakawa's and Ubame's roads 18 ft past theirs
+
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame** (`pool/magistracies/*/`), their notes; `docs/buildings.md`.
@@ -54,3 +56,12 @@ in 328's ranking and this spec.
 - [x] T05 wave 102's rows (FR-001, FR-002)
       research: rendering
       verify: DONE. wave 102: the house's two privies (Ochiba's guests' added); the section's claims relabeled; the servants relabel taken back; impl-drift IN-STEP; spec-fidelity CLEAR round 2
+
+## Phase 6 - wave 103 (amendment 6): the road at the gate at its own width
+
+- Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Ochiba**, **Hayakawa**, **Ubame**, their notes; `docs/buildings.md`;
+  `l7r/diagram/tools/pack_audit/shared.py` and its test.
+
+- [x] T06 wave 103's row (FR-001, FR-002)
+      research: rendering
+      verify: DONE. wave 103: the road at each gate at the width of the road the compound stands on, running past the gate (0088); pack_audit's crop check reads a stroke's width; impl-drift IN-STEP; spec-fidelity CLEAR round 2

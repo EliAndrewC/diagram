@@ -63,11 +63,12 @@
   <!-- Outer land (surrounding countryside / town outskirts) -->
   <rect x="0" y="0" width="1300" height="900" fill="#EFE3C2" data-kind="-"/>
 
-  <!-- Road from the county town, approaching the south gate: 12 ft, centered on the gate range's 12 ft passage
-       (x 615..651; feature 267 pass 2 - it was 13.3 ft centered at x 635 and ran 4 px under the east post) -->
+  <!-- feature 372 wave 103: the lesser highway the compound stands on (a GUESS that it is one), 18 ft (54 px), inside 0088's 15-24 ft (it was a
+       12 ft road ending at the gate), running past the gate and turning south off the sheet short of the border wall, the
+       gate opening straight onto it with no wider ground before it (0088's drawing page) -->
   <g data-kind="road">
-    <path d="M 633 830 L 633 754" stroke="#B89060" stroke-width="36" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 633 830 L 633 754" stroke="#9C7448" stroke-width="36" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
+    <path d="M 176 781 L 1040 781 L 1040 830" stroke="#B89060" stroke-width="54" stroke-linecap="butt" fill="none" opacity="0.55"/>
+    <path d="M 176 781 L 1040 781 L 1040 830" stroke="#9C7448" stroke-width="54" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
   <!-- The Fox road: arrives from the east across the border, forking to the cart gate
        (goods) and, by a path of the same 6 ft, to the parley room's outer door (people). -->

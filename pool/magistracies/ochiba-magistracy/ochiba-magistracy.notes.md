@@ -39,7 +39,7 @@
 - Each residence room-label is a multi-room ZONE/suite, not one room (compressed for legibility, a tolerated simplification per size-audit); the engawa strip along the block's south face, over the inner garden, is the veranda that reads "residence, not nagaya."
 - The internal divider gate sits on the main axis directly behind the office hall: deliberate (the hall is the privacy baffle; official business is received in the hall and goes no deeper, while a guest of rank for the house comes in at the office's genkan and goes on through the office, the household gate and the garden to the reception's veranda; heavy service uses the kitchen postern). Now documented in the program's two-court bullet.
 - Holding cell at TRUE footprint (12x10 ft, the small end of the attested span - feature 267 R24) - the lattice-bar lines are linework under the stroke convention. (The old "~2x footprint" exemption wording was stale against the review log and is retired with the glyph doctrine, 2026-07-21.)
-- Main gate opening ~8 ft, a one-bay yakuimon (feature 267 R26; it was 27 ft, then 13.3 ft - the size-audit agent caught the structure-vs-passage confusion in 2026-07). The road outside stays 13.3 ft wide - a road's width, not the gate's.
+- Main gate opening ~8 ft, a one-bay yakuimon (feature 267 R26; it was 27 ft, then 13.3 ft - the size-audit agent caught the structure-vs-passage confusion in 2026-07). The road outside is the Imperial road, 30 ft, passing the gate (feature 372 wave 103).
 - Inari shrine as a hall rather than a modest standalone: deliberate L5R divergence (SKILL.md reference framework).
 - Cell placement SE by the barracks: cell placement is a free variable (grounding).
 - No interrogation room: global rule (grounding) - do not flag.
@@ -49,6 +49,7 @@
 
 ## Review log
 
+- **2026-10-10 (feature 372 wave 103)**: the Imperial road drawn at its own 30 ft (90 px), research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, running east-west past the gate (its direction a GUESS) - it was an 8 ft lane drawn into the gate; the gate opens straight onto it (no wider ground before a compound's gate, 0088), the threshold stones and the notice board on its near edge; the sheet extends 32 px south to hold it.
 - **2026-10-10 (feature 372 wave 102)**: the house's second privy, the guests', drawn at the rear of the reception room - attached to its east face at the rear corner, clear of the garden (research/questions/0101-privies-setchin.drawing.html: a house keeps two, the guests' and the family's); the family's is captioned `family privy`.
 - **2026-10-10 (feature 372 wave 101)**: the gatehouse drawn 40 x 12 ft (120 x 36 px): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html draws a gatehouse of its own about 40 ft long (a GUESS, a fifth over Takayama's measured ~400 sq ft) and 2 ken deep; it was 18 x 12 ft, the temple guardroom's size. It grows east into open outer court.
 - **2026-10-10 (feature 372 wave 98, the privy matched to its research)**: every privy drawn 5 ft square (15 x 15 px), 0101's one-seat privy (research/questions/0101-privies-setchin.drawing.html); they were drawn 14-22 px a side (up to ~7 ft), each now kept against the wall or house face it stood on.
