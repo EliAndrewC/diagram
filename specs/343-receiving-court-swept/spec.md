@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec under review
+**Status**: In progress - spec FAITHFUL (round 3), plan next
 
 **Affects**: magistracy, research record
 
@@ -76,3 +76,4 @@ before modern times, and the modal reworded if not.
 - spec-fidelity-verify, round 2 (2026-10-10): CHANGES REQUIRED, one wording: the Why bullet on Morse's Sakai drawing
   said "not dated" and named an owner no source gives. Applied, with FR-002's list matching FR-001's.
 
+- spec-fidelity-verify, round 3 (2026-10-10): **FAITHFUL**. Nothing to change.

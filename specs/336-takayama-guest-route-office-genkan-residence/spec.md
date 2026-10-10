@@ -33,8 +33,9 @@ compound as restored.
   to the GM's download list (`make download-add`).
 - **FR-002 - Ochiba's outdoor route is recorded as a mismatch, not a guess.** The evidence speaks for an indoor way, so the
   sheet's outdoor route (the office's rear door, the middle gate, the garden path) departs from it. The code that decides
-  that route carries a `Research:` claim citing 0104's findings, and its `impl-drift` verdict - DRIFTED, if the claim
-  check finds the departure - shows it in `make claims-report` (FR-091). The sheet is not redrawn.
+  that route carries a `Research:` claim citing 0104's findings, recorded DRIFTED by its `impl-drift` check and shown in
+  `make claims-report` (FR-091). A check that finds otherwise contradicts this requirement's premise and is reported to
+  the GM, not passed. The sheet is not redrawn.
 - **FR-090 - Its checks.** The record checks the change owes (`make record-owed`) are run and answered.
 - **FR-091 - The implementation check** (feature 378): `make impl-check F=336` reports nothing missing at close.
   A claim that the new finding contradicts is recorded DRIFTED and shown in `make claims-report`; the code and the sheets
@@ -43,14 +44,14 @@ compound as restored.
 ## Success Criteria
 
 - **SC-001** (FR-001, FR-002): 0104 carries the Takayama evidence with its limits; the 1830 drawing is on the download
-  list; the claim on the route's code is checked and its verdict is in `make claims-report`.
+  list; the claim on the route's code is recorded DRIFTED in `make claims-report`.
 - **SC-090** (FR-090): `make record-owed` is answered.
 - **SC-091** (FR-091): `make impl-check F=336` reports nothing missing; no file under `pool/` changes.
 
 ## Decisions Recorded
 
-- **D1 - No map change.** The finding is weak (a modern route; a corridor whose ends are unstated); the GM's rule for
-  research features is to annotate, and the implementation check records any claim it contradicts.
+- **D1 - No map change.** The evidence is the compound as restored, and the Edo-period plan (the 1830 drawing) is unread;
+  the GM's rule for research features is to annotate, and the implementation check records the claim it contradicts.
 
 ## The entry, as filed
 
@@ -84,4 +85,6 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
 - spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED. Applied: the plan the entry named was sought and read (the
   official compound illustration, R2: office and residence joined under roof), the 1830 drawing goes to the download list,
   and the outdoor route is recorded as a mismatch through a checked claim (FR-091), not labeled a guess.
+- spec-fidelity-verify, round 2 (2026-10-10): CHANGES REQUIRED. Applied: FR-002 and SC-001 record the claim DRIFTED with no
+  hedge (another verdict is reported to the GM); D1's reason is the restored compound and the unread 1830 drawing.
 

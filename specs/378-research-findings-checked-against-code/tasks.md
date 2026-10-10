@@ -20,9 +20,9 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T05 Claimed units outside the hamlet scope (plan D6, FR-009): `tools/claims.py:claimed_outside` in `all_units`; the four claims it brings in checked by impl-drift
       research: rendering
       verify: DONE. claimed_outside in all_units (own claims only; coverage unchanged); tests/tools/test_claims.py 38 passed incl. SC-005; the 4 claims checked by impl-drift and recorded (barracks DRIFTED, 3 IN-STEP, 22 UNCLAIMED); make claims-owed: none
-- [ ] T04 Close: make done green (an engine file changed); the tooling tests and make hooks-test green; report; landed
+- [x] T04 Close: make done green (an engine file changed); the tooling tests and make hooks-test green; report; landed
       research: rendering
-      verify: the push accepted
+      verify: DONE. make done green alone in the foreground (the arbiter's ruling on the two overlapping red gates); tooling tests and hooks-test inside it; report written; landed by the push carrying this tick
 - [ ] GM review (make gm-reviewed F=378) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

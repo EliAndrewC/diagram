@@ -31,4 +31,4 @@ carries, https://jinya.gifu.jp/en/architecture/ -> `/wp/wp-content/themes/origin
   none, so the route is under roof.
 
 **Its limit**: an illustration of the compound as restored (the office of 1816, the residence restored in 1996 from an 1830
-drawing), not an Edo-period plan. The 1830 drawing itself is not on the web; it goes to the GM's download list.
+drawing), not an Edo-period plan. The 1830 drawing itself was not reached in this pass; it goes to the GM's download list.

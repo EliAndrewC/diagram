@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec under review
+**Status**: In progress - spec FAITHFUL (round 1), plan next
 
 **Affects**: magistracy, research record
 
@@ -65,3 +65,4 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
 
 
 ## Review history
+- spec-fidelity, Mode 2, round 1 (2026-10-10): **FAITHFUL**, with notes for the implementation (R1 search list; the Why wording).
