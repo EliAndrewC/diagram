@@ -378,8 +378,7 @@ _ESCAPES = {
     ),
     "DECIDE_OK": (
         "command",
-        "feature 375 FR-003(a): matched in a check dispatch's PROMPT by an anchored regex with the reason floor (check-bundle-hooks.sh "
-        "and pair-hooks.sh), each recording the escape with guard_log",
+        "feature 375 FR-003(a): matched in a check dispatch's PROMPT by an anchored regex with the reason floor (check-bundle-hooks.sh and pair-hooks.sh), each recording the escape with guard_log",
     ),
     "CHECK_BUNDLE_OK": (
         "command",

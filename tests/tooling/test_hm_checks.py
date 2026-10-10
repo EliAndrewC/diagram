@@ -23,6 +23,7 @@ def _isolated_census(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) ->
     """An escape taken here is recorded - in a throwaway census, never the live one (feature 169)."""
     monkeypatch.setenv("GUARD_LOG_DIR", str(tmp_path / "guard-log"))
 
+
 MANIFEST = "owed-checks: quote-check\nunit: quote-check:0105.drawing#bath-size abc123\nunit: quote-check:0105#well x\n"
 MODAL = "owed-checks: modal-depiction\nunit: modal-depiction:sheet/bath f00\n"
 PAGE = "/c/research/questions/0105-baths-furo.drawing.html"
