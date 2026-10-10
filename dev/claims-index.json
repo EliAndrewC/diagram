@@ -16709,45 +16709,44 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#origin on the houses' bank": {
-  "code": "31b4c69fd2fec23d",
-  "core": "293c20ed4deb2557",
-  "date": "2026-10-07",
-  "note": "keeping the origin on the houses' bank rests on the page, but the standoff `14.0 + w/2` is a distance the page does not give (the claim admits it is \"the router's figure\"); split it out as its own UNRESEARCHED claim, and drop \"crossed squarely on a plank bridge\", which this code does not do",
+  "code": "258e3bc578194d86",
+  "core": "10d0e09755cff95b",
+  "date": "2026-10-09",
+  "note": "the origin stops on the houses' own bank and the spur crosses at a crossing place; the 14 px is labeled as the router's figure, not the page's",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
-  ],
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#spur origin clear of the houses": {
-  "code": "98a687de9d11108e",
-  "core": "293c20ed4deb2557",
-  "date": "2026-10-07",
-  "note": "the page sets the start on the cluster's edge and gives no distance; +8 is unresearched",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:71315c33d0ad6f37",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#spur origin clear of the houses": {
+  "code": "cc31833688c0d63b",
+  "core": "10d0e09755cff95b",
+  "date": "2026-10-09",
+  "note": "no page gives how far past the farthest house a spur starts, so UNRESEARCHED stands; the optional fabric changes only where the same polygons come from",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#spur starts facing the field": {
-  "code": "0589e955f1a93430",
-  "core": "293c20ed4deb2557",
-  "date": "2026-10-07",
-  "note": "the spur is the through-route's field end, taking the shortest way",
+  "code": "0863d7c36adcd4fe",
+  "core": "10d0e09755cff95b",
+  "date": "2026-10-09",
+  "note": "the origin is on the edge facing the target, so the run is short and straight",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5",
-   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
   "verdict": "IN-STEP"
  },
@@ -24275,8 +24274,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#connector width": {
-  "code": "e45d858b6f4d686a",
-  "core": "f4999d6ee7c7b386",
+  "code": "b3c2e698701e78e4",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "CONNECTOR_WIDTH 6 ft on both the valley and polder branches; the page's track out is 6 ft",
   "pages": {
@@ -24284,14 +24283,14 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
-   "0081-village-lanes.drawing.html:91a5765af6230403"
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#field spur tip on the bund": {
-  "code": "2201754eda39423e",
-  "core": "f4999d6ee7c7b386",
+  "code": "82e692cf6544cdc1",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "tip_onto_the_bund runs before threading and again on the drawn spur; the path joins the outer bund",
   "pages": {
@@ -24304,8 +24303,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#field spur width": {
-  "code": "216f78adb411fd8c",
-  "core": "f4999d6ee7c7b386",
+  "code": "6f02e17582783da3",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "SPUR_WIDTH 5 ft, the spur's rank",
   "pages": {
@@ -24313,14 +24312,14 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
-   "0081-village-lanes.drawing.html:91a5765af6230403"
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance": {
-  "code": "fa98c09575c5bd00",
-  "core": "f4999d6ee7c7b386",
+  "code": "62c3087324867e77",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "LANE_CLEARANCE 7 ft from the lane's middle",
   "pages": {
@@ -24328,27 +24327,27 @@
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+   "0081-village-lanes.drawing.html:34425c991aa27503"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
-  "code": "495a083784651edf",
-  "core": "f4999d6ee7c7b386",
+  "code": "cbe0accd87c7859b",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
-  "note": "the connector and spur are laid in this stage, after every house is seated",
+  "note": "the connector and spur are laid in this stage, after every house is seated; _fabric_now is read after the houses stand",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#polder has no spur": {
-  "code": "db9f1aeac4eab85c",
-  "core": "f4999d6ee7c7b386",
+  "code": "e69f3fde530f4e23",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "nothing in the bundle covers a polder's way into its fields; the general rule that the path runs onto the outer bund is acknowledged in the guess",
   "pages": {},
@@ -24356,13 +24355,13 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
    "0014-bunds-between-the-paddies-aze.drawing.html:de5f537983379a58",
-   "0081-village-lanes.drawing.html:df440690bbce9cb6"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road": {
-  "code": "25032aefecd52cef",
-  "core": "f4999d6ee7c7b386",
+  "code": "eca7990f56d7cdab",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "the street runs on off the map at both ends, and the far end is marked run_on",
   "pages": {
@@ -24375,8 +24374,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road over the brook at a ford": {
-  "code": "062571a465fc24f4",
-  "core": "f4999d6ee7c7b386",
+  "code": "e801c19d38cc2ca7",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "ford_crossing picks the crossing place that makes the walk shortest, and thread_over_the_ford keeps the square deck between the landings",
   "pages": {
@@ -24384,15 +24383,15 @@
   },
   "research": "d47738a05844fe19",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:71315c33d0ad6f37",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road width": {
-  "code": "388509232f4ea03f",
-  "core": "f4999d6ee7c7b386",
+  "code": "79171e1cafe9ae3a",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "width=6 is the street's 6 ft",
   "pages": {
@@ -24405,8 +24404,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
-  "code": "5a8091f44d9c8ec4",
-  "core": "f4999d6ee7c7b386",
+  "code": "32bcdddcb1b48601",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "the page allows a lane to touch a plot's boundary but does not require it; the 12 ft clip is then carried on to the bund",
   "pages": {
@@ -24414,14 +24413,14 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:f2368e271306e3c2",
-   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur drawn taut": {
-  "code": "ff40c7add8761baa",
-  "core": "f4999d6ee7c7b386",
+  "code": "c6435fff12a3ed33",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "straight from the cluster's edge to the field, or through the two ford landings",
   "pages": {
@@ -24429,13 +24428,13 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur kept however short": {
-  "code": "cb509ec566632c61",
-  "core": "f4999d6ee7c7b386",
+  "code": "3bf2045d6d9d9832",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "the floor is SPUR_WIDTH, 5 ft, matching the page's \"however short that leaves the path\"",
   "pages": {
@@ -24448,8 +24447,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur over the brook at a ford": {
-  "code": "c708aa3098904fad",
-  "core": "f4999d6ee7c7b386",
+  "code": "fb4ed29922cb8c83",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "ford_crossing picks the ford that makes the walk shortest; a 4-point spur goes through thread_over_the_ford, which keeps the deck",
   "pages": {
@@ -24457,15 +24456,15 @@
   },
   "research": "d47738a05844fe19",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:71315c33d0ad6f37",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back": {
-  "code": "c33a85d31dcd4e63",
-  "core": "f4999d6ee7c7b386",
+  "code": "8dbbdd9cd2a1f95b",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "no page gives a 17 ft set-back, so UNRESEARCHED stands",
   "pages": {},
@@ -24474,8 +24473,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#spur to the field": {
-  "code": "20b56562045ab0c1",
-  "core": "f4999d6ee7c7b386",
+  "code": "59934bcd0e12b5e2",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "candidates are ranked by fewest crossings, then shortest, and the winner is clipped off the dry plots and the marsh",
   "pages": {
@@ -24483,28 +24482,28 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5",
-   "0081-village-lanes.drawing.html:f2368e271306e3c2",
-   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#toe-band margin": {
-  "code": "72a334609486b5bb",
-  "core": "f4999d6ee7c7b386",
+  "code": "633ed77269578dcd",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "the page says to keep off wet ground but gives no margin, so UNRESEARCHED stands",
   "pages": {},
   "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#track off the map": {
-  "code": "3cc86dd124b477fc",
-  "core": "f4999d6ee7c7b386",
+  "code": "3cb0ff01e7e96203",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "the connector runs out to the frame",
   "pages": {
@@ -24512,13 +24511,13 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:16df95fc169329f7"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#track off the wet": {
-  "code": "f016d22198519cf5",
-  "core": "f4999d6ee7c7b386",
+  "code": "142f79892f604bc6",
+  "core": "84c8b5e51e347be7",
   "date": "2026-10-09",
   "note": "the spur is clipped off the toe band and trim_off_marsh takes it off every marsh",
   "pages": {
@@ -24526,7 +24525,7 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875"
   ],
   "verdict": "IN-STEP"
  },

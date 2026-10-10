@@ -79,7 +79,7 @@ def gate_out_of_the_field(envelope: Poly, gate: Pt) -> Pt:
     return push_out_of(envelope, gate, SPUR_SETBACK)
 
 
-def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
+def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt, fabric: list[Poly] | None = None) -> Pt:
     """The point on the placed cluster's edge that FACES `target`.
 
     NOT `_cluster_gateway`, and confusing the two cost the reference map its field access. That helper
@@ -112,7 +112,9 @@ def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
     n = math.hypot(ux, uy) or 1.0
     ux, uy = ux / n, uy / n
     reach = max(((x - cx) * ux + (y - cy) * uy for x, y in zip(xs, ys, strict=False)), default=0.0)
-    fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
+    # `fabric`, where the caller asks this per candidate of an unchanging map, is built ONCE by it (feature 328, batch 11's
+    # perf-audit: the spur's 111-124 candidates each rebuilt `_homestead_polys`, and wave 87's held parts doubled its cost)
+    fabric = fabric if fabric is not None else [poly for poly, _owner, _kind in _homestead_polys(s)]
     edge = push_clear_of_fabric((cx, cy), (ux, uy), reach + TRACK_FABRIC_GAP + 8.0, fabric)
     # ...AND ON THE HOUSES' OWN BANK (feature 261). Pushed past the furthest house by the fabric gap, the origin landed
     # across a brook that runs close by - Inashiro's by 20 ft - so the spur began on the field's side of the water, never

@@ -1,0 +1,36 @@
+perf-profile seed 25 stage track: 0.7s under cProfile (the stages before it took 6.5s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261010T001415Z-seed25-track.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         1347854 function calls (1245378 primitive calls) in 0.605 seconds
+
+   Ordered by: cumulative time
+   List reduced from 210 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.675    0.675 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/track.py:383(stage_track)
+119622/17146    0.086    0.000    0.597    0.000 {built-in method builtins.min}
+      121    0.000    0.000    0.360    0.003 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/track.py:564(<genexpr>)
+      120    0.001    0.000    0.360    0.003 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/track.py:524(spur_path)
+      120    0.013    0.000    0.348    0.003 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/cluster_edge.py:82(_cluster_edge_toward)
+      122    0.069    0.001    0.323    0.003 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/geom.py:271(push_clear_of_fabric)
+      120    0.000    0.000    0.230    0.002 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/track.py:565(<lambda>)
+      120    0.004    0.000    0.229    0.002 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/checks.py:257(violations)
+      613    0.000    0.000    0.150    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/checks.py:283(<genexpr>)
+      495    0.016    0.000    0.150    0.000 /diagram/.clones/digram-backlog/l7r/diagram/sitegen/geom.py:84(crosses_poly)
+   120549    0.052    0.000    0.129    0.000 /diagram/.clones/digram-backlog/l7r/diagram/sitegen/geom.py:103(<genexpr>)
+   121896    0.082    0.000    0.125    0.000 {built-in method builtins.max}
+   122052    0.069    0.000    0.079    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/primitives.py:32(point_in_poly)
+        1    0.000    0.000    0.048    0.048 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/track.py:107(_thread_the_fabric)
+        4    0.000    0.000    0.038    0.010 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/clearance.py:102(fabric_index)
+        4    0.012    0.003    0.037    0.009 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/clearance.py:122(__init__)
+        1    0.000    0.000    0.031    0.031 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/route.py:160(_route)
+     3836    0.001    0.000    0.031    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/checks.py:285(<genexpr>)
+      480    0.011    0.000    0.030    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/checks.py:298(_meeting)
+     3753    0.002    0.000    0.029    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/checks.py:312(crossing_lands_on_crop)
+   231922    0.021    0.000    0.021    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/geom.py:287(<genexpr>)
+        2    0.001    0.000    0.020    0.010 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/bund.py:131(__init__)
+     9860    0.004    0.000    0.019    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/checks.py:323(<genexpr>)
+    20257    0.011    0.000    0.018    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/primitives.py:115(segments_cross)
+     8619    0.005    0.000    0.015    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+
+

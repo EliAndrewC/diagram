@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "c77080e23",
+    "label": "328-start",
+    "utc": "20261009T235948Z"
+  },
+  "binding": "cbe79e04d39e244124dbf4d9441f5c4b7fa3ed7750d3dc1600a919db8267f100",
+  "end": {
+    "commit": "e09b15ff3",
+    "label": "328-end",
+    "utc": "20261010T000252Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261010T001111Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -7.4,
+          "4": 0.0,
+          "47": -3.3
+        },
+        "total_pct": -2.7
+      },
+      "20": {
+        "seeds": {
+          "25": -3.3,
+          "39": -1.8,
+          "4": -1.7,
+          "47": -1.8
+        },
+        "total_pct": -2.2
+      },
+      "40": {
+        "seeds": {
+          "25": 0.7,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 1.5
+        },
+        "total_pct": 0.5
+      }
+    },
+    "seeds": {
+      "25": -4.4,
+      "39": -2.7,
+      "4": -2.2,
+      "47": 0.0
+    },
+    "total_pct": -2.3
+  },
+  "note": "reviewer counterfactual at e09b15ff3 (detached worktrees, 40 households, seeds 47 and 25, two reps each): wave 88 off changes nothing - thread_over_the_ford is never called, _thread_the_fabric and _route run once per stage in every leg, so no two router calls; wave 87 off returns profiled track 0.85->0.66 s (seed 47) and 0.85->0.62 s (seed 25), about 0.06 s unprofiled, the measured +0.05/+0.06 s; the cost is _homestead_polys rebuilt 111-124 times per stage through spur_path's push_clear_of_fabric, each rebuild twice the cost with the held parts, not the threading; CONTROL batch11-pair is the pair itself, not a run with the cause removed",
+  "verdict": "inconsistent"
+}

@@ -519,6 +519,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # never drawn: Inashiro and Kashikawa lost their only way to the field.
     brook_segs = gap_segments([(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)], getattr(s, "brook_fords", ()), FORD_HALF)
 
+    _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # built once for every candidate: nothing is drawn while they are scored
+
     def spur_path(target: Pt) -> Poly:
         # THE TIP STOPS OUTSIDE THE FIELD, measured on the LOCAL edge normal (GM 2026-08-12:
         # "Inashiro has village paths overlapping with rice paddies"). It used to pull back 8 px
@@ -545,7 +547,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # from the field - the spur ran 104 degrees off its own target and died in the windbreak.
         #
         # Now: the origin faces THIS target.
-        _s = _cluster_edge_toward(s, target, _band_start)
+        _s = _cluster_edge_toward(s, target, _band_start, _fabric_now)
         # ...AND OVER THE BROOK AT A FORD (feature 261). Where the houses stand across the brook from their rice, the
         # path crosses it square at the ford that makes the walk shortest, and `bridges()` decks the crossing - a
         # straight run would meet the brook wherever it happened to, between fords, and the clip would cut it there.

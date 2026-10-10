@@ -1949,5 +1949,41 @@
       "cohort_with_fillet_patch": "49/54 - 902 newly passing against the fillet's own 48; 23, 40, 904 still newly failing",
       "pool": "no map moved"
     }
+  },
+  "batch11-pair": {
+    "quantity": "batch 11's timing pair (waves 87-90): c77080e23 -> e09b15ff3",
+    "observed": "2026-10-10",
+    "source": "dev/perf-log/20261009T235948Z-328-start-perfbase.json, dev/perf-log/20261010T000252Z-328-end-base.json",
+    "command": "make perf in two detached worktrees, back to back; make perf-report AGAINST=328-start",
+    "method": "the pair on a quiet host (load 1.4 -> 1.2); the grown stage read from the report",
+    "value": {
+      "band": 1,
+      "reference_total_pct": -2.3,
+      "households_10_pct": -2.7,
+      "households_20_pct": -2.2,
+      "households_40_pct": 0.5,
+      "largest_growth": "40 households seed 47 +1.5% and seed 25 +0.7%, each the track stage +0.1 s",
+      "reading": "the track stage is where the batch added work: a ford run threaded as two legs (wave 88, two router calls in place of one) and the held parts in the fabric every way is threaded by (wave 87); every other size and the reference fell"
+    }
+  },
+  "batch11-track-fabric-once": {
+    "quantity": "batch 11's track-stage growth and its fix: the spur's fabric built once, not once per candidate",
+    "observed": "2026-10-10",
+    "source": "make perf-profile SEED=47|25 STAGE=track HOUSEHOLDS=40 in the base worktree at e09b15ff3 and in the clone with the fix; the perf-audit's own counterfactual (wave 87 off, wave 88 off) recorded in its confirmation of 2026-10-10",
+    "command": "make perf-profile SEED=<s> STAGE=track HOUSEHOLDS=40",
+    "method": "the track stage profiled before and after; the five pool maps rerolled and compared with HEAD",
+    "value": {
+      "seed_47_track_profiled_s": {
+        "before": 0.9,
+        "after": 0.7
+      },
+      "seed_25_track_profiled_s": {
+        "before": 0.9,
+        "after": 0.7
+      },
+      "audit_counterfactual": "wave 87 off: 0.66 and 0.62 s profiled; wave 88 off: no change (thread_over_the_ford never called on these seeds)",
+      "cause": "_homestead_polys rebuilt 111-124 times a track stage, once per spur candidate (_cluster_edge_toward), each rebuild about twice its old cost with wave 87's held parts",
+      "pool": "all five maps byte-identical"
+    }
   }
 }

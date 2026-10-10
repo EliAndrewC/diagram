@@ -554,3 +554,4 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
   the fix required is the household's privy over its sty, the pair's place weighed and recorded as a GUESS, the claim
   re-cited to 0048 and the Han note. A glyph-only form was then BLOCKED at plan review (the farmstead privy kept) and the row
   held at E3 (m:wave86-privy-over-the-sty-held). Not for the GM unless the E3 work finds a real impossibility.
+- Batch 11's escalation check noted an open decision in the record, not a finding: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html lists "decision left open (one season across the sheet)" - whether a map shows one season everywhere (the ripe-gold dry crops beside a green paddy follow its ripest-color guess). Raised for the GM at the feature's end if it has not been put already.
