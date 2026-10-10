@@ -1,4 +1,4 @@
-# Feature 371: a ledger row for every recorded review verdict
+# Feature 371: a ledger row for every pass of every check
 
 **Feature Branch**: none (main, in a session clone)
 
@@ -19,8 +19,9 @@ the author had missed it, what was done and its cost (feature 294). What does no
 written. Feature 328 ran 26 glyph checks in its batches 2-4 (2026-10-08/09) and wrote none of their rows; they were found
 missing at batch 5's close and rebuilt by hand from the agents' transcripts. The record a check leaves - `make
 review-verdict`, one file per unit - keeps only the unit's LATEST round, so a round overwritten before its row is written is
-gone. This feature keeps every verdict in an append-only log, names each one that has no ledger row, prints the row to add
-with its cost already measured, and refuses a push that would land a review pass without its row.
+gone, and a record or plan check leaves no such record at all. This feature logs every check's pass when the agent
+returns, in an append-only log with its measured cost, names each pass that has no ledger row, prints the row to add with its
+cost filled in, and refuses a push that would land a pass without its row.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -31,8 +32,8 @@ A session runs any check the ledger logs - a map review, a record check, `impl-d
 pass, every commit says which pass is missing its row and prints the row, and the push refuses.
 
 **Why this priority**: it is the GM's question - can we see how often our subagent checks pay off - answered by construction,
-so the table the answer is read from is whole: all of it, not the 40% the map reviews make up (spec review round 1, measured
-on the table's 374 rows).
+so the table the answer is read from is whole: all of it, not the 40% the map reviews make up (observed 2026-10-10; method:
+`ledger_lint.measured_rows` over `dev/review-ledger.md`, 150 of 374 rows).
 
 **Independent Test**: log a pass in a fixture clone; the report names it and the push refuses; add the row it printed; the
 report is empty and the push passes.
@@ -58,14 +59,18 @@ the session fills only the judgment cells (verdict, finding, class, author misse
 - A pass whose rows land in an earlier push: still answered - the rows stay in the ledger, and a row answers by its cells, not
   by the push that carried it.
 - A pass with several findings: one row per finding (the ledger's rule); any one row carrying its cells answers it.
-- An agent that is not a check (a general-purpose helper, `round-arbiter`, `perf-audit`'s helpers): not logged - the log takes
-  exactly the checks the ledger's `CHECKS` set names.
+- What counts as a check: every agent that judges the work and whose findings get acted on - the ledger's `CHECKS` set, which
+  this feature extends with the three modal checks (`modal-depiction`, `modal-form`, `modal-research`, record checks by
+  feature 375's plan D9) and `source-filter` (it judges each uncited page KEEP or NOT-KEPT). An agent that judges nothing - a
+  general-purpose or Explore helper - or rules on the PROCESS rather than the work (`round-arbiter`) is not a check and is not
+  logged.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: Every return of a dispatched agent whose type is a check the ledger names (`ledger_lint.CHECKS`) MUST append a
+- **FR-001**: Every return of a dispatched agent whose type is a check (`ledger_lint.CHECKS`, which MUST name the modal checks and
+  `source-filter` too, so their rows pass the ledger lint) MUST append a
   record - the date, the check, what it checked, its agent and its measured wall and token cells - to an append-only log in
   the clone's git directory; nothing rewrites or deletes an entry.
 - **FR-002**: A pass is ANSWERED by a row of the measured table whose check, wall cell and tokens cell are the pass's; a check
@@ -108,3 +113,6 @@ the session fills only the judgment cells (verdict, finding, class, author misse
 - **spec-fidelity round 1 (2026-10-10): NOT FAITHFUL.** (1) Record and plan checks out of scope was a carve-out against "our
   subagent checks" - 60% of the table's rows on round 1's own run; now every check the ledger names is logged, at its return. (2) A same-date
   subject match could not tell two same-day rounds apart - a pass is now answered by its own cost cells. (3) FR-004 faithful.
+- **spec-fidelity round 2 (2026-10-10): NOT FAITHFUL.** (1) The modal checks were called "not a check" - they and
+  `source-filter` are now checks, added to `CHECKS` so their rows pass the lint. (2) The title and Summary reworded to FR-001.
+  (3) US1's figure given its date and method.
