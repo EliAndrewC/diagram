@@ -422,6 +422,71 @@ def served_arm(s: Settlement, arm: Poly) -> Poly:
     return [] if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT else arm
 
 
+def _web_cut_lines(plan: SitePlan, frame: _margin_frame, arcs: list[float], stands: list[float]) -> list[Poly]:
+    """The web's candidate lines, one per cut, in the house-fitted frame - the rolled lane form's own geometry (lifted out
+    of `stage_web` by feature 370, the 100-statement cap; same order, same arithmetic).
+
+    Research:
+        lane form knob - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side lanes or a back lane, rolled per map
+        lane runs past its last steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: about 30 ft
+        back lane ties - research/questions/0081-village-lanes.html: cross-ways frame the back lanes
+        back lane tie spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: cross lanes about one to every 300 ft - `web_cuts` at a reach of 1.5 x BUNDLE_PITCH (150 ft), so the ties stand up to about 300 ft apart
+        web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
+        a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
+        a web lane's span - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut
+    """
+    pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall
+
+    # A WEB LANE SPANS THE HOUSES IT SERVES, AND NO MORE. Spanning the whole cluster's extent
+    # instead leaves a tail running past the last steading into open ground at whichever end has no
+    # houses at that cut - a tread that serves nobody, which is exactly what `lanes_reach_something`
+    # exists to catch, and it was 13 of 24 cohort seeds. So each lane's extent is read off the
+    # houses within reach of ITS OWN cut, not off the cluster as a whole.
+    local = WEB_REACH_FT
+
+    def _extent(cuts_at: float, along: list[float], across: list[float]) -> tuple[float, float]:
+        near_by = [v for v, w in zip(along, across, strict=False) if abs(w - cuts_at) <= local] or along
+        return (min(near_by) - pad, max(near_by) + pad)
+
+    lines: list[Poly] = []
+    if plan.lane_web == "alleys":
+        # A lateral spans the cluster's DEPTH at a cut along the margin. Straight in outline
+        # coordinates, which is a gentle curve on the ground - it runs square out from the field
+        # edge, which is the way a path between two plots actually leaves the paddy.
+        for cut in web_cuts(arcs, WEB_REACH_FT, MIN_WEB_GAP):
+            d0, d1 = _extent(cut, stands, arcs)
+            lines.append([frame(cut, d0 + (d1 - d0) * i / 12.0) for i in range(13)])
+        return lines
+    # A back lane spans the cluster's LENGTH at a cut in the standoff, sampled finely enough to
+    # follow the margin's curve - a straight one parallels a curved field edge for a hundred feet
+    # and then walks into the rice.
+    cuts = web_cuts(stands, WEB_REACH_FT, MIN_WEB_GAP)
+    for cut in cuts:
+        a0, a1 = _extent(cut, arcs, stands)
+        n = max(4, int((a1 - a0) / 40.0))
+        lines.append([frame(a0 + (a1 - a0) * i / n, cut) for i in range(n + 1)])
+    # ...AND THE CROSS-LINKS THAT MAKE IT A FRAMEWORK RATHER THAN A LADDER OF SEPARATE RUNGS.
+    #
+    # PARALLEL LANES NEVER MEET. That is arithmetic, not a bug to tune around, and it is why the
+    # back-lane form came out of three settlement-reviews as two and three disconnected
+    # components while the alleys form did not: an alley crosses the spine it branches from, a
+    # back lane runs beside its neighbor forever. The source is not silent about this - the
+    # planned form is "back lanes on each side of the main street WHICH, TOGETHER WITH THE MAIN
+    # STREET ITSELF, PROVIDES A RECTANGULAR FRAMEWORK for the development of the village". A
+    # framework is the parallels PLUS the ties. We were drawing only the parallels.
+    #
+    # The ties go where a lateral can physically pass - the gaps between steadings - which is the
+    # same question `web_cuts` answers, asked along the other axis. They stand about one to every
+    # 300 ft of the cluster's length (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html):
+    # a reach of 1.5 pitches each way, so cuts up to three pitches apart - the form still reads as
+    # a laid-out place with a few cross-ways, not as the alleys form with extra steps.
+    if cuts:
+        lo_c, hi_c = min(cuts) - pad, max(cuts) + pad
+        for tie in web_cuts(arcs, 1.5 * BUNDLE_PITCH, MIN_WEB_GAP):
+            lines.append([frame(tie, lo_c + (hi_c - lo_c) * i / 8.0) for i in range(9)])
+    return lines
+
+
 def stage_web(s: Settlement, plan: SitePlan) -> None:
     """The lanes the settlement wore.
 
@@ -442,6 +507,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     Steps:
         l7r.diagram.hamletgen.ways.fabric._margin_frame
         l7r.diagram.hamletgen.ways.web._lay_skeleton
+        l7r.diagram.hamletgen.ways.web._web_cut_lines
         l7r.diagram.settlement._knobs.web_cuts
         l7r.diagram.hamletgen.ways.web.lay_reachable_runs
         l7r.diagram.hamletgen.ways.web._reachable_runs
@@ -466,18 +532,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         dispersed hamlet draws no web - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
-        lane form knob - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side lanes or a back lane, rolled per map
         lanes after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
-        lane runs past its last steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: about 30 ft
-        back lane ties - research/questions/0081-village-lanes.html: cross-ways frame the back lanes
-        back lane tie spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: cross lanes about one to every 300 ft - `web_cuts` at a reach of 1.5 x BUNDLE_PITCH (150 ft), so the ties stand up to about 300 ft apart
         belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
             may cross a shelter belt, the planting resuming on both sides, but not run its length
         door path reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: STEADING_ARRIVAL_FT 12 ft off the steading's built ground
         door path distance - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: DOOR_REACH_FT 60 ft, the page's reach at which a way counts as reaching a farmhouse
-        web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
-        a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
-        a web lane's span - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut
         web lanes off the hard ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: a stretch that would cross the field, a crop or wet ground is cut out
         web lane margin off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
         web lanes off the water - UNRESEARCHED: web cuts and joins clipped at the watercourses and drawn channels, no web lane crossing water
@@ -556,57 +615,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     if not _rows:
         _lay_skeleton(s, plan, frame, arcs, stands)
 
-    pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall
-
-    # A WEB LANE SPANS THE HOUSES IT SERVES, AND NO MORE. Spanning the whole cluster's extent
-    # instead leaves a tail running past the last steading into open ground at whichever end has no
-    # houses at that cut - a tread that serves nobody, which is exactly what `lanes_reach_something`
-    # exists to catch, and it was 13 of 24 cohort seeds. So each lane's extent is read off the
-    # houses within reach of ITS OWN cut, not off the cluster as a whole.
-    local = WEB_REACH_FT
-
-    def _extent(cuts_at: float, along: list[float], across: list[float]) -> tuple[float, float]:
-        near_by = [v for v, w in zip(along, across, strict=False) if abs(w - cuts_at) <= local] or along
-        return (min(near_by) - pad, max(near_by) + pad)
-
-    lines: list[Poly] = []
-    if _rows:
-        pass  # no cuts: a row's farms are served by their street
-    elif plan.lane_web == "alleys":
-        # A lateral spans the cluster's DEPTH at a cut along the margin. Straight in outline
-        # coordinates, which is a gentle curve on the ground - it runs square out from the field
-        # edge, which is the way a path between two plots actually leaves the paddy.
-        for cut in web_cuts(arcs, WEB_REACH_FT, MIN_WEB_GAP):
-            d0, d1 = _extent(cut, stands, arcs)
-            lines.append([frame(cut, d0 + (d1 - d0) * i / 12.0) for i in range(13)])
-    else:
-        # A back lane spans the cluster's LENGTH at a cut in the standoff, sampled finely enough to
-        # follow the margin's curve - a straight one parallels a curved field edge for a hundred feet
-        # and then walks into the rice.
-        cuts = web_cuts(stands, WEB_REACH_FT, MIN_WEB_GAP)
-        for cut in cuts:
-            a0, a1 = _extent(cut, arcs, stands)
-            n = max(4, int((a1 - a0) / 40.0))
-            lines.append([frame(a0 + (a1 - a0) * i / n, cut) for i in range(n + 1)])
-        # ...AND THE CROSS-LINKS THAT MAKE IT A FRAMEWORK RATHER THAN A LADDER OF SEPARATE RUNGS.
-        #
-        # PARALLEL LANES NEVER MEET. That is arithmetic, not a bug to tune around, and it is why the
-        # back-lane form came out of three settlement-reviews as two and three disconnected
-        # components while the alleys form did not: an alley crosses the spine it branches from, a
-        # back lane runs beside its neighbor forever. The source is not silent about this - the
-        # planned form is "back lanes on each side of the main street WHICH, TOGETHER WITH THE MAIN
-        # STREET ITSELF, PROVIDES A RECTANGULAR FRAMEWORK for the development of the village". A
-        # framework is the parallels PLUS the ties. We were drawing only the parallels.
-        #
-        # The ties go where a lateral can physically pass - the gaps between steadings - which is the
-        # same question `web_cuts` answers, asked along the other axis. They stand about one to every
-        # 300 ft of the cluster's length (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html):
-        # a reach of 1.5 pitches each way, so cuts up to three pitches apart - the form still reads as
-        # a laid-out place with a few cross-ways, not as the alleys form with extra steps.
-        if cuts:
-            lo_c, hi_c = min(cuts) - pad, max(cuts) + pad
-            for tie in web_cuts(arcs, 1.5 * BUNDLE_PITCH, MIN_WEB_GAP):
-                lines.append([frame(tie, lo_c + (hi_c - lo_c) * i / 8.0) for i in range(9)])
+    lines = [] if _rows else _web_cut_lines(plan, frame, arcs, stands)  # no cuts on a row: its farms are served by their street
 
     crops = crop_polys(s)
     toe = s.toe_band() or None

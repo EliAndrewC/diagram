@@ -8,15 +8,15 @@
 
 ## Phase 1 - the cap and its checks (test first)
 
-- [ ] T01 tests/tooling/test_function_cap.py: under the project config a 101-statement function fails and 100 passes; `check-function-cap.py` names it with both ways out, in a linted tree and in `scripts/`; every suppression case of D3 (SC-001, SC-004; FR-001, FR-002, FR-004, FR-008) - written and seen RED before T02
+- [x] T01 tests/tooling/test_function_cap.py: under the project config a 101-statement function fails and 100 passes; `check-function-cap.py` names it with both ways out, in a linted tree and in `scripts/`; every suppression case of D3 (SC-001, SC-004; FR-001, FR-002, FR-004, FR-008) - written and seen RED before T02
       research: rendering
-      verify: make test-file FILE=tests/tooling/test_function_cap.py red, then green after T03
-- [ ] T02 pyproject.toml: PLR0915 selected, `max-statements = 100` with the survey's reason beside it (D1; FR-001, FR-005)
+      verify: DONE. test_function_cap.py seen red (no check, no setting), 30 green after T02-T03
+- [x] T02 pyproject.toml: PLR0915 selected, `max-statements = 100` with the survey's reason beside it (D1; FR-001, FR-005)
       research: rendering
-      verify: T01's config cases green; the comment states 131 of 1,209 and "second most common"
-- [ ] T03 scripts/gates/check-function-cap.py with `--selftest` (D2, D3); first in `make static` and `make quick`, and before every push in sync-with-main.sh (FR-002, FR-004, FR-008)
+      verify: DONE. max-statements 100 with the survey's 131 of 1,209 beside it; the config cases green
+- [x] T03 scripts/gates/check-function-cap.py with `--selftest` (D2, D3); first in `make static` and `make quick`, and before every push in sync-with-main.sh (FR-002, FR-004, FR-008)
       research: rendering
-      verify: T01 green; --selftest; make hooks-test green (the push suite)
+      verify: DONE. check-function-cap.py selftest ok (also with HOME moved); first in static and quick; push suite 116 green
 
 ## Phase 2 - the twelve splits (D4), each proven by its module's tests, then make quick
 
