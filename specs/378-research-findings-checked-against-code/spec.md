@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - spec under review
+**Status**: In progress - spec FAITHFUL (round 3), plan under review
 
 **Affects**: research process, tooling
 
@@ -154,3 +154,4 @@ research-record feature's spec says the check is owed at its close.
   the index reads (a module-docstring claim outside the scope does not); US1 and US2 follow FR-001 and FR-003; D2's
   attribution and D3's figures labeled.
 
+- spec-fidelity-verify, round 3 (2026-10-10): **FAITHFUL**. Every round 2 item resolved; nothing to change.
