@@ -1,6 +1,6 @@
 # Feature Specification: Generator-parity gaps (town-checks audit, 2026-07-21; re-checked 2026-10-07)
 
-**Status**: Filed - from future-work/towns.md, "OWED AT CONVERSION: generator-parity gaps (town-checks audit, 2026-07-21; re-checked 2026-10-07)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Superseded by 381 (2026-10-10): carried word for word into the town tier's placeholder, `specs/381-town-tier-scripted/` (the GM, 2026-10-10: "I agree with your approach, so please do it."). Was: Filed - from future-work/towns.md, "OWED AT CONVERSION: generator-parity gaps (town-checks audit, 2026-07-21; re-checked 2026-10-07)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: town
 

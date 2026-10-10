@@ -1,6 +1,6 @@
 # Feature Specification: The frozen cities' modern-only forms (feature 280, the modern-only sweep, 2026-09-29)
 
-**Status**: Filed - from future-work/cities.md, "OWED AT CONVERSION: the frozen cities' modern-only forms (feature 280, the modern-only sweep, 2026-09-29)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Superseded by 382 (2026-10-10): carried word for word into the provincial city tier's placeholder, `specs/382-provincial-city-tier-scripted/` (the GM, 2026-10-10: "I agree with your approach, so please do it."). Was: Filed - from future-work/cities.md, "OWED AT CONVERSION: the frozen cities' modern-only forms (feature 280, the modern-only sweep, 2026-09-29)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: provincial city
 

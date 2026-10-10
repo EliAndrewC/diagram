@@ -19,7 +19,9 @@ towns, provincial cities and capitals, and a feature is owed at the earliest sta
 tag is live today (*"If something will be required for both towns and cities, then it is owed at the towns stage"*;
 a farmhouse change touches every tier, so it is owed now). An `**Owed at**:` line with a reason overrides the derived
 stage where it is wrong. The report groups each state by stage, or by tag with `--by-affects`; `--check` refuses an
-open feature with no tag or an unknown one.
+open feature with no tag or an unknown one, and one owed at a tier not yet scripted that is not that tier's PLACEHOLDER
+(`placeholders` in `.specify/affects.json`; the GM, 2026-10-10: everything owed when villages are scripted is one feature,
+*"the placeholder feature for anything that we come up with"*, and the same for towns and provincial cities).
 
     speckit-todo.py [--root <repo>] [--all]     --all adds the closed features and why each is closed
     speckit-todo.py [--root <repo>] --affects T,U   only the features carrying any of those tags, same layout
@@ -43,7 +45,7 @@ import argparse
 import json
 import re
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 sys.dont_write_bytecode = True
@@ -81,14 +83,20 @@ class Feature:
 class Vocabulary:
     stage: dict[str, str]
     aliases: dict[str, tuple[str, ...]]
+    placeholders: dict[str, str] = field(default_factory=dict)
 
 
 def vocabulary(root: Path) -> Vocabulary:
-    """The tags and the stage of each, from `.specify/affects.json`; none when the file is absent."""
+    """The tags and the stage of each, and each later stage's placeholder feature, from `.specify/affects.json`; none when the
+    file is absent."""
     path = root / AFFECTS
     data = json.loads(path.read_text()) if path.is_file() else {}
     tags = data.get("tags", {})
-    return Vocabulary({t: v["stage"] for t, v in tags.items()}, {a: tuple(ts) for a, ts in data.get("aliases", {}).items()})
+    return Vocabulary(
+        {t: v["stage"] for t, v in tags.items()},
+        {a: tuple(ts) for a, ts in data.get("aliases", {}).items()},
+        dict(data.get("placeholders", {})),
+    )
 
 
 def affects(text: str, vocab: Vocabulary) -> tuple[tuple[str, ...], tuple[str, ...]]:
@@ -293,6 +301,38 @@ def check_message(missing: list[Feature], vocab: Vocabulary | None = None) -> st
     )
 
 
+def off_placeholder(specs: Path, vocab: Vocabulary) -> list[Feature]:
+    """The open features owed at a tier not yet scripted that are not that tier's placeholder (the GM, 2026-10-10: *"all of
+    the things that are owed when we implement villages should be consolidated into a single spec kit feature"*, and the
+    same for each later tier)."""
+    return [
+        f for f in features(specs)
+        if f.state != "closed" and f.owed in STAGES[1:] and f.name != vocab.placeholders.get(f.owed)
+    ]
+
+
+def placeholder_message(off: list[Feature], vocab: Vocabulary) -> str:
+    """The refusal, naming each feature's placeholder - empty when every later-tier item is in its placeholder."""
+    if not off:
+        return ""
+    lines = []
+    for f in off:
+        home = vocab.placeholders.get(f.owed)
+        lines.append(
+            f"  specs/{f.name}/  (owed at {f.owed}): carry its text into specs/{home}/spec.md under '## Carried items' and close it"
+            f" '**Status**: Superseded by {home.split('-', 1)[0]} (<date>): carried word for word ...'"
+            if home
+            else f"  specs/{f.name}/  (owed at {f.owed}, which has no placeholder yet): make it the {f.owed} tier's placeholder -"
+            f' add "{f.owed}": "{f.name}" under "placeholders" in .specify/affects.json'
+        )
+    return (
+        f"speckit-todo: {len(off)} feature(s) owed at a tier not yet scripted sit outside that tier's placeholder:\n"
+        + "\n".join(lines)
+        + "\n(the GM, 2026-10-10: everything owed when a tier is scripted is one feature, not exhaustive; tag it with a\n"
+        "scripted kind too - hamlet, magistracy - if it is owed now.)\n"
+    )
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="list the spec-kit features not yet closed")
     ap.add_argument("--root", default=".", help="the repository root (default: the current directory)")
@@ -311,7 +351,9 @@ def main(argv: list[str]) -> int:
         sys.stdout.write(("yes" if closed_by_status(Path(args.closed_by_status)) else "no") + "\n")
         return 0
     if args.check:
-        msg = check_message(untagged(Path(args.root) / "specs"), vocabulary(Path(args.root)))
+        vocab = vocabulary(Path(args.root))
+        specs = Path(args.root) / "specs"
+        msg = check_message(untagged(specs), vocab) + placeholder_message(off_placeholder(specs, vocab), vocab)
         sys.stderr.write(msg)
         return 1 if msg else 0
     if args.state:
