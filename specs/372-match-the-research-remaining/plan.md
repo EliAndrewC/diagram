@@ -236,9 +236,9 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   bath (13 x 11 ft) and **Ubame**'s (10 x 11 ft) drawn 10 x 8 ft against their kitchens, each bath's tub moved to stay on its yard
   side; the procedure's claim and text say 10 x 8 ft; the band in `types.json` tightened from 8-22 to w 8-18 by h 6-12 ft.
 - **Hayakawa's bath kept at 18 x 12 ft**: its notes roll it as a resident particular ("superstitious Hajime keeps TWO well-tended
-  modest shrines and an enlarged bath", knob 7), so the band admits it and the procedure names the enlarged bath as a sheet's
-  resident particular, under the program's resident-particulars knob and its claim (a separate claim was refused by impl-drift:
-  0105's drawing page records no enlarged size). The ranked fix named only Ochiba and Ubame; the draft already drew 10 x 8.
+  modest shrines and an enlarged bath", knob 7), so the band admits it; whether that particular stands is HELD for the GM (found-wave108: 0105 keeps the bath
+  10 x 8 ft so the house stays at 49 tsubo, and the record checks asked which rule wins - a bullet recording the enlarged bath on
+  0105's drawing page was drafted and withdrawn). The procedure still names it, unclaimed, as it did before the wave. The ranked fix named only Ochiba and Ubame; the draft already drew 10 x 8.
 - **Records**: m:wave108-bath-size; the two sheets' notes.
 - **Occasions**: glyph-redrawn: bath on ochiba-magistracy (the same change on Ubame).
 

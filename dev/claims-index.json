@@ -1473,13 +1473,15 @@
   "date": "2026-10-10",
   "note": "the kitchen well with the bath is recorded as the project's reading",
   "pages": {
-   "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
+   "0105-baths-furo.drawing.html": "71e214c6f51783fd"
   },
-  "research": "c93529d7938119b7",
+  "research": "c1e9191087fe7677",
   "rests": [
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
+  "triage": "touched",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Adding a building type#type workflow": {
@@ -2173,11 +2175,19 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Inner court (private / sacred)#bath": {
-  "code": "85830384a77dbe61",
-  "core": "36bdb5d4a5562844",
+ "docs/buildings.md::Inner court (private / sacred)#Hayakawa's enlarged bath, up to ~54 x 36 px = 18 x 12 ft, as a sheet's resident particular (the 10 x 8 ft guess was chosen to keep the house within 49 tsubo, and no claim covers going past it)": {
+  "code": "820eca0d767c15d3",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "a room or addition on the service side by the kitchen and well, never a pavilion; 10x8 recorded as a GUESS",
+  "note": "Hayakawa's enlarged bath, up to ~54 x 36 px = 18 x 12 ft, as a sheet's resident particular (the 10 x 8 ft guess was chosen to keep the house within 49 tsubo, and no claim covers going past it)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "docs/buildings.md::Inner court (private / sacred)#bath": {
+  "code": "7f24650140288194",
+  "core": "820eca0d767c15d3",
+  "date": "2026-10-10",
+  "note": "Research finds the bath inside the house or as an addition to it, never a separate building, and gives no size; the drawing page places it on the service side by the kitchen and well, and records 10 x 8 ft as a guess sized to fit the 49-tsubo house. The claim says the same.",
   "pages": {
    "0105-baths-furo.drawing.html": "3a22b50676fcbd78",
    "0105-baths-furo.html": "d5cd9565ea393908"
@@ -2191,16 +2201,16 @@
    "0105-baths-furo.html:16a26f2af5d6a16b",
    "0105-baths-furo.html:6f0f6411ed6e730e",
    "0105-baths-furo.html:92fb6bed7c57c8e5",
-   "0105-baths-furo.html:b664b0550fba61ba",
-   "0105-baths-furo.html:d8d19b4eb5351d97"
+   "0105-baths-furo.html:d8d19b4eb5351d97",
+   "0105-baths-furo.html:f9880c41b621a58b"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#engawa": {
-  "code": "6c38af70a7b04fce",
-  "core": "36bdb5d4a5562844",
+  "code": "4cfe5284d118e73c",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "the procedure fixes \"along the garden-facing south face of each block\" where 0102's drawing page makes the faces a knob of two forms, and ~8 px = 2.7 ft is below the attested 3-6 ft (the generated compound draws 4 ft); roll the faces and widen to 3 ft or more",
+  "note": "the procedure fixes the garden face on every block (\"along the garden-facing south face of each block\"), but 0102's drawing page makes the faces \"a knob between two forms\" (garden face alone, or two or three faces), so the faces should be rolled per sheet; also ~8 px is ~2.7 ft at the section's own scale, under the 3 ft floor and not the 4 ft the drawing page gives the generated compound",
   "pages": {
    "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html": "9a588e588b7fc9fa",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html": "d414f1a91e856c72"
@@ -2208,8 +2218,8 @@
   "research": "5332970e76f0dd3b",
   "rests": [
    "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:002eb43fd8e0dbdc",
-   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:1ab70933149d3f3b",
    "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:e679dd9ba7fb6cc9",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.html:42ebb2ad8738820f",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:ab7dc4049fa46cee",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:c62884b883d6ff3f",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:e50acf31e21172cd"
@@ -2217,49 +2227,54 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Inner court (private / sacred)#formal reception room": {
-  "code": "d7e926a84ad3ab58",
-  "core": "36bdb5d4a5562844",
+  "code": "cbe3e99f11732aaa",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "Takayama's residence kept a room for receiving guests",
+  "note": "Takayama's residence kept its own room for receiving guests beside the office; the zashiki is guest space inside the house",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
   "research": "cde11191e2ae3f5f",
   "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:80ac18283316ac77",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:e20e108d786f655f"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan": {
-  "code": "1be4b1334da0ca47",
-  "core": "36bdb5d4a5562844",
+  "code": "7fcb4747cda2e499",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "genkan on the office, or none on the roji form; other blocks use informal doors",
+  "note": "a knob between the two attested forms (a genkan on the office, as at Takayama, or no genkan and a roji path to the zashiki veranda, as at Koseki); other blocks use the inner or kitchen door",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
   },
   "research": "d6575223a27df7a3",
   "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan porch size": {
-  "code": "e939a090f44c2587",
-  "core": "36bdb5d4a5562844",
+  "code": "1aba2a2de1976eed",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "no porch size in the cited material",
+  "note": "0104 gives no porch size",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#inner garden": {
-  "code": "e1c734cc685a18ca",
-  "core": "36bdb5d4a5562844",
+  "code": "ec4037cddaf6b075",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "pond-or-dry garden before the rooms, lanterns optional",
+  "note": "the optional pond rolls between the attested pond garden and dry garden; lanterns are attested in ordinary gardens; the garden lies before the formal rooms",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html": "a2da28c93c49acfa"
   },
@@ -2269,27 +2284,26 @@
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:21ce4fa1ddb6b1b8",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:28bccdbb5d4fc2f1",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:47e1a354b7e22021",
-   "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:90362721f42307d0",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:ba5b5b37436fe857",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:c29c96fc559c5cb1"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kamado range size": {
-  "code": "e7bd0a692152178d",
-  "core": "36bdb5d4a5562844",
+  "code": "27a8072e6f941bab",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "no kamado size in the cited material",
+  "note": "0107 gives no range size or count of fire mouths",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kitchen": {
-  "code": "b832015d64e671b4",
-  "core": "36bdb5d4a5562844",
+  "code": "8778aa3a5910eb73",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "\"~120 x ~100 = ~40x33 ft\" (~1,320 sq ft) is cited to 0107, which gives no size, and contradicts 0091's drawing page: house, kitchen and bath \"come to about 1,780 sq ft\", the kitchen \"a fraction\", about a sixth; the size should follow 0091's drawing page",
+  "note": "~40x33 ft (~1,320 sq ft) cannot fit 0091's finding of a kitchen at \"about a sixth\" of the house (~440 sq ft) or the drawing page's house + kitchen + bath of ~1,780 sq ft, and §161 calls a kitchen near the whole house's size wrong; 0107 gives no size (§116 defers to 0091), so the size should cite 0091 and fall within it",
   "pages": {
    "0107-kitchens-daidokoro.drawing.html": "d3233f8a13a78830",
    "0107-kitchens-daidokoro.html": "1eedc5cf7b1adca7"
@@ -2298,54 +2312,52 @@
   "rests": [
    "0107-kitchens-daidokoro.drawing.html:73a3759342f8854c",
    "0107-kitchens-daidokoro.drawing.html:b9c022b8e45ef642",
-   "0107-kitchens-daidokoro.html:22e397b7573f5733",
-   "0107-kitchens-daidokoro.html:b75e492411be9efb"
+   "0107-kitchens-daidokoro.html:10294f430cd37c5b",
+   "0107-kitchens-daidokoro.html:22e397b7573f5733"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Inner court (private / sacred)#kitchen corridor tagged residence corridor": {
-  "code": "faf378ddf994e1db",
-  "core": "36bdb5d4a5562844",
+  "code": "030c652adf620094",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "the procedure offers \"a short covered corridor\" (Hayakawa's covered way), a form 0091 gives to shogun and daimyo mansions (\"middle and lower-ranking samurai had almost none\"); only the projecting kitchen (ell) is attested, so the corridor should be labeled DEVIATION or GUESS",
+  "note": "the \"short covered corridor\" form is not attested for this rank: middle-rank houses \"had almost none\" (corridors between buildings belonged to shogun and daimyo mansions), and only the projecting kitchen (the ell) is attested; record the corridor as a DEVIATION on 0091's drawing page or label it GUESS",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
   "research": "cde11191e2ae3f5f",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:4adcc0fb43fa63e7",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Inner court (private / sacred)#reception at one end": {
-  "code": "59c3fc67cf5299de",
-  "core": "36bdb5d4a5562844",
+  "code": "2d4d0ffc64a7ffc0",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "reception and the ancestral alcove at the formal end",
+  "note": "the reception is at an end in both the palace order and the small house's order; the altar sits beside the zashiki's tokonoma or behind the zashiki",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html": "1228abbd554a36c7"
   },
   "research": "5928a50e3d067773",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:351603d669c53509",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:4ac40a02f105bb0c",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:78661719bce7d1a0",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d59d56dfc182e6ec",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:f1cd8cc3f400ee13",
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:2a2c8bbc0151daa8",
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:414f8be338415f3b",
-   "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:56590e800f15cbe0",
-   "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:e209fa8f46240c13"
+   "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:56590e800f15cbe0"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#residence massing": {
-  "code": "077e394afe511e61",
-  "core": "36bdb5d4a5562844",
+  "code": "ec52845a7e3704a8",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "one block, or echelon for accretion",
+  "note": "one block under one roof, or echelon for a house added to over generations; the choice is made per sheet by its story",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
@@ -2355,24 +2367,25 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:2005eab9d88a4421",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:4adcc0fb43fa63e7",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:983ac19a67796e47",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms": {
-  "code": "5dbcf52d29e58b66",
-  "core": "36bdb5d4a5562844",
+  "code": "a087d996ec951edc",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "the house is sized to 49 tsubo (0091's drawing page §125), within the thousand-koku Kuchiba house's 41-74 tsubo, which held six rooms, while the 38-room karo mansion stood on 280 tsubo of building; 18-25 rooms does not fit a 49-tsubo house, and the record answers about six",
+  "note": "the bundle answers this: the Kuchiba house of 41-74 tsubo holds six rooms, the Saigo mansion has 38 rooms on 280 tsubo (~7 tsubo a room), and our house is sized to 49 tsubo, which gives about six rooms, not 18-25; the claim should cite 0091 (and 0106) with ~6 rooms",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Inner court (private / sacred)#room order": {
-  "code": "a2e6c96e5afa224c",
-  "core": "36bdb5d4a5562844",
+  "code": "ae3f34e6cbf3dfc0",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "0091's drawing page makes room order \"a knob with two forms\", but the procedure names no knob and every sheet takes the palace order (\"the small house's order is never taken\"); roll it or relabel",
+  "note": "the procedure fixes only \"reception at one end\", which holds in both orders; the claim reports that the sheets so far take the palace order, as the drawing page records",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "2688f28d713d8374"
   },
@@ -2382,41 +2395,33 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d39a6c083ed2ffa",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:c46fa707abad1ec6"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart": {
-  "code": "bd52a2b35ac92a34",
-  "core": "36bdb5d4a5562844",
+  "code": "2325b4462bf8ecfc",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "the procedure draws the karo's house as a separate structure inside the compound, but \"No page we read places a chief retainer's own house inside the residence compound itself\"; the attested forms are near the lord or in the castle grounds, or staff koya/nagaya",
+  "note": "karo and staff lived apart from the lord's rooms: near the residence, or in small houses (koya) and long-houses (nagaya) inside an intendancy's walls",
   "pages": {
    "0106-the-chief-retainers-house-karo-yashiki.html": "b58e93b5d1d396f7"
   },
   "research": "5a4241ec0f470a1b",
   "rests": [
-   "0106-the-chief-retainers-house-karo-yashiki.html:47f0cdaa1ad82d71",
+   "0106-the-chief-retainers-house-karo-yashiki.html:3b969adec7af9389",
    "0106-the-chief-retainers-house-karo-yashiki.html:52f01b1b82bc7149",
    "0106-the-chief-retainers-house-karo-yashiki.html:80b0dad39e3061bf",
    "0106-the-chief-retainers-house-karo-yashiki.html:9003bd375cdf6745"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#suites as labeled zones": {
-  "code": "cee14ac6b0b209ee",
-  "core": "36bdb5d4a5562844",
+  "code": "91907305916839b9",
+  "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "0091's drawing page records this as a drawing convention",
+  "note": "each label standing for a compressed suite is a drawing convention, as the drawing page records",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
- },
- "docs/buildings.md::Inner court (private / sacred)#the residence placed along the north range of the inner court": {
-  "code": "36bdb5d4a5562844",
-  "core": "36bdb5d4a5562844",
-  "date": "2026-10-10",
-  "note": "the residence placed along the north range of the inner court",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "docs/buildings.md::Latrines and the rear service strip#named rear yard": {
   "code": "5cc48c0452a40565",
@@ -3811,12 +3816,14 @@
   "date": "2026-10-08",
   "note": "the kitchen's well serves the bath",
   "pages": {
-   "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
+   "0105-baths-furo.drawing.html": "71e214c6f51783fd"
   },
-  "research": "c93529d7938119b7",
+  "research": "c1e9191087fe7677",
   "rests": [
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
+  "triage": "touched",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#garden well": {
@@ -3836,13 +3843,15 @@
   "note": "a well with the kitchen, inside or beside it",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
-   "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
+   "0105-baths-furo.drawing.html": "71e214c6f51783fd"
   },
-  "research": "d6adb6196011c9f7",
+  "research": "2134d8d866137050",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:6218744dea5fe01d",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
+  "triage": "touched",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#stables well": {
