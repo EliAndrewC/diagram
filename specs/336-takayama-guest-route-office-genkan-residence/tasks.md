@@ -19,7 +19,7 @@ The record write is `research: physical` with its five boxes; the rest are `rese
 - [ ] T02 The download list (D2): the 1830 drawing
       research: rendering
       verify: make download-add
-- [ ] T03 The claim on the route's code (D3, FR-002): STONE_STEP_FT cites 0104; impl-drift records it DRIFTED
+- [ ] T03 The claim on the route's code (D3, D3a, FR-002): _roji_parts cites 0104; impl-drift records it DRIFTED; Ochiba's hand-drawn route noted in implementation-check.md
       research: rendering
       verify: make claims-report lists it DRIFTED
 - [ ] T04 Implementation check (feature 378): make impl-check F=336 reports nothing missing (D4, FR-091)

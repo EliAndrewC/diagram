@@ -37,11 +37,18 @@ its page, https://jinya.gifu.jp/en/architecture/, which shows it.
 **D2 - The download list**: the 1830 drawing the 1996 restoration followed goes to `research/to-download.md` through
 `make download-add`.
 
-**D3 - The claim on the route's code** (FR-002): the roji constant `STONE_STEP_FT` in `l7r/diagram/compound_model.py`,
-the code that draws a guest's way from the middle gate to the reception's veranda out of doors, gains a `Research:` claim
-citing 0104's findings page (a string literal after the assignment, the grammar for a constant). Its `impl-drift` check
-is to record it DRIFTED. This is a docstring-class edit with no code change; the unit enters the index through feature
-378's claimed-outside rule.
+**D3 - The claim on the route's code** (FR-002). `_roji_parts` in `l7r/diagram/compound_parts.py` is the code that sends a
+guest out of doors: "from the middle gate a stepping-stone path, the roji, straight to a shoe stone at the reception room's
+veranda". It gains a `Research:` claim citing 0104's findings page, in its docstring, and its `impl-drift` check is to
+record it DRIFTED. `STONE_STEP_FT` only spaces the stones and is not the decision (plan review, round 1). The
+statement behind it at `compound_model.py` (the `DOOR_KINDS` comment: "the guest's way is the middle gate and the roji ...
+so the residence carries no genkan") is a comment the claims grammar cannot read; it is reworded to point at the claim.
+The unit enters the index through feature 378's claimed-outside rule. The edit is a docstring and a comment, not code.
+
+**D3a - Ochiba's own route is drawn by no code.** The Ochiba sheet is hand-authored SVG; its route
+(`ochiba-magistracy.svg`) is written there, and `claims.py` reads no SVG. The code claim covers the generated compound's
+version of the same route. Ochiba's is recorded in `specs/336-.../implementation-check.md` as drawn by hand, outside the
+claims index, and the sheet stays untouched (D1).
 
 **D4 - The implementation check** (FR-091): `make impl-check F=336` reports nothing missing.
 
@@ -49,6 +56,7 @@ is to record it DRIFTED. This is a docstring-class edit with no code change; the
 
 ```text
 research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan{.html,.notes.html}
-l7r/diagram/compound_model.py   the claim on STONE_STEP_FT only
+l7r/diagram/compound_parts.py   the claim on _roji_parts (docstring)
+l7r/diagram/compound_model.py   the DOOR_KINDS comment points at it
 research/to-download.md   through make download-add
 ```

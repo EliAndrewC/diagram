@@ -1,0 +1,40 @@
+{
+ "feature": "343-receiving-court-swept",
+ "plan_sha256": "ca11c8b20ff660d5e8a9799bab84068d9f257c6e501da99bffdd2074890261a1",
+ "plan_text": "# Implementation Plan: is the receiving court \"swept\"? (feature 343)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The record write** (FR-001): 0104's findings page gains the absence note and the two-drawings sentence, from\nresearch.md R1; written by the shared write session, committed `343: ...`.\n\n**D2 - The modal** (FR-002): `border-court.md` reworded by this session after the record lands (its Entry and Drawing name\n0104 and 0110). It owes `modal-form`, `modal-research` and `modal-depiction` (`make record-owed` names them), each from\n`make modal-bundle`.\n\n**D3 - The sheet's comments** (FR-005): the three \"swept\" comments of `ubame-magistracy.svg` reworded. No drawn element\nchanges, so no review check is owed (feature 294).\n\n**D4 - The implementation check** (FR-004): the claims citing 0104's findings, re-owed by the change, are triaged or\nre-checked; a question no code decides is recorded per feature 378.\n\n## Project Structure\n\n```text\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan{.html,.notes.html}\nl7r/diagram/interactive/assets/modals/sheet/border-court.md\npool/magistracies/ubame-magistracy/ubame-magistracy.svg   comments only\n```\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "0104 gains the absence note and the two-drawings sentence from R1",
+   "class": "within",
+   "why": "FR-001"
+  },
+  {
+   "id": "D2",
+   "summary": "border-court.md reworded after the record lands; modal-form, modal-research, modal-depiction each from make modal-bundle",
+   "class": "within",
+   "why": "FR-002 and FR-003; record_owed.py routes the three modal checks (line 214)"
+  },
+  {
+   "id": "D3",
+   "summary": "the three 'swept' comments of ubame-magistracy.svg reworded; no drawn element changes, so no review check owed",
+   "class": "within",
+   "why": "FR-005/SC-004 ('no source comment of the ubame sheet says swept'); measured: three comments, lines 33, 353 (practice ground) and 383 (border court)"
+  },
+  {
+   "id": "D4",
+   "summary": "claims citing 0104 triaged or re-checked; a question no code decides recorded per feature 378",
+   "class": "within",
+   "why": "FR-004"
+  },
+  {
+   "id": "TC-shared",
+   "summary": "shared write/check sessions, one commit per feature",
+   "class": "within",
+   "why": "the record's process"
+  }
+ ],
+ "verdict": "CLEAR"
+}

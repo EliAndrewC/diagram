@@ -29,12 +29,13 @@ N/A: no generator change.
 
 ## Decisions
 
-**D1 - The absence note** (FR-001): 0099's findings page gains an absence note on the roofed court's size, naming ONLY
-what R1 records as searched: the record, the archive, Takayama's official and city pages, Japanese Wikipedia's お白洲,
-and the Edo, Sado and Suibara coverage. imidas and kotobank are dropped, because R1 does not record them (spec review
-note). Written by the shared write session, committed `337: ...`.
+**D1 - The absence note** (FR-001): 0099's findings page gains an absence note on the roofed court's size, naming what
+was searched as FR-001 lists it: the record, the archive, Takayama's official and city pages, Japanese Wikipedia, imidas,
+kotobank, and coverage of the Edo, Sado and Suibara magistracies. research.md R1 now records each of these searches (plan
+review round 1 found the summary had left them out). Written by the shared write session, committed `337: ...`.
 
-**D2 - The Why's "49 mats"** is struck from the spec: R1 does not carry it (spec review note).
+**D2 - The Why's "49 mats"** was struck from the spec; R1 now carries the tourist pages' 49-mat great hall as what it is,
+a search summary about the great hall, not the court.
 
 **D3 - `make open-questions`** must list it (SC-001): the note's form is the one `open-questions` reads.
 

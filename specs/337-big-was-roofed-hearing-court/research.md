@@ -14,3 +14,15 @@ reporting only).
 
 **Answer** (observed 2026-10-10; method: the sources above): no measured roofed court. Not readable on the web: Takayama's
 survey plan or repair report, the 1810 plan's plate, the Edo-Tokyo Museum model.
+
+**What else was searched** (observed 2026-10-10; method: the same pass's report, set down here in full; the summary
+above had left these out, plan review round 1):
+- **Japanese Wikipedia, imidas and kotobank on the court**: who sat in each tier, and no size.
+- **Takayama tourist pages**: the great hall is three rooms in a row of 49 mats, the largest room in the jin'ya; there
+  are about 40 rooms; no mat count or size is given for the court. These are search-result summaries, not read pages.
+- **The Edo town magistracy**: the whole South Town Magistracy site is 2,603 tsubo in 1842 (Tenpo 13), with 1,307 tsubo
+  of building. These are site totals from search summaries, not the court.
+- **The Sado Magistracy** (restored 2000 from drawings and Meiji photographs) and **the Suibara Daikansho** (restored 1995
+  from a plan drawing): searches found no area for the court.
+- **Survey reports, floor plans and repair reports** on Takayama and other jin'ya: none gave a court area.
+

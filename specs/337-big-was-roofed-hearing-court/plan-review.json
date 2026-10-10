@@ -1,0 +1,41 @@
+{
+ "feature": "337-big-was-roofed-hearing-court",
+ "plan_sha256": "d880cd8ad4faafc5bd3a865a51dac0a3eb6db5c52e992f5243ddd932762709ec",
+ "plan_text": "# Implementation Plan: how big was a roofed hearing court? (feature 337)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The absence note** (FR-001): 0099's findings page gains an absence note on the roofed court's size, naming ONLY\nwhat R1 records as searched: the record, the archive, Takayama's official and city pages, Japanese Wikipedia's お白洲,\nand the Edo, Sado and Suibara coverage. imidas and kotobank are dropped, because R1 does not record them (spec review\nnote). Written by the shared write session, committed `337: ...`.\n\n**D2 - The Why's \"49 mats\"** is struck from the spec: R1 does not carry it (spec review note).\n\n**D3 - `make open-questions`** must list it (SC-001): the note's form is the one `open-questions` reads.\n\n**D4 - The implementation check** (FR-091): the claims citing 0099's findings (`ROOFED_ZONES` in `compound_model.py` and\nthe procedure sections) are re-owed and checked.\n\n## Project Structure\n\n```text\nresearch/questions/0099-the-hearing-court-shirasu{.html,.notes.html}\n```\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "0099's absence note names ONLY what R1 records as searched: imidas and kotobank dropped from FR-001's list; Edo, Sado and Suibara coverage kept",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The criterion (name only what was measured as searched) is sound and would be legitimate applied consistently, but D1 applies it to half the list. Sado and Suibara appear neither in R1 nor anywhere in 0099 (grep), yet D1 keeps them, so the note would name searches no record holds - the defect D1 exists to avoid. Meanwhile imidas and kotobank are 0099's own cited sources (notes shirasu-imidas, shirasu-imidas-2, shirasu-kotobank, shirasu-kotobank-2), so 'not searched' is itself unmeasured. And a plan narrowing an accepted FR is a post-acceptance spec amendment, which re-owes a review."
+  },
+  {
+   "id": "D2",
+   "summary": "the Why's '49 mats' struck",
+   "class": "within",
+   "why": "already applied in the spec; the round-1 reviewer's note"
+  },
+  {
+   "id": "D3",
+   "summary": "the note in the form make open-questions reads",
+   "class": "within",
+   "why": "SC-001; 0099's existing absence note is already listed by make open-questions (measured 2026-10-10)"
+  },
+  {
+   "id": "D4",
+   "summary": "claims citing 0099 (ROOFED_ZONES, procedure sections) re-owed and checked",
+   "class": "within",
+   "why": "FR-091"
+  },
+  {
+   "id": "TC-shared",
+   "summary": "shared write/check sessions, one commit per feature",
+   "class": "within",
+   "why": "the record's process"
+  }
+ ],
+ "verdict": "BLOCKED"
+}
