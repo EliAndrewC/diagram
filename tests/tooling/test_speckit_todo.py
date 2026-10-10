@@ -174,3 +174,7 @@ def test_check_names_the_open_features_with_no_stage_and_the_line_to_add(tmp_pat
 def test_every_open_feature_in_the_repository_names_its_stage() -> None:
     """The GM, 2026-10-10: every open feature says when it is owed, so the list can be read by stage."""
     assert st.check_message(st.unstaged(REPO / "specs")) == ""
+
+
+def test_a_tree_with_no_specs_directory_has_nothing_owed(tmp_path: Path) -> None:
+    assert st.features(tmp_path / "specs") == [] and st.check_message(st.unstaged(tmp_path / "specs")) == ""

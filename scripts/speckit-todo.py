@@ -96,7 +96,8 @@ def closed_by_status(d: Path) -> bool:
 
 
 def features(specs: Path) -> list[Feature]:
-    return [feature(d) for d in sorted(specs.iterdir()) if d.is_dir()]
+    """Every feature directory; a tree with no `specs/` has none (the push runs `--check` in any repository)."""
+    return [feature(d) for d in sorted(specs.iterdir()) if d.is_dir()] if specs.is_dir() else []
 
 
 def _line(f: Feature, extra: str = "") -> str:
