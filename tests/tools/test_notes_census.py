@@ -27,6 +27,13 @@ def test_the_census_counts_what_the_map_DREW_including_the_clumps_off_the_page()
     assert "rack **2**" in body and "trough **1**", "fixtures are counted by form, falling back to kind"
 
 
+def test_the_census_counts_the_storehouse_annexes_against_the_farmhouses() -> None:
+    """Feature 361: the storehouse count lived only in hand-typed dated entries, and one went stale on Kuwabata."""
+    M = {"houses": [{"x": 0.0, "y": 0.0}, {"x": 50.0, "y": 0.0}, {"x": 99.0, "y": 0.0}], "farm_sheds": [{"x": 1.0, "y": 1.0}]}
+    assert "storehouses: **1** of **3** farmhouses" in nc.census(M)
+    assert "storehouses: **0** of **0** farmhouses" in nc.census({"houses": []}), "a map with no annexes says so"
+
+
 def test_a_map_with_no_fixtures_says_NONE_rather_than_printing_an_empty_list() -> None:
     assert "farmstead fixtures: none" in nc.census({"houses": []})
 

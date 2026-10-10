@@ -219,3 +219,87 @@ def test_a_dropped_block_coming_back_between_dispatches_trips_the_reversal_wire(
     assert "a tripwire is owed its ruling first (reversal:q:0105@3" in out
     assert list(ha.owed(root)) == ["reversal:q:0105@3"]
     assert hc.subject_blocks(root, "modal:sheet/none") == []
+
+
+# ---- feature 371: every check's pass is logged at its return, with its cost cells ------------------------------------------
+
+
+def _transcript(tmp: pathlib.Path, name: str, prompt: str, stamps: tuple[str, str] = ("2026-10-10T10:00:00Z", "2026-10-10T10:01:20Z")) -> pathlib.Path:
+    """A minimal agent transcript: the dispatch's prompt, then one model call with its usage."""
+    t = tmp / f"agent-{name}.jsonl"
+    t.write_text(
+        json.dumps({"timestamp": stamps[0], "message": {"role": "user", "content": prompt}})
+        + "\n"
+        + json.dumps(
+            {
+                "timestamp": stamps[1],
+                "message": {"role": "assistant", "usage": {"input_tokens": 1000, "cache_read_input_tokens": 2000, "cache_creation_input_tokens": 0, "output_tokens": 500}, "content": []},
+            }
+        )
+        + "\n"
+    )
+    return t
+
+
+def _log(tmp: pathlib.Path) -> list[dict]:
+    p = tmp / hc.PASS_LOG
+    return [json.loads(ln) for ln in p.read_text().splitlines()] if p.is_file() else []
+
+
+def test_a_checks_return_appends_one_pass_with_the_transcripts_cells(tmp_path: pathlib.Path) -> None:
+    """FR-001 / SC-004: the cells are the ones review_cost computes from the same transcript."""
+    _lint, rc = hc._reviews()
+    t = _transcript(tmp_path, "a1", "Check the bundle at /tmp/x/MANIFEST.md | read it\nmore")
+    assert hc.log_pass(tmp_path, "returned", {"agent_type": "glyph-check", "agent_id": "a1", "agent_transcript_path": str(t)}, 0.0)
+    (rec,) = _log(tmp_path)
+    assert rec["check"] == "glyph-check" and rec["agent"] == "a1" and rec["subject"] == "Check the bundle at /tmp/x/MANIFEST.md read it"
+    assert f"{rec['wall']} | {rec['tokens']}" == rc.cells(rc.cost(t.read_text().splitlines()))
+
+
+def test_an_agent_that_is_not_a_check_logs_nothing(tmp_path: pathlib.Path) -> None:
+    t = _transcript(tmp_path, "a2", "help")
+    for kind in ("general-purpose", "round-arbiter", "Explore"):
+        assert not hc.log_pass(tmp_path, "returned", {"agent_type": kind, "agent_id": "a2", "agent_transcript_path": str(t)}, 0.0)
+    assert _log(tmp_path) == []
+
+
+def test_each_return_of_a_resumed_check_is_logged_with_its_own_cells(tmp_path: pathlib.Path) -> None:
+    """Plan review 2: the second stop's cells are the resumed segment's alone; the same return seen twice is logged once; a
+    background launch waits for its return."""
+    _lint, rc = hc._reviews()
+    t = _transcript(tmp_path, "a3", "MODE 2")
+    payload = {"agent_type": "spec-fidelity", "agent_id": "a3", "agent_transcript_path": str(t)}
+    assert hc.log_pass(tmp_path, "returned", payload, 0.0)
+    assert not hc.log_pass(tmp_path, "returned", payload, 0.0), "the same return seen again is not a second pass"
+    with t.open("a") as fh:  # resumed: a new prompt, then a second call
+        fh.write(json.dumps({"timestamp": "2026-10-10T11:00:00Z", "message": {"role": "user", "content": "round 2, please"}}) + "\n")
+        fh.write(
+            json.dumps(
+                {
+                    "timestamp": "2026-10-10T11:00:40Z",
+                    "requestId": "r2",
+                    "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 100, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 50}},
+                }
+            )
+            + "\n"
+        )
+    assert hc.log_pass(tmp_path, "returned", payload, 0.0)
+    first, second = _log(tmp_path)
+    assert second["wall"] == "40 s" and (first["wall"], first["tokens"]) != (second["wall"], second["tokens"])
+    assert f"{second['wall']} | {second['tokens']}" == rc.cells(rc.cost(rc.segments(t.read_text().splitlines())[-1]))
+    bg = {"tool_input": {"subagent_type": "spec-fidelity"}, "tool_response": {"status": "async_launched", "agentId": "a3"}}
+    assert not hc.log_pass(tmp_path, "launched", bg, 0.0) and len(_log(tmp_path)) == 2
+
+
+def test_a_foreground_check_is_logged_when_its_tool_call_completes(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _lint, rc = hc._reviews()
+    t = _transcript(tmp_path, "a4", "Check the claims bundle")
+    monkeypatch.setattr(rc, "transcript", lambda aid, root=None: t if aid == "a4" else None)
+    fg = {"tool_input": {"subagent_type": "impl-drift"}, "tool_response": {"status": "completed", "agentId": "a4"}}
+    assert hc.log_pass(tmp_path, "launched", fg, 0.0)
+    assert _log(tmp_path)[0]["check"] == "impl-drift"
+
+
+def test_a_return_with_no_transcript_or_a_broken_one_never_raises(tmp_path: pathlib.Path) -> None:
+    assert not hc.log_pass(tmp_path, "returned", {"agent_type": "glyph-check", "agent_id": "a5", "agent_transcript_path": str(tmp_path / "gone.jsonl")}, 0.0)
+    assert not hc.log_pass(tmp_path / "no-such-dir", "returned", {"agent_type": "glyph-check", "agent_id": "a6", "agent_transcript_path": str(_transcript(tmp_path, "a6", "x"))}, 0.0)

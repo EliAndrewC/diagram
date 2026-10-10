@@ -419,5 +419,16 @@ expect_out "unknown: towns"
 ( cd "$D/main/.clones/c" && sed -i 's/^\*\*Affects\*\*: towns$/**Affects**: town, capital/' specs/400-x/spec.md && git add -A && git commit -qm "tagged" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the same spec with known tags -> lands" 0 $?
 
+echo "17. a check's pass with no row in the review ledger is refused at the push, with the row to add (feature 371)"
+D=$(topology lo)
+( cd "$D/main/.clones/c" && mkdir -p dev && printf '# ledger\n\n## Review checks, measured (feature 294 on)\n\n| date | check | subject | verdict | finding | class | author missed? | acted on | wall | tokens |\n|---|---|---|---|---|---|---|---|---|---|\n' > dev/review-ledger.md \
+  && echo docs > note.md && git add -A && git commit -qm "a ledger" )
+printf '%s\n' '{"date": "2026-10-10", "check": "glyph-check", "subject": "copse", "agent": "a1", "wall": "80 s", "tokens": "244k in (199k cached) / 7.8k out"}' > "$D/main/.clones/c/.git/check-passes.jsonl"
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a logged pass with no row -> refused" 1 $?
+expect_out "| 2026-10-10 | glyph-check | copse | ? |"
+OUT=$(LEDGER_ROWS_OK="a fixture's escape with its reason" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "the escape with a reason lands" 0 $?
+( cd "$D/main/.clones/c" && printf '| 2026-10-10 | glyph-check | copse | PASS | caught nothing | nothing | - | nothing | 80 s | 244k in (199k cached) / 7.8k out |\n' >> dev/review-ledger.md && echo more > note.md && git add -A && git commit -qm "the row" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the pass with its row lands" 0 $?
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

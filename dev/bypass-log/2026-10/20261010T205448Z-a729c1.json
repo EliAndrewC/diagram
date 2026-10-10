@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-10T20:54:48Z",
+  "target": "claims-gate",
+  "commit": "b47f3172e",
+  "why": "CLAIMS_OK: the GM 2026-10-10: findings in code feature 370 moved without changing, not new things we created; all 14 recorded and listed by make claims-report, for feature 374; pool byte-identical"
+}

@@ -1535,6 +1535,10 @@ review-paired-gate:  ## [project] the settlement-review's paired gate - green, r
 # verification record; running is a gate target live in this clone, by cwd.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
 
+# GUARD_EDIT_OK: feature 371 adds an operation - read-only; the push's refusal is sync-with-main.sh's, not this
+ledger-owed:     ## [project] every check pass logged in this clone with no row in the review ledger, each with the row to add (feature 371)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md"
+
 review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
 ##  AGENT=<id>  the agent id the Agent tool's result names
 	@: "GUARD_EDIT_OK: feature 294 FR-010, adding an operation - the ledger's measured table copies its cost from this, never from memory"
