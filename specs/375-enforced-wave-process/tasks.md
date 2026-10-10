@@ -32,21 +32,21 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       verify: DONE. DONE. make done green (476 s, run-log 20261010T170058); hooks-test inside it; 375's report written from this session's transcript (report.md); landed by the push that carries this tick
 ## Batch 2 - the owing logic
 
-- [ ] T08 The pop-up triage (plan D1): a modal unit owed only because a page its `Drawing:` or `Entry:` names moved owes a TRIAGE; `make modal-triage` shows each moved page's blocks new, changed or removed since the unit's last answer (the pages a bundle read kept as blobs) beside the kinds naming it; `make modal-triaged BUNDLE= REPLY=` answers the kinds a reply does not name and sends the named on; `make modal-bundle` refuses a unit owed only a triage (FR-001)
+- [x] T08 The pop-up triage (plan D1): a modal unit owed only because a page its `Drawing:` or `Entry:` names moved owes a TRIAGE; `make modal-triage` shows each moved page's blocks new, changed or removed since the unit's last answer (the pages a bundle read kept as blobs) beside the kinds naming it; `make modal-triaged BUNDLE= REPLY=` answers the kinds a reply does not name and sends the named on; `make modal-bundle` refuses a unit owed only a triage (FR-001)
       research: rendering
-      verify: tests red on today's owing (a drawing-page edit owes every kind naming it) and green after; the refusal and its escape tested
-- [ ] T09 Line-scoped procedure claims (plan D2): `tools/claims.py` fingerprints a section claim by its own line and keeps the section's own fingerprint and blocks; a section edit elsewhere owes a triage through `make claims-triage`, a table row being a block; `claims.py backfill-sections` migrates the index without owing anything; 100% coverage on `tools/claims.py` (FR-002)
+      verify: DONE. DONE. modal_triage.py + make modal-triage/modal-triaged; bundles keep the pages they read (page: lines, blobs), answers store them; modal-bundle refuses a triage-only unit (REASON= to override); record-owed names the triage; tests red on the old owing (the depiction bundle test now refused) and green after
+- [x] T09 Line-scoped procedure claims (plan D2): `tools/claims.py` fingerprints a section claim by its own line and keeps the section's own fingerprint and blocks; a section edit elsewhere owes a triage through `make claims-triage`, a table row being a block; `claims.py backfill-sections` migrates the index without owing anything; 100% coverage on `tools/claims.py` (FR-002)
       research: rendering
-      verify: tests red on today's fingerprint (one line re-owes the section) and green after; the backfill run owes nothing on the real index
-- [ ] T10 File, don't fix (plan D15, its owing half): every check bundle's MANIFEST lists the blocks the delta changed (`changed-blocks:`), the page checks' contracts put a finding on any other block under `OUTSIDE THE CHANGE`, and `make record-checked REPLY=` files that section as open rows in `specs/NNN/found.jsonl` (FR-006)
+      verify: DONE. DONE. tools/claims.py: a section claim's code is its own line, section_blocks (table rows each a block), 100% on the new lines; claims_triage.py split out (claims.py 761 lines); section triage in claims-triage; backfill-sections re-keyed 281 real claims, nothing newly owed; tests red-first on the one-row edit
+- [x] T10 File, don't fix (plan D15, its owing half): every check bundle's MANIFEST lists the blocks the delta changed (`changed-blocks:`), the page checks' contracts put a finding on any other block under `OUTSIDE THE CHANGE`, and `make record-checked REPLY=` files that section as open rows in `specs/NNN/found.jsonl` (FR-006)
       research: rendering
-      verify: tests over a reply with both sections; the bundle's line checked on a real page
-- [ ] T11 SC-001 replay: 372's waves 106, 108 and 111 through the old and the new owing - modal-depiction units owed in full and impl-drift claims owed - recorded in `measurements.json` against two thirds and four fifths (SC-001)
+      verify: DONE. DONE. check bundles end with The change (changed-block/changed-note lines vs the merge base); five page-check contracts report OUTSIDE THE CHANGE apart; make record-checked REPLY= files them to specs/NNN/found.jsonl; test_outside_the_change.py
+- [x] T11 SC-001 replay: 372's waves 106, 108 and 111 through the old and the new owing - modal-depiction units owed in full and impl-drift claims owed - recorded in `measurements.json` against two thirds and four fifths (SC-001)
       research: rendering
-      verify: the replay's figures recorded; the triages it needs run on the replayed bundles
-- [ ] T12 Batch 2 closes: `make done` green; landed
+      verify: DONE. DONE. make replay-owing over 372's 24 commits: impl-drift in full 385 -> 19 (95%); depiction owed only by a page 13 -> 3 after the replayed triage (77%), every depiction unit 26 -> 16 (13 are the waves' own Depiction edits); m:sc001-replay
+- [x] T12 Batch 2 closes: `make done` green; landed
       research: rendering
-      verify: the gate's run-log line
+      verify: DONE. DONE. make done green (384 s); landed by the push carrying this tick
 - [ ] T99 Batches 3-4 (plan D18) [lands-open]
       research: rendering
       verify: ticked by the last batch
