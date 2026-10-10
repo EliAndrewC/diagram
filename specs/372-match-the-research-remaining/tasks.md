@@ -10,10 +10,10 @@ in 328's ranking and this spec.
 - (reviewed PASS at batch 1's close, 2026-10-10) glyph-redrawn: boundary stones on ubame-magistracy - wave 99: each pillar 3 ft square, the plinth form (0083)
 - (reviewed PASS at batch 1's close, 2026-10-10) glyph-redrawn: road on hayakawa-magistracy - wave 100: the cart lanes to the side gates 6 ft (0082), on Hayakawa and Ubame
 
-- layout-revised: ochiba-magistracy - wave 101: the gatehouse 40 x 12 ft (0093)
-- glyph-redrawn: gatehouse on ubame-magistracy - wave 101: the gate ranges 12 ft deep on Hayakawa and Ubame (0093)
+- (reviewed PASS at batch 2's close, 2026-10-10, round 2) layout-revised: ochiba-magistracy - wave 101: the gatehouse 40 x 12 ft (0093)
+- (reviewed PASS at batch 2's close, 2026-10-10) glyph-redrawn: gatehouse on ubame-magistracy - wave 101: the gate ranges 12 ft deep on Hayakawa and Ubame (0093)
 
-- placement-changed: latrine on ochiba-magistracy - wave 102: the guests' privy at the reception room's rear (0101)
+- (reviewed PASS at batch 2's close, 2026-10-10) placement-changed: latrine on ochiba-magistracy - wave 102: the guests' privy at the reception room's rear (0101)
 
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 

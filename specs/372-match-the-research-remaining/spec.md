@@ -115,6 +115,13 @@ many maps; a newly failing cohort seed is a regression, reverted with its measur
   about 4 ft (`docs/buildings.md`, Scale), and wave 97's charcoal store kept where it stood across its loading apron
   (m:wave97-ubame-charcoal in 328's `measurements.json`; spec-fidelity ruled it LEGITIMATE, raised under constitution XVI).
 
+- **A research item from batch 2's close**: Ochiba's garrison privy sends its night soil to the far west service gate through
+  the lane in front of the hearing court; an east-wall postern would end the haul. Run the pass on 0101 (the night-soil
+  collector's back gate) and 0090 (a jin'ya's rear gates), then draw the postern or record the GUESS in Ochiba's notes.
+- **A tooling gap found at batch 2's close**: a glyph-check verdict is keyed by its element alone (`glyph-check--latrine`), so a
+  check of the same element on another sheet overwrites the first sheet's record; key the verdict by element and map (the
+  latrine check of 2026-10-10 carried Ubame's open findings forward by hand).
+
 ## The filed features, sorted (328's close, 2026-10-10)
 
 The GM asked which of `make speckit-todo`'s filed features relate to this work and which are future work for the tiers that

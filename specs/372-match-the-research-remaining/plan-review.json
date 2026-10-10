@@ -1,6 +1,6 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "aa16cdd91bab5ed043e5d1ec142cf03f99f38c8bba06c2e25d4f15a9866273c6",
+ "plan_sha256": "838a868c3c9b926b24d3529e13ebb18ca3d5ed8c732de6bd28006552064aadc8",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
@@ -75,6 +75,36 @@
    "summary": "placement-changed: latrine on ochiba-magistracy",
    "class": "within",
    "why": "the occasion the new privy opens"
+  },
+  {
+   "id": "B2-no-pair",
+   "summary": "batch 2 (waves 101-102) owes no timing pair: no engine code changed",
+   "class": "within",
+   "why": "plan's own cycle owes a pair for engine code; re-derived: git diff 4a2fb94e4 and the working tree name no l7r/**/*.py, pool/*.gen.py or pool/*.json; same ruling as batch 1"
+  },
+  {
+   "id": "B2-gate",
+   "summary": "gate green 2026-10-10 on the landed engine key",
+   "class": "within",
+   "why": "FR-003's batch close; no engine change since the landed key"
+  },
+  {
+   "id": "B2-close-reviews",
+   "summary": "batch closed on its three occasions: glyph checks gatehouse (Ubame) and latrine (Ochiba) PASS, Ochiba's building review NEEDS-WORK then PASS round 2",
+   "class": "within",
+   "why": "the occasions waves 101-102 declared, each answered within two rounds; tasks.md marks all three retired"
+  },
+  {
+   "id": "B2-E1-popup",
+   "summary": "the gatehouse pop-up and building-programs.md brought to the 40 x 12 ft drawn (and the gate range 12 ft); the pop-up's text revised (Edo gate range as the deeper form, dates dropped, source and Entry 0118 added), record checks clean on round 3",
+   "class": "within",
+   "why": "a defect the review found in the work at hand (XIV): the reader-facing text said 18 x 12 ft / 14 ft after wave 101 changed the drawing; m:batch2-gatehouse-text re-run: both texts say about 40 ft, the remaining '18 by 12 ft' is Kita-in's measured guardroom and an unrelated shrine hall"
+  },
+  {
+   "id": "B2-glyph-verdict-gap",
+   "summary": "spec records a tooling gap: glyph-check verdicts keyed by element alone, so a second sheet's check overwrites the first; to be keyed by element and map",
+   "class": "within",
+   "why": "records a defect found at the close; narrows nothing asked and changes no behavior of the requested work"
   }
  ],
  "verdict": "CLEAR"

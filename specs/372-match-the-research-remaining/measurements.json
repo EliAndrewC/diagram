@@ -127,5 +127,21 @@
       "pack_audit_diff_lines": 0,
       "reading": "Ochiba's guests' privy added at the reception room's rear corner on its east face (610,282); Hayakawa (family, guest) and Ubame (latrine-1 at the reception end, latrine-2 at the family end) already drew two"
     }
+  },
+  "batch2-gatehouse-text": {
+    "quantity": "building-review of Ochiba, batch 2 (E1): the gatehouse's pop-up and building-programs.md brought to the 40 x 12 ft drawn",
+    "observed": "2026-10-10",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "7aa06ed7d69b",
+    "source": "l7r/diagram/interactive/assets/modals/sheet/gatehouse.md; docs/building-programs.md (rendered by make building-programs)",
+    "command": "grep -n 'about 40 by 12 ft\\|about 40 ft' l7r/diagram/interactive/assets/modals/sheet/gatehouse.md docs/building-programs.md",
+    "method": "the two texts read after the edit; the pop-up's five record checks answered clean on round 3",
+    "value": {
+      "popup_depiction": "A gatehouse of its own is drawn about 40 by 12 ft, and a gate range about 12 ft deep.",
+      "table_guess": "The length of a gatehouse of its own, about 40 ft",
+      "record_checks_round": 3,
+      "reading": "both texts say what the sheet draws; the 18 x 12 ft is gone from both"
+    }
   }
 }
