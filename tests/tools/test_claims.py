@@ -276,8 +276,7 @@ def test_a_section_claim_is_owed_by_its_own_line_and_the_section_has_its_blocks(
     its own line; the section's words are its core and its blocks, which a triage diffs. Before, one edit anywhere in the
     section re-owed every claim of it."""
     (u,) = cl.doc_units(SECTION, "b.md", None)
-    assert u.blocks == ("A well stands by the kitchen, a few feet out.", "- a curb of stone around its mouth", "- a sweep beside it",
-                        "| item | band |", "| well | 3-4 ft |", "| curb | 1 ft |")
+    assert u.blocks == ("A well stands by the kitchen, a few feet out.", "- a curb of stone around its mouth", "- a sweep beside it", "| item | band |", "| well | 3-4 ft |", "| curb | 1 ft |")
     (moved,) = cl.doc_units(SECTION.replace("| 1 ft |", "| 2 ft |"), "b.md", None)
     assert moved.core != u.core and [moved.code(c) for c in moved.claims] == [u.code(c) for c in u.claims], "a row moved; no line did"
     (relabeled,) = cl.doc_units(SECTION.replace("curb size - CONVENTION", "curb size - GUESS"), "b.md", None)

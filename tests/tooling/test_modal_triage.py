@@ -19,9 +19,7 @@ mb = _load("_modal_bundle")
 mt = _load("modal_triage")
 ro = _load("record_owed")
 
-DRAWN = FARMHOUSE.replace(
-    "    Name: farmhouse", "    Depiction: The map draws every house alike.\n\n    Name: farmhouse"
-).replace(
+DRAWN = FARMHOUSE.replace("    Name: farmhouse", "    Depiction: The map draws every house alike.\n\n    Name: farmhouse").replace(
     "    Entry: research/questions/0029-farmhouses-minka.html",
     "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html",
 )
@@ -48,7 +46,7 @@ def test_a_moved_drawing_page_owes_a_triage_not_the_check(drawn: pathlib.Path) -
     honors, and the triage's bundle shows only the changed block."""
     _edit(drawn, "Wells stand by the door.", "Wells stand by the kitchen.")
     base = ro.merge_base(drawn)
-    (slug, why, fp), = mo.owed(drawn, base)
+    ((slug, why, fp),) = mo.owed(drawn, base)
     assert slug == DEP and mt.triage_only(why)
     assert [s for s, _w, _f in mt.pending(drawn, base, ro.store(drawn))] == [DEP]
     m = mo.find(drawn, "Farmhouse")

@@ -59,8 +59,7 @@ not a row
 def test_a_reply_s_outside_findings_are_filed_as_open_rows(tmp_path: pathlib.Path) -> None:
     assert ro.outside("no section here") == []
     rows = ro.outside(REPLY)
-    assert rows == [("research/questions/0105-wells.html", "Its curb is stone", "no footnote for the stone curb"),
-                    ("research/questions/0105-wells.notes.html", "note a", "the page number is missing")]
+    assert rows == [("research/questions/0105-wells.html", "Its curb is stone", "no footnote for the stone curb"), ("research/questions/0105-wells.notes.html", "note a", "the page number is missing")]
     (tmp_path / ".specify").mkdir()
     (tmp_path / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
     filed = ro.file_outside(tmp_path, "quote-check", REPLY)
