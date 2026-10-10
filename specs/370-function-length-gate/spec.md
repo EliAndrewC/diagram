@@ -117,7 +117,12 @@ survey, its date and its numbers.
 - **SC-004**: A suppression with no reason fails the gate; one with a reason passes (FR-004).
 - **SC-005**: The setting's comment and clause 12 both state that 100 is the second most common value on GitHub (131 of
   1,209 repositories) and the most common chosen over the default, citing research.md R1 (FR-005, FR-006).
-- **SC-006**: The claims gate passes at the push with every split unit's claims carried and checked (FR-007).
+- **SC-006**: The claims gate passes at the push with every split unit's claims carried and checked (FR-007). AMENDED
+  2026-10-10 by the GM: *"we don't need to fix research claim refusals that were already documented, which... are not new
+  things that we've created. I mean, as long as they show up on a make claims report, then they will get handled in
+  feature 374"* - every split unit's claims were checked (13 impl-drift passes, research.md R4); the findings that describe
+  behavior the split moved but did not change are recorded in the claims index, listed by `make claims-report`, and land
+  under the claims gate's escape for feature 374 to carry.
 
 ## Assumptions
 
@@ -138,6 +143,13 @@ survey, its date and its numbers.
 - **D1 - 100 statements** (the GM, 2026-10-10, from research.md R1). Class: deliberate choice on measured evidence.
 - **D2 - ruff's count, in the linter** (the GM: *"I do like the idea of just doing that in our linter"*). Class: tooling
   convention.
+- **D4 - the claims the split re-opened** (the GM, 2026-10-10, SC-006): the impl-drift re-check of every split unit found
+  long-standing drift in code the split moved but did not change; round 1's fixes (relabels, citations, added claims, and
+  `_ground_push`'s lane room converted to px - no map moves at 1 ft/px) took the gate's refusals from 39 to 16, and round 2
+  began reversing round 1. The rest stand in `make claims-report` for feature 374. Class: process decision, the GM's.
+- **D5 - the 40-household seed 39 at +14.2%** (370-start against 370-end; every other seed faster, 20 hh -26.5%): the GM,
+  2026-10-10, *"I am okay with that one 14.2% seed"*. A split adds calls, not work; the two bookends were hours apart under
+  different load. Class: accepted measurement, the GM's.
 - **D3 - `scripts/`, `pool/` and `tests/hooks/` held by this rule alone** (FR-002): the GM asked for a cap on function
   length, and those trees are the project's own code; the rest of their lint stays out of scope. Class: scope decision.
 

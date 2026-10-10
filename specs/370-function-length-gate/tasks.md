@@ -71,3 +71,6 @@
 - [ ] T20 the whole project under the cap, the gate green, the perf bookends (SC-002)
       research: rendering
       verify: ruff over the five held trees reports no PLR0915; make done green; make perf LABEL=370-end, perf-report AGAINST=370-start
+- [ ] GM review (make gm-reviewed F=370) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
