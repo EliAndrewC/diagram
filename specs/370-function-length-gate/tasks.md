@@ -56,15 +56,15 @@
 
 ## Phase 3 - the record, and the proof
 
-- [ ] T16 constitution clause 12 amended, 2.28.0 -> 2.29.0, the deferred TODOs closed; plan template's clause-12 paragraph (D7; FR-006, SC-005)
+- [x] T16 constitution clause 12 amended, 2.28.0 -> 2.29.0, the deferred TODOs closed; plan template's clause-12 paragraph (D7; FR-006, SC-005)
       research: rendering
-      verify: the clause names 100, ruff's count, the reasoned noqa and research.md R1
-- [ ] T17 CLAUDE.md "the gate" row, docs/guards.md record (D8)
+      verify: DONE. clause 12 names ruff's count, 100, the reasoned noqa on the def line and R1's 131 of 1,209; 2.28.0 -> 2.29.0 with the TODO closed; plan template's paragraph
+- [x] T17 CLAUDE.md "the gate" row, docs/guards.md record (D8)
       research: rendering
-      verify: read back
-- [ ] T18 the pool rerolled, `git diff --stat HEAD -- pool/` empty (D5; SC-003)
+      verify: DONE. CLAUDE.md gate row; docs/guards.md row beside the file cap, its stale 'still owed' line updated
+- [x] T18 the pool rerolled, `git diff --stat HEAD -- pool/` empty (D5; SC-003)
       research: rendering
-      verify: the diff is empty; the Mode A sheets regenerate identically
+      verify: DONE. make maps SCOPE=all (5 hamlets) and make map on all 6 Mode A sheets: REGENERATED, git status -- pool/ empty: byte-identical to HEAD
 - [ ] T19 the claims re-check: claims-owed, a bundle per module, impl-drift, claims-checked (D6; FR-007, SC-006)
       research: rendering
       verify: make claims-owed names nothing this feature introduced
