@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-10T02:25:34Z",
+  "target": "review-accept",
+  "commit": "faaa90dc8",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--barley F4: a confirmation, nothing to fix"
+}

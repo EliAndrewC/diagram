@@ -2088,5 +2088,31 @@
         "after_reorder": 9.6
       }
     }
+  },
+  "batch12-pair": {
+    "quantity": "batch 12's timing pair (waves 91-94): 017535498 -> HEAD, and its control",
+    "observed": "2026-10-10",
+    "source": "dev/perf-log/20261010T023047Z-328-start-perfbase.json, dev/perf-log/20261010T023347Z-328-end-base.json; make perf-profile SEED=39 STAGE=homesteads HOUSEHOLDS=10 in the perfbase worktree at 017535498 and in the clone, twice each",
+    "command": "make perf in two detached worktrees, back to back; make perf-report AGAINST=328-start; make perf-profile SEED=39 STAGE=homesteads HOUSEHOLDS=10",
+    "method": "the pair re-taken once (the first under a review agent's load, 2.2 -> 4.2, discarded); the grown stage profiled at both commits",
+    "value": {
+      "band": 1,
+      "reference_total_pct": -0.6,
+      "households_10_pct": 0.9,
+      "households_20_pct": -0.9,
+      "households_40_pct": -6.5,
+      "largest_growth": "10 households seed 39 +4.0% and 20 households seed 4 +1.7%, each the homesteads stage +0.1 s",
+      "control_homesteads_profiled_s": {
+        "start_017535498": [
+          1.4,
+          1.4
+        ],
+        "end_HEAD": [
+          1.4,
+          1.4
+        ]
+      },
+      "reading": "the profiled homesteads stage is the same at both commits; the +0.1 s on two small rolls is run-to-run jitter, and the 40-household rolls fell 6.5%"
+    }
   }
 }

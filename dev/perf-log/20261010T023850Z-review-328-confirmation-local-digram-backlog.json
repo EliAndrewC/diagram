@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "017535498",
+    "label": "328-start",
+    "utc": "20261010T023047Z"
+  },
+  "binding": "bfa52492959cdf28ee613d2f78d2f08fcc7c6c79b01f495468c79a9d874722be",
+  "end": {
+    "commit": "faaa90dc8",
+    "label": "328-end",
+    "utc": "20261010T023347Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261010T023850Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 4.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.9
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": -1.9,
+          "4": 1.7,
+          "47": -3.7
+        },
+        "total_pct": -0.9
+      },
+      "40": {
+        "seeds": {
+          "25": -8.9,
+          "39": -8.7,
+          "4": -6.4,
+          "47": -2.3
+        },
+        "total_pct": -6.5
+      }
+    },
+    "seeds": {
+      "25": -2.3,
+      "39": 0.0,
+      "4": 0.0,
+      "47": 0.0
+    },
+    "total_pct": -0.6
+  },
+  "note": "homesteads +0.05-0.08s on 10hh seed 39 and 20hh seed 4 is jitter: the batch's changes (door_end_teed/_teed_pair/knots/lane_knots, meet_end_to_end, _smooth_web, _touch_junctions; track.py/bund.py docstring-only) run in no homesteads code path - cProfile at both commits has the identical call count and time (seed39/10hh 2141877 calls, 1.43s both; seed4/20hh re-run by the reviewer with both legs in detached worktrees, 7320071 calls, 4.25-4.31s both); the diff's stage, web, fell 0.4-1.2s at 40hh",
+  "verdict": "consistent"
+}
