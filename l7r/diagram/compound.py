@@ -712,7 +712,7 @@ def county_magistracy_program() -> CompoundProgram:
         # house both - guests were received in the garden-facing rooms (research 0091); the servants' row it once
         # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk
         # along the divider. Its size is a GUESS.
-        CourtZone("garden", 97.0, 36.0, 129.0, 46.0),  # feature 374 wave 113: from the kitchen ell's east face, the house 7 ft west
+        CourtZone("garden", 102.0, 36.0, 124.0, 46.0),  # feature 374 wave 113: from the kitchen ell's east face (the house's west end), the house 7 ft west
         # The vegetable ground WEST of the house, filling the kitchen yard (research 0109 and 405: west is one of the
         # attested seats, and the sun decides among them - here it gets 9.5 h, feature 283's garden_sun; a residence's vegetable ground runs from the Takei house's ~1,070 sq ft plot to
         # a field over about half the Yokota house's grounds). Pass 7 (building-review round 6: the yard stood ~100 x 60
@@ -786,7 +786,10 @@ def county_magistracy_program() -> CompoundProgram:
             ),
             engawa_ft=4.0,
             door_face="N",
-            door_fracs=(0.2, 0.3),  # feature 374 wave 113: the kitchen ell takes the west face, its free 6 ft too short for a door's approach
+            door_fracs=(
+                0.4,
+                0.5,
+            ),  # feature 374 wave 113: the kitchen ell takes the west face, its free 6 ft too short for a door's approach; off the family privy at the rear west corner (building-review round 8)
             inset_ft=10.0,
         ),
         # THE SERVANTS' ROW TAKES THE NW CORNER, the kitchen yard before it (pass 6, building-review round 5: east of the
