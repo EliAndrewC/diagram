@@ -224,11 +224,15 @@ names the line) and by `make tick` - so the mark cannot become an unlogged escap
 
 **Lands open**: T99
 
-**Amendment 1 (2026-10-10, batch 4):** D10's reversal and red-gate wires as built (above); `make check-closed` (D4's silent
-check, named by the freeze's refusal); the three escapes D3, D4 and D10 named (`DECIDE_OK`, `FREEZE_OK`, `ARBITER_OK`) recorded
-in the guard census and held to its reason floor; a current CLEAR plan-stage verdict covers a task section its reviewer read
-unchanged (D3); a ruled cascade raises its own bar, so the next dispatch does not re-trip (D10). Batch 4 then delivers D12,
-D13, D14 and D17 as planned.
+**Amendment 1 (2026-10-10, batch 4; round 2 after the plan review of round 1):** D10's reversal and red-gate wires as built
+(above). `make check-closed` (D4) closes only a dispatch SILENT past the 90-minute ceiling - a running check is never closed -
+and records each use with its reason in the guard census; it is the fourth escape. The escapes reach their own rule only, each
+recorded with its reason and held to the census's floor: `DECIDE_OK` the decide-first refusal (D3), `FREEZE_OK` the freeze and
+the apply-once hold (D4), `ARBITER_OK` the arbiter's holds and the round cap, on a check's prompt or a gate (D10). A current
+CLEAR plan-stage verdict covers a task section its reviewer read unchanged (D3). The cascade wire (D10) stays live after ANY
+ruling: its trigger id advances (`cascade@<rulings + 1>`) and it fires again only when CASCADE_MIN further dispatches since the
+last ruling find the ratio still past 1.0 - one round's worth of checks, after a `continue` or an `accept` alike. Batch 4 then
+delivers D12, D13, D14 and D17 as planned.
 
 A later spec that
 must wait declares `**Waits on**: 375`, and `make tick` refuses a task of it while 375 is open - 374's spec carries the line,

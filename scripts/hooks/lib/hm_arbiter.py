@@ -80,6 +80,9 @@ def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float
     if trigger in state:
         return False
     state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now}
+    m = re.match(r"(\d+) check dispatches", detail)
+    if m:
+        state[trigger]["dispatches"] = int(m.group(1))
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
     return True
@@ -129,8 +132,8 @@ def refusal(triggers: list[str]) -> str:
     return (f"a tripwire is owed its ruling first ({', '.join(triggers)}; feature 375 FR-010/FR-011): make arbiter-bundle "
             f"TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" "
             "FILE=<its JSON> AS=round-arbiter. The feature goes on elsewhere meanwhile. (A session started before the agent "
-            "existed cannot dispatch it: restart it, or carry ARBITER_OK=\"<reason>\" on the gate / FREEZE_OK=\"<reason>\" "
-            "in the check's prompt - both logged.)")
+            "existed cannot dispatch it: restart it, or carry ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - "
+            "logged.)")
 
 
 def reversal(events: list[Mapping[str, Any]], path: str, old: str, new: str) -> bool:
@@ -139,10 +142,19 @@ def reversal(events: list[Mapping[str, Any]], path: str, old: str, new: str) -> 
     return bool(new) and new in replaced and new != old
 
 
-def cascade(dispatches: int, lines: int, ruled: int = 0) -> bool:
-    """Past the ratio - raised by one step for each `continue` the feature's cascade rulings carry, so a ruled cascade does not
-    re-trip on the very next dispatch (the trigger id is `cascade@<rulings + 1>`, fixed until ruled)."""
-    return dispatches >= CASCADE_MIN and dispatches > CASCADE_RATIO * (1 + ruled) * max(lines, 1)
+def cascade(dispatches: int, lines: int, last: int = 0) -> bool:
+    """Past the ratio with at least CASCADE_MIN dispatches - counted since the last cascade ruling, whatever it ruled (`last`:
+    the dispatches the feature had then). So the wire stays live after a ruling, and fires again only when a round's worth of
+    further checks are out of proportion too (the plan review of amendment 1: a raise per `continue` both under- and
+    over-shot, and an `accept` switched it off)."""
+    return dispatches - last >= CASCADE_MIN and dispatches > CASCADE_RATIO * max(lines, 1)
+
+
+def cascade_state(root: Path) -> tuple[str, int]:
+    """(the next cascade trigger id, the dispatches at the last cascade ruling): the id advances after ANY ruling."""
+    ruled = [r for t, r in rulings(root).items() if t.startswith("cascade@")]
+    last = max((int(r.get("dispatches") or 0) for r in ruled), default=0)
+    return f"cascade@{len(ruled) + 1}", last
 
 
 def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared: str, now: str | None = None) -> dict[str, Any]:
@@ -160,6 +172,7 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     trig = owed(root).get(trigger, {})
     row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit", ""),
+           **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
            "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when}
     d.mkdir(parents=True, exist_ok=True)
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:

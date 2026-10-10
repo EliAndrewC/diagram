@@ -136,9 +136,13 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
     assert ha.main(["bogus"]) == 2
 
 
-def test_a_ruled_cascade_does_not_re_trip_on_the_next_dispatch(tmp_path: pathlib.Path) -> None:
+def test_the_cascade_wire_stays_live_after_any_ruling(tmp_path: pathlib.Path) -> None:
+    """The plan review of amendment 1: after a ruling the id advances and the count restarts from the dispatches then - an
+    `accept` does not switch the wire off, and a `continue` allows a round's worth of checks, not a threshold's."""
     root = _clone(tmp_path)
-    assert ha.cascade(12, 10, 0) and not ha.cascade(12, 10, 1), "a continue ruling raises the bar a step"
-    ha.trip(root, "cascade@1", "cascade", "", "12 over 10", 1)
-    ha.record_ruling(root, "cascade@1", {"ruling": "continue", "why": "the checks found new defects"}, "round-arbiter")
-    assert ha.continues(root, "cascade@") == 1 and not ha.trip(root, "cascade@1", "cascade", "", "again", 2)
+    assert ha.cascade_state(root) == ("cascade@1", 0)
+    assert ha.cascade(12, 10) and not ha.cascade(9, 1), "ten dispatches before the ratio means anything"
+    ha.trip(root, "cascade@1", "cascade", "", "12 check dispatches over 10 changed lines", 1)
+    ha.record_ruling(root, "cascade@1", {"ruling": "accept", "why": "the checks found real defects each time"}, "round-arbiter")
+    assert ha.cascade_state(root) == ("cascade@2", 12)
+    assert not ha.cascade(20, 10, 12) and ha.cascade(22, 10, 12), "live again a round of checks after the ruling"

@@ -177,8 +177,16 @@ def main(argv: list[str]) -> int:
     except ValueError as e:
         print(f"tick: refused - {e} ({path})", file=sys.stderr)
         return 2
-    path.write_text(new, encoding="utf-8")
     remaining = sum(1 for ln in new.splitlines() if ln.startswith("- [ ] "))
+    if remaining == 0:  # feature 375 FR-009/FR-014: the last tick closes the feature - its report and carried keys first
+        sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
+        import close_check  # noqa: PLC0415
+
+        why = close_check.reasons(d, root / "specs")
+        if why:
+            print("tick: refused - this tick would close the feature, and:\n  " + "\n  ".join(why), file=sys.stderr)
+            return 2
+    path.write_text(new, encoding="utf-8")
     print(f"ticked {line[:90]}\n{remaining} task(s) still open in {path.relative_to(root)}")
     return 0
 
