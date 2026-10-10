@@ -1,0 +1,144 @@
+"""`scripts/hooks/lib/hm_arbiter.py` - tripwires and the round arbiter's rulings (feature 375, FR-010, FR-011).
+
+The GM wanted progress never to stop at a round cap, and a loop caught when it happens: a trigger is owed one binding ruling,
+holds only the next dispatch on its unit (or the next gate), and every ruling becomes a row of the GM's review.
+"""
+
+from __future__ import annotations
+
+import json
+import pathlib
+
+import pytest
+
+from tests.tooling.test_modal_checks import _load
+
+ha = _load("hm_arbiter")
+
+
+def _clone(tmp: pathlib.Path) -> pathlib.Path:
+    (tmp / ".git").mkdir()
+    (tmp / ".specify").mkdir()
+    (tmp / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    return tmp
+
+
+def test_a_trigger_holds_only_its_unit_or_the_gate_until_ruled(tmp_path: pathlib.Path) -> None:
+    root = _clone(tmp_path)
+    assert ha.trip(root, "round:quote-check|q:0105@3", "round", "quote-check|q:0105", "d", 1)
+    assert not ha.trip(root, "round:quote-check|q:0105@3", "round", "quote-check|q:0105", "d", 2), "once"
+    assert ha.blocking(root, "quote-check|q:0105") == ["round:quote-check|q:0105@3"] and ha.blocking(root, "record-format|q:0105") == []
+    ha.trip(root, "red-gate", "red-gate", "", "two red gates", 3)
+    assert ha.blocking(root, gate=True) == ["red-gate"] and "red-gate" not in ha.blocking(root, "x")
+    ha.trip(root, "reversal:/a.md", "reversal", "/a.md", "A -> B -> A", 4)
+    assert "reversal:/a.md" in ha.blocking(root, "anything"), "a reversal holds every check"
+    assert "make arbiter-bundle" in ha.refusal(["red-gate"]) and ha.refusal([]) == ""
+
+
+def test_a_ruling_is_binding_once_and_reaches_the_gm(tmp_path: pathlib.Path) -> None:
+    root = _clone(tmp_path)
+    ha.trip(root, "reversal:/a.md", "reversal", "/a.md", "A -> B -> A", 1)
+    with pytest.raises(PermissionError):
+        ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "x"}, "main")
+    with pytest.raises(ValueError, match="one of"):
+        ha.record_ruling(root, "reversal:/a.md", {"ruling": "maybe", "why": "x"}, "round-arbiter")
+    row = ha.record_ruling(root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation over the bath bullet"}, "round-arbiter", "2026-10-10T00:00:00Z")
+    assert row["kind"] == "reversal" and ha.owed(root) == {}
+    d = root / "specs" / "375-x"
+    assert json.loads((d / "gm-review.jsonl").read_text())["ruling"] == "process-fault"
+    assert json.loads((d / "found.jsonl").read_text())["block"] == "reversal:/a.md", "a process fault is filed as a tooling row"
+    with pytest.raises(ValueError, match="already ruled"):
+        ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "again"}, "round-arbiter")
+    assert not ha.trip(root, "reversal:/a.md", "reversal", "/a.md", "again", 2), "a ruled trigger does not fire again"
+    assert ha.closed(root, "reversal:") == "process-fault" and ha.continues(root, "reversal:") == 0
+    (d / "arbiter.jsonl").write_text((d / "arbiter.jsonl").read_text() + "not json\n")
+    assert list(ha.rulings(root)) == ["reversal:/a.md"]
+    (root / ".specify" / "feature.json").write_text("not json")
+    with pytest.raises(ValueError, match="no active feature"):
+        ha.record_ruling(root, "x", {"ruling": "accept", "why": "y"}, "round-arbiter")
+
+
+def test_the_wires() -> None:
+    log = [{"ev": "PreToolUse", "tool": "Edit", "path": "/a.md", "old": "A", "new": "B"}]
+    assert ha.reversal(log, "/a.md", "B", "A") and not ha.reversal(log, "/b.md", "B", "A") and not ha.reversal(log, "/a.md", "A", "C")
+    assert ha.cascade(10, 5) and not ha.cascade(9, 1) and not ha.cascade(10, 20)
+    assert ha.env_ok("X_OK", 'X_OK="a reason here"') and not ha.env_ok("X_OK", "none")
+
+
+def test_a_worktree_shares_its_clone_s_state(tmp_path: pathlib.Path) -> None:
+    (tmp_path / "c").mkdir()
+    root = _clone(tmp_path / "c")
+    wt = tmp_path / "wt"
+    wt.mkdir()
+    (root / ".git" / "worktrees" / "wt").mkdir(parents=True)
+    (root / ".git" / "worktrees" / "wt" / "commondir").write_text("../..\n")
+    (wt / ".git").write_text(f"gitdir: {root / '.git' / 'worktrees' / 'wt'}\n")
+    assert ha.common_dir(wt) == (root / ".git").resolve()
+
+
+ab = _load("arbiter_bundle")
+
+
+def test_findings_are_marked_new_repeated_or_reversing() -> None:
+    r1 = "1. the bath size has no footnote\n2. a tooltip is missing on doma\n\nEDIT a.html\n<<<\n10 by 8 ft\n===\n12 by 9 ft\n>>>\n"
+    r2 = "1. the bath size has no footnote\n2. the well sits wrong now\n\nEDIT a.html\n<<<\n12 by 9 ft\n===\n10 by 8 ft\n>>>\n"
+    m1, m2 = ab.mark_rounds([r1, r2])
+    assert [k for k, _f in m1] == ["NEW", "NEW"]
+    assert [k for k, _f in m2] == ["REPEATED", "NEW", "REVERSING"]
+
+
+def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    import subprocess
+
+    root = tmp_path / "c"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    d = root / "specs" / "375-x"
+    d.mkdir(parents=True)
+    (d / "request.md").write_text("the GM's words")
+    (d / "spec.md").write_text("the spec")
+    q = root / "research" / "questions"
+    q.mkdir(parents=True)
+    (q / "0105-baths.html").write_text("<p>a</p>")
+    reply = tmp_path / "r1.md"
+    reply.write_text("1. the bath size has no footnote at all\n")
+    (root / ".git" / "checks-open.json").write_text(
+        json.dumps(
+            {
+                "dispatches": {
+                    "t1": {"check": "quote-check", "subjects": ["q:0105"], "t": 1, "state": "answered", "reply": str(reply)},
+                    "t2": {"check": "quote-check", "subjects": ["q:0105"], "t": 2, "state": "answered"},
+                }
+            }
+        )
+    )
+    ha.trip(root, "round:quote-check|q:0105@3", "round", "quote-check|q:0105", "round 3 of quote-check on q:0105", 3)
+    monkeypatch.delenv("L7R_EVENTS_DIR", raising=False)
+    el = _load("event_log")
+    el.append({"hook_event_name": "PreToolUse", "cwd": str(root), "tool_name": "Edit", "tool_input": {"file_path": str(q / "0105-baths.html"), "old_string": "a", "new_string": "b"}})
+    manifest = ab.bundle(root, "round:quote-check|q:0105@3", tmp_path / "out").read_text()
+    assert "trigger: round:quote-check|q:0105@3" in manifest and "### Round 1" in manifest and "### Round 2" in manifest
+    assert "- NEW: the bath size has no footnote at all" in manifest and "(no findings in the kept reply)" in manifest
+    assert (tmp_path / "out" / "request.md").read_text() == "the GM's words" and (tmp_path / "out" / "edits.diff").is_file()
+    assert "0105-baths.html" in (tmp_path / "out" / "cascade.txt").read_text()
+    assert ab.subject_files(root, "modal:sheet/bath") == ["l7r/diagram/interactive/assets/modals/sheet/bath.md"]
+    assert ab.subject_files(root, "x") == []
+    assert "trigger: red-gate" in ab.bundle(root, "red-gate", tmp_path / "out2").read_text()
+    monkeypatch.chdir(root)
+    assert ab.main(["red-gate", "--root", str(root), "--out", str(tmp_path / "out3")]) == 0
+    v = tmp_path / "v.json"
+    v.write_text(json.dumps({"ruling": "accept", "why": "the finding repeats a wording preference"}))
+    assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "main"]) == 2
+    assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "round-arbiter"]) == 0
+    assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "round-arbiter"]) == 1, "binding: once"
+    assert ha.main(["bogus"]) == 2
+
+
+def test_a_ruled_cascade_does_not_re_trip_on_the_next_dispatch(tmp_path: pathlib.Path) -> None:
+    root = _clone(tmp_path)
+    assert ha.cascade(12, 10, 0) and not ha.cascade(12, 10, 1), "a continue ruling raises the bar a step"
+    ha.trip(root, "cascade@1", "cascade", "", "12 over 10", 1)
+    ha.record_ruling(root, "cascade@1", {"ruling": "continue", "why": "the checks found new defects"}, "round-arbiter")
+    assert ha.continues(root, "cascade@") == 1 and not ha.trip(root, "cascade@1", "cascade", "", "again", 2)

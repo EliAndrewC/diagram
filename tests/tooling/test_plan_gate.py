@@ -234,3 +234,95 @@ def test_typo_scale_rules() -> None:
     assert gate._distance("ab", "ba") == 1 and gate._distance("kitten", "sitting") == 3
     review = {"plan_sha256": "x", "plan_text": "", "decisions": [], "verdict": "CLEAR"}
     assert gate.judge(b"anything", json.dumps(review))[0] == "plan-review-stale", "no text recorded: the hash decides, as before"
+
+
+PLAN_TASKS = b"# plan\n\n**D1 - a decision.** Each tub by a door.\n\n## T05 the bath (amendment 1)\n\n- the bath 10 x 8 ft\n\n## T06 the wells\n\n- a well by the kitchen\n"
+
+
+def _git_init(root: pathlib.Path) -> None:
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+
+
+def test_a_task_section_carries_its_own_decision_verdict(tmp_path: pathlib.Path) -> None:
+    """Feature 375 FR-003(a), plan D3: decide first. A task's plan section is ruled on alone; a section with its own current
+    verdict does not stale the plan-stage verdict, and a check for that task waits for it."""
+    text = PLAN_TASKS.decode()
+    secs = gate.task_sections(text)
+    assert set(secs) == {"T05", "T06"} and secs["T05"].startswith("## T05") and "a well" not in secs["T05"]
+    d = feature(tmp_path, plan=PLAN_TASKS)
+    gate.record(d, current([WITHIN], plan=PLAN_TASKS), "spec-fidelity")
+    sha = hashlib.sha256(secs["T05"].encode()).hexdigest()
+    with pytest.raises(PermissionError):
+        gate.record_task(d, "T05", {"section_sha256": sha, "decisions": []}, "main")
+    with pytest.raises(ValueError, match="no section naming T09"):
+        gate.record_task(d, "T09", {"section_sha256": sha, "decisions": []}, "spec-fidelity")
+    with pytest.raises(ValueError, match="changed while"):
+        gate.record_task(d, "T05", {"section_sha256": "x", "decisions": []}, "spec-fidelity")
+    with pytest.raises(ValueError, match="must be a list"):
+        gate.record_task(d, "T05", {"section_sha256": sha}, "spec-fidelity")
+    assert gate.record_task(d, "T05", {"section_sha256": sha, "decisions": [WITHIN]}, "spec-fidelity")["verdict"] == "CLEAR"
+    review = json.loads((d / "plan-review.json").read_text())
+    assert gate.task_current(review, text, "T05") and not gate.task_current(review, text, "T06")
+    grown = text.replace("- the bath 10 x 8 ft\n", "- the bath 10 x 8 ft\n- a second bath for guests\n")
+    (d / "plan.md").write_text(grown)
+    assert gate.owed(d)[0] == "plan-review-stale", "a new decision in a section its verdict no longer matches"
+    gate.record_task(d, "T05", {"section_sha256": hashlib.sha256(gate.task_sections(grown)["T05"].encode()).hexdigest(), "decisions": [WITHIN]}, "spec-fidelity")
+    assert gate.owed(d) is None, "the section's own verdict covers it; the plan-stage verdict stands"
+    gate.record(d, current([WITHIN], plan=grown.encode()), "spec-fidelity")
+    assert "T05" in json.loads((d / "plan-review.json").read_text())["tasks"], "a plan review keeps the task verdicts"
+    assert gate.task_current({"tasks": {"T05": {"verdict": "BLOCKED"}}}, grown, "T05") is False
+
+
+def test_a_check_waits_for_its_task_s_decisions(tmp_path: pathlib.Path) -> None:
+    root = tmp_path / "clone"
+    _git_init(root)
+    d = feature(root, plan=PLAN_TASKS, name="375-x")
+    (d / "tasks.md").write_text("- [x] T04 done\n- [ ] T05 the bath\n- [ ] T07 docs\n")
+    assert gate.decision_refusal(root) == "" and gate.active_task(root) == (None, ""), "no active feature: not this guard's"
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    assert gate.active_task(root) == (d, "T05")
+    assert "T05: its plan section carries no current CLEAR decision verdict" in gate.decision_refusal(root)
+    gate.record(d, current([WITHIN], plan=PLAN_TASKS), "spec-fidelity")
+    assert gate.decision_refusal(root) == "", "a current CLEAR plan review read the section: it covers it"
+    (d / "plan.md").write_bytes(PLAN_TASKS.replace(b"10 x 8 ft", b"12 x 9 ft"))
+    assert "T05: its plan section" in gate.decision_refusal(root), "the section changed since: its own preflight"
+    (d / "plan.md").write_bytes(PLAN_TASKS)
+    (d / "plan-review.json").unlink()
+    sha = hashlib.sha256(gate.task_sections(PLAN_TASKS.decode())["T05"].encode()).hexdigest()
+    gate.record_task(d, "T05", {"section_sha256": sha, "decisions": []}, "spec-fidelity")
+    assert gate.decision_refusal(root) == ""
+    common = root / ".git"
+    (common / "active-task").write_text(json.dumps({"feature": "375-x", "task": "T07"}))
+    assert gate.active_task(root) == (d, "T07")
+    assert "no section for this task" in gate.decision_refusal(root) and "plan-review" in gate.decision_refusal(root)
+    gate.record(d, current([WITHIN], plan=PLAN_TASKS), "spec-fidelity")
+    assert gate.decision_refusal(root) == "", "no section: the plan-stage verdict decides"
+    assert "MODE 4: PLAN REVIEW of one task's section" in gate.decide_prompt(d, "T05") and "TASK=T05" in gate.decide_prompt(d, "T05")
+    (root / ".specify" / "feature.json").write_text("not json")
+    assert gate.active_task(root) == (None, "")
+
+
+def test_the_decide_commands(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    root = tmp_path / "clone"
+    _git_init(root)
+    d = feature(root, plan=PLAN_TASKS, name="375-x")
+    monkeypatch.chdir(root)
+    assert gate.main(["decide", "375", "T05"]) == 0 and "MODE 4" in capsys.readouterr().out
+    assert gate.main(["section-sha", "375", "T05"]) == 0
+    sha = capsys.readouterr().out.strip()
+    assert sha == hashlib.sha256(gate.task_sections(PLAN_TASKS.decode())["T05"].encode()).hexdigest()
+    assert gate.main(["decide", "375", "T99"]) == 2
+    assert gate.main(["task-start", "375", "T06"]) == 0 and json.loads((root / ".git" / "active-task").read_text())["task"] == "T06"
+    assert gate.main(["task-start", "999", "T06"]) == 2
+    src = tmp_path / "v.json"
+    src.write_text(json.dumps({"section_sha256": sha, "decisions": []}))
+    assert gate.main(["record-task", "375", "T05", str(src), "--as", "spec-fidelity"]) == 0
+    assert gate.main(["record-task", "375", "T05", str(src), "--as", "main"]) == 2
+    assert gate.main(["record-task", "999", "T05", str(src), "--as", "spec-fidelity"]) == 2
+    src.write_text("{}")
+    assert gate.main(["record-task", "375", "T05", str(src), "--as", "spec-fidelity"]) == 1
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    assert gate.main(["decided", str(root)]) == 1 and "T06: its plan section" in capsys.readouterr().out
+    assert d.is_dir()

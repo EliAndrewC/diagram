@@ -47,6 +47,32 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T12 Batch 2 closes: `make done` green; landed
       research: rendering
       verify: DONE. DONE. make done green (384 s); landed by the push carrying this tick
-- [ ] T99 Batches 3-4 (plan D18) [lands-open]
+## Batch 3 - the guards and the arbiter
+
+- [x] T13 Decide, then freeze - the check state (plan D4): `hm_checks.py` keeps every page or pop-up check in flight (dispatch, launch, return, answer); `record-edit-hooks.sh` refuses an Edit to a subject while a check on it runs and, once the round has returned, any edit but the round's own EDIT blocks (`make apply-edits` on a reply of the round admitted); `check-bundle-hooks.sh` refuses a check already in an open round while another runs; `make check-closed` for a silent one (FR-003 b, c)
+      research: rendering
+      verify: DONE. DONE. hm_checks.py (pending/running/returned/answered, versions, replies kept); record-edit-hooks freezes Edit/Write and apply-edits, admitting only the round's EDIT blocks; check-bundle-hooks refuses a re-dispatch into a running round; checks-hooks wired on PostToolUse(Agent) and SubagentStop; make check-closed; test-checks-hooks.sh 15/15, red with the freeze removed; test_hm_checks.py
+- [x] T14 EDIT blocks for the three page checks that had none - intro-check, record-style, translation-check - so every proposal on a frozen subject is a block (plan D4)
+      research: rendering
+      verify: DONE. DONE. intro-check, record-style and translation-check contracts end findings with EDIT blocks; agent tier test green
+- [x] T15 Decide first (plan D3, D19): `make task-start`, `make decide F= T=` (a plan review of the task's section), `make plan-verdict TASK=`; a check dispatch refused until the active task's decisions carry a CLEAR verdict (FR-003 a)
+      research: rendering
+      verify: DONE. DONE. plan_gate task sections + record_task, make task-start/decide/section-sha, plan-verdict TASK=; check-bundle-hooks and pair-hooks refuse a check before the active task's decisions carry a verdict (a current whole-plan verdict covers an unchanged section); DECIDE_OK logged; tests in test_plan_gate.py and test-checks-hooks.sh
+- [x] T16 Tripwires (plan D10): the record checks' round cap (two per subject per feature); an Edit putting back an earlier Edit's old text; a second red gate in a row; the cascade ratio past its measured threshold; a heavy run the quick tier covers - each writing `arbiter-owed` and refusing the next dispatch or gate until a ruling (FR-010)
+      research: rendering
+      verify: DONE. DONE. hm_arbiter.py: round cap (record checks two per subject per feature; the review cap to the arbiter), reversal (Edit digests in the event log, and block returns across the versions each dispatch found), red gate (ci/state.py, gates only), cascade (1.0 a line, 10 dispatches, raised per ruling); a guard firing on correct work fixed on the way (make-only read a hook suite as a guard file)
+- [x] T17 The round arbiter (plan D11): `.claude/agents/round-arbiter.md` (Opus, high, omitClaudeMd, its tier row); `make arbiter-bundle TRIGGER=`, `make arbiter-ruled`; one binding ruling per trigger in `specs/NNN/arbiter.jsonl`; the review checks' cap goes to the arbiter instead of `REVIEW_ROUNDS_OK` (FR-011)
+      research: rendering
+      verify: DONE. DONE. round-arbiter contract (opus high, omitClaudeMd, tier row, pre-authorized), make arbiter-bundle (rounds marked NEW/REPEATED/REVERSING, edits.diff, cascade.txt, oscillation, request/spec), make arbiter-ruled (binding once, gm-review row, process fault filed); test_hm_arbiter.py
+- [x] T18 The escalation filter owed only for open findings (plan D16): disarmed when the ledger's row for the review shows every finding disposed (FR-007)
+      research: rendering
+      verify: DONE. DONE. ledger_lint.disposed (fixed/verified/accepted/filed or nothing-found vs left for the GM; binding from 2026-10-11); escalation-hooks disarms when the review's own rows are all disposed; test-escalation-hooks.sh 24/24
+- [x] T19 SC-006 replay: 372's waves 106 and 108 through the tripwires - 0105's and 0100's third rounds and the bath bullet's A -> B -> A fire, and no round past the cap needs a GM waiver (SC-006)
+      research: rendering
+      verify: DONE. DONE. SC-006: 0100's and 0105's third rounds fire (12:23, 14:40 UTC), the bath bullet's return fires (tests/tooling/test_replays_375.py over its three versions - the D10 wire widened to the versions each dispatch found, as the spec's 'computed from the file's history' asks; an Edit-digest wire alone could not see a script and a git checkout), both GM-waived rounds go to the arbiter; m:sc006-replay, m:cascade-threshold
+- [x] T20 Batch 3 closes: `make done` green; landed
+      research: rendering
+      verify: DONE. DONE. make done green (488 s) after two reds the gate found (the escape census: three new escapes unclassified and unlogged - fixed); landed by the push carrying this tick
+- [ ] T99 Batch 4 (plan D18) [lands-open]
       research: rendering
       verify: ticked by the last batch

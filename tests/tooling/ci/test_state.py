@@ -194,3 +194,23 @@ def test_the_state_file_of_a_WORKTREE_lands_in_its_own_gitdir(tmp_path: Path) ->
     malformed.mkdir()
     (malformed / ".git").write_text("not a gitdir pointer\n")
     assert _state_file(malformed) == malformed / STATE_FILE, "anything else falls back to the plain path"
+
+
+def test_a_second_red_gate_in_a_row_trips_the_arbiter(repo: Path) -> None:
+    """Feature 375 FR-010: the red-gate tripwire - one red gate is a finding; two in a row owe the round arbiter a ruling."""
+    import json
+
+    owed = repo / ".git" / "arbiter-owed.json"
+    state.write(repo, state.FAILED, "done")
+    assert not owed.exists(), "one red gate"
+    state.write(repo, state.GREEN, "quick")
+    assert not owed.exists(), "a quick run is not a gate"
+    state.write(repo, state.FAILED, "done")
+    first = json.loads(owed.read_text())
+    assert [v["kind"] for v in first.values()] == ["red-gate"]
+    state.write(repo, state.GREEN, "done")
+    state.write(repo, state.FAILED, "done")
+    assert len(json.loads(owed.read_text())) == 1, "a green gate between: not in a row"
+    owed.write_text("not json")
+    trigger = state.second_red_gate(repo, now="2026-10-10T00:00:00Z")
+    assert trigger == "red-gate@2026-10-10T00:00:00Z" and trigger in json.loads(owed.read_text())

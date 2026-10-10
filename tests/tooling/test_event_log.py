@@ -250,3 +250,22 @@ def test_a_returned_agent_s_verdict_is_read_from_its_reply() -> None:
     ]
     assert el.from_transcript(rows)[-1]["verdict"] == "CLEAR"
     assert fr.verdicts(el.from_transcript(rows)) == {"spec-fidelity": {"CLEAR": 1}}
+
+
+def test_an_edit_putting_back_replaced_text_trips_the_arbiter(tmp_path: Path, monkeypatch) -> None:  # noqa: ANN001
+    """FR-010's reversal wire (feature 372's bath bullet: drafted, withdrawn, drafted again)."""
+    clone = tmp_path / "clone"
+    (clone / ".git").mkdir(parents=True)
+    (clone / ".specify").mkdir()
+    (clone / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    monkeypatch.delenv("L7R_EVENTS_DIR", raising=False)
+
+    def edit(old: str, new: str) -> None:
+        el.append({"hook_event_name": "PreToolUse", "cwd": str(clone), "tool_name": "Edit", "tool_input": {"file_path": "/a.md", "old_string": old, "new_string": new}})
+
+    edit("the bath is 10 ft", "the bath is 12 ft")
+    edit("Wells by the door", "Wells by the kitchen")
+    assert not (clone / ".git" / "arbiter-owed.json").exists()
+    edit("the bath is 12 ft", "the bath is 10 ft")
+    owed = json.loads((clone / ".git" / "arbiter-owed.json").read_text())
+    assert list(owed) == ["reversal:/a.md"] and owed["reversal:/a.md"]["kind"] == "reversal"

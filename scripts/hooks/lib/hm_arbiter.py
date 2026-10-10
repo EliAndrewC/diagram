@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""Tripwires and the round arbiter's rulings - escalation without stopping (feature 375, FR-010, FR-011; plan D10, D11).
+
+WHY (the GM, 2026-10-10): *"our progress does not stop because we are going through an unexpectedly high number of rounds of
+reviews, but rather we escalate to a subagent, and that subagent might say to continue, or it might say that it deems that
+what we have now is actually fine ... or it will look at what is happening and say, oh, we're caught in a loop, we're
+oscillating, we're having reviews that trigger other reviews"*. A pattern is caught the moment it happens, by the hook that
+sees it - not by an hourly timer, and not by the looping session judging itself.
+
+THE TRIGGERS (`<git common dir>/arbiter-owed.json`, `{id: {kind, unit, detail, t}}`):
+
+- `round:<check>|<subject>` - a check's third round on one subject in one feature (record checks: `hm_checks.py`; review
+  checks: `pair-hooks.sh`), refused at dispatch until ruled;
+- `reversal:<path>` - an Edit putting back text an earlier Edit of the same file in the feature replaced (A -> B -> A, from
+  the event log's digests);
+- `red-gate` - a second red `make done` in a row (`l7r/diagram/ci/state.py` writes it);
+- `cascade` - check dispatches per hand-written changed line past the measured threshold.
+
+A trigger owes a RULING before the next check dispatch on its unit (a reversal or a cascade: any check; a red gate: the next
+gate). Nothing else stops. `make arbiter-bundle TRIGGER=` builds what `round-arbiter` reads; `make arbiter-ruled` records its
+ruling - one per trigger, binding - in `specs/<feature>/arbiter.jsonl` and as a row of the GM's review (`gm-review.jsonl`,
+FR-012). `continue` lifts a round cap by one round; `accept` and `process-fault` close the unit (its further dispatches are
+refused; a process fault is filed as a tooling row in `found.jsonl`).
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+import time
+from collections.abc import Mapping
+from pathlib import Path
+from typing import Any
+
+OWED = "arbiter-owed.json"
+RULINGS = ("continue", "accept", "process-fault")
+#: check dispatches per hand-written changed line past which a feature's checks are cascading (FR-010), and the fewest
+#: dispatches before the ratio means anything. Set from the SC-006 replay (specs/375-enforced-wave-process/measurements.json
+#: `cascade-threshold`): 372's wave 106 ran 0.13 and its looping wave 108 1.35.
+CASCADE_RATIO = 1.0
+CASCADE_MIN = 10
+
+
+def common_dir(root: Path) -> Path:
+    g = root / ".git"
+    if g.is_file():
+        m = re.match(r"gitdir:\s*(.+)", g.read_text(encoding="utf-8").strip())
+        gd = (root / m.group(1)).resolve() if m else g
+        c = gd / "commondir"
+        return (gd / c.read_text(encoding="utf-8").strip()).resolve() if c.is_file() else gd
+    return g
+
+
+def feature_dir(root: Path) -> Path | None:
+    try:
+        fd = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
+    except (OSError, ValueError):
+        return None
+    return (root / str(fd).rstrip("/")) if fd else None
+
+
+def _load(path: Path) -> dict[str, Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def owed(root: Path) -> dict[str, dict[str, Any]]:
+    return _load(common_dir(root) / OWED)
+
+
+def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float | None = None) -> bool:
+    """Record a trigger once (a second firing of a trigger already owed or ruled changes nothing); True when it is new."""
+    if trigger in rulings(root):
+        return False
+    path = common_dir(root) / OWED
+    state = _load(path)
+    if trigger in state:
+        return False
+    state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
+    return True
+
+
+def rulings(root: Path) -> dict[str, dict[str, Any]]:
+    """`{trigger: its ruling}` of the active feature (`specs/<feature>/arbiter.jsonl`)."""
+    d = feature_dir(root)
+    out: dict[str, dict[str, Any]] = {}
+    f = d / "arbiter.jsonl" if d else None
+    for line in (f.read_text(encoding="utf-8").splitlines() if f and f.is_file() else []):
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        out[str(r.get("trigger"))] = r
+    return out
+
+
+def continues(root: Path, prefix: str) -> int:
+    """How many `continue` rulings the round triggers of one unit carry - each lifts its cap by one round."""
+    return sum(1 for t, r in rulings(root).items() if t.startswith(prefix) and r.get("ruling") == "continue")
+
+
+def closed(root: Path, prefix: str) -> str:
+    """The ruling that closed the unit (`accept` / `process-fault`), or ''."""
+    return next((str(r["ruling"]) for t, r in rulings(root).items() if t.startswith(prefix) and r.get("ruling") in RULINGS[1:]), "")
+
+
+def blocking(root: Path, unit: str = "", gate: bool = False) -> list[str]:
+    """The unruled triggers that hold the next dispatch on `unit` (its own round triggers, and every reversal or cascade), or,
+    with `gate`, the next `make done` (a red-gate trigger)."""
+    out = []
+    for t, v in owed(root).items():
+        kind = v.get("kind")
+        if gate and kind == "red-gate":
+            out.append(t)
+        elif not gate and (kind in ("reversal", "cascade") or (kind == "round" and v.get("unit") == unit)):
+            out.append(t)
+    return sorted(out)
+
+
+def refusal(triggers: list[str]) -> str:
+    if not triggers:
+        return ""
+    t = triggers[0]
+    return (f"a tripwire is owed its ruling first ({', '.join(triggers)}; feature 375 FR-010/FR-011): make arbiter-bundle "
+            f"TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" "
+            "FILE=<its JSON> AS=round-arbiter. The feature goes on elsewhere meanwhile. (A session started before the agent "
+            "existed cannot dispatch it: restart it, or carry ARBITER_OK=\"<reason>\" on the gate / FREEZE_OK=\"<reason>\" "
+            "in the check's prompt - both logged.)")
+
+
+def reversal(events: list[Mapping[str, Any]], path: str, old: str, new: str) -> bool:
+    """Whether an Edit of `path` (digests `old` -> `new`) puts back text an earlier Edit of that file replaced (A -> B -> A)."""
+    replaced = {str(e.get("old")) for e in events if e.get("ev") == "PreToolUse" and e.get("tool") == "Edit" and e.get("path") == path}
+    return bool(new) and new in replaced and new != old
+
+
+def cascade(dispatches: int, lines: int, ruled: int = 0) -> bool:
+    """Past the ratio - raised by one step for each `continue` the feature's cascade rulings carry, so a ruled cascade does not
+    re-trip on the very next dispatch (the trigger id is `cascade@<rulings + 1>`, fixed until ruled)."""
+    return dispatches >= CASCADE_MIN and dispatches > CASCADE_RATIO * (1 + ruled) * max(lines, 1)
+
+
+def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared: str, now: str | None = None) -> dict[str, Any]:
+    """Record the round arbiter's ruling: binding, one per trigger (FR-011)."""
+    if declared != "round-arbiter":
+        raise PermissionError("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, "
+                              "recorded, not a proof")
+    if trigger in rulings(root):
+        raise ValueError(f"{trigger} is already ruled - one ruling per trigger, binding; the session neither re-asks nor overrules")
+    if ruling.get("ruling") not in RULINGS or not str(ruling.get("why") or "").strip():
+        raise ValueError(f"a ruling is one of {RULINGS} with a `why`")
+    d = feature_dir(root)
+    if d is None:
+        raise ValueError("no active feature (.specify/feature.json) to record the ruling in")
+    when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    trig = owed(root).get(trigger, {})
+    row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit", ""),
+           "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when}
+    d.mkdir(parents=True, exist_ok=True)
+    with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+    with (d / "gm-review.jsonl").open("a", encoding="utf-8") as fh:  # FR-012: every ruling is the GM's to review after landing
+        fh.write(json.dumps({"kind": "arbiter", "trigger": trigger, "ruling": row["ruling"], "why": row["why"], "utc": when},
+                            ensure_ascii=False) + "\n")
+    if row["ruling"] == "process-fault":
+        with (d / "found.jsonl").open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps({"check": "round-arbiter", "file": "(tooling)", "block": trigger, "finding": row["why"],
+                                 "status": "open", "utc": when}, ensure_ascii=False) + "\n")
+    path = common_dir(root) / OWED
+    state = _load(path)
+    if state.pop(trigger, None) is not None:
+        path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
+    return row
+
+
+def env_ok(name: str, text: str) -> bool:
+    return bool(re.search(rf'{name}="[^"]{{8,}}"', text)) or len(os.environ.get(name, "").split()) >= 2
+
+
+def main(argv: list[str]) -> int:
+    """`hm_arbiter.py ruled <trigger> <json file> --as <who>` - what `make arbiter-ruled` runs."""
+    import sys  # noqa: PLC0415
+
+    if argv[:1] == ["ruled"] and len(argv) == 5 and argv[3] == "--as":
+        root = Path(".").resolve()
+        try:
+            row = record_ruling(root, argv[1], json.loads(Path(argv[2]).read_text(encoding="utf-8")), argv[4])
+        except PermissionError as e:
+            print(f"arbiter-ruled: {e}", file=sys.stderr)
+            return 2
+        except (OSError, ValueError) as e:
+            print(f"arbiter-ruled: refused - {e}", file=sys.stderr)
+            return 1
+        print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
+        return 0
+    print("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter", file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    import sys
+
+    raise SystemExit(main(sys.argv[1:]))

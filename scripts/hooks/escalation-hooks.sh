@@ -88,7 +88,20 @@ json.dump(d, open(tmp, "w"))
 os.replace(tmp, p)' "$1" "$2" "$3" 2>/dev/null || true
 }
 
+ledger_count() { # ledger_count <clone> -> how many measured rows the review ledger holds now
+  python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import ledger_lint as l; print(len(l.measured_rows(open(sys.argv[2]).read())))' \
+    "$EH_HERE/../reviews" "$1/dev/review-ledger.md" 2>/dev/null || echo 0
+}
+
+all_disposed() { # all_disposed <clone> <agent> <rows at arming> -> exit 0 when that review's new rows exist and every one is disposed
+  python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import ledger_lint as l
+rows = [dict(zip(l.COLUMNS, c)) for _n, c in l.measured_rows(open(sys.argv[2]).read())[int(sys.argv[4] or 0):] if len(c) == len(l.COLUMNS)]
+mine = [r for r in rows if r["check"] == sys.argv[3]]
+sys.exit(0 if mine and all(l.disposed(r) is True for r in mine) else 1)' "$EH_HERE/../reviews" "$1/dev/review-ledger.md" "$2" "$3" 2>/dev/null
+}
+
 arm() {   # arm <clone> <which review>
+  write_field "$(state_file "$1")" ledger_rows "$(ledger_count "$1")"  # GUARD_EDIT_OK: feature 375 FR-007 - the rows its own ledger rows follow
   write_field "$(state_file "$1")" armed_by "$2"
   write_field "$(state_file "$1")" armed_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   write_field "$(state_file "$1")" told ""
@@ -137,13 +150,21 @@ stop() {
   [ -n "$clone" ] || exit 0
   armed="$(read_field "$(state_file "$clone")" armed_by)"
   [ -n "$armed" ] || exit 0
+  # GUARD_EDIT_OK: feature 375 FR-007 - a review whose every finding is DISPOSED (its ledger rows say fixed, verified, accepted,
+  # filed, or nothing found) owes no escalation-check: nothing of it is going to the GM.
+  if all_disposed "$clone" "$armed" "$(read_field "$(state_file "$clone")" ledger_rows)"; then
+    disarm "$clone"
+    guard_log escalation permitted "$armed" findings-disposed
+    exit 0
+  fi
   key="$(read_field "$(state_file "$clone")" armed_at)"
   [ "$(read_field "$(state_file "$clone")" told)" = "$key" ] && exit 0   # once per armed review, never a loop
   write_field "$(state_file "$clone")" told "$key"
   printf 'FINDINGS UNFILTERED: %s returned and no escalation-check has read what you are about to tell the GM.\n' "$armed" >&2
   printf 'Dispatch `escalation-check` with your draft as the prompt - it cuts the items that name no norm,\n' >&2
   printf 'the ones the record already answers, and your own process narrative ("a bug, then I fixed it").\n' >&2
-  printf 'Relaying nothing from this review? Re-dispatch with ESCALATION_OK="<reason>".\n' >&2
+  printf 'Relaying nothing from this review? Write its ledger row with every finding disposed (fixed, verified, accepted,\n' >&2
+  printf 'filed as a row - feature 375), or re-dispatch with ESCALATION_OK="<reason>".\n' >&2
   guard_log escalation blocked "stop" findings-unfiltered
   exit 2
 }

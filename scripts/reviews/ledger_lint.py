@@ -33,6 +33,24 @@ MISSED = frozenset({"yes", "no", "-"})
 _WALL = re.compile(r"^\d+ s$")
 _TOKENS = re.compile(r"^\d+k in \(\d+k cached\) / [\d.]+k out$")
 COLUMNS = ("date", "check", "subject", "verdict", "finding", "class", "author missed?", "acted on", "wall", "tokens")
+#: feature 375 FR-007: what a row's `acted on` says - DISPOSED (fixed, verified, accepted with a reason, filed as a row, or
+#: nothing because nothing was found) or OPEN (left for the GM). Only an open finding owes `escalation-check`; a row written from
+#: the rule's day on must say which in words this reads.
+_DISPOSED = re.compile(r"\b(fix|fixed|rewritten|reworded|amended|applied|verified|accepted|filed|found row|redrawn|recorded|"
+                       r"corrected|retired|moved|withdrawn|answered)\b", re.I)
+_OPEN = re.compile(r"\b(GM|held|escalat\w*|open|pending)\b")
+_CLEAN = re.compile(r"^(PASS|CLEAR|FAITHFUL|IN-STEP|INTRO-OK|NO-INTRO-NEEDED|clean)\b")
+RULE_FROM = "2026-10-11"
+
+
+def disposed(row: dict[str, str]) -> bool | None:
+    """True when a review row's findings are all disposed, False when one is left for the GM, None when the words say neither."""
+    acted = row.get("acted on", "").strip()
+    if _OPEN.search(acted) or acted in ("", "-"):
+        return False if acted not in ("", "-") or row.get("finding", "-") not in ("", "-") else True
+    if acted.lower() == "nothing":
+        return row.get("finding", "-") in ("", "-") or bool(_CLEAN.match(row.get("verdict", "")))
+    return True if _DISPOSED.search(acted) else None
 
 
 def measured_rows(text: str) -> list[tuple[int, list[str]]]:
@@ -70,6 +88,8 @@ def problems(text: str) -> list[str]:
             out.append(f"line {n}: class {row['class']!r} - one of {', '.join(sorted(CLASSES))}")
         if row["author missed?"] not in MISSED:
             out.append(f"line {n}: author missed? {row['author missed?']!r} - yes, no or -")
+        if row["date"] >= RULE_FROM and disposed(row) is None:
+            out.append(f"line {n}: acted on {row['acted on']!r} - say fixed, verified, accepted (why), filed as a row, or left for the GM (feature 375)")
         if not _WALL.match(row["wall"]) or not _TOKENS.match(row["tokens"]):
             out.append(f"line {n}: the cost cells are not `make review-cost AGENT=<id>`'s ({row['wall']!r} | {row['tokens']!r})")
     return out
