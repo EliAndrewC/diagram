@@ -2184,3 +2184,11 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T217 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. impl-drift on touch.py's claims IN-STEP, fresh agents on fresh bundles; claims.py drops a rest outside a claim's pages (m:wave95-foreign-rests); make claims-owed: none
+
+## Phase 97 - wave 96 (amendment 95): the knot row closed by wave 94; the 7 ft footpath re-tried
+
+- Records only: `audit/waves.json`, `audit/found-wave4.jsonl` (and the `ranking.json`, `ranking.md` and `audit/closed-tiers.json` it rebuilds), `measurements.json`; one comment at `consts.py`.
+
+- [x] T218 wave 96's rows (FR-003, FR-004)
+      research: rendering
+      verify: DONE. wave 96: knot row closed by wave 94; the 7 ft footpath re-tried and still refused (m:wave96-footpath-7ft); spec-fidelity CLEAR

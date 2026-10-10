@@ -11615,7 +11615,7 @@
   "found": "wave 4: the knot test, measured",
   "tier_as_ranked": "E3",
   "moved": "amendment 9 round 5: the fix text re-aimed at the knot that exists",
-  "wave": "",
+  "wave": "94",
   "scope": "kept"
  },
  {
@@ -11846,7 +11846,7 @@
   "key": "l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "footpaths thread to every farmhouse while keeping 0246's 7 ft off a garden fence: at 7 ft Kashikawa's settled web left two farmhouses off the network (WebRefused at (3024, 3004) and (3265, 2589)) - re-route or re-seat so the gap holds",
+  "fix": "footpaths thread to every farmhouse while keeping 0246's 7 ft off a garden fence: at 7 ft Kashikawa's settled web left two farmhouses off the network (WebRefused at (3024, 3004) and (3265, 2589)) - re-route or re-seat so the gap holds; re-tried at wave 96 after the web's hardening (waves 87-95): still Kashikawa refused and cohort seeds 03, 23, 40 and 903 newly refused, each with farmhouses off the connected way network (m:wave96-footpath-7ft)",
   "files": [
    "l7r/diagram/hamletgen/ways/web.py"
   ],

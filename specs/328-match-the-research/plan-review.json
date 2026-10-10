@@ -1,44 +1,26 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "96c2aea2d8da7fab03f62089037beaddc60af11024c713dbf6ed19a68e5993f4",
+ "plan_sha256": "70816a10dbd15d3593ccc02ef31f33318c4122e652e099a50a3b6787475a7e0b",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W95-a",
-   "summary": "Row touch.py::_touch_junctions#final overrun cut FIXED: the 6 ft floor dropped, the cut strict (< 40.0) as 0081 words it",
+   "id": "W96-1",
+   "summary": "Row knots.py::settle_knots#a knot no lawful gather reaches closed on wave 94's evidence; its wave set to 94; no code change",
    "class": "within",
-   "why": "Unchanged since round 2: 0081 cuts a tail of under 40 ft; the floor was on no page; claims-index row IN-STEP. Moves the implementation to the research (FR-004)."
+   "why": "A found row (no claim key in the index) whose finding is a measured knot. Its last case, Sawada's field way 9.4 ft from lane 10's door end, is in the class wave 94's LEGITIMATE narrow ruling covers (m:wave94-door-end-teed: all 26 exempted pairs that class). Re-run at HEAD: test_pool_261.py 42 passed, 1 xfailed (the zigzag list), _KNOTS_WAITING empty; the cohort carries no knotted seed (m:wave94-gather-passes, m:wave95-serve-60). The defect the row records is absent; recording that adds no new exception to the request."
   },
   {
-   "id": "W95-b",
-   "summary": "Row touch.py::_touch_junctions#a house served FIXED: the orphan pass asks `serves` (60 ft of the house, or 12 ft of its built ground) in place of sweeps' 100 ft _SERVE_FT",
+   "id": "W96-2",
+   "summary": "FOOTPATH_FABRIC_GAP 4 -> 7 ft re-tried in a detached worktree; Kashikawa refused, cohort 52 -> 48/54 (03, 23, 40, 903 newly failing); the found row web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot and the four rows waiting on it stay E3, nothing lands",
    "class": "within",
-   "why": "Unchanged since round 2: 0246's drawing page gives 60 ft of the farmhouse or 12 ft of its steading's built ground as how close counts as serving a house. The sweeps.py 100 ft reading is raised in claims-followup.md for the GM."
+   "why": "The spec's Edge Case (a fix whose maps fail takes the failing work's tier and waits on a found row) and the standing rule that a newly failing cohort seed is a regression (XIII). Measured: the cohort log reproduces 48/54, and the four new failures are each WebRefused with farmhouse(s) off the connected way network, which is the found row's own work. The rows stay open in the queue, not dropped. Round 2 (record edits confirmed): the plan's Wave 96 bullet names the found row as the open gating row and its four waiting rows; the found row's fix text carries m:wave96-footpath-7ft and the failing set; the measurement records the refusal class (WebRefused, refuse_unreached); consts.py's comment records the failed re-try (comment only)."
   },
   {
-   "id": "W95-b2",
-   "summary": "built_ground: a byre goes to the household its record names (`of`); a byre whose record names none (the shared shed on the commons, 0048) is no steading's built ground",
+   "id": "W96-3",
+   "summary": "Records only (waves.json, found-wave4.jsonl and what it rebuilds, measurements.json; one comment at consts.py); no Decisions Recorded row",
    "class": "within",
-   "why": "Round 3's remedy done as set, verified this round: (1) touch.py::built_ground has no `elif houses:` branch - a byre with no `of` is skipped (`if not of: continue`), as law.reach_to_steading reads it; (2) the UNRESEARCHED claim is gone, replaced by `#a shared byre no steading's ground` citing research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html (its line 24: 'a shed on the common ground among the houses ... reached by several of them'); (3) the docstring, the plan's sentence and the test (renamed test_a_byre_is_built_ground_of_the_house_its_record_names_and_a_shared_one_of_none, asserting only the `of` byre is keyed and a shared shed 10 ft off the run serves no house) are corrected; no 'nearest house' byre wording remains in plan, tasks, spec or claims-followup; (4) both built_ground rows in dev/claims-index.json are IN-STEP, resting only on blocks of their own pages; (5) m:wave95-serve-60's cohort figure reproduces: the scratchpad cohort log taken after the final edit, in a worktree whose touch.py is byte-identical to the clone's, reads 52/54 (refused Audit-10, Audit-20). Now a narrowing of nothing: it follows both pages, so it carries no exception."
-  },
-  {
-   "id": "W95-c",
-   "summary": "A new claim on an existing, unclaimed decision of _touch_junctions: a moved end's last stretch kept short, UNRESEARCHED",
-   "class": "within",
-   "why": "Claim coverage only, no behavior change; impl-drift IN-STEP."
-  },
-  {
-   "id": "W95-d",
-   "summary": "Tooling (XIV): scripts/record/claims.py::record drops a rest on a page the claim does not cite and names it, with a test; the index's foreign rests repaired by the same rule",
-   "class": "within",
-   "why": "A defect found in the work at hand and fixed where it was found (XIV); m:wave95-foreign-rests records the repair with its cause."
-  },
-  {
-   "id": "W95-e",
-   "summary": "Verification: the pool and its knot test, the cohort, impl-drift, spec-fidelity; m:wave95-serve-60 re-measured on the code that ships",
-   "class": "within",
-   "why": "Enforces what the request asks (the implementation matches the research, no regression). The cohort run completed in about a minute against its 20-25 min norm, i.e. served from the roll cache keyed on executed code - so no cohort roll executes the changed built_ground either, and the 52/54 holds for the final code. The entry's method says so of the pool only; an aside, not a finding."
+   "why": "No change that can alter a roll lands (the consts.py edit is a comment; FOOTPATH_FABRIC_GAP stays 4.0), so FR-008 owes no Decisions row. tasks.md Phase 97 lists exactly these records. Round 1's required record edits are present."
   }
  ],
  "verdict": "CLEAR"

@@ -205,7 +205,9 @@ TRACK_FABRIC_GAP = WEB_FABRIC_GAP
 # being reached and a house being 296 ft from anything with no route at all.
 # HELD AT 4 ft by feature 328 wave 4: the lane page's own figure is 7 ft (a lane's middle, a 3 ft footpath's included,
 # keeps at least 7 ft clear of a garden fence - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html),
-# but at 7 ft Kashikawa's footpaths cannot thread to two farmhouses; the row waits for a found row that lets them. Why
+# but at 7 ft Kashikawa's footpaths cannot thread to two farmhouses; the row waits for a found row that lets them.
+# A FIX THAT FAILED, re-tried at wave 96 (2026-10-10) after the web's hardening: still Kashikawa refused and cohort seeds
+# 03, 23, 40, 903 newly refused (farmhouses off the network; m:wave96-footpath-7ft in specs/328). Why
 # 4 ft, kept: the number was doing real work at the margin. The overlap matrix sizes every lane at 6 ft
 # wide whatever its record says, so 3 ft is the hard floor and this is 3 plus a hand's breadth; the
 # drawn tread is 3 px, so the ink clears a wall by better than two of its own widths. At 5 a hemmed-in

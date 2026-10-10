@@ -1553,6 +1553,20 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   to a fresh agent on a fresh bundle, never a resumed one.
 - **Verification**: the pool and its knot test; the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
 
+## Wave 96 (amendment 95, 2026-10-10) - batch 13
+
+- **Row `knots.py::settle_knots#a knot no lawful gather reaches` closed by wave 94.** Its one case left was Sawada's knot
+  (its field way 9.4 ft from lane 10's door end), the pool's last strict-xfail knot; under wave 94's ruled reading of 0081 (a
+  household way's lone door end teed on its own lane is one path, not a knot) the pool's knot test passes with the waiting
+  list empty and the cohort carries no knot (m:wave94-door-end-teed). The row's wave is set to 94; no code changes.
+- **The found row `web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot` re-tried, still open (E3).**
+  `FOOTPATH_FABRIC_GAP` at 0246's 7 ft, re-tried after the web's hardening (waves 87-95): Kashikawa is refused and the
+  cohort falls 52 -> 48/54, seeds 03, 23, 40 and 903 newly refused, each with farmhouses off the connected way network
+  (m:wave96-footpath-7ft). The found row stays open at E3, its fix text carrying the measurement, and the four rows that
+  wait on it (`consts.py::FOOTPATH_FABRIC_GAP`, `track.py::_thread_the_fabric`, `street.py::join_to`,
+  `bund.py::RunOnBlocks.clear`) stay as filed; the failed re-try is recorded at `consts.py`'s comment.
+- **Verification**: the measurement; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

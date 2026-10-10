@@ -2151,5 +2151,19 @@
       "cohort_48": "52/54 (refused 10, 20), none newly failing, on the final built_ground",
       "pool": "no map moved (no pool roll executes the changed code; the roll cache keyed on executed code)"
     }
+  },
+  "wave96-footpath-7ft": {
+    "quantity": "wave 96 (2026-10-10): FOOTPATH_FABRIC_GAP at 0246's 7 ft, re-tried after waves 87-95",
+    "observed": "2026-10-10",
+    "source": "a detached worktree at 4d36d1497 with FOOTPATH_FABRIC_GAP 4.0 -> 7.0; make map for the five hamlets; make test-file FILE=tests/hamletgen/test_pool_261.py; make cohort N=48",
+    "command": "make map; make cohort N=48",
+    "method": "the one constant changed, the pool rerolled, the cohort run",
+    "value": {
+      "pool": "Kashikawa refused; Mizuguchi moved; three maps unchanged",
+      "cohort_passed": 48,
+      "cohort_48": "48/54 (refused 03, 10, 20, 23, 40, 903) - 03, 23, 40 and 903 newly failing against 52/54",
+      "reading": "the footpath still cannot reach every farmhouse 7 ft off a plot: the row and its dependents stay E3 as filed",
+      "refusals": "each of Kashikawa and seeds 03, 23, 40 and 903 is refused WebRefused with farmhouses off the connected way network (refuse_unreached): the footpath's 7 ft cannot thread between the plots to them"
+    }
   }
 }
