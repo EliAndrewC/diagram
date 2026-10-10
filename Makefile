@@ -1200,6 +1200,19 @@ replay-owing:   ## [project] replay recorded commits through the old owing and t
 	@: "GUARD_EDIT_OK: feature 375 SC-001 - TRIAGE=1 also writes each commit's pop-up triage bundle for the triage to judge"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/replay_owing.py" $(REVS) $(if $(OUT),--out "$(OUT)",) $(if $(TRIAGE),--triage,)
 
+# GUARD_EDIT_OK: feature 375 FR-012 adds three operations - the GM's review after landing: what waits on him, a finding accepted
+# with a reason (a row he may overturn), and his review recorded (which may close the feature, through its closing check).
+gm-review:      ## [project] what waits on the GM, by feature: HELD rows (work cannot go on) and TO REVIEW rows (landed; he may overturn) - feature 375
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py list
+
+accept:         ## [project] accept a finding with a reason - the work goes on, and the GM may overturn it after landing (feature 375)   F=375 FINDING="<what>" REASON="<why it can stand>"
+	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py accept "$(F)" "$(FINDING)" "$(REASON)"
+
+gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375)   F=375 [OVERTURN=<n> TO=<NNN>]
+	@if [ -z "$(F)" ]; then printf 'make gm-reviewed: F=<feature> is required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py reviewed "$(F)" $(if $(OVERTURN),"$(OVERTURN)" "$(TO)",)
+
 # GUARD_EDIT_OK: feature 375 FR-009 adds an operation - read-only unless WRITE=1, which writes the feature's report.md.
 feature-report: ## [project] where a feature's time and dispatches went, as a table, from the event log, the run log and git   F=375 [TRANSCRIPT="<jsonl> ..."] [SINCE=<ISO>] [UNTIL=<ISO>] [WRITE=1]
 ##  F=<NNN>            the feature

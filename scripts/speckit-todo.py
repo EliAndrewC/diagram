@@ -50,7 +50,7 @@ sys.dont_write_bytecode = True
 
 #: what a `**Status**:` value begins with when a feature is closed without every task ticked (plan D1, D3)
 CLOSING = ("done", "superseded by", "withdrawn")
-STATES = ("filed", "planned", "in progress")
+STATES = ("filed", "planned", "in progress", "done - GM review pending")
 #: when an open feature is owed, in the order the work reaches it (the GM, 2026-10-10)
 STAGES = ("now", "village", "town", "provincial city", "capital")
 #: the tag vocabulary, relative to the repository root
@@ -133,6 +133,8 @@ def feature(d: Path, vocab: Vocabulary | None = None) -> Feature:
         state, why = "closed", status
     elif total and ticked == total:
         state, why = "closed", "every task ticked"
+    elif total and ticked == total - 1 and holding(d) == [] and gm_rows(d):  # feature 375 FR-012: landed, the GM's box open
+        state, why = "done - GM review pending", f"make gm-reviewed F={d.name.split('-', 1)[0]}"
     elif total == 0:
         state, why = "filed", ""
     else:

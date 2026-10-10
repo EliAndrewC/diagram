@@ -180,6 +180,16 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     with (d / "gm-review.jsonl").open("a", encoding="utf-8") as fh:  # FR-012: every ruling is the GM's to review after landing
         fh.write(json.dumps({"kind": "arbiter", "trigger": trigger, "ruling": row["ruling"], "why": row["why"], "utc": when},
                             ensure_ascii=False) + "\n")
+    try:  # FR-012: a feature with a row for the GM carries its GM-review box
+        import importlib.util  # noqa: PLC0415
+
+        spec = importlib.util.spec_from_file_location("gm_review", Path(__file__).resolve().parents[2] / "gm_review.py")
+        if spec and spec.loader:
+            gm = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(gm)
+            gm.ensure_box(d)
+    except (OSError, ImportError):  # pragma: no cover - a tree without the script records the row all the same
+        pass
     if row["ruling"] == "process-fault":
         with (d / "found.jsonl").open("a", encoding="utf-8") as fh:
             fh.write(json.dumps({"check": "round-arbiter", "file": "(tooling)", "block": trigger, "finding": row["why"],
