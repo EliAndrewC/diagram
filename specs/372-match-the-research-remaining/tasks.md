@@ -133,5 +133,6 @@ in 328's ranking and this spec.
 
 - Record only (FR-001): 0105's two notes files.
 
-- [ ] T13 wave 110's row (FR-001)
+- [x] T13 wave 110's row (FR-001)
       research: rendering
+      verify: DONE. DONE. wave 110: the 0105 absence note's Matsue sentence removed (CLAIM-FROM-UNREAD cleared); quote-check and record-format clean; plan review CLEAR
