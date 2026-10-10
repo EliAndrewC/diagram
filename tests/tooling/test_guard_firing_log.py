@@ -366,6 +366,7 @@ _ESCAPES = {
     ),
     "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/gates/entry-gate.sh (feature 311), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
     "CLAIMS_OK": ("environment", "read as ${CLAIMS_OK:-} by scripts/gates/claims-gate.sh (feature 316), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
+    "PREFLIGHT_OK": ("environment", "a make variable on `make done` (feature 375 FR-004), which a mention cannot set; reason floor and the firing log via the Makefile's LOGESCAPE, as REF_OK"),
     "CLOSE_OK": (
         "environment",
         "read as ${CLOSE_OK:-} by sync-with-main.sh's closing check (feature 375, FR-009/FR-014), which a mention cannot set; reason floor via hm_escape.py reason-ok, recorded with guard_log",

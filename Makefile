@@ -124,9 +124,12 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	@: "GUARD_EDIT_OK: feature 375 FR-004 - THE PREFLIGHT FIRST, ahead of the verified-done reuse too (a stale derived file is"
 	@: " invisible to that key): the derived files, the record and its pointers, make quick and the changed engine lines, in"
 	@: " a minute at most, stopping here on a failure (scripts/gates/preflight.py; 372's wave 106 went red six times on causes"
-	@: " these find). PREFLIGHT_OK=1 skips it when the session has just run make preflight itself."
-	@$(if $(PREFLIGHT_OK),:,python3 "$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" || { printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; })
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
+	@: " these find). PREFLIGHT_OK=\"<reason>\" skips it - when the session has just run make preflight itself - and is logged"
+	@: " (GUARD_EDIT_OK: feature 375 - the escape census found it unlogged and reasonless); a tree without the script (a test's"
+	@: " fixture) has no preflight to run."
+	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$(PREFLIGHT_OK)",@:)
+	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" || { printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; })
+	@p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram || true; \
 	  : "GUARD_EDIT_OK: the SHORT-CIRCUIT re-stamps rather than earns, and that is what kept a bogus" ; \
@@ -220,7 +223,8 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts/measure'); import gatecost as _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
 	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else python3 "$$root/scripts/measure/ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
 	: "GUARD_EDIT_OK: feature 375 FR-004 - a tree that moved while the gate ran is not vouched for: no green, the file named"; \
-	python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { $(STATE) failed-gate $(DONE_NAME); exit 1; }; \
+	[ ! -f "$$root/scripts/gates/preflight.py" ] || python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { $(STATE) failed-gate $(DONE_NAME); exit 1; }; \
+	: "(GUARD_EDIT_OK: feature 375 - a fixture tree without the script has no tree check to run)"; \
 	$(STATE) green-local $(DONE_NAME); \
 	: "GUARD_EDIT_OK: FINDING 2 OF THE NAMING AUDIT - both banners STATED SOMETHING FALSE. Since feature" ; \
 	: "174 the phase list is 'hooks-test test-full (+perf-gate under FULL)', so a plain make done runs the" ; \
