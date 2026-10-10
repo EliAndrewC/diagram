@@ -45,6 +45,17 @@ description: "Task list template for feature implementation"
   because a documented requirement that relies on memory gets skipped; `tests/test_task_research_boxes.py`
   turns a ticked `physical` task with an unticked box red at the gate.
 
+- **A `research record` feature's last research task is its IMPLEMENTATION CHECK** (feature 378, GM 2026-10-10: *"every
+  feature of this type should have a task in which we look up whether or not our implementation conforms"*). Add, after
+  its research tasks: `- [ ] Tnn Implementation check (feature 378): for each question whose findings this feature
+  changed, the code that decides it cites its FINDINGS page in a Research: claim (added where missing; a drawing-page
+  pointer alone is not re-owed by a changed finding) and the claim's impl-drift check
+  is recorded - make claims-owed / claims-bundle / claims-checked - or, ONLY where no code decides it (the thing is not
+  built), implementation-check.md says "- NNNN: no code implements it - <why>; searched: <units and grep>"; a claim on
+  code outside the hamlet scope (the magistracy's compound_model.py) enters the index too; the code is NOT fixed unless
+  this spec asks; verify: make impl-check F=<n> reports nothing missing`. A DRIFTED verdict is a result, not a failure: it shows in `make claims-report`. The closing check refuses
+  the feature while `make impl-check` reports anything missing.
+
 - **Every task that writes prose or code carries the house-style line: `American spellings, hyphens
   only`** (GM 2026-09-12, feature 236 item 4: *"we can have that as a checklist item in advance as
   well as having an automated check for it"*). The automated half is a `make quick` phase that fails

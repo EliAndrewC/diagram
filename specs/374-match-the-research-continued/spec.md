@@ -169,3 +169,5 @@ current figure before the first wave.
 - Amendment 1 (2026-10-10, at the plan): spec-lint found FR-003 and FR-005 named by no success criterion - SC-003 now cites
   FR-003 (its at-the-cap clause), and SC-007 is FR-005's (a guard fixed with its test, an escape's reason naming its exemption).
   Put to the plan review with the plan.
+
+**Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=374` says what is owed. The code is fixed only where this spec asks.

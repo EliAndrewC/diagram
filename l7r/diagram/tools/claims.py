@@ -533,12 +533,35 @@ def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = Fals
         _claims, errors, units = module_units(tree, rel, mod, p.name == "__init__.py", constants, every_module_unit)
         for unit in units:
             yield unit, errors
+    yield from claimed_outside(skill, set(mods), repo_prefix)
     for doc, tops in PROCEDURES.items():
         if not (skill / doc).is_file():  # a tree read at an older commit (the push's base) may predate a document
             continue
         text = (skill / doc).read_text(encoding="utf-8")
         for unit in doc_units(text, repo_prefix + doc, tops):
             yield unit, []
+
+
+def claimed_outside(skill: Path, inside: set[str], repo_prefix: str = "") -> Iterator[tuple[Unit, list[str]]]:
+    """Every unit of an engine module OUTSIDE the hamlet scope that carries a `Research:` claim of its OWN (feature 378).
+
+    WHY (the GM, 2026-10-10: a research feature's finding is checked against the code and a mismatch *"properly annotated
+    so that a `make claims-report` will show this item"*): the code that decides the magistracy's questions - the roofed
+    court, the middle gate, the guest's route (`compound_model.py`) - sits outside the hamlet's imports, so a claim there
+    reached no index and no report. A unit enters by carrying its own claim; nothing obliges the rest of its module to
+    carry one, so the coverage rule (every unit claimed) stays the hamlet scope's, and a module docstring's claims, which
+    every unit would inherit, bring in none of them (3 such units on 2026-10-10: `compound`, `compound_model`,
+    `interactive.record.site_pages`)."""
+    for mod, p in engine_modules(skill).items():
+        if mod in inside:
+            continue
+        tree = ast.parse(p.read_text(encoding="utf-8"))
+        is_pkg = p.name == "__init__.py"
+        constants = reexported({mod: module_constants(tree)}, {mod: import_table(tree, mod, is_pkg)})
+        _claims, errors, units = module_units(tree, repo_prefix + p.relative_to(skill).as_posix(), mod, is_pkg, constants)
+        for unit in units:
+            if unit.claims and not unit.inherited:
+                yield unit, errors
 
 
 def coverage(units: Iterable[tuple[Unit, list[str]]], questions: set[str]) -> list[str]:
