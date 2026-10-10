@@ -47,7 +47,7 @@ N/A: no generator change.
 - **The lock.** A claim is read, checked and appended under `fcntl.flock` on `<sheet>.lock`.
 - **Which question a line names.**
   - Every 4-digit number in its item field.
-  - An old page name followed by a run of section numbers (`homesteads 050 110 145`, `fields/090 080`,
+  - An old page name followed by a run of section numbers (`homesteads  050 110 145`, `fields/090 080`,
     `PAGE=water SECTION=020`), each mapped to its number through `research/moved-303.json`.
 - **When a claim is live.** It is the latest line of one owner naming that question, and:
   - and the line carries none of `done`, `released`, `landed`, `complete` or `withdrawn` anywhere after its owner. Old

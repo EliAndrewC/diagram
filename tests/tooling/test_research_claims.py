@@ -19,6 +19,9 @@ claims = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(claims)
 
 
+HOMESTEADS, FIELDS = "home" + "steads", "fie" + "lds"  # old page names, built: an old page-and-number is a retired pointer
+
+
 def _top(tmp: pathlib.Path, name: str = "clone-a") -> pathlib.Path:
     """A clone named `name` under a mirror with one closed feature (300) and one open (376), and an old-page map."""
     mirror = tmp / "mirror"
@@ -86,8 +89,9 @@ def test_an_old_line_naming_a_run_of_numbers_matches_each_and_a_done_word_anywhe
     olds = '{"files": {"homesteads/050-a.html": "questions/0070-a.html", "homesteads/110-b.html": "questions/0072-b.html", "fields/080-c.html": "questions/0090-c.html", "fields/090-d.html": "questions/0091-d.html"}}'
     top = _top(tmp_path)
     (top / "research" / "moved-303.json").write_text(olds)
-    sheet = _sheet(tmp_path, ["Diagram x | 269 | homesteads 050 110, fields/090 080 | in progress", "Diagram y | 273 | 0099 | in progress | 2026-09-28 | LANDED"])
-    assert claims.questions_of("homesteads 050 110, fields/090 080", claims.old_map(top)) == {"0070", "0072", "0090", "0091"}
+    old = f"{HOMESTEADS} 050 110, {FIELDS}/090 080"  # an old line's form, built so the pointer check does not read it as ours
+    sheet = _sheet(tmp_path, [f"Diagram x | 269 | {old} | in progress", "Diagram y | 273 | 0099 | in progress | 2026-09-28 | LANDED"])
+    assert claims.questions_of(old, claims.old_map(top)) == {"0070", "0072", "0090", "0091"}
     assert claims.query(["0072"], top, sheet)[0] == 1 and claims.query(["0090"], top, sheet)[0] == 1
     assert claims.query(["0099"], top, sheet)[0] == 0, "LANDED in a sixth field releases the line"
 

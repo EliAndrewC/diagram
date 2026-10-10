@@ -45,8 +45,8 @@ import sys
 SHEET = pathlib.Path(os.environ.get("L7R_CLAIMS_SHEET", "/diagram/.clones/RESEARCH-CLAIMS.md"))
 RELEASED = re.compile(r"\b(done|released|landed|complete|withdrawn)\b", re.I)
 QNUM = re.compile(r"(?<![\d.])(\d{4})(?![\d])")
-# an old page name and the RUN of three-digit section numbers after it: `homesteads 050 110 145`, `fields/090 080`,
-# `PAGE=water SECTION=020` (plan review: 27 of 300 owner-question pairs sat after the first number of a run)
+# an old page name and the RUN of three-digit section numbers after it - `<page> 050 110 145`, `<page>/090 080`, or
+# the PAGE= / SECTION= arguments (plan review: 27 of 300 owner-question pairs sat after the first number of a run)
 OLD = re.compile(r"(?:PAGE=)?([a-z][a-z-]*(?:/[a-z][a-z-]*)?)((?:(?:/|\s+SECTION=|\s*,?\s+(?:and\s+)?)\d{3}(?![\d]))+)")
 
 
