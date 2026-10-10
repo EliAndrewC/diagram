@@ -36,7 +36,7 @@ The ten at 100: `settlement/homestead_parts/stands.py` `village_grove` (190), `h
 `_seat_households` (169), `hamletgen/ways/touch.py` `_touch_junctions` (144), `settlement/finish.py` `finish` (133),
 `compound.py` `emit_svg` (127), `hamletgen/hinterland/parcels.py` `open_ground_patches` (118), `settlement/land/cover.py`
 `commons` (115), `settlement/fields/paddy.py` (106), `compound_parts.py` (105), `hamletgen/ways/web.py` (103). In
-`scripts/`: `record/uncited.py:831` (122), `record/claims.py:786` (104).
+`scripts/`: `record/uncited.py:831` (122), `record/claims.py:636` (110 - re-measured by the plan review after main moved; first measured at :786, 104).
 
 Per tree at 100 (2026-10-10, the spec review re-running the same command): `l7r` 10, `tests` 0, `scripts` 2,
 `pool` 0, `tests/hooks` 0; outside the cap, `specs` 3 and `legacy-hand-authored-pool` 0.

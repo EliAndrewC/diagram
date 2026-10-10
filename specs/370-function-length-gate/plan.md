@@ -57,25 +57,27 @@ A split adds function calls and no work; any seed more than 5% slower is diagnos
 
 ## Decisions
 
-- **D1 - the setting.** `[tool.ruff.lint] select` gains `"PLR0915"` and `"PGH004"`; `[tool.ruff.lint.pylint]
-  max-statements = 100`, with a comment giving the GM's reason (the second most common value on GitHub, 131 of 1,209
-  repositories, and the most common chosen over the default 50 - research.md R1). `PGH004` (blanket `# noqa`) is on
-  because a bare `# noqa` would silence `PLR0915` with no code and no reason - the bypass FR-004 closes; it fires on
-  nothing today (measured 2026-10-10: 0 in every tree).
-- **D2 - the trees outside the fence.** `make static` gains one line: `python3 -m ruff check --select PLR0915,PGH004
-  scripts pool tests/hooks` - ruff lints an explicitly named path even when `extend-exclude` lists it (`force-exclude` is
-  off), so the fence's formatting reasons stand and only these two rules reach those trees (FR-002). The same line runs at
-  the push beside `check-file-scale.py`, because a scripts-only push takes the DIRECT route and runs no gate.
-- **D3 - the reason check.** `scripts/gates/check-file-scale.py` - which already scans the same trees with the same
-  exclusions (`SKIP_PARTS`: the legacy pool, `specs/`) and already refuses a bare file-size marker - also refuses a
-  `# noqa` naming `PLR0915` with fewer than three words after it, printing the line and "say why the body must remain one
-  (constitution X clause 12), or split it". Its `--selftest` gains the two cases (bare fires, reasoned passes).
+- **D1 - the setting.** `[tool.ruff.lint] select` gains `"PLR0915"`; `[tool.ruff.lint.pylint] max-statements = 100`,
+  with a comment giving the GM's reason (the second most common value on GitHub, 131 of 1,209 repositories, and the most
+  common chosen over the default 50 - research.md R1). No other rule is added (plan review round 1: PGH004 was scope creep).
+- **D2 - one check owns the cap, everywhere it is held.** `scripts/gates/check-function-cap.py` runs ruff's statement rule
+  alone (`ruff check --select PLR0915`, the 100 from D1's config) over all five held trees - `l7r`, `tests`, `scripts`,
+  `pool`, `tests/hooks` (ruff lints an explicitly named path even when `extend-exclude` lists it) - and on a finding prints
+  each function with its count and BOTH ways out: split it into parts at module or class level, or put
+  `# noqa: PLR0915 <why the body must remain one>` on its `def` line (constitution X clause 12) (FR-008). It runs FIRST in
+  `make static`, so its message is what a session reads, and before every push in `sync-with-main.sh` beside
+  `check-file-scale.py` - a push of `tests/` or `scripts/` alone takes the DIRECT route and runs no gate (plan review 3).
+- **D3 - the suppression is one body, with its reason.** The same script refuses, in every held tree: a `# noqa` naming
+  PLR0915 with fewer than three words after it; one anywhere but on a `def` line; a bare `# noqa` on a `def` line (it
+  silences the cap with no rule named - measured by the plan review); a file-level `# ruff: noqa` that is bare or names
+  PLR0915 (it would exempt every function in the file); and an `ignore` or `per-file-ignores` entry naming PLR0915 in
+  `pyproject.toml` (FR-004). `--selftest` plants each case; the tests pin the messages.
 - **D4 - the splits.** Each of the twelve (research.md R2) is cut along the phases its own comments already name, into
   module-level (or method-level, for a `Settlement` method) parts that take what they use as parameters - never a nested
   function (it counts in its parent: spec edge cases). The order of every call, every random draw and every registry
-  write is unchanged, so no map moves. A part that lands in a hamlet-rolled module carries a `Research:` block holding
-  the claims for the code it took (moved from the parent's, not copied), and the parent's `Steps:` list names it where it
-  has one.
+  write is unchanged, so no map moves. A part carries a `Research:` block with the claims for the code it took; a claim
+  moves out of the parent only when none of the code it rests on stays behind, and is kept by the parent otherwise
+  (FR-007: a split unit keeps its claims). The parent's `Steps:` list names the part where it has one.
 - **D5 - map identity, measured.** After the last split: `make maps` (the whole pool), then `git diff --stat HEAD --
   pool/` must be empty. Per split, the module's tests are the quick proof; the reroll is the final one.
 - **D6 - the claims re-check.** The split units' code fingerprints change, so `make claims-owed` will name them; one
@@ -91,10 +93,9 @@ A split adds function calls and no work; any seed more than 5% slower is diagnos
 
 ```text
 pyproject.toml                       D1
-Makefile (static)                    D2
-scripts/sync-with-main.sh            D2 (the push)
-scripts/gates/check-file-scale.py    D3
-tests/tooling/test_function_cap.py   SC-001, SC-004 (the cap fires at 101, passes at 100; the reason check)
+scripts/gates/check-function-cap.py  D2, D3
+Makefile (static), sync-with-main.sh D2 (first in static; before every push)
+tests/tooling/test_function_cap.py   SC-001, SC-004 (the cap fires at 101 with both ways out, passes at 100; every suppression case)
 .specify/memory/constitution.md      D7
 .specify/templates/plan-template.md  D7
 CLAUDE.md, docs/guards.md            D8
@@ -104,3 +105,11 @@ the twelve functions (research.md R2) D4
 ## Complexity Tracking
 
 None.
+
+## Review history
+
+- **Plan review round 1 (2026-10-10): CHANGES REQUIRED.** (1) FR-008's two ways out were printed nowhere ruff fires - D2 now
+  runs the rule in one script that prints them. (2) PGH004 dropped as scope creep; the bare-noqa hole it closed is D3's,
+  on `def` lines only. (3) The push now covers `tests/` (all five trees). (4) A file-level suppression and a pyproject
+  ignore are refused (D3). D4 reworded: a split unit keeps a claim whose code stays. research.md R2's stale `claims.py`
+  row updated.

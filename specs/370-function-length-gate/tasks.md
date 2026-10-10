@@ -8,18 +8,15 @@
 
 ## Phase 1 - the cap and its checks (test first)
 
-- [ ] T01 tests/tooling/test_function_cap.py: a 101-statement function fails the project's ruff config and a 100-statement one passes, in a linted tree and in `scripts/` through the static line; a bare `# noqa` fires PGH004 (SC-001; FR-001, FR-002, FR-008) - written and seen RED before T02
+- [ ] T01 tests/tooling/test_function_cap.py: under the project config a 101-statement function fails and 100 passes; `check-function-cap.py` names it with both ways out, in a linted tree and in `scripts/`; every suppression case of D3 (SC-001, SC-004; FR-001, FR-002, FR-004, FR-008) - written and seen RED before T02
       research: rendering
-      verify: make test-file FILE=tests/tooling/test_function_cap.py red, then green after T02
-- [ ] T02 pyproject.toml: PLR0915 + PGH004 selected, `max-statements = 100` with the survey's reason beside it (D1; FR-001, FR-005)
+      verify: make test-file FILE=tests/tooling/test_function_cap.py red, then green after T03
+- [ ] T02 pyproject.toml: PLR0915 selected, `max-statements = 100` with the survey's reason beside it (D1; FR-001, FR-005)
       research: rendering
-      verify: T01 green; the comment states 131 of 1,209 and "second most common"
-- [ ] T03 Makefile `static` and sync-with-main.sh's push: `ruff check --select PLR0915,PGH004 scripts pool tests/hooks` (D2; FR-002)
+      verify: T01's config cases green; the comment states 131 of 1,209 and "second most common"
+- [ ] T03 scripts/gates/check-function-cap.py with `--selftest` (D2, D3); first in `make static`, and before every push in sync-with-main.sh (FR-002, FR-004, FR-008)
       research: rendering
-      verify: T01's out-of-fence case green; make hooks-test green
-- [ ] T04 check-file-scale.py: a `# noqa: PLR0915` with fewer than three words after it is refused with the clause-12 message; selftest cases (D3; FR-004, FR-008, SC-004)
-      research: rendering
-      verify: check-file-scale.py --selftest; T01's reason case green
+      verify: T01 green; --selftest; make hooks-test green (the push suite)
 
 ## Phase 2 - the twelve splits (D4), each proven by its module's tests, then make quick
 

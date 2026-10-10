@@ -1,0 +1,74 @@
+{
+ "feature": "370-function-length-gate",
+ "plan_sha256": "b4bb52aa3824b475605638d66e370178c60c29c65ce38f166f99923ad0319ef8",
+ "plan_text": "# Implementation Plan: a mechanical cap on function length, held at the gate\n\n**Branch**: none (main, in the session clone) | **Date**: 2026-10-10 | **Spec**: [spec.md](spec.md)\n\n**Input**: `specs/370-function-length-gate/spec.md` (spec-fidelity round 2: FAITHFUL)\n\n## Summary\n\nTurn on ruff's statement rule (`PLR0915`) at 100 in `pyproject.toml` with the survey's reason beside it (research.md R1),\nhold it over the three working trees the lint fence leaves out, refuse a bare or reasonless suppression, amend\nconstitution clause 12 to name the cap, and split the twelve functions over it today (research.md R2) without moving a map.\n\n## Technical Context\n\n**Language/Version**: Python 3.14 (`pyproject.toml` `target-version = \"py314\"`)\n\n**Primary Dependencies**: ruff (already the gate's linter); no new dependency\n\n**Testing**: pytest through `make test-file` / `make quick` / `make done`; the gate script's own `--selftest`\n\n**Project Type**: the diagram engine and its tooling\n\n**Single-artifact target**: no map changes by design. Proof is the opposite of a sweep: `make maps` over the whole pool on\nthe landing commit, every manifest compared with HEAD's (`git diff --stat HEAD -- pool/`) - empty (SC-003).\n\n**Every step is two steps.** Each split is proven on its own first (`make test-file` on its module's tests, then\n`make quick`), and the pool reroll at the end is its own task.\n\n## Performance bookends (constitution VI)\n\n| | label | total | median | worst | notes |\n|---|---|---|---|---|---|\n| before | `370-start` | | | | on unmodified code, before the first engine edit |\n| after | `370-end` | | | | before the push |\n\nA split adds function calls and no work; any seed more than 5% slower is diagnosed here in writing.\n\n## Constitution Check\n\n- **I, II**: N/A - no UI in this repository.\n- **III, IV, V, VII, VIII, IX**: N/A - no pool content, SOURCE block, in-world prose or setting detail is written.\n- **VI. Verify before reporting done**: PASS - each split: its module's tests (`make test-file`), then `make quick`; at\n  the end `make done`, the pool reroll diffed against HEAD (SC-003), the perf bookends. No review check is owed: no map\n  changes (`tasks.md` `## Occasions`: none).\n- **X. Python discipline**: PASS - this feature IS clause 12 made real. ruff, format, pyrefly and the 100% floor hold\n  over every edit; the new gate behavior is test-first (the fixture tests fail before the setting lands). No file passes\n  1,000 lines: each split stays in its own module unless that module would cross it, in which case the part moves to a\n  sibling module named in the task.\n- **XII. Historical grounding**: N/A for the world - no generator asserts anything new; every split carries its unit's\n  `Research:` claims with the code they describe (FR-007), and the claims gate's `impl-drift` re-check is run on the\n  units it owes.\n- **XIII. No known regressions**: PASS - baseline is the pool's committed manifests at HEAD and a green `make done` on the\n  unmodified clone (recorded 2026-10-10 by the earlier pushes' stamps); merge requires zero manifest changes and a green\n  gate.\n- **XVI. Do the literal thing**: PASS - splitting is the default for all twelve (FR-003); a function kept whole goes to a\n  `spec-fidelity` exception check of its own first. None is planned to be kept whole.\n\n## Decisions\n\n- **D1 - the setting.** `[tool.ruff.lint] select` gains `\"PLR0915\"` and `\"PGH004\"`; `[tool.ruff.lint.pylint]\n  max-statements = 100`, with a comment giving the GM's reason (the second most common value on GitHub, 131 of 1,209\n  repositories, and the most common chosen over the default 50 - research.md R1). `PGH004` (blanket `# noqa`) is on\n  because a bare `# noqa` would silence `PLR0915` with no code and no reason - the bypass FR-004 closes; it fires on\n  nothing today (measured 2026-10-10: 0 in every tree).\n- **D2 - the trees outside the fence.** `make static` gains one line: `python3 -m ruff check --select PLR0915,PGH004\n  scripts pool tests/hooks` - ruff lints an explicitly named path even when `extend-exclude` lists it (`force-exclude` is\n  off), so the fence's formatting reasons stand and only these two rules reach those trees (FR-002). The same line runs at\n  the push beside `check-file-scale.py`, because a scripts-only push takes the DIRECT route and runs no gate.\n- **D3 - the reason check.** `scripts/gates/check-file-scale.py` - which already scans the same trees with the same\n  exclusions (`SKIP_PARTS`: the legacy pool, `specs/`) and already refuses a bare file-size marker - also refuses a\n  `# noqa` naming `PLR0915` with fewer than three words after it, printing the line and \"say why the body must remain one\n  (constitution X clause 12), or split it\". Its `--selftest` gains the two cases (bare fires, reasoned passes).\n- **D4 - the splits.** Each of the twelve (research.md R2) is cut along the phases its own comments already name, into\n  module-level (or method-level, for a `Settlement` method) parts that take what they use as parameters - never a nested\n  function (it counts in its parent: spec edge cases). The order of every call, every random draw and every registry\n  write is unchanged, so no map moves. A part that lands in a hamlet-rolled module carries a `Research:` block holding\n  the claims for the code it took (moved from the parent's, not copied), and the parent's `Steps:` list names it where it\n  has one.\n- **D5 - map identity, measured.** After the last split: `make maps` (the whole pool), then `git diff --stat HEAD --\n  pool/` must be empty. Per split, the module's tests are the quick proof; the reroll is the final one.\n- **D6 - the claims re-check.** The split units' code fingerprints change, so `make claims-owed` will name them; one\n  `make claims-bundle` per module and an `impl-drift` dispatch per bundle, run once after the last split, then\n  `make claims-checked`. This is the feature's expected review cost (spec Assumptions).\n- **D7 - the constitution.** Principle X clause 12 is amended to name the measure (ruff's statement count), the cap (100),\n  the escape (`# noqa: PLR0915` with a reason saying why the body stays one), the survey (research.md R1) and where it is\n  held; the deferred-TODO lines in the Sync Impact Report and the \"carried\" list close; the version goes 2.28.0 -> 2.29.0\n  (a principle's requirement changes). The plan template's clause-12 paragraph is updated to match.\n- **D8 - the docs.** Root `CLAUDE.md`'s \"the gate\" row gains the cap; `docs/guards.md` gains its record.\n\n## Project Structure\n\n```text\npyproject.toml                       D1\nMakefile (static)                    D2\nscripts/sync-with-main.sh            D2 (the push)\nscripts/gates/check-file-scale.py    D3\ntests/tooling/test_function_cap.py   SC-001, SC-004 (the cap fires at 101, passes at 100; the reason check)\n.specify/memory/constitution.md      D7\n.specify/templates/plan-template.md  D7\nCLAUDE.md, docs/guards.md            D8\nthe twelve functions (research.md R2) D4\n```\n\n## Complexity Tracking\n\nNone.\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1-PLR0915",
+   "summary": "select PLR0915 with max-statements = 100 in pyproject, the survey's reason beside it",
+   "class": "within",
+   "why": "FR-001 and FR-005 literally; the GM chose 100 and asked for the reason documented."
+  },
+  {
+   "id": "D1/D2-PGH004",
+   "summary": "PGH004 (blanket noqa) selected in every linted tree and added to the out-of-fence line over scripts/pool/tests/hooks",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Departs from the accepted spec rather than narrowing it (the record has two classes; a departure from a MUST is ruled here): FR-002 holds 'the same rule, alone' over the three trees and Out of Scope excludes the rest of the lint rules from them. Measured 2026-10-10 (ruff 0.15.22, scratch fixture): PGH004 refuses `import os  # noqa`, a line no function is on, while PLR0915 still fired on the function below it - so its reach is a new refusal of code unrelated to the cap. The bypass it targets is real (a bare `# noqa` on the def line silences PLR0915) and must be closed, but narrowly: D3 refuses a blanket `# noqa` on a line defining a function, and a blanket file-level `# ruff: noqa`, in every held tree. Zero hits today is a cost argument, not a fidelity one."
+  },
+  {
+   "id": "D2",
+   "summary": "explicit `ruff check --select ... scripts pool tests/hooks` in make static and at the push",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The explicit-path premise is measured true (a named excluded dir is linted). But the push line covers only the three out-of-fence trees: gate-stamp's diagram area excludes tests/, so a tests/-only delta takes the DIRECT route and runs no ruff at all, and a 101-statement test function lands. US1 says the push fails and scenario 1 names tests/; D2's own reason (a DIRECT push runs no gate) applies to tests/ identically. The push line must hold every tree the cap holds (l7r, tests, scripts, pool, tests/hooks), as check-file-scale already does over $ROOT."
+  },
+  {
+   "id": "D3",
+   "summary": "check-file-scale.py refuses a `# noqa` naming PLR0915 with fewer than three words of reason",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The three-word floor is an acceptable mechanical proxy for FR-004's WHY. But FR-004 defines the justification as the inline suppression for one body; measured: `# ruff: noqa: PLR0915 <reason>` at file level passes ruff and would pass a three-word check while exempting every function in the file. D3 must name the forms it accepts (inline on the def line only), refuse the file-level PLR0915 form outright, and (with the PGH004 item) the blanket forms; the test pins that pyproject carries no ignore/per-file-ignores naming PLR0915."
+  },
+  {
+   "id": "FR-008-missing",
+   "summary": "no decision carries FR-008 (the failure message names the two ways out)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Drops a requirement of the accepted spec. ruff's own message is `PLR0915 Too many statements (101 > 100)` (measured) - file, line, count, cap, but neither split nor the reasoned suppression; D3's message covers only the reasonless-suppression case. The plan needs a decision that surfaces both ways out wherever the cap fires (make static and the push), with test_function_cap.py pinning the text."
+  },
+  {
+   "id": "D4",
+   "summary": "split the twelve into module/class-level parts in phase order, no nested functions, Research claims moved with the code",
+   "class": "within",
+   "why": "FR-003 and FR-007. One clarification owed in wording, not a ruling: FR-007 says the split unit KEEPS its claims, so the parent keeps any claim its remaining code still rests on; only a claim whose code left entirely moves."
+  },
+  {
+   "id": "D5",
+   "summary": "whole-pool reroll diffed against HEAD after the last split",
+   "class": "within",
+   "why": "SC-003 / FR-003 literally."
+  },
+  {
+   "id": "D6",
+   "summary": "claims-owed, claims-bundle, impl-drift, claims-checked once after the last split",
+   "class": "within",
+   "why": "FR-007 / SC-006 and the spec's Assumptions."
+  },
+  {
+   "id": "D7",
+   "summary": "constitution clause 12 amended (measure, cap, escape, survey), Sync Impact TODO closed, 2.28.0 -> 2.29.0, plan template updated",
+   "class": "within",
+   "why": "FR-006; the version bump and template follow from a principle's requirement changing."
+  },
+  {
+   "id": "D8",
+   "summary": "root CLAUDE.md gate row and docs/guards.md record",
+   "class": "within",
+   "why": "Documents the guard the spec asks for, per the project's standing rule that every guard is recorded; adds no behavior."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
