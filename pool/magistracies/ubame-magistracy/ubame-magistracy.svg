@@ -684,7 +684,7 @@
 
   <!-- Karo's house - the house elder keeps a separate dwelling in the residence court (feature 267 pass 3: moved
        12 px east, x 364 -> 376, to keep a 4 ft alley beside the bath; feature 374 wave 113, building-review round 2 E1:
-       12 px more, x 376 -> 388, when the bath moved with the kitchen, so the 4 ft alley stays) -->
+       12 px more, x 376 -> 388, when the bath moved with the kitchen: a 16 px (~5 ft) alley, measured) -->
   <g data-kind="karo's house">
     <rect x="388" y="372" width="110" height="70" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
     <rect x="438" y="368" width="10" height="8" fill="#4A3318" data-kind="door"/>
