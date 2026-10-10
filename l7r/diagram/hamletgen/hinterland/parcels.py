@@ -209,50 +209,17 @@ def seat_off_the_row(p: tuple[float, float], centers: Sequence[tuple[float, ...]
     return next((q for q in off_the_row(p, centers) if ok(q) and not in_a_ruled_line(q, centers)), None)
 
 
-def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
-    """Find `count` patches of ground still open enough for a managed woodland - by SCANNING.
-
-    Woodland (coppice, bamboo, tung-oil - the "economic forest") is a few discrete patches on the
-    higher, farther ground, set back from the sun-needing crops by the scrub between. Ikegami places
-    three by hand. The script cannot hand-place, so it scans a coarse lattice over the canvas and
-    scores each candidate square on the two things that actually decide the answer:
-
-      - it must be CLEAR of the crops by a real margin, and clear by MORE on the crop's sunny side,
-        because a canopy south of a field shades it (this mirrors `woodland_clear_of_crops`, whose
-        set-back is bigger to the south for exactly that reason);
-      - it must be clear of the settlement, its lanes, its grove and its water.
-
-    Among the candidates that qualify - beyond the fields from the houses - it ranks them by `woodland_tier` (higher ground
-    than the fields first, then the level) and takes the nearest within a tier, and it keeps them apart from each other so
-    three patches read as three woods rather than
-    one ragged mass. This is the stage that most obviously could not be done by pinning coordinates:
-    "where is there still room" is a question about the map as it stands at that moment.
+def _patch_keepouts(
+    s: Settlement, plan: SitePlan
+) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]], list[tuple[Poly, float]], list[tuple[Poly, float]], list[Poly], list[Poly], Any, tuple[float, float]]:
+    """What a woodland parcel keeps clear of, gathered once for `open_ground_patches`: the keep circles and rectangles, the
+    lanes and streams at their reach, the marshes, the field ground and its sampled edge, and the house cloud's center
+    (lifted out of it by feature 370, the 100-statement cap; the same reads in the same order).
 
     Research:
-        parcel count and size - UNRESEARCHED: `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5
-        crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
         keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
-        where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
-        the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
-        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
-        parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
-        aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
-        line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
-        mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no sample of the parcel in marsh (WET_SHARE_CAP 0)
-        on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
-        scan seat window - CONVENTION: a seat's center may sit up to 0.6 of the half-size outside the predicted frame, 0.8 of the square's box inside it
         title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter
-        woods not in a ruled line - UNRESEARCHED
-        nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields
-        per-parcel size bands - UNRESEARCHED: 0.82-1.18 of the half-size by band, then a 0.84 smaller try
-        scan reach - UNRESEARCHED: confined to 210 px past the content box
-        a ring with room for a wood - UNRESEARCHED: a ring with room for fewer than `WOODLAND_MIN_CROWNS` (5) crowns is refused as a wood
-        commons legibility floor - UNRESEARCHED: a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)
     """
-    # IN THE MAP'S PIXELS (feature 328 batch 3, impl-drift): the parcel size and the commons' legibility floor are feet, and every
-    # length the scan compares them with is px - equal at a hamlet's 1 ft/px, wrong at any other grain
-    size, floor_px = s.px(size), s.px(_COMMONS_FLOOR_FT)
-    dx, dy = plan.fall
     keep: list[tuple[float, float, float]] = []  # (x, y, radius) of everything to stay clear of
     for h in s.M.get("houses", []):
         keep.append((h["x"], h["y"], 150.0))
@@ -294,7 +261,101 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     crop_pts = crop_edge_points(crops)  # the field ground's edge, sampled and indexed once, for `field_height_near` (269 B27)
     _hx = [h["x"] for h in s.M.get("houses", [])] or [plan.W / 2]
     _hy = [h["y"] for h in s.M.get("houses", [])] or [plan.H / 2]
-    ccx, ccy = sum(_hx) / len(_hx), sum(_hy) / len(_hy)
+    return keep, keep_rects, lanes, streams, marshes, crops, crop_pts, (sum(_hx) / len(_hx), sum(_hy) / len(_hy))
+
+
+def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, float, float]], crop_pts: Any, cc: tuple[float, float]) -> list[tuple[float, float, float]]:
+    """The scored seats ranked by `woodland_tier` and kept only beyond the fields from the houses (lifted out of
+    `open_ground_patches` by feature 370, the 100-statement cap; the same reads in the same order).
+
+    Research:
+        where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
+        the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
+        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
+    """
+    ccx, ccy = cc
+    # THE WOOD STANDS BEYOND THE FIELDS, ON GROUND HIGHER THAN THE FIELDS IT ADJOINS (269 B27; research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html,
+    # "Village fuel woods and their coppice (satoyama)" - houses, then fields, then the hill and wild land beyond; the
+    # nearest hill slope round the settlement; the Musashino upland's groves, fields, then the konara wood on the
+    # outer edge). The scorer used to ADD `0.35 * upslope` to nearness, and nearness outbid it: a 90 px step toward
+    # the cluster was worth 257 px of height, so Kashikawa drew a stand 886 ft down the fan and 75 ft off the reed
+    # marsh. A cross-slope preference (the along/cross ratio, 2026-08-18) narrowed that and still admitted ground
+    # below the houses. The record's rule is a ranking, so it is one here (`woodland_tier`): a seat higher than the
+    # field ground beside it and not below the houses (their median, `house_floor`) first; then, where the map has no such ground, a seat on
+    # the level beside the fields - not below the houses; a seat below the houses' median height is never offered. Low wet
+    # ground by a marsh or a river is left to grass and reeds: the marsh and stream keep-outs above refuse it, and it
+    # lies below the houses on a fan. Where the ground slopes the seat higher than the field next to it ranks first -
+    # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).
+    dx, dy = plan.fall
+    _fall = (dx, dy)
+    _house_floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], _fall)
+    _tiers = [
+        woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts, s.px(FIELD_BESIDE_FT))) for t in scored
+    ]  # beside in px: the edge samples are px (impl-drift, batch 3)
+    # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
+    # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
+    # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground
+    scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True) if k < 2]
+    # ...AND BEYOND THE FIELDS FROM THE HOUSES (feature 328; 0077's drawing page: "on the nearest slope beyond the fields
+    # from the houses", the village running houses, then fields, then the wild land): feature 261 had preferred the
+    # houses' side of the field. A RULE, not a preference: where no seat is reached across the field none is offered,
+    # and the wood is recorded beyond the sheet (`woodland_on_the_sheet`) - 0077 records no fallback to the open ground
+    # nearest the houses (impl-drift, wave 20). On EVERY tier the walk must run THROUGH the field (`crossed_through`):
+    # 0077 asks both beyond the fields AND higher than them, and on ground falling evenly the houses' own side is
+    # higher than the field too (the woodland glyph check of wave 20, Mizuguchi).
+    # ...THROUGH ANY OF THE VILLAGE'S FIELDS, its row holdings with the paddy (batch 1's woodland glyph check on Kashikawa: the
+    # walk was asked of the paddy alone, so every seat beyond the far row's dry-field strips was refused and the wood
+    # stood level with the paddy, below 19 of the 20 houses; 0033's row village runs house lot, then field, then woodland)
+    _seats = [(t[1], t[2]) for t in scored]
+    _through = crossed_through_many(plan.envelope, (ccx, ccy), _seats)
+    for _hold in s.M.get("row_holdings") or []:
+        _hp = [(float(v[0]), float(v[1])) for v in _hold.get("poly") or []]
+        if len(_hp) >= 3:
+            _through = [a or b for a, b in zip(_through, crossed_through_many(_hp, (ccx, ccy), _seats), strict=True)]
+    return [t for t, ok in zip(scored, _through, strict=True) if ok]
+
+
+def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
+    """Find `count` patches of ground still open enough for a managed woodland - by SCANNING.
+
+    Woodland (coppice, bamboo, tung-oil - the "economic forest") is a few discrete patches on the
+    higher, farther ground, set back from the sun-needing crops by the scrub between. Ikegami places
+    three by hand. The script cannot hand-place, so it scans a coarse lattice over the canvas and
+    scores each candidate square on the two things that actually decide the answer:
+
+      - it must be CLEAR of the crops by a real margin, and clear by MORE on the crop's sunny side,
+        because a canopy south of a field shades it (this mirrors `woodland_clear_of_crops`, whose
+        set-back is bigger to the south for exactly that reason);
+      - it must be clear of the settlement, its lanes, its grove and its water.
+
+    Among the candidates that qualify - beyond the fields from the houses - it ranks them by `woodland_tier` (higher ground
+    than the fields first, then the level) and takes the nearest within a tier, and it keeps them apart from each other so
+    three patches read as three woods rather than
+    one ragged mass. This is the stage that most obviously could not be done by pinning coordinates:
+    "where is there still room" is a question about the map as it stands at that moment.
+
+    Research:
+        parcel count and size - UNRESEARCHED: `count` parcels from 250 ft, the ladder scaled 0.9-1.1 per map, rungs 0.8, 0.64, 0.5
+        crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
+        parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
+        aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
+        line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
+        mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no sample of the parcel in marsh (WET_SHARE_CAP 0)
+        on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
+        scan seat window - CONVENTION: a seat's center may sit up to 0.6 of the half-size outside the predicted frame, 0.8 of the square's box inside it
+        title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter
+        woods not in a ruled line - UNRESEARCHED
+        nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields
+        per-parcel size bands - UNRESEARCHED: 0.82-1.18 of the half-size by band, then a 0.84 smaller try
+        scan reach - UNRESEARCHED: confined to 210 px past the content box
+        a ring with room for a wood - UNRESEARCHED: a ring with room for fewer than `WOODLAND_MIN_CROWNS` (5) crowns is refused as a wood
+        commons legibility floor - UNRESEARCHED: a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)
+    """
+    # IN THE MAP'S PIXELS (feature 328 batch 3, impl-drift): the parcel size and the commons' legibility floor are feet, and every
+    # length the scan compares them with is px - equal at a hamlet's 1 ft/px, wrong at any other grain
+    size, floor_px = s.px(size), s.px(_COMMONS_FLOOR_FT)
+    dx, dy = plan.fall
+    keep, keep_rects, lanes, streams, marshes, crops, crop_pts, (ccx, ccy) = _patch_keepouts(s, plan)
 
     # THE PATCHES MUST NOT STRETCH THE FRAME. `crop_to_content` frames the map to its HARD features,
     # and a woodland patch is one - so a patch parked in a far corner of the working canvas drags the
@@ -459,45 +520,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                         scored.append((-math.hypot(x - ccx, y - ccy), x, y))
                     x += step
                 y += step
-            # THE WOOD STANDS BEYOND THE FIELDS, ON GROUND HIGHER THAN THE FIELDS IT ADJOINS (269 B27; research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html,
-            # "Village fuel woods and their coppice (satoyama)" - houses, then fields, then the hill and wild land beyond; the
-            # nearest hill slope round the settlement; the Musashino upland's groves, fields, then the konara wood on the
-            # outer edge). The scorer used to ADD `0.35 * upslope` to nearness, and nearness outbid it: a 90 px step toward
-            # the cluster was worth 257 px of height, so Kashikawa drew a stand 886 ft down the fan and 75 ft off the reed
-            # marsh. A cross-slope preference (the along/cross ratio, 2026-08-18) narrowed that and still admitted ground
-            # below the houses. The record's rule is a ranking, so it is one here (`woodland_tier`): a seat higher than the
-            # field ground beside it and not below the houses (their median, `house_floor`) first; then, where the map has no such ground, a seat on
-            # the level beside the fields - not below the houses; a seat below the houses' median height is never offered. Low wet
-            # ground by a marsh or a river is left to grass and reeds: the marsh and stream keep-outs above refuse it, and it
-            # lies below the houses on a fan. Where the ground slopes the seat higher than the field next to it ranks first -
-            # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).
-            _fall = (dx, dy)
-            _house_floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], _fall)
-            _tiers = [
-                woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts, s.px(FIELD_BESIDE_FT))) for t in scored
-            ]  # beside in px: the edge samples are px (impl-drift, batch 3)
-            # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
-            # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
-            # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground
-            scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True) if k < 2]
-            # ...AND BEYOND THE FIELDS FROM THE HOUSES (feature 328; 0077's drawing page: "on the nearest slope beyond the fields
-            # from the houses", the village running houses, then fields, then the wild land): feature 261 had preferred the
-            # houses' side of the field. A RULE, not a preference: where no seat is reached across the field none is offered,
-            # and the wood is recorded beyond the sheet (`woodland_on_the_sheet`) - 0077 records no fallback to the open ground
-            # nearest the houses (impl-drift, wave 20). On EVERY tier the walk must run THROUGH the field (`crossed_through`):
-            # 0077 asks both beyond the fields AND higher than them, and on ground falling evenly the houses' own side is
-            # higher than the field too (the woodland glyph check of wave 20, Mizuguchi).
-            # ...THROUGH ANY OF THE VILLAGE'S FIELDS, its row holdings with the paddy (batch 1's woodland glyph check on Kashikawa: the
-            # walk was asked of the paddy alone, so every seat beyond the far row's dry-field strips was refused and the wood
-            # stood level with the paddy, below 19 of the 20 houses; 0033's row village runs house lot, then field, then woodland)
-            _seats = [(t[1], t[2]) for t in scored]
-            _through = crossed_through_many(plan.envelope, (ccx, ccy), _seats)
-            for _hold in s.M.get("row_holdings") or []:
-                _hp = [(float(v[0]), float(v[1])) for v in _hold.get("poly") or []]
-                if len(_hp) >= 3:
-                    _through = [a or b for a, b in zip(_through, crossed_through_many(_hp, (ccx, ccy), _seats), strict=True)]
-            _beyond = [t for t, ok in zip(scored, _through, strict=True) if ok]
-            scored = _beyond
+            scored = _beyond_the_fields(s, plan, scored, crop_pts, (ccx, ccy))  # higher than the fields beside it, and across them
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground
             # (a map with one parcel is common), and a ruled chain is the defect two reviews recorded (Inashiro's band lies
