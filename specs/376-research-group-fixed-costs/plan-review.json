@@ -1,0 +1,104 @@
+{
+ "feature": "376-research-group-fixed-costs",
+ "plan_sha256": "74df2a97620e3eb51b6d70921d2c1fde508aea67353a33502436c83a7c6fa3f0",
+ "plan_text": "# Implementation Plan: the claims sign-up sheet through tooling, and the archive before the web (feature 376)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md` R1 (the premise), R2 (the measurement)\n\n## Summary\n\nTwo pieces, as the GM asked: one tool for the claims sheet (FR-001 to FR-003) with the GM's large-file rule written\ninto the guidelines (FR-004), and the fix R2's measurement names (FR-005, FR-006). Main sessions already look locally\nbefore the web. The checking agents re-fetch pages the archive holds, because the scripts in front of them cannot read\na PDF and never ask the archive. Everything is tooling: every task is `research: rendering`. No engine file changes, so\nthe landing is DIRECT.\n\n## Technical Context\n\n- **Code.** Python 3 stdlib scripts under `scripts/pages/` and `scripts/record/`, and a bash guard under\n  `scripts/hooks/`.\n- **Tests.** In `tests/tooling/` (the scripts) and `tests/hooks/` (the guard).\n- **The claims sheet** sits outside every repository, at `/diagram/.clones/RESEARCH-CLAIMS.md`, shared by every clone.\n- **The archive's working copy** is at `<mirror>/.specify/source-archive/`. Its manifest rows are\n  `research/archive/<id[:2]>/<id>.json`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V**: N/A.\n- **VI**: N/A for maps. The guard is a `case` on the payload before any python.\n- **X**: every new function has a test.\n- **XII**: N/A - no physical decision.\n- **XIII**: tooling tests and `make hooks-test` green before and after.\n- **XIV**: the bugs R2 found are fixed here.\n- **XVI**: every FR is built as written, with the mechanisms below.\n\n## Decisions\n\n**D1 - The claims tool** (`scripts/pages/claims.py`, FR-001).\n- **The commands.**\n  - `make research-claim Q=\"0060 0246\" FEATURE=376 [STATUS=\"in progress\"] [WHY=]` claims.\n  - `make research-claims Q=\"...\"` queries.\n  - `STATUS=done` releases. `RELEASE=<owner> WHY=\"<reason>\"` releases another owner's stale claim, and the reason is\n    written on the line.\n- **The owner** is the clone's directory name (`git rev-parse --show-toplevel`), so a session cannot claim as another.\n- **New lines** keep the sheet's shape, so old and new read alike: `<owner> | <feature> | Q=0060,0246 | <status> |\n  <YYYY-MM-DD>`.\n- **The lock.** A claim is read, checked and appended under `fcntl.flock` on `<sheet>.lock`.\n- **Which question a line names.**\n  - Every 4-digit number in its item field.\n  - An old `<page>/<NNN>` or `<page> <NNN>` form, mapped to its number through `research/moved-303.json`.\n- **When a claim is live.** It is the latest line of one owner naming that question, and:\n  - its status does not open with `done`, `released`, `landed`, `complete`, `withdrawn` or `DONE`;\n  - and its feature is not settled. A feature is settled when `make speckit-todo`'s `feature()` reads its directory in\n    the mirror's `specs/` as closed. That retires the old free-text lines whose features finished without a release\n    line.\n- **Output.** At most one line per live claim touching the asked questions, and one summary line. Nothing else is\n  printed.\n\n**D2 - The sheet's guard** (`scripts/hooks/claims-file-hooks.sh`, FR-002).\n- **What it refuses.**\n  - A PreToolUse `Read`, `Edit` or `Write` whose path is the sheet.\n  - A Bash command that names it (`RESEARCH-CLAIMS`). The FR-001 commands never name it on their command line.\n- **The refusal** names `make research-claim` / `make research-claims`.\n- **The escape.** `CLAIMS_FILE_OK=\"<reason>\"` covers a repair of the sheet itself, recorded by `guard_log` as every\n  escape is.\n- **Registration.** In `.claude/settings.json` on `Read|Edit|Write` and on `Bash`.\n\n**D3 - The text** (FR-003, FR-004).\n- `scripts/container/page-session-rules.md`: the claims sheet goes through `make research-claim` /\n  `research-claims`; `make lines` / `make append` stay for handoffs and checks reports.\n- CLAUDE.md gains the GM's rule: any time a process requires editing a potentially large file, it uses tooling (a make\n  target) to edit it, never opening and editing it by hand, as `make tick` does for `tasks.md`.\n- The guard table gains a row.\n\n**D4 - The archive behind a page that cannot be read** (FR-006, R2).\n- **A PDF is asked about.** `quote_verbatim.Pages._get` stops returning NOT-CHECKED from the URL's extension alone. It\n  makes the request it already makes for any page and keeps only the headers for a PDF (as it does now for a PDF it\n  learns of from the content type). So a PDF answers `NOT-CHECKED, live` or `UNFETCHABLE`.\n- **`sources.CachedPages.get`.** On a cache miss it asks the inner fetcher (the live page) first, unchanged. When that\n  is not FETCHED, it reads the archive's text for the URL: the manifest row's `path`, then\n  `<mirror>/.specify/source-archive/<path>/text.txt`. If there is text, it returns\n  `{\"state\": \"FETCHED\", \"text\", \"archived\": <capture date>, \"live\": <was the link answered>}`, and does not put it in\n  the page cache, which holds what was fetched. Everything built on `CachedPages` gains this: `make quote-verbatim`,\n  `make source-pages`, and a check bundle's `pages/`.\n- **`quote_verbatim.judge_note`.** A passage judged on an archived page counts only when VERBATIM. Anything else there\n  becomes `NOT-CHECKED` \"not found verbatim in the archived text of <date> - check by hand\", because PDF extraction can\n  split words. A note VERBATIM only on archived pages is READABLE when every such link answered live, else `-`. So the\n  archive can confirm a quotation but never sink one.\n\n**D5 - Validation.** `make quote-verbatim` is run on real questions whose notes cite PDFs, before and after D4. The\nNOT-CHECKED that became VERBATIM, and any verdict that changed otherwise, are recorded in R2. A verdict that LOSES\nground - a VERBATIM or READABLE lost, a new NOT-ON-PAGE or NOT-READABLE - is a bug. A PDF that is now asked and\nrefused moves from NOT-CHECKED to UNFETCHABLE, the truer of two residue verdicts.\n\n## Project Structure\n\n```text\nscripts/pages/claims.py                 new - the claims tool\nMakefile                                research-claim, research-claims\nscripts/hooks/claims-file-hooks.sh      new - the sheet's guard\n.claude/settings.json                   its registration\nscripts/record/quote_verbatim.py        a PDF asked about; archived passages count only when VERBATIM\nscripts/record/sources.py               CachedPages reads the archive after the live page fails\nscripts/container/page-session-rules.md, CLAUDE.md, docs/guards.md\ntests/tooling/test_claims.py            new\ntests/tooling/test_quote_verbatim.py, tests/tooling/test_sources.py\ntests/hooks/test-claims-file-hooks.sh   new\n```\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1-commands",
+   "summary": "research-claim / research-claims / STATUS=done; RELEASE=<owner> WHY= releases another owner's claim with the reason on the line",
+   "class": "within",
+   "why": "FR-001's three commands and the spec edge case 'the command can release one claim by name with a reason'."
+  },
+  {
+   "id": "D1-owner",
+   "summary": "owner = the clone's directory name (git rev-parse --show-toplevel)",
+   "class": "within",
+   "why": "FR-001: 'The owner is the session's clone name'."
+  },
+  {
+   "id": "D1-format-lock",
+   "summary": "new lines keep the sheet's pipe shape; claim read/check/append under fcntl.flock",
+   "class": "within",
+   "why": "Edge case 'claim is made under a lock'; spec D1 keeps the sheet where it is."
+  },
+  {
+   "id": "D1-old-line-matching",
+   "summary": "an old line names a question by a 4-digit number or a single '<page> <NNN>' / '<page>/<NNN>' mapped through moved-303.json",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Edge case: a query matches 'by the page and number the old record used'. The old record also uses a number LIST after one page name ('homesteads 050 110 145 160', 'fields/090 080'); the plan's two forms match only the first number. Measured 2026-10-10 (scratch parse of RESEARCH-CLAIMS.md against moved-303.json numbers): 273 owner-question pairs with the plan's forms, 300 with list forms, so 27 pairs missed. Fix: every NNN in a run of numbers following a page name."
+  },
+  {
+   "id": "D1-live-settled",
+   "summary": "a claim is not live when its feature is settled per speckit-todo in the mirror's specs/, retiring old lines with no release line",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The accepted spec decided this case the other way: 'an old line counts as live unless a later line for the same owner and item says it is done' and 'A session ends without marking its claim done: its claim stays live ... the command can release one claim by name with a reason'. Measured 2026-10-10 (scratch parse, done-word anywhere after the item): 169 questions held by stale lines, all of settled features (292, 319, 280, 291, 269...), max 5 holders, so the spec's literal rule is usable, not impossible; the spec's own example 0060 0246 is held by 292's and 319's lines. The plan's argument is the harder-to-use one. Within-spec routes: a one-time release sweep through the FR-001 tool (WHY = the feature's landing), which writes exactly the 'later line says done' the edge case names; or amend the spec. Settledness read from the mirror is also a second source of truth the spec never names."
+  },
+  {
+   "id": "D1-done-words",
+   "summary": "a status 'says it is done' when it opens with done/released/landed/complete/withdrawn/DONE",
+   "class": "within",
+   "why": "A reading of 'says it is done' for free text. Note: old lines carry the word inside the item field (4-field lines) or in a 6th field (273's LANDED); reading only a 4th-field prefix will miss them once the settled clause goes."
+  },
+  {
+   "id": "D1-output",
+   "summary": "one line per live claim touching the asked questions plus one summary line",
+   "class": "within",
+   "why": "FR-001 'a few lines whatever the sheet's size'; SC-001."
+  },
+  {
+   "id": "D2-refusals",
+   "summary": "refuse Read/Edit/Write on the sheet and any Bash command naming RESEARCH-CLAIMS; refusal names the FR-001 commands",
+   "class": "within",
+   "why": "FR-002's routes. Advisory: refusing every MENTION reaches past FR-002's read/write routes (a grep over docs for the path, a commit message), against the project's invocations-not-mentions doctrine; T03 will hit it."
+  },
+  {
+   "id": "D2-escape",
+   "summary": "CLAIMS_FILE_OK=\"<reason>\" permits a repair of the sheet by hand",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-002 says the routes 'are refused' with no carve-out, and the GM's rule is to edit the large file through tooling. The plan names no repair the tool cannot do: it is append-only, it already reads malformed free-text lines, flock releases on process death so no lock goes stale, and a wrong claim is released through the tool. Nothing in the escape limits it to repair. Drop it, or bind it to the GM's verbatim words as DOWNLOAD_COPY_OK is, which makes any use the GM's own decision."
+  },
+  {
+   "id": "D3-text",
+   "summary": "page-session-rules.md, CLAUDE.md large-file rule in the GM's terms, guard row; make lines/append stay for other coordination files",
+   "class": "within",
+   "why": "FR-003, FR-004; FR-003 is scoped to the claims file."
+  },
+  {
+   "id": "D4-pdf-request",
+   "summary": "quote_verbatim asks a PDF's URL (headers only) instead of NOT-CHECKED by extension",
+   "class": "within",
+   "why": "Serves FR-006's fix for R2's PDF gap; READABLE needs the link answered."
+  },
+  {
+   "id": "D4-archive-after-live",
+   "summary": "CachedPages: cache, then live, then the archive's text.txt only when the live page is not FETCHED; not cached",
+   "class": "within",
+   "why": "R2's gap is agents re-fetching held pages the scripts gave up on; consulting the archive whenever the script would give up closes it, and the live request is needed anyway for READABLE. Measured 2026-10-10 over the 95 surviving quote-check bundles in /tmp/l7r-check (a sample, not the 773 transcript fetches): of held passages the live page fetched but did not show VERBATIM (4 NOT-ON-PAGE, 2 DIFFERS), 0 were in the archived text, so archive-after-live loses nothing measured. residue_pages builds on CachedPages(NotCached()), so the bundle's pages/ gains the archived text too."
+  },
+  {
+   "id": "D4-confirm-never-sink",
+   "summary": "a passage on archived text counts only when VERBATIM; otherwise NOT-CHECKED for the agent",
+   "class": "within",
+   "why": "A correctness constraint (PDF extraction splits words); the agent still gets the archived text in pages/."
+  },
+  {
+   "id": "D5-validation",
+   "summary": "quote-verbatim before/after on real PDF-citing questions; a verdict that LOSES ground is a bug; NOT-CHECKED -> UNFETCHABLE for an asked-and-refused PDF accepted as the truer residue",
+   "class": "within",
+   "why": "FR-006's test that fails on the gap; SC-004. The amended bar (commit bd18b880a) still forbids any lost VERBATIM/READABLE or new NOT-ON-PAGE/NOT-READABLE, so the archive still cannot sink a quotation."
+  },
+  {
+   "id": "implicit-held-fetches-outside-scripts",
+   "summary": "no fix and no recorded why for held-URL fetches outside the scripts: main threads 12 of 39, general-purpose agents 14 of 57",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005's second measure counts these and FR-006 says each gap R2 measures gets a fix; the spec's edge case requires 'nothing to fix' to be RECORDED as a finding. R2 reports the counts with no cause, and the plan's 'Main sessions already look locally' answers the first measure, not this one. local_first.py counts 'make source-pages URL=' as a fetch, and D4 consults the archive only after live fails, so a main session's source-pages on a held URL is unchanged by D4. R2 must measure why the 26 were fetched and either name a gap with a fix and test or record why none is owed. Also record R2's third measure for agents (local-first.txt prints no asked-already row, i.e. 0 of 207 agent searches; R2 states it for main only)."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

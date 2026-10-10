@@ -35,7 +35,7 @@ N/A: no generator change.
 
 ## Decisions
 
-**D1 - The claims tool** (`scripts/pages/claims.py`, FR-001).
+**D1 - The claims tool** (`scripts/pages/research_claims.py`, FR-001).
 - **The commands.**
   - `make research-claim Q="0060 0246" FEATURE=376 [STATUS="in progress"] [WHY=]` claims.
   - `make research-claims Q="..."` queries.
@@ -47,22 +47,28 @@ N/A: no generator change.
 - **The lock.** A claim is read, checked and appended under `fcntl.flock` on `<sheet>.lock`.
 - **Which question a line names.**
   - Every 4-digit number in its item field.
-  - An old `<page>/<NNN>` or `<page> <NNN>` form, mapped to its number through `research/moved-303.json`.
+  - An old page name followed by a run of section numbers (`homesteads 050 110 145`, `fields/090 080`,
+    `PAGE=water SECTION=020`), each mapped to its number through `research/moved-303.json`.
 - **When a claim is live.** It is the latest line of one owner naming that question, and:
-  - its status does not open with `done`, `released`, `landed`, `complete`, `withdrawn` or `DONE`;
-  - and its feature is not settled. A feature is settled when `make speckit-todo`'s `feature()` reads its directory in
-    the mirror's `specs/` as closed. That retires the old free-text lines whose features finished without a release
-    line.
+  - and the line carries none of `done`, `released`, `landed`, `complete` or `withdrawn` anywhere after its owner. Old
+    lines put the word in the item or in a sixth field, so the whole line is read.
+- **Forgotten claims.** The spec keeps a claim live until a later line releases it, so a closed feature's forgotten
+  claims are released by `research_claims.py sweep`. It writes one release line for each live claim whose feature
+  `make speckit-todo` reads as closed, with that as the reason. It is run once at the landing and can be run again; it
+  is never a rule applied silently on read (plan review, round 1).
 - **Output.** At most one line per live claim touching the asked questions, and one summary line. Nothing else is
   printed.
 
 **D2 - The sheet's guard** (`scripts/hooks/claims-file-hooks.sh`, FR-002).
 - **What it refuses.**
   - A PreToolUse `Read`, `Edit` or `Write` whose path is the sheet.
-  - A Bash command that names it (`RESEARCH-CLAIMS`). The FR-001 commands never name it on their command line.
+  - A Bash command that acts on it (below). The FR-001 commands never name it on their command line.
 - **The refusal** names `make research-claim` / `make research-claims`.
-- **The escape.** `CLAIMS_FILE_OK="<reason>"` covers a repair of the sheet itself, recorded by `guard_log` as every
-  escape is.
+- **No escape.** FR-002 makes no carve-out, and no repair needs one: the tool only appends, reads every old line, its
+  lock releases with its process, and a wrong claim is released through it.
+- **What counts as acting on the sheet.** Its file name (with `.md`) as an operand of a command that reads or writes:
+  `cat`, `sed`, a redirect, `make lines`, `make append`, and so on. A command that only mentions it, such as a grep
+  over the docs or a commit message, passes. Guards match invocations, not mentions.
 - **Registration.** In `.claude/settings.json` on `Read|Edit|Write` and on `Bash`.
 
 **D3 - The text** (FR-003, FR-004).
@@ -92,17 +98,33 @@ NOT-CHECKED that became VERBATIM, and any verdict that changed otherwise, are re
 ground - a VERBATIM or READABLE lost, a new NOT-ON-PAGE or NOT-READABLE - is a bug. A PDF that is now asked and
 refused moves from NOT-CHECKED to UNFETCHABLE, the truer of two residue verdicts.
 
+**D6 - The archive before an agent's own fetch** (FR-006; the plan review asked why R2's other held fetches were made).
+- **The other held fetches.** Of the 26 outside the checking agents, 10 were main sessions' `make source-pages` served
+  from the page cache, which never reached the web; R2 overcounted them. 2 were a PDF and a full text through
+  `source-pages`, which D4 covers. 14 were ad-hoc agents' own `WebFetch`, and nothing told those agents the archive
+  existed.
+- **The fix.** `scripts/hooks/archive-first-hooks.sh` (decider `lib/hm_archive_first.py`, reading the archive through
+  `sources._cited` and the manifest, as D4 does) refuses the FIRST `WebFetch` of a URL the archive holds, naming the
+  archived text and its capture date. The same actor's second fetch of that URL passes.
+- **Why the second fetch passes.** The archived copy is the cheap, exact first read. A second fetch is the actor saying
+  it needs the live page, as quote-check's READABLE does.
+- **The actor** is the session and agent id, kept in a small state file. It covers every agent, defined or ad hoc,
+  with no contract change, because the refusal carries the route.
+
 ## Project Structure
 
 ```text
-scripts/pages/claims.py                 new - the claims tool
+scripts/pages/research_claims.py                 new - the claims tool
 Makefile                                research-claim, research-claims
 scripts/hooks/claims-file-hooks.sh      new - the sheet's guard
 .claude/settings.json                   its registration
 scripts/record/quote_verbatim.py        a PDF asked about; archived passages count only when VERBATIM
 scripts/record/sources.py               CachedPages reads the archive after the live page fails
 scripts/container/page-session-rules.md, CLAUDE.md, docs/guards.md
-tests/tooling/test_claims.py            new
+tests/tooling/test_research_claims.py            new
 tests/tooling/test_quote_verbatim.py, tests/tooling/test_sources.py
 tests/hooks/test-claims-file-hooks.sh   new
+scripts/hooks/archive-first-hooks.sh    new - D6
+scripts/hooks/lib/hm_archive_first.py   new - D6's decider
+tests/hooks/test-archive-first-hooks.sh new
 ```

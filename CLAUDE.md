@@ -259,7 +259,8 @@ doctrine for writing a guard: `docs/guards.md`.
 | `main-tree-hooks.sh` | a write that would land in the mirror is moved to the clone; one naming it is refused | `MAIN_TREE_OK` |
 | `discard-hooks.sh` | a checkout or restore that would discard uncommitted work | `DISCARD_OK` |
 | `conflict-marker-hooks.sh` | a `git add` or commit that would stage conflict markers | `CONFLICT_MARKERS_OK` |
-| `claims-file-hooks.sh` | a Read, Edit, Write or shell command on the research claims sheet; `make research-claim` / `research-claims` is the way in (feature 376) | `CLAIMS_FILE_OK` |
+| `archive-first-hooks.sh` | an actor's FIRST `WebFetch` of a page the source archive holds, naming the archived text; the same actor's second fetch passes (feature 376) | the second fetch |
+| `claims-file-hooks.sh` | a Read, Edit, Write or shell command acting on the research claims sheet; `make research-claim` / `research-claims` is the way in (feature 376) | none - the tool does everything |
 | `feature-approval-hooks.sh` + spec-lint check 6 | a `git add` or commit staging a NEW feature (377 on) whose `spec.md` lacks the GM's `**Approved**:` line, or quotes words the GM did not write in this session (feature 377); a `sync-with-main.sh done/push` landing a closed feature OPEN without one added (any number); the push re-checks the line's form | none - the GM's approval |
 | `ledger-hooks.sh` | a commit staging the review ledger with a measured row short of its check, class or cost | `LEDGER_LINT_OK` |
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |

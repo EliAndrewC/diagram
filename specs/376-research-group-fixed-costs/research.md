@@ -78,14 +78,25 @@ basis for a character-for-character check.
 tokens, little: the quote-check re-fetches of held pages carried about 1.1 M, the three checking agents' together about
 1.5 M. The cost is in what the check can see. Of the 946 fetches, 572 were PDFs, read through a summary.
 
-**The fix** (FR-006, plan D5). When the live page cannot be read (a PDF, a refused host), `CachedPages` reads the
+**The other held fetches** (observed 2026-10-10; method: each of the 26 fetches outside the checking agents, its
+tool, its result and its URL). 10 were main sessions' `make source-pages` served from the page cache, so they never
+reached the web; the count above overcounts them. 2 were a PDF and a full text read through `source-pages`, which the fix
+below covers. 14 were ad-hoc agents' own `WebFetch` of pages the archive held (a Gutenberg text, Japanese Wikipedia, two
+PDFs). Nothing had told those agents the archive existed: plan D6.
+
+**Searches the record already answers** (observed 2026-10-10; method: as above): none of the agents' 207 searches, and
+none of the main sessions' 20, matched a record question's heading by the 60% rule.
+
+**The fix** (FR-006, plan D4 and D6). When the live page cannot be read (a PDF, a refused host), `CachedPages` reads the
 archive's text of that URL before giving up. A quotation found VERBATIM there is reported VERBATIM, marked as read from
 the archive. One not found there stays NOT-CHECKED for the agent, because PDF text extraction can split words and a miss
-proves nothing. READABLE still needs the live link to have answered. No gap here needs an overhaul.
+proves nothing. READABLE still needs the live link to have answered. Plan D6 adds a hook: an agent's first fetch of
+a page the archive holds is refused with the archived text's path, and its second fetch passes. No gap here needs an
+overhaul.
 
 **Validation** (observed 2026-10-10; method: `make quote-verbatim` on questions 0059, 0235, 0009, 0080 and 0033, the
-five whose notes cite the most PDFs, once at HEAD in a detached worktree and once with plan D4; the reports are in
-`measure/validation/`).
+five whose notes cite the most PDFs, once at HEAD in a detached worktree and once with plan D4; the reports quote
+the sources at length and are not committed - `make quote-verbatim Q=<n> OUT=<json>` at each commit remakes them).
 
 | verdict before -> after (observed 2026-10-10; method: the ten reports) | passages |
 |---|---|

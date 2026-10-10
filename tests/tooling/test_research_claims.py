@@ -1,4 +1,4 @@
-"""`scripts/pages/claims.py` (feature 376 FR-001): the research claims sheet, claimed and asked through one tool.
+"""`scripts/pages/research_claims.py` (feature 376 FR-001): the research claims sheet, claimed and asked through one tool.
 
 WHAT THESE PROVE (SC-001): on a sheet the size of the real one (1,138 lines on 2026-10-10), a claim and a query print
 at most five lines; another session's live claim refuses an overlapping claim and is named alone; a release frees it;
@@ -13,7 +13,7 @@ import pathlib
 import threading
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("claims", REPO / "scripts/pages/claims.py")
+_spec = importlib.util.spec_from_file_location("research_claims", REPO / "scripts/pages/research_claims.py")
 assert _spec and _spec.loader
 claims = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(claims)
@@ -70,9 +70,26 @@ def test_an_old_free_text_line_is_matched_by_its_old_page_and_number(tmp_path: p
     assert code == 1 and "Diagram shrines" in text
 
 
-def test_a_claim_whose_feature_is_settled_is_not_live(tmp_path: pathlib.Path) -> None:
-    sheet = _sheet(tmp_path, ["clone-b | 300 | Q=0060 | in progress | 2026-09-27"])
-    assert claims.query(["0060"], _top(tmp_path), sheet)[0] == 0, "feature 300 is Done, so its forgotten claim is retired"
+def test_a_settled_features_forgotten_claim_stays_live_until_a_line_releases_it(tmp_path: pathlib.Path) -> None:
+    # the spec: "an old line counts as live unless a later line for the same owner and item says it is done" - so a
+    # closed feature's claim is released by the sweep's line, never silently by the feature's state (plan review)
+    sheet = _sheet(tmp_path, ["clone-b | 300 | Q=0060 | in progress | 2026-09-27", "clone-c | 376 | Q=0061 | in progress | 2026-10-10"])
+    top = _top(tmp_path)
+    assert claims.query(["0060"], top, sheet)[0] == 1
+    code, text = claims.sweep(top, sheet, today="2026-10-10")
+    assert "1 release line(s) for 1 claim(s)" in text
+    assert sheet.read_text().splitlines()[-1] == "clone-b | 300 | Q=0060 | released by clone-a: feature 300 is closed (make speckit-todo) | 2026-10-10"
+    assert claims.query(["0060"], top, sheet)[0] == 0 and claims.query(["0061"], top, sheet)[0] == 1, "an open feature's claim is kept"
+
+
+def test_an_old_line_naming_a_run_of_numbers_matches_each_and_a_done_word_anywhere_releases(tmp_path: pathlib.Path) -> None:
+    olds = '{"files": {"homesteads/050-a.html": "questions/0070-a.html", "homesteads/110-b.html": "questions/0072-b.html", "fields/080-c.html": "questions/0090-c.html", "fields/090-d.html": "questions/0091-d.html"}}'
+    top = _top(tmp_path)
+    (top / "research" / "moved-303.json").write_text(olds)
+    sheet = _sheet(tmp_path, ["Diagram x | 269 | homesteads 050 110, fields/090 080 | in progress", "Diagram y | 273 | 0099 | in progress | 2026-09-28 | LANDED"])
+    assert claims.questions_of("homesteads 050 110, fields/090 080", claims.old_map(top)) == {"0070", "0072", "0090", "0091"}
+    assert claims.query(["0072"], top, sheet)[0] == 1 and claims.query(["0090"], top, sheet)[0] == 1
+    assert claims.query(["0099"], top, sheet)[0] == 0, "LANDED in a sixth field releases the line"
 
 
 def test_a_stale_claim_is_released_by_name_only_with_a_reason(tmp_path: pathlib.Path) -> None:

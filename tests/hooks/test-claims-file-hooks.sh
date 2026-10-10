@@ -33,10 +33,15 @@ done
 file_tool Read /diagram/.clones/diagram-research/CLAUDE.md
 [ "$RC" -eq 0 ] && ok "a Read of another file passes" || no "an unrelated Read was refused" "(rc=$RC)"
 
-echo "3. the escape, for a repair of the sheet itself, is recorded"
-bash_cmd "CLAIMS_FILE_OK='repair a line written before the tool existed' sed -i 's/a/b/' $SHEET"
-[ "$RC" -eq 0 ] && ok "CLAIMS_FILE_OK with a reason passes" || no "the escape did not pass" "(rc=$RC)"
-bash_cmd "cat $SHEET"
+echo "3. a MENTION is not an invocation; there is no escape; a refusal is recorded"
+for c in 'grep -rn "RESEARCH-CLAIMS" docs/' "git -C /x commit -m 'the sheet RESEARCH-CLAIMS.md is tooled now'" "echo see RESEARCH-CLAIMS.md in the docs"; do
+  bash_cmd "$c"
+  [ "$RC" -eq 0 ] && ok "a mention passes: ${c:0:40}" || no "a mention was refused: $c" "(rc=$RC)"
+done
+bash_cmd "CLAIMS_FILE_OK='repair a line' sed -i 's/a/b/' $SHEET"
+[ "$RC" -eq 2 ] && ok "CLAIMS_FILE_OK is no escape" || no "an escape token let a write through" "(rc=$RC)"
+bash_cmd "cd /diagram/.clones && cat RESEARCH-CLAIMS.md"
+[ "$RC" -eq 2 ] && ok "a bare file name after a cd is still the sheet" || no "a relative read passed" "(rc=$RC)"
 grep -q '"guard": "claims-file"' "$LOGROOT"/*.json 2>/dev/null && ok "a refusal writes a guard-log entry" || no "no guard-log entry"
 
 echo "4. it fires only through its own check"
