@@ -172,6 +172,65 @@ OUT2=$(python3 -c 'import json,sys; print(json.dumps({"tool_name":"Bash","transc
 [ "$RC2" -eq 0 ] && ok "with the decider's call removed the same command passes - the test sees the guard, not a stub" || no "the stripped hook still blocked" "(rc=$RC2)"
 rm -f "$SANS"; clean
 
+echo "6. amendment 1: a feature reopened and LANDED open needs the GM's approval; reopened and closed again does not"
+mkdir -p "$FIX/.specify" "$FIX/specs/300-closed-by-status" "$FIX/specs/301-closed-by-tasks" "$FIX/specs/302-still-open"
+cp "$HERE/../../.specify/affects.json" "$FIX/.specify/"
+printf '# 300\n\n**Status**: Done 2026-10-01 - measured\n' > "$FIX/specs/300-closed-by-status/spec.md"
+printf '# 301\n\n**Status**: In progress\n' > "$FIX/specs/301-closed-by-tasks/spec.md"
+printf -- '- [x] T01 a thing\n' > "$FIX/specs/301-closed-by-tasks/tasks.md"
+printf '# 302\n\n**Status**: Filed - deferred\n' > "$FIX/specs/302-still-open/spec.md"
+git -C "$FIX" add -A >/dev/null 2>&1; git -C "$FIX" commit -qm closed >/dev/null 2>&1
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+commit() { git -C "$FIX" add -A >/dev/null 2>&1; git -C "$FIX" commit -qm "$1" >/dev/null 2>&1; }
+push() { run "scripts/sync-with-main.sh done"; }
+sed -i 's/^\*\*Status\*\*: Done.*/**Status**: Filed - more work found/' "$FIX/specs/300-closed-by-status/spec.md"; commit reopen
+push
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "specs/300-closed-by-status/spec.md: closed before, and this push lands it OPEN" && ok "a status reopen left open is refused at the push, naming the feature" || no "a reopen left open landed" "(rc=$RC) $OUT"
+printf '%s' "$OUT" | grep -q "needs no approval: finish the work and close the feature" && ok "...and the refusal names finishing and closing first, no approval needed" || no "the reopen-is-fine sentence is missing"
+[ "$(printf '%s' "$OUT" | grep -n "finish the work and close" | cut -d: -f1)" -lt "$(printf '%s' "$OUT" | grep -n "A feature is filed only when" | cut -d: -f1)" ] && ok "...before the approval route" || no "the approval route comes first"
+run "cd $FIX && scripts/sync-with-main.sh push"
+[ "$RC" -eq 2 ] && ok "...also as cd <clone> && sync-with-main.sh push" || no "the cd form was not read" "(rc=$RC)"
+sed -i 's/^\*\*Status\*\*: Filed.*/**Status**: Done 2026-10-10 - the more work done/' "$FIX/specs/300-closed-by-status/spec.md"; commit reclose
+push
+[ "$RC" -eq 0 ] && ok "reopened, worked and closed again within the push: no approval needed" || no "a reopen closed again was refused" "(rc=$RC) $OUT"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+printf -- '- [ ] T02 the next thing\n' >> "$FIX/specs/301-closed-by-tasks/tasks.md"; commit "reopen by a task"
+push
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "301-closed-by-tasks" && ok "a feature closed by its ticked tasks, reopened by a new task, is refused too" || no "a task reopen landed" "(rc=$RC)"
+printf '\n**Approved**: the GM, 2026-10-10, "please file a feature for the gadget"\n' >> "$FIX/specs/301-closed-by-tasks/spec.md"; commit "foreign approval"
+push
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "quotes words the GM did not write" && ok "...and an added approval in words the GM never wrote does not let it land" || no "a foreign approval let a reopen land" "(rc=$RC)"
+printf '\n**Approved**: the GM, 2026-10-10, "Yes, please go ahead and file this as a feature"\n' >> "$FIX/specs/301-closed-by-tasks/spec.md"; commit "the GM's approval"
+push
+[ "$RC" -eq 0 ] && ok "...but the GM's own words, added in the delta, do" || no "the GM's approval did not let the reopen land" "(rc=$RC) $OUT"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+printf '\nmore notes\n' >> "$FIX/specs/302-still-open/spec.md"; commit "an open feature edited"
+push
+[ "$RC" -eq 0 ] && ok "a feature already open at the base is not this check's" || no "an already-open feature was refused" "(rc=$RC)"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+printf -- '- [ ] T01 hidden work\n' > "$FIX/specs/300-closed-by-status/tasks.md"; commit "a task under Done"
+push
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "300-closed-by-status/spec.md: an unticked task added under a status line that still says closed" && ok "FR-012: an unticked task added under a Done status is refused" || no "hidden open work landed" "(rc=$RC) $OUT"
+[ "$(printf '%s' "$OUT" | grep -n "do the work and tick the task" | cut -d: -f1)" -lt "$(printf '%s' "$OUT" | grep -n "A feature is filed only when" | cut -d: -f1)" ] && ok "...its refusal, too, leads with doing the work (tick the task) before the approval route" || no "FR-012's refusal leads with the approval"
+printf '\n**Approved**: the GM, 2026-10-10, "please file a feature for the gadget"\n' >> "$FIX/specs/300-closed-by-status/spec.md"; commit "foreign approval under Done"
+push
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "a task added under a closed status; the approval line it adds quotes words" && ok "...and a foreign approval gets FR-012's own wording, not 'reopened'" || no "FR-012's not-found wording is wrong" "(rc=$RC) $OUT"
+git -C "$FIX" reset -q --hard HEAD~1
+sed -i 's/^- \[ \] T01/- [x] T01/' "$FIX/specs/300-closed-by-status/tasks.md"; commit "ticked"
+push
+[ "$RC" -eq 0 ] && ok "...and passes once the task is done and ticked" || no "a ticked task under Done was refused" "(rc=$RC)"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+printf -- '- [ ] T02 a leftover box, open when the feature closed\n' >> "$FIX/specs/300-closed-by-status/tasks.md"; commit "a leftover"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+sed -i 's/^- \[ \] T02/- [x] T02/' "$FIX/specs/300-closed-by-status/tasks.md"
+printf -- '- [ ] T03 new work slipped in\n' >> "$FIX/specs/300-closed-by-status/tasks.md"; commit "tick one, add one"
+push
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "300-closed-by-status" && ok "ticking a leftover box and adding a new one (the count unchanged) is still refused" || no "tick-one-add-one landed hidden work" "(rc=$RC)"
+sed -i 's/^- \[ \] T03/- [x] T03/' "$FIX/specs/300-closed-by-status/tasks.md"; commit "T03 done"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+run "make quick"
+[ "$RC" -eq 0 ] && ok "a command that is neither a git add/commit nor a push passes untouched" || no "make quick was refused" "(rc=$RC)"
+
 echo
 echo "feature-approval: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]
