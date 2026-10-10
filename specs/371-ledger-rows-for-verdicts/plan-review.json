@@ -1,0 +1,53 @@
+{
+ "feature": "371-ledger-rows-for-verdicts",
+ "plan_sha256": "64524248c865bf17ae3700ecf2edfe3a4f0973503ceec55c06ca091c1593a86a",
+ "plan_text": "# Implementation Plan: a ledger row for every pass of every check\n\n**Branch**: none (main, in the session clone) | **Date**: 2026-10-10 | **Spec**: [spec.md](spec.md) (FAITHFUL, round 3)\n\n## Summary\n\nLog each check's pass where feature 375's hooks already see it return, with its cost cells computed from the agent's\ntranscript exactly as `make review-cost` computes them; a pass is answered by a measured-table row carrying its check and those\ncells; a script lists the unanswered passes with the row to add, reports at every commit and refuses at the push.\n\n## Technical Context\n\n**Language**: Python 3.14 and bash (the hooks). **Dependencies**: none new - `scripts/reviews/review_cost.py` (`cost`, `cells`)\nand `scripts/reviews/ledger_lint.py` (`CHECKS`, `measured_rows`). **Testing**: pytest (`tests/tooling/`) and the hook suites\n(`tests/hooks/`, `make hooks-test`). **No generator change**, so no map moves, no perf bookends, no review occasions.\n\n## Constitution Check\n\n- I-V, VII-IX: N/A - tooling only; no UI, pool content, SOURCE block or setting detail.\n- VI: PASS - each task names its test; `make hooks-test` and `make done` before landing.\n- X: PASS - test-first; the new script under the 100-statement cap and 100% where coverage reaches (`scripts/` is outside the\n  engine floor; its tests are its proof).\n- XII: N/A - nothing the world sees changes. XIII: PASS - the hook suites and the gate green before and after.\n- XVI: PASS - every check the ledger names, every pass, no carve-out (spec rounds 1-3).\n\n## Decisions\n\n- **D1 - the log.** `<git common dir>/check-passes.jsonl`, one JSON line per pass: `date`, `check`, `subject`, `agent`,\n  `wall`, `tokens`. `hm_checks.py` writes it: at `launched` (PostToolUse Agent) it remembers every agent whose\n  `subagent_type` is in `CHECKS` (`passes_pending`: agent id -> check, subject); at `returned` (SubagentStop) it computes the\n  cells from `agent_transcript_path` with `review_cost.cost` / `cells` and appends; a FOREGROUND check (returned at PostToolUse)\n  is appended there, its transcript found by `review_cost.transcript`. The subject is the dispatch's MANIFEST path where the\n  prompt names one, else the prompt's first 100 characters. Append-only: opened in append mode, never rewritten.\n- **D2 - CHECKS.** `ledger_lint.CHECKS` gains `modal-depiction`, `modal-form`, `modal-research` and `source-filter` (spec\n  FR-001), so their rows pass the lint.\n- **D3 - the answer.** `scripts/reviews/ledger_owed.py`: a pass is answered when some measured row has the same `check`, and\n  its `wall` and `tokens` cells equal the pass's (whitespace-normalized). It prints each unanswered pass as the row to add -\n  date, check, subject and cost filled, the five judgment cells `?`.\n- **D4 - where it runs.** At every commit `ledger-hooks.sh` adds the list as context and never refuses for it (FR-004); at the\n  push `sync-with-main.sh` runs `ledger_owed.py --refuse` beside `ledger_lint.py`, refusing while a pass logged in that clone\n  is unanswered, escape `LEDGER_ROWS_OK=\"<reason>\"`, recorded in the bypass log. `make ledger-owed` lists them by hand.\n- **D5 - tests.** `tests/tooling/test_ledger_owed.py`: a fixture log and ledger - fires with no row, quiet with it, two\n  same-day rounds told apart by their cells, the printed row's cells; `tests/tooling/test_hm_checks.py`: launch then return of a\n  check appends one line with the transcript's cells, a non-check agent appends none, two returns append two; the push suite\n  (`tests/hooks/test-sync-with-main.sh`) refuses an unanswered pass and passes once answered; `test-ledger-hooks.sh` reports\n  without refusing.\n- **D6 - the record.** Root `CLAUDE.md`'s enforced table (the `ledger-hooks.sh` row), `docs/guards.md`, and `docs/reviews.md`'s\n  ledger paragraph say a pass is logged and its row owed at the push.\n\n## Project Structure\n\n```text\nscripts/hooks/lib/hm_checks.py       D1\nscripts/reviews/ledger_lint.py       D2\nscripts/reviews/ledger_owed.py       D3 (new)\nscripts/hooks/ledger-hooks.sh        D4 (report at commit)\nscripts/sync-with-main.sh            D4 (refuse at the push)\nMakefile                             D4 (make ledger-owed)\ntests/tooling/test_ledger_owed.py, tests/tooling/test_hm_checks.py, tests/hooks/test-sync-with-main.sh, tests/hooks/test-ledger-hooks.sh   D5\nCLAUDE.md, docs/guards.md, docs/reviews.md   D6\n```\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "the pass log in <git common dir>/check-passes.jsonl, written by hm_checks.py at launched/returned (foreground at PostToolUse)",
+   "class": "within",
+   "why": "The hooks reach every agent: PostToolUse matcher Agent and the matcherless SubagentStop in .claude/settings.json; foreground results carry agentId (1034 'completed' Agent results in the parent transcripts all do, counted 2026-10-10). hm_checks today only tracks dispatches recorded for CHECK_KINDS, so the log needs its own branch reading tool_input.subagent_type - present in the payload. The return rule itself is D1-return below."
+  },
+  {
+   "id": "D1-return",
+   "summary": "unlabeled in the plan: one logged pass per agent id, cells computed once at the first stop; a resumed agent's second return, and a pending pass across the per-feature state reset, are not addressed",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001 says EVERY return is logged. Measured 2026-10-10 (SubagentStop events in the clones' l7r-events logs joined to each agent's subagents/agent-<aid>.jsonl timestamps): 3 of 78 stops have transcript lines after the stop, from 2 agents (a7c59df9e4e24e781 perf-audit, acd6dedf767bf96c9 spec-fidelity) RESUMED with a second SubagentStart/SubagentStop on the same aid. A pending entry keyed by agent id either drops the second return or logs it with cumulative cells; review_cost.cost takes wall as max-min over the whole file, so the first pass's cells stop matching `make review-cost` (acd6: about 11 min at the first stop, about 65 min after the resume) - SC-004/US2 fail and a row copied from review-cost never answers the pass. Also hm_checks.handle resets the state to {feature, dispatches} when .specify/feature.json changes, so a passes_pending kept in checks-open.json is dropped for a check outstanding across a feature switch. Whether SubagentStop also fires for a FOREGROUND agent is unmeasured (375's probe was background only), so the PostToolUse route may double-log. Not impossible, not implied by the request, and it defeats its purpose (a whole table answered from measured cost)."
+  },
+  {
+   "id": "D2",
+   "summary": "CHECKS gains modal-depiction, modal-form, modal-research, source-filter",
+   "class": "within",
+   "why": "FR-001 verbatim; 18 + 4 = 22 = the 23 agent files less round-arbiter, as the spec's round 3 says."
+  },
+  {
+   "id": "D3",
+   "summary": "ledger_owed.py: answered by check + wall + tokens equal (whitespace-normalized); prints the row with judgment cells '?'",
+   "class": "within",
+   "why": "FR-002/FR-003. Same file (agent_transcript_path vs review_cost.transcript's glob) and the same cells() string; ledger_lint's _WALL/_TOKENS match cells()'s shape exactly. Holds for an agent that returns once; the resumed case is D1-return."
+  },
+  {
+   "id": "D4",
+   "summary": "report at every commit via ledger-hooks.sh, never refusing; refuse at the push in sync-with-main.sh with LEDGER_ROWS_OK recorded; make ledger-owed",
+   "class": "within",
+   "why": "FR-004 literally: report at every commit, refuse the push, escape with a reason, recorded."
+  },
+  {
+   "id": "D5",
+   "summary": "tests: ledger_owed fixtures, hm_checks launch/return, the push suite, the ledger hook suite",
+   "class": "within",
+   "why": "FR-005 and SC-001..004 - enforcement of what was asked."
+  },
+  {
+   "id": "D6",
+   "summary": "CLAUDE.md enforced table, docs/guards.md, docs/reviews.md updated",
+   "class": "within",
+   "why": "the project's rule that every guard is recorded; describes the requested behavior only."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

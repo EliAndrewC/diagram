@@ -25,23 +25,30 @@ and `scripts/reviews/ledger_lint.py` (`CHECKS`, `measured_rows`). **Testing**: p
 
 ## Decisions
 
-- **D1 - the log.** `<git common dir>/check-passes.jsonl`, one JSON line per pass: `date`, `check`, `subject`, `agent`,
-  `wall`, `tokens`. `hm_checks.py` writes it: at `launched` (PostToolUse Agent) it remembers every agent whose
-  `subagent_type` is in `CHECKS` (`passes_pending`: agent id -> check, subject); at `returned` (SubagentStop) it computes the
-  cells from `agent_transcript_path` with `review_cost.cost` / `cells` and appends; a FOREGROUND check (returned at PostToolUse)
-  is appended there, its transcript found by `review_cost.transcript`. The subject is the dispatch's MANIFEST path where the
-  prompt names one, else the prompt's first 100 characters. Append-only: opened in append mode, never rewritten.
+- **D1 - the log.** `<git common dir>/check-passes.jsonl`, one JSON line per RETURN: `date`, `check`, `subject`, `agent`,
+  `wall`, `tokens`. `hm_checks.py` writes it in its own branch, apart from the page-check state (which a switch of feature
+  resets, plan review 1): at SubagentStop - whose payload carries `agent_type`, `agent_id` and `agent_transcript_path`
+  (feature 375's `subagent-stop-probe`) - an agent whose type is in `CHECKS` gets a line, its cells computed from the
+  transcript with `review_cost.cost` / `cells`; at PostToolUse a FOREGROUND (`completed`) check gets one too, its transcript
+  found by `review_cost.transcript`. Nothing is held pending between the two events. The subject is the first line of the
+  dispatch's prompt (the transcript's first user message), cut to 100 characters, with `|` and newlines made spaces so the
+  printed row passes the lint. Append-only: opened in append mode, never rewritten.
+- **D1b - a resumed agent, and a pass logged twice.** One agent id may log several lines: a check resumed after it returned
+  stops again (measured by plan review 1: 2 agents, 3 of 78 stops), and a foreground check may be seen by both events. The
+  PASS is the agent; its cells are its LATEST line's, computed over its whole transcript - which is what `make review-cost`
+  prints once it has finished, so the row the session copies answers it (SC-004).
 - **D2 - CHECKS.** `ledger_lint.CHECKS` gains `modal-depiction`, `modal-form`, `modal-research` and `source-filter` (spec
   FR-001), so their rows pass the lint.
-- **D3 - the answer.** `scripts/reviews/ledger_owed.py`: a pass is answered when some measured row has the same `check`, and
+- **D3 - the answer.** `scripts/reviews/ledger_owed.py` reads the log as one pass per agent id (its latest line, D1b); a pass is answered when some measured row has the same `check`, and
   its `wall` and `tokens` cells equal the pass's (whitespace-normalized). It prints each unanswered pass as the row to add -
   date, check, subject and cost filled, the five judgment cells `?`.
 - **D4 - where it runs.** At every commit `ledger-hooks.sh` adds the list as context and never refuses for it (FR-004); at the
   push `sync-with-main.sh` runs `ledger_owed.py --refuse` beside `ledger_lint.py`, refusing while a pass logged in that clone
   is unanswered, escape `LEDGER_ROWS_OK="<reason>"`, recorded in the bypass log. `make ledger-owed` lists them by hand.
 - **D5 - tests.** `tests/tooling/test_ledger_owed.py`: a fixture log and ledger - fires with no row, quiet with it, two
-  same-day rounds told apart by their cells, the printed row's cells; `tests/tooling/test_hm_checks.py`: launch then return of a
-  check appends one line with the transcript's cells, a non-check agent appends none, two returns append two; the push suite
+  same-day rounds told apart by their cells, the printed row's cells; `tests/tooling/test_hm_checks.py`: a check's return appends one line with the
+  transcript's cells, a non-check agent appends none, a foreground check is logged at PostToolUse, a resumed agent's second
+  stop appends a second line; the push suite
   (`tests/hooks/test-sync-with-main.sh`) refuses an unanswered pass and passes once answered; `test-ledger-hooks.sh` reports
   without refusing.
 - **D6 - the record.** Root `CLAUDE.md`'s enforced table (the `ledger-hooks.sh` row), `docs/guards.md`, and `docs/reviews.md`'s
@@ -59,3 +66,9 @@ Makefile                             D4 (make ledger-owed)
 tests/tooling/test_ledger_owed.py, tests/tooling/test_hm_checks.py, tests/hooks/test-sync-with-main.sh, tests/hooks/test-ledger-hooks.sh   D5
 CLAUDE.md, docs/guards.md, docs/reviews.md   D6
 ```
+
+## Review history
+
+- **Plan review round 1 (2026-10-10): CHANGES REQUIRED.** A resumed check's first cells went stale and a feature switch could
+  drop a pending pass: now a line per return written at that event with nothing pending (D1), the pass is the agent and its
+  latest line's cells count (D1b). The subject is sanitized and the printed row asserted lint-clean (D1, D5).
