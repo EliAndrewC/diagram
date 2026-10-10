@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - spec accepted (spec-fidelity round 2, FAITHFUL)
+**Status**: Done 2026-10-10 - spec FAITHFUL (round 2), plan CLEAR (round 2), every task ticked; the guard suite 29/29
 
 **Affects**: tooling, review process
 
