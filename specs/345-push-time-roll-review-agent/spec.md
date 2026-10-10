@@ -1,6 +1,6 @@
 # Feature Specification: The push-time `roll-review` agent (deferred by feature 217, 2026-09-08)
 
-**Status**: Filed - from future-work/cross-cutting.md, "The push-time `roll-review` agent (deferred by feature 217, 2026-09-08)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Withdrawn (the GM, 2026-10-10: "I agree with withdrawing feature 345") - the roll roster has held zero rows since feature 219, so the check would have nothing to review; the three zero-cost layers (the census verdict, the roster guard, the audit pointer) stand. Was: Filed - from future-work/cross-cutting.md, "The push-time `roll-review` agent (deferred by feature 217, 2026-09-08)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: review process, tooling
 

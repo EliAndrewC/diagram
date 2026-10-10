@@ -101,6 +101,9 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   # verdict is owed here like any other. (Code pushed without touching the spec's directory never brought it
   # under this check anyway, so the exemption opens nothing the check held.)
   if [ ! -f "$(dirname "$spec")/tasks.md" ] && grep -qE '^\*\*Status\*\*:?[[:space:]]*Filed\b' "$spec"; then continue; fi
+  # GUARD_EDIT_OK: the GM 2026-10-10 withdrew filed feature 345 and this check refused the status edit. A spec WITHDRAWN
+  # or SUPERSEDED with no tasks.md was never implemented, so it owes no verdict either; one that was planned keeps owing it.
+  if [ ! -f "$(dirname "$spec")/tasks.md" ] && grep -qiE '^\*\*Status\*\*:?[[:space:]]*(Withdrawn|Superseded by)\b' "$spec"; then continue; fi
   # A VERDICT, not a MENTION (feature 156, 2026-08-29). The check used to be a bare `grep FAITHFUL`,
   # which two shapes satisfied without a review having passed: a spec whose only occurrence is "NOT
   # FAITHFUL" - i.e. one a reviewer REJECTED - and a spec whose prose merely discusses the word. So
