@@ -205,12 +205,27 @@ def _todo():  # noqa: ANN202 - scripts/speckit-todo.py, imported by path (its na
     return mod
 
 
-def _state_at(top: str, rev: str, d: str, todo, vocab, tmp: str) -> tuple[str, str, int, bool]:  # noqa: ANN001
-    """(make speckit-todo's state, spec.md text, unticked tasks, closed by its status line) of `specs/<d>` at `rev`;
-    ("", "", 0, False) where it did not exist."""
+_OPEN_BOX = re.compile(r"^\s*- \[ \] (.*)$", re.M)
+_TASK_ID = re.compile(r"^(T\d+[a-z]?)\b")
+
+
+def open_tasks(text: str) -> set[str]:
+    """Each unticked task, keyed by its id (`T07`) where it has one, else by its normalized line (plan review of
+    amendment 1: a COUNT misses a push that ticks a leftover box and adds a new one - 17 closed features hold open boxes)."""
+    out = set()
+    for m in _OPEN_BOX.finditer(text):
+        line = norm(m.group(1))
+        tid = _TASK_ID.match(line)
+        out.add(tid.group(1) if tid else line)
+    return out
+
+
+def _state_at(top: str, rev: str, d: str, todo, vocab, tmp: str) -> tuple[str, str, set[str], bool]:  # noqa: ANN001
+    """(make speckit-todo's state, spec.md text, its unticked tasks, closed by its status line) of `specs/<d>` at `rev`;
+    ("", "", set(), False) where it did not exist."""
     names = _git(top, "ls-tree", "-r", "--name-only", rev, "--", f"specs/{d}").stdout.split()
     if not names:
-        return "", "", 0, False
+        return "", "", set(), False
     for name in names:
         dest = os.path.join(tmp, rev, name)
         os.makedirs(os.path.dirname(dest), exist_ok=True)
@@ -220,7 +235,7 @@ def _state_at(top: str, rev: str, d: str, todo, vocab, tmp: str) -> tuple[str, s
     spec = os.path.join(here, "spec.md")
     text = open(spec, encoding="utf-8", errors="replace").read() if os.path.exists(spec) else ""  # noqa: SIM115
     tasks = os.path.join(here, "tasks.md")
-    unticked = len(re.findall(r"^\s*- \[ \] ", open(tasks, encoding="utf-8", errors="replace").read(), re.M)) if os.path.exists(tasks) else 0  # noqa: SIM115
+    unticked = open_tasks(open(tasks, encoding="utf-8", errors="replace").read()) if os.path.exists(tasks) else set()  # noqa: SIM115
     import pathlib  # noqa: PLC0415
 
     return todo.feature(pathlib.Path(here), vocab).state, text, unticked, todo.closed_by_status(pathlib.Path(here))
@@ -249,7 +264,7 @@ def reopened(top: str, transcript: str) -> list[tuple[str, str]]:
             now, after, open_after, status_closed = _state_at(top, "HEAD", d, todo, vocab, tmp)
             reopen = was in SETTLED and bool(now) and now not in SETTLED
             # FR-012: an unticked task added under a status line that still says Done (speckit-todo reads it closed)
-            hidden = bool(now) and status_closed and open_after > open_before
+            hidden = bool(now) and status_closed and bool(open_after - open_before)  # a task open now that was not
             if not (reopen or hidden):
                 continue
             added = [q for q in quotes(after) if q not in quotes(before) and len(norm(q).split()) >= MIN_WORDS]
@@ -257,7 +272,7 @@ def reopened(top: str, transcript: str) -> list[tuple[str, str]]:
                 messages = gm_messages(transcript)
             if not any(norm(q) in m for q in added for m in messages):
                 kind = "reopened" if reopen else "hidden-open"
-                out.append((kind if not added else "reopened-not-found", f"specs/{d}/spec.md"))
+                out.append((kind if not added else kind + "-not-found", f"specs/{d}/spec.md"))
     return out
 
 

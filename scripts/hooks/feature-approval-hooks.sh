@@ -55,14 +55,22 @@ BAD=$(printf '%s' "$INPUT" | FA_CWD="$PWD" python3 "$FA_HERE/lib/hm_approval.py"
       reopened-not-found) printf '  %s: reopened and left open; the approval line it adds quotes words the GM did not write in this session\n' "$path" ;;
       # GUARD_EDIT_OK: feature 377 amendment 1 - FR-012, open work hidden under a closed status, new
       hidden-open) printf '  %s: an unticked task added under a status line that still says closed - speckit-todo would never show it\n' "$path" ;;
+      # GUARD_EDIT_OK: feature 377 amendment 1 plan review - FR-012's own not-found wording (its status never changed)
+      hidden-open-not-found) printf '  %s: a task added under a closed status; the approval line it adds quotes words the GM did not write in this session\n' "$path" ;;
       *)         printf '  %s: %s\n' "$path" "$why" ;;
     esac
   done
   # GUARD_EDIT_OK: feature 377 amendment 1 - a reopen's refusal names the approval-free route first (FR-011, FR-005)
-  case "$BAD" in *reopened*|*hidden-open*)
+  # GUARD_EDIT_OK: feature 377 amendment 1 plan review - FR-012's route is "do the work and tick the task"
+  case "$BAD" in *reopened*)
     printf '\nReopening a feature to do its work yourself needs no approval: finish the work and close the feature\n'
     printf 'again (status Done, or every task ticked), THEN push. Until then the work stays committed in your clone,\n'
     printf 'backed up by every refused push. Only a feature you mean to land OPEN needs the GM'"'"'s approval below.\n' ;;
+  esac
+  case "$BAD" in *hidden-open*)
+    printf '\nAdding a task under a closed status to do it yourself needs no approval: do the work and tick the task,\n'
+    printf 'THEN push. Until then it stays committed in your clone, backed up by every refused push. Only work you mean\n'
+    printf 'to land undone needs the GM'"'"'s approval below - and then its status line should say it is open.\n' ;;
   esac
   printf '\nA feature is filed only when the GM says to (the GM, 2026-10-10). Ask the GM in this session, in your\n'
   printf 'final message rather than mid-stream, and prefer extending and reopening the feature the work came from.\n'

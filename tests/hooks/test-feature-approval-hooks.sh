@@ -211,10 +211,22 @@ git -C "$FIX" update-ref refs/remotes/origin/main HEAD
 printf -- '- [ ] T01 hidden work\n' > "$FIX/specs/300-closed-by-status/tasks.md"; commit "a task under Done"
 push
 [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "300-closed-by-status/spec.md: an unticked task added under a status line that still says closed" && ok "FR-012: an unticked task added under a Done status is refused" || no "hidden open work landed" "(rc=$RC) $OUT"
-[ "$(printf '%s' "$OUT" | grep -n "finish the work and close" | cut -d: -f1)" -lt "$(printf '%s' "$OUT" | grep -n "A feature is filed only when" | cut -d: -f1)" ] && ok "...its refusal, too, leads with doing the work before the approval route" || no "FR-012's refusal leads with the approval"
+[ "$(printf '%s' "$OUT" | grep -n "do the work and tick the task" | cut -d: -f1)" -lt "$(printf '%s' "$OUT" | grep -n "A feature is filed only when" | cut -d: -f1)" ] && ok "...its refusal, too, leads with doing the work (tick the task) before the approval route" || no "FR-012's refusal leads with the approval"
+printf '\n**Approved**: the GM, 2026-10-10, "please file a feature for the gadget"\n' >> "$FIX/specs/300-closed-by-status/spec.md"; commit "foreign approval under Done"
+push
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "a task added under a closed status; the approval line it adds quotes words" && ok "...and a foreign approval gets FR-012's own wording, not 'reopened'" || no "FR-012's not-found wording is wrong" "(rc=$RC) $OUT"
+git -C "$FIX" reset -q --hard HEAD~1
 sed -i 's/^- \[ \] T01/- [x] T01/' "$FIX/specs/300-closed-by-status/tasks.md"; commit "ticked"
 push
 [ "$RC" -eq 0 ] && ok "...and passes once the task is done and ticked" || no "a ticked task under Done was refused" "(rc=$RC)"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+printf -- '- [ ] T02 a leftover box, open when the feature closed\n' >> "$FIX/specs/300-closed-by-status/tasks.md"; commit "a leftover"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+sed -i 's/^- \[ \] T02/- [x] T02/' "$FIX/specs/300-closed-by-status/tasks.md"
+printf -- '- [ ] T03 new work slipped in\n' >> "$FIX/specs/300-closed-by-status/tasks.md"; commit "tick one, add one"
+push
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "300-closed-by-status" && ok "ticking a leftover box and adding a new one (the count unchanged) is still refused" || no "tick-one-add-one landed hidden work" "(rc=$RC)"
+sed -i 's/^- \[ \] T03/- [x] T03/' "$FIX/specs/300-closed-by-status/tasks.md"; commit "T03 done"
 git -C "$FIX" update-ref refs/remotes/origin/main HEAD
 run "make quick"
 [ "$RC" -eq 0 ] && ok "a command that is neither a git add/commit nor a push passes untouched" || no "make quick was refused" "(rc=$RC)"

@@ -105,7 +105,9 @@ verify against. Its repository is the command's last `cd` before the script, els
 directory's files at the base and at HEAD are written to a temporary tree and judged by the state function
 `feature()`, imported from `scripts/speckit-todo.py`, so the states cannot drift. SETTLED is `closed` or `done - GM review
 pending` (speckit-todo lists the second as open, but it holds only the GM's box - spec FR-011); anything else is open.
-FR-012 reads the same two trees: an unticked task added (more open boxes at HEAD than at the base) under a status line
+FR-012 reads the same two trees: an unticked task added - a task open at HEAD that was not open at the base, keyed by its id (`T07`) or, without one,
+its normalized line, never by a count (plan review: 17 closed features hold leftover open boxes, so tick-one-add-one
+leaves a count flat) under a status line
 `closed_by_status` reads as closed is refused the same way. A reopen's refusal prints the approval-free route first:
 finish, close, then push; FR-012's refusal prints the same route first (do the work, tick the task). Settled at the base and open at HEAD is refused, unless HEAD's `spec.md`
 holds an approval line the base's did not, whose quote verifies as in D2. Not at the commit: a reopen the session works
