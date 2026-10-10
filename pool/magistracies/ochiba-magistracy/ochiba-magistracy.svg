@@ -186,6 +186,7 @@
        size-audit hierarchy sweep, 2026-07) -->
   <g data-kind="stables">
     <rect x="220" y="674" width="88" height="66" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="304" y="700" width="4" height="14" fill="#4A3318" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100) -->
     <!-- stall divisions -->
     <line x1="249" y1="674" x2="249" y2="740" stroke="#6B4F2A" stroke-width="1"/>
     <line x1="278" y1="674" x2="278" y2="740" stroke="#6B4F2A" stroke-width="1"/>
@@ -508,6 +509,7 @@
        the freed strip went to the inner garden. -->
   <g data-kind="compound shrine">
     <rect data-id="compound-shrine-2" x="880" y="200" width="110" height="92" fill="#C9876C" stroke="#6B2A18" stroke-width="2.5"/>
+    <rect x="880" y="239" width="4" height="14" fill="#4A3318" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100) -->
     <!-- internal rail dividing W (Ta-no-Kami) and E (Myobu) -->
     <line data-id="compound-shrine-3" x1="935" y1="208" x2="935" y2="284" stroke="#5C1A0A" stroke-width="2"/>
     <!-- vermillion edging -->
@@ -585,7 +587,7 @@
          garden faces the reception rooms). It lies west of the nakamon-to-stone line, off the guests' way. -->
     <ellipse cx="537" cy="408" rx="40" ry="18" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- the stepping stone (kutsunugi-ishi) at the reception's veranda, on the line up from the nakamon -->
-    <rect x="594" y="373" width="12" height="8" rx="2" fill="#9C9488" stroke="#5C5448" stroke-width="0.8"/>
+    <rect id="shoe-stone" x="594" y="373" width="12" height="8" rx="2" fill="#9C9488" stroke="#5C5448" stroke-width="0.8"/>
     <text font-size="10" font-style="italic" fill="#3A2E1C"><tspan>inner</tspan><tspan>garden</tspan></text>
   </g>
 
@@ -712,7 +714,7 @@
   <!-- ============================================================ -->
   <!-- TOP LAYER - fire-water tubs (tensuioke), drawn last so their rims sit ON TOP        -->
   <!-- of the gardens and court, never buried. Each is GUTTER-FED by roof runoff, so it    -->
-  <!-- sits AGAINST its building at an eaves corner/downspout - DISTRIBUTED to the wooden   -->
+  <!-- sits AGAINST its building beside a door (0100; wave 106) - DISTRIBUTED to the wooden  -->
   <!-- buildings, weighted to the kitchen (2, open hearth); the fireproof plaster kura      -->
   <!-- carries none (halls burn, kura endure). The label sits beside the kitchen pair.      -->
   <!-- ============================================================ -->
@@ -732,10 +734,10 @@
     <circle cx="581" cy="470.5" r="3.8"/>
     <circle cx="331" cy="257.5" r="3.8"/>
     <circle cx="335" cy="374" r="3.8"/>
-    <circle cx="874" cy="286" r="3.8"/>
+    <circle cx="872.5" cy="231" r="3.8"/>
     <circle cx="939" cy="608.5" r="3.8"/>
     <circle cx="651" cy="710" r="3.8"/>
-    <circle cx="314" cy="680" r="3.8"/>
+    <circle cx="315.5" cy="693" r="3.8"/>
     <circle cx="366" cy="203.5" r="3.8"/>
   </g>
   <text font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs" data-names="fire-water-tubs">fire-water tubs</text>

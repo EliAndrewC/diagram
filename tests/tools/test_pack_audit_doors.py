@@ -44,7 +44,8 @@ def test_a_tub_stands_by_a_door_of_the_building_it_serves() -> None:
         )
     )
     off = pa.tubs_off_their_doors(plan)
-    assert [(t.x, t.y, round(t.door_ft, 1)) for t in off] == [(106, 5, 14.9)]  # the shed and the inner door judge nothing
+    # the shed and the building with only an inner room's door tag no entrance: their tubs cannot be judged, so they fail
+    assert [(t.x, t.y, round(t.door_ft, 1)) for t in off] == [(264, 30, float("inf")), (306, 210, float("inf")), (106, 5, 14.9)]
     outside = pa.parse_svg(
         _svg(
             _rect(0, 0, 400, 400, COURT),
@@ -54,3 +55,28 @@ def test_a_tub_stands_by_a_door_of_the_building_it_serves() -> None:
         )
     )
     assert pa.tubs_off_their_doors(outside) == []  # a door drawn just outside its wall is still on it
+
+
+def test_a_bath_tub_is_not_judged_and_a_declared_shoe_stone_is_an_entrance() -> None:
+    """A bath is entered from its house, so its tub is not judged by a door even under another building's eaves; the
+    reception's shoe stone, declared `id="shoe-stone"`, is its entrance (R07, research 0104)."""
+    bath = '<g data-kind="bath"><rect x="200" y="0" width="40" height="30" fill="#C9A57A"/></g>'
+    stone = '<rect id="shoe-stone" x="40" y="101" width="12" height="5" fill="#B8B0A0"/>'
+    plan = pa.parse_svg(
+        _svg(
+            _rect(0, 0, 400, 400, COURT),
+            _rect(0, 0, 100, 100, "#DDB87A"),
+            stone,
+            bath,
+            _tubgroup('<circle cx="62" cy="108" r="3.8"/>', '<circle cx="220" cy="37" r="3.8"/>', '<circle cx="5" cy="108" r="3.8"/>'),
+        )
+    )
+    assert [(t.x, t.y) for t in pa.tubs_off_their_doors(plan)] == [(5, 108)]  # 13 ft from the stone; the bath's passes
+
+
+def test_the_registry_says_a_doorless_building_tags_no_door() -> None:
+    from l7r.diagram.tools.pack_audit import registry as R
+
+    plan = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), _rect(0, 0, 100, 100, "#DDB87A"), _tubgroup('<circle cx="106" cy="50" r="3.8"/>')))
+    check = next(c for c in R.CHECKS if c.name == "tubs_off_their_doors")
+    assert check.run(R.Context(plan, "", None, None, None)) == ["a fire-water tub at svg(106,50) stands at a building that tags no door"]

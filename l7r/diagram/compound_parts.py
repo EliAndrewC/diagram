@@ -651,5 +651,5 @@ def _roji_parts(program: CompoundProgram, result: PlaceResult, taken: list[Box],
     for x, y in stones:
         rect(x - 1.0, y - 0.67, 2.0, 1.33, "none", "none", 0)  # registers the stone with the captions; its ellipse follows
         parts.append(f'<ellipse cx="{ox + x * FTPX:.0f}" cy="{oy + y * FTPX:.0f}" rx="3" ry="2"/>')
-    parts.append(rect(*shoe, "#9C9488", "#5C5448", 0.8))
+    parts.append(rect(*shoe, "#9C9488", "#5C5448", 0.8, "shoe-stone"))  # declared: the reception's entrance (pack_audit)
     parts.append("</g></g>")

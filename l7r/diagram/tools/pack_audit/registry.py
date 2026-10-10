@@ -73,7 +73,10 @@ def _tub_adrift(ctx: Context) -> list[str]:
 
 
 def _tub_off_its_door(ctx: Context) -> list[str]:
-    return [f"a fire-water tub at svg({t.x:.0f},{t.y:.0f}) stands {t.door_ft:.1f} ft from its building's nearest door" for t in c.tubs_off_their_doors(ctx.plan)]
+    return [
+        f"a fire-water tub at svg({t.x:.0f},{t.y:.0f}) " + (f"stands {t.door_ft:.1f} ft from its building's nearest door" if t.door_ft != float("inf") else "stands at a building that tags no door")
+        for t in c.tubs_off_their_doors(ctx.plan)
+    ]
 
 
 def _tub_in_building(ctx: Context) -> list[str]:

@@ -89,22 +89,28 @@ class TubOffItsDoor:
 
     x: float
     y: float
-    door_ft: float  # the center-to-center distance to the nearest door of the buildings it serves
+    door_ft: float  # the center-to-center distance to the nearest door of the buildings it serves; inf: none draws a door
 
 
-# A door glyph is drawn inside its wall's line or just outside it (Hayakawa's kitchen door stands on the face, 6 px out)
-DOOR_ON_WALL_PX = 2.0 * FTPX
+# A door glyph is drawn inside its wall's line or just outside it - a step or a porch board (Hayakawa's kitchen door stands
+# 6 px out, its guest house's entrance 8 px: plan review of wave 106)
+DOOR_ON_WALL_PX = 4.0 * FTPX
+# The reception's way in: the guest steps up from the shoe stone at its veranda (R07, research 0104 - no genkan), so a stone
+# the sheet DECLARES (`id="shoe-stone"`, as it declares its hall or its well) is that building's entrance (wave 106)
+SHOE_STONE_ID = "shoe-stone"
+# A bath is entered from the house it abuts (no outside door): its tub stands on its yard side, judged by no door
+DOORLESS_KINDS = frozenset({"bath"})
 
 
 def doors_of(plan: ParsedPlan, b: Rect) -> list[tuple[float, float]]:
     """The centers (px) of the doors on building `b`: each rect the sheet tags `door` (its own tags, feature 262 - a
-    small dark rect may as well be a hearth) lying on its outline: within DOOR_ON_WALL_PX of the footprint and of one of
+    small dark rect may as well be a hearth) or the shoe stone it declares (SHOE_STONE_ID), lying on its outline: within DOOR_ON_WALL_PX of the footprint and of one of
     its edges (an inner room's door, deep inside, is no entrance)."""
     m = DOOR_ON_WALL_PX
     return [
         (d.x + d.w / 2, d.y + d.h / 2)
         for d in plan.fills
-        if plan.label_kinds.get(d.pos) == "door"
+        if (plan.label_kinds.get(d.pos) == "door" or d.ident == SHOE_STONE_ID)
         and d.x >= b.x - m
         and d.x2 <= b.x2 + m
         and d.y >= b.y - m
@@ -116,16 +122,19 @@ def doors_of(plan: ParsedPlan, b: Rect) -> list[tuple[float, float]]:
 def tubs_off_their_doors(plan: ParsedPlan) -> list[TubOffItsDoor]:
     """Fire-water tubs that stand at a building's wall but not at its entrance (feature 372 wave 106): research 0100 keeps
     standing water at a wooden building's entrance, so a tub's center stands within TUB_DOOR_MAX_FT of a door of a
-    building whose eaves hold it (`tub_by_its_door`, the predicate the draft seats by). A tub whose buildings draw no door
-    is not judged here; one adrift of every building is `fire_water_adrift`'s. Worst (farthest) first."""
+    building whose eaves hold it (`tub_by_its_door`, the predicate the draft seats by). A tub whose buildings tag no door
+    fails too (its door is drawn and tagged, or it cannot be judged - plan review of wave 106). A tub at a bath, entered
+    from its house (DOORLESS_KINDS), is not judged by a door; one adrift of every building is `fire_water_adrift`'s. Worst first."""
     out: list[TubOffItsDoor] = []
     for t in plan.tubs:
         cx, cy = t.x + t.w / 2, t.y + t.h / 2
         hosts = [b for b in plan.buildings if tub_by_its_eaves((cx / FTPX, cy / FTPX), _ft_box(b))]
         doors = [(dx / FTPX, dy / FTPX) for b in hosts for dx, dy in doors_of(plan, b)]
-        if not doors or tub_by_its_door((cx / FTPX, cy / FTPX), doors):
+        if not hosts or any(plan.label_kinds.get(b.pos) in DOORLESS_KINDS for b in hosts):
+            continue  # a bath's tub stands on its yard side, whatever else's eaves reach it (Ochiba's under the veranda's)
+        if doors and tub_by_its_door((cx / FTPX, cy / FTPX), doors):
             continue
-        out.append(TubOffItsDoor(cx, cy, min(math.hypot(cx / FTPX - dx, cy / FTPX - dy) for dx, dy in doors)))
+        out.append(TubOffItsDoor(cx, cy, min((math.hypot(cx / FTPX - dx, cy / FTPX - dy) for dx, dy in doors), default=math.inf)))
     out.sort(key=lambda t: t.door_ft, reverse=True)
     return out
 

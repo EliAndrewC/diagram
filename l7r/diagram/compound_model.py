@@ -99,6 +99,11 @@ DOOR_KINDS: frozenset[str] = frozenset(
         "barracks",
         "servants' quarters",
         "gatehouse",
+        # every wooden building with a fire-water tub carries a door, so its tub stands at its entrance (research 0100;
+        # feature 372 wave 106, plan review: the cell, the workshop and the clerks' room had none, their tubs unjudged)
+        "cell",
+        "cinnabar workshop",
+        "clerks' room",
     }
 )
 # The fracs along a face a door is tried at, the middle first: a tub or a well holds a face's ends or middle.

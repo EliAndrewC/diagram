@@ -203,6 +203,17 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   (its wording suggestion, "the kitchen's two one either side", left: one more visible edit re-owes five checks), modal-depiction
   clean on the four pop-ups 0100's drawing page feeds (the storehouse's ken given its feet and the archive's "pale" dropped, each
   as the check proposed; the archive's crop shows the page's highlight, not the drawn fill - the modal-bundle gap this spec lists).
+- **Plan review round 1 (BLOCKED, decision c)**: a building that tagged no door left its tub unjudged - 23 of 77 tubs, some
+  still at eaves corners. Now the check FAILS a tub at a building with no entrance, reads a door drawn up to 4 ft off its wall
+  (Hayakawa's guest house's was 8 px out), and takes the reception's shoe stone, declared `id="shoe-stone"`, as its entrance
+  (R07, research 0104: no genkan - no door is drawn on the veranda); a tub at a bath, entered from the house, is not judged by
+  a door (decision c3). The hand sheets are brought to the draft's rule that every building draws its door ("a building with
+  no drawn door reads as sealed", pass 5): ten doors drawn, each on the face toward its approach or yard, in each sheet's small
+  dark door style; the drafts' cell, cinnabar workshop and clerks' room join `DOOR_KINDS`. Ten more tubs moved. The roof seat
+  0100 also attests is not drawn (the GM's footprint ruling), now on 0100's drawing page and in the Decisions row; the page's
+  bullet takes the record-format check's wording too, in the same edit. m:wave106-tubs-at-doors restated per sheet, strict.
+  Hoshigaoka's `glyph-check--door` and `size-audit--door` units are waived: its door ink predates the wave, only the tag is
+  new, and the door kind is reviewed on the three magistracy sheets.
 - **Records**: m:wave106-tubs-at-doors; the six sheets' notes.
 - **Occasions**: placement-changed: fire-water tubs on ubame-magistracy (every hand sheet's tubs re-seated); layout-revised:
   county-magistracy-example (the draft's tub seat).

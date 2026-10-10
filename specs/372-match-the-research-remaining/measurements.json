@@ -381,35 +381,36 @@
     "observed": "2026-10-10",
     "source": "the six sheets the row names, read by make pack-audit (tubs_off_their_doors) at origin/main and in the clone",
     "command": "make pack-audit ARGS=<each sheet's svg>",
-    "method": "tubs_off_their_doors: each tub held by a building's eaves stands within TUB_DOOR_MAX_FT (10.5 ft) of a door the sheet tags on that building's outline; a tub whose buildings tag no door is not judged",
-    "quantity": "fire-water tubs off their building's doors, per sheet, before and after wave 106",
+    "method": "tubs_off_their_doors (strict, after plan review round 1): each tub held by a building's eaves stands within TUB_DOOR_MAX_FT (10.5 ft) of an entrance on that building's outline - a rect the sheet tags `door` (within 4 ft of the wall) or its declared shoe stone; a tub at a building that draws no entrance FAILS; a tub at a bath is not judged by a door",
+    "quantity": "fire-water tubs off their building's entrance or at a building with none, per sheet, at origin/main and after wave 106",
     "value": {
       "hayakawa": {
-        "before": "7 of 13",
-        "after": "0 of 13"
+        "before": "13 tubs: 7 far from a door, 3 at a building with no door",
+        "after": "0 of 13 off (a tub at a bath is not judged by a door)"
       },
       "ochiba": {
-        "before": "5 of 10",
-        "after": "0 of 10"
+        "before": "10 tubs: 5 far from a door, 2 at a building with no door",
+        "after": "0 of 10 off (a tub at a bath is not judged by a door)"
       },
       "ubame": {
-        "before": "9 of 19",
-        "after": "0 of 19"
+        "before": "19 tubs: 10 far from a door, 7 at a building with no door",
+        "after": "0 of 19 off (a tub at a bath is not judged by a door)"
       },
       "hoshigaoka": {
-        "before": "0 of 4 judged (no door tagged; all four at the corners)",
-        "after": "0 of 4, its two doors tagged, two tubs beside each"
+        "before": "4 tubs, all 4 at a building with no door (its doors untagged; the tubs at its corners)",
+        "after": "4 judged, 0 off: its two doors tagged, two tubs beside each"
       },
       "county-magistracy-example": {
-        "before": "not measured under the final reading (the first reading, which took a hearth for a door, gave 9 of 14)",
-        "after": "0 of 14"
+        "before": "not measured under the strict reading (generated, not tracked at main)",
+        "after": "14 tubs, 0 off (the bath's not judged by a door)"
       },
       "ochiba-roundtrip-test": {
-        "before": "not measured under the final reading (the first gave 12 of 17)",
-        "after": "0 of 17"
+        "before": "not measured under the strict reading (generated, not tracked at main)",
+        "after": "17 tubs, 0 off"
       },
-      "limit": "10.5 ft: the kitchen's second tub beside its first at one 6 ft door, past the door's held approach and the draft's 1 ft clearance, stands ~10.2 ft off (compound_model.TUB_DOOR_MAX_FT)",
-      "tests": "test_compound 77 passed, test_pack_audit 90, test_registry 69 (the red fixture ochiba-tub-off-door-red.svg fires), test_mode_a_sheets 27"
+      "doors drawn": "ten: Hayakawa's Fire Dragon shrine (west face, toward its torii) and stables (south, the stable yard); Ochiba's compound shrine (west) and stables (east); Ubame's shrine (west), stables (east), granary (south), tally office (south) and office hall (west); the drafts' cell, cinnabar workshop and clerks' room (DOOR_KINDS)",
+      "shoe stones declared": "Hayakawa, Ochiba and Ubame (id=\"shoe-stone\"), and the draft's",
+      "limit": "10.5 ft: the kitchen's second tub beside its first at one 6 ft door, past the door's held approach and the draft's 1 ft clearance, stands ~10.2 ft off (compound_model.TUB_DOOR_MAX_FT)"
     }
   }
 }

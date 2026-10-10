@@ -1,46 +1,98 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "5bf71ee40a130a65eafaba2d6ac7a3959e026e4b82ca30e165ebd5dcda555746",
+ "plan_sha256": "5cdbea00eb81a35a36d66b2fab1cfbb8aefb24c693fa7f5abd0c405eeb9ed42c",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "B4-fixtures",
-   "summary": "Batch 4's first gate: the 26 frozen red fixtures' copied tax archive brought to 72 x 54 px (east face kept) so each still fires only its own check",
-   "class": "within",
-   "why": "test fixtures kept true to the band wave 105 tightened; no check loosened, each fixture still fires the one check it exists for; changes no drawn map"
-  },
-  {
-   "id": "B4-E1-yard",
-   "summary": "E1: the draft's outer-court yard zone starts at the hearing court's east edge (x 141 -> 155.5 ft, its east end 188 kept); test_compound holds that no two of the draft's zones share ground",
-   "class": "within",
-   "why": "a regression wave 105 introduced (the court re-centered to 75.5-155.5 ft, the yard drawn after it over 141-155.5 ft), fixed in the wave (XIII/XIV); the yard is an unfenced open-ground zone whose bounds are a drawing convention, so shortening it to where the court ends drops nothing asked; the test only fails when the requested drawing is broken (enforcement). Read: compound.py diff, the draft's svg (court rect x 248-488 px), m:batch4-county-yard-off-the-court"
-  },
-  {
-   "id": "B4-E2-notes",
-   "summary": "E2: the draft's notes brought current (archive size, a wave 105 entry, the middle gate's reason, the archive's proportions labeled GUESS)",
-   "class": "within",
-   "why": "records matching what is drawn; labels an unlabeled guess (the project's one failure)"
-  },
-  {
-   "id": "B4-E3-longhouse",
-   "summary": "E3: the staff long-house's squat 50 x 36 ft form against 0097's rowhouse (<=~24 ft deep) filed as a found E3 row in the ranking, not fixed in wave 105",
-   "class": "within",
-   "why": "predates the wave (pass 6's form, untouched by wave 105); now on FR-001's work list as a found row, scope kept, wave blank, ranking.md row 53, with the full fix written (redraw <=24 ft deep, bays side by side, reseat). The request is fix all of it easiest-first in ranked order; ranking it is that order, not a drop. Nothing narrowed"
-  },
-  {
-   "id": "B4-E4-barracks",
-   "summary": "E4: the barracks left for its ranked row #barracks",
-   "class": "within",
-   "why": "an open ranked row (ranking.json: tier E3, scope mode-a, wave blank) already on the work list; FR-001 keeps the ranking's order (same as W105-drifted-left)"
-  },
-  {
-   "id": "B4-no-pair",
-   "summary": "Bookends row 4: no timing pair at batch 4's close because its engine code (types.json band, compound.py draft, the roundtrip gen, pack_audit's coverage floor) is off the pair's path",
+   "id": "W106-a one rule, not a knob",
+   "summary": "each tub beside a door of its building; the roof seat 0100 also attests is not drawn",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "narrows FR-003's literal 'one timing pair' and SC-002's 'its pair band recorded and audited', and supersedes the previous record's B4-open ('bookends owed at the close'). Premise MEASURED, not taken on trust: the pair is make perf (perf_snapshot rolls the reference hamlet via hamletgen); importing hamletgen, its driver and plan loads 245 l7r modules and none of compound, compound_model, compound_parts, pack_audit or buildings.types; no file under hamletgen/ or settlement/ imports them or reads types.json. So the pair would time byte-identical code at both ends: by construction it cannot detect any regression this batch made, and its band could only be load noise - which, read as band 3, FR-003 would send to the GM as a sign-off on nothing. The rule's purpose cannot be served on this batch. Condition: this holds only while a batch's engine code stays off the hamlet roll path; a batch touching code the pair rolls takes its pair"
+   "why": "The ranked fix itself offers 'at the wooden building's entrance' as its first alternative, and the GM's 2026-07-25/26 ruling (no part of a tub glyph in a footprint) leaves the roof seat undrawable on a plan, so the exception is implied by the GM's own words. Recording gap, not a fidelity block: the roof seat's omission is stated only in plan.md - neither the spec's wave-106 Decisions Recorded row nor 0100's drawing page says the roof seat is deliberately not drawn and why."
+  },
+  {
+   "id": "W106-b the 10.5 ft limit",
+   "summary": "TUB_DOOR_MAX_FT 10.5 ft, a CONVENTION from the kitchen's second tub side by side at one door",
+   "class": "within",
+   "why": "0100 gives no distance; a check needs one; it is labeled CONVENTION at the code, the doc and the drawing page. Re-measured on the six sheets (judged tubs): farthest 10.4 ft (round-trip), 10.0 ft (Ochiba), 9.9 ft (Ubame)."
+  },
+  {
+   "id": "W106-c1 a tagged door past the outline tolerance",
+   "summary": "doors_of keeps a tagged door only within DOOR_ON_WALL_PX (6 px) of the footprint; a building whose tagged entrance stands farther out is treated as drawing no door, so its tub is not judged",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Measured in the clone (pack_audit's own parse, doors_of at 12 px instead of 6): Hayakawa's guest house tags its entrance (rect 925,300 30x8, 'entry from the guest garden') 8 px out, so its tub at (888,210) - 35.8 ft from that door, at the NW corner - passes unjudged; Ubame's tub at (246,256) stands 49.7 ft from its building's tagged door, likewise unjudged. These are exactly the row's defect (a tub at a wall or eaves corner, not the entrance) passing because the check misreads a drawn door. Not impossible: widen the tolerance to the door glyphs the sheets actually draw, then re-seat."
+  },
+  {
+   "id": "W106-c2 a wooden building that draws no door is not judged (hand sheets and the draft's court-face fallback)",
+   "summary": "a tub whose host buildings tag no door is exempt from tubs_off_their_doors; the hand sheets' tubs at such buildings were left where they stood, and the draft seats a door-less building's tub on the court face 'as before'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Measured: 23 of the six sheets' 77 tubs are unjudged - Hayakawa 5 of 13, Ochiba 3 of 10, Ubame 9 of 19, the county draft 2 of 14, the round-trip sheet 4 of 17 (Hoshigaoka 0 of 4). Several still stand where the row says they must not, by the sheets' own comments: Hayakawa's stables tub 'NW eaves corner', the residence east block's 'off the veranda's SE corner', the Fire Dragon shrine's 'against the east eaves'; the round-trip sheet's cinnabar workshop and clerks' room draw no door and take the old court-face seat. The ranked fix names all six sheets and says 'not at a wall or eaves corner'; the exemption is word-plausible (no door to measure to) and purpose-fatal (the defect survives on ~30% of tubs). Not physically impossible: this same wave tagged Hoshigaoka's doors precisely so its corner tubs could be judged and moved - the remedy (draw or tag the entrance of each tubbed wooden building, on the sheets and in the draft's door emission, then seat the tub beside it) was applied to one sheet and withheld from five. The figure m:wave106-tubs-at-doors misstates the same thing: 'after 0 of 13' (Hayakawa), '0 of 19' (Ubame) and the rest count unjudged tubs in the denominator as passing, while Hoshigaoka's 'before' line says '0 of 4 judged'; restate each sheet as judged / unjudged."
+  },
+  {
+   "id": "W106-c3 the bath takes the court face",
+   "summary": "the draft's bath (10x8 ft, appended as a tub host beside the kitchen) carries no door and its tub falls back to the court face",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Adjudicated apart from c2 (MODE 1's seam rule): a bath entered from the house has no exterior entrance to stand water at, so the entrance seat is physically absent - provided the bath is in fact drawn with no outside door. The plan does not distinguish this case; it should be recorded as its own decision (spec Decisions Recorded and the point of change) when c2 is fixed, or the bath given its door."
+  },
+  {
+   "id": "W106-d2 no clear seat beside a door",
+   "summary": "the draft falls back to the court face when a door-tagged building has no clear seat beside or round the corner from its door",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Applies only where the seat is physically unavailable, and because the building's doors are tagged, tubs_off_their_doors reports such a tub rather than passing it silently; the county draft has none (12 judged tubs at 7.0-7.2 ft)."
+  },
+  {
+   "id": "W106-corner round the corner for a short face",
+   "summary": "a face too short for a tub beside its door (the gatehouse's 12 ft end) takes one round the corner nearest the door, still within 10.5 ft",
+   "class": "within",
+   "why": "Still beside the entrance by the same measure; labeled UNRESEARCHED at docs/buildings.md."
+  },
+  {
+   "id": "W106-d Ochiba's residence tub at the family's door",
+   "summary": "the residence's tub at the notch corner by the family's door, ~5 ft, not by the guests' stepping stone",
+   "class": "within",
+   "why": "The residence's only drawn door is the family's (an uchi-genkan in function; 0100's original is genkan-saki); the guests' way in is a stepping stone at the reception's veranda, not a door, and the formal genkan is on the office hall. Re-measured 4.9 ft. Aside: the sheet's tub-layer comment still reads 'sits AGAINST its building at an eaves corner/downspout' and the pass-2/3 comments describe corner seats - stale against the new rule."
+  },
+  {
+   "id": "W106-e record-format wording left",
+   "summary": "the drawing page's 'the kitchen's two one either side of its door' not reworded",
+   "class": "within",
+   "why": "A wording suggestion; leaving it narrows nothing the GM asked for."
+  },
+  {
+   "id": "W106-f count rows left to their own rows",
+   "summary": "#one tub per wooden building (held) and the country shrine's #fire-water count are not this wave's",
+   "class": "within",
+   "why": "Separate ranked rows taken in FR-001's order; nothing in this wave contradicts their fixes."
+  },
+  {
+   "id": "W106-g Hoshigaoka's doors tagged, two tubs beside each",
+   "summary": "the country-shrine sheet's two doors tagged and its four corner tubs re-seated two per door",
+   "class": "within",
+   "why": "The country-shrine Mode A sheet is named by the row and in scope under amendment 8; its count is the separate #fire-water row's."
+  },
+  {
+   "id": "W106-h pop-up fixes",
+   "summary": "the storehouse's ken given feet, the archive's 'pale' dropped, as modal-depiction proposed",
+   "class": "within",
+   "why": "Defects found in the work at hand (constitution XIV)."
+  },
+  {
+   "id": "W106-i found row E0 left for its wave",
+   "summary": "'fire-water tubs at a village shrine' UNCLAIMED, ranked as a found row",
+   "class": "within",
+   "why": "Recorded in the ranking per FR-001; not this row."
+  },
+  {
+   "id": "W106-j occasions",
+   "summary": "placement-changed on ubame-magistracy for every hand sheet's tubs; layout-revised on the county draft",
+   "class": "within",
+   "why": "Review occasions are the feature-294 procedure under 328's FR-005; not a narrowing of the request."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
