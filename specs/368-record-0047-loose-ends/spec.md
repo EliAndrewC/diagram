@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec accepted, planning
+**Status**: In progress - plan CLEAR, record write queued (M2)
 
 **Affects**: research record
 
