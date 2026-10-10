@@ -176,6 +176,19 @@ def test_rounds_reversals_and_subjects() -> None:
     assert fr._hm(3700) == "1 h 02 min" and fr._hm(90) == "2 min"
 
 
+def test_a_round_is_a_capped_check_that_ran() -> None:
+    """374, 2026-10-10: three building-review dispatches the pair hook refused, then the three that ran, read as third rounds;
+    so did a general-purpose modal triage. A refused dispatch has no PostToolUse; an ad-hoc agent has no cap."""
+    br = {"ev": "PreToolUse", "tool": "Agent", "cat": "review check", "agent": "building-review", "unit": "building-review--x,"}
+    evs = [{**br, "t": str(i), "id": f"a{i}"} for i in range(5)]
+    evs += [{"ev": "PostToolUse", "tool": "Agent", "id": i} for i in ("a0", "a3")]
+    evs += [{"ev": "PreToolUse", "tool": "Agent", "cat": "record check", "agent": "general-purpose", "manifest": "/t/modal-triage/MANIFEST.md", "t": str(9 + i)} for i in range(3)]
+    assert fr.tripwires(evs) == []
+    evs.append({"ev": "PostToolUse", "tool": "Agent", "id": "a4"})
+    assert fr.tripwires(evs) == [("4", "round:building-review|building-review--x@3")]
+    assert el.line({"hook_event_name": "PreToolUse", "tool_name": "Agent", "tool_input": {"subagent_type": "building-review", "prompt": "UNIT: building-review--y, on the sheet"}})["unit"] == "building-review--y"
+
+
 def _git(repo: Path, *args: str) -> None:
     env = {
         "GIT_AUTHOR_NAME": "a",

@@ -153,9 +153,15 @@ def tripwires(events: Sequence[Mapping[str, Any]], gate_results: Sequence[tuple[
     one subject, an Edit putting back replaced text, a round run on the GM's waiver, and a second red gate in a row."""
     out: list[tuple[str, str]] = []
     count: Counter[tuple[str, str]] = Counter()
+    # a ROUND is a check that ran: a dispatch the hooks refused has no PostToolUse, and an ad-hoc agent (a general-purpose
+    # triage) has no round cap - counting either reported 374's refused building-review retries as third rounds (2026-10-10)
+    ran = {str(e.get("id")) for e in events if e["ev"] == "PostToolUse" and e.get("tool") == "Agent"}
+    capped = el.RECORD_CHECKS | el.CLAIMS_CHECKS | el.REVIEW_CHECKS
     for e in events:
-        if e["ev"] == "PreToolUse" and e.get("tool") == "Agent" and e.get("cat") in CHECK_CATS:
-            unit = subject(str(e["manifest"])) if e.get("manifest") else str(e.get("unit") or "")
+        if e["ev"] == "PreToolUse" and e.get("tool") == "Agent" and e.get("cat") in CHECK_CATS and e.get("agent") in capped:
+            if e.get("id") and str(e["id"]) not in ran:
+                continue
+            unit = subject(str(e["manifest"])) if e.get("manifest") else str(e.get("unit") or "").rstrip(",;.")
             if unit:
                 count[(str(e.get("agent")), unit)] += 1
                 n = count[(str(e.get("agent")), unit)]
