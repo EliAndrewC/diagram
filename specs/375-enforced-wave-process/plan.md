@@ -242,9 +242,14 @@ a gate where a red it prevents costs a whole one; (2) "100% on each" changed eng
 stops only on a line OFF the hamlet path (`tools/claims.scope`): a line on the path may be reached only by a rolled map, which
 the preflight does not roll, so it is reported and left to the gate's floor; and `ci/`, which the project counts as no engine
 code (feature 132 FR-025) and tests only in the tooling tree, is left to the gate. `PREFLIGHT_OK="<reason>"` skips the phase,
-reason-floored and recorded in the guard census through LOGESCAPE - the sixth escape. A changed line in a module tested
-only where the quick tier does not run (a `tooling`-marked test under `tests/tools/`, a town or city tier test - found by the
-mirrored layout) is reported and left to the gate's floor, as a hamlet-path line is. The tree check excludes the tracked files the gate itself writes (`GATE_WRITES`,
+reason-floored and recorded in the guard census through LOGESCAPE - the sixth escape. A changed line in a module that a test
+outside the quick tier reaches - a `tooling`-marked test under `tests/tools/`, a town or city tier test, found by the mirrored
+layout, a whole package where the test names one - is reported and left to the gate's floor whether or not a quick test also
+reaches the module, as a hamlet-path line is: within seconds the preflight cannot tell whether such a test runs the line. The
+reach, listed by the plan review (2026-10-10): `citybudget.py`, `settlement/core.py`, `trades.py`, `castle_civic.py`, eight
+whole `settlement/` packages (87 files: structures, city, civic_grounds, homestead_parts, shrines_wells, land, water_ways,
+rolling) and five audits (cache_audit, cohort_audit, roll_audit, perf_profile, mapcheck). Wave 106's two untested lines
+(`compound.py`, `tools/pack_audit/`) are outside it and still stop the preflight. The tree check excludes the tracked files the gate itself writes (`GATE_WRITES`,
 measured on this batch's gate run). D13's list of features closed when the check landed includes 372, closed by its ticks.
 
 A later spec that
