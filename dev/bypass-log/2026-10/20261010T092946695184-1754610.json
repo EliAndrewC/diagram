@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-10T09:29:46Z",
+  "target": "review-accept",
+  "commit": "144b0ff10",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--road F4: the road glyph's dash on a wide road reads as ribs; no norm sets the dash against the width, left as the road glyph every sheet draws"
+}

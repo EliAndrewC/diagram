@@ -1,56 +1,74 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "1c6939b139a6c254a45a79fb733eb197aab9c1d615f8acdc47dfdc0230ad3867",
+ "plan_sha256": "d9007ada86936fb1846d10be272d690df3daf6562665a392e7587c6793f7dae0",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W104-size",
-   "summary": "All four gate boards drawn as 0190's frame: 16 x 6 ft (48 x 18 px), long side to the road, on a footing 2 ft wider all round (60 x 30 px) with a fence line",
+   "summary": "All four gate boards drawn as 0190's frame 16 x 6 ft on a footing 2 ft wider all round with a fence line",
    "class": "within",
-   "why": "unchanged since the round-1 CLEAR: 0190's drawing page draws every board so; magistracies are in scope by 328's amendment 8"
+   "why": "unchanged since the earlier CLEAR rounds: 0190's drawing page draws every board so"
   },
   {
    "id": "W104-roof-fence-glyph",
-   "summary": "Roof as a ridge line along the frame, fence as a dashed line at the footing's edge",
+   "summary": "Roof as a ridge line, fence as a dashed line at the footing's edge",
    "class": "within",
-   "why": "a drawing of the page's roofed frame and fence line; nothing on the page dropped"
+   "why": "a drawing of the page's roofed frame and fence; nothing dropped"
   },
   {
    "id": "W104-site",
-   "summary": "Each gate board on the road's far verge straight across from its gate (replacing the near-edge site that stood in the road)",
+   "summary": "Each gate board on the road's far verge straight across from its gate",
    "class": "within",
-   "why": "0190: every board stands on a road or street, beside it, never set back and never in it; 0088 (wave 103): the gate opens straight onto the road with no wider ground before it, so the far verge is the only roadside ground at the gate; the board stays 'at the office's own gate' (0190's GUESS). Checked on the ink: Ochiba's footing starts at y 845 against the road's far edge at 844.5, Hayakawa's and Ubame's at 809 against 808.5"
+   "why": "0190 beside the road never in it; 0088 the gate opens straight onto the road; checked on the ink (m batch3-boards-off-the-road)"
   },
   {
    "id": "W104-bounty-west",
-   "summary": "Ubame's bounty board beside its notice board on the same verge, west, not mirrored about the gate",
+   "summary": "Ubame's bounty board beside its notice board on the same verge, west",
    "class": "within",
-   "why": "both boards stay at the gate beside the road; which side of its neighbor it stands on is a placement detail no page or GM word settles"
+   "why": "a placement detail no page or GM word settles; both boards stay at the gate beside the road"
   },
   {
    "id": "W104-limit",
-   "summary": "compound_model.NOTICE_BOARD_MAX_FT raised 20 -> 40 ft, a GUESS claimed against 0190's drawing page, so a board facing its gate across the Imperial road's 30 ft passes notice_board_adrift",
+   "summary": "NOTICE_BOARD_MAX_FT 20 -> 40 ft, now labeled this project's figure, UNRESEARCHED (was worded GUESS against 0190)",
    "class": "within",
-   "why": "the 20 ft is a project tolerance from feature 287's census (H29b), on no research page and no GM ruling, set while boards stood at the wall; held at 20 it would force the boards back into the road or against the wall, contrary to 0190 and 0088. Raising it narrows nothing the GM asked (328's request: make the maps match the research); it changes a project number to let the research's placement stand, labeled GUESS with its why beside it. The check still enforces the board-by-the-gate rule: both red fixtures and the draft test's far case were moved out so it still fires. The 40 over the measured ~30-32 ft (Ochiba's footing/frame from the opening) is slack a GUESS may carry"
+   "why": "the 20 ft was a project tolerance on no page; held at 20 it would push the boards back into the road against 0190 and 0088. The relabel is the more honest class: 0190 gives no distance, so the number is this project's; code claim, plan and spec Decisions row agree (compound_model.py docstring, spec line 86)"
   },
   {
    "id": "W104-fixtures",
-   "summary": "The two frozen red fixtures' misplaced boards moved farther out (Ochiba 90 px, Hayakawa 80) and test_compound's far case 40 -> 60 ft, so the check still fails on them",
+   "summary": "Red fixtures' boards moved farther out so notice_board_adrift still fires",
    "class": "within",
-   "why": "preserves the enforcement the check exists for under the new limit; no behavior added"
+   "why": "keeps the enforcement under the new limit; no behavior added"
   },
   {
-   "id": "W104-occasion",
-   "summary": "glyph-redrawn occasion on ubame-magistracy standing for the same glyph on all three sheets",
+   "id": "W104-road-edge",
+   "summary": "Ochiba's road edge set on the wall's outer face, closing a half-foot strip under the wall (road check F6)",
    "class": "within",
-   "why": "process; narrows nothing drawn"
+   "why": "0088: the gate opens straight onto the road with no ground before it; the strip contradicted that, so closing it carries the wave-103 rule out"
   },
   {
-   "id": "W104-records",
-   "summary": "Decisions row for the far-verge site and the limit (GUESS), m:wave104-notice-boards updated, the claim, three sheets' notes",
+   "id": "B3-no-pair",
+   "summary": "Batch 3 bookends: no timing pair owed, the batch's engine code (pack_audit shared.py crop check and registry.py hint text; compound_model.NOTICE_BOARD_MAX_FT) not in what the pair rolls",
    "class": "within",
-   "why": "records the decisions under their labels"
+   "why": "measured, not asserted: make perf runs perf_snapshot, which rolls hamletgen's reference hamlet stages (perf_snapshot.py lines 112-114); grep finds no import of compound_model, compound_parts or tools.pack_audit anywhere under hamletgen, settlement or waterfields - the constant's readers are compound_parts.board_by_a_gate (the compound draft) and pack_audit only. A pair would time byte-identical code on its path, so skipping it narrows nothing the pair exists to catch; the gate (make done) still ran green at the engine key that holds the change. Same reasoning as batches 1-2. The row says 'pack_audit's crop check' and omits registry.py's fix-hint string (20 -> 40 ft), also pack_audit - an omission of wording, not of substance"
+  },
+  {
+   "id": "B3-note-box",
+   "summary": "Ubame's border note box moved below the road (round 2 F7: the caption placer had put the note on the road)",
+   "class": "within",
+   "why": "a fix of a defect the review found, following from wave 103's road; narrows nothing"
+  },
+  {
+   "id": "B3-roofed-wording",
+   "summary": "Ubame's notes drop 'roofed' as the bounty board's distinguishing word",
+   "class": "within",
+   "why": "every board is now 0190's roofed frame, so 'a second, roofed board' wrongly implied the first was not; the drawing is unchanged"
+  },
+  {
+   "id": "B3-close",
+   "summary": "Batch 3 closed: road PASS, notice board NEEDS-WORK then PASS round 2, ledger rows written, occasions retired",
+   "class": "within",
+   "why": "process; the ledger rows and the tasks.md occasion lines match the reported verdicts"
   }
  ],
  "verdict": "CLEAR"

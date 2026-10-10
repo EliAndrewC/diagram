@@ -190,5 +190,68 @@
         40
       ]
     }
+  },
+  "batch3-boards-off-the-road": {
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/{ubame,ochiba}-magistracy/*.svg at the batch 3 gate; make pack-audit on each",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the board footings' and the road's rects read; the audit's notice_board_adrift and gate_feeds_its_road",
+    "quantity": "the notice board check's F1: the gate boards off the road, on its far verge",
+    "verifies": "F1",
+    "subject": "glyph-check--notice-board",
+    "answers": "a19f07ecfa6a",
+    "value": {
+      "ubame_road_px": [
+        754,
+        808
+      ],
+      "ubame_footings_y": [
+        809,
+        839
+      ],
+      "ochiba_road_px": [
+        754.5,
+        844.5
+      ],
+      "ochiba_footing_y": [
+        845,
+        875
+      ],
+      "reading": "every footing starts past the road's far edge; no board stands on road ink; notice_board_adrift OK at 40 ft"
+    }
+  },
+  "batch3-boards-off-mirror": {
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/{ubame,ochiba}-magistracy/*.svg at the batch 3 gate; make pack-audit on each",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the board footings' and the road's rects read; the audit's notice_board_adrift and gate_feeds_its_road",
+    "quantity": "the notice board check's F2: Ubame's two boards no longer mirror about the gate",
+    "verifies": "F2",
+    "subject": "glyph-check--notice-board",
+    "answers": "a19f07ecfa6a",
+    "value": {
+      "gate_center_x": 633,
+      "notice_board_center_x": 633,
+      "bounty_board_center_x": 560,
+      "reading": "the notice board straight across from the gate, the bounty board beside it to the west; not a pair about the opening"
+    }
+  },
+  "batch3-road-on-the-wall-face": {
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/{ubame,ochiba}-magistracy/*.svg at the batch 3 gate; make pack-audit on each",
+    "command": "grep -n 'M 180 799.5 L 1020 799.5' pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "method": "the board footings' and the road's rects read; the audit's notice_board_adrift and gate_feeds_its_road",
+    "quantity": "the road check's F6: Ochiba's road edge on the wall's outer face",
+    "verifies": "F6",
+    "subject": "glyph-check--road",
+    "answers": "a19f07ecfa6a",
+    "value": {
+      "road_center_y": [
+        801,
+        799.5
+      ],
+      "road_near_edge_y": 754.5,
+      "reading": "the road's near edge at the wall's outer face, closing the half-foot strip"
+    }
   }
 }

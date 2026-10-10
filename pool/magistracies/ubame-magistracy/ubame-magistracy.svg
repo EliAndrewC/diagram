@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="176 84 1054 776" font-family="Georgia, 'Times New Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="176 84 1054 792" font-family="Georgia, 'Times New Roman', serif">
   <!-- ============================================================ -->
   <!-- Ubame County Magistracy - top-down diagrammatic plan          -->
   <!-- North at top, main gate facing south (bottom).                -->
@@ -67,8 +67,8 @@
        12 ft road ending at the gate), running past the gate and turning south off the sheet short of the border wall, the
        gate opening straight onto it with no wider ground before it (0088's drawing page) -->
   <g data-kind="road">
-    <path d="M 176 781 L 1040 781 L 1040 862" stroke="#B89060" stroke-width="54" stroke-linecap="butt" fill="none" opacity="0.55"/>
-    <path d="M 176 781 L 1040 781 L 1040 862" stroke="#9C7448" stroke-width="54" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
+    <path d="M 176 781 L 1040 781 L 1040 878" stroke="#B89060" stroke-width="54" stroke-linecap="butt" fill="none" opacity="0.55"/>
+    <path d="M 176 781 L 1040 781 L 1040 878" stroke="#9C7448" stroke-width="54" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
   <!-- The Fox road: arrives from the east across the border, forking to the cart gate
        (goods) and, by a path of the same 6 ft, to the parley room's outer door (people). -->
@@ -841,8 +841,10 @@
   <!-- ============================================================ -->
   <!-- The border note box (a unique instance feature)               -->
   <!-- ============================================================ -->
+  <!-- feature 372 batch 3: the box below the road, so its note stays in it (the road the gate opens onto now runs where it
+       stood; the caption placer had moved the note out onto the road) -->
   <g data-kind="fox border">
-    <rect x="204" y="768" width="270" height="52" fill="#F2EAD0" stroke="#8C7448" stroke-width="1.2" opacity="0.95"/>
+    <rect x="204" y="814" width="290" height="56" fill="#F2EAD0" stroke="#8C7448" stroke-width="1.2" opacity="0.95"/>
     <text font-size="9.5" font-weight="bold" fill="#5C3A28">The border</text>
     <text font-size="8.5" font-style="italic" fill="#5C4830" data-cont="1">The east wall IS the Fox/Scorpion line, and it cuts the</text>
     <text font-size="8.5" font-style="italic" fill="#5C4830" data-cont="1">parley-room floor: the Kitsune are met, and the charcoal</text>

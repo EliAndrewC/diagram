@@ -15,9 +15,9 @@ in 328's ranking and this spec.
 
 - (reviewed PASS at batch 2's close, 2026-10-10) placement-changed: latrine on ochiba-magistracy - wave 102: the guests' privy at the reception room's rear (0101)
 
-- glyph-redrawn: road on ochiba-magistracy - wave 103: the Imperial road at 30 ft past the gate (0088); Hayakawa's and Ubame's roads 18 ft past theirs
+- (reviewed PASS at batch 3's close, 2026-10-10, round 2) glyph-redrawn: road on ochiba-magistracy - wave 103: the Imperial road at 30 ft past the gate (0088); Hayakawa's and Ubame's roads 18 ft past theirs
 
-- glyph-redrawn: notice board on ubame-magistracy - wave 104: 0190's roofed frame 16 x 6 ft on its stone footing inside a fence, on all four gate boards
+- (reviewed PASS at batch 3's close, 2026-10-10, round 2) glyph-redrawn: notice board on ubame-magistracy - wave 104: 0190's roofed frame 16 x 6 ft on its stone footing inside a fence, on all four gate boards
 
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 

@@ -12,7 +12,7 @@ from .grids import FTPX
 from .parse import WALL_KIND, WALL_STROKE, ParsedPlan, Rect
 
 # TUB_MAX_GAP_FT (3.5): a wall-hugging tub sits ~1.7-2 ft from a wall (its own radius + eaves); beyond this it is adrift
-# in the court with no roof draining into it. NOTICE_BOARD_MAX_FT (20): a notice board must sit within this of a gate
+# in the court with no roof draining into it. NOTICE_BOARD_MAX_FT (40 since feature 372 wave 104): a notice board must sit within this of a gate
 # opening to be read. Both numbers AND both rules are the engine's (feature 287, homes H29b): the compound draft seats its
 # tubs and its board by `tub_by_its_eaves` / `board_by_a_gate`, and `fire_water_adrift` / `notice_board_adrift` below
 # call the same two predicates, so a generated sheet cannot seat what this audit would flag.
