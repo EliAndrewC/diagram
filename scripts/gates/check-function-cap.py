@@ -31,6 +31,7 @@ from __future__ import annotations
 import io
 import json
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -70,22 +71,31 @@ def held_files(root: Path) -> list[Path]:
     return sorted(found)
 
 
-def over_cap(root: Path) -> list[tuple[str, int, str]]:
-    """(file relative to root, line, ruff's message) for every function over the cap."""
+def over_cap(root: Path, config: Path = REPO / "pyproject.toml") -> list[tuple[str, int, str]]:
+    """(file relative to root, line, ruff's message) for every function over the cap, under `config`."""
     trees = [t for t in TREES if (root / t).is_dir()]
-    if not trees or not (REPO / "pyproject.toml").is_file():  # a tree with no config sets no cap (the push's own fixtures)
+    if not trees or not config.is_file():  # a tree with no config sets no cap (the push's own fixtures)
         return []
     r = subprocess.run(
-        [sys.executable, "-m", "ruff", "check", "--no-cache", "--config", str(REPO / "pyproject.toml"), "--select", RULE, "--output-format", "json", *trees],
+        [*_ruff(), "check", "--no-cache", "--config", str(config), "--select", RULE, "--output-format", "json", *trees],
         capture_output=True,
         text=True,
         check=False,
         cwd=root,
     )
-    if r.returncode not in (0, 1):
-        raise RuntimeError(f"ruff failed ({r.returncode}): {r.stderr.strip()}")
-    rows = {(str(Path(f["filename"]).resolve().relative_to(root.resolve())), f["location"]["row"], f["message"]) for f in json.loads(r.stdout or "[]")}
+    try:  # a ruff that did not run answers in stderr, not JSON - never read that as "nothing over the cap"
+        found = json.loads(r.stdout)
+    except json.JSONDecodeError:
+        raise RuntimeError(f"ruff did not run ({r.returncode}): {r.stderr.strip()[:300]}") from None
+    rows = {(str(Path(f["filename"]).resolve().relative_to(root.resolve())), f["location"]["row"], f["message"]) for f in found}
     return sorted(rows)
+
+
+def _ruff() -> list[str]:
+    """The ruff on PATH, else the interpreter's module: the push's fixtures run with HOME moved, which hides a per-user
+    install from `python3 -m ruff` while its binary stays on PATH."""
+    exe = shutil.which("ruff")
+    return [exe] if exe else [sys.executable, "-m", "ruff"]
 
 
 def _comments(text: str) -> list[tuple[int, str]]:
@@ -142,9 +152,9 @@ def config_ignores(toml_text: str) -> list[str]:
     return found
 
 
-def check(root: Path) -> list[str]:
+def check(root: Path, config: Path = REPO / "pyproject.toml") -> list[str]:
     """Every refusal, as the lines to print; empty when the tree is under the cap."""
-    msgs = [f"  {f}:{n}  {msg}" for f, n, msg in over_cap(root)]
+    msgs = [f"  {f}:{n}  {msg}" for f, n, msg in over_cap(root, config)]
     problems = [f"  {p.relative_to(root)}:{n}  {why}" for p in held_files(root) for n, why in suppression_problems(p)]
     pyproject = root / "pyproject.toml"
     ignores = config_ignores(pyproject.read_text()) if pyproject.is_file() else []
@@ -180,7 +190,10 @@ def selftest() -> int:
         for rel, (text, _) in cases.items():
             (root / rel).parent.mkdir(parents=True, exist_ok=True)
             (root / rel).write_text(text)
-        report = "\n".join(check(root))
+        # its own config, so the selftest proves the check anywhere - the push's fixture trees carry no pyproject.toml
+        config = Path(td) / "selftest-ruff.toml"
+        config.write_text('[lint]\nselect = ["PLR0915"]\n[lint.pylint]\nmax-statements = 100\n')
+        report = "\n".join(check(root, config))
         wrong = [rel for rel, (_, fires) in cases.items() if (f"{rel}:" in report) is not fires]
     bad_config = config_ignores('[tool.ruff.lint.per-file-ignores]\n"x.py" = ["PLR09"]\n') == []
     if wrong or bad_config:
