@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec under review
+**Status**: In progress - spec FAITHFUL (round 3), plan next
 
 **Affects**: magistracy, research record
 
@@ -88,3 +88,4 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
 - spec-fidelity-verify, round 2 (2026-10-10): CHANGES REQUIRED. Applied: FR-002 and SC-001 record the claim DRIFTED with no
   hedge (another verdict is reported to the GM); D1's reason is the restored compound and the unread 1830 drawing.
 
+- spec-fidelity-verify, round 3 (2026-10-10): **FAITHFUL**. Both round 2 items resolved.

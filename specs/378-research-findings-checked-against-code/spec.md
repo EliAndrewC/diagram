@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - spec FAITHFUL (round 3), plan under review
+**Status**: In progress - landed; every task ticked but the GM's review of the arbiter's rulings on two overlapping red gates (make gm-review)
 
 **Affects**: research process, tooling
 
