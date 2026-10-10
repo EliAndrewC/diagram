@@ -53,7 +53,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   stone at the reception's veranda (the Koseki form, research 0104). The household's own doors: the kitchen's
   one outside door on its WEST face, onto the 7 ft way between it and the servants' row that runs to the yard (pass
   7: on its yard face it opened into a ~5 ft pocket between the bath, the well and the house), and the residence's
-  inner entrance on its rear (north) face at the kitchen end, onto the alley (feature 374 wave 113: the kitchen ell takes its west face)
+  inner entrance on its rear (north) face in the kitchen half, east of the family privy, onto the alley (feature 374 wave 113: the kitchen ell takes its west face)
   (research buildings 370). Note 300 says of the Koseki house that the everyday door is the kitchen entrance, while
   370 gives the family an inner entrance apart from it; the draft draws both doors.
 - **R18 granary**: an earth-walled kura on the ground, no posts (the dozo form).

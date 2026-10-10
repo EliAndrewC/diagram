@@ -215,8 +215,7 @@
     <rect x="874" y="492" width="12" height="8"/>
     <rect x="874" y="530" width="12" height="8"/>
   </g>
-  <!-- Kitchen postern posts (west service door, opening into the open gap
-       between residence and kitchen rather than against the kitchen flank) -->
+  <!-- Kitchen postern posts (west service door, opening into the kitchen yard west of the kitchen ell -->
   <g fill="#2D2A24" data-kind="side gate">
     <rect x="134" y="286" width="12" height="8"/>
     <rect x="134" y="320" width="12" height="8"/>
@@ -284,7 +283,8 @@
   </g>
   <g data-kind="residence">
     <text font-size="11" font-weight="bold" letter-spacing="2" fill="#5C4830">RESIDENCE</text>
-    <!-- West block: the private end - the inner rooms with the lineage's alcove, deepest, beside the kitchen,
+    <!-- West block: the private end - the inner rooms deepest, the family quarters toward the corridor, the kitchen
+         an ell projecting south from the family end (feature 374 wave 113; the lineage's alcove is with the reception),
          and the family's rooms toward the corridor (each label is a multi-room ZONE, not one room; engawa
          veranda along the south face). The reception moved to the east block on 2026-09-27 (GM: "fix what you
          found"): drawn here, its genkan and its engawa faced the kitchen's flank 11 ft away, where the record
@@ -435,8 +435,8 @@
        lord's own wing (interior-audit historical correction 2026-07) -->
   <g data-kind="karo's house">
     <rect x="340" y="374" width="115" height="74" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
-    <!-- informal side entrance (a modest door, not a second genkan) on the WEST face, onto the service ground
-         between the kitchen and the house: on the south face it opened 0.3 ft short of the court divider's ink
+    <!-- informal side entrance (a modest door, not a second genkan) on the WEST face, onto the kitchen yard:
+         on the south face it opened 0.3 ft short of the court divider's ink
          (building review, feature 264; moved 2026-09-27) -->
     <rect x="332" y="398" width="8" height="26" fill="#C9A57A" stroke="#5A3F1E" stroke-width="1" data-kind="door"/>
     <text font-size="11" font-weight="bold" fill="#3A2E1C">karo's house</text>
@@ -853,7 +853,7 @@
     <circle cx="827" cy="542.5" r="3.8"/>
     <!-- barracks (west eaves; moved east with it, pass 3) -->
     <circle cx="696" cy="702" r="3.8"/>
-    <!-- karo's house (SW eaves corner, clear of the bath and its west door; pass 3 - it had none) -->
+    <!-- karo's house (SW eaves corner, by its west door onto the kitchen yard; pass 3 - it had none) -->
     <circle cx="334" cy="442" r="3.8"/>
     <!-- gate range (west end) -->
     <circle cx="366" cy="711" r="3.8"/>
