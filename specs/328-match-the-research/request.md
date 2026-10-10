@@ -24,3 +24,20 @@ The GM, 2026-10-07 (amendment 8), verbatim:
 ## The GM, 2026-10-07 (amending the goal, verbatim)
 
 I'm amending the goal to note that I'm leaving for work, so please don't stop working until you hit the cap or the feature is done.  If you need to ask me a question then please defer it to the end of the feature so that I don't come back to find you've been blocking on a question not doing any work for the past 7 hours, etc.
+
+## The GM, 2026-10-10 (the split, verbatim)
+
+> I think it might be good to land what we have in main now after finishing wave 97's review. By splitting off the rest of our work into a separate feature. Because then other things will get the benefit of branching off of what we've already done and so forth. That includes some tooling improvements, which it would be good to make more widely available. I'd also like you to look at the open spec kit features, which you can do with `make speckit-todo` and take a look at which of them it would make sense to pull in to this feature because it is related to what we're doing here versus which of them are future work for settlements which are not hamlets.
+
+## The GM, 2026-10-10 (the landing's decisions, verbatim)
+
+The GM answered two questions the session put before the push (each answer the option the GM picked):
+
+> Landing needs your call on one known regression ... Waive it, or revert wave 52's seats? - "Waive it (Recommended)": Land with Sawada's zigzag on the strict waiting list. The fix (re-laying a household's way at seating so it never enters another's dooryard) moves to 372 as an open E3 row.
+
+> ... How should I handle the sign-off? - "Pre-approve band 3": If the pair reads band 3 with its causes recorded and audited by perf-audit, record your sign-off with these words and push without waiting.
+
+And, in the same exchange:
+
+> Anything that we'd need by decision for the existing feature can be spun out into the other feature.
+

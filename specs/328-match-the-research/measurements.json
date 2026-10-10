@@ -2186,5 +2186,18 @@
       "cart_yard_ft": 15,
       "sheets_redrawn": 1
     }
+  },
+  "t140-seed25-at-head": {
+    "quantity": "T140 at 328's close (2026-10-10): the 40-household scaling roll of seed 25 at HEAD",
+    "observed": "2026-10-10",
+    "source": "the clone at the split's commit; .../scratchpad/t140.log",
+    "command": "make cohort HOUSEHOLDS=40 N=1 SEED=25",
+    "method": "the one roll, its verdicts read",
+    "value": {
+      "refused": 0,
+      "knots": 1,
+      "knot_ft": 23.8,
+      "reading": "the web is drawn (no WebRefused): T140's refusal is gone; the roll carries one lane knot under wave 93's cohort rule (lanes 1 and 2, ends at (2727.4, 3352.6) and (2748.6, 3363.4), 23.8 ft apart) - a found row for feature 372; 'knob values never rolled' is a one-seed run's artifact"
+    }
   }
 }

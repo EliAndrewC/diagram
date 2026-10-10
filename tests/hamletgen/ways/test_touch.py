@@ -399,6 +399,8 @@ def test_a_house_is_served_within_60_ft_of_itself_or_12_ft_of_its_own_built_grou
     assert serves((0.0, 0.0), [((-50.0, 100.0), (50.0, 100.0))], built), "100 ft from the house, 10 ft from its yard"
     assert not serves((0.0, 0.0), [((-50.0, 110.0), (50.0, 110.0))], built), "20 ft past its yard"
     assert not serves((5.0, 5.0), [((-50.0, 100.0), (50.0, 100.0))], built), "another house's yard serves it nothing"
+    assert serves((0.0, 0.0), [((10.0, 60.0), (10.0, 200.0))], {(0.0, 0.0): [[(0.0, 180.0), (20.0, 180.0), (20.0, 200.0), (0.0, 200.0)]]}), "a run crossing its yard's edge, the house 180 ft off"
+    assert built_ground({"gardens": [{"poly": [[0.0, 0.0], [1.0, 0.0], [1.0, 1.0]]}]}) == {}, "a bed whose record names no house is no steading's"
 
 
 def test_a_byre_is_built_ground_of_the_house_its_record_names_and_a_shared_one_of_none() -> None:

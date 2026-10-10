@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft
+**Status**: Draft (closing at wave 97 - FR-011)
 
 **Input**: the GM's request, verbatim in `request.md`: rank every finding `make claims-report` shows by how much
 implementation work it takes to make the implementation match the research it cites, then fix them from easiest to
@@ -161,6 +161,20 @@ session's last actions are recording the running checks, a commit, and `scripts/
   (accurate, deviation, convention, guess) at the point of change and in this feature's `spec.md` under Decisions
   Recorded, added by the wave's amendment; the claim line is the pointer.
 
+- **FR-011 (the split, the GM 2026-10-10)**: the feature closes at wave 97 and lands, so other work branches off what it
+  has done (its tooling included). Every row still open in `ranking.json` at wave 97 - the E3 and E4 rows, the found rows
+  waiting on them, the one E2 row held for the GM - moves to feature 372 (`specs/372-match-the-research-remaining/`), which
+  carries them in ranking order with this feature's records as its starting point, and with them everything still waiting on
+  a decision of the GM's (the GM: *"Anything that we'd need by decision for the existing feature can be spun out into the
+  other feature"*): the held questions and T140 if its roll is still refused at HEAD. T137, Sawada's zigzag, is WAIVED by the
+  GM for this landing (*"Waive it"*, `request.md`): it stays on the strict waiting list and its fix moves to 372 as an open E3
+  row. Before the push: batch 13 (waves 95-97) is closed as every batch was, and one timing pair is taken from main's
+  commit to HEAD as the newest pair, its band recorded and audited; at band 3 the GM's pre-approved sign-off is recorded in
+  their words (*"Pre-approve band 3"*). The tasks that recorded earlier batches' closes are ticked on that evidence, and those
+  whose waves never reached main (T38, T41, T132) at the landing, after the pair. The filed features (`make speckit-todo`)
+  are sorted in 372's spec into those related to this work and future work for the tiers that are not hamlets; one is folded
+  into 372 only as the GM chooses.
+
 - **FR-009 (which hand-drawn maps are touched)**: the frozen hand-rolled settlement maps (Hoshigaoka and the other
   legacy villages) are never edited (GM 2026-09-28: *"I do not want you to modify hand-rolled maps"*). A Mode A building
   sheet is redrawn only where a fixed procedure's finding names it; each such sheet is listed by name in its wave's
@@ -183,8 +197,11 @@ session's last actions are recording the running checks, a commit, and `scripts/
 - **SC-003** (FR-003, FR-006): waves are taken in tier order: no E(n+1) row is fixed while an E(n) row the session could fix stands open
   (an E(n) row may wait on a dependency, recorded in the ranking).
 - **SC-004** (FR-007): at the GM's usage cap (FR-007), the clone holds no uncommitted work and no unrecorded check verdict.
-- **SC-005** (FR-009, FR-010, spec-wide): the end state of the whole program is `make claims-report` with 0 DRIFTED, 0 MISLABELED, 0 UNCLAIMED,
+- **SC-005** (FR-009, FR-010, spec-wide): the end state of the whole program (this feature, carried on by feature 372 - FR-011) is `make claims-report` with 0 DRIFTED, 0 MISLABELED, 0 UNCLAIMED,
   0 NEEDS-RESEARCH and 0 CANNOT-TELL outside the DEFERRED units; every finding in a deferred unit reads DEFERRED.
+- **SC-006** (FR-011): at this feature's close, every in-scope row of `ranking.json` without a wave is carried by feature
+  372's spec, with the decisions still owed and the filed features sorted; a main-to-HEAD timing pair is the newest and its
+  band is signed off where it owes it; every task here is ticked; the waves through 97 are on main.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -234,7 +251,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 | The orphan pass keeps a lane piece where a house it serves would be left without a way within the page's serving reach, not a looser one (wave 95) | GUESS on 0246's drawing page, at the figure it records | the pass read a looser reach than the page; no pool map moved, the cohort holds 52 of 54 (m:wave95-serve-60) | `hamletgen/ways/touch.py` `_touch_junctions` |
 | Ubame's charcoal weighing floor drawn at 0197's size, at the cart yard's edge (wave 97) | GUESS on 0197's drawing page, at the figure it records | it was drawn larger, near square; 1 hand sheet redrawn, Ubame (m:wave97-ubame-charcoal) | `pool/magistracies/ubame-magistracy/ubame-magistracy.svg` weighing floor |
 | A charcoal bale drawn twice its length on a Mode A sheet (wave 97) | MAP DRAWING CONVENTION (0199's drawing page: a bale drawn about twice its real length so it reads) | Ubame's two bales were drawn longer still; the Scale paragraph names the convention (m:wave97-ubame-charcoal) | `docs/buildings.md` Scale; Ubame's sheet |
-| No fire gap is drawn round a charcoal store; Ubame's cart yard is a loading apron (wave 97) | HISTORICALLY ACCURATE for the absence (0197: no premodern gap found, the plaster wall the protection); GUESS for the apron's width (0116) | the yard was drawn narrower, as the store's fire gap; the store unmoved, the apron its use (m:wave97-ubame-charcoal) | Ubame's sheet cart yard; `docs/buildings.md` Outer court |
+| No fire gap is drawn round a charcoal store; Ubame's cart yard is a loading apron (wave 97) | GUESS (0197's absence note: no premodern gap found, the modern figure not drawn, a store at the ordinary spacing a guess); GUESS for the apron's width (0116) | the yard was drawn narrower, as the store's fire gap; the store unmoved, the apron its use (m:wave97-ubame-charcoal) | Ubame's sheet cart yard; `docs/buildings.md` Outer court |
 
 ## Assumptions
 
@@ -398,3 +415,12 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   needle floor NOT LEGITIMATE (the reviewer's probe: a blunted 7-degree spike is a lawful basin); the cut off the drain and before
   the weld LEGITIMATE (to raise with the GM at the feature's end); the Decisions Recorded row reclassed; PLOT_SIZES tiered E4.
   Round 2: plan CLEAR (7 decisions); the amendment CHANGES REQUIRED for the ranking rebuild, done (PLOT_SIZES at E4); FAITHFUL.
+- Amendment 97 (the split, FR-011), round 1 (spec-fidelity MODE 2 + MODE 4, 2026-10-10): CHANGES REQUIRED; plan BLOCKED (8
+  decisions: S3, S4, S6 NOT LEGITIMATE). (1) The landing takes batch 13's pair as the newest, so the push's perf gate never sees
+  waves 9, 10 and batch 3's band 3: retake the main-to-HEAD landing pair as the newest and, at band 3, record the GM's sign-off
+  before `done` (the plan's wave-11 condition). (2) T137 is a regression against main (main's zigzag test has no waiting list,
+  HEAD xfails Sawada): put the waiver-or-revert question to the GM before the push. (3) T38, T41, T132 tick at the landing,
+  after the sign-off, not on records that show them unfinished. (4) T140's premise is stale (bookends row 4,
+  m:batch4-pair-and-slide-fix: seed 25 draws): measure at HEAD, tick it if it draws, and correct 372. (5) The speckit-todo
+  sort a task and an SC. (6) 372's held-question list carries bath_seat and the waves 80/82 items, or says it is not
+  exhaustive. T110-T119 and T121 tick on the records (cite row 2 for batch 1's pair). The 204-row count re-derived: it holds.

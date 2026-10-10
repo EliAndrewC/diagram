@@ -9,7 +9,7 @@ This file is the Mode A half of the project: interior plan views of manors, magi
 <!-- Research: plan scale - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama -->
 <!-- Research: scale bar - CONVENTION: 90 px bar labeled 30 ft in a top corner of the sheet, where every sheet draws it -->
 <!-- Research: caption placement - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: captions declared, placed by the one placer -->
-<!-- Research: true size for every footprint - CONVENTION research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html: point glyphs included, only stroke floors, location markers and the bales drawn about 4 ft long diverge -->
+<!-- Research: true size for every footprint - CONVENTION: point glyphs included, only stroke floors, location markers and the bales drawn about 4 ft long (0199's drawing page) diverge -->
 <!-- Research: well location marker - research/questions/0196-communal-wells-ido.drawing.html: ~22 px curb glyph marks a ~3-4 ft curb -->
 <!-- Research: buildings at true size - CANON: the GM's ruling of 2026-07-21, buildings drawn at true size; research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html bears only on the proportion ranking, the kitchen, stable and shrine ranks being this project's reading -->
 <!-- Research: main gate passage width - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the passage is the form's own, yakuimon ~6-8.5 ft (~18-26 px) or nagaya-mon ~12 ft (~36 px), not ~10-13 ft or ~40 px -->

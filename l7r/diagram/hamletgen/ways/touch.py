@@ -401,9 +401,6 @@ def _touch_junctions(
             _houses = lane_houses(s.M)  # a household reached across a yard is owed no way of its own (feature 317)
             _built = built_ground(s.M)
 
-            def _near(pt: Pt, segs: list[tuple[Pt, Pt]]) -> float:
-                return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
-
             _dropped = 0
             _dropped_idx: list[int] = []
             for i in orphans:

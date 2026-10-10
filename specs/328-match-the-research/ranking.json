@@ -10407,7 +10407,7 @@
  {
   "key": "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap",
   "tier": "E3",
-  "fix": "Ubame's charcoal store at the ordinary 6-10 ft kura spacing, no 13-14 ft fire gap, its cart yard cut to a 15-20 ft apron; sheet re-laid",
+  "fix": "no fire gap drawn round the charcoal store (0197); Ubame's cart yard drawn as the 15 ft loading apron between the tally range and the store (0116's 15-20 ft, no wider than its use), the store unmoved since the apron is the space's use (wave 97, spec-fidelity W97-5)",
   "files": [
    "docs/buildings.md",
    "pool/magistracies/ubame-magistracy/ubame-magistracy.svg"

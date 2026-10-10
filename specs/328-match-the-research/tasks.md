@@ -2201,5 +2201,19 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - Sheet redrawn (FR-009): **Ubame** (`pool/magistracies/ubame-magistracy/ubame-magistracy.svg`), its notes; `docs/buildings.md`
   (four claim lines, the Scale paragraph, one new claim).
 
-- [ ] T219 wave 97's rows (FR-003, FR-008, FR-009)
+- [x] T219 wave 97's rows (FR-003, FR-008, FR-009)
+      research: rendering
+      verify: DONE. wave 97: Ubame's charcoal yard to 0197/0199 (weighing floor 16 x 14 ft, bales 4 ft, cart yard a 15 ft apron); impl-drift IN-STEP; spec-fidelity CLEAR (W97-5 the store unmoved, LEGITIMATE)
+
+## Phase 99 - the split (amendment 97): batch 13's close, the open tasks settled, the landing
+
+- [ ] T220 batch 13's close: `make done` green; the owed occasions reviewed (barley on Kashikawa; the weighing floor, the
+      charcoal bales and Ubame's layout); `escalation-check`; the bookends row (FR-005, FR-006)
+      research: rendering
+- [ ] T221 the landing pair: main's commit -> HEAD, the newest pair; `perf-report`, its records and `perf-audit`; at band 3
+      the GM's pre-approved sign-off recorded (FR-011)
+      research: rendering
+- [ ] T222 the split: T140 measured at HEAD; feature 372 filed with the open rows, the waived zigzag, the held decisions and
+      the filed features sorted; the earlier closes' tasks ticked on their records; the status line Done; landed (FR-011,
+      SC-006)
       research: rendering

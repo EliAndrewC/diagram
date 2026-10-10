@@ -1,26 +1,58 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "70816a10dbd15d3593ccc02ef31f33318c4122e652e099a50a3b6787475a7e0b",
- "reviewed": "2026-10-09",
+ "plan_sha256": "890ea7e4c931e403faa906ade4b1c6361ebd654eca81eb57eb6669f5fa285395",
+ "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W96-1",
-   "summary": "Row knots.py::settle_knots#a knot no lawful gather reaches closed on wave 94's evidence; its wave set to 94; no code change",
+   "id": "S1",
+   "summary": "Batch 13 (waves 95-97) closed as every batch was: make done green, the owed occasions, escalation-check, the bookends row closed by the landing pair; the gate's coverage finding fixed (a dead nearest-segment closure removed from touch.py, two unit tests), and a CONVENTION claim line reworded to name its page in text",
    "class": "within",
-   "why": "A found row (no claim key in the index) whose finding is a measured knot. Its last case, Sawada's field way 9.4 ft from lane 10's door end, is in the class wave 94's LEGITIMATE narrow ruling covers (m:wave94-door-end-teed: all 26 exempted pairs that class). Re-run at HEAD: test_pool_261.py 42 passed, 1 xfailed (the zigzag list), _KNOTS_WAITING empty; the cohort carries no knotted seed (m:wave94-gather-passes, m:wave95-serve-60). The defect the row records is absent; recording that adds no new exception to the request."
+   "why": "The standing batch close (FR-005, FR-006, feature 294 occasions) and the 100% floor the gate enforces (XIV). The closure is unreferenced, so no map can move; the two asserts enforce serves/built_ground behavior already specified. The claim edit satisfies the claims-coverage test. Nothing the GM did not ask for."
   },
   {
-   "id": "W96-2",
-   "summary": "FOOTPATH_FABRIC_GAP 4 -> 7 ft re-tried in a detached worktree; Kashikawa refused, cohort 52 -> 48/54 (03, 23, 40, 903 newly failing); the found row web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot and the four rows waiting on it stay E3, nothing lands",
+   "id": "S2",
+   "summary": "T110-T118, T119 (batch 1, pair cited from bookends row 2) and T121 (batch 2) ticked on their recorded closes",
    "class": "within",
-   "why": "The spec's Edge Case (a fix whose maps fail takes the failing work's tier and waits on a found row) and the standing rule that a newly failing cohort seed is a regression (XIII). Measured: the cohort log reproduces 48/54, and the four new failures are each WebRefused with farmhouse(s) off the connected way network, which is the found row's own work. The rows stay open in the queue, not dropped. Round 2 (record edits confirmed): the plan's Wave 96 bullet names the found row as the open gating row and its four waiting rows; the found row's fix text carries m:wave96-footpath-7ft and the failing set; the measurement records the refusal class (WebRefused, refuse_unreached); consts.py's comment records the failed re-try (comment only)."
+   "why": "Round 1's remedy applied: row 2's pair cited since row 1's audit read not-justified. The records support the closes."
   },
   {
-   "id": "W96-3",
-   "summary": "Records only (waves.json, found-wave4.jsonl and what it rebuilds, measurements.json; one comment at consts.py); no Decisions Recorded row",
+   "id": "S3",
+   "summary": "T38, T41 (waves 9 and 10) and T132 (batch 3) ticked at the landing, after the landing pair and its sign-off",
    "class": "within",
-   "why": "No change that can alter a roll lands (the consts.py edit is a comment; FOOTPATH_FABRIC_GAP stays 4.0), so FR-008 owes no Decisions row. tasks.md Phase 97 lists exactly these records. Round 1's required record edits are present."
+   "why": "Round 1 S3 remedy applied (plan 'The open tasks', FR-011, T222). Their closes owed the band-3 sign-off and the landing; ticking after T221 records them on that evidence. perf_review.check passes a band-3 pair only with a justified audit AND the sign-off, so the order is enforced."
+  },
+  {
+   "id": "S4",
+   "summary": "T137 (Sawada's zigzag, wave 52's regression vs main) waived for the landing; stays on _ZIGZAGS_WAITING; its fix moves to 372 as an open E3 row",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Constitution XIII's third exit, an explicit GM waiver, given verbatim in request.md ('Waive it (Recommended)' - land with the zigzag on the strict waiting list, the fix to 372 as an open E3 row). The plan and 372 do exactly what the waiver says."
+  },
+  {
+   "id": "S5",
+   "summary": "T140 measured once at HEAD (make cohort HOUSEHOLDS=40 N=1 SEED=25): ticked DONE on that record if it draws; if refused, moved to 372 with the GM's seating decision",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 1's stale-premise remedy applied: measured, not assumed. The refused branch would land a refusal the stack introduced (19f69655c is not on main); T140's own text says only 'the GM's waiver or go-ahead on the seating rebuild' remains, which is a decision, and the GM's own words cover it: 'Anything that we'd need by decision for the existing feature can be spun out into the other feature.' If that branch fires, the closing report must name the landed refusal for the GM (XVI)."
+  },
+  {
+   "id": "S6",
+   "summary": "The landing pair: main's commit (wave 8) -> HEAD taken last as the newest pair; perf-report, perf-explain, perf-audit; at band 3 the GM's pre-approved sign-off recorded in his words; it supersedes batch 13's own pair",
+   "class": "within",
+   "why": "Round 1 S6 remedy applied, and the GM pre-approved band 3 ('Pre-approve band 3'). The pre-approval is conditional on the causes recorded and audited; perf_review.check passes an audit only at 'justified', so a not-justified or cannot-determine audit still refuses the push and is a new question for the GM, not covered by the pre-approval."
+  },
+  {
+   "id": "S7",
+   "summary": "Feature 372 filed: the 204 open in-scope rows (161 E3, 42 E4, 1 E2 held), the waived zigzag, T140 if refused, the whole 'Held for the GM' section, two items raised at close, m:wave97-ubame-charcoal",
+   "class": "within",
+   "why": "The GM's split and 'Anything that we'd need by decision ... can be spun out'. Round 1's remedy applied: the whole held section is pointed at, bath_seat and the waves 80/82 items named; the store-placement figure carries its key (re-run: pack audit reads 15.7 ft, coverage 39%)."
+  },
+  {
+   "id": "S8",
+   "summary": "make speckit-todo's 41 filed features (331-371) sorted in 372's spec and the closing report into related vs future work for non-hamlet tiers; none folded until the GM chooses",
+   "class": "within",
+   "why": "The GM asked the session to look and say which to pull in versus which are future work. Now in T222 and SC-006 (round 1 remedy). Checked: every one of 331-371 appears exactly once across the two lists."
   }
  ],
  "verdict": "CLEAR"

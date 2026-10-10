@@ -3420,6 +3420,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Scale#true size for every footprint": {
+  "code": "44c2bb5cd1713604",
+  "core": "d28e8161b6f37cbb",
+  "date": "2026-10-10",
+  "note": "drawing everything at true size, with the stroke-floor, location-marker and bale exceptions, is a rule about how things are shown and decides no physical size, so CONVENTION is the right label",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Scale#well location marker": {
   "code": "237b902034dc340f",
   "core": "d28e8161b6f37cbb",

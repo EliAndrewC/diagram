@@ -1591,6 +1591,35 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `make map` on Ubame (REGENERATED, the page written with no untagged ink), the pack audit, impl-drift on the
   owed claims, `make quick`, `spec-fidelity`.
 
+## The split (amendment 97, 2026-10-10) - batch 13's close and the landing
+
+- **The GM's ruling** (`request.md`, "the split"): land after wave 97's review; the rest of the work goes to a separate
+  feature, so other work branches off this one's (its tooling included). FR-011.
+- **Batch 13 (waves 95-97) is closed as every batch was**: `make done` green on its last commit; the owed occasions on that
+  gate (glyph-check: barley on Kashikawa, the weighing floor and the charcoal bales on Ubame; building-review: Ubame), then
+  `escalation-check`; the bookends row closed by the landing pair below.
+  Its first gate found `touch.py` under the hamlet path's 100% floor at three lines wave 95 left: a nearest-segment
+  closure the orphan pass no longer calls (removed - `serves` replaced it), a bed whose record names no house, and a run
+  crossing its steading's ground; the last two are now unit tests (`tests/hamletgen/ways/test_touch.py`). No map can move.
+  And a claim line written with a page after `CONVENTION` failed the claims-coverage test (a convention takes no pointer):
+  the page is named in its text instead.
+- **The landing pair**: one timing pair from main's commit (wave 8) to HEAD, taken last so it is the newest pair the push
+  reads; `perf-report`, `perf-explain` and `perf-audit` as its band owes; at band 3 the GM's sign-off recorded in their
+  words, pre-approved (`request.md`: *"Pre-approve band 3"*). It supersedes batch 13's own pair, which is not taken.
+- **The open tasks**: T110-T118 with T119 (batch 1; its pair cited from bookends row 2, row 1's own audit reading
+  not-justified) and T121 (batch 2) are ticked on their recorded closes. T38, T41 (waves 9 and 10) and T132 (batch 3) are
+  ticked at the landing, after the landing pair and its sign-off, since none of their waves reached main. T137 is WAIVED by
+  the GM and moves to 372 as its row. T140 is measured once at HEAD (`make cohort HOUSEHOLDS=40 N=1 SEED=25`): if the roll
+  draws, it is ticked DONE on that record (bookends row 4 already recorded it drawing); if refused, it moves to 372.
+- **Feature 372** (`specs/372-match-the-research-remaining/spec.md`, filed): the 204 open in-scope rows in ranking order
+  (161 E3, 42 E4, 1 E2 held), the zigzag row, T140 if still refused, the whole "Held for the GM" section of
+  `claims-followup.md`, and the sorted filed features.
+- **The landing**: `scripts/sync-with-main.sh done` (GATED: engine code since main) once every task is ticked; the status
+  line reads Done with the evidence.
+- **The filed features**: `make speckit-todo`'s 41 read and sorted for the GM in the closing report - related to this
+  work (scripted hamlets, magistracies, country shrines, or the research record behind them) against future work for the
+  tiers that are not hamlets; none is folded into 372 until the GM chooses.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
