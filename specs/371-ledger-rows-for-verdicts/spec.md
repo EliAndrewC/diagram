@@ -24,79 +24,87 @@ with its cost already measured, and refuses a push that would land a review pass
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - A review pass cannot land without its row (Priority: P1)
+### User Story 1 - A check's pass cannot land without its row (Priority: P1)
 
-A session runs a review check; the check writes its verdict. Until the session adds the ledger row for it, every commit says
-which verdict is missing a row and prints that row, and the push refuses.
+A session runs any check the ledger logs - a map review, a record check, `impl-drift`, a spec or plan round, `perf-audit`,
+`escalation-check`. When the check returns, its pass is logged with its measured cost. Until a row of the ledger carries that
+pass, every commit says which pass is missing its row and prints the row, and the push refuses.
 
-**Why this priority**: it is the GM's question - can we see how often the checks pay off - answered by construction, so the
-table the answer is read from is whole.
+**Why this priority**: it is the GM's question - can we see how often our subagent checks pay off - answered by construction,
+so the table the answer is read from is whole: all of it, not the 40% the map reviews make up (spec review round 1, measured
+on the table's 374 rows).
 
-**Independent Test**: record a verdict in a fixture clone; the report names it and the push refuses; add the row it printed;
-the report is empty and the push passes.
+**Independent Test**: log a pass in a fixture clone; the report names it and the push refuses; add the row it printed; the
+report is empty and the push passes.
 
 **Acceptance Scenarios**:
 
-1. **Given** a verdict recorded today for `glyph-check--copse`, **When** no ledger row of today's date names `glyph-check`
-   and `copse`, **Then** the report lists it with the row to add, and the push refuses.
+1. **Given** a `glyph-check` pass logged today, **When** no row of the measured table carries its check and its cost cells,
+   **Then** the report lists it with the row to add, and the push refuses.
 2. **Given** that row added, **When** the check runs, **Then** it reports nothing and the push passes.
-3. **Given** two rounds of the same unit, **When** only the first has a row, **Then** the second is still reported.
+3. **Given** two rounds of one check on one subject on one day, **When** only the first has its row, **Then** the second is
+   still reported - each pass has its own cost, so one row cannot answer both.
 
 ### User Story 2 - The row is printed, not reconstructed (Priority: P1)
 
-The printed row carries the date, the check, the subject, the verdict and the number of findings, and the cost cells from the
-agent's own measurement (`make review-cost AGENT=<id>`), where the dispatch recorded which agent ran; where it did not, the
-row carries the command to run instead.
+The printed row carries the date, the check, what it checked and its wall and token cells as measured when the pass returned;
+the session fills only the judgment cells (verdict, finding, class, author missed?, acted on).
 
-**Independent Test**: a verdict whose dispatch recorded its agent prints a row whose cost cells are that agent's measured
-wall time and tokens.
+**Independent Test**: a logged pass prints a row whose cost cells are the ones `make review-cost` gives for its agent.
 
 ### Edge Cases
 
-- A verdict recorded before this feature: not in the log, so not reported (the log starts empty).
-- A verdict re-recorded for the same round (a corrected findings file): one entry per call; each needs its row, and one row
-  of that date may answer several entries of the same unit only if it says so (the row's subject names the unit and the
-  check, and its date matches - one row per pass is the ledger's own rule).
-- A record or plan check (`impl-drift`, `spec-fidelity`, ...) writes no verdict through `make review-verdict`; its rows stay
-  the session's to write, as today (out of scope).
+- A pass from before this feature: not in the log, so not reported (the log starts empty).
+- A pass whose rows land in an earlier push: still answered - the rows stay in the ledger, and a row answers by its cells, not
+  by the push that carried it.
+- A pass with several findings: one row per finding (the ledger's rule); any one row carrying its cells answers it.
+- An agent that is not a check (a general-purpose helper, `round-arbiter`, `perf-audit`'s helpers): not logged - the log takes
+  exactly the checks the ledger's `CHECKS` set names.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: Every call of `make review-verdict` MUST append its record - the unit, its check, the verdict, the number of
-  findings, the engine key, the gate's state and the time - to an append-only log beside the per-unit records; nothing
-  rewrites or deletes an entry.
-- **FR-002**: A check MUST list every logged verdict that no row of the ledger's measured table answers - a row of the same
-  date naming the unit's check and its subject.
-- **FR-003**: For each, it MUST print the row to add: the date, the check, the subject, the verdict and the findings, with
-  the wall and token cells from `make review-cost` for the agent the dispatch recorded, or the `make review-cost AGENT=<id>`
-  command where none was recorded.
+- **FR-001**: Every return of a dispatched agent whose type is a check the ledger names (`ledger_lint.CHECKS`) MUST append a
+  record - the date, the check, what it checked, its agent and its measured wall and token cells - to an append-only log in
+  the clone's git directory; nothing rewrites or deletes an entry.
+- **FR-002**: A pass is ANSWERED by a row of the measured table whose check, wall cell and tokens cell are the pass's; a check
+  MUST list every logged pass no row answers.
+- **FR-003**: For each, it MUST print the row to add with its date, check, subject and cost cells filled, and the judgment
+  cells left for the session.
 - **FR-004**: The check MUST report at every commit (it never refuses an unrelated commit) and MUST refuse the push while a
-  verdict logged in that clone has no row, with an escape that states a reason and is recorded.
-- **FR-005**: A test MUST prove the check fires on a verdict with no row and passes once the row exists.
+  pass logged in that clone has no row, with an escape that states a reason and is recorded.
+- **FR-005**: A test MUST prove the check fires on a pass with no row, passes once the row exists, and tells two same-day
+  rounds apart.
 
 ### Key Entities
 
-- **The verdict log**: one line per `make review-verdict` call, append-only, in the clone's git directory.
-- **A row's answer**: a measured-table row whose date, check and subject match a logged verdict.
+- **The pass log**: one line per returned check, append-only, in the clone's git directory.
+- **A row's answer**: a measured-table row carrying the pass's check and its cost cells.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: In a fixture, a recorded verdict with no ledger row is named by the check with the row to add, and the push
-  refuses (FR-002, FR-003, FR-004).
-- **SC-002**: The same fixture with that row added passes (FR-002, FR-005).
-- **SC-003**: Two `make review-verdict` calls on one unit leave two log entries (FR-001).
-- **SC-004**: A verdict whose dispatch recorded its agent prints that agent's measured cost cells (FR-003).
+- **SC-001** (FR-002, FR-003, FR-004): In a fixture, a logged pass with no row is named with the row to add, and the push
+  refuses.
+- **SC-002** (FR-002, FR-005): The same fixture with that row added passes.
+- **SC-003** (FR-001, FR-005): Two returns of one check on one subject in one day leave two entries, each answered only by
+  its own row.
+- **SC-004** (FR-001, FR-003): A logged pass's printed cost cells are those `make review-cost` gives for its agent.
 
 ## Assumptions
 
-- The ledger's measured table and its columns stay as feature 294 defined them (`scripts/reviews/ledger_lint.py`).
-- A unit's name carries its check (`<check>--<subject>`, e.g. `glyph-check--copse`); a legacy bare name (`kashikawa`) is a
-  settlement-review.
-- The dispatch's agent id is read from feature 375's checks state where it recorded one.
+- The ledger's measured table and its columns stay as feature 294 defined them (`scripts/reviews/ledger_lint.py`), and its
+  cost cells are copied from `make review-cost AGENT=<id>`, never typed (its own heading says so) - which is what lets the
+  cells identify a pass.
+- Feature 375's hooks see every agent's launch (PostToolUse, with its type and agent id) and return (SubagentStop, with its
+  transcript); the log is written there.
 
 ## Out of Scope
 
-- Rows for record and plan checks (`impl-drift`, `quote-check`, `spec-fidelity`, ...), which do not write review verdicts.
-- Backfilling rows for verdicts recorded before this feature.
+- Backfilling rows for passes from before this feature.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-10): NOT FAITHFUL.** (1) Record and plan checks out of scope was a carve-out against "our
+  subagent checks" - 60% of the table's rows; now every check the ledger names is logged, at its return. (2) A same-date
+  subject match could not tell two same-day rounds apart - a pass is now answered by its own cost cells. (3) FR-004 faithful.
