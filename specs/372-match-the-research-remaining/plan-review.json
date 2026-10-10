@@ -1,6 +1,6 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "4f85b1e347b3b1fa04777dec11093d4ee74a969ba74bb94c409453ad98254775",
+ "plan_sha256": "e5aac1d290c74e936a57df33c573be8a7c6919086bbd574eb24fa6442248264f",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
@@ -93,6 +93,24 @@
    "summary": "one glyph-redrawn occasion, road on hayakawa-magistracy, standing for both sheets",
    "class": "within",
    "why": "the occasion the edit opens, declared as wave 98's was"
+  },
+  {
+   "id": "B1-no-pair",
+   "summary": "batch 1 (waves 98-100) closes with no timing pair: it changed no engine code",
+   "class": "within",
+   "why": "FR-003 closes a batch as 328 did, and 328s plan (the model, by FR-002/FR-003) defines the pair by engine change: start at the commit before the batchs first engine change, end at its last; 328 wave 1 (no engine behavior) owed no bookend. Measured: git diff 2ac146eca -- l7r pool lists only the three magistracy SVGs and notes, no engine path, so a pair has no endpoints and would time identical code. Not a carve-out from the pair, the pairs own definition applied; an engine change in a later batch owes the pair as written."
+  },
+  {
+   "id": "B1-three-waves",
+   "summary": "batch 1 closes at three waves, under FR-003s 4-5",
+   "class": "within",
+   "why": "narrows nothing asked: every rows fix stands, and landing sooner is the splits stated purpose (never stacked unpushed). The 4-5 size exists to amortize the lengthy tests (GM 2026-10-08), and this batch runs none; 328 closed batch 13 at three waves (95-97)."
+  },
+  {
+   "id": "B1-ubame-f6-notes",
+   "summary": "Ubames notes line on the boundary stones brought to the wave-99 drawing (glyph check F6)",
+   "class": "within",
+   "why": "the records owed by wave 99 (328 FR-009 carried), a check finding answered"
   }
  ],
  "verdict": "CLEAR"

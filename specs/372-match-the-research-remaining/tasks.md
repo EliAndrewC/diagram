@@ -5,10 +5,10 @@ in 328's ranking and this spec.
 
 ## Occasions
 
-- glyph-redrawn: latrine on ubame-magistracy - wave 98: every privy 5 ft square (15 px), 0101's one-seat privy, on Hayakawa, Ochiba and Ubame
+- (reviewed PASS at batch 1's close, 2026-10-10) glyph-redrawn: latrine on ubame-magistracy - wave 98: every privy 5 ft square (15 px), 0101's one-seat privy, on Hayakawa, Ochiba and Ubame
 
-- glyph-redrawn: boundary stones on ubame-magistracy - wave 99: each pillar 3 ft square, the plinth form (0083)
-- glyph-redrawn: road on hayakawa-magistracy - wave 100: the cart lanes to the side gates 6 ft (0082), on Hayakawa and Ubame
+- (reviewed PASS at batch 1's close, 2026-10-10) glyph-redrawn: boundary stones on ubame-magistracy - wave 99: each pillar 3 ft square, the plinth form (0083)
+- (reviewed PASS at batch 1's close, 2026-10-10) glyph-redrawn: road on hayakawa-magistracy - wave 100: the cart lanes to the side gates 6 ft (0082), on Hayakawa and Ubame
 
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
