@@ -457,26 +457,7 @@ class FinishMixin:
         # overhang per side (`scatter_frame_overhang`), and a positive one as `scatter_frame_breach` for a caller whose
         # scatters kept no such frame. A title panel beyond a neatline is not the map, so the view measured is the
         # neatline where one is recorded.
-        if self._scatter_frames:
-            _tight = (
-                max(f[0] for f, _b in self._scatter_frames),
-                max(f[1] for f, _b in self._scatter_frames),
-                min(f[2] for f, _b in self._scatter_frames),
-                min(f[3] for f, _b in self._scatter_frames),
-            )
-            self.M["meta"]["scatter_frame"] = [round(v, 1) for v in _tight]
-            _view = self.M["meta"].get("neatline") or self.view
-            if _view:
-                _over = [-1e9, -1e9, -1e9, -1e9]
-                for _frame, _parcel in self._scatter_frames:
-                    _side = scatter_overhang(_frame, _parcel, _view)
-                    if _side is not None:
-                        _over = [max(a, b) for a, b in zip(_over, _side, strict=True)]
-                if max(_over) > -1e9:
-                    _over = [round(v, 1) for v in _over]
-                    self.M["meta"]["scatter_frame_overhang"] = _over  # left, top, right, bottom: positive = the view shows ground a throw was kept out of
-                    if max(_over) > 0:
-                        self.M["meta"]["scatter_frame_breach"] = _over
+        self._record_scatter_frame()
         # THE FIELD'S CHORDS FOR THE GATE (feature 140): `houses_clear_of_paddies` measures the same few chords the
         # placer measured (`rolling/fit.py::_field_chains`) - open chains facing the planned seat when there is one
         # (`keepout_chains`, each chord with its outward normal), a closed simplified ring (`keepout`) when not.
@@ -556,62 +537,7 @@ class FinishMixin:
         # one shared-opacity group with the pond's fill last (so a feeder's overshoot inside the rim is
         # painted over), then every sheen. A pond's rim is therefore under every bed that reaches it - the
         # dark outline stops where the channel enters, which is the GM's "continuous flow of water".
-        _entries = list(self.water) + list(self.late_water)
-        _widx = self._late_water_idx if self._late_water_idx is not None else self._water_idx
-        if _entries and _widx is not None:
-            for w in self.water:  # a pond-anchored feeder is snapped to the rim now that the pond is known
-                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
-                if w.get("clip") is not None and self.M.get("pond"):
-                    cp = self._clip_to_pond(w["clip"]["pts"])
-                    dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in cp)
-                    w["_bed"] = w["clip"]["bed_t"].format(dd=dd)
-                    if w["clip"]["sheen_t"] is not None:
-                        w["_sheen"] = w["clip"]["sheen_t"].format(dd=dd)
-            for w in self.late_water:
-                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
-            # THE PADDY LAYER GOES UNDER THE WATER, WHATEVER THE CALL ORDER (feature 287, water W38): a plot emitted through
-            # `add_paddy` after the water block's anchor - a field drawn after the first stream on a map with no late block,
-            # or after the last late call - would paint over every channel it lies across. It is lifted to the front of the
-            # water block (its own slot emptied, so no index moves), in its draw order, and so no channel can precede a plot.
-            lifted = [z for z in self._paddy_z if z > _widx]
-            wblock: list[Any] = [self.out[z] for z in lifted]
-            wcls: list[ClsTag] = [self.out_cls[z] for z in lifted]
-            for z in lifted:
-                self.out[z], self.out_cls[z] = "", None
-            bedzs: list[Any] = []
-            sheenzs: list[Any] = []
-            for w in _entries:  # rims below every bed
-                if w.get("edge") is not None:
-                    wblock.append(w["edge"])
-                    wcls.append(w["cls"])
-            wblock.append('<g opacity="0.85">')
-            wcls.append(None)
-            for w in sorted(_entries, key=lambda w: bool(w.get("pond_fill"))):  # the pond FILL last (stable)
-                w["rec"]["bedz"] = _widx + len(wblock)
-                bedzs.append(_widx + len(wblock))
-                wblock.append(w["_bed"])
-                wcls.append(w["cls"])
-            wblock.append('</g>')
-            wcls.append(None)
-            wblock.append('<g opacity="0.55">')
-            wcls.append(None)
-            for w in _entries:
-                if w["_sheen"] is not None:
-                    w["rec"]["sheenz"] = _widx + len(wblock)
-                    sheenzs.append(_widx + len(wblock))
-                    wblock.append(w["_sheen"])
-                    wcls.append(w["cls"])
-            wblock.append('</g>')
-            wcls.append(None)
-            if bedzs:
-                self.M["water_bed_zmax"] = max(bedzs)
-            if sheenzs:
-                self.M["water_sheen_zmin"] = min(sheenzs)
-            if self._pond_entry is not None:
-                self._pond_entry["rec"]["late"] = self._late_water_idx is not None  # the fill lives in the late block when one exists
-            splices.append((_widx, wblock, wcls))
-            if self._late_water_idx is not None and self._water_idx is not None:
-                splices.append((self._water_idx, [""], [None]))  # the early placeholder empties; nothing renders there
+        self._water_block(splices)
         for idx, block, bcls_ in sorted(splices, key=lambda s: -s[0]):  # high index first so the lower stays valid
             self.out[idx : idx + 1] = block
             self.out_cls[idx : idx + 1] = bcls_
@@ -676,6 +602,92 @@ class FinishMixin:
             finally:
                 png_pool.shutdown()
         return len(self.placed)
+
+    def _record_scatter_frame(self: Settlement) -> None:  # type: ignore[misc]
+        """Record the tightest frame any scatter threw within and the view's overhang past it, per side (`finish`'s
+        verification of the scatter frame - the why is at its call; lifted out of `finish` by feature 370, the
+        100-statement cap)."""
+        if self._scatter_frames:
+            _tight = (
+                max(f[0] for f, _b in self._scatter_frames),
+                max(f[1] for f, _b in self._scatter_frames),
+                min(f[2] for f, _b in self._scatter_frames),
+                min(f[3] for f, _b in self._scatter_frames),
+            )
+            self.M["meta"]["scatter_frame"] = [round(v, 1) for v in _tight]
+            _view = self.M["meta"].get("neatline") or self.view
+            if _view:
+                _over = [-1e9, -1e9, -1e9, -1e9]
+                for _frame, _parcel in self._scatter_frames:
+                    _side = scatter_overhang(_frame, _parcel, _view)
+                    if _side is not None:
+                        _over = [max(a, b) for a, b in zip(_over, _side, strict=True)]
+                if max(_over) > -1e9:
+                    _over = [round(v, 1) for v in _over]
+                    self.M["meta"]["scatter_frame_overhang"] = _over  # left, top, right, bottom: positive = the view shows ground a throw was kept out of
+                    if max(_over) > 0:
+                        self.M["meta"]["scatter_frame_breach"] = _over
+
+    def _water_block(self: Settlement, splices: list[Any]) -> None:  # type: ignore[misc]
+        """Build `finish`'s ONE water block - every rim, then every bed in one shared-opacity group with the pond's fill
+        last, then every sheen - and queue its splice (the why is at its call; lifted out of `finish` by feature 370, the
+        100-statement cap; the same order, so the same SVG)."""
+        _entries = list(self.water) + list(self.late_water)
+        _widx = self._late_water_idx if self._late_water_idx is not None else self._water_idx
+        if _entries and _widx is not None:
+            for w in self.water:  # a pond-anchored feeder is snapped to the rim now that the pond is known
+                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
+                if w.get("clip") is not None and self.M.get("pond"):
+                    cp = self._clip_to_pond(w["clip"]["pts"])
+                    dd = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in cp)
+                    w["_bed"] = w["clip"]["bed_t"].format(dd=dd)
+                    if w["clip"]["sheen_t"] is not None:
+                        w["_sheen"] = w["clip"]["sheen_t"].format(dd=dd)
+            for w in self.late_water:
+                w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
+            # THE PADDY LAYER GOES UNDER THE WATER, WHATEVER THE CALL ORDER (feature 287, water W38): a plot emitted through
+            # `add_paddy` after the water block's anchor - a field drawn after the first stream on a map with no late block,
+            # or after the last late call - would paint over every channel it lies across. It is lifted to the front of the
+            # water block (its own slot emptied, so no index moves), in its draw order, and so no channel can precede a plot.
+            lifted = [z for z in self._paddy_z if z > _widx]
+            wblock: list[Any] = [self.out[z] for z in lifted]
+            wcls: list[ClsTag] = [self.out_cls[z] for z in lifted]
+            for z in lifted:
+                self.out[z], self.out_cls[z] = "", None
+            bedzs: list[Any] = []
+            sheenzs: list[Any] = []
+            for w in _entries:  # rims below every bed
+                if w.get("edge") is not None:
+                    wblock.append(w["edge"])
+                    wcls.append(w["cls"])
+            wblock.append('<g opacity="0.85">')
+            wcls.append(None)
+            for w in sorted(_entries, key=lambda w: bool(w.get("pond_fill"))):  # the pond FILL last (stable)
+                w["rec"]["bedz"] = _widx + len(wblock)
+                bedzs.append(_widx + len(wblock))
+                wblock.append(w["_bed"])
+                wcls.append(w["cls"])
+            wblock.append('</g>')
+            wcls.append(None)
+            wblock.append('<g opacity="0.55">')
+            wcls.append(None)
+            for w in _entries:
+                if w["_sheen"] is not None:
+                    w["rec"]["sheenz"] = _widx + len(wblock)
+                    sheenzs.append(_widx + len(wblock))
+                    wblock.append(w["_sheen"])
+                    wcls.append(w["cls"])
+            wblock.append('</g>')
+            wcls.append(None)
+            if bedzs:
+                self.M["water_bed_zmax"] = max(bedzs)
+            if sheenzs:
+                self.M["water_sheen_zmin"] = min(sheenzs)
+            if self._pond_entry is not None:
+                self._pond_entry["rec"]["late"] = self._late_water_idx is not None  # the fill lives in the late block when one exists
+            splices.append((_widx, wblock, wcls))
+            if self._late_water_idx is not None and self._water_idx is not None:
+                splices.append((self._water_idx, [""], [None]))  # the early placeholder empties; nothing renders there
 
     def render_png(self: Settlement, basepath: str, width: int = 2600) -> None:  # type: ignore[misc]
         """Rasterize basepath.svg -> basepath.png via resvg.
