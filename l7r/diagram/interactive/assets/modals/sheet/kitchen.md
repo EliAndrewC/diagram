@@ -22,7 +22,7 @@ Guesses:
 Depiction: A residence's plan draws the kitchen board-floored, cooking on a kamado that stands either on a small doma at the
 kitchen's edge or, on legs, on the boards with no doma drawn - each plan takes one - and never on a sunken hearth. Its door opens into the work space of
 the service ground, the reverse of a guest's door; the family's own door is the residence's inner entrance. The kitchen is
-kept a fraction of the size of the house it serves, to the side and rear of it, away from the gate.
+drawn at about the size of the Hagi house's kitchen wing, about 24 by 18 ft or a little smaller, whatever the size of the house it serves, and always well short of the house itself; it stands to the side and rear of the house, away from the gate.
 
 Name: kitchen
 Covers: the kitchen and pantries building and its label

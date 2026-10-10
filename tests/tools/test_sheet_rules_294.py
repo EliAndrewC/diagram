@@ -351,3 +351,15 @@ def test_the_family_privy_is_attached_to_the_house_at_its_rear_else_an_end() -> 
     assert seat2 is not None and seat2[0] in (45.0, 110.0)
     boxed = [(0.0, 0.0, 200.0, 2.0 - 1e-9), (40.0, 0.0, 50.0, 30.0), (110.0, 0.0, 120.0, 30.0), (50.0, 22.0, 110.0, 30.0)]
     assert cp._family_privy(env, [walled], boxed, [], ()) is None
+
+
+def test_veranda_depths_holds_a_strip_to_half_a_ken_to_one_ken() -> None:
+    """Feature 374 wave 112: 0102's drawing page, 3-6 ft; a strip in a tagged group is read as one too."""
+    svg = (
+        '<svg><rect x="0" y="0" width="90" height="8" fill="#E8D2A8" data-kind="engawa"/>'
+        '<rect x="0" y="20" width="90" height="12" fill="#E8D2A8" data-kind="engawa"/>'
+        '<g data-kind="engawa"><rect x="0" y="40" width="20" height="90" fill="#E8D2A8"/></g>'
+        '<rect x="0" y="140" width="9" height="40" fill="#E8D2A8" data-kind="engawa"/></svg>'
+    )
+    got = pr.veranda_depths(svg)
+    assert got == ["the veranda at svg(0,0) is 2.7 ft deep - the band is 3-6 ft", "the veranda at svg(0,40) is 6.7 ft deep - the band is 3-6 ft"]

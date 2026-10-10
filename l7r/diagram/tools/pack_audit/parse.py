@@ -6,6 +6,7 @@ import re
 from dataclasses import dataclass, field
 
 from ...interactive.sheet import element_kinds
+from .tagged import marks
 
 INTERIOR_FILL = "url(#court-earth)"
 BUILDING_FILLS: frozenset[str] = frozenset({"#DDB87A", "#C9A57A", "#E8D2A8", "#F2EFE4", "#C9876C", "#B89868", "#8C6F3E", "#6B4030"})
@@ -437,7 +438,10 @@ def parse_svg(text: str) -> ParsedPlan:
     wells = tuple(r for r in rects if r.fill == WELL_FILL)
     fills = tuple(r for r in rects if not r.precinct)
     furniture = tuple(r for r in fills if r.area_px < FURNITURE_MAX_AREA_PX)
-    door_rects = tuple(r for r in rects if r.fill in DARK_FILLS and r.area_px < DOOR_MAX_AREA_PX)
+    # A kamado tagged `hearth` shares a door's dark ink and size; in a 24 x 18 ft kitchen it stands within a door's reach
+    # of a wall, and the floating-door check read it as a door adrift (feature 374 wave 113) - the sheet says what it is.
+    hearths = {m.pos for m in marks(text) if m.tag == "rect" and m.kind == "hearth"}
+    door_rects = tuple(r for r in rects if r.fill in DARK_FILLS and r.area_px < DOOR_MAX_AREA_PX and r.pos not in hearths)
     kinds = element_kinds(text)
     return ParsedPlan(
         interior,

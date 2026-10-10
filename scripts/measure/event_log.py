@@ -153,7 +153,7 @@ def line(payload: Mapping[str, Any], t: str | None = None) -> dict[str, Any]:
                 out["manifest"] = m.group(1)
             u = re.search(r"\bUNIT:\s*(\S+)", prompt)  # a review check's unit (feature 294's dispatch form)
             if u:
-                out["unit"] = u.group(1)
+                out["unit"] = u.group(1).rstrip(",;.")  # "UNIT: <slug>, on ..." - the comma is the prose's, not the slug's
             if "REVIEW_ROUNDS_OK=" in prompt:  # a round past the cap on the GM's waiver - what FR-011's arbiter replaces
                 out["waiver"] = 1
             resp = payload.get("tool_response")

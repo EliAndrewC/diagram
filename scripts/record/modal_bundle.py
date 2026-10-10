@@ -242,8 +242,13 @@ with sync_playwright() as p:
         pg.wait_for_timeout(200)
     x, y, w, h = rect()
     pg.mouse.move(2, 2); pg.wait_for_timeout(150)  # off the glyph, so it is not drawn lit
+    # ...AND NEVER LIT: zoomed in, a large glyph (a Mode A kitchen, an archive) fills the viewport, so the corner the mouse
+    # leaves for is ON it and the shot showed the page's highlight, not the drawn fill (feature 372 wave 105; fixed feature
+    # 374 wave 113, FR-007). The lit state is cleared outright, and the clip takes the glyph's whole box, at least 600 x 500.
+    pg.evaluate("() => document.querySelectorAll('g.f.on').forEach(g => g.classList.remove('on'))"); pg.wait_for_timeout(100)
     cx, cy = x + w / 2, y + h / 2
-    pg.screenshot(path=out, clip={"x": max(0, cx - 300), "y": max(0, cy - 250), "width": 600, "height": 500})
+    cw, ch = min(1200, max(600, w + 60)), min(900, max(500, h + 60))
+    pg.screenshot(path=out, clip={"x": max(0, min(cx - cw / 2, 1200 - cw)), "y": max(0, min(cy - ch / 2, 900 - ch)), "width": cw, "height": ch})
     b.close()
 """
 

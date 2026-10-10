@@ -148,3 +148,20 @@ def test_the_cascade_wire_stays_live_after_any_ruling(tmp_path: pathlib.Path) ->
     ha.record_ruling(root, "cascade@1", {"ruling": "accept", "why": "the checks found real defects each time"}, "round-arbiter")
     assert ha.cascade_state(root) == ("cascade@2", 12)
     assert not ha.cascade(20, 10, 12) and ha.cascade(22, 10, 12), "live again a round of checks after the ruling"
+
+
+def test_an_accept_on_a_round_cap_answers_its_units(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 374 FR-005: an `accept` closed the unit to dispatches while the record gate went on owing it, so the push
+    refused what the arbiter accepted; a modal-research accept answers its three units, a page's check its question."""
+    import sys
+    import types
+
+    calls: list[tuple[str, dict]] = []
+    fake = types.ModuleType("record_owed")
+    fake.answer = lambda root, check, result, **kw: calls.append((check, kw)) or [f"{check}:x"]  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "record_owed", fake)
+    root = pathlib.Path("/r")
+    assert ha.accept_answers(root, "modal-research|modal:sheet/x", "accepted") == ["modal-accuracy:x", "modal-references:x", "modal-gaps:x"]
+    assert ha.accept_answers(root, "quote-check|q:0091", "accepted") == ["quote-check:x"]
+    assert calls[-1] == ("quote-check", {"q": "0091"}) and calls[0] == ("modal-accuracy", {"kind": "sheet/x"})
+    assert ha.accept_answers(root, "impl-drift|", "accepted") == [], "no subject: nothing to answer"

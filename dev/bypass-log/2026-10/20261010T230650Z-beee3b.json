@@ -1,0 +1,6 @@
+{
+  "utc": "20261010T230650Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "every review this delta owes ran and passed at engine key 09b4e0ec93b5; the key moved only by merging main"
+}

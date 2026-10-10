@@ -55,11 +55,6 @@ ROOFED_ZONES: dict[str, tuple[str, float]] = {"oshirasu": ("#5A3F1E", 2.0)}
 # post-and-beam front. Each post is drawn 1 ft square, at true size.
 ROOF_POST_BAY_FT: float = 12.0
 ROOF_POST_FT: float = 1.0
-# The covered corridor joining the kitchen to the residence (feature 267, research/questions/0107-kitchens-daidokoro.html 'Kitchens (daidokoro)': the kitchen is
-# part of the HOUSE, joined as an ell or by a short covered corridor, never a freestanding cookhouse; docs/buildings.md
-# "Kitchen + pantries"). Its width, one ken (~6 ft), is a GUESS; it is drawn only across a gap no wider than a
-# fire-gap - a longer run would be a gallery, not the short corridor the research describes.
-CORRIDOR_W_FT: float = 6.0
 # The bath (feature 267 R09, research/questions/0105-baths-furo.html 'Baths (furo)': a room of the residence or a small addition to it on its
 # service side, by the kitchen and its well - no bath as a building of its own was found). 10 x 8 ft (pass 6: the whole
 # house is held to research 0091's 49-tsubo house, ~1,740 sq ft; it was 15 x 12, then 12 x 10) - below the
@@ -200,6 +195,11 @@ class BuildingSpec:
     # a face a door is tried at when not DOOR_FRACS
     extra_doors: tuple[str, ...] = ()
     door_fracs: tuple[float, ...] = ()
+    # The `feature` of the building this one is an ELL of: the placer abuts the two, no fire-gap between (feature 374
+    # wave 113, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: a middle-rank house was one
+    # block, its kitchen projecting from one side, with almost no corridors - the draft drew a covered corridor across
+    # the fire-gap until then).
+    joins: str = ""
 
 
 @dataclass(frozen=True)

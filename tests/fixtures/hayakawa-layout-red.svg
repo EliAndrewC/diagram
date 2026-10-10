@@ -288,7 +288,7 @@
        living block - the cookhouse does not out-foot the family's own quarters
        (size-audit 2026-07) -->
   <g data-kind="kitchen">
-    <rect x="160" y="320" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="214" y="320" width="72" height="54" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <rect x="175" y="333" width="30" height="22" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
     <circle cx="190" cy="344" r="6" fill="#E68A40"/>
     <text x="222" y="370" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">kitchen</text>

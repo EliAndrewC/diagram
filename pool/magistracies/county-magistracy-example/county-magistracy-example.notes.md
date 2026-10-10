@@ -17,8 +17,9 @@ The forms the draft takes where the research gives more than one (feature 267 ou
 - **R01 veranda**: the garden face alone (the first of the two forms), 4 ft wide (pass 6; 5 ft before) - an `engawa` strip inside the
   residence's south face (research 0102: 3-6 ft).
 - **R02 residence massing**: one block under one roof, the ordinary form, massed in TWO ROWS of rooms front and back
-  (as pass 2 re-massed Ochiba's, forms.md; the Kuchiba house's two rows, research buildings 260); the kitchen joined
-  to it by a short covered corridor, not an echelon of halls (research buildings 250, 360/370).
+  (as pass 2 re-massed Ochiba's, forms.md; the Kuchiba house's two rows, research buildings 260); the kitchen an
+  ELL abutting its west end, no corridor (feature 374 wave 113, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html:
+  a middle-rank house was one block, its kitchen projecting from one side, with almost no corridors), not an echelon of halls.
 - **R03 room order**: the palace order's lesser form - the reception room at the east END, the full depth, nearest the
   middle gate; the master's rooms beside it on the garden row; the family's beyond, on the garden row by the kitchen,
   with the inner rooms behind (research buildings 260). Room sizes are GUESSES.
@@ -31,10 +32,9 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   entrance; the hatch was a guess and is dropped for it.) THE CARTER'S ROUTE to both (pass 8): in by the kitchen
   postern in the west wall, north along the wall past the vegetable ground, up the 7 ft way between the servants' row
   and the kitchen, and east along the rear alley, which since pass 8 runs on behind the kitchen - the kitchen stands
-  10 ft off the north wall as the house does, so the corridor between them no longer closes the alley's west end.
+  10 ft off the north wall as the house does, so the kitchen ell abutting the house leaves the alley's west end open.
   Never through the ceremonial middle gate or the lord's garden. The alley opens east onto the inner court; at its
-  west end the kitchen's corridor to the house closes it (the slot north of the corridor is closed on all sides - the
-  pass-5 notes' "opens west into the slot" was wrong). The servants reach the kitchen by the kitchen yard instead:
+  west end it runs on behind the kitchen, which abuts the house as an ell (feature 374 wave 113). The servants reach the kitchen by the kitchen yard instead:
   since pass 6 their row stands in the NW corner beside the kitchen, its door and privy on the yard with the postern.
 - **House size**: research 0091 is the ground. Its two measured main houses are the Yokota house of a
   150-koku district magistrate (gun-bugyo) at about 49 tsubo (~1,740 sq ft) and the Matsue house of 500-1,000 koku
@@ -53,7 +53,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   stone at the reception's veranda (the Koseki form, research 0104). The household's own doors: the kitchen's
   one outside door on its WEST face, onto the 7 ft way between it and the servants' row that runs to the yard (pass
   7: on its yard face it opened into a ~5 ft pocket between the bath, the well and the house), and the residence's
-  inner entrance on its west face, below the corridor
+  inner entrance on its rear (north) face in the kitchen half, east of the family privy, onto the alley (feature 374 wave 113: the kitchen ell takes its west face)
   (research buildings 370). Note 300 says of the Koseki house that the everyday door is the kitchen entrance, while
   370 gives the family an inner entrance apart from it; the draft draws both doors.
 - **R18 granary**: an earth-walled kura on the ground, no posts (the dozo form).
@@ -78,10 +78,10 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   house's grounds). Pass 7 takes the field form, as large as the yard holds - 64 x 48 ft, 3,072 sq ft, its size a
   GUESS - leaving a ~12 ft way from the postern along the west wall (7 ft past the servants' privy, which stands flush to it) (pass 6's 36 x 30 plot left ~100 x 60 ft of the
   yard bare). It is drawn in the garden stipple, as the hand sheets draw theirs.
-- **Garden**: 122 x 46 ft, from the kitchen's corridor to the guest house (pass 7): the one garden faces the
+- **Garden**: 124 x 46 ft, from the kitchen ell's east face to the guest house (pass 7; feature 374 wave 113: 2 ft longer, the house 7 ft west): the one garden faces the
   reception and the guest house both, guests being received in the garden-facing rooms (research buildings 330).
   Pass 5's 188 ft garden ran on beside the servants' row with a bare strip; pass 6 cut it to the house's 68 ft and
-  left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. A ~69 x 36 ft band of inner court north of
+  left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. A ~76 x 36 ft band of inner court north of
   it, east of the house (the alley's east end and the shrine's corner), stays open ground.
 - **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
   ~36 x 30 ft is Ochiba's particular, not the generic post's (docs/building-programs.md: "The shrine is universal
@@ -101,7 +101,7 @@ Guesses the draft carries beyond those: a **detached guest house** (R10, researc
 in the main house; a guest house apart was not found). (The karo's house of its own, a GUESS through pass 5, is now
 a bay of the staff long-house - R11's attested form.) The kitchen postern's, the service gate's and the middle gate's 6 ft (narrower than the main
 gate), the door width (a map drawing convention, research 0117), the roji's stone spacing, the hearing
-court's 80 x 32 ft, the garden's 122 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 62 x 25 ft, the 5 ft privies and
+court's 80 x 32 ft, the garden's 124 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 62 x 25 ft, the 5 ft privies and
 their 15 ft from any well are guesses too. The forecourt, the `outer court` ground beside the hearing court and the
 cart yard are drawn as bare ground with no edge: an outlined forecourt read as a fenced one, a GUESS the record does
 not support (research 0104).
@@ -286,6 +286,8 @@ Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check p
 
 ## Review log
 
+- **2026-10-10 (feature 374 wave 113, building-review round 1)**: the garden zone starts at the kitchen ell's east face (it started 5 ft west of it and held the kitchen well); the house's inner entrance moved east along its rear face, off the family privy at the rear west corner.
+- **2026-10-10 (feature 374 wave 113)**: the kitchen an ELL abutting the house's west end (`BuildingSpec.joins`: the placer leaves no fire-gap between the two), the covered corridor that crossed the 7 ft gap gone (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: almost no corridors in a middle-rank house, its kitchen projecting from one side); the house 7 ft further west, the garden zone with it; the house's inner entrance on its rear face at the kitchen end, the west face being the kitchen's; the family privy a foot in from the house's rear west corner.
 - **2026-09-27 building-review of the pass-2 draft** (the pass-3 fix list): 3 delta errors (a tub and its caption under
   the roofed court; the garden off the house; the court longer than the hall and off its axis), 5 program items the
   outcomes name (the gate pair R19/R26, doors and the approach R07, the divider gate and kitchen postern, the

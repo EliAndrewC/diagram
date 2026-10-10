@@ -28,6 +28,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 import time
 from collections.abc import Mapping
 from pathlib import Path
@@ -157,6 +158,27 @@ def cascade_state(root: Path) -> tuple[str, int]:
     return f"cascade@{len(ruled) + 1}", last
 
 
+#: the units one `modal-research` dispatch is answered as
+RESEARCH_UNITS: tuple[str, ...] = ("modal-accuracy", "modal-references", "modal-gaps")
+
+
+def accept_answers(root: Path, unit: str, result: str) -> list[str]:
+    """An `accept` on a round cap answers that check's units on its subject at today's words (feature 374 FR-005): the
+    arbiter closed the unit to further dispatches, and the record gate went on owing it, so the push refused what the
+    arbiter had accepted. `unit` is `<check>|<subject>` - a pop-up `modal:<uid>` or a question `q:<NNNN>`."""
+    check, _, subject = unit.partition("|")
+    kind, _, name = subject.partition(":")
+    if kind not in ("modal", "q") or not check or not name:
+        return []
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "record"))
+    import record_owed  # noqa: PLC0415
+
+    done: list[str] = []
+    for c in RESEARCH_UNITS if check == "modal-research" else (check,):
+        done += record_owed.answer(root, c, result, kind=name) if kind == "modal" else record_owed.answer(root, c, result, q=name)
+    return done
+
+
 def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared: str, now: str | None = None) -> dict[str, Any]:
     """Record the round arbiter's ruling: binding, one per trigger (FR-011)."""
     if declared != "round-arbiter":
@@ -190,6 +212,8 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
             gm.ensure_box(d)
     except (OSError, ImportError):  # pragma: no cover - a tree without the script records the row all the same
         pass
+    if row["ruling"] == "accept" and row["kind"] == "round":
+        accept_answers(root, row["unit"], f"accepted by the round arbiter ({trigger})")
     if row["ruling"] == "process-fault":
         with (d / "found.jsonl").open("a", encoding="utf-8") as fh:
             fh.write(json.dumps({"check": "round-arbiter", "file": "(tooling)", "block": trigger, "finding": row["why"],
