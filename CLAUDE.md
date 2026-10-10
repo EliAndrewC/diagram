@@ -131,7 +131,7 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   feature - `make claim`, then a `spec.md` whose `**Status**: Filed` says what it is - and ask `make speckit-todo` what
   is open: filed, planned, in progress. Each spec names what it touches in an `**Affects**:` line (tags from
   `.specify/affects.json`: the diagram kinds, tooling, research, ...), and its stage - `now`, `village`, `town`, `provincial city`,
-  `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag; `CHECK=1`, run at the push, holds it). A feature closes when every task is ticked, or when its status line opens
+  `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag, `AFFECTS=<tag>` lists only that tag's; `CHECK=1`, run at the push, holds it). A feature closes when every task is ticked, or when its status line opens
   `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
 - Every task is `research: rendering` or `research: physical`; a physical task carries the boxes
   `research pass`, `source-reader confirmed`, `recorded and cited`, `quote-check confirmed` and

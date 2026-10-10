@@ -22,6 +22,7 @@ stage where it is wrong. The report groups each state by stage, or by tag with `
 open feature with no tag or an unknown one.
 
     speckit-todo.py [--root <repo>] [--all]     --all adds the closed features and why each is closed
+    speckit-todo.py [--root <repo>] --affects T,U   only the features carrying any of those tags, same layout
     speckit-todo.py [--root <repo>] --by-affects     the open features grouped by tag (a feature under each of its tags)
     speckit-todo.py [--root <repo>] --check     exit 1, with the line to add, when an open feature's tags are missing or unknown
     speckit-todo.py --state <specs/NNN-slug>     one feature's state
@@ -180,10 +181,16 @@ def _by_affects(group: list[Feature], tags: list[str]) -> list[str]:
     return out
 
 
-def report(specs: Path, show_closed: bool = False, by_affects: bool = False) -> str:
-    fs = features(specs)
+def wanted(words: str, vocab: Vocabulary) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """The tags a filter names (comma-separated, aliases expanded) and the ones the vocabulary does not know."""
+    return affects(f"**Affects**: {words}", vocab)
+
+
+def report(specs: Path, show_closed: bool = False, by_affects: bool = False, only: tuple[str, ...] = ()) -> str:
+    """The features by state, grouped by stage or by tag; `only` keeps the features carrying any of those tags."""
+    fs = [f for f in features(specs) if not only or set(only) & set(f.affects)]
     tags = list(vocabulary(specs.parent).stage)
-    out: list[str] = []
+    out: list[str] = [f"affects {', '.join(only)}", ""] if only else []
     for state in STATES:
         group = [f for f in fs if f.state == state]
         out.append(f"{state.upper()} ({len(group)})")
@@ -195,7 +202,8 @@ def report(specs: Path, show_closed: bool = False, by_affects: bool = False) -> 
         out.extend(_line(f, f.why) for f in closed)
         out.append("")
     n = {s: sum(f.state == s for f in fs) for s in STATES}
-    out.append(f"open: {n['filed']} filed, {n['planned']} planned, {n['in progress']} in progress; closed: {len(closed)}")
+    scope = f" (affects {', '.join(only)})" if only else ""
+    out.append(f"open: {n['filed']} filed, {n['planned']} planned, {n['in progress']} in progress; closed: {len(closed)}{scope}")
     return "\n".join(out) + "\n"
 
 
@@ -235,6 +243,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--root", default=".", help="the repository root (default: the current directory)")
     ap.add_argument("--all", action="store_true", help="also list the closed features and why")
     ap.add_argument("--check", action="store_true", help="exit 1 when an open feature's tags are missing or unknown")
+    ap.add_argument("--affects", metavar="TAGS", help="only the features carrying any of these tags (comma-separated)")
     ap.add_argument("--by-affects", action="store_true", help="group the open features by tag, not by stage")
     ap.add_argument("--state", metavar="DIR", help="print one feature directory's state and nothing else")
     ap.add_argument("--closed-by-status", metavar="DIR", help="print yes when the spec's status line closes it, else no")
@@ -249,7 +258,15 @@ def main(argv: list[str]) -> int:
     if args.state:
         sys.stdout.write(feature(Path(args.state)).state + "\n")
         return 0
-    sys.stdout.write(report(Path(args.root) / "specs", show_closed=args.all, by_affects=args.by_affects))
+    only: tuple[str, ...] = ()
+    if args.affects:
+        vocab = vocabulary(Path(args.root))
+        only, unknown = wanted(args.affects, vocab)
+        if unknown or not only:
+            known = ", ".join([*vocab.stage, *vocab.aliases])
+            sys.stderr.write(f"speckit-todo: AFFECTS names no tag it knows: {', '.join(unknown) or args.affects}\nTags: {known}.\n")
+            return 2
+    sys.stdout.write(report(Path(args.root) / "specs", show_closed=args.all, by_affects=args.by_affects, only=only))
     return 0
 
 

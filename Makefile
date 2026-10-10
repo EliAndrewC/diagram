@@ -1160,8 +1160,10 @@ claim:          ## [project] claim the next spec-kit feature number under the ho
 speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, planned, in progress - by the stage each is owed at   [ALL=1: also the closed; BY=affects: by tag; CHECK=1: refuse missing or unknown tags]
 ##  ALL=1   also list the closed features and the reason each is closed
 ##  BY=affects  group the open features by their `**Affects**:` tags (.specify/affects.json) instead of by stage
+##  AFFECTS=tooling  only the features carrying that tag, same layout (several: AFFECTS="tooling, magistracy")
 ##  CHECK=1 exit 1, with the line to add, when an open feature's spec has no `**Affects**:` tag or an unknown one
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/speckit-todo.py" --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(filter affects,$(BY)),--by-affects,) $(if $(CHECK),--check,)
+# GUARD_EDIT_OK: the GM 2026-10-10 - AFFECTS= filters the read-only listing by tag.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/speckit-todo.py" --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(filter affects,$(BY)),--by-affects,) $(if $(AFFECTS),--affects "$(AFFECTS)",) $(if $(CHECK),--check,)
 
 # GUARD_EDIT_OK: feature 251 - four new operations (the token census and the three script pre-passes that
 # take the mechanical part of a subagent check out of a model); no existing target or guard changes.

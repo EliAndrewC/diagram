@@ -253,3 +253,27 @@ def test_a_tree_with_no_specs_or_no_vocabulary_has_nothing_owed(tmp_path: Path) 
     _feature(tmp_path, "001-x", "Filed", None)
     assert st.untagged(tmp_path / "specs") == [], "a repository without .specify/affects.json does not use the tags"
     assert st.check_message([]) == ""
+
+
+def test_affects_keeps_only_the_features_carrying_a_named_tag_in_the_same_layout(tmp_path: Path) -> None:
+    """The GM, 2026-10-10: `make speckit-todo AFFECTS=tooling` - only those items, with the same organization."""
+    _tagged(tmp_path, "001-tool", "tooling")
+    _tagged(tmp_path, "002-town", "tooling", "\n**Owed at**: town - waits on the town tier\n")
+    _tagged(tmp_path, "003-sheet", "magistracy")
+    out = st.report(tmp_path / "specs", only=("tooling",))
+    assert out.startswith("affects tooling\n") and "003-sheet" not in out
+    assert out.index("owed at now (1)") < out.index("001-tool") < out.index("owed at town (1)") < out.index("002-town")
+    assert out.rstrip().splitlines()[-1] == "open: 2 filed, 0 planned, 0 in progress; closed: 0 (affects tooling)"
+    assert "003-sheet" in st.report(tmp_path / "specs", only=("tooling", "magistracy"))
+
+
+def test_the_affects_option_expands_aliases_and_refuses_an_unknown_tag(tmp_path: Path) -> None:
+    _tagged(tmp_path, "001-town", "town")
+    _tagged(tmp_path, "002-tool", "tooling")
+    run = [sys.executable, str(script("speckit-todo.py")), "--root", str(tmp_path), "--affects"]
+    r = subprocess.run([*run, "all settlements"], capture_output=True, text=True, check=False)
+    assert r.returncode == 0 and "001-town" in r.stdout and "002-tool" not in r.stdout
+    r = subprocess.run([*run, "Tooling, town"], capture_output=True, text=True, check=False)
+    assert r.returncode == 0 and "001-town" in r.stdout and "002-tool" in r.stdout
+    r = subprocess.run([*run, "tools"], capture_output=True, text=True, check=False)
+    assert r.returncode == 2 and "AFFECTS names no tag it knows: tools" in r.stderr and "Tags: hamlet, village" in r.stderr
