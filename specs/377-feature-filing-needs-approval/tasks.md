@@ -26,3 +26,16 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T06 Close: `make hooks-test` and the tooling tests green; landed
       research: rendering
       verify: DONE. make hooks-test green, tooling tests 85 passed, make quick clean; landed by the push that carries this tick
+
+## Amendment 1 (the GM 2026-10-10: a reopen that lands open needs approval; one worked and settled again does not)
+
+- [x] T07 FR-011 and FR-012 in the decider and the guard (plan D9): `reopened()` and `push_repo()` in hm_approval.py over speckit-todo's `feature()`; the hook's bail-out admits `sync-with-main.sh`; the refusal's wording for a reopen
+      research: rendering
+      verify: DONE. reopened()/push_repo()/open_tasks() in hm_approval.py over speckit-todo's feature(): SETTLED at base and open at HEAD refused; FR-012 by task id under a closed status; hook bail-out admits sync-with-main.sh; refusals lead with finishing; suite section 6
+- [x] T08 The suite (SC-007): a status reopen and a task reopen refused at the push; reopened and settled again passes; a foreign added approval refused, the GM's own passes; an already-open feature and an unrelated command untouched; FR-012's task under Done refused, passing once ticked; the refusal leads with finishing
+      research: rendering
+      verify: DONE. suite 44/44: status and task reopens refused at the push; reopened and settled again passes; foreign approval refused, the GM's passes; already-open untouched; FR-012 task under Done refused incl. tick-one-add-one, passing once ticked; refusal order pinned; make hooks-test green
+- [x] T09 The text: CLAUDE.md's bullet and guard row, `docs/spec-kit-and-reviews.md`, `docs/guards.md` name the reopen rule
+      research: rendering
+      verify: DONE. CLAUDE.md bullet (reopen may be worked and closed; LANDS open needs approval) and guard row; spec-kit-and-reviews.md and guards.md name the push rule and FR-012
+

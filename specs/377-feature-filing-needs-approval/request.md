@@ -8,3 +8,11 @@ it had filed 376 on its own judgment. The GM replied:
 
 Dictation note: the GM dictates. "a, a spec change feature" is "a spec-kit feature", and "spec kit to do run" is
 `make speckit-todo`.
+
+## Amendment 1 (2026-10-10, same session)
+
+After 377 landed, the session asked whether reopening a closed feature should also need the GM's approval. The GM:
+
+> So the thing that I want to be asked about before it happens is having the number of features with open work that is not handled increase without my knowledge, without me signing off on it. Now, if an old feature is reopened in order for a session to add work to it where the session is doing that work, and then closing the feature again as the work is done, then that is okay for a session to do without my approval.
+>
+> Since you already filed 376, then you can go ahead and work it as its own feature.

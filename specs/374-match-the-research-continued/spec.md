@@ -45,6 +45,10 @@ a task per wave, the same gates and reviews, batched closes.
 tooling there - content-scoped record checks, line-scoped claims, decide-then-freeze, a preflight inside the gate. Take no wave
 here until 375 has landed.
 
+375's tooling is in its first real use here. When one of its guards refuses correct work, fix the guard in this feature
+(with its test), as constitution XIV asks; never escape it just to keep going. An escape is for a case that is genuinely
+exempt, and its reason says why (the GM, 2026-10-10).
+
 **Carried from 375** (its FR-014; this feature cannot close until both keys are in its `measurements.json`): SC-003 -
 in this feature's first three tasks, no red gate from a cause 375's preflight checks, no page re-checked while a check on it
 was outstanding, no plan-review BLOCK on a decision the decision preflight had ruled on (key `sc003-375-first-three-tasks`);

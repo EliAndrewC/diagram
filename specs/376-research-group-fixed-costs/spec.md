@@ -17,7 +17,10 @@ and `split.py`; R3 has every figure and the method's validation against R1.)
   Feature 269, which ran on both sides of the landing, rose from 1.18 M to 1.36 M.
 - A write session got shorter (median 54 turns against 76) and lighter per turn (105 K against 152 K). A group now
   checks about 8 things where it checked 21.
-- **The mechanism.** A group's sessions have a fixed part that does not shrink with the work. Check sessions run
+- **The mechanism - CORRECTED by `research.md` R1 (2026-10-10):** a fit of each group's cost against its things shows
+  the fixed part per group FELL (5.4 M to 3.5 M) and the cost per thing ROSE (0.78 M to 1.02 M), in more reading and
+  searching per item; the explanation below, as filed, is wrong, and with it the size of the levers (about 4% and 2%).
+  As filed: A group's sessions have a fixed part that does not shrink with the work. Check sessions run
   about 37 turns each, two a group, whatever they check, and a write session's setup is paid per session. So a write
   costs 6.8 turns a thing against 3.5, and a check 0.53 M a thing against 0.37 M.
 - **Coordination.** Whole reads of coordination files are gone (0.5 M against 50.8 M), but the line reads still

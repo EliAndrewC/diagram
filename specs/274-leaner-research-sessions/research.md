@@ -172,3 +172,12 @@ The caps shortened the sessions and lowered the peak, and the line reads ended t
 thing checked rose, because groups got smaller while each session's fixed cost did not. The next lever is the fixed
 part of a group, not the length of a session: one check pass over several write sessions' output, and a `make lines`
 that answers the claim a session needs rather than every line naming its page. Both are filed as feature 376.
+
+## R4 - R3's explanation corrected (feature 376, 2026-10-10)
+
+R3 explained the higher cost per thing checked as each session's fixed part spread over fewer things. A fit of each
+group's cost against its things (observed 2026-10-10; method: `specs/376-research-group-fixed-costs/measure/fixed_and_marginal.py`,
+in 376's research.md R1) shows the opposite. After the landing the fixed part per group FELL, from 5.4 M to 3.5 M, and
+the cost per thing ROSE, from 0.78 M to 1.02 M; feature 269 alone rose from 1.11 M to 1.59 M a thing. The rise sits in
+more reading and searching per item (reads 1.04 -> 2.18 a thing, web searches 0.65 -> 1.60), the work of the
+post-landing groups. R3's other figures stand; its "why the cost per thing rose" paragraph does not.

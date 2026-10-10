@@ -193,6 +193,102 @@ def judge(cmd: str, cwd: str, transcript: str) -> list[tuple[str, str]]:
     return out
 
 
+#: `make speckit-todo`'s states that hold no unhandled work: closed, or done with only the GM's review left
+SETTLED = ("closed", "done - GM review pending")
+PUSH = re.compile(r"sync-with-main\.sh\s+(?:done|push)\b")
+
+
+def _todo():  # noqa: ANN202 - scripts/speckit-todo.py, imported by path (its name has a hyphen)
+    import importlib.util  # noqa: PLC0415
+
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "speckit-todo.py")
+    spec = importlib.util.spec_from_file_location("speckit_todo", path)
+    mod = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+    sys.modules["speckit_todo"] = mod
+    spec.loader.exec_module(mod)  # type: ignore[union-attr]
+    return mod
+
+
+_OPEN_BOX = re.compile(r"^\s*- \[ \] (.*)$", re.M)
+_TASK_ID = re.compile(r"^(T\d+[a-z]?)\b")
+
+
+def open_tasks(text: str) -> set[str]:
+    """Each unticked task, keyed by its id (`T07`) where it has one, else by its normalized line (plan review of
+    amendment 1: a COUNT misses a push that ticks a leftover box and adds a new one - 17 closed features hold open boxes)."""
+    out = set()
+    for m in _OPEN_BOX.finditer(text):
+        line = norm(m.group(1))
+        tid = _TASK_ID.match(line)
+        out.add(tid.group(1) if tid else line)
+    return out
+
+
+def _state_at(top: str, rev: str, d: str, todo, vocab, tmp: str) -> tuple[str, str, set[str], bool]:  # noqa: ANN001
+    """(make speckit-todo's state, spec.md text, its unticked tasks, closed by its status line) of `specs/<d>` at `rev`;
+    ("", "", set(), False) where it did not exist."""
+    names = _git(top, "ls-tree", "-r", "--name-only", rev, "--", f"specs/{d}").stdout.split()
+    if not names:
+        return "", "", set(), False
+    for name in names:
+        dest = os.path.join(tmp, rev, name)
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        with open(dest, "wb") as fh:
+            fh.write(subprocess.run(["git", "-C", top, "show", f"{rev}:{name}"], capture_output=True, check=False).stdout)
+    here = os.path.join(tmp, rev, "specs", d)
+    spec = os.path.join(here, "spec.md")
+    text = open(spec, encoding="utf-8", errors="replace").read() if os.path.exists(spec) else ""  # noqa: SIM115
+    tasks = os.path.join(here, "tasks.md")
+    unticked = open_tasks(open(tasks, encoding="utf-8", errors="replace").read()) if os.path.exists(tasks) else set()  # noqa: SIM115
+    import pathlib  # noqa: PLC0415
+
+    return todo.feature(pathlib.Path(here), vocab).state, text, unticked, todo.closed_by_status(pathlib.Path(here))
+
+
+def reopened(top: str, transcript: str) -> list[tuple[str, str]]:
+    """Amendment 1 (the GM, 2026-10-10: "the number of features with open work that is not handled [must not] increase
+    without my knowledge"): every feature CLOSED at the push's base and OPEN at HEAD, unless HEAD's spec.md adds an
+    approval line whose quote the GM wrote in this session. Reopened, worked and closed again within the delta passes."""
+    import pathlib  # noqa: PLC0415
+    import tempfile  # noqa: PLC0415
+
+    base = _git(top, "merge-base", "HEAD", "origin/main").stdout.strip()
+    if not base:
+        return []
+    dirs = sorted({n.split("/")[1] for n in _git(top, "diff", "--name-only", base, "HEAD", "--", "specs/").stdout.split() if n.count("/") >= 2})
+    if not dirs:
+        return []
+    todo = _todo()
+    vocab = todo.vocabulary(pathlib.Path(top))
+    out: list[tuple[str, str]] = []
+    messages: list[str] | None = None
+    with tempfile.TemporaryDirectory() as tmp:
+        for d in dirs:
+            was, before, open_before, _ = _state_at(top, base, d, todo, vocab, tmp)
+            now, after, open_after, status_closed = _state_at(top, "HEAD", d, todo, vocab, tmp)
+            reopen = was in SETTLED and bool(now) and now not in SETTLED
+            # FR-012: an unticked task added under a status line that still says Done (speckit-todo reads it closed)
+            hidden = bool(now) and status_closed and bool(open_after - open_before)  # a task open now that was not
+            if not (reopen or hidden):
+                continue
+            added = [q for q in quotes(after) if q not in quotes(before) and len(norm(q).split()) >= MIN_WORDS]
+            if messages is None:
+                messages = gm_messages(transcript)
+            if not any(norm(q) in m for q in added for m in messages):
+                kind = "reopened" if reopen else "hidden-open"
+                out.append((kind if not added else kind + "-not-found", f"specs/{d}/spec.md"))
+    return out
+
+
+def push_repo(cmd: str, cwd: str) -> str:
+    """The repository a `sync-with-main.sh done|push` command runs in: the last `cd` before it, else the cwd."""
+    before = cmd[: PUSH.search(cmd).start()]  # type: ignore[union-attr]
+    cds = re.findall(r"(?:^|[;&|]\s*|\s)cd\s+(['\"]?)([^\s;&|'\"]+)\1", before)
+    where = cds[-1][1] if cds else cwd
+    where = where if os.path.isabs(where) else os.path.join(cwd, where)
+    return _git(where, "rev-parse", "--show-toplevel").stdout.strip()
+
+
 def main(argv: list[str]) -> int:
     if argv[:1] != ["judge"]:
         print(__doc__.strip().splitlines()[-1].strip(), file=sys.stderr)
@@ -202,7 +298,12 @@ def main(argv: list[str]) -> int:
     except json.JSONDecodeError:
         return 0
     cmd = str((payload.get("tool_input") or {}).get("command") or "")
-    for bad, rel in judge(cmd, os.environ.get("FA_CWD") or os.getcwd(), payload.get("transcript_path") or ""):
+    cwd, transcript = os.environ.get("FA_CWD") or os.getcwd(), payload.get("transcript_path") or ""
+    found = judge(cmd, cwd, transcript)
+    if PUSH.search(cmd):
+        top = push_repo(cmd, cwd)
+        found += reopened(top, transcript) if top else []
+    for bad, rel in found:
         print(f"{bad}\t{rel}")
     return 0
 
