@@ -120,3 +120,10 @@ in 328's ranking and this spec.
 - [x] T11 wave 108's row (FR-001, FR-002)
       research: rendering
       verify: DONE. DONE. wave 108: the bath at 0105's 10 x 8 ft on Ochiba and Ubame; Hayakawa's enlarged bath recorded on 0105 as a GUESS particular and claimed; band w 8-18 by h 8-12; glyph-check bath PASS; record checks answered; plan review CLEAR round 2
+
+## Phase 12 - wave 109 (amendment 8): three more claims labeled as the record has them
+
+- Claims only (FR-001): `docs/buildings.md`'s wells and inner court sections.
+
+- [ ] T12 wave 109's rows (FR-001)
+      research: rendering

@@ -188,6 +188,7 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: reception at one end - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html: zashiki and alcove at the formal end -->
 <!-- Research: formal reception room - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: zashiki kept even beside an office hall -->
 <!-- Research: senior retainers housed apart - research/questions/0106-the-chief-retainers-house-karo-yashiki.html: karo in a separate house -->
+<!-- Research: the karo's own house as a lodging block inside the compound - GUESS research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: on the hand-drawn plans the karo has a small house of their own in the residence court; no page places a chief retainer's own house inside the compound -->
 <!-- Research: suites as labeled zones - CONVENTION: each labeled area compresses several rooms -->
 <!-- Research: engawa - research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: ~8 px strip along the garden-facing south face; all three magistracy sheets draw only a ~3 ft strip on the garden face, the faces never rolled as a knob -->
 <!-- Research: genkan - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: on the office hall or none with a roji path, a knob; other blocks by informal doors -->
@@ -201,6 +202,7 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: room order - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: every sheet drawn so far takes the palace order (reception in front, the master's rooms, the family's beyond); the small house's order is never taken -->
 <!-- Research: residence of ~18-25 tatami rooms - GUESS: 18-25 rooms falls between the record's thousand-koku six-room house (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html) and its 38-room karo mansion (research/questions/0106-the-chief-retainers-house-karo-yashiki.html) -->
 
+<!-- Research: the residence along the north range - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the residence with its garden before it and the shady north band behind it, a service strip or an alley -->
 - **Residence** - the lord's family dwelling along the north range, with internal soft-divisions (dashed lines) separating rooms. The historical rules the interior-audit added (2026-07), as feature 267's research revised them:
   - **Never one long bar, one room deep** - a single long rectangle reads as a nagaya (barracks) or honjin guest range. Two massings are attested (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html): ONE BLOCK under one roof, two rows of rooms front and back (the Kuchiba house's six-room plan) - the ordinary form below a daimyo's scale; or halls in ECHELON (gankō, "flying geese") joined by corridors - the great house's form, or a house added to hall by hall over generations. Draw echelon only where the sheet's story is accretion.
   - **The reception sits at one END of the house** ('Samurai residences and their rooms (buke yashiki)'), never between the master's rooms and the family's, and the ancestral alcove belongs at the formal end, by or behind the zashiki ('Household altar rooms and ancestral tablets (butsuma and ihai)'; the rule at 'How our maps draw household altar rooms and ancestral tablets (butsuma and ihai)').
@@ -218,7 +220,8 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: kitchen well - research/questions/0105-baths-furo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: inside or beside the kitchen -->
 <!-- Research: garden well - UNRESEARCHED: in the inner garden -->
 <!-- Research: stables well - UNRESEARCHED: just outside the stables for watering -->
-<!-- Research: bath-area well - research/questions/0105-baths-furo.drawing.html: optional, the kitchen well usually serves the bath -->
+<!-- Research: bath-area well - GUESS research/questions/0105-baths-furo.drawing.html: optional, the kitchen well usually serves the bath (0105's own reading) -->
+<!-- Research: a fourth well only for very large compounds - UNRESEARCHED: no page says how many wells a compound kept by its size -->
 <!-- Research: well glyph - research/questions/0196-communal-wells-ido.drawing.html: Hoshigaoka's sheet draws a plain square curb and mouth, with no sweep or pulley frame and no roof -->
 <!-- Research: well curb size - CONVENTION: the curb drawn ~22x22 px (~7.3 ft), a marker larger than the ~4 ft curb it stands for, as 0196's drawing page draws its wells -->
 

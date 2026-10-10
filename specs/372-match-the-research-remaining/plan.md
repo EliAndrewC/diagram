@@ -245,6 +245,15 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   drawn for the old room (the east one ~2 px inside the wall's stroke), its tub on the room's center line.
 - **Occasions**: glyph-redrawn: bath on ochiba-magistracy (the same change on Ubame).
 
+## Wave 109 (amendment 8, 2026-10-10) - batch 7
+
+- **Scope**: three E0 rows this batch's impl-drift found in `docs/buildings.md`, the claim lines alone: `Wells#bath-area well`
+  relabeled GUESS on 0105's drawing page (that the kitchen well serves the bath is 0105's own reading), with the optional fourth
+  well "only for very large compounds" claimed apart, UNRESEARCHED; the residence along the inner court's north range claimed on
+  0091's drawing page (the garden before it, the shady north band behind it); and the hand plans' karo's house inside the compound
+  claimed as the GUESS 0106's drawing page records. No sheet, no engine code.
+- **Records**: the claims' impl-drift; waves.json.
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |

@@ -2435,6 +2435,38 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Inner court (private / sacred)#the karo's own house as a lodging block inside the compound": {
+  "code": "2a5ef9c0a07bcdac",
+  "core": "820eca0d767c15d3",
+  "date": "2026-10-10",
+  "note": "0106's drawing page records the karo's small house of their own in the residence court on the hand-drawn plans as a GUESS, and says no page places a chief retainer's own house inside the compound",
+  "pages": {
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "e6b3918520f5a2bb"
+  },
+  "research": "285fa23206e4df8a",
+  "rests": [
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html:820e8a9256c1e84c",
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html:e10a3a961134047e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Inner court (private / sacred)#the residence along the north range": {
+  "code": "7385aafeceb1104d",
+  "core": "820eca0d767c15d3",
+  "date": "2026-10-10",
+  "note": "the house stands on the north range with the garden on the sunny south before it and the north band behind it, a service strip or an alley, as the drawing page lays it out",
+  "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "2688f28d713d8374"
+  },
+  "research": "1f38e2d63c0f5480",
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:5f6b53f63bb73ef0",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:9ad51c4d62413a83"
+  ],
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Latrines and the rear service strip#named rear yard": {
   "code": "5cc48c0452a40565",
   "core": "70ccd133534c2b95",
@@ -3822,11 +3854,21 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Wells#bath-area well": {
-  "code": "f7df90d7f5712cf1",
+ "docs/buildings.md::Wells#a fourth well only for very large compounds": {
+  "code": "e187cfa4645911ba",
   "core": "309217cfd3f4df96",
   "date": "2026-10-10",
-  "note": "\"the kitchen well usually serves the bath\" is a reading the drawing page records as its own (\"our reading, not something the list says\"), so the label should be GUESS research/questions/0105-baths-furo.drawing.html. The optional fourth well \"only for very large compounds\" is something the page says nothing about and should be its own UNRESEARCHED claim",
+  "note": "no cited page gives how many wells a compound kept by its size, so UNRESEARCHED is the right label",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Wells#bath-area well": {
+  "code": "4c7bdbeeabde5206",
+  "core": "309217cfd3f4df96",
+  "date": "2026-10-10",
+  "note": "nothing in the bundle answers whether a compound kept a separate well for its bath; 0105's drawing page records the kitchen well filling the bath as this project's reading, so the optional extra well is a guess with nothing recorded against it",
   "pages": {
    "0105-baths-furo.drawing.html": "d6704c2151c9e01f"
   },
@@ -3835,8 +3877,7 @@
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
-  "triaged": "2026-10-10",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#garden well": {
   "code": "4acd79d4af94df79",
