@@ -88,3 +88,8 @@ def test_a_tub_nearer_another_building_than_the_bath_is_judged_by_that_buildings
     door = '<rect x="0" y="0" width="18" height="4" fill="#4A3318" data-kind="door"/>'
     plan = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), _rect(0, 0, 100, 100, "#DDB87A"), door, bath, _tubgroup('<circle cx="103" cy="56" r="3.8"/>')))
     assert [(t.x, t.y) for t in pa.tubs_off_their_doors(plan)] == [(103, 56)]
+
+
+def test_a_tub_adrift_of_every_building_is_left_to_fire_water_adrift() -> None:
+    plan = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), _rect(0, 0, 100, 100, "#DDB87A"), _tubgroup('<circle cx="300" cy="300" r="3.8"/>')))
+    assert pa.tubs_off_their_doors(plan) == [] and pa.fire_water_adrift(plan)
