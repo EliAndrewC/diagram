@@ -134,6 +134,24 @@ and footnote KEY + passage of the old sections, and check each is in the new sec
 **CUT by** and the rule). A footnote dropped because another note in the new section quotes the same passage is not
 lost; name the note that carries it. A footnote whose passage appears nowhere in the new notes is LOST.
 
+## End each finding with its EDIT (feature 375, plan D4)
+
+Your page is FROZEN while you run, and once your round returns the session may write only the edits its checks proposed -
+as blocks of exactly this shape, which `make apply-edits` applies and the freeze admits (`record-edit-hooks.sh`):
+
+    EDIT <the ORIGIN path of the fragment or notes file, as the MANIFEST gives it>
+    <<<
+    the exact text now in that file
+    ===
+    the text that should replace it
+    >>>
+
+- Copy the old text CHARACTER FOR CHARACTER from the bundle's copy of that file, just long enough to occur ONCE in it (a
+  clause or a sentence). An intro that is missing is an EDIT whose old text is the line it follows - the heading line - and
+  whose new text is that line followed by the intro paragraph.
+- One block per change; several per finding when it changes several places. A finding you cannot word from the bundle - a
+  source to find, a choice for the GM - ends with `EDIT: none - <why>`; the session works it after the round is answered.
+
 ## Outside the change (feature 375, FR-006)
 
 Your bundle's MANIFEST ends with **The change**: the blocks and notes this delta wrote or rewrote. Judge everything you are
