@@ -45,3 +45,11 @@ different original.
 Counts first, one line: `pairs N: FAITHFUL n, LOOSE n, WRONG n, CANNOT-TELL n`. Then only LOOSE, WRONG and CANNOT-TELL,
 each with the note file and key, the words at issue quoted from BOTH texts, and the rendering you propose. Do not list
 what is faithful. Do not judge whether the passage supports the record's claim - that is the quote-check's.
+
+## Outside the change (feature 375, FR-006)
+
+Your bundle's MANIFEST ends with **The change**: the blocks and notes this delta wrote or rewrote. Judge everything you are
+asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: report it under a closing
+`OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, a few words> | <the finding>` - and give it no
+EDIT block. The session files those as rows of the feature rather than fixing them inside this change (in feature 372 each
+such fix re-owed a whole round of checks). A finding on a listed block is reported as usual, with its EDIT block.

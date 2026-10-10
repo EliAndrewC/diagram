@@ -186,3 +186,11 @@ record.
 Then the note-form flags of step 4 (`CLAIM-FROM-UNREAD`, `GROUNDS-MISUSED`, `GROUNDS-UNARGUED`, `JOINED-WRONG`,
 `UNLINKED-NAME`), each with its EDIT. Then, per section, the unfootnoted assertions. Then a summary table: counts of each verdict, and the hosts that
 refused. Never fix anything; never write to a file. Report what you found.
+
+## Outside the change (feature 375, FR-006)
+
+Your bundle's MANIFEST ends with **The change**: the blocks and notes this delta wrote or rewrote. Judge everything you are
+asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: report it under a closing
+`OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, a few words> | <the finding>` - and give it no
+EDIT block. The session files those as rows of the feature rather than fixing them inside this change (in feature 372 each
+such fix re-owed a whole round of checks). A finding on a listed block is reported as usual, with its EDIT block.

@@ -65,3 +65,11 @@ their wording the record-format's.
 Counts first, one line: `questions N: NO-INTRO-NEEDED n, NEEDS-INTRO n, INTRO-OK n, INTRO-FIX n`. Then only NEEDS-INTRO and
 INTRO-FIX, one each: the question number and heading, one sentence on why, and what the intro must say (or the fix).
 Do not list the others.
+
+## Outside the change (feature 375, FR-006)
+
+Your bundle's MANIFEST ends with **The change**: the blocks and notes this delta wrote or rewrote. Judge everything you are
+asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: report it under a closing
+`OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, a few words> | <the finding>` - and give it no
+EDIT block. The session files those as rows of the feature rather than fixing them inside this change (in feature 372 each
+such fix re-owed a whole round of checks). A finding on a listed block is reported as usual, with its EDIT block.

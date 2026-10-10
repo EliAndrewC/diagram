@@ -233,6 +233,32 @@ NOTES_BUDGET = 12_000
 STYLE = pathlib.Path("research/STYLE.md")
 
 
+def changed_section(root: pathlib.Path, fragments: list[str]) -> str:
+    """The MANIFEST's account of THE CHANGE (feature 375, FR-006): each question page's blocks and each notes file's notes whose
+    words differ from the merge base. A check reports a finding on anything else under `OUTSIDE THE CHANGE`, and
+    `make record-checked REPLY=` files it as an open row rather than leaving an edit owed - the pre-existing fixes that re-owed
+    a round each in 372's waves."""
+    sys.path.insert(0, str(HERE))
+    import record_owed as ro  # noqa: PLC0415
+    import record_units as ru  # noqa: PLC0415
+
+    base = ro.merge_base(root)
+    lines = []
+    for rel in fragments:
+        now = (root / rel).read_text(encoding="utf-8") if (root / rel).is_file() else ""
+        was = ro._git(root, "show", f"{base}:{rel}") if base else ""
+        if rel.endswith(".notes.html"):
+            old, new = ru.read_notes(was), ru.read_notes(now)
+            lines += [f"changed-note: {rel} | {k}" for k in sorted(new) if old.get(k) != new[k]]
+        else:
+            old_blocks = {b.words for b in ru.read_page(was).blocks}
+            lines += [f"changed-block: {rel} | {b.words[:120]}" for b in ru.read_page(now).blocks if b.words not in old_blocks]
+    body = "\n".join(lines) if lines else "(none - every block and note predates this change: every finding is OUTSIDE THE CHANGE)"
+    return ("\n## The change (feature 375, FR-006)\n\nThe blocks and notes this delta wrote or rewrote. A finding on anything NOT "
+            "listed here is reported under a closing `OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, "
+            "a few words> | <the finding>` - and is filed as a row, not fixed in this change.\n\n" + body + "\n")
+
+
 def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
                  notes: frozenset[str] = frozenset(), for_: str = "all", owed: str = "", bare: bool = False) -> int:
     sys.path.insert(0, str(HERE))
@@ -308,7 +334,8 @@ def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str]
     for path in extra:
         src = (root / path) if not pathlib.Path(path).is_absolute() else pathlib.Path(path)
         rows.append((copy(src, out, f"extra/{src.name}"), str(path), "named by the dispatcher"))
-    (out / MANIFEST).write_text(manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows) + owed, encoding="utf-8")
+    (out / MANIFEST).write_text(manifest(out, f"question {q}" + ("" if for_ == "all" else f", for {for_}"), rows) + owed
+                                + changed_section(root, fragments), encoding="utf-8")
     print(f"check-bundle: {len(rows)} file(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
 

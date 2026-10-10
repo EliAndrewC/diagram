@@ -223,3 +223,11 @@ Per section, the three lists, each item one block: the class, the quoted text, t
 table: sections read, items per class, and the glossary terms you would add, each a `GLOSSARY` line
 (the section above), which the script writes. An empty class says `none`. Never fix anything; never write
 to a file. Report what a reader would see.
+
+## Outside the change (feature 375, FR-006)
+
+Your bundle's MANIFEST ends with **The change**: the blocks and notes this delta wrote or rewrote. Judge everything you are
+asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: report it under a closing
+`OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, a few words> | <the finding>` - and give it no
+EDIT block. The session files those as rows of the feature rather than fixing them inside this change (in feature 372 each
+such fix re-owed a whole round of checks). A finding on a listed block is reported as usual, with its EDIT block.

@@ -133,3 +133,11 @@ and footnote KEY + passage of the old sections, and check each is in the new sec
 **LOST** - what it was, where it stood, and whether a rule of the guide cuts it by name (then it is not lost: say
 **CUT by** and the rule). A footnote dropped because another note in the new section quotes the same passage is not
 lost; name the note that carries it. A footnote whose passage appears nowhere in the new notes is LOST.
+
+## Outside the change (feature 375, FR-006)
+
+Your bundle's MANIFEST ends with **The change**: the blocks and notes this delta wrote or rewrote. Judge everything you are
+asked to judge, but a finding on a block or note that is NOT listed there is pre-existing: report it under a closing
+`OUTSIDE THE CHANGE` heading, one line each - `- <origin file> | <the block, a few words> | <the finding>` - and give it no
+EDIT block. The session files those as rows of the feature rather than fixing them inside this change (in feature 372 each
+such fix re-owed a whole round of checks). A finding on a listed block is reported as usual, with its EDIT block.

@@ -300,6 +300,43 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
     return done
 
 
+_OUTSIDE = re.compile(r"^#*\s*\**OUTSIDE THE CHANGE\**\s*:?\s*$", re.M)
+_ROW = re.compile(r"^\s*-\s*`?([^|`]+?)`?\s*\|\s*(.+?)\s*\|\s*(.+?)\s*$")
+
+
+def outside(reply: str) -> list[tuple[str, str, str]]:
+    """(file, block, finding) of every line under a reply's `OUTSIDE THE CHANGE` heading (feature 375, FR-006)."""
+    m = _OUTSIDE.search(reply)
+    if m is None:
+        return []
+    rows = []
+    for line in reply[m.end():].splitlines():
+        if line.startswith("#"):
+            break
+        r = _ROW.match(line)
+        if r:
+            rows.append((r.group(1).strip(), r.group(2), r.group(3)))
+    return rows
+
+
+def file_outside(root: pathlib.Path, check: str, reply: str) -> list[dict]:
+    """Append a reply's OUTSIDE THE CHANGE findings to the active feature's `found.jsonl` as open rows: filed, never an edit
+    owed by this change (feature 375, FR-006). Fixing one stays possible as that row's own change."""
+    rows = [{"check": check, "file": f, "block": b, "finding": x, "status": "open",
+             "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())} for f, b, x in outside(reply)]
+    if not rows:
+        return []
+    try:
+        feature = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
+    except (OSError, ValueError):
+        feature = ""
+    target = root / (feature or "specs/_unfiled") / "found.jsonl"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open("a", encoding="utf-8") as fh:
+        fh.writelines(json.dumps(r, ensure_ascii=False) + "\n" for r in rows)
+    return rows
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=".")
@@ -315,6 +352,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--key", default="")
     ap.add_argument("--kind", default="")
     ap.add_argument("--reason", default="", help="with --answer and no --bundle: why today's content may be recorded (bypass log)")
+    ap.add_argument("--reply", default="", help="with --answer: the check's reply, whose OUTSIDE THE CHANGE findings are filed (feature 375)")
     args = ap.parse_args(argv)
     top = _git(pathlib.Path(args.root), "rev-parse", "--show-toplevel").strip()
     if not top:
@@ -330,6 +368,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"record-checked: REFUSED - {refusal}", file=sys.stderr)
             return 2
         done = answer(root, args.answer, args.result, args.bundle, args.q, args.notes, args.key, args.kind)
+        if args.reply:
+            for row in file_outside(root, args.answer, pathlib.Path(args.reply).read_text(encoding="utf-8")):
+                print(f"record-checked: filed, not fixed - {row['file']} | {row['block']} | {row['finding']}")
         if done and not args.bundle and args.reason:
             bypass_log(root, "record-checked", f"{args.answer} on {' '.join(done)}: {args.reason}")
         if not done:
