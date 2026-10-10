@@ -418,7 +418,7 @@
     "subject": "glyph-check--fire-water-tubs",
     "answers": "2d2dfbe5daa6",
     "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit on it",
-    "command": "grep -n 'cx=\"655.5\" cy=\"714\"\\|cx=\"940\" cy=\"270\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -n 'cx=\"655.5\" cy=\"714\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
     "method": "the gate range's tub's disc against the main gate passage (x 615-651)",
     "quantity": "the tub check's F1: the gate range's tub out of the main gate's mouth",
     "verifies": "F1",
@@ -443,8 +443,8 @@
     "subject": "glyph-check--fire-water-tubs",
     "answers": "2d2dfbe5daa6",
     "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit on it",
-    "command": "grep -n 'cx=\"655.5\" cy=\"714\"\\|cx=\"940\" cy=\"270\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-    "method": "the shrine's tub against its west door (y 252-264)",
+    "command": "grep -n 'cx=\"966\" cy=\"291.5\"\\|x=\"976\" y=\"280\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the shrine's tub against its door, which plan review round 2 moved to the south face toward the approach torii",
     "quantity": "the tub check's F3: the shrine's tub beside its door, not at the corner",
     "verifies": "F3",
     "value": {
@@ -453,10 +453,16 @@
         280
       ],
       "after": [
-        940,
-        270
+        966,
+        291.5
       ],
-      "reading": "beside the west door's south end, clear of the doorway; pack_audit clean"
+      "door": [
+        976,
+        280,
+        14,
+        4
+      ],
+      "reading": "2 ft west of the south door, ~6.5 ft from its center, clear of the door's approach; its east edge in line with the torii's west post; pack_audit clean (it stood at (940,270) beside a west door until plan review round 2)"
     }
   },
   "wave106-county-gate-tub": {

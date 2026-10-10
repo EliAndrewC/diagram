@@ -208,12 +208,12 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   (Hayakawa's guest house's was 8 px out), and takes the reception's shoe stone, declared `id="shoe-stone"`, as its entrance
   (R07, research 0104: no genkan - no door is drawn on the veranda); a tub at a bath, entered from the house, is not judged by
   a door (decision c3). The hand sheets are brought to the draft's rule that every building draws its door ("a building with
-  no drawn door reads as sealed", pass 5): ten doors drawn, each on the face toward its approach or yard, in each sheet's small
+  no drawn door reads as sealed", pass 5): doors drawn, each on the face toward its approach or yard, in each sheet's small
   dark door style (nine doors: Hayakawa 2, Ochiba 2, Ubame 5 - Ubame's shrine's on its south face, toward its approach torii, after plan review round 2); the drafts' cell, cinnabar workshop and clerks' room join `DOOR_KINDS`. Ten more tubs moved; the bath exemption holds only where the bath is the tub's nearest building (round 2). The roof seat
   0100 also attests is not drawn (the GM's footprint ruling), now on 0100's drawing page and in the Decisions row; the page's
   bullet takes the record-format check's wording too, in the same edit. m:wave106-tubs-at-doors restated per sheet, strict.
-  Hoshigaoka's `glyph-check--door` and `size-audit--door` units are waived: its door ink predates the wave, only the tag is
-  new, and the door kind is reviewed on the three magistracy sheets.
+  Hoshigaoka's `glyph-check--door` and `size-audit--door` units were run all the same (the tooling owed them: the tag is
+  new to the sheet, though its door ink predates the wave): both PASS.
 - **Records**: m:wave106-tubs-at-doors; the six sheets' notes.
 - **Occasions**: placement-changed: fire-water tubs on ubame-magistracy (every hand sheet's tubs re-seated); layout-revised:
   county-magistracy-example (the draft's tub seat).
@@ -226,3 +226,4 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 | 2 | 101-102 | none owed: no engine code changed (hand sheets, their notes, a modal, the procedure) | green 2026-10-10 on the landed engine key | closed: glyph checks gatehouse (Ubame) and latrine (Ochiba) PASS; Ochiba's building review NEEDS-WORK (E1: the gatehouse's pop-up and building-programs.md gave the old size - fixed, the pop-up's record checks clean on round 3) then PASS round 2 |
 | 3 | 103-104 | none owed: the batch's engine code is a review tool (`pack_audit`'s crop check) and `compound_model.NOTICE_BOARD_MAX_FT`, read only by the generated compound draft's board check and the pack audit - neither in what the timing pair rolls (the hamlet's stages) | green 2026-10-10 at the board limit's engine key | closed: glyph checks road (Ochiba) PASS and notice board (Ubame) NEEDS-WORK then PASS round 2; the border note box moved below the road (round 2's F7); escalation-check |
 | 4 | 105 | none owed: the batch's engine code is the Mode A band (`buildings/types.json`), the generated compound draft (`compound.py`), its round-trip test generator and `pack_audit`'s coverage floor - none in what the timing pair rolls (the hamlet's stages) | green 2026-10-10 at engine key cb24cd5f61e7 | closed: glyph check tax archive (Hayakawa) PASS round 1 and 2; building-review county-magistracy-example NEEDS-WORK then PASS round 2 (the yard off the court, the notes; the long-house a found row); escalation-check |
+| 5 | 106 | none owed: the batch's engine code is the Mode A draft's tub seat (`compound_parts`, `compound_model.DOOR_KINDS`, `TUB_DOOR_MAX_FT`) and `pack_audit`'s door check - none in what the timing pair rolls (the hamlet's stages) | green 2026-10-10 at engine key 4ade95493877 | closed: glyph checks tubs (Ubame) NEEDS-WORK then PASS and door (Hoshigaoka) PASS round 2; size audit door PASS round 2; building-review county NEEDS-WORK then PASS; plan review CLEAR round 3; escalation-check |

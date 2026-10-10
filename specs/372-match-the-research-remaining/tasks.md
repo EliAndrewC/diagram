@@ -23,9 +23,9 @@ in 328's ranking and this spec.
 
 - (reviewed PASS at batch 4's close, 2026-10-10, round 2) layout-revised: county-magistracy-example - wave 105: the generated draft's tax archive 24 x 18 ft and its hearing court re-centered on the office hall
 
-- placement-changed: fire-water tubs on ubame-magistracy - wave 106: each tub beside a door of its building (0100), 21 hand tubs moved and Hoshigaoka's re-seated
+- (reviewed PASS at batch 5's close, 2026-10-10, round 2) placement-changed: fire-water tubs on ubame-magistracy - wave 106: each tub beside a door of its building (0100), 21 hand tubs moved and Hoshigaoka's re-seated
 
-- layout-revised: county-magistracy-example - wave 106: the draft seats each tub beside a door of its building
+- (reviewed PASS at batch 5's close, 2026-10-10, round 2) layout-revised: county-magistracy-example - wave 106: the draft seats each tub beside a door of its building
 
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 

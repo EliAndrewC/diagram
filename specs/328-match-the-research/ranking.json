@@ -7148,6 +7148,21 @@
   "scope": "mode-a"
  },
  {
+  "key": "l7r/diagram/buildings/types.json#door band",
+  "verdict": "UNCLAIMED",
+  "tier": "E2",
+  "fix": "size-audit--door (wave 106): a door is 3-6 ft along its wall, from one sliding panel (about 90 cm, fusuma) to a kitchen's one-ken main door (about 1.81 m, JAANUS odoguchi, folko); no building type requires a door, so the band has no home in types.json - give the door kind a band the registry enforces, and audit Hayakawa's and Ochiba's 2 x 8 ft doors (likely stable or cart doors, perhaps their own kind)",
+  "files": [
+   "l7r/diagram/buildings/types.json"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 106's size-audit of the door on hoshigaoka-shrine, Q1 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/cluster.py::below_drain#wet side of the drain",
   "tier": "E2",
   "fix": "below_drain tests only points whose projection falls within the drain's span (unclamped projection parameter in 0..1 over the polyline), so ground past either end is allowed",

@@ -1,6 +1,6 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "697a402b4b1572889babe545bf3530091116fd973a770bb2512ba072790eb781",
+ "plan_sha256": "4c979361639f41fcd58bad1b09155e1a45532c4ebdf5f3340c4b0dd5dc6b2480",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
@@ -9,106 +9,111 @@
    "summary": "each tub beside a door of its building; the roof seat 0100 also attests is not drawn",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round 1's ruling stands (the ranked fix offers the entrance; the GM's 2026-07-25/26 footprint ruling leaves the roof seat undrawable). Round 1's recording gap is closed: the roof's omission is now on 0100's drawing page, in spec.md's second wave-106 Decisions row and in docs/buildings.md. Labels disagree (docs: DEVIATION; spec row: CANON for the roof) - make them agree."
+   "why": "Rounds 1-2's ruling stands (the GM's 2026-07-25/26 footprint ruling leaves the roof seat undrawable; the entrance is the one drawable seat). Round 2's label item confirmed: spec.md's row now reads 'DEVIATION for the roof, not drawn (0100 attests it; the GM's footprint ruling)', agreeing with docs/buildings.md's 'no tub on the roof - DEVIATION' claim and 0100's drawing page."
   },
   {
    "id": "W106-b the 10.5 ft limit",
    "summary": "TUB_DOOR_MAX_FT 10.5 ft, a CONVENTION",
    "class": "within",
-   "why": "Unchanged from round 1. Re-measured on the six sheets after the fixes: farthest judged tub 10.4 ft (Hayakawa's karo's house; round-trip kitchen's second)."
+   "why": "Unchanged. Re-run: make pack-audit on all six sheets, tubs_off_their_doors OK on each (13+10+19+4+17+14 = 77 tubs)."
   },
   {
    "id": "W106-c1 door tolerance widened to 4 ft",
-   "summary": "doors_of reads a tagged door up to DOOR_ON_WALL_PX = 4 ft (12 px) off its wall",
+   "summary": "doors_of reads a tagged door up to 4 ft off its wall",
    "class": "within",
-   "why": "Round 1 item 2 confirmed: Hayakawa's guest-house entrance (8 px out) is now read; its tub moved from (888,210) to (918,307.5), 7.4 ft from that door."
+   "why": "Unchanged since round 2."
   },
   {
    "id": "W106-c2 a tub at a building with no entrance FAILS",
-   "summary": "tubs_off_their_doors reports a tub whose hosts tag no door ('stands at a building that tags no door'); nine doors drawn on the hand sheets, the cell, cinnabar workshop and clerks' room added to DOOR_KINDS",
+   "summary": "tubs_off_their_doors fails a tub whose hosts tag no door; nine doors drawn on the hand sheets, three draft kinds added to DOOR_KINDS",
    "class": "within",
-   "why": "Round 1 item 1 confirmed. Measured in the clone (pack_audit's own parse and tubs_off_their_doors on all six sheets, the county draft from .gencache): 0 of 77 off; the only tubs not judged by a door are the four bath tubs, one each on Ochiba, Ubame, the round-trip sheet and the county draft. The round-trip sheet's cinnabar workshop and clerks' room tubs now judged at 7.0 ft. The restated 'before' counts re-derived against origin/main's sheets: Hayakawa 7 far + 3 doorless, Ochiba 5 + 2, Ubame 10 + 7, Hoshigaoka 4 doorless - all as recorded. Figure fixes: the sheets draw NINE new doors (Hayakawa 2, Ochiba 2, Ubame 5), not ten, in plan.md, spec.md's row and m:wave106-tubs-at-doors ('doors drawn'); Hayakawa's 'after' parenthetical about a bath tub has no referent (no Hayakawa tub is bath-hosted after the wave), and its 'before' omits the 13th tub, (286,336), which the bath exemption skipped; spec.md's row cites '23 of 77 tubs unjudged' to m:wave106-tubs-at-doors, which does not record it (it is round 1's own run - label it so)."
+   "why": "Round 2's count items confirmed. Doors: git diff origin/main adds data-kind=door rects Hayakawa 2, Ochiba 2, Ubame 5 = nine, none removed; m:wave106-tubs-at-doors 'doors drawn' and spec.md's row now say nine. Hayakawa's 'before' now 8 far + 3 doorless with the kitchen tub the old exemption skipped, and its 'after' parenthetical removed - re-run: the current tubs_off_their_doors on origin/main's Hayakawa sheet reports 11 (3 at inf, 8 far, (286,336) at 35.2 ft among them). spec.md's '23 of 77' now labeled 'by plan review round 1's own count'. Moves re-counted from the sheets: 21 at the first pass (Hayakawa 7, Ochiba 5, Ubame 9 incl. the labeled tub), 10 at round 1 (4+2+4), matching '21' and 'Ten more'. One residue to fix (not a ruling): plan.md's round-1 bullet still reads 'ten doors drawn, each on the face toward its approach or yard, in each sheet's small dark door style (nine doors: ...)' - the parenthetical was appended but the stale 'ten' kept; strike 'ten' so the sentence states nine once. Aside: m:wave106-ubame-gate-tub's command still greps the shrine tub's superseded seat cx=940 cy=270 (now 966,291.5); its recorded value is the gate tub only, so no recorded figure moved, but drop that pattern."
   },
   {
    "id": "W106-c3 the bath's tub is not judged by a door",
-   "summary": "DOORLESS_KINDS = {bath}: a tub any of whose hosts is a bath is skipped",
+   "summary": "a tub is exempt only where its NEAREST host is a bath",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "For the bath's own tub: 0105 draws the bath as a room or small addition of the residence, and measured, no bath on any sheet draws an outside door (doors_of empty on Ochiba's, Ubame's and the drafts'), so its entrance seat is physically absent; round 1's condition is met and it is now its own decision in spec.md, docs/buildings.md and 0100's drawing page. Mechanism note, not blocking on today's sheets: the code skips a tub if ANY host is a bath, which reaches wider than the decision - at origin/main Hayakawa's tub at (286,336), hosted by kitchen and bath, stood 35.2 ft from the kitchen's door and was skipped. No live sheet passes that way now. Tighten it in the same fix round (exempt only when the bath is the nearest host, or equivalent) with that case as the test."
+   "why": "Round 2's mechanism item confirmed: checks.py now skips only when min(hosts, by point-rect distance) is a bath, not when any host is; the new test (a tub at 103,56 between a bath and a doored building, nearer the building) is reported off. This confines the exemption to the bath's own tub, the case where the entrance seat is physically absent (no bath draws an outside door; 0105 draws it entered from the house). The four bath tubs remain the only ones not judged by a door; all six sheets pass. The real case reproduces: origin/main's Hayakawa tub at (286,336), kitchen- and bath-hosted, is now reported at 35.2 ft by the current code."
   },
   {
    "id": "W106-shoe the reception's shoe stone as its entrance",
-   "summary": "a stone declared id=\"shoe-stone\" on a building's outline counts as its entrance; no door drawn on the veranda",
+   "summary": "a declared shoe stone on a building's outline counts as its entrance",
    "class": "within",
-   "why": "0104's second attested form - no genkan, the guest's way along the garden path to the zashiki's veranda - is the form Hayakawa's and Ubame's R07 comments record; where the guest steps up is that building's entrance, and drawing a door on the veranda would contradict 0104's drawn design. The check accepts the stone only on the host's outline. Measured: Hayakawa's east-block tub 5.1 ft, Ubame's two 5.2 and 4.9 ft from the stone."
+   "why": "Unchanged since round 2; Hayakawa's east-block tub comment now says 'beside the shoe stone its guests step up from'."
   },
   {
    "id": "W106-faces doors drawn on the face toward the approach or yard",
-   "summary": "each new door on the face toward its approach or yard, in each sheet's door style",
+   "summary": "each new door on the face toward its approach or yard",
    "class": "within",
-   "why": "The remedy round 1 asked for. Checked per door against each sheet: Hayakawa's shrine door faces its west torii, its stables door the stable and cart yard; Ochiba's shrine door the shrine-approach garden arm, its stables door the stables well's open court; Ubame's stables, granary, tally office and office hall doors face open ground. One instance departs from this rule - see W106-ubame-shrine."
+   "why": "Now holds for all nine doors: Ubame's shrine door moved to the south face (see W106-ubame-shrine)."
   },
   {
-   "id": "W106-ubame-shrine Ubame's shrine entrance drawn on its side, beside its corner tub",
-   "summary": "Ubame's Inari shrine door drawn on its west face (946, 252-264), toward the grove; its tub left at (940,280)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Not labeled by the plan; found by checking each new door. The shrine (x 946-1020, y 232-284) has its approach torii (x 962-1004, y 300-312) due south on its own axis (x 983), so by the plan's own rule its entrance is the south face. Instead the door went on the west face, toward the grove trees, and the tub did not move: it stands 4 px above the SW eaves corner, 2.4 ft from it - the 'wall or eaves corner' seat the ranked fix says the tub must leave, now passing because a door was fitted to it. Round 1's c2 defect surviving by a word-level pass. Not impossible: the 16 px between the shrine's south face and the torii leaves room for a tub beside a south door. Remedy: draw the door on the south face toward the torii, move the tub beside it, re-run pack-audit. Aside (not a finding): Ubame's tally office tub (952,646) also stayed at its SW corner with its door drawn at the west end of the south face; the south ground is a yard, so the rule holds, but look at it in the same edit."
+   "id": "W106-ubame-shrine Ubame's shrine entrance on its south face toward its approach torii, its tub beside it",
+   "summary": "door rect x 976-990 on the south face (y 280-284), the tub moved from (940,270) to (966,291.5)",
+   "class": "within",
+   "why": "Round 2's NOT LEGITIMATE item is remedied exactly as asked. Measured in the sheet: the door's center x 983 is the shrine's and the torii's own axis (torii lintel x 962-1004 at y 300, pillars x 969 and 997); the tub's disc (x 962.2-969.8, y 287.7-295.3) stands off the south face, ~6.5 ft from the door's center (976-990 by 280-284, center 983,282) and ~2 ft clear of the door's west edge, above the torii lintel (y 300) at the west pillar's line - beside the entrance, clear of the approach, no longer at the SW eaves corner. The west-face door is removed; the notes' review log says 'south, toward its approach torii'. pack-audit on Ubame: tubs_off_their_doors, tubs_in_buildings, floating_doors OK. No departure from the request remains, so the decision is within."
+  },
+  {
+   "id": "W106-gate-tubs two tubs out of main gates' tracks (review fixes)",
+   "summary": "Ubame's gate-range tub (643.5,714)->(655.5,714) round the guardroom's corner off the passage mouth; the draft's beside-door slack cut from a tub half-width to 0.15 ft past a face's end, so the gatehouse tub takes the round-the-corner seat (416,602)->(404,596)",
+   "class": "within",
+   "why": "Neither narrows the rule: both tubs still stand at their own building's entrance within 10.5 ft, by the round-the-corner seat W106-corner already provides for a face too short, and the move takes them out of a main gate's track (a tub in the gate passage is beside no door anyone could use). The slack change only removes seats that overhung a face's end; it adds no exemption. Verified: both coordinates present in the sheets (the county draft regenerated 09:35, after compound_parts.py's 08:53 edit); pack-audit OK on both; test_compound's assertion moved to 0.15 ft. m:wave106-ubame-gate-tub and m:wave106-county-gate-tub agree."
   },
   {
    "id": "W106-hoshigaoka-waiver Hoshigaoka's door glyph/size checks waived",
-   "summary": "glyph-check--door and size-audit--door on Hoshigaoka waived: its door ink predates the wave, only the tag is new",
+   "summary": "glyph-check--door and size-audit--door on Hoshigaoka waived: door ink predates the wave",
    "class": "within",
-   "why": "Premise measured: git diff origin/main on hoshigaoka-shrine.svg changes the two door rects by adding data-kind=\"door\" only (x, y, size, fill unchanged), plus the tubs and a comment. Review occasions are feature 294's procedure, not a narrowing of the request; the door kind is reviewed on the three magistracy sheets."
+   "why": "Unchanged; git diff origin/main on its svg still adds only the door tags (2 lines), no new door ink."
   },
   {
    "id": "W106-corner round the corner for a short face",
    "summary": "a face too short for a tub beside its door takes one round the nearest corner, within 10.5 ft",
    "class": "within",
-   "why": "Unchanged from round 1."
+   "why": "Unchanged; now also carries the gate tubs above."
   },
   {
    "id": "W106-d Ochiba's residence tub at the family's door",
    "summary": "the residence's tub by the family's door",
    "class": "within",
-   "why": "Unchanged from round 1 (4.9 ft re-measured); the stale tub-layer comment round 1 noted is now corrected on Ochiba. Aside: Hayakawa's tub-layer comments still describe the old seats ('NW eaves corner', 'off the veranda's SE corner', 'against the Fire Dragon shrine's east eaves') above the moved circles."
+   "why": "Unchanged."
   },
   {
    "id": "W106-e record-format wording",
-   "summary": "the drawing page now takes the 'one either side' wording",
+   "summary": "the drawing page takes the 'one either side' wording",
    "class": "within",
-   "why": "A wording change; nothing narrowed."
+   "why": "Unchanged."
   },
   {
    "id": "W106-f count rows left to their own rows",
    "summary": "#one tub per wooden building and the country shrine's #fire-water count not this wave's",
    "class": "within",
-   "why": "Unchanged from round 1."
+   "why": "Unchanged."
   },
   {
    "id": "W106-g Hoshigaoka's doors tagged, two tubs beside each",
-   "summary": "the country-shrine sheet's doors tagged and its four corner tubs re-seated two per door",
+   "summary": "four corner tubs re-seated two per door",
    "class": "within",
-   "why": "Unchanged from round 1; re-measured 7.1 ft each."
+   "why": "Unchanged; pack-audit OK."
   },
   {
    "id": "W106-h pop-up fixes",
-   "summary": "the storehouse's ken given feet, the archive's 'pale' dropped; the tubs pop-up's fire-watch wording and shrine GUESS",
+   "summary": "the storehouse's ken given feet, the archive's 'pale' dropped; the tubs pop-up's fire-watch wording and village-shrine GUESS",
    "class": "within",
-   "why": "Defects found in the work at hand (constitution XIV); the village-shrine tubs are labeled GUESS at docs/building-programs.md and the modal."
+   "why": "The new edits since round 2 restate the village-shrine tubs guess in the pop-up and both building-programs fire_water rows ('none was found named at a shrine ... reckoned from the farmhouse its keeper's dwelling is drawn as'): a guess labeled as one, nothing narrowed."
   },
   {
-   "id": "W106-i found row E0 left for its wave",
-   "summary": "'fire-water tubs at a village shrine' ranked as a found row",
+   "id": "W106-i found rows left for their waves",
+   "summary": "found-wave106.jsonl: the village-shrine tubs claim, 0220's arch label, the burial claim, the carter's route, the pop-up's tub look, the commuting clerks' and two-court labels",
    "class": "within",
-   "why": "Unchanged from round 1."
+   "why": "Ranked as found rows (constitution XIV's record of a finding, each with its fix), not dropped work and not a narrowing of wave 106's scope."
   },
   {
    "id": "W106-j occasions",
    "summary": "placement-changed on ubame-magistracy; layout-revised on the county draft",
    "class": "within",
-   "why": "Review occasions are feature 294's procedure; not a narrowing."
+   "why": "Feature 294's procedure; unchanged."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
