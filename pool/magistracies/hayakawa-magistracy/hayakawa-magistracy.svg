@@ -327,8 +327,8 @@
     <!-- the veranda on two or three faces: the faces knob's roll, random.Random(zlib.crc32(b"hayakawa-magistracy:residence
          veranda faces")).choice(["garden face alone", "two or three faces"]) = two or three faces (feature 374 wave 112,
          0102's drawing page). The garden (south) face 4 ft (12 px; it was 8 px), turning the south-east corner and running
-         up the reception's east end at 3 ft (9 px), narrower where it turns, as Katsura's does; the board veranda to the
-         guests' privy on the north face is the third. -->
+         up the reception's east end at 3 ft (9 px), narrower where it turns, as Katsura's does; the board walk to the
+         guests' privy on the north face is a way of its own, short of the east strip. -->
     <rect x="458" y="310" width="251" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <rect x="700" y="234" width="9" height="76" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line x1="578" y1="234" x2="578" y2="310" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
