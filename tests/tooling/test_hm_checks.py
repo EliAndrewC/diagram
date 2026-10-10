@@ -263,12 +263,30 @@ def test_an_agent_that_is_not_a_check_logs_nothing(tmp_path: pathlib.Path) -> No
     assert _log(tmp_path) == []
 
 
-def test_a_resumed_check_logs_again_and_a_background_launch_logs_nothing(tmp_path: pathlib.Path) -> None:
-    """Plan D1b: a second stop is a second line (the reader keeps the latest); a background launch waits for its return."""
+def test_each_return_of_a_resumed_check_is_logged_with_its_own_cells(tmp_path: pathlib.Path) -> None:
+    """Plan review 2: the second stop's cells are the resumed segment's alone; the same return seen twice is logged once; a
+    background launch waits for its return."""
+    _lint, rc = hc._reviews()
     t = _transcript(tmp_path, "a3", "MODE 2")
     payload = {"agent_type": "spec-fidelity", "agent_id": "a3", "agent_transcript_path": str(t)}
-    assert hc.log_pass(tmp_path, "returned", payload, 0.0) and hc.log_pass(tmp_path, "returned", payload, 0.0)
-    assert len(_log(tmp_path)) == 2
+    assert hc.log_pass(tmp_path, "returned", payload, 0.0)
+    assert not hc.log_pass(tmp_path, "returned", payload, 0.0), "the same return seen again is not a second pass"
+    with t.open("a") as fh:  # resumed: a new prompt, then a second call
+        fh.write(json.dumps({"timestamp": "2026-10-10T11:00:00Z", "message": {"role": "user", "content": "round 2, please"}}) + "\n")
+        fh.write(
+            json.dumps(
+                {
+                    "timestamp": "2026-10-10T11:00:40Z",
+                    "requestId": "r2",
+                    "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 100, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 50}},
+                }
+            )
+            + "\n"
+        )
+    assert hc.log_pass(tmp_path, "returned", payload, 0.0)
+    first, second = _log(tmp_path)
+    assert second["wall"] == "40 s" and (first["wall"], first["tokens"]) != (second["wall"], second["tokens"])
+    assert f"{second['wall']} | {second['tokens']}" == rc.cells(rc.cost(rc.segments(t.read_text().splitlines())[-1]))
     bg = {"tool_input": {"subagent_type": "spec-fidelity"}, "tool_response": {"status": "async_launched", "agentId": "a3"}}
     assert not hc.log_pass(tmp_path, "launched", bg, 0.0) and len(_log(tmp_path)) == 2
 

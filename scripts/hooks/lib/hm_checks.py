@@ -431,7 +431,8 @@ def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | 
     """Append a check's pass to the log (feature 371, plan D1/D1b): at SubagentStop (`returned`) for an agent whose type is a
     check, and at PostToolUse (`launched`) for a FOREGROUND one, which has returned by then. The cells are computed over the
     whole transcript, as `make review-cost` computes them; nothing is held between the two events, so a switch of feature
-    drops nothing, and a resumed agent's later line supersedes its first when the log is read. Never raises: a hook that
+    drops nothing; each return of a resumed agent is a pass of its own, its cells this return's segment; the same return
+    seen by both events is logged once. Never raises: a hook that
     fails here must not take the session's tool call with it."""
     try:
         ledger_lint, review_cost = _reviews()
@@ -448,9 +449,16 @@ def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | 
         if check not in ledger_lint.CHECKS or not tpath or not Path(tpath).is_file():
             return False
         lines = Path(tpath).read_text(encoding="utf-8", errors="replace").splitlines()
-        wall, tokens = review_cost.cells(review_cost.cost(lines)).split(" | ", 1)
+        # THIS RETURN's cells: the transcript's last segment (a resumed agent's earlier returns are passes of their own,
+        # logged at their own stops - plan review 2), as `make review-cost` prints them
+        wall, tokens = review_cost.cells(review_cost.cost(review_cost.segments(lines)[-1])).split(" | ", 1)
         rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid, "wall": wall, "tokens": tokens}
-        with (git_dir / PASS_LOG).open("a", encoding="utf-8") as fh:
+        log = git_dir / PASS_LOG
+        prior = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()] if log.is_file() else []
+        mine = [r for r in prior if r.get("agent") == aid]
+        if mine and (mine[-1].get("wall"), mine[-1].get("tokens")) == (wall, tokens):
+            return False  # the same return seen by both events (a foreground check): one pass, logged once
+        with log.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(rec) + "\n")
         return True
     except Exception:  # noqa: BLE001 - the hook's own failure never blocks the session (see the docstring)

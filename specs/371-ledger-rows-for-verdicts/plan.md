@@ -33,13 +33,17 @@ and `scripts/reviews/ledger_lint.py` (`CHECKS`, `measured_rows`). **Testing**: p
   found by `review_cost.transcript`. Nothing is held pending between the two events. The subject is the first line of the
   dispatch's prompt (the transcript's first user message), cut to 100 characters, with `|` and newlines made spaces so the
   printed row passes the lint. Append-only: opened in append mode, never rewritten.
-- **D1b - a resumed agent, and a pass logged twice.** One agent id may log several lines: a check resumed after it returned
-  stops again (measured by plan review 1: 2 agents, 3 of 78 stops), and a foreground check may be seen by both events. The
-  PASS is the agent; its cells are its LATEST line's, computed over its whole transcript - which is what `make review-cost`
-  prints once it has finished, so the row the session copies answers it (SC-004).
+- **D1b - a resumed agent, and a return seen twice.** Each RETURN is a pass (plan review 2: SC-003's "each answered only by
+  its own row"). An agent resumed after it returned - by a new prompt, or woken by its own background task (a system
+  notification) - stops again (observed 2026-10-10; method: SubagentStop events in the clones' `l7r-events` logs joined to
+  each agent's transcript timestamps: 2 agents, 3 of 78 stops). `review_cost.segments` splits a transcript at each user text
+  record after its first, one segment per return (measured 2026-10-10 on the 60 newest transcripts: none that returned once
+  splits); the log takes the LAST segment's cells at each stop, and `make review-cost` prints one `return N:` line per segment
+  for a resumed agent (one line, as before, for every other), so each return's row copies its own cells. The same return seen
+  by both events (a foreground check) is written once: a line whose agent and cells equal that agent's last is skipped.
 - **D2 - CHECKS.** `ledger_lint.CHECKS` gains `modal-depiction`, `modal-form`, `modal-research` and `source-filter` (spec
   FR-001), so their rows pass the lint.
-- **D3 - the answer.** `scripts/reviews/ledger_owed.py` reads the log as one pass per agent id (its latest line, D1b); a pass is answered when some measured row has the same `check`, and
+- **D3 - the answer.** `scripts/reviews/ledger_owed.py` reads every logged line as a pass (an identical repeat once, D1b); a pass is answered when some measured row has the same `check`, and
   its `wall` and `tokens` cells equal the pass's (whitespace-normalized). It prints each unanswered pass as the row to add -
   date, check, subject and cost filled, the five judgment cells `?`.
 - **D4 - where it runs.** At every commit `ledger-hooks.sh` adds the list as context and never refuses for it (FR-004); at the
@@ -48,7 +52,8 @@ and `scripts/reviews/ledger_lint.py` (`CHECKS`, `measured_rows`). **Testing**: p
 - **D5 - tests.** `tests/tooling/test_ledger_owed.py`: a fixture log and ledger - fires with no row, quiet with it, two
   same-day rounds told apart by their cells, the printed row's cells; `tests/tooling/test_hm_checks.py`: a check's return appends one line with the
   transcript's cells, a non-check agent appends none, a foreground check is logged at PostToolUse, a resumed agent's second
-  stop appends a second line; the push suite
+  stop appends a second line with that return's cells, the same return seen twice is logged once; `test_review_cost.py`: a
+  resumed transcript splits at its new prompt and `make review-cost` prints a line per return; the push suite
   (`tests/hooks/test-sync-with-main.sh`) refuses an unanswered pass and passes once answered; `test-ledger-hooks.sh` reports
   without refusing.
 - **D6 - the record.** Root `CLAUDE.md`'s enforced table (the `ledger-hooks.sh` row), `docs/guards.md`, and `docs/reviews.md`'s
@@ -72,3 +77,7 @@ CLAUDE.md, docs/guards.md, docs/reviews.md   D6
 - **Plan review round 1 (2026-10-10): CHANGES REQUIRED.** A resumed check's first cells went stale and a feature switch could
   drop a pending pass: now a line per return written at that event with nothing pending (D1), the pass is the agent and its
   latest line's cells count (D1b). The subject is sanitized and the printed row asserted lint-clean (D1, D5).
+- **Plan review round 2 (2026-10-10): CHANGES REQUIRED.** Collapsing an agent to one pass dropped a resumed agent's first
+  return: each return is now a pass with its own segment's cells, and `make review-cost` prints a line per return (D1b); the
+  foreground double sighting is an idempotent write, not a redefinition of a pass; the lint claim is the ten-cell count; the
+  figure carries its date and method.

@@ -52,13 +52,16 @@ def load_passes(path: Path) -> list[dict[str, str]]:
     return out
 
 
-def latest_per_agent(passes: Sequence[dict[str, str]]) -> list[dict[str, str]]:
-    """One pass per agent: its LATEST line (plan D1b) - a check resumed after it returned stops again, and a foreground check
-    may be logged by both of its events; the latest cells cover the whole transcript, as `make review-cost` prints them."""
-    by: dict[str, dict[str, str]] = {}
-    for i, p in enumerate(passes):
-        by[p.get("agent") or f"#{i}"] = p
-    return list(by.values())
+def distinct(passes: Sequence[dict[str, str]]) -> list[dict[str, str]]:
+    """Each logged line is a pass (plan review 2: a resumed agent's every return is one); an identical repeat of an agent's
+    line - the same return seen by two events - is one."""
+    seen, out = set(), []
+    for p in passes:
+        key = (p.get("agent"), p.get("check"), _norm(p.get("wall", "")), _norm(p.get("tokens", "")))
+        if key not in seen:
+            seen.add(key)
+            out.append(p)
+    return out
 
 
 def unanswered(passes: Sequence[dict[str, str]], ledger_text: str) -> list[dict[str, str]]:
@@ -89,7 +92,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--refuse", action="store_true", help="exit 1 while a pass is unanswered")
     args = ap.parse_args(argv)
     ledger = Path(args.ledger)
-    passes = latest_per_agent(load_passes(Path(args.log) if args.log else default_log()))
+    passes = distinct(load_passes(Path(args.log) if args.log else default_log()))
     owed = unanswered(passes, ledger.read_text(encoding="utf-8") if ledger.is_file() else "")
     if not owed:
         return 0

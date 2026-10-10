@@ -304,6 +304,8 @@ push_cmd() {
   # GUARD_EDIT_OK: feature 371 - a NEW refusal: a check's pass logged in this clone with no row in the review ledger's measured
   # table does not land (the GM 2026-10-10: "so that we can see how often they are paying off"); the row to add is printed.
   if [ -n "${LEDGER_ROWS_OK:-}" ]; then
+    # shellcheck source=/dev/null
+    . "$ROOT/scripts/hooks/lib/guardlog.sh" 2>/dev/null || guard_log() { :; }  # sourced further down; this escape records here
     if ! python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$LEDGER_ROWS_OK" >/dev/null; then
       guard_log sync-with-main blocked "$LEDGER_ROWS_OK" LEDGER_ROWS_OK-no-reason
       die "LEDGER_ROWS_OK needs a REASON: two words and eight characters, saying why these passes land without their rows"

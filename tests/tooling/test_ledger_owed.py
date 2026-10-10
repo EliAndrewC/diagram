@@ -84,18 +84,18 @@ def test_the_command_reports_and_refuses_only_when_asked(tmp_path: Path, ledger:
         assert "LEDGER_ROWS_OK" in r.stdout + r.stderr
 
 
-def test_a_resumed_check_is_one_pass_whose_latest_cells_count() -> None:
-    """Plan D1b: a check resumed after it returned logs again; its latest line covers the whole transcript, as
-    `make review-cost` prints it once the agent has finished - so a row copied from that answers it."""
-    first, later = _pass(wall="80 s"), _pass(wall="3900 s", tokens="900k in (800k cached) / 20.0k out")
-    passes = lo.latest_per_agent([first, later])
-    assert passes == [later]
-    assert lo.unanswered(passes, HEAD + _row(wall="3900 s", tokens="900k in (800k cached) / 20.0k out")) == []
-    assert lo.latest_per_agent([_pass(), {**_pass(), "agent": "a2"}]) == [_pass(), {**_pass(), "agent": "a2"}], "two agents, two passes"
+def test_each_return_of_a_resumed_check_is_a_pass_and_a_repeat_is_one() -> None:
+    """Plan review 2: a check resumed after it returned has two passes, each answered only by its own row; the same return
+    seen by two events (a foreground check) is one pass."""
+    first, later = _pass(wall="80 s"), _pass(wall="40 s", tokens="90k in (80k cached) / 2.0k out")
+    passes = lo.distinct([first, later, dict(later)])
+    assert passes == [first, later]
+    assert lo.unanswered(passes, HEAD + _row()) == [later]
+    assert lo.unanswered(passes, HEAD + _row() + _row(wall="40 s", tokens="90k in (80k cached) / 2.0k out")) == []
 
 
-def test_the_printed_row_passes_the_ledger_lint_whatever_its_subject() -> None:
-    """FR-003: the row to add can be added as printed - a subject with a pipe or a newline is made safe."""
+def test_the_printed_row_keeps_its_ten_cells_whatever_its_subject() -> None:
+    """FR-003: a subject with a pipe or a newline is made safe, so the row keeps the table's ten cells; filled in, it lints."""
     row = lo.row_for(_pass(subject="MODE 2 | review\nfeature 371"))
     filled = row.replace("| ? | ? | ? | ? | ? |", "| PASS | caught nothing | nothing | - | nothing |")
     assert ll.problems(HEAD + filled + "\n") == [], ll.problems(HEAD + filled + "\n")
