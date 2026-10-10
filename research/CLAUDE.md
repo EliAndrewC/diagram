@@ -94,7 +94,7 @@ readable part, recorded in `research/partial-confirmations.jsonl` - the push and
 A `research record` feature that changes a question's findings looks up whether the code conforms. Where code decides
 what the question decides, its `Research:` claim cites the question - added if missing - and `impl-drift` records the
 verdict (`make claims-owed`, `claims-bundle`, `claims-checked`). Where no code implements it yet, the feature's
-`implementation-check.md` says `- NNNN: no code implements it - <why>`. A DRIFTED verdict is the result the GM asked to see
+`implementation-check.md` says `- NNNN: no code implements it - <why>; searched: <what>` (only where no code decides it). A DRIFTED verdict is the result the GM asked to see
 in `make claims-report`; the code is fixed only where the feature's spec asks. `make impl-check F=<n>` lists what is
 owed, and no feature of this type closes until it reports nothing missing.
 

@@ -71,6 +71,8 @@ def test_claims_owed_their_check_are_missing_until_checked_and_a_drift_closes(tm
 def test_a_question_recorded_as_implemented_nowhere_is_not_missing(tmp_path: pathlib.Path) -> None:
     root, d = _tree(tmp_path)
     (d / "implementation-check.md").write_text("- 0047: no code implements it - the magistracy's privy is not drawn yet\n")
+    assert "must say what was searched" in ic.report(root, d, cites=({}, set(), {}))[1][0], "a reason with no search is not (b)"
+    (d / "implementation-check.md").write_text("- 0047: no code implements it - the magistracy's privy is not drawn yet; searched: grep -rn privy l7r/diagram/compound*.py\n")
     lines, missing = ic.report(root, d, cites=({}, set(), {}))
     assert missing == [] and any("the magistracy's privy is not drawn yet" in ln for ln in lines)
 
@@ -95,5 +97,5 @@ def test_the_closing_check_refuses_on_what_is_missing(tmp_path: pathlib.Path, mo
     monkeypatch.setattr(cc, "_impl_check", lambda: _Stub)
     why = cc.reasons(d, root / "specs")
     assert any("owes its implementation check (feature 378): 0047" in w for w in why)
-    (d / "implementation-check.md").write_text("- 0047: no code implements it - not drawn\n")
+    (d / "implementation-check.md").write_text("- 0047: no code implements it - not drawn; searched: grep -rn privy l7r\n")
     assert cc.reasons(d, root / "specs") == []

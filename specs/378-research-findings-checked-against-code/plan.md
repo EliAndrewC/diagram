@@ -6,7 +6,8 @@
 
 One small reader that composes what exists, `scripts/record/impl_check.py`, asked by `make impl-check` and by the closing
 check every closing route already asks. It is backed by the template task, the guidelines and a line in each open
-research-record spec. Everything is tooling: every task is `research: rendering`. No engine file changes: DIRECT.
+research-record spec. Everything is tooling: every task is `research: rendering`. One engine file changes (`l7r/diagram/tools/claims.py`,
+D6), so the landing is GATED on `make done`.
 
 ## Technical Context
 
@@ -36,16 +37,26 @@ findings. Measured on real features: 317 changed 0081, 315 changed 0046, 310 cha
 
 **D2 - A claim cites a question** when one of its pointers names `research/questions/NNNN-`, its findings or its drawing
 page. **Checked** means it is not in `claims.owed()`: a changed finding re-owes every claim resting on it (feature 318),
-so a finding the feature changed cannot pass on a verdict reached before it.
+so a finding the feature changed cannot pass on a verdict reached before it. Every reason `owed()` gives counts,
+triage included (spec review round 1).
 
-**D3 - The record** is `specs/NNN-*/implementation-check.md`, with lines `- NNNN: no code implements it - <why>`. It is
-needed only for a question no claim cites.
+**D3 - The record** is `specs/NNN-*/implementation-check.md`, with lines `- NNNN: no code implements it - <why>; searched:
+<units and grep>`. It is for a question NO code decides, and a line without its `searched:` part is missing. Merge
+commits are read for no feature (`git log --no-merges`).
 
 **D4 - The closing check** (`close_check.reasons`) appends `impl_check.missing(d, <its repository>)`. The tag test runs
 first and the commit read second, so a feature that owes nothing pays no claims scan.
 
 **D5 - The text.** The tasks template's standard task, CLAUDE.md's research section, `research/CLAUDE.md`, and a line
 in each of the seven open research-record specs (336, 337, 338, 343, 352, 368, 374).
+
+**D6 - Claimed units outside the hamlet scope** (spec FR-009). `l7r/diagram/tools/claims.py:all_units` also yields,
+through `claimed_outside`, every unit of an engine module outside the scope that carries its OWN claim, not one
+inherited from a module docstring, with that module's constants for its fingerprint. `coverage` is unchanged in effect:
+an out-of-scope module's unclaimed units are never yielded, so they owe nothing. Today this brings in 3 units with 4
+claims (`compound.county_magistracy_program`, `compound_model.NOTICE_BOARD_MAX_FT`, `site_pages.frame`), owed their
+`impl-drift` check before the push (`claims-gate.sh`). It is an engine file (`l7r/**`), so the landing is GATED on
+`make done`.
 
 ## Project Structure
 

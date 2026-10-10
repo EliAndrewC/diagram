@@ -38,7 +38,7 @@ yet, it asks for a line saying so, and why.
 
 **Independent Test**: a fixture feature tagged `research record` whose commits changed one question.
 - With no claim citing the question and no line about it, closing is refused, naming the question.
-- With a claim citing it but not yet checked, closing is refused, naming the claim as owed its check.
+- With a claim citing it that `make claims-owed` lists (new, or re-owed by the rewrite), closing is refused, naming it.
 - With the claim checked (IN-STEP or DRIFTED alike), or with a "no code implements it" line, closing passes.
 
 **Acceptance Scenarios**:
@@ -65,7 +65,8 @@ research-record feature's spec says the check is owed at its close.
 - **A changed question that only the map's drawing pages discuss** (`.drawing.html`): the drawing page is the
   implementation's own account, not a finding; only a question's findings page (`NNNN-<id>.html`) is owed.
 - **A finding no code yet implements** (a tier not built, a building not drawn): recorded in the feature's
-  `implementation-check.md` as `- NNNN: no code implements it - <why>`.
+  `implementation-check.md` as `- NNNN: no code implements it - <why>; searched: <what>`. A thing that IS drawn is never
+  this case.
 - **A claim on code the feature may not edit**: adding a `Research:` line to a docstring is a docstring edit, not a code
   change. It owes the claim's `impl-drift` check, not a gate run of the maps.
 - **A feature closed before this lands** is never asked.
@@ -76,16 +77,26 @@ research-record feature's spec says the check is owed at its close.
 
 - **FR-001 - What is owed.** A feature tagged `research record` (its `**Affects**:` line) owes, for each question whose
   findings page its commits changed or created, one of:
-  - (a) at least one `Research:` claim, in the engine's code or the Mode A procedures, citing that question, every one
-    of which has a row in the claims index (not owed its `impl-drift` check);
-  - (b) a line in its `implementation-check.md`: `- NNNN: no code implements it - <why>`.
+  - (a) at least one `Research:` claim, in the engine's code or the Mode A procedures, citing that question, none of
+    which `make claims-owed` lists for any reason (new, code changed, research changed, triage). A claim that cited the
+    question before the feature rewrote it is re-owed by the rewrite, so it is checked against the NEW finding;
+  - (b) only for a question that NO code decides (the thing is not built: a tier, a building, a feature no generator
+    draws), a line in its `implementation-check.md`: `- NNNN: no code implements it - <why>; searched: <the units and the
+    grep that found none>`. Code that draws or decides the thing is case (a) whatever it does: the claim is added, and
+    a mismatch is the DRIFTED verdict the report shows.
 
-  A feature's commits are those whose message opens with its number (`Feature NNN` or `NNN:`), as this repository
-  writes them.
+  A feature's commits are those whose message opens with its number (`Feature NNN` or `NNN:`); a merge commit is
+  attributed to no feature.
+- **FR-009 - A claim on code outside the hamlet scope reaches the index.** The claims index reads the modules the hamlet
+  generator imports, and the code that decides the magistracy's questions (`compound_model.py`, `compound.py`) is not
+  among them. A unit of any engine module that carries a `Research:` claim of its own enters the index, so its
+  `impl-drift` verdict is kept and `make claims-report` shows it. The rest of its module is not obliged to carry claims:
+  the every-unit coverage rule stays the hamlet scope's.
 - **FR-002 - Not the code.** Closing never requires that a claim be IN-STEP. A DRIFTED or NEEDS-RESEARCH verdict closes
   the feature and stands in `make claims-report`. The code is changed only where the feature's own spec asks for it.
-- **FR-003 - `make impl-check F=<n>`.** It prints, per owed question, its claims with their verdicts (or "owed its
-  check"), or its recorded reason, and then what is missing. It prints nothing else.
+- **FR-003 - `make impl-check F=<n>`.** It prints, per owed question, its claims with their verdicts (or "owed", for
+  any reason `make claims-owed` gives), or its recorded line, and then what is missing. A (b) line without its `searched:`
+  part is missing. It prints nothing else.
 - **FR-004 - Held at every close.** The closing check (`scripts/gates/close_check.py`, which the last tick, a closing
   status, `make gm-reviewed` and the push all ask) refuses a research-record feature while FR-003 reports anything
   missing. The refusal names what is missing and the command.
@@ -101,13 +112,15 @@ research-record feature's spec says the check is owed at its close.
 ## Success Criteria
 
 - **SC-001** (FR-001, FR-004, FR-008): a fixture research feature that changed a question cannot close with no claim and
-  no line; nor with a claim owed its check; and can with a checked claim, DRIFTED included, or with a "no code implements
-  it" line.
+  no line; nor with a claim `make claims-owed` lists; nor with a (b) line that does not say what was searched; and can
+  with a checked claim, DRIFTED included, or with a full (b) line.
+- **SC-005** (FR-009): a unit outside the hamlet scope carrying its own claim is in the claims index's reading, and its
+  module's unclaimed units owe nothing.
 - **SC-002** (FR-002): a DRIFTED claim closes the feature and appears in `make claims-report`.
 - **SC-003** (FR-003): `make impl-check` on a real closed research feature lists its changed questions and their
   claims.
-- **SC-004** (FR-005, FR-006, FR-007): the tasks template, the seven open research-record specs, CLAUDE.md and
-  `research/CLAUDE.md` carry the rule.
+- **SC-004** (FR-005, FR-006, FR-007): the tasks template, every spec `make speckit-todo AFFECTS="research record"` lists
+  open at landing, CLAUDE.md and `research/CLAUDE.md` carry the rule.
 
 ## What it does not cover
 
@@ -122,6 +135,17 @@ research-record feature's spec says the check is owed at its close.
   rule is enforced at every close by tooling and written into CLAUDE.md, which operationalizes Principle XII. A
   constitution clause would add no enforcement the closing check does not give.
 - **D2 - "Changed" is read from the feature's commits**, by this repository's message convention, so a session cannot
-  owe or escape a question by what it chooses to list.
+  owe or escape a question by what it chooses to list. Of the 51 commits since 2026-09-25 that touch a question's page,
+  40 open with `Feature NNN` or `NNN:` (observed 2026-10-10; method: `git log` over `research/questions/*.html`, by the
+  plan review); the other 11 are merges and repository-wide moves, which no feature owns, and one direct modal tweak.
+- **D3 - The index takes claimed units outside the hamlet scope** (FR-009). It is not widened to every engine module,
+  which would owe a claim on every unit of 96 more modules: only units that carry their own claim enter. Three did on
+  2026-10-10 (`compound.county_magistracy_program`, `compound_model.NOTICE_BOARD_MAX_FT`, `site_pages.frame`; four
+  claims, now owed their `impl-drift` check).
 
 ## Review history
+- spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED. Applied: (a) means not listed by `make claims-owed`
+  for any reason, so an existing claim is re-checked against the new finding; (b) is only for a thing no code decides,
+  with what was searched; FR-009 and D3 bring a claimed unit outside the hamlet scope into the index (the magistracy's
+  code); D2 carries its measurement and leaves merges unattributed; SC-004 names the open features by command.
+

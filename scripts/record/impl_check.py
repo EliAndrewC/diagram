@@ -14,7 +14,9 @@ not its `.notes`, `.drawing` or `.originals`) the feature's commits changed or c
 message opens with its number (`Feature NNN` or `NNN:`), as this repository writes them:
   (a) at least one `Research:` claim, in the engine's code or the Mode A procedures, citing the question (its findings or
       its drawing page), none of them owed its check - so the index holds a verdict for each, IN-STEP or a finding;
-  (b) or a line in the feature's `implementation-check.md`:  `- NNNN: no code implements it - <why>`.
+  (b) only for a question NO code decides (the thing is not built), a line in the feature's `implementation-check.md`:
+      `- NNNN: no code implements it - <why>; searched: <the units and the grep that found none>`. Code that draws or
+      decides the thing is case (a) whatever it does - its claim added, a mismatch the DRIFTED verdict the report shows.
 A DRIFTED claim satisfies (a): the verdict is what the GM asked to see in the report, and fixing the code is the
 feature's own business only if its spec says so.
 
@@ -36,6 +38,8 @@ RECORD = "implementation-check.md"
 FINDINGS_PAGE = re.compile(r"^(?:\.claude/skills/diagram/)?research/questions/(\d{4})-[a-z0-9-]+\.html$")  # the prefix: before 329
 CITED = re.compile(r"research/questions/(\d{4})-")
 NONE_LINE = re.compile(r"^-\s*(\d{4}):\s*no code implements it\s*-\s*(\S.*)$", re.M)
+#: case (b) says what was searched, or it is a reason without a search (spec FR-001, review round 1)
+SEARCHED = re.compile(r";\s*searched:\s*\S")
 
 
 def _git(root: Path, *args: str) -> str:
@@ -54,7 +58,7 @@ def is_research_feature(d: Path) -> bool:
 def changed_questions(root: Path, number: int) -> list[str]:
     """Every question whose findings page a commit of feature `number` changed or created."""
     pattern = rf"^(Feature )?0*{number}([: ]|$)"
-    shas = _git(root, "log", "--format=%H", "-E", f"--grep={pattern}").split()
+    shas = _git(root, "log", "--no-merges", "--format=%H", "-E", f"--grep={pattern}").split()  # a merge is no feature's
     found: set[str] = set()
     for sha in shas:
         for name in _git(root, "diff-tree", "--no-commit-id", "--name-only", "-r", "--root", sha).split():
@@ -115,12 +119,15 @@ def report(root: Path, d: Path, cites=None) -> tuple[list[str], list[str]]:  # n
             lines += [f"      {verdict.get(k) or '-':<14} {k}" + ("  (owed)" if k in due else "") for k in keys[:12]]
             if owed:
                 missing.append(f"{q}: {len(owed)} claim(s) citing it are owed their impl-drift check - `make claims-owed` names them")
-        elif q in nones:
+        elif q in nones and SEARCHED.search(nones[q]):
             lines.append(f"  {q}: no code implements it - {nones[q]}")
+        elif q in nones:
+            lines.append(f"  {q}: no code implements it - {nones[q]}  (says nothing of what was searched)")
+            missing.append(f"{q}: its line in {RECORD} must say what was searched - `; searched: <the units and the grep that found none>`")
         else:
             lines.append(f"  {q}: no claim cites it, and {RECORD} has no line for it")
             missing.append(f"{q}: cite it in the `Research:` claim of the code that decides it (then its impl-drift check), "
-                           f"or add `- {q}: no code implements it - <why>` to {d.name}/{RECORD}")
+                           f"or, only if NO code decides it, add `- {q}: no code implements it - <why>; searched: <what>` to {d.name}/{RECORD}")
     lines.append(f"impl-check: {len(missing)} missing" if missing else "impl-check: nothing missing")
     return lines, missing
 

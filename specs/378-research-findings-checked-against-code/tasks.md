@@ -17,6 +17,9 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [ ] T03 The text (plan D5, FR-005, FR-006, FR-007): the template task, CLAUDE.md, research/CLAUDE.md, the seven open specs
       research: rendering
       verify: SC-004 - each carries the rule
-- [ ] T04 Close: the tooling tests and make hooks-test green; report; landed
+- [ ] T05 Claimed units outside the hamlet scope (plan D6, FR-009): `tools/claims.py:claimed_outside` in `all_units`; the four claims it brings in checked by impl-drift
+      research: rendering
+      verify: tests/tools/test_claims.py (SC-005); make claims-owed lists none of the four after their check
+- [ ] T04 Close: make done green (an engine file changed); the tooling tests and make hooks-test green; report; landed
       research: rendering
       verify: the push accepted
