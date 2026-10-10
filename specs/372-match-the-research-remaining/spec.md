@@ -4,14 +4,78 @@
 
 **Created**: 2026-10-10
 
-**Status**: Filed - split off feature 328 at its wave 97 by the GM's ruling of 2026-10-10 (328's `request.md`, "the split";
-its FR-011): *"land what we have in main now after finishing wave 97's review. By splitting off the rest of our work into a
-separate feature."* Rewriting this into a full spec, a plan and tasks is the work of whoever picks it up (`/speckit-specify`
-on this directory, taking 328's `spec.md` as its model); until then `make speckit-todo` lists it as filed.
+**Status**: Draft (specified 2026-10-10 from its filed form)
 
-**Input**: feature 328's request (`specs/328-match-the-research/request.md`), unchanged in kind: bring the implementation to
-the research it cites, easiest first, in scope only for code the scripted hamlets, the magistracies and the country shrines
-execute (328's amendment 8; the legacy hand-drawn settlements' rows stay DEFERRED).
+**Input**: `request.md` - feature 328's request, carried on: bring the implementation to the research it cites, easiest
+first, for the code the scripted hamlets, the magistracies and the country shrines execute; split off 328 at its wave 97
+(328's FR-011) and started at once, *"pick up where you left off"*.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - The fixes go on where 328 stopped (Priority: P1)
+
+The GM, back from 328's landing, finds the next rows of the ranking being fixed in order, each wave verified as 328's were,
+and each batch landing on main as it closes, so other work branches off it.
+
+**Independent Test**: the ranking's open rows fall wave by wave; `make claims-report` shows their findings gone and no new
+one; each batch's commits are on main.
+
+### User Story 2 - The GM's decisions are gathered, not waited on (Priority: P1)
+
+What only the GM can decide is collected here and put to the GM at the feature's end or when the GM asks, never blocking
+the work in between (328's goal amendment).
+
+**Independent Test**: every held item names what was searched and found; no task waits on an answer while other rows stand
+open.
+
+### Edge Cases
+
+328's edge cases hold unchanged (a fix that would change the research instead; a hand-drawn Mode A sheet; a fix that changes
+many maps; a newly failing cohort seed is a regression, reverted with its measurement).
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+- **FR-001 (the starting point)**: the work list is everything listed under "What it carries" below - 328's ranking's open
+  in-scope rows at wave 97 (`specs/328-match-the-research/ranking.json`, rows with no wave and not deferred), the findings
+  the claims gate counted as introduced at 328's landing, the waived zigzag, the found rows, the efficiency item. 328's
+  tiers (its FR-003) and its order stand; a row fixed here is marked with its wave in 328's ranking (`audit/waves.json`), so
+  one ranking stays the one record.
+- **FR-002 (328's rules carried)**: 328's FR-002 (the measure is implementation work), FR-003 (tiers), FR-004 (the direction
+  of a fix), FR-005 (verification per fix, batched), FR-008 (the record of decisions, in this spec's Decisions Recorded),
+  FR-009 (hand-drawn maps) and FR-010 (scope) apply here as written there.
+- **FR-003 (waves land per batch)**: a batch of 4-5 waves closes as 328's did (the gate, the occasions, one timing pair and
+  its `perf-audit`) and LANDS when it closes: this feature's tasks are the current batch's, so the open-task refusal clears
+  at each close. A batch is never stacked unpushed behind another (the GM's reason for the split).
+- **FR-004 (the usage cap)**: 328's FR-007, at the cap the GM last set for this work, `90%` of the weekly window (armed with
+  `~/.claude/hooks/usage_cap.py`).
+- **FR-005 (decisions)**: a question for the GM is recorded with what was searched and found, and work moves to the next
+  row; the held list is put to the GM at the feature's end (FR-002's exception path still goes to `spec-fidelity` first).
+- **FR-006 (the filed features)**: a filed feature listed below is folded in only when the GM chooses it.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001** (FR-001, FR-002): after each wave, every row it took re-checks IN-STEP under `impl-drift`, and `make
+  claims-report`'s count of in-scope findings falls by at least that many with no new one.
+- **SC-002** (FR-003): every closed batch is on main, its gate green, its pair band recorded and audited.
+- **SC-003** (FR-004, FR-005): at the cap or the end, the clone holds no uncommitted work and no unrecorded verdict, and the
+  held list for the GM is complete.
+- **SC-004** (FR-001, FR-006): at the end, `make claims-report` shows 0 in-scope findings outside the DEFERRED units, or each
+  that remains names its held decision.
+
+## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
+
+| Decision | Class | Why | Recorded at |
+|---|---|---|---|
+
+## Assumptions
+
+- 328's records (`ranking.json`, `measurements.json`, `audit/`, `claims-followup.md`) are the starting state and stay in
+  328's directory; this feature's measurements are its own `measurements.json`.
+- The cohort baseline is 52 of 54 at 328's landing (seeds 10 and 20 refused).
 
 ## What it carries
 
@@ -74,7 +138,7 @@ forms), 344 (fabric-first generation, a research direction), 350 and 351 (a vill
 its shrine grove), 354 (seasonal maps, deferred by the GM), 363 (the kiln glyph, on the towns), 364-367 (the frozen towns:
 modern-only forms, the enclosed-fan floor, generator parity, the deep audit's items).
 
-## How it starts
+## How it starts (328's precedent)
 
 The cohort baseline is 52 of 54 (`make cohort N=48`, seeds 10 and 20 refused) and a newly failing seed is a regression,
 reverted with its measurement (328's precedent). The wave cycle, the batch close every four or five waves, and the review
