@@ -252,6 +252,39 @@ def test_doc_units_are_sections_with_comment_claims() -> None:
     assert cl.doc_units(DOC.replace("<!-- a note -->", "<!-- another -->"), "b.md", None)[1].core == units[1].core
 
 
+SECTION = """## Wells
+
+<!-- Research: well seat - GUESS -->
+<!-- Research: curb size - CONVENTION -->
+
+A well stands by the kitchen,
+a few feet out.
+
+- a curb of stone
+  around its mouth
+- a sweep beside it
+
+| item | band |
+|---|---|
+| well | 3-4 ft |
+| curb | 1 ft |
+"""
+
+
+def test_a_section_claim_is_owed_by_its_own_line_and_the_section_has_its_blocks() -> None:
+    """Feature 375 FR-002: the markers stand at the section's head, not beside their rule text, so a section claim's code is
+    its own line; the section's words are its core and its blocks, which a triage diffs. Before, one edit anywhere in the
+    section re-owed every claim of it."""
+    (u,) = cl.doc_units(SECTION, "b.md", None)
+    assert u.blocks == ("A well stands by the kitchen, a few feet out.", "- a curb of stone around its mouth", "- a sweep beside it",
+                        "| item | band |", "| well | 3-4 ft |", "| curb | 1 ft |")
+    (moved,) = cl.doc_units(SECTION.replace("| 1 ft |", "| 2 ft |"), "b.md", None)
+    assert moved.core != u.core and [moved.code(c) for c in moved.claims] == [u.code(c) for c in u.claims], "a row moved; no line did"
+    (relabeled,) = cl.doc_units(SECTION.replace("curb size - CONVENTION", "curb size - GUESS"), "b.md", None)
+    assert relabeled.code(relabeled.claims[1]) != u.code(u.claims[1]) and relabeled.code(relabeled.claims[0]) == u.code(u.claims[0])
+    assert cl.section_blocks("# head\ntext\n") == ("# head", "text"), "a heading line is a block of its own"
+
+
 def test_doc_units_restricted_to_named_tops_take_their_subtree() -> None:
     units = cl.doc_units(DOC, "b.md", ("One",))
     assert [u.qualname for u in units] == ["One", "One sub"]

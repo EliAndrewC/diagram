@@ -212,3 +212,70 @@ def test_the_triage_reads_only_lines_that_open_with_touches(tmp_path: pathlib.Pa
     out, msgs = cx.record_triage(index, units, reply, "d")
     assert msgs == [f"touched: {SHARE} - in backticks"] and "triage" not in out[FAR]
     assert cx.kept_text(skill / QDIR, "no-such-snapshot") == ""
+
+
+WALLS = "docs/buildings.md::Walls#walls"
+DOC = "## Walls\n<!-- Research: walls - CONVENTION -->\n\nA wall stands round the yard.\n\n| part | band |\n|---|---|\n| wall | 3 ft |\n| gate | 8 ft |\n"
+
+
+def _checked_doc(root: pathlib.Path) -> tuple[pathlib.Path, dict, dict]:
+    """A tree whose procedure section `Walls` carries one claim and a table, its claims recorded from a bundle."""
+    skill = _tree(root, MOD, PAGE)
+    (skill / "docs" / "buildings.md").write_text(DOC)
+    cur = cx.current(skill)
+    cx.bundle(root, cur, sorted(cur), root / "b")
+    blocks = json.loads((root / "b" / "blocks.json").read_text())
+    units = json.loads((root / "b" / "units.json").read_text())
+    assert units[WALLS]["section"] == cur[WALLS].unit.core and cur[WALLS].unit.core in blocks["snapshots"]
+    reply = "".join(f"VERDICT {k} IN-STEP - ok [§]\n" for k in units)
+    index, _msgs = cx.record({}, units, reply, "d", blocks["numbered"])
+    assert index[WALLS]["section"] == cur[WALLS].unit.core
+    return skill, index, {**blocks["snapshots"]}
+
+
+def test_a_section_edit_off_a_claims_line_owes_a_triage_of_the_changed_rows(tmp_path: pathlib.Path) -> None:
+    """Feature 375 FR-002 (372's wave 106: impl-drift over 73, 105 and 105 claims for edits off their lines): a regenerated
+    table row re-owes no claim in full; the triage shows only the row that changed, and clearing records the section."""
+    root = _repo(tmp_path)
+    skill, index, store = _checked_doc(root)
+    _commit(root, "the section as checked")
+    assert dict(cx.owed(cx.current(skill), index, skill / QDIR, store)).get(WALLS) is None
+    (skill / "docs" / "buildings.md").write_text(DOC.replace("| gate | 8 ft |", "| gate | 10 ft |"))
+    cur = cx.current(skill)
+    assert dict(cx.owed(cur, index, skill / QDIR, store))[WALLS] == cx.SECTION_TRIAGE
+    assert WALLS not in cx.judged(cx.owed(cur, index, skill / QDIR, store))
+    manifest = cx.triage_bundle(cur, index, store, [WALLS], skill / QDIR, tmp_path / "t").read_text()
+    assert "## docs/buildings.md::Walls (a procedure section" in manifest and "> | gate | 10 ft |" in manifest
+    assert "Removed blocks (no longer in the section):\n\n> | gate | 8 ft |" in manifest and "| wall | 3 ft |" not in manifest
+    data = json.loads((tmp_path / "t" / "triage.json").read_text())
+    assert data["forced"] == [] and data["units"][WALLS]["section"] == cur[WALLS].unit.core
+    cleared, _ = cx.record_triage(index, data["units"], "", "d2")
+    assert cleared[WALLS]["section"] == cur[WALLS].unit.core
+    assert WALLS not in dict(cx.owed(cur, cleared, skill / QDIR, {**store, **data["snapshots"]}))
+    (skill / "docs" / "buildings.md").write_text(DOC.replace("walls - CONVENTION", "walls - GUESS"))
+    assert dict(cx.owed(cx.current(skill), index, skill / QDIR, store))[WALLS] == "code changed", "its own line moved: owed in full"
+
+
+def test_a_removed_row_no_history_shows_forces_the_section_claim(tmp_path: pathlib.Path) -> None:
+    skill, index, store = _checked_doc(tmp_path)  # no repository: no history to read the removed row back from
+    (skill / "docs" / "buildings.md").write_text(DOC.replace("| gate | 8 ft |\n", ""))
+    cur = cx.current(skill)
+    cx.triage_bundle(cur, index, store, [WALLS], skill / QDIR, tmp_path / "t")
+    assert json.loads((tmp_path / "t" / "triage.json").read_text())["forced"] == [WALLS]
+
+
+def test_the_section_backfill_rekeys_current_rows_and_leaves_owed_ones_owed(tmp_path: pathlib.Path) -> None:
+    skill = _tree(tmp_path, MOD, PAGE)
+    (skill / "docs" / "buildings.md").write_text(DOC)
+    cur = cx.current(skill)
+    cl = cx.engine(pathlib.Path(cx.__file__).resolve().parents[2])
+    old = cl._sha(cur[WALLS].unit.core + "\x1f" + cur[WALLS].claim.normalized())
+    index = {WALLS: {"verdict": "IN-STEP", "code": old, "research": ""}, PRECINCT: {"verdict": "IN-STEP", "code": "stale", "research": ""}}
+    assert dict(cx.owed(cur, index))[WALLS] == "code changed", "the new fingerprint alone would owe it"
+    store: dict[str, list[str]] = {}
+    assert cx.backfill_sections(cur, index, store) == 1
+    assert WALLS not in dict(cx.owed(cur, index)) and dict(cx.owed(cur, index))[PRECINCT] == "code changed"
+    assert store[cur[WALLS].unit.core] and cx.backfill_sections(cur, index, store) == 0, "once"
+
+
+PRECINCT = "docs/building-programs.md::Country shrine (a village district's shrine)#precinct"

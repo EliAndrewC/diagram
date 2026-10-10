@@ -205,13 +205,20 @@ class Unit:
     core: str
     errors: list[str] = field(default_factory=list)
     names: tuple[str, ...] = ()
+    blocks: tuple[str, ...] = ()  # a procedure section's blocks, its claim markers out (feature 375, FR-002)
 
     def key(self, claim: Claim) -> str:
         """The index key of one claim of this unit."""
         return f"{self.path}::{self.qualname}#{claim.label}"
 
     def code(self, claim: Claim) -> str:
-        """The code fingerprint of one claim: the core plus the normalized claim line."""
+        """The code fingerprint of one claim: the core plus the normalized claim line. A PROCEDURE SECTION's claim is its own
+        line alone (feature 375, FR-002): its markers stand in a cluster at the section's head, never beside the rule text they
+        claim, so no position says which words a claim rests on, and fingerprinting the whole section re-owed every claim of
+        it on any edit (372's wave 106: impl-drift over 73, 105 and 105 claims, nearly all IN-STEP). The rest of the section is
+        `core`, and an edit there owes a TRIAGE of its changed blocks (`scripts/record/claims.py`)."""
+        if self.kind == "section":
+            return _sha("section-claim\x1f" + claim.normalized())
         return _sha(self.core + "\x1f" + claim.normalized())
 
 
@@ -418,8 +425,29 @@ def doc_units(text: str, path: str, tops: tuple[str, ...] | None) -> list[Unit]:
             except ClaimError as exc:
                 errors.append(str(exc))
         core = _sha(" ".join(_COMMENT.sub(" ", body).split()))
-        units.append(Unit(path, title, "section", i + 1, end, claims, False, core, errors))
+        units.append(Unit(path, title, "section", i + 1, end, claims, False, core, errors, blocks=section_blocks(body)))
     return units
+
+
+_LIST_ITEM = re.compile(r"^\s{0,3}(?:[-*+]|\d+[.)])\s")
+
+
+def section_blocks(body: str) -> tuple[str, ...]:
+    """A procedure section's BLOCKS, each with its whitespace folded and its comments out (feature 375, FR-002): a paragraph, a
+    list item with its continuation lines, a table row, a heading. A table row is a block of its own, so a regenerated
+    `building-programs.md` shows a triage only the rows whose text changed."""
+    out: list[list[str]] = []
+    for raw in _COMMENT.sub(" ", body).split("\n"):
+        line = raw.strip()
+        if not line or set(line) <= set("|-: "):
+            out.append([])
+            continue
+        starts = line.startswith(("|", "#")) or bool(_LIST_ITEM.match(raw))
+        if starts or not out or not out[-1] or out[-1][0].startswith(("|", "#")):
+            out.append([line])
+        else:
+            out[-1].append(line)
+    return tuple(" ".join(" ".join(b).split()) for b in out if b)
 
 
 def reexported(constants: dict[str, dict[str, str]], tables: dict[str, dict[str, tuple[str, str]]]) -> dict[str, dict[str, str]]:

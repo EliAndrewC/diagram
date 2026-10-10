@@ -58,12 +58,25 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
 import record_units as ru  # noqa: E402
+from claims_triage import (  # noqa: E402,F401 - the triage half, split out (feature 375 T09); re-exported
+    BLOBS,
+    findings_of,
+    keep_texts,
+    kept_text,
+    page_blocks,
+    record_triage,
+    removed_words,
+    triage_bundle,
+)
 
 INDEX = "dev/claims-index.json"
 # GUARD_EDIT_OK: feature 328 amendment 8 (the GM 2026-10-07) - a finding in code only the legacy hand-authored villages, towns
 # and cities run is DEFERRED, not DRIFTED: those checks go when the settlements convert, so they are not worth fixing now.
 DEFERRED = "dev/claims-deferred.json"
-STORE = "dev/claims-pages.json"  # the page snapshots each row's pages name (feature 318, FR-016)
+STORE = "dev/claims-pages.json"  # the page snapshots each row's pages name (feature 318, FR-016), and each section's (375)
+#: what a claim owed only a triage is owed for: a page it cites changed (feature 318), or its section did and its line did not (375)
+SECTION_TRIAGE = "section triage"
+TRIAGED = ("triage", SECTION_TRIAGE)
 QUESTIONS = "research/questions"
 FINDINGS = ("DRIFTED", "NEEDS-RESEARCH", "MISLABELED", "UNCLAIMED", "CANNOT-TELL")
 VERDICTS = ("IN-STEP", *FINDINGS)
@@ -85,30 +98,6 @@ def engine(skill: Path) -> Any:  # noqa: ANN401 - the engine's claims reader, im
     from l7r.diagram.tools import claims  # noqa: PLC0415
 
     return claims
-
-
-def findings_of(page_text: str) -> str:
-    """The digest of what a claim is checked against: a question's heading and its non-intro blocks' words."""
-    page = ru.read_page(page_text)
-    return ru.digest([page.heading, *(b.words for b in page.blocks if not b.intro)])
-
-
-def page_blocks(name: str, qdir: Path, memo: dict[str, Any] | None = None) -> tuple[str, list[tuple[str, str]]]:
-    """A cited question's findings digest and its non-intro blocks as (digest, words), in order - what a claim can rest on
-    (feature 318, FR-016). A missing file is `missing` with no blocks."""
-    memo = {} if memo is None else memo
-    if name not in memo:
-        f = qdir / name
-        if not f.is_file():
-            memo[name] = ("missing", [])
-        else:
-            text = f.read_text(encoding="utf-8")
-            page = ru.read_page(text)
-            memo[name] = (
-                findings_of(text),
-                [(ru.digest([b.words]), b.words) for b in page.blocks if not b.intro],
-            )
-    return memo[name]
 
 
 def research_fp(pointers: Sequence[str], qdir: Path, memo: dict[str, str] | None = None) -> str:
@@ -230,6 +219,8 @@ def owed(
             out.append((key, "code changed"))
         elif was.get("triage") == "touched":
             out.append((key, "triage touched"))
+        elif row.unit.kind == "section" and "section" in was and was["section"] != row.unit.core:
+            out.append((key, SECTION_TRIAGE))  # feature 375 FR-002: its own line stands; the rest of its section moved
         elif was.get("research") != row.research:
             out.append(
                 (
@@ -242,7 +233,7 @@ def owed(
 
 def judged(due: Sequence[tuple[str, str]]) -> list[str]:
     """The owed keys `impl-drift` must judge: every owed key but those owed only a triage."""
-    return [k for k, why in due if why != "triage"]
+    return [k for k, why in due if why not in TRIAGED]
 
 
 def live_rows(cur: dict[str, Row], index: dict[str, dict[str, str]]) -> dict[str, dict[str, str]]:
@@ -319,6 +310,9 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path) -> P
     numbered: dict[str, str] = {}  # §N -> page:digest, numbered across the whole bundle (FR-016)
     snapshots: dict[str, list[str]] = {}
     memo: dict[str, Any] = {}
+    for k in keys:  # a section claim's section, snapshot by its blocks: what a later section triage diffs (feature 375, FR-002)
+        if cur[k].unit.kind == "section":
+            snapshots[cur[k].unit.core] = [ru.digest([b]) for b in cur[k].unit.blocks]
     for name in cited:
         page = ru.read_page((qdir / name).read_text(encoding="utf-8"))
         fp, blocks = page_blocks(name, qdir, memo)
@@ -343,6 +337,7 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path) -> P
             "research": cur[k].research,
             "uid": cur[k].uid,
             "pages": {ptr.rsplit("/", 1)[1]: page_blocks(ptr.rsplit("/", 1)[1], qdir, memo)[0] for ptr in cur[k].claim.pointers},
+            **({"section": cur[k].unit.core} if cur[k].unit.kind == "section" else {}),
         }
         for k in keys
     }
@@ -443,6 +438,8 @@ def record(
         }
         if "pages" in fp:
             row["pages"] = fp["pages"]
+        if "section" in fp:
+            row["section"] = fp["section"]
         if rests is not None:
             row["rests"] = rests
         out[key] = row
@@ -463,168 +460,21 @@ def record(
     return out, msgs
 
 
-# ---- the triage (feature 318, FR-016) ------------------------------------------------------------------------------
-
-_TOUCHES = re.compile(r"^TOUCHES\s+(\S.*?)\s+-\s+(.*)$")
-
-
-#: The page texts a snapshot was taken of, kept as git blobs in the clone (feature 375 T04): `{findings digest: blob sha}`.
-BLOBS = "claims-page-blobs.json"
-
-
-def _blob_map(qdir: Path) -> Path | None:
-    common = (_git(qdir, "rev-parse", "--path-format=absolute", "--git-common-dir") or "").strip()
-    return Path(common) / BLOBS if common else None
-
-
-def keep_texts(qdir: Path, units: Mapping[str, Mapping[str, Any]]) -> int:
-    """Keep, as a git blob, the text of every page a recorded snapshot was taken of (`units`' `pages`), while the page still
-    stands at that snapshot. WHY (feature 375 T04, measured on 372's wave 108): a block drafted and withdrawn before any commit
-    is in no version of the page's history, so `removed_words` could not show it, and every claim citing the page was owed in
-    full (`forced`) - "3 of 3 sent on to impl-drift" from a triage reply that named none. The blob is the snapshot's own text,
-    so the removed words are always there to show."""
-    path = _blob_map(qdir)
-    pages = {name: fp for u in units.values() for name, fp in dict(u.get("pages") or {}).items()}
-    if path is None or not pages:
-        return 0
-    blobs = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
-    kept = 0
-    for name, fp in sorted(pages.items()):
-        f = qdir / name
-        if fp in blobs or not f.is_file() or findings_of(text := f.read_text(encoding="utf-8")) != fp:
+def backfill_sections(cur: dict[str, Row], index: dict[str, dict[str, Any]], store: dict[str, list[str]]) -> int:
+    """Re-key every procedure-section claim to the fingerprint of its own line (feature 375, FR-002) WITHOUT owing it: a row
+    current under the old fingerprint (its section's core plus its line) gets the new `code` and its section's fingerprint and
+    blocks; a row the old fingerprint already owed is left owed, since its new code cannot match. Run once, at the change."""
+    cl = engine(Path(__file__).resolve().parents[2])
+    n = 0
+    for key, row in cur.items():
+        was = index.get(key)
+        if was is None or row.unit.kind != "section" or "section" in was:
             continue
-        run = subprocess.run(["git", "-C", str(qdir), "hash-object", "-w", "--stdin"], input=text, capture_output=True, text=True, check=False)
-        if run.returncode == 0:
-            blobs[fp] = run.stdout.strip()
-            kept += 1
-    if kept:
-        path.write_text(json.dumps(blobs, indent=0, sort_keys=True) + "\n", encoding="utf-8")
-    return kept
-
-
-def kept_text(qdir: Path, fp: str) -> str:
-    """The text of the page snapshot `fp`, from the clone's kept blobs, or ''."""
-    path = _blob_map(qdir)
-    blob = json.loads(path.read_text(encoding="utf-8")).get(fp, "") if path is not None and path.is_file() else ""
-    return (_git(qdir, "cat-file", "-p", blob) or "") if blob else ""
-
-
-def removed_words(qdir: Path, name: str, digests: set[str], depth: int = 60, snapshot: str = "") -> dict[str, str]:
-    """The words of the blocks `digests` of the question `name` that no longer stand, read back from the snapshot's kept text
-    (`keep_texts`) and then the page's own git history (newest first, at most `depth` versions): the snapshots keep digests
-    only, and the triage must SHOW a removed block. A block nothing yields is absent from the answer."""
-    found: dict[str, str] = {}
-    texts = ([kept_text(qdir, snapshot)] if snapshot else []) + [
-        _git(qdir, "show", f"{sha}:./{name}") or "" for sha in (_git(qdir, "log", "--format=%H", f"-{depth}", "--", name) or "").split()
-    ]
-    for text in texts:
-        for b in ru.read_page(text).blocks:
-            d = ru.digest([b.words])
-            if d in digests and not b.intro:
-                found.setdefault(d, b.words)
-        if len(found) == len(digests):
-            break
-    return found
-
-
-def triage_bundle(
-    cur: dict[str, Row],
-    index: Mapping[str, Mapping[str, Any]],
-    store: Mapping[str, list[str]],
-    keys: Sequence[str],
-    qdir: Path,
-    out: Path,
-) -> Path:
-    """The triage bundle for `keys` (claims owed only a triage): per cited page, the blocks new, changed or REMOVED since each
-    claim's check (a removed block is shown too: a row with no `rests` may have rested on it, and a deleted caveat bears on a
-    claim that did not name it), and the claims citing it with their last verdict. A removed block whose words its page's history
-    no longer yields makes every claim citing that page owed in full (`forced`). Writes MANIFEST.md and triage.json (each claim's
-    fingerprints now, today's snapshots, the forced claims)."""
-    if out.exists():
-        shutil.rmtree(out)
-    out.mkdir(parents=True)
-    memo: dict[str, Any] = {}
-    by_page: dict[str, list[str]] = {}
-    changed: dict[str, list[str]] = {}
-    gone: dict[str, list[str]] = {}
-    lost: dict[tuple[str, str], bool] = {}
-    forced: set[str] = set()
-    for key in keys:
-        for name, old in index[key]["pages"].items():
-            fp, blocks = page_blocks(name, qdir, memo)
-            if fp == old:
-                continue
-            before, now = set(store.get(old, [])), {d for d, _w in blocks}
-            fresh = [w for d, w in blocks if d not in before]
-            if (name, old) not in lost:
-                missing = before - now
-                words = removed_words(qdir, name, missing, snapshot=old) if missing else {}
-                gone[f"{name}|{old}"] = [words[d] for d in sorted(missing) if d in words]
-                lost[(name, old)] = len(words) < len(missing)
-            if lost[(name, old)]:
-                forced.add(key)
-            if fresh or gone[f"{name}|{old}"]:
-                changed[name] = fresh
-                gone[name] = sorted(set(gone.get(name, [])) | set(gone[f"{name}|{old}"]))
-                by_page.setdefault(name, []).append(key)
-    parts = [
-        "# Triage of claim re-checks (feature 318)\n",
-        "owed-checks: claims-triage\n",
-        "Each page below changed since the claims under it were last judged; it lists ONLY its new, changed and REMOVED blocks. "
-        "For each claim, decide whether any of those blocks - a block added or reworded, or one taken away - could change its verdict - a figure, rule, form, order, exception or recorded "
-        "deviation that bears on what the claim says the code does. Reply one `TOUCHES <key> - <which block, a few words>` line per "
-        "such claim, and nothing for the rest: a claim you do not name is cleared without a re-check. When unsure, name it.\n",
-    ]
-    for name, ks in sorted(by_page.items()):
-        parts.append(f"## {QUESTIONS}/{name}\n\nNew or changed blocks:\n")
-        parts += [f"> {w}\n" for w in changed[name]] or ["(none)\n"]
-        if gone.get(name):
-            parts.append("Removed blocks (no longer on the page):\n")
-            parts += [f"> {w}\n" for w in gone[name]]
-        parts.append("Claims citing it:\n")
-        for k in sorted(ks):
-            parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")
-        parts.append("")
-    (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
-    units = {
-        k: {
-            "research": cur[k].research,
-            "pages": {ptr.rsplit("/", 1)[1]: page_blocks(ptr.rsplit("/", 1)[1], qdir, memo)[0] for ptr in cur[k].claim.pointers},
-        }
-        for k in keys
-    }
-    snaps = {fp: [d for d, _w in blocks] for fp, blocks in memo.values()}
-    (out / "triage.json").write_text(
-        json.dumps({"units": units, "snapshots": snaps, "forced": sorted(forced)}, indent=1, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-    return out / "MANIFEST.md"
-
-
-def record_triage(
-    index: dict[str, dict[str, Any]],
-    units: Mapping[str, Mapping[str, Any]],
-    reply: str,
-    today: str,
-    forced: Sequence[str] = (),
-) -> tuple[dict[str, dict[str, Any]], list[str]]:
-    """The index with a triage reply applied: a named claim is owed `impl-drift` (`triage: touched`), and so is a `forced` one (a
-    block removed from its page whose words the history no longer yields); every other claim of the bundle keeps its verdict and
-    the blocks it rests on, recorded at the pages as they stand now."""
-    touched = {m.group(1).strip("`"): m.group(2) for raw in reply.split("\n") if (m := _TOUCHES.match(raw.strip().strip("`")))}
-    msgs = [f"refused: `{k}` is not a claim of this triage" for k in sorted(set(touched) - set(units))]
-    touched |= {k: "a removed block the history no longer shows" for k in forced if k in units and k not in touched}
-    out = dict(index)
-    for key, fp in sorted(units.items()):
-        row = dict(out[key])
-        if key in touched:
-            row["triage"] = "touched"
-            msgs.append(f"touched: {key} - {touched[key]}")
-        else:
-            row.update(research=fp["research"], pages=dict(fp["pages"]), triaged=today)
-            row.pop("triage", None)
-        out[key] = row
-    return out, msgs
+        if was.get("code") == cl._sha(row.unit.core + "\x1f" + row.claim.normalized()):
+            was.update(code=row.code, section=row.unit.core)
+            store[row.unit.core] = [ru.digest([b]) for b in row.unit.blocks]
+            n += 1
+    return n
 
 
 def backfill(
@@ -802,6 +652,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     td.add_argument("--bundle", required=True)
     td.add_argument("--reply", required=True)
     sub.add_parser("backfill")
+    sub.add_parser("backfill-sections")
     sub.add_parser("report")
     sub.add_parser("gate")
     cv = sub.add_parser("coverage")
@@ -841,6 +692,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         if len(due) > len(full):
             print(f"claims-owed: {len(due) - len(full)} claim(s) owe only a TRIAGE of the blocks that changed on their pages - `make claims-triage` first; it sends on only the claims a change bears on")
         return 0
+    if args.cmd == "backfill-sections":
+        n = backfill_sections(cur, index, store)
+        save_index(root / INDEX, live_rows(cur, index))
+        save_store(root / STORE, store)
+        print(f"claims-backfill-sections: {n} section claim(s) re-keyed to their own line; none owed by it")
+        return 0
     if args.cmd == "backfill":
         n = backfill(cur, index, qdir, store)
         save_index(root / INDEX, live_rows(cur, index))
@@ -848,7 +705,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"claims-backfill: {n} row(s) given the pages they were checked at")
         return 0
     if args.cmd == "triage":
-        keys = [k for k, why in owed(cur, index, qdir, store) if why == "triage"]
+        keys = [k for k, why in owed(cur, index, qdir, store) if why in TRIAGED]
         if not keys:
             print("claims-triage: no claim is owed a triage")
             return 0
@@ -889,7 +746,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.cmd == "bundle":
         due_all = owed(cur, index, qdir, store)
-        due = {k: why for k, why in due_all if why != "triage"}
+        due = {k: why for k, why in due_all if why not in TRIAGED}
         if args.owed:
             keys = sorted(due)
         elif args.module:

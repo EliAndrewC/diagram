@@ -1226,6 +1226,10 @@ claims-triaged: ## [project] record a triage reply: a claim it names (TOUCHES) i
 claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" backfill
 
+# GUARD_EDIT_OK: feature 375 FR-002 adds a one-time operation - the procedure-section claims re-keyed to their own lines.
+claims-backfill-sections: ## [project] re-key every procedure-section claim to its own line (feature 375), owing nothing that was not owed: run once, at the change
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" backfill-sections
+
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
