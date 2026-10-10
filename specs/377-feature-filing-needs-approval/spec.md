@@ -110,7 +110,7 @@ A session reading the guidelines learns:
 - **FR-004 - The push backstop.** At the push, spec-lint reports any `spec.md` of a feature numbered 377 or above, in
   the push's delta, that has no approval line of FR-001's form.
 - **FR-005 - The refusal carries the fix.** Each refusal states the line's exact form and that the session must ask
-  the GM (a reopen's refusal names finishing and closing first, FR-011). It names which check failed: no line, too short, or not found among the GM's messages. A test pins the
+  the GM (the refusals of FR-011 and FR-012 name finishing and closing first). It names which check failed: no line, too short, or not found among the GM's messages. A test pins the
   text.
 - **FR-006 - No escape for the session.** Neither the commit guard, the push backstop nor the push check of FR-011
   and FR-012 has an escape variable. The
@@ -126,17 +126,18 @@ A session reading the guidelines learns:
 - **FR-009 - spec-fidelity checks the approval's subject.** Its contract adds: an approval line's quote must approve
   the feature it sits in; otherwise the verdict is NOT FAITHFUL.
 - **FR-011 - A reopen that lands open needs approval** (amendment 1). When a session runs `scripts/sync-with-main.sh
-  done` or `push`, every feature that was CLOSED at the delta's base and is OPEN at its head is refused, unless the delta
+  done` or `push`, every feature that was SETTLED at the delta's base and is OPEN at its head is refused, unless the delta
   adds an approval line to its `spec.md` whose quote the GM wrote in this session (as FR-002 reads the GM's messages).
   SETTLED means no session work is left: `make speckit-todo`'s `closed` (a status line opening `Done`, `Superseded by`
   or `Withdrawn`, or every task ticked) or its `done - GM review pending`, which speckit-todo lists among the open but
-  which holds only the GM's own box. Anything else is open. A feature reopened and closed again within the delta passes
+  which holds only the GM's own box. Anything else is open. A feature reopened and SETTLED again within the delta passes
   with no approval. Any feature number. The refusal names the approval-free route FIRST: finish the work and close
   the feature, then land it (the work stays committed in the clone and backed up meanwhile); the approval line is the
   way to land it open. A push of the reopened feature's `specs/` directory alone is held like any other.
 - **FR-012 - Open work hidden under a closed status** (amendment 1). The same push check refuses a delta that adds an
   unticked task to a feature whose status line still opens `Done`, `Superseded by` or `Withdrawn` at HEAD: speckit-todo
-  reads it as closed and the GM would never see the work. The same approval line, added in the delta, lets it land.
+  reads it as closed and the GM would never see the work. Its refusal leads, as FR-011's does, with doing the work and ticking the task
+  before landing; the same approval line, added in the delta, lets it land open.
 - **FR-010 - Tested.** The guard has a suite under `tests/hooks/` run by `make hooks-test`, covering every scenario
   above (no line, short quote, foreign quote, the GM's quote, an AskUserQuestion answer, a rename, a feature below
   377). The spec-lint check has a test, and a test proves each guard fires on the unguarded case.
@@ -154,7 +155,7 @@ A session reading the guidelines learns:
 - **SC-006** (FR-003, FR-008): the withdrawn requirements stay withdrawn - no commit-time gate on a reopen (FR-011
   judges what lands instead), and 376 carries no approval line.
 - **SC-007** (FR-011, FR-012, FR-010): in the guard's suite, a push carrying a feature reopened and left open is refused; one
-  reopened and closed again passes; one left open with the GM's quoted approval added passes; a feature open at the
+  reopened and settled again passes; one left open with the GM's quoted approval added passes; a feature open at the
   base and still open is not this check's; an unticked task added under a `Done` status is refused.
 
 ## What it does not cover
@@ -213,4 +214,6 @@ A session reading the guidelines learns:
   rule (speckit-todo lists `done - GM review pending` as open; this check counts it settled, as no session work is
   left); the reopen refusal leads with finishing and closing; FR-006 covers the push check; FR-012 added for open
   tasks under a closed status; the does-not-cover line corrected; D4 records that FR-002 is unchanged.
+- spec-fidelity-verify, amendment 1 round 2 (2026-10-10): CHANGES REQUIRED, two wordings. Applied: FR-011's operative
+  sentence and its pass case use SETTLED; FR-012's refusal leads with doing the work, as FR-011's does (FR-005 widened).
 
