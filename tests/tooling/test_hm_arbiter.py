@@ -120,7 +120,9 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
     el.append({"hook_event_name": "PreToolUse", "cwd": str(root), "tool_name": "Edit", "tool_input": {"file_path": str(q / "0105-baths.html"), "old_string": "a", "new_string": "b"}})
     manifest = ab.bundle(root, "round:quote-check|q:0105@3", tmp_path / "out").read_text()
     assert "trigger: round:quote-check|q:0105@3" in manifest and "### Round 1" in manifest and "### Round 2" in manifest
-    assert "- NEW: the bath size has no footnote at all" in manifest and "(no findings in the kept reply)" in manifest
+    assert "- NEW: the bath size has no footnote at all" in manifest and "(no reply kept for this round)" in manifest
+    assert (tmp_path / "out" / "round-1-quote-check.md").read_text() == "1. the bath size has no footnote at all\n"
+    assert "The whole reply: `round-1-quote-check.md`" in manifest
     assert (tmp_path / "out" / "request.md").read_text() == "the GM's words" and (tmp_path / "out" / "edits.diff").is_file()
     assert "0105-baths.html" in (tmp_path / "out" / "cascade.txt").read_text()
     assert ab.subject_files(root, "modal:sheet/bath") == ["l7r/diagram/interactive/assets/modals/sheet/bath.md"]
