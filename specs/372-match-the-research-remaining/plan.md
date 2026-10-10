@@ -122,8 +122,15 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   a board as a roofed frame 16 x 6 ft, its long side to the road, on a stone footing about 2 ft wider all round with a fence
   line at its edge (the Kanagawa board); the sheets drew ~7 x 3 ft gate boards and a ~9 x 4 ft bounty board. All four boards -
   **Ochiba**'s, **Hayakawa**'s and **Ubame**'s two - drawn so (a 48 x 18 px frame with a ridge line for its roof, on a 60 x 30 px
-  stone footing with a dashed fence line), on the road's near edge beside the gate now that each road passes its gate (wave
-  103); Ubame's bounty board moved 14 px west to clear the gate range's post.
+  stone footing with a dashed fence line), on the road's far verge straight across from the gate: the gate opens straight onto
+  the road (0088), so beside the road means across it (0190: a board stands beside the road, never in it); Ubame's bounty board
+  stands beside its notice board on the same verge, west, so the pair does not mirror about the gate. A first draft stood the
+  boards on the road's near edge; the notice board's glyph check (round 1, NEEDS-WORK, F1) found them in the road.
+- **The board's limit**: `compound_model.NOTICE_BOARD_MAX_FT`, the engine's one predicate behind `pack_audit`'s
+  `notice_board_adrift` (feature 287 H29b), was 20 ft, set while boards stood against the wall and on no page; a board facing
+  its gate across the Imperial road's 30 ft stands ~31 ft off, so it is 40 ft, a GUESS claimed on 0190's drawing page. The two
+  frozen red fixtures' misplaced boards moved farther out (Ochiba's 90 px, Hayakawa's 80) so the check still fires on them; the
+  generated draft's own board, 8 ft from its gate, is unaffected.
 - **Records**: m:wave104-notice-boards; the claim; three sheets' notes (their point-glyph lines no longer give 7 x 3 ft).
 - **Occasions**: glyph-redrawn: notice board on ubame-magistracy (the same glyph on all three sheets).
 

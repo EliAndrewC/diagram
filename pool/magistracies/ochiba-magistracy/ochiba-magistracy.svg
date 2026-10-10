@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="180 84 840 784" font-family="Georgia, 'Times New Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="180 84 840 816" font-family="Georgia, 'Times New Roman', serif">
   <!-- ============================================================ -->
   <!-- Ochiba County Magistracy - top-down diagrammatic plan         -->
   <!-- North at top, main gate facing south (bottom).                -->
@@ -59,8 +59,8 @@
     <!-- feature 372 wave 103: the Imperial road runs past the gate at the road's own 30 ft (90 px), 0088's drawing page
          (it was an 8 ft lane drawn into the gate); the gate opens straight onto it, no wider ground before the gate (0088),
          the threshold stones and the notice board on the road's near edge; which way the road runs here is a GUESS -->
-    <path d="M 180 801 L 1020 801" stroke="#B89060" stroke-width="90" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 180 801 L 1020 801" stroke="#9C7448" stroke-width="90" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
+    <path d="M 180 799.5 L 1020 799.5" stroke="#B89060" stroke-width="90" stroke-linecap="butt" opacity="0.55"/>
+    <path d="M 180 799.5 L 1020 799.5" stroke="#9C7448" stroke-width="90" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
 
   <!-- Title block (just above the compound; no redundant summary line - the
@@ -153,10 +153,11 @@
     <!-- 3 ft nearer the main gate (feature 266): measured by its own rect, the board stood 22.1 ft from the opening, past the 20 ft a kosatsu is read at -->
     <!-- feature 372 wave 104: a roofed frame 16 x 6 ft (48 x 18 px), its long side to the road, on a stone footing 2 ft
          wider all round with a fence line at its edge (research/questions/0190-notice-boards-kosatsuba.drawing.html, the
-         Kanagawa board; it was drawn ~7 x 3 ft) -->
-    <rect x="451" y="757" width="60" height="30" fill="#CFC6B4" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
-    <rect x="457" y="763" width="48" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
-    <line x1="457" y1="772" x2="505" y2="772" stroke="#6B4F2A" stroke-width="1.2"/>
+         Kanagawa board; it was drawn ~7 x 3 ft); it stands on the road's far verge facing the gate, beside the road
+         and not in it, since the gate opens straight onto the road (0088) -->
+    <rect x="570" y="845" width="60" height="30" fill="#CFC6B4" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <rect x="576" y="851" width="48" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
+    <line x1="576" y1="860" x2="624" y2="860" stroke="#6B4F2A" stroke-width="1.2"/>
     <text font-size="9" font-style="italic" fill="#5C4830">notice board</text>
   </g>
 

@@ -243,10 +243,11 @@
   <g data-kind="notice board">
     <!-- feature 372 wave 104: a roofed frame 16 x 6 ft (48 x 18 px), its long side to the road, on a stone footing 2 ft
          wider all round with a fence line at its edge (research/questions/0190-notice-boards-kosatsuba.drawing.html, the
-         Kanagawa board; it was drawn ~7 x 3 ft) -->
-    <rect x="540" y="757" width="60" height="30" fill="#CFC6B4" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
-    <rect x="546" y="763" width="48" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
-    <line x1="546" y1="772" x2="594" y2="772" stroke="#6B4F2A" stroke-width="1.2"/>
+         Kanagawa board; it was drawn ~7 x 3 ft); it stands on the road's far verge facing the gate, beside the road
+         and not in it, since the gate opens straight onto the road (0088) -->
+    <rect x="478" y="809" width="60" height="30" fill="#CFC6B4" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <rect x="484" y="815" width="48" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
+    <line x1="484" y1="824" x2="532" y2="824" stroke="#6B4F2A" stroke-width="1.2"/>
     <text font-size="9" font-style="italic" fill="#5C4830">notice board</text>
   </g>
 

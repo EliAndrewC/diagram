@@ -183,8 +183,12 @@
         30
       ],
       "before_px": "Ochiba, Hayakawa, Ubame's notice boards 21 x 9; Ubame's bounty board 28 x 12",
-      "pack_audit_diff": "no check changed on Hayakawa or Ubame; Ochiba lost one LOOSE-gap line (a 13.3 ft gap the board no longer bounds)",
-      "reading": "four boards 16 x 6 ft frames with a ridge line, each on a 20 x 10 ft footing with a dashed fence line, long side to the road, on the road's near edge beside its gate; Ubame's bounty board 14 px west to clear the gate range's post"
+      "pack_audit_diff": "notice_board_adrift OK on all three; the two frozen red fixtures' misplaced boards moved farther out so the check still fires on them (test_pack_audit 89 passed)",
+      "reading": "four boards 16 x 6 ft frames with a ridge line, each on a 20 x 10 ft footing with a dashed fence line, long side to the road, on the road's far verge straight across from the gate (Ubame's bounty board beside its notice board, west); every audit check OK on all three sheets once NOTICE_BOARD_MAX_FT is 40 ft (Ochiba's board faces its gate across the Imperial road's 30 ft)",
+      "board_gate_limit_ft": [
+        20,
+        40
+      ]
     }
   }
 }

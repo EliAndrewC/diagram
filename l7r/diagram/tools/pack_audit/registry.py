@@ -212,7 +212,7 @@ CHECKS: tuple[Check, ...] = (
     Check("tubs_in_buildings", _tub_in_building, False, "ubame-tubs-inside-red.svg", "move the tub OUT, clear of the wall"),
     Check("tubs_on_wells", _tub_on_well, False, "ochiba-tub-on-well-red.svg", "move the tub to a different eaves corner"),
     # --- the magistracy's own ---
-    Check("notice_board_adrift", _board, False, "ochiba-layout-red.svg", "move the notice board to within 20 ft of a gate opening"),
+    Check("notice_board_adrift", _board, False, "ochiba-layout-red.svg", "move the notice board to within 40 ft of a gate opening"),
     Check(
         "privies_by_zone",
         lambda ctx: pr.privies_by_zone(ctx.text),

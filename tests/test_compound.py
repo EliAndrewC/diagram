@@ -784,7 +784,7 @@ def test_the_generated_sheets_fixtures_stand_by_their_rules() -> None:
     env = _env()
     gl, _gr = c._gate_interval(env)
     assert cp.board_by_the_gate(env, (gl - 14.0, env.h_ft + 3.0, gl - 8.0, env.h_ft + 4.5))
-    assert not cp.board_by_the_gate(env, (gl - 40.0, env.h_ft + 3.0, gl - 34.0, env.h_ft + 4.5))
+    assert not cp.board_by_the_gate(env, (gl - 60.0, env.h_ft + 3.0, gl - 54.0, env.h_ft + 4.5))
 
 
 def test_a_repair_skips_a_far_neighbor_and_one_whose_lifting_frees_nothing() -> None:

@@ -219,7 +219,7 @@
 
   <!-- Notice board just outside the wall, west of the gate -->
   <g data-kind="notice board">
-    <rect x="380" y="758" width="44" height="12" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
+    <rect x="300" y="758" width="44" height="12" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
     <circle cx="386" cy="772" r="1.5" fill="#4A3318"/>
     <circle cx="418" cy="772" r="1.5" fill="#4A3318"/>
     <text x="402" y="786" text-anchor="middle" font-size="9" font-style="italic" fill="#5C4830">notice board</text>

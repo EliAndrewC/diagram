@@ -219,9 +219,13 @@ TUB_MAX_GAP_FT: float = 3.5
 """How far from its building a fire-water tub may stand (feature 287, homes H29b): the number `pack_audit`'s
 `fire_water_adrift` registers - a gutter-fed tub hugs its eaves - held equal to it by a test."""
 
-NOTICE_BOARD_MAX_FT: float = 20.0
+NOTICE_BOARD_MAX_FT: float = 40.0
 """How far from the main gate's opening the compound's notice board may stand (feature 287, homes H29b): the number
-`pack_audit`'s `notice_board_adrift` registers, held equal to it by a test."""
+`pack_audit`'s `notice_board_adrift` registers, held equal to it by a test. 40 ft since feature 372 wave 104 (it was 20,
+set while boards stood against the wall): the gate opens straight onto the road it stands on (0088), so its board stands
+beside that road on the far verge facing the gate (0190), across as much as the Imperial road's 30 ft.
+
+Research: board by the gate - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: a board at the office's own gate, beside the road, within 40 ft of the opening across the road"""
 
 
 @dataclass(frozen=True)
