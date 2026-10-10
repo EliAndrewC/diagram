@@ -72,9 +72,11 @@
   <!-- The Fox road: arrives from the east across the border, forking to the cart gate
        (goods) and, by a narrower path, to the parley room's outer door (people). -->
   <g data-kind="road">
-    <!-- 9 ft, matching the narrowed cart gate (feature 267 pass 2; it was 12 ft) -->
-    <path d="M 1280 666.5 L 1074 666.5" stroke="#B89060" stroke-width="27" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 1280 666.5 L 1074 666.5" stroke="#9C7448" stroke-width="27" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
+    <!-- the cart lane to the cart gate, 6 ft (18 px), 0082's allowance over the hand cart's bed
+         (research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html; feature 372 wave 100:
+         it was 9 ft, matching the cart gate; feature 267 pass 2 had it at 12 ft) -->
+    <path d="M 1280 666.5 L 1074 666.5" stroke="#B89060" stroke-width="18" stroke-linecap="butt" opacity="0.55"/>
+    <path d="M 1280 666.5 L 1074 666.5" stroke="#9C7448" stroke-width="18" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
     <path d="M 1170 666 L 1170 503 L 1113 503" stroke="#B89060" stroke-width="18" fill="none" stroke-linecap="butt" opacity="0.5"/>
     <path d="M 1170 666 L 1170 503 L 1113 503" stroke="#9C7448" stroke-width="18" stroke-dasharray="10 8" fill="none" opacity="0.35"/>
   </g>

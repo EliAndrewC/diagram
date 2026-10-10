@@ -10092,7 +10092,7 @@
   "tier_as_ranked": "E1",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "100",
   "scope": "mode-a"
  },
  {
@@ -10147,7 +10147,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "99",
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
   "scope": "mode-a"
  },
  {

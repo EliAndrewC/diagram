@@ -40,19 +40,28 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 
 ## Wave 99 (amendment 2, 2026-10-10) - batch 1
 
-- **Scope**: the next Mode A rows that redraw cleanly. `docs/buildings.md::Fire-water tubs#one tub per wooden building`: 0100's
-  drawing page puts a tub at each major wooden building and two at the kitchen, the total following the count - **Ochiba**'s
-  karo's house and senior retainers' quarters had none, so each gets one at an eaves corner (the karo's house SW on its west
-  face, the quarters SE on its east face), 2.2 px off the wall as the procedure seats every tub; Ubame's 19 for its ~19
-  wooden buildings already follows the rule (the claim restated to the rule). `#boundary pillars`: 0083's drawing page gives
-  about 1 to 1.5 ft of shaft, up to about 3 ft with a plinth (a GUESS) - **Ubame**'s two pillars, 3 x 3.7 ft, drawn 3 ft square
-  (the plinth form). Sheets redrawn: Ochiba, Ubame.
+- **Scope**: `docs/buildings.md::Approaches and surroundings#boundary pillars` - 0083's drawing page gives about 1 to 1.5 ft
+  of shaft, up to about 3 ft with a plinth (a GUESS); **Ubame**'s two pillars, 3 x 3.7 ft, drawn 3 ft square (the plinth form).
+  IN-STEP under impl-drift.
+- **Held, its place kept**: `Fire-water tubs#one tub per wooden building` (row 14) waits on `#senior retainers housed apart`
+  (row 21, its `after`): row 21 may move the karo's house out of the walls, and row 14's tubs are added "if they survive".
+  Wave 99's first draft added Ochiba's two tubs ahead of it and called Ubame's 19 the rule's own count without a measurement;
+  plan review round 2 (BLOCKED) took both back - the tubs removed, the claim restored - and row 14 is taken after row 21, with
+  Ubame's tubs counted per building then.
 - **Passed over, its place kept**: `Walls and gates#main gate posts` (E3) - 0092's 2 ft post is thinner than the 3 ft wall it
   ends (6 px against the wall's 9 px), so drawn as written it would vanish into the wall's ink; how a post shows at a wall's
   end is a drawing question for the row's own wave, not taken here.
-- **Records**: m:wave99-tubs-and-pillars (the pack audit: '10 tubs' -> '12 tubs', none adrift); both claims IN-STEP; each
-  sheet's notes (history lines; Ubame's point-glyph line no longer calls the stones markers).
-- **Occasions**: glyph-redrawn: boundary stones on ubame-magistracy; placement-changed: fire-water tubs on ochiba-magistracy.
+- **Records**: m:wave99-pillars; Ubame's notes (the history line; its point-glyph line no longer calls the stones markers).
+- **Occasions**: glyph-redrawn: boundary stones on ubame-magistracy.
+
+## Wave 100 (amendment 3, 2026-10-10) - batch 1
+
+- **Scope**: `docs/buildings.md::Approaches and surroundings#cart lane to a side gate` - 0082's drawing page takes a cart lane
+  at about 6 ft (a GUESS: the hand cart's 2.5 ft bed and room for its wheels). **Hayakawa**'s lane from the east postern to the
+  bank street (10.7 ft) and **Ubame**'s run of the Fox road to the cart gate (9 ft) drawn 6 ft (18 px); the gates themselves
+  keep their widths. IN-STEP under impl-drift.
+- **Records**: m:wave100-cart-lanes (every pack-audit check OK on both sheets); both sheets' notes and comments.
+- **Occasions**: glyph-redrawn: road on hayakawa-magistracy (the lane narrowed; Ubame's the same glyph).
 
 ## Performance bookends (constitution VI)
 

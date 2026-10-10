@@ -77,8 +77,8 @@ many maps; a newly failing cohort seed is a regression, reverted with its measur
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | A Mode A privy drawn at 0101's one-seat size (wave 98) | GUESS on 0101's drawing page, at the figure it records | the procedure allowed and the sheets drew larger privies; 14 privies redrawn on 3 sheets (m:wave98-privy-size) | `docs/buildings.md` Latrines; the three sheets |
-| One fire-water tub at each major wooden building, Ochiba's two added (wave 99) | RECONSTRUCTION: 0100's drawing page's placement by risk | Ochiba's karo's house and senior retainers' quarters had none; the sheet draws 12 tubs (m:wave99-tubs-and-pillars) | Ochiba's sheet; `docs/buildings.md` Fire-water tubs |
-| Ubame's boundary pillars drawn square, the plinth form (wave 99) | GUESS on 0083's drawing page, at the top of its band | they were drawn a little longer than the band allows (m:wave99-tubs-and-pillars) | Ubame's sheet; `docs/buildings.md` Approaches |
+| Ubame's boundary pillars drawn square, the plinth form (wave 99) | GUESS on 0083's drawing page, at the top of its band | they were drawn a little longer than the band allows; now 9 by 9 pixels (m:wave99-pillars) | Ubame's sheet; `docs/buildings.md` Approaches |
+| A cart lane to a side gate drawn at 0082's allowance (wave 100) | GUESS on 0082's drawing page, at the figure it records | Hayakawa's and Ubame's cart lanes were drawn wider; both now at the allowance (m:wave100-cart-lanes) | the two sheets; `docs/buildings.md` Approaches |
 
 ## Assumptions
 

@@ -82,11 +82,12 @@
     <path d="M 508 900 L 508 754.5" stroke="#9C7448" stroke-width="36" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
 
-  <!-- Lane from the east postern to the bank street and the landing steps (10.7 ft - a real
-       bale-cart route; it was 4.7 ft, too narrow for one cart) -->
+  <!-- Lane from the east postern to the bank street and the landing steps: a cart lane, 6 ft (18 px), 0082's allowance
+       over the hand cart's 2.5 ft bed (research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html;
+       feature 372 wave 100: it was 10.7 ft) -->
   <g data-kind="road">
-    <path d="M 880 515 L 1036 515" stroke="#B89060" stroke-width="32" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 880 515 L 1036 515" stroke="#9C7448" stroke-width="32" stroke-dasharray="10 9" fill="none" opacity="0.4"/>
+    <path d="M 880 515 L 1036 515" stroke="#B89060" stroke-width="18" stroke-linecap="butt" opacity="0.55"/>
+    <path d="M 880 515 L 1036 515" stroke="#9C7448" stroke-width="18" stroke-dasharray="10 9" fill="none" opacity="0.4"/>
   </g>
 
   <!-- Bank street along the river, 9 ft (feature 267 R42, river-cities 070: the samurai residences stood back from
@@ -187,7 +188,7 @@
     <!-- Annex perimeter (the accreted guest wing) -->
     <line x1="880" y1="180" x2="1000" y2="180"/>
     <line x1="1000" y1="400" x2="880" y2="400"/>
-    <!-- East, annex to postern (landing gate 500..530 = 10 ft: one bale cart at a time, the lane being 10.7 ft, and
+    <!-- East, annex to postern (landing gate 500..530 = 10 ft: one bale cart at a time, the cart lane 6 ft (wave 100), and
          narrower than the ~12 ft main gate - feature 267 pass 2; it was 12.7 ft, which left the ceremonial gate
          barely the widest) -->
     <line x1="880" y1="400" x2="880" y2="495.5"/>

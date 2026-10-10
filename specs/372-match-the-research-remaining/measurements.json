@@ -59,24 +59,32 @@
       "pool": "no map moved; the knot test 42 passed, 1 xfailed"
     }
   },
-  "wave99-tubs-and-pillars": {
-    "quantity": "wave 99 (2026-10-10): Ochiba's two wooden buildings given their tubs; Ubame's boundary pillars at 0083's plinth",
+  "wave99-pillars": {
+    "quantity": "wave 99 (2026-10-10): Ubame's boundary pillars at 0083's plinth",
     "observed": "2026-10-10",
-    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg and ubame-magistracy.svg before and after; make pack-audit on Ochiba",
-    "command": "make pack-audit ARGS=pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-    "method": "the tub circles and pillar rects read; the pack audit diffed",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg before and after",
+    "command": "read the two boundary-stones rects",
+    "method": "the rects read before and after",
     "value": {
-      "ochiba_tubs": [
-        10,
-        12
-      ],
-      "tubs_adrift": 0,
       "pillar_px": 9,
       "pillar_before_px": [
         9,
         11
       ],
-      "reading": "Ochiba: tubs at the karo's house (670,280) and the senior retainers' quarters (390,644), the audit's one change '10 tubs' -> '12 tubs', every tub within reach of its wall; Ubame: both pillars 9 x 9 px (3 ft, a shaft on its plinth)"
+      "reading": "both pillars 9 x 9 px (3 ft, a shaft on its plinth), they were 9 x 11 px (3 x 3.7 ft)"
+    }
+  },
+  "wave100-cart-lanes": {
+    "quantity": "wave 100 (2026-10-10): the cart lanes to the side gates at 0082's 6 ft",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg and ubame-magistracy.svg; make pack-audit on each",
+    "command": "make pack-audit ARGS=<sheet>",
+    "method": "the lane paths' stroke widths read before and after; the audits' checks read",
+    "value": {
+      "lane_px": 18,
+      "hayakawa_before_px": 32,
+      "ubame_before_px": 27,
+      "reading": "Hayakawa's landing lane 10.7 -> 6 ft, Ubame's run of the Fox road to the cart gate 9 -> 6 ft; every pack-audit check OK on both sheets"
     }
   }
 }

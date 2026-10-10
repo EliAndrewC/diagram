@@ -1541,20 +1541,19 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#cart lane to a side gate": {
-  "code": "c037e498ee48c29d",
+  "code": "7d354e095a4a7fb2",
   "core": "afa1187219969616",
-  "date": "2026-10-08",
-  "note": "sheets draw 9 and 10.7 ft lanes where the page says \"about 6 ft where carts use it\"",
+  "date": "2026-10-10",
+  "note": "the 0082 drawing page records the 6 ft cart lane as a GUESS",
   "pages": {
-   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html": "85212996326713e7",
-   "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58"
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html": "85212996326713e7"
   },
-  "research": "4108c90168ec7189",
+  "research": "e8329e50c8452924",
   "rests": [
    "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:0a998c14d09c7362",
-   "0088-highways-and-what-lines-them-kaido.drawing.html:8a0b103100180964"
+   "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:cae772605b4340ee"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#empty surroundings": {
   "code": "d57055e59ab57406",
