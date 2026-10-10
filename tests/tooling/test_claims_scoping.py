@@ -155,3 +155,16 @@ def test_the_command_line_triage_triaged_and_backfill(tmp_path: pathlib.Path, ca
     assert [k for k, _w in cx.owed(cx.current(skill), cx.load_index(root / cx.INDEX), skill / cx.QUESTIONS.split("/", 3)[-1], cx.load_store(root / cx.STORE))] == [FAR]
     assert cx.main(["--root", str(root), "backfill"]) == 0 and "row(s) given the pages" in capsys.readouterr().out
     assert cx.main(["--root", str(root), "report"]) == 0
+
+
+def test_a_rest_on_a_page_the_claim_does_not_cite_is_dropped_and_named() -> None:
+    """Feature 328 wave 95: an agent re-sent a fresh bundle cited the section numbers of the bundle it first read, and the
+    claims came to rest on blocks of pages they do not cite, so an edit to their own pages no longer re-owed
+    them. A rest outside the claim's own pages is dropped - the claim then owes a triage of any change on its pages - and named."""
+    units = {SHARE: {"uid": SHARE.split("#")[0], "code": "c", "core": "c", "research": "r", "pages": {"0033-row-villages-resson.html": "d"}}}
+    numbered = {"§1": "0033-row-villages-resson.html:a", "§2": "0081-village-lanes.drawing.html:b"}
+    index, msgs = cx.record({}, units, f"VERDICT {SHARE} IN-STEP - ok [§1, §2]\n", "d", numbered)
+    assert index[SHARE]["rests"] == ["0033-row-villages-resson.html:a"]
+    assert any("0081-village-lanes.drawing.html" in m for m in msgs)
+    index, msgs = cx.record({}, units, f"VERDICT {SHARE} IN-STEP - ok [§2]\n", "d", numbered)
+    assert "rests" not in index[SHARE], "nothing of its own pages left: any change on them is triaged"

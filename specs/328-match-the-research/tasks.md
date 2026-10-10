@@ -2173,3 +2173,14 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T215 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. impl-drift over every claim resting on 0081's changed bullet: IN-STEP but two older drifts filed as open E1 rows and one NEEDS-RESEARCH row left open; make claims-owed: none
+
+## Phase 96 - wave 95 (amendment 94): the final overrun cut without its floor; a house served at the page's reach
+
+- `hamletgen/ways/touch.py` (`_touch_junctions`).
+
+- [x] T216 wave 95's rows: `#final overrun cut` and `#a house served` (FR-003, FR-004)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 95, round 4); the final overrun cut under 40 ft with no floor; a house served at 0246's whole guess (60 ft of the house or 12 ft of its built ground, byres by owner); no pool map or cohort seed moved (m:wave95-overrun-floor, m:wave95-serve-60)
+- [x] T217 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. impl-drift on touch.py's claims IN-STEP, fresh agents on fresh bundles; claims.py drops a rest outside a claim's pages (m:wave95-foreign-rests); make claims-owed: none

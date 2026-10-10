@@ -2114,5 +2114,42 @@
       },
       "reading": "the profiled homesteads stage is the same at both commits; the +0.1 s on two small rolls is run-to-run jitter, and the 40-household rolls fell 6.5%"
     }
+  },
+  "wave95-overrun-floor": {
+    "quantity": "wave 95 (2026-10-10): the touch pass's final overrun cut without its 6 ft floor",
+    "observed": "2026-10-10",
+    "source": "make map GEN=pool/hamlets/<map>/<map>.gen.py for the five hamlets; make test-file FILE=tests/hamletgen/test_pool_261.py; make cohort N=48 in a detached worktree on the same patch",
+    "command": "make map; make test-file FILE=tests/hamletgen/test_pool_261.py; make cohort N=48",
+    "method": "the floor removed, the pool rerolled and compared with HEAD, the cohort run",
+    "value": {
+      "cohort_passed": 52,
+      "cohort_48": "52/54 (refused 10, 20), none newly failing",
+      "pool": "no map moved; the knot test 42 passed, 1 xfailed"
+    }
+  },
+  "wave95-foreign-rests": {
+    "quantity": "claims-index rows resting on blocks of pages the claim does not cite",
+    "observed": "2026-10-10",
+    "source": "dev/claims-index.json read for every row's rests against its pages",
+    "command": "a read of dev/claims-index.json: each rest's page against the row's pages",
+    "method": "the rule scripts/record/claims.py::record now applies, run once over the index",
+    "value": {
+      "rows_repaired": 115,
+      "rows_left_with_no_rest": 20,
+      "cause": "a resumed impl-drift agent, re-sent a fresh bundle, cited the section numbers of the bundle it first read",
+      "note": "counted at the repair, before this wave's own touch.py rows were re-checked; against HEAD 120 rows changed their rests and 18 rest on nothing, the difference those re-checked rows"
+    }
+  },
+  "wave95-serve-60": {
+    "quantity": "wave 95 (2026-10-10): the orphan pass's serving reach at 0246's whole guess (60 ft of the house or 12 ft of its built ground; byres by their recorded household, the shared shed on the commons no steading's), on the code that ships",
+    "observed": "2026-10-10",
+    "source": "a detached worktree at HEAD with wave 95's changes; make map for the five hamlets; make cohort N=48",
+    "command": "make map GEN=pool/hamlets/<map>/<map>.gen.py; make cohort N=48",
+    "method": "the final touch.py (serves, built_ground with byres by `of`, a shared shed no steading's) rolled over the pool and the cohort; both come back from the roll cache, keyed on executed code: no pool roll and no cohort seed reaches built_ground (an orphan piece left unjoined), so the change has no measured effect on either - the unit tests in tests/hamletgen/ways/test_touch.py hold it",
+    "value": {
+      "cohort_passed": 52,
+      "cohort_48": "52/54 (refused 10, 20), none newly failing, on the final built_ground",
+      "pool": "no map moved (no pool roll executes the changed code; the roll cache keyed on executed code)"
+    }
   }
 }

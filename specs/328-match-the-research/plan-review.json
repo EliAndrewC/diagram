@@ -1,81 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "674c5728691f5f3a0931cf88ea813c491c43401c89014b68ec39c92f51df7f7b",
+ "plan_sha256": "96c2aea2d8da7fab03f62089037beaddc60af11024c713dbf6ed19a68e5993f4",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W94-a",
-   "summary": "Row knots.py::next_gather#knots no lawful gather reaches FIXED by door_end_teed (a lone access-lane door end teed on its own lane is no knot), asked by the gather search and the verdict",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Unchanged from round 1: the exception spec-fidelity ruled LEGITIMATE in its narrow form on 2026-10-10; the predicate still returns True only for end 0 of an access lane, alone, on no other lane, with the other point on its own polyline. Round 1's W94-d is resolved: spec.md carries the Decisions Recorded row (m:wave94-door-end-teed) and the review-history line with the five conditions."
+   "id": "W95-a",
+   "summary": "Row touch.py::_touch_junctions#final overrun cut FIXED: the 6 ft floor dropped, the cut strict (< 40.0) as 0081 words it",
+   "class": "within",
+   "why": "Unchanged since round 2: 0081 cuts a tail of under 40 ft; the floor was on no page; claims-index row IN-STEP. Moves the implementation to the research (FR-004)."
   },
   {
-   "id": "W94-b",
-   "summary": "Sawada off _KNOTS_WAITING",
+   "id": "W95-b",
+   "summary": "Row touch.py::_touch_junctions#a house served FIXED: the orphan pass asks `serves` (60 ft of the house, or 12 ft of its built ground) in place of sweeps' 100 ft _SERVE_FT",
    "class": "within",
-   "why": "Follows from W94-a, as in round 1."
+   "why": "Unchanged since round 2: 0246's drawing page gives 60 ft of the farmhouse or 12 ft of its steading's built ground as how close counts as serving a house. The sweeps.py 100 ft reading is raised in claims-followup.md for the GM."
   },
   {
-   "id": "W94-c",
-   "summary": "The pool test pinning the narrow form (teed door end no knot; door end beside another lane's end, or a junction door end, still knots)",
+   "id": "W95-b2",
+   "summary": "built_ground: a byre goes to the household its record names (`of`); a byre whose record names none (the shared shed on the commons, 0048) is no steading's built ground",
    "class": "within",
-   "why": "Enforcement of the ruling's narrow form."
+   "why": "Round 3's remedy done as set, verified this round: (1) touch.py::built_ground has no `elif houses:` branch - a byre with no `of` is skipped (`if not of: continue`), as law.reach_to_steading reads it; (2) the UNRESEARCHED claim is gone, replaced by `#a shared byre no steading's ground` citing research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html (its line 24: 'a shed on the common ground among the houses ... reached by several of them'); (3) the docstring, the plan's sentence and the test (renamed test_a_byre_is_built_ground_of_the_house_its_record_names_and_a_shared_one_of_none, asserting only the `of` byre is keyed and a shared shed 10 ft off the run serves no house) are corrected; no 'nearest house' byre wording remains in plan, tasks, spec or claims-followup; (4) both built_ground rows in dev/claims-index.json are IN-STEP, resting only on blocks of their own pages; (5) m:wave95-serve-60's cohort figure reproduces: the scratchpad cohort log taken after the final edit, in a worktree whose touch.py is byte-identical to the clone's, reads 52/54 (refused Audit-10, Audit-20). Now a narrowing of nothing: it follows both pages, so it carries no exception."
   },
   {
-   "id": "W94-d",
-   "summary": "Decisions Recorded row and review-history line for the door-end exception",
+   "id": "W95-c",
+   "summary": "A new claim on an existing, unclaimed decision of _touch_junctions: a moved end's last stretch kept short, UNRESEARCHED",
    "class": "within",
-   "why": "Round 1's BLOCKED item, now done (spec.md Decisions table, wave 94 row; review history, the 2026-10-10 exception check with its five conditions)."
+   "why": "Claim coverage only, no behavior change; impl-drift IN-STEP."
   },
   {
-   "id": "W94-e",
-   "summary": "joints.meet_end_to_end and smooth._smooth_web step 4 skip the teed pair with the same door_end_teed predicate",
+   "id": "W95-d",
+   "summary": "Tooling (XIV): scripts/record/claims.py::record drops a rest on a page the claim does not cite and names it, with a test; the index's foreign rests repaired by the same rule",
    "class": "within",
-   "why": "The ruling's own reading carried to every gather pass: under it the pair is one drawn lane, not two ends that nearly meet, so a pass that slid the door end onto the foot was applying 0081's joining rule to a pair the ruling says it does not reach. The same predicate is asked, so the class cannot widen. Round 2's wording note done: the wave 94 Decisions row's 'Recorded at' now names joints.py meet_end_to_end and smooth.py _smooth_web."
+   "why": "A defect found in the work at hand and fixed where it was found (XIV); m:wave95-foreign-rests records the repair with its cause."
   },
   {
-   "id": "W94-f",
-   "summary": "door_end_teed reordered (the one-lane test first) for speed",
+   "id": "W95-e",
+   "summary": "Verification: the pool and its knot test, the cohort, impl-drift, spec-fidelity; m:wave95-serve-60 re-measured on the code that ships",
    "class": "within",
-   "why": "Logically equivalent conjunction; the guard on end, alone and role unchanged."
-  },
-  {
-   "id": "W94-g",
-   "summary": "E0 labels: spur clip margin UNRESEARCHED, cut_stub_ends split and re-cited (0081 40 ft tail, 0246 60 ft house, bund reach UNRESEARCHED), three unclaimed decisions in _touch_junctions claimed",
-   "class": "within",
-   "why": "spur clip margin's ranked row is MISLABELED E0 (impl-drift's own verdict; 0081 permits touching and gives no clearance); the cut_stub_ends split states honestly a claim that was IN-STEP; claiming UNCLAIMED code decisions is the E0 work this feature has done throughout."
-  },
-  {
-   "id": "W94-h",
-   "summary": "sweeps._join_orphan_ways#link width keeps its 0081 citation and its open E4 row (NEEDS-RESEARCH); out of the plan's E0 list",
-   "class": "within",
-   "why": "Round 2's BLOCKED item, done as set out: sweeps.py is unchanged (line 265 still cites 0081), the claims-index record keeps verdict NEEDS-RESEARCH (a triage of the changed 0081 block, 2026-10-09), ranking.json's row is untouched (E4, NEEDS-RESEARCH, wave '', scope kept), and the plan names it as an open E4 row, not an E0 fix. Nothing is narrowed: the ranked finding stays open for its research pass."
-  },
-  {
-   "id": "W94-i",
-   "summary": "_touch_junctions' three straight links held max(WEB_FABRIC_GAP 7 ft, w/2 + 2 ft) off the fabric instead of max(4 ft, ...): a drift fixed in the generator",
-   "class": "within",
-   "why": "Implementation moved to 0246's 7 ft at a garden fence - the direction the request asks for."
-  },
-  {
-   "id": "W94-j",
-   "summary": "Decisions Recorded row for the touch pass's straight links at the web's fabric gap (MAP DRAWING CONVENTION, 0246; recorded at touch.py _touch_junctions; m:wave94-gather-passes)",
-   "class": "within",
-   "why": "Round 2's BLOCKED item, done as set out: spec.md's Decisions Recorded table carries the wave 94 row, classed by 0246's own words as wave 89's near-identical row was, with its consequence and measurement key (m:wave94-gather-passes, whose knot-test count 42 passed / 1 xfailed this round re-ran and matched). FR-008 is met."
-  },
-  {
-   "id": "W94-k",
-   "summary": "Three modals' Depiction tabs corrected (back lane parallel to the field's edge; no uphill crossbar or uphill Y arms)",
-   "class": "within",
-   "why": "The statements brought to what the page and the code say (0246: back lanes 'parallel to the field's edge'; no page or code places the T's crossbar or the Y's arms uphill); nothing drawn changes."
-  },
-  {
-   "id": "W94-l",
-   "summary": "Two older drifts filed as open E1 found rows (touch 'a house served' 100 ft vs 0246's 60; 'final overrun cut' 6 ft floor), not fixed in this wave",
-   "class": "within",
-   "why": "Edge Cases: new findings are recorded in the ranking under the tier they take; both are in found-wave94.jsonl and scope.json (kept) for a later wave. Round 2's wording note done: the plan names both rows."
+   "why": "Enforces what the request asks (the implementation matches the research, no regression). The cohort run completed in about a minute against its 20-25 min norm, i.e. served from the roll cache keyed on executed code - so no cohort roll executes the changed built_ground either, and the 52/54 holds for the final code. The entry's method says so of the pool only; an aside, not a finding."
   }
  ],
  "verdict": "CLEAR"

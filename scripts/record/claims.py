@@ -425,6 +425,14 @@ def record(
             continue
         verdict, note = verdicts[key]
         note, rests = rests_of(note, numbered or {})
+        # ...ONLY ON ITS OWN PAGES (feature 328 wave 95): an agent re-sent a fresh bundle cited the section numbers of the bundle it
+        # first read, and claims came to rest on blocks of pages they do not cite, so an edit to their own pages no longer
+        # re-owed them. A foreign rest is dropped and named; with none of its own left the claim triages any change on its pages
+        if rests and "pages" in fp:
+            foreign = [r for r in rests if r.rsplit(":", 1)[0] not in fp["pages"]]
+            if foreign:
+                msgs.append(f"`{key}`: rests on {', '.join(sorted({r.rsplit(':', 1)[0] for r in foreign}))}, a page it does not cite - dropped (was the reply judged against another bundle's numbering?)")
+                rests = [r for r in rests if r not in foreign] or None
         row: dict[str, Any] = {
             "verdict": verdict,
             "code": fp["code"],

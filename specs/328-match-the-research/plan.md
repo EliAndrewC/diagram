@@ -1531,6 +1531,28 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `tests/hamletgen/test_pool_261.py` (a teed door end no knot; a door end beside another lane's end, and a
   door end that is a junction, still knots); the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
 
+## Wave 95 (amendment 94, 2026-10-10) - batch 13
+
+- **Row `touch.py::_touch_junctions#final overrun cut` FIXED (E1).** 0081 cuts "a tail of under 40 ft beyond a crossing"; the
+  touch pass's final cut took only tails of 6 to 40 ft, a 6 ft floor on no page. The floor is dropped: a lane is ended at its
+  first contact with the way wherever the run past it is under 40 ft. No pool map moved; the cohort holds 52/54
+  (m:wave95-overrun-floor).
+- **Row `touch.py::_touch_junctions#a house served` FIXED (E1).** The orphan pass dropped a lane piece only where every house
+  within 100 ft (`_SERVE_FT`) of it stood within 100 ft of another way. 0246's guess at how close serves a house is 60 ft of
+  the house (or 12 ft of its built ground); its 100 ft only sets how many back lanes to add (a fresh impl-drift's reading of
+  the page, over a first reading that took the 100 ft as the serving figure). The pass now asks the page's whole guess
+  (`serves`): within 60 ft of the house (`WAY_END_REACH_FT`), or within 12 ft (`STEADING_ARRIVAL_FT`) of its own built ground,
+  the yard, beds, sheds and byres whose records name it (`built_ground`; a byre recorded with no household is the shared shed on the commons, 0048, and no steading's). No pool map moved; the cohort holds 52/54
+  (m:wave95-serve-60). The final cut's test is strict, under 40 ft, as the page words it. A new claim names an unclaimed decision of the same function (a moved end's last stretch kept short,
+  UNRESEARCHED).
+- **Tooling (XIV): a claim rests only on blocks of its own pages.** spec-fidelity found claims recorded resting on blocks of
+  pages they do not cite: an impl-drift agent re-sent a fresh bundle cited the section numbers of the bundle it first read,
+  so an edit to a claim's own page no longer re-owed it. `scripts/record/claims.py::record` now drops a rest outside the
+  claim's pages and names it (the claim then triages any change on its pages), with a test; the index's 115 such rows are
+  repaired by the same rule (20 left resting on nothing, so triaged whole) (m:wave95-foreign-rests). Process: a re-check goes
+  to a fresh agent on a fresh bundle, never a resumed one.
+- **Verification**: the pool and its knot test; the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

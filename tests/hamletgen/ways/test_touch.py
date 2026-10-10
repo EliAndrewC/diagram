@@ -386,3 +386,27 @@ def test_the_clearance_oracle_catches_a_dropped_vertex() -> None:
     lossy.extend((q, q[0], q[1], q[0], q[1]) for q in square)
     assert touch._clear_within(run, touch._fabric_vertices([square]), 4.5) == min(_old_clear(run, [square]), 4.5) < 4.5
     assert touch._clear_within(run, lossy, 4.5) != min(_old_clear(run, [square]), 4.5)
+
+
+def test_a_house_is_served_within_60_ft_of_itself_or_12_ft_of_its_own_built_ground() -> None:
+    """Feature 328 wave 95 (0246's guess): a run serves a house within 60 ft of the house, or within 12 ft of the steading's
+    built ground - the yard, beds and sheds whose records name the house."""
+    from l7r.diagram.hamletgen.ways.touch import built_ground, serves
+
+    M = {"threshing_yards": [{"of": [0.0, 0.0], "poly": [[0.0, 70.0], [20.0, 70.0], [20.0, 90.0], [0.0, 90.0]]}]}
+    built = built_ground(M)
+    assert serves((0.0, 0.0), [((-50.0, 55.0), (50.0, 55.0))], built), "55 ft from the house"
+    assert serves((0.0, 0.0), [((-50.0, 100.0), (50.0, 100.0))], built), "100 ft from the house, 10 ft from its yard"
+    assert not serves((0.0, 0.0), [((-50.0, 110.0), (50.0, 110.0))], built), "20 ft past its yard"
+    assert not serves((5.0, 5.0), [((-50.0, 100.0), (50.0, 100.0))], built), "another house's yard serves it nothing"
+
+
+def test_a_byre_is_built_ground_of_the_house_its_record_names_and_a_shared_one_of_none() -> None:
+    """A byre counts as built ground of the house its record names (`of`); a shared shed on the commons, whose record names
+    none (0048), is no steading's (feature 328 wave 95)."""
+    from l7r.diagram.hamletgen.ways.touch import built_ground, serves
+
+    M = {"houses": [{"x": 0.0, "y": 0.0}, {"x": 500.0, "y": 0.0}], "byres": [{"x": 10.0, "y": 80.0, "w": 20.0, "h": 20.0}, {"x": 20.0, "y": 300.0, "w": 20.0, "h": 20.0, "of": [500.0, 0.0]}]}
+    built = built_ground(M)
+    assert sorted(built) == [(500.0, 0.0)], "only the byre naming its house"
+    assert not serves((0.0, 0.0), [((-50.0, 100.0), (50.0, 100.0))], built), "a shared shed 10 ft off the run serves no house"

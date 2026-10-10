@@ -249,6 +249,8 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_keep_the_route_wide#through-route keeps its width": "E4",
  "l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut": "E1",
  "l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut": "E1",
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a house served": "E1",
+ "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut": "E1",
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach": "E1",
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled": "E0",
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water": "E0",

@@ -8,10 +8,12 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
+from l7r.diagram.settlement import Settlement, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
 
 from ..consts import (
+    STEADING_ARRIVAL_FT,
+    WAY_END_REACH_FT,
     WEB_FABRIC_GAP,
     Poly,
     Pt,
@@ -20,7 +22,7 @@ from .clearance import _bends_badly, _clear_touch, may_write
 from .fabric import _LANE_JOIN_FT, _draw_web
 from .geom import _TOUCH_GAP, _components, _stop_at_network, _unretrace, lane_houses, polyline_len
 from .route import _route, _unjog
-from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _SERVE_FT
+from .sweeps import _FINE_CELL, _LINK_DIRECTNESS
 
 
 def _detour_links(cands: Sequence[tuple[float, Pt, Pt]], hard: Any, walls: Any, water: Any) -> list[tuple[float, Pt, Poly]]:
@@ -134,13 +136,14 @@ def _touch_junctions(
         end meets end - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one
         orphan piece dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
         connector never dropped - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
-        final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut
+        final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of under 40 ft past the way it meets is cut (a 6 ft floor, on no page, dropped - feature 328 wave 95)
         join reach - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the code extends a free end within 25 ft (`_LANE_JOIN_FT`, and `_STUB_REACH_FT` on the final pass) of another way to it
         orphan reach - UNRESEARCHED: a stranded piece linked back to the network from up to `_ORPHAN_REACH` (150 ft)
         a foot beside its own lane's other end left - UNRESEARCHED: a foot within 6 ft of the lane's other end is not joined
         a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
         a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)
-        a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served by it, where the page says 60 ft"""
+        a moved end's last stretch kept short - UNRESEARCHED: an end moved onto another's grows its last leg to at most twice its old length and 4 ft
+        a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house, or within 12 ft of the steading's built ground (`serves`)"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
     # Every rung here tests the LINK it is about to draw, and none of them looks at the lane that comes
     # out - so a link that is itself legal, spliced on by `_unjog`/`_unretrace` or by moving another
@@ -277,7 +280,7 @@ def _touch_junctions(
                             _sx, _sy = _a0[0] + (_b0[0] - _a0[0]) * _t * 3.0 / _span0, _a0[1] + (_b0[1] - _a0[1]) * _t * 3.0 / _span0
                             _f = min((seg_closest(_sx, _sy, a, b) for a, b in _os_k), key=lambda z: math.dist((_sx, _sy), z))
                             if (
-                                math.dist((_sx, _sy), _f) <= _TOUCH_GAP and 6.0 < polyline_len([(_sx, _sy), *_run[_si + 1 :]]) <= 40.0
+                                math.dist((_sx, _sy), _f) <= _TOUCH_GAP and polyline_len([(_sx, _sy), *_run[_si + 1 :]]) < 40.0
                             ):  # only a SHORT overrun is cut (Kuwabata's was 32 ft); a long run past a way it grazes is a route, not a hook
                                 _cut_at = (_si, _f)
                                 break
@@ -354,7 +357,7 @@ def _touch_junctions(
             # junction is already allowed to brush a fence at (see the note under `_ORPHAN_REACH`): a
             # lane and a plot fence share a line in a real village. (2) Failing that, DROP the piece -
             # but only when no farmhouse would be stranded by it: every house the piece serves (within
-            # `_SERVE_FT` of its tread) must still stand within `_SERVE_FT` of some other way. A fragment
+            # `WAY_END_REACH_FT`, 60 ft, of its tread) must still stand within 60 ft of some other way. A fragment
             # that serves no house nobody else reaches is a drawing, not a lane, and the network check
             # is right to want it gone; a fragment that IS a house's only way stays, visibly broken.
             for i in sorted(orphans, key=lambda k: -polyline_len(ways[k])):
@@ -396,6 +399,7 @@ def _touch_junctions(
         if not joined:
             _others = [sg for j in range(len(ways)) if j not in orphans and len(ways[j]) >= 2 for sg in zip(ways[j], ways[j][1:], strict=False)]
             _houses = lane_houses(s.M)  # a household reached across a yard is owed no way of its own (feature 317)
+            _built = built_ground(s.M)
 
             def _near(pt: Pt, segs: list[tuple[Pt, Pt]]) -> float:
                 return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
@@ -411,8 +415,8 @@ def _touch_junctions(
                 if lanes[i].get("connector") or lanes[i].get("street"):
                     continue
                 _mine = list(zip(ways[i], ways[i][1:], strict=False))
-                _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]
-                if all(_near(h, _others) <= _SERVE_FT for h in _served):
+                _served = [h for h in _houses if serves(h, _mine, _built)]
+                if all(serves(h, _others, _built) for h in _served):
                     if lanes[i].get("spur"):
                         s.M["meta"]["field_spur_swept"] = "isolated - no house of its own and no join to the web"  # feature 230: recorded, not silent
                     lanes[i]["pts"] = []
@@ -558,3 +562,46 @@ _DETOUR_DIRECTNESS = 8.0  # the last rung may walk round a yard: up to 8x the st
 # ladder above has failed, so a piece that joins today joins by exactly the same route it did before.
 _ALONG_STEP_FT = 40.0  # a sample every 40 ft: finer than the shortest link worth drawing, coarse enough to stay cheap
 _ALONG_CANDS = 8  # routes attempted at the fine cell, nearest first - the cost bound on a rung that only runs for a stranded piece
+
+
+def built_ground(M: Mapping[str, Any]) -> dict[tuple[float, float], list[list[Pt]]]:
+    """Each household's own built ground, keyed by its house's center rounded to 0.1: the threshing yard, the garden beds and
+    the farm sheds and the byres whose records name it (`of`), as `law.reach_to_steading` reads them; a byre whose record names
+    no house - the shared shed on the commons - is no steading's. The house itself needs no entry: 12 ft from its walls lies
+    inside the 60 ft from its center `serves` asks first.
+
+    Research:
+        a steading's built ground - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: house, byre, shed, threshing yard or garden
+        a shared byre no steading's ground - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: a shed on the common ground among the houses, reached by several of them"""
+    out: dict[tuple[float, float], list[list[Pt]]] = {}
+    for r in M.get("byres") or ():
+        of = r.get("of")
+        if not of:
+            continue
+        c = (float(of[0]), float(of[1]))
+        out.setdefault((round(c[0], 1), round(c[1], 1)), []).append(rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0)))
+    for key in ("threshing_yards", "gardens", "farm_sheds"):
+        for r in M.get(key) or ():
+            of = r.get("of")
+            if not of:
+                continue
+            poly = [(float(a), float(b)) for a, b in r["poly"]] if r.get("poly") else rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0))
+            out.setdefault((round(float(of[0]), 1), round(float(of[1]), 1)), []).append(poly)
+    return out
+
+
+def serves(h: Pt, segs: Sequence[tuple[Pt, Pt]], built: Mapping[tuple[float, float], Sequence[Sequence[Pt]]]) -> bool:
+    """Does a run of `segs` serve the house at `h`: within `WAY_END_REACH_FT` (60 ft) of the house, or within
+    `STEADING_ARRIVAL_FT` (12 ft) of its own built ground (`built_ground`)?
+
+    Research: a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house, or within 12 ft of the steading's built ground"""
+    if min((seg_dist(h[0], h[1], a, b) for a, b in segs), default=float("inf")) <= WAY_END_REACH_FT:
+        return True
+    for poly in built.get((round(float(h[0]), 1), round(float(h[1]), 1)), ()):
+        edges = list(zip(poly, [*poly[1:], poly[0]], strict=False))
+        for a, b in segs:
+            if any(segments_cross(a, b, c, d) for c, d in edges):
+                return True
+            if min(min(seg_dist(a[0], a[1], c, d), seg_dist(b[0], b[1], c, d), seg_dist(c[0], c[1], a, b), seg_dist(d[0], d[1], a, b)) for c, d in edges) <= STEADING_ARRIVAL_FT:
+                return True
+    return False

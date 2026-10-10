@@ -559,4 +559,7 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
   "lane ends that nearly meet"; a household way's lone door end with another way's T on that same lane is read as one lane
   joining the two, not a knot. It cleared 14 of 48 cohort seeds and Sawada's waiting knot; a door end beside another lane's
   end, or one that is itself a junction, is still a knot (m:wave94-door-end-teed). Raised for the GM's information (XVI).
+- Wave 95's reviews noted the record reading 0246 two ways: `touch.py`'s orphan pass now serves a house at 0246's guess (60 ft
+  of the house, or 12 ft of its built ground), while `sweeps.py` keeps a house served within 100 ft (`_SERVE_FT`, its claims
+  IN-STEP on the page's back-lane figure). Raised for the GM's information; not a finding today.
 
