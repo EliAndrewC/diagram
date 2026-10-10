@@ -1,0 +1,15 @@
+{
+  "subagent-stop-probe": {
+    "quantity": "whether the hook events see a background agent's launch and its return, and pair them (D4, D7)",
+    "observed": "2026-10-10",
+    "source": "a temporary user-level hook on SubagentStart, SubagentStop and PostToolUse(Agent) appending its input to the scratchpad; one background haiku agent dispatched; the hook then removed (settings restored from a copy)",
+    "command": "the probe hook's log, read with json.loads per line",
+    "method": "the three events' inputs read for hook_event_name, agent_type, agent_id, tool_response.status and agentId",
+    "value": {
+      "SubagentStart": "fired at launch: agent_type general-purpose, agent_id present",
+      "PostToolUse(Agent)": "fired at launch: tool_response.status async_launched, tool_response.agentId equal to the agent_id",
+      "SubagentStop": "fired at the background agent's return with the same agent_id and agent_type",
+      "reading": "a background check's return is seen by SubagentStop and paired to its dispatch through PostToolUse's agentId; D4 keeps the answer as a second return signal anyway"
+    }
+  }
+}
