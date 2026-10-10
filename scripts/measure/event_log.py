@@ -58,7 +58,11 @@ MAKE_CATEGORIES = {
 EDIT_TOOLS = frozenset({"Edit", "Write", "NotebookEdit", "MultiEdit"})
 #: `make` in COMMAND position - the start of a line, after `;` `&&` `||` `|` `(`, or a shell keyword - never a mention inside
 #: a heredoc or a quoted string ("make gm-reviewed" in a spec being edited read as a make run, 375's first report)
-_MAKE = re.compile(r"(?:^|[;&|(]\s*|\b(?:then|do|else|time)\s+)make\s+(?:-[CfIjo]\s+\S+\s+|-{1,2}[\w-]+(?:=\S+)?\s+|[A-Z_]+=\S*\s+)*([a-z][\w-]*)")
+_MAKE = re.compile(
+    r"(?:^|[;&|(]\s*|\b(?:then|do|else|time)\s+)(?:[A-Z_][A-Z0-9_]*=\S*\s+)*make\s+"
+    r"(?:-[CfIjo]\s+\S+\s+|-{1,2}[\w-]+(?:=\S+)?\s+|[A-Z_]+=\S*\s+)*([a-z][\w-]*)",
+    re.M,
+)
 _MANIFEST = re.compile(r"(/[^\s`\"'<>)]*MANIFEST\.md)")
 _NOTIFICATION = re.compile(r"<task-id>([^<]+)</task-id>")
 _RESULT = re.compile(r"<result>(.*?)(?:</result>|$)", re.S)
