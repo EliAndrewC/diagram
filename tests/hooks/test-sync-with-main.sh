@@ -387,5 +387,13 @@ grep -qx B "$C/dev/x.md" 2>/dev/null && yes_ || no_ "the clone's edit did not la
 [ ! -e "$C/$OLDP" ] && yes_ || no_ "the old directory was left behind"
 [ -z "$(git -C "$C" status --porcelain)" ] && yes_ || no_ "the merge left the clone dirty: $(git -C "$C" status --porcelain | head -3)"
 
+echo "16. an open feature with no **Owed at** stage is refused at the push, a specs/-only DIRECT one included (the GM, 2026-10-10)"
+D=$(topology ow)
+( cd "$D/main/.clones/c" && mkdir -p specs/400-x && printf -- '# Feature Specification: x\n\n**Status**: Filed - deferred work\n' > specs/400-x/spec.md && git add -A && git commit -qm "filed, no stage" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a filed spec with no stage -> refused" 1 $?
+expect_out "**Owed at**: now | village | town | provincial city | capital"
+( cd "$D/main/.clones/c" && printf -- '\n**Owed at**: town\n' >> specs/400-x/spec.md && git add -A && git commit -qm "staged" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the same spec with its stage -> lands" 0 $?
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi
