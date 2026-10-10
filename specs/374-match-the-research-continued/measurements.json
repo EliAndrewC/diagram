@@ -77,5 +77,18 @@
         "length": 3
       }
     }
+  },
+  "wave114-rooms": {
+    "quantity": "wave 114 (2026-10-10): the residence's labeled zones stand for a house of about six rooms",
+    "observed": "2026-10-10",
+    "source": "docs/buildings.md (the bullet and its claim) and pool/magistracies/*/*.notes.md before (main) and after",
+    "command": "grep -rn '18-25' docs pool/magistracies",
+    "method": "every statement of the residence's room count searched in the procedure, the notes and the sheets",
+    "value": {
+      "before": "~18-25 tatami rooms (the procedure, its claim, Hayakawa's notes)",
+      "after": "about six rooms (0091: the Kuchiba house, 41-74 tsubo)",
+      "sheets_redrawn": 0,
+      "places_changed": 3
+    }
   }
 }
