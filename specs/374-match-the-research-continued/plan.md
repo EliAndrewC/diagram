@@ -80,7 +80,7 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
   Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.
 - **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), its shape a GUESS, the ceiling ACCURATE (0091's measured
   wing), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in
-  `buildings/types.json` narrowed so the old size fails it: w 18-26 by h 14-20 ft (either orientation). The procedure's kitchen
+  `buildings/types.json` narrowed so the old size fails it: w 18-24 by h 14-18 ft (either orientation; at most 432 sq ft, under the measured ~440 - the T02 preflight's aside). The procedure's kitchen
   bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; "a large institutional daidokoro" goes (the ranked fix sizes it to
   the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,
   read 2026-10-10), already inside the new band.
@@ -101,6 +101,14 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
   seats the bath; at 24 x 18 the bath found no clear run); the frozen red fixtures' kitchens brought to 72 x 54 px against their
   houses, their contents and baths moved with them, so each fires only its own check (the two whose check counts tubs at the old
   kitchen keep it).
+- **Amendment 2 (2026-10-10, the draft as built)**: with the ell abutting the house's west end, the house's west face keeps 6 ft
+  free below the kitchen, short of a door's 8 ft approach, so the draft's inner entrance opens on the house's rear (north)
+  face at the kitchen end, onto the rear alley; 0107's drawing page said "on the residence's face toward the kitchen" and now
+  says "on the residence's back, at the end the kitchen stands against" (its record checks owed: the pop-ups naming the
+  page triaged, quote-check on the note in that block, record-format). The house stands 7 ft further west with the gap gone,
+  so the draft's garden zone starts 7 ft west to stay before the whole south face; the family privy at the house's rear west
+  corner stands a foot in from it, its half-foot margin off the kitchen. Hayakawa's kitchen door stands on its south face,
+  its two tubs either side.
 - **Occasions**: layout-revised: hayakawa-magistracy and ubame-magistracy (the kitchen joined as an ell, the corridor gone);
   layout-revised: county-magistracy-example (the draft's ell); glyph-redrawn: kitchen on ochiba-magistracy.
 
