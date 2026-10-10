@@ -1,116 +1,68 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "e5aac1d290c74e936a57df33c573be8a7c6919086bbd574eb24fa6442248264f",
+ "plan_sha256": "e463e357a3aeb319fdba68dd7b52d5d10f6fcd08a5ce300a0c20c43b8299f8db",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W98-scope",
-   "summary": "wave 98 takes 328's ranked E3 row 22 (privy size): the hand sheets' privies at 0101's 5 ft square",
+   "id": "W101-scope",
+   "summary": "wave 101 takes ranking row 697 (Walls and gates#gatehouse, E3, mode-a) while E3 rows 661-669 stand open",
    "class": "within",
-   "why": "unchanged since round 2: a ranked open row (FR-001), the ranking's own fix text, sheets per 328's FR-009"
+   "why": "an order choice within one tier, as W99-gate-posts-passed was ruled: 328's SC-003 binds tier order, no E2/E1 row the session can fix is open (row 479 is held for the GM), the row's 'after' is empty"
   },
   {
-   "id": "W98-sheet-count",
-   "summary": "Hayakawa 5, Ochiba 4, Ubame 5 - 14 privies, every one 15 x 15 px",
+   "id": "W101-follow-the-guess",
+   "summary": "Ochiba's freestanding gatehouse drawn at 0093's ~40 x 12 ft GUESS, not kept at the measured temple guardroom's 18 x 12 (the flagged tempting deviation)",
    "class": "within",
-   "why": "unchanged since round 2, where it was re-read on the sheets"
+   "why": "328's FR-004 (by 372's FR-002): a fix changes the implementation to match the research. 0093's drawing page answers 'How long is a gatehouse of its own drawn? About 40 ft, a GUESS' and names the 18 ft guardroom only as the temple comparison; the ranked fix says exactly this. Keeping 18 x 12 would be the exception, owed the exception path. No GM ruling set 18 x 12: it was feature 267's session correction (forms.md R19; Ochiba notes, 267 pass 4), so nothing the GM decided is reversed"
   },
   {
-   "id": "W98-anchor",
-   "summary": "each resized privy kept against the face it stood on",
+   "id": "W101-range-depth",
+   "summary": "Hayakawa's and Ubame's gate ranges 14 -> 12 ft deep (42 -> 36 px)",
    "class": "within",
-   "why": "how the requested resize is carried out without re-siting"
+   "why": "the ranked fix text; 0093's drawing page: both forms 'about 2 ken (~12 ft) deep', measured. Re-read on the sheets: Hayakawa y 718.5-754.5, Ubame y 718-754, both 36 px"
   },
   {
-   "id": "W98-generated-already",
-   "summary": "generated sheets and Hoshigaoka untouched (already 15 px)",
+   "id": "W101-south-face-kept",
+   "summary": "the north face moved in, the south face kept on the wall line; doors, Hayakawa's passage and Ubame's roof-edge dash follow",
    "class": "within",
-   "why": "checked in round 1"
+   "why": "how the requested depth is carried out; a nagaya-mon's outer face is the wall line (the sheets' own definition), so it is the face that cannot move"
   },
   {
-   "id": "W98-away-from-water",
-   "summary": "E4 'privies away from water' split: 15 ft from a well a GUESS on 0101, food-prep half UNRESEARCHED",
+   "id": "W101-ochiba-grows-east",
+   "summary": "Ochiba's gatehouse lengthened eastward into open outer court, its west door toward the passage unchanged",
    "class": "within",
-   "why": "the ranking's own fix text; 328 closed E4 rows the same way"
+   "why": "placement of the requested size; it keeps beside, never across, the opening (buildings.md's rule); pack audit OK per m:wave101-gatehouse"
   },
   {
-   "id": "W98-new-claims",
-   "summary": "three unclaimed decisions claimed as impl-drift read them",
+   "id": "W101-ubame-tub",
+   "summary": "the existing tub at Ubame's range north face moved 6 px in with the face",
    "class": "within",
-   "why": "FR-004's MISLABELED fix carried"
+   "why": "a knock-on keeping an existing check green (fire_water_adrift), no tub added or removed, so row 14's hold behind row 21 and row 663 are untouched"
   },
   {
-   "id": "W98-drifted-left",
-   "summary": "'residence privy attached' and 'servants in the rear strip' left for their place",
+   "id": "W101-types-json-untouched",
+   "summary": "the ranked row's files list l7r/diagram/buildings/types.json, the wave does not edit it",
    "class": "within",
-   "why": "ranked rows of their own; FR-001 keeps 328's order"
+   "why": "the row's fix text asks for no change there and the band (14-82 by 6-24 ft) already admits 40 x 12; the 18 x 12 why-text in docs/building-programs.md:104 and the county example's 54 x 36 gatehouse belong to the separate building-programs row (scope deferred by 328), not to this row"
   },
   {
-   "id": "W99-pillars",
-   "summary": "Ubame's two boundary pillars 3 ft square (9 x 9 px), the plinth form of 0083's band",
+   "id": "W101-decisions-row",
+   "summary": "Decisions row: depth ACCURATE (measured, both forms), length GUESS",
    "class": "within",
-   "why": "the ranked fix offers exactly this form; re-read on the sheet: both rects (1066,423) and (1066,553) are 9 x 9"
+   "why": "FR-008 carried; the classes match 0093's own labels"
   },
   {
-   "id": "W99-row14-held",
-   "summary": "row 14 (one tub per wooden building) held behind row 21 entirely: Ochiba's two tubs removed, the claim, waves.json and ranking back to their pre-wave-99 state, Ubame's tubs to be counted per building when the row is taken",
+   "id": "W101-occasions",
+   "summary": "layout-revised ochiba-magistracy; glyph-redrawn gatehouse on ubame-magistracy",
    "class": "within",
-   "why": "carries out round 2's ruling: 328's FR-003 (by 372's FR-002) puts a row after any row it names in 'after', and row 14's 'after' is row 21, which is open. Verified against ac7e4b1bc^: no tub circle differs on Ochiba or Ubame, and the claim, waves.json and ranking entries match byte for byte. Nothing of row 14's fix is dropped: the plan promises the whole row, Ubame's cut included, after row 21. Note: the ranking's wave column still reads '4 (IN-STEP ...)', which FR-001's 'rows with no wave' reads as not open, so the hold lives in the plan's prose alone; give the row a flag in ranking.json so the next wave's selection finds it"
+   "why": "the occasions the edits open, declared as batch 1's were"
   },
   {
-   "id": "W99-gate-posts-passed",
-   "summary": "E3 row 49 'main gate posts' passed over, its place kept",
+   "id": "W101-batch-2",
+   "summary": "wave 101 opens batch 2, its pair owed at the close",
    "class": "within",
-   "why": "an order choice within one tier, the row kept open for its own wave (unchanged since round 2)"
-  },
-  {
-   "id": "W100-scope",
-   "summary": "wave 100 takes E3 row 11 (cart lane to a side gate): Hayakawa's 10.7 ft and Ubame's 9 ft lanes drawn 6 ft (18 px)",
-   "class": "within",
-   "why": "the next open in-scope row in ranking order (rows 1-9 deferred, row 10 done in wave 99), 'after' empty; the ranking's fix text names exactly these two lanes, these widths and 18 px; re-read on the sheets: both paths now stroke-width 18 (were 32 and 27); m:wave100-cart-lanes re-run, make pack-audit exits 0 on both"
-  },
-  {
-   "id": "W100-gates-keep-widths",
-   "summary": "the gates themselves keep their widths (Ubame's cart gate 9 ft, Hayakawa's landing gate 10 ft)",
-   "class": "within",
-   "why": "the fix names the lanes only; nothing in it reaches the gates"
-  },
-  {
-   "id": "W100-ubame-fox-road-run",
-   "summary": "on Ubame the narrowed path is the Fox road's whole run from the map edge to the cart gate, including the stretch east of the fork to the parley path",
-   "class": "within",
-   "why": "that 27 px path is the one element the ranked fix names by its 9 ft; nothing narrower or wider was taken. What width the Fox road itself keeps east of the fork is row 12's (road at the gate, 0088), still open"
-  },
-  {
-   "id": "W100-decisions-row",
-   "summary": "Decisions row: a cart lane at 0082's allowance, GUESS",
-   "class": "within",
-   "why": "FR-008 carried; the class matches 0082's Evidence label ('guess (a cart lane of about 6 ft ...)')"
-  },
-  {
-   "id": "W100-occasion",
-   "summary": "one glyph-redrawn occasion, road on hayakawa-magistracy, standing for both sheets",
-   "class": "within",
-   "why": "the occasion the edit opens, declared as wave 98's was"
-  },
-  {
-   "id": "B1-no-pair",
-   "summary": "batch 1 (waves 98-100) closes with no timing pair: it changed no engine code",
-   "class": "within",
-   "why": "FR-003 closes a batch as 328 did, and 328s plan (the model, by FR-002/FR-003) defines the pair by engine change: start at the commit before the batchs first engine change, end at its last; 328 wave 1 (no engine behavior) owed no bookend. Measured: git diff 2ac146eca -- l7r pool lists only the three magistracy SVGs and notes, no engine path, so a pair has no endpoints and would time identical code. Not a carve-out from the pair, the pairs own definition applied; an engine change in a later batch owes the pair as written."
-  },
-  {
-   "id": "B1-three-waves",
-   "summary": "batch 1 closes at three waves, under FR-003s 4-5",
-   "class": "within",
-   "why": "narrows nothing asked: every rows fix stands, and landing sooner is the splits stated purpose (never stacked unpushed). The 4-5 size exists to amortize the lengthy tests (GM 2026-10-08), and this batch runs none; 328 closed batch 13 at three waves (95-97)."
-  },
-  {
-   "id": "B1-ubame-f6-notes",
-   "summary": "Ubames notes line on the boundary stones brought to the wave-99 drawing (glyph check F6)",
-   "class": "within",
-   "why": "the records owed by wave 99 (328 FR-009 carried), a check finding answered"
+   "why": "FR-003's batch cycle"
   }
  ],
  "verdict": "CLEAR"

@@ -41,5 +41,6 @@ in 328's ranking and this spec.
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ubame**, **Ochiba**, their notes; `docs/buildings.md`.
 
-- [ ] T04 wave 101's row (FR-001, FR-002)
+- [x] T04 wave 101's row (FR-001, FR-002)
       research: rendering
+      verify: DONE. wave 101: the gate ranges 2 ken deep, Ochiba's gatehouse 40 x 12 ft (0093); impl-drift IN-STEP; spec-fidelity CLEAR
