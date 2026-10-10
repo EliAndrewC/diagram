@@ -48,7 +48,8 @@ description: "Task list template for feature implementation"
 - **A `research record` feature's last research task is its IMPLEMENTATION CHECK** (feature 378, GM 2026-10-10: *"every
   feature of this type should have a task in which we look up whether or not our implementation conforms"*). Add, after
   its research tasks: `- [ ] Tnn Implementation check (feature 378): for each question whose findings this feature
-  changed, the code that decides it cites it in a Research: claim (added where missing) and the claim's impl-drift check
+  changed, the code that decides it cites its FINDINGS page in a Research: claim (added where missing; a drawing-page
+  pointer alone is not re-owed by a changed finding) and the claim's impl-drift check
   is recorded - make claims-owed / claims-bundle / claims-checked - or, ONLY where no code decides it (the thing is not
   built), implementation-check.md says "- NNNN: no code implements it - <why>; searched: <units and grep>"; a claim on
   code outside the hamlet scope (the magistracy's compound_model.py) enters the index too; the code is NOT fixed unless

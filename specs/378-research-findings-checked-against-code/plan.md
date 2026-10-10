@@ -30,13 +30,16 @@ research-record feature whose commits changed a question.
 
 ## Decisions
 
-**D1 - The changed questions** are read from git: `git log -E --grep '^(Feature )?NNN([: ]|$)'`, then each commit's
+**D1 - The changed questions** are read from git: every non-merge commit whose SUBJECT line opens `Feature NNN` or
+`NNN:` (git's `--grep` would match any line, so the subject is filtered here), then each commit's
 paths matching a findings page, `research/questions/NNNN-<id>.html`. Before feature 329 those paths carried the old
 `.claude/skills/diagram/` prefix, so that prefix is accepted. `.notes`, `.drawing` and `.originals` pages are not
 findings. Measured on real features: 317 changed 0081, 315 changed 0046, 310 changed 0038.
 
-**D2 - A claim cites a question** when one of its pointers names `research/questions/NNNN-`, its findings or its drawing
-page. **Checked** means it is not in `claims.owed()`: a changed finding re-owes every claim resting on it (feature 318),
+**D2 - A claim cites a question** when one of its pointers names the question's FINDINGS page,
+`research/questions/NNNN-<id>.html`. A pointer to the drawing page alone does not count: such a claim is fingerprinted on
+the drawing page, so a rewritten finding never re-owes it (plan review, round 1: 31 questions are cited only through
+drawing pages). **Checked** means it is not in `claims.owed()`: a changed finding re-owes every claim resting on it (feature 318),
 so a finding the feature changed cannot pass on a verdict reached before it. Every reason `owed()` gives counts,
 triage included (spec review round 1).
 

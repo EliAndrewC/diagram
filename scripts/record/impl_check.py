@@ -13,7 +13,7 @@ WHAT IS OWED by a feature tagged `research record`, for each question whose FIND
 not its `.notes`, `.drawing` or `.originals`) the feature's commits changed or created - its commits being those whose
 message opens with its number (`Feature NNN` or `NNN:`), as this repository writes them:
   (a) at least one `Research:` claim, in the engine's code or the Mode A procedures, citing the question (its findings or
-      its drawing page), none of them owed its check - so the index holds a verdict for each, IN-STEP or a finding;
+      its FINDINGS page - a claim on the drawing page alone is not re-owed by a rewritten finding), none of them owed - so the index holds a verdict for each, IN-STEP or a finding;
   (b) only for a question NO code decides (the thing is not built), a line in the feature's `implementation-check.md`:
       `- NNNN: no code implements it - <why>; searched: <the units and the grep that found none>`. Code that draws or
       decides the thing is case (a) whatever it does - its claim added, a mismatch the DRIFTED verdict the report shows.
@@ -36,7 +36,9 @@ ROOT = Path(__file__).resolve().parents[2]
 TAG = "research record"
 RECORD = "implementation-check.md"
 FINDINGS_PAGE = re.compile(r"^(?:\.claude/skills/diagram/)?research/questions/(\d{4})-[a-z0-9-]+\.html$")  # the prefix: before 329
-CITED = re.compile(r"research/questions/(\d{4})-")
+# a claim cites a question by its FINDINGS page only: a claim on the drawing page alone is fingerprinted on that page, so a
+# rewritten finding never re-owes it and it would pass on a verdict reached before the change (plan review of 378)
+CITED = re.compile(r"research/questions/(\d{4})-[a-z0-9-]+\.html$")
 NONE_LINE = re.compile(r"^-\s*(\d{4}):\s*no code implements it\s*-\s*(\S.*)$", re.M)
 #: case (b) says what was searched, or it is a reason without a search (spec FR-001, review round 1)
 SEARCHED = re.compile(r";\s*searched:\s*\S")
@@ -58,7 +60,9 @@ def is_research_feature(d: Path) -> bool:
 def changed_questions(root: Path, number: int) -> list[str]:
     """Every question whose findings page a commit of feature `number` changed or created."""
     pattern = rf"^(Feature )?0*{number}([: ]|$)"
-    shas = _git(root, "log", "--no-merges", "--format=%H", "-E", f"--grep={pattern}").split()  # a merge is no feature's
+    # the SUBJECT line opens with the number (git's --grep would also match a later line); a merge is no feature's
+    rx = re.compile(pattern)
+    shas = [ln.split(" ", 1)[0] for ln in _git(root, "log", "--no-merges", "--format=%H %s").splitlines() if rx.search(ln.split(" ", 1)[-1])]
     found: set[str] = set()
     for sha in shas:
         for name in _git(root, "diff-tree", "--no-commit-id", "--name-only", "-r", "--root", sha).split():
@@ -116,7 +120,7 @@ def report(root: Path, d: Path, cites=None) -> tuple[list[str], list[str]]:  # n
         if keys:
             owed = [k for k in keys if k in due]
             lines.append(f"  {q}: {len(keys)} claim(s) cite it" + (f", {len(owed)} owed the check" if owed else ""))
-            lines += [f"      {verdict.get(k) or '-':<14} {k}" + ("  (owed)" if k in due else "") for k in keys[:12]]
+            lines += [f"      {verdict.get(k) or '-':<14} {k}" + ("  (owed)" if k in due else "") for k in keys]
             if owed:
                 missing.append(f"{q}: {len(owed)} claim(s) citing it are owed their impl-drift check - `make claims-owed` names them")
         elif q in nones and SEARCHED.search(nones[q]):

@@ -99,3 +99,22 @@ def test_the_closing_check_refuses_on_what_is_missing(tmp_path: pathlib.Path, mo
     assert any("owes its implementation check (feature 378): 0047" in w for w in why)
     (d / "implementation-check.md").write_text("- 0047: no code implements it - not drawn; searched: grep -rn privy l7r\n")
     assert cc.reasons(d, root / "specs") == []
+
+
+def test_a_claim_citing_only_the_drawing_page_does_not_count(tmp_path: pathlib.Path) -> None:
+    # plan review of 378: a drawing-page claim is fingerprinted on the drawing page, so the rewritten finding never
+    # re-owes it - counted, it would close the feature on a verdict reached before the finding changed
+    root, d = _tree(tmp_path)
+    assert ic.CITED.search("research/questions/0047-the-privy.drawing.html") is None
+    assert ic.CITED.search("research/questions/0047-the-privy.html").group(1) == "0047"
+    _lines, missing = ic.report(root, d, cites=({}, set(), {}))
+    assert missing and "no code implements it" in missing[0], "a question cited only through its drawing page owes a finding claim"
+
+
+def test_only_the_subject_line_names_the_feature(tmp_path: pathlib.Path) -> None:
+    root, d = _tree(tmp_path)
+    (root / "research" / "questions" / "0050-elsewhere.html").write_text("<p>x</p>\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "Feature 392: an unrelated change\n\n390: mentioned in the body only")
+    assert ic.changed_questions(root, 390) == ["0047"]
+
