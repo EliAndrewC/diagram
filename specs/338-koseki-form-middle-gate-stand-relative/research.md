@@ -16,4 +16,4 @@ and reporting only).
 
 **Answer** (observed 2026-10-10; method: the sources above): no source places a middle gate relative to an office hall.
 Not read: the 1994 repair report 『旧小関家住宅修理工事報告書』 (a candidate for the GM's download list), a Moriguchi plan
-labelling 中門 beside 式台.
+labeling 中門 beside 式台.
