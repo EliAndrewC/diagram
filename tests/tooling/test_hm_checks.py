@@ -93,8 +93,7 @@ def test_a_dispatch_another_guard_refused_never_freezes_the_page() -> None:
     assert hc.edit_refusal(st, PAGE, "a", "b", hc.PENDING_S + 1) == "", "never launched: it stops counting"
     hc.dispatch(st, "t2", "modal-depiction", "/m", MODAL, 0)
     hc.launched(st, "t2", "ag2", background=False)
-    assert "no edit to apply" in hc.edit_refusal(st, "/c/l7r/diagram/interactive/assets/modals/sheet/bath.md", "a", "b", 1), \
-        "a foreground check returns with its call"
+    assert "no edit to apply" in hc.edit_refusal(st, "/c/l7r/diagram/interactive/assets/modals/sheet/bath.md", "a", "b", 1), "a foreground check returns with its call"
     hc.launched(st, "unknown", "agX", True)
 
 

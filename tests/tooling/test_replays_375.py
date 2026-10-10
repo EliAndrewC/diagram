@@ -22,9 +22,11 @@ ru = _load("record_units")
 REPO = Path(__file__).resolve().parents[2]
 PAGE = "research/questions/0105-baths-furo.drawing.html"
 #: the bullet the 14:13 script inserted after the `The bath is drawn 10 by 8 ft` item (transcript 8d3395e5, 2026-10-10T14:13:32Z)
-BULLET = ("\n<li><strong>A plan may draw its bath larger as one of its resident's particulars - a GUESS.</strong><br>Where a plan's "
-          "story gives its magistrate a fondness for the bath, the bath is drawn larger, up to about 18 by 12 ft, still on the "
-          "house's service side; no page we read gives a bath's size to draw it from.</li>")
+BULLET = (
+    "\n<li><strong>A plan may draw its bath larger as one of its resident's particulars - a GUESS.</strong><br>Where a plan's "
+    "story gives its magistrate a fondness for the bath, the bath is drawn larger, up to about 18 by 12 ft, still on the "
+    "house's service side; no page we read gives a bath's size to draw it from.</li>"
+)
 
 
 def _show(rev: str) -> str:
@@ -41,7 +43,7 @@ def _blocks(text: str) -> list[str]:
 def test_the_bath_bullet_s_return_trips_the_oscillation_wire() -> None:
     withdrawn = _show("b0eca1ebd")  # wave 108, 14:19 UTC: the bullet withdrawn
     i = withdrawn.index("The bath is drawn 10 by 8 ft")
-    drafted = withdrawn[: withdrawn.index("</li>", i) + 5] + BULLET + withdrawn[withdrawn.index("</li>", i) + 5:]
+    drafted = withdrawn[: withdrawn.index("</li>", i) + 5] + BULLET + withdrawn[withdrawn.index("</li>", i) + 5 :]
     readded = _show("175cca78a")  # wave 108, 14:32 UTC: the bullet back, re-worded
     versions = [_blocks(drafted), _blocks(withdrawn), _blocks(readded)]
     back = hc.oscillation(versions)

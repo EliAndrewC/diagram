@@ -110,7 +110,7 @@ def second_red_gate(root: Path, now: str | None = None) -> str:
     path = _state_file(root).parent / "arbiter-owed.json"
     try:
         owed = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         owed = {}
     trigger = f"red-gate@{when}"
     owed[trigger] = {"kind": "red-gate", "unit": "", "detail": "a second red make done in a row", "t": time.time()}

@@ -155,7 +155,8 @@
    ],
    "threshold": 1.0,
    "fewest_dispatches": 10,
-   "reading": "ordinary work ran 0.13-0.59 checks a line; wave 108, the loop the spec names (0105's four rounds), ran 1.35. The wire is set at 1.0 with at least 10 dispatches: it fires on wave 108 and on none of the ordinary windows (hm_arbiter.CASCADE_RATIO, CASCADE_MIN)"
+   "reading": "ordinary work ran 0.13-0.59 checks a line; wave 108, the loop the spec names (0105's four rounds), ran 1.35. The wire is set at 1.0 with at least 10 dispatches: it fires on wave 108 and on none of the ordinary windows (hm_arbiter.CASCADE_RATIO, CASCADE_MIN)",
+   "live_count": "the live wire counts the record, modal and impl-drift dispatches the check state records; the measured ratios also counted review checks and ad-hoc triages, so the live wire reads lower than these figures - it under-fires, the safe side"
   }
  },
  "sc006-replay": {

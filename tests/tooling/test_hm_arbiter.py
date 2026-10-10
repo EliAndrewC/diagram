@@ -42,8 +42,7 @@ def test_a_ruling_is_binding_once_and_reaches_the_gm(tmp_path: pathlib.Path) -> 
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "x"}, "main")
     with pytest.raises(ValueError, match="one of"):
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "maybe", "why": "x"}, "round-arbiter")
-    row = ha.record_ruling(root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation over the bath bullet"},
-                           "round-arbiter", "2026-10-10T00:00:00Z")
+    row = ha.record_ruling(root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation over the bath bullet"}, "round-arbiter", "2026-10-10T00:00:00Z")
     assert row["kind"] == "reversal" and ha.owed(root) == {}
     d = root / "specs" / "375-x"
     assert json.loads((d / "gm-review.jsonl").read_text())["ruling"] == "process-fault"
@@ -105,14 +104,20 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
     (q / "0105-baths.html").write_text("<p>a</p>")
     reply = tmp_path / "r1.md"
     reply.write_text("1. the bath size has no footnote at all\n")
-    (root / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": {
-        "t1": {"check": "quote-check", "subjects": ["q:0105"], "t": 1, "state": "answered", "reply": str(reply)},
-        "t2": {"check": "quote-check", "subjects": ["q:0105"], "t": 2, "state": "answered"}}}))
+    (root / ".git" / "checks-open.json").write_text(
+        json.dumps(
+            {
+                "dispatches": {
+                    "t1": {"check": "quote-check", "subjects": ["q:0105"], "t": 1, "state": "answered", "reply": str(reply)},
+                    "t2": {"check": "quote-check", "subjects": ["q:0105"], "t": 2, "state": "answered"},
+                }
+            }
+        )
+    )
     ha.trip(root, "round:quote-check|q:0105@3", "round", "quote-check|q:0105", "round 3 of quote-check on q:0105", 3)
     monkeypatch.delenv("L7R_EVENTS_DIR", raising=False)
     el = _load("event_log")
-    el.append({"hook_event_name": "PreToolUse", "cwd": str(root), "tool_name": "Edit",
-               "tool_input": {"file_path": str(q / "0105-baths.html"), "old_string": "a", "new_string": "b"}})
+    el.append({"hook_event_name": "PreToolUse", "cwd": str(root), "tool_name": "Edit", "tool_input": {"file_path": str(q / "0105-baths.html"), "old_string": "a", "new_string": "b"}})
     manifest = ab.bundle(root, "round:quote-check|q:0105@3", tmp_path / "out").read_text()
     assert "trigger: round:quote-check|q:0105@3" in manifest and "### Round 1" in manifest and "### Round 2" in manifest
     assert "- NEW: the bath size has no footnote at all" in manifest and "(no findings in the kept reply)" in manifest

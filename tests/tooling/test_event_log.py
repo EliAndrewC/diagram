@@ -261,8 +261,7 @@ def test_an_edit_putting_back_replaced_text_trips_the_arbiter(tmp_path: Path, mo
     monkeypatch.delenv("L7R_EVENTS_DIR", raising=False)
 
     def edit(old: str, new: str) -> None:
-        el.append({"hook_event_name": "PreToolUse", "cwd": str(clone), "tool_name": "Edit",
-                   "tool_input": {"file_path": "/a.md", "old_string": old, "new_string": new}})
+        el.append({"hook_event_name": "PreToolUse", "cwd": str(clone), "tool_name": "Edit", "tool_input": {"file_path": "/a.md", "old_string": old, "new_string": new}})
 
     edit("the bath is 10 ft", "the bath is 12 ft")
     edit("Wells by the door", "Wells by the kitchen")
