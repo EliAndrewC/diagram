@@ -81,7 +81,7 @@ def test_an_item_that_cites_another_items_finding_is_still_one_question() -> Non
     # ("B16's finding", "B19's remaining claims") and every id on a line was counted as a question of its own.
     fx1 = (
         "## Your items\n\n- F01: the byre sentence points to homesteads 300 (B16's finding: in the house).\n"
-        "- F02: the heading says what the section finds.\n- F03 `homesteads/180`: B19's village-form claims.\n"
+        "- F02: the heading says what the section finds.\n- F03: B19's village-form claims.\n"
         "- F04: the farmhouse is twice the usual size.\n\n## The procedure\n"
     )
     assert bl.load(fx1, RECORD)[1:] == (4, ["F01", "F02", "F03", "F04"])
