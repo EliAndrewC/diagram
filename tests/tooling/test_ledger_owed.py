@@ -82,3 +82,20 @@ def test_the_command_reports_and_refuses_only_when_asked(tmp_path: Path, ledger:
     if not ledger:
         assert "| 2026-10-10 | glyph-check | copse on inashiro | ? |" in r.stdout + r.stderr
         assert "LEDGER_ROWS_OK" in r.stdout + r.stderr
+
+
+def test_a_resumed_check_is_one_pass_whose_latest_cells_count() -> None:
+    """Plan D1b: a check resumed after it returned logs again; its latest line covers the whole transcript, as
+    `make review-cost` prints it once the agent has finished - so a row copied from that answers it."""
+    first, later = _pass(wall="80 s"), _pass(wall="3900 s", tokens="900k in (800k cached) / 20.0k out")
+    passes = lo.latest_per_agent([first, later])
+    assert passes == [later]
+    assert lo.unanswered(passes, HEAD + _row(wall="3900 s", tokens="900k in (800k cached) / 20.0k out")) == []
+    assert lo.latest_per_agent([_pass(), {**_pass(), "agent": "a2"}]) == [_pass(), {**_pass(), "agent": "a2"}], "two agents, two passes"
+
+
+def test_the_printed_row_passes_the_ledger_lint_whatever_its_subject() -> None:
+    """FR-003: the row to add can be added as printed - a subject with a pipe or a newline is made safe."""
+    row = lo.row_for(_pass(subject="MODE 2 | review\nfeature 371"))
+    filled = row.replace("| ? | ? | ? | ? | ? |", "| PASS | caught nothing | nothing | - | nothing |")
+    assert ll.problems(HEAD + filled + "\n") == [], ll.problems(HEAD + filled + "\n")

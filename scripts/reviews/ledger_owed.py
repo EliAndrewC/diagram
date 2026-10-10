@@ -52,6 +52,15 @@ def load_passes(path: Path) -> list[dict[str, str]]:
     return out
 
 
+def latest_per_agent(passes: Sequence[dict[str, str]]) -> list[dict[str, str]]:
+    """One pass per agent: its LATEST line (plan D1b) - a check resumed after it returned stops again, and a foreground check
+    may be logged by both of its events; the latest cells cover the whole transcript, as `make review-cost` prints them."""
+    by: dict[str, dict[str, str]] = {}
+    for i, p in enumerate(passes):
+        by[p.get("agent") or f"#{i}"] = p
+    return list(by.values())
+
+
 def unanswered(passes: Sequence[dict[str, str]], ledger_text: str) -> list[dict[str, str]]:
     """The passes no measured row answers - a row of the same check carrying the pass's wall and tokens cells."""
     keys = set()
@@ -80,7 +89,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--refuse", action="store_true", help="exit 1 while a pass is unanswered")
     args = ap.parse_args(argv)
     ledger = Path(args.ledger)
-    owed = unanswered(load_passes(Path(args.log) if args.log else default_log()), ledger.read_text(encoding="utf-8") if ledger.is_file() else "")
+    passes = latest_per_agent(load_passes(Path(args.log) if args.log else default_log()))
+    owed = unanswered(passes, ledger.read_text(encoding="utf-8") if ledger.is_file() else "")
     if not owed:
         return 0
     stream = sys.stderr if args.refuse else sys.stdout

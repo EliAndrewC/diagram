@@ -219,3 +219,69 @@ def test_a_dropped_block_coming_back_between_dispatches_trips_the_reversal_wire(
     assert "a tripwire is owed its ruling first (reversal:q:0105@3" in out
     assert list(ha.owed(root)) == ["reversal:q:0105@3"]
     assert hc.subject_blocks(root, "modal:sheet/none") == []
+
+
+# ---- feature 371: every check's pass is logged at its return, with its cost cells ------------------------------------------
+
+
+def _transcript(tmp: pathlib.Path, name: str, prompt: str, stamps: tuple[str, str] = ("2026-10-10T10:00:00Z", "2026-10-10T10:01:20Z")) -> pathlib.Path:
+    """A minimal agent transcript: the dispatch's prompt, then one model call with its usage."""
+    t = tmp / f"agent-{name}.jsonl"
+    t.write_text(
+        json.dumps({"timestamp": stamps[0], "message": {"role": "user", "content": prompt}})
+        + "\n"
+        + json.dumps(
+            {
+                "timestamp": stamps[1],
+                "message": {"role": "assistant", "usage": {"input_tokens": 1000, "cache_read_input_tokens": 2000, "cache_creation_input_tokens": 0, "output_tokens": 500}, "content": []},
+            }
+        )
+        + "\n"
+    )
+    return t
+
+
+def _log(tmp: pathlib.Path) -> list[dict]:
+    p = tmp / hc.PASS_LOG
+    return [json.loads(ln) for ln in p.read_text().splitlines()] if p.is_file() else []
+
+
+def test_a_checks_return_appends_one_pass_with_the_transcripts_cells(tmp_path: pathlib.Path) -> None:
+    """FR-001 / SC-004: the cells are the ones review_cost computes from the same transcript."""
+    _lint, rc = hc._reviews()
+    t = _transcript(tmp_path, "a1", "Check the bundle at /tmp/x/MANIFEST.md | read it\nmore")
+    assert hc.log_pass(tmp_path, "returned", {"agent_type": "glyph-check", "agent_id": "a1", "agent_transcript_path": str(t)}, 0.0)
+    (rec,) = _log(tmp_path)
+    assert rec["check"] == "glyph-check" and rec["agent"] == "a1" and rec["subject"] == "Check the bundle at /tmp/x/MANIFEST.md read it"
+    assert f"{rec['wall']} | {rec['tokens']}" == rc.cells(rc.cost(t.read_text().splitlines()))
+
+
+def test_an_agent_that_is_not_a_check_logs_nothing(tmp_path: pathlib.Path) -> None:
+    t = _transcript(tmp_path, "a2", "help")
+    for kind in ("general-purpose", "round-arbiter", "Explore"):
+        assert not hc.log_pass(tmp_path, "returned", {"agent_type": kind, "agent_id": "a2", "agent_transcript_path": str(t)}, 0.0)
+    assert _log(tmp_path) == []
+
+
+def test_a_resumed_check_logs_again_and_a_background_launch_logs_nothing(tmp_path: pathlib.Path) -> None:
+    """Plan D1b: a second stop is a second line (the reader keeps the latest); a background launch waits for its return."""
+    t = _transcript(tmp_path, "a3", "MODE 2")
+    payload = {"agent_type": "spec-fidelity", "agent_id": "a3", "agent_transcript_path": str(t)}
+    assert hc.log_pass(tmp_path, "returned", payload, 0.0) and hc.log_pass(tmp_path, "returned", payload, 0.0)
+    assert len(_log(tmp_path)) == 2
+    bg = {"tool_input": {"subagent_type": "spec-fidelity"}, "tool_response": {"status": "async_launched", "agentId": "a3"}}
+    assert not hc.log_pass(tmp_path, "launched", bg, 0.0) and len(_log(tmp_path)) == 2
+
+
+def test_a_foreground_check_is_logged_when_its_tool_call_completes(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _lint, rc = hc._reviews()
+    t = _transcript(tmp_path, "a4", "Check the claims bundle")
+    monkeypatch.setattr(rc, "transcript", lambda aid, root=None: t if aid == "a4" else None)
+    fg = {"tool_input": {"subagent_type": "impl-drift"}, "tool_response": {"status": "completed", "agentId": "a4"}}
+    assert hc.log_pass(tmp_path, "launched", fg, 0.0)
+    assert _log(tmp_path)[0]["check"] == "impl-drift"
+
+
+def test_a_return_with_no_transcript_or_a_broken_one_never_raises(tmp_path: pathlib.Path) -> None:
+    assert not hc.log_pass(tmp_path, "returned", {"agent_type": "glyph-check", "agent_id": "a5", "agent_transcript_path": str(tmp_path / "gone.jsonl")}, 0.0)
+    assert not hc.log_pass(tmp_path / "no-such-dir", "returned", {"agent_type": "glyph-check", "agent_id": "a6", "agent_transcript_path": str(_transcript(tmp_path, "a6", "x"))}, 0.0)
