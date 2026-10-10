@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - spec accepted (spec-fidelity round 2, FAITHFUL); taken before feature 374's first task; it applies to every feature
+**Status**: Done (2026-10-10) - every task ticked across four landed batches; SC-001, SC-002, SC-005 and SC-006 measured (`measurements.json`, `audit.md`); SC-003 and SC-004 carried to 374 and held there by FR-014; `report.md` written
 
 **Affects**: review process, tooling
 
