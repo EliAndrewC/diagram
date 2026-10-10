@@ -141,5 +141,6 @@ in 328's ranking and this spec.
 
 - Record and procedure (FR-001): 0105's drawing page, `docs/buildings.md` Wells, the well pop-up.
 
-- [ ] T14 wave 111's row (FR-001)
+- [x] T14 wave 111's row (FR-001)
       research: rendering
+      verify: DONE. DONE. wave 111: the kitchen well's two seats recorded on 0105 as a GUESS (generated past the bath, hand-drawn inside the kitchen); procedure, claim and the bath and well pop-ups say so; record checks clean; plan review CLEAR round 2
