@@ -121,7 +121,7 @@ correct work is fixed, not escaped (an escape only for a genuinely exempt case, 
   sheets' 8-8.7 ft doors as a convention, against the GM's true-size rule); `fixture_quota`; and `one tub per wooden building`
   (waiting on `#senior retainers housed apart`).
 - **Every decision still owed to the GM**: 372's spec, "What it carries" (328's held section, the Mode A wells as markers,
-  wave 97's charcoal store) - put to the GM at this feature's start or end, through `escalation-check`.
+  wave 97's charcoal store) - put to the GM at this feature's end, through `escalation-check` (FR-004).
 - **Carried from 372's spec unchanged**: the claims-gate findings counted as introduced at 328's landing; Sawada's zigzag
   (waived for landing, an open E3 row); the 40-household seed 25 knot; Ochiba's garrison privy haul (a research item on 0101
   and 0090).
