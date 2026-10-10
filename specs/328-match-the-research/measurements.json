@@ -2031,5 +2031,19 @@
         "newly failing": "04, 19, 32, 41, 42 (the base still 52/54 in the clone; the 54/54 base with wave 91 held)"
       }
     }
+  },
+  "wave92-door-end-teed": {
+    "quantity": "wave 92 (2026-10-10): wave 91 with the knot verdict reading a door end teed on its own lane as no knot",
+    "observed": "2026-10-10",
+    "source": "a detached worktree with wave 91 and door_end_teed (engine knots and the pool test) probed to log every exempted pair; make cohort N=48; make map for the five hamlets; make test-file FILE=tests/hamletgen/test_pool_261.py",
+    "command": "make cohort N=48; make map; make test-file FILE=tests/hamletgen/test_pool_261.py",
+    "method": "the exempted pairs logged and classed by the lanes' roles; the pool rerolled with the predicate in both the gather search and the verdict, then in the verdict only",
+    "value": {
+      "cohort_passed": 54,
+      "exempted_pairs_distinct": 53,
+      "exempted_classes": "all a lone access door end with the other point on its own lane (41 access-access, 10 access-field way, 1 join-orphans, 1 three-lane)",
+      "pool": "Inashiro passes the knot test; Kuwabata (lane 4 and lane 6 feet 19.3 ft apart) and Sawada fail it with real knots, in both forms - wave 91's own, hidden at first because make quick stops at the first failure",
+      "outcome": "reverted with wave 91 (E3)"
+    }
   }
 }
