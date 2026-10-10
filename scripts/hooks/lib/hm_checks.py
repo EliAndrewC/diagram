@@ -421,9 +421,10 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
                         hm_arbiter.trip(root, f"reversal:{s}@{len(vs)}", "reversal", s, f"{s}: a block dropped earlier is back - \"{back}...\"", now)
         out = dispatch(state, str(payload.get("tool_use_id") or now), check, manifest, text, now, root)
         if not out and root is not None:
-            n = len(state.get("dispatches", {}))
-            if hm_arbiter.cascade(n, changed_lines(root)):
-                hm_arbiter.trip(root, f"cascade:{n}", "cascade", "", f"{n} check dispatches over {changed_lines(root)} changed lines", now)
+            n, k = len(state.get("dispatches", {})), hm_arbiter.continues(root, "cascade@")
+            lines = changed_lines(root)
+            if hm_arbiter.cascade(n, lines, k):  # each `continue` ruling raises the bar, as a round cap's does
+                hm_arbiter.trip(root, f"cascade@{k + 1}", "cascade", "", f"{n} check dispatches over {lines} changed lines", now)
     elif mode == "launched" and payload.get("tool_name") == "Agent":
         resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
         launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched")

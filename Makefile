@@ -1120,6 +1120,11 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 	@: "GUARD_EDIT_OK: feature 375 FR-003(a) - TASK= records a decision preflight on one task's plan section"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" $(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
+# GUARD_EDIT_OK: feature 375 FR-003(b) adds an operation - close a check that went silent, so its page is not frozen for good
+check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>"
+	@if [ -z "$(SUBJECT)" ] || [ -z "$(REASON)" ]; then printf 'make check-closed: SUBJECT=<q:NNNN or modal:<registry>/<slug>> and REASON="<why>" are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_checks.py close "$(SUBJECT)" "$(REASON)"
+
 # GUARD_EDIT_OK: feature 375 FR-011 adds two operations - the round arbiter's bundle, and the recording of its ruling
 # (only the `round-arbiter` subagent passes AS=round-arbiter; a ruling is binding, one per trigger).
 arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]

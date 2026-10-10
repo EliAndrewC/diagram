@@ -128,7 +128,9 @@ def refusal(triggers: list[str]) -> str:
     t = triggers[0]
     return (f"a tripwire is owed its ruling first ({', '.join(triggers)}; feature 375 FR-010/FR-011): make arbiter-bundle "
             f"TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" "
-            "FILE=<its JSON> AS=round-arbiter. The feature goes on elsewhere meanwhile")
+            "FILE=<its JSON> AS=round-arbiter. The feature goes on elsewhere meanwhile. (A session started before the agent "
+            "existed cannot dispatch it: restart it, or carry ARBITER_OK=\"<reason>\" on the gate / FREEZE_OK=\"<reason>\" "
+            "in the check's prompt - both logged.)")
 
 
 def reversal(events: list[Mapping[str, Any]], path: str, old: str, new: str) -> bool:
@@ -137,8 +139,10 @@ def reversal(events: list[Mapping[str, Any]], path: str, old: str, new: str) -> 
     return bool(new) and new in replaced and new != old
 
 
-def cascade(dispatches: int, lines: int) -> bool:
-    return dispatches >= CASCADE_MIN and dispatches > CASCADE_RATIO * max(lines, 1)
+def cascade(dispatches: int, lines: int, ruled: int = 0) -> bool:
+    """Past the ratio - raised by one step for each `continue` the feature's cascade rulings carry, so a ruled cascade does not
+    re-trip on the very next dispatch (the trigger id is `cascade@<rulings + 1>`, fixed until ruled)."""
+    return dispatches >= CASCADE_MIN and dispatches > CASCADE_RATIO * (1 + ruled) * max(lines, 1)
 
 
 def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared: str, now: str | None = None) -> dict[str, Any]:

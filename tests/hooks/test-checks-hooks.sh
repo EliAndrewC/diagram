@@ -54,6 +54,14 @@ edit "about 10 by 8 ft" "about 12 by 9 ft"; rc=$?
 [ "$rc" = 2 ] && grep -q "none of the 1 edit(s) they proposed" "$T/err" && ok "IT FIRES: another replacement at the proposed place is refused" || no "a different edit went through" "rc=$rc"
 bash_call "make apply-edits FROM=$REPLY"; rc=$?
 [ "$rc" = 0 ] && ok "STAYS QUIET: make apply-edits on the round's own reply" || no "apply-edits refused" "rc=$rc $(cat "$T/err")"
+# the command the freeze names, for a check that went silent, closes it (the advisor's note: a refusal must name a command that runs)
+agent t5 | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>&1
+python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t5","tool_input":{},"tool_response":{"status":"async_launched","agentId":"ag5"}}))' "$C" | "$H/checks-hooks.sh" launched
+edit "about 10 by 8 feet" "about 10 by 8 ft"; rc=$?
+[ "$rc" = 2 ] && ok "a new round freezes the page again" || no "not frozen" "rc=$rc"
+( cd "$C" && python3 "$H/lib/hm_checks.py" close q:0105 "the agent died silently" >/dev/null )  # what `make check-closed` runs
+edit "about 10 by 8 feet" "about 10 by 8 ft"; rc=$?
+[ "$rc" = 0 ] && ok "make check-closed unfreezes it" || no "check-closed did not close it" "rc=$rc $(cat "$T/err")"
 bash_call "make quick"; rc=$?
 [ "$rc" = 0 ] && ok "STAYS QUIET: an unrelated command" || no "make quick refused" "rc=$rc"
 "$H/checks-hooks.sh" bogus >/dev/null 2>&1; rc=$?

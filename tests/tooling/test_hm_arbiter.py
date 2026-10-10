@@ -129,3 +129,11 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
     assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "round-arbiter"]) == 0
     assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "round-arbiter"]) == 1, "binding: once"
     assert ha.main(["bogus"]) == 2
+
+
+def test_a_ruled_cascade_does_not_re_trip_on_the_next_dispatch(tmp_path: pathlib.Path) -> None:
+    root = _clone(tmp_path)
+    assert ha.cascade(12, 10, 0) and not ha.cascade(12, 10, 1), "a continue ruling raises the bar a step"
+    ha.trip(root, "cascade@1", "cascade", "", "12 over 10", 1)
+    ha.record_ruling(root, "cascade@1", {"ruling": "continue", "why": "the checks found new defects"}, "round-arbiter")
+    assert ha.continues(root, "cascade@") == 1 and not ha.trip(root, "cascade@1", "cascade", "", "again", 2)

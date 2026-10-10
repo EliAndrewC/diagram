@@ -287,7 +287,10 @@ def decision_refusal(root: pathlib.Path) -> str:
     except (OSError, ValueError):
         review = {}
     if task in task_sections(text):
-        if task_current(review, text, task):
+        # a plan reviewed CLEAR as a whole, still current, covers its task sections too: the reviewer read them; only a section
+        # added or changed since needs its own preflight (the advisor's note before batch 3 landed)
+        read = task_sections(str(review.get("plan_text") or "")).get(task)
+        if task_current(review, text, task) or (owed(d) is None and read is not None and typo_only(read, task_sections(text)[task])):
             return ""
         return (f"{d.name} {task}: its plan section carries no current CLEAR decision verdict - decide first, then check "
                 f"(feature 375 FR-003a): `make decide F={d.name.split('-')[0]} T={task}` names the review to dispatch")

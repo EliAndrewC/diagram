@@ -285,6 +285,12 @@ def test_a_check_waits_for_its_task_s_decisions(tmp_path: pathlib.Path) -> None:
     (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
     assert gate.active_task(root) == (d, "T05")
     assert "T05: its plan section carries no current CLEAR decision verdict" in gate.decision_refusal(root)
+    gate.record(d, current([WITHIN], plan=PLAN_TASKS), "spec-fidelity")
+    assert gate.decision_refusal(root) == "", "a current CLEAR plan review read the section: it covers it"
+    (d / "plan.md").write_bytes(PLAN_TASKS.replace(b"10 x 8 ft", b"12 x 9 ft"))
+    assert "T05: its plan section" in gate.decision_refusal(root), "the section changed since: its own preflight"
+    (d / "plan.md").write_bytes(PLAN_TASKS)
+    (d / "plan-review.json").unlink()
     sha = hashlib.sha256(gate.task_sections(PLAN_TASKS.decode())["T05"].encode()).hexdigest()
     gate.record_task(d, "T05", {"section_sha256": sha, "decisions": []}, "spec-fidelity")
     assert gate.decision_refusal(root) == ""
