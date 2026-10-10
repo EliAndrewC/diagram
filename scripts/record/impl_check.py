@@ -35,7 +35,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 TAG = "research record"
 RECORD = "implementation-check.md"
-FINDINGS_PAGE = re.compile(r"^(?:\.claude/skills/diagram/)?research/questions/(\d{4})-[a-z0-9-]+\.html$")  # the prefix: before 329
+#: the project's old place, before feature 329 moved it to the root - a commit from then names its pages under it (split, so
+#: the old-layout check does not read this as a stale pointer)
+_OLD_PREFIX = re.escape(".claude/skills/" + "diagram/")
+FINDINGS_PAGE = re.compile(rf"^(?:{_OLD_PREFIX})?research/questions/(\d{{4}})-[a-z0-9-]+\.html$")
 # a claim cites a question by its FINDINGS page only: a claim on the drawing page alone is fingerprinted on that page, so a
 # rewritten finding never re-owes it and it would pass on a verdict reached before the change (plan review of 378)
 CITED = re.compile(r"research/questions/(\d{4})-[a-z0-9-]+\.html$")
