@@ -41,6 +41,11 @@ in 328's ranking and this spec.
 
 - [ ] T05 SC-005: key `sc004-375-dispatches-per-row` over T01-T03, from `make feature-report F=374`
       research: rendering
+## Standing - the ranking's remaining rows
+
+- [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]
+      research: rendering
+
 - [ ] GM review (make gm-reviewed F=374) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

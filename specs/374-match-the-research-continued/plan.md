@@ -141,6 +141,14 @@ while a check on them was outstanding, plan-review BLOCKs on a decision a decisi
 
 The dispatches per closed row of T01-T03 (four rows), from the same report, beside 372's ~10 (375's "Why", an estimate).
 
+## Landing by batch (375's D18)
+
+374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:
+`tasks.md` holds the current batch's tasks and one standing task, T99, for the batches still to come. A batch whose
+decisions need no new ruling adds its tasks under its own plan section, decided per task (`make decide`).
+
+**Lands open**: T99
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |
