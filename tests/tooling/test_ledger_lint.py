@@ -40,3 +40,17 @@ def test_main_reads_a_ledger_and_the_repository_s_own_is_clean(tmp_path: Path, c
     f.write_text(HEAD + "| 2026-10-02 | eyeball | x | PASS | y | judgment | yes | fixed | 4 s | 1k in (0k cached) / 0.1k out |\n")
     assert ll.main([str(f)]) == 1 and "eyeball" in capsys.readouterr().out
     assert ll.main([]) == 0, "the repository's own ledger"
+
+
+def test_a_row_from_375_on_says_whether_its_findings_are_disposed() -> None:
+    """Feature 375 FR-007: the escalation filter is owed only for findings left open, read from `acted on`."""
+    row = dict(zip(ll.COLUMNS, ["2026-10-11", "glyph-check", "s", "PASS", "an arc", "judgment", "no", "fixed", "1 s", "1k in (1k cached) / 1.0k out"], strict=True))
+    assert ll.disposed(row) is True
+    assert ll.disposed({**row, "acted on": "held for the GM"}) is False
+    assert ll.disposed({**row, "acted on": "nothing", "finding": "-"}) is True
+    assert ll.disposed({**row, "acted on": "nothing", "verdict": "NEEDS-WORK"}) is False
+    assert ll.disposed({**row, "acted on": "-", "finding": "-"}) is True and ll.disposed({**row, "acted on": "-"}) is False
+    assert ll.disposed({**row, "acted on": "thought about it"}) is None
+    table = ll.MEASURED_HEADING + "\n\n| " + " | ".join(ll.COLUMNS) + " |\n|---|\n| " + " | ".join({**row, "acted on": "thought about it"}.values()) + " |\n"
+    assert any("say fixed, verified, accepted" in p for p in ll.problems(table))
+    assert not ll.problems(table.replace("2026-10-11", "2026-10-10")), "rows before the rule keep their words"
