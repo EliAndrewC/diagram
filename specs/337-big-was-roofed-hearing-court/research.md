@@ -26,3 +26,8 @@ above had left these out, plan review round 1):
   from a plan drawing): searches found no area for the court.
 - **Survey reports, floor plans and repair reports** on Takayama and other jin'ya: none gave a court area.
 
+**The archive was not truly searched** (observed 2026-10-10; method: `make archive-find` re-run one term at a time after the
+tool's fix). The pass asked `make archive-find TERMS="白洲|shirasu|お白洲|吟味所"` and was told "nothing held". The tool needs
+every term, and on its own 白洲 is in 23 archived texts. Those texts are read, one term at a time, before the absence note
+is written (the shared write brief says so).
+

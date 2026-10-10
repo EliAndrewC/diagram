@@ -45,10 +45,14 @@ statement behind it at `compound_model.py` (the `DOOR_KINDS` comment: "the guest
 so the residence carries no genkan") is a comment the claims grammar cannot read; it is reworded to point at the claim.
 The unit enters the index through feature 378's claimed-outside rule. The edit is a docstring and a comment, not code.
 
-**D3a - Ochiba's own route is drawn by no code.** The Ochiba sheet is hand-authored SVG; its route
-(`ochiba-magistracy.svg`) is written there, and `claims.py` reads no SVG. The code claim covers the generated compound's
-version of the same route. Ochiba's is recorded in `specs/336-.../implementation-check.md` as drawn by hand, outside the
-claims index, and the sheet stays untouched (D1).
+**D3a - Ochiba's own route is drawn by no code, and its mismatch is recorded where a hand sheet's can be.** The Ochiba
+sheet is hand-authored SVG (`ochiba-magistracy.gen.py` only rasterizes it); `claims.py` reads no SVG. The feature's
+`implementation-check.md` line for Ochiba states:
+- that the sheet's outdoor route (the office's rear door, the nakamon, the garden path to the veranda stone, which its own
+  svg comment cites to research 0104 and Takayama) departs from 0104's finding that the way ran under roof - the mismatch
+  FR-002 names;
+- that `_roji_parts`'s DRIFTED claim is its checked counterpart for the generated route;
+- that the sheet stays untouched (FR-002, FR-091).
 
 **D4 - The implementation check** (FR-091): `make impl-check F=336` reports nothing missing.
 

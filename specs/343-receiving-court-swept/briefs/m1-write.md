@@ -49,7 +49,9 @@ the research found. Research features annotate the record; they change no map an
   - Japanese Wikipedia's お白洲 (which gives the 1810 South Town plan's 3-shaku veranda and 1-ken stair, not the court);
   - coverage of the Edo, Sado and Suibara magistracies.
 
-  Check that `make open-questions` lists it.
+  BEFORE writing it, ask the archive one term at a time - `make archive-find TERMS="白洲"` (23 texts hold it),
+  then `お白洲`, `吟味所`, `shirasu` - and read the texts it names for any size of a ROOFED court. A size found there is
+  recorded and cited, and the absence note is then not written. Check that `make open-questions` lists the note.
 
 Keep each question under the 20,000-byte cap. Change nothing else, and edit no modal, sheet or code.
 
