@@ -29,6 +29,6 @@
 - [x] T05 CLAUDE.md, docs/guards.md, docs/reviews.md (D6)
       research: rendering
       verify: DONE. CLAUDE.md ledger-hooks row, docs/guards.md row, docs/reviews.md paragraph read back
-- [ ] T06 the gate green; this feature's own checks' passes have their rows (SC-001..SC-004)
+- [x] T06 the gate green; this feature's own checks' passes have their rows (SC-001..SC-004)
       research: rendering
-      verify: make done green; make ledger-owed lists nothing for this clone
+      verify: DONE. make done green (339 s); make ledger-owed lists nothing; this feature's six review passes have their rows

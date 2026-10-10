@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09 (filed by feature 328's session); specified 2026-10-10
 
-**Status**: Draft - spec-fidelity round 3 verdict FAITHFUL (2026-10-10)
+**Status**: Done (2026-10-10): every task ticked; make done green, make ledger-owed clean, see report.md
 
 **Affects**: review process, tooling
 
