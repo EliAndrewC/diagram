@@ -894,9 +894,9 @@
   "date": "2026-10-10",
   "note": "0091's drawing page records the magistracy's own guest house as a GUESS",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9c80f66513d917da"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
   },
-  "research": "849a899593053688",
+  "research": "599c1caf9eb1593b",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:14a6adb4a8440bc9",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:be635f0990c5e3da"
@@ -1181,22 +1181,22 @@
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
   "code": "810f386085867e6d",
-  "core": "0564c190350b66a9",
+  "core": "0ab41672ec7df598",
   "date": "2026-10-10",
-  "note": "30-42% building cover, the court spine kept open",
+  "note": "the program's coverage band, its open court spine and its rule of closing up loose ground match the page.",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:6b2deb010b88db75",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c63fb7818cf50fcb",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
-  "section": "0564c190350b66a9",
-  "triage": "touched",
+  "section": "0ab41672ec7df598",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
@@ -1343,9 +1343,9 @@
   "date": "2026-10-10",
   "note": "service strip or alley a GUESS, rear storehouses and rear yard attested",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9c80f66513d917da"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
   },
-  "research": "849a899593053688",
+  "research": "599c1caf9eb1593b",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:3fbca2091d585e8c",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
@@ -2534,6 +2534,38 @@
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Inner court (private / sacred)#kitchen": {
+  "code": "f916629b4dcc8631",
+  "core": "ae0a5605f51e7f36",
+  "date": "2026-10-10",
+  "note": "0091's drawing page records the kitchen's size as a GUESS: the wing's ~12 tsubo, not its share, about 24 by 18 ft or a little smaller whatever the size of the house; the band is within that; the ell is attested.",
+  "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
+  },
+  "research": "599c1caf9eb1593b",
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:4e5371e6e55b47e9"
+  ],
+  "section": "ae0a5605f51e7f36",
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Inner court (private / sacred)#kitchen abuts the house, no corridor": {
+  "code": "36b37305874a929b",
+  "core": "ae0a5605f51e7f36",
+  "date": "2026-10-10",
+  "note": "middle and lower-ranking samurai houses had almost no corridors; one block; the kitchen projects from one side.",
+  "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
+  },
+  "research": "cde11191e2ae3f5f",
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:4adcc0fb43fa63e7",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
+  ],
+  "section": "ae0a5605f51e7f36",
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Inner court (private / sacred)#reception at one end": {
   "code": "74d3a6c7280692cf",
   "core": "820eca0d767c15d3",
@@ -2558,9 +2590,9 @@
  },
  "docs/buildings.md::Inner court (private / sacred)#residence massing": {
   "code": "4dbd11fc36586ba9",
-  "core": "820eca0d767c15d3",
+  "core": "ae0a5605f51e7f36",
   "date": "2026-10-10",
-  "note": "one block under one roof, or echelon for a house added to over generations; the choice is made per sheet by its story",
+  "note": "both forms attested and chosen per sheet.",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
@@ -2571,10 +2603,29 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:4adcc0fb43fa63e7",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:983ac19a67796e47",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d59d56dfc182e6ec"
   ],
-  "section": "820eca0d767c15d3",
-  "triage": "touched",
+  "section": "ae0a5605f51e7f36",
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Inner court (private / sacred)#residence of about six rooms": {
+  "code": "7eaa95b17222b4a2",
+  "core": "ae0a5605f51e7f36",
+  "date": "2026-10-10",
+  "note": "the Kuchiba house, 41-74 tsubo, has six rooms all in one house.",
+  "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
+  },
+  "research": "cde11191e2ae3f5f",
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:953f1f83f0003148",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d59d56dfc182e6ec",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:dcabdf9948afb679",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:f7d5825ee9a50598"
+  ],
+  "section": "ae0a5605f51e7f36",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#room order": {
@@ -2583,9 +2634,9 @@
   "date": "2026-10-10",
   "note": "the procedure fixes only \"reception at one end\", which holds in both orders; the claim reports that the sheets so far take the palace order, as the drawing page records",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9c80f66513d917da"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
   },
-  "research": "849a899593053688",
+  "research": "599c1caf9eb1593b",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:67be3b248bb083d3",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d39a6c083ed2ffa",
@@ -2616,13 +2667,12 @@
  },
  "docs/buildings.md::Inner court (private / sacred)#suites as labeled zones": {
   "code": "f2c56de422606071",
-  "core": "820eca0d767c15d3",
+  "core": "ae0a5605f51e7f36",
   "date": "2026-10-10",
-  "note": "each label standing for a compressed suite is a drawing convention, as the drawing page records",
+  "note": "the drawing page calls a labeled room standing for a compressed suite a drawing convention.",
   "pages": {},
   "research": "",
-  "section": "820eca0d767c15d3",
-  "triage": "touched",
+  "section": "ae0a5605f51e7f36",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#the karo's own house as a lodging block inside the compound": {
@@ -2648,9 +2698,9 @@
   "date": "2026-10-10",
   "note": "the house stands on the north range with the garden on the sunny south before it and the north band behind it, a service strip or an alley, as the drawing page lays it out",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9c80f66513d917da"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
   },
-  "research": "849a899593053688",
+  "research": "599c1caf9eb1593b",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:5f6b53f63bb73ef0",
@@ -2796,9 +2846,9 @@
   "date": "2026-10-10",
   "note": "the formal garden on the south is attested, and the drawing page records the shady north band as the service strip, a GUESS reasoned from where the garden stood",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9c80f66513d917da"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
   },
-  "research": "849a899593053688",
+  "research": "599c1caf9eb1593b",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
