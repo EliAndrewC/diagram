@@ -698,6 +698,21 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Wells#bath-area well",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "'the kitchen well usually serves the bath' is 0105's drawing page's own reading: label GUESS research/questions/0105-baths-furo.drawing.html; the optional fourth well 'only for very large compounds' is its own UNRESEARCHED claim",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 108's impl-drift of the wells claims resting on 0105 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt distance upwind",
   "verdict": "NEEDS-RESEARCH",
   "tier": "E0",
@@ -4320,6 +4335,21 @@
   "verdict": "DRIFTED",
   "wave": "2",
   "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Wells#kitchen well",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the section puts the kitchen well inside or immediately adjacent to the kitchen, but 0105's drawing page puts it past the bath, as far as 20 ft out from the kitchen; follow the drawing page and label it GUESS research/questions/0105-baths-furo.drawing.html",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 108's impl-drift of the wells claims resting on 0105 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas",

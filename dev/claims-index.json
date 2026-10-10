@@ -1471,17 +1471,15 @@
   "code": "c7a96e1e696636c3",
   "core": "07162988ea2a9227",
   "date": "2026-10-10",
-  "note": "the kitchen well with the bath is recorded as the project's reading",
+  "note": "the kitchen well kept with the kitchen and bath is the drawing page's own reading (\"that the one well also filled the bath is our reading\"), so GUESS is the right label; 0091 places no kitchen's well",
   "pages": {
-   "0105-baths-furo.drawing.html": "71e214c6f51783fd"
+   "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
   },
-  "research": "c1e9191087fe7677",
+  "research": "c93529d7938119b7",
   "rests": [
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Adding a building type#type workflow": {
@@ -3813,18 +3811,17 @@
  "docs/buildings.md::Wells#bath-area well": {
   "code": "f7df90d7f5712cf1",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-08",
-  "note": "the kitchen's well serves the bath",
+  "date": "2026-10-10",
+  "note": "\"the kitchen well usually serves the bath\" is a reading the drawing page records as its own (\"our reading, not something the list says\"), so the label should be GUESS research/questions/0105-baths-furo.drawing.html. The optional fourth well \"only for very large compounds\" is something the page says nothing about and should be its own UNRESEARCHED claim",
   "pages": {
-   "0105-baths-furo.drawing.html": "71e214c6f51783fd"
+   "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
   },
-  "research": "c1e9191087fe7677",
+  "research": "c93529d7938119b7",
   "rests": [
+   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Wells#garden well": {
   "code": "4acd79d4af94df79",
@@ -3839,20 +3836,19 @@
  "docs/buildings.md::Wells#kitchen well": {
   "code": "43758fcf084e6538",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-08",
-  "note": "a well with the kitchen, inside or beside it",
+  "date": "2026-10-10",
+  "note": "the section puts the kitchen well \"inside or immediately adjacent to the kitchen building\", but 0105's drawing page puts it \"Past the bath, as far as 20 ft out from the kitchen\" (the bath abuts the kitchen). 0091 places no kitchen's well, and the drawing page calls keeping the three together \"our reading\". The placement should follow the drawing page, and the label should be GUESS research/questions/0105-baths-furo.drawing.html",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
-   "0105-baths-furo.drawing.html": "71e214c6f51783fd"
+   "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
   },
-  "research": "2134d8d866137050",
+  "research": "d6adb6196011c9f7",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:6218744dea5fe01d",
+   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Wells#stables well": {
   "code": "16bed03fee167c19",
