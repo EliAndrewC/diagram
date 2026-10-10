@@ -134,6 +134,10 @@ def is_new(top: str, rel: str) -> bool:
     """Is this `specs/NNN-slug/spec.md` a new feature, rather than one HEAD already holds (at this path or renumbered)?"""
     if _git(top, "cat-file", "-e", f"HEAD:{rel}").returncode == 0:
         return False
+    # GUARD_EDIT_OK: a MERGE brings main's features in - feature 370's sync-in merged 377 itself and the guard refused the
+    # merge commit; a spec the merge's other side already holds was filed (and approved) where it was written, not here
+    if _git(top, "cat-file", "-e", f"MERGE_HEAD:{rel}").returncode == 0:
+        return False
     renamed = _git(top, "diff", "--cached", "-M", "--name-status").stdout.splitlines()
     if any(ln.startswith("R") and ln.split("\t")[-1] == rel for ln in renamed):
         return False

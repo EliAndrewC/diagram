@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "a1e5f51a0",
+    "label": "370-start",
+    "utc": "20261010T183200Z"
+  },
+  "binding": "0a13c10b19fe9541b636224ebe9373f0fe400c9e3c95f430d0178fb4f3ed2b5f",
+  "end": {
+    "commit": "e9a10bfb2",
+    "label": "370-end",
+    "utc": "20261010T194031Z"
+  },
+  "environment": "local",
+  "feature": "370-function-length-gate",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "5d1e3e39-ce66-4b5b-9848-fd9450c57988",
+    "utc": "20261010T204502Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -43.5,
+          "39": -40.0,
+          "4": -37.0,
+          "47": -35.7
+        },
+        "total_pct": -38.9
+      },
+      "20": {
+        "seeds": {
+          "25": -28.7,
+          "39": -33.7,
+          "4": -24.5,
+          "47": -18.8
+        },
+        "total_pct": -26.5
+      },
+      "40": {
+        "seeds": {
+          "25": -15.4,
+          "39": 14.2,
+          "4": -19.8,
+          "47": -4.4
+        },
+        "total_pct": -9.1
+      }
+    },
+    "seeds": {
+      "25": -49.4,
+      "39": -26.0,
+      "4": -22.0,
+      "47": -22.6
+    },
+    "total_pct": -32.0
+  },
+  "note": "seed 39 at 40hh, homesteads/windbreak/hinterland: end cell 15.3s vs the 328 series 10.4-12.1s at the same 158 placer calls and 40 houses (stages 5.23/2.25/1.92 vs quiet ~3.56/1.38/1.25); control perf-audit-seed39-40hh-ab CPU stage medians at end 3.56/1.36/1.25 sit on the quiet values, end/start 0.986, so the growth is load and the l7r diff (function lifts plus merged 375/377) adds no work. The explanation's 25.6s start total shows the session was loaded but is the other leg; the end cell's own inflation and the A/B carry the attribution",
+  "verdict": "consistent"
+}

@@ -608,6 +608,25 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             if tub:
                 tubs.append(tub)
     _roji_parts(program, result, taken, rect, parts, ox, oy)
+    _draw_point_parts(env, wells, privies, tubs, taken, rect, caption, parts, ox, oy)
+    return parts
+
+
+def _draw_point_parts(
+    env: Envelope,
+    wells: list[tuple[float, float]],
+    privies: list[tuple[float, float, str]],
+    tubs: list[tuple[float, float]],
+    taken: list[Box],
+    rect: Callable[..., str],
+    caption: Callable[..., str],
+    parts: list[str],
+    ox: float,
+    oy: float,
+) -> None:
+    """Draw the point features `_point_features` seated - the wells, the privies with their hatches, the fire-water
+    tubs under one caption, and the notice board by the gate (lifted out of it by feature 370, the 100-statement cap;
+    same order, so the same ink and the same caption seats)."""
     for cx, cy in wells:
         parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
         caption("point", cx - 3.65, cy - 3.65, 7.3, 7.3, "well", 8, True, "#3A2E1C", "well")
@@ -632,7 +651,6 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     assert board_by_the_gate(env, (gl - 14.0, env.h_ft + 3.0, gl - 8.0, env.h_ft + 4.5)), "the board stands 8 ft west of the gate, by construction"
     parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))
     caption("point", gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "notice board", 7, True, "#3A2E1C", "notice board")
-    return parts
 
 
 def _roji_parts(program: CompoundProgram, result: PlaceResult, taken: list[Box], rect: Callable[..., str], parts: list[str], ox: float, oy: float) -> None:

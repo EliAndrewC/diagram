@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "a1e5f51a0",
+    "label": "370-start",
+    "utc": "20261010T183200Z"
+  },
+  "binding": "0a13c10b19fe9541b636224ebe9373f0fe400c9e3c95f430d0178fb4f3ed2b5f",
+  "criteria": {
+    "commensurate": "Measured cost about zero against a lint-driven, behavior-preserving refactor. The stages the report says grew (homesteads +1.0, windbreak +0.5, hinterland +0.2 s) are flat or lower at the end commit under equal conditions: medians homesteads 3.66 to 3.56, windbreak 1.42 to 1.36, hinterland 1.28 to 1.25 s. The bookend +14.2% (13.4 to 15.3 s) is inferred to be load. Both bookends sit off this machine history: the 328 series had TOTAL 16.5-17.5 s and 40/39 at 10.4-12.4 s, while 370-start had TOTAL 25.6 s (40/4 25.8 vs about 17) and 370-end had 40/4 20.7, 40/25 16.5 and 40/47 17.4 vs about 17.3/13.5/13.0. The -32% TOTAL and -9.1% at 40 households are the same artifact in reverse, not a speedup.",
+    "necessary": "The flagged cost does not exist when measured. The work is necessary in its own right: spec 370 FR-001/FR-002 cap functions at 100 statements, so the 12 over-cap functions had to be split, with the pool byte-identical. The 40-household seed 39 roll does identical work at both commits (placer_calls 158 and 158, houses 40 and 40). Reviewer counterfactual: detached worktrees at a1e5f51a0 (370-start) and e9a10bfb2 (370-end), seed 39 at 40 households, 6 interleaved ABBA pairs, per-stage process CPU time. Median CPU start 12.74 s vs end 12.51 s; paired end/start median 0.986 (all six 0.92-1.00); wall medians 10.99 vs 10.66 s.",
+    "no_way_around": "None needed, since there is no cost to avoid. The split adds call boundaries but no per-candidate scans, and placer_calls are unchanged; CPU time shows the added calls are not measurable at this resolution (end/start 0.986). No profile was taken because there is no growth to locate. Caveat: the bookends record no load figure, and their load is inferred from the whole-run totals above. Load average was about 10 on 22 cpus when this audit began and 2-6 during its runs, so a re-taken 370-end on a quiet machine would bring the recorded band back in line."
+  },
+  "end": {
+    "commit": "e9a10bfb2",
+    "label": "370-end",
+    "utc": "20261010T194031Z"
+  },
+  "environment": "local",
+  "feature": "370-function-length-gate",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "5d1e3e39-ce66-4b5b-9848-fd9450c57988",
+    "utc": "20261010T204223Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -43.5,
+          "39": -40.0,
+          "4": -37.0,
+          "47": -35.7
+        },
+        "total_pct": -38.9
+      },
+      "20": {
+        "seeds": {
+          "25": -28.7,
+          "39": -33.7,
+          "4": -24.5,
+          "47": -18.8
+        },
+        "total_pct": -26.5
+      },
+      "40": {
+        "seeds": {
+          "25": -15.4,
+          "39": 14.2,
+          "4": -19.8,
+          "47": -4.4
+        },
+        "total_pct": -9.1
+      }
+    },
+    "seeds": {
+      "25": -49.4,
+      "39": -26.0,
+      "4": -22.0,
+      "47": -22.6
+    },
+    "total_pct": -32.0
+  },
+  "note": "Reviewer numbers: seed 39 at 40 households, both legs in detached worktrees, 12 interleaved rolls in ABBA order, CPU per stage. A first wall-clock pass under load 3-6 was inconclusive (within-leg range 10.7-15.8 s; minima start 10.7, end 10.8). The 375/377 code that the merge brought in is in the end leg and is not separated out; the combined end commit is not slower. The GM D5 acceptance (2026-10-10) is context only; this verdict rests on the reviewer runs. No explanation record exists for this pair, so no confirmation was written.",
+  "verdict": "justified"
+}

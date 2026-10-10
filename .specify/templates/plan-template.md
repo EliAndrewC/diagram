@@ -130,10 +130,11 @@ approval before /speckit-tasks may run.
   2026-09-08): the plan MUST say which index answers it (a grid, a ring
   index, an outline of the blocked ground, built once) and MUST NOT walk
   every item on the map per candidate. Functions stay at human scale
-  (clause 12): a plan whose implementation would grow any function past a
-  few hundred logical statements MUST say so and justify it, and past
-  ~1,000 the function carries an inline justification annotation or gets
-  split - measured in statements/expressions, never raw lines. Files
+  (clause 12): no function past 100 statements, ruff's count (`PLR0915`,
+  held by `check-function-cap.py` at the gate and the push) - a plan whose
+  implementation would grow one past it says how it is split into parts at
+  module or class level, or why the body must remain one (`# noqa: PLR0915
+  <why>` on its `def` line), measured in statements, never raw lines. Files
   stay at human scale too (clause 13, test files included): a plan
   whose implementation
   would grow any source or test file past ~1,000 raw lines MUST say so and
