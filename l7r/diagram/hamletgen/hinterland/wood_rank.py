@@ -51,6 +51,9 @@ def field_height_near(p: Pt, fall: Pt, edge: FieldEdge, beside: float = FIELD_BE
     nearest point stood 53 ft below a wood whose paddy beside it ran up past its top). With no field ground within
     `FIELD_REACH_PX`, -inf (every seat stands above it).
 
+
+    Research:
+        how far beside reaches - GUESS: FIELD_BESIDE_FT, 300 ft past the nearest edge point; no page gives a distance
     Research: higher than the fields beside it - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: on ground higher than the fields beside it"""
     import numpy as np  # bound here, not at import (feature 237)
 

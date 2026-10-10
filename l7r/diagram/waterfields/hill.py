@@ -55,6 +55,7 @@ def build_terraces(
         retaining wall form - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html: one lip drawn, no per-settlement stone wall or earth bank roll
         drain and outfall course - UNRESEARCHED: the drain descends 40 px along the foot, the outfall turns 66 px downhill, the brook runs 300 px straight downhill
         acreage scale - NONE: measured at a fixed 2 ft/px although `ftpx` is a parameter
+        cells per step - UNRESEARCHED: at least three, a cell floor of 24 px, split jitter 0.7
     """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))  # downhill unit
@@ -195,6 +196,8 @@ def build_ribbon(
         floor width waver - UNRESEARCHED: the valley floor's width wavers +/-10% on a 90 px period
         outfall and brook - UNRESEARCHED: an outfall stub 60 px and a brook 300 px straight downhill
         acreage scale - NONE: measured at a fixed 2 ft/px although `ftpx` is a parameter
+        cells across a band - UNRESEARCHED: at least two, a cell floor of 24 px, split jitter 0.6
+        supply down the upper brook - UNRESEARCHED: drawn only down the upper half of the valley brook
     """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))

@@ -31,7 +31,7 @@ longer needs is pruned (`tree.prune_the_tree`). This replaced the driver's re-ro
 THE CROSSINGS ARE SQUARED HERE (ways W11): the squaring `stage_crossings` did after the woods now runs as this pass's first
 step, so every guarantee below is judged on the squared lane and no stage after the web rewrites one.
 
-Research: settle plumbing - NONE: rounds, step order and bookkeeping; each rule is claimed at its predicate in law.py"""
+Research: settle plumbing - NONE: rounds, step order and bookkeeping; each rule is claimed at its predicate in law.py, and a split piece's room and width at `apply_pieces`"""
 
 from __future__ import annotations
 
@@ -90,6 +90,10 @@ def _rounded(p: Poly) -> list[list[float]]:
 
 def apply_pieces(s: Any, edits: Mapping[int, list[Poly]]) -> int:
     """Replace each lane `i` of `edits` by its pieces - the first in place, record and ink together, the rest as new lanes of
+
+    Research:
+        split piece's room - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each split piece keeps WEB_CLEARANCE, 18 ft of lane room, whatever its source kept
+        split piece's width - research/questions/0081-village-lanes.drawing.html: a piece with no width is drawn 3 ft wide, a footpath
     the same width and kind - and drop a lane left with no piece of 1 ft or more. Returns the lanes changed."""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     drops = []

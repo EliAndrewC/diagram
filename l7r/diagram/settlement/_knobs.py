@@ -316,7 +316,7 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     claim that a hamlet had no such official.
 
     Research:
-        seats a settlement can site - research/questions/0190-notice-boards-kosatsuba.drawing.html: center always, entrance with an approach, frontage with a headman's house
+        seats a settlement can site - research/questions/0190-notice-boards-kosatsuba.html: a board at the center, at an entrance with an approach, on a frontage by a headman's house
         bridgehead and shrine withheld - research/questions/0190-notice-boards-kosatsuba.drawing.html: absent from the value space
     """
     if v == "center":

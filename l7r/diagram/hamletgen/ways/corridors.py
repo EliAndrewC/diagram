@@ -338,9 +338,11 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
 
     Research:
         off the crop and marsh - research/questions/0081-village-lanes.drawing.html: the field, the dry hem and the marsh hard
-        across ground cover - UNRESEARCHED: the commons and the groves are not walls to a path
+        across the groves - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees
+        across the commons - UNRESEARCHED: the commons are not a wall to a path
         the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the
+        a defense marsh is no wall - UNRESEARCHED: a marsh kept for defense is not a wall to the field way
             path's own dooryard"""
     M = s.M
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]

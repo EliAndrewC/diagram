@@ -308,6 +308,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
         end carried on to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html
         lane serving nothing dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is the only link in the web
         a tail kept as a house's only way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never for a household reached across a neighbor's land, owed none (`geom.lane_houses`)
+        connector at the gate kept - UNRESEARCHED: a connector starting at the way out's gate is never trimmed
     """
     _final_houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     _owed = lane_houses(s.M)  # the houses a lane may be kept as the only way to
@@ -540,11 +541,12 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         web lanes off the hard ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: a stretch that would cross the field, a crop or wet ground is cut out
         web lane margin off the hard ground - DEVIATION research/questions/0081-village-lanes.drawing.html: the page lets a lane touch a plot's boundary; WEB_HARD_GAP keeps a web lane 8 ft off the field, the crop and the marsh
         a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
-        ground cover is not fabric - UNRESEARCHED: a lane may cross grazing scrub and run along a tree belt; the commons and the village groves are left out of the fabric it routes round
+        ground cover is not fabric - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses a tree belt and the planting resumes on both sides
+        scrub and commons crossed - UNRESEARCHED: a lane may cross grazing scrub and the commons; the village groves are left out of the fabric it routes round
         a further row street's end - UNRESEARCHED: it ends at its outermost joint or at its last farm's door (`trim_streets`, `_TOUCH_GAP` and the door's offset)
         web lanes off the water - UNRESEARCHED: web cuts and joins clipped at the watercourses and drawn channels, no web lane crossing water
         orphan stub joined - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, so a stranded stub is joined into it
-        orphan stub's reach - CONVENTION: within `_STUB_REACH_FT`, 25 ft, research/questions/0081-village-lanes.drawing.html's join reach, which that page calls a drawing convention
+        orphan stub's reach - research/questions/0081-village-lanes.drawing.html: within `_STUB_REACH_FT`, 25 ft, the page's join reach, a stub is joined into the network
         web lanes routed round the households' reserved wood seats as fabric - UNRESEARCHED: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain

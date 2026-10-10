@@ -88,6 +88,7 @@ class FuneraryGroundsMixin:
             keep-clear margin - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: no cleared band; other features placed without regard to it
             caption - CONVENTION
             six jizo at its entrance - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: at a burial ground's entrance; the code draws them only on a cremation ground's rim (the found row funerary.py::cremation_ground#six jizo at a burial ground's entrance fixes it)
+            stupa and its seats - UNRESEARCHED: a stupa 13 px tall at the rear corners of a ruled plot, inside an organic one
         """
         if organic is None:
             organic = not parish
@@ -259,6 +260,7 @@ class FuneraryGroundsMixin:
             ragged outline, bed off center - CONVENTION
             keep-clear margin - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: no fire clearance drawn around a pyre; its 120 ft from houses and wells held where it is seated
             pyre ground unwalled - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html: the pyre stands in a walled yard; drawn as an open ragged ground, no wall
+            jizo size - research/questions/0235-village-burial-grounds-bochi.drawing.html: about 2 ft tall, drawn 2.0 by 2.7 ft at a 1.4-width pitch
         """
         # TO SCALE (GM 2026-07-19; anchors in research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html): a sanmai's cleared working core is
         # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial

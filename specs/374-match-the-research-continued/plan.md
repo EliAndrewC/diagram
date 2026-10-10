@@ -143,13 +143,17 @@ The dispatches per closed row of T01-T03 (four rows), from the same report, besi
 
 ## Batch 2 (T06-T09): the claims labeled as the record has them
 
-**The work list read from the claims report** (`make claims-report`, 2026-10-10): 195 in-scope findings - DRIFTED 119,
-MISLABELED 28, UNCLAIMED 21, NEEDS-RESEARCH 16, CANNOT-TELL 11. 328's ranking is stale against it (rows re-checked since: the
-room order and the senior retainers' rows read IN-STEP now, closed by later relabels), and the spec's end state is the report's
-(SC-003), so batches from here take the report's findings, the cheapest first as 328's tiers did: this batch the 28
-MISLABELED, the 21 UNCLAIMED and the 11 CANNOT-TELL - claim labels, new claims and fuller re-checks, no drawn change. A finding
-whose fix is a drawn change (the compound shrine's grove, `#grove inside a compound wall`) waits for the wave that redraws it.
-Docstring and comment edits change no engine key (the gate's short-circuit), so no map moves and no review occasion is owed.
+**The work list** stays 328's ranking (FR-001), brought current with the claims report (`make claims-report`, 2026-10-10:
+DRIFTED 119, MISLABELED 28, UNCLAIMED 21, NEEDS-RESEARCH 16, CANNOT-TELL 11). The ranking had gone stale against it both ways:
+26 of its open rows read IN-STEP now (closed by later relabels - the room order and the senior retainers' rows among them),
+closed by that re-check and marked wave 115 in `audit/waves.json`; and 56 of the report's findings were not in it, added as
+found rows (`audit/found-wave115.jsonl`, tiered E0 for a label, E1 for a re-check, E3 for a drift, E4 for a research question)
+and the ranking rebuilt (`audit/merge.py`): 224 open rows. The 34 open rows that are no claim at all - review and cohort
+findings, Sawada's zigzag, the 20/40-household reach rows, the held door band - stay on the list under T99. This batch takes the
+cheapest tier first, as 328's did: the MISLABELED, UNCLAIMED and CANNOT-TELL claims - labels, new claims, fuller re-checks, no
+drawn change. A finding whose fix is a drawn change (the compound shrine's grove) or a code change (a label the code
+contradicts) waits for the wave that makes it. Docstring and comment edits change no engine key (the gate's short-circuit), so no
+map moves and no review occasion is owed.
 
 ### Wave 115 (T06) - the procedures' four relabels
 

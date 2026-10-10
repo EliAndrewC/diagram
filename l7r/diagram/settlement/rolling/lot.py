@@ -223,6 +223,7 @@ def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[t
     Research:
         quota, record and registry plumbing - NONE: the k-th plain household takes lot k; the parts set on the settlement for the seat search
         a role household gets no byre and no farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: a household with a role (the headman) takes no lot, so no stall and no fixtures, where 0028 says a headman's carries several
+        watered seats for plain households - UNRESEARCHED: only plain households are held to watered seats and given a well pocket
     """
     lots = getattr(s, "_lots", None)
     k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")

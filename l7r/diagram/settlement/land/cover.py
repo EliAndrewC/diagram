@@ -343,6 +343,9 @@ class GroundCoverMixin:
         made - so the scan that offers a parcel and the commons that stocks it read one answer: a parcel whose room is
         under `WOODLAND_MIN_CROWNS` is not offered, and a parcel whose throws seat fewer is stocked from its room.
 
+
+        Research:
+            crowns on a lattice - CONVENTION: crowns seated on a regular square lattice at the page's density
         Research: coppice stocking grid - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown every COMMONS_SPACING_FT on dry ground, none under another"""
         xs, ys = [float(q[0]) for q in poly], [float(q[1]) for q in poly]
         x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
