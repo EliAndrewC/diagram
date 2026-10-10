@@ -93,6 +93,24 @@ def hamlet_path(root: Path) -> set[str]:
     return {str(p.relative_to(root)) for p in claims.scope(root).values()}
 
 
+def outside_quick(root: Path) -> set[str]:
+    """Engine files whose tests live where the quick tier never runs - a `tooling`-marked module under `tests/tools/`, or a
+    town or city tier test - found by the mirrored layout (`tests/<tree>/a/test_b.py` tests `l7r/diagram/a/b.py`). A line only
+    those reach is the gate's to judge (the plan review of amendment 2: `citybudget.py`'s lines 358 and 432, the audits)."""
+    out: set[str] = set()
+    tests = list((root / "tests" / "tier_town").rglob("test_*.py")) + list((root / "tests" / "tier_city").rglob("test_*.py"))
+    tests += [t for t in (root / "tests" / "tools").glob("test_*.py") if "pytestmark = pytest.mark.tooling" in t.read_text(encoding="utf-8")]
+    for t in tests:
+        rel = t.relative_to(root / "tests").parts[1:] if t.parts[-2] != "tools" or "tier_" in str(t) else ("tools", t.name)
+        stem = Path(*rel[:-1], rel[-1][len("test_"):-len(".py")])
+        for cand in (Path("l7r/diagram") / f"{stem}.py", Path("l7r/diagram") / stem / "__init__.py"):
+            if (root / cand).is_file():
+                out.add(str(cand))
+        if (root / "l7r/diagram" / stem).is_dir():
+            out.update(str(f.relative_to(root)) for f in (root / "l7r/diagram" / stem).rglob("*.py"))
+    return out
+
+
 def coverage_step(root: Path, changed: dict[str, set[int]], workers: str) -> tuple[dict[str, list[int]], dict[str, list[int]]]:
     """(off-path uncovered lines, on-path uncovered lines) from one quick-tree run with coverage over the changed files."""
     if not changed:
@@ -108,7 +126,7 @@ def coverage_step(root: Path, changed: dict[str, set[int]], workers: str) -> tup
         subprocess.run(cmd, cwd=root, capture_output=True, text=True, check=False, env=env)
         cov = json.loads(report.read_text(encoding="utf-8")) if report.is_file() else {}
     gaps = uncovered(cov, changed)
-    path = hamlet_path(root) if gaps else set()
+    path = (hamlet_path(root) | outside_quick(root)) if gaps else set()  # where a test the quick tier skips may reach a line
     return {f: v for f, v in gaps.items() if f not in path}, {f: v for f, v in gaps.items() if f in path}
 
 
@@ -189,7 +207,7 @@ def main(argv: list[str] | None = None) -> int:
         prev = t
     print("preflight: " + ", ".join(steps))
     for f, ls in sorted(on.items()):
-        print(f"preflight: {f} lines {ls[:12]} - no quick test runs them; on the hamlet path, so a rolled map may (the gate's floor judges)")
+        print(f"preflight: {f} lines {ls[:12]} - no quick test runs them; a rolled map or a test the quick tier skips may (the gate's floor judges)")
     if off:
         for f, ls in sorted(off.items()):
             print(f"preflight: {f} lines {ls[:12]} - changed, run by no quick test, and off the hamlet path: only a unit test covers them")

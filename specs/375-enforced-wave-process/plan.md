@@ -241,8 +241,10 @@ delivers D12, D13, D14 and D17 as planned.
 a gate where a red it prevents costs a whole one; (2) "100% on each" changed engine file is judged on the CHANGED LINES, and
 stops only on a line OFF the hamlet path (`tools/claims.scope`): a line on the path may be reached only by a rolled map, which
 the preflight does not roll, so it is reported and left to the gate's floor; and `ci/`, which the project counts as no engine
-code (feature 132 FR-025) and tests only in the tooling tree, is left to the gate. `PREFLIGHT_OK=1` skips the phase when the
-session has just run `make preflight`. The tree check excludes the tracked files the gate itself writes (`GATE_WRITES`,
+code (feature 132 FR-025) and tests only in the tooling tree, is left to the gate. `PREFLIGHT_OK="<reason>"` skips the phase,
+reason-floored and recorded in the guard census through LOGESCAPE - the sixth escape. A changed line in a module tested
+only where the quick tier does not run (a `tooling`-marked test under `tests/tools/`, a town or city tier test - found by the
+mirrored layout) is reported and left to the gate's floor, as a hamlet-path line is. The tree check excludes the tracked files the gate itself writes (`GATE_WRITES`,
 measured on this batch's gate run). D13's list of features closed when the check landed includes 372, closed by its ticks.
 
 A later spec that
