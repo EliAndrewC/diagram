@@ -1,0 +1,247 @@
+[
+ {
+  "group": "269:diagram-supplemental:c3",
+  "start": "2026-09-28T04:21",
+  "sessions": 3,
+  "kinds": {
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 7,
+  "things": 12,
+  "total": 6413446,
+  "main": 5198894,
+  "agents": 1214552,
+  "peak": 68583,
+  "per_thing": 534453.8333333334,
+  "complete": false
+ },
+ {
+  "group": "269:diagram-supplemental:c4a",
+  "start": "2026-09-28T04:36",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 6,
+  "things": 11,
+  "total": 11427498,
+  "main": 9813978,
+  "agents": 1613520,
+  "peak": 159179,
+  "per_thing": 1038863.4545454546,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:c4b",
+  "start": "2026-09-28T05:07",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 3,
+  "things": 5,
+  "total": 7697204,
+  "main": 6900749,
+  "agents": 796455,
+  "peak": 130473,
+  "per_thing": 1539440.8,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:x1a",
+  "start": "2026-09-28T05:24",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 4,
+  "things": 8,
+  "total": 8553084,
+  "main": 7550604,
+  "agents": 1002480,
+  "peak": 186190,
+  "per_thing": 1069135.5,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:x1b",
+  "start": "2026-09-28T05:46",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 3,
+  "things": 7,
+  "total": 10801771,
+  "main": 10098329,
+  "agents": 703442,
+  "peak": 172849,
+  "per_thing": 1543110.142857143,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:x1c",
+  "start": "2026-09-28T06:16",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 5,
+  "things": 7,
+  "total": 4089375,
+  "main": 3452720,
+  "agents": 636655,
+  "peak": 101742,
+  "per_thing": 584196.4285714285,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fx1",
+  "start": "2026-09-28T07:33",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 2,
+  "things": 7,
+  "total": 13045494,
+  "main": 11788140,
+  "agents": 1257354,
+  "peak": 201706,
+  "per_thing": 1863642.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fx2",
+  "start": "2026-09-28T08:02",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 6106167,
+  "main": 4646836,
+  "agents": 1459331,
+  "peak": 85677,
+  "per_thing": 1526541.75,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fx3",
+  "start": "2026-09-28T08:16",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 0,
+  "things": 3,
+  "total": 3210237,
+  "main": 2894882,
+  "agents": 315355,
+  "peak": 94434,
+  "per_thing": 1070079.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fx4",
+  "start": "2026-09-28T08:27",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 0,
+  "k": 3,
+  "things": 4,
+  "total": 2172156,
+  "main": 1738109,
+  "agents": 434047,
+  "peak": 60678,
+  "per_thing": 543039.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:sp1",
+  "start": "2026-09-28T08:33",
+  "sessions": 7,
+  "kinds": {
+   "write": 1,
+   "check": 6
+  },
+  "q": 11,
+  "m": 0,
+  "k": 0,
+  "things": 11,
+  "total": 20967844,
+  "main": 17170926,
+  "agents": 3796918,
+  "peak": 159406,
+  "per_thing": 1906167.6363636365,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:sp2",
+  "start": "2026-09-28T09:29",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 8,
+  "m": 0,
+  "k": 0,
+  "things": 8,
+  "total": 10864339,
+  "main": 9135812,
+  "agents": 1728527,
+  "peak": 100907,
+  "per_thing": 1358042.375,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fin",
+  "start": "2026-09-28T09:56",
+  "sessions": 7,
+  "kinds": {
+   "check": 7
+  },
+  "q": 14,
+  "m": 0,
+  "k": 0,
+  "things": 14,
+  "total": 13540464,
+  "main": 9658048,
+  "agents": 3882416,
+  "peak": 89614,
+  "per_thing": 967176.0,
+  "complete": false
+ }
+]

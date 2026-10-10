@@ -1,0 +1,1509 @@
+[
+ {
+  "group": "250:diagram-research-1:urban-features",
+  "start": "2026-09-27T05:00",
+  "sessions": 1,
+  "kinds": {
+   "check": 1
+  },
+  "q": 7,
+  "m": 0,
+  "k": 7,
+  "things": 14,
+  "total": 1645573,
+  "main": 1330898,
+  "agents": 314675,
+  "peak": 70358,
+  "per_thing": 117540.92857142857,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:buildings",
+  "start": "2026-09-27T05:05",
+  "sessions": 3,
+  "kinds": {
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 5,
+  "things": 11,
+  "total": 6470618,
+  "main": 5129205,
+  "agents": 1341413,
+  "peak": 91196,
+  "per_thing": 588238.0,
+  "complete": false
+ },
+ {
+  "group": "267:diagram-buildings:g1b",
+  "start": "2026-09-27T05:11",
+  "sessions": 3,
+  "kinds": {
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 18,
+  "things": 24,
+  "total": 7239756,
+  "main": 5652468,
+  "agents": 1587288,
+  "peak": 108767,
+  "per_thing": 301656.5,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-1:split-urban-features-080",
+  "start": "2026-09-27T05:23",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 0,
+  "k": 0,
+  "things": 0,
+  "total": 994375,
+  "main": 994375,
+  "agents": 0,
+  "peak": 64047,
+  "per_thing": null,
+  "complete": false
+ },
+ {
+  "group": "267:diagram-buildings:g2",
+  "start": "2026-09-27T05:24",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 8,
+  "m": 0,
+  "k": 20,
+  "things": 28,
+  "total": 16436936,
+  "main": 14151200,
+  "agents": 2285736,
+  "peak": 211182,
+  "per_thing": 587033.4285714285,
+  "complete": true
+ },
+ {
+  "group": "250:diagram-research-1:split-homesteads-140",
+  "start": "2026-09-27T05:25",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 0,
+  "k": 0,
+  "things": 0,
+  "total": 640750,
+  "main": 640750,
+  "agents": 0,
+  "peak": 51874,
+  "per_thing": null,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-1:split-urban-features-010",
+  "start": "2026-09-27T05:28",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 0,
+  "k": 0,
+  "things": 0,
+  "total": 606682,
+  "main": 606682,
+  "agents": 0,
+  "peak": 58028,
+  "per_thing": null,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:cities-capitals",
+  "start": "2026-09-27T05:29",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 8,
+  "m": 0,
+  "k": 0,
+  "things": 8,
+  "total": 14363846,
+  "main": 12207091,
+  "agents": 2156755,
+  "peak": 136091,
+  "per_thing": 1795480.75,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:h1",
+  "start": "2026-09-27T05:56",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 9,
+  "things": 15,
+  "total": 17539681,
+  "main": 15334084,
+  "agents": 2205597,
+  "peak": 266031,
+  "per_thing": 1169312.0666666667,
+  "complete": true
+ },
+ {
+  "group": "267:diagram-buildings:g3",
+  "start": "2026-09-27T06:01",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 8,
+  "things": 14,
+  "total": 13250790,
+  "main": 12002145,
+  "agents": 1248645,
+  "peak": 190900,
+  "per_thing": 946485.0,
+  "complete": true
+ },
+ {
+  "group": "250:diagram-research-1:split-fields-070",
+  "start": "2026-09-27T06:58",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 0,
+  "k": 0,
+  "things": 0,
+  "total": 952084,
+  "main": 952084,
+  "agents": 0,
+  "peak": 69712,
+  "per_thing": null,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-2:owed-archetypes-2",
+  "start": "2026-09-27T07:03",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 7,
+  "k": 0,
+  "things": 7,
+  "total": 850979,
+  "main": 693787,
+  "agents": 157192,
+  "peak": 43555,
+  "per_thing": 121568.42857142857,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:owed-fields-2",
+  "start": "2026-09-27T07:03",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 2,
+  "k": 0,
+  "things": 2,
+  "total": 230472,
+  "main": 185450,
+  "agents": 45022,
+  "peak": 25922,
+  "per_thing": 115236.0,
+  "complete": false
+ },
+ {
+  "group": "267:diagram-buildings:g3b",
+  "start": "2026-09-27T07:04",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 0,
+  "k": 11,
+  "things": 18,
+  "total": 17843700,
+  "main": 16121668,
+  "agents": 1722032,
+  "peak": 233072,
+  "per_thing": 991316.6666666666,
+  "complete": true
+ },
+ {
+  "group": "250:diagram-research-3:owed-homesteads-4",
+  "start": "2026-09-27T07:04",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 1,
+  "k": 0,
+  "things": 1,
+  "total": 224835,
+  "main": 203915,
+  "agents": 20920,
+  "peak": 25421,
+  "per_thing": 224835.0,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:owed-urban-features",
+  "start": "2026-09-27T07:05",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 0,
+  "m": 3,
+  "k": 0,
+  "things": 3,
+  "total": 571244,
+  "main": 509394,
+  "agents": 61850,
+  "peak": 59405,
+  "per_thing": 190414.66666666666,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-2:owed-archetypes-3",
+  "start": "2026-09-27T07:05",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 8,
+  "k": 0,
+  "things": 8,
+  "total": 657326,
+  "main": 488090,
+  "agents": 169236,
+  "peak": 44181,
+  "per_thing": 82165.75,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-2:owed-archetypes-4",
+  "start": "2026-09-27T07:07",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 7,
+  "k": 0,
+  "things": 7,
+  "total": 808888,
+  "main": 666444,
+  "agents": 142444,
+  "peak": 68011,
+  "per_thing": 115555.42857142857,
+  "complete": false
+ },
+ {
+  "group": "269:diagram-supplemental:v1",
+  "start": "2026-09-27T07:08",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 13,
+  "things": 19,
+  "total": 23216432,
+  "main": 17422053,
+  "agents": 5794379,
+  "peak": 226404,
+  "per_thing": 1221917.4736842106,
+  "complete": true
+ },
+ {
+  "group": "250:diagram-research-1:owed-buildings",
+  "start": "2026-09-27T07:12",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 0,
+  "m": 13,
+  "k": 0,
+  "things": 13,
+  "total": 1588784,
+  "main": 1351216,
+  "agents": 237568,
+  "peak": 90041,
+  "per_thing": 122214.15384615384,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:owed-buildings-6",
+  "start": "2026-09-27T07:12",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 11,
+  "k": 0,
+  "things": 11,
+  "total": 1152957,
+  "main": 953688,
+  "agents": 199269,
+  "peak": 72121,
+  "per_thing": 104814.27272727272,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-2:owed-urban-features-2",
+  "start": "2026-09-27T07:12",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 11,
+  "k": 0,
+  "things": 11,
+  "total": 1171367,
+  "main": 950358,
+  "agents": 221009,
+  "peak": 71969,
+  "per_thing": 106487.90909090909,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-2:owed-urban-features-3",
+  "start": "2026-09-27T07:14",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 7,
+  "k": 0,
+  "things": 7,
+  "total": 606427,
+  "main": 466015,
+  "agents": 140412,
+  "peak": 37026,
+  "per_thing": 86632.42857142857,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:owed-buildings-7",
+  "start": "2026-09-27T07:14",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 14,
+  "k": 0,
+  "things": 14,
+  "total": 1639013,
+  "main": 1380310,
+  "agents": 258703,
+  "peak": 84677,
+  "per_thing": 117072.35714285714,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-1:owed-buildings-2",
+  "start": "2026-09-27T07:15",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 11,
+  "k": 0,
+  "things": 11,
+  "total": 1129243,
+  "main": 931622,
+  "agents": 197621,
+  "peak": 73091,
+  "per_thing": 102658.45454545454,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-2:owed-towns",
+  "start": "2026-09-27T07:15",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 0,
+  "m": 4,
+  "k": 0,
+  "things": 4,
+  "total": 463960,
+  "main": 395446,
+  "agents": 68514,
+  "peak": 35878,
+  "per_thing": 115990.0,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-2:owed-ways",
+  "start": "2026-09-27T07:17",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 0,
+  "m": 3,
+  "k": 0,
+  "things": 3,
+  "total": 295605,
+  "main": 243372,
+  "agents": 52233,
+  "peak": 27754,
+  "per_thing": 98535.0,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:owed-buildings-8",
+  "start": "2026-09-27T07:17",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 12,
+  "k": 0,
+  "things": 12,
+  "total": 890009,
+  "main": 676360,
+  "agents": 213649,
+  "peak": 50057,
+  "per_thing": 74167.41666666667,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-1:owed-buildings-3",
+  "start": "2026-09-27T07:17",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 12,
+  "k": 0,
+  "things": 12,
+  "total": 1115220,
+  "main": 894099,
+  "agents": 221121,
+  "peak": 56418,
+  "per_thing": 92935.0,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:owed-buildings-9",
+  "start": "2026-09-27T07:18",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 13,
+  "k": 0,
+  "things": 13,
+  "total": 1188941,
+  "main": 956381,
+  "agents": 232560,
+  "peak": 55980,
+  "per_thing": 91457.0,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-1:owed-buildings-4",
+  "start": "2026-09-27T07:19",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 15,
+  "k": 0,
+  "things": 15,
+  "total": 1431986,
+  "main": 1141876,
+  "agents": 290110,
+  "peak": 66989,
+  "per_thing": 95465.73333333334,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-3:owed-buildings-10",
+  "start": "2026-09-27T07:20",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 7,
+  "k": 0,
+  "things": 7,
+  "total": 831557,
+  "main": 697830,
+  "agents": 133727,
+  "peak": 44403,
+  "per_thing": 118793.85714285714,
+  "complete": false
+ },
+ {
+  "group": "250:diagram-research-1:owed-buildings-5",
+  "start": "2026-09-27T07:22",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 9,
+  "k": 0,
+  "things": 9,
+  "total": 677546,
+  "main": 527752,
+  "agents": 149794,
+  "peak": 42250,
+  "per_thing": 75282.88888888889,
+  "complete": false
+ },
+ {
+  "group": "267:diagram-buildings:g4",
+  "start": "2026-09-27T07:49",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 15,
+  "things": 21,
+  "total": 14610967,
+  "main": 12356601,
+  "agents": 2254366,
+  "peak": 202808,
+  "per_thing": 695760.3333333334,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:h2",
+  "start": "2026-09-27T07:55",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 4,
+  "things": 7,
+  "total": 9837423,
+  "main": 8491376,
+  "agents": 1346047,
+  "peak": 153636,
+  "per_thing": 1405346.142857143,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:f1",
+  "start": "2026-09-27T08:18",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 5,
+  "k": 12,
+  "things": 24,
+  "total": 25513561,
+  "main": 22177391,
+  "agents": 3336170,
+  "peak": 246365,
+  "per_thing": 1063065.0416666667,
+  "complete": true
+ },
+ {
+  "group": "267:diagram-buildings:g5",
+  "start": "2026-09-27T08:30",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 11,
+  "things": 15,
+  "total": 8649246,
+  "main": 7337769,
+  "agents": 1311477,
+  "peak": 132438,
+  "per_thing": 576616.4,
+  "complete": true
+ },
+ {
+  "group": "267:diagram-buildings:g6",
+  "start": "2026-09-27T08:47",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 9,
+  "m": 0,
+  "k": 22,
+  "things": 31,
+  "total": 22614112,
+  "main": 20094335,
+  "agents": 2519777,
+  "peak": 237086,
+  "per_thing": 729487.4838709678,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:w1",
+  "start": "2026-09-27T09:06",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 3,
+   "finish": 1
+  },
+  "q": 5,
+  "m": 0,
+  "k": 15,
+  "things": 20,
+  "total": 18022265,
+  "main": 15545083,
+  "agents": 2477182,
+  "peak": 193755,
+  "per_thing": 901113.25,
+  "complete": true
+ },
+ {
+  "group": "267:diagram-buildings:g7",
+  "start": "2026-09-27T09:29",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 12,
+  "things": 16,
+  "total": 14777248,
+  "main": 13198778,
+  "agents": 1578470,
+  "peak": 242909,
+  "per_thing": 923578.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:f2",
+  "start": "2026-09-27T09:52",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 10,
+  "things": 15,
+  "total": 15853555,
+  "main": 14152600,
+  "agents": 1700955,
+  "peak": 220736,
+  "per_thing": 1056903.6666666667,
+  "complete": true
+ },
+ {
+  "group": "267:diagram-buildings:g8",
+  "start": "2026-09-27T10:01",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 3,
+  "things": 5,
+  "total": 4054114,
+  "main": 3491080,
+  "agents": 563034,
+  "peak": 88854,
+  "per_thing": 810822.8,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:v2",
+  "start": "2026-09-27T10:20",
+  "sessions": 7,
+  "kinds": {
+   "write": 1,
+   "check": 6
+  },
+  "q": 12,
+  "m": 0,
+  "k": 10,
+  "things": 22,
+  "total": 35862420,
+  "main": 29811744,
+  "agents": 6050676,
+  "peak": 274115,
+  "per_thing": 1630110.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:a1",
+  "start": "2026-09-27T12:00",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 9,
+  "m": 0,
+  "k": 9,
+  "things": 18,
+  "total": 19569800,
+  "main": 16768044,
+  "agents": 2801756,
+  "peak": 207099,
+  "per_thing": 1087211.111111111,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-2:v3",
+  "start": "2026-09-27T12:03",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 5,
+  "k": 17,
+  "things": 28,
+  "total": 25443239,
+  "main": 22975506,
+  "agents": 2467733,
+  "peak": 259801,
+  "per_thing": 908687.1071428572,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-1:v1",
+  "start": "2026-09-27T12:03",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 0,
+  "k": 12,
+  "things": 19,
+  "total": 21170338,
+  "main": 19340128,
+  "agents": 1830210,
+  "peak": 234871,
+  "per_thing": 1114228.3157894737,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-3:v6",
+  "start": "2026-09-27T12:03",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 16,
+  "things": 21,
+  "total": 21053175,
+  "main": 18937329,
+  "agents": 2115846,
+  "peak": 275148,
+  "per_thing": 1002532.1428571428,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-5:t3",
+  "start": "2026-09-27T12:05",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 8,
+  "m": 1,
+  "k": 16,
+  "things": 25,
+  "total": 26620386,
+  "main": 24565603,
+  "agents": 2054783,
+  "peak": 270052,
+  "per_thing": 1064815.44,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-4:t1",
+  "start": "2026-09-27T12:05",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 8,
+  "m": 1,
+  "k": 15,
+  "things": 24,
+  "total": 22614753,
+  "main": 20544613,
+  "agents": 2070140,
+  "peak": 259999,
+  "per_thing": 942281.375,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-2:v4",
+  "start": "2026-09-27T13:03",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 3,
+  "k": 26,
+  "things": 36,
+  "total": 36822386,
+  "main": 32639340,
+  "agents": 4183046,
+  "peak": 356622,
+  "per_thing": 1022844.0555555555,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-1:v2",
+  "start": "2026-09-27T13:04",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 12,
+  "things": 18,
+  "total": 22385938,
+  "main": 19613426,
+  "agents": 2772512,
+  "peak": 212851,
+  "per_thing": 1243663.2222222222,
+  "complete": true
+ },
+ {
+  "group": "272:diagram-shrines-1:s",
+  "start": "2026-09-27T13:05",
+  "sessions": 8,
+  "kinds": {
+   "write": 1,
+   "check": 7
+  },
+  "q": 14,
+  "m": 7,
+  "k": 16,
+  "things": 37,
+  "total": 46449595,
+  "main": 42229961,
+  "agents": 4219634,
+  "peak": 369378,
+  "per_thing": 1255394.4594594594,
+  "complete": true
+ },
+ {
+  "group": "272:diagram-shrines-2:r2",
+  "start": "2026-09-27T13:05",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 17,
+  "things": 22,
+  "total": 24027909,
+  "main": 21024518,
+  "agents": 3003391,
+  "peak": 303571,
+  "per_thing": 1092177.6818181819,
+  "complete": true
+ },
+ {
+  "group": "272:diagram-shrines-3:r4",
+  "start": "2026-09-27T13:05",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 29,
+  "things": 34,
+  "total": 28087804,
+  "main": 24821469,
+  "agents": 3266335,
+  "peak": 283665,
+  "per_thing": 826111.8823529412,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-5:t4",
+  "start": "2026-09-27T13:06",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 9,
+  "m": 0,
+  "k": 12,
+  "things": 21,
+  "total": 24551183,
+  "main": 21473913,
+  "agents": 3077270,
+  "peak": 257455,
+  "per_thing": 1169103.9523809524,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:r1",
+  "start": "2026-09-27T13:06",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 7,
+  "things": 13,
+  "total": 18358501,
+  "main": 15698190,
+  "agents": 2660311,
+  "peak": 210325,
+  "per_thing": 1412192.3846153845,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-3:w1",
+  "start": "2026-09-27T13:09",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 22,
+  "things": 27,
+  "total": 24279499,
+  "main": 21934530,
+  "agents": 2344969,
+  "peak": 314505,
+  "per_thing": 899240.7037037037,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-4:t2",
+  "start": "2026-09-27T13:15",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 10,
+  "m": 0,
+  "k": 11,
+  "things": 21,
+  "total": 24230075,
+  "main": 21349533,
+  "agents": 2880542,
+  "peak": 263244,
+  "per_thing": 1153813.0952380951,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-1:v7",
+  "start": "2026-09-27T16:44",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 0,
+  "k": 18,
+  "things": 25,
+  "total": 29988481,
+  "main": 27172310,
+  "agents": 2816171,
+  "peak": 273863,
+  "per_thing": 1199539.24,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-3:u1",
+  "start": "2026-09-27T16:47",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 9,
+  "m": 3,
+  "k": 20,
+  "things": 32,
+  "total": 24477803,
+  "main": 21109472,
+  "agents": 3368331,
+  "peak": 245718,
+  "per_thing": 764931.34375,
+  "complete": true
+ },
+ {
+  "group": "272:diagram-shrines-2:r3",
+  "start": "2026-09-27T16:47",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 14,
+  "things": 20,
+  "total": 35433005,
+  "main": 31768638,
+  "agents": 3664367,
+  "peak": 384691,
+  "per_thing": 1771650.25,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:h3",
+  "start": "2026-09-27T16:48",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 10,
+  "things": 16,
+  "total": 19168524,
+  "main": 17269921,
+  "agents": 1898603,
+  "peak": 223543,
+  "per_thing": 1198032.75,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-5:r1",
+  "start": "2026-09-27T16:57",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 1,
+  "k": 11,
+  "things": 17,
+  "total": 19544895,
+  "main": 17640055,
+  "agents": 1904840,
+  "peak": 249388,
+  "per_thing": 1149699.705882353,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-4:g1",
+  "start": "2026-09-27T17:03",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 10,
+  "m": 18,
+  "k": 7,
+  "things": 35,
+  "total": 28425294,
+  "main": 25909984,
+  "agents": 2515310,
+  "peak": 230010,
+  "per_thing": 812151.2571428572,
+  "complete": true
+ },
+ {
+  "group": "272:diagram-shrines-3:t",
+  "start": "2026-09-27T17:07",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 20,
+  "things": 25,
+  "total": 21620977,
+  "main": 18000145,
+  "agents": 3620832,
+  "peak": 242323,
+  "per_thing": 864839.08,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-2:v5",
+  "start": "2026-09-27T17:11",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 9,
+  "m": 5,
+  "k": 15,
+  "things": 29,
+  "total": 27741795,
+  "main": 25141718,
+  "agents": 2600077,
+  "peak": 301588,
+  "per_thing": 956613.6206896552,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-6:k2",
+  "start": "2026-09-27T17:23",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 10,
+  "m": 1,
+  "k": 17,
+  "things": 28,
+  "total": 31509896,
+  "main": 28627265,
+  "agents": 2882631,
+  "peak": 294791,
+  "per_thing": 1125353.4285714286,
+  "complete": true
+ },
+ {
+  "group": "272:diagram-shrines-1:b37",
+  "start": "2026-09-27T17:23",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 12,
+  "things": 17,
+  "total": 17254619,
+  "main": 14700166,
+  "agents": 2554453,
+  "peak": 221189,
+  "per_thing": 1014977.5882352941,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-5:w2",
+  "start": "2026-09-27T17:36",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 0,
+  "k": 13,
+  "things": 20,
+  "total": 30203313,
+  "main": 27956405,
+  "agents": 2246908,
+  "peak": 329440,
+  "per_thing": 1510165.65,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:f3",
+  "start": "2026-09-27T17:37",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 10,
+  "things": 14,
+  "total": 8095024,
+  "main": 6692001,
+  "agents": 1403023,
+  "peak": 142712,
+  "per_thing": 578216.0,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-4:g2",
+  "start": "2026-09-27T17:49",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 9,
+  "m": 7,
+  "k": 13,
+  "things": 29,
+  "total": 25652647,
+  "main": 22978825,
+  "agents": 2673822,
+  "peak": 264080,
+  "per_thing": 884574.0344827586,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-1:u2",
+  "start": "2026-09-27T21:39",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 0,
+  "k": 10,
+  "things": 17,
+  "total": 23077379,
+  "main": 21163497,
+  "agents": 1913882,
+  "peak": 266256,
+  "per_thing": 1357492.8823529412,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-3:k1",
+  "start": "2026-09-27T21:39",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 10,
+  "m": 0,
+  "k": 17,
+  "things": 27,
+  "total": 20807152,
+  "main": 18557252,
+  "agents": 2249900,
+  "peak": 246027,
+  "per_thing": 770635.2592592592,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:w2",
+  "start": "2026-09-27T21:45",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 4,
+  "things": 10,
+  "total": 16286415,
+  "main": 13887700,
+  "agents": 2398715,
+  "peak": 186946,
+  "per_thing": 1628641.5,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-6:k4",
+  "start": "2026-09-27T21:58",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 9,
+  "m": 0,
+  "k": 15,
+  "things": 24,
+  "total": 21002234,
+  "main": 19825111,
+  "agents": 1177123,
+  "peak": 292283,
+  "per_thing": 875093.0833333334,
+  "complete": true
+ },
+ {
+  "group": "271:diagram-research-2:k5",
+  "start": "2026-09-27T22:21",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 7,
+  "m": 0,
+  "k": 13,
+  "things": 20,
+  "total": 12201386,
+  "main": 11948540,
+  "agents": 252846,
+  "peak": 276560,
+  "per_thing": 610069.3,
+  "complete": false
+ },
+ {
+  "group": "271:diagram-research-5:t5",
+  "start": "2026-09-27T22:21",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 10,
+  "m": 0,
+  "k": 17,
+  "things": 27,
+  "total": 18257430,
+  "main": 17702089,
+  "agents": 555341,
+  "peak": 312900,
+  "per_thing": 676201.1111111111,
+  "complete": false
+ },
+ {
+  "group": "271:diagram-research-4:k7",
+  "start": "2026-09-27T22:21",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 9,
+  "m": 0,
+  "k": 13,
+  "things": 22,
+  "total": 11009225,
+  "main": 10652983,
+  "agents": 356242,
+  "peak": 258056,
+  "per_thing": 500419.3181818182,
+  "complete": false
+ },
+ {
+  "group": "271:diagram-research-1:u3",
+  "start": "2026-09-27T22:22",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 9,
+  "m": 0,
+  "k": 14,
+  "things": 23,
+  "total": 17963926,
+  "main": 17499894,
+  "agents": 464032,
+  "peak": 359138,
+  "per_thing": 781040.2608695652,
+  "complete": false
+ },
+ {
+  "group": "271:diagram-research-3:k3",
+  "start": "2026-09-27T22:25",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 9,
+  "m": 0,
+  "k": 19,
+  "things": 28,
+  "total": 18921976,
+  "main": 17671651,
+  "agents": 1250325,
+  "peak": 325887,
+  "per_thing": 675784.8571428572,
+  "complete": false
+ },
+ {
+  "group": "269:diagram-supplemental:a2",
+  "start": "2026-09-27T22:26",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 6,
+  "m": 0,
+  "k": 11,
+  "things": 17,
+  "total": 8314007,
+  "main": 7877121,
+  "agents": 436886,
+  "peak": 220241,
+  "per_thing": 489059.23529411765,
+  "complete": false
+ }
+]

@@ -216,4 +216,5 @@ def main():
     print(len(sessions), "sessions")
 
 
-main()
+if __name__ == "__main__":  # imported by specs/347-*/measure/collect.py for its folding helpers
+    main()
