@@ -145,7 +145,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Every feature ends with `make feature-report F=NNN WRITE=1` - where its time and dispatches went, from the hooks' event
   log; its last `make tick`, a closing status line and `make gm-reviewed` refuse without it, and without any measurement
   another spec carried to it (`Carried: SC-nnn -> NNN <key>`). A feature lands with the GM's review open when it has a row
-  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.)
+  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.) A row the GM discussed in the session and
+  agreed needs no more action IS his review: run `make gm-reviewed F=NNN WORDS="<his words, verbatim>"` in that turn (GM 2026-10-10).
 - Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
   or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's
   to judge: its refusal names `make arbiter-bundle`, and an advisor asked about a loop is handed that MANIFEST too.
