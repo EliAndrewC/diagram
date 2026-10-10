@@ -304,6 +304,52 @@ def apply_refusal(state: Mapping[str, Any], command: str, now: float) -> str:
     return ""
 
 
+#: how much of a dropped block's words a later block must carry to be that block back (a re-wording counts: 372's bath bullet
+#: came back with its lead and first sentence intact and a sentence added)
+SIMILAR = 0.6
+_WORD = re.compile(r"[a-z0-9]+")
+
+
+def _words(text: str) -> set[str]:
+    return set(_WORD.findall(text.lower()))
+
+
+def oscillation(versions: list[list[str]]) -> str:
+    """A block of the latest version that is a block an earlier version had and a later one had dropped (A -> B -> A), by
+    words (FR-010's reversal wire computed from the subject's own history - an edit made by a script or a `git checkout` is
+    seen as well as one made with the Edit tool). Returns the block's first words, or ''."""
+    if len(versions) < 3:
+        return ""
+    last, prev = versions[-1], versions[-2]
+    for b in last:
+        wb = _words(b)
+        if any(len(wb & _words(p)) >= SIMILAR * max(len(_words(p)), 1) for p in prev):
+            continue  # it stood just before: no return
+        for i, vi in enumerate(versions[:-2]):
+            for a in vi:
+                wa = _words(a)
+                if len(wa) >= 5 and len(wa & wb) >= SIMILAR * len(wa):
+                    gone = any(not any(len(wa & _words(c)) >= SIMILAR * len(wa) for c in vj) for vj in versions[i + 1:-1])
+                    if gone:
+                        return " ".join(b.split()[:12])
+    return ""
+
+
+def subject_blocks(root: Path, subject: str) -> list[str]:
+    """The subject's blocks as its checks read them: a question's pages (`record_units.read_page`), a pop-up's paragraphs."""
+    if subject.startswith("q:"):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1].parent / "record"))
+        import record_units as ru  # noqa: PLC0415
+
+        out: list[str] = []
+        for f in sorted((root / "research" / "questions").glob(f"{subject[2:]}-*.html")):
+            if not f.name.endswith(".notes.html"):
+                out += [b.words for b in ru.read_page(f.read_text(encoding="utf-8")).blocks]
+        return out
+    f = root / "l7r/diagram/interactive/assets/modals" / f"{subject[6:]}.md"
+    return [" ".join(p.split()) for p in f.read_text(encoding="utf-8").split("\n\n") if p.strip()] if f.is_file() else []
+
+
 def _feature(root: Path) -> str:
     try:
         return Path(str(json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", ""))).name
@@ -363,6 +409,16 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
         if check not in CHECK_KINDS or re.search(r'FREEZE_OK="[^"]{8,}"', str(ti.get("prompt") or "")):
             return ""
         manifest, text = _manifest_of(str(ti.get("prompt") or ""))
+        if root is not None and check in PAGE_CHECKS:  # FR-010: the subject's versions as each dispatch found it
+            for s in subjects_of_manifest(text):
+                vs = state.setdefault("versions", {}).setdefault(s, [])
+                cur = subject_blocks(root, s)
+                if cur and (not vs or vs[-1] != cur):
+                    vs.append(cur)
+                    del vs[:-12]
+                    back = oscillation(vs)
+                    if back:
+                        hm_arbiter.trip(root, f"reversal:{s}@{len(vs)}", "reversal", s, f"{s}: a block dropped earlier is back - \"{back}...\"", now)
         out = dispatch(state, str(payload.get("tool_use_id") or now), check, manifest, text, now, root)
         if not out and root is not None:
             n = len(state.get("dispatches", {}))

@@ -179,3 +179,29 @@ def test_a_ruled_trigger_is_never_put_to_the_arbiter_again(tmp_path: pathlib.Pat
     gate = {"cwd": str(root), "tool_name": "Bash", "tool_input": {"command": "cd x && make done"}}
     assert "a tripwire is owed its ruling first (red-gate@1" in hc.handle("edit", gate, 5)
     assert hc.handle("edit", {**gate, "tool_input": {"command": 'ARBITER_OK="ruled by hand, GM present" make done'}}, 5) == ""
+
+
+def test_a_dropped_block_coming_back_between_dispatches_trips_the_reversal_wire(tmp_path: pathlib.Path) -> None:
+    """FR-010, from the subject's own history: the versions each dispatch found (feature 372's bath bullet was put back by a
+    script, never an Edit)."""
+    root = _clone(tmp_path)
+    ha = _load("hm_arbiter")
+    q = root / "research" / "questions"
+    q.mkdir(parents=True)
+    page = q / "0105-baths-furo.drawing.html"
+    m = tmp_path / "MANIFEST.md"
+    m.write_text(MANIFEST)
+    bullet = "<li>A plan may draw its bath larger as one of its resident's particulars, up to 18 by 12 ft.</li>\n"
+    base = "<h2 id='b'>Baths</h2>\n<ul>\n<li>The bath is drawn 10 by 8 ft beside the kitchen.</li>\n"
+    for i, body in enumerate((base + bullet, base, base + bullet.replace("up to", "as large as"))):
+        page.write_text(body + "</ul>\n")
+        agent = {"cwd": str(root), "tool_name": "Agent", "tool_use_id": f"t{i}", "tool_input": {"subagent_type": "quote-check", "prompt": str(m)}}
+        out = hc.handle("dispatch", agent, i)
+        if i < 2:
+            assert out == ""
+            hc.handle("launched", {**agent, "tool_response": {"status": "async_launched", "agentId": f"a{i}"}}, i)
+            hc.handle("returned", {"cwd": str(root), "agent_id": f"a{i}", "last_assistant_message": "ok"}, i)
+            hc.record_answer(root, "quote-check", ["quote-check:0105#x"])
+    assert "a tripwire is owed its ruling first (reversal:q:0105@3" in out
+    assert list(ha.owed(root)) == ["reversal:q:0105@3"]
+    assert hc.subject_blocks(root, "modal:sheet/none") == []

@@ -147,9 +147,15 @@ def line(payload: Mapping[str, Any], t: str | None = None) -> dict[str, Any]:
                 out["new"] = digest(str(ti.get("content") or ""))
         elif tool == "Agent":
             out["agent"] = ti.get("subagent_type") or "general-purpose"
-            m = _MANIFEST.search(str(ti.get("prompt") or ""))
+            prompt = str(ti.get("prompt") or "")
+            m = _MANIFEST.search(prompt)
             if m:
                 out["manifest"] = m.group(1)
+            u = re.search(r"\bUNIT:\s*(\S+)", prompt)  # a review check's unit (feature 294's dispatch form)
+            if u:
+                out["unit"] = u.group(1)
+            if "REVIEW_ROUNDS_OK=" in prompt:  # a round past the cap on the GM's waiver - what FR-011's arbiter replaces
+                out["waiver"] = 1
             resp = payload.get("tool_response")
             if isinstance(resp, Mapping) and resp.get("agentId"):
                 out["aid"] = resp["agentId"]
