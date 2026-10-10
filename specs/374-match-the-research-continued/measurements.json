@@ -342,5 +342,48 @@
     "value": {
       "wording": "the lane that runs west into the kitchen yard"
     }
+  },
+  "sc003-375-first-three-tasks": {
+    "quantity": "375's SC-003 over 374's T01-T03 (waves 112-114): red gates from a cause the preflight checks, pages re-checked while a check on them was outstanding, plan-review BLOCKs on a decision a decision preflight had ruled",
+    "observed": "2026-10-10",
+    "source": "make feature-report F=374 (the event log, the run log), the review ledger, plan-review.json",
+    "command": "make feature-report F=374",
+    "method": "the report's gates and tripwires read; each red gate's log read for its cause (done1.log: the tree moved during the run; done3.log: tests/tooling/test_ledger_lint.py on the ledger's cost cells) - neither is a preflight step (derived files, the record, its pointers, make quick, the changed engine lines); the freeze's state (.git/checks-open.json) refused one re-dispatch into a running round and no edit to a frozen page; plan-review.json holds no BLOCKED verdict",
+    "value": {
+      "red_gates": 2,
+      "red_from_a_preflight_cause": 0,
+      "pages_rechecked_while_a_check_ran": 0,
+      "plan_review_blocks_on_a_ruled_decision": 0,
+      "met": true
+    }
+  },
+  "sc004-375-dispatches-per-row": {
+    "quantity": "375's SC-004: agent dispatches per closed row of 374's T01-T03, beside 372's ~10 (375's 'Why', an estimate)",
+    "observed": "2026-10-10",
+    "source": "this session's dispatches, counted by check from the event log (refused dispatches not counted)",
+    "command": "make feature-report F=374",
+    "method": "launched agents counted per check; rows closed by T01-T03: engawa, kitchen, kitchen corridor (renamed 'kitchen abuts the house, no corridor'), residence rooms = 4",
+    "value": {
+      "rows_closed": 4,
+      "dispatches": {
+        "spec-fidelity (spec, plan, decision preflights)": 9,
+        "impl-drift": 5,
+        "claims and modal triages": 6,
+        "quote-check": 3,
+        "record-format": 3,
+        "modal-form": 2,
+        "modal-research": 3,
+        "modal-depiction": 7,
+        "glyph-check": 5,
+        "building-review": 8,
+        "round-arbiter": 5,
+        "escalation-check": 4
+      },
+      "total": 60,
+      "per_row": 15.0,
+      "checks_only_per_row": 10.5,
+      "beside_372": 10,
+      "reading": "higher than 372's ~10: three applied EDIT blocks each re-owed the check that proposed them (a second round per pop-up, three to the arbiter), one sentence on 0091's drawing page owed 16 pop-ups their triage twice, the building reviews ran three rounds on two sheets, and first use of 375 met four tooling gaps (each fixed with its test)"
+    }
   }
 }

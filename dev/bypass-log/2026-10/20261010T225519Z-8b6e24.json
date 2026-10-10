@@ -1,0 +1,6 @@
+{
+  "utc": "20261010T225519Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: this dispatch exists to reach the round cap's arbiter ruling; the snapshot is retaken only if the arbiter rules continue"
+}
