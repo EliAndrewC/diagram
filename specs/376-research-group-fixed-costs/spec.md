@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10 (filed); repurposed 2026-10-10
-**Status**: In progress - spec FAITHFUL (round 2), plan under review
+**Status**: Done 2026-10-10 - spec FAITHFUL, plan CLEAR (round 2), every task ticked; claims tool and guard, archive behind unreadable pages, archive-first hook
 
 **Affects**: research process, tooling
 
