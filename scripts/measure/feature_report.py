@@ -79,7 +79,10 @@ def load_events(logs: Iterable[Path], transcripts: Iterable[Path], since: str = 
         t = str(e.get("t") or "")
         if not t or (since and t < since) or (until and t > until):
             continue
-        out.setdefault((e.get("sid"), e.get("ev"), e.get("id"), e.get("aid"), t), e)
+        # the same event from the hook log and from a transcript differ in their times by milliseconds: keyed by the call's
+        # id where it has one (a tool call, an agent), by the second otherwise
+        key = (e.get("ev"), e.get("id")) if e.get("id") else (e.get("ev"), e.get("aid")) if e.get("aid") else (e.get("sid"), e.get("ev"), t[:19])
+        out.setdefault(key, e)
     return sorted(out.values(), key=lambda e: e["t"])
 
 
