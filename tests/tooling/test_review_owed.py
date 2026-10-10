@@ -255,6 +255,23 @@ def test_a_landed_feature_s_pointer_declares_nothing(clone: Path) -> None:
     assert units(clone) == []
 
 
+def test_a_feature_landed_part_way_declares_again_when_its_tasks_grow(clone: Path) -> None:
+    """Feature 328 (2026-10-10): its first waves landed with every box ticked, then it went on - the later waves' tasks and
+    occasions are this delta's work, so its `## Occasions` declares again (it was read as landed and the push refused)."""
+    _tasks(clone, ["glyph-redrawn: privy"])
+    tasks = clone / "specs" / "999-test" / "tasks.md"
+    tasks.write_text(tasks.read_text().replace("- [ ] T01", "- [x] T01"))
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "the first waves")
+    git(clone, "update-ref", "refs/remotes/origin/main", git(clone, "rev-parse", "HEAD"))
+    (clone / "l7r" / "engine.py").write_text("X = 3\n")
+    tasks.write_text(tasks.read_text() + "\n- [x] T02 a later wave\n      research: rendering\n")
+    git(clone, "add", "-A")
+    git(clone, "commit", "-qm", "a later wave")
+    assert owed.check_declared(clone) is None
+    assert units(clone) == [("glyph-check", "privy", "inashiro")]
+
+
 def test_a_committed_change_beyond_the_merge_base_counts(clone: Path) -> None:
     _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "well": 1}, renders=True)
     git(clone, "commit", "-qam", "a well")

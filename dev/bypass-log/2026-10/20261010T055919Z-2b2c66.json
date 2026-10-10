@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-10T05:59:19Z",
+  "target": "claims-gate",
+  "commit": "284766dfb",
+  "why": "CLAIMS_OK: GM 2026-10-10 split: land 328 now, the rest to feature 372; the 27 introduced findings are listed in specs/372-match-the-research-remaining/introduced-at-328-landing.txt"
+}

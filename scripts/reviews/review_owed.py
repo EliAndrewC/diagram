@@ -263,8 +263,12 @@ def active_features(root: Path, base: str) -> list[str]:
             # ...BUT NOT A FEATURE THAT HAD LANDED AT THE BASE: its tasks.md there with every task ticked. Its occasions were
             # owed and judged when it landed; a later record written into its folder (a measurement answering a finding) is
             # not that feature's work again (the torii tweak re-owed feature 294's four glyph checks).
+            # GUARD_EDIT_OK: feature 328's landing (2026-10-10) - a feature that landed its first waves with every box
+            # ticked and then went on, its tasks.md growing by wave, was read as landed and its `## Occasions` ignored, so
+            # the push of its later waves was refused as undeclared. Landed means the delta leaves its tasks.md as it was.
             was = _git(root, "show", f"{base}:specs/{parts[1]}/tasks.md")
-            if was and "- [x]" in was and not re.search(r"^- \[ \]", was, re.M):
+            now = (root / "specs" / parts[1] / "tasks.md").read_text()
+            if was and "- [x]" in was and not re.search(r"^- \[ \]", was, re.M) and now.strip() == was.strip():
                 continue
             found.add(f"specs/{parts[1]}")
     return sorted(found)
