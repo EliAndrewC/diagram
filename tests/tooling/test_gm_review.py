@@ -69,7 +69,7 @@ def test_a_discussed_row_is_reviewed_with_the_gms_words(root: pathlib.Path, monk
     with pytest.raises(ValueError, match="two words"):
         gm.reviewed(root, d, words="fine")
     monkeypatch.chdir(root)
-    monkeypatch.setenv("GM_WORDS","I don't know that we need any tooling around it")
+    monkeypatch.setenv("GM_WORDS", "I don't know that we need any tooling around it")
     assert gm.main(["reviewed", "375"]) == 0
     assert gm.rows(d)[0]["gm_words"] == "I don't know that we need any tooling around it"
     assert "nothing waits" in gm.listing(root)
