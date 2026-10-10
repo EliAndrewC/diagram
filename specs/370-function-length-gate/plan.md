@@ -64,14 +64,15 @@ A split adds function calls and no work; any seed more than 5% slower is diagnos
   alone (`ruff check --select PLR0915`, the 100 from D1's config) over all five held trees - `l7r`, `tests`, `scripts`,
   `pool`, `tests/hooks` (ruff lints an explicitly named path even when `extend-exclude` lists it) - and on a finding prints
   each function with its count and BOTH ways out: split it into parts at module or class level, or put
-  `# noqa: PLR0915 <why the body must remain one>` on its `def` line (constitution X clause 12) (FR-008). It runs FIRST in
-  `make static`, so its message is what a session reads, and before every push in `sync-with-main.sh` beside
+  `# noqa: PLR0915 <why the body must remain one>` on its `def` line (constitution X clause 12) (FR-008). It pins the root config (`--config pyproject.toml`), so no nested `ruff.toml` can lift the cap (plan review 2). It runs
+  FIRST in `make static` and in `make quick` (ahead of quick's own `ruff check`, as `check-file-scale.py` already runs
+  there), so its message is what a session reads, and before every push in `sync-with-main.sh` beside
   `check-file-scale.py` - a push of `tests/` or `scripts/` alone takes the DIRECT route and runs no gate (plan review 3).
 - **D3 - the suppression is one body, with its reason.** The same script refuses, in every held tree: a `# noqa` naming
   PLR0915 with fewer than three words after it; one anywhere but on a `def` line; a bare `# noqa` on a `def` line (it
-  silences the cap with no rule named - measured by the plan review); a file-level `# ruff: noqa` that is bare or names
-  PLR0915 (it would exempt every function in the file); and an `ignore` or `per-file-ignores` entry naming PLR0915 in
-  `pyproject.toml` (FR-004). `--selftest` plants each case; the tests pin the messages.
+  silences the cap with no rule named - measured by the plan review); a file-level `# ruff: noqa` or `# flake8: noqa` that is bare or
+  names PLR0915 (it would exempt every function in the file); and any value in `pyproject.toml`'s ruff tables that names
+  PLR0915 or a prefix of it (`ignore`, `extend-ignore`, `per-file-ignores`, `extend-per-file-ignores`, ...) (FR-004). `--selftest` plants each case; the tests pin the messages.
 - **D4 - the splits.** Each of the twelve (research.md R2) is cut along the phases its own comments already name, into
   module-level (or method-level, for a `Settlement` method) parts that take what they use as parameters - never a nested
   function (it counts in its parent: spec edge cases). The order of every call, every random draw and every registry
@@ -113,3 +114,6 @@ None.
   on `def` lines only. (3) The push now covers `tests/` (all five trees). (4) A file-level suppression and a pyproject
   ignore are refused (D3). D4 reworded: a split unit keeps a claim whose code stays. research.md R2's stale `claims.py`
   row updated.
+- **Plan review round 2 (2026-10-10): CHANGES REQUIRED.** (1) The check runs in `make quick` too, ahead of its ruff line.
+  (2) `# flake8: noqa` refused as `# ruff: noqa` is. (3) The check pins the root config; every ruff key naming the rule is
+  refused. tasks.md T15's stale figure updated.

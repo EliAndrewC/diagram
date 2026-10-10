@@ -14,7 +14,7 @@
 - [ ] T02 pyproject.toml: PLR0915 selected, `max-statements = 100` with the survey's reason beside it (D1; FR-001, FR-005)
       research: rendering
       verify: T01's config cases green; the comment states 131 of 1,209 and "second most common"
-- [ ] T03 scripts/gates/check-function-cap.py with `--selftest` (D2, D3); first in `make static`, and before every push in sync-with-main.sh (FR-002, FR-004, FR-008)
+- [ ] T03 scripts/gates/check-function-cap.py with `--selftest` (D2, D3); first in `make static` and `make quick`, and before every push in sync-with-main.sh (FR-002, FR-004, FR-008)
       research: rendering
       verify: T01 green; --selftest; make hooks-test green (the push suite)
 
@@ -50,7 +50,7 @@
 - [ ] T14 hamletgen/ways/web.py `stage_web` (103)
       research: rendering
       verify: as T05
-- [ ] T15 scripts/record/uncited.py (122) and scripts/record/claims.py (104)
+- [ ] T15 scripts/record/uncited.py (122) and scripts/record/claims.py (110)
       research: rendering
       verify: make test-file on their tests
 
