@@ -27,9 +27,14 @@ MODE="${1:-}"
 INPUT=$(cat 2>/dev/null || true)
 [ "$MODE" = "pretool" ] || exit 0
 
-# the cheap bail-out (plan D6), no wider than the parser: a git add or commit, and a spec directory somewhere near it
-case "$INPUT" in *git*) ;; *) exit 0 ;; esac
-case "$INPUT" in *add*|*commit*) ;; *) exit 0 ;; esac
+# the cheap bail-out (plan D6), no wider than the parser: a git add or commit, or a push through sync-with-main.sh
+# (GUARD_EDIT_OK: feature 377 amendment 1 - a new operation, the GM 2026-10-10: a feature reopened and left open is
+# judged by what LANDS, so the push is read too)
+case "$INPUT" in
+  *sync-with-main.sh*) ;;
+  *git*) case "$INPUT" in *add*|*commit*) ;; *) exit 0 ;; esac ;;
+  *) exit 0 ;;
+esac
 
 FA_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BAD=$(printf '%s' "$INPUT" | FA_CWD="$PWD" python3 "$FA_HERE/lib/hm_approval.py" judge 2>/dev/null || true)
@@ -38,20 +43,33 @@ BAD=$(printf '%s' "$INPUT" | FA_CWD="$PWD" python3 "$FA_HERE/lib/hm_approval.py"
 # shellcheck source=/dev/null
 . "$FA_HERE/lib/guardlog.sh"
 {
-  printf '\n\033[1mBLOCKED: this would file a new spec-kit feature without the GM'"'"'s approval.\033[0m\n'
+  # GUARD_EDIT_OK: feature 377 amendment 1 - one header for both rules (a new feature, a reopen left open)
+  printf '\n\033[1mBLOCKED: this would add a feature with open work the GM has not approved.\033[0m\n'
   printf '%s\n' "$BAD" | while IFS=$'\t' read -r why path; do
     case "$why" in
       no-line)   printf '  %s: no approval line\n' "$path" ;;
       short)     printf '  %s: the approval quote is under three words - a bare "yes" approves nothing\n' "$path" ;;
       not-found) printf '  %s: the quoted words are in no message the GM wrote in this session\n' "$path" ;;
+      # GUARD_EDIT_OK: feature 377 amendment 1 - the reopen refusals, new
+      reopened)  printf '  %s: closed before, and this push lands it OPEN - finish its work and close it again, or add the GM'"'"'s approval\n' "$path" ;;
+      reopened-not-found) printf '  %s: reopened and left open; the approval line it adds quotes words the GM did not write in this session\n' "$path" ;;
+      # GUARD_EDIT_OK: feature 377 amendment 1 - FR-012, open work hidden under a closed status, new
+      hidden-open) printf '  %s: an unticked task added under a status line that still says closed - speckit-todo would never show it\n' "$path" ;;
       *)         printf '  %s: %s\n' "$path" "$why" ;;
     esac
   done
+  # GUARD_EDIT_OK: feature 377 amendment 1 - a reopen's refusal names the approval-free route first (FR-011, FR-005)
+  case "$BAD" in *reopened*|*hidden-open*)
+    printf '\nReopening a feature to do its work yourself needs no approval: finish the work and close the feature\n'
+    printf 'again (status Done, or every task ticked), THEN push. Until then the work stays committed in your clone,\n'
+    printf 'backed up by every refused push. Only a feature you mean to land OPEN needs the GM'"'"'s approval below.\n' ;;
+  esac
   printf '\nA feature is filed only when the GM says to (the GM, 2026-10-10). Ask the GM in this session, in your\n'
   printf 'final message rather than mid-stream, and prefer extending and reopening the feature the work came from.\n'
   printf 'Once the GM approves, put their words on a line of its own in the spec.md, verbatim:\n'
   printf '  **Approved**: the GM, %s, "<the GM'"'"'s words, verbatim>"\n' "$(date +%F)"
   printf 'This guard reads the GM'"'"'s own messages in this transcript (a picked AskUserQuestion answer is quoted\n'
+  # GUARD_EDIT_OK: feature 377 amendment 1 - the reopen sentence moved up, to the reopen refusal alone
   printf 'with its question). There is no escape variable.\n\n'
 } >&2
 guard_log feature-approval blocked "$(printf '%s' "$BAD" | cut -f1 | sort -u | tr '\n' ' ')" unapproved-feature
