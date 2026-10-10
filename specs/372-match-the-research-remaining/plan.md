@@ -167,6 +167,13 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   as ranked (barracks, forecourt, the stables' three), left for their places.
 - **Records**: m:wave105-tax-archive; three sheets' notes.
 - **Occasions**: glyph-redrawn: tax archive on hayakawa-magistracy (the same glyph on all three sheets).
+- **Batch 4's close, building-review round 1 of the draft** (NEEDS-WORK): E1, a regression of this wave - the outer court's
+  yard, a zone drawn after the hearing court, still began where the court had ended before it slid east and painted out
+  its east end; the yard now starts at the court's east edge, and `tests/test_compound.py` holds that no two of the draft's
+  zones share ground (m:batch4-county-yard-off-the-court). E2, the draft's notes stale (the archive's old size, no entry for
+  the wave, the middle gate's old reason, the archive's proportions unlabeled): all four fixed (m:batch4-county-notes-current).
+  E3, the staff long-house squat against 0097's rowhouse form, predates the wave and was tracked nowhere: a found row, E3,
+  in the ranking (`audit/found-wave105.jsonl`). E4, the barracks, is ranked row #barracks, left for its wave.
 
 ## Performance bookends (constitution VI)
 

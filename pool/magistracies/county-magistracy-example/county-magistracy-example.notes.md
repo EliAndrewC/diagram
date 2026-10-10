@@ -45,7 +45,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   (Pass 5 wrote "~2,400 sq ft" for a house of 1,980 + 480 + 120 = 2,580 sq ft, ~72 tsubo; pass 4 drew ~4,700.) The
   residence kind entry's "about 180 to 200 ft" was corrected at its source (`interactive/compound_kinds/household.py`)
   and docs/buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
-  lodgings, stores and office (the office hall 113 x 38, the tax archive 34 x 34, the granary 60 x 30, the barracks
+  lodgings, stores and office (the office hall 113 x 38, the tax archive 24 x 18 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 60 x 30, the barracks
   45 x 34, the retainers' long-house 50 x 36, the servants' row 72 x 22, the stables 42 x 24, the grooms' row 44 x 18
   and the guest house 33 x 32), which holds coverage in the jin'ya band without shrinking the envelope; each of those
   sizes is a GUESS in its band.
@@ -91,7 +91,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   research 0099 drawing) - the roofed court keeps its white-gravel fill.
 - **Middle gate**: beside the office hall's east end, not behind it (docs/building-programs.md puts it customarily on the
   main axis behind the hall, the hall as the privacy baffle). Here the hall backs the divider at 1.5 ft with no alley
-  behind it, and it stands west of the main axis (the tax archive takes the west end), so the placer opens the gate at
+  behind it, and its center stands west of the main axis (the hall spans ~59-172 ft of the ~270 ft compound, ~33 ft of outer court and the tax archive west of it since wave 105), so the placer opens the gate at
   the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house
   from the hearing court. A deliberate DEVIATION from the customary seat, recorded.
 - **Lesser gates**: the kitchen postern in the west wall (6 ft) and the outer court's service gate in the south wall
@@ -259,6 +259,17 @@ Coverage 33%, perimeter-hugging 72%, nothing overflows; every registered check p
 - **Notes**: the vegetable ground leaves a ~12 ft way along the west wall, 7 ft past the servants' privy.
 
 Coverage 33%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
+
+2026-10-10 feature 372 wave 105 (the tax archive):
+
+- **The tax archive 34 x 34 -> 24 x 18 ft** (432 sq ft): research 0100's records storehouse, under its ~450 sq ft
+  ceiling; the 4:3 proportions are a GUESS (0100's drawing page).
+- **The hearing court re-centered on the office hall** (75.5-155.5 ft), as the hall's own court.
+- **The outer court's yard starts at 155.5 ft**, where the hearing court ends: drawn after the court, at 141 ft it
+  painted out the court's east end (building-review E1; `tests/test_compound.py` now holds that no two zones share ground).
+- LEFT, with its reason: the gatehouse stays 18 x 12 ft - at 40 ft the stables find no seat.
+
+Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
 
 ## Review log
 

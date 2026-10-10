@@ -552,6 +552,15 @@ def test_the_county_example_sets_the_garden_before_the_house_and_the_court_on_th
     assert 1_650 <= house <= 1_850
 
 
+def test_no_zone_of_the_county_example_paints_over_another() -> None:
+    """Feature 372 wave 105: the hearing court moved east onto the hall and the yard drawn after it painted out its
+    east end (building-review E1). Zones are drawn in order, so any two that share ground hide one under the other."""
+    prog, _result, _svg = _county()
+    zs = list(prog.spine)
+    shared = [(a.name, b.name) for i, a in enumerate(zs) for b in zs[i + 1 :] if min(a.x2, b.x2) > max(a.x_ft, b.x_ft) and min(a.y2, b.y2) > max(a.y_ft, b.y_ft)]
+    assert shared == []
+
+
 def test_no_caption_but_its_own_stands_under_the_roofed_court() -> None:
     from l7r.diagram.tools import pack_audit as pa
 

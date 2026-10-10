@@ -316,5 +316,51 @@
       "reading": "the band now admits no archive over 432 sq ft; the draft, at 24 x 18, covers 32% - under the old 33% floor, which predated 0116's correction to 30-42% (Takayama's measured ~31% the bottom), so the floor follows the page; the draft's hearing court re-centered on the hall the smaller archive let slide east; test_compound 72 passed, test_mode_a_sheets 27 passed",
       "draft_gatehouse_40ft": "tried: with the gatehouse at 40 x 12 ft, make map on county-magistracy-example failed - \"'stables' (42 x 24 ft, outer S) finds no seat on its wall inside the compound the program allows\"; reverted to 18 x 12"
     }
+  },
+  "batch4-county-yard-off-the-court": {
+    "observed": "2026-10-10",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "35b0d86d90b4",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg after make map; tests/test_compound.py",
+    "command": "grep -o 'data-kind=\"hearing court\"' and the outer court rects in the draft's svg; make test-file FILE=tests/test_compound.py",
+    "method": "the hearing court's rect and the yard's rect read from the draft; the new test asks every pair of zones for shared ground",
+    "quantity": "the building review's E1: the outer court's yard no longer painted over the hearing court's east end",
+    "verifies": "E1",
+    "value": {
+      "hearing_court_svg_x": [
+        248,
+        488
+      ],
+      "yard_svg_x": [
+        488,
+        586
+      ],
+      "yard_ft_before": [
+        141.0,
+        188.0
+      ],
+      "yard_ft_after": [
+        155.5,
+        188.0
+      ],
+      "test": "test_no_zone_of_the_county_example_paints_over_another passed; test_compound 73 passed",
+      "reading": "the yard starts where the court ends; the old yard (141-188 ft) shared 141-155.5 ft with the court (75.5-155.5 ft), so the test fires on it"
+    }
+  },
+  "batch4-county-notes-current": {
+    "observed": "2026-10-10",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "35b0d86d90b4",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "grep -n '24 x 18\\|wave 105\\|its center stands west' pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "method": "the notes read against the draft as regenerated",
+    "quantity": "the building review's E2: the notes state the archive as drawn, carry a wave 105 entry, the middle gate's current reason and the archive's proportions as a GUESS",
+    "verifies": "E2",
+    "value": {
+      "archive_line": "the tax archive 24 x 18 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS)",
+      "entry": "2026-10-10 feature 372 wave 105 (the tax archive)",
+      "middle_gate": "its center stands west of the main axis (the hall spans ~59-172 ft of the ~270 ft compound, ~33 ft of outer court and the tax archive west of it since wave 105)",
+      "coverage": "32%, perimeter-hugging 71% (make pack-audit)"
+    }
   }
 }

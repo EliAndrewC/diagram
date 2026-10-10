@@ -10822,6 +10822,22 @@
   "scope": "mode-a"
  },
  {
+  "key": "l7r/diagram/compound.py::county_magistracy_program#senior retainers' quarters",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "0097's drawing page: a rowhouse is a long, narrow building no more than about 24 ft deep, never a square or squat block, its dwellings in a row along its length. The county example's staff long-house is 50 x 36 ft with the karo's bay stacked across its depth (the north 14 ft) and both doors on its short east end: redraw it at most ~24 ft deep with the bays side by side, each with its own door on the long face, and reseat what the new footprint moves (the 26 ft gap and the karo's door facing the hall's flank, the review's N1). Same rule as the #barracks row",
+  "files": [
+   "l7r/diagram/compound.py",
+   "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 105's building-review of the county example, E3 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/burial.py::stage_burial#farmstead graves",
   "tier": "E3",
   "fix": "roll the 0236 household-grave knob (about half of hamlets; where on, about a third of farmsteads draw a small grave at a plot corner, in the grove or on own land close by) and draw it",

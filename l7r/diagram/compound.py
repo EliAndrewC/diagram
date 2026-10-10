@@ -696,7 +696,9 @@ def county_magistracy_program() -> CompoundProgram:
         # stands; 32 ft deep (36 until pass 5) keeps the cart slot to the stables and room for the stable well before
         # them (docs/buildings.md "Hearing court"). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its
         # size is a GUESS - no roofed court's size was found.
-        CourtZone("oshirasu", 75.5, 130.0, 80.0, 32.0),  # y 130 since pass 6: the office hall is 38 ft deep; x 75.5 since feature 372 wave 105, centered again on the hall the smaller tax archive let slide east
+        CourtZone(
+            "oshirasu", 75.5, 130.0, 80.0, 32.0
+        ),  # y 130 since pass 6: the office hall is 38 ft deep; x 75.5 since feature 372 wave 105, centered again on the hall the smaller tax archive let slide east
         # just inside the main gate (131-139), east of the gatehouse that stands beside it, and 55 ft wide (it was 36)
         # to take the ground east of the gate the hearing court gave up when it shrank to the hall's length; a
         # marshalling apron's width is a GUESS
@@ -712,7 +714,9 @@ def county_magistracy_program() -> CompoundProgram:
         # The outer court's open ground between the hearing court and the practice ground (pass 4, building-review round
         # 3: ~50 x 40 ft unnamed): the way from the forecourt to the middle gate and the hall's east door, named, not
         # fenced (UNFENCED_ZONES). Its bounds are a drawing convention.
-        CourtZone("yard", 141.0, 131.0, 47.0, 33.0),  # y 131 since pass 6: the office hall is 38 ft deep
+        # x 155.5 since feature 372 wave 105: the hearing court re-centered on the hall ends there, and a yard drawn
+        # over it painted out its east end (building-review E1).
+        CourtZone("yard", 155.5, 131.0, 32.5, 33.0),  # y 131 since pass 6: the office hall is 38 ft deep
         # The cart yard before the service gate (pass 4: the ~71 x 30 ft of bare ground in the SE outer court) - the
         # carts, the stable muck and the prisoners' way out; the kind the hand sheets draw (a DEVIATION from canon on
         # H and U, forms.md). Its size is a GUESS.
@@ -805,8 +809,8 @@ def county_magistracy_program() -> CompoundProgram:
         ),
         # 24 x 18 ft, under 0100's ~450 sq ft records-store ceiling (feature 372 wave 105; it was 34 x 34, pass 6's mass)
         b("tax archive", "kura", 24.0, 18.0, "outer", "W", order=6, feature="tax archive"),
-        # 50 ft long (it was 60): the hearing court, now centered on the hall, starts at x 59.5, and the retainers'
-        # east face must keep a 7 ft run in front of it for its tub and door
+        # 50 ft long (it was 60): the hearing court, centered on the hall, starts at x 75.5 (feature 372 wave 105),
+        # and the retainers' east face must keep a 7 ft run in front of it for its tub and door
         # The staff long-house (pass 6): the senior retainers' quarters, 50 x 36 ft, with the KARO'S BAY at its north end,
         # 14 ft of it with its own door - R11's attested form (research 0106: at an intendancy the staff lived
         # inside the compound in small houses or long-houses; a chief retainer's house inside the lord's own compound was
