@@ -4565,10 +4565,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound.py::county_magistracy_program#barracks size": {
-  "code": "ee5dc32252b51fa7",
-  "core": "a7b55fe1be0c8213",
+  "code": "889c08bb8bf80bdd",
+  "core": "ca50acb68ebe0714",
   "date": "2026-10-10",
-  "note": "the code draws the barracks with b(\"barracks\", \"service\", 45.0, 34.0, ...), which is 34 ft deep and a squat 45 x 34 block, but the page says it is \"drawn 12 to 24 ft deep\", \"no more than about 24 ft deep\" and \"never a square or squat block\"; the depth should be 12-24 ft, with the length set by the bays",
+  "note": "the code's b(\"barracks\", \"service\", 45.0, 34.0, ...) draws it 34 ft deep, but the page says it is \"drawn 12 to 24 ft deep\" and \"never a square or squat block\"; the depth should be 24 ft or less.",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "d4c70185f30440ae"
   },
@@ -4580,179 +4580,11 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/compound.py::county_magistracy_program#compound envelope 270 x 200 ft with the inner/outer divider at 90 ft": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "compound envelope 270 x 200 ft with the inner/outer divider at 90 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#compound shrine 18 x 14 ft on the E wall of the inner court": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "compound shrine 18 x 14 ft on the E wall of the inner court",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#detached guest house 33 x 32 ft": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "detached guest house 33 x 32 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#forecourt 55 x 31 ft inside the main gate": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "forecourt 55 x 31 ft inside the main gate",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#garden before the house, 122 x 46 ft, facing the reception and guest house": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "garden before the house, 122 x 46 ft, facing the reception and guest house",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#gatehouse 18 x 12 ft beside the gate, door on the gate passage": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "gatehouse 18 x 12 ft beside the gate, door on the gate passage",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#granary kura 60 x 30 ft on the E wall": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "granary kura 60 x 30 ft on the E wall",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#hearing court (oshirasu) 80 x 32 ft, centered on the office hall": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "hearing court (oshirasu) 80 x 32 ft, centered on the office hall",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#holding cell 12 x 10 ft": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "holding cell 12 x 10 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#kitchen 20 x 18 ft between the servants' row and the house, door W, 10 ft inset": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "kitchen 20 x 18 ft between the servants' row and the house, door W, 10 ft inset",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#kitchen postern in the W wall at 50 ft and service gate in the S wall at 244 ft, each with a 6 ft passage": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "kitchen postern in the W wall at 50 ft and service gate in the S wall at 244 ft, each with a 6 ft passage",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#magistrate's dais 30 x 10 ft on the office hall's south face; office hall doors E and W": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "magistrate's dais 30 x 10 ft on the office hall's south face; office hall doors E and W",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#main gate one-bay yakuimon, 8 ft passage": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "main gate one-bay yakuimon, 8 ft passage",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#office hall 113 x 38 ft backing the divider, with clerks' room, day office and study rooms": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "office hall 113 x 38 ft backing the divider, with clerks' room, day office and study rooms",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#outer-court yard and cart yard (62 x 25 ft) by the service gate": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "outer-court yard and cart yard (62 x 25 ft) by the service gate",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#practice ground 33 x 42 ft beside the barracks": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "practice ground 33 x 42 ft beside the barracks",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#residence 56 x 24 ft, rooms in two rows with the reception at the east end, on the N wall, 10 ft inset": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "residence 56 x 24 ft, rooms in two rows with the reception at the east end, on the N wall, 10 ft inset",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#residence veranda 4 ft, garden face only; entrance on the W face": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "residence veranda 4 ft, garden face only; entrance on the W face",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#senior retainers' long-house 50 x 36 ft with a 14 ft karo's bay at its north end": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "senior retainers' long-house 50 x 36 ft with a 14 ft karo's bay at its north end",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#servants' quarters 72 x 22 ft in the NW corner of the inner court (common-room vs per-dwelling door form not set)": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "servants' quarters 72 x 22 ft in the NW corner of the inner court (common-room vs per-dwelling door form not set)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound.py::county_magistracy_program#stables 42 x 24 ft and grooms' row 44 x 18 ft on the S wall, SW corner": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "stables 42 x 24 ft and grooms' row 44 x 18 ft on the S wall, SW corner",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/compound.py::county_magistracy_program#tax archive size": {
-  "code": "0bf9cca73bef72ca",
-  "core": "a7b55fe1be0c8213",
+  "code": "2fa9ea429eae7da2",
+  "core": "ca50acb68ebe0714",
   "date": "2026-10-10",
-  "note": "an earth-walled kura of 24 x 18 ft (432 sq ft), under the ~450 sq ft ceiling, with its shape a guess",
+  "note": "an earth-walled kura of 24 x 18 ft = 432 sq ft, under the ~450 sq ft Takayama ceiling; the shape a GUESS.",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
   },
@@ -4765,14 +4597,6 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fb5af5b7b0dcb397"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/compound.py::county_magistracy_program#vegetable garden west of the house, 64 x 48 ft": {
-  "code": "a7b55fe1be0c8213",
-  "core": "a7b55fe1be0c8213",
-  "date": "2026-10-10",
-  "note": "vegetable garden west of the house, 64 x 48 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_model.py::NOTICE_BOARD_MAX_FT#board by the gate": {
   "code": "fcdc114704d6270b",
