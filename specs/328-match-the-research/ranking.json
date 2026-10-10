@@ -10416,7 +10416,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "97",
   "scope": "mode-a"
  },
  {
@@ -10432,7 +10432,7 @@
   "tier_as_ranked": "E1",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "97",
   "scope": "mode-a"
  },
  {
@@ -10448,7 +10448,7 @@
   "tier_as_ranked": "E1",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "97",
   "scope": "mode-a"
  },
  {
@@ -10705,7 +10705,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
   "moved": "T51a: tiered by its work by a fresh reader - Measured: Ubame is the only sheet with bales (data-kind='charcoal bales'), and at 6x3 ft it matches neither true size (~2x1.3 ft) nor the ~4 ft convention, so just naming the divergence would still leave the sheet off the record - a hand-drawn sheet redrawn.",
-  "wave": "",
+  "wave": "97",
   "scope": "mode-a"
  },
  {

@@ -2165,5 +2165,26 @@
       "reading": "the footpath still cannot reach every farmhouse 7 ft off a plot: the row and its dependents stay E3 as filed",
       "refusals": "each of Kashikawa and seeds 03, 23, 40 and 903 is refused WebRefused with farmhouses off the connected way network (refuse_unreached): the footpath's 7 ft cannot thread between the plots to them"
     }
+  },
+  "wave97-ubame-charcoal": {
+    "quantity": "wave 97 (2026-10-10): Ubame's charcoal yard redrawn to 0197 and 0199's drawing pages",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg before and after; make pack-audit ARGS=<the sheet> before and after; make map GEN=<its gen>",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the sheet's rects read in px at 3 px = 1 ft; the pack audit run on the sheet before and after the edit",
+    "value": {
+      "weighing_floor": "80 x 80 px (26.7 ft square) -> 48 x 42 px (16 x 14 ft), at x 900-948, y 598-640: against the tally shed's west face and on the cart yard's edge; six posts -> four",
+      "bales": "two 18 x 9 px (6 x 3 ft) -> two 12 x 8 px (4 x 2.7 ft)",
+      "cart_yard": "the apron band 186 x 40 px (13.3 ft deep) -> 186 x 45 px (15 ft), filling the 47 px (15.7 ft) between the tally range (y 640) and the store (y 687); the store and the tally range unmoved",
+      "pack_audit": "coverage 39% unchanged; bare open ground 34% -> 35%; tile r2c2 52% -> 45% built; the tally-store gap reads 15.7 ft both before and after (LOOSE against the audit's 10 ft kura heuristic, the apron's 15-20 ft use); one new vacant rectangle 23 x 51 ft at svg(850,446), the outer court's open ground beside the rowhouse, replacing a 51 x 23 ft central one",
+      "render": "make map REGENERATED; the weighing floor's caption placed outside the floor with a leader, west",
+      "weighing_floor_ft": [
+        16,
+        14
+      ],
+      "bale_long_ft": 4,
+      "cart_yard_ft": 15,
+      "sheets_redrawn": 1
+    }
   }
 }

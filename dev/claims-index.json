@@ -2478,21 +2478,22 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
-  "code": "d90bac6ac96d6e47",
+  "code": "9521a802b86ac635",
   "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "this section's text draws no cart yard. 0197 says \"keeps no fire gap of a set width\" and that a plastered charcoal store stands at the ordinary spacing; 0116 gives kura 6-10 ft, not 13-14 ft",
+  "date": "2026-10-09",
+  "note": "no set fire gap round a plastered store, which stands at the ordinary spacing; the 15 ft apron is inside the 15-20 ft band",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
   "research": "fdc09ba7d3987100",
   "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:0ad7edfc766bacb6",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:7a657acf6f84c329"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell": {
   "code": "9cb240eeb59f09f5",
@@ -2525,10 +2526,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": {
-  "code": "ef722fb8b28c96e8",
+  "code": "237fbc25a05ae69c",
   "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "bales are drawn ~6 x 3 ft where 0199 says \"A bale is drawn about 4 ft long, by convention\" (real ~2 x 1.3 ft); also, this section's text draws no bales",
+  "date": "2026-10-09",
+  "note": "drawn about 4 ft by convention, keeping the 2 x 1.3 ft proportion",
   "pages": {
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html": "c4e837038c94b2f6"
   },
@@ -2537,13 +2538,13 @@
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html:47b9da864eba6419",
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html:bb020e97bc9a68c9"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal weighing floor": {
-  "code": "b69293e49ea58791",
+  "code": "e0403728d2c36792",
   "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "~27 ft square where 0197 sets \"a weighing floor of 16 by 14 ft\"; also, this section's text draws none",
+  "date": "2026-10-09",
+  "note": "16 x 14 ft as the page gives",
   "pages": {
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
@@ -2552,7 +2553,7 @@
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:6bf708142ba3ec57",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:9c6dfab4db52b728"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#clerk positions at the dais": {
   "code": "3be5ff6fb74321e8",
@@ -2615,6 +2616,22 @@
   "rests": [
    "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Outer court (administrative / public)#granary label": {
+  "code": "0db42d036b1690cc",
+  "core": "5a31cf1e47f2f0bf",
+  "date": "2026-10-09",
+  "note": "the page backs the \"granary\" label: an office store held rice beside a local reserve, a reserve held \"rice and other grain\", and kura stored unhulled grain as well as rice",
+  "pages": {
+   "0098-storehouses-for-the-tax-rice.html": "b0964dae032a23e9"
+  },
+  "research": "f2e5561095446765",
+  "rests": [
+   "0098-storehouses-for-the-tax-rice.html:73d9a0065ef28793",
+   "0098-storehouses-for-the-tax-rice.html:b8fb4a1535a30a42",
+   "0098-storehouses-for-the-tax-rice.html:f74ffe27121393ae"
   ],
   "verdict": "IN-STEP"
  },
@@ -3317,42 +3334,39 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#buildings at true size": {
-  "code": "b8d7bbe10e583173",
-  "core": "b012d136f8c458d1",
-  "date": "2026-10-08",
-  "note": "the claim names the GM's ruling of 2026-07-21; 0116 is not in the bundle and this verdict does not rest on it",
+  "code": "f7160f8c11ad934b",
+  "core": "d28e8161b6f37cbb",
+  "date": "2026-10-09",
+  "note": "the account names the GM's ruling of 2026-07-21; 0116 leaves the kitchen, stable and shrine ranks to this project",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#caption placement": {
-  "code": "a61b1ec50adf76c4",
-  "core": "b012d136f8c458d1",
-  "date": "2026-10-08",
-  "note": "captions are declared and placed last by one placer: inside what they name, else at the ranked places beside it, turned with it, a leader only past the allowed gap",
+  "code": "ea770eb50348a389",
+  "core": "d28e8161b6f37cbb",
+  "date": "2026-10-09",
+  "note": "declared captions, placed inside or beside in ranked order, turned with the feature, a leader only beyond the allowed gap",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:5fdeb07b90c0385f",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:b450303bef4265a6",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bde210da1f30868f",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#main gate passage width": {
-  "code": "8690e2d193b758a6",
-  "core": "b012d136f8c458d1",
-  "date": "2026-10-08",
-  "note": "the page measures the yakuimon \"across their frontage\" (1.8-2.6 m), which is the structure's width, not the passage; the claim gives that frontage as the passage, the same mix-up this section warns about. Only the nagaya-mon's 12 ft is an opening (\"opens in its central two ken\"). The claim should say the yakuimon passage is narrower than its ~6-8.5 ft frontage",
+  "code": "e2832a73bbb89c6c",
+  "core": "d28e8161b6f37cbb",
+  "date": "2026-10-09",
+  "note": "the page measures the yakuimon's 6-9 ft \"across their frontage\" (the whole structure); the claim uses that as the PASSAGE width, the same structure-as-passage error the section itself warns against. Only the nagaya-mon's 12 ft is an opening. The claim should call the yakuimon passage a guess under its frontage, or say it is the frontage",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
   },
@@ -3365,27 +3379,26 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Scale#plan scale": {
-  "code": "ceb09a345b1f3a0e",
-  "core": "b012d136f8c458d1",
-  "date": "2026-10-08",
-  "note": "3 px = 1 ft, chosen so the drawn compounds fall between Joge and Takayama",
+  "code": "e83d69c6aa81cfa3",
+  "core": "d28e8161b6f37cbb",
+  "date": "2026-10-09",
+  "note": "3 px = 1 ft, so drawn compounds fall between Joge and Takayama",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:4afbca9685190246",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c1eb54b975cd5790",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c3ce58964db48140",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:ae03b2d56e73425e",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#residence wing length": {
-  "code": "92733b1dbe251659",
-  "core": "b012d136f8c458d1",
-  "date": "2026-10-08",
-  "note": "this question claim keeps 180-200 ft wings the page contradicts (67 tsubo for a 500-1,000 koku house; 1,200-1,800 sq ft guessed for 100-300 koku). It should be a DEVIATION recorded on a drawing page, or a GUESS. Also, the section's 49-tsubo Yokota house for a 150-koku magistrate is not on this page",
+  "code": "4fbe3bd9ddf688bc",
+  "core": "d28e8161b6f37cbb",
+  "date": "2026-10-09",
+  "note": "180-200 ft wings go beyond the record's senior house of \"about 67 tsubo, about 2,400 sq ft\", yet the claim is backed by the question (a claim that the code matches the findings). A knowing departure should be labeled DEVIATION and recorded on a drawing page, or the sheets redrawn. Also, the 49-tsubo figure is not in 0118; it is in 0116 §294 (Matsushiro), and \"Yokota house\" appears nowhere in the bundle",
   "pages": {
    "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html": "3e4449f4b18d8a72"
   },
@@ -3393,36 +3406,25 @@
   "rests": [
    "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:7a5358483b31834d",
    "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:a0744a8d4e6197ff",
-   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:b4f7e08b118404c0",
-   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:b54c1dffd6ca961a"
+   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:b4f7e08b118404c0"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Scale#scale bar": {
-  "code": "3ff07f1b36207603",
-  "core": "b012d136f8c458d1",
-  "date": "2026-10-08",
-  "note": "how the scale is shown",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "docs/buildings.md::Scale#true size for every footprint": {
-  "code": "450f21430898a8e4",
-  "core": "b012d136f8c458d1",
-  "date": "2026-10-08",
-  "note": "how footprints are drawn, with stroke floors and markers as the only exceptions",
+  "code": "40405ce1a5c04efc",
+  "core": "d28e8161b6f37cbb",
+  "date": "2026-10-09",
+  "note": "pure display",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#well location marker": {
-  "code": "1e08c502b1a82292",
-  "core": "b012d136f8c458d1",
-  "date": "2026-10-08",
-  "note": "the page puts the curb the marker stands for at \"About 4 ft square\", fitted around a ~3 ft shaft; the claim's \"~3-4 ft curb\" takes in the shaft's size. It should say ~4 ft",
+  "code": "237b902034dc340f",
+  "core": "d28e8161b6f37cbb",
+  "date": "2026-10-09",
+  "note": "a marker larger than life for a curb of about 4 ft",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "85fc1e4c2a7f3a2a"
   },
@@ -3432,7 +3434,7 @@
    "0196-communal-wells-ido.drawing.html:6ae8258e9425fcd7",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sheet conventions#main gate on the south wall": {
   "code": "c0efd7a2fec074c6",

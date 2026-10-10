@@ -560,5 +560,9 @@
   "l7r/diagram/hamletgen/ways/knots.py::next_gather#knots no lawful gather reaches": "94",
   "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#final overrun cut": "95",
   "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a house served": "95",
-  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot no lawful gather reaches": "94"
+  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot no lawful gather reaches": "94",
+  "docs/buildings.md::Scale#true size for every footprint": "97",
+  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": "97",
+  "docs/buildings.md::Outer court (administrative / public)#charcoal weighing floor": "97",
+  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": "97"
 }

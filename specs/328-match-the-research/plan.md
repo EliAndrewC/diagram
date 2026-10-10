@@ -1567,6 +1567,30 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `bund.py::RunOnBlocks.clear`) stay as filed; the failed re-try is recorded at `consts.py`'s comment.
 - **Verification**: the measurement; `spec-fidelity`.
 
+## Wave 97 (amendment 96, 2026-10-10) - batch 13
+
+- **Scope**: the Ubame charcoal group, four Mode A rows in the next in-scope E3 run: `docs/buildings.md::Scale#true size for
+  every footprint`, `Outer court ...#charcoal bales`, `#charcoal weighing floor`, `#cart yard as a charcoal fire gap`. One
+  hand-drawn sheet is redrawn, as each finding names it (FR-009): **Ubame** (`pool/magistracies/ubame-magistracy/`).
+- **The weighing floor** at 0197's drawing page's 16 x 14 ft (48 x 42 px; it was ~27 ft square), against the tally shed and
+  on the cart yard's edge, where the bales come off the carts; four posts at its corners.
+- **The bales** at 0199's drawing convention, about 4 ft long (12 x 8 px, the 2 x 1.3 ft bale's proportion; they were 6 x 3 ft);
+  the Scale paragraph names them the third sanctioned divergence after stroke floors and location markers.
+- **The cart yard is a loading apron, not a fire gap.** 0197 draws no fire gap round a charcoal yard or store (none premodern
+  found) and lets a plaster store stand at the ordinary spacing; 0116 takes a loading apron at 15-20 ft. The apron band between
+  the tally range and the store is drawn 15 ft (it was 13.3 ft, drawn as the store's gap); the store and the tally range stay
+  where they stood, 15.7 ft apart, which is the apron's use. Decided here, not asked: the store's 6-10 ft kura spacing is
+  0116's for a storehouse beside its neighbors; where carts load between the store and the range, the stretch is the apron's
+  width, no wider than its use (0116's own rule), and nothing else stands within 20 ft of the store. Moving the store to 8 ft
+  would close the apron the cart gate opens onto.
+- **Records**: the sheet's comments, its notes (the history line, the fire-gap and bale paragraphs), the four claim lines,
+  m:wave97-ubame-charcoal (the pack audit before and after). A claim the re-check found unclaimed - the granary labeled
+  `granary`, not `rice granary` - is written (0098).
+- **Occasions**: `layout-revised: ubame-magistracy` (building-review), `glyph-redrawn: weighing floor on ubame-magistracy`,
+  `glyph-redrawn: charcoal bales on ubame-magistracy` (glyph-check), at batch 13's close.
+- **Verification**: `make map` on Ubame (REGENERATED, the page written with no untagged ink), the pack audit, impl-drift on the
+  owed claims, `make quick`, `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
