@@ -14,7 +14,7 @@ The record's roji approach (Hayakawa, Ubame) runs a guest of rank behind the off
 whether the middle gate of the "Koseki form" opened off the forecourt instead, which would make the divider gate's place a
 per-sheet form.
 
-**The research pass** (2026-10-10, an agent, read-only; `research.md` R1): the premise does not hold. The record's Koseki form is the old Koseki house at Shiroishi (旧小関家, a middle-rank retainer's
+**The research pass** (2026-10-10, an agent, read-only; `research.md` R1): no source places a middle gate relative to an office hall. The record's Koseki form is the old Koseki house at Shiroishi (旧小関家, a middle-rank retainer's
 house of 1730), a residence with NO office hall: its middle gate is a gate in the roji wall (塀中門), from the gate court
 through the walled roji straight to the principal room's veranda. No source read places a middle gate relative to an
 office hall, in a jin'ya or elsewhere.
