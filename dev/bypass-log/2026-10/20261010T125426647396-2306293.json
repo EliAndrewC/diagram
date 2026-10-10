@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-10T12:54:26Z",
+  "target": "review-accept",
+  "commit": "585df49dc",
+  "outcome": "permitted",
+  "why": "review-accept building-review--county-magistracy-example Q1: pre-existing, not this wave: a research question filed as a found E4 row (found-wave106.jsonl)"
+}

@@ -412,5 +412,85 @@
       "shoe stones declared": "Hayakawa, Ochiba and Ubame (id=\"shoe-stone\"), and the draft's",
       "limit": "10.5 ft: the kitchen's second tub beside its first at one 6 ft door, past the door's held approach and the draft's 1 ft clearance, stands ~10.2 ft off (compound_model.TUB_DOOR_MAX_FT)"
     }
+  },
+  "wave106-ubame-gate-tub": {
+    "observed": "2026-10-10",
+    "subject": "glyph-check--fire-water-tubs",
+    "answers": "2d2dfbe5daa6",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit on it",
+    "command": "grep -n 'cx=\"655.5\" cy=\"714\"\\|cx=\"940\" cy=\"270\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the gate range's tub's disc against the main gate passage (x 615-651)",
+    "quantity": "the tub check's F1: the gate range's tub out of the main gate's mouth",
+    "verifies": "F1",
+    "value": {
+      "before": [
+        643.5,
+        714
+      ],
+      "after": [
+        655.5,
+        714
+      ],
+      "disc_x_after": [
+        651.7,
+        659.3
+      ],
+      "reading": "against the guardroom's north face, round the corner from its door, clear of the passage; pack_audit clean"
+    }
+  },
+  "wave106-ubame-shrine-tub": {
+    "observed": "2026-10-10",
+    "subject": "glyph-check--fire-water-tubs",
+    "answers": "2d2dfbe5daa6",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit on it",
+    "command": "grep -n 'cx=\"655.5\" cy=\"714\"\\|cx=\"940\" cy=\"270\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg; make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the shrine's tub against its west door (y 252-264)",
+    "quantity": "the tub check's F3: the shrine's tub beside its door, not at the corner",
+    "verifies": "F3",
+    "value": {
+      "before": [
+        940,
+        280
+      ],
+      "after": [
+        940,
+        270
+      ],
+      "reading": "beside the west door's south end, clear of the doorway; pack_audit clean"
+    }
+  },
+  "wave106-county-gate-tub": {
+    "observed": "2026-10-10",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "2d2dfbe5daa6",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg after make map",
+    "command": "grep -o '<circle cx=\"404\" cy=\"596\"' the draft's svg; make pack-audit ARGS=<it>",
+    "method": "the gatehouse tub's disc against the main gate's track (x 414-438 px)",
+    "quantity": "the building review's E1: the gatehouse tub out of the gate's track",
+    "verifies": "E1",
+    "value": {
+      "before": [
+        416,
+        602
+      ],
+      "after": [
+        404,
+        596
+      ],
+      "reading": "on the gatehouse's north face at its north-east corner, the round-the-corner seat; a beside-door seat may now stand at most 0.15 ft past a face's end (it stood 0.35 ft past, in the track)"
+    }
+  },
+  "wave106-county-notes": {
+    "observed": "2026-10-10",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "2d2dfbe5daa6",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "grep -n 'wave 106' the notes",
+    "method": "the notes read against the draft",
+    "quantity": "the building review's E2: the notes record wave 106",
+    "verifies": "E2",
+    "value": {
+      "entry": "2026-10-10 feature 372 wave 106 (the fire-water tubs at the entrance)"
+    }
   }
 }

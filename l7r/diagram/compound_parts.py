@@ -398,8 +398,10 @@ def beside_door_fracs(p: Placed, side: str, door: tuple[float, float]) -> tuple[
     _nx, ny, fx, fy, length = _face(p, side)
     at = (door[0] - fx) if ny else (door[1] - fy)
     fracs = [(at + sign * d) / length for d in _BESIDE_DOOR_FT for sign in (-1, 1)]
-    # a tub's center may stand up to its half-width past the face's end: it is still under that corner's eaves
-    slack = 1.3 / length
+    # a seat a hair past the face's end is kept (0.15 ft: the round-trip kitchen's second tub, 0.1 ft past); none farther -
+    # a tub 0.35 ft past the corner stood in the main gate's track beside the gatehouse (feature 372 wave 106,
+    # building-review E1): a short face takes `round_the_corner`
+    slack = 0.15 / length
     return tuple(f for f in fracs if -slack <= f <= 1.0 + slack)
 
 

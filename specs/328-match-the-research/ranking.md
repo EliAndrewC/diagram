@@ -13,8 +13,8 @@ first. Within a tier, rows of one module sit together; a row waits for the rows 
 | E1 | 182 |
 | E2 | 207 |
 | E3 | 237 |
-| E4 | 63 |
-| all | 952 |
+| E4 | 64 |
+| all | 953 |
 
 ## E0
 
@@ -992,3 +992,4 @@ first. Within a tier, rows of one module sit together; a row waits for the rows 
 | 61 | `l7r/diagram/waterfields/banks.py::_TOE_MIN_THICKNESS#least thickness` | DRIFTED | 0005 sets no least basin width while 0014 says a thin strip takes the toe's least width with no figure; the record must settle whether a least width exists and its value before 0.16 can stand or go | kept |  |
 | 62 | `l7r/diagram/waterfields/partition.py::HUG_COL#no strip too thin for a paddy` | DRIFTED | the pages disagree on whether a basin has a least width (0005 none, 0014 the toe's, no figure) and neither gives 0.3; record the figure first | kept |  |
 | 63 | `l7r/diagram/waterfields/partition.py::HUG_ROW#no strip too thin for a paddy` | DRIFTED | as HUG_COL: the record gives no least strip depth and its two pages disagree; neither gives 0.5 row steps | kept |  |
+| 64 | `pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md#the carter's route past the kitchen's north tub` | DRIFTED | the kitchen's north tub leaves ~3.1-3.4 ft of the 7 ft way the notes call the carter's route to the house's privies: research how night soil left a samurai compound (buckets on a shoulder pole, or a handcart); by pole the way passes and the notes' word 'carter' changes, by cart the tub moves to the door's south side | kept |  |

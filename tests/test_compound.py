@@ -910,8 +910,8 @@ def test_the_seats_beside_a_door_flank_it_nearest_first_and_stay_by_the_face() -
     fracs = cp.beside_door_fracs(p, "S", (10.0, 10.0))  # the door mid-face on the south side
     assert fracs[:2] == pytest.approx(((10.0 - 6.35) / 20.0, (10.0 + 6.35) / 20.0))
     assert len(fracs) == 8 and min(fracs) == pytest.approx(0.0) and max(fracs) == pytest.approx(1.0)
-    near_end = cp.beside_door_fracs(p, "S", (1.0, 10.0))  # nothing past the tub's half-width beyond the west end
-    assert all(f >= -1.3 / 20.0 for f in near_end) and len(near_end) == 4
+    near_end = cp.beside_door_fracs(p, "S", (1.0, 10.0))  # nothing past the face's west end
+    assert all(f >= -0.15 / 20.0 for f in near_end) and len(near_end) == 4
     side = cp.beside_door_fracs(c.Placed(_b("y", 10.0, 20.0, "outer", "W"), 0.0, 0.0), "E", (10.0, 10.0))
     assert side[0] == pytest.approx(3.65 / 20.0)  # along a west or east face the frac runs down it
 

@@ -271,6 +271,19 @@ Coverage 33%, perimeter-hugging 71%, nothing overflows; every registered check p
 
 Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
 
+2026-10-10 feature 372 wave 106 (the fire-water tubs at the entrance):
+
+- **Each tub beside a door of its building** (research 0100: standing water kept at the entrance), its center within 10.5 ft of
+  the door's - a CONVENTION, the distance the kitchen's second tub needs beside its first; the kitchen's two either side of its
+  door where both sides are clear.
+- **The gatehouse's tub round the corner nearest its door**, on the north face: the 12 ft east face leaves no seat beside the door
+  clear of the main gate's track (UNRESEARCHED).
+- **The bath's tub on its yard side**, judged by no door: the bath is entered from the house.
+- **The cell draws a door**, as every building with a tub does; the reception's shoe stone is declared `id="shoe-stone"`, its
+  guests' way in (no genkan).
+
+Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
+
 ## Review log
 
 - **2026-09-27 building-review of the pass-2 draft** (the pass-3 fix list): 3 delta errors (a tub and its caption under
