@@ -86,5 +86,25 @@
       "ubame_before_px": 27,
       "reading": "Hayakawa's landing lane 10.7 -> 6 ft, Ubame's run of the Fox road to the cart gate 9 -> 6 ft; every pack-audit check OK on both sheets"
     }
+  },
+  "wave101-gatehouse": {
+    "quantity": "wave 101 (2026-10-10): the gate ranges at 2 ken deep, Ochiba's gatehouse at 0093's 40 ft",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/{hayakawa,ubame,ochiba}-magistracy/*.svg before and after; make pack-audit on each",
+    "command": "make pack-audit ARGS=<sheet>",
+    "method": "the gatehouse rects read before and after; the audits diffed",
+    "value": {
+      "range_depth_px": [
+        42,
+        36
+      ],
+      "ochiba_gatehouse_px": [
+        54,
+        120
+      ],
+      "ubame_tub_moved": "(784,706) -> (784,712), back against the range's north face (the audit had flagged it 4.0 ft off)",
+      "coverage": "Ubame 39% -> 38%; Hayakawa and Ochiba tiles within 3 points; Ochiba's largest central vacancy 37 x 57 ft -> 37 x 41 ft",
+      "reading": "both gate ranges 12 ft deep with their south faces on the wall line; Ochiba's gatehouse 40 x 12 ft, grown east into open court; every audit check OK after the tub's move"
+    }
   }
 }

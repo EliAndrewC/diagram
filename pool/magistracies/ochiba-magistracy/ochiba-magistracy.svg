@@ -369,10 +369,10 @@
 
   <!-- Gatehouse (guard post just inside and BESIDE the gate - never across it) -->
   <g data-kind="gatehouse">
-    <!-- a gatehouse of its own beside the gate, 18 x 12 ft - the one freestanding guardroom measured is about 18 ft
-         (feature 267 R19, buildings 420: Takayama's form; it was 40 ft long, the gate range's scale; pass 2 took its
-         depth from 14 to 12 ft) -->
-    <rect x="656" y="706" width="54" height="36" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
+    <!-- a gatehouse of its own beside the gate, 40 x 12 ft - 0093's drawing page: about 40 ft long (a GUESS, a fifth over
+         Takayama's measured ~400 sq ft at 2 ken deep) and 2 ken (~12 ft) deep, measured (feature 372 wave 101: it was
+         18 x 12 ft, the temple guardroom's size; feature 267 R19 had taken it from 40 ft) -->
+    <rect x="656" y="706" width="120" height="36" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
     <!-- feature 267 pass 3: the gatehouse's door, on its west face toward the gate passage it keeps -->
     <rect x="650" y="718" width="6" height="14" fill="#B89868" stroke="#4A3318" stroke-width="0.8" data-kind="door"/>
 

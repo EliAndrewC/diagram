@@ -10,6 +10,9 @@ in 328's ranking and this spec.
 - (reviewed PASS at batch 1's close, 2026-10-10) glyph-redrawn: boundary stones on ubame-magistracy - wave 99: each pillar 3 ft square, the plinth form (0083)
 - (reviewed PASS at batch 1's close, 2026-10-10) glyph-redrawn: road on hayakawa-magistracy - wave 100: the cart lanes to the side gates 6 ft (0082), on Hayakawa and Ubame
 
+- layout-revised: ochiba-magistracy - wave 101: the gatehouse 40 x 12 ft (0093)
+- glyph-redrawn: gatehouse on ubame-magistracy - wave 101: the gate ranges 12 ft deep on Hayakawa and Ubame (0093)
+
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame** (`pool/magistracies/*/`), their notes; `docs/buildings.md`.
@@ -33,3 +36,10 @@ in 328's ranking and this spec.
 - [x] T03 wave 100's row (FR-001, FR-002)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the wave's claims; spec-fidelity CLEAR (plan round 3); sheets regenerated, pack audits checked
+
+## Phase 4 - wave 101 (amendment 4): the gate ranges at 2 ken; Ochiba's gatehouse at 40 ft
+
+- Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ubame**, **Ochiba**, their notes; `docs/buildings.md`.
+
+- [ ] T04 wave 101's row (FR-001, FR-002)
+      research: rendering

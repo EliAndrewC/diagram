@@ -287,17 +287,18 @@
   </g>
 
   <!-- Gatehouse: the GATE RANGE is a nagaya-mon - its south face IS the wall line (the wall is broken along it) and
-       the 12 ft main-gate passage runs THROUGH it, a room on each side: the guardroom east (46 x 14 ft), opening
-       onto the passage by its door, and a gate-keepers' room west (13 x 14 ft) (feature 267 pass 2, R19/R26,
+       the 12 ft main-gate passage runs THROUGH it, a room on each side: the guardroom east (46 x 12 ft), opening
+       onto the passage by its door, and a gate-keepers' room west (13 x 12 ft) (feature 267 pass 2, R19/R26,
        buildings 420 and 480: the Kashiwara jin'ya's guardroom in the gate range; the range stood inside the wall
-       beside an opening of its own until then). The west room's use is a guess. -->
+       beside an opening of its own until then). The west room's use is a guess. Feature 372 wave 101: 12 ft deep (36 px),
+       2 ken, 0093's measured depth for both forms (it was 14 ft); the south face stays on the wall line. -->
   <g data-kind="gatehouse">
     <!-- the two rooms as rects of their own, so the guardroom's door sits on its own west wall (one rect across the
          passage read the door as floating inside the building) -->
-    <rect x="575" y="712" width="40" height="42" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
-    <rect data-id="gatehouse-1" x="651" y="712" width="139" height="42" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
+    <rect x="575" y="718" width="40" height="36" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
+    <rect data-id="gatehouse-1" x="651" y="718" width="139" height="36" fill="#8C6F3E" stroke="#4A3318" stroke-width="1.5"/>
     <!-- the passage: court ground under the range's roof, the roof's edges dashed across it -->
-    <line x1="615" y1="712" x2="651" y2="712" stroke="#4A3318" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="615" y1="718" x2="651" y2="718" stroke="#4A3318" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="615" y1="754" x2="651" y2="754" stroke="#4A3318" stroke-width="0.8" stroke-dasharray="4 3"/>
     <!-- the guardroom's door onto the passage -->
     <rect x="648" y="724" width="6" height="18" fill="#4A3318" data-kind="door"/>
@@ -895,7 +896,7 @@
     <circle cx="354" cy="558" r="3.8"/>
     <circle cx="852" cy="600" r="3.8"/>
     <circle cx="854" cy="560" r="3.8"/>
-    <circle cx="784" cy="706" r="3.8"/>
+    <circle cx="784" cy="712" r="3.8"/>
     <circle cx="306" cy="697.7" r="3.8"/>
     <circle cx="250" cy="662" r="3.8"/>
     <circle cx="952" cy="646" r="3.8"/>

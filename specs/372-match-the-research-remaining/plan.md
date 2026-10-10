@@ -63,8 +63,22 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 - **Records**: m:wave100-cart-lanes (every pack-audit check OK on both sheets); both sheets' notes and comments.
 - **Occasions**: glyph-redrawn: road on hayakawa-magistracy (the lane narrowed; Ubame's the same glyph).
 
+## Wave 101 (amendment 4, 2026-10-10) - batch 2
+
+- **Scope**: `docs/buildings.md::Walls and gates#gatehouse` (E3, flagged deviation-tempting: 18 x 12 ft is the one guardroom
+  measured, the page's 40 ft a guess). 0093's drawing page draws both forms 2 ken (~12 ft) deep, measured, and a gatehouse of
+  its own about 40 ft long, a GUESS a fifth over Takayama's measured ~400 sq ft; the fix follows the page, as the ranked fix
+  says, not the tempting deviation. **Hayakawa**'s and **Ubame**'s gate ranges 14 -> 12 ft deep, the north face moved in, the
+  south face kept on the wall line (the doors and Hayakawa's passage follow); **Ochiba**'s gatehouse 18 x 12 -> 40 x 12 ft,
+  grown east into open outer court (nothing stood within 80 px).
+- **Knock-on**: Ubame's tub at the range's north face stood 4.0 ft off once the face moved in (the pack audit's
+  fire_water_adrift); moved in with it.
+- **Records**: m:wave101-gatehouse; the procedure's Gatehouse paragraph and claim; three sheets' notes.
+- **Occasions**: layout-revised: ochiba-magistracy (the gatehouse more than doubled); glyph-redrawn: gatehouse on ubame-magistracy.
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |
 |---|---|---|---|---|
 | 1 | 98-100 | none owed: the batch changed no engine code (hand sheets, their notes and the procedure only), so the engine key is the landed one and a pair would time the same code | green 2026-10-10 (already verified on the landed engine key) | closed: glyph checks latrine, boundary stones, road PASS; escalation-check |
+| 2 | 101- | owed at the batch close | at the batch close | open |

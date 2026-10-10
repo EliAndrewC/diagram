@@ -3514,26 +3514,25 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#compound wall stroke": {
-  "code": "0ab87d77cbb8045d",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "3 ft dark stroke matches the plan convention, which takes the tsuijibei's thickness",
+  "code": "8fe54b8e2d557eed",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "3 ft heavy dark stroke",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
   "research": "04d454c4c7654894",
   "rests": [
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:aef4a5069500ea83",
-   "0092-compound-walls-neribei-and-tsuijibei.drawing.html:bbba3419b31507b3",
-   "0092-compound-walls-neribei-and-tsuijibei.drawing.html:f335f68a1e164a0e"
+   "0092-compound-walls-neribei-and-tsuijibei.drawing.html:bbba3419b31507b3"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#divider wall": {
-  "code": "801fc77c9053805b",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "a ~2 ft wall falls within the lighter wall's measured foot to 2 ft; the gate it has is a separate unclaimed decision (see UNCLAIMED)",
+  "code": "ef138c30886cbfc3",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "2 ft is within the lighter wall's measured 1-2 ft",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
@@ -3544,10 +3543,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#divider wall between the courts": {
-  "code": "af1439faf4fab30d",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "two courts with the office in front and the residence behind, split by a divider with its own gate, as recorded",
+  "code": "01a44e0f078bed9a",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "office in front, residence behind, with a gate between",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
@@ -3560,10 +3559,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#gatehouse": {
-  "code": "2de3f853c27cbedf",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "the gate range is drawn \"14 ft deep\" (Hayakawa and Ubame), but the page draws both forms \"about 2 ken (~12 ft) deep\". The freestanding house is fixed at 18x12 and \"~40 ft is a GUESS - that is the range's scale\" misreads the drawing page, which gives ~40 ft as the freestanding gatehouse's GUESS length. The house is fixed \"beside\" the gate where §26 attests both beside and behind. Make it 12 ft deep, and reconcile the length with §40 or record a DEVIATION",
+  "code": "524687bad7f7e98d",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "the gatehouse or the guardroom in the gate range is rolled per plan; 2 ken deep; the 40 ft is a recorded GUESS",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "c88808926ebd4116",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
@@ -3574,16 +3573,18 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:77efbd366737e4bc",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:c728fa105e6309d9",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:049fe2faa8c36407",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:2d7726f48cf3e499",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:73f43c24a22be5fc",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:7962493012310fe7",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:cd57d3fd287dbd8e"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate forms": {
-  "code": "c90751aa9d5da411",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "yakuimon 6-8.5 ft (18-26 px) or nagaya-mon ~12 ft, rolled per plan, as the page sets it",
+  "code": "5422dec1e32d0ead",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "the yakuimon (6-9 ft) or the nagaya-mon (~12 ft) is rolled per plan",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
   },
@@ -3596,10 +3597,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate on the south wall": {
-  "code": "ebc7a690af2e91c1",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "the same default as above, applied to the south-wall gap in the compound wall",
+  "code": "43c03f6e44137955",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "the gate faces south where nothing else decides; the Joge post's east-wall gate is noted",
   "pages": {
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "017ee0b68f90e06e"
   },
@@ -3612,10 +3613,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate posts": {
-  "code": "3d3720e1a5dc2e56",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "the claim gives each post as ~2.7-5.3 x 4.7 ft, but the cited page says \"A gate post is drawn about 2 ft square\" (a convention). Draw posts ~2 ft square, or record the larger posts as a DEVIATION",
+  "code": "7d2e2cb242f21181",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "the cited page's only post size is \"A gate post is drawn about 2 ft square\", but the sheets draw each post ~2.7-5.3 x 4.7 ft; either draw the posts at ~2 ft square or record the larger post on 0092's drawing page as a GUESS and relabel the claim",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
@@ -3626,10 +3627,10 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Walls and gates#no salt wards at gates": {
-  "code": "088e7e399660d984",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "no salt or other wards at an official's gates, as the page says",
+  "code": "2b8ea06b89277717",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "none is recorded at an official's gate",
   "pages": {
    "0240-salt-heaps-at-doorways-morijio.drawing.html": "21e03e816285eede"
   },
@@ -3640,20 +3641,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#opening ink width": {
-  "code": "1e0d83abe5e81c53",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "pulling the line endpoints back by half a stroke is purely how the opening is drawn",
+  "code": "54b12e568519c542",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "drawing mechanics only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#structures abut walls": {
-  "code": "342d4a12ed2422ca",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "the procedure measures \"~2 ft off a compound wall\" as \"half the ink plus a hair\" from the wall's centerline, which leaves ~0.5 ft between a building and the wall face (and ~0.5 ft off a divider). The page sets \"A foot or two, its eaves nearly touching the wall\" (a GUESS). Clearance should be 1-2 ft from the wall face. The no-building-on-wall rule itself matches",
+  "code": "b31baf699c35e645",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "\"~2 ft off a compound wall, ~1.5 ft off a divider\" is measured from the wall's centerline (\"half the ink plus a hair\"), which leaves about 0.5 ft between the wall's face and the building; the page puts a building \"A foot or two\" off the wall. Either measure the clearance from the face (about 2.5-3.5 ft from the centerline of a 3 ft wall), or record the 0.5 ft gap as the project's guess on the page",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
@@ -3665,10 +3666,10 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Walls and gates#threshold stones": {
-  "code": "aa6112bcc5a1518a",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "CANON, and the account names both GM rulings (2026-07-25, 2026-09-26)",
+  "code": "f6e4045bb5024142",
+  "core": "260aa1c5e1ce4172",
+  "date": "2026-10-10",
+  "note": "both GM rulings are named",
   "pages": {},
   "research": "",
   "rests": [],

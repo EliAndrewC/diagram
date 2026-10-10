@@ -857,17 +857,19 @@
        staff-housing (c) the men who keep the gate are the ones who sleep at it; this sheet's CHOICE among the attested
        uses (menservants' rooms, a stable or a store the others). Its door is on the north face, onto the forecourt; the caption sits across the range's
        north face instead of on the bay. -->
+  <!-- feature 372 wave 101: the range 12 ft deep (36 px), 2 ken, 0093's measured depth for both forms (it was 14 ft); its
+       south face stays on the wall line -->
   <g data-kind="gatehouse">
-    <rect data-id="gatehouse-2" x="334" y="712.5" width="240" height="42" fill="#8C6F3E" stroke="#4A3318" stroke-width="2"/>
+    <rect data-id="gatehouse-2" x="334" y="718.5" width="240" height="36" fill="#8C6F3E" stroke="#4A3318" stroke-width="2"/>
     <!-- each room its own floor (the sheets' feature-264 convention), so each room's name seats in its own room -->
-    <rect data-id="gatehouse-3" x="334" y="712.5" width="102" height="42" fill="#8C6F3E"/>
-    <rect data-id="gatehouse-4" x="436" y="712.5" width="54" height="42" fill="#8C6F3E"/>
-    <rect data-id="gatehouse-5" x="526" y="712.5" width="48" height="42" fill="#8C6F3E"/>
-    <rect data-id="gatehouse-6" x="334" y="712.5" width="240" height="42" fill="none" stroke="#4A3318" stroke-width="2"/>
+    <rect data-id="gatehouse-3" x="334" y="718.5" width="102" height="36" fill="#8C6F3E"/>
+    <rect data-id="gatehouse-4" x="436" y="718.5" width="54" height="36" fill="#8C6F3E"/>
+    <rect data-id="gatehouse-5" x="526" y="718.5" width="48" height="36" fill="#8C6F3E"/>
+    <rect data-id="gatehouse-6" x="334" y="718.5" width="240" height="36" fill="none" stroke="#4A3318" stroke-width="2"/>
     <!-- the guardroom's partition, and its opening onto the passage -->
-    <line data-id="gatehouse-1" x1="436" y1="712.5" x2="436" y2="754.5" stroke="#4A3318" stroke-width="1"/>
+    <line data-id="gatehouse-1" x1="436" y1="718.5" x2="436" y2="754.5" stroke="#4A3318" stroke-width="1"/>
     <!-- the gatekeepers' lodging's door, on the north face onto the forecourt -->
-    <rect x="373" y="706.5" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <rect x="373" y="712.5" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text font-size="10" font-weight="bold" fill="#3A2E1C" data-names="gatehouse-1 gatehouse-2 gatehouse-3 gatehouse-4 gatehouse-5 gatehouse-6">gate range</text>
     <text font-size="8" font-style="italic" fill="#3A2E1C" data-names="gatehouse-3">gatekeepers'</text>
     <text font-size="8" font-style="italic" fill="#3A2E1C" data-cont="1">lodging</text>
@@ -877,7 +879,7 @@
   <!-- The passage through the range, its floor the court's earth, and the gate posts at its outer face where the doors
        hang; the town street meets it (feature 267 pass 2) -->
   <g data-kind="main gate">
-    <rect x="490" y="712.5" width="36" height="42" fill="#D9C28E" stroke="#4A3318" stroke-width="1"/>
+    <rect x="490" y="718.5" width="36" height="36" fill="#D9C28E" stroke="#4A3318" stroke-width="1"/>
     <!-- the guardroom's door onto the passage -->
     <rect x="482" y="722" width="8" height="12" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door" data-part-of="gatehouse"/>
     <g fill="#2D2A24">
