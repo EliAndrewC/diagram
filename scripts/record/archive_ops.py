@@ -293,6 +293,7 @@ def find(
                     f"the GM's copy of {key}: {store.dir / entry['archived']}", file=out
                 )
     words = [t.strip() for t in terms.split("|") if t.strip()]
+    each: dict[str, int] = {}  # texts holding each word alone - the tip when none holds them all
     if words and store.dir.is_dir():
         found = None
         for word in words:
@@ -312,6 +313,7 @@ def find(
                 check=False,
             )
             files = {f for f in done.stdout.splitlines() if "/.git/" not in f}
+            each[word] = len({str(pathlib.Path(f).parent) for f in files})
             found = files if found is None else found & files
         by_dir = {str(pathlib.Path(f).parent): f for f in sorted(found or ())}
         url_of = {str(store.dir / r["path"]): r["url"] for r in rows if r.get("path")}
@@ -324,6 +326,16 @@ def find(
             )
             if d in url_of:  # feature 312 FR-018
                 print("\n".join(src._attempts_mod().report(root, url=url_of[d])), file=out)
+    if not hits and len(words) > 1 and any(each.values()):
+        # THE TERMS ARE ALL REQUIRED (`a|b` is a and b, not a or b), and four research passes of feature 376 read
+        # "nothing held" as an empty archive and went to the web for texts the archive held under one word alone
+        held = ", ".join(f"{w} {n}" for w, n in each.items())
+        print(
+            f"archive: no text holds ALL of {' + '.join(words)} (TERMS are all required). Texts holding each alone: {held}"
+            f" - ask one term at a time: `make archive-find TERMS=\"{max(each, key=each.get)}\"`",
+            file=out,
+        )
+        return 1
     if not hits:
         print(
             "archive: nothing held - search the web (a page you cite is archived by `make source-outcome OUTCOME=cited:<key>`)",

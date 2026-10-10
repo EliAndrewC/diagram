@@ -1,0 +1,34 @@
+{
+  "utc": "2026-10-10T22:12:02Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 8,
+  "result": "failed: static",
+  "commit": "6ac5c4898",
+  "first_failure_s": 6.7,
+  "last_failure_s": 6.7,
+  "host": {
+    "load": [
+      8.58,
+      9.33
+    ],
+    "mem_avail_mb": [
+      7849,
+      8369
+    ],
+    "cpu_temp_c": [
+      57.0,
+      63.0
+    ],
+    "stall_s": {
+      "cpu": 0.1,
+      "io": 0.0,
+      "io_full": 0.0,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

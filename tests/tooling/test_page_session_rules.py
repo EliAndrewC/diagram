@@ -40,6 +40,7 @@ CARRIED = {
         "The record is HTML under": "Never edit a built page",
         "Reading and checking are dispatched to agents": "run the mechanical pre-pass",
         "A record check reads a BUNDLE": "Checks read BUNDLES",
+        "A `research record` feature closes only": "NOT: feature 378's implementation check is owed by the session that closes the feature, never by a page session",
     },
 }
 

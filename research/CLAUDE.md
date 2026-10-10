@@ -89,6 +89,16 @@ one can wholly read (`paywalled`, `gm-partial`, `never-read`) stands only on a p
 readable part, recorded in `research/partial-confirmations.jsonl` - the push and `make quick` refuse it otherwise
 (`scripts/gates/check-partial-citations.py`).
 
+## A finding is checked against the code before its feature closes (GM 2026-10-10, feature 378)
+
+A `research record` feature that changes a question's findings looks up whether the code conforms. Where code decides
+what the question decides, its `Research:` claim cites the question's findings page (a drawing-page pointer alone is
+not re-owed by a changed finding) - added if missing - and `impl-drift` records the
+verdict (`make claims-owed`, `claims-bundle`, `claims-checked`). Where no code implements it yet, the feature's
+`implementation-check.md` says `- NNNN: no code implements it - <why>; searched: <what>` (only where no code decides it). A DRIFTED verdict is the result the GM asked to see
+in `make claims-report`; the code is fixed only where the feature's spec asks. `make impl-check F=<n>` lists what is
+owed, and no feature of this type closes until it reports nothing missing.
+
 ## A question has a size (feature 250 D14, GM 2026-09-26)
 
 A question's PROSE stays under 20,000 bytes (`scripts/gates/check-question-size.py`; `make quick` fails on one a

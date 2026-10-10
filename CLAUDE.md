@@ -65,6 +65,12 @@ auto-loads when a session edits the record; the archive and the download list ar
 - Where the research supports more than one form, it becomes a knob with per-settlement variance
   rolled from the map's seed, never a choice. A degree along a continuum is calibrated liberty; a
   choice between distinct forms is a knob.
+- A `research record` feature closes only with its findings checked against the code (feature 378, GM 2026-10-10): each
+  question whose findings it changed is cited (its findings page, not only its drawing page) by a `Research:` claim of
+  the code that decides it, checked by
+  `impl-drift`, or, where no code decides it, recorded as implemented nowhere with what was searched (`implementation-check.md`). A DRIFTED claim is a result shown by `make
+  claims-report`; the code is fixed only if the feature's spec asks. `make impl-check F=<n>` says what is owed, and the
+  closing check refuses until it reports nothing.
 - Every rendering decision is recorded in one of four classes - historically accurate, deliberate
   deviation, map drawing convention, guess - in `research/` (the finding), the operative doc (the
   rule), the point of change (the pointer) and the feature's spec under "Decisions Recorded". An
@@ -145,7 +151,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Every feature ends with `make feature-report F=NNN WRITE=1` - where its time and dispatches went, from the hooks' event
   log; its last `make tick`, a closing status line and `make gm-reviewed` refuse without it, and without any measurement
   another spec carried to it (`Carried: SC-nnn -> NNN <key>`). A feature lands with the GM's review open when it has a row
-  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.)
+  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.) A row the GM discussed in the session and
+  agreed needs no more action IS his review: run `make gm-reviewed F=NNN WORDS="<his words, verbatim>"` in that turn (GM 2026-10-10).
 - Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
   or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's
   to judge: its refusal names `make arbiter-bundle`, and an advisor asked about a loop is handed that MANIFEST too.

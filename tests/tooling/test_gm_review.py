@@ -61,6 +61,20 @@ def test_an_arbiter_ruling_is_a_row_and_the_gm_closes_it(root: pathlib.Path) -> 
     assert "nothing waits" in gm.listing(root)
 
 
+def test_a_discussed_row_is_reviewed_with_the_gms_words(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    d = root / "specs" / "375-x"
+    (d / "report.md").write_text("# report\n")
+    gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
+    assert 'make gm-reviewed F=375 WORDS="<his words>"' in gm.listing(root), "the row says how a discussion closes it"
+    with pytest.raises(ValueError, match="two words"):
+        gm.reviewed(root, d, words="fine")
+    monkeypatch.chdir(root)
+    monkeypatch.setenv("GM_WORDS","I don't know that we need any tooling around it")
+    assert gm.main(["reviewed", "375"]) == 0
+    assert gm.rows(d)[0]["gm_words"] == "I don't know that we need any tooling around it"
+    assert "nothing waits" in gm.listing(root)
+
+
 def test_an_overturned_row_becomes_an_open_row_of_another_feature(root: pathlib.Path) -> None:
     d, other = root / "specs" / "375-x", root / "specs" / "376-y"
     (d / "report.md").write_text("# report\n")
