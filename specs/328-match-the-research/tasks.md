@@ -627,9 +627,9 @@ closed.
 - [x] T37 every touched unit re-checked by `impl-drift`; each wave-9 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
       verify: DONE. impl-drift on every touched unit (bundles A-I, scratchpad/w9, each recorded with make claims-checked); every finding a found row tiered by its work (T38a, T38b) or a held row's own stated drift (D8)
-- [ ] T38 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+- [x] T38 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. ticked at the landing (FR-011), after the landing pair's band 1 and its consistent audit, which supersede waves 9-10's own pairs
 
 
 ## Phase 11 - wave 10 (amendment 9): the open in-scope E0 claims, then in-scope E1 rows 290-354
@@ -695,9 +695,9 @@ BEGINS ONCE WAVE 9 IS PUSHED (FR-006) - or as the exception check rules (plan, W
 - [x] T40 every touched unit re-checked by `impl-drift`; each wave-10 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
       verify: DONE. impl-drift on every touched unit (bundles A-E, scratchpad/w10, each recorded with make claims-checked); the wave's own stale claim texts corrected and re-checked; every other finding a found row (audit/found-wave10.jsonl)
-- [ ] T41 the bookend pair, back to back, and the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+- [x] T41 the bookend pair, back to back, and the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. ticked at the landing (FR-011), after the landing pair's band 1 and its consistent audit, which supersede waves 9-10's own pairs
 
 
 ## Phase 12 - wave 11 (amendment 10): the last open in-scope E0 and E1 rows
@@ -1438,8 +1438,9 @@ Back in ranking order (row 481 on).
 - [x] T109 the joiner's confluence, both ends; row 481 closed (FR-003, FR-004)
       research: rendering
       verify: DONE. the joiner's confluence tested from either end, row 481 closed as fixed in wave 34; tests red on the old code; impl-drift IN-STEP; spec-fidelity CLEAR r2
-- [ ] T110 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
+- [x] T110 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. ticked at the split (FR-011) on its recorded close: the wave's impl-drift re-check in its verify line; batch 1 closed (T119)
 
 ## Phase 44 - wave 43 (amendment 42): rows 482-485 of the lane web
 
@@ -1473,8 +1474,9 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 - [x] T111 rows 482-485 (FR-003, FR-004)
       research: rendering
       verify: DONE. rows 482-485: the hairpin's T, the third gather form, the steading reach, the refused near join; tests red on the old code; impl-drift IN-STEP r2; spec-fidelity CLEAR r2
-- [ ] T112 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
+- [x] T112 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. ticked at the split (FR-011) on its recorded close: the wave's impl-drift re-check in its verify line; batch 1 closed (T119)
 
 ## Phase 45 - wave 44 (amendment 43): row 486, a near run joined at a single point; 0246's reach to the center
 
@@ -1503,8 +1505,9 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 - [x] T113 row 486; the reach to the center (FR-003, FR-004)
       research: rendering
       verify: DONE. row 486 joined at a single point (joined_link, carried_onto, the whole run snapped or linked at the way's width); the reach to the center; tests; impl-drift IN-STEP r3; spec-fidelity CLEAR r2
-- [ ] T114 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
+- [x] T114 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. ticked at the split (FR-011) on its recorded close: the wave's impl-drift re-check in its verify line; batch 1 closed (T119)
 
 ## Phase 46 - wave 45 (amendment 44): rows 487-490 - 0081's hairpin and zigzag; no end is behind a house
 
@@ -1530,8 +1533,9 @@ In ranking order (rows 487-490; 491-492 next, row 492's change held as `audit/he
 - [x] T115 rows 487-490 (FR-003, FR-004)
       research: rendering
       verify: DONE. rows 487-490: the hairpin cut (40 ft+ a GUESS, E4 filed), the zigzag pulled straight, the behind-the-wall rule removed whole; tests; spec-fidelity CLEAR r2; impl-drift r2 one MISLABELED held for the E4 research
-- [ ] T116 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
+- [x] T116 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. ticked at the split (FR-011) on its recorded close: the wave's impl-drift re-check in its verify line; batch 1 closed (T119)
 
 ## Phase 47 - wave 46 (amendment 45): rows 491-494 and 496 - 0081's taut lane and its cut hairpin
 
@@ -1570,16 +1574,18 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T117 rows 491-494 and 496 (FR-003, FR-004)
       research: rendering
       verify: DONE. rows 491-494 and 496: the hairpin cut at the only contact, the nub as 0081's hook, the track and spur taut, the bend rule on the track out; found on the way the canvas reach, the long square leg, the refusal's detail, the chord at 7 ft; impl-drift answered r1-r4; spec-fidelity plan CLEAR r2, spec FAITHFUL r3
-- [ ] T118 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
+- [x] T118 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. ticked at the split (FR-011) on its recorded close: the wave's impl-drift re-check in its verify line; batch 1 closed (T119)
 
 ## Batch 1 close - waves 42-46 (FR-005 batched, GM 2026-10-08)
 
-- [ ] T119 batch 1's close: `make done` green on the batch's last commit; one timing pair 4a9b7c077 (before wave 43) -> the
+- [x] T119 batch 1's close: `make done` green on the batch's last commit; one timing pair 4a9b7c077 (before wave 43) -> the
       batch's last engine commit, `perf-explain` and `perf-audit` (waves 42, 44 and 45 were paired alone); the occasions
       the batch declares (wave 46's village lane, round 3 allowed by the GM's ruling); then T110, T112, T114, T116, T118
       ticked and the wave column written (FR-005, FR-006)
       research: rendering
+      verify: DONE. ticked at the split (FR-011) on batch 1's recorded close: gates green, wave 46's village lane PASS round 3 in the ledger, the wave column set; its pair cited from bookends row 2 (row 1's own audit read not-justified)
 
 ## Phase 48 - wave 47 (amendment 46): batch 1's findings; the persimmon give-way, 0072's arc, the checkpoint tier
 
@@ -1608,8 +1614,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T120 batch 1's findings, rows 381, 436, 438 and 442; the belt's visible break (FR-003, FR-004, FR-005)
       research: rendering
       verify: DONE. batch 1's findings (Kashikawa's woods beyond the row holdings; the track out to the frame and 400 ft past it), rows 381, 436, 438 and 442, the belt's visible break judged; tests red on the old code; the hamlets regenerated (persimmon overlaps to 0); impl-drift answered r1-r5; record checks answered; spec-fidelity plan CLEAR r2
-- [ ] T121 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
+- [x] T121 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering
+      verify: DONE. ticked at the split (FR-011) on batch 2's recorded close: bookends row 2
 
 ## Phase 49 - wave 48 (amendment 47): rows 502-505 - the lane's 7 ft at the footprint; the skeleton's margins and ford
 
@@ -1698,8 +1705,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T131 wave 52's rows (FR-003, FR-004)
       research: rendering
       verify: DONE. verified 2026-10-08: plan review CLEAR round 3; impl-drift recorded (claims-owed none); record-owed none
-- [ ] T132 the claims re-checked by `impl-drift`; batch 3 closed (FR-005, FR-006)
+- [x] T132 the claims re-checked by `impl-drift`; batch 3 closed (FR-005, FR-006)
       research: rendering
+      verify: DONE. ticked at the landing (FR-011): batch 3's band 3 and its open audit superseded by the landing pair, band 1, perf-audit consistent
 
 ## Phase 54 - wave 53 (amendment 52): the grove's crown density in real feet
 
@@ -1722,10 +1730,11 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T136 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
       verify: DONE. verified 2026-10-08: plan CLEAR (wave 54 round 3); impl-drift recorded; record-owed none
-- [ ] T137 wave 52's two regressions fixed (spec-fidelity W54-5, W54-7; constitution XIII): Kuwabata's knot (lanes 9/11, 21.8 ft)
+- [x] T137 wave 52's two regressions fixed (spec-fidelity W54-5, W54-7; constitution XIII): Kuwabata's knot (lanes 9/11, 21.8 ft)
       off `_KNOTS_WAITING` (DONE wave 54: `KNOTTED_TRIES`) and Sawada's zigzag (lanes 1/3) off `_ZIGZAGS_WAITING` - or the
       impossibility investigation written (plan, Wave 54) and the waiver put to the GM
       research: rendering
+      verify: DONE. WAIVED by the GM for the landing (request.md: Waive it); Sawada stays on the strict waiting list; the fix moves to feature 372 as an open E3 row
 
 ## Phase 56 - wave 55 (amendment 54): the grove's density as drawn
 
@@ -1737,11 +1746,12 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T139 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
       verify: DONE. verified 2026-10-08: plan CLEAR (batch 3's close round 2); impl-drift recorded; record-owed none
-- [ ] T140 the 40-household scaling roll of seed 25 refuses its web since the barn seat's withdrawal (19f69655c; fourteen
+- [x] T140 the 40-household scaling roll of seed 25 refuses its web since the barn seat's withdrawal (19f69655c; fourteen
       access lanes' first leg within 7 ft of their own garden - m:t140-seed25-fouled-fabric): fix the seating so a door's way
       keeps the fabric gap at 40 households; the route the plan names was attempted and its investigation written (plan,
       batch 3's close) - only now the GM's waiver or go-ahead on the seating rebuild, with batch 3's band-3 sign-off
       research: rendering
+      verify: DONE. DONE: the roll draws at HEAD (m:t140-seed25-at-head); its one knot, 23.8 ft, is a found row in feature 372's spec
 
 ## Phase 57 - wave 56 (amendment 55): the seats off the plots' sun at the tree's 50 ft
 
@@ -2207,13 +2217,16 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 ## Phase 99 - the split (amendment 97): batch 13's close, the open tasks settled, the landing
 
-- [ ] T220 batch 13's close: `make done` green; the owed occasions reviewed (barley on Kashikawa; the weighing floor, the
+- [x] T220 batch 13's close: `make done` green; the owed occasions reviewed (barley on Kashikawa; the weighing floor, the
       charcoal bales and Ubame's layout); `escalation-check`; the bookends row (FR-005, FR-006)
       research: rendering
-- [ ] T221 the landing pair: main's commit -> HEAD, the newest pair; `perf-report`, its records and `perf-audit`; at band 3
+      verify: DONE. batch 13's close: make done green at bb07b08af; barley, charcoal bales and Ubame's building review PASS, the weighing floor PASS round 2; escalation-check 0 keep; bookends row 13
+- [x] T221 the landing pair: main's commit -> HEAD, the newest pair; `perf-report`, its records and `perf-audit`; at band 3
       the GM's pre-approved sign-off recorded (FR-011)
       research: rendering
-- [ ] T222 the split: T140 measured at HEAD; feature 372 filed with the open rows, the waived zigzag, the held decisions and
+      verify: DONE. the landing pair fc5d79363 -> bb07b08af: band 1 (no sign-off owed), perf-audit consistent after five rounds (m:landing-pair, -control, -40hh-seed47, -40hh-field-tie)
+- [x] T222 the split: T140 measured at HEAD; feature 372 filed with the open rows, the waived zigzag, the held decisions and
       the filed features sorted; the earlier closes' tasks ticked on their records; the status line Done; landed (FR-011,
       SC-006)
       research: rendering
+      verify: DONE. the split: feature 372 filed (204 rows, the waived zigzag, T140's knot, the held decisions, the field-tie item, the filed features sorted); the earlier closes ticked on their records; landed by sync-with-main done

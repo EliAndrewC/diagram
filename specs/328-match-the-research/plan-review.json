@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "890ea7e4c931e403faa906ade4b1c6361ebd654eca81eb57eb6669f5fa285395",
+ "plan_sha256": "70cd4a34e55dfee4de5a88f2b6225520f21aae9e2e7bda149749504c942870d3",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
@@ -53,6 +53,24 @@
    "summary": "make speckit-todo's 41 filed features (331-371) sorted in 372's spec and the closing report into related vs future work for non-hamlet tiers; none folded until the GM chooses",
    "class": "within",
    "why": "The GM asked the session to look and say which to pull in versus which are future work. Now in T222 and SC-006 (round 1 remedy). Checked: every one of 331-371 appears exactly once across the two lists."
+  },
+  {
+   "id": "S9",
+   "summary": "The landing pair's end commit is bb07b08af, not the final HEAD 1b561760b",
+   "class": "within",
+   "why": "1b561760b adds only records (measurements, ledger, perf-log, spec/plan/tasks text) - no engine path changed after bb07b08af, so the pair is main -> the engine's HEAD as the split section and T221 require; band 1, so the GM's pre-approved band-3 sign-off is not owed."
+  },
+  {
+   "id": "S10",
+   "summary": "The field-tie efficiency item (capacity.field_distances, m:landing-pair-40hh-field-tie) filed to 372, not fixed in 328",
+   "class": "within",
+   "why": "The GM's split: 'land what we have ... splitting off the rest of our work into a separate feature' and 'Anything ... can be spun out into the other feature'; the item is a perf-audit finding consistent at band 1, not a regression blocking the landing."
+  },
+  {
+   "id": "S11",
+   "summary": "T140 ticked DONE on m:t140-seed25-at-head (the web draws); its one lane knot filed as a found row in 372",
+   "class": "within",
+   "why": "Applies S5 as written (draws -> DONE); T140's defect was the refused web, which is gone; the knot is a new finding and goes to 372 under the GM's split ruling."
   }
  ],
  "verdict": "CLEAR"

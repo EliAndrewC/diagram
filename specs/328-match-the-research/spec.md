@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft (closing at wave 97 - FR-011)
+**Status**: Done 2026-10-10 - closed at wave 97 by the GM's split (FR-011): every task ticked, batch 13 closed (make done green, its reviews PASS), the landing pair band 1 with perf-audit consistent; the open rows, the waived zigzag and the held decisions carried by feature 372
 
 **Input**: the GM's request, verbatim in `request.md`: rank every finding `make claims-report` shows by how much
 implementation work it takes to make the implementation match the research it cites, then fix them from easiest to
