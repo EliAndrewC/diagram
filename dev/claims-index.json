@@ -1479,13 +1479,14 @@
   "date": "2026-10-10",
   "note": "0105's drawing page records the kitchen-bath-well grouping as the project's reading",
   "pages": {
-   "0105-baths-furo.drawing.html": "66bf58e15b4f3e3a"
+   "0105-baths-furo.drawing.html": "d6704c2151c9e01f"
   },
-  "research": "26288649234b45de",
+  "research": "7ae1de1fad0c5b85",
   "rests": [
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Adding a building type#type workflow": {
@@ -2183,14 +2184,14 @@
   "code": "ea8ebbc0c0178e38",
   "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "0105's drawing page records up to about 18 by 12 ft on the service side as a GUESS",
+  "note": "the drawing page records the bath enlarged up to about 18 x 12 ft on the service side as a resident's particular, a GUESS; the doc's ~54 x 36 px = 18 x 12 ft matches, and no page gives a bath's size",
   "pages": {
-   "0105-baths-furo.drawing.html": "66bf58e15b4f3e3a"
+   "0105-baths-furo.drawing.html": "d6704c2151c9e01f"
   },
-  "research": "26288649234b45de",
+  "research": "7ae1de1fad0c5b85",
   "rests": [
    "0105-baths-furo.drawing.html:5ac8b5f9c5612dfb",
-   "0105-baths-furo.drawing.html:6adcec524fa95c94"
+   "0105-baths-furo.drawing.html:87595aae6ed4540e"
   ],
   "verdict": "IN-STEP"
  },
@@ -2198,15 +2199,14 @@
   "code": "7f24650140288194",
   "core": "820eca0d767c15d3",
   "date": "2026-10-10",
-  "note": "Research finds the bath inside the house or as an addition to it, never a separate building, and gives no size; the drawing page places it on the service side by the kitchen and well, and records 10 x 8 ft as a guess sized to fit the 49-tsubo house. The claim says the same.",
+  "note": "room or addition on the service side by kitchen and well, never a building apart, matches the findings; 10 x 8 ft matches the drawing page's guess; the new enlarged-bath bullet (§141) has its own claim and does not touch this one",
   "pages": {
-   "0105-baths-furo.drawing.html": "3a22b50676fcbd78",
+   "0105-baths-furo.drawing.html": "d6704c2151c9e01f",
    "0105-baths-furo.html": "d5cd9565ea393908"
   },
-  "research": "e1c7fb59ecd421a0",
+  "research": "7593ebcf99a7aac0",
   "rests": [
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
-   "0105-baths-furo.drawing.html:0b1d5b0ba345a21a",
    "0105-baths-furo.drawing.html:5ac8b5f9c5612dfb",
    "0105-baths-furo.drawing.html:ce969bb3b4eea7b3",
    "0105-baths-furo.html:16a26f2af5d6a16b",
@@ -2215,7 +2215,7 @@
    "0105-baths-furo.html:d8d19b4eb5351d97",
    "0105-baths-furo.html:f9880c41b621a58b"
   ],
-  "triage": "touched",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#engawa": {
@@ -3828,9 +3828,9 @@
   "date": "2026-10-10",
   "note": "\"the kitchen well usually serves the bath\" is a reading the drawing page records as its own (\"our reading, not something the list says\"), so the label should be GUESS research/questions/0105-baths-furo.drawing.html. The optional fourth well \"only for very large compounds\" is something the page says nothing about and should be its own UNRESEARCHED claim",
   "pages": {
-   "0105-baths-furo.drawing.html": "66bf58e15b4f3e3a"
+   "0105-baths-furo.drawing.html": "d6704c2151c9e01f"
   },
-  "research": "26288649234b45de",
+  "research": "7ae1de1fad0c5b85",
   "rests": [
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
@@ -3855,9 +3855,9 @@
   "note": "the section puts the kitchen well \"inside or immediately adjacent to the kitchen building\", but 0105's drawing page puts it \"Past the bath, as far as 20 ft out from the kitchen\" (the bath abuts the kitchen). 0091 places no kitchen's well, and the drawing page calls keeping the three together \"our reading\". The placement should follow the drawing page, and the label should be GUESS research/questions/0105-baths-furo.drawing.html",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
-   "0105-baths-furo.drawing.html": "66bf58e15b4f3e3a"
+   "0105-baths-furo.drawing.html": "d6704c2151c9e01f"
   },
-  "research": "65794969d58f6c92",
+  "research": "cd21d9633a7ae098",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:6218744dea5fe01d",
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",

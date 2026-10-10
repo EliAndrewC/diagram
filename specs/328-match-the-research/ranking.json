@@ -4200,6 +4200,22 @@
   "scope": "kept"
  },
  {
+  "key": "research/questions/0105-baths-furo.notes.html#bath-building-absence",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the absence note bath-building-absence (both 0105 notes files) says 'The Matsue samurai residence lists its yudono by name only' - a claim about what a named, unlinked page says, which an absence note may not carry (CLAIM-FROM-UNREAD): remove the sentence, or cite the Matsue page as its own note with a quoted passage",
+  "files": [
+   "research/questions/0105-baths-furo.notes.html",
+   "research/questions/0105-baths-furo.drawing.notes.html"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 108's quote-check of 0105, round 3 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)",
   "verdict": "MISLABELED",
   "tier": "E1",

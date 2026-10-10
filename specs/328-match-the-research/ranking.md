@@ -9,12 +9,12 @@ first. Within a tier, rows of one module sit together; a row waits for the rows 
 
 | tier | rows |
 |---|---|
-| E0 | 268 |
+| E0 | 269 |
 | E1 | 183 |
 | E2 | 208 |
 | E3 | 238 |
 | E4 | 65 |
-| all | 962 |
+| all | 963 |
 
 ## E0
 
@@ -288,6 +288,7 @@ first. Within a tier, rows of one module sit together; a row waits for the rows 
 | 266 | `l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default` | UNCLAIMED | waterfields/polder.py build_polder docstring (after line 99), add: 'lattice unbent by default - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder keeps its surveyed grid (`mosaic` 0, `edge_wander` 0); the dike-pond block passes its own mosaic' | kept | 12 |
 | 267 | `l7r/diagram/waterfields/polder.py::build_polder#low rows wet` | CANNOT-TELL | re-check: _polder_parcels flags low = r >= rows - 2 (polder.py:364) and tints every low plot FLOODED (:371), merges never straddle the band (:380); 0007 says a polder tints every low plot (22 of 22 on Enokida) - reword the claim at polder.py:98 and :334 to 'every low plot, the two lowest rows as the drawing's low band' | kept | 11 |
 | 268 | `l7r/diagram/waterfields/polder.py::build_polder#module line bow` | UNCLAIMED | add a claim to build_polder: 'module line bow - 0014: each row and column line bowed up to line_wander 0.10 of the module, off the boundary lines' (polder.py:40, applied in _polder_lattice) | kept | 11 |
+| 269 | `research/questions/0105-baths-furo.notes.html#bath-building-absence` | MISLABELED | the absence note bath-building-absence (both 0105 notes files) says 'The Matsue samurai residence lists its yudono by name only' - a claim about what a named, unlinked page says, which an absence note may not carry (CLAIM-FROM-UNREAD): remove the sentence, or cite the Matsue page as its own note with a quoted passage | kept |  |
 
 ## E1
 

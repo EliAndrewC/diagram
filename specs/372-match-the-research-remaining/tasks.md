@@ -117,5 +117,6 @@ in 328's ranking and this spec.
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Ochiba**, **Ubame**, their notes; `docs/buildings.md`; the bath band.
 
-- [ ] T11 wave 108's row (FR-001, FR-002)
+- [x] T11 wave 108's row (FR-001, FR-002)
       research: rendering
+      verify: DONE. DONE. wave 108: the bath at 0105's 10 x 8 ft on Ochiba and Ubame; Hayakawa's enlarged bath recorded on 0105 as a GUESS particular and claimed; band w 8-18 by h 8-12; glyph-check bath PASS; record checks answered; plan review CLEAR round 2
