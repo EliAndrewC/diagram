@@ -211,6 +211,7 @@ git -C "$FIX" update-ref refs/remotes/origin/main HEAD
 printf -- '- [ ] T01 hidden work\n' > "$FIX/specs/300-closed-by-status/tasks.md"; commit "a task under Done"
 push
 [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "300-closed-by-status/spec.md: an unticked task added under a status line that still says closed" && ok "FR-012: an unticked task added under a Done status is refused" || no "hidden open work landed" "(rc=$RC) $OUT"
+[ "$(printf '%s' "$OUT" | grep -n "finish the work and close" | cut -d: -f1)" -lt "$(printf '%s' "$OUT" | grep -n "A feature is filed only when" | cut -d: -f1)" ] && ok "...its refusal, too, leads with doing the work before the approval route" || no "FR-012's refusal leads with the approval"
 sed -i 's/^- \[ \] T01/- [x] T01/' "$FIX/specs/300-closed-by-status/tasks.md"; commit "ticked"
 push
 [ "$RC" -eq 0 ] && ok "...and passes once the task is done and ticked" || no "a ticked task under Done was refused" "(rc=$RC)"

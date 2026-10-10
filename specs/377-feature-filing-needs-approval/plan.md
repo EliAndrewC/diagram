@@ -107,7 +107,7 @@ directory's files at the base and at HEAD are written to a temporary tree and ju
 pending` (speckit-todo lists the second as open, but it holds only the GM's box - spec FR-011); anything else is open.
 FR-012 reads the same two trees: an unticked task added (more open boxes at HEAD than at the base) under a status line
 `closed_by_status` reads as closed is refused the same way. A reopen's refusal prints the approval-free route first:
-finish, close, then push. Settled at the base and open at HEAD is refused, unless HEAD's `spec.md`
+finish, close, then push; FR-012's refusal prints the same route first (do the work, tick the task). Settled at the base and open at HEAD is refused, unless HEAD's `spec.md`
 holds an approval line the base's did not, whose quote verifies as in D2. Not at the commit: a reopen the session works
 and closes again is allowed, and only what lands shows whether it was closed. The cheap bail-out admits a command naming
 `sync-with-main.sh` beside the git add/commit shape (D6).
