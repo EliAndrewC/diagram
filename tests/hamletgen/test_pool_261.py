@@ -225,7 +225,9 @@ from l7r.diagram.hamletgen.ways.knots import _KNOT_MARGIN, lane_knots  # noqa: E
 # fixed at seating, `gap_ways.KNOTTED_TRIES`.)
 # Wave 56 (the copse's seats off the plots' sun at the tree's 50 ft) re-laid Inashiro's homesteads' ground, and its knot is
 # gathered: off the list (main still carries it).
-_KNOTS_WAITING = {"sawada"}
+# Wave 94 (a household way's lone door end teed on its own lane is no knot, `ways.knots.door_end_teed`): Sawada's field way
+# leaves lane 10 9.4 ft from where lane 10 leaves its door - that pair is a T near a door, not a knot: off the list.
+_KNOTS_WAITING: set[str] = set()
 
 
 @pytest.mark.parametrize(
@@ -292,3 +294,16 @@ def test_every_bamboo_stand_is_on_the_sheet(gen: str) -> None:
     for st in stands:
         ring = st.get("poly") or st.get("outline")
         assert all(x <= q[0] <= x + w and y <= q[1] <= y + h for q in ring), f"a {st.get('role')} stand runs off the sheet"
+
+
+def test_a_lone_door_end_teed_on_its_own_lane_is_no_knot_but_a_door_end_beside_another_lane_is() -> None:
+    """Feature 328 wave 94 (`door_end_teed`, spec-fidelity's ruling of 2026-10-10): an access lane's lone door end with a T on
+    that same lane is one drawn lane joining the two - no knot; the same door end within the reach of ANOTHER lane's free end,
+    or a door end that is itself a junction, is still a knot."""
+    door = {"pts": [[0.0, 0.0], [0.0, 100.0]], "role": "access"}
+    teed = {"pts": [[80.0, 20.0], [0.0, 20.0]], "role": "access"}  # its foot on the door lane 20 ft from the door end
+    assert lane_knots([door, teed]) == []
+    loose = {"pts": [[80.0, -10.0], [10.0, -10.0]], "role": "access"}  # a free end 14 ft from the door end, on no lane
+    assert lane_knots([door, loose]), "a door end beside another lane's free end is a knot"
+    on_side = {"pts": [[-50.0, 0.0], [50.0, 0.0]], "role": "access"}  # the door end on another lane's side: a junction
+    assert lane_knots([door, teed, on_side]), "a door end that is itself a junction keeps the pair a knot"

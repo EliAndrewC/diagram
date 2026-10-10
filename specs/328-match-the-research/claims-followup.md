@@ -555,3 +555,8 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
   re-cited to 0048 and the Han note. A glyph-only form was then BLOCKED at plan review (the farmstead privy kept) and the row
   held at E3 (m:wave86-privy-over-the-sty-held). Not for the GM unless the E3 work finds a real impossibility.
 - Batch 11's escalation check noted an open decision in the record, not a finding: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html lists "decision left open (one season across the sheet)" - whether a map shows one season everywhere (the ripe-gold dry crops beside a green paddy follow its ripest-color guess). Raised for the GM at the feature's end if it has not been put already.
+- Wave 94 (`hamletgen/ways/knots.py::door_end_teed`, spec-fidelity ruled LEGITIMATE in a narrow form, 2026-10-10): 0081 joins
+  "lane ends that nearly meet"; a household way's lone door end with another way's T on that same lane is read as one lane
+  joining the two, not a knot. It cleared 14 of 48 cohort seeds and Sawada's waiting knot; a door end beside another lane's
+  end, or one that is itself a junction, is still a knot (m:wave94-door-end-teed). Raised for the GM's information (XVI).
+

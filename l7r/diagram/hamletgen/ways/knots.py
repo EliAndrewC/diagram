@@ -78,6 +78,36 @@ def _on(p: Poly, q: Pt) -> bool:
     return any(seg_dist(q[0], q[1], a, b) <= _JOINT_FT for a, b in zip(p, p[1:], strict=False))
 
 
+def door_end_teed(lanes: Sequence[Mapping[str, Any]], i: int, end: int, alone: bool, other: Pt) -> bool:
+    """Is lane `i`'s `end` a household way's DOOR end that meets no way - an access lane's first end, `alone` at its node and
+    on no other lane's side - with `other` on that same lane, so that the one lane runs between them? Such a pair is a T near
+    a door, not two ends that nearly meet: 0081's knot is ends left loose beside each other and three lanes arriving a few
+    feet apart, and here one drawn lane already joins the two (the reading this module's docstring states: "a 15 ft door lane
+    from the track's head is not two arrivals"). The gather search (`knots`) and the knot verdict (`lane_knots`, read by the
+    pool's seed test and the cohort) both ask it (feature 328 wave 94; spec-fidelity's ruling of 2026-10-10: LEGITIMATE in
+    this narrow form - a door end within the reach of another lane's end or foot, or a door end that is itself a junction,
+    is still a knot).
+
+    Research: a door end teed on its own lane - research/questions/0081-village-lanes.drawing.html: a path leaving its own door with a T on it is one path, not two ends that nearly meet (a map drawing convention)"""
+    ln = lanes[i]
+    if end != 0 or not alone or ln.get("role") != ACCESS_ROLE:
+        return False
+    pts = _pts(ln)
+    if len(pts) < 2:
+        return False
+    q = pts[0]
+    if any(k != i and len(_pts(o)) >= 2 and _on(_pts(o), q) for k, o in enumerate(lanes)):
+        return False
+    return _on(pts, other)
+
+
+def _teed_pair(lanes: Sequence[Mapping[str, Any]], na: Node, nb: Node) -> bool:
+    """`door_end_teed` asked of two nodes either way round: one a lone door end, the other on its lane.
+
+    Research: a door end teed on its own lane - research/questions/0081-village-lanes.drawing.html: a path leaving its own door with a T on it is one path, not two ends that nearly meet"""
+    return any(len(n[1]) == 1 and door_end_teed(lanes, n[1][0][0], n[1][0][1], True, m[0]) for n, m in ((na, nb), (nb, na)))
+
+
 def knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, float]]:
     """The knots of the web: pairs of `end_nodes` indices that no one lane runs between standing within `_KNOT_FT` of one
     another, `KNOT_MARGIN` (1.0) leaving that the page's own reach - nearest first, with their distance. (A 1.5 margin once caught a foot slid just past the
@@ -91,7 +121,7 @@ def knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, float]]:
     for a in range(len(nodes)):
         for b in range(a + 1, len(nodes)):
             d = math.dist(nodes[a][0], nodes[b][0])
-            if d <= _KNOT_FT * KNOT_MARGIN and frozenset((a, b)) not in spans:
+            if d <= _KNOT_FT * KNOT_MARGIN and frozenset((a, b)) not in spans and not _teed_pair(lanes, nodes[a], nodes[b]):
                 out.append((a, b, d))
     return sorted(out, key=lambda k: k[2])
 
@@ -477,6 +507,9 @@ def lane_knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, tuple[floa
         for b in range(a + 1, len(ends)):
             d = math.dist(ends[a][1], ends[b][1])
             if root(a) == root(b) or frozenset((root(a), root(b))) in spans or d > _KNOT_MARGIN * _KNOT_FT:
+                continue
+            # ...A DOOR END TEED ON ITS OWN LANE is no knot (`door_end_teed`, the predicate the gather search asks too)
+            if any(door_end_teed(lanes, ends[x][0], 0 if x % 2 == 0 else -1, sum(root(z) == root(x) for z in range(len(ends))) == 1, ends[y][1]) for x, y in ((a, b), (b, a))):
                 continue
             if d <= _KNOT_FT or (junction(a) and junction(b) and one_lane(a, b)):
                 out.append((ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(d, 1)))

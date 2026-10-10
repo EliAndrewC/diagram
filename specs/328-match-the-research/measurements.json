@@ -2058,5 +2058,19 @@
       "knotted_seeds": 14,
       "reading": "every earlier cohort figure in this feature was measured without the knot rule (the retakes of 83, 84, 85 and wave 91's 54/54 included); 38/54 is the honest baseline, and the fourteen knotted seeds are pre-existing defects of the knot gather (0081), filed as a found row"
     }
+  },
+  "wave94-door-end-teed": {
+    "quantity": "wave 94 (2026-10-10): the knot verdict and the gather search reading a household way's lone door end teed on its own lane as no knot (door_end_teed, spec-fidelity's ruling of 2026-10-10)",
+    "observed": "2026-10-10",
+    "source": "a detached worktree at b89ff2ddb with the predicate, probed to log every exempted pair; make cohort N=48; make map for the five hamlets; make test-file FILE=tests/hamletgen/test_pool_261.py",
+    "command": "make cohort N=48; make map GEN=pool/hamlets/<map>/<map>.gen.py; make test-file FILE=tests/hamletgen/test_pool_261.py",
+    "method": "the exempted pairs logged and classed by the two lanes' roles (the ruling's condition 4); the pool rerolled and its knot test run",
+    "value": {
+      "cohort_passed": 52,
+      "cohort_48": "52/54 (refused 10, 20) - the 14 knotted seeds of m:wave93-cohort-knots all cleared, none newly failing",
+      "exempted_pairs_distinct": 26,
+      "exempted_classes": "all a lone access door end with the other point on its own lane: 17 access-access, 9 access-field way",
+      "pool": "no map moved; Sawada's waiting knot (its field way 9.4 ft from lane 10's door end) cleared, the waiting list empty"
+    }
   }
 }

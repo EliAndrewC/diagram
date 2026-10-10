@@ -1503,6 +1503,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `tests/tools/test_cohort_audit.py` (a knotted manifest reported), `tests/hamletgen/test_pool_261.py`
   (the pool's verdict unchanged); the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
 
+## Wave 94 (amendment 93, 2026-10-10) - batch 12
+
+- **Row `knots.py::next_gather#knots no lawful gather reaches` FIXED, by spec-fidelity's ruling on 0081's knot.** 0081: "Lane
+  ends that nearly meet are joined ... so three lanes never arrive a few feet apart in a knot." Ruled LEGITIMATE (2026-10-10,
+  the exception path, XVI) in a narrow form: a household way's lone door end - an access lane's first end, meeting no way -
+  with a T on that same lane is one drawn lane joining the two, not two ends that nearly meet (the reading `knots.py`'s own
+  docstring states); a door end beside another lane's end or foot, or a door end that is itself a junction, is still a knot.
+  `door_end_teed` is the one predicate the gather search (`knots`) and the verdict (`lane_knots`, read by the pool's seed
+  test and the cohort) ask, as the ruling's third condition requires. Measured (its fourth): every one of the 26 pairs it
+  exempts is that class (17 access-access, 9 access-field way), and the 14 knotted seeds of wave 93 were all of it - the
+  cohort 38 -> 52/54, none newly failing; no pool map moved, and Sawada's waiting knot (its field way 9.4 ft from lane 10's
+  door end) comes off the list (m:wave94-door-end-teed). Raised with the GM at the feature's end, per XVI.
+- **Verification**: `tests/hamletgen/test_pool_261.py` (a teed door end no knot; a door end beside another lane's end, and a
+  door end that is a junction, still knots); the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

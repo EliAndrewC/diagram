@@ -201,6 +201,7 @@
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": "E2",
  "l7r/diagram/hamletgen/ways/joints.py::fold_the_connector_hairpin#a hairpin at the track becomes a T": "E2",
  "l7r/diagram/hamletgen/ways/joints.py::meet_end_to_end#ends that nearly meet are joined": "E1",
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#knots no lawful gather reaches": "E3",
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": "E2",
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width is judged at 3 ft in the lawfulness check": "E0",
  "l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short": "E1",

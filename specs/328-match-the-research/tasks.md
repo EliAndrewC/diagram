@@ -2162,3 +2162,12 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T213 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. impl-drift 2 of 2 IN-STEP (lane_knots, _KNOT_MARGIN); make claims-owed: none
+
+## Phase 95 - wave 94 (amendment 93): a lone door end teed on its own lane is no knot
+
+- `hamletgen/ways/knots.py` (`door_end_teed`, `knots`, `lane_knots`); `tests/hamletgen/test_pool_261.py`.
+
+- [ ] T214 wave 94's row (FR-003, FR-004)
+      research: rendering
+- [ ] T215 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
