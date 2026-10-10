@@ -181,7 +181,7 @@ PARTS: dict[str, list[tuple[str, str]]] = {
         ("parley mats", "parley room"),
         ("nakamon", "court divider"),
     ],
-    "county-magistracy-example": [("striking posts", "practice ground"), ("weapon rack", "practice ground"), ("clerks' room", "office hall"), ("residence corridor", "residence")],
+    "county-magistracy-example": [("striking posts", "practice ground"), ("weapon rack", "practice ground"), ("clerks' room", "office hall")],
     "ochiba-roundtrip-test": [("striking posts", "practice ground"), ("weapon rack", "practice ground")],
 }
 

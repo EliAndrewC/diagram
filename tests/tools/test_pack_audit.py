@@ -556,6 +556,15 @@ def test_floating_door_flagged_but_flush_deep_and_straddling_pass() -> None:
     assert pa.floating_doors(pa.parse_svg(straddle)) == []
 
 
+def test_a_kamado_tagged_hearth_near_a_wall_is_no_floating_door() -> None:
+    """Feature 374 wave 113: a 24 x 18 ft kitchen's kamado stands within a door's reach of a wall, in a door's dark ink."""
+    b = _rect(0, 0, 72, 54, "#C9A57A")
+    untagged = _svg(_rect(0, 0, 300, 300, COURT), b, _rect(16, 37, 18, 8, "#6B4030"))
+    assert pa.floating_doors(pa.parse_svg(untagged))
+    tagged = _svg(_rect(0, 0, 300, 300, COURT), b, '<g data-kind="hearth">' + _rect(16, 37, 18, 8, "#6B4030") + "</g>")
+    assert pa.floating_doors(pa.parse_svg(tagged)) == []
+
+
 def test_format_report_door_section() -> None:
     svg = _svg(
         _rect(0, 0, 300, 300, COURT),

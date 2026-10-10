@@ -164,11 +164,16 @@ def _place_one(env: Envelope, spec: BuildingSpec, spine: tuple[CourtZone, ...], 
         end = _obstacle_end(gate, spine, already, px, py, spec, horizontal)
         if end is None:
             break
-        cursor = end + FIRE_GAP_FT
+        cursor = end + (0.0 if any(_joined(spec, p.spec) and (p.x2 if horizontal else p.y2) == end for p in already) else FIRE_GAP_FT)
     if cursor + size > along_end - WALL_MARGIN_FT:
         return None
     px, py = (cursor, cross) if horizontal else (cross, cursor)
     return Placed(spec, px, py)
+
+
+def _joined(a: BuildingSpec, b: BuildingSpec) -> bool:
+    """One of the two is an ell of the other (`BuildingSpec.joins`): they abut, no fire-gap between."""
+    return bool(a.joins and a.joins == b.feature) or bool(b.joins and b.joins == a.feature)
 
 
 def _wall_tier(wall: str) -> int:
@@ -230,7 +235,7 @@ def composition_plan(result: PlaceResult, margin_ft: float = DRAFT_MARGIN_FT) ->
     """The composition as the pack audit reads a sheet (`tools/pack_audit/parse.ParsedPlan`): the precinct's two courts,
     every placed mass and the court divider, at the draft's own pixel frame and rounding (`emit_svg` writes each rect
     at `ox + x * FTPX` to the whole pixel), so the audit's grid measures - `coverage`, `perimeter_hugging_pct` - read the
-    composition the way they read the drawn sheet. The point features the draft adds later (the bath, the corridor, the
+    composition the way they read the drawn sheet. The point features the draft adds later (the bath and the
     privies) are not in it: they are seated around the masses and add built ground (measured on both generated drafts,
     2026-09-29: the drawn sheet's coverage 1.2 points over the masses' alone)."""
     from .tools.pack_audit.parse import ParsedPlan, Rect
@@ -707,7 +712,7 @@ def county_magistracy_program() -> CompoundProgram:
         # house both - guests were received in the garden-facing rooms (research 0091); the servants' row it once
         # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk
         # along the divider. Its size is a GUESS.
-        CourtZone("garden", 104.0, 36.0, 122.0, 46.0),
+        CourtZone("garden", 97.0, 36.0, 129.0, 46.0),  # feature 374 wave 113: from the kitchen ell's east face, the house 7 ft west
         # The vegetable ground WEST of the house, filling the kitchen yard (research 0109 and 405: west is one of the
         # attested seats, and the sun decides among them - here it gets 9.5 h, feature 283's garden_sun; a residence's vegetable ground runs from the Takei house's ~1,070 sq ft plot to
         # a field over about half the Yokota house's grounds). Pass 7 (building-review round 6: the yard stood ~100 x 60
@@ -755,8 +760,8 @@ def county_magistracy_program() -> CompoundProgram:
         # Its rooms take the palace order's lesser form - the reception at the east END, the full depth, nearest the
         # middle gate; the master's rooms beside it on the garden row; the family's beyond, with the inner rooms behind
         # (R03). The veranda runs along the garden face alone, 4 ft (R01's first form, research rendering/buildings
-        # 'How our maps draw verandas and storm shutters (engawa and amado)': 3-6 ft). Its inner entrance opens on its west face, toward the
-        # kitchen (research/questions/0107-kitchens-daidokoro.drawing.html 'How our maps draw kitchens (daidokoro)').
+        # 'How our maps draw verandas and storm shutters (engawa and amado)': 3-6 ft). Its inner entrance opens on its rear (north) face at the
+        # kitchen end, onto the rear alley the kitchen's way joins (feature 374 wave 113: the kitchen ell abuts the west face) (research/questions/0107-kitchens-daidokoro.drawing.html 'How our maps draw kitchens (daidokoro)').
         # It stands 10 ft off the north wall: the rear band narrowed to a cart/servant alley (research 0091),
         # the family privy flush to the wall in it.
         # THE HOUSE'S SIZE is research 0091's: the Yokota house of a 150-koku district magistrate (gun-bugyo, the
@@ -780,16 +785,18 @@ def county_magistracy_program() -> CompoundProgram:
                 ("reception room", 36.0, 0.0, 20.0, 20.0),
             ),
             engawa_ft=4.0,
-            door_face="W",
+            door_face="N",
+            door_fracs=(0.2, 0.3),  # feature 374 wave 113: the kitchen ell takes the west face, its free 6 ft too short for a door's approach
             inset_ft=10.0,
         ),
         # THE SERVANTS' ROW TAKES THE NW CORNER, the kitchen yard before it (pass 6, building-review round 5: east of the
-        # house the servants were cut off from the kitchen - the corridor closes the kitchen-residence gap - and ~190 ft
+        # house the servants were cut off from the kitchen - the kitchen closes the gap to the residence - and ~190 ft
         # round from the postern). It is placed first (order 12) so the kitchen and the house follow it east. 72 x 22 ft,
         # a nagaya two rooms deep for the ~10 household servants, a GUESS.
         b("servants' quarters", "service", 72.0, 22.0, "inner", "N", order=12, feature="servants' quarters"),
-        # The kitchen stands between the servants' row and the house, joined to the residence's west end by the short
-        # corridor (research/questions/0107-kitchens-daidokoro.html 'Kitchens (daidokoro)'), its yard - the bath, the well, its one door, the postern - to the south
+        # The kitchen stands between the servants' row and the house, an ELL abutting the residence's west end (feature 374
+        # wave 113, `joins`: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, a kitchen projecting
+        # from one side of a one-block house, no corridor), its yard - the bath, the well, its one door, the postern - to the south
         # and west. 20 x 18 ft, part of the house's 49 tsubo (above); the kitchen's own size is a GUESS (research 380:
         # "How much of either house was kitchen is not given").
         # Its one outside door opens WEST, onto the way between it and the servants' row that runs to the yard (pass 7,
@@ -797,8 +804,8 @@ def county_magistracy_program() -> CompoundProgram:
         # It stands 10 ft off the north wall, as the house does (pass 8, building-review round 7): the house's rear alley
         # then runs on behind the kitchen to the way between it and the servants' row, and down it to the kitchen yard
         # and the postern - the night-soil carter's service route to the house's privies. Flush to the wall, the
-        # kitchen and the corridor closed the alley's west end, and the privies were ~400 ft round from any service edge.
-        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=10.0),
+        # kitchen closed the alley's west end, and the privies were ~400 ft round from any service edge.
+        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=10.0, joins="residence"),
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
         # is Ochiba's particular - docs/building-programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; docs/buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).

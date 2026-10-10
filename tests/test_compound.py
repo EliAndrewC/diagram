@@ -372,22 +372,23 @@ def test_abut_seats_flush_against_the_court_face() -> None:
     assert cp._abut(env, east, 15.0, 12.0, [(40.0, 0.0, 80.0, 200.0)]) is None  # the whole face walled off
 
 
-def test_corridor_spans_a_short_gap_on_the_run_two_buildings_share() -> None:
-    a = c.Placed(_b("residence", 90.0, 36.0, "inner", "N"), 3.0, 2.0)
-    k = c.Placed(_b("kitchen", 44.0, 36.0, "inner", "W"), 2.0, 45.0)
-    assert cp._corridor(k, a, 6.0, 7.0) == (21.5, 38.0, 27.5, 45.0)
-    assert cp._corridor(a, k, 6.0, 7.0) == (21.5, 38.0, 27.5, 45.0)
-    left = c.Placed(_b("l", 20.0, 30.0, "inner", "W"), 0.0, 10.0)
-    right = c.Placed(_b("r", 20.0, 30.0, "inner", "W"), 25.0, 20.0)
-    assert cp._corridor(left, right, 6.0, 7.0) == (20.0, 27.0, 25.0, 33.0)
-    assert cp._corridor(right, left, 6.0, 7.0) == (20.0, 27.0, 25.0, 33.0)
-    far = c.Placed(_b("f", 20.0, 30.0, "inner", "W"), 0.0, 60.0)
-    assert cp._corridor(left, far, 6.0, 7.0) is None  # 20 ft apart is a gallery, not a short corridor
-    assert cp._corridor(left, c.Placed(_b("o", 5.0, 5.0, "inner", "W"), 100.0, 100.0), 6.0, 7.0) is None  # no shared run
+def test_an_ell_abuts_the_building_it_joins_with_no_fire_gap() -> None:
+    """Feature 374 wave 113 (0091: a kitchen projecting from one side of a one-block house, no corridor): a building that
+    `joins` another is placed flush against it along their wall; any other neighbor keeps the fire-gap."""
+    house = c.Placed(c.BuildingSpec("residence", "lord", 40.0, 30.0, "inner", "N", feature="residence"), 10.0, 2.0)
+    ell = c.BuildingSpec("kitchen", "service", 20.0, 18.0, "inner", "N", feature="kitchen", joins="residence")
+    assert c._joined(ell, house.spec) and c._joined(house.spec, ell)
+    assert not c._joined(c.BuildingSpec("shed", "service", 10.0, 10.0, "inner", "N"), house.spec)
+    env = c.Envelope(200.0, 120.0, 60.0)
+    placed = c._place_one(env, ell, (), [house])
+    assert placed is not None and placed.x_ft == house.x2
+    other = c._place_one(env, c.BuildingSpec("shed", "service", 10.0, 10.0, "inner", "N"), (), [house])
+    assert other is not None and other.x_ft == house.x2 + c.FIRE_GAP_FT
 
 
 def test_the_county_example_keeps_the_house_together() -> None:
-    """Feature 267: the bath abuts the kitchen, off every spine court; a corridor joins the kitchen to the residence;
+    """Feature 267: the bath abuts the kitchen, off every spine court; the kitchen abuts the residence, an ell with no
+    corridor (feature 374 wave 113);
     the clerks' room is a room of the office hall, not a building; the cell is 12 x 10 ft."""
     prog = c.county_magistracy_program()
     result = c.place(prog)
@@ -397,8 +398,10 @@ def test_the_county_example_keeps_the_house_together() -> None:
     cell = next(p for p in result.placed if p.spec.name == "cell")
     assert (cell.spec.w_ft, cell.spec.h_ft) == (12.0, 10.0)
     svg = c.emit_svg(prog, result)
-    assert 'data-kind="residence corridor"' in svg and 'data-kind="bath"' in svg and 'data-kind="clerks\' room"' in svg
+    assert 'data-kind="residence corridor"' not in svg and 'data-kind="bath"' in svg and 'data-kind="clerks\' room"' in svg
     kitchen = next(p for p in result.placed if p.spec.name == "kitchen")
+    house = next(p for p in result.placed if p.spec.feature == "residence")
+    assert kitchen.x2 == house.x_ft or house.x2 == kitchen.x_ft  # flush, its side against the house's end
     bath = next(ln for ln in svg.splitlines() if 'data-kind="bath"' in ln and "<rect" in ln)
     assert f'y="{c.FTPX * (15.0 + kitchen.y2):.0f}"' in bath  # flush against the kitchen's court (south) face
     assert svg.count(">well<") == 3
@@ -683,7 +686,9 @@ def test_the_family_privy_is_attached_to_the_house_at_its_rear_corner() -> None:
     fam = svg.split('data-kind="latrine" data-part-of="residence"')[0].rsplit("<rect ", 1)[1]
     x = (float(fam.split('x="')[1].split('"')[0]) - 7.0 * c.FTPX) / c.FTPX
     y = (float(fam.split('y="')[1].split('"')[0]) - 15.0 * c.FTPX) / c.FTPX
-    assert x == pytest.approx(home.x_ft, abs=0.5) and y + cp.PRIVY_FT == pytest.approx(home.y_ft, abs=0.5)  # flush to its rear
+    # flush to its rear, at its west corner - a foot in from it since the kitchen ell abuts that end (feature 374 wave 113:
+    # the privy keeps its half-foot margin off the kitchen)
+    assert home.x_ft <= x <= home.x_ft + 1.5 and y + cp.PRIVY_FT == pytest.approx(home.y_ft, abs=0.5)
     assert 'data-kind="door" data-part-of="kitchen"' in svg
     door = svg.split('data-kind="door" data-part-of="kitchen"')[0].rsplit("<rect ", 1)[1]
     assert (float(door.split('x="')[1].split('"')[0]) - 7.0 * c.FTPX) / c.FTPX == pytest.approx(kitchen.x_ft, abs=0.5)  # its west face (pass 7)

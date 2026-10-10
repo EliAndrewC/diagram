@@ -123,8 +123,8 @@
  "verdict": "CLEAR",
  "tasks": {
   "T02": {
-   "section_sha256": "fc710fe9295ea4d4513da243a490d1661b4cbf6383d378f75ee3ef0d9f027457",
-   "section_text": "### Wave 113 (T02) - the kitchen at 0091's size, joined as an ell\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#kitchen` (E3) and `#kitchen corridor tagged residence corridor`\n  (E3, after the first; the same building). 0091: the one kitchen measured, the Kuchiba house's east wing, is about 12 tsubo\n  (~440 sq ft, 5.9 x 6.9 m) by the prefecture's measure, about a sixth of the house; a middle-rank house was one block, its kitchen\n  projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens (each kitchen's rect read off the three SVGs, 2026-10-10), and\n  Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.\n- **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), its shape a GUESS, the ceiling ACCURATE (0091's measured\n  wing), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in\n  `buildings/types.json` narrowed so the old size fails it: w 18-26 by h 14-20 ft (either orientation). The procedure's kitchen\n  bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; \"a large institutional daidokoro\" goes (the ranked fix sizes it to\n  the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,\n  read 2026-10-10), already inside the new band.\n- **What stands in the kitchen moves with it**: the kamado range, a well drawn inside the kitchen (0105's drawing page: inside\n  the kitchen on a hand plan), its door, the two tubs at its door (wave 106's rule, `tubs_off_their_doors`), the bath abutting it.\n  The ground the smaller kitchen frees is left as the court or service ground it opens onto. Each move audited.\n- **Amendment 1 (2026-10-10, found in the work)**: (a) Ubame joins its kitchen by a covered corridor too (an L across its service\n  alley, tagged a residence corridor), so its kitchen becomes an ell as Hayakawa's does: it projects south from the west block under\n  the shuttered wing, its door on its west face toward the kitchen postern, the bath on its south face; the west block's veranda\n  starts at the kitchen's east face. Hayakawa's ell projects south from its west block's family end, the bath on its west face, the\n  door on its south face; Ochiba's is the ell it was, shrunk into the house's corner. (b) The generated draft\n  (`compound_parts._point_features`) also joins its kitchen by a covered corridor (`_corridor`, `CORRIDOR_W_FT`) across the 7 ft\n  fire-gap the placer leaves: the procedure now drops that form, so the draft draws the ell - a `BuildingSpec.joins` names the\n  building an ell projects from, the placer abuts the two with no fire-gap (`_place_one`), and the corridor code goes. Its\n  occasion: layout-revised: county-magistracy-example. (c) Knock-ons in the tooling, each fixed where found: `pack_audit` read a\n  kamado tagged `hearth` as a door glyph adrift (`floating_doors`) once a small kitchen put it within a door's reach of a wall -\n  a rect inside a `hearth` element is no door (a test); the round-trip sheet's program kitchen 18 x 24 ft (its court face then\n  seats the bath; at 24 x 18 the bath found no clear run); the frozen red fixtures' kitchens brought to 72 x 54 px against their\n  houses, their contents and baths moved with them, so each fires only its own check (the two whose check counts tubs at the old\n  kitchen keep it).\n- **Occasions**: layout-revised: hayakawa-magistracy and ubame-magistracy (the kitchen joined as an ell, the corridor gone);\n  layout-revised: county-magistracy-example (the draft's ell); glyph-redrawn: kitchen on ochiba-magistracy.\n\n",
+   "section_sha256": "6e6cb208e7caceb24a2726bea10a4467ef5e90067d37d7868329762f285e1378",
+   "section_text": "### Wave 113 (T02) - the kitchen at 0091's size, joined as an ell\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#kitchen` (E3) and `#kitchen corridor tagged residence corridor`\n  (E3, after the first; the same building). 0091: the one kitchen measured, the Kuchiba house's east wing, is about 12 tsubo\n  (~440 sq ft, 5.9 x 6.9 m) by the prefecture's measure, about a sixth of the house; a middle-rank house was one block, its kitchen\n  projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens (each kitchen's rect read off the three SVGs, 2026-10-10), and\n  Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.\n- **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), its shape a GUESS, the ceiling ACCURATE (0091's measured\n  wing), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in\n  `buildings/types.json` narrowed so the old size fails it: w 18-24 by h 14-18 ft (either orientation; at most 432 sq ft, under the measured ~440 - the T02 preflight's aside). The procedure's kitchen\n  bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; \"a large institutional daidokoro\" goes (the ranked fix sizes it to\n  the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,\n  read 2026-10-10), already inside the new band.\n- **What stands in the kitchen moves with it**: the kamado range, a well drawn inside the kitchen (0105's drawing page: inside\n  the kitchen on a hand plan), its door, the two tubs at its door (wave 106's rule, `tubs_off_their_doors`), the bath abutting it.\n  The ground the smaller kitchen frees is left as the court or service ground it opens onto. Each move audited.\n- **Amendment 1 (2026-10-10, found in the work)**: (a) Ubame joins its kitchen by a covered corridor too (an L across its service\n  alley, tagged a residence corridor), so its kitchen becomes an ell as Hayakawa's does: it projects south from the west block under\n  the shuttered wing, its door on its west face toward the kitchen postern, the bath on its south face; the west block's veranda\n  starts at the kitchen's east face. Hayakawa's ell projects south from its west block's family end, the bath on its west face, the\n  door on its south face; Ochiba's is the ell it was, shrunk into the house's corner. (b) The generated draft\n  (`compound_parts._point_features`) also joins its kitchen by a covered corridor (`_corridor`, `CORRIDOR_W_FT`) across the 7 ft\n  fire-gap the placer leaves: the procedure now drops that form, so the draft draws the ell - a `BuildingSpec.joins` names the\n  building an ell projects from, the placer abuts the two with no fire-gap (`_place_one`), and the corridor code goes. Its\n  occasion: layout-revised: county-magistracy-example. (c) Knock-ons in the tooling, each fixed where found: `pack_audit` read a\n  kamado tagged `hearth` as a door glyph adrift (`floating_doors`) once a small kitchen put it within a door's reach of a wall -\n  a rect inside a `hearth` element is no door (a test); the round-trip sheet's program kitchen 18 x 24 ft (its court face then\n  seats the bath; at 24 x 18 the bath found no clear run); the frozen red fixtures' kitchens brought to 72 x 54 px against their\n  houses, their contents and baths moved with them, so each fires only its own check (the two whose check counts tubs at the old\n  kitchen keep it).\n- **Amendment 2 (2026-10-10, the draft as built)**: with the ell abutting the house's west end, the house's west face keeps 6 ft\n  free below the kitchen, short of a door's 8 ft approach, so the draft's inner entrance opens on the house's rear (north)\n  face at the kitchen end, onto the rear alley; 0107's drawing page said \"on the residence's face toward the kitchen\" and now\n  says \"on the residence's back, at the end the kitchen stands against\" (its record checks owed: the pop-ups naming the\n  page triaged, quote-check on the note in that block, record-format). The house stands 7 ft further west with the gap gone,\n  so the draft's garden zone starts 7 ft west to stay before the whole south face; the family privy at the house's rear west\n  corner stands a foot in from it, its half-foot margin off the kitchen. Hayakawa's kitchen door stands on its south face,\n  its two tubs either side.\n- **Occasions**: layout-revised: hayakawa-magistracy and ubame-magistracy (the kitchen joined as an ell, the corridor gone);\n  layout-revised: county-magistracy-example (the draft's ell); glyph-redrawn: kitchen on ochiba-magistracy.\n\n",
    "reviewed": "2026-10-10",
    "declared": "spec-fidelity",
    "decisions": [
@@ -132,55 +132,85 @@
      "id": "size",
      "summary": "each sheet's kitchen drawn ~24 x 18 ft (72 x 54 px), shape a GUESS, ceiling ACCURATE from 0091's measured ~12 tsubo wing",
      "class": "within",
-     "why": "is the ranked fix of #kitchen verbatim ('~440 sq ft, e.g. ~24 x 18 ft ... on all three sheets'); HEAD's three kitchens re-read at 120 x 100 px, as the plan states"
+     "why": "the ranked fix of #kitchen verbatim ('~440 sq ft, e.g. ~24 x 18 ft ... on all three sheets'); unchanged since round 1"
     },
     {
      "id": "band",
-     "summary": "types.json kitchen band narrowed to w 18-26 by h 14-20 ft, either orientation, so the old 40 x 33 ft fails",
+     "summary": "types.json kitchen band narrowed to w 18-24 by h 14-18 ft, either orientation, at most 432 sq ft",
      "class": "within",
-     "why": "the ranked fix names 'the kitchen band'; a tolerance around ~24 x 18 that refuses the old size enforces the row"
+     "why": "the ranked fix names 'the kitchen band'; the new top (24 x 18 = 432) sits under 0091's ~440 ceiling, closing round 1's aside, and still admits the ~24 x 18 target, the draft's 20 x 18 and the round-trip sheet's 18 x 24 while refusing the old 40 x 33"
     },
     {
      "id": "ell",
      "summary": "kitchen joined to the house as an ell, abutting, no covered corridor; Hayakawa's covered way removed",
      "class": "within",
-     "why": "is the ranked fix of #kitchen corridor tagged residence corridor"
+     "why": "the ranked fix of #kitchen corridor tagged residence corridor"
     },
     {
      "id": "procedure-text",
      "summary": "procedure bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; 'a large institutional daidokoro' dropped",
      "class": "within",
-     "why": "the row's files include docs/buildings.md and its fix says '0091 cited'; the old wording states the size the row corrects"
+     "why": "the row's files include docs/buildings.md and its fix says '0091 cited'"
     },
     {
      "id": "draft-size",
      "summary": "the generated draft's 20 x 18 ft kitchen left as it is, inside the new band",
      "class": "within",
-     "why": "the ranked row names the three sheets and the band, not the draft's program; the draft already satisfies the band, so nothing the row asks is left undone"
+     "why": "20 x 18 = 360 sq ft is inside w 18-24 by h 14-18; nothing the row asks is left undone"
     },
     {
      "id": "contents-move",
      "summary": "kamado, inside well, door, door tubs and bath move with the kitchen; freed ground left as court or service ground; each move audited",
      "class": "within",
-     "why": "the necessary consequence of resizing the kitchen; no rule is relaxed"
+     "why": "the necessary consequence of resizing the kitchen; no rule relaxed"
     },
     {
      "id": "A1a-ubame",
-     "summary": "Ubame's covered kitchen corridor also removed and its kitchen made an ell; per-sheet ell placements (Ubame south of the west block, Hayakawa south of the family end, Ochiba shrunk into the corner)",
+     "summary": "Ubame's covered kitchen corridor also removed and its kitchen made an ell; per-sheet ell placements",
      "class": "within",
-     "why": "widens the row's file list, not its rule: the fix is 'no covered corridor form', so leaving Ubame's would itself be the exception; placements are design"
+     "why": "the fix is 'no covered corridor form'; leaving Ubame's would itself be the exception"
     },
     {
      "id": "A1b-draft-ell",
-     "summary": "the generated draft drops its kitchen corridor; BuildingSpec.joins names the building an ell projects from and the placer abuts the two with no fire-gap; corridor code removed",
+     "summary": "the generated draft drops its kitchen corridor; BuildingSpec.joins and the placer abut the ell with no fire-gap; corridor code removed",
      "class": "within",
-     "why": "the procedure the draft implements now has no corridor form (the same row); an ell abuts by definition, so the fire-gap's absence between a kitchen and its own house is the row, not a carve-out of the fire-gap rule between separate buildings"
+     "why": "the procedure the draft implements has no corridor form now; an ell abuts its own house by definition"
     },
     {
      "id": "A1c-tooling",
-     "summary": "pack_audit no longer reads a kamado rect inside a hearth element as a floating door (with a test); round-trip sheet kitchen 18 x 24 ft; red fixtures' kitchens brought to 72 x 54 px with contents moved, the two tub-count fixtures keeping the old kitchen",
+     "summary": "pack_audit hearth-not-a-door fix with a test; round-trip sheet kitchen 18 x 24 ft; red fixtures' kitchens brought to 72 x 54 px, two tub-count fixtures keeping the old kitchen",
      "class": "within",
-     "why": "knock-ons fixed where found (constitution XIV, FR-005); 18 x 24 is inside the band's either-orientation clause; red fixtures are deliberately faulty test inputs, not implementation the request asks to match the research, and keeping the two preserves what their checks prove"
+     "why": "knock-ons fixed where found (XIV, FR-005); 18 x 24 is inside the narrowed band's either-orientation clause"
+    },
+    {
+     "id": "A2a-inner-entrance",
+     "summary": "the draft's inner entrance moves from the house's west face to its rear (north) face at the kitchen end, the west face keeping only 6 ft below the ell, short of a door's 8 ft approach",
+     "class": "within",
+     "why": "the record attests only that a separate inner entrance existed (kotobank-uchigenkan, matsue-bukeyashiki); no source places it on a face, so its face is placement design, and the entrance itself is kept"
+    },
+    {
+     "id": "A2b-0107-drawing-page",
+     "summary": "0107's drawing page sentence changed from 'on the residence's face toward the kitchen' to 'on the residence's back, at the end the kitchen stands against', its record checks owed",
+     "class": "within",
+     "why": "the drawing page states how our maps draw it; it follows the drawing, and the evidence it cites (the entrance's existence) is unchanged"
+    },
+    {
+     "id": "A2c-garden-zone",
+     "summary": "the draft's garden zone starts 7 ft further west, the house having moved 7 ft west with the fire-gap gone, to stay before the whole south face",
+     "class": "within",
+     "why": "a consequence of the ell abutting; keeps the existing rule rather than relaxing it"
+    },
+    {
+     "id": "A2d-family-privy",
+     "summary": "the family privy at the house's rear west corner stands a foot in from the corner, a half-foot margin off the kitchen",
+     "class": "within",
+     "why": "a consequence of the kitchen now standing against that end; no rule relaxed"
+    },
+    {
+     "id": "A2e-hayakawa-door-tubs",
+     "summary": "Hayakawa's kitchen door on its south face with its two tubs either side",
+     "class": "within",
+     "why": "the door face was already amendment 1's; the tubs at the door are wave 106's rule applied"
     },
     {
      "id": "occasions",
