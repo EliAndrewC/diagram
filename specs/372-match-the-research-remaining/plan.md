@@ -268,7 +268,9 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   kitchen on its earth floor (Ochiba's "on the doma since pass 3"), the generated plans past the bath. No page places a samurai
   kitchen's well, so neither form is research-backed and the ranked fix's "follow the drawing page" would move three wells on no
   evidence: the drawing page now records both seats, a GUESS, and the procedure and its claim say the same. The well pop-up says
-  the kitchen's well stands inside the kitchen on its earth floor or past the bath. No sheet, no engine code.
+  the kitchen's well stands inside the kitchen or past the bath. (Plan review round 1: only Ochiba's well stands on a doma -
+  Ubame's is inside the kitchen off its doma, Hayakawa's kitchen has none - so the seat is "inside the kitchen", the doma named
+  for Ochiba alone.) No sheet, no engine code.
 - **Records**: the claims' impl-drift; the record checks the page edit owes.
 
 ## Performance bookends (constitution VI)

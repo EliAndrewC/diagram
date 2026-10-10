@@ -19,7 +19,7 @@ Guesses:
 
 Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
 shows where the well stands; a real curb was some 3 to 4 ft across. Where a plan has a kitchen and stables, the kitchen's
-well stands inside the kitchen on its earth floor or past the bath, and the well by the stables serves the horses and the kennel in the service yard.
+well stands inside the kitchen or past the bath, and the well by the stables serves the horses and the kennel in the service yard.
 
 Name: well
 Covers: every well curb glyph and its label

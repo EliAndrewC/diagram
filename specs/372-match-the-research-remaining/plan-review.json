@@ -1,33 +1,41 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "5d072aed70f5f6974e988692e36a04fe29911396b14571a0861a17e003aa35cf",
+ "plan_sha256": "cef095c9ddf443cdb742a8476038973b9d764744d470d5d629d0d076f8762343",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W110-scope",
-   "summary": "Wave 110 takes the one E0 ranked row research/questions/0105-baths-furo.notes.html#bath-building-absence (MISLABELED, CLAIM-FROM-UNREAD) into feature 372's work list.",
-   "class": "within",
-   "why": "FR-001's work list is 328's ranking's open rows; row 269 is one of them, and the request (328: 'fix all of it', easiest first) asks for exactly this. E0 before harder tiers follows the requested order."
+   "id": "W111-a",
+   "summary": "The ranked fix ('follow the drawing page': procedure says past the bath, the hand sheets' kitchen wells moved to match) is not followed; the hand sheets' wells stay where drawn and 0105's drawing page records a hand-sheet seat beside the generated plans' past-the-bath seat, both GUESS.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The plan's own ground (moving the wells would be 'on no evidence') is a cost argument and does not make it legitimate. The purpose test does: the GM asked that the implementation match the research, and the evidence the record holds is not edited - 0105's question page (kitchen, well and bath kept together; c.1600 a bath in a corner of the doma) and 0091 (wells 'at the front, at the side or indoors', the Miwa house's in the doma). 'Past the bath, as far as 20 ft out' is the drawing page's account of the generated plans' geometry, in a sentence 0105 calls 'our reading', and it was false for the hand plans; correcting the drawing page to describe what the maps draw is the record matching the implementation, not the research moved to bless it. Moving the hand sheets' wells out of the kitchen would take them from the one seat the record attests indoors to a seat the page calls a reading - against the request's purpose. Legitimate in DIRECTION only; the seat it records is ruled in W111-b."
   },
   {
-   "id": "W110-remove-not-cite",
-   "summary": "The sentence 'The Matsue samurai residence lists its yudono by name only' is removed from both 0105 notes files rather than cited as its own note from the Matsue page (matsue-bukeyashiki, already in the registry).",
-   "class": "within",
-   "why": "The request asks that every finding be fixed so the implementation matches the research; it does not ask that any sentence be preserved or that the record gain citations. The ranked row the GM-requested audit produced names removal as one of its two fixes ('remove the sentence, or cite the Matsue page as its own note'), and either fully clears the finding (quote-check reports CLAIM-FROM-UNREAD cleared). No drawing rule rests on the sentence: the note's operative statement (no page shows a samurai compound's bath as a building of its own, none gives a bath's size) is unchanged and still carries the 10 x 8 ft GUESS of wave 108, and the Matsue page stays in the note's searched list. Choosing the lesser of two offered remedies narrows nothing that was asked; citing would add record content the request never asked for."
+   "id": "W111-b",
+   "summary": "The hand-sheet seat is recorded as 'inside the kitchen on its earth floor (doma)' for the hand-drawn sheets as a class - in docs/buildings.md's Kitchen well bullet and claim, 0105's drawing page and the well pop-up ('inside the kitchen on its earth floor or past the bath') - on Ochiba's 'on the doma since pass 3'.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Measured per sheet (MODE 1: adjudicate each case the exception covers). Ochiba: doma rect x226-298 y306-360, well x270-292 y330-352 - on the doma, TRUE. Ubame: doma (kitchen-1) x216-288 y332-386, well x294-316 y404-426 - inside the kitchen but OFF its doma, FALSE. Hayakawa: the sheet says 'Hayakawa's kitchen has no doma (knob 9: the kamado on the board floor)', well x248-270 y388-410 inside a kitchen with no earth floor - FALSE. One sheet's seat was stretched over three, so the record now states a seat two of the three sheets do not draw: the implementation does not match the record this wave writes, which leaves a finding the request says to fix. What all three sheets do draw is a well INSIDE THE KITCHEN (each well rect lies within its kitchen rect); the procedure bullet, its claim, 0105's drawing page and the well pop-up should record that (with the doma named for Ochiba alone, or not at all) - or the sheets must be made to match the recorded seat. 0091's 'indoors' still carries W111-a's purpose ground for an inside-the-kitchen seat."
   },
   {
-   "id": "W110-silence-unchanged",
-   "summary": "The absence note's stated silence and its search comment are left as they were.",
+   "id": "W111-c",
+   "summary": "The kitchen-well claim relabeled GUESS on 0105's drawing page, its 0091 citation dropped.",
    "class": "within",
-   "why": "The finding concerns only the one sentence; leaving the rest untouched is the literal fix."
+   "why": "The ranked fix asks for the GUESS label on 0105's drawing page, and ranking row 'Magistrate's manor#wells by use' already found that 0091 places wells 'at the front, at the side or indoors', not by a kitchen."
   },
   {
-   "id": "W110-records",
-   "summary": "Records: quote-check and record-format on the note; the source-reader unit answered as an absence note citing no page; ranking row 269 marked wave 110; waves.json and closed-tiers.json updated.",
+   "id": "W111-d",
+   "summary": "The bath pop-up's 'the kitchen's well beyond it' becomes 'close by'.",
    "class": "within",
-   "why": "The record checks the repository owes for an edited note, and the bookkeeping FR-001/SC-001 require; an absence note cites no page, so there is nothing for source-reader to read."
+   "why": "A consequence of W111-a: 'beyond it' was true only of the generated plans; 'close by' is true of both seats and keeps 0105's kitchen-well-bath grouping."
+  },
+  {
+   "id": "W111-e",
+   "summary": "No sheet redrawn and no engine code changed; the records owed are the claims' impl-drift and the page edit's record checks.",
+   "class": "within",
+   "why": "Follows from W111-a, and the checks are 328's FR-005 verification as written. impl-drift IN-STEP does not measure the sheets' geometry, which is where W111-b fails."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

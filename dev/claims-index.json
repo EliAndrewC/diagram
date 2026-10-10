@@ -1477,14 +1477,14 @@
   "code": "d3cae021ce2a0eeb",
   "core": "0564c190350b66a9",
   "date": "2026-10-10",
-  "note": "the kitchen well kept with the kitchen and bath, and 0091's wells at the gate, the east side and indoors, are as the pages record them; the garden and stables wells are covered by their own claim",
+  "note": "the kitchen well kept with the kitchen and bath is a GUESS that 0105's drawing page records (\"that the one well also filled the bath is our reading\"); \"by the kitchen\" covers both the generated plans' spot and the hand-drawn plans' spot inside the kitchen",
   "pages": {
-   "0105-baths-furo.drawing.html": "5bf8dac8630a1c2c"
+   "0105-baths-furo.drawing.html": "de13b621fc93a424"
   },
-  "research": "60110293b1975de5",
+  "research": "05a5d9db2a9784b9",
   "rests": [
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
-   "0105-baths-furo.drawing.html:04d570c66ea834c5"
+   "0105-baths-furo.drawing.html:c2529d4d294eb292"
   ],
   "verdict": "IN-STEP"
  },
@@ -2185,9 +2185,9 @@
   "date": "2026-10-10",
   "note": "the drawing page records the bath enlarged up to about 18 x 12 ft on the service side as a resident's particular, a GUESS; the doc's ~54 x 36 px = 18 x 12 ft matches, and no page gives a bath's size",
   "pages": {
-   "0105-baths-furo.drawing.html": "5bf8dac8630a1c2c"
+   "0105-baths-furo.drawing.html": "de13b621fc93a424"
   },
-  "research": "60110293b1975de5",
+  "research": "05a5d9db2a9784b9",
   "rests": [
    "0105-baths-furo.drawing.html:5ac8b5f9c5612dfb",
    "0105-baths-furo.drawing.html:87595aae6ed4540e"
@@ -2201,10 +2201,10 @@
   "date": "2026-10-10",
   "note": "room or addition on the service side by kitchen and well, never a building apart, matches the findings; 10 x 8 ft matches the drawing page's guess; the new enlarged-bath bullet (§141) has its own claim and does not touch this one",
   "pages": {
-   "0105-baths-furo.drawing.html": "5bf8dac8630a1c2c",
+   "0105-baths-furo.drawing.html": "de13b621fc93a424",
    "0105-baths-furo.html": "d5cd9565ea393908"
   },
-  "research": "246884db45c4d2cc",
+  "research": "f0ac64feb2ec30fb",
   "rests": [
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:5ac8b5f9c5612dfb",
@@ -3855,84 +3855,87 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#a fourth well only for very large compounds": {
-  "code": "29551d8105d53478",
-  "core": "55bfe263e5fb0281",
+  "code": "bc5652b8a7e978c7",
+  "core": "9ca4aa60abe62c38",
   "date": "2026-10-10",
-  "note": "nothing in the bundle gives a compound's well count by size",
+  "note": "no cited page says how many wells a compound kept by its size",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#bath-area well": {
-  "code": "e80f3cb41692d391",
-  "core": "55bfe263e5fb0281",
+  "code": "0708d973b8080e51",
+  "core": "9ca4aa60abe62c38",
   "date": "2026-10-10",
-  "note": "matches 0105's reading that the one well also filled the bath",
+  "note": "the kitchen well serving the bath is 0105's own reading, recorded as such",
   "pages": {
-   "0105-baths-furo.drawing.html": "5bf8dac8630a1c2c"
+   "0105-baths-furo.drawing.html": "de13b621fc93a424"
   },
-  "research": "60110293b1975de5",
+  "research": "05a5d9db2a9784b9",
   "rests": [
-   "0105-baths-furo.drawing.html:04d570c66ea834c5"
+   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
+   "0105-baths-furo.drawing.html:c2529d4d294eb292"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#garden well": {
-  "code": "eb0135786d88cdfa",
-  "core": "55bfe263e5fb0281",
+  "code": "100905b16168ebf4",
+  "core": "9ca4aa60abe62c38",
   "date": "2026-10-10",
-  "note": "no page places a garden well; 0091 lists only the gate, the side and the doma",
+  "note": "no cited page places a well in a garden",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#kitchen well": {
-  "code": "70bc9ac85d9ad483",
-  "core": "55bfe263e5fb0281",
+  "code": "6208961bd86d1e95",
+  "core": "9ca4aa60abe62c38",
   "date": "2026-10-10",
-  "note": "0105's drawing page records both seats as a GUESS, and the text matches it; the doma well at the Miwa house (0091) is not named as a kitchen's",
+  "note": "inside the kitchen on hand-drawn plans, and past the bath within 20 ft on generated ones, both recorded as a GUESS; Ochiba's doma is a case of \"inside the kitchen\"",
   "pages": {
-   "0105-baths-furo.drawing.html": "5bf8dac8630a1c2c"
+   "0105-baths-furo.drawing.html": "de13b621fc93a424"
   },
-  "research": "60110293b1975de5",
+  "research": "05a5d9db2a9784b9",
   "rests": [
-   "0105-baths-furo.drawing.html:04d570c66ea834c5"
+   "0105-baths-furo.drawing.html:c2529d4d294eb292"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#stables well": {
-  "code": "af70f281a71a4cdc",
-  "core": "55bfe263e5fb0281",
+  "code": "90f0cb06f20c101d",
+  "core": "9ca4aa60abe62c38",
   "date": "2026-10-10",
-  "note": "no page places a stable's well",
+  "note": "no cited page places a stable's well",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#well count": {
-  "code": "a737d8b087641991",
-  "core": "55bfe263e5fb0281",
+  "code": "89dcbb2f1aefa0a6",
+  "core": "9ca4aa60abe62c38",
   "date": "2026-10-10",
-  "note": "0196 counts a settlement's communal wells, not a compound's; a samurai house's own well is uncounted",
+  "note": "0196 counts a settlement's communal wells, not a compound's; silent on this",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#well curb size": {
-  "code": "5f0ed25cfc8d5d86",
-  "core": "55bfe263e5fb0281",
+  "code": "8d83dc39b80e8665",
+  "core": "9ca4aa60abe62c38",
   "date": "2026-10-10",
-  "note": "a marker drawn larger than the ~4 ft curb, following 0196's convention of larger-than-life markers",
+  "note": "a marker drawn larger than the ~4 ft curb is the page's own marker convention",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#well glyph": {
-  "code": "f99ab9a8e0e9463b",
-  "core": "55bfe263e5fb0281",
+  "code": "c43bc0d1fa983976",
+  "core": "9ca4aa60abe62c38",
   "date": "2026-10-10",
-  "note": "the cited page never mentions Hoshigaoka and makes the lifting gear a knob (\"about three wells in four take a sweep\" on shallow water, a pulley frame on deep), with a roof on one in three, so the fixed plain curb with no gear and no roof contradicts it; either roll the gear and roof per plan, or relabel the claim to a page that records a gearless compound well",
+  "note": "0196's drawing page never mentions Hoshigaoka or a plain curb: every well it draws takes a sweep or a pulley frame (a knob weighted by water depth), even a plain pole is \"drawn with a sweep all the same\", and about one in three is roofed; the gearless, roofless curb is a form the page does not attest - roll the gear and roof as the page does, or relabel GUESS/UNRESEARCHED if the compound's own wells fall outside the page",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "85fc1e4c2a7f3a2a"
   },

@@ -217,7 +217,7 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 ### Wells
 
 <!-- Research: well count - UNRESEARCHED: 2-4 wells for ~50 inhabitants and horses -->
-<!-- Research: kitchen well - GUESS research/questions/0105-baths-furo.drawing.html: on a hand-drawn plan inside the kitchen on its earth floor, on a generated one past the bath within 20 ft of the kitchen; no page places a samurai kitchen's well -->
+<!-- Research: kitchen well - GUESS research/questions/0105-baths-furo.drawing.html: on a hand-drawn plan inside the kitchen, on a generated one past the bath within 20 ft of the kitchen; no page places a samurai kitchen's well -->
 <!-- Research: garden well - UNRESEARCHED: in the inner garden -->
 <!-- Research: stables well - UNRESEARCHED: just outside the stables for watering -->
 <!-- Research: bath-area well - GUESS research/questions/0105-baths-furo.drawing.html: optional, the kitchen well usually serves the bath (0105's own reading) -->
@@ -227,7 +227,7 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 
 A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 
-- **Kitchen well** (busiest) - small stone-curb rect (~22×22) with dark well-mouth circle, inside the kitchen on its earth floor (doma) on the hand-drawn sheets; the generated plans set it past the bath, within 20 ft of the kitchen (both a GUESS, 0105's drawing page).
+- **Kitchen well** (busiest) - small stone-curb rect (~22×22) with dark well-mouth circle, inside the kitchen on the hand-drawn sheets (on its doma at Ochiba); the generated plans set it past the bath, within 20 ft of the kitchen (both a GUESS, 0105's drawing page).
 - **Garden well** - same form, in the inner garden for family / ornamental use.
 - **Stables well** - same form, just outside the stables for horse-watering.
 - **Bath-area well** (optional fourth) - only for very large compounds; usually the kitchen well serves the bath by carry.
