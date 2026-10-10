@@ -83,7 +83,7 @@ correct work is fixed, not escaped (an escape only for a genuinely exempt case, 
   count of in-scope findings falls by at least that many with no new one.
 - **SC-002** (FR-002): every closed batch is on main, its gate green, its pair band recorded and audited (or its plan section's
   reviewed record that the pair would time unchanged code).
-- **SC-003** (FR-001, FR-004): at the end, `make claims-report` shows 0 in-scope findings outside the DEFERRED units; the held
+- **SC-003** (FR-001, FR-003, FR-004): at the end, `make claims-report` shows 0 in-scope findings outside the DEFERRED units; the held
   list goes to the GM once every row the session can fix is done, the feature closes after the answers are applied, and a row the
   GM rules should stay as it is becomes a Decisions Recorded row, not a DRIFTED one. At the cap, the clone holds no uncommitted
   work and no unrecorded verdict.
@@ -95,6 +95,9 @@ correct work is fixed, not escaped (an escape only for a genuinely exempt case, 
   counted from that session's record (2026-10-10), an estimate, not a measurement key.
 - **SC-006** (FR-007): every carried tooling gap is closed by a test red on the old code, or recorded as already closed with
   its evidence.
+- **SC-007** (FR-005): every refusal of correct work by one of 375's guards in this feature ends in a fix of the guard with a test
+  red on the old guard, and every escape this feature passes carries a reason naming why its case is genuinely exempt (`make
+  guard-log`).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -163,3 +166,6 @@ current figure before the first wave.
   no country-shrine Affects tag (328's FR-010 carries the scope); the filed guard rule's "(the GM, 2026-10-10)" is the filed
   spec's record, not verbatim words.
 - Round 2 (spec-fidelity, verify, 2026-10-10): FAITHFUL - all four items confirmed in the diff; spec-lint exits 0.
+- Amendment 1 (2026-10-10, at the plan): spec-lint found FR-003 and FR-005 named by no success criterion - SC-003 now cites
+  FR-003 (its at-the-cap clause), and SC-007 is FR-005's (a guard fixed with its test, an escape's reason naming its exemption).
+  Put to the plan review with the plan.
