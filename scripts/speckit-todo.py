@@ -147,7 +147,7 @@ def check_message(missing: list[Feature]) -> str:
         f"speckit-todo: {len(missing)} open feature(s) say not when they are owed:\n{names}\n"
         "Add this line under the **Status** line, naming ONE stage:\n"
         "  **Owed at**: now | village | town | provincial city | capital\n"
-        "`now` unless it waits on a tier's conversion; a thing two tiers need is owed at the earlier one "
+        "`now` unless it concerns a tier not yet scripted (its code, its maps or its generator - a city-only fold is `provincial city`); a thing two tiers need is owed at the earlier one "
         "(hamlets, then villages, towns, provincial cities, capitals - the GM, 2026-10-10).\n"
     )
 
