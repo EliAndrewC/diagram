@@ -56,6 +56,18 @@ incidents behind them.*
 - **The why is compounding** (the GM's own reasoning): the point of these generators is to expand them onto a foundation whose behavior is known-good. Every defect left in place is one the next tier inherits and builds over, entangled by then with work that assumed it. Keeping the floor level is what lets the building get taller.
 - **Record a fix that FAILED, at the point of change.** A cheap wrong lever that measurably did nothing saves the next session from pulling it again - see the front-row lane cap's two recorded dead ends in [`hamletgen/homesteads.py`](../l7r/diagram/hamletgen/homesteads/__init__.py).
 
+## Measured, enforced, escalated (feature 375)
+
+The GM, 2026-10-10: *"anything that requires someone to just remember to do the right thing is not tenable"*. Feature 372's waves
+105-111 cost about 120 dispatches for a dozen rows, the time going to loops, not fixes; feature 375 built each fix into the
+tooling. **Measured**: a hook writes every tool call to the feature's event log, and `make feature-report F=NNN WRITE=1` turns
+it into where the time went - every feature closes with one. **Decide, then check**: a task's decisions carry a verdict before
+its checks run (`make decide`); a page is frozen while its checks run; a round's own edits go in once. **Owed by what changed**:
+a pop-up's checks are triaged against the blocks that moved; a procedure claim is owed by its own line. **Escalated without
+stopping**: a tripwire (a third round, a block that comes back, two red gates, checks out of proportion to the change) owes the
+`round-arbiter` one binding ruling - continue, accept or process fault - in place of the GM's waiver, and the GM reviews every
+ruling after the feature lands (`make gm-review`, `make gm-reviewed`). The full record: `specs/375-enforced-wave-process/`.
+
 ## Review subagents
 
 **Review checks run on their OCCASION, in the background, never per task (GM 2026-08-26; feature 294, GM 2026-10-01)** - the GM looking at the map is the faster reviewer of a change that moves things under rules already judged; a check runs when what it judges is new or changed (an element new to a map, a glyph redrawn or re-placed, a map new to the pool, a declared occasion). Doctrine and the ledger in [`docs/reviews.md`](reviews.md). Every pass is a row in [`review-ledger.md`](../dev/review-ledger.md) - verdict, what it caught that the author missed, and what it missed that the GM then saw - so "is it pulling its weight" is a total, not an impression.
