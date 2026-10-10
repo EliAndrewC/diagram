@@ -49,3 +49,4 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
 - spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED. Applied:
   - FR-001: a `process-fault` ruling's fault is its `tooling_fix`, held like any other; the contract stops saying "file".
   - FR-002: the GM-review row carries the fix, and a fix made adds what was built and its test to the GM's review.
+- spec-fidelity-verify, Mode 3, round 2 (2026-10-10): FAITHFUL - both round 1 items resolved.
