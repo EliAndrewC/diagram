@@ -606,7 +606,10 @@ class PaddyMixin:
         """Feed a water-first field's MAIN at a single point from the pond, and empty its DRAIN to the outlet, each anchored
         safely inside the field (lifted out of `water_field` by feature 370, the 100-statement cap; same order).
 
-        Research: feed and outfall - UNRESEARCHED: the main fed from the source at its nearest point 11 px or more inside the field, the drain emptied at its point nearest the outlet, each channel 2.6 px"""
+        Research:
+            feed and outfall's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: each channel 2.6 px, a pond feeder at roughly twice the floor
+            feed and outfall's seat - UNRESEARCHED: the main fed from the source at its nearest point 11 px or more inside the field, the drain emptied at its point nearest the outlet
+            feed and outfall meander - UNRESEARCHED: each channel drawn with an 8 px meander (`amp=8`)"""
         x0, y0, x1, y1 = bbox
         safe = [(t[1], t[2]) for t in interior if edge_dist(t[1], t[2], smoothed) >= 14] or [((x0 + x1) / 2, (y0 + y1) / 2)]
         msafe = [q for q in main_pts if edge_dist(q[0], q[1], smoothed) >= 11] or main_pts or safe

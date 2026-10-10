@@ -538,9 +538,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         door path reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: STEADING_ARRIVAL_FT 12 ft off the steading's built ground
         door path distance - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: DOOR_REACH_FT 60 ft, the page's reach at which a way counts as reaching a farmhouse
         web lanes off the hard ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: a stretch that would cross the field, a crop or wet ground is cut out
-        web lane margin off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
+        web lane margin off the hard ground - DEVIATION research/questions/0081-village-lanes.drawing.html: the page lets a lane touch a plot's boundary; WEB_HARD_GAP keeps a web lane 8 ft off the field, the crop and the marsh
+        a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
+        ground cover is not fabric - UNRESEARCHED: a lane may cross grazing scrub and run along a tree belt; the commons and the village groves are left out of the fabric it routes round
+        a further row street's end - UNRESEARCHED: it ends at its outermost joint or at its last farm's door (`trim_streets`, `_TOUCH_GAP` and the door's offset)
         web lanes off the water - UNRESEARCHED: web cuts and joins clipped at the watercourses and drawn channels, no web lane crossing water
-        orphan stub joined - UNRESEARCHED: an orphan stub joined within _STUB_REACH_FT, held to 0081's 25 ft join reach (research/questions/0081-village-lanes.drawing.html); joining a stub into the one network is not that page's end-to-end rule
+        orphan stub joined - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, so a stranded stub is joined into it
+        orphan stub's reach - CONVENTION: within `_STUB_REACH_FT`, 25 ft, research/questions/0081-village-lanes.drawing.html's join reach, which that page calls a drawing convention
         web lanes routed round the households' reserved wood seats as fabric - UNRESEARCHED: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain

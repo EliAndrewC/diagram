@@ -128,10 +128,11 @@ def _touch_junctions(
     and a junction is a place where two treads meet, not two ends that nearly do.
 
     Straight when the last stretch is clear, routed when it is not; the lane's record and its ink are
-    rewritten together (`reink_lane`). Ends that stop at a house or leave the map are left alone - a
-    door path ends at its door. `lanes_form_one_network` holds the line. Returns the ends closed.
+    rewritten together (`reink_lane`). The track out and a row's streets are left alone - neither is extended nor has its
+    end moved. `lanes_form_one_network` holds the line. Returns the ends closed.
 
     Research:
+        the track and the streets left whole - research/questions/0081-village-lanes.drawing.html, research/questions/0033-row-villages-resson.drawing.html: the track out runs off the map and a row's street is one way along its row, so neither's end is extended or moved
         ends touch the way they near - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, joined where treads meet
         end meets end - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one
         final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of under 40 ft past the way it meets is cut (a 6 ft floor, on no page, dropped - feature 328 wave 95)
@@ -311,8 +312,10 @@ def _one_network(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: 
     the same order).
 
     Research:
-        orphan piece dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
+        orphan piece dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a piece joined to the network or dropped, a household reached across a neighbor's land owed none (`geom.lane_houses`)
+        a farmhouse's only way kept - GUESS: a piece that is a farmhouse's only way and cannot be joined is kept and counted (`lane_orphans`) for the settle, which joins it or refuses the map (`last_resort.refuse_unreached`)
         connector never dropped - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
+        streets never dropped - research/questions/0033-row-villages-resson.drawing.html: a row's street is laid as one way along its row, so it is never dropped as an orphan piece
         orphan reach - UNRESEARCHED: a stranded piece linked back to the network from up to `_ORPHAN_REACH` (150 ft)
         a roundabout link refused - UNRESEARCHED: a junction link longer than `_LINK_DIRECTNESS` (4) times the gap it closes
         a straight link off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off a garden fence, more for a lane wider than 10 ft (w/2 + 2 ft), as `_smooth_web`'s chord keeps (feature 328 wave 94: it kept 4 ft)

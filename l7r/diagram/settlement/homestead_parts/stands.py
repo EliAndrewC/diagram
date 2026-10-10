@@ -244,8 +244,10 @@ class StandsMixin:
         Research:
             three groves - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the back grove, the water-mouth grove and the dooryard copse
             clump grid - UNRESEARCHED: a 20 or 32 bscale step, clumps 28 or 22 bscale units
-            clump inside the page window - CONVENTION: a clump kept only where some of its crown falls inside the page
+            clump inside the page window - CONVENTION: a clump kept only where some of its drawn crowns fall inside the page - a clump's crowns are drawn out to 0.9 of a clump from its seat (`_draw_grove`; the keep-outs' "a DRAWN crown runs to ~1.03 x clump"), so a seat up to 0.9 of a clump past the edge is kept
             copse mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the dooryard mix, fruit and broadleaf, no bamboo or conifer
+            water-mouth grove drawn in the conifer-backed windbreak mix - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: big old trees, Huangling's mainly yew; the village belt takes the same mix, drawn in its rolled form (`grove_fill.ink_and_record_grove`)
+            clumps kept apart - UNRESEARCHED: a re-seat 0.55 of a grid step from any clump down, a gap-fill seat and the grid's own seats half a clump from a seat taken or reserved
             copse filled to the homesteads' wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: reserved seats first, then the grid
             no wind declared - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the regional northwest (every map takes it unless its spec declares a local wind); a hamlet always passes its plan's wind
             belt a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: ends trimmed to the wind's quarter

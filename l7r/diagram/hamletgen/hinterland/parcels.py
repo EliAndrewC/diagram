@@ -219,6 +219,7 @@ def _patch_keepouts(
     Research:
         keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
         title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter
+        no wood on the marsh - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: low ground by a river or marsh is left to grass, so the drawn marsh (`marsh_ground`) is a keep-out
     """
     keep: list[tuple[float, float, float]] = []  # (x, y, radius) of everything to stay clear of
     for h in s.M.get("houses", []):
@@ -269,7 +270,8 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
     `open_ground_patches` by feature 370, the 100-statement cap; the same reads in the same order).
 
     Research:
-        where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
+        where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, the slope higher than the fields first, then the level beside them
+        no wood below the houses - GUESS: a seat below the houses' median height (`house_floor`) is dropped on any ground; the page refuses one only past the fields beside a river or marsh
         the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
         beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
     """

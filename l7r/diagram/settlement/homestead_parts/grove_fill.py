@@ -51,6 +51,9 @@ def grove_blocks(
         clump crown-reach margin off a way - UNRESEARCHED: the crown reach kept clear of lanes, streets and the road, the margin's width
         clumps off the gardens' east - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft (`EAST_REACH_FT`) east of a yard or bed, from its north edge down to 50 ft below its south edge
         one grove off another's - UNRESEARCHED: one grove's clumps kept off another's by the sum of their canopy reaches
+        groves off the households' wood seats - UNRESEARCHED: every grove but the copse kept off each household's reserved copse seat (`reserved_seat_keepouts`)
+        clumps off a dike bank - UNRESEARCHED: no clump based on a dike's bank
+        the title's pocket kept clear - CONVENTION: clumps kept a crown off the pocket reserved for the map's name
     """
     from .stands import crown_reach, deep_marsh, reserved_seat_keepouts  # noqa: PLC0415 - `stands` imports this module
 
@@ -260,7 +263,15 @@ def reseat_clump(
     constant-depth ribbon, and the clumps were being filtered out, not left outside.
 
     Interior-only: a clump blocked near the polygon's own rim is at the belt's edge, where
-    stopping is correct."""
+    stopping is correct.
+
+    Research:
+        a belt plants round a local obstacle - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane through the belt and a wellhead in it are planted round, the wall resuming
+        a seat refused for the sun set deeper - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a crown refused in a plot's sun is set deeper in the stand rather than dropped
+        the re-seat's reach - UNRESEARCHED: a refused belt clump is offered up to 2.2 grid steps away, eight bearings a ring
+        the copse re-seats only when displaced - UNRESEARCHED: a sparse grove re-seats only where another grove's canopy displaced it; any other refusal leaves the gap
+        the belt stops at a lane it abuts - UNRESEARCHED: a clump blocked by a lane within a clump of the belt's rim is dropped
+        the edges a stand stops at - UNRESEARCHED: a clump refused by the crop, open water or a dike bank is dropped, not re-seated"""
     # INTERIOR ONLY FOR A LANE, and this cost seed 10 a round. The rule reads "a clump blocked
     # near the polygon's own rim is at the belt's edge, where stopping is correct" - true of a
     # lane, false of everything else. A belt is 110 px deep and a clump is 28, so demanding
@@ -458,10 +469,8 @@ def ink_and_record_grove(s: Settlement, seated: list[tuple[float, float]], poly:
     clumps stock; returns the clumps recorded.
 
     Research:
-        copse mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the dooryard mix, fruit and broadleaf, no bamboo or conifer
-        off the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the south strip, the west lane and every crown's sun ground
+        the belt's rolled form - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the village belt drawn conifer-led (its conifer ranks laid along it and painted over the clumps) or mixed broadleaf, rolled per map (`_windbreak_belt`)
         belt alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: belt clumps standing in the toe or waterside marsh drawn as alder
-        water-mouth grove drawn in the conifer-backed windbreak mix - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: big old trees, Huangling's mainly yew
         the belt's hit region - CONVENTION: the page lights the crowns drawn - each windbreak clump's seat out to its crown reach plus 0.3 of a clump for a crown's spread, the conifer ranks at their drawn radius, the alder clumps (their own class) left out
     """
     from .stands import crown_reach  # noqa: PLC0415 - `stands` imports this module

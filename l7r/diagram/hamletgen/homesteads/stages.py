@@ -417,7 +417,7 @@ def _ground_push(s_: Settlement, seat_: Pt, n_: Pt, house_: tuple[float, float])
     # ...cleared by a FOOTPATH's room, not a hair: a homestead pushed to two pixels off a dike's bank left no way a
     # lane could pass between them, the web stranded it, and the re-roll then forbade the only front seats the
     # dike heads offer (Kuwabata: front 0 on the kept roll, the cluster 162 px off its polder)
-    push += WEB_FABRIC_GAP * 2.0 + 6.0
+    push += s_.px(WEB_FABRIC_GAP * 2.0 + 6.0)  # feet to the map's px (feature 370's impl-drift: it was added as px; identical at a hamlet's 1 ft/px)
     return (seat_[0] + n_[0] * push, seat_[1] + n_[1] * push), by_water
 
 
@@ -775,10 +775,12 @@ def _seat_rank_rounds(s: Settlement, plan: SitePlan, placed: int, rng: random.Ra
         the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground
         the step between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: an envelope's depth and then the larger of the lane's room and the yard's 39 ft of sun, so ranks running north-south stand as the page's rows 92 ft apart (house, yard and 39 ft of sun)
         a lane's room between ranks - GUESS: `MIN_WEB_GAP` kept between the dispersed form's ranks as a spacing only - no lane is laid there; where the ranks run north-south it falls inside the yard's sun
-        rank depth jitter - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue, on an alleys hamlet only
+        rank depth jitter on an alleys hamlet only - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a back lane is the planned form, alleys the grown one, so only an alleys hamlet's ranks are taken off the line
+        rank depth jitter's size - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue
+        the ranks' layout - UNRESEARCHED: round k stands at the row's depth plus k steps, in a brick pattern (even rounds offer the midpoints between neighbors, odd rounds the seats straight behind), center-out, four rank rounds then three rescue rounds
         a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
         the rescue's offer along the field - UNRESEARCHED: in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
-        a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more by the step's north-south share, whichever way the ranks run, so no rank stands in the sun south of another rank's yards
+        a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the step adds `SUN_CORRIDOR_FT` by its north-south share, a spacing that offers seats near clear sun; the full 39 ft south of every yard and bed is held by the placer's own sun rule (`fit._sun_corridor_ok`, both ways), which refuses a seat that would stand in it
     """
     seat = plan.seat
     ax, ay = seat["along"]
