@@ -24,7 +24,7 @@ Chinese county office's order, kept for every plan, though at Takayama the resid
 house either as one block under one roof or as two or three halls stepped back one behind the next, each joined to the
 last by a corridor, as the great houses joined their halls. The reception stands at one end of the house, with
 the garden before it on the sunny side where the buildings allow, and each labeled room - the master's, the family's, the
-inner rooms - stands for a suite of several rooms.
+inner rooms - stands for a suite of several rooms. The pale strip along the garden face is the veranda, always drawn open: the plan shows the house by day, its storm shutters stowed in their boxes, as they stood in daylight.
 
 Name: residence
 Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label

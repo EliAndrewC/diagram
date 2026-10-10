@@ -1,0 +1,81 @@
+{
+  "wave112-verandas": {
+    "quantity": "wave 112 (2026-10-10): the residence verandas at 0102's 3-6 ft, their faces a rolled knob",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg before (main) and after; make pack-audit on each",
+    "command": "make pack-audit ARGS=pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "each data-kind=\"engawa\" rect read before and after; veranda_depths red on all three before, OK after",
+    "value": {
+      "before_px": 8,
+      "before_ft": 2.7,
+      "garden_face_px": 12,
+      "garden_face_ft": 4,
+      "turned_face_px": 9,
+      "turned_face_ft": 3,
+      "band_ft": [
+        3,
+        6
+      ],
+      "rolls": {
+        "hayakawa": "two or three faces",
+        "ochiba": "garden face alone",
+        "ubame": "garden face alone"
+      },
+      "moved": "Hayakawa: the west block's door and tub, the shoe stone and its tub 4 px south; Ochiba and Ubame: the shoe stone 4 px south"
+    }
+  },
+  "wave113-kitchens": {
+    "quantity": "wave 113 (2026-10-10): the kitchens at 0091's measured wing, ells with no corridor",
+    "observed": "2026-10-10",
+    "source": "the three hand sheets and the county draft before (main) and after; make pack-audit on each",
+    "command": "make pack-audit ARGS=pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "method": "each kitchen rect read before and after; the draft's placer output (compound.place) for the gap",
+    "value": {
+      "before_px": [
+        120,
+        100
+      ],
+      "before_ft": [
+        40,
+        33
+      ],
+      "after_px": [
+        72,
+        54
+      ],
+      "after_ft": [
+        24,
+        18
+      ],
+      "band_ft": {
+        "w": [
+          18,
+          24
+        ],
+        "h": [
+          14,
+          18
+        ]
+      },
+      "measured_wing_sq_ft": 440,
+      "draft_kitchen_ft": [
+        20,
+        18
+      ],
+      "draft_gap_before_ft": 7,
+      "draft_gap_after_ft": 0,
+      "draft_house_shift_ft": 7,
+      "corridor_px": {
+        "hayakawa": [
+          12,
+          22
+        ],
+        "ubame": "an L across the 9 ft alley"
+      },
+      "residence_corridor_drawn_ft": {
+        "width": 11,
+        "length": 3
+      }
+    }
+  }
+}
