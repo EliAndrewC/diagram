@@ -1320,6 +1320,30 @@
   ],
   "verdict": "IN-STEP"
  },
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court": {
+  "code": "905b9698690b2a36",
+  "core": "1c9c579e4b74ae58",
+  "date": "2026-10-10",
+  "note": "0090 puts a jail inside the walls and 0097 lists the jail and storehouses among an office's parts, but no cited page says which court the stables, cell or granary stand in, so UNRESEARCHED is the right label; 0116 §179 only describes Ochiba's sheet",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#shrine smaller than the residence": {
+  "code": "829647bbcece4e86",
+  "core": "1c9c579e4b74ae58",
+  "date": "2026-10-10",
+  "note": "0116's drawing page records \"no kitchen, bath or shrine hall out-sizes it\" as a GUESS",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
+  },
+  "research": "8bb634ee7fbc398f",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
+  ],
+  "verdict": "IN-STEP"
+ },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
   "code": "2aba26ac564a7070",
   "core": "1c9c579e4b74ae58",
@@ -1356,22 +1380,6 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
- },
- "docs/building-programs.md::Magistrate's manor (county magistracy)#the shrine kept smaller in footprint than the residence (0218 is silent; 0116 records it as a GUESS)": {
-  "code": "1c9c579e4b74ae58",
-  "core": "1c9c579e4b74ae58",
-  "date": "2026-10-10",
-  "note": "the shrine kept smaller in footprint than the residence (0218 is silent; 0116 records it as a GUESS)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "docs/building-programs.md::Magistrate's manor (county magistracy)#the stables, cell and granary placed in the outer court": {
-  "code": "1c9c579e4b74ae58",
-  "core": "1c9c579e4b74ae58",
-  "date": "2026-10-10",
-  "note": "the stables, cell and granary placed in the outer court",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob": {
   "code": "296ac67a0b09d6bf",

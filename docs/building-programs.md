@@ -20,6 +20,7 @@ Per-building-type specs: the required program every instance shares, the knobs t
 <!-- Research: outer service gate for muck and prisoners - UNRESEARCHED: the same gate taking muck and prisoner transfers from a busy outer court -->
 <!-- Research: wall display - UNRESEARCHED: most impressive on the public approach, plainer at the rear -->
 <!-- Research: guest doors feed courts - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html: guests step into a court or garden, service doors into work space; Ubame's border court drawn with garden stipple and a stone lantern -->
+<!-- Research: service buildings in the outer court - UNRESEARCHED: the stables, cell and granary in the office court, in front of the divider (0090 puts a jail inside the walls but names no court) -->
 <!-- Research: two-court zoning - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: office court in front, residence behind a divider -->
 <!-- Research: divider gate - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: a gate between the two courts -->
 <!-- Research: divider gate width - UNRESEARCHED: ~8 ft -->
@@ -29,6 +30,7 @@ Per-building-type specs: the required program every instance shares, the knobs t
 <!-- Research: commuting clerks - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: a workroom for 3-4 heimen clerks, no clerk housing -->
 <!-- Research: residence entrances - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: one genkan, informal doors elsewhere -->
 <!-- Research: rear service strip - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: servants' nagaya, stores, rear yard or alley on the north; 0115 puts servants along the street, in the gate range or under the main roof -->
+<!-- Research: shrine smaller than the residence - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the shrine kept smaller in footprint than the residence -->
 <!-- Research: universal shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one shrine, Inari by default, subordinate to the residence; Hayakawa's sheet keeps two, as real offices kept more than one shrine (the Joge post an Inari shrine, a Tenjin shrine and others) -->
 <!-- Research: wells by use - GUESS research/questions/0105-baths-furo.drawing.html: the kitchen well by the kitchen, kept with the kitchen and bath on the project's reading ("that the one well also filled the bath is our reading"); 0091 places a house's wells at the front, at the side or indoors, not by a kitchen -->
 <!-- Research: garden and stables wells - GUESS: a well for the garden and one for the stables; no page places them, the 0091 drawing page records only the rear well as a guess -->
