@@ -6,6 +6,7 @@ down, clear of every one of them and of what was seated before it.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Callable, Sequence
 
 from .buildings.types import by_tier
@@ -29,6 +30,7 @@ from .compound_model import (
     ROOF_POST_FT,
     ROOFED_ZONES,
     STONE_STEP_FT,
+    TUB_DOOR_MAX_FT,
     TUB_MAX_GAP_FT,
     WALL_INK_FT,
     BuildingSpec,
@@ -382,6 +384,46 @@ def tub_by_its_eaves(tub: tuple[float, float], host: Box) -> bool:
     return _gap((tub[0], tub[1], tub[0], tub[1]), host) <= TUB_MAX_GAP_FT
 
 
+# Where a tub stands along a face from a door's center (feature 372 wave 106): past the door's held approach (its half-width
+# plus a foot, 4 ft), the seat's 1 ft clearance and the tub's own half (1.3 ft), then farther - the last the kitchen's second
+# tub beside its first (TUB_DOOR_MAX_FT) - each still inside TUB_DOOR_MAX_FT at 2.5 ft out
+_BESIDE_DOOR_FT: tuple[float, ...] = (6.35, 7.0, 8.0, 10.0)
+# the corner seat's distance in from the corner nearest a door, on the face round that corner
+_CORNER_IN_FT = 1.5
+
+
+def beside_door_fracs(p: Placed, side: str, door: tuple[float, float]) -> tuple[float, ...]:
+    """The fracs along `p`'s `side` face either side of the door centered at `door` (feet), nearest first, kept by the face:
+    where the draft seats a fire-water tub at its building's entrance (research 0100)."""
+    _nx, ny, fx, fy, length = _face(p, side)
+    at = (door[0] - fx) if ny else (door[1] - fy)
+    fracs = [(at + sign * d) / length for d in _BESIDE_DOOR_FT for sign in (-1, 1)]
+    # a tub's center may stand up to its half-width past the face's end: it is still under that corner's eaves
+    slack = 1.3 / length
+    return tuple(f for f in fracs if -slack <= f <= 1.0 + slack)
+
+
+def round_the_corner(p: Placed, side: str, door: tuple[float, float]) -> list[tuple[str, float]]:
+    """The seats round the corners of `p` beside its door on `side`: each face meeting `side`, at the end nearest `side`,
+    `_CORNER_IN_FT` in - kept only where a tub 2.5 ft out stands by the door (`tub_by_its_door`). For a face too short to
+    seat a tub beside its door (a gatehouse's 12 ft end, feature 372 wave 106). (face, frac) pairs."""
+    out: list[tuple[str, float]] = []
+    for adj in ("N", "S") if side in ("E", "W") else ("W", "E"):
+        nx, ny, fx, fy, length = _face(p, adj)
+        far = side in ("E", "S")  # the door's side is the face's far (east or south) end
+        frac = 1.0 - _CORNER_IN_FT / length if far else _CORNER_IN_FT / length
+        tub = (fx + length * frac, fy + ny * 2.5) if ny else (fx + nx * 2.5, fy + length * frac)
+        if tub_by_its_door(tub, [door]):
+            out.append((adj, frac))
+    return out
+
+
+def tub_by_its_door(tub: tuple[float, float], doors: Sequence[tuple[float, float]]) -> bool:
+    """THE ONE PREDICATE of `tubs_off_their_doors` (feature 372 wave 106), in feet: a fire-water tub's CENTER stands within
+    `TUB_DOOR_MAX_FT` of the center of one of its building's doors - research 0100's water kept at the entrance."""
+    return any(math.hypot(tub[0] - dx, tub[1] - dy) <= TUB_DOOR_MAX_FT for dx, dy in doors)
+
+
 def board_by_a_gate(board: Box, openings: Sequence[tuple[float, float]]) -> bool:
     """THE ONE PREDICATE of `notice_board_adrift` (feature 287, homes H29b), in feet: a notice board is read where people
     pass, so the nearest edge of its box stands within `NOTICE_BOARD_MAX_FT` of the middle of a gate opening. The pack
@@ -525,12 +567,14 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # a door on each lodging block's face (DOOR_KINDS, `_door`), a part of its building: seated after the bath, the
     # wells and the privies and BEFORE the tubs, which have seats to spare. The door and the ground before it are held
     # clear of what follows. A building may carry more than one (`BuildingSpec.extra_doors`).
+    doors: dict[str, list[tuple[str, tuple[float, float]]]] = {}  # each building's doors: the face and the door's center
     for p in result.placed:
         if p.spec.feature not in DOOR_KINDS:
             continue
         for side in (p.spec.door_face or _court_side(p), *p.spec.extra_doors):
             if found := _door(env, p, [t for t in taken if t != (p.x_ft, p.y_ft, p.x2, p.y2)], side):
                 (dx, dy, dx2, dy2), approach = found
+                doors.setdefault(p.spec.name, []).append((side, ((dx + dx2) / 2, (dy + dy2) / 2)))
                 taken += [(dx, dy, dx2, dy2), approach]
                 parts.append(rect(dx, dy, dx2 - dx, dy2 - dy, "#4A3318", "none", 0, "", "door", p.spec.feature))
     hosts = list(result.placed)
@@ -547,7 +591,12 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             # the court face first, its ends last (0.05, 0.95: where a roofed court covers the rest of it); then an end
             # face at its court end (pass 6: the kitchen's yard face, crowded by the bath, the well and the door, kept
             # neither of its two tubs)
-            tub = seat(p, 2.6, (0.15, 0.85, 0.4, 0.6, 0.05, 0.95, 0.03, 0.97), (2.5,))
+            # beside a door first: research 0100 keeps the standing water at a wooden building's entrance (feature 372
+            # wave 106); a building with no door drawn, or none with a clear seat beside it, takes the court face
+            tub = next((t for side, c in doors.get(p.spec.name, []) if (t := seat(p, 2.6, beside_door_fracs(p, side, c), (2.5,), side))), None)
+            corners = [corner for side, c in doors.get(p.spec.name, []) for corner in round_the_corner(p, side, c)]
+            tub = tub or next((t for adj, frac in corners if (t := seat(p, 2.6, (frac,), (2.5,), adj))), None)
+            tub = tub or seat(p, 2.6, (0.15, 0.85, 0.4, 0.6, 0.05, 0.95, 0.03, 0.97), (2.5,))
             # (the west or north end before the east or south: the example's kitchen's east end faces the closed slot
             # north of its corridor to the house, its west end the servants' yard)
             tub = tub or seat(p, 2.6, toward_court, (2.5,), ends[1]) or seat(p, 2.6, toward_court, (2.5,), ends[0])

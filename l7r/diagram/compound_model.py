@@ -219,6 +219,14 @@ TUB_MAX_GAP_FT: float = 3.5
 """How far from its building a fire-water tub may stand (feature 287, homes H29b): the number `pack_audit`'s
 `fire_water_adrift` registers - a gutter-fed tub hugs its eaves - held equal to it by a test."""
 
+TUB_DOOR_MAX_FT: float = 10.5
+"""How far a fire-water tub's center may stand from a door of the building it serves (feature 372 wave 106): research 0100
+keeps standing water at a wooden building's ENTRANCE, so a tub stands beside a door. The kitchen's two tubs side by side
+at one 6 ft door set the figure: along the face, the door's half-width and the foot its approach keeps (4 ft), the
+draft's 1 ft clearance, the near tub (2.6 ft), another foot and the far tub's half (1.3 ft) - 9.9 ft - at 2.5 ft out, ~10.2
+ft; a short face's tub round the corner nearest its door stands ~8.6 ft off. The 10.5 ft is a CONVENTION of this project;
+the number `pack_audit`'s `tubs_off_their_doors` registers, held equal to it by sharing this name."""
+
 NOTICE_BOARD_MAX_FT: float = 40.0
 """How far from the main gate's opening the compound's notice board may stand (feature 287, homes H29b): the number
 `pack_audit`'s `notice_board_adrift` registers, held equal to it by a test. 40 ft since feature 372 wave 104 (it was 20,

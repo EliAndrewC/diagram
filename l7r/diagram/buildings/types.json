@@ -16,6 +16,7 @@
       "perimeter_hugging",
       "two_court_zoning",
       "fire_water_adrift",
+      "tubs_off_their_doors",
       "fire_water_distribution",
       "tubs_in_buildings",
       "tubs_on_wells"
@@ -236,6 +237,7 @@
       "well_clear_of_arch",
       "no_precinct_enclosure",
       "fire_water_adrift",
+      "tubs_off_their_doors",
       "fire_water_distribution",
       "tubs_in_buildings",
       "tubs_on_wells"

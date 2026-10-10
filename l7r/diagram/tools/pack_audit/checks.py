@@ -6,8 +6,9 @@ import math
 from dataclasses import dataclass
 
 from ...compound_model import NOTICE_BOARD_MAX_FT as NOTICE_BOARD_MAX_FT
+from ...compound_model import TUB_DOOR_MAX_FT as TUB_DOOR_MAX_FT
 from ...compound_model import TUB_MAX_GAP_FT as TUB_MAX_GAP_FT
-from ...compound_parts import board_by_a_gate, tub_by_its_eaves
+from ...compound_parts import board_by_a_gate, tub_by_its_door, tub_by_its_eaves
 from .grids import FTPX
 from .parse import WALL_KIND, WALL_STROKE, ParsedPlan, Rect
 
@@ -79,6 +80,47 @@ def fire_water_adrift(plan: ParsedPlan) -> list[TubAdrift]:
         gaps = [_point_rect_dist(cx, cy, b) for b in plan.buildings]
         out.append(TubAdrift(cx, cy, (min(gaps) if gaps else float("inf")) / FTPX))
     out.sort(key=lambda t: t.gap_ft, reverse=True)
+    return out
+
+
+@dataclass(frozen=True)
+class TubOffItsDoor:
+    """A fire-water tub at its building's eaves but away from every door of it."""
+
+    x: float
+    y: float
+    door_ft: float  # the center-to-center distance to the nearest door of the buildings it serves
+
+
+# A door glyph is drawn inside its wall's line or just outside it (Hayakawa's kitchen door stands on the face, 6 px out)
+DOOR_ON_WALL_PX = 2.0 * FTPX
+
+
+def doors_of(plan: ParsedPlan, b: Rect) -> list[tuple[float, float]]:
+    """The centers (px) of the doors on building `b`: each rect the sheet tags `door` (its own tags, feature 262 - a
+    small dark rect may as well be a hearth) lying within DOOR_ON_WALL_PX of the footprint."""
+    m = DOOR_ON_WALL_PX
+    return [
+        (d.x + d.w / 2, d.y + d.h / 2)
+        for d in plan.fills
+        if plan.label_kinds.get(d.pos) == "door" and d.x >= b.x - m and d.x2 <= b.x2 + m and d.y >= b.y - m and d.y2 <= b.y2 + m
+    ]
+
+
+def tubs_off_their_doors(plan: ParsedPlan) -> list[TubOffItsDoor]:
+    """Fire-water tubs that stand at a building's wall but not at its entrance (feature 372 wave 106): research 0100 keeps
+    standing water at a wooden building's entrance, so a tub's center stands within TUB_DOOR_MAX_FT of a door of a
+    building whose eaves hold it (`tub_by_its_door`, the predicate the draft seats by). A tub whose buildings draw no door
+    is not judged here; one adrift of every building is `fire_water_adrift`'s. Worst (farthest) first."""
+    out: list[TubOffItsDoor] = []
+    for t in plan.tubs:
+        cx, cy = t.x + t.w / 2, t.y + t.h / 2
+        hosts = [b for b in plan.buildings if tub_by_its_eaves((cx / FTPX, cy / FTPX), _ft_box(b))]
+        doors = [(dx / FTPX, dy / FTPX) for b in hosts for dx, dy in doors_of(plan, b)]
+        if not doors or tub_by_its_door((cx / FTPX, cy / FTPX), doors):
+            continue
+        out.append(TubOffItsDoor(cx, cy, min(math.hypot(cx / FTPX - dx, cy / FTPX - dy) for dx, dy in doors)))
+    out.sort(key=lambda t: t.door_ft, reverse=True)
     return out
 
 

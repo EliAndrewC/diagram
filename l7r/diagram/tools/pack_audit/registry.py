@@ -72,6 +72,10 @@ def _tub_adrift(ctx: Context) -> list[str]:
     return [f"tub at svg({t.x:.0f},{t.y:.0f}) is {t.gap_ft:.1f} ft from the nearest building" for t in c.fire_water_adrift(ctx.plan)]
 
 
+def _tub_off_its_door(ctx: Context) -> list[str]:
+    return [f"a fire-water tub at svg({t.x:.0f},{t.y:.0f}) stands {t.door_ft:.1f} ft from its building's nearest door" for t in c.tubs_off_their_doors(ctx.plan)]
+
+
 def _tub_in_building(ctx: Context) -> list[str]:
     return [f"a fire-water tub at svg({t.x:.0f},{t.y:.0f}) reaches {t.into_ft:.1f} ft INTO a building" for t in c.tubs_in_buildings(ctx.plan)]
 
@@ -202,6 +206,7 @@ CHECKS: tuple[Check, ...] = (
     ),
     # --- fire-water: required by BOTH programs, so both declarations list it (spec 254 FR-003, round-1 item 2) ---
     Check("fire_water_adrift", _tub_adrift, False, "ochiba-tub-adrift-red.svg", "move the tub to a wall or eaves corner - a tensuioke is gutter-fed"),
+    Check("tubs_off_their_doors", _tub_off_its_door, False, "ochiba-tub-off-door-red.svg", "move the tub beside a door of its building - research 0100 keeps the water at the entrance"),
     Check(
         "fire_water_distribution",
         lambda ctx: pr.fire_water_distribution(ctx.text, ctx.plan),
