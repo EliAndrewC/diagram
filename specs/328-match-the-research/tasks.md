@@ -2150,3 +2150,15 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T211 the claims re-checked by `impl-drift` (FR-005, FR-006)
       research: rendering
       verify: DONE. DONE. no claim owed: the change reverted (make claims-owed: none)
+
+## Phase 94 - wave 93 (amendment 92): the cohort holds the knot rule (tooling)
+
+- `hamletgen/ways/knots.py` (`lane_knots`), `tools/cohort_audit.py`; `tests/tools/test_cohort_audit.py`,
+  `tests/hamletgen/test_pool_261.py`.
+
+- [x] T212 wave 93's tooling (XIV)
+      research: rendering
+      verify: DONE. DONE. plan CLEAR (wave 93, round 2); lane_knots in ways/knots.py, read by the pool test and the cohort; the honest baseline 38/54, the 14 knotted seeds an open E3 found row (m:wave93-cohort-knots)
+- [x] T213 the claims re-checked by `impl-drift` (FR-005, FR-006)
+      research: rendering
+      verify: DONE. DONE. impl-drift 2 of 2 IN-STEP (lane_knots, _KNOT_MARGIN); make claims-owed: none

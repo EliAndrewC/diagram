@@ -427,3 +427,57 @@ def settle_knots(s: Any) -> int:
             refused.append(edits)
         moved += n
     return moved
+
+
+_KNOT_MARGIN = 1.0  # the page's own reach (feature 328); the slide the 1.5 caught is gone
+"""How many knot reaches apart two junctions on one lane still count as a knot: 1.0, the page's own reach and no margin past
+it. It was 1.5, to catch a foot slid along a lane to just past the reach (glyph-check round 2 of feature 328 wave 4, Inashiro:
+lane 13's foot slid 16.7 ft along lane 11 to 25.18 ft from its end); that slide is gone, and at 1.0 a pair past 25 ft is no
+knot, so the junction clause of `lane_knots` adds nothing to its 25 ft clause (feature 328 wave 93, impl-drift).
+
+Research: a knot's reach - research/questions/0081-village-lanes.drawing.html: the page's own 25 ft, no margin past it"""
+
+
+def lane_knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, tuple[float, float], int, tuple[float, float], float]]:
+    """The knots of a finished web, (lane, end, lane, end, ft): two lane ends within the knot reach (`_KNOT_FT`) of one another
+    not standing at one point, and two JUNCTIONS (an end that meets another way: two or more ends at one point, or a T-foot on
+    another lane's side) on the SAME lane within `_KNOT_MARGIN` reaches. Ends within `_JOINT_FT` are one point; a pair one lane
+    runs between (its own two ends) is that lane, its join. The pool's seed test (`tests/hamletgen/test_pool_261.py`) and
+    the cohort (`tools/cohort_audit.py`) read this one verdict (feature 328 wave 93: the cohort lacked it, and a change that
+    knotted three pool maps read 54/54).
+
+    Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point, so three lanes never arrive a few feet apart in a knot"""
+
+    pts = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    ends = [(i, p[e]) for i, p in enumerate(pts) if len(p) >= 2 for e in (0, -1)]
+    node = list(range(len(ends)))
+
+    def root(a: int) -> int:
+        while node[a] != a:
+            a = node[a]
+        return a
+
+    for a in range(len(ends)):
+        for b in range(a + 1, len(ends)):
+            if math.dist(ends[a][1], ends[b][1]) <= _JOINT_FT:
+                node[root(b)] = root(a)
+    spans = {frozenset((root(2 * k), root(2 * k + 1))) for k in range(len(ends) // 2)}  # each lane's own two points
+
+    def on(k: int, q: tuple[float, float]) -> bool:
+        return any(seg_dist(q[0], q[1], u, v) <= _JOINT_FT for u, v in zip(pts[k], pts[k][1:], strict=False))
+
+    def junction(a: int) -> bool:
+        return sum(root(b) == root(a) for b in range(len(ends))) > 1 or any(k != ends[a][0] and len(pts[k]) >= 2 and on(k, ends[a][1]) for k in range(len(pts)))
+
+    def one_lane(a: int, b: int) -> bool:
+        return any(len(p) >= 2 and on(k, ends[a][1]) and on(k, ends[b][1]) for k, p in enumerate(pts))
+
+    out = []
+    for a in range(len(ends)):
+        for b in range(a + 1, len(ends)):
+            d = math.dist(ends[a][1], ends[b][1])
+            if root(a) == root(b) or frozenset((root(a), root(b))) in spans or d > _KNOT_MARGIN * _KNOT_FT:
+                continue
+            if d <= _KNOT_FT or (junction(a) and junction(b) and one_lane(a, b)):
+                out.append((ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(d, 1)))
+    return out

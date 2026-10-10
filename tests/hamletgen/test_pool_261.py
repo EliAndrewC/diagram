@@ -207,55 +207,7 @@ def test_no_zigzag_straddles_a_joint(gen: str) -> None:
         assert _bends_badly(x) or _bends_badly(y) or not _bends_badly([*x, *y[1:]]), f"lanes {i} and {j} zigzag across their joint at {x[-1]}"
 
 
-_KNOT_MARGIN = 1.0  # the page's own reach (feature 328); the slide the 1.5 caught is gone
-"""Two junctions on one lane this many knot reaches apart still count as a knot: a foot slid along the lane to just past the
-reach is the knot drawn, not gathered (glyph-check round 2 of feature 328 wave 4, Inashiro: lane 13's foot slid 16.7 ft along
-lane 11 to 25.18 ft from lane 11's end, a walker turning 51, 91, 92 and 72 degrees within 45 ft)."""
-
-
-def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, tuple[float, float], float]]:
-    """The knots of a finished web, (lane, end, lane, end, ft): two lane ends within the knot reach (`_KNOT_FT`) of one another
-    not standing at one point, and two JUNCTIONS (an end that meets another way: two or more ends at one point, or a T-foot on
-    another lane's side) on the SAME lane within `_KNOT_MARGIN` reaches. Ends within `_JOINT_FT` are one point; a pair one lane
-    runs between (its own two ends) is that lane, its join."""
-    from l7r.diagram.hamletgen.ways.joints import _JOINT_FT
-    from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
-    from l7r.diagram.settlement._geom.primitives import seg_dist
-
-    pts = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
-    ends = [(i, p[e]) for i, p in enumerate(pts) if len(p) >= 2 for e in (0, -1)]
-    node = list(range(len(ends)))
-
-    def root(a: int) -> int:
-        while node[a] != a:
-            a = node[a]
-        return a
-
-    for a in range(len(ends)):
-        for b in range(a + 1, len(ends)):
-            if math.dist(ends[a][1], ends[b][1]) <= _JOINT_FT:
-                node[root(b)] = root(a)
-    spans = {frozenset((root(2 * k), root(2 * k + 1))) for k in range(len(ends) // 2)}  # each lane's own two points
-
-    def on(k: int, q: tuple[float, float]) -> bool:
-        return any(seg_dist(q[0], q[1], u, v) <= _JOINT_FT for u, v in zip(pts[k], pts[k][1:], strict=False))
-
-    def junction(a: int) -> bool:
-        return sum(root(b) == root(a) for b in range(len(ends))) > 1 or any(k != ends[a][0] and len(pts[k]) >= 2 and on(k, ends[a][1]) for k in range(len(pts)))
-
-    def one_lane(a: int, b: int) -> bool:
-        return any(len(p) >= 2 and on(k, ends[a][1]) and on(k, ends[b][1]) for k, p in enumerate(pts))
-
-    out = []
-    for a in range(len(ends)):
-        for b in range(a + 1, len(ends)):
-            d = math.dist(ends[a][1], ends[b][1])
-            if root(a) == root(b) or frozenset((root(a), root(b))) in spans or d > _KNOT_MARGIN * _KNOT_FT:
-                continue
-            if d <= _KNOT_FT or (junction(a) and junction(b) and one_lane(a, b)):
-                out.append((ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(d, 1)))
-    return out
-
+from l7r.diagram.hamletgen.ways.knots import _KNOT_MARGIN, lane_knots  # noqa: E402 - the knot verdict lives in the engine (feature 328 wave 93: the cohort reads it too)
 
 # THE KNOTS NO LAWFUL GATHER REACHES YET (feature 328 wave 4, measured): on these two maps every single-point gather of the
 # remaining knots runs a way along another, through a yard, or off the network, so they wait for the ranked found row that

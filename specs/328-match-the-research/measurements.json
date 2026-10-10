@@ -2045,5 +2045,18 @@
       "pool": "Inashiro passes the knot test; Kuwabata (lane 4 and lane 6 feet 19.3 ft apart) and Sawada fail it with real knots, in both forms - wave 91's own, hidden at first because make quick stops at the first failure",
       "outcome": "reverted with wave 91 (E3)"
     }
+  },
+  "wave93-cohort-knots": {
+    "quantity": "wave 93 (2026-10-10): the cohort holding 0081's knot rule (lane_knots), which only the pool's seed test asked",
+    "observed": "2026-10-10",
+    "source": "make cohort N=48 at 67c6cc195 with lane_knots moved into ways/knots.py and reported by tools/cohort_audit.roll_one",
+    "command": "make cohort N=48",
+    "method": "the cohort run once with the knot rule; seeds failing it counted",
+    "value": {
+      "cohort_passed": 38,
+      "cohort_48": "38/54 (refused 10, 20; knotted 02, 07, 09, 13, 17, 18, 21, 24, 25, 26, 36, 39, 41, 47)",
+      "knotted_seeds": 14,
+      "reading": "every earlier cohort figure in this feature was measured without the knot rule (the retakes of 83, 84, 85 and wave 91's 54/54 included); 38/54 is the honest baseline, and the fourteen knotted seeds are pre-existing defects of the knot gather (0081), filed as a found row"
+    }
   }
 }

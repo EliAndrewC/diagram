@@ -37,6 +37,7 @@ if HERE not in sys.path:
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
 from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, row_rules, water_rules  # noqa: E402
+from l7r.diagram.hamletgen.ways.knots import lane_knots  # noqa: E402
 from l7r.diagram.overlap import matrix_violations  # noqa: E402
 from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves, gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
 from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT, CANOPY_SHADE_FT, bamboo_shading_plots, trees_shading_plots  # noqa: E402
@@ -135,6 +136,12 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
     # the windward faces, no garden's morning sun cut off - the three feature 126 measured that the matrix cannot see - no
     # lane across a band, and no fixture standing inside one (the matrix abstains on VEGETATION).
     _M = getattr(report, "manifest", None) or {}
+    # ...AND THE KNOT RULE THE POOL HOLDS (feature 328 wave 93, `ways.knots.lane_knots`): only the pool's seed test asked it, so
+    # a change that left lane ends knotted on three pool maps read 54/54 here
+    _knots = lane_knots(_M.get("lanes") or [])
+    if _knots:
+        report.fail_lines.append(f"FAIL lane_knots -> {len(_knots)} knot(s), e.g. {_knots[:2]}")
+        report.failures.append("lane_knots")
     # ...AND THE ROW VILLAGE'S AND THE GROVE FARM'S (feature 291 amendment 3, `homesteads/row_rules.py`).
     for name, found in (
         ("grove_sides_missing", grove_sides_missing(_M)),

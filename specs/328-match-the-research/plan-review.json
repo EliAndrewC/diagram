@@ -1,44 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "5fad8018cbb970f3683c9d6bcb6255b71b0b94b288a8e18eac4ac7c0bff2533a",
+ "plan_sha256": "8590bee966566c14030921d49564c3df2df3f309cf7aa5e352f91b133e42a14a",
  "reviewed": "2026-10-09",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W91-1",
-   "summary": "Seed 20's refusal diagnosed as parts_clear holding a household's way 2 ft off its own garden beds where 0246 holds a lane's middle 7 ft off a garden fence; the fix (own beds at ACCESS_HALF_FT) built, then reverted because it re-chose Inashiro's ways into a lane knot the pool test refuses; the patch kept in audit/reverted/",
+   "id": "W93-a",
+   "summary": "lane_knots (0081's knot verdict) moved from tests/hamletgen/test_pool_261.py into hamletgen/ways/knots.py; the pool test imports it with _KNOT_MARGIN",
    "class": "within",
-   "why": "Nothing is narrowed: code and maps are exactly as wave 90 left them (the working diff touches no engine file; the patch applies cleanly to HEAD), so the plan departs from no page. Keeping a change that fails a pool test on the reference map out of main is constitution XIII, and the defect is not dropped (W91-2)."
+   "why": "A relocation: the body matches HEAD's test line for line, and _KNOT_MARGIN keeps 1.0 (HEAD's test line 210 already had 1.0). Only the constant's docstring changed: it now describes the retired 1.5 as history and the 1.0 as current, which is a correction toward the code. The pool's verdict is unchanged. No behavior is added."
   },
   {
-   "id": "W91-2",
-   "summary": "The defect filed as a found row, E3, files access.py and gap_ways.py, its work the beds at 7 ft together with the gap pass gathering a foot at a neighbor's door end; the row is in ranking.json (scope kept) and found-wave77.jsonl",
+   "id": "W93-b",
+   "summary": "tools/cohort_audit.roll_one reports lane_knots as a cohort failure",
    "class": "within",
-   "why": "Adds a row to the ranking and drops none; the stated work moves the implementation to 0246's fence clearance (FR-004). E3 matches FR-003's own definition (a change across modules: the seating's parts_clear and the gap pass), and the row is taken in tier order with the rest (SC-003), as the request orders the work easiest to hardest. The measurement (m:wave91-own-beds-at-the-fence) names seed 20 in its command."
+   "why": "A check that only FAILS when lanes break 0081 (ends within 25 ft joined at a single point). It enforces what the request asks for (the implementation matching the research). It refuses and rewrites nothing."
   },
   {
-   "id": "W91-3",
-   "summary": "The 7 ft fence gap classed MAP DRAWING CONVENTION; wave 89's Decisions Recorded row relabeled from HISTORICALLY ACCURATE to the same",
+   "id": "W93-c",
+   "summary": "The cohort's regression bar re-based to 38/54 with the knot rule; future waves are measured against it, plus the per-seed newly-failing test",
    "class": "within",
-   "why": "0246's drawing page says it in its own words (line 25: 'The gap is a map drawing convention, not a measured figure'; its Evidence comment lists the 7 ft gap under convention). A label corrected toward the page; no behavior changes."
+   "why": "A stricter measured bar, not a relaxed one (round 1 re-ran make cohort N=48: 38/54, knotted seeds exactly as m:wave93-cohort-knots). The per-seed newly-failing test keeps XIII intact."
   },
   {
-   "id": "W91-4",
-   "summary": "settle.theirs' doorstep exemption (gardens within DOORSTEP_FT of a lane's end) stated as UNRESEARCHED and left as it is",
+   "id": "W93-d",
+   "summary": "No map changes; the pool's strict xfail list unchanged",
    "class": "within",
-   "why": "A statement of the existing law, not a change: the function's own claim already labels the exemption UNRESEARCHED, and UNRESEARCHED claims are outside this feature's findings by the spec's ruling. The plan neither widens nor relies on it."
+   "why": "Tooling only; nothing is drawn differently."
   },
   {
-   "id": "W91-5",
-   "summary": "Seed 10's field-way found row (routed_field_runs) stays open",
+   "id": "W93-e",
+   "summary": "The fourteen knotted seeds filed as a found row (E3) under the distinct key knots.py::next_gather#knots no lawful gather reaches, in audit/found-wave93.jsonl, merged and scoped kept",
    "class": "within",
-   "why": "The reverted patch only made seed 10 roll clean by re-choosing its ways; the code path the row names is unchanged, so closing it would close a finding with no fix. Keeping it open drops nothing."
-  },
-  {
-   "id": "W91-6",
-   "summary": "No Decisions Recorded row and no review occasion for wave 91; verification the cohort and pool test under the measurement, and spec-fidelity",
-   "class": "within",
-   "why": "FR-008 owes a row only for a fix that changes what a map draws or states, and feature 294 owes an occasion only for a drawn change; with the change reverted no map moves. Withdrawing the round-1 row and occasion follows from the revert."
+   "why": "Round 1's BLOCK is answered. The row is in its own file under a key distinct from the wave-43 row. scope.json says kept. ranking.json adds exactly that row (E3, wave empty). ranking.md differs from HEAD only by that row (row 101, open, blank wave cell) and the E3/all counts 235->236 and 946->947. The wave-43 row (next_gather#lane ends gathered, row 53) is back to its original fix and wave 43, and found-wave77.jsonl is untouched. The fourteen defects are now open work in the ranking, to be taken in tier order: that is the request's own 'easiest to hardest' and SC-003's process, so the filing narrows nothing. Waves 90/91's found rows (routed_field_runs, parts_clear) also show open with blank waves (rows 95 and 183)."
   }
  ],
  "verdict": "CLEAR"

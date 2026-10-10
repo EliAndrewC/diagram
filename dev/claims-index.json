@@ -18858,6 +18858,21 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/knots.py::_KNOT_MARGIN#a knot's reach": {
+  "code": "691f7a87a25046c4",
+  "core": "7276802b5dc226e3",
+  "date": "2026-10-09",
+  "note": "margin 1.0 is the page's 25 ft reach with nothing added; the page says its distances are drawing conventions, so citing the drawing page is right",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::_WHOLE_RULES#plumbing": {
   "code": "45f37584081d2cd5",
   "core": "881fa61431772e84",
@@ -18948,6 +18963,22 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/knots.py::lane_knots#lane ends gathered": {
+  "code": "dc3ee3690ea34ca8",
+  "core": "70009a22597e829d",
+  "date": "2026-10-09",
+  "note": "reports two lane ends within the knot reach that were not joined at one point (a lane's own two ends excepted), which is the page's rule for gathering ends",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
   ],

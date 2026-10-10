@@ -250,3 +250,13 @@ def test_a_refused_roll_is_reported_by_name_not_raised(monkeypatch) -> None:  # 
     header, failures, lines = ca.roll_one((901, 12, {"row_line": "street"}))
     assert header.startswith("Audit-901 households=12 form=linear") and header.endswith("REFUSED")
     assert failures == ["refused:Refused"] and lines == ["FAIL refused:Refused -> no margin seats all 12"]
+
+
+def test_roll_one_reports_lane_ends_knotted_short_of_a_join(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 328 wave 93: the knot rule the pool's seed test holds (`ways.knots.lane_knots`, 0081: ends within 25 ft are
+    joined at a single point) is a cohort failure too - without it a change that knotted three pool maps read 54/54."""
+    rep = _report([])
+    rep.manifest = {"lanes": [{"pts": [[0.0, 0.0], [100.0, 0.0]]}, {"pts": [[110.0, 10.0], [200.0, 10.0]]}]}  # two ends 14 ft apart
+    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    _header, failures, lines = ca.roll_one((13, 13))
+    assert "lane_knots" in failures and any("FAIL lane_knots" in ln for ln in lines)

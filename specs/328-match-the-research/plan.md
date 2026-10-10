@@ -1492,6 +1492,17 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   gap pass's gather at a door end. The code and maps as wave 90 left them.
 - **Verification**: the cohort and the pool test (m:wave91-own-beds-at-the-fence); `spec-fidelity`.
 
+## Wave 93 (amendment 92, 2026-10-10) - batch 12
+
+- **Tooling (XIV): the cohort holds 0081's knot rule.** Wave 91 read 54/54 on the cohort while knotting three pool maps,
+  because the knot rule (`lane_knots`) lived in the pool's seed test alone. It moves into the engine (`ways/knots.py`, the
+  test imports it) and `tools/cohort_audit.roll_one` reports it beside the matrix and the grove rules. The honest baseline is
+  38/54: fourteen seeds finish knotted at HEAD (m:wave93-cohort-knots) - every cohort figure this feature recorded before
+  was blind to the rule, the reverted rows' retakes included. The fourteen are filed as a found row (E3, the knot gather);
+  no map changes.
+- **Verification**: `tests/tools/test_cohort_audit.py` (a knotted manifest reported), `tests/hamletgen/test_pool_261.py`
+  (the pool's verdict unchanged); the cohort; `impl-drift` on the claims owed; `spec-fidelity`.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

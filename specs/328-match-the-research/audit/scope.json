@@ -312,6 +312,7 @@
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": "kept",
  "l7r/diagram/hamletgen/ways/joints.py::fold_the_connector_hairpin#a hairpin at the track becomes a T": "kept",
  "l7r/diagram/hamletgen/ways/joints.py::meet_end_to_end#ends that nearly meet are joined": "kept",
+ "l7r/diagram/hamletgen/ways/knots.py::next_gather#knots no lawful gather reaches": "kept",
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": "kept",
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot no lawful gather reaches": "kept",
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width is judged at 3 ft in the lawfulness check": "kept",

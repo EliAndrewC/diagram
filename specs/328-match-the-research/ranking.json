@@ -11556,6 +11556,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/knots.py::next_gather#knots no lawful gather reaches",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "0081: lane ends within 25 ft are joined at a single point. Measured with the knot rule in the cohort (wave 93): 14 of the 48 seeds (02, 07, 09, 13, 17, 18, 21, 24, 25, 26, 36, 39, 41, 47) finish with lane ends knotted short of a join the settle's gather (next_gather) did not reach; the pool holds two maps waiting the same way (the strict xfail list in tests/hamletgen/test_pool_261.py). The work: a gather that reaches them lawfully (wave 92's door-end ruling LEGITIMATE in its narrow form for one class), or the earlier household's way re-laid at seating (m:wave93-cohort-knots)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/knots.py",
+   "l7r/diagram/settlement/rolling/gap_ways.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 93's knot-aware cohort (feature 328, 2026-10-10)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot no lawful gather reaches",
   "verdict": "DRIFTED",
   "tier": "E3",
