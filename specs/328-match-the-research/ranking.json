@@ -1,5 +1,20 @@
 [
  {
+  "key": "docs/building-programs.md::Country shrine (a village district's shrine)#a hill shrine's village keeps its burial ground apart",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim the burial_ground row of the table's rule that a hill shrine's village keeps its burial ground apart, citing the burial page the section's other burial claims cite (0226)",
+  "files": [
+   "docs/building-programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 106's impl-drift of the country shrine's section, round 5 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#approach width about 10 ft",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -13759,7 +13774,7 @@
  },
  {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
-  "verdict": "DRIFTED",
+  "verdict": "MISLABELED",
   "tier": "E4",
   "fix": "Exception path (FR-004), a page edit: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:4 (Evidence comment, 'convention (the innermost arch one pitch off the hall ...)') and :29 ('so this is a map drawing convention') reclassed as a GUESS. No implementation change: the claim at docs/building-programs.md:132 is already 'GUESS ... the innermost arch 12 ft off the hall's face', and the 12 ft drawn stands.",
   "files": [
@@ -13767,8 +13782,8 @@
   ],
   "after": [],
   "flag": "",
-  "found": "wave 47 impl-drift round 4",
-  "tier_as_ranked": "E1",
+  "found": "wave 106's impl-drift of the country shrine's section, round 5 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E0",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed: 0220.drawing.html:4 still lists 'convention (the innermost arch one pitch off the hall; ...)' and :29 'The innermost arch stands 12 ft off the hall's nearest face, the same as the spacing between arches.' The procedure already draws that distance and already labels it GUESS (building-programs.md:132), so the disagreement is only in the page's class; T56a tiered this same key E4 for that",
   "wave": "",
   "scope": "deferred"
