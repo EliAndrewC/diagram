@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-10T10:56:23Z",
+  "target": "review-accept",
+  "commit": "3142a8c90",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--tax-archive F6: no norm asks the archive's shape to vary; the proportions stay labeled a GUESS on 0100's drawing page and in the notes; a shape knob would be a new rule for the GM, not this row"
+}

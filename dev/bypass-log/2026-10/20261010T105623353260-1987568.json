@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-10T10:56:23Z",
+  "target": "review-accept",
+  "commit": "3142a8c90",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--tax-archive F4: a confirmation, nothing to fix"
+}
