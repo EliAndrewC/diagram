@@ -22,6 +22,7 @@ the time went to loops, not fixes:
 | red gates from causes a cheap check finds | wave 106's gate red ~6 times: a file edited mid-gate, `building-programs.md` stale twice, stub pointers in found rows, two untested lines |
 | small tool defects | the claims-triage parser read the word "TOUCHES" anywhere as a touched claim; a typo in `plan.md` forced a fresh plan review |
 | pre-existing defects fixed mid-wave | small fixes a check proposed on blocks the wave never touched, each re-owing a round |
+| the escalation filter run on what never reached the GM | `escalation-check` ran several times on drafts it then cut almost entirely |
 
 An earlier retrospective (feature 328's close) named most of these as intentions; none was built into the tooling, and each
 slid back. The GM's rule for this feature: **every change is enforced by the tooling - a hook, a gate or the owing logic -
@@ -31,7 +32,9 @@ never by a session remembering.**
 
 Each requirement names its enforcement and is proved by a test that fails on the old behavior (constitution: a guard proves it
 fires) and by a replay of 372's recorded deltas (SC-001). Thresholds are counted per checked thing (a page, pop-up, sheet, spec
-or plan) and per feature - never per "wave", which was feature 372's own way of batching, not a unit every feature has.
+or plan) and per feature - never per "wave", which was feature 372's own way of batching, not a unit every feature has. Where a
+requirement needs the unit of work a check belongs to, that unit is a **task** of the feature's `tasks.md` (372's waves were
+each one task).
 
 - **FR-001 Content-scoped record-check owing.** A pop-up's checks are owed by a drawing or question page's change only where the
   changed block bears on that pop-up's kind: the owing logic (`scripts/record/modal_owed.py`, "a page its Drawing: names
@@ -40,19 +43,20 @@ or plan) and per feature - never per "wave", which was feature 372's own way of 
 - **FR-002 Line-scoped claim re-owing.** A claim is owed impl-drift when its own line or the rule text it sits beside changed,
   not when anything in its section changed; a regenerated table (`make building-programs`) re-owes only the rows whose text
   changed. Everything else in the section goes through one triage (`scripts/record/claims.py`, "code changed").
-- **FR-003 Decide, then freeze.** (a) **Decide first**: a feature's record checks, review checks and claim checks for a change are
-  refused at dispatch (`check-bundle-hooks.sh`, `pair-hooks.sh`) until the plan section for that change carries a spec-fidelity
-  verdict on the approach (a short decision preflight, recorded like a plan verdict). (b) **Freeze while checked**: while any check on a page or modal is
-  running or unanswered, an Edit to that page or modal is refused (`record-edit-hooks.sh`), except an edit a returned check
-  proposed. (c) **Apply once**: a check on a page is not re-dispatched while another check on the same page is outstanding - all
+- **FR-003 Decide, then freeze.** (a) **Decide first**: a feature's record checks, review checks and claim checks are
+  refused at dispatch (`check-bundle-hooks.sh`, `pair-hooks.sh`) until the decisions of the task they belong to carry a
+  spec-fidelity verdict on the approach - the plan section for that task where the plan has one (a short decision preflight,
+  recorded like a plan verdict), else the plan's own plan-stage verdict. (b) **Freeze while checked**: while any check on a page or modal is
+  running or unanswered, an Edit to that page or modal is refused (`record-edit-hooks.sh`), except, once every check outstanding on
+  that page or modal has returned, the edits those checks proposed, applied in one pass. (c) **Apply once**: a check on a page is not re-dispatched while another check on the same page is outstanding - all
   of a round's checks return, their edits are applied in one pass, then the page is checked once.
 - **FR-004 Pre-gate preflight, inside the gate.** `make done` begins with a phase that takes seconds: regenerate the derived files
   (`building-programs.md`, the glossary, the record build), check research pointers, run spec-lint, and run the quick tests
   with coverage on the engine files the delta changed; it stops there on a failure. The gate refuses to report green when a
   tracked file changed while it ran (it hashes the tree at start and end), naming the file.
 - **FR-005 Two tool fixes.** (a) The claims-triage reply parser reads only lines that open with `TOUCHES `. (b) A plan verdict
-  survives an edit to `plan.md` outside the sections and decision lines it ruled on: the plan gate hashes the ruled
-  sections, not the whole file.
+  survives an edit that adds or changes no decision (a typo, a wording fix); any edit that adds or changes a decision, ruled or
+  new, anywhere in `plan.md` voids it.
 - **FR-006 File, don't fix, outside the change's own words.** A check's finding on a block the feature did not change is
   reported apart (bundles mark which blocks changed); `make record-checked` files it as an open row of the feature (or a filed
   feature) rather than leaving an edit owed. Fixing it stays possible as that row's own change.
@@ -70,8 +74,9 @@ or plan) and per feature - never per "wave", which was feature 372's own way of 
   the record-check answers and git: wall time split into thinking, editing, quick tests, test files, gates, waiting on each kind
   of subagent, and writing the spec (when it was written in the same session); the dispatches, rounds per checked thing, red
   gates and BLOCKED reviews; rows or tasks closed; and the cascade ratio - checks dispatched per line of the feature's own
-  diff. Every feature gets one, however small, and its own cost is a row of it. The last `make tick` of a feature refuses until
-  its report is written into the feature's directory.
+  diff. Every feature gets one, however small, and its own cost is a row of it. No route closes a feature until
+  its report is written into the feature's directory: the last `make tick`, a status line turned `Done`, and `make gm-reviewed`
+  each refuse without it, and the push refuses a feature whose status reads closed without it.
 - **FR-010 Tripwires.** Hooks fire the moment a pattern appears, not on a timer:
   - the same check on the same thing reaching its round cap (record checks capped at two rounds like review checks; today they
     have no cap);
@@ -91,7 +96,8 @@ or plan) and per feature - never per "wave", which was feature 372's own way of 
   fault** (a loop, oscillation or disproportionate cascade: the unit stops, the fault is filed as a tooling row, the feature
   goes on elsewhere). One ruling per unit per trigger, binding: the session can neither re-dispatch it for another answer nor
   overrule an accept. Its cost is a row of the feature report.
-- **FR-012 Landed, the GM's review after.** A feature lands with one box open: the GM's review. `make gm-review` lists, by
+- **FR-012 Landed, the GM's review after.** A feature that has to-review or held items lands with exactly one box open, the
+  GM's review; a feature with none has no such box. `make gm-review` lists, by
   feature, two kinds: **held** (work on the item cannot go on until the GM decides - today's held rows, absorbed) and **to review**
   (work went on and landed; the GM may overturn: every arbiter ruling and every accepted finding). A feature whose only open item
   is that review reads `Done - GM review pending` in `make speckit-todo`; `make gm-reviewed F=NNN` closes it, and a ruling the GM
@@ -101,25 +107,35 @@ or plan) and per feature - never per "wave", which was feature 372's own way of 
   it is not the monitor; the tripwires and the arbiter are. `CLAUDE.md` names the patterns of FR-010 so an advisor call sees them,
   and the arbiter's bundle is what a session hands it.
 
+- **FR-014 A measurement carried to a later feature is held by the tooling.** A success criterion measured in another
+  feature's work is declared in this spec as carried (`Carried: <SC> -> <feature> <measurements key>`); that feature cannot
+  close (every route of FR-009) while its `measurements.json` lacks the key, and `make speckit-todo` shows the carry.
+
 ## Success criteria
 
 - **SC-001** Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
   units owed fall by at least two thirds, impl-drift claims owed by at least four fifths, against the counts above.
 - **SC-002** Each FR has a test that fails with the old behavior and passes with the new, run by `make hooks-test` or the gate.
-- **SC-003** In feature 374's first three changes: no red gate from a cause FR-004's preflight checks, no page re-checked
-  while a check on it was outstanding, and no plan-review BLOCK on a decision the decision preflight had ruled on.
+- **SC-003** (carried to 374) In feature 374's first three tasks: no red gate from a cause FR-004's preflight checks, no page
+  re-checked while a check on it was outstanding, and no plan-review BLOCK on a decision the decision preflight had ruled on.
+  `Carried: SC-003 -> 374 sc003-375-first-three-tasks`.
+- **SC-004** (carried to 374) The dispatches per closed row of feature 374's first three tasks, recorded beside 372's (~10 per
+  row). `Carried: SC-004 -> 374 sc004-375-dispatches-per-row`.
 - **SC-005** `make feature-report` runs in under ten seconds on feature 372's record and on a one-task feature, and reproduces
   this spec's measured table within its stated rounding.
 - **SC-006** Replaying 372's waves 106 and 108: the tripwires fire on 0105's and 0100's third rounds and on the bath bullet's
   A -> B -> A, and no round past the cap needed a GM waiver.
-- **SC-004** The dispatches per closed row of feature 374's first batch are recorded beside 372's (~10 per row) in this
-  feature's measurements.
+
+375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
+until 375 has landed.
 
 ## What it does not cover
 
 - Judgment errors inside a decision (wave 108's back-and-forth over Hayakawa's bath was the session's own oscillation). FR-003(a)
   puts the decision to spec-fidelity before the edits and FR-010's oscillation tripwire catches the reversal, which bounds the
   cost, but neither can make the first decision right.
+- Escape variables remain. Every guard keeps its named escape (`*_OK="<reason>"`), each use logged to `dev/bypass-log/` and
+  `make audit`, so a slide back is visible, not prevented.
 - The size of the remaining rows: 153 E3 and 43 E4 rows are real redraws and research passes; this feature makes each cheaper,
   not fewer.
 
@@ -130,4 +146,6 @@ or plan) and per feature - never per "wave", which was feature 372's own way of 
 | Enforcement over guidance throughout | this project's decision | the GM, 2026-10-10 (`request.md`); 328's retrospective, held only as intentions, slid back within a day |
 | One feature for enforcement, measurement and escalation | this project's decision | the GM, 2026-10-10: "all part of one feature because conceptually this is all under the same umbrella" |
 | A round arbiter in place of the GM's waiver; the GM reviews after landing | this project's decision | the GM, 2026-10-10: progress should not stop at a round cap; the GM wants features to land without waiting on review |
+| The unit of work a check belongs to is a task, never a wave | spec-fidelity round 1, 2026-10-10 | a feature without waves has tasks; 372's waves were each one task |
+| SC-003 and SC-004 carried to 374 and held there by FR-014 | spec-fidelity round 1, 2026-10-10 | 374 takes no task until 375 lands, and a feature with an open task lands nothing: keeping 375 open for them would stall both |
 | Tripwires on events, not an hourly timer | this project's decision | a pattern is caught when it happens; a timer fires mid-action and asks the looping session to judge itself |
