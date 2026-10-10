@@ -89,6 +89,8 @@ def test_a_tree_the_cap_does_not_hold_is_not_checked(tmp_path: Path) -> None:
         ("# ruff: noqa\n" + _function(3), "a file-level `# ruff: noqa`"),
         ("# ruff: noqa: PLR0915 - the whole file is one long table\n" + _function(3), "a file-level `# ruff: noqa`"),
         ("# ruff: noqa: E501\n" + _function(3), None),
+        ("# flake8: noqa\n" + _function(3), "a file-level `# ruff: noqa`"),
+        ("# flake8: noqa: PLR0915\n" + _function(3), "a file-level `# ruff: noqa`"),
         (_function(3, "  # noqa: E501, PLR0915 - kept whole because every step reads the same cursor"), None),
     ],
 )
@@ -109,6 +111,7 @@ def test_a_suppression_is_one_body_with_its_reason(tmp_path: Path, text: str, pr
         ('[tool.ruff.lint]\nignore = ["E501", "PLR0915"]\n', True),
         ('[tool.ruff.lint.per-file-ignores]\n"l7r/x.py" = ["PLR0915"]\n', True),
         ('[tool.ruff.lint]\nextend-ignore = ["PLR09"]\n', True),
+        ('[tool.ruff.lint]\nextend-per-file-ignores = {"x.py" = ["PLR0915"]}\n', True),
         ('[tool.ruff.lint]\nignore = ["E501"]\n', False),
     ],
 )
@@ -125,12 +128,22 @@ def test_the_repository_config_holds_the_cap_and_says_why_100() -> None:
     assert "131 of 1,209" in text and "second most common" in text
 
 
-def test_the_check_runs_first_in_static_and_before_every_push() -> None:
+@pytest.mark.parametrize("target", ["static", "quick"])
+def test_the_check_runs_first_in_static_and_quick_and_before_every_push(target: str) -> None:
     """D2: a session reads the check's message, not ruff's; a tests- or scripts-only push runs no gate."""
-    static = (REPO / "Makefile").read_text().split("\nstatic:", 1)[1].split("\n\n", 1)[0]
-    lines = [ln.strip() for ln in static.splitlines() if ln.startswith("\t")]
-    assert "check-function-cap.py" in lines[0], lines[:2]
+    recipe = (REPO / "Makefile").read_text().split(f"\n{target}:", 1)[1].split("\n\n", 1)[0]
+    lines = [ln.strip() for ln in recipe.splitlines() if ln.startswith("\t") and ("ruff" in ln or "check-function-cap" in ln)]
+    assert "check-function-cap.py" in lines[0] and lines[0].find("check-function-cap") < (lines[0] + "ruff").find("ruff"), lines[:2]
     assert "check-function-cap.py" in (REPO / "scripts/sync-with-main.sh").read_text()
+
+
+def test_a_nested_ruff_config_cannot_lift_the_cap(tmp_path: Path) -> None:
+    """D2 (plan review 2): the check pins the root config, so a `ruff.toml` beside the code is not read."""
+    d = tmp_path / "l7r"
+    d.mkdir()
+    (d / "ruff.toml").write_text('[lint.per-file-ignores]\n"*.py" = ["PLR0915"]\n')
+    (d / "long.py").write_text(_function(CAP + 1))
+    assert _check(tmp_path).returncode == 1
 
 
 def test_the_selftest_passes() -> None:
