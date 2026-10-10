@@ -94,8 +94,8 @@ def hamlet_path(root: Path) -> set[str]:
 
 
 def outside_quick(root: Path) -> set[str]:
-    """Engine files whose tests live where the quick tier never runs - a `tooling`-marked module under `tests/tools/`, or a
-    town or city tier test - found by the mirrored layout (`tests/<tree>/a/test_b.py` tests `l7r/diagram/a/b.py`). A line only
+    """Engine files a test OUTSIDE the quick tier reaches - a `tooling`-marked module under `tests/tools/`, or a town or city
+    tier test, whether or not a quick test reaches the file too - found by the mirrored layout (`tests/<tree>/a/test_b.py` tests `l7r/diagram/a/b.py`). A line only
     those reach is the gate's to judge (the plan review of amendment 2: `citybudget.py`'s lines 358 and 432, the audits)."""
     out: set[str] = set()
     tests = list((root / "tests" / "tier_town").rglob("test_*.py")) + list((root / "tests" / "tier_city").rglob("test_*.py"))
