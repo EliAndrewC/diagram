@@ -85,7 +85,7 @@ check already in the round is refused (`check-bundle-hooks.sh`). Once all have r
 dispatch opens the next round. **Returned** is the first of: SubagentStop for its agent id (it fires for a background agent: `m:subagent-stop-probe`), a foreground PostToolUse, or the
 check's answer (`make record-checked` / `claims-checked` / `modal-triaged`) - so a missing hook event never deadlocks a
 subject. A check silent past the no-poll guard's 90-minute wait ceiling is reported stale by `agent-stall-hooks.sh` and can be
-closed with `make check-closed ID= REASON=`. Escape `FREEZE_OK`.
+closed with `make check-closed SUBJECT= REASON=`. Escape `FREEZE_OK`.
 **What the apply pass admits: the checks' own EDIT blocks.** A check's proposals are already machine-readable: seven
 contracts (quote-check, record-format, entry-drift, source-applicability and the three modal checks) end each finding they
 can word with an `EDIT <path> <<< old === new >>>` block, which `make apply-edits` applies. At SubagentStop the hook reads
@@ -148,8 +148,12 @@ else = other subagent; the rest = other tool, which the report breaks down by ma
 - round cap: record and claims checks get the review checks' cap of two rounds per subject per feature (a round being a
   dispatch at a new fingerprint), counted in `.git/review-rounds.json` as the review checks are;
 - A -> B -> A: an Edit whose `new_string` equals an earlier Edit's `old_string` on the same file in the feature (from the
-  event log), checked at PreToolUse(Edit); the report also finds it from the commits;
-- a second red gate in a row: the gate's own failure exit reads the previous run's state;
+  event log), checked at PreToolUse(Edit); AND, for a page or pop-up, a block that an earlier version had, a later one
+  dropped, and the latest has again (by words, so a re-wording counts), over the versions each check dispatch found
+  (amendment 1, from T19: 372's bath bullet was added by a script, withdrawn by a `git checkout` and re-added re-worded - no
+  Edit, so the digest wire alone could not see it; the spec's "computed from the file's history" asks for this);
+- a second red gate in a row: `l7r/diagram/ci/state.py` records each gate's outcome apart from the one slot a quick run
+  overwrites, and a red after a red writes the trigger (amendment 1: where the gate's outcome is already recorded);
 - A -> B -> A over commits too: the report and the SC-006 replay run the same comparison on the converted events;
 - the cascade ratio past a threshold set from the SC-006 replay (`m:cascade-threshold`: the ratio of 372's waves 106 and
   108 and of a sample of ordinary tasks, the wire set between them), checked at each check dispatch;
@@ -219,6 +223,34 @@ mark on any other open box is itself refused - at the push (the box holds the la
 names the line) and by `make tick` - so the mark cannot become an unlogged escape. This plan's line:
 
 **Lands open**: T99
+
+**Amendment 1 (2026-10-10, batch 4; round 2 after the plan review of round 1):** D10's reversal and red-gate wires as built
+(above). `make check-closed` (D4) closes only a dispatch SILENT past the 90-minute ceiling - a running check is never closed -
+and records each use with its reason in the guard census; it is the fourth escape. The escapes reach their own rule only, each
+recorded with its reason and held to the census's floor: `DECIDE_OK` the decide-first refusal (D3), `FREEZE_OK` the freeze and
+the apply-once hold (D4), `ARBITER_OK` the arbiter's holds and the round cap, on a check's prompt or a gate (D10). A current
+CLEAR plan-stage verdict covers a task section its reviewer read unchanged (D3). The cascade wire (D10) stays live after ANY
+ruling: its trigger id advances (`cascade@<rulings + 1>`) and it fires again only when CASCADE_MIN further dispatches since the
+last ruling find the ratio still past 1.0 - one round's worth of checks, after a `continue` or an `accept` alike. Batch 4 then
+delivers D12, D13, D14 and D17 as planned.
+
+**Amendment 2 (2026-10-10, batch 4, as built):** `ARBITER_OK` (D10) also re-opens a unit an `accept` or `process-fault` closed;
+`CLOSE_OK` is the fifth escape, from D13's closing check at the push, reason-floored and recorded. D14 as built, two narrowings:
+(1) the preflight keeps the record build (`make record CHECK=1`), which the spec lists among its derived files, though it is
+43 of the phase's 51 s at load 7.4 (`m:preflight-cost`) - every other step takes seconds, and the phase costs about a tenth of
+a gate where a red it prevents costs a whole one; (2) "100% on each" changed engine file is judged on the CHANGED LINES, and
+stops only on a line OFF the hamlet path (`tools/claims.scope`): a line on the path may be reached only by a rolled map, which
+the preflight does not roll, so it is reported and left to the gate's floor; and `ci/`, which the project counts as no engine
+code (feature 132 FR-025) and tests only in the tooling tree, is left to the gate. `PREFLIGHT_OK="<reason>"` skips the phase,
+reason-floored and recorded in the guard census through LOGESCAPE - the sixth escape. A changed line in a module that a test
+outside the quick tier reaches - a `tooling`-marked test under `tests/tools/`, a town or city tier test, found by the mirrored
+layout, a whole package where the test names one - is reported and left to the gate's floor whether or not a quick test also
+reaches the module, as a hamlet-path line is: within seconds the preflight cannot tell whether such a test runs the line. The
+reach, listed by the plan review (2026-10-10): `citybudget.py`, `settlement/core.py`, `trades.py`, `castle_civic.py`, eight
+whole `settlement/` packages (87 files: structures, city, civic_grounds, homestead_parts, shrines_wells, land, water_ways,
+rolling) and five audits (cache_audit, cohort_audit, roll_audit, perf_profile, mapcheck). Wave 106's two untested lines
+(`compound.py`, `tools/pack_audit/`) are outside it and still stop the preflight. The tree check excludes the tracked files the gate itself writes (`GATE_WRITES`,
+measured on this batch's gate run). D13's list of features closed when the check landed includes 372, closed by its ticks.
 
 A later spec that
 must wait declares `**Waits on**: 375`, and `make tick` refuses a task of it while 375 is open - 374's spec carries the line,

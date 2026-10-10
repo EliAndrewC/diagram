@@ -59,9 +59,9 @@ agent t5 | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>&1
 python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t5","tool_input":{},"tool_response":{"status":"async_launched","agentId":"ag5"}}))' "$C" | "$H/checks-hooks.sh" launched
 edit "about 10 by 8 feet" "about 10 by 8 ft"; rc=$?
 [ "$rc" = 2 ] && ok "a new round freezes the page again" || no "not frozen" "rc=$rc"
-( cd "$C" && python3 "$H/lib/hm_checks.py" close q:0105 "the agent died silently" >/dev/null )  # what `make check-closed` runs
+out="$( cd "$C" && python3 "$H/lib/hm_checks.py" close q:0105 "the agent died silently" )"  # what `make check-closed` runs
 edit "about 10 by 8 feet" "about 10 by 8 ft"; rc=$?
-[ "$rc" = 0 ] && ok "make check-closed unfreezes it" || no "check-closed did not close it" "rc=$rc $(cat "$T/err")"
+[ "$rc" = 2 ] && printf '%s' "$out" | grep -q "0 silent dispatch(es)" && ok "make check-closed leaves a LIVE check alone (only a silent one closes)" || no "check-closed closed a live check" "rc=$rc $out"
 bash_call "make quick"; rc=$?
 [ "$rc" = 0 ] && ok "STAYS QUIET: an unrelated command" || no "make quick refused" "rc=$rc"
 "$H/checks-hooks.sh" bogus >/dev/null 2>&1; rc=$?

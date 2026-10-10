@@ -123,6 +123,8 @@ def test_writes_feature_json_and_prints_the_two_exports(world) -> None:
     assert fj == {"feature_directory": "specs/004-point"}
     assert "export SPECIFY_FEATURE=004-point" in r.stderr
     assert "export SPECIFY_FEATURE_DIRECTORY=specs/004-point" in r.stderr
+    # feature 377: the claim says what a commit of the spec will need, and what to do instead without it
+    assert '**Approved**: the GM, ' in r.stderr and "Propose it in your final message" in r.stderr
 
 
 def test_dry_run_names_the_claim_and_creates_and_records_nothing(world) -> None:

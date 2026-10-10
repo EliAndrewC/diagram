@@ -35,7 +35,25 @@ def _lint14(*args, **kwargs) -> list[str]:
     """Checks 1 to 4 alone. These fixtures are unkeyed by design; check 5 is proven in its own tests below,
     and its messages are set aside by what they say (`_spec_figures.CHECK5_MARKS`), not by renumbering the
     fixture out of its reach - which is how a feature-number cutoff once hid in this file's history."""
-    return [x for x in lint.lint(*args, **kwargs) if not figs_is_check5(x)]
+    return [x for x in lint.lint(*args, **kwargs) if not figs_is_check5(x) and lint.CHECK6_MARK not in x]
+
+
+def test_check_6_a_new_feature_without_the_gms_approval_line(tmp_path: pathlib.Path) -> None:
+    # feature 377: from 377 on, a spec carries the GM's approval line; the push reads its form (the commit guard
+    # verifies the quote against the transcript, which the push cannot read)
+    d = _feature(tmp_path, tasks=None)
+    assert any(lint.CHECK6_MARK in x and "has none" in x and "**Approved**: the GM" in x for x in lint.lint(d))
+    (d / "spec.md").write_text(GOOD + '\n**Approved**: the GM, 2026-10-10, "Yes"\n')
+    assert any("fewer than three words" in x for x in lint.lint(d))
+    (d / "spec.md").write_text(GOOD + '\n**Approved**: the GM, 2026-10-10, "please file it then"\n')
+    assert not [x for x in lint.lint(d) if lint.CHECK6_MARK in x]
+
+
+def test_check_6_never_reads_a_feature_before_377(tmp_path: pathlib.Path) -> None:
+    old = tmp_path / "specs" / "376-older"
+    old.mkdir(parents=True)
+    (old / "spec.md").write_text(GOOD)
+    assert not [x for x in lint.lint(old) if lint.CHECK6_MARK in x]
 
 
 GOOD = """# Feature 999

@@ -73,6 +73,26 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T20 Batch 3 closes: `make done` green; landed
       research: rendering
       verify: DONE. DONE. make done green (488 s) after two reds the gate found (the escape census: three new escapes unclassified and unlogged - fixed); landed by the push carrying this tick
-- [ ] T99 Batch 4 (plan D18) [lands-open]
+## Batch 4 - the gates and the doctrine
+
+- [x] T21 The closing check (plan D13): `scripts/gates/close_check.py` - no report or a carried key missing refuses the last `make tick`, `make gm-reviewed` and the push of a touched feature that reads closed; `closed-before-375.txt` written from what read closed at its landing; `make speckit-todo` shows each carry (FR-009, FR-014)
       research: rendering
-      verify: ticked by the last batch
+      verify: DONE. DONE. close_check.py (report + carried keys) asked by the last make tick, make gm-reviewed and the push of a touched feature that reads closed (CLOSE_OK, logged); closed-before-375.txt (250 features, 372 among them - its report then written anyway); speckit-todo shows carries via close_check --carries; test_close_check.py 3, sync suite 116 with its closed fixtures given reports
+- [x] T22 The GM's review after landing (plan D12): `make gm-review` (held and to-review rows by feature), `make accept`, `make gm-reviewed [OVERTURN= TO=]`; the GM-review box added by the tooling; `make speckit-todo` reads `Done - GM review pending` (FR-012)
+      research: rendering
+      verify: DONE. DONE. gm_review.py + make gm-review/accept/gm-reviewed (OVERTURN= TO=); the GM box added by the tooling on a row (accept, an arbiter ruling) and honored only with an open row; speckit-todo state Done - GM review pending; make gm-review lists 328's three held rows; test_gm_review.py 4
+- [x] T23 The preflight inside the gate (plan D14): `make done` begins with the derived files, the research pointers, spec-lint and the quick tier with coverage on the changed engine files, stopping there on a failure; the gate refuses green when a tracked file changed while it ran, naming it; its cost measured (FR-004)
+      research: rendering
+      verify: DONE. DONE. preflight.py first in make done (ahead of the reuse): derived files, record + pointers, make quick, the changed engine lines (stop off the hamlet path and outside modules tests outside quick reach); tree check before green; PREFLIGHT_OK reasoned and logged; 36-62 s at load 5-7, the record build most of it (m:preflight-cost; amendment 2 ruled LEGITIMATE); test_preflight.py 4
+- [x] T24 The doctrine (plan D17): the root CLAUDE.md's guard table and an FR-010 note the advisor reads; docs/guards.md rows; research/CLAUDE.md (modal-triage, record-checked REPLY=, check-closed); docs/spec-kit-and-reviews.md (feature-report, decide, the arbiter, the GM's review) (FR-013)
+      research: rendering
+      verify: DONE. DONE. CLAUDE.md (guard table rows, the workflow bullets naming feature-report, decide, the arbiter's bundle), docs/guards.md (six rows), research/CLAUDE.md (a check round), docs/spec-kit-and-reviews.md; FR-013 pinned by test_375_doctrine.py
+- [x] T25 SC-002's audit: each FR with the test that fails on the old behavior, listed in `audit.md` (SC-002)
+      research: rendering
+      verify: DONE. DONE. audit.md: FR-001..FR-014 each with its test and how it was proved red (removed, by construction or changed); the event-log suite proved red here (14 of 18 with its write removed)
+- [x] T26 375 closes: `make done` green; its report written; T99 ticked; landed through its own closing check
+      research: rendering
+      verify: DONE. DONE. make done green (preflight clean in 36 s, then the verified reuse - batch 4 is scripts and docs); the whole tooling tree 1491 passed and hooks-test green against these scripts; plan amendments 1 and 2 CLEAR; 375's report regenerated; landed through its own closing check
+- [x] T99 The last batch (plan D18) [lands-open]
+      research: rendering
+      verify: DONE. DONE. batches 1-4 landed (plan D18): measurement and the fixes, the owing logic, the guards and the arbiter, the gates and the doctrine

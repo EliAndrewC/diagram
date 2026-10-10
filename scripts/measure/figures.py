@@ -64,7 +64,11 @@ def rerun(spec_dir: pathlib.Path) -> tuple[list[str], list[str], list[str]]:
     try:
         for command in sorted({e["command"] for e in recorded.values() if e.get("command")}):
             path.write_text(original)
-            run = subprocess.run(shlex.split(command), cwd=ROOT, capture_output=True, text=True)
+            try:
+                run = subprocess.run(shlex.split(command), cwd=ROOT, capture_output=True, text=True)
+            except (OSError, ValueError) as e:  # a command written as prose: not runnable, so listed, never fatal (feature 375)
+                skipped.append(f"  NOT RE-MEASURED: {command[:120]}\n      not a runnable command ({type(e).__name__})")
+                continue
             if run.returncode:
                 reason = (run.stderr.strip().splitlines() or ["exit " + str(run.returncode)])[-1][:160]
                 skipped.append(f"  NOT RE-MEASURED: {command}\n      {reason}")

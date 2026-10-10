@@ -105,6 +105,11 @@ Answer these, in this order:
    whose scope is decided by a factual premise nobody MEASURED (this project's standing rule: a number or a state is
    measured, never remembered or assumed) is a requirement that does not implement what was approved, however
    faithful its wording. Do not rule such a passage "faithful" because it sounds like the request.
+7. **Does the approval line approve THIS feature?** (feature 377, GM 2026-10-10: features are filed only with the GM's
+   approval.) A spec numbered 377 or above carries `**Approved**: the GM, YYYY-MM-DD, "<their words>"`. A commit guard
+   has already checked that the words are the GM's; only you can check what they approve. Read the quote against the
+   request: words that state a rule, accept a feature after the fact, or approve a different piece of work do not
+   approve filing this one, and the verdict is NOT FAITHFUL until the line quotes the GM's approval of this feature.
 
 **Enforcing what was asked is not unrequested scope (GM 2026-09-20).** A test, a guard or a check whose ONLY effect
 is to make the thing the GM asked for actually happen, and keep happening, SERVES the request: name the clause it

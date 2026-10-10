@@ -140,7 +140,7 @@ expect_out "the claim), allowed"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "a later docs push from the same clone: the delta no longer touches the spec dir -> the pointer decides" 0 $?
 ( cd "$D/main/.clones/c" && mkdir -p .specify && echo '{"feature_directory": "specs/140-x"}' > .specify/feature.json && echo more > note.md && git add -A && git commit -qm docs2 )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the pointer names a feature with open tasks -> refused even for docs" 1 $?
-( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n' > specs/140-x/tasks.md && git add -A && git commit -qm done )
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && git add -A && git commit -qm done )
 # GUARD_EDIT_OK: feature 243 - a ticked feature now also owes its plan review at the push, so this finished
 # feature proves the plan gate is WIRED into the push (refused without the record) before it lands with one.
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: ticked tasks with no plan review -> refused (feature 243)" 1 $?
@@ -149,13 +149,13 @@ expect_out "PLAN GATE"
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
   && git add -A && git commit -qm "the plan, reviewed" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: every task ticked and the plan reviewed -> the docs land" 0 $?
-( cd "$D/main/.clones/c" && echo 'def a(): return 9' > pool/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 9' > pool/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "IT FIRES on the GATED route too, before ci-merge is even consulted" 1 $?
 expect_out "IN PROGRESS"
 # feature 330 (FR-002): ONE state rule with `make speckit-todo` - a feature its status line closes is not in progress,
 # though a box is unticked; the same open box under a status that does not close it is still refused
 D=$(topology fr)
-( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [x] T01 done\n- [ ] T02 the report\n' > specs/140-x/tasks.md \
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [x] T01 done\n- [ ] T02 the report\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md \
   && printf -- '# Feature Specification: x\n\n**Status**: Done (2026-10-08): landed in abc1234; only the report was left unticked\n\n## Review history\n- spec-fidelity round 1: FAITHFUL\n' > specs/140-x/spec.md \
   && printf '# plan\n' > specs/140-x/plan.md \
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
@@ -168,10 +168,10 @@ expect_out "IN PROGRESS"
 # ticked task whose indented research box is open, is still in progress under a status that closes nothing
 ( cd "$D/main/.clones/c" && printf -- '## Phase 1\n  - [ ] T01 indented and open\n  - [ ] T02 indented and open\n' > specs/140-x/tasks.md && echo m3 > note.md && git add -A && git commit -qm indented )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: indented open tasks -> refused" 1 $?
-( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n      - [ ] research pass\n' > specs/140-x/tasks.md && echo m4 > note.md && git add -A && git commit -qm research-box )
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n      - [ ] research pass\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && echo m4 > note.md && git add -A && git commit -qm research-box )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a ticked task with an open indented research box -> refused" 1 $?
 # feature 375 plan D18: a `[lands-open]` box does not hold the landing; an ordinary open box beside it still does
-( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md \
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md \
   && printf -- '# Feature Specification: x\n\n**Status**: In progress - batch 2 next\n\n**Owed at**: now\n\n## Review history\n- spec-fidelity round 1: FAITHFUL\n' > specs/140-x/spec.md \
   && printf '# plan\n\n**Lands open**: T99\n' > specs/140-x/plan.md \
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
@@ -182,10 +182,10 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: an 
 expect_out "holds: T01 open"
 # ...and the mark is honored only where the tooling or a reviewed plan put it (plan review round 2): a hand-typed mark on a
 # task the plan does not name holds the landing like any open box; the GM-review box in its fixed form does not
-( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T02 a task someone marked [lands-open]\n' > specs/140-x/tasks.md && echo m7 > note.md && git add -A && git commit -qm "hand-typed mark" )
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T02 a task someone marked [lands-open]\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && echo m7 > note.md && git add -A && git commit -qm "hand-typed mark" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a [lands-open] mark the plan does not name -> refused" 1 $?
 expect_out "honored only on the GM-review box"
-( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] GM review (make gm-reviewed F=140) [lands-open]\n' > specs/140-x/tasks.md && echo m8 > note.md && git add -A && git commit -qm "the GM's box, nothing for the GM" )
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] GM review (make gm-reviewed F=140) [lands-open]\n' > specs/140-x/tasks.md && printf '# report\n' > specs/140-x/report.md && echo m8 > note.md && git add -A && git commit -qm "the GM's box, nothing for the GM" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the GM-review box on a feature with no row for the GM -> refused" 1 $?
 ( cd "$D/main/.clones/c" && printf '{"kind": "arbiter", "row": "r1"}\n' > specs/140-x/gm-review.jsonl && echo m9 > note.md && git add -A && git commit -qm "a row for the GM" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the GM-review box in its fixed form, a row open -> lands" 0 $?
@@ -409,7 +409,8 @@ grep -qx B "$C/dev/x.md" 2>/dev/null && yes_ || no_ "the clone's edit did not la
 echo "16. an open feature with no **Affects** tag, or an unknown one, is refused at the push, a specs/-only DIRECT one included (the GM, 2026-10-10)"
 D=$(topology ow)
 ( cd "$D/main/.clones/c" && mkdir -p specs/400-x .specify && cp "$HERE/../../.specify/affects.json" .specify/ \
-  && printf -- '# Feature Specification: x\n\n**Status**: Filed - deferred work\n' > specs/400-x/spec.md && git add -A && git commit -qm "filed, no tag" )
+  && printf -- '# Feature Specification: x\n\n**Status**: Filed - deferred work\n\n**Approved**: the GM, 2026-10-10, "file the x feature"\n' > specs/400-x/spec.md && git add -A && git commit -qm "filed, no tag" )
+# (the approval line, feature 377: spec-lint's check 6 asks it of every feature from 377 on; this case is about tags)
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a filed spec with no tag -> refused" 1 $?
 expect_out "**Affects**: hamlet, magistracy"
 ( cd "$D/main/.clones/c" && printf -- '\n**Affects**: towns\n' >> specs/400-x/spec.md && git add -A && git commit -qm "a typo" )

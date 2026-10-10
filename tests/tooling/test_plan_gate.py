@@ -165,6 +165,7 @@ def test_make_tick_refuses_and_writes_nothing_until_the_plan_is_reviewed(tmp_pat
     assert tt.main(["243", "T02", "built"]) == 2, "a plan edited after its review owes a new one (FR-004)"
     monkeypatch.setenv("PLAN_REVIEW_OK", "a probe escape with a reason")
     monkeypatch.setattr(gate, "bypass_record", lambda *a: None)
+    (d / "report.md").write_text("# report\n")  # the last tick closes the feature: its report first (feature 375)
     assert tt.main(["243", "T02", "built"]) == 0
     assert "BYPASSED" in capsys.readouterr().out
 

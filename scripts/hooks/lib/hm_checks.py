@@ -118,22 +118,23 @@ def open_round(state: Mapping[str, Any], subject: str, now: float | None = None)
             if subject in d.get("subjects", []) and d.get("state") != "answered" and _live(d, now)]
 
 
-def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None) -> str:
+def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None,
+             freeze_ok: bool = False, arbiter_ok: bool = False) -> str:
     """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap and the tripwires, which
     the round arbiter rules on - `hm_arbiter.py`)."""
     subjects = subjects_of_manifest(text) if check in PAGE_CHECKS else []
-    if root is not None:
+    if root is not None and not arbiter_ok:
         held = hm_arbiter.blocking(root, "")
         if held:
             return hm_arbiter.refusal(held)
     for s in subjects:
-        same = [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
+        same = [] if freeze_ok else [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
         if same and [d for d in running(state, s, now) if d.get("state") == "running"]:  # launched, not a refused call's record
             return (f"`{check}` is already in {s}'s round and that round has a check still running - all of a round's checks "
                     "return, their edits go in in one pass, then the page is checked once (feature 375 FR-003c)")
         n = state.setdefault("rounds", {}).get(f"{check}|{s}", 0)
         unit = f"{check}|{s}"
-        if root is not None:
+        if root is not None and not arbiter_ok:
             shut = hm_arbiter.closed(root, f"round:{unit}@")
             if shut:
                 return f"the round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)"
@@ -420,8 +421,12 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
             if root is not None and m and m.group(1).strip() in hm_arbiter.rulings(root):
                 return f"{m.group(1).strip()} is already ruled - one ruling per trigger, binding (feature 375 FR-011)"
             return ""
-        if check not in CHECK_KINDS or escaped("FREEZE_OK", str(ti.get("prompt") or "")):
+        if check not in CHECK_KINDS:
             return ""
+        prompt = str(ti.get("prompt") or "")
+        # each escape reaches its own rule only: FREEZE_OK the apply-once hold (FR-003c), ARBITER_OK the arbiter's holds and
+        # the round cap (FR-010/011) - the plan review of amendment 1
+        freeze_ok, arbiter_ok = escaped("FREEZE_OK", prompt), escaped("ARBITER_OK", prompt)
         manifest, text = _manifest_of(str(ti.get("prompt") or ""))
         if root is not None and check in PAGE_CHECKS:  # FR-010: the subject's versions as each dispatch found it
             for s in subjects_of_manifest(text):
@@ -433,12 +438,12 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
                     back = oscillation(vs)
                     if back:
                         hm_arbiter.trip(root, f"reversal:{s}@{len(vs)}", "reversal", s, f"{s}: a block dropped earlier is back - \"{back}...\"", now)
-        out = dispatch(state, str(payload.get("tool_use_id") or now), check, manifest, text, now, root)
+        out = dispatch(state, str(payload.get("tool_use_id") or now), check, manifest, text, now, root, freeze_ok, arbiter_ok)
         if not out and root is not None:
-            n, k = len(state.get("dispatches", {})), hm_arbiter.continues(root, "cascade@")
-            lines = changed_lines(root)
-            if hm_arbiter.cascade(n, lines, k):  # each `continue` ruling raises the bar, as a round cap's does
-                hm_arbiter.trip(root, f"cascade@{k + 1}", "cascade", "", f"{n} check dispatches over {lines} changed lines", now)
+            n, lines = len(state.get("dispatches", {})), changed_lines(root)
+            trigger, last = hm_arbiter.cascade_state(root)
+            if hm_arbiter.cascade(n, lines, last):  # live after any ruling; counted from the dispatches at the last one
+                hm_arbiter.trip(root, trigger, "cascade", "", f"{n} check dispatches over {lines} changed lines", now)
     elif mode == "launched" and payload.get("tool_name") == "Agent":
         resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
         launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched")
@@ -466,19 +471,32 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
     return out
 
 
+def close(root: Path, subject: str, reason: str, now: float) -> int:
+    """`make check-closed`: close the checks on `subject` that went SILENT - running past STALE_S with no return - and record
+    each use with its reason in the guard census. A live check is never closed here (the plan review of amendment 1: closing
+    any check at any time was an unlogged way past the freeze)."""
+    path = state_path(str(root))
+    state = load(path) if path else {}
+    if not escaped("CHECK_CLOSED", f'CHECK_CLOSED="{reason}"'):
+        print("check-closed: REASON needs two words and eight characters - it is what a later audit reads", file=sys.stderr)
+        return 2
+    silent = [d for d in state.get("dispatches", {}).values()
+              if subject in d.get("subjects", []) and d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S]
+    for d in silent:
+        d["state"] = "answered"
+        d["closed"] = reason
+    if path and silent:
+        save(path, state)
+    live = len(running(state, subject, now))
+    print(f"check-closed: {len(silent)} silent dispatch(es) on {subject} closed - {reason}"
+          + (f"; {live} still running and not silent: wait for them" if live else ""))
+    return 0
+
+
 def main(argv: list[str]) -> int:
     mode = argv[0] if argv else ""
     if mode == "close" and len(argv) == 3:  # make check-closed SUBJECT= REASON=
-        path = state_path(os.getcwd())
-        state = load(path) if path else {}
-        if len(argv[2].split()) < 2:
-            print("check-closed: REASON needs two words or more - it is what a later audit reads", file=sys.stderr)
-            return 2
-        n = answered(state, "*", [argv[1]])
-        if path and n:
-            save(path, state)
-        print(f"check-closed: {n} dispatch(es) on {argv[1]} closed - {argv[2]}")
-        return 0
+        return close(Path(os.getcwd()), argv[1], argv[2], time.time())
     try:
         payload = json.loads(sys.stdin.read() or "{}")
     except ValueError:

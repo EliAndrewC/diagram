@@ -146,7 +146,7 @@ def test_the_hook_entry_points_and_the_state_file(tmp_path: pathlib.Path, monkey
     assert hc.handle("edit", {"cwd": cwd, "tool_name": "Bash", "tool_input": {"command": "ls"}}, 5) == ""
     assert hc.handle("other", {"cwd": cwd}, 5) == ""
     state = json.loads((tmp_path / ".git" / hc.STATE).read_text())
-    assert state["feature"] == "375-x" and state["rounds"] == {"quote-check|q:0105": 1}
+    assert state["feature"] == "375-x" and state["rounds"] == {"quote-check|q:0105": 2}, "a FREEZE_OK dispatch is a round too"
     hc.record_answer(tmp_path, "quote-check", ["quote-check:0105#well"])
     assert json.loads((tmp_path / ".git" / hc.STATE).read_text())["dispatches"]["t1"]["state"] == "answered"
     (tmp_path / ".specify" / "feature.json").write_text('{"feature_directory": "specs/376-y"}')
@@ -154,7 +154,13 @@ def test_the_hook_entry_points_and_the_state_file(tmp_path: pathlib.Path, monkey
     assert json.loads((tmp_path / ".git" / hc.STATE).read_text())["rounds"] == {"quote-check|q:0105": 1}, "a new feature counts afresh"
     monkeypatch.chdir(tmp_path)
     assert hc.main(["close", "q:0105", "x"]) == 2
-    assert hc.main(["close", "q:0105", "the agent died silently"]) == 0 and "1 dispatch(es) on q:0105 closed" in capsys.readouterr().out
+    st = json.loads((tmp_path / ".git" / hc.STATE).read_text())
+    st["dispatches"]["t9"] = {"check": "quote-check", "subjects": ["q:0105"], "t": 0, "state": "running"}
+    (tmp_path / ".git" / hc.STATE).write_text(json.dumps(st))
+    assert hc.close(tmp_path, "q:0105", "the agent died silently", hc.STALE_S - 1) == 0
+    out = capsys.readouterr().out
+    assert "0 silent dispatch(es)" in out and "still running and not silent" in out, "a live check is never closed"
+    assert hc.main(["close", "q:0105", "the agent died silently"]) == 0 and "1 silent dispatch(es) on q:0105 closed" in capsys.readouterr().out
     monkeypatch.setattr("sys.stdin", __import__("io").StringIO(json.dumps({**edit, "tool_input": {**edit["tool_input"]}})))
     assert hc.main(["edit"]) == 0
     monkeypatch.setattr("sys.stdin", __import__("io").StringIO("not json"))

@@ -415,6 +415,22 @@ push_cmd() {
     fi
   done
   active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
+  # GUARD_EDIT_OK: feature 375 FR-009/FR-014 - a touched feature that reads closed carries its report and the measurements other
+  # specs carried to it, whichever route closed it (its last tick, a Done / Superseded by / Withdrawn status line)
+  local closing
+  . "$ROOT/scripts/hooks/lib/guardlog.sh" 2>/dev/null || guard_log() { :; }
+  closing="$(cd "$ROOT" && python3 scripts/gates/close_check.py --push "$base...HEAD" 2>/dev/null)" || true
+  if [ -n "$closing" ]; then
+    if [ -n "${CLOSE_OK:-}" ] && python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$CLOSE_OK" >/dev/null 2>&1; then
+      guard_log sync-with-main escaped "$CLOSE_OK" close-ok
+    else
+      printf '\n\033[1mREFUSED: a feature this push closes owes what closing owes (feature 375):\033[0m\n' >&2
+      printf '%s\n' "$closing" | sed 's/^/  /' >&2
+      printf 'A case that is genuinely exempt: CLOSE_OK="<reason>" (recorded).\n\n' >&2
+      guard_log sync-with-main blocked "closing" closing-owes
+      exit 1
+    fi
+  fi
   if [ -n "$active" ]; then
     local outside
     outside=$(printf '%s\n' "$ours" | grep -vE "^(${active// /|})/" || true)

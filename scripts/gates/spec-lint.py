@@ -44,6 +44,33 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 # THE ONE DEFINITION OF A FIGURE lives beside check 5 and is re-exported here under its old names, which
 # feature 240 imports from this file. A second copy would drift silently (spec D4).
 from spec_figures import _FIGURE, _UNIT_ALT, UNITS, check_measured_figures  # noqa: E402,F401
+
+# CHECK 6 (feature 377): a feature numbered FIRST or above carries the GM's approval line. The ONE definition of the
+# line is the commit guard's decider, imported, so the commit and the push cannot disagree about its form.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+import hm_approval  # noqa: E402
+
+APPROVAL_FIRST, APPROVAL_FORM, form_problem = hm_approval.FIRST, hm_approval.FORM, hm_approval.form_problem
+
+#: what every check-6 finding says, so a test of checks 1-4 can set them aside by what they say
+CHECK6_MARK = "the GM's approval line"
+
+
+def check_approval(spec_dir: pathlib.Path) -> list[str]:
+    """Check 6: the spec.md of a feature numbered APPROVAL_FIRST or above carries a well-formed approval line (the GM,
+    2026-10-10: "spec kit features should not be filed without my explicit approval"). The commit guard
+    (`scripts/hooks/feature-approval-hooks.sh`) also verifies the quote against the session's transcript; at the push
+    only the form can be read, which catches a commit the guard could not see."""
+    m = re.match(r"(\d{3,})-", spec_dir.name)
+    spec = spec_dir / "spec.md"
+    if not m or int(m.group(1)) < APPROVAL_FIRST or not spec.is_file():
+        return []
+    bad = form_problem(spec.read_text(encoding="utf-8", errors="replace"))
+    if not bad:
+        return []
+    why = "has none" if bad == "no-line" else "quotes fewer than three words"
+    return [f"{spec}:1: {CHECK6_MARK} {why} - a feature is filed only with the GM's approval; ask the GM, then add, "
+            f"verbatim: {APPROVAL_FORM}"]
 _POINTER = re.compile(r"\bR\d+\b|research\.md")
 _ID = re.compile(r"\b(FR|SC)-(\d{3}[a-z]?)\b")
 # GUARD_EDIT_OK: the pattern recognized only `**FR-001**`, the id bolded alone, and five of the nine
@@ -256,6 +283,7 @@ def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
     # CHECK 5 (feature 239): a measured figure is derived, not typed. Its own module, beside this one;
     # it reads every touched spec (the feature-239 cutoff was ruled NOT LEGITIMATE) once a tasks.md exists.
     bad += check_measured_figures(spec_dir)
+    bad += check_approval(spec_dir)   # check 6 (feature 377) needs no tasks.md: a filed spec is the case it exists for
     return bad
 
 
@@ -336,8 +364,9 @@ def selftest() -> None:
     from spec_figures import is_check5
 
     def lint14(d: pathlib.Path) -> list[str]:
-        """Checks 1 to 4 alone: check 5 is proven in its own tests, and these fixtures are unkeyed by design."""
-        return [x for x in lint(d) if not is_check5(x)]
+        """Checks 1 to 4 alone: checks 5 and 6 are proven in their own tests, and these fixtures are unkeyed and
+        unapproved by design."""
+        return [x for x in lint(d) if not is_check5(x) and CHECK6_MARK not in x]
 
     import tempfile
 

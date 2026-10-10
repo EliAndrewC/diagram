@@ -196,6 +196,14 @@ per note VERBATIM / SUPPORTS, per section the assertions with no footnote - afte
 the units `make record-owed` names, its verdicts recorded with `make record-checked` and in the task (`quote-check
 confirmed`).
 
+**A check round, as the tooling holds it (feature 375).** A pop-up owed only because a page it names moved is TRIAGED first
+(`make modal-triage`, one ad-hoc opus agent, `make modal-triaged`), as claims are (`make claims-triage`). While a check on a
+page or pop-up runs, the page is frozen; when the round returns, its EDIT blocks go in (`make apply-edits`) and nothing
+else until the checks are answered. Record each answer with `make record-checked ... REPLY=<the reply>`: a finding on a block
+the change did not write - the check lists it under `OUTSIDE THE CHANGE` - is filed as an open row of the feature, not fixed in
+this change. A check's third round on one page goes to the `round-arbiter`, not the GM; `make check-closed` closes a check
+that went silent.
+
 ## Written for the reader (GM 2026-09-07, feature 209)
 
 1. **A term the reader would not know is a glossary tooltip** - one glossary for the map and the record, each
