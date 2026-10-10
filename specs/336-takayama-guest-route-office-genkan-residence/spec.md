@@ -17,16 +17,24 @@ stone). Whether the way ran under roof is not recorded; the entry asks for it.
 **The research pass** (2026-10-10, an agent, read-only; `research.md` R1): probably indoors, but no source states the Edo-period route. The record's own source (shirobito-1717-takayama) describes
 the MODERN visitors' route over the restored compound: it "goes round the rooms of the goyakusho ... and continues on to the
 residence". The Gifu prefecture's facility table of the Takayama Jin'ya lists a covered corridor, 渡廊下 12.78 m², beside the
-office (1816) and the residence (restored 1996 from an 1830 drawing), without its ends. Nothing puts the route out of doors.
+office (1816) and the residence (restored 1996 from an 1830 drawing), without its ends. Nothing puts the route out of doors. The Takayama Jin'ya's own illustration of the compound (R2) shows the office running
+straight back under joined roofs into the residence's wings, with no open ground between: the way is under roof, on the
+compound as restored.
 
 ## Requirements
 
 - **FR-001 - The finding recorded.** `research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html`
-  states what the Takayama sources show - the visitors' route through the office rooms to the residence, and a covered
-  corridor among the restored buildings - each with its limit (a modern route over a restored compound; the corridor's
-  ends unstated), and that the Edo-period route is not recorded (an absence note naming what was searched).
-- **FR-002 - The drawing page labels Ochiba's outdoor route.** `0104`'s drawing page says the outdoor way (rear door,
-  middle gate, garden path) is a GUESS against the Takayama evidence for an indoor one.
+  states what the Takayama sources show, each with its limit (the restored compound, not an Edo plan):
+  - the visitors' route through the office rooms to the residence;
+  - a covered corridor among the restored buildings;
+  - the official illustration showing office and residence joined under roof with no open ground between.
+
+  It says the Edo-period plan itself (the 1830 drawing the restoration followed) has not been read, and that drawing goes
+  to the GM's download list (`make download-add`).
+- **FR-002 - Ochiba's outdoor route is recorded as a mismatch, not a guess.** The evidence speaks for an indoor way, so the
+  sheet's outdoor route (the office's rear door, the middle gate, the garden path) departs from it. The code that decides
+  that route carries a `Research:` claim citing 0104's findings, and its `impl-drift` verdict - DRIFTED, if the claim
+  check finds the departure - shows it in `make claims-report` (FR-091). The sheet is not redrawn.
 - **FR-090 - Its checks.** The record checks the change owes (`make record-owed`) are run and answered.
 - **FR-091 - The implementation check** (feature 378): `make impl-check F=336` reports nothing missing at close.
   A claim that the new finding contradicts is recorded DRIFTED and shown in `make claims-report`; the code and the sheets
@@ -34,8 +42,8 @@ office (1816) and the residence (restored 1996 from an 1830 drawing), without it
 
 ## Success Criteria
 
-- **SC-001** (FR-001, FR-002): 0104 carries the Takayama evidence with its limits and the absence note; its drawing page
-  labels the outdoor route a guess.
+- **SC-001** (FR-001, FR-002): 0104 carries the Takayama evidence with its limits; the 1830 drawing is on the download
+  list; the claim on the route's code is checked and its verdict is in `make claims-report`.
 - **SC-090** (FR-090): `make record-owed` is answered.
 - **SC-091** (FR-091): `make impl-check F=336` reports nothing missing; no file under `pool/` changes.
 
@@ -73,3 +81,7 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
 
 
 ## Review history
+- spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED. Applied: the plan the entry named was sought and read (the
+  official compound illustration, R2: office and residence joined under roof), the 1830 drawing goes to the download list,
+  and the outdoor route is recorded as a mismatch through a checked claim (FR-091), not labeled a guess.
+

@@ -16,3 +16,19 @@ and reporting only).
 
 **Answer** (observed 2026-10-10; method: the sources above): indoors, probably through the office and a covered corridor;
 the Edo-period route is not recorded in anything read. Not reached: the 1992 survey report (上嶋善治), the 1830 drawing.
+
+## R2 - the Takayama Jin'ya's own illustration of the compound (2026-10-10, spec review round 1)
+
+**Method** (observed 2026-10-10; method: the session fetched and looked at the image the official architecture page
+carries, https://jinya.gifu.jp/en/architecture/ -> `/wp/wp-content/themes/original_theme/images/architecture/map_illust_2.png`,
+1514 x 874 px). The spec review asked for the plan the filed entry named before a silence is recorded.
+
+**What it shows** (observed 2026-10-10; method: as above):
+- The office (the central gabled hall, its entrance hung with purple curtains) runs straight back under joined roofs
+  into the residence's wings.
+- The residence's wings stand round a garden with a pond at the rear of the compound.
+- No open ground separates the office from the residence. A guest going on from the office to the residence crosses
+  none, so the route is under roof.
+
+**Its limit**: an illustration of the compound as restored (the office of 1816, the residence restored in 1996 from an 1830
+drawing), not an Edo-period plan. The 1830 drawing itself is not on the web; it goes to the GM's download list.

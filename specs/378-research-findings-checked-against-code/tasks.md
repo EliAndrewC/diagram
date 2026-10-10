@@ -23,3 +23,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [ ] T04 Close: make done green (an engine file changed); the tooling tests and make hooks-test green; report; landed
       research: rendering
       verify: the push accepted
+- [ ] GM review (make gm-reviewed F=378) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
