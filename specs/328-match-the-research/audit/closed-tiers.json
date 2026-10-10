@@ -1,4 +1,5 @@
 {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#a hill shrine's village keeps its burial ground apart": "E0",
  "docs/building-programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)": "E1",
  "docs/building-programs.md::Country shrine (a village district's shrine)#approach width about 10 ft": "E0",
  "docs/building-programs.md::Country shrine (a village district's shrine)#basin beside the approach": "E1",
@@ -22,6 +23,7 @@
  "docs/building-programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet": "E0",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)": "E0",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais 0099 drawing records it as": "E0",
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#commuting clerks": "E0",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": "E2",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob": "E3",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern": "E0",
@@ -32,6 +34,7 @@
  "docs/building-programs.md::Magistrate's manor (county magistracy)#sand hearing court": "E2",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob": "E2",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob": "E2",
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning": "E0",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role": "E0",
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wells by use": "E0",
  "docs/buildings.md::Approaches and surroundings#boundary pillars": "E3",

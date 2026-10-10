@@ -102,3 +102,10 @@ in 328's ranking and this spec.
 - [x] T09 wave 106's row (FR-001, FR-002)
       research: rendering
       verify: DONE. DONE. wave 106: each fire-water tub beside a door of its building (0100) on all six sheets and the draft; every tub-bearing building draws its entrance; tubs_off_their_doors; m:wave106-tubs-at-doors; reviews PASS round 2; plan review CLEAR round 4
+
+## Phase 10 - wave 107 (amendment 8): three claims labeled as the record has them
+
+- Claims only (FR-001): `docs/building-programs.md`'s magistrate's manor and country shrine sections.
+
+- [ ] T10 wave 107's rows (FR-001)
+      research: rendering

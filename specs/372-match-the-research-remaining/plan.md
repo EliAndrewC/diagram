@@ -218,6 +218,15 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 - **Occasions**: placement-changed: fire-water tubs on ubame-magistracy (every hand sheet's tubs re-seated); layout-revised:
   county-magistracy-example (the draft's tub seat).
 
+## Wave 107 (amendment 8, 2026-10-10) - batch 6
+
+- **Scope**: three E0 rows wave 106's impl-drift found in `docs/building-programs.md`, the claim lines alone: `#two-court zoning`
+  relabeled DEVIATION on 0090's drawing page (residence-behind-office is its deliberate simplification; at Takayama the residence
+  stood beside the office); `#commuting clerks` relabeled DEVIATION on 0113 (an intendant's clerks lived inside the compound; the
+  setting's commuting scribes are canon); and the table's rule that a hill shrine's village keeps its burial ground apart claimed,
+  UNRESEARCHED (no source says whether graves climbed a hill shrine's slope). No sheet, no engine code.
+- **Records**: the claims' impl-drift; waves.json.
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |

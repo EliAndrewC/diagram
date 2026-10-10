@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-10T13:49:27Z",
+  "target": "claims-gate",
+  "commit": "25c0456a2",
+  "why": "CLAIMS_OK: the claims gate's remaining findings in the re-checked sections are open ranked rows of feature 372 (specs/328-match-the-research/ranking.json; the wave 106 found rows in audit/found-wave106.jsonl), re-raised only because wave 106 edited those sections"
+}
