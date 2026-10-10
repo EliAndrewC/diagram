@@ -131,9 +131,9 @@ def refusal(triggers: list[str]) -> str:
     t = triggers[0]
     return (f"a tripwire is owed its ruling first ({', '.join(triggers)}; feature 375 FR-010/FR-011): make arbiter-bundle "
             f"TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" "
-            "FILE=<its JSON> AS=round-arbiter. The feature goes on elsewhere meanwhile. (A session started before the agent "
-            "existed cannot dispatch it: restart it, or carry ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - "
-            "logged.)")
+            "FILE=<its JSON> AS=round-arbiter. The feature goes on elsewhere meanwhile. (Claude Code picks up a new agent file "
+            "mid-session - this one did on 2026-10-10 - so only if `round-arbiter` is missing from the session's agent list: "
+            "restart it, or carry ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - logged.)")
 
 
 def reversal(events: list[Mapping[str, Any]], path: str, old: str, new: str) -> bool:
