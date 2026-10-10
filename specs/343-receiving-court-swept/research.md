@@ -21,7 +21,7 @@ session (`scripts/record/archive_ops.py`, a tooling commit of its own).
 - 0224 records swept ground for graves (Ming, 1630s) and finds Japanese grave cleaning and swept shrine precincts only in
   modern custom.
 - Morse (1886) saw a "well swept" Kyoto yard and swept garden paths in the 1880s, which is modern.
-- Morse's reproduction of a Sakai garden drawing shows a stone path through a second gateway to the genka, inside a garden
+- Morse's reproduction of a Sakai garden drawing shows a stone path through a second gateway to the genka (Morse's spelling of genkan), inside a garden
   with lanterns. Morse dates it loosely ("nearly two hundred years ago").
 
 **Not reached:** Edo machi-fure on sweeping before a house, the Takayama Jin'ya's own site, the Joge pamphlet itself, and

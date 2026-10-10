@@ -23,8 +23,8 @@ earth. What there is:
 - the hearing court's white sand or gravel concerns the hearing court, not the approach;
 - Morse's "well swept" yards are 1880s gardens;
 - one loosely dated drawing, Morse's reproduction of a Sakai garden plan ("nearly two hundred years ago" from 1886), shows a
-  stone path through a second gateway to the genkan inside a garden with lanterns - a merchant's or a daimyo's garden
-  approach, not dated, not a receiving court.
+  stone path through a second gateway to the genkan inside a garden with lanterns: a garden approach, only loosely dated,
+  not a receiving court.
 
 ## Requirements
 
@@ -37,7 +37,7 @@ earth. What there is:
   known.
 - **FR-002 - The modal reworded.** `border-court.md` no longer calls the court "swept". Its Depiction says what the sheet
   draws (a garden-stippled court with a stone lantern). Its Guesses keep the garden as a guess, and say that no source
-  attests the court's ground swept, raked, graveled or bare before modern times. Their "the one drawing found shows that
+  attests the court's ground swept, raked, graveled, sanded or bare before modern times. Their "the one drawing found shows that
   ground open" is brought into line with Morse's Sakai drawing (a garden approach, loosely dated).
 - **FR-003 - Its checks.** The record checks the change owes (`make record-owed`) and the modal checks (`modal-form`,
   `modal-research`, `modal-depiction`) are run and answered.
@@ -73,4 +73,6 @@ before modern times, and the modal reworded if not.
 - spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED, wording. Applied: the silence is limited to swept, raked,
   graveled, sanded or bare earth; Morse's Sakai drawing is named with its loose date and why it is not counted; "the one
   drawing" sentences follow; 0224 is quoted as it reads; FR-005/SC-004 allow correcting the sheet's "swept" comments.
+- spec-fidelity-verify, round 2 (2026-10-10): CHANGES REQUIRED, one wording: the Why bullet on Morse's Sakai drawing
+  said "not dated" and named an owner no source gives. Applied, with FR-002's list matching FR-001's.
 
