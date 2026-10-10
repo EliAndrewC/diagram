@@ -217,6 +217,21 @@
   "scope": "deferred"
  },
  {
+  "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#commuting clerks",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0113 finds an intendant's tetsuki and tedai living inside the office's compound; the commuting heimen scribes are the setting's own figure - relabel the claim CANON (or DEVIATION 0113)",
+  "files": [
+   "docs/building-programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 106's impl-drift of the magistrate's manor section, round 6 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -246,6 +261,21 @@
   "verdict": "DRIFTED",
   "wave": "1",
   "scope": "deferred"
+ },
+ {
+  "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0090's drawing page records residence-behind-office as a deliberate simplification (at Takayama the residence stood beside the office) - relabel the claim DEVIATION research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html",
+  "files": [
+   "docs/building-programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 106's impl-drift of the magistrate's manor section, round 6 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role",
