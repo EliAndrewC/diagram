@@ -223,8 +223,10 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 - **Scope**: three E0 rows wave 106's impl-drift found in `docs/building-programs.md`, the claim lines alone: `#two-court zoning`
   relabeled DEVIATION on 0090's drawing page (residence-behind-office is its deliberate simplification; at Takayama the residence
   stood beside the office); `#commuting clerks` relabeled DEVIATION on 0113 (an intendant's clerks lived inside the compound; the
-  setting's commuting scribes are canon); and the table's rule that a hill shrine's village keeps its burial ground apart claimed,
-  UNRESEARCHED (no source says whether graves climbed a hill shrine's slope). No sheet, no engine code.
+  setting's commuting scribes are canon); and the table's rule that a hill shrine's village keeps its burial ground apart claimed as
+  0236's drawing page records it, a GUESS (no source says so outright; plan review: not UNRESEARCHED, and not 0226 as the ranked
+  fix had it - 0226 says nothing of a hill shrine). The clerks' claim points at 0113's drawing page, which records the deviation.
+  No sheet, no engine code.
 - **Records**: the claims' impl-drift; waves.json.
 
 ## Performance bookends (constitution VI)

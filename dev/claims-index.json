@@ -14,12 +14,18 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#a hill shrine's village keeps its burial ground apart": {
-  "code": "961d6ada106ee970",
+  "code": "73bf495caa4b0dc0",
   "core": "38dc27ca4571cbdb",
   "date": "2026-10-10",
-  "note": "none of the cited pages says whether a village with a hill shrine kept its graves in the shrine's yard or apart. 0226 attests both forms with no rule tied to the ground, and 0223's slope forms are about the shrine's wood, not its graves",
-  "pages": {},
-  "research": "",
+  "note": "the 0236 drawing page records that a village whose shrine stands on a hill always takes a ground apart, and labels it a GUESS (\"no source we read says so outright\"); the code and the cited page agree",
+  "pages": {
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "3d5e34940b9d67aa"
+  },
+  "research": "d7ba04d0b4559610",
+  "rests": [
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:e30f2a65a59ae8f3",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:f40525fdbd8e6707"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#a village shrine's office dated": {
@@ -863,21 +869,18 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
-  "code": "05c8dc0dd2a2fb75",
+  "code": "cada2dd5d2cfff4b",
   "core": "8dc531d25949d438",
   "date": "2026-10-10",
-  "note": "0113 records that an intendant's clerks lived in huts and row houses inside the compound, and also records the setting's scribes \"live in town and come in each day\". A workroom in the office hall matches Takayama's goyoba",
+  "note": "the 0113 drawing page records the clerks housed in town, with no housing at the office, as \"a deliberate deviation from the Japanese record\" (the intendant's huts and row houses); their room is drawn inside the office hall",
   "pages": {
-   "0113-the-office-hall-and-its-clerks-goyakusho.html": "f48c2ca0c1c3bee2"
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "44879b9fd51f7154"
   },
-  "research": "7e9c46821cfb826d",
+  "research": "b41a6bcda29db296",
   "rests": [
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:10f227f986a15250",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:352ae21535d62c0f",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:67e2f21a3252fd23",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:9bba608484ca0320",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:bfca6b0c572eed52",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:ff7cc7b9e0cf23e6"
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:42ca231b3f4511ce",
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:45e428be060a17da",
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:dd0a1e4b03a2fce4"
   ],
   "verdict": "IN-STEP"
  },
