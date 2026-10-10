@@ -10,11 +10,15 @@ palanquin could cross, then the step of the formal entrance. No real border post
 receiving a neighboring domain's officials; that use of it is the setting's own.
 
 Guesses:
-- That the court is a swept garden set with a stone lantern rather than open ground: no account puts a garden between the
-  gate and a guest's formal entrance; the one drawing found shows that ground open.
+- That the court is a garden set with a stone lantern rather than open ground: no account puts a garden between the
+  gate and a guest's formal entrance. The two drawings found of the ground inside a gate both show it open: Joge's,
+  and a garden-book plate Morse reproduced in 1886, whose stone path runs through a second gateway to the entrance and
+  which he dates only loosely, to Sakai "nearly two hundred years ago".
+- What the court's ground is: no source read says the ground before a formal entrance was swept, raked, graveled,
+  sanded or left bare earth before modern times, so the plan gives it no surface of its own.
 
-Depiction: The plan draws the border court as a swept garden of its own, set with a stone lantern, inside the guests' door
-and apart from the hearing court.
+Depiction: The plan draws the border court as a garden of its own, stippled and set with a stone lantern, inside the
+guests' door and apart from the hearing court.
 
 Name: border court
 Covers: the receiving court behind a border posting's parley door, and its label
