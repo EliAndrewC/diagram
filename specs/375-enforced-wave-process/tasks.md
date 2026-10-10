@@ -30,6 +30,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [ ] T06 Batch 1 closes: `make done` green; `make hooks-test`; 375's report so far written from this session's transcript; landed
       research: rendering
       verify: the gate's run-log line; the report file
-- [ ] Batches 2-4 (plan D18) [lands-open]
+- [ ] T99 Batches 2-4 (plan D18) [lands-open]
       research: rendering
       verify: ticked by the last batch
