@@ -68,11 +68,15 @@ survey, its date and its numbers.
 
 - A function under 100 statements but long in raw lines (wrapped strings, a long literal): passes - the measure is
   statements, never lines (clause 12).
-- A nested function: counted as its own function, and its statements are not counted again in its parent (ruff's count).
-- The frozen and excluded trees (`pool/`, `legacy-hand-authored-pool/`, `specs/`, `tests/hooks/`): not held - they are
-  outside the lint fence for their own reasons (pyproject's `extend-exclude`), and a frozen exhibit is never edited.
-- `scripts/` is outside the lint fence too (feature 329 kept it there), but it is the project's own working code, so the
-  cap - this rule alone - is held over it.
+- A nested function: ruff counts its statements in its PARENT as well (measured 2026-10-10 by the spec review: an outer
+  function of 30 assignments holding an inner one of 30 reported 61). So moving code into a nested function does not
+  bring a parent under the cap; only a part at module level or on a class does.
+- `legacy-hand-authored-pool/` and `specs/` are not held: both are write-once history (the frozen exhibits; the specs'
+  retired migration tooling, where 3 functions are over 100 today), and a cap over them could be met only by editing
+  history.
+- `scripts/`, `pool/` and `tests/hooks/` are outside the lint fence (pyproject's `extend-exclude`, for formatting reasons:
+  feature 161, 329), but they are the project's own working code and the file cap already holds them, so the function
+  cap - this rule alone - is held over them too (0 functions over 100 in `pool/` and `tests/hooks/` today, 2 in `scripts/`).
 
 ## Requirements *(mandatory)*
 
@@ -80,12 +84,18 @@ survey, its date and its numbers.
 
 - **FR-001**: The lint step the gate already runs MUST fail any function over 100 statements, counted by the linter's
   statement rule (ruff `PLR0915`, `max-statements = 100`), over every tree it lints (research.md R3).
-- **FR-002**: The same rule, alone, MUST be held over `scripts/`, which the lint fence otherwise excludes.
-- **FR-003**: Every function over the cap at the start of the work (research.md R2) MUST be split into named parts or
-  carry the justification marker; splitting MUST NOT change any map (the pool's manifests identical to HEAD's).
-- **FR-004**: The justification is the linter's own inline suppression for that rule followed by a reason in words;
-  a suppression with no reason MUST fail the gate, with a message that names the line and says a reason is owed.
-- **FR-005**: The setting MUST carry, beside it, why 100: the survey's date, its sample and its finding (research.md R1).
+- **FR-002**: The same rule, alone, MUST be held over `scripts/`, `pool/` and `tests/hooks/`, which the lint fence
+  otherwise excludes; only `legacy-hand-authored-pool/` and `specs/` stay outside it (edge cases).
+- **FR-003**: Every function over the cap at the start of the work (research.md R2) MUST be split into parts at module or
+  class level (a nested function does not count, edge cases); splitting MUST NOT change any map (the pool's manifests
+  identical to HEAD's). Splitting is the default: a function kept whole goes through a `spec-fidelity` exception check of
+  its own and is listed under Decisions Recorded.
+- **FR-004**: The justification is the linter's own inline suppression for that rule followed by a reason saying WHY the
+  body must remain one (constitution Principle X clause 12: an annotation that "justifies why it must remain one body");
+  a suppression with no reason MUST fail the gate, with a message that names the line and says such a reason is owed.
+- **FR-005**: The setting MUST carry, beside it, why 100: the survey's date and sample, and the GM's stated reason - 100 is
+  the second most common value on GitHub (131 of 1,209 repositories) and the most common one chosen over the default
+  50 (research.md R1).
 - **FR-006**: Constitution Principle X clause 12 MUST be amended to name the measure (the statement count), the cap (100),
   the escape (the reasoned suppression) and the survey, and its Sync Impact Report's deferred TODO MUST be closed.
 - **FR-007**: Every unit split under FR-003 MUST keep its research claims, and every new part MUST carry the claims its
@@ -105,7 +115,8 @@ survey, its date and its numbers.
   FR-002, FR-003).
 - **SC-003**: The pool rerolled on the landing commit leaves every manifest identical to HEAD's (FR-003).
 - **SC-004**: A suppression with no reason fails the gate; one with a reason passes (FR-004).
-- **SC-005**: The setting's comment and clause 12 both cite research.md R1 (FR-005, FR-006).
+- **SC-005**: The setting's comment and clause 12 both state that 100 is the second most common value on GitHub (131 of
+  1,209 repositories) and the most common chosen over the default, citing research.md R1 (FR-005, FR-006).
 - **SC-006**: The claims gate passes at the push with every split unit's claims carried and checked (FR-007).
 
 ## Assumptions
@@ -129,3 +140,12 @@ survey, its date and its numbers.
   convention.
 - **D3 - `scripts/` held by this rule alone** (FR-002): the GM asked for a cap on function length, and `scripts/` is the
   project's own code; the rest of its lint stays out of scope. Class: scope decision.
+
+## Review history
+
+- **spec-fidelity round 1 (2026-10-10): NOT FAITHFUL.** (1) D3 faithful. (2) `pool/` and `tests/hooks/` were carved out on a
+  wrong premise (only the legacy pool is frozen) - now held (FR-002). (3) The escape was looser than clause 12 - the
+  reason must say why the body stays one, and splitting is the default, a kept function an exception of its own
+  (FR-003, FR-004). (4) FR-005 / SC-005 now state the GM's reason. (5) The nested-function edge case was wrong (ruff counts
+  a nested body in its parent) - corrected, and FR-003 says a nested part does not count. (6) research.md R3's figures
+  dated and given their method.

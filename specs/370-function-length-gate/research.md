@@ -41,7 +41,8 @@ The ten at 100: `settlement/homestead_parts/stands.py` `village_grove` (190), `h
 ## R3. The constitution's measure, and why ruff's statement count stands for it
 
 Principle X clause 12 measures a function "in logic units (statements/expressions), never raw lines" and names ~1,000 as
-a defect. Counted as statements nothing here comes near it (the largest is 190-217 by the two counters); counted as
-expression nodes 16 functions pass 1,000, but an expression count is inflated by every attribute and name (`a.b(c)` is
+a defect. Counted as statements nothing here comes near it (2026-10-10, over `l7r/`: the largest is 190 by ruff's
+count and 217 by an `ast` walk counting every `ast.stmt` node); counted as `ast.expr` nodes by the same walk,
+16 functions pass 1,000, but an expression count is inflated by every attribute and name (`a.b(c)` is
 four nodes). Ruff's `PLR0915` counts statements - the unit pylint and ruff define, deterministic and already in the
 linter the gate runs - so the clause's measure becomes ruff's statement count and its threshold the GM's 100.
