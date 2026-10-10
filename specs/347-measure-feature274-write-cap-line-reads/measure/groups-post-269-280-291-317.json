@@ -1,0 +1,1364 @@
+[
+ {
+  "group": "269:diagram-supplemental:c3",
+  "start": "2026-09-28T04:21",
+  "sessions": 3,
+  "kinds": {
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 7,
+  "things": 12,
+  "total": 6413446,
+  "main": 5198894,
+  "agents": 1214552,
+  "peak": 68583,
+  "per_thing": 534453.8333333334,
+  "complete": false
+ },
+ {
+  "group": "269:diagram-supplemental:c4a",
+  "start": "2026-09-28T04:36",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 6,
+  "things": 11,
+  "total": 11427498,
+  "main": 9813978,
+  "agents": 1613520,
+  "peak": 159179,
+  "per_thing": 1038863.4545454546,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:c4b",
+  "start": "2026-09-28T05:07",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 3,
+  "things": 5,
+  "total": 7697204,
+  "main": 6900749,
+  "agents": 796455,
+  "peak": 130473,
+  "per_thing": 1539440.8,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:x1a",
+  "start": "2026-09-28T05:24",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 4,
+  "things": 8,
+  "total": 8553084,
+  "main": 7550604,
+  "agents": 1002480,
+  "peak": 186190,
+  "per_thing": 1069135.5,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:x1b",
+  "start": "2026-09-28T05:46",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 3,
+  "things": 7,
+  "total": 10801771,
+  "main": 10098329,
+  "agents": 703442,
+  "peak": 172849,
+  "per_thing": 1543110.142857143,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:x1c",
+  "start": "2026-09-28T06:16",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 5,
+  "things": 7,
+  "total": 4089375,
+  "main": 3452720,
+  "agents": 636655,
+  "peak": 101742,
+  "per_thing": 584196.4285714285,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fx1",
+  "start": "2026-09-28T07:33",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 2,
+  "things": 7,
+  "total": 13045494,
+  "main": 11788140,
+  "agents": 1257354,
+  "peak": 201706,
+  "per_thing": 1863642.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fx2",
+  "start": "2026-09-28T08:02",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 6106167,
+  "main": 4646836,
+  "agents": 1459331,
+  "peak": 85677,
+  "per_thing": 1526541.75,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fx3",
+  "start": "2026-09-28T08:16",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 0,
+  "things": 3,
+  "total": 3210237,
+  "main": 2894882,
+  "agents": 315355,
+  "peak": 94434,
+  "per_thing": 1070079.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fx4",
+  "start": "2026-09-28T08:27",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 0,
+  "k": 3,
+  "things": 4,
+  "total": 2172156,
+  "main": 1738109,
+  "agents": 434047,
+  "peak": 60678,
+  "per_thing": 543039.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:sp1",
+  "start": "2026-09-28T08:33",
+  "sessions": 7,
+  "kinds": {
+   "write": 1,
+   "check": 6
+  },
+  "q": 11,
+  "m": 0,
+  "k": 0,
+  "things": 11,
+  "total": 20967844,
+  "main": 17170926,
+  "agents": 3796918,
+  "peak": 159406,
+  "per_thing": 1906167.6363636365,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:sp2",
+  "start": "2026-09-28T09:29",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 8,
+  "m": 0,
+  "k": 0,
+  "things": 8,
+  "total": 10864339,
+  "main": 9135812,
+  "agents": 1728527,
+  "peak": 100907,
+  "per_thing": 1358042.375,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:fin",
+  "start": "2026-09-28T09:56",
+  "sessions": 7,
+  "kinds": {
+   "check": 7
+  },
+  "q": 14,
+  "m": 0,
+  "k": 0,
+  "things": 14,
+  "total": 13540464,
+  "main": 9658048,
+  "agents": 3882416,
+  "peak": 89614,
+  "per_thing": 967176.0,
+  "complete": false
+ },
+ {
+  "group": "280:diagram-supplemental-2:w2",
+  "start": "2026-09-28T12:21",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 5,
+  "things": 10,
+  "total": 17579985,
+  "main": 15302149,
+  "agents": 2277836,
+  "peak": 219231,
+  "per_thing": 1757998.5,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:w1",
+  "start": "2026-09-28T12:53",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 11,
+  "things": 16,
+  "total": 18158516,
+  "main": 15320905,
+  "agents": 2837611,
+  "peak": 244098,
+  "per_thing": 1134907.25,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:f1",
+  "start": "2026-09-28T13:30",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 4,
+  "things": 8,
+  "total": 10221858,
+  "main": 8713397,
+  "agents": 1508461,
+  "peak": 143357,
+  "per_thing": 1277732.25,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:f3",
+  "start": "2026-09-28T13:54",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 6,
+  "things": 8,
+  "total": 15804566,
+  "main": 14918095,
+  "agents": 886471,
+  "peak": 209313,
+  "per_thing": 1975570.75,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:f2",
+  "start": "2026-09-28T14:30",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 4,
+  "things": 8,
+  "total": 13506945,
+  "main": 12284294,
+  "agents": 1222651,
+  "peak": 218918,
+  "per_thing": 1688368.125,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:h2",
+  "start": "2026-09-28T15:01",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 6,
+  "things": 11,
+  "total": 20648086,
+  "main": 18244201,
+  "agents": 2403885,
+  "peak": 226382,
+  "per_thing": 1877098.7272727273,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:h1",
+  "start": "2026-09-28T15:45",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 3,
+  "things": 7,
+  "total": 15100228,
+  "main": 13535839,
+  "agents": 1564389,
+  "peak": 221088,
+  "per_thing": 2157175.4285714286,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:y1",
+  "start": "2026-09-28T17:27",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 0,
+  "k": 5,
+  "things": 6,
+  "total": 6453523,
+  "main": 4554774,
+  "agents": 1898749,
+  "peak": 122118,
+  "per_thing": 1075587.1666666667,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:u1",
+  "start": "2026-09-28T17:48",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 9,
+  "things": 13,
+  "total": 12497146,
+  "main": 10397332,
+  "agents": 2099814,
+  "peak": 219016,
+  "per_thing": 961318.9230769231,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:r2",
+  "start": "2026-09-28T18:24",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 4,
+  "things": 6,
+  "total": 5923598,
+  "main": 4924895,
+  "agents": 998703,
+  "peak": 141510,
+  "per_thing": 987266.3333333334,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:r1",
+  "start": "2026-09-28T18:42",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 0,
+  "k": 7,
+  "things": 14,
+  "total": 17786208,
+  "main": 16216963,
+  "agents": 1569245,
+  "peak": 240221,
+  "per_thing": 1270443.4285714286,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:b1",
+  "start": "2026-09-28T19:15",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 5,
+  "things": 9,
+  "total": 9776669,
+  "main": 8539119,
+  "agents": 1237550,
+  "peak": 169069,
+  "per_thing": 1086296.5555555555,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:b2",
+  "start": "2026-09-28T19:37",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 4,
+  "things": 8,
+  "total": 8286079,
+  "main": 7121199,
+  "agents": 1164880,
+  "peak": 141103,
+  "per_thing": 1035759.875,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:a2",
+  "start": "2026-09-28T19:57",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 5,
+  "things": 9,
+  "total": 12808709,
+  "main": 11263067,
+  "agents": 1545642,
+  "peak": 217364,
+  "per_thing": 1423189.888888889,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:a1",
+  "start": "2026-09-28T20:33",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 6,
+  "things": 10,
+  "total": 12643998,
+  "main": 11293127,
+  "agents": 1350871,
+  "peak": 132877,
+  "per_thing": 1264399.8,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:t3",
+  "start": "2026-09-28T21:17",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 9,
+  "things": 12,
+  "total": 9018575,
+  "main": 7855383,
+  "agents": 1163192,
+  "peak": 178268,
+  "per_thing": 751547.9166666666,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:t1",
+  "start": "2026-09-28T21:38",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 7,
+  "things": 10,
+  "total": 13428427,
+  "main": 11920801,
+  "agents": 1507626,
+  "peak": 182690,
+  "per_thing": 1342842.7,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:t2",
+  "start": "2026-09-28T22:23",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 6,
+  "things": 9,
+  "total": 7294098,
+  "main": 6198453,
+  "agents": 1095645,
+  "peak": 149790,
+  "per_thing": 810455.3333333334,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:u4",
+  "start": "2026-09-28T22:40",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 5,
+  "things": 7,
+  "total": 9329220,
+  "main": 7831486,
+  "agents": 1497734,
+  "peak": 133226,
+  "per_thing": 1332745.7142857143,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:u2",
+  "start": "2026-09-28T23:04",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 6,
+  "things": 11,
+  "total": 10969924,
+  "main": 9893003,
+  "agents": 1076921,
+  "peak": 171765,
+  "per_thing": 997265.8181818182,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:u3",
+  "start": "2026-09-28T23:32",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 8,
+  "things": 13,
+  "total": 14888478,
+  "main": 13169740,
+  "agents": 1718738,
+  "peak": 202818,
+  "per_thing": 1145267.5384615385,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:c1",
+  "start": "2026-09-29T00:01",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 5,
+  "things": 9,
+  "total": 12509736,
+  "main": 11016786,
+  "agents": 1492950,
+  "peak": 169304,
+  "per_thing": 1389970.6666666667,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:c2",
+  "start": "2026-09-29T00:29",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 3,
+  "things": 7,
+  "total": 9515710,
+  "main": 8343486,
+  "agents": 1172224,
+  "peak": 156965,
+  "per_thing": 1359387.142857143,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:c3",
+  "start": "2026-09-29T00:51",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 5,
+  "things": 8,
+  "total": 11277172,
+  "main": 10335240,
+  "agents": 941932,
+  "peak": 161062,
+  "per_thing": 1409646.5,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:r3",
+  "start": "2026-09-29T01:15",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 7,
+  "things": 10,
+  "total": 10203123,
+  "main": 9162748,
+  "agents": 1040375,
+  "peak": 167443,
+  "per_thing": 1020312.3,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:b3",
+  "start": "2026-09-29T01:36",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 7,
+  "things": 10,
+  "total": 12856225,
+  "main": 11492647,
+  "agents": 1363578,
+  "peak": 185129,
+  "per_thing": 1285622.5,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:f4",
+  "start": "2026-09-29T02:05",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 3,
+  "things": 6,
+  "total": 12318588,
+  "main": 11636069,
+  "agents": 682519,
+  "peak": 254521,
+  "per_thing": 2053098.0,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:w3",
+  "start": "2026-09-29T02:28",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 3,
+  "things": 5,
+  "total": 6464070,
+  "main": 5644247,
+  "agents": 819823,
+  "peak": 148746,
+  "per_thing": 1292814.0,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:w4",
+  "start": "2026-09-29T02:44",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 7,
+  "things": 9,
+  "total": 12030751,
+  "main": 10749452,
+  "agents": 1281299,
+  "peak": 227471,
+  "per_thing": 1336750.111111111,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:h3",
+  "start": "2026-09-29T03:07",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 6,
+  "things": 12,
+  "total": 16147851,
+  "main": 14063828,
+  "agents": 2084023,
+  "peak": 222678,
+  "per_thing": 1345654.25,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:h4",
+  "start": "2026-09-29T03:47",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 3,
+  "things": 6,
+  "total": 12288511,
+  "main": 10892935,
+  "agents": 1395576,
+  "peak": 198361,
+  "per_thing": 2048085.1666666667,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:h5",
+  "start": "2026-09-29T04:15",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 0,
+  "k": 5,
+  "things": 12,
+  "total": 12926563,
+  "main": 11906573,
+  "agents": 1019990,
+  "peak": 188476,
+  "per_thing": 1077213.5833333333,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:v1",
+  "start": "2026-09-29T04:47",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 0,
+  "k": 5,
+  "things": 12,
+  "total": 14228294,
+  "main": 11194673,
+  "agents": 3033621,
+  "peak": 163156,
+  "per_thing": 1185691.1666666667,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:finish-a2b",
+  "start": "2026-09-29T05:23",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 0,
+  "k": 0,
+  "things": 0,
+  "total": 1817676,
+  "main": 1147014,
+  "agents": 670662,
+  "peak": 57757,
+  "per_thing": null,
+  "complete": false
+ },
+ {
+  "group": "280:diagram-supplemental-2:finish-f1a",
+  "start": "2026-09-29T05:28",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 0,
+  "k": 0,
+  "things": 0,
+  "total": 2082050,
+  "main": 1481604,
+  "agents": 600446,
+  "peak": 62696,
+  "per_thing": null,
+  "complete": false
+ },
+ {
+  "group": "280:diagram-supplemental-2:recheck-merge",
+  "start": "2026-09-29T05:33",
+  "sessions": 1,
+  "kinds": {
+   "other": 1
+  },
+  "q": 0,
+  "m": 0,
+  "k": 0,
+  "things": 0,
+  "total": 1800263,
+  "main": 1483723,
+  "agents": 316540,
+  "peak": 55775,
+  "per_thing": null,
+  "complete": false
+ },
+ {
+  "group": "280:diagram-supplemental-2:v3",
+  "start": "2026-09-29T05:55",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 5,
+  "things": 11,
+  "total": 12805461,
+  "main": 11145626,
+  "agents": 1659835,
+  "peak": 183870,
+  "per_thing": 1164132.8181818181,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:v2",
+  "start": "2026-09-29T06:24",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 2,
+  "things": 6,
+  "total": 9668709,
+  "main": 8224801,
+  "agents": 1443908,
+  "peak": 151721,
+  "per_thing": 1611451.5,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:a3",
+  "start": "2026-09-29T06:49",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 5,
+  "things": 9,
+  "total": 14253668,
+  "main": 12413081,
+  "agents": 1840587,
+  "peak": 179315,
+  "per_thing": 1583740.888888889,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:a4",
+  "start": "2026-09-29T07:18",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 2,
+  "things": 6,
+  "total": 11354311,
+  "main": 9561206,
+  "agents": 1793105,
+  "peak": 156801,
+  "per_thing": 1892385.1666666667,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:r4",
+  "start": "2026-09-29T07:44",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 3,
+  "things": 8,
+  "total": 16948421,
+  "main": 14090150,
+  "agents": 2858271,
+  "peak": 206150,
+  "per_thing": 2118552.625,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:t4",
+  "start": "2026-09-29T08:30",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 6,
+  "things": 9,
+  "total": 12737699,
+  "main": 11557547,
+  "agents": 1180152,
+  "peak": 201460,
+  "per_thing": 1415299.888888889,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:c5",
+  "start": "2026-09-29T08:58",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 5,
+  "things": 9,
+  "total": 16502429,
+  "main": 14807973,
+  "agents": 1694456,
+  "peak": 187486,
+  "per_thing": 1833603.2222222222,
+  "complete": true
+ },
+ {
+  "group": "280:diagram-supplemental-2:r5",
+  "start": "2026-09-29T09:37",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 2,
+  "things": 4,
+  "total": 10175335,
+  "main": 9064124,
+  "agents": 1111211,
+  "peak": 174745,
+  "per_thing": 2543833.75,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r1",
+  "start": "2026-09-29T14:45",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 0,
+  "things": 3,
+  "total": 5738034,
+  "main": 4909597,
+  "agents": 828437,
+  "peak": 108939,
+  "per_thing": 1912678.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r2",
+  "start": "2026-09-29T15:03",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 0,
+  "things": 2,
+  "total": 2451420,
+  "main": 1806128,
+  "agents": 645292,
+  "peak": 57979,
+  "per_thing": 1225710.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r3",
+  "start": "2026-09-29T15:10",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 0,
+  "k": 0,
+  "things": 1,
+  "total": 896865,
+  "main": 703608,
+  "agents": 193257,
+  "peak": 28637,
+  "per_thing": 896865.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r4",
+  "start": "2026-09-29T15:15",
+  "sessions": 1,
+  "kinds": {
+   "split": 1
+  },
+  "q": 0,
+  "m": 1,
+  "k": 0,
+  "things": 1,
+  "total": 1146114,
+  "main": 1039479,
+  "agents": 106635,
+  "peak": 77347,
+  "per_thing": 1146114.0,
+  "complete": false
+ },
+ {
+  "group": "291:diagram-readability-2:r5",
+  "start": "2026-09-29T17:57",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 4195040,
+  "main": 3150818,
+  "agents": 1044222,
+  "peak": 63263,
+  "per_thing": 1048760.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r6",
+  "start": "2026-09-29T21:30",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 3,
+  "m": 0,
+  "k": 0,
+  "things": 3,
+  "total": 13095900,
+  "main": 11760575,
+  "agents": 1335325,
+  "peak": 256683,
+  "per_thing": 4365300.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r7",
+  "start": "2026-09-29T23:54",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 9910839,
+  "main": 8982137,
+  "agents": 928702,
+  "peak": 149345,
+  "per_thing": 2477709.75,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r8",
+  "start": "2026-09-30T00:52",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 0,
+  "k": 0,
+  "things": 1,
+  "total": 2045385,
+  "main": 1849433,
+  "agents": 195952,
+  "peak": 57155,
+  "per_thing": 2045385.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r9",
+  "start": "2026-09-30T02:30",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 0,
+  "k": 0,
+  "things": 1,
+  "total": 1308311,
+  "main": 1125281,
+  "agents": 183030,
+  "peak": 45733,
+  "per_thing": 1308311.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r10",
+  "start": "2026-09-30T03:01",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 0,
+  "things": 2,
+  "total": 5477480,
+  "main": 4125171,
+  "agents": 1352309,
+  "peak": 89007,
+  "per_thing": 2738740.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r11",
+  "start": "2026-09-30T04:33",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 0,
+  "k": 0,
+  "things": 1,
+  "total": 1390178,
+  "main": 1212014,
+  "agents": 178164,
+  "peak": 46955,
+  "per_thing": 1390178.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r12",
+  "start": "2026-09-30T05:27",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 0,
+  "things": 2,
+  "total": 15376430,
+  "main": 12172410,
+  "agents": 3204020,
+  "peak": 215924,
+  "per_thing": 7688215.0,
+  "complete": true
+ },
+ {
+  "group": "291:diagram-readability-2:r13",
+  "start": "2026-09-30T10:55",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 0,
+  "things": 2,
+  "total": 3278566,
+  "main": 2860510,
+  "agents": 418056,
+  "peak": 100108,
+  "per_thing": 1639283.0,
+  "complete": true
+ },
+ {
+  "group": "317:diagram-performance:r1",
+  "start": "2026-10-03T03:28",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 15,
+  "k": 0,
+  "things": 16,
+  "total": 23832511,
+  "main": 18920601,
+  "agents": 4911910,
+  "peak": 303709,
+  "per_thing": 1489531.9375,
+  "complete": true
+ },
+ {
+  "group": "317:diagram-performance:r2",
+  "start": "2026-10-03T05:24",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 6,
+  "k": 0,
+  "things": 7,
+  "total": 41181996,
+  "main": 32936093,
+  "agents": 8245903,
+  "peak": 331932,
+  "per_thing": 5883142.285714285,
+  "complete": true
+ }
+]

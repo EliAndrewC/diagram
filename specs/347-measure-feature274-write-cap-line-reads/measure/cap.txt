@@ -1,0 +1,19 @@
+  319:diagram-html:h1: 7 questions, 0 keys reserved
+  319:diagram-html:h12: 5 questions, 0 keys reserved
+  319:diagram-html:h5: 6 questions, 0 keys reserved
+  319:diagram-html:h8: 8 questions, 0 keys reserved
+  319:diagram-html-2:h3: 6 questions, 0 keys reserved
+  319:diagram-html-2:h4: 6 questions, 0 keys reserved
+  319:diagram-html-2:h11: 6 questions, 0 keys reserved
+  319:diagram-html-2:h10: 6 questions, 0 keys reserved
+  319:diagram-html-3:h9: 5 questions, 0 keys reserved
+  319:diagram-html-3:h13: 5 questions, 0 keys reserved
+  319:diagram-html-3:h14: 5 questions, 0 keys reserved
+286 write sessions after the landing: 5 declared an exempt page-load; 11 counted over 4 questions undeclared; 0 reserved over 10 registry keys; briefs no longer on disk (questions uncounted) {'319': 0, '317': 0, '291': 0, '292': 196, '269': 0, '280': 0}; cap escapes logged 143:
+     4 write-cap diagram-html: each brief edits at most four questions; the counter reads modal names in quoted conflict lines as questions
+     5 write-cap diagram-html: each brief edits at most four questions; the counter reads modal names in the quoted conflict lines as questio
+     4 write-cap diagram-html-2: each brief edits at most four questions; the counter reads modal names in quoted conflict lines as questions
+     3 write-cap diagram-html-3: each brief edits at most four questions; the counter reads modal names in quoted conflict lines as questions
+    51 write-cap diagram-reorg: a topic folds more than four old sections into one; a merge cannot be split across sessions (feature 292 plan 
+    62 write-cap diagram-reorg-2: a topic folds more than four old sections into one; a merge cannot be split across sessions (feature 292 plan 
+    14 write-cap diagram-reorg-3: a topic folds more than four old sections into one; a merge cannot be split across sessions (feature 292 plan 

@@ -42,6 +42,7 @@ CODE_REF = re.compile(r"[\w/.-]+\.(?:py|json|md|js|svg|txt|sh)(?::[\d,-]+)?|\b[a
 Q_LIST = re.compile(r"Q=(\d{4}(?:\s*,\s*\d{4})*)")
 NUMBER = re.compile(r"(?<![\d.])\d{4}(?![\d])")
 ITEM_ID = re.compile(r"\b[A-Z]{1,2}\d{2,3}\b")
+LEAD_IDS = re.compile(r"(?:\s*,?\s*[A-Z]{1,2}\d{2,3}(?:-[A-Z]{1,2}\d{2,3})?\b)+")
 
 
 def stems(record: pathlib.Path) -> set[int]:
@@ -90,8 +91,11 @@ def count(text: str, record: pathlib.Path) -> tuple[int, list[str]]:
         if got:
             found |= got
         else:
-            ids = list(dict.fromkeys(ITEM_ID.findall(line.split("**")[0])))
-            new += ids or [line[2:].split()[0]]
+            # The ids that LEAD the line are its questions ("- A133 A135 D49 D52-D56 ..." assigns each); an id later in
+            # its prose is a citation ("B16's finding"), and counting those made 269's FX1 six where it had four
+            # (feature 347's measurement).
+            head = LEAD_IDS.match(line[2:])
+            new += list(dict.fromkeys(ITEM_ID.findall(head.group(0)))) if head else [line[2:].split()[0]]
     detail = [f"{n:04d}" for n in sorted(found)] + new
     return len(found) + len(new), detail
 

@@ -1,0 +1,249 @@
+[
+ {
+  "group": "269:diagram-supplemental:h1",
+  "start": "2026-09-27T05:56",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 9,
+  "things": 15,
+  "total": 17539681,
+  "main": 15334084,
+  "agents": 2205597,
+  "peak": 266031,
+  "per_thing": 1169312.0666666667,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:v1",
+  "start": "2026-09-27T07:08",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 13,
+  "things": 19,
+  "total": 23216432,
+  "main": 17422053,
+  "agents": 5794379,
+  "peak": 226404,
+  "per_thing": 1221917.4736842106,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:h2",
+  "start": "2026-09-27T07:55",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 3,
+  "m": 0,
+  "k": 4,
+  "things": 7,
+  "total": 9837423,
+  "main": 8491376,
+  "agents": 1346047,
+  "peak": 153636,
+  "per_thing": 1405346.142857143,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:f1",
+  "start": "2026-09-27T08:18",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 4
+  },
+  "q": 7,
+  "m": 5,
+  "k": 12,
+  "things": 24,
+  "total": 25513561,
+  "main": 22177391,
+  "agents": 3336170,
+  "peak": 246365,
+  "per_thing": 1063065.0416666667,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:w1",
+  "start": "2026-09-27T09:06",
+  "sessions": 5,
+  "kinds": {
+   "write": 1,
+   "check": 3,
+   "finish": 1
+  },
+  "q": 5,
+  "m": 0,
+  "k": 15,
+  "things": 20,
+  "total": 18022265,
+  "main": 15545083,
+  "agents": 2477182,
+  "peak": 193755,
+  "per_thing": 901113.25,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:f2",
+  "start": "2026-09-27T09:52",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 5,
+  "m": 0,
+  "k": 10,
+  "things": 15,
+  "total": 15853555,
+  "main": 14152600,
+  "agents": 1700955,
+  "peak": 220736,
+  "per_thing": 1056903.6666666667,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:v2",
+  "start": "2026-09-27T10:20",
+  "sessions": 7,
+  "kinds": {
+   "write": 1,
+   "check": 6
+  },
+  "q": 12,
+  "m": 0,
+  "k": 10,
+  "things": 22,
+  "total": 35862420,
+  "main": 29811744,
+  "agents": 6050676,
+  "peak": 274115,
+  "per_thing": 1630110.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:a1",
+  "start": "2026-09-27T12:00",
+  "sessions": 6,
+  "kinds": {
+   "write": 1,
+   "check": 5
+  },
+  "q": 9,
+  "m": 0,
+  "k": 9,
+  "things": 18,
+  "total": 19569800,
+  "main": 16768044,
+  "agents": 2801756,
+  "peak": 207099,
+  "per_thing": 1087211.111111111,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:r1",
+  "start": "2026-09-27T13:06",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 7,
+  "things": 13,
+  "total": 18358501,
+  "main": 15698190,
+  "agents": 2660311,
+  "peak": 210325,
+  "per_thing": 1412192.3846153845,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:h3",
+  "start": "2026-09-27T16:48",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 10,
+  "things": 16,
+  "total": 19168524,
+  "main": 17269921,
+  "agents": 1898603,
+  "peak": 223543,
+  "per_thing": 1198032.75,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:f3",
+  "start": "2026-09-27T17:37",
+  "sessions": 3,
+  "kinds": {
+   "write": 1,
+   "check": 2
+  },
+  "q": 4,
+  "m": 0,
+  "k": 10,
+  "things": 14,
+  "total": 8095024,
+  "main": 6692001,
+  "agents": 1403023,
+  "peak": 142712,
+  "per_thing": 578216.0,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:w2",
+  "start": "2026-09-27T21:45",
+  "sessions": 4,
+  "kinds": {
+   "write": 1,
+   "check": 3
+  },
+  "q": 6,
+  "m": 0,
+  "k": 4,
+  "things": 10,
+  "total": 16286415,
+  "main": 13887700,
+  "agents": 2398715,
+  "peak": 186946,
+  "per_thing": 1628641.5,
+  "complete": true
+ },
+ {
+  "group": "269:diagram-supplemental:a2",
+  "start": "2026-09-27T22:26",
+  "sessions": 1,
+  "kinds": {
+   "write": 1
+  },
+  "q": 6,
+  "m": 0,
+  "k": 11,
+  "things": 17,
+  "total": 8314007,
+  "main": 7877121,
+  "agents": 436886,
+  "peak": 220241,
+  "per_thing": 489059.23529411765,
+  "complete": false
+ }
+]
