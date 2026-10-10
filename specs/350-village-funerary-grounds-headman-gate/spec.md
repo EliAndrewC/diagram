@@ -1,6 +1,8 @@
-# Feature Specification: OPEN 2026-09-28, OWED AT CONVERSION: a village's funerary grounds (was feature 275, withdrawn), and the headman's gate
+# Feature Specification: OPEN 2026-09-28: a village's funerary grounds (was feature 275, withdrawn), and the headman's gate
 
 **Status**: Filed - from future-work/farming-communities.md, "OPEN 2026-09-28, OWED AT CONVERSION: a village's funerary grounds (was feature 275, withdrawn), and the headman's gate", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+
+**Owed at**: village
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

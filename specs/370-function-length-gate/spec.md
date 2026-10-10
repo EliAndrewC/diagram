@@ -2,6 +2,8 @@
 
 **Status**: Filed - 2026-10-08, found while closing feature 111
 
+**Owed at**: now
+
 **Input**: the GM, closing feature 111 (2026-10-08, verbatim): *"You can close feature 111 because we've replaced
 "decompose for readability" with a mechanical cap on function length and file length."*
 

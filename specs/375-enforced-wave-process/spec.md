@@ -3,6 +3,9 @@
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
 **Status**: Filed - to be taken before feature 374's first wave
+
+**Owed at**: now
+
 **Input**: `request.md` (the GM, 2026-10-10)
 
 ## Why

@@ -1,6 +1,8 @@
-# Feature Specification: OWED AT CONVERSION (269's research, 2026-09-28): what the scripted city generator must draw differently
+# Feature Specification: What the scripted city generator must draw differently (269's research, 2026-09-28)
 
 **Status**: Filed - from future-work/cities.md, "OWED AT CONVERSION (269's research, 2026-09-28): what the scripted city generator must draw differently", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+
+**Owed at**: provincial city
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

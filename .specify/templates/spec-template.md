@@ -6,6 +6,8 @@
 
 **Status**: Draft
 
+**Owed at**: [now | village | town | provincial city | capital - the earliest stage that needs it]
+
 **Input**: User description: "$ARGUMENTS"
 
 ## User Scenarios & Testing *(mandatory)*

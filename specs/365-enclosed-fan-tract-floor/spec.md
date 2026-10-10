@@ -1,6 +1,8 @@
-# Feature Specification: OWED AT CONVERSION: the enclosed-fan tract floor (GM decision 2026-08-03)
+# Feature Specification: The enclosed-fan tract floor (GM decision 2026-08-03)
 
 **Status**: Filed - from future-work/towns.md, "OWED AT CONVERSION: the enclosed-fan tract floor (GM decision 2026-08-03)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+
+**Owed at**: town
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

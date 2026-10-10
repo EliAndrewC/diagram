@@ -2,6 +2,8 @@
 
 **Status**: Filed - from feature 325's ruling R1, 2026-10-08
 
+**Owed at**: now
+
 **Input**: the GM's ruling on feature 325 R1 (2026-10-08, verbatim): *"For feature 325 the answer is "spring / summer /
 autumn" i.e. when there is planting."*
 

@@ -2,6 +2,8 @@
 
 **Status**: Filed - from future-work/compounds.md, "Research owed (rewritten by feature 267, 2026-09-27)", piece 6, 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
+**Owed at**: now
+
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 
 Rewriting this into a full spec, a plan and tasks is the work of whoever picks it up (`/speckit-specify` on this directory); until then `make speckit-todo` lists it as filed.

@@ -126,3 +126,51 @@ def test_closed_by_status_reads_the_status_line_alone(tmp_path: Path, status: st
     assert st.closed_by_status(d) is closed
     r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--closed-by-status", str(d)], capture_output=True, text=True, check=False)
     assert r.stdout.strip() == ("yes" if closed else "no")
+
+
+@pytest.mark.parametrize(
+    ("line", "stage"),
+    [
+        ("**Owed at**: town", "town"),
+        ("**Owed at**: Provincial city - the governor's mansion", "provincial city"),
+        ("**Owed at:** now", "now"),
+        ("**Owed at**: [now | village | town | provincial city | capital - the earliest stage that needs it]", ""),
+        ("**Owed at**: cities", ""),
+        ("**Owed at**: townhouse", ""),
+        ("no line at all", ""),
+    ],
+)
+def test_the_stage_is_read_from_its_line(line: str, stage: str) -> None:
+    """The template's placeholder and a word that only begins like a stage name no stage (the GM, 2026-10-10)."""
+    assert st.owed_at(f"# Feature: x\n\n**Status**: Filed\n\n{line}\n") == stage
+
+
+def test_the_report_groups_each_state_by_stage_in_the_order_the_work_reaches_it(tmp_path: Path) -> None:
+    for name, owed in (("001-city", "capital"), ("002-town", "town"), ("003-now", "now"), ("004-none", None)):
+        d = _feature(tmp_path, name, "Filed", None, name)
+        if owed:
+            (d / "spec.md").write_text((d / "spec.md").read_text() + f"\n**Owed at**: {owed}\n")
+    out = st.report(tmp_path / "specs")
+    assert out.index("owed at now (1)") < out.index("003-now") < out.index("owed at town (1)") < out.index("002-town")
+    assert out.index("002-town") < out.index("owed at capital (1)") < out.index("001-city") < out.index("NO STAGE") < out.index("004-none")
+    assert "owed at village" not in out, "an empty stage prints no heading"
+
+
+def test_check_names_the_open_features_with_no_stage_and_the_line_to_add(tmp_path: Path) -> None:
+    _feature(tmp_path, "001-open", "Filed", None)
+    _feature(tmp_path, "002-closed", "Withdrawn (GM)", None)
+    d = _feature(tmp_path, "003-staged", "Filed", None)
+    (d / "spec.md").write_text((d / "spec.md").read_text() + "\n**Owed at**: village\n")
+    r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--root", str(tmp_path), "--check"], capture_output=True, text=True, check=False)
+    assert r.returncode == 1
+    assert "specs/001-open/spec.md" in r.stderr and "002-closed" not in r.stderr and "003-staged" not in r.stderr
+    assert "**Owed at**: now | village | town | provincial city | capital" in r.stderr
+    assert "a thing two tiers need is owed at the earlier one" in r.stderr
+    (tmp_path / "specs" / "001-open" / "spec.md").write_text("# Feature: x\n\n**Status**: Filed\n\n**Owed at**: now\n")
+    r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--root", str(tmp_path), "--check"], capture_output=True, text=True, check=False)
+    assert (r.returncode, r.stderr) == (0, "")
+
+
+def test_every_open_feature_in_the_repository_names_its_stage() -> None:
+    """The GM, 2026-10-10: every open feature says when it is owed, so the list can be read by stage."""
+    assert st.check_message(st.unstaged(REPO / "specs")) == ""

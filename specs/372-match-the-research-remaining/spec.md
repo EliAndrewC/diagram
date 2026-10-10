@@ -6,6 +6,8 @@
 
 **Status**: Draft (specified 2026-10-10 from its filed form)
 
+**Owed at**: now
+
 **Input**: `request.md` - feature 328's request, carried on: bring the implementation to the research it cites, easiest
 first, for the code the scripted hamlets, the magistracies and the country shrines execute; split off 328 at its wave 97
 (328's FR-011) and started at once, *"pick up where you left off"*.

@@ -1156,9 +1156,11 @@ claim:          ## [project] claim the next spec-kit feature number under the ho
 	python3 "$$(git rev-parse --show-toplevel)/scripts/claim-feature.py" $(if $(PEEK),--dry-run,) $(if $(RENUMBER),--renumber "$(RENUMBER)",-- "$(SLUG)")
 
 # GUARD_EDIT_OK: feature 330 adds an operation - read-only; nothing a guard decides changes.
-speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, planned, in progress - with their progress   [ALL=1: also the closed, and why]
+# GUARD_EDIT_OK: the GM 2026-10-10 - the open features grouped by the stage they are owed at; CHECK=1 is read-only too.
+speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, planned, in progress - by the stage each is owed at   [ALL=1: also the closed; CHECK=1: refuse an open feature with no stage]
 ##  ALL=1   also list the closed features and the reason each is closed
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/speckit-todo.py" --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,)
+##  CHECK=1 exit 1, with the line to add, when an open feature's spec has no `**Owed at**:` stage
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/speckit-todo.py" --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(CHECK),--check,)
 
 # GUARD_EDIT_OK: feature 251 - four new operations (the token census and the three script pre-passes that
 # take the mechanical part of a subagent check out of a model); no existing target or guard changes.

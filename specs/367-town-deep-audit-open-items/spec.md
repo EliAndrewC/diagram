@@ -1,6 +1,8 @@
-# Feature Specification: OWED AT CONVERSION: the town deep audit's open items (2026-07-24, against the frozen Hoshizora and Hirameki)
+# Feature Specification: The town deep audit's open items (2026-07-24, against the frozen Hoshizora and Hirameki)
 
 **Status**: Filed - from future-work/towns.md, "OWED AT CONVERSION: the town deep audit's open items (2026-07-24, against the frozen Hoshizora and Hirameki)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+
+**Owed at**: town
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

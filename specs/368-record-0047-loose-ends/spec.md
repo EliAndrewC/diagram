@@ -3,6 +3,8 @@
 **Status**: Filed - three defects in research/questions/0047-farm-privies-and-their-night-soil-benjo* that record-format
 noticed during feature 328's wave 61 and that lie outside that feature's scope (no engine claim rests on them).
 
+**Owed at**: now
+
 **Created**: 2026-10-08, from feature 328 wave 61 (spec-fidelity W61: "file them where open work lives").
 
 ## What is wrong

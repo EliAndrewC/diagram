@@ -2,6 +2,8 @@
 
 **Status**: Filed (2026-10-09, by feature 328's session) - not started.
 
+**Owed at**: now
+
 ## What and why
 
 Every review pass is owed a row of `dev/review-ledger.md`'s measured table with its cost (`docs/reviews.md`, feature 294),
