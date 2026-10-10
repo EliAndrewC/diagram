@@ -1,0 +1,6 @@
+{
+  "utc": "20261010T225528Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the snapshot predates round 2's notes and comment fixes; the review reads the regenerated pool folder"
+}

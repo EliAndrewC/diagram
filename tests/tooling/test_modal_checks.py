@@ -392,3 +392,25 @@ def test_a_check_reads_each_conditioned_item_with_its_condition() -> None:
 
 def test_several_conditions_read_as_one_clause() -> None:
     assert mb._conditions_shown("- [settlement_form=nucleated][lane_web=alleys] A.") == "- (only where settlement_form is nucleated and lane_web is alleys) A."
+
+
+def test_the_glyph_crop_shows_the_drawn_fill_never_the_highlight(tmp_path: pathlib.Path) -> None:
+    """Feature 374 FR-007 (carried from 372 wave 105): a glyph that fills the viewport is under the corner the mouse leaves
+    for, so the shot showed the page's highlight (the lit `g.f.on` fill), not the drawn fill. Red on the old script."""
+    import pytest  # noqa: PLC0415
+
+    pytest.importorskip("playwright")
+    page = tmp_path / "sheet.html"
+    page.write_text(
+        "<html><head><style>body{margin:0} g.f.on rect{fill:#FFC83C !important}</style></head><body>"
+        '<svg width="1200" height="900"><g class="f" data-k="kitchen"><rect x="0" y="0" width="1200" height="900" fill="#C9A57A"/></g></svg>'
+        "<script>document.querySelectorAll('g.f').forEach(g=>{g.addEventListener('mouseover',()=>g.classList.add('on'));"
+        "g.addEventListener('mouseout',()=>g.classList.remove('on'))})</script></body></html>"
+    )
+    out = tmp_path / "glyph.png"
+    assert mb.glyph_crop(page, "kitchen", out)
+    from PIL import Image  # noqa: PLC0415
+
+    with Image.open(out) as im:
+        r, g, b = im.convert("RGB").getpixel((im.width // 2, im.height // 2))
+    assert (r, g, b) == (0xC9, 0xA5, 0x7A), f"the crop shows {r:02X}{g:02X}{b:02X}, not the drawn fill"

@@ -1,0 +1,6 @@
+{
+  "utc": "20261010T221226Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the hooks run the mirror's element-only unit names while this clone's tooling keys a glyph check by element and map; the fix lands with this batch"
+}

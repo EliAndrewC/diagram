@@ -1,6 +1,5 @@
 """compound_parts.py - what the compound draft seats AROUND the placed masses (split out of `compound.py`, feature
-267): the faces of a building, the fire-water tubs, wells and privies at them, the house's service parts (the kitchen's
-corridor, the bath), the gates in the walls, the doors, and the roji - each seated against the masses the placer set
+267): the faces of a building, the fire-water tubs, wells and privies at them, the house's service part (the bath), the gates in the walls, the doors, and the roji - each seated against the masses the placer set
 down, clear of every one of them and of what was seated before it.
 """
 
@@ -13,7 +12,6 @@ from .buildings.types import by_tier
 from .compound_model import (
     BATH_H_FT,
     BATH_W_FT,
-    CORRIDOR_W_FT,
     DIVIDER_INK_FT,
     DOOR_D_FT,
     DOOR_FRACS,
@@ -40,7 +38,6 @@ from .compound_model import (
     Placed,
     PlaceResult,
     _gate_interval,
-    _kind_attr,
 )
 
 
@@ -321,24 +318,6 @@ def _abut(env: Envelope, p: Placed, w: float, h: float, boxes: list[Box]) -> tup
     return next(((x, y) for x, y in seats if _is_clear(env, boxes, x, y, w, h)), None)
 
 
-def _corridor(a: Placed, b: Placed, width: float, max_gap: float) -> Box | None:
-    """A covered corridor `width` wide across the gap between two buildings that face each other across no more than
-    `max_gap` ft (CORRIDOR_W_FT), centered on the run they share; None if they share no such run."""
-    lo, hi = max(a.x_ft, b.x_ft), min(a.x2, b.x2)
-    if hi - lo >= width:
-        top, bot = (a.y2, b.y_ft) if a.y2 <= b.y_ft else (b.y2, a.y_ft)
-        if 0 < bot - top <= max_gap:
-            mid = (lo + hi) / 2
-            return (mid - width / 2, top, mid + width / 2, bot)
-    lo, hi = max(a.y_ft, b.y_ft), min(a.y2, b.y2)
-    if hi - lo >= width:
-        left, right = (a.x2, b.x_ft) if a.x2 <= b.x_ft else (b.x2, a.x_ft)
-        if 0 < right - left <= max_gap:
-            mid = (lo + hi) / 2
-            return (left, mid - width / 2, right, mid + width / 2)
-    return None
-
-
 def _roomiest(points: list[tuple[float, float]], boxes: list[Box]) -> tuple[float, float]:
     """The point with the most open ground around it: the farthest from its SECOND-nearest box - every tub stands against
     the building it serves, so the nearest box says nothing - with a box holding the point (its own) not counted; the
@@ -442,8 +421,8 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     """The program's point features, seated by the composition (feature 254): fire-water tubs at every
     wooden building's court face (two at the kitchen), a well at the kitchen, the garden and the stables,
     a privy beside the barracks, the stables and the servants' row, the notice board outside the main gate -
-    and the house's service parts (feature 267): a covered corridor joining the kitchen to the residence, and
-    the bath as a small addition abutting the kitchen's court face. The placer arranges the wall-ranging masses; these follow them, each
+    and the house's service part (feature 267): the bath as a small addition abutting the kitchen's court face (the
+    kitchen itself is an ell the placer abuts to the house, `BuildingSpec.joins`). The placer arranges the wall-ranging masses; these follow them, each
     seated at the first spot along its building's court face that is CLEAR of every mass and of every
     feature already seated - a draft swept by the gate carries the whole program, not the masses alone."""
     env = program.envelope
@@ -481,12 +460,6 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     tubs: list[tuple[float, float]] = []
     wells: list[tuple[float, float]] = []
     privies: list[tuple[float, float, str]] = []  # center, and the building it is a part of (an attached privy)
-    # The kitchen is part of the house: a short covered corridor joins it to the residence where they face each other
-    # across a fire-gap (CORRIDOR_W_FT), drawn as a part of the residence
-    if "kitchen" in by_name and "residence" in by_name and (cor := _corridor(by_name["kitchen"], by_name["residence"], CORRIDOR_W_FT, FIRE_GAP_FT)):
-        taken.append(cor)
-        fill, stroke = KINDS["lord"]
-        parts += [f"<g{_kind_attr('residence')}>", rect(cor[0], cor[1], cor[2] - cor[0], cor[3] - cor[1], fill, stroke, 1.2, "", "residence corridor"), "</g>"]
     # The bath is a small addition abutting the kitchen's court face - the house's service side (BATH_W_FT); seated
     # before the wells so the kitchen well takes what the bath leaves, and clear of every spine court, since a bath in
     # the garden is the pavilion the research does not find
@@ -599,8 +572,8 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             corners = [corner for side, c in doors.get(p.spec.name, []) for corner in round_the_corner(p, side, c)]
             tub = tub or next((t for adj, frac in corners if (t := seat(p, 2.6, (frac,), (2.5,), adj))), None)
             tub = tub or seat(p, 2.6, (0.15, 0.85, 0.4, 0.6, 0.05, 0.95, 0.03, 0.97), (2.5,))
-            # (the west or north end before the east or south: the example's kitchen's east end faces the closed slot
-            # north of its corridor to the house, its west end the servants' yard)
+            # (the west or north end before the east or south: the example's kitchen's east end abuts the house, its
+            # west end the servants' yard)
             tub = tub or seat(p, 2.6, toward_court, (2.5,), ends[1]) or seat(p, 2.6, toward_court, (2.5,), ends[0])
             # EVERY SEAT OFFERED STANDS BY ITS EAVES (feature 287, homes H29b): 2.5 ft off the face is inside the gutter's
             # reach by construction - held here by the rule's one predicate, the number the pack audit registers
@@ -643,7 +616,7 @@ def _draw_point_parts(
         for tx, ty in tubs:  # every tub is drawn - and so is an obstacle to every caption
             rect(tx - 1.27, ty - 1.27, 2.54, 2.54, "none", "none", 0)  # registers the tub; its drawn circle follows
         # the group's one caption goes on the tub with the most open ground around it: the first tub can stand hemmed
-        # in (the residence's, between the wall, the kitchen and their corridor), and a caption pushed off it is
+        # in (the residence's, between the wall and the kitchen), and a caption pushed off it is
         # drawn far from any tub it names - a group's name stands beside one of the glyphs it names
         tx, ty = _roomiest(tubs, taken)
         caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs")

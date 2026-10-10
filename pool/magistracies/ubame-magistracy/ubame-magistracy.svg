@@ -115,7 +115,7 @@
     <!-- North -->
     <line x1="200" y1="150" x2="1070" y2="150"/>
     <!-- West (broken by the kitchen postern at y=306..326 - a ~6.7 ft handcart door
-         opening into the service alley BETWEEN residence and kitchen, not the kitchen's flank) -->
+         opening into the kitchen yard west of the kitchen ell) -->
     <line x1="200" y1="150" x2="200" y2="301.5"/>
     <line x1="200" y1="330.5" x2="200" y2="750"/>
     <!-- East: BROKEN around the parley room (y=470..536), which is part of the wall,
@@ -565,8 +565,8 @@
   <!-- Residence: two offset blocks (gankō / flying-geese massing), family only.
        The EAST block carries the public half - Koharu's quarters, the guest room, and the
        reception at the east end - facing the inner garden, the guest's roji ending at the
-       reception's veranda; the private family end sits west, beside the kitchen, which joins
-       it by a covered corridor across the service alley. -->
+       reception's veranda; the private family end sits west, the kitchen an ell projecting
+       south from the family quarters, with no corridor (feature 374 wave 113). -->
   <g data-kind="residence">
     <!-- West block: shuttered wing, family quarters, inner rooms (the lineage alcove is with the reception since
          feature 267 R05) -->
@@ -576,7 +576,11 @@
     <rect data-id="inner-rooms-1" x="432" y="218" width="90" height="76" fill="#DDB87A" data-kind="inner rooms"/>
     <rect data-id="residence-3" x="252" y="218" width="270" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <rect data-id="shuttered-wing-1" x="252" y="218" width="90" height="76" fill="#C9B489" stroke="#5A3F1E" stroke-width="2.5" data-kind="shuttered wing"/>
-    <rect x="252" y="294" width="270" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <!-- the veranda along each block's garden (south) face alone: the faces knob's roll, random.Random(zlib.crc32(
+         b"ubame-magistracy:residence veranda faces")).choice(["garden face alone", "two or three faces"]) = garden face
+         alone (feature 374 wave 112, 0102's drawing page); 4 ft deep, 12 px, within 0102's 3-6 ft (it was 8 px, 2.7 ft) -->
+    <rect x="252" y="294" width="90" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <rect x="414" y="294" width="108" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line data-id="residence-4" x1="342" y1="218" x2="342" y2="294" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line data-id="residence-1" x1="432" y1="218" x2="432" y2="294" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <g data-kind="shuttered wing">
@@ -587,7 +591,7 @@
         <line x1="326" y1="224" x2="326" y2="288"/>
       </g>
     </g>
-    <rect x="376" y="294" width="26" height="8" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <rect x="430" y="294" width="26" height="8" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <g data-kind="shuttered wing">
       <text font-size="9.5" font-weight="bold" fill="#3A2E1C" data-names="shuttered-wing-1"><tspan>shuttered</tspan><tspan>wing</tspan></text>
     </g>
@@ -609,7 +613,7 @@
     <rect data-id="guest-quarters-1" x="634" y="238" width="102" height="76" fill="#DDB87A" data-kind="guest quarters"/>
     <rect data-id="reception-room-1" x="736" y="238" width="102" height="76" fill="#DDB87A" data-kind="reception room"/>
     <rect data-id="residence-6" x="532" y="238" width="306" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
-    <rect x="532" y="314" width="306" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <rect x="532" y="314" width="306" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line data-id="residence-7" x1="634" y1="238" x2="634" y2="314" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line data-id="residence-8" x1="736" y1="238" x2="736" y2="314" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <g data-kind="lord's quarters">
@@ -633,53 +637,57 @@
     <text font-size="7.5" font-style="italic" fill="#5C4830" data-names="latrine-2">latrine</text>
   </g>
 
-  <!-- Kitchen + pantries (west range) -->
+  <!-- Kitchen + pantries - 24 x 18 ft (72 x 54 px), an ELL of the house (feature 374 wave 113): the one kitchen measured,
+       the Kuchiba house's east wing, is about 12 tsubo (~440 sq ft), about a sixth of the house, and a middle-rank house
+       was one block, its kitchen projecting from one side, with almost no corridors
+       (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html); the size taken from it is a GUESS, as 0091's drawing page holds a kitchen's size. It projects
+       south from the west block under the family quarters, the lived rooms (building-review 2026-10-10 E2: under the
+       shuttered wing it hung off the closed rooms, which this sheet's pass 3 had moved the old corridor off); it was
+       40 x 33 ft and stood across the service alley, joined by a covered corridor, now gone. -->
   <g data-kind="kitchen">
-    <rect x="214" y="330" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <!-- the doma: an earth-floored patch inside the kitchen, 24 x 18 ft, the service door opening onto it (feature
-         267 pass 2, R13, 0107; the sheet's knob is "on a small doma" and no doma was drawn) -->
-    <rect data-id="kitchen-1" x="216" y="332" width="72" height="54" fill="#B8A07A"/>
-    <!-- the kitchen door (katteguchi) on the north face, into the service alley the postern opens onto - the house's
-         service door (buildings 370); moved west onto the doma, clear of the corridor (feature 267 pass 2) -->
-    <rect x="256" y="324" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <!-- the hearth is a kamado range, ~6 x 2.7 ft with two fire mouths, on the doma (feature 267 R13, 0107:
-         a samurai kitchen cooked on a kamado; pass 2 halved the 10 x 4.3 ft range, twice a two-mouth kamado) -->
+    <rect x="342" y="294" width="72" height="54" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <!-- the doma: an earth-floored strip inside the kitchen along its west face, ~9 x 17 ft, the service door, the kamado
+         and the well on it (feature 267 R13, 0107; the sheet's knob is "on a small doma"; the record's one indoor well
+         stands in a doma, the Miwa house's - building-review 2026-10-10 Q1) -->
+    <rect data-id="kitchen-1" x="343" y="295" width="26" height="52" fill="#B8A07A"/>
+    <!-- the kitchen door (katteguchi) on the west face, onto the kitchen yard the postern opens into - the house's
+         service door (buildings 370) -->
+    <rect x="336" y="318" width="6" height="24" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <!-- the hearth is a kamado range, ~6 x 2.7 ft with two fire mouths, on the doma (feature 267 R13, 0107) -->
     <g data-kind="hearth">
-      <!-- a path, not a rect: at its true 18 x 8 px a dark rect is read by pack_audit as a door glyph
-           (DOOR_MAX_AREA_PX 250, #6B4030 in DARK_FILLS) and floating_doors fired on it - reported for the tool -->
-      <path d="M 222 350 h 18 v 8 h -18 z" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
-      <circle cx="227" cy="354" r="2.5" fill="#E68A40"/>
-      <circle cx="235" cy="354" r="2.5" fill="#E68A40"/>
+      <path d="M 347 334 h 18 v 8 h -18 z" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
+      <circle cx="352" cy="338" r="2.5" fill="#E68A40"/>
+      <circle cx="360" cy="338" r="2.5" fill="#E68A40"/>
     </g>
     <text font-size="13" font-weight="bold" fill="#3A2E1C" data-names="kitchen-1">kitchen</text>
     <text font-size="11" fill="#3A2E1C" data-cont="1">&amp; pantries</text>
-    <rect data-id="well-1" x="294" y="404" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
-    <circle data-id="well-2" cx="305" cy="415" r="6" fill="#2D2A24" data-kind="well"/>
+    <rect data-id="well-1" x="345" y="302" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
+    <circle data-id="well-2" cx="356" cy="313" r="6" fill="#2D2A24" data-kind="well"/>
     <text font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well" data-names="well-1 well-2">well</text>
   </g>
+  <!-- the kitchen yard: the ground between the west wall, the kitchen, its bath and the karo's house, where the kitchen
+       postern opens and the kitchen door gives (0107's drawing page: the door opens onto the way to the kitchen's yard;
+       building-review 2026-10-10 E3 - it stood bare once the old kitchen left it) -->
+  <g data-kind="inner court">
+    <polygon points="205,310 334,310 334,445 205,445" fill="none"/>
+    <text font-size="9" font-style="italic" fill="#7A6A4A">kitchen yard</text>
+  </g>
 
-  <!-- The kitchen joins the house: a short covered corridor, 4 ft wide, across the ~9 ft service alley (feature 267
-       pass 2, 0107/370: the kitchen is part of the house, its door the house's service door). Pass 3: an L
-       from the north end of the kitchen's east wall to the family quarters' veranda (x 346..358) - it landed at
-       x 320..332 on the shuttered wing's veranda, the closed rooms, and the bath moved south to free its way. -->
-  <path d="M 334 332 H 346 V 302 H 358 V 344 H 334 Z" fill="#DDB87A" stroke="#5A3F1E" stroke-width="1.5" data-kind="residence corridor" data-part-of="residence"/>
-
-  <!-- Bath: a small addition on the kitchen range's east wall, 10 x 11 ft (feature 267 R09, 0105: a room of
-       the residence or a small addition to it - the Takayama residence's with its well and kitchen - never a building
-       of its own; it was a pavilion in the yard). Pass 2 trimmed it from 13 x 10 ft; pass 3 moved it south of the
-       kitchen corridor, 4 ft clear of the karo's house (moved 4 ft east for it). The family reaches it through the
-       kitchen, so it has no door of its own. The size is a guess. The steam wisps went with the move: above the bath
-       they would cross the corridor. -->
+  <!-- Bath: a small addition on the kitchen's south wall (feature 374 wave 113: it moved with the smaller kitchen), 10 x 8 ft
+       (feature 372 wave 108, 0105 drawing page's guess; feature 267 R09, 0105: a room of the residence or a small addition to
+       it - never a building of its own). The family reaches it through the kitchen, so it has no door of its own; its tub
+       on its yard (south) side. -->
   <g data-kind="bath">
-    <rect x="334" y="348" width="30" height="24" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/><!-- feature 372 wave 108: 10 x 8 ft, 0105 drawing page's guess (it was 10 x 11) -->
+    <rect x="342" y="348" width="30" height="24" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/><!-- feature 372 wave 108: 10 x 8 ft, 0105 drawing page's guess (it was 10 x 11) -->
     <text font-size="10" font-weight="bold" fill="#3A2E1C">bath</text>
   </g>
 
   <!-- Karo's house - the house elder keeps a separate dwelling in the residence court (feature 267 pass 3: moved
-       12 px east, x 364 -> 376, to keep a 4 ft alley beside the bath) -->
+       12 px east, x 364 -> 376, to keep a 4 ft alley beside the bath; feature 374 wave 113, building-review round 2 E1:
+       12 px more, x 376 -> 388, when the bath moved with the kitchen: a 16 px (~5 ft) alley, measured) -->
   <g data-kind="karo's house">
-    <rect x="376" y="372" width="110" height="70" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
-    <rect x="426" y="368" width="10" height="8" fill="#4A3318" data-kind="door"/>
+    <rect x="388" y="372" width="110" height="70" fill="#DDB87A" stroke="#5A3F1E" stroke-width="2"/>
+    <rect x="438" y="368" width="10" height="8" fill="#4A3318" data-kind="door"/>
     <text font-size="11" font-weight="bold" fill="#3A2E1C">karo's house</text>
     <text font-size="8" font-style="italic" fill="#5C4830" data-cont="1">(the house elder)</text>
   </g>
@@ -743,7 +751,7 @@
       <ellipse cx="772.0" cy="335.5" rx="2.2" ry="1.7"/>
       <ellipse cx="778.6" cy="338.5" rx="2.2" ry="1.7"/>
       <ellipse cx="784.5" cy="332.5" rx="2.2" ry="1.7"/>
-      <rect id="shoe-stone" x="781" y="323" width="12" height="5" fill="#B8B0A0"/>
+      <rect id="shoe-stone" x="781" y="327" width="12" height="5" fill="#B8B0A0"/>
     </g>
     <!-- The roji is WALLED (research 0104: "a walled garden path"; at Koseki "the earthen wall encloses the
          roji in an L"): a low earthen wall, 1 ft, continuing the middle gate's posts north - the west wall to the
@@ -901,14 +909,16 @@
          from (794,348) with their buildings. Pass 3: the barracks' west tub from (708,552), where it pinched the east
          walk to ~4.7 ft, to the rowhouse's south face between two doors; the bath's from (370,345) to the bath's south
          face, and the karo's house's from (358,438) with their buildings -->
-    <circle cx="249" cy="322.5" r="3.8"/>
+    <!-- feature 374 wave 113: the kitchen pair either side of its west door (this one and the label's), the bath's on its
+         south face, each moved with the smaller kitchen -->
+    <circle cx="337.5" cy="312" r="3.8"/>
     <circle cx="352" cy="211" r="3.8"/>
-    <circle cx="411" cy="310" r="3.8"/>
-    <circle cx="366" cy="310" r="3.8"/>
+    <circle cx="425" cy="310" r="3.8"/>
+    <circle cx="461" cy="310" r="3.8"/>
     <circle cx="772" cy="330" r="3.8"/>
     <circle cx="801" cy="330" r="3.8"/>
-    <circle cx="412" cy="364.5" r="3.8"/>
-    <circle cx="349" cy="379.5" r="3.8"/>
+    <circle cx="424" cy="364.5" r="3.8"/>
+    <circle cx="357" cy="376.5" r="3.8"/>
     <circle cx="532" cy="336.5" r="3.8"/>
     <circle cx="966" cy="291.5" r="3.8"/>
     <circle cx="352.5" cy="532" r="3.8"/>
@@ -920,10 +930,10 @@
     <circle cx="952" cy="646" r="3.8"/>
     <circle cx="1025" cy="532" r="3.8"/>
   </g>
-  <!-- the tubs' name, grouped with the one tub it stands by (the kitchen's north-east corner): self-tagged, it took
+  <!-- the tubs' name, grouped with the one tub it stands by (the kitchen's, south of its west door): self-tagged, it took
        whichever tub stood nearest where it was written, and flipped between two on every pass (feature 267) -->
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">
-    <circle cx="287" cy="322.5" r="3.8"/>
+    <circle cx="337.5" cy="346" r="3.8"/>
     <text font-size="8" font-style="italic" stroke="none" fill="#3A5060">fire-water tubs</text>
   </g>
 </svg>

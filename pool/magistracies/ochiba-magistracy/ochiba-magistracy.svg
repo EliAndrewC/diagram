@@ -421,8 +421,10 @@
     <rect data-id="guest-quarters-1" x="340" y="287" width="135" height="75" fill="#DDB87A" data-kind="guest quarters"/>
     <rect data-id="reception-room-1" x="475" y="287" width="135" height="75" fill="#DDB87A" data-kind="reception room"/>
     <rect data-id="residence-2" x="340" y="212" width="270" height="150" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
-    <!-- the engawa along the garden (south) face only (R01) -->
-    <rect x="340" y="362" width="270" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <!-- the engawa along the garden (south) face only (R01): the faces knob's roll, random.Random(zlib.crc32(
+         b"ochiba-magistracy:residence veranda faces")).choice(["garden face alone", "two or three faces"]) = garden face
+         alone (feature 374 wave 112, 0102's drawing page); 4 ft deep, 12 px, within 0102's 3-6 ft (it was 8 px, 2.7 ft) -->
+    <rect x="340" y="362" width="270" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line data-id="residence-3" x1="340" y1="287" x2="610" y2="287" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line data-id="residence-4" x1="475" y1="212" x2="475" y2="362" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <!-- the period gradient runs formal (front) -> the lord -> the family deepest (omote, naka-oku, oku): the
@@ -445,27 +447,28 @@
     </g>
   </g>
 
-  <!-- Kitchen + pantries - 40x33 ft; a large institutional daidokoro (it feeds
-       household, clerks, and the watch), but kept SMALLER than the house's living
-       rows - the cookhouse does not out-foot the family's own quarters
-       (size-audit 2026-07). feature 267 pass 2: an ELL of the house, joined to
+  <!-- Kitchen + pantries - 24 x 18 ft (72 x 54 px; feature 374 wave 113, it was 40 x 33 ft): the one kitchen measured,
+       the Kuchiba house's east wing, is about 12 tsubo (~440 sq ft), about a sixth of the house, projecting from one
+       side of a one-block house (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html); the
+       size taken from it is a GUESS, as 0091's drawing page holds a kitchen's size. feature 267 pass 2: an ELL of the house, joined to
        the residence block's west end (research 0107/370: the kitchen door
        is the house's service door, and the Takayama residence lists its earth
        floor, kitchen, well and bath among its own rooms); it stood apart before,
        across a gap from the house. -->
   <g data-kind="kitchen" data-part-of="residence">
-    <rect data-id="kitchen-1" x="220" y="262" width="120" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <!-- the small DOMA (earth floor), ~24 x 18 ft, the kamado standing on it (R13, 0107). Pass 3 moved it to
+    <rect data-id="kitchen-1" x="268" y="308" width="72" height="54" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <!-- the small DOMA (earth floor), ~23 x 8 ft along the kitchen's south side (feature 374 wave 113: it was 24 x 18 ft,
+         the size the whole kitchen now is), the kamado standing on it (R13, 0107). Pass 3 moved it to
          the kitchen's SOUTH side (research 370: "one door to the outside, on its doma") so the door, the kamado and
          the well all stand on it; the board-floored pantries lie north of it. -->
-    <rect x="226" y="306" width="72" height="54" fill="#B8A07A"/>
+    <rect x="270" y="336" width="68" height="25" fill="#B8A07A"/>
     <!-- the hearth is a kamado range, two fire mouths, ~6 x 2.5 ft (feature 267 R13, 0107: a samurai kitchen
          cooked on a kamado; the sunken irori it drew once is the common house's). Pass 2: it was 10 x 4.3 ft, twice a
          two-mouth range. -->
     <g data-kind="hearth">
-      <rect x="234" y="314" width="18" height="8" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
-      <circle cx="239" cy="318" r="2.5" fill="#E68A40"/>
-      <circle cx="247" cy="318" r="2.5" fill="#E68A40"/>
+      <rect x="284" y="345" width="18" height="8" fill="#6B4030" stroke="#3A2010" stroke-width="0.8"/>
+      <circle cx="289" cy="349" r="2.5" fill="#E68A40"/>
+      <circle cx="297" cy="349" r="2.5" fill="#E68A40"/>
     </g>
     <text font-size="13" font-weight="bold" fill="#3A2E1C" data-names="kitchen-1">kitchen</text>
     <text font-size="11" fill="#3A2E1C" data-cont="1">&amp; pantries</text>
@@ -473,10 +476,10 @@
          come straight in from the postern, and the night-soil collector's way north up the strip inside the west wall
          passes beside it, not across its mouth (pass 2: the north-face door stood 2 ft off that path; pass 3 set it
          4 ft east so the SW tub stands clear of its mouth) -->
-    <rect x="244" y="362" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <rect x="276" y="362" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <!-- Kitchen well (the primary, busiest well - inside the kitchen, on the doma since pass 3) -->
-    <rect data-id="well-1" x="270" y="330" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
-    <circle data-id="well-2" cx="281" cy="341" r="6" fill="#2D2A24" data-kind="well"/>
+    <rect data-id="well-1" x="313" y="338" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
+    <circle data-id="well-2" cx="324" cy="349" r="6" fill="#2D2A24" data-kind="well"/>
     <text font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well" data-names="well-1 well-2">well</text>
   </g>
   <!-- feature 267 pass 2: the ground south of the kitchen ell is named for what it is - the postern's yard, the
@@ -587,7 +590,7 @@
          garden faces the reception rooms). It lies west of the nakamon-to-stone line, off the guests' way. -->
     <ellipse cx="537" cy="408" rx="40" ry="18" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- the stepping stone (kutsunugi-ishi) at the reception's veranda, on the line up from the nakamon -->
-    <rect id="shoe-stone" x="594" y="373" width="12" height="8" rx="2" fill="#9C9488" stroke="#5C5448" stroke-width="0.8"/>
+    <rect id="shoe-stone" x="594" y="377" width="12" height="8" rx="2" fill="#9C9488" stroke="#5C5448" stroke-width="0.8"/>
     <text font-size="10" font-style="italic" fill="#3A2E1C"><tspan>inner</tspan><tspan>garden</tspan></text>
   </g>
 
@@ -595,9 +598,9 @@
        of the residence or a small addition to it - the Takayama residence's with its well and kitchen - never a
        building of its own). Pass 2 moved it with the kitchen ell. The size is a guess. -->
   <g data-kind="bath">
-    <rect x="290" y="362" width="30" height="24" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/><!-- feature 372 wave 108: 10 x 8 ft, 0105 drawing page's guess (it was 13 x 11) -->
+    <rect x="310" y="362" width="30" height="24" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/><!-- feature 372 wave 108: 10 x 8 ft, 0105 drawing page's guess (it was 13 x 11); feature 374 wave 113: under the smaller kitchen's east end -->
     <!-- small steam plume suggestion -->
-    <path d="M 302 376 q 3 -8 -2 -14 M 316 376 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
+    <path d="M 320 383 q 3 -8 -2 -14 M 332 383 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
     <text font-size="12" font-weight="bold" fill="#3A2E1C">bath</text>
   </g>
 
@@ -729,11 +732,12 @@
          corners (the re-mass moved both), the gatehouse's at its shortened NW corner -->
     <!-- pass 3: the kitchen pair moved off the collector's strip inside the west wall (they pinched it to ~2.6 ft) to
          the ell's SW corner under its south eaves and its NE corner in the notch -->
-    <circle cx="226" cy="366" r="3.8"/>
-    <circle cx="275" cy="369.5" r="3.8"/>
+    <!-- feature 374 wave 113: the kitchen pair either side of its door, under the smaller kitchen's south eaves -->
+    <circle cx="264" cy="366.5" r="3.8"/>
+    <circle cx="304" cy="366.5" r="3.8"/>
     <circle cx="581" cy="470.5" r="3.8"/>
     <circle cx="331" cy="257.5" r="3.8"/>
-    <circle cx="305" cy="393.5" r="3.8"/>
+    <circle cx="325" cy="390.5" r="3.8"/>
     <circle cx="872.5" cy="231" r="3.8"/>
     <circle cx="939" cy="608.5" r="3.8"/>
     <circle cx="651" cy="710" r="3.8"/>
