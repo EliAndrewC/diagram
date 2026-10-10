@@ -576,7 +576,10 @@
     <rect data-id="inner-rooms-1" x="432" y="218" width="90" height="76" fill="#DDB87A" data-kind="inner rooms"/>
     <rect data-id="residence-3" x="252" y="218" width="270" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <rect data-id="shuttered-wing-1" x="252" y="218" width="90" height="76" fill="#C9B489" stroke="#5A3F1E" stroke-width="2.5" data-kind="shuttered wing"/>
-    <rect x="252" y="294" width="270" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <!-- the veranda along each block's garden (south) face alone: the faces knob's roll, random.Random(zlib.crc32(
+         b"ubame-magistracy:residence veranda faces")).choice(["garden face alone", "two or three faces"]) = garden face
+         alone (feature 374 wave 112, 0102's drawing page); 4 ft deep, 12 px, within 0102's 3-6 ft (it was 8 px, 2.7 ft) -->
+    <rect x="252" y="294" width="270" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line data-id="residence-4" x1="342" y1="218" x2="342" y2="294" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line data-id="residence-1" x1="432" y1="218" x2="432" y2="294" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <g data-kind="shuttered wing">
@@ -609,7 +612,7 @@
     <rect data-id="guest-quarters-1" x="634" y="238" width="102" height="76" fill="#DDB87A" data-kind="guest quarters"/>
     <rect data-id="reception-room-1" x="736" y="238" width="102" height="76" fill="#DDB87A" data-kind="reception room"/>
     <rect data-id="residence-6" x="532" y="238" width="306" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
-    <rect x="532" y="314" width="306" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <rect x="532" y="314" width="306" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line data-id="residence-7" x1="634" y1="238" x2="634" y2="314" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line data-id="residence-8" x1="736" y1="238" x2="736" y2="314" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <g data-kind="lord's quarters">
@@ -743,7 +746,7 @@
       <ellipse cx="772.0" cy="335.5" rx="2.2" ry="1.7"/>
       <ellipse cx="778.6" cy="338.5" rx="2.2" ry="1.7"/>
       <ellipse cx="784.5" cy="332.5" rx="2.2" ry="1.7"/>
-      <rect id="shoe-stone" x="781" y="323" width="12" height="5" fill="#B8B0A0"/>
+      <rect id="shoe-stone" x="781" y="327" width="12" height="5" fill="#B8B0A0"/>
     </g>
     <!-- The roji is WALLED (research 0104: "a walled garden path"; at Koseki "the earthen wall encloses the
          roji in an L"): a low earthen wall, 1 ft, continuing the middle gate's posts north - the west wall to the

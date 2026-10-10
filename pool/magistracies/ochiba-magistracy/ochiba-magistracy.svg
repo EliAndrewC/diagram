@@ -421,8 +421,10 @@
     <rect data-id="guest-quarters-1" x="340" y="287" width="135" height="75" fill="#DDB87A" data-kind="guest quarters"/>
     <rect data-id="reception-room-1" x="475" y="287" width="135" height="75" fill="#DDB87A" data-kind="reception room"/>
     <rect data-id="residence-2" x="340" y="212" width="270" height="150" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
-    <!-- the engawa along the garden (south) face only (R01) -->
-    <rect x="340" y="362" width="270" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <!-- the engawa along the garden (south) face only (R01): the faces knob's roll, random.Random(zlib.crc32(
+         b"ochiba-magistracy:residence veranda faces")).choice(["garden face alone", "two or three faces"]) = garden face
+         alone (feature 374 wave 112, 0102's drawing page); 4 ft deep, 12 px, within 0102's 3-6 ft (it was 8 px, 2.7 ft) -->
+    <rect x="340" y="362" width="270" height="12" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line data-id="residence-3" x1="340" y1="287" x2="610" y2="287" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line data-id="residence-4" x1="475" y1="212" x2="475" y2="362" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <!-- the period gradient runs formal (front) -> the lord -> the family deepest (omote, naka-oku, oku): the
@@ -587,7 +589,7 @@
          garden faces the reception rooms). It lies west of the nakamon-to-stone line, off the guests' way. -->
     <ellipse cx="537" cy="408" rx="40" ry="18" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- the stepping stone (kutsunugi-ishi) at the reception's veranda, on the line up from the nakamon -->
-    <rect id="shoe-stone" x="594" y="373" width="12" height="8" rx="2" fill="#9C9488" stroke="#5C5448" stroke-width="0.8"/>
+    <rect id="shoe-stone" x="594" y="377" width="12" height="8" rx="2" fill="#9C9488" stroke="#5C5448" stroke-width="0.8"/>
     <text font-size="10" font-style="italic" fill="#3A2E1C"><tspan>inner</tspan><tspan>garden</tspan></text>
   </g>
 
