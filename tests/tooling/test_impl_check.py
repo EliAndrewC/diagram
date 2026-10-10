@@ -117,4 +117,3 @@ def test_only_the_subject_line_names_the_feature(tmp_path: pathlib.Path) -> None
     _git(root, "add", "-A")
     _git(root, "commit", "-qm", "Feature 392: an unrelated change\n\n390: mentioned in the body only")
     assert ic.changed_questions(root, 390) == ["0047"]
-
