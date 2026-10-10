@@ -12,6 +12,15 @@ CLAUDE = (Path(__file__).resolve().parents[2] / "CLAUDE.md").read_text(encoding=
 
 
 def test_claude_md_names_the_tripwires_and_the_arbiter_s_bundle() -> None:
-    for term in ("third round on one subject", "coming back", "second red gate in a row", "1.0 a changed line",
-                 "round-arbiter", "make arbiter-bundle", "make feature-report F=NNN WRITE=1", "make decide", "make gm-review"):
+    for term in (
+        "third round on one subject",
+        "coming back",
+        "second red gate in a row",
+        "1.0 a changed line",
+        "round-arbiter",
+        "make arbiter-bundle",
+        "make feature-report F=NNN WRITE=1",
+        "make decide",
+        "make gm-review",
+    ):
         assert term in CLAUDE, f"CLAUDE.md no longer names {term!r} (feature 375 FR-013)"
