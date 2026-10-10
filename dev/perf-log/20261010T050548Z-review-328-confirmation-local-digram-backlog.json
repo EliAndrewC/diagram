@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "fc5d79363",
+    "label": "328-start",
+    "utc": "20261010T044543Z"
+  },
+  "binding": "d0829ccf346cd561570e0f4c340a256b93625591206e23f4aa41595e24b92997",
+  "end": {
+    "commit": "bb07b08af",
+    "label": "328-end",
+    "utc": "20261010T044846Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261010T050548Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -13.8,
+          "39": -7.1,
+          "4": -17.6,
+          "47": -3.3
+        },
+        "total_pct": -10.7
+      },
+      "20": {
+        "seeds": {
+          "25": -18.1,
+          "39": -5.4,
+          "4": -1.7,
+          "47": -14.8
+        },
+        "total_pct": -10.4
+      },
+      "40": {
+        "seeds": {
+          "25": -8.2,
+          "39": -14.0,
+          "4": -10.1,
+          "47": 2.4
+        },
+        "total_pct": -7.7
+      }
+    },
+    "seeds": {
+      "25": 5.0,
+      "39": -14.3,
+      "4": -8.3,
+      "47": 9.8
+    },
+    "total_pct": -2.3
+  },
+  "note": "Reference seeds CONSISTENT and the control is real: reviewer re-ran it in fresh detached worktrees at bb07b08af (within_reach_of -> return True; its only caller fixture_seats.py:421) interleaved with untouched HEAD, 2 reps each: seed 47 4.63 -> 3.85 s (start 3.91; homesteads 1.61 -> 1.33, web 0.72 -> 0.34, notice 0.27 -> 0.07), seed 25 4.31 -> 3.88 s (start 3.87 - the session's 0.16 s understates it, its control leg ran on a slower host, field +0.12 s upstream of homesteads), seeds 39 and 4 unmoved; web and notice fall because the bypass seats a third hamlet, as the explanation says. INCONSISTENT on what it omits: the report's 40-household leg is band 1 with seed 47 +2.4% (hinterland +0.4 s, track +0.1 s) and the explanation says nothing of it. Reviewer re-timed it, fc5d79363 vs bb07b08af, 2 interleaved reps: total 12.21 -> 12.46 s, hinterland 1.51 -> 1.92 s, track 0.12 -> 0.22 s, reproduced every rep; the privy-reach bypass does not move it (12.40 s, hinterland 1.91). Name that stage's cause with a control (or a measured spread showing it is jitter) and resubmit. My previous record (045511Z) missed this leg too.",
+  "verdict": "inconsistent"
+}

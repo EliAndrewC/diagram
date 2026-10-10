@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "fc5d79363",
+    "label": "328-start",
+    "utc": "20261010T044543Z"
+  },
+  "binding": "d0829ccf346cd561570e0f4c340a256b93625591206e23f4aa41595e24b92997",
+  "end": {
+    "commit": "bb07b08af",
+    "label": "328-end",
+    "utc": "20261010T044846Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261010T045511Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -13.8,
+          "39": -7.1,
+          "4": -17.6,
+          "47": -3.3
+        },
+        "total_pct": -10.7
+      },
+      "20": {
+        "seeds": {
+          "25": -18.1,
+          "39": -5.4,
+          "4": -1.7,
+          "47": -14.8
+        },
+        "total_pct": -10.4
+      },
+      "40": {
+        "seeds": {
+          "25": -8.2,
+          "39": -14.0,
+          "4": -10.1,
+          "47": 2.4
+        },
+        "total_pct": -7.7
+      }
+    },
+    "seeds": {
+      "25": 5.0,
+      "39": -14.3,
+      "4": -8.3,
+      "47": 9.8
+    },
+    "total_pct": -2.3
+  },
+  "note": "CONTROL landing-pair is the bookend pair itself, not a run with the cause removed (same defect as batch11-pair). The record contradicts itself: seed 39 homesteads went 0.92->1.16 s (+0.24), it did not fall, so homesteads grew on 3 of 4 seeds (25 +0.29, 39 +0.24, 47 +0.30). Reviewer re-timing in detached worktrees at fc5d79363 and bb07b08af, 2 reps each, reproduces this within 0.02 s, so it is not jitter. cProfile of homesteads at both commits shows systematic code cost, not a different hamlet per seed: (1) fixture seating (fixture_seats.lay_fixtures, with the new within_reach_of - privy held within 48 ft, f83a9214b - called 27k-71k times) about doubles on ALL four seeds, profiled 0.17->0.36 / 0.27->0.53 / 0.11->0.20 / 0.19->0.35 s on 25/47/39/4; (2) the household ways (gap_ways.lay_the_ways via _first_admitted/access.admitted, admission calls 62->301 on seed 25) profiled 0.78->1.48 / 0.91->1.26 / 0.65->1.00 s on 25/47/39. Seed 4 fell only because its ways got cheaper (0.74->0.57 s). The explanation also says nothing about seed 47 web +0.2 s and notice 0.13->0.27 s (doubled, reproduced), about 40 pct of that seed's +0.43 s. Rewrite: name the fixture-reach check and the ways admission search as the cost, cover 47's web and notice, and record a real control (e.g. within_reach_of bypassed).",
+  "verdict": "inconsistent"
+}

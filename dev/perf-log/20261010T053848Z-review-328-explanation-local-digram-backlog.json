@@ -1,0 +1,409 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "fc5d79363",
+    "label": "328-start",
+    "utc": "20261010T044543Z"
+  },
+  "binding": "d0829ccf346cd561570e0f4c340a256b93625591206e23f4aa41595e24b92997",
+  "control": "landing-pair-40hh-seed47",
+  "control_record": {
+    "command": "hs40.py <worktree> 47 plain, per commit, first-parent bisection",
+    "file": "/diagram/.clones/digram-backlog/specs/328-match-the-research/measurements.json",
+    "key": "landing-pair-40hh-seed47",
+    "method": "the hinterland stage's wall time at each bisection commit; the parent of each step is its control (the step's one change removed)",
+    "observed": "2026-10-10",
+    "quantity": "the landing pair's 40-household seed 47 growth (hinterland +0.4 s, track +0.1 s), bisected over the 453 commits fc5d79363..bb07b08af (2026-10-10)",
+    "source": ".../scratchpad/pa328L/hs40.py (the perf-audit's 40-household stage timer) on a detached worktree at each commit; gc.collect() before each stage at three commits ruled out collector pressure",
+    "value": {
+      "gc_ruled_out_s": {
+        "3b4d2fc4d": [
+          1.71,
+          1.69
+        ],
+        "f83a9214b": [
+          1.48,
+          1.47
+        ],
+        "head": [
+          1.93,
+          1.91
+        ]
+      },
+      "head_s": 1.92,
+      "homesteads": "4.36 s at main, 4.58 s at HEAD (two reps each); the bypass of the privy-reach rule at HEAD moves it only to 4.52 s. Across the feature's first-parent commits it wanders with the hamlet each commit lays: 4.40 (74171164e), 4.57, 4.22, 4.64, 4.68 / 4.91 (36c6c3ca5's parent and itself, wave 10), 4.89 (2a2b1caa1), 5.02, 5.03, 5.01, 4.98, 4.99, 5.83 (3e1b51f8f), 4.69 (f86f95ddc), 4.58 (HEAD) - a spread of 4.22-5.83 s with no single step, HEAD's +0.2 s inside it",
+      "main_s": 1.48,
+      "reading": "the stages' times move with the hamlet the seating lays: the hinterland's two rising steps are privy-seating fixes to 0047 (each step's parent its control), the track's one step is wave 46's taut lane (0081), and the homesteads stage wanders across a 1.6 s spread commit to commit, HEAD's +0.2 s inside it; a gc.collect() before each stage changes nothing",
+      "steps": "f83a9214b 1.47 -> 3b4d2fc4d 1.71 (wave 51 round 3: the privy's reach measured true off a corner, 0047); later 1.45 (c0feb4b8e) and 1.36 (a6004fdc6, wave 61); a6004fdc6 1.36 -> fe203d8bc 1.89 (wave 62: the privy's slide bounded to its wall, 0047); HEAD 1.92",
+      "track": "0.12 s at main -> 0.21 s: one step, b9af57f08 (wave 46, 0081's taut lane and its cut hairpin: the track out drawn taut), its parent 5c888adf4 0.139 s against 0.209 s; flat across both privy steps and 0.22 s at HEAD"
+    }
+  },
+  "end": {
+    "commit": "bb07b08af",
+    "label": "328-end",
+    "utc": "20261010T044846Z"
+  },
+  "environment": "local",
+  "explanation": "Band 1 over waves 9-97, every size's total down. Reference seeds 25 and 47: 0047's privy-reach rule, controlled by bypassing it at HEAD, and the lawful household-way search (m:landing-pair-control). The 40-household leg's seed 47, each stage with a control: hinterland (+0.44 s) bisected to two privy-seating fixes to 0047 - 3b4d2fc4d (wave 51 round 3, 1.47 to 1.71 s) and fe203d8bc (wave 62, 1.35 to 1.87 s), each against its parent, the map changed and the stage's call count with it; track (+0.09 s) one step, b9af57f08 (wave 46, 0081's taut lane), 0.14 to 0.21 s against its parent; homesteads (+0.2 s) no step - it wanders 4.22 to 5.83 s across the feature's commits as each lays a different hamlet, HEAD's 4.58 s inside that spread, and the privy-rule bypass moves it only to 4.52 s. Research-driven seating and lanes; accepted with the numbers (m:landing-pair-40hh-seed47).",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261010T053848Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -13.8,
+          "39": -7.1,
+          "4": -17.6,
+          "47": -3.3
+        },
+        "total_pct": -10.7
+      },
+      "20": {
+        "seeds": {
+          "25": -18.1,
+          "39": -5.4,
+          "4": -1.7,
+          "47": -14.8
+        },
+        "total_pct": -10.4
+      },
+      "40": {
+        "seeds": {
+          "25": -8.2,
+          "39": -14.0,
+          "4": -10.1,
+          "47": 2.4
+        },
+        "total_pct": -7.7
+      }
+    },
+    "seeds": {
+      "25": 5.0,
+      "39": -14.3,
+      "4": -8.3,
+      "47": 9.8
+    },
+    "total_pct": -2.3
+  },
+  "render": "perf bands [local]: 328-end vs 328-start -> band 1\n  seed   4    -8.3%\n  seed  25    +5.0%; grew: homesteads +0.3s, web +0.1s\n  seed  39   -14.3%\n  seed  47    +9.8%; grew: homesteads +0.3s, web +0.2s, notice +0.1s\n  TOTAL       -2.3%\n  10 households: TOTAL  -10.7% -> band 0\n    seed   4   -17.6%\n    seed  25   -13.8%\n    seed  39    -7.1%\n    seed  47    -3.3%\n  20 households: TOTAL  -10.4% -> band 0\n    seed   4    -1.7%\n    seed  25   -18.1%\n    seed  39    -5.4%\n    seed  47   -14.8%\n  40 households: TOTAL   -7.7% -> band 1\n    seed   4   -10.1%\n    seed  25    -8.2%\n    seed  39   -14.0%\n    seed  47    +2.4%; grew: hinterland +0.4s, homesteads +0.2s, track +0.1s\n  owes: a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.08,
+        0.08
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.66,
+        0.65
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.62,
+        0.61
+      ],
+      "homesteads": [
+        1.18,
+        1.47
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.05,
+        0.09
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.69,
+        0.77
+      ],
+      "windbreak": [
+        0.47,
+        0.41
+      ],
+      "woodland": [
+        0.06,
+        0.0
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.09,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.58,
+        0.6
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.74,
+        0.59
+      ],
+      "homesteads": [
+        0.92,
+        1.16
+      ],
+      "labels": [
+        0.01,
+        0.0
+      ],
+      "notice": [
+        0.14,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.05,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.94,
+        0.58
+      ],
+      "windbreak": [
+        0.51,
+        0.39
+      ],
+      "woodland": [
+        0.13,
+        0.0
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.09,
+        0.09
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.98,
+        0.87
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.96,
+        0.75
+      ],
+      "homesteads": [
+        1.28,
+        1.2
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.02,
+        0.01
+      ],
+      "track": [
+        0.14,
+        0.14
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.61,
+        0.75
+      ],
+      "windbreak": [
+        0.47,
+        0.44
+      ],
+      "woodland": [
+        0.09,
+        0.0
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.08,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.63,
+        0.61
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.7,
+        0.69
+      ],
+      "homesteads": [
+        1.27,
+        1.57
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.14,
+        0.27
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.06,
+        0.08
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.55,
+        0.74
+      ],
+      "windbreak": [
+        0.51,
+        0.42
+      ],
+      "woodland": [
+        0.08,
+        0.0
+      ]
+    }
+  },
+  "verdict": "pending"
+}

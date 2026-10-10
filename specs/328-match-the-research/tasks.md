@@ -5,9 +5,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
-- layout-revised: ubame-magistracy - wave 97: the weighing floor drawn 16 x 14 ft at the cart yard's edge, the cart yard a 15 ft loading apron (0197, 0116; m:wave97-ubame-charcoal)
-- glyph-redrawn: weighing floor on ubame-magistracy - wave 97: 16 x 14 ft, four posts, against the tally shed (0197)
-- glyph-redrawn: charcoal bales on ubame-magistracy - wave 97: two bales about 4 ft long, 12 x 8 px (0199's convention)
+- (reviewed PASS at batch 13's close, 2026-10-10) layout-revised: ubame-magistracy - wave 97: the weighing floor drawn 16 x 14 ft at the cart yard's edge, the cart yard a 15 ft loading apron (0197, 0116; m:wave97-ubame-charcoal)
+- (reviewed PASS at batch 13's close, 2026-10-10, round 2) glyph-redrawn: weighing floor on ubame-magistracy - wave 97: 16 x 14 ft, four posts, against the tally shed (0197)
+- (reviewed PASS at batch 13's close, 2026-10-10) glyph-redrawn: charcoal bales on ubame-magistracy - wave 97: two bales about 4 ft long, 12 x 8 px (0199's convention)
 - (reviewed PASS at batch 11's close, 2026-10-09) placement-changed: village lane on kashikawa - waves 88 and 89: the row road threaded leg by leg over its ford, the far leg run on taut (0035; m:wave88-road-over-its-ford), and one door path moved 4 to 5 px further from its garden (0246; m:wave89-door-path-at-the-law-s-gap); batch 11's close
 - (reviewed PASS at batch 7's close, 2026-10-09) glyph-redrawn: pond canal on kuwabata - wave 73 (the dike-pond polder inks its supply channels `pond canal`): the feeder, toes and laterals at 0068's widths in feet (the feeder 4.5 ft at its inlet to 1.5, the toes and laterals 2.5 -> 1.2 floored 1.5 with their heads capped by the feeder) and each parcel's bank per channel (m:wave73-polder-widths-r2); batch 7's close
 - (reviewed PASS at batch 7's close, 2026-10-09) glyph-redrawn: drainage ditch on kuwabata - wave 73: the polder's drain at its 5.5 ft outfall width, and the crop's half-bund bank beside it (m:wave73-polder-widths-r2); batch 7's close

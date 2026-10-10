@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "fc5d79363",
+    "label": "328-start",
+    "utc": "20261010T044543Z"
+  },
+  "binding": "d0829ccf346cd561570e0f4c340a256b93625591206e23f4aa41595e24b92997",
+  "end": {
+    "commit": "bb07b08af",
+    "label": "328-end",
+    "utc": "20261010T044846Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261010T054903Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -13.8,
+          "39": -7.1,
+          "4": -17.6,
+          "47": -3.3
+        },
+        "total_pct": -10.7
+      },
+      "20": {
+        "seeds": {
+          "25": -18.1,
+          "39": -5.4,
+          "4": -1.7,
+          "47": -14.8
+        },
+        "total_pct": -10.4
+      },
+      "40": {
+        "seeds": {
+          "25": -8.2,
+          "39": -14.0,
+          "4": -10.1,
+          "47": 2.4
+        },
+        "total_pct": -7.7
+      }
+    },
+    "seeds": {
+      "25": 5.0,
+      "39": -14.3,
+      "4": -8.3,
+      "47": 9.8
+    },
+    "total_pct": -2.3
+  },
+  "note": "Round 4, 40 hh seed 47, reviewer fresh detached worktrees, hs40b.py, 2 interleaved reps. HINTERLAND confirmed in round 3, unchanged (HEAD 1.90 s). TRACK CONSISTENT: step reproduced at b9af57f08 (wave 46, 0081 taut lane), parent 5c888adf4 0.139/0.139 s vs 0.211/0.210 s, main 0.120/0.117, HEAD 0.216/0.215; the diff makes it plausible - connector_track reach raised to the canvas diagonal (max(reach, hypot(W, H))), so all 41 bearing candidates run longer clearance checks. HOMESTEADS INCONSISTENT: HEAD +0.2 s is code, not hamlet wander. Unprofiled wrapper: free_seats 0.311/0.311 s at main vs 0.511/0.517 s at HEAD (+0.20 s, the whole stage delta; the rest of the stage 4.00 vs 4.04 s). Of that, capacity.field_distances is 0.166/0.166 s in one call, with shapely already loaded; it does not exist at main. It is the seat-order tie toward the field (wave 20, 81a14d318; vectorized 07ca65758, whose message names it as homesteads growth). CONTROL: field_distances stubbed to return {} at HEAD gives homesteads 4.349/4.360 s, vs live 4.520/4.498 and main 4.354/4.313 - the stub removes the growth, while hinterland and track barely move (1.895, 0.214). The 4.22-5.83 s commit-to-commit spread is real, but it does not explain HEAD over main, and the privy-rule bypass (4.52) was the wrong control: it never removed this cause. Rewrite the homesteads clause around field_distances with this control. Note for the session: the ring distance is computed for every free grid point but used only as a tie-break within one pitch.",
+  "verdict": "inconsistent"
+}

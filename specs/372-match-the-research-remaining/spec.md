@@ -35,6 +35,11 @@ execute (328's amendment 8; the legacy hand-drawn settlements' rows stay DEFERRE
   about 4 ft (`docs/buildings.md`, Scale), and wave 97's charcoal store kept where it stood across its loading apron
   (m:wave97-ubame-charcoal; spec-fidelity ruled it LEGITIMATE, raised under constitution XVI).
 
+- **An efficiency item from 328's landing pair**: `capacity.field_distances` (wave 20's seat-order tie toward the field)
+  computes a ring distance for every free grid point but uses it only to break ties within one grid pitch - 0.166 s of the
+  homesteads stage at 40 households, seed 47 (m:landing-pair-40hh-field-tie in 328's records); compute it only for the tied
+  candidates.
+
 ## The filed features, sorted (328's close, 2026-10-10)
 
 The GM asked which of `make speckit-todo`'s filed features relate to this work and which are future work for the tiers that

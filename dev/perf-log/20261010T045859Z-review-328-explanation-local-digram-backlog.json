@@ -1,0 +1,432 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "fc5d79363",
+    "label": "328-start",
+    "utc": "20261010T044543Z"
+  },
+  "binding": "d0829ccf346cd561570e0f4c340a256b93625591206e23f4aa41595e24b92997",
+  "control": "landing-pair-control",
+  "control_record": {
+    "command": "hs.py (the perf-audit's stage timer) on a detached worktree at HEAD, within_reach_of returning True",
+    "file": "/diagram/.clones/digram-backlog/specs/328-match-the-research/measurements.json",
+    "key": "landing-pair-control",
+    "method": "per-stage wall times at the start, at the end and at the end with the rule bypassed, means of two repeats",
+    "observed": "2026-10-10",
+    "quantity": "the landing pair's control (2026-10-10): HEAD bb07b08af with the privy-reach rule (`fixture_seats.within_reach_of`, 0047's 48 ft, added f83a9214b) bypassed, the four reference seeds, two repeats",
+    "source": ".../scratchpad/ctl.jsonl (control), .../scratchpad/pa328L/plain.jsonl (perf-audit's start and end, two repeats)",
+    "value": {
+      "reading": "the privy-reach rule is the cost on seeds 25 and 47: bypassed, seed 47's total falls below main's (its whole +0.49 s: 0.21 s of seating trials directly, and the web and notice that the differently seated hamlet lays - web 0.72 -> 0.34, notice 0.27 -> 0.08), seed 25's by 0.16 of its 0.24 s; seeds 39 and 4 do not move with it, their homesteads change being the household ways' search (perf-audit's profile: access.admitted 62 -> 301 calls on seed 25), which waves 9-97 made lawful (door ways admitted only where the lane law holds)",
+      "seed25_homesteads_s": [
+        1.19,
+        1.46,
+        1.34
+      ],
+      "seed25_total_s": {
+        "control": 3.96,
+        "end": 4.12,
+        "start": 3.88
+      },
+      "seed39_homesteads_s": [
+        0.91,
+        1.17,
+        1.2
+      ],
+      "seed47_stages_s": {
+        "homesteads": [
+          1.24,
+          1.56,
+          1.35
+        ],
+        "notice": [
+          0.13,
+          0.27,
+          0.08
+        ],
+        "web": [
+          0.51,
+          0.72,
+          0.34
+        ]
+      },
+      "seed47_total_s": {
+        "control": 3.85,
+        "end": 4.4,
+        "start": 3.91
+      },
+      "seed4_homesteads_s": [
+        1.29,
+        1.18,
+        1.19
+      ]
+    }
+  },
+  "end": {
+    "commit": "bb07b08af",
+    "label": "328-end",
+    "utc": "20261010T044846Z"
+  },
+  "environment": "local",
+  "explanation": "Band 1 over waves 9-97 (fc5d79363 to bb07b08af), every size's total down (reference -2.3 pct; 10/20/40 households -10.7/-10.4/-7.7 pct). The two slower reference seeds are 0047's privy-reach rule (within_reach_of, a privy no more than 48 ft from its house, f83a9214b): with it bypassed at HEAD, seed 47's total falls from 4.40 s to 3.85 s, below main's 3.91 s - 0.21 s of extra fixture-seat trials directly, and the web (0.72 to 0.34 s) and notice (0.27 to 0.08 s) the differently seated hamlet lays; seed 25 falls 4.12 to 3.96 s (main 3.88 s). The rest of the homesteads change on seeds 25 and 39 is the household ways' search, which now admits a way only where the lane law holds (access.admitted 62 to 301 calls on seed 25, perf-audit's profile). Both are research the feature brought in; accepted with the numbers (m:landing-pair-control).",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261010T045859Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -13.8,
+          "39": -7.1,
+          "4": -17.6,
+          "47": -3.3
+        },
+        "total_pct": -10.7
+      },
+      "20": {
+        "seeds": {
+          "25": -18.1,
+          "39": -5.4,
+          "4": -1.7,
+          "47": -14.8
+        },
+        "total_pct": -10.4
+      },
+      "40": {
+        "seeds": {
+          "25": -8.2,
+          "39": -14.0,
+          "4": -10.1,
+          "47": 2.4
+        },
+        "total_pct": -7.7
+      }
+    },
+    "seeds": {
+      "25": 5.0,
+      "39": -14.3,
+      "4": -8.3,
+      "47": 9.8
+    },
+    "total_pct": -2.3
+  },
+  "render": "perf bands [local]: 328-end vs 328-start -> band 1\n  seed   4    -8.3%\n  seed  25    +5.0%; grew: homesteads +0.3s, web +0.1s\n  seed  39   -14.3%\n  seed  47    +9.8%; grew: homesteads +0.3s, web +0.2s, notice +0.1s\n  TOTAL       -2.3%\n  10 households: TOTAL  -10.7% -> band 0\n    seed   4   -17.6%\n    seed  25   -13.8%\n    seed  39    -7.1%\n    seed  47    -3.3%\n  20 households: TOTAL  -10.4% -> band 0\n    seed   4    -1.7%\n    seed  25   -18.1%\n    seed  39    -5.4%\n    seed  47   -14.8%\n  40 households: TOTAL   -7.7% -> band 1\n    seed   4   -10.1%\n    seed  25    -8.2%\n    seed  39   -14.0%\n    seed  47    +2.4%; grew: hinterland +0.4s, homesteads +0.2s, track +0.1s\n  owes: a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.08,
+        0.08
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.66,
+        0.65
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.62,
+        0.61
+      ],
+      "homesteads": [
+        1.18,
+        1.47
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.05,
+        0.09
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.69,
+        0.77
+      ],
+      "windbreak": [
+        0.47,
+        0.41
+      ],
+      "woodland": [
+        0.06,
+        0.0
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.09,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.58,
+        0.6
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.74,
+        0.59
+      ],
+      "homesteads": [
+        0.92,
+        1.16
+      ],
+      "labels": [
+        0.01,
+        0.0
+      ],
+      "notice": [
+        0.14,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.05,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.94,
+        0.58
+      ],
+      "windbreak": [
+        0.51,
+        0.39
+      ],
+      "woodland": [
+        0.13,
+        0.0
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.09,
+        0.09
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.98,
+        0.87
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.96,
+        0.75
+      ],
+      "homesteads": [
+        1.28,
+        1.2
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.02,
+        0.01
+      ],
+      "track": [
+        0.14,
+        0.14
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.61,
+        0.75
+      ],
+      "windbreak": [
+        0.47,
+        0.44
+      ],
+      "woodland": [
+        0.09,
+        0.0
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.08,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.63,
+        0.61
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.7,
+        0.69
+      ],
+      "homesteads": [
+        1.27,
+        1.57
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.14,
+        0.27
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.06,
+        0.08
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.55,
+        0.74
+      ],
+      "windbreak": [
+        0.51,
+        0.42
+      ],
+      "woodland": [
+        0.08,
+        0.0
+      ]
+    }
+  },
+  "verdict": "pending"
+}

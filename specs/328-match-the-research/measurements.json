@@ -2199,5 +2199,171 @@
       "knot_ft": 23.8,
       "reading": "the web is drawn (no WebRefused): T140's refusal is gone; the roll carries one lane knot under wave 93's cohort rule (lanes 1 and 2, ends at (2727.4, 3352.6) and (2748.6, 3363.4), 23.8 ft apart) - a found row for feature 372; 'knob values never rolled' is a one-seed run's artifact"
     }
+  },
+  "wave97-bales-stacked": {
+    "quantity": "wave 97's glyph-check round 1 (weighing floor, NEEDS-WORK): the bales stacked under the steelyard's hook end",
+    "observed": "2026-10-10",
+    "verifies": "F1",
+    "subject": "glyph-check--weighing-floor",
+    "answers": "7aa06ed7d69b",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg, the weighing-floor group",
+    "command": "read the SVG's rects",
+    "method": "the bale rects against the steelyard's hook (x 913) and weight (x 925-929)",
+    "value": {
+      "bales": "two 12 x 8 px at x 909-921, y 620-628 and 628-636 (stacked, 12 x 16 px together)",
+      "hook_x": 913,
+      "weight_x": [
+        925,
+        929
+      ],
+      "clear_px": 4,
+      "reading": "both bales under the hook end; the weight hangs 4 px clear of the nearest bale over bare floor (F1); the stack is 12 x 16 px, not a 24 x 8 bar like the weapon rack (F6)"
+    }
+  },
+  "wave97-bales-stacked-not-a-bar": {
+    "quantity": "wave 97's glyph-check round 1 (weighing floor, NEEDS-WORK): the bales stacked under the steelyard's hook end (F6: no longer a bar like the weapon rack)",
+    "observed": "2026-10-10",
+    "verifies": "F6",
+    "subject": "glyph-check--weighing-floor",
+    "answers": "7aa06ed7d69b",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg, the weighing-floor group",
+    "command": "read the SVG's rects",
+    "method": "the bale rects against the steelyard's hook (x 913) and weight (x 925-929)",
+    "value": {
+      "bales": "two 12 x 8 px at x 909-921, y 620-628 and 628-636 (stacked, 12 x 16 px together)",
+      "hook_x": 913,
+      "weight_x": [
+        925,
+        929
+      ],
+      "clear_px": 4,
+      "reading": "both bales under the hook end; the weight hangs 4 px clear of the nearest bale over bare floor (F1); the stack is 12 x 16 px, not a 24 x 8 bar like the weapon rack (F6)"
+    }
+  },
+  "landing-pair": {
+    "quantity": "328's landing pair (2026-10-10): main's commit fc5d79363 (wave 8) -> HEAD bb07b08af (wave 97, batch 13's close), back to back on a quiet host (load 1.29 / 1.15 / 1.01)",
+    "observed": "2026-10-10",
+    "source": "dev/perf-log/20261010T044543Z-328-start-perfbase.json, dev/perf-log/20261010T044846Z-328-end-base.json",
+    "command": "make perf LABEL=328-start (worktree at main), make perf LABEL=328-end (worktree at HEAD); make perf-report AGAINST=328-start",
+    "method": "the perf snapshot's four seeds at the reference and at 10, 20 and 40 households, the pair back to back",
+    "value": {
+      "band": 1,
+      "reference_total_pct": -2.3,
+      "households_10_pct": -10.7,
+      "households_20_pct": -10.4,
+      "households_40_pct": -7.7,
+      "slower_seeds": "reference seed 25 +5.0% (homesteads +0.3 s, web +0.1 s), seed 47 +9.8% (homesteads +0.3 s, web +0.2 s, notice +0.1 s); 40 households seed 47 +2.4% (hinterland +0.4 s)",
+      "reading": "band 1: every size's total is down; the two reference seeds' growth is in the homesteads stage, which waves 9-97 rebuilt to the research (fixtures, privies and heaps re-seated, held parts, door paths) - each seed draws a different hamlet at the two commits, and seeds 4 and 39 fell 8-14% on the same stages"
+    }
+  },
+  "landing-pair-control": {
+    "quantity": "the landing pair's control (2026-10-10): HEAD bb07b08af with the privy-reach rule (`fixture_seats.within_reach_of`, 0047's 48 ft, added f83a9214b) bypassed, the four reference seeds, two repeats",
+    "observed": "2026-10-10",
+    "source": ".../scratchpad/ctl.jsonl (control), .../scratchpad/pa328L/plain.jsonl (perf-audit's start and end, two repeats)",
+    "command": "hs.py (the perf-audit's stage timer) on a detached worktree at HEAD, within_reach_of returning True",
+    "method": "per-stage wall times at the start, at the end and at the end with the rule bypassed, means of two repeats",
+    "value": {
+      "seed47_total_s": {
+        "start": 3.91,
+        "end": 4.4,
+        "control": 3.85
+      },
+      "seed47_stages_s": {
+        "homesteads": [
+          1.24,
+          1.56,
+          1.35
+        ],
+        "web": [
+          0.51,
+          0.72,
+          0.34
+        ],
+        "notice": [
+          0.13,
+          0.27,
+          0.08
+        ]
+      },
+      "seed25_total_s": {
+        "start": 3.88,
+        "end": 4.12,
+        "control": 3.96
+      },
+      "seed25_homesteads_s": [
+        1.19,
+        1.46,
+        1.34
+      ],
+      "seed39_homesteads_s": [
+        0.91,
+        1.17,
+        1.2
+      ],
+      "seed4_homesteads_s": [
+        1.29,
+        1.18,
+        1.19
+      ],
+      "reading": "the privy-reach rule is the cost on seeds 25 and 47: bypassed, seed 47's total falls below main's (its whole +0.49 s: 0.21 s of seating trials directly, and the web and notice that the differently seated hamlet lays - web 0.72 -> 0.34, notice 0.27 -> 0.08), seed 25's by 0.16 of its 0.24 s; seeds 39 and 4 do not move with it, their homesteads change being the household ways' search (perf-audit's profile: access.admitted 62 -> 301 calls on seed 25), which waves 9-97 made lawful (door ways admitted only where the lane law holds)"
+    }
+  },
+  "landing-pair-40hh-seed47": {
+    "quantity": "the landing pair's 40-household seed 47 growth (hinterland +0.4 s, track +0.1 s), bisected over the 453 commits fc5d79363..bb07b08af (2026-10-10)",
+    "observed": "2026-10-10",
+    "source": ".../scratchpad/pa328L/hs40.py (the perf-audit's 40-household stage timer) on a detached worktree at each commit; gc.collect() before each stage at three commits ruled out collector pressure",
+    "command": "hs40.py <worktree> 47 plain, per commit, first-parent bisection",
+    "method": "the hinterland stage's wall time at each bisection commit; the parent of each step is its control (the step's one change removed)",
+    "value": {
+      "main_s": 1.48,
+      "head_s": 1.92,
+      "steps": "f83a9214b 1.47 -> 3b4d2fc4d 1.71 (wave 51 round 3: the privy's reach measured true off a corner, 0047); later 1.45 (c0feb4b8e) and 1.36 (a6004fdc6, wave 61); a6004fdc6 1.36 -> fe203d8bc 1.89 (wave 62: the privy's slide bounded to its wall, 0047); HEAD 1.92",
+      "gc_ruled_out_s": {
+        "f83a9214b": [
+          1.48,
+          1.47
+        ],
+        "3b4d2fc4d": [
+          1.71,
+          1.69
+        ],
+        "head": [
+          1.93,
+          1.91
+        ]
+      },
+      "reading": "the hinterland's two rising steps are privy-seating fixes to 0047 (each step's parent its control); the track's one step is wave 46's connector reach (0081's taut lane); the homesteads growth is m:landing-pair-40hh-field-tie's; a gc.collect() before each stage changes nothing",
+      "track": "0.12 s at main -> 0.21 s: one step, b9af57f08 (wave 46, 0081's taut lane and its cut hairpin: the track out drawn taut), its parent 5c888adf4 0.139 s against 0.209 s; flat across both privy steps and 0.22 s at HEAD",
+      "homesteads": "superseded by m:landing-pair-40hh-field-tie: HEAD's +0.2 s is wave 20's field tie-break (capacity.field_distances), not the stage's wander; the stage does wander 4.22-5.83 s across the feature's commits, but a stub of the tie-break returns HEAD to main's time"
+    }
+  },
+  "landing-pair-40hh-field-tie": {
+    "quantity": "the 40-household seed 47 homesteads +0.2 s: wave 20's seat-order tie toward the field (`capacity.field_distances`, 81a14d318, vectorized 07ca65758), controlled by stubbing it at HEAD (perf-audit round 4, 2026-10-10)",
+    "observed": "2026-10-10",
+    "source": ".../scratchpad/pa328R4/hs40nofd.py (the stub control), fdtime.py (per-function wrapper); perf-audit record dev/perf-log/20261010T054903Z-review-328-confirmation-local-digram-backlog.json",
+    "command": "hs40 at main, at HEAD and at HEAD with field_distances returning {}, two interleaved reps each",
+    "method": "the homesteads stage's wall time and free_seats' own time at each",
+    "value": {
+      "homesteads_s": {
+        "main": [
+          4.354,
+          4.313
+        ],
+        "head": [
+          4.52,
+          4.498
+        ],
+        "head_tie_stubbed": [
+          4.349,
+          4.36
+        ]
+      },
+      "free_seats_s": {
+        "main": 0.311,
+        "head": 0.514
+      },
+      "field_distances_s": 0.166,
+      "reading": "the whole +0.2 s is free_seats, and field_distances (absent at main) is 0.166 s of it; stubbed, homesteads returns to main's time; the distance is computed for every free grid point though it breaks ties only within one grid pitch - an efficiency item filed to feature 372"
+    }
   }
 }
