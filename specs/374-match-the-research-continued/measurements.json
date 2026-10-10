@@ -90,5 +90,189 @@
       "sheets_redrawn": 0,
       "places_changed": 3
     }
+  },
+  "b1-county-e1": {
+    "quantity": "the county draft's garden zone starts at the kitchen ell's east face; the kitchen well outside it",
+    "observed": "2026-10-10",
+    "verifies": "E1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "026828713522",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound.py the garden CourtZone",
+    "command": "make pack-audit ARGS=pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "method": "the zone's x read against the kitchen's x2 (both 102 ft) after make map; the audit clean",
+    "value": {
+      "garden_x_ft": 102,
+      "kitchen_x2_ft": 102,
+      "well_in_garden": false
+    }
+  },
+  "b1-county-n1": {
+    "quantity": "the notes' band figure",
+    "observed": "2026-10-10",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "026828713522",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "grep -n '76 x 36' pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "band": "~76 x 36 ft"
+    }
+  },
+  "b1-county-n2": {
+    "quantity": "the notes' garden figure",
+    "observed": "2026-10-10",
+    "verifies": "N2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "026828713522",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "grep -n '124 x 46' pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "garden": "124 x 46 ft"
+    }
+  },
+  "b1-hayakawa-e1": {
+    "quantity": "the ground the old kitchen left named the kitchen yard",
+    "observed": "2026-10-10",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -n 'kitchen yard' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "the named yard polygon read; make pack-audit clean",
+    "value": {
+      "yard_px": [
+        146,
+        306,
+        320,
+        450
+      ]
+    }
+  },
+  "b1-hayakawa-e2": {
+    "quantity": "knob 9's line describes the kitchen as drawn",
+    "observed": "2026-10-10",
+    "verifies": "E2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "grep -n 'an ell projecting south from the west block' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "knob9": "an ell, no corridor, door on the south face"
+    }
+  },
+  "b1-hayakawa-e3": {
+    "quantity": "the residence corridor's map note no longer names a kitchen corridor",
+    "observed": "2026-10-10",
+    "verifies": "E3",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "grep -n 'residence corridor' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "method": "read after the edit; the page rebuilt by make map",
+    "value": {
+      "note": "the corridor joins the two halls; the kitchen stands against the west block with no corridor"
+    }
+  },
+  "b1-hayakawa-n2": {
+    "quantity": "the inner entrance's comment and the wave-113 log line",
+    "observed": "2026-10-10",
+    "verifies": "N2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg; pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "grep -n 'kitchen yard west of the kitchen ell\\|the GUESS 0091' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "fixed": 2
+    }
+  },
+  "b1-ubame-e1": {
+    "quantity": "the notes describe the kitchen as drawn",
+    "observed": "2026-10-10",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep -n 'under the family quarters' pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "method": "read after the edit; the page rebuilt by make map",
+    "value": {
+      "places": 2
+    }
+  },
+  "b1-ubame-e2": {
+    "quantity": "the kitchen ell under the family quarters, the lived rooms",
+    "observed": "2026-10-10",
+    "verifies": "E2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the kitchen rect read (x 342-414 under the family quarters' x 342-432); the audit clean",
+    "value": {
+      "kitchen_px": [
+        342,
+        294,
+        72,
+        54
+      ]
+    }
+  },
+  "b1-ubame-e3": {
+    "quantity": "the ground the old kitchen left named the kitchen yard",
+    "observed": "2026-10-10",
+    "verifies": "E3",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -n 'kitchen yard' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the named yard polygon read",
+    "value": {
+      "yard_px": [
+        205,
+        310,
+        334,
+        445
+      ]
+    }
+  },
+  "b1-ubame-q1": {
+    "quantity": "the kitchen well on the doma",
+    "observed": "2026-10-10",
+    "verifies": "Q1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -n 'well-1' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the well's rect read inside the doma's",
+    "value": {
+      "well_px": [
+        345,
+        302,
+        22,
+        22
+      ],
+      "doma_px": [
+        343,
+        295,
+        26,
+        52
+      ]
+    }
+  },
+  "b1-ubame-n1": {
+    "quantity": "the bath's comment current",
+    "observed": "2026-10-10",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "026828713522",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -n 'Bath: a small addition' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "bath": "10 x 8 ft on the kitchen's south wall"
+    }
   }
 }
