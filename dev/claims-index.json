@@ -23720,10 +23720,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#connector never dropped": {
-  "code": "ecf722db806183c3",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "the connector is skipped by the touch loop and by the orphan drop, so the track out is never deleted",
+  "code": "12b54d523086303e",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "in step",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -23735,10 +23735,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#end meets end": {
-  "code": "988889169fc88380",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "when the foot is within 4 ft of the other lane's end, that end is moved onto q: one join point, read as one lane",
+  "code": "4dce658af0b45ddd",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "in step",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -23750,10 +23750,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#ends touch the way they near": {
-  "code": "825f46c4c6556916",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "a free end is extended until its tread touches the way it nears; the web is joined where treads meet",
+  "code": "f848842a386f586d",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "in step",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -23794,19 +23794,20 @@
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan piece dropped": {
-  "code": "8be9c892f66a50d0",
-  "core": "dafcb92a930c390d",
-  "date": "2026-10-09",
-  "note": "a piece is dropped only when every house in `lane_houses` it serves is served by another way; households reached across a neighbor are owed no lane, and a piece joining nothing is not drawn",
+  "code": "4fda560c09083fcb",
+  "core": "75ab3e95057cb594",
+  "date": "2026-10-10",
+  "note": "in step",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
