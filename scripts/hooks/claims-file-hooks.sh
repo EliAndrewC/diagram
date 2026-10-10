@@ -44,6 +44,13 @@ elif tool == "Bash":
     path = re.compile(r"(?:^|[\s\x27\x22=<>])(?:\S*/)?RESEARCH-CLAIMS\.md(?![\w.-])")
     verb = re.compile(r"(?:^|[\s;&|(])(?:cat|head|tail|less|more|sed|awk|grep|egrep|rg|tee|cp|mv|rm|wc|vi|vim|nano|python3?|perl|truncate|touch)\b|>|<|make\s+(?:lines|append)\b")
     for piece in re.split(r"&&|\|\||;|\n", cmd):
+        # GUARD_EDIT_OK: plan review round 2 - a grep or rg searching FOR the name names it as its PATTERN, not a file:
+        # its first non-option argument is dropped before the sheet is looked for
+        words = piece.split()
+        if words and words[0] in ("grep", "egrep", "rg"):
+            rest = [w for w in words[1:] if not w.startswith("-")]
+            if rest:
+                piece = piece.replace(rest[0], " ", 1)
         if path.search(piece) and not re.match(r"\s*git\b", piece) and verb.search(path.sub(" ", piece)):
             print("Bash")
             break

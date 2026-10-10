@@ -25,7 +25,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       verify: tests/hooks/test-archive-first-hooks.sh - first fetch of a held page refused with its text; the same actor's second passes; another actor, an unheld page, a WebSearch
 - [ ] T05 Validation (plan D5, SC-004): make quote-verbatim before and after on real questions citing PDFs; recorded in research.md R2
       research: rendering
-      verify: every changed verdict is NOT-CHECKED -> VERBATIM
+      verify: no verdict loses ground (plan D5: no VERBATIM or READABLE lost, no new NOT-ON-PAGE or NOT-READABLE)
 - [ ] T06 Close: the tooling tests and make hooks-test green; feature report; landed
       research: rendering
       verify: the push accepted

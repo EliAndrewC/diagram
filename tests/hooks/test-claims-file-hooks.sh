@@ -15,7 +15,7 @@ bash_cmd() { OUT=$(python3 -c 'import json,sys; print(json.dumps({"tool_name":"B
 file_tool() { OUT=$(python3 -c 'import json,sys; print(json.dumps({"tool_name":sys.argv[1],"tool_input":{"file_path":sys.argv[2]}}))' "$1" "$2" | "$HOOK" pretool 2>&1); RC=$?; }
 
 echo "1. every hand route to the sheet is refused, naming the tool"
-for c in "cat $SHEET" "tail -5 $SHEET" "echo 'x | 376 | Q=0060' >> $SHEET" "sed -i 's/a/b/' $SHEET" \
+for c in "cat $SHEET" "grep -n 0060 $SHEET" "tail -5 $SHEET" "echo 'x | 376 | Q=0060' >> $SHEET" "sed -i 's/a/b/' $SHEET" \
          "make lines FILE=$SHEET KEY=homesteads" "make append FILE=$SHEET LINE='x | 376 | Q=0060'"; do
   bash_cmd "$c"
   [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'make research-claims Q=' && ok "refused: ${c:0:40}" || no "passed: $c" "(rc=$RC)"
@@ -34,7 +34,7 @@ file_tool Read /diagram/.clones/diagram-research/CLAUDE.md
 [ "$RC" -eq 0 ] && ok "a Read of another file passes" || no "an unrelated Read was refused" "(rc=$RC)"
 
 echo "3. a MENTION is not an invocation; there is no escape; a refusal is recorded"
-for c in 'grep -rn "RESEARCH-CLAIMS" docs/' "git -C /x commit -m 'the sheet RESEARCH-CLAIMS.md is tooled now'" "echo see RESEARCH-CLAIMS.md in the docs"; do
+for c in 'grep -rn "RESEARCH-CLAIMS" docs/' 'grep -rn RESEARCH-CLAIMS.md docs/' "git -C /x commit -m 'the sheet RESEARCH-CLAIMS.md is tooled now'" "echo see RESEARCH-CLAIMS.md in the docs"; do
   bash_cmd "$c"
   [ "$RC" -eq 0 ] && ok "a mention passes: ${c:0:40}" || no "a mention was refused: $c" "(rc=$RC)"
 done
