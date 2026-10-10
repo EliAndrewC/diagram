@@ -12035,6 +12035,30 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_rank_rounds#the ranks staggered": {
+  "code": "e18afd14d37f48ea",
+  "core": "ead3c022debb8995",
+  "date": "2026-10-10",
+  "note": "in the brick pattern, even rounds offer midpoints between neighbors and odd rounds the seats straight behind; the drawing page allows staggered houses (\"a map may stagger houses east to west\") and records that as a GUESS",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:6e49c8ae71d8a5e7"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/stages.py::_seat_rank_rounds#the ranks' rounds": {
+  "code": "393913127683ed83",
+  "core": "ead3c022debb8995",
+  "date": "2026-10-10",
+  "note": "the cited pages say nothing on how many ranks a cluster has or on the center-out order (round k at the row's depth plus k steps, four rank rounds, three rescue rounds); they give only the 92 ft between rows, which a separate claim covers",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_rank_rounds#the rescue's offer along the field": {
   "code": "22281799edbb8cb9",
   "core": "ead3c022debb8995",

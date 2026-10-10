@@ -115,8 +115,8 @@ survey, its date and its numbers.
   FR-002, FR-003).
 - **SC-003**: The pool rerolled on the landing commit leaves every manifest identical to HEAD's (FR-003).
 - **SC-004**: A suppression with no reason fails the gate; one with a reason passes (FR-004).
-- **SC-005**: The setting's comment and clause 12 both state that 100 is the second most common value on GitHub (131 of
-  1,209 repositories) and the most common chosen over the default, citing research.md R1 (FR-005, FR-006).
+- **SC-005** (FR-005, FR-006): The setting's comment and clause 12 both state that 100 is the second most common value on
+  GitHub (131 of 1,209 repositories) and the most common chosen over the default, citing research.md R1.
 - **SC-006**: The claims gate passes at the push with every split unit's claims carried and checked (FR-007). AMENDED
   2026-10-10 by the GM: *"we don't need to fix research claim refusals that were already documented, which... are not new
   things that we've created. I mean, as long as they show up on a make claims report, then they will get handled in
@@ -145,9 +145,10 @@ survey, its date and its numbers.
   convention.
 - **D4 - the claims the split re-opened** (the GM, 2026-10-10, SC-006): the impl-drift re-check of every split unit found
   long-standing drift in code the split moved but did not change; round 1's fixes (relabels, citations, added claims, and
-  `_ground_push`'s lane room converted to px - no map moves at 1 ft/px) took the gate's refusals from 39 to 16, and round 2
+  `_ground_push`'s lane room converted to px - no map moves at a hamlet's scale, research.md R4) took the gate's refusals from 39 to 16, and round 2
   began reversing round 1. The rest stand in `make claims-report` for feature 374. Class: process decision, the GM's.
-- **D5 - the 40-household seed 39 at +14.2%** (370-start against 370-end; every other seed faster, 20 hh -26.5%): the GM,
+- **D5 - the 40-household seed 39 at +14.2%** (a one-shot observation, observed 2026-10-10; method: `make perf-report
+  AGAINST=370-start` on the 370-end run; every other seed faster, 20 hh -26.5%): the GM,
   2026-10-10, *"I am okay with that one 14.2% seed"*. A split adds calls, not work; the two bookends were hours apart under
   different load. Class: accepted measurement, the GM's.
 - **D3 - `scripts/`, `pool/` and `tests/hooks/` held by this rule alone** (FR-002): the GM asked for a cap on function
