@@ -72,8 +72,8 @@ for every row not owed under the old scheme (an owed row stays owed), so the cha
 (`check-bundle-hooks.sh` for the record checks and impl-drift, `pair-hooks.sh` for the review checks) is refused unless
 `plan-review.json` carries a CLEAR verdict current under D6 that covers that task: a `## <task id>` section of `plan.md` ruled
 by a per-task decision preflight (`make decide F= T=` builds a bundle of that section, the request and the spec;
-`spec-fidelity` MODE 5 records `tasks.<id>` in `plan-review.json`), or, where the plan has no section for the task, the
-plan-stage verdict. Escape `DECIDE_OK="<reason>"`.
+`spec-fidelity` in its plan-review mode, D19, records `tasks.<id>` in `plan-review.json`), or, where the plan has no
+section for the task, the plan-stage verdict. Escape `DECIDE_OK="<reason>"`.
 
 **D4 - FR-003(b)(c): check state from the hook events.** `.git/checks-open.json` holds every record, claims and modal check
 dispatched: its subject (a question number, a modal uid, a claims bundle's pages), from the MANIFEST's `unit:` lines, and
@@ -86,21 +86,34 @@ dispatch opens the next round. **Returned** is the first of: SubagentStop for it
 check's answer (`make record-checked` / `claims-checked` / `modal-triaged`) - so a missing hook event never deadlocks a
 subject. A check silent past the no-poll guard's 90-minute wait ceiling is reported stale by `agent-stall-hooks.sh` and can be
 closed with `make check-closed ID= REASON=`. Escape `FREEZE_OK`.
-**What the apply pass admits.** A hook sees an edit, not who proposed it: no reply is structured enough to match an
-`old_string` to a finding. So the pass is bounded by what can be read mechanically - the subject's own files only, and
-(D15) not a block the feature had not changed, which is where a check's proposal on someone else's words would land.
-An edit the checks did not propose to the feature's own changed blocks is not distinguishable and is admitted; the next
-round reads it.
+**What the apply pass admits: the checks' own EDIT blocks.** A check's proposals are already machine-readable: seven
+contracts (quote-check, record-format, entry-drift, source-applicability and the three modal checks) end each finding they
+can word with an `EDIT <path> <<< old === new >>>` block, which `make apply-edits` applies. At SubagentStop the hook reads
+the returned agent's last reply (`agent_transcript_path`) and keeps its EDIT blocks on the subject's round. In the apply
+pass `make apply-edits` on a reply of this round is admitted (`record-edit-hooks.sh` gains a Bash matcher for it), and a
+hand Edit to the subject is admitted only when its `old_string` lies inside the old text of one of the round's EDIT blocks
+(the session applying a block `apply-edits` refused, or a part of one); any other Edit to the subject is refused, naming
+the round's blocks. The three page checks that write no EDIT blocks today - intro-check, record-style and
+translation-check - are given them in their contracts (a task of batch 3), so every check that proposes words on a frozen
+subject proposes them as blocks. impl-drift's subject is a claim in code or a procedure section, never a frozen page or
+modal, so the freeze does not reach it (its findings are recorded by `make claims-checked`).
 
-**D5 - FR-005(a): locate first.** The 372 record shows triage replies whose second `TOUCHES` sat mid-line and a count of
-"6 of 6 sent on" from a one-line reply. The task first reproduces the defect from those replies against today's parser; the
-fix reads only lines that open with `TOUCHES ` (after list markers and backticks are stripped), counts only those, and prints
-what it ignored. If today's parser already reads only such lines, the test pins that and the record says so.
+**D5 - FR-005(a): located - the parser was not the defect.** Today's parser already reads only lines that open with
+`TOUCHES ` (`record_triage`'s anchored pattern), and the test pins that, with a mid-line `TOUCHES` and a prose mention ignored.
+372's wave 108 record shows what happened instead (its transcript, 2026-10-10 14:19 UTC): a bullet drafted on 0105's drawing
+page and withdrawn before any commit left the page back at its old words, the triage reply named no claim, and
+`claims-triaged` reported "3 of 3 sent on" - the three were `forced`, because the withdrawn block's words were in no version
+of the page's history and `removed_words` could not show them. The fix (XIV, a defect found in the work): every snapshot's
+page text is kept as a git blob in the clone (`keep_texts`, `<git dir>/claims-page-blobs.json`) and read first, so a removed
+block is shown even when it never reached a commit; and `claims-triaged` reports the claims a reply named apart from those
+owed in full, so the count says which.
 
 **D6 - FR-005(b): a decision edit is any edit that is not a typo.** `plan-review.json` keeps the reviewed plan's text
 (`plan_text`, beside its hash). A plan whose hash differs keeps its verdict only when its word-level diff from that text is
 typo-scale: whitespace, re-wrapping and punctuation, and single-word replacements within edit distance two, neither word
-holding a digit or a negation (`not`, `no`, `never`, `except`, `unless`, `only`). Any added or removed word, number or
+holding a digit, a number word or ordinal (`one`-`twenty`, `hundred`, `thousand`, `first`-`tenth`, `half`, `twice`) or a
+negation (`not`, `no`, `never`, `except`, `unless`, `only`). The cost, accepted with FR-005(b)'s wording: a plain rewording
+voids the verdict and owes a re-review. Any added or removed word, number or
 negation voids it - the conservative side, since a missed decision is the incident the plan gate exists for. A
 D3 task section is judged the same way against its own preflight text.
 
@@ -117,15 +130,18 @@ the feature, so a spec written in one clone and built in another is one report.
 `specs/NNN/report.md`: wall time by category (thinking, editing, quick tests, test files, gates, waiting on each subagent
 type, spec-kit steps), dispatches, rounds per checked thing, red gates and BLOCKED reviews, tasks and rows closed, and the
 cascade ratio (check dispatches per line of the feature's own diff, `git diff --numstat` over its commits). Sources: the
-event log; `dev/run-log/` (gates); the review ledger and plan-review history (BLOCKED); the commits whose message names the
+event log; `dev/run-log/` (gates); the review ledger and plan-review history (BLOCKED); the record-check answers
+(`<git dir>/record-checks/`, each clone's, for the checks answered and their results); the commits whose message names the
 feature. Where the event log is missing (any feature before this one, and 375 itself) a session transcript fills it:
 `TRANSCRIPT=<jsonl>` converts a Claude Code transcript to the same events, Edit digests included, so the SC-006 replay
 and 375's own report run on converted events. Closing routes refuse without the report (D13).
 
 **D9 - Categories.** From the tool call alone: Edit/Write/NotebookEdit = edit; Bash running `make quick` = quick test,
-`make test-file` = test file, `make done` = gate, `make tick`/`claim`/a `/speckit-*` skill = spec-kit step; Agent by
-`subagent_type`: the record checks, impl-drift and the modal checks = record check, the review checks = review check,
-`spec-fidelity*` = spec review, `round-arbiter`, anything else = other subagent; the rest = other tool.
+`make test-file` = test file, `make done` = gate, `make tick`/`claim`/`plan-verdict`/a `/speckit-*` skill = spec-kit step;
+Agent by `subagent_type`: the record checks and the modal checks = record check (an ad-hoc modal triage too, known by the
+MANIFEST its prompt names); impl-drift and the claims triage (an ad-hoc agent on a `claims-triage` MANIFEST) = claims
+check, FR-008's own category; the review checks = review check; `spec-fidelity*` = spec review; `round-arbiter`; anything
+else = other subagent; the rest = other tool, which the report breaks down by make target.
 
 **D10 - FR-010: tripwires, each where its event is seen.**
 - round cap: record and claims checks get the review checks' cap of two rounds per subject per feature (a round being a
@@ -154,22 +170,25 @@ on a ruled trigger is refused (`pair-hooks.sh`). `REVIEW_ROUNDS_OK` is retired f
 
 **D12 - FR-012: the GM's review after landing.** `specs/NNN/gm-review.jsonl` holds the to-review rows (every arbiter
 ruling and every finding accepted with a reason - `make accept` writes them); the held rows are read where they are today
-(328's `audit/overrides.json` `Held`). `make gm-review` lists both by feature. A feature with a row gets one task
-`- [ ] GM review (make gm-reviewed F=NNN)`, added by the tooling and exempt from the open-task refusal; `make speckit-todo`
+(328's `audit/overrides.json` `Held`). `make gm-review` lists both by feature. A feature with a row of either kind, held or
+to-review, gets one task
+`- [ ] GM review (make gm-reviewed F=NNN) [lands-open]`, added by the tooling and exempt from the open-task refusal by its
+`[lands-open]` mark (D18); `make speckit-todo`
 shows such a feature as `Done - GM review pending`; the task carries `research: rendering`; `make gm-reviewed F=NNN [OVERTURN=<row> TO=<feature>]` ticks it, and an
 overturned ruling becomes a row of an open feature.
 
 **D13 - FR-009/FR-014: one closing check.** `scripts/gates/close_check.py` is asked by every closing route - `make tick` on
 the last open task, `make gm-reviewed`, and the push for each feature THE DELTA TOUCHES (`plan_gate.touched_features`) whose
-status line opens `Done` or whose tasks are all ticked; features numbered below 375 are not asked (they closed under the
-old rule): the report must exist and the feature's carried keys (`Carried: SC-nnn -> NNN key` in any spec) must be in its
+status line opens `Done` or whose tasks are all ticked. A feature already CLOSED when the closing check lands is not
+asked: the check's own landing commit writes `scripts/gates/closed-before-375.txt`, the features `make speckit-todo` reads
+closed at that commit, and nothing else is exempt - 372 (Draft) and 374 (Filed) are asked. The report must exist and the feature's carried keys (`Carried: SC-nnn -> NNN key` in any spec) must be in its
 `measurements.json`. `make speckit-todo` lists the carries.
 
 **D14 - FR-004: the preflight phase.** `make done` runs `preflight` first - ahead of the `verified-done` short-circuit too,
 since a stale derived file is invisible to that key - `make building-programs`,
 `make glossary`, `make record CHECK=1`, `check-research-pointers.py`, `spec-lint.py` on the delta's spec directories, and
 `make quick` with coverage over the engine files the delta changed (100% on each). It stops on a failure. "Seconds" is measured, not promised (`m:preflight-cost`); if the record build or the quick tier
-makes it longer, the measurement says which. The tree check:
+makes it longer, the measurement says which, and keeping a slower step in the preflight is put to a MODE 1 exception check. The tree check:
 the gate hashes `git ls-files -m -o --exclude-standard` contents at its start (after the preflight) and end; any tracked
 file that differs fails the gate naming it - the files the gate itself writes measured first and excluded by name.
 
@@ -181,28 +200,33 @@ equal the merge base's is refused as "filed as row N"; `make found-take ROW=` ma
 **D16 - FR-007: armed until the findings are disposed.** `escalation-hooks.sh` still arms at a review's dispatch (so a
 review whose row is never written stays armed), and now disarms on either path: `escalation-check` dispatched, or the review
 ledger holding that unit's row from this dispatch with every finding disposed - its `acted on` column one of the disposals
-(fixed, verified, accepted with a reason, filed as a row, nothing). The ledger lint holds that vocabulary.
+(fixed, verified, accepted with a reason, filed as a row, or `nothing` - which the ledger lint admits only on a row whose
+verdict found nothing, so it can never switch off an open finding). The ledger lint holds that vocabulary.
 
 **D17 - FR-013.** `CLAUDE.md`'s enforcement table gains the new guards and a three-line note naming FR-010's patterns, and
 says that a session asking the advisor about a loop hands it `make arbiter-bundle`'s MANIFEST.
 
-**D18 - Landing by batch.** A feature with an open task lands nothing, and 375 is too large to sit in one clone for its
-whole length. So every decision is reviewed here once, and `tasks.md` holds only the current batch: a batch's tasks are
-ticked, the feature lands, and the next batch's tasks are added from the list below (as 372 added its waves). Adding tasks
-that carry decisions already reviewed is not a plan change; a batch that needs a new decision amends this plan and is
-reviewed again. Between a landing and the next batch's tasks the feature reads closed in `make speckit-todo`, which is
-true of what has landed; its status line says which batch is next.
+**D18 - Landing by batch, open between them.** A feature with an open task lands nothing, and 375 is too large to sit in one
+clone for its whole length. So every decision is reviewed here once, and `tasks.md` holds the current batch's tasks plus one
+standing task, `- [ ] Batches 2-4 (plan D18) [lands-open]`. A task line marked `[lands-open]` is exempt from
+`sync-with-main.sh`'s open-task refusal and keeps the feature open in `make speckit-todo` and to every closing route (D13),
+so 375 lands each batch and never reads closed until its last box is ticked. The mark is the tooling's (batch 1 builds it,
+with a test that an ordinary open box still refuses the push); D12's GM-review box uses the same mark. A later spec that
+must wait declares `**Waits on**: 375`, and `make tick` refuses a task of it while 375 is open - 374's spec carries the line,
+so its first task waits for the last batch. Adding a batch's tasks that carry decisions already reviewed is not a plan
+change; a batch that needs a new decision amends this plan and is reviewed again.
 
-**D19 - MODE 5 is a plan review of one section.** The decision preflight (D3) is dispatched as `MODE 4: PLAN REVIEW` of the
-named task's section, so `review-round-hooks.sh`'s classifier passes it as a plan review and never reroutes it to the verify
+**D19 - The decision preflight is a plan review of one section.** It is dispatched as `MODE 4: PLAN REVIEW` of the named
+task's section, so `review-round-hooks.sh`'s classifier passes it as a plan review and never reroutes it to the verify
 twin; `make plan-verdict TASK=<id>` records it under `tasks.<id>`.
 
 ## Batches
 
-1. **Measurement and the two fixes**: D7, D8, D9 (the event log, the report, the transcript converter; 375's report so far),
-   D5, D6.
+1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005
+   on 372 and a one-task feature; 375's report so far), D5, D6, D18's `[lands-open]` mark and `**Waits on**:`.
 2. **The owing logic**: D1, D2 (with its migration), D15; the SC-001 replay.
-3. **The guards and the arbiter**: D3, D19, D4, D10, D11, D16; the SC-006 replay.
+3. **The guards and the arbiter**: D3, D19, D4 (with the EDIT blocks added to intro-check, record-style and
+   translation-check), D10, D11, D16; the SC-006 replay.
 4. **The gates and the doctrine**: D12, D13, D14, D17; FR-014's carry; SC-002's audit (each FR's old-behavior test listed);
    375's own report written; the feature closes.
 

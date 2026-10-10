@@ -1,15 +1,29 @@
 {
-  "subagent-stop-probe": {
-    "quantity": "whether the hook events see a background agent's launch and its return, and pair them (D4, D7)",
-    "observed": "2026-10-10",
-    "source": "a temporary user-level hook on SubagentStart, SubagentStop and PostToolUse(Agent) appending its input to the scratchpad; one background haiku agent dispatched; the hook then removed (settings restored from a copy)",
-    "command": "the probe hook's log, read with json.loads per line",
-    "method": "the three events' inputs read for hook_event_name, agent_type, agent_id, tool_response.status and agentId",
-    "value": {
-      "SubagentStart": "fired at launch: agent_type general-purpose, agent_id present",
-      "PostToolUse(Agent)": "fired at launch: tool_response.status async_launched, tool_response.agentId equal to the agent_id",
-      "SubagentStop": "fired at the background agent's return with the same agent_id and agent_type",
-      "reading": "a background check's return is seen by SubagentStop and paired to its dispatch through PostToolUse's agentId; D4 keeps the answer as a second return signal anyway"
-    }
+ "subagent-stop-probe": {
+  "quantity": "whether the hook events see a background agent's launch and its return, and pair them (D4, D7)",
+  "observed": "2026-10-10",
+  "source": "a temporary user-level hook on SubagentStart, SubagentStop and PostToolUse(Agent) appending its input to the scratchpad; one background haiku agent dispatched; the hook then removed (settings restored from a copy)",
+  "command": "the probe hook's log, read with json.loads per line",
+  "method": "the three events' inputs read for hook_event_name, agent_type, agent_id, tool_response.status and agentId",
+  "value": {
+   "SubagentStart": "fired at launch: agent_type general-purpose, agent_id present",
+   "PostToolUse(Agent)": "fired at launch: tool_response.status async_launched, tool_response.agentId equal to the agent_id",
+   "SubagentStop": "fired at the background agent's return with the same agent_id and agent_type",
+   "reading": "a background check's return is seen by SubagentStop and paired to its dispatch through PostToolUse's agentId; D4 keeps the answer as a second return signal anyway"
   }
+ },
+ "event-hook-cost": {
+  "quantity": "the event-log hook's wall time per call, beside two guards that already run on every Bash call (plan D7, Constitution Check VI)",
+  "observed": "2026-10-10",
+  "source": "the clone at the T01 draft; load average 1.2 / 1.6 / 2.4",
+  "command": "40 runs each of scripts/hooks/event-log-hooks.sh, batching-hooks.sh pretool and shell-check-hooks.sh pretool on one PreToolUse(Bash) payload, median, in a python subprocess loop",
+  "method": "median wall ms of the 40; python -X importtime on event_log.py for where it goes",
+  "varies": "timing; shared container",
+  "value": {
+   "event_log_ms": 59.3,
+   "batching_pretool_ms": 37.7,
+   "shell_check_pretool_ms": 74.8,
+   "reading": "inside the existing guards' range (below shell-check's); about 25 ms of it is the json and re imports. Claude Code runs a call's matching hooks in parallel, so on Bash and Edit calls it adds little wall time beside the guards already there"
+  }
+ }
 }

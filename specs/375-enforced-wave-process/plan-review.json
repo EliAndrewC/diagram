@@ -1,0 +1,197 @@
+{
+ "feature": "375-enforced-wave-process",
+ "plan_sha256": "0a1bdade28dfe53c4fda646294a5aa082581e051be300ac6d4082edff4510bb1",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Summary/Technical Context",
+   "summary": "every task research: rendering; one engine module (tools/claims.py) so the landing is GATED; nothing fires in this session until it lands, so proofs are hooks-test fixtures and replays and 375's own report comes from the transcript backfill",
+   "class": "within",
+   "why": "Mechanics of delivering FR-001..FR-014; SC-002 asks for tests that fail on the old behavior, which fixtures and replays are. The m: keys event-hook-cost, preflight-cost and cascade-threshold carry no stated figure (targets the tasks will measure), so they are not NOT-REVIEWABLE; subagent-stop-probe is a one-shot labeled observation of a removed hook."
+  },
+  {
+   "id": "Constitution Check",
+   "summary": "VI measured as the per-call hook cost (m:event-hook-cost), a cost past the slowest existing per-call guard a finding; XIII baseline in a detached worktree; XVI every FR as written",
+   "class": "within",
+   "why": "Adds a measurement of a cost FR-008 introduces; narrows nothing."
+  },
+  {
+   "id": "D1",
+   "summary": "FR-001 as a modal triage of the moved page's changed blocks (one ad-hoc opus agent, TOUCHES replies), named units owed in full, the rest answered 'triage: untouched'; the page's before is the blob recorded at the unit's last answer, else the merge base",
+   "class": "within",
+   "why": "FR-001 says 'one cheap triage ... as make claims-triage already does', and claims-triage is one ad-hoc opus agent (scripts/record/claims.py line 822). 'Answered at its current fingerprint, triage: untouched' is 'cleared on the record'. Units owed by the modal's own words are untouched, as FR-001 scopes only drawing/question page changes."
+  },
+  {
+   "id": "D2",
+   "summary": "FR-002: a procedure claim's fingerprint is its own line; 'the rule text it sits beside' is not located by position because markers stand clustered at each section head, so the rest of the section goes to a triage; one-time backfill so the change owes nothing by itself",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Premise measured, not assumed: grep counts 175 Research: markers in docs/buildings.md and 106 in docs/building-programs.md (2026-10-10, grep -c; the plan says 174, one off, not a finding), and building-programs.md lines 17-62 are all markers with the rule text after them. A clustered marker sits beside other markers, so the literal 'rule text it sits beside' has no referent - the rule is impossible as written, not merely awkward. The request's own words are 'line-scoped claim re-owing', and FR-002 itself sends 'everything else in the section' to one triage, so a rule-text change that bears on a claim still reaches impl-drift through the triage. Purpose (stop re-owing whole sections, SC-001's four fifths) is served. The migration preserves owed rows, so nothing owed is dropped."
+  },
+  {
+   "id": "D3",
+   "summary": "FR-003(a): active task in .git/active-task (make task-start, default the first open task); check dispatches refused unless plan-review.json carries a current CLEAR covering the task - a per-task section preflight (make decide) where plan.md has a ## <task id> section, else the plan-stage verdict; escape DECIDE_OK",
+   "class": "within",
+   "why": "Exactly FR-003(a)'s two branches and its two enforcing hooks; impl-drift is the claim check FR-003(a) names. The escape is the spec's own 'every guard keeps its named escape'."
+  },
+  {
+   "id": "D4 (freeze and apply-once)",
+   "summary": "FR-003(b)(c) from hook events: .git/checks-open.json, a subject's round open from first dispatch until every check returned; Edit/Write to the subject refused and a check already in the round not re-dispatched; returned = first of SubagentStop, foreground PostToolUse, or the recorded answer; stale checks closed by make check-closed; escape FREEZE_OK",
+   "class": "within",
+   "why": "Implements 'refused while running or unanswered' and (c)'s one-round shape. SubagentStop firing for a background agent is a recorded observation (m:subagent-stop-probe). The multiple return signals prevent deadlock without widening what is admitted."
+  },
+  {
+   "id": "D4 (what the apply pass admits)",
+   "summary": "the apply pass admits any edit to the subject's own files on blocks the feature changed, because 'no reply is structured enough to match an old_string to a finding'; only blocks the feature had not changed are refused",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-003(b) admits, after return, only 'the edits those checks proposed, applied in one pass'. The stated impossibility is a premise nobody measured, and the repository contradicts it: scripts/record/apply_edits.py (make apply-edits) already applies EDIT blocks carrying the exact old text and its replacement, and seven check contracts emit them (quote-check, record-format, entry-drift, source-applicability, modal-depiction, modal-research, modal-form). For those checks the boundary is mechanical: admit make apply-edits FROM=<a reply of this round>, and refuse a hand Edit whose old_string matches no returned EDIT block's old text (escape with a reason). Purpose-level: the GM's rule is that nothing rests on a session remembering; admitting every edit leaves 'apply only what was proposed' to memory, which is how 0105 took four rounds. What the plan should say: the apply pass is bounded by the round's EDIT blocks for checks that emit them; for checks that emit none (impl-drift, intro-check, record-style, translation-check by grep of .claude/agents/ for EDIT) state the residual as a narrowing of its own, put to a MODE 1 check, rather than admitting everything for every check."
+  },
+  {
+   "id": "D5",
+   "summary": "FR-005(a): reproduce the parser defect from 372's replies first; read only lines opening with 'TOUCHES ' after list markers and backticks are stripped; print what was ignored; if already correct, pin with a test and record it",
+   "class": "within",
+   "why": "A markdown list marker before TOUCHES is still a line that opens with it; mid-line TOUCHES, the defect, is excluded. Locating first is constitution XIV's habit, not a scope change."
+  },
+  {
+   "id": "D6",
+   "summary": "FR-005(b): a plan verdict survives only a typo-scale word diff (whitespace, re-wrap, punctuation, single-word replacements within edit distance two holding no digit or negation); any added or removed word voids it",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-005(b) names 'a typo, a wording fix' as surviving and makes 'any edit that adds or changes a decision, ruled or new, anywhere in plan.md' void it unconditionally. Whether a reworded phrase changes a decision is judgment; any mechanical test that admits wording fixes admits some decision changes, which breaks the unconditional clause and re-opens the incident the plan gate exists for (feature 239). The motivating case in request.md is a typo, which survives. Keeping the unconditional clause over the parenthetical example is the conservative reading of the spec's own two clauses. Cost to raise with the GM: a pure wording fix now costs a plan re-review. One gap in the mechanism the task must close: number words and ordinals hold no digit and sit within distance two ('two'->'ten', 'first'->'fifth'), so a count change would pass as typo-scale; add them to the void list."
+  },
+  {
+   "id": "D7",
+   "summary": "FR-008: one matcher-less hook on PreToolUse, PostToolUse, SubagentStart, SubagentStop, UserPromptSubmit and Stop appends a JSON line to <git common dir>/l7r-events/<feature>.jsonl (edit digests, make target, agent type/id/MANIFEST/duration); feature from .specify/feature.json; never blocks; the report reads every clone's log",
+   "class": "within",
+   "why": "FR-008's fields, plus events it needs for the gaps and the returns. The git dir survives compaction, session changes and transcript pruning, which is what FR-008 requires."
+  },
+  {
+   "id": "D8",
+   "summary": "FR-009: make feature-report writes specs/NNN/report.md from the event log, dev/run-log/, the review ledger and plan-review history, and the feature's commits; a TRANSCRIPT= converter fills features without an event log, 375 included",
+   "class": "within",
+   "why": "Every column FR-009 names is there. FR-009 also names 'the record-check answers' as a source and the plan's list omits them; the task should take rounds per checked thing and returns from them too, but this is a source list, not a narrowing of the table. SC-005 (under ten seconds on 372's record and on a one-task feature, reproducing the spec's table) is not named in the Batches list; it belongs with the report in batch 1 and is owed before 375 closes."
+  },
+  {
+   "id": "D9",
+   "summary": "categories: impl-drift folded with the record and modal checks into 'record check'; added 'spec review', 'round-arbiter', 'other tool'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-008 lists 'claims check' as a category of its own, beside 'record check'. D9 drops it, folding impl-drift into record check and leaving the claims triage (an ad-hoc agent) under 'other subagent'. Nothing makes the split impossible: impl-drift is a subagent_type, and the claims triage is identified by the claims-triage MANIFEST its prompt names (D7 already records it). Purpose: the GM asked for time per kind of work, and impl-drift over 73, 105 and 105 claims is one of the measured loops in the spec's own table - folding it hides the cost the feature exists to expose. What it should say: a 'claims check' category for impl-drift and the claims triage. The added categories are finer splits and stand."
+  },
+  {
+   "id": "D10 (round cap)",
+   "summary": "record and claims checks capped at two rounds per subject per feature, a round being a dispatch at a new fingerprint, counted in review-rounds.json",
+   "class": "within",
+   "why": "FR-010's first bullet as written."
+  },
+  {
+   "id": "D10 (A -> B -> A)",
+   "summary": "live: an Edit whose new_string equals an earlier Edit's old_string on the same file, checked at PreToolUse(Edit); the report and the SC-006 replay run the same over converted events and commits",
+   "class": "within",
+   "why": "FR-010 asks for a passage returning to an earlier version computed from the file's history; the edit log is that history. Exact-string matching misses a reversal with different edit boundaries, so SC-006's bath-bullet replay is the test that this does what FR-010 says; if it misses, that is a defect, not an accepted limit."
+  },
+  {
+   "id": "D10 (second red gate)",
+   "summary": "the gate's failure exit reads the previous run's state",
+   "class": "within",
+   "why": "FR-010 as written."
+  },
+  {
+   "id": "D10 (cascade threshold)",
+   "summary": "threshold set from the SC-006 replay (m:cascade-threshold: 372's waves 106 and 108 against a sample of ordinary tasks), checked at each check dispatch",
+   "class": "within",
+   "why": "FR-010 says 'a set threshold' and fixes no number; setting it by measurement before the wire lands is the project's rule that a number is measured, not remembered. The key is a target the task takes, nothing to re-run now."
+  },
+  {
+   "id": "D10 (heavy run)",
+   "summary": "make test-file on a file with no rolls_map test, or make done with no engine path changed since the last green gate, refused with the cheaper command by measure-hooks.sh; no arbiter",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-010 says every tripwire dispatches the round arbiter, but FR-011 fixes the arbiter's unit as a checked thing (page, pop-up, sheet, spec or plan), and a test run is none of those, so the arbiter has nothing to rule on; the literal route is impossible. Refusing before the run with the cheaper command catches the pattern 'the moment it appears', does not stop the feature (the cheaper run proceeds; MEASURE_OK remains), and is what the GM's 'are we running lengthier tests than we should?' asks for."
+  },
+  {
+   "id": "D10 (refusal until ruled)",
+   "summary": "a tripwire writes arbiter-owed.json; the next check dispatch on the unit, or for a feature-wide wire the next gate or check dispatch, is refused with the arbiter's command until a ruling is recorded",
+   "class": "within",
+   "why": "A hook cannot dispatch an agent; refusing the next dispatch until the arbiter has ruled is how 'a tripwire dispatches the round arbiter' is enforced. The pause lasts one arbiter dispatch and stops nothing else, so 'it does not stop the feature' holds."
+  },
+  {
+   "id": "D11",
+   "summary": "round-arbiter agent (Opus high, omitClaudeMd, tier-test row); make arbiter-bundle with findings marked new/repeated/reversing, round diffs, cascade chain, oscillation flags, request and spec; rulings recorded in arbiter.jsonl; accept closes the unit, process-fault files a tooling row in found.jsonl; a second dispatch on a ruled trigger refused; REVIEW_ROUNDS_OK retired from the cap",
+   "class": "within",
+   "why": "FR-011's bundle, rulings and binding as written. Retiring REVIEW_ROUNDS_OK from the cap follows FR-012 ('no longer needed for round caps') and FR-011 ('the session can neither re-dispatch ... nor overrule'); other escapes stay."
+  },
+  {
+   "id": "D12",
+   "summary": "gm-review.jsonl holds every arbiter ruling and accepted finding; held rows read from 328's overrides; make gm-review lists both; a feature with a row gets one tooling-added task exempt from the open-task refusal; speckit-todo shows 'Done - GM review pending'; make gm-reviewed ticks it, an overturn becomes a row of an open feature",
+   "class": "within",
+   "why": "FR-012 as written. The task should add the box for held items as well as to-review rows ('to-review or held items'); 'a feature with a row' should read so."
+  },
+  {
+   "id": "D13 (one closing check)",
+   "summary": "close_check.py asked by the last make tick, make gm-reviewed, and the push for each touched feature whose status opens Done or whose tasks are all ticked: report present and carried keys in measurements.json",
+   "class": "within",
+   "why": "FR-009's routes and FR-014's carry check. 'A status line turned Done' is held at the push, where a closing lands; nothing closes on main without it."
+  },
+  {
+   "id": "D13 (features below 375 not asked)",
+   "summary": "features numbered below 375 are exempt from the closing check, on the ground that they closed under the old rule",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The premise is unmeasured and false: specs/374-*/spec.md reads 'Status: Filed' with no tasks.md, and 372's reads 'Draft'; neither has closed. FR-014's only declared carries are 'SC-003 -> 374' and 'SC-004 -> 374', and the spec makes 374 'unable to close (every route of FR-009) while its measurements.json lacks the key'. Exempting by number exempts 374, so FR-014 has no enforcement at all and SC-003/SC-004 - the evidence the new process works - can be dropped silently, which is the slide-back the GM said is 'not tenable'. It also contradicts FR-009's 'every feature gets one, however small'. What it should say: the exemption covers features already closed when 375's closing check lands (judged by their state at that commit), never a number range; every feature open then, 372 and 374 included, is asked."
+  },
+  {
+   "id": "D14",
+   "summary": "FR-004: preflight before the verified-done short-circuit (building-programs, glossary, record CHECK=1, research pointers, spec-lint on the delta's specs, make quick with 100% coverage on changed engine files); 'seconds' measured as m:preflight-cost; tree hashed after the preflight and at the end, gate-written files excluded by name",
+   "class": "within",
+   "why": "FR-004's contents and the start/end hash. Measuring 'seconds' rather than assuming it is the project's rule; it does not accept a slower preflight. If the measurement exceeds seconds, keeping a slower phase is an exception owed a MODE 1 check, not covered by this verdict."
+  },
+  {
+   "id": "D15",
+   "summary": "FR-006: MANIFEST lists changed-blocks, contracts report OUTSIDE THE CHANGE, record-checked files those as open rows in found.jsonl; during an apply pass an edit to a block equal to the merge base is refused as 'filed as row N'; make found-take makes the row the active task's own change",
+   "class": "within",
+   "why": "FR-006 as written, including 'fixing it stays possible as that row's own change'."
+  },
+  {
+   "id": "D16",
+   "summary": "FR-007: escalation-hooks still arms at dispatch and disarms on escalation-check or on the ledger row recording every finding disposed (fixed, verified, accepted with a reason, filed as a row, nothing)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-007's effect - a review whose every finding is disposed of owes no escalation-check - holds: until the ledger row exists the findings are, as far as any tool can read, open, and the stop hook fires once per armed review, so a disposed row before the turn ends costs nothing. Arming at dispatch also covers a review whose row is never written, which arming on findings could not. The ledger lint must define 'nothing' as 'no findings', never 'no action taken', or it is a way to disarm an open finding."
+  },
+  {
+   "id": "D17",
+   "summary": "FR-013: CLAUDE.md's enforcement table gains the guards and a note naming FR-010's patterns; a session asking the advisor about a loop hands it the arbiter bundle's MANIFEST",
+   "class": "within",
+   "why": "FR-013 as written."
+  },
+  {
+   "id": "D18 (landing by batch)",
+   "summary": "every decision reviewed here once; tasks.md holds the current batch; each batch lands; tasks carrying reviewed decisions are not a plan change; a new decision amends the plan and is reviewed again",
+   "class": "within",
+   "why": "The spec does not require a single landing, and landing what works serves the GM's 'land on main without needing my review'. New decisions still go back to review."
+  },
+  {
+   "id": "D18 (reads closed between batches)",
+   "summary": "between a landing and the next batch's tasks the feature reads closed in make speckit-todo; its status line names the next batch",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The spec fixes when 375 closes - 'on SC-001, SC-002, SC-005 and SC-006' - and FR-009 makes the last make tick a closing route; a batch's last tick closes 375 before any of those is met, and before batch 4 the closing check that would refuse it does not exist. Purpose-level: 374 'takes no task until 375 has landed', and SC-003/SC-004 measure 374's first three tasks under the new process; a 375 that reads closed after batch 1 invites 374 to start with FR-003 and FR-004 unbuilt, which defeats the carried criteria. Not impossible: D12 already builds a tooling-added task exempt from the open-task refusal, and the same kind of task (an open 'next batch' box) keeps 375 open and landable. 'Too large for one clone' is a cost argument. What it should say: 375 stays open between batches by a tooling-held mark, and 374's first task waits for the last batch's landing."
+  },
+  {
+   "id": "D19",
+   "summary": "the per-task decision preflight is dispatched as a MODE 4 plan review of the task's section, so review-round-hooks passes it to spec-fidelity rather than the verify twin; recorded with make plan-verdict TASK=<id> under tasks.<id>",
+   "class": "within",
+   "why": "FR-003(a) asks for the preflight 'recorded like a plan verdict'; this records it exactly so. (D3 calls it MODE 5 and D19 MODE 4; one name should be chosen when the contract is written.)"
+  },
+  {
+   "id": "Batches",
+   "summary": "four batches: measurement and the two fixes; owing logic with the SC-001 replay; guards and arbiter with the SC-006 replay; gates and doctrine with FR-014's carry, SC-002's audit and 375's report",
+   "class": "within",
+   "why": "Orders what the spec requires. SC-005 is not named in any batch; it must be, since 375 closes on it."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

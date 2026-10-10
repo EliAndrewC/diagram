@@ -1162,6 +1162,15 @@ speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, 
 ##  CHECK=1 exit 1, with the line to add, when an open feature's spec has no `**Owed at**:` stage
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/speckit-todo.py" --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(CHECK),--check,)
 
+# GUARD_EDIT_OK: feature 375 FR-009 adds an operation - read-only unless WRITE=1, which writes the feature's report.md.
+feature-report: ## [project] where a feature's time and dispatches went, as a table, from the event log, the run log and git   F=375 [TRANSCRIPT="<jsonl> ..."] [SINCE=<ISO>] [UNTIL=<ISO>] [WRITE=1]
+##  F=<NNN>            the feature
+##  TRANSCRIPT=<files> session transcripts to convert where the event log has no lines (a feature before 375)
+##  SINCE= UNTIL=      ISO UTC bounds on the events read (a transcript holding more than this feature)
+##  WRITE=1            also write specs/NNN-*/report.md, which every closing route asks for
+	@if [ -z "$(F)" ]; then printf 'make feature-report: F=<feature number> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/feature_report.py" --root "$$(git rev-parse --show-toplevel)" "$(F)" $(foreach t,$(TRANSCRIPT),--transcript "$(t)") $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(WRITE),--write,)
+
 # GUARD_EDIT_OK: feature 251 - four new operations (the token census and the three script pre-passes that
 # take the mechanical part of a subagent check out of a model); no existing target or guard changes.
 agent-census:   ## [project] what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=<json>]

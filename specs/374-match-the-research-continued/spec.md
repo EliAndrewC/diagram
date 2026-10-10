@@ -6,6 +6,8 @@
 
 **Owed at**: now
 
+**Waits on**: 375 (`make tick` refuses a task here while 375 is open - 375's plan D18)
+
 **Input**: `request.md` (the GM, 2026-10-10); feature 328's request and feature 372's carry over unchanged.
 
 ## What it is

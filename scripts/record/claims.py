@@ -468,13 +468,56 @@ def record(
 _TOUCHES = re.compile(r"^TOUCHES\s+(\S.*?)\s+-\s+(.*)$")
 
 
-def removed_words(qdir: Path, name: str, digests: set[str], depth: int = 60) -> dict[str, str]:
-    """The words of the blocks `digests` of the question `name` that no longer stand, read back from the page's own git history
-    (newest first, at most `depth` versions): the snapshots keep digests only, and the triage must SHOW a removed block. A block
-    no version yields is absent from the answer."""
+#: The page texts a snapshot was taken of, kept as git blobs in the clone (feature 375 T04): `{findings digest: blob sha}`.
+BLOBS = "claims-page-blobs.json"
+
+
+def _blob_map(qdir: Path) -> Path | None:
+    common = (_git(qdir, "rev-parse", "--path-format=absolute", "--git-common-dir") or "").strip()
+    return Path(common) / BLOBS if common else None
+
+
+def keep_texts(qdir: Path, units: Mapping[str, Mapping[str, Any]]) -> int:
+    """Keep, as a git blob, the text of every page a recorded snapshot was taken of (`units`' `pages`), while the page still
+    stands at that snapshot. WHY (feature 375 T04, measured on 372's wave 108): a block drafted and withdrawn before any commit
+    is in no version of the page's history, so `removed_words` could not show it, and every claim citing the page was owed in
+    full (`forced`) - "3 of 3 sent on to impl-drift" from a triage reply that named none. The blob is the snapshot's own text,
+    so the removed words are always there to show."""
+    path = _blob_map(qdir)
+    pages = {name: fp for u in units.values() for name, fp in dict(u.get("pages") or {}).items()}
+    if path is None or not pages:
+        return 0
+    blobs = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+    kept = 0
+    for name, fp in sorted(pages.items()):
+        f = qdir / name
+        if fp in blobs or not f.is_file() or findings_of(text := f.read_text(encoding="utf-8")) != fp:
+            continue
+        run = subprocess.run(["git", "-C", str(qdir), "hash-object", "-w", "--stdin"], input=text, capture_output=True, text=True, check=False)
+        if run.returncode == 0:
+            blobs[fp] = run.stdout.strip()
+            kept += 1
+    if kept:
+        path.write_text(json.dumps(blobs, indent=0, sort_keys=True) + "\n", encoding="utf-8")
+    return kept
+
+
+def kept_text(qdir: Path, fp: str) -> str:
+    """The text of the page snapshot `fp`, from the clone's kept blobs, or ''."""
+    path = _blob_map(qdir)
+    blob = json.loads(path.read_text(encoding="utf-8")).get(fp, "") if path is not None and path.is_file() else ""
+    return (_git(qdir, "cat-file", "-p", blob) or "") if blob else ""
+
+
+def removed_words(qdir: Path, name: str, digests: set[str], depth: int = 60, snapshot: str = "") -> dict[str, str]:
+    """The words of the blocks `digests` of the question `name` that no longer stand, read back from the snapshot's kept text
+    (`keep_texts`) and then the page's own git history (newest first, at most `depth` versions): the snapshots keep digests
+    only, and the triage must SHOW a removed block. A block nothing yields is absent from the answer."""
     found: dict[str, str] = {}
-    for sha in (_git(qdir, "log", "--format=%H", f"-{depth}", "--", name) or "").split():
-        text = _git(qdir, "show", f"{sha}:./{name}") or ""
+    texts = ([kept_text(qdir, snapshot)] if snapshot else []) + [
+        _git(qdir, "show", f"{sha}:./{name}") or "" for sha in (_git(qdir, "log", "--format=%H", f"-{depth}", "--", name) or "").split()
+    ]
+    for text in texts:
         for b in ru.read_page(text).blocks:
             d = ru.digest([b.words])
             if d in digests and not b.intro:
@@ -515,7 +558,7 @@ def triage_bundle(
             fresh = [w for d, w in blocks if d not in before]
             if (name, old) not in lost:
                 missing = before - now
-                words = removed_words(qdir, name, missing) if missing else {}
+                words = removed_words(qdir, name, missing, snapshot=old) if missing else {}
                 gone[f"{name}|{old}"] = [words[d] for d in sorted(missing) if d in words]
                 lost[(name, old)] = len(words) < len(missing)
             if lost[(name, old)]:
@@ -832,9 +875,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         save_index(root / INDEX, live_rows(cur, new))
         save_store(root / STORE, {**store, **data["snapshots"]})
+        keep_texts(qdir, data["units"])
         for m in msgs:
             print(f"claims-triaged: {m}")
-        print(f"claims-triaged: {sum(1 for m in msgs if m.startswith('touched'))} of {len(data['units'])} sent on to impl-drift; the rest cleared")
+        named = sum(1 for m in msgs if m.startswith("touched") and " - a removed block the history no longer shows" not in m)
+        forced = sum(1 for m in msgs if m.startswith("touched")) - named
+        print(f"claims-triaged: {named} of {len(data['units'])} named by the reply"
+              + (f", {forced} owed in full because a removed block's words could not be shown" if forced else "")
+              + "; sent on to impl-drift, the rest cleared")
         return 0
     if args.cmd == "report":
         print(report(cur, index, qdir, store, load_deferred(root / DEFERRED)))
@@ -880,6 +928,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     new, msgs = record(index, units, reply, datetime.date.today().isoformat(), blocks["numbered"])
     save_index(root / INDEX, live_rows(cur, new))
     save_store(root / STORE, {**store, **blocks["snapshots"]})
+    keep_texts(qdir, units)
     for m in msgs:
         print(f"claims-checked: {m}")
     print(f"claims-checked: {sum(1 for k in units if k in new and new[k].get('code') == units[k]['code'])} of {len(units)} recorded")

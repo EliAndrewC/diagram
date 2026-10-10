@@ -20,6 +20,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "h=/diagram/scripts/hooks/clone-sync-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/clone-sync-hooks.sh\"; exec \"$h\" prompt",
             "timeout": 60,
             "statusMessage": "Syncing session clone with main..."
@@ -54,6 +63,15 @@
       }
     ],
     "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log",
+            "timeout": 5
+          }
+        ]
+      },
       {
         "matcher": "Edit|Write|NotebookEdit",
         "hooks": [
@@ -310,7 +328,38 @@
         ]
       }
     ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log records every hook event; it never refuses",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log",
+            "timeout": 5
+          }
+        ]
+      },
       {
         "matcher": "Read|Grep|Glob|Bash",
         "hooks": [
@@ -323,6 +372,15 @@
       }
     ],
     "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log",
+            "timeout": 5
+          }
+        ]
+      },
       {
         "hooks": [
           {
