@@ -92,7 +92,13 @@ def bundle(root: Path, trigger: str, out: Path) -> Path:
         parts.append(f"## Rounds - {check} on {subject}\n")
         for i, (v, marked) in enumerate(zip(rounds, mark_rounds(replies), strict=True), 1):
             parts.append(f"### Round {i} ({v.get('state')}; verdict: {el.verdict_of(replies[i - 1]) or 'no reply kept'})\n")
-            parts += [f"- {m}: {f}" for m, f in marked] or ["- (no findings in the kept reply)"]
+            if replies[i - 1]:
+                # THE REPLY ITSELF, beside the MANIFEST: the marks read numbered and bulleted lines only, and a check that words its
+                # findings otherwise (modal-form's sections) left the arbiter with "no findings" on 374's first day (2026-10-10)
+                (out / f"round-{i}-{check}.md").write_text(replies[i - 1], encoding="utf-8")
+                parts.append(f"The whole reply: `round-{i}-{check}.md` beside this file.")
+            parts += [f"- {m}: {f}" for m, f in marked] or ["- (no numbered or bulleted findings - read the whole reply)" if replies[i - 1]
+                                                             else "- (no reply kept for this round)"]
             parts.append("")
         files = subject_files(root, subject)
         if files:
