@@ -686,7 +686,7 @@
   <!-- Stables (SW corner) - 28x16 ft, a small umaya for a rich county's few
        mounts; deliberately kept UNDER the barracks (a stable for a handful of
        horses must not out-foot the watch's quarters - size-audit hierarchy
-       sweep, 2026-07). Feature 267 pass 2: pulled up with their well to a 10 ft fire gap below the tax archive - the
+       sweep, 2026-07). Feature 267 pass 2: pulled up with their well to a 10 ft fire gap below the tax archive (14 ft since feature 372 wave 105 drew the archive at 0100's 24 x 18 ft) - the
        ~60 x 34 ft void the clerks' duty room left (research buildings 430) is closed, and the ground below is the
        stable and cart yard the west service gate opens on -->
   <g data-kind="stables">
