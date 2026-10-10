@@ -196,3 +196,42 @@ def test_the_push_judges_every_touched_feature_with_a_tick_at_HEAD(tmp_path: pat
     # what lands is HEAD: a review written in the working tree and not committed does not count
     (ticked_no_review / "plan-review.json").write_text(json.dumps(current([])), encoding="utf-8")
     assert "specs/001-a" in {f for f, _, _ in gate.push_owed(root, f"{base}..HEAD")}
+
+
+PLAN_375 = (b"# plan\n\n**D1 - the gatehouse.** Each sheet draws its gatehoue at 12 ft, and every tub stands by a door.\n"
+            b"**D2 - the bath.** The bath is 10 x 8 ft.\n")
+
+
+@pytest.mark.parametrize(
+    "edit",
+    [
+        ((b"gatehoue", b"gatehouse", True)),  # a misspelling
+        (b"12 ft, and", b"12 ft,\n and", True),  # a re-wrap
+        (b"stands by a door.", b"stands by a door;", True),  # punctuation
+        (b"12 ft", b"14 ft", False),  # a number
+        (b"every tub", b"each tub", False),  # a quantifier
+        (b"stands by", b"never stands by", False),  # a word added, and a negation
+        (b"10 x 8 ft.\n", b"10 x 8 ft.\n**D3 - a new decision.** A well by the kitchen.\n", False),  # a new decision
+        (b"the gatehouse.", b"the gateway.", False),  # a different word, not a misspelling
+    ],
+    ids=["misspelling", "re-wrap", "punctuation", "number", "quantifier", "negation-added", "new-decision", "other-word"],
+)
+def test_a_verdict_survives_a_typo_and_nothing_more(tmp_path: pathlib.Path, edit: tuple) -> None:
+    """Feature 375 FR-005(b), plan D6: an edit that adds or changes no decision keeps the verdict; any other voids it."""
+    old, new, keeps = edit
+    d = feature(tmp_path, plan=PLAN_375)
+    gate.record(d, current([WITHIN], plan=PLAN_375), "spec-fidelity")
+    assert json.loads((d / "plan-review.json").read_text())["plan_text"] == PLAN_375.decode()
+    assert gate.owed(d) is None
+    (d / "plan.md").write_bytes(PLAN_375.replace(old, new))
+    assert (gate.owed(d) is None) is keeps, f"{old!r} -> {new!r}"
+
+
+def test_typo_scale_rules() -> None:
+    assert gate.typo_only("a b c d", "a b c d")
+    assert not gate.typo_only("teh cat sat on teh mat wiht ahat", "the cat sat on the mat with a hat")
+    assert gate.typo_only("teh rule", "the rule") and not gate.typo_only("two gates", "ten gates")
+    assert not gate.typo_only("wing 2", "wing 3") and not gate.typo_only("the dog", "the cat")
+    assert gate._distance("ab", "ba") == 1 and gate._distance("kitten", "sitting") == 3
+    review = {"plan_sha256": "x", "plan_text": "", "decisions": [], "verdict": "CLEAR"}
+    assert gate.judge(b"anything", json.dumps(review))[0] == "plan-review-stale", "no text recorded: the hash decides, as before"

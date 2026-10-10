@@ -168,3 +168,48 @@ def test_a_rest_on_a_page_the_claim_does_not_cite_is_dropped_and_named() -> None
     assert any("0081-village-lanes.drawing.html" in m for m in msgs)
     index, msgs = cx.record({}, units, f"VERDICT {SHARE} IN-STEP - ok [§2]\n", "d", numbered)
     assert "rests" not in index[SHARE], "nothing of its own pages left: any change on them is triaged"
+
+
+def test_a_withdrawn_block_that_never_reached_a_commit_is_shown_not_forced(tmp_path: pathlib.Path) -> None:
+    """Feature 375 T04, the defect 372's wave 108 met: a bullet drafted and withdrawn before any commit. The claims were checked
+    with it on the page; the page went back to its committed words; the triage reply named no claim, and every claim citing the
+    page was still owed in full, because no version in the page's history held the withdrawn block's words. The snapshot's own
+    text is now kept (`keep_texts`) and read first."""
+    root = _repo(tmp_path)
+    _tree(root, MOD, PAGE)
+    _commit(root, "the page as committed")
+    drafted = PAGE.replace("<p>Each lane", "<p>A drafted rule.</p>\n<p>Each lane")
+    skill, index, store = _checked_at(root, drafted)
+    _tree(root, MOD, PAGE)  # withdrawn: the page is back to its committed words
+    cur = cx.current(skill)
+    manifest = cx.triage_bundle(cur, index, store, [SHARE, FAR], skill / QDIR, tmp_path / "t").read_text()
+    data = json.loads((tmp_path / "t" / "triage.json").read_text())
+    assert data["forced"] == [], "the withdrawn block is shown from its kept text, so nothing is owed in full"
+    assert "Removed blocks (no longer on the page):\n\n> A drafted rule." in manifest
+    out, msgs = cx.record_triage(index, data["units"], "No claims are touched, so I have no `TOUCHES` lines.\n", "d", data["forced"])
+    assert msgs == [] and "triage" not in out[SHARE] and "triage" not in out[FAR]
+
+
+def _checked_at(root: pathlib.Path, page: str) -> tuple[pathlib.Path, dict, dict]:
+    """`_checked` at `page`, with the snapshot texts kept as `claims-checked` keeps them."""
+    skill = _tree(root, MOD, page)
+    cur = cx.current(skill)
+    cx.bundle(root, cur, sorted(cur), root / "b")
+    blocks = json.loads((root / "b" / "blocks.json").read_text())
+    units = json.loads((root / "b" / "units.json").read_text())
+    reply = "".join(f"VERDICT {k} IN-STEP - ok {'[§1]' if k == SHARE else '[§3]' if k == FAR else '[§]'}\n" for k in units)
+    index, _msgs = cx.record({}, units, reply, "d", blocks["numbered"])
+    assert cx.keep_texts(skill / QDIR, units) == 1
+    assert cx.keep_texts(skill / QDIR, units) == 0, "kept once"
+    return skill, index, blocks["snapshots"]
+
+
+def test_the_triage_reads_only_lines_that_open_with_touches(tmp_path: pathlib.Path) -> None:
+    """FR-005(a): a prose mention or a mid-line TOUCHES names nothing; a line that opens with it (bare, or in backticks) does."""
+    skill, index, _store = _checked(tmp_path)
+    units = {SHARE: {"research": "r", "pages": {}}, FAR: {"research": "r", "pages": {}}}
+    reply = (f"The other claims are cleared; nothing TOUCHES {FAR} - here.\n- TOUCHES {FAR} - a bulleted line\n"
+             f"`TOUCHES {SHARE} - in backticks`\n")
+    out, msgs = cx.record_triage(index, units, reply, "d")
+    assert msgs == [f"touched: {SHARE} - in backticks"] and "triage" not in out[FAR]
+    assert cx.kept_text(skill / QDIR, "no-such-snapshot") == ""

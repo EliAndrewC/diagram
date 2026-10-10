@@ -403,7 +403,10 @@ push_cmd() {
     # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
     # unread or otherwise, as before - unless its spec's status line CLOSES it (Done, Superseded by, Withdrawn: the
     # words `speckit-todo.py` states once). The exemption fails closed: an error or no answer counts as not closed.
-    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && grep -qE '^\s*- \[ \]' "$ROOT/$f/tasks.md"; then
+    # GUARD_EDIT_OK: feature 375 plan D18 - a box marked `[lands-open]` (a standing "later batches" task, the GM's review box)
+    # does not hold the landing; every other open box still does, and the feature stays open to `make speckit-todo` and to
+    # every closing route while the marked box is unticked.
+    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && grep -E '^\s*- \[ \]' "$ROOT/$f/tasks.md" | grep -qvF '[lands-open]'; then
       [ "$(python3 "$ROOT/scripts/speckit-todo.py" --closed-by-status "$ROOT/$f" 2>/dev/null)" = yes ] || active="$active $f"
     fi
   done

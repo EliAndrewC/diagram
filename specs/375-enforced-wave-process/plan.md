@@ -76,8 +76,8 @@ by a per-task decision preflight (`make decide F= T=` builds a bundle of that se
 section for the task, the plan-stage verdict. Escape `DECIDE_OK="<reason>"`.
 
 **D4 - FR-003(b)(c): check state from the hook events.** `.git/checks-open.json` holds every record, claims and modal check
-dispatched: its subject (a question number, a modal uid, a claims bundle's pages), from the MANIFEST's `unit:` lines, and
-its state. PreToolUse(Agent) opens it; PostToolUse(Agent) pairs `tool_use_id` with the launched `agentId`; SubagentStop (or a
+dispatched: its subject (a question number or a modal uid, from the MANIFEST's `unit:` lines - an impl-drift or claims-triage dispatch is
+counted for D10 and D11 but has no frozen subject, below), and its state. PreToolUse(Agent) opens it; PostToolUse(Agent) pairs `tool_use_id` with the launched `agentId`; SubagentStop (or a
 foreground PostToolUse) marks it returned; `make record-checked`, `claims-checked`, `modal-triaged` close it. A subject's
 ROUND is open from its first dispatch until every check in it has returned. While a round is open: an Edit or Write to the
 subject's files (`research/questions/NNNN-*`, the modal's `.md` file) is refused (`record-edit-hooks.sh`), and a dispatch of a
@@ -92,7 +92,8 @@ can word with an `EDIT <path> <<< old === new >>>` block, which `make apply-edit
 the returned agent's last reply (`agent_transcript_path`) and keeps its EDIT blocks on the subject's round. In the apply
 pass `make apply-edits` on a reply of this round is admitted (`record-edit-hooks.sh` gains a Bash matcher for it), and a
 hand Edit to the subject is admitted only when its `old_string` lies inside the old text of one of the round's EDIT blocks
-(the session applying a block `apply-edits` refused, or a part of one); any other Edit to the subject is refused, naming
+AND its `new_string` lies inside that block's new text (the session applying a block `apply-edits` refused, or a part of
+one - never a different replacement at a proposed place); any other Edit to the subject is refused, naming
 the round's blocks. The three page checks that write no EDIT blocks today - intro-check, record-style and
 translation-check - are given them in their contracts (a task of batch 3), so every check that proposes words on a frozen
 subject proposes them as blocks. impl-drift's subject is a claim in code or a procedure section, never a frozen page or
@@ -178,8 +179,9 @@ shows such a feature as `Done - GM review pending`; the task carries `research: 
 overturned ruling becomes a row of an open feature.
 
 **D13 - FR-009/FR-014: one closing check.** `scripts/gates/close_check.py` is asked by every closing route - `make tick` on
-the last open task, `make gm-reviewed`, and the push for each feature THE DELTA TOUCHES (`plan_gate.touched_features`) whose
-status line opens `Done` or whose tasks are all ticked. A feature already CLOSED when the closing check lands is not
+the last open task, `make gm-reviewed`, and the push for each feature THE DELTA TOUCHES (`plan_gate.touched_features`) that reads closed - its status line opening
+any of `speckit-todo.py`'s closing words (`Done`, `Superseded by`, `Withdrawn`: `closed_by_status`) or its tasks all ticked.
+Moving a carried key to another feature is an amendment to the declaring feature's spec, reviewed like any other. A feature already CLOSED when the closing check lands is not
 asked: the check's own landing commit writes `scripts/gates/closed-before-375.txt`, the features `make speckit-todo` reads
 closed at that commit, and nothing else is exempt - 372 (Draft) and 374 (Filed) are asked. The report must exist and the feature's carried keys (`Carried: SC-nnn -> NNN key` in any spec) must be in its
 `measurements.json`. `make speckit-todo` lists the carries.
@@ -208,10 +210,15 @@ says that a session asking the advisor about a loop hands it `make arbiter-bundl
 
 **D18 - Landing by batch, open between them.** A feature with an open task lands nothing, and 375 is too large to sit in one
 clone for its whole length. So every decision is reviewed here once, and `tasks.md` holds the current batch's tasks plus one
-standing task, `- [ ] Batches 2-4 (plan D18) [lands-open]`. A task line marked `[lands-open]` is exempt from
-`sync-with-main.sh`'s open-task refusal and keeps the feature open in `make speckit-todo` and to every closing route (D13),
-so 375 lands each batch and never reads closed until its last box is ticked. The mark is the tooling's (batch 1 builds it,
-with a test that an ordinary open box still refuses the push); D12's GM-review box uses the same mark. A later spec that
+standing task, `- [ ] T99 Batches 2-4 (plan D18) [lands-open]`. An open box marked `[lands-open]` does not hold the landing
+and keeps the feature open in `make speckit-todo` and to every closing route (D13), so 375 lands each batch and never reads
+closed until its last box is ticked. **The mark is honored only where it was put by the tooling or a reviewed plan**:
+D12's GM-review line, written by `make gm-review`'s tooling in its one fixed form; and a task the plan names on a
+`**Lands open**: <task ids>` line, read only while `plan-review.json` is CLEAR and current for that plan. A `[lands-open]`
+mark on any other open box is itself refused - at the push (the box holds the landing as an ordinary one, and the refusal
+names the line) and by `make tick` - so the mark cannot become an unlogged escape. This plan's line:
+
+**Lands open**: T99 A later spec that
 must wait declares `**Waits on**: 375`, and `make tick` refuses a task of it while 375 is open - 374's spec carries the line,
 so its first task waits for the last batch. Adding a batch's tasks that carry decisions already reviewed is not a plan
 change; a batch that needs a new decision amends this plan and is reviewed again.

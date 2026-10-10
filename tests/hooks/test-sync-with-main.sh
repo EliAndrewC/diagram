@@ -170,6 +170,13 @@ expect_out "IN PROGRESS"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: indented open tasks -> refused" 1 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n      - [ ] research pass\n' > specs/140-x/tasks.md && echo m4 > note.md && git add -A && git commit -qm research-box )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a ticked task with an open indented research box -> refused" 1 $?
+# feature 375 plan D18: a `[lands-open]` box does not hold the landing; an ordinary open box beside it still does
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md \
+  && printf -- '# Feature Specification: x\n\n**Status**: In progress - batch 2 next\n\n**Owed at**: now\n\n## Review history\n- spec-fidelity round 1: FAITHFUL\n' > specs/140-x/spec.md \
+  && echo m5 > note.md && git add -A && git commit -qm lands-open )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: only a [lands-open] box open -> lands" 0 $?
+( cd "$D/main/.clones/c" && printf -- '- [ ] T01 open\n- [ ] T99 later batches [lands-open]\n' > specs/140-x/tasks.md && echo m6 > note.md && git add -A && git commit -qm "one ordinary box" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: an ordinary open box beside a [lands-open] one -> refused" 1 $?
 
 echo "8. origins are re-pointed at GitHub once, and said so"
 D=$(topology h)

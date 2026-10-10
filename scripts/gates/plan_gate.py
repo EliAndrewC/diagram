@@ -38,6 +38,52 @@ RULINGS = ("LEGITIMATE", "NOT LEGITIMATE")
 # task, not a task of its own.
 _TICKED = re.compile(r"^- \[[xX]\] ", re.M)
 
+#: Words a "typo" may never touch (feature 375 FR-005(b), plan D6): a number, a quantity, a negation or a quantifier changes a
+#: decision however few letters it moves - "two" -> "ten", "all" -> "any", "must" -> "may".
+GUARDED = frozenset(
+    "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen "
+    "nineteen twenty thirty forty fifty hundred thousand first second third fourth fifth sixth seventh eighth ninth tenth half "
+    "twice once double triple not no never none except unless only all any each every some few many most more less fewer "
+    "may must should shall can cannot before after above below over under min max least".split()
+)
+#: How many words a typo-scale edit may change in the whole plan
+TYPO_WORDS = 3
+_WORD = re.compile(r"[A-Za-z0-9]+")
+
+
+def _distance(a: str, b: str) -> int:
+    """The Damerau-Levenshtein distance of two short words (a transposition is one edit)."""
+    prev2: list[int] = []
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+            if i > 1 and j > 1 and ca == b[j - 2] and a[i - 2] == cb:
+                cur[j] = min(cur[j], prev2[j - 2] + 1)
+        prev2, prev = prev, cur
+    return prev[-1]
+
+
+def typo_only(old: str, new: str) -> bool:
+    """Whether `new` differs from `old` by typos alone (FR-005(b), plan D6): whitespace, re-wrapping, case and punctuation; at
+    most TYPO_WORDS words replaced, each by a near spelling (one letter for a word of four or fewer, two beyond), none of them a
+    digit or a GUARDED word; no word added or removed. Anything else adds or changes a decision, and voids the verdict - the
+    conservative side, since a missed decision is the incident this gate exists for (feature 239)."""
+    a, b = _WORD.findall(old.lower()), _WORD.findall(new.lower())
+    if len(a) != len(b):
+        return False
+    changed = [(x, y) for x, y in zip(a, b, strict=True) if x != y]
+    if len(changed) > TYPO_WORDS:
+        return False
+    for x, y in changed:
+        if x in GUARDED or y in GUARDED or any(c.isdigit() for c in x + y):
+            return False
+        if _distance(x, y) > (1 if min(len(x), len(y)) <= 4 else 2):
+            return False
+    return True
+
+
 HOW = ("dispatch `spec-fidelity` in its PLAN REVIEW mode with request.md, spec.md and plan.md, then record "
        "its JSON: make plan-verdict F=<feature> FILE=<json> AS=spec-fidelity")
 
@@ -60,8 +106,9 @@ def judge(plan: bytes | None, review_text: str | None) -> tuple[str, str] | None
         review = json.loads(review_text)
     except ValueError:
         return "plan-review-missing", f"{RECORD} is not JSON - {HOW}"
-    if review.get("plan_sha256") != digest(plan):
-        return "plan-review-stale", f"plan.md changed after its review (FR-004) - {HOW}"
+    if review.get("plan_sha256") != digest(plan) and not typo_only(str(review.get("plan_text") or ""), plan.decode("utf-8", "replace")):
+        return "plan-review-stale", (f"plan.md changed after its review by more than a typo (FR-004; feature 375 FR-005(b): "
+                                     f"a word added or removed, a number, a negation or a quantifier) - {HOW}")
     if review.get("verdict") != "CLEAR":
         narrowing = [d.get("id", "?") for d in review.get("decisions", []) if d.get("ruling") == "NOT LEGITIMATE"]
         return "plan-review-blocked", (f"the plan review is BLOCKED ({', '.join(narrowing) or 'no ruling named'} ruled "
@@ -158,6 +205,7 @@ def record(spec_dir: pathlib.Path, review: dict, declared: str, today: str | Non
     if review.get("verdict") not in (None, verdict):
         raise ValueError(f"the input says {review['verdict']} but its rulings make it {verdict} (P2)")
     out = {"feature": spec_dir.name, "plan_sha256": review["plan_sha256"],
+           "plan_text": plan.read_text(encoding="utf-8"),  # feature 375 FR-005(b): what a later typo is measured against
            "reviewed": today or datetime.date.today().isoformat(), "declared": declared,
            "decisions": decisions, "verdict": verdict}
     (spec_dir / RECORD).write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")

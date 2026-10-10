@@ -880,9 +880,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"claims-triaged: {m}")
         named = sum(1 for m in msgs if m.startswith("touched") and " - a removed block the history no longer shows" not in m)
         forced = sum(1 for m in msgs if m.startswith("touched")) - named
-        print(f"claims-triaged: {named} of {len(data['units'])} named by the reply"
-              + (f", {forced} owed in full because a removed block's words could not be shown" if forced else "")
-              + "; sent on to impl-drift, the rest cleared")
+        print(f"claims-triaged: {named + forced} of {len(data['units'])} sent on to impl-drift ({named} named by the reply"
+              + (f", {forced} owed in full: a removed block's words could not be shown" if forced else "")
+              + "); the rest cleared")
         return 0
     if args.cmd == "report":
         print(report(cur, index, qdir, store, load_deferred(root / DEFERRED)))
