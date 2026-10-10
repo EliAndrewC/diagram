@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec under review
+**Status**: In progress - spec accepted, planning
 
 **Affects**: research record
 
@@ -104,4 +104,4 @@ five maps seat 72 privies (privies only, not manure pits):
   - the August set is kept whole and apart, and the unrecorded 72 ft run is marked or dropped;
   - every statement of the share is named;
   - the seam is named in FR-005, and item 4's nine modals in FR-006.
-
+- spec-fidelity-verify, Mode 3, round 2 (2026-10-10): FAITHFUL - all eight items resolved; the script re-run byte-identical.
