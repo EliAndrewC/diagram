@@ -2379,10 +2379,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#engawa": {
-  "code": "148853962f6e8e35",
-  "core": "820eca0d767c15d3",
+  "code": "8c91ac227dbfb510",
+  "core": "7e5f699a82530faf",
   "date": "2026-10-10",
-  "note": "the procedure fixes the garden face on every block (\"along the garden-facing south face of each block\"), but 0102's drawing page makes the faces \"a knob between two forms\" (garden face alone, or two or three faces), so the faces should be rolled per sheet; also ~8 px is ~2.7 ft at the section's own scale, under the 3 ft floor and not the 4 ft the drawing page gives the generated compound",
+  "note": "3-6 ft (9-18 px at 3 px/ft), free per face; the faces are a per-sheet knob between the garden face alone and two or three faces, never four; narrower where it turns, as at Katsura; the garden face drawn wider is a GUESS; the seedless draft's garden face alone at 4 ft matches the drawing page",
   "pages": {
    "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html": "9a588e588b7fc9fa",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html": "d414f1a91e856c72"
@@ -2390,14 +2390,19 @@
   "research": "5332970e76f0dd3b",
   "rests": [
    "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:002eb43fd8e0dbdc",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:1ab70933149d3f3b",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:46550d11fc509120",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:a771c520048821c8",
    "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:e679dd9ba7fb6cc9",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:42ebb2ad8738820f",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:ab7dc4049fa46cee",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:c62884b883d6ff3f",
-   "0102-verandas-and-storm-shutters-engawa-and-amado.html:e50acf31e21172cd"
+   "0102-verandas-and-storm-shutters-engawa-and-amado.html:e3859740411ca31c",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.html:e50acf31e21172cd",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.html:efc9c3619bf2373e"
   ],
-  "section": "820eca0d767c15d3",
-  "verdict": "DRIFTED"
+  "section": "7e5f699a82530faf",
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#formal reception room": {
   "code": "6ce57599a7edf620",
