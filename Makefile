@@ -1279,6 +1279,12 @@ claims-coverage: ## [project] every unit with no research claim, a malformed cla
 claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" report
 
+# GUARD_EDIT_OK: feature 378 FR-003 - a new operation: what a research-record feature owes before it closes (the GM
+# 2026-10-10: its findings checked against the code, "a tracked must be there"); close_check.py asks the same.
+impl-check: ## [project] a research-record feature's changed questions, each with the claims citing it and their verdicts, and what its close still owes (feature 378)   F=<n>
+	@if [ -z "$(F)" ]; then printf 'make impl-check: F=<feature number> is required - e.g. make impl-check F=343\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/impl_check.py" "$(F)"
+
 # GUARD_EDIT_OK: feature 318 amendment 4 - three operations scoping a re-check to the blocks a claim rests on; the push's refusal is unchanged (claims-gate.sh).
 claims-triage: ## [project] the claims owed only a TRIAGE (a page they cite moved, the blocks they rest on stand): one bundle of the new or changed blocks for one agent   [OUT=<dir>]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" triage $(if $(OUT),--out "$(abspath $(OUT))",)

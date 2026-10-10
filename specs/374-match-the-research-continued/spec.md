@@ -163,3 +163,5 @@ current figure before the first wave.
   no country-shrine Affects tag (328's FR-010 carries the scope); the filed guard rule's "(the GM, 2026-10-10)" is the filed
   spec's record, not verbatim words.
 - Round 2 (spec-fidelity, verify, 2026-10-10): FAITHFUL - all four items confirmed in the diff; spec-lint exits 0.
+
+**Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=374` says what is owed. The code is fixed only where this spec asks.

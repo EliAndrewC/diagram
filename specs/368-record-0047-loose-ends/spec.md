@@ -32,3 +32,5 @@ noticed during feature 328's wave 61 and that lie outside that feature's scope (
 ## Done when
 
 Each of the five is fixed, and the record checks they owe (`make record-owed`) are answered.
+
+**Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=368` says what is owed. The code is fixed only where this spec asks.

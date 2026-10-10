@@ -14,3 +14,5 @@ A reviewer found copse crowns whose nearest farmhouse stood across a lane. Featu
 copse seats by reservation (woods W25), which settles the map, not the question; no research page carries it as a guess
 or an absence, so `make open-questions` cannot list it. When it is searched, record the answer (or the absence) on
 research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html and drop this entry.
+
+**Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=352` says what is owed. The code is fixed only where this spec asks.

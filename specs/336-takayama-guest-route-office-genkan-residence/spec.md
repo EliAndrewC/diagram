@@ -32,3 +32,5 @@ Closer sources named but not read (each check report's "Open" line, gathered in 
 bulletin vol. 6) on tablet veneration; the NILIM page on samurai-house ranks; the holding archive of the 1841 Edo
 magistracy plan; Takehashi yohitsu for the Nakano dog figures; Ji Cheng's Yuanye (1631) on a study's garden siting;
 the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and want a rendering reader.
+
+**Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=336` says what is owed. The code is fixed only where this spec asks.

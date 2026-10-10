@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 
@@ -60,7 +59,20 @@ def reasons(d: Path, specs: Path | None = None) -> list[str]:
     for decl, sc, n, key in carries(specs or d.parent):
         if n.lstrip("0") == num and key not in have:
             out.append(f"{decl}'s {sc} is carried here and `{key}` is not in {d.name}/measurements.json (FR-014)")
+    # GUARD_EDIT_OK: feature 378 FR-004 - a new closing requirement, the GM 2026-10-10: a `research record` feature closes
+    # only once each question it changed is cited by a checked `Research:` claim or recorded as implemented nowhere
+    out += _impl_check().missing(d, d.resolve().parents[1])  # the repository holding `specs/<d>`
     return out
+
+
+def _impl_check():  # noqa: ANN202 - scripts/record/impl_check.py by path (the gates and the record are siblings)
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("impl_check", ROOT / "scripts" / "record" / "impl_check.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def _todo():  # noqa: ANN202 - speckit-todo.py by path (a hyphenated script), one state rule

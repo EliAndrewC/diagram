@@ -15,3 +15,5 @@ in modern custom). The receiving court's modal (`l7r/diagram/interactive/assets/
 "The plan draws the border court as a swept garden"; research 0224's drawing page finds swept ground at shrines and graves
 recorded only in modern custom. Owed: a research pass on whether a receiving court's surface is attested swept or raked
 before modern times, and the modal reworded if not.
+
+**Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=343` says what is owed. The code is fixed only where this spec asks.
