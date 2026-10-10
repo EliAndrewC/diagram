@@ -10,7 +10,7 @@ Earlier the same day:
 
 > In particular, I want to make sure that our tooling is up to snuff. [...] at the rate that we're going, it'll probably take like a week of constant running in order to close out this feature. And if that's what it takes, then that's what it takes. But in the past, it has often turned out to be the case that process improvements will give us order of magnitude speedups in development time.
 
-Then, on detecting loops and limiting rounds (2026-10-10). The session answered the first of these two messages by
+Then, on detecting loops and limiting rounds (2026-10-10). The session answered the first of the messages below by
 proposing event tripwires in place of an hourly timer, FR-006 and FR-007 beyond the five, a held / to-review split for his
 review, and the report owed before the last tick; the GM's replies ("Okay, thanks", then the last message below) built on
 those proposals (transcript `8d3395e5-fe32-4f85-9c89-80c344d2ac1a`):

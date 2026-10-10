@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Filed - to be taken before feature 374's first wave; it applies to every feature, not to waves alone
+**Status**: In progress - spec accepted (spec-fidelity round 2, FAITHFUL); taken before feature 374's first task; it applies to every feature
 
 **Owed at**: now
 
@@ -89,7 +89,7 @@ each one task).
 ### Escalation without stopping
 
 - **FR-011 The round arbiter.** A defined agent (its contract in `.claude/agents/`, its tier pinned) replaces the GM's waiver at a
-  round cap or tripwire. It judges the process, not the work, from a bundle the tooling builds: each round's findings marked new,
+  round cap or tripwire. It judges the process, not the work (its unit is the checked thing - a page, pop-up, sheet, spec or plan - never a task), from a bundle the tooling builds: each round's findings marked new,
   repeated or reversing an earlier fix; the diffs between rounds; the cascade chain (which edit re-owed which checks); the
   oscillation flags; the feature's request and spec. It rules one of: **continue** (one more round, naming what it must look
   at); **accept** (the state stands; what is left is filed as rows or accepted with a reason, and the unit closes); **process
@@ -149,3 +149,12 @@ until 375 has landed.
 | The unit of work a check belongs to is a task, never a wave | spec-fidelity round 1, 2026-10-10 | a feature without waves has tasks; 372's waves were each one task |
 | SC-003 and SC-004 carried to 374 and held there by FR-014 | spec-fidelity round 1, 2026-10-10 | 374 takes no task until 375 lands, and a feature with an open task lands nothing: keeping 375 open for them would stall both |
 | Tripwires on events, not an hourly timer | this project's decision | a pattern is caught when it happens; a timer fires mid-action and asks the looping session to judge itself |
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-10): CHANGES REQUIRED - seven items: FR-003(b) against (c); FR-005(b) let a new decision keep
+  an old verdict; "a change" undefined (now a task); SC-003/SC-004 held by tooling (FR-014); the GM's box only where owed;
+  FR-009 on every closing route; the escape-variable limit and the escalation row.
+- Round 2 (spec-fidelity, verify, 2026-10-10): FAITHFUL - all seven resolved; FR-014 faithful as the enforcement of the GM's
+  rule. Asides taken: request.md's framing count; "the unit" of FR-011 is the checked thing (a page, pop-up, sheet, spec or
+  plan), not the task; 374's measuring tasks do not count among its first three.

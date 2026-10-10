@@ -47,7 +47,7 @@ here until 375 has landed.
 in this feature's first three tasks, no red gate from a cause 375's preflight checks, no page re-checked while a check on it
 was outstanding, no plan-review BLOCK on a decision the decision preflight had ruled on (key `sc003-375-first-three-tasks`);
 SC-004 - the dispatches per closed row of those three tasks, beside 372's ~10 (key `sc004-375-dispatches-per-row`). Each is a
-named task of this feature's `tasks.md`.
+named task of this feature's `tasks.md`, and those two measuring tasks are not among the three measured.
 
 `make claim` is done (this directory). Next: `/speckit-specify` over this file and `request.md`, then plan and tasks in
 waves, as 372 did (`specs/372-match-the-research-remaining/` is the worked example). Re-arm the usage cap with the GM's
