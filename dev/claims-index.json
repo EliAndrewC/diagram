@@ -19022,10 +19022,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::door_end_teed#a door end teed on its own lane": {
-  "code": "35e7773a76aa85c0",
-  "core": "5dd8dee261d52c39",
+  "code": "b2ddd48b819026e5",
+  "core": "ba7667cb73dda67a",
   "date": "2026-10-09",
-  "note": "the tests are reordered but the verdict is unchanged: an access lane's lone end 0 on no other lane's side, the other point on its own lane, recorded as a convention",
+  "note": "an access lane's lone end 0, on no other lane's side, with the other point on its own lane: the narrow form, recorded as a convention",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -19066,10 +19066,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::lane_knots#lane ends gathered": {
-  "code": "7e4be1595363b89d",
-  "core": "933828f986f5037d",
+  "code": "66bf1f45afc70786",
+  "core": "56e48f9b8133ff80",
   "date": "2026-10-09",
-  "note": "ends within 25 ft, or two junctions on one lane within 25 ft, minus spans and teed door ends",
+  "note": "every pair within 25 ft that is not at one point, not a lane's own span and not a teed door pair",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },

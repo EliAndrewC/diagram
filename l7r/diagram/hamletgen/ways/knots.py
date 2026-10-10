@@ -93,8 +93,6 @@ def door_end_teed(lanes: Sequence[Mapping[str, Any]], i: int, end: int, alone: b
     if end != 0 or not alone or ln.get("role") != ACCESS_ROLE:
         return False
     pts = _pts(ln)
-    if len(pts) < 2:
-        return False
     if not _on(pts, other):  # the one-lane test first: it settles almost every pair a gather asks about (feature 328 wave 94, perf)
         return False
     q = pts[0]
@@ -470,9 +468,8 @@ Research: a knot's reach - research/questions/0081-village-lanes.drawing.html: t
 
 def lane_knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, tuple[float, float], int, tuple[float, float], float]]:
     """The knots of a finished web, (lane, end, lane, end, ft): two lane ends within the knot reach (`_KNOT_FT`) of one another
-    not standing at one point, and two JUNCTIONS (an end that meets another way: two or more ends at one point, or a T-foot on
-    another lane's side) on the SAME lane within `_KNOT_MARGIN` reaches. Ends within `_JOINT_FT` are one point; a pair one lane
-    runs between (its own two ends) is that lane, its join. The pool's seed test (`tests/hamletgen/test_pool_261.py`) and
+    not standing at one point. Ends within `_JOINT_FT` are one point; a pair one lane runs between (its own two ends) is that
+    lane, its join; a household way's lone door end teed on its own lane is no knot (`door_end_teed`). The pool's seed test (`tests/hamletgen/test_pool_261.py`) and
     the cohort (`tools/cohort_audit.py`) read this one verdict (feature 328 wave 93: the cohort lacked it, and a change that
     knotted three pool maps read 54/54).
 
@@ -493,15 +490,6 @@ def lane_knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, tuple[floa
                 node[root(b)] = root(a)
     spans = {frozenset((root(2 * k), root(2 * k + 1))) for k in range(len(ends) // 2)}  # each lane's own two points
 
-    def on(k: int, q: tuple[float, float]) -> bool:
-        return any(seg_dist(q[0], q[1], u, v) <= _JOINT_FT for u, v in zip(pts[k], pts[k][1:], strict=False))
-
-    def junction(a: int) -> bool:
-        return sum(root(b) == root(a) for b in range(len(ends))) > 1 or any(k != ends[a][0] and len(pts[k]) >= 2 and on(k, ends[a][1]) for k in range(len(pts)))
-
-    def one_lane(a: int, b: int) -> bool:
-        return any(len(p) >= 2 and on(k, ends[a][1]) and on(k, ends[b][1]) for k, p in enumerate(pts))
-
     out = []
     for a in range(len(ends)):
         for b in range(a + 1, len(ends)):
@@ -511,6 +499,7 @@ def lane_knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, tuple[floa
             # ...A DOOR END TEED ON ITS OWN LANE is no knot (`door_end_teed`, the predicate the gather search asks too)
             if any(door_end_teed(lanes, ends[x][0], 0 if x % 2 == 0 else -1, sum(root(z) == root(x) for z in range(len(ends))) == 1, ends[y][1]) for x, y in ((a, b), (b, a))):
                 continue
-            if d <= _KNOT_FT or (junction(a) and junction(b) and one_lane(a, b)):
-                out.append((ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(d, 1)))
+            # (two JUNCTIONS on one lane up to `_KNOT_MARGIN` reaches apart were counted here too; at the margin's 1.0 every pair
+            # left is within `_KNOT_FT`, so that clause could never add one and is gone - feature 328 wave 94, the coverage floor)
+            out.append((ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(d, 1)))
     return out
