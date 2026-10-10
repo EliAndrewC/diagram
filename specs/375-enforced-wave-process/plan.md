@@ -148,8 +148,12 @@ else = other subagent; the rest = other tool, which the report breaks down by ma
 - round cap: record and claims checks get the review checks' cap of two rounds per subject per feature (a round being a
   dispatch at a new fingerprint), counted in `.git/review-rounds.json` as the review checks are;
 - A -> B -> A: an Edit whose `new_string` equals an earlier Edit's `old_string` on the same file in the feature (from the
-  event log), checked at PreToolUse(Edit); the report also finds it from the commits;
-- a second red gate in a row: the gate's own failure exit reads the previous run's state;
+  event log), checked at PreToolUse(Edit); AND, for a page or pop-up, a block that an earlier version had, a later one
+  dropped, and the latest has again (by words, so a re-wording counts), over the versions each check dispatch found
+  (amendment 1, from T19: 372's bath bullet was added by a script, withdrawn by a `git checkout` and re-added re-worded - no
+  Edit, so the digest wire alone could not see it; the spec's "computed from the file's history" asks for this);
+- a second red gate in a row: `l7r/diagram/ci/state.py` records each gate's outcome apart from the one slot a quick run
+  overwrites, and a red after a red writes the trigger (amendment 1: where the gate's outcome is already recorded);
 - A -> B -> A over commits too: the report and the SC-006 replay run the same comparison on the converted events;
 - the cascade ratio past a threshold set from the SC-006 replay (`m:cascade-threshold`: the ratio of 372's waves 106 and
   108 and of a sample of ordinary tasks, the wire set between them), checked at each check dispatch;
@@ -219,6 +223,12 @@ mark on any other open box is itself refused - at the push (the box holds the la
 names the line) and by `make tick` - so the mark cannot become an unlogged escape. This plan's line:
 
 **Lands open**: T99
+
+**Amendment 1 (2026-10-10, batch 4):** D10's reversal and red-gate wires as built (above); `make check-closed` (D4's silent
+check, named by the freeze's refusal); the three escapes D3, D4 and D10 named (`DECIDE_OK`, `FREEZE_OK`, `ARBITER_OK`) recorded
+in the guard census and held to its reason floor; a current CLEAR plan-stage verdict covers a task section its reviewer read
+unchanged (D3); a ruled cascade raises its own bar, so the next dispatch does not re-trip (D10). Batch 4 then delivers D12,
+D13, D14 and D17 as planned.
 
 A later spec that
 must wait declares `**Waits on**: 375`, and `make tick` refuses a task of it while 375 is open - 374's spec carries the line,
