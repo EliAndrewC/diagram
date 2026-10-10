@@ -103,6 +103,12 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
   kitchen keep it).
 - **Amendment 3 (2026-10-10, impl-drift)**: the kitchen claim relabeled GUESS on 0091's drawing page (above), and the
   corridor claim renamed `#kitchen abuts the house, no corridor` - its old name described the corridor the wave removed.
+- **Amendment 4 (2026-10-10, impl-drift round 2)**: the kitchen's size is taken from the measured wing as a size, whatever the
+  house's size, not as its sixth share - recorded so on 0091's drawing page as a GUESS (the ranked fix's ~12 tsubo kept; sizing
+  every kitchen to a sixth of its house was impl-drift's other way out, and would size the hand sheets' larger houses'
+  kitchens past the measured wing); the claim names that page. The residence-rooms claim (T03) renamed `#residence of about
+  six rooms`. The residence-corridor pop-up's guess bullet gives the drawn width (about 11 ft, Hayakawa's and Ubame's) and its
+  `Covers:` drops "covered" (modal-form round 1).
 - **Amendment 2 (2026-10-10, the draft as built)**: with the ell abutting the house's west end, the house's west face keeps 6 ft
   free below the kitchen, short of a door's 8 ft approach, so the draft's inner entrance opens on the house's rear (north)
   face at the kitchen end, onto the rear alley; 0107's drawing page said "on the residence's face toward the kitchen" and now
