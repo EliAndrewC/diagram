@@ -168,7 +168,9 @@ def judge(cmd: str, cwd: str, transcript: str) -> list[tuple[str, str]]:
     out: list[tuple[str, str]] = []
     messages: list[str] | None = None
     # `add` and `commit -a` take the working tree's file; a plain `commit` takes what is staged
-    worktree = bool(re.search(r"\badd\b", cmd) or re.search(r"\bcommit\b[^;&|]*\s-[a-zA-Z]*a", cmd) or "--all" in cmd)
+    # (the git SUBCOMMAND, not the word: `specs/380-add-thing/` names no add - plan review round 2)
+    git_ = r"\bgit(?:\s+-[Cc]\s+\S+)*\s+"
+    worktree = bool(re.search(git_ + r"add\b", cmd) or re.search(git_ + r"commit\b[^;&|]*\s(?:-[a-zA-Z]*a[a-zA-Z]*|--all)(?=\s|$)", cmd))
     for path in dict.fromkeys(os.path.normpath(p) for p in staged_by(cmd, cwd)):
         m = SPEC.search(path)
         if not m or int(m.group(1)) < FIRST:

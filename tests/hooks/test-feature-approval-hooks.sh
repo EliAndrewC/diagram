@@ -142,6 +142,12 @@ spec 378-widget-cache '**Approved**: the GM, 2026-10-10, "Yes, please go ahead a
 run "git commit -m staged-without-line"
 [ "$RC" -eq 2 ] && ok "the staged copy has no line, so the commit is refused though the working tree has one" || no "a plain commit read the working tree" "(rc=$RC)"
 clean
+spec 378-add-thing ""
+git -C "$FIX" add -A >/dev/null 2>&1
+spec 378-add-thing '**Approved**: the GM, 2026-10-10, "Yes, please go ahead and file this as a feature"'
+run "git commit -m x specs/378-add-thing/spec.md"
+[ "$RC" -eq 2 ] && ok "...even when the path itself holds the word add (the subcommand decides, not the word)" || no "a slug holding 'add' made a plain commit read the working tree" "(rc=$RC)"
+clean
 mkdir -p "$FIX/specs/301-old-style"; printf '# 301\n' > "$FIX/specs/301-old-style/spec.md"
 run "git add -A"
 [ "$RC" -eq 0 ] && ok "a new directory numbered below 377 is never checked" || no "a pre-377 feature was refused" "(rc=$RC)"
