@@ -178,7 +178,7 @@
   <!-- Tax archive (W side) - sealed plaster kura: the ledgers are the
        county's tax base, so they get fireproof walls -->
   <g data-kind="tax archive">
-    <rect x="220" y="500" width="96" height="84" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="244" y="515" width="72" height="54" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
     <rect x="308" y="535" width="8" height="14" fill="#4A3318"/>
     <text x="268" y="547" text-anchor="middle" font-size="13" font-weight="bold" fill="#3A2E1C">tax archive</text>
   </g>

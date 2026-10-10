@@ -170,7 +170,7 @@
   <!-- Tax archive (W side) - sealed plaster kura holding the ledgers, the tally rolls,
        and the coin the county holds -->
   <g data-kind="tax archive">
-    <rect x="212" y="470" width="96" height="84" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="236" y="485" width="72" height="54" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
     <rect x="300" y="505" width="8" height="14" fill="#4A3318" data-kind="door"/>
     <text font-size="13" font-weight="bold" fill="#3A2E1C"><tspan>tax</tspan><tspan>archive</tspan></text>
   </g>

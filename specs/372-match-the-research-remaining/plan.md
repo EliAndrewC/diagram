@@ -153,6 +153,10 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   archive larger. Left as found: the draft's gatehouse, 18 x 12 ft where 0093 now draws ~40 ft - at 40 its stables find no
   seat on that wall; it is the draft's own row (`docs/building-programs.md` walled enclosure), recorded at its line
   (m:wave105-draft-and-band).
+- **Batch 4's first gate** failed one test: the 26 frozen red fixtures under `tests/fixtures/` copy Ochiba's or Ubame's old
+  sheet, archive and all, and the tighter band made `ochiba-no-scale-red.svg` fire `size_bands` beside the one check it exists
+  for. Each fixture's archive brought to 72 x 54 px (its east face kept), so each still fires only its own check (the tools
+  suite 513 passed).
 - **Left as found**: the pack audit reads the gaps round the smaller archive LOOSE (a heuristic note, not a check) on
   Hayakawa and Ubame; the open ground is outer court.
 - **The record checks the drawing page's edit owed**: four pop-ups citing 0100's drawing page re-checked (modal-depiction): the
