@@ -93,9 +93,10 @@ def _pages_of(m: mo.Modal, check: str) -> list[str]:
     return m.drawing_files() if check == mo.DEPICTION_CHECK else m.entry_files()
 
 
-def bundle(root: pathlib.Path, out: pathlib.Path) -> tuple[pathlib.Path | None, int]:
-    """Write the triage bundle (MANIFEST.md, triage.json); (its MANIFEST, how many units it carries)."""
-    base = ro.merge_base(root)
+def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathlib.Path | None, int]:
+    """Write the triage bundle (MANIFEST.md, triage.json); (its MANIFEST, how many units it carries). `base` defaults to the
+    merge base; the SC-001 replay passes a commit's parent."""
+    base = base or ro.merge_base(root)
     store = ro.store(root)
     units = pending(root, base, store)
     if not units:

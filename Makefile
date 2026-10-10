@@ -1165,6 +1165,12 @@ speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, 
 # GUARD_EDIT_OK: the GM 2026-10-10 - AFFECTS= filters the read-only listing by tag.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/speckit-todo.py" --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(filter affects,$(BY)),--by-affects,) $(if $(AFFECTS),--affects "$(AFFECTS)",) $(if $(CHECK),--check,)
 
+# GUARD_EDIT_OK: feature 375 SC-001 adds an operation - read-only: detached sparse worktrees under OUT, removed at the end.
+replay-owing:   ## [project] replay recorded commits through the old owing and the new: modal-depiction units and impl-drift claims owed, per commit and in total (feature 375 SC-001)   REVS="<sha> ..." [OUT=<dir>]
+	@if [ -z "$(REVS)" ]; then printf 'make replay-owing: REVS="<commit> ..." is required\n' >&2; exit 2; fi
+	@: "GUARD_EDIT_OK: feature 375 SC-001 - TRIAGE=1 also writes each commit's pop-up triage bundle for the triage to judge"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/replay_owing.py" $(REVS) $(if $(OUT),--out "$(OUT)",) $(if $(TRIAGE),--triage,)
+
 # GUARD_EDIT_OK: feature 375 FR-009 adds an operation - read-only unless WRITE=1, which writes the feature's report.md.
 feature-report: ## [project] where a feature's time and dispatches went, as a table, from the event log, the run log and git   F=375 [TRANSCRIPT="<jsonl> ..."] [SINCE=<ISO>] [UNTIL=<ISO>] [WRITE=1]
 ##  F=<NNN>            the feature
