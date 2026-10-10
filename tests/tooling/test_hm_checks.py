@@ -219,3 +219,13 @@ def test_a_dropped_block_coming_back_between_dispatches_trips_the_reversal_wire(
     assert "a tripwire is owed its ruling first (reversal:q:0105@3" in out
     assert list(ha.owed(root)) == ["reversal:q:0105@3"]
     assert hc.subject_blocks(root, "modal:sheet/none") == []
+
+
+def test_a_modal_research_dispatch_is_closed_by_its_three_answers() -> None:
+    """Feature 374 FR-005: one `modal-research` dispatch is answered as `modal-accuracy`, `modal-references` and
+    `modal-gaps`; matched by the unit's name it stayed open, its round never ended, and its next round was refused."""
+    st = {"dispatches": {"t1": {"check": "modal-research", "subjects": ["modal:sheet/x"], "state": "returned"}}}
+    assert hc.answered(st, "modal-accuracy", ["modal:sheet/x"]) == 1
+    assert st["dispatches"]["t1"]["state"] == "answered"
+    other = {"dispatches": {"t1": {"check": "modal-form", "subjects": ["modal:sheet/x"], "state": "returned"}}}
+    assert hc.answered(other, "modal-accuracy", ["modal:sheet/x"]) == 0, "a research answer closes no other check"

@@ -4,12 +4,12 @@ townhouses and the houses of middle and lower-ranking samurai had almost none: s
 
 A great house could also grow hall by hall. At the Katsura villa four halls stand stepped back one behind the next,
 like geese in flight, and they went up in three phases over about half a century, in the early Edo period: halls set in
-echelon were how this house grew as its holders built onto it.
+echelon were how this house grew, hall added to hall, as the great houses' many joined halls did.
 
 How such a corridor was built, how wide or how long it ran, and how Katsura's own halls are joined, is not recorded.
 
 Guesses:
-- How the plan draws the corridor: about 11 ft (3.4 m) wide, running the few feet between the halls it joins; no account
+- How the plan draws the corridor: about 11 ft (3.4 m) wide, running about 3 ft (1 m) between the halls it joins; no account
   of a watari-roka's width or length was found.
 
 Depiction: The plan draws the corridor joining each hall of a residence set in echelon to the hall before it, putting the great
