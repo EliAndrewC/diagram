@@ -388,6 +388,16 @@ check "...counting its round for the active feature" 'grep -q "settlement-review
 printf '{"none":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
 refused_for "a THIRD round of the same unit is refused" "$GLYPH" "the cap is two"
 check "...recorded under its own rule" 'grep -rl "review-round-cap" "$GUARD_LOG_ROOT" >/dev/null'
+# GUARD_EDIT_OK: feature 375 FR-011 - past the cap the round arbiter rules: the refusal names it, and its `continue` runs the round
+refused_for "...and the refusal hands it to the round arbiter" "$GLYPH" "make arbiter-bundle"
+mkdir -p "$CLONE/.specify" "$CLONE/specs/900-x"; printf '{"feature_directory": "specs/900-x"}' > "$CLONE/.specify/feature.json"
+printf '{"specs/900-x":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
+printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "continue", "why": "a new finding"}\n' > "$CLONE/specs/900-x/arbiter.jsonl"
+check "a continue ruling runs the third round" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
+printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "accept", "why": "fine as it stands"}\n' > "$CLONE/specs/900-x/arbiter.jsonl"
+refused_for "...an accept closes the unit" "$GLYPH" "the round arbiter closed"
+rm -rf "$CLONE/.specify" "$CLONE/specs/900-x" "$CLONE/.git/arbiter-owed.json"
+printf '{"none":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
 GLYPH_BARE=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\nREVIEW_ROUNDS_OK=\"x\""}')
 refused_for "...and its waiver needs a reason" "$GLYPH_BARE" "needs a REASON"
 GLYPH_WAIVED=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\nREVIEW_ROUNDS_OK=\"the GM said: one more round is fine\""}')

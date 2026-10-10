@@ -38,6 +38,9 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import hm_arbiter  # noqa: E402
+
 STATE = "checks-open.json"
 #: the checks whose subject is a question page or a pop-up, and so freeze it while they run
 PAGE_CHECKS = frozenset(
@@ -115,19 +118,29 @@ def open_round(state: Mapping[str, Any], subject: str, now: float | None = None)
             if subject in d.get("subjects", []) and d.get("state") != "answered" and _live(d, now)]
 
 
-def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float) -> str:
-    """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap)."""
+def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None) -> str:
+    """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap and the tripwires, which
+    the round arbiter rules on - `hm_arbiter.py`)."""
     subjects = subjects_of_manifest(text) if check in PAGE_CHECKS else []
+    if root is not None:
+        held = hm_arbiter.blocking(root, "")
+        if held:
+            return hm_arbiter.refusal(held)
     for s in subjects:
         same = [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
         if same and [d for d in running(state, s, now) if d.get("state") == "running"]:  # launched, not a refused call's record
             return (f"`{check}` is already in {s}'s round and that round has a check still running - all of a round's checks "
                     "return, their edits go in in one pass, then the page is checked once (feature 375 FR-003c)")
         n = state.setdefault("rounds", {}).get(f"{check}|{s}", 0)
-        if n >= ROUND_CAP and not state.get("arbiter", {}).get(f"{check}|{s}") == "continue":
-            return (f"round {n + 1} of `{check}` on {s} in this feature - the cap is {ROUND_CAP} (feature 375 FR-010). "
-                    f"The round arbiter rules first: make arbiter-bundle TRIGGER=\"{check}|{s}\", dispatch `round-arbiter` on its "
-                    "MANIFEST, then make arbiter-ruled")
+        unit = f"{check}|{s}"
+        if root is not None:
+            shut = hm_arbiter.closed(root, f"round:{unit}@")
+            if shut:
+                return f"the round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)"
+            cap = ROUND_CAP + hm_arbiter.continues(root, f"round:{unit}@")
+            if n >= cap:
+                hm_arbiter.trip(root, f"round:{unit}@{n + 1}", "round", unit, f"round {n + 1} of {check} on {s}", now)
+                return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"])
     for s in subjects:
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
@@ -292,6 +305,34 @@ def _feature(root: Path) -> str:
         return ""
 
 
+#: every check a dispatch is counted for: the page checks freeze their subject; impl-drift and the triages count to FR-010 only
+CHECK_KINDS = PAGE_CHECKS | {"impl-drift"}
+
+
+def _root(payload: Mapping[str, Any]) -> Path | None:
+    p = Path(str(payload.get("cwd") or ".")).resolve()
+    return next((d for d in (p, *p.parents) if (d / ".git").exists()), None)
+
+
+def changed_lines(root: Path) -> int:
+    """Hand-written lines the clone's delta changed against the merge base (feature_report's rule: generated files and specs/
+    out) - the cascade ratio's base (FR-010)."""
+    import subprocess  # noqa: PLC0415
+
+    def git(*a: str) -> str:
+        r = subprocess.run(["git", "-C", str(root), *a], capture_output=True, text=True, check=False)
+        return r.stdout if r.returncode == 0 else ""
+
+    base = git("merge-base", "HEAD", "origin/main").strip() or git("rev-parse", "HEAD").strip()
+    gen = re.compile(r"\.(svg|json|jsonl|png|webp)$|^specs/|^dev/(run-log|perf-log|bypass-log|idle-log)/|^pool/.*\.notes\.md$")
+    total = 0
+    for raw in git("diff", "--numstat", base).splitlines():
+        parts = raw.split("\t")
+        if len(parts) == 3 and parts[0].isdigit() and not gen.search(parts[2]):
+            total += int(parts[0]) + int(parts[1])
+    return total
+
+
 def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> str:
     """One hook event. Returns a refusal message (the hook exits 2 with it) or ''."""
     now = time.time() if now is None else now
@@ -307,10 +348,20 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
     out = ""
     if mode == "dispatch" and payload.get("tool_name") == "Agent":
         check = str(ti.get("subagent_type") or "")
-        if check not in PAGE_CHECKS or re.search(r'FREEZE_OK="[^"]{8,}"', str(ti.get("prompt") or "")):
+        root = _root(payload)
+        if check == "round-arbiter":
+            m = re.search(r"^trigger: (.+)$", _manifest_of(str(ti.get("prompt") or ""))[1], re.M)
+            if root is not None and m and m.group(1).strip() in hm_arbiter.rulings(root):
+                return f"{m.group(1).strip()} is already ruled - one ruling per trigger, binding (feature 375 FR-011)"
+            return ""
+        if check not in CHECK_KINDS or re.search(r'FREEZE_OK="[^"]{8,}"', str(ti.get("prompt") or "")):
             return ""
         manifest, text = _manifest_of(str(ti.get("prompt") or ""))
-        out = dispatch(state, str(payload.get("tool_use_id") or now), check, manifest, text, now)
+        out = dispatch(state, str(payload.get("tool_use_id") or now), check, manifest, text, now, root)
+        if not out and root is not None:
+            n = len(state.get("dispatches", {}))
+            if hm_arbiter.cascade(n, changed_lines(root)):
+                hm_arbiter.trip(root, f"cascade:{n}", "cascade", "", f"{n} check dispatches over {changed_lines(root)} changed lines", now)
     elif mode == "launched" and payload.get("tool_name") == "Agent":
         resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
         launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched")
@@ -319,6 +370,11 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
                                                                        str(payload.get("last_assistant_message") or "")))
     elif mode == "edit" and payload.get("tool_name") == "Bash":
         command = str(ti.get("command") or "")
+        root = _root(payload)
+        if root is not None and re.search(r"(?:^|[;&|(]\s*)(?:[A-Z_]+=\S*\s+)*make\s+(?:-\S+\s+)*done\b", command, re.M):
+            held = hm_arbiter.blocking(root, gate=True)
+            if held and not re.search(r'ARBITER_OK="[^"]{8,}"', command):
+                return hm_arbiter.refusal(held)
         return "" if re.search(r'FREEZE_OK="[^"]{8,}"', command) else apply_refusal(state, command, now)
     elif mode == "edit" and payload.get("tool_name") in ("Edit", "Write", "MultiEdit"):
         if re.search(r'FREEZE_OK="[^"]{8,}"', " ".join(str(v) for v in ti.values())):

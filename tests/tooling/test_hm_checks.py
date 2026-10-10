@@ -59,14 +59,31 @@ def test_a_check_is_not_re_dispatched_into_a_round_that_is_still_running() -> No
     assert hc.dispatch(st, "t3", "quote-check", "/m", MANIFEST, 2) == "", "all returned: the next round may start"
 
 
-def test_the_third_round_goes_to_the_arbiter() -> None:
+def _clone(tmp: pathlib.Path) -> pathlib.Path:
+    (tmp / ".git").mkdir()
+    (tmp / ".specify").mkdir()
+    (tmp / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    return tmp
+
+
+def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path) -> None:
+    """FR-010/FR-011: the record checks' cap of two rounds per subject per feature; the third trips the arbiter, whose
+    `continue` lifts the cap by one and whose `accept` closes the unit for good."""
+    root = _clone(tmp_path)
+    ha = _load("hm_arbiter")
     st: dict = {}
     for i in range(2):
-        assert hc.dispatch(st, f"t{i}", "quote-check", "/m", MANIFEST, i) == ""
+        assert hc.dispatch(st, f"t{i}", "quote-check", "/m", MANIFEST, i, root) == ""
         hc.answered(st, "quote-check", ["q:0105"])
-    assert "round 3 of `quote-check` on q:0105" in hc.dispatch(st, "t9", "quote-check", "/m", MANIFEST, 5)
-    st["arbiter"] = {"quote-check|q:0105": "continue"}
-    assert hc.dispatch(st, "t9", "quote-check", "/m", MANIFEST, 5) == ""
+    msg = hc.dispatch(st, "t9", "quote-check", "/m", MANIFEST, 5, root)
+    assert "round 3 of `quote-check` on q:0105 in this feature passes its cap of 2" in msg and "make arbiter-bundle" in msg
+    assert list(ha.owed(root)) == ["round:quote-check|q:0105@3"]
+    ha.record_ruling(root, "round:quote-check|q:0105@3", {"ruling": "continue", "why": "a new finding each round", "what": "the notes"}, "round-arbiter")
+    assert hc.dispatch(st, "t9", "quote-check", "/m", MANIFEST, 5, root) == "" and ha.owed(root) == {}
+    hc.answered(st, "quote-check", ["q:0105"])
+    assert "passes its cap of 3" in hc.dispatch(st, "t10", "quote-check", "/m", MANIFEST, 6, root)
+    ha.record_ruling(root, "round:quote-check|q:0105@4", {"ruling": "accept", "why": "what is left is wording"}, "round-arbiter")
+    assert "the round arbiter closed quote-check|q:0105 (accept)" in hc.dispatch(st, "t11", "quote-check", "/m", MANIFEST, 7, root)
     assert hc.dispatch(st, "ti", "impl-drift", "/m", "unit: impl-drift:x 1\n", 5) == "" and st["dispatches"]["ti"]["subjects"] == []
 
 

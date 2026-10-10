@@ -91,6 +91,12 @@ check "redirect over settings.json"           blocked "cat > .claude/settings.js
 check "append to a hook script"               blocked "echo x >> scripts/hooks/no-poll-hooks.sh"
 check "the escape, with a reason"             ok      "sed -i 's/a/b/' scripts/hooks/gate-hooks.sh  # GUARD_EDIT_OK: it fired on correct work"
 check "READING a guard file is not writing"   ok      "grep -n done Makefile"
+# GUARD_EDIT_OK: feature 375 - a hook's SUITE is not a guard (guard-file-hooks.sh exempts it on the Edit route)
+check "a suite written by python is not a guard" ok   "python3 - <<PY
+import pathlib; pathlib.Path('tests/hooks/test-pair-hooks.sh').write_text(x)
+PY"
+check "sed -i on a suite is not a guard write" ok     "sed -i 's/a/b/' tests/hooks/test-gate-hooks.sh"
+check "...but its guard still is"             blocked "sed -i 's/a/b/' scripts/hooks/test-hooks.sh"
 # GUARD_EDIT_OK: feature 217 - the roster of rolled hamlets is a guard on the shell route too
 check "heredoc appending a roll row to the roster" blocked "cat >> tests/rolls.py <<EOF
 Roll(SPEC, 'x', 'y')

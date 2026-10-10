@@ -102,6 +102,23 @@ def read(root: Path) -> VerificationState | None:
     )
 
 
+def second_red_gate(root: Path, now: str | None = None) -> str:
+    """FR-010's red-gate tripwire (feature 375): a second red `make done` in a row owes the round arbiter a ruling before the
+    next gate (`scripts/hooks/lib/hm_arbiter.py` reads `arbiter-owed.json` beside this state; feature 372's wave 106 went red
+    about six times, each from a cause a cheap check finds). Returns the trigger written."""
+    when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    path = _state_file(root).parent / "arbiter-owed.json"
+    try:
+        owed = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        owed = {}
+    trigger = f"red-gate@{when}"
+    owed[trigger] = {"kind": "red-gate", "unit": "", "detail": "a second red make done in a row", "t": time.time()}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(owed, indent=1, sort_keys=True), encoding="utf-8")
+    return trigger
+
+
 def write(root: Path, event: str, target: str, reused: bool = False) -> VerificationState:
     if event not in (GREEN, FAILED):
         raise ValueError(f"unknown verification event {event!r} (want {GREEN} or {FAILED})")
@@ -115,6 +132,11 @@ def write(root: Path, event: str, target: str, reused: bool = False) -> Verifica
     # first commit after this rule was noticed). If the standing record is a green `done` against
     # exactly this content, a green run of anything smaller leaves it standing.
     prior = read(root)
+    if target == "done":  # the last GATE's outcome, apart from the one slot a quick run overwrites (FR-010: red gates in a row)
+        last = _state_file(root).parent / "last-gate"
+        if event == FAILED and last.is_file() and last.read_text(encoding="utf-8").strip() == FAILED:
+            second_red_gate(root)
+        last.write_text(event + "\n", encoding="utf-8")
     if (
         event == GREEN
         and target != "done"
