@@ -297,6 +297,10 @@ push_cmd() {
   python3 "$ROOT/scripts/gates/check-old-layout.py" --selftest >/dev/null || die "check-old-layout selftest failed - fix scripts/gates/check-old-layout.py before pushing"
   python3 "$ROOT/scripts/gates/check-old-layout.py" "$ROOT" || die "a live file names the project's old location (above) - feature 329 moved it to the repository root; drop the prefix"
   python3 "$ROOT/scripts/gates/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
+  # GUARD_EDIT_OK: feature 370 - the 100-statement function cap, HERE as well as first in static and quick: a push of tests/ or
+  # scripts/ alone takes the DIRECT route and runs no gate, and the cap holds those trees too.
+  python3 "$ROOT/scripts/gates/check-function-cap.py" --selftest >/dev/null || die "check-function-cap selftest failed - fix scripts/gates/check-function-cap.py before pushing"
+  python3 "$ROOT/scripts/gates/check-function-cap.py" "$ROOT" || die "a function is past the 100-statement cap, or a suppression of it says not why (above) - feature 370"
   # GUARD_EDIT_OK: feature 234 - both halves of "the record and the modals stay in step" run HERE for
   # the same reason the three above do: the delta that breaks either is a research-page edit touching
   # no Python, which takes the DIRECT route and runs no gate at all, so a gate-only check would surface

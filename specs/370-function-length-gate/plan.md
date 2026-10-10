@@ -95,7 +95,7 @@ A split adds function calls and no work; any seed more than 5% slower is diagnos
 ```text
 pyproject.toml                       D1
 scripts/gates/check-function-cap.py  D2, D3
-Makefile (static), sync-with-main.sh D2 (first in static; before every push)
+Makefile (static, quick), sync-with-main.sh D2 (first in static and quick; before every push)
 tests/tooling/test_function_cap.py   SC-001, SC-004 (the cap fires at 101 with both ways out, passes at 100; every suppression case)
 .specify/memory/constitution.md      D7
 .specify/templates/plan-template.md  D7

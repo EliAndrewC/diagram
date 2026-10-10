@@ -1549,7 +1549,8 @@ durations:       ## [tests] where the suite's time goes - run when a target feel
 
 quick:           ## [tests] tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure   ALL=1
 ##  ALL=1  run EVERY quick test, not just the ones whose code changed (default: change-selected via testmon)
-	@python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
+	@: "GUARD_EDIT_OK: feature 370 - the function cap first, so a session reads its two ways out, not ruff's bare PLR0915"
+	@python3 scripts/gates/check-function-cap.py && python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
 	: "GUARD_EDIT_OK: feature 236, the GM item 4 - the house-style rule, on the DELTA, as a PHASE." ; \
 	: "A PHASE and not a pytest test because quick selects tests by CHANGED CODE (testmon), and a scan" ; \
 	: "whose own code never changes would sit unexecuted through exactly the edits it exists to catch." ; \
@@ -1757,6 +1758,8 @@ static format typecheck test: | guard
 # GUARD_EDIT_OK: feature 185 - the recipe half of the `lint` -> `static` rename (see the comment on
 # the target-position line above; four sites in this file, all of them required).
 static:         ## [static] the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)
+	: "GUARD_EDIT_OK: feature 370 - the 100-statement function cap runs FIRST, so its message (both ways out) is read, not ruff's bare one"
+	python3 scripts/gates/check-function-cap.py --selftest >/dev/null && python3 scripts/gates/check-function-cap.py
 	python3 -m ruff check --fix .
 	python3 scripts/gates/check-duplicate-defs.py --selftest
 	python3 scripts/gates/check-duplicate-defs.py .

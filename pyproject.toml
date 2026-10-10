@@ -33,8 +33,18 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B", "SIM"]
+# PLR0915 IS THE FUNCTION-LENGTH CAP (feature 370; constitution Principle X clause 12), held - with its suppressions - by
+# scripts/gates/check-function-cap.py, which runs first in `make static` and `make quick` and before every push.
+select = ["E", "F", "I", "UP", "B", "SIM", "PLR0915"]
 ignore = ["E501"]   # long descriptive lines are house style; the formatter caps wrapping via line-length
+
+[tool.ruff.lint.pylint]
+# 100 STATEMENTS A FUNCTION (the GM, 2026-10-10). Why 100 and not ruff's and pylint's default 50: in a survey of 1,209
+# public repositories that set max-statements (GitHub code search, 2026-10-10), 100 was the second most common value -
+# 131 of 1,209 - and the most common one chosen over the default, which many configs carry only because
+# `pylint --generate-rcfile` writes it (specs/370-function-length-gate/research.md R1). At 100 the cap failed 12 of this
+# project's functions on the day it landed, each split rather than exempted (research.md R2).
+max-statements = 100
 
 [tool.ruff.lint.per-file-ignores]
 # the package __init__ re-exports the overlap taxonomy and matrix surface via star

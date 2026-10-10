@@ -132,7 +132,7 @@ def test_the_repository_config_holds_the_cap_and_says_why_100() -> None:
 def test_the_check_runs_first_in_static_and_quick_and_before_every_push(target: str) -> None:
     """D2: a session reads the check's message, not ruff's; a tests- or scripts-only push runs no gate."""
     recipe = (REPO / "Makefile").read_text().split(f"\n{target}:", 1)[1].split("\n\n", 1)[0]
-    lines = [ln.strip() for ln in recipe.splitlines() if ln.startswith("\t") and ("ruff" in ln or "check-function-cap" in ln)]
+    lines = [ln.strip() for ln in recipe.splitlines() if ln.startswith("\t") and not ln.strip().lstrip("@").startswith(":") and ("ruff" in ln or "check-function-cap" in ln)]
     assert "check-function-cap.py" in lines[0] and lines[0].find("check-function-cap") < (lines[0] + "ruff").find("ruff"), lines[:2]
     assert "check-function-cap.py" in (REPO / "scripts/sync-with-main.sh").read_text()
 
