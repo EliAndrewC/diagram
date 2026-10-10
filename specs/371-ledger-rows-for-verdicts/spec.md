@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09 (filed by feature 328's session); specified 2026-10-10
 
-**Status**: Draft
+**Status**: Draft - spec-fidelity round 3 verdict FAITHFUL (2026-10-10)
 
 **Affects**: review process, tooling
 
@@ -116,3 +116,5 @@ the session fills only the judgment cells (verdict, finding, class, author misse
 - **spec-fidelity round 2 (2026-10-10): NOT FAITHFUL.** (1) The modal checks were called "not a check" - they and
   `source-filter` are now checks, added to `CHECKS` so their rows pass the lint. (2) The title and Summary reworded to FR-001.
   (3) US1's figure given its date and method.
+- **spec-fidelity round 3 (2026-10-10): FAITHFUL.** Every round-2 item confirmed; of the 23 agents only `round-arbiter` stays
+  outside `CHECKS`, by its own description.
