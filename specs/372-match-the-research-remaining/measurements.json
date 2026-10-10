@@ -362,5 +362,18 @@
       "middle_gate": "its center stands west of the main axis (the hall spans ~59-172 ft of the ~270 ft compound, ~33 ft of outer court and the tax archive west of it since wave 105)",
       "coverage": "32%, perimeter-hugging 71% (make pack-audit)"
     }
+  },
+  "batch4-hayakawa-stables-comment": {
+    "observed": "2026-10-10",
+    "subject": "glyph-check--tax-archive",
+    "answers": "35b0d86d90b4",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -n 'fire gap below the tax archive' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "the stables' comment read against the archive as drawn",
+    "quantity": "the tax archive check's F5: the stables comment gives the fire gap below the smaller archive",
+    "verifies": "F5",
+    "value": {
+      "comment": "10 ft fire gap below the tax archive (14 ft since feature 372 wave 105 drew the archive at 0100's 24 x 18 ft)"
+    }
   }
 }

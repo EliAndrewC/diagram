@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-10T10:51:06Z",
+  "target": "review-accept",
+  "commit": "7d2c4257b",
+  "outcome": "permitted",
+  "why": "review-accept building-review--county-magistracy-example E3: pre-existing, not this wave's delta: filed as a found E3 row in the ranking (audit/found-wave105.jsonl), fixed at its own wave"
+}
