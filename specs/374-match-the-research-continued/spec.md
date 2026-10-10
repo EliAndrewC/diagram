@@ -153,3 +153,13 @@ named task of this feature's `tasks.md`, and those two measuring tasks are not a
 `make claim` is done (this directory). Next: `/speckit-specify` over this file and `request.md`, then plan and tasks in
 waves, as 372 did (`specs/372-match-the-research-remaining/` is the worked example). Re-arm the usage cap with the GM's
 current figure before the first wave.
+
+## Review history
+
+- Round 1 (spec-fidelity MODE 2, 2026-10-10): CHANGES REQUIRED - (1) FR-002 said "as written there" yet added a condition to
+  372's FR-003's timing pair: 372's FR-003 now quoted verbatim, "none owed" a reviewed plan decision; (2) FR-004 asked the GM at
+  the start too: at the feature's end only (328's goal amendment), User Story 3 and "What it carries" matched; (3) `85%`
+  backticked in FR-003's quote (spec-lint check 5); (4) SC-005's ~10 labeled as 375's "Why" estimate. Asides left as asides:
+  no country-shrine Affects tag (328's FR-010 carries the scope); the filed guard rule's "(the GM, 2026-10-10)" is the filed
+  spec's record, not verbatim words.
+- Round 2 (spec-fidelity, verify, 2026-10-10): FAITHFUL - all four items confirmed in the diff; spec-lint exits 0.
