@@ -128,3 +128,10 @@ in 328's ranking and this spec.
 - [x] T12 wave 109's rows (FR-001)
       research: rendering
       verify: DONE. DONE. wave 109: the bath-area well GUESS 0105 drawing (the fourth well UNRESEARCHED), the residence on the north range on 0091's drawing page, the karo's house GUESS 0106 drawing; impl-drift IN-STEP 4; plan review CLEAR
+
+## Phase 13 - wave 110 (amendment 8): the 0105 absence note carries only its silence
+
+- Record only (FR-001): 0105's two notes files.
+
+- [ ] T13 wave 110's row (FR-001)
+      research: rendering

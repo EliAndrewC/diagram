@@ -254,6 +254,13 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   claimed as the GUESS 0106's drawing page records. No sheet, no engine code.
 - **Records**: the claims' impl-drift; waves.json.
 
+## Wave 110 (amendment 8, 2026-10-10) - batch 7
+
+- **Scope**: the E0 found row `research/questions/0105-baths-furo.notes.html#bath-building-absence`: the absence note said "The
+  Matsue samurai residence lists its yudono by name only", a claim about a named, unlinked page an absence note may not carry
+  (quote-check, CLAIM-FROM-UNREAD); the sentence removed from both 0105 notes files, the note's stated silence unchanged.
+- **Records**: the note's quote-check and record-format; its source-reader answered as an absence note citing no page.
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |

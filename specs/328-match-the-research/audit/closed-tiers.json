@@ -588,5 +588,6 @@
  "l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least": "E2",
  "l7r/diagram/waterfields/tint.py::judge_tint#tint reads as a basin": "E2",
  "l7r/diagram/waterfields/tint.py::mark_low#wet plots on the drain": "E2",
- "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html::the belts' measured figures#belt arcs": "E1"
+ "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html::the belts' measured figures#belt arcs": "E1",
+ "research/questions/0105-baths-furo.notes.html#bath-building-absence": "E0"
 }
