@@ -1,6 +1,6 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "419891347d7fa29a83fef8016c323f3968f9f7dd68b873771da0339b4952ac47",
+ "plan_sha256": "efaefdfed9c5e577dc673954dccee99beed0537319b7a0a3251736b49970d052",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
@@ -21,20 +21,6 @@
    "summary": "docs/buildings.md bullet and claim rewritten; strongroom role within the same ceiling",
    "class": "within",
    "why": "the row's prose target; claim IN-STEP"
-  },
-  {
-   "id": "W105-band",
-   "summary": "The declared band (l7r/diagram/buildings/types.json tax_archive, rendered at docs/building-programs.md:90) left at 20-48 by 10-36 ft",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "ranking row 37 names three targets: the three sheets, the band and the prose. The band is unchanged and unmentioned in the plan; it is what pack_audit size_bands holds a sheet to, and it passes a 48 x 36 ft (1,728 sq ft) archive, about four times the ceiling the row enforces. Nothing makes it impossible, no GM word implies it, and leaving it defeats the row's purpose"
-  },
-  {
-   "id": "W105-page-bullet",
-   "summary": "0100 drawing page's bullet 'Our plans draw the records storehouse larger than this ceiling, about 32 to 36 ft long' removed because 'the plans no longer do'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "the premise was not measured and is false: compound.py:807 draws the generated archive 34 x 34 ft and its claim (:667) cites this very page for 'a 34 x 34 ft kura (~1,160 sq ft)'; county-magistracy-example.svg draws 102 x 102 px and ochiba-roundtrip-test.svg (Ochiba's program measured off the sheet) 96 x 84 px. A true record of a remaining mismatch was deleted instead of corrected, and the wave's scope silently stops at the hand sheets (waves 98 and 104 stated what the generated draft does). Either bring compound.py and the two generated sheets to the ceiling or keep the bullet naming the generated draft and record it as left"
   },
   {
    "id": "W105-loose-left",
@@ -71,7 +57,37 @@
    "summary": "Batch 4 bookends owed at the close",
    "class": "within",
    "why": "FR-003 as written"
+  },
+  {
+   "id": "W105-band",
+   "summary": "tax_archive band in types.json now w 18-24 by h 12-18 ft (rendered in building-programs.md); compound.py draft archive and claim 24 x 18 ft; roundtrip program 24 x 18 ft",
+   "class": "within",
+   "why": "round 1's block resolved: ranking row 37 names the band and prose; the band now admits no archive over 432 sq ft, under 0100's ~450 sq ft ceiling; both generated sheets read 72 x 54 px"
+  },
+  {
+   "id": "W105-page-bullet",
+   "summary": "0100 drawing page's 'our plans draw it larger' bullet stays removed",
+   "class": "within",
+   "why": "its premise is now true: every tax archive in pool/ (three hand sheets, county-magistracy-example, ochiba-roundtrip-test) is 72 x 54 px; no plan draws it larger"
+  },
+  {
+   "id": "W105-coverage-floor",
+   "summary": "pack_audit COVERAGE_FLOOR 0.33 -> 0.30 and its report line, following 0116 as corrected 2026-10-01; new spec Decisions row",
+   "class": "within",
+   "why": "0116's drawing page reads 'About 30-42%', its bottom Takayama's measured ~31%, its correction dated 2026-10-01 in its own comment; the 0.33 predated that and was the check's staleness, not a carve-out. Matching a check to its research page is the request's own aim (328, match the research) and XIV. Decisions row's classes (floor ACCURATE, ceiling GUESS) match the page's Evidence line. Re-run: the draft reads 32%, coverage_band OK"
+  },
+  {
+   "id": "W105-oshirasu",
+   "summary": "draft's fixed hearing-court zone x 59.5 -> 75.5, re-centered on the hall",
+   "class": "within",
+   "why": "a knock-on of the archive's size, holding test_compound's existing centering rule; no new behavior"
+  },
+  {
+   "id": "W105-gatehouse-left",
+   "summary": "draft's gatehouse left 18 x 12 ft (0093 draws ~40 ft), recorded at its code line",
+   "class": "within",
+   "why": "the draft's gatehouse is ranking row 9 (building-programs.md walled enclosure), scope 'deferred' in ranking.json; FR-001 excludes deferred rows from this feature's work list, so not taking it narrows nothing asked. The stated reason (stables find no seat at 40 ft) is not load-bearing for that and is not in m:wave105-draft-and-band - an aside, not a ruling"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

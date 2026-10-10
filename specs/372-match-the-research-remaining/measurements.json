@@ -313,7 +313,8 @@
         59.5,
         75.5
       ],
-      "reading": "the band now admits no archive over 432 sq ft; the draft, at 24 x 18, covers 32% - under the old 33% floor, which predated 0116's correction to 30-42% (Takayama's measured ~31% the bottom), so the floor follows the page; the draft's hearing court re-centered on the hall the smaller archive let slide east; test_compound 72 passed, test_mode_a_sheets 27 passed"
+      "reading": "the band now admits no archive over 432 sq ft; the draft, at 24 x 18, covers 32% - under the old 33% floor, which predated 0116's correction to 30-42% (Takayama's measured ~31% the bottom), so the floor follows the page; the draft's hearing court re-centered on the hall the smaller archive let slide east; test_compound 72 passed, test_mode_a_sheets 27 passed",
+      "draft_gatehouse_40ft": "tried: with the gatehouse at 40 x 12 ft, make map on county-magistracy-example failed - \"'stables' (42 x 24 ft, outer S) finds no seat on its wall inside the compound the program allows\"; reverted to 18 x 12"
     }
   }
 }

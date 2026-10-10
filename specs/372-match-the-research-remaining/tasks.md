@@ -21,6 +21,8 @@ in 328's ranking and this spec.
 
 - glyph-redrawn: tax archive on hayakawa-magistracy - wave 105: the records storehouse 24 x 18 ft, under 0100's ~450 sq ft, on all three sheets
 
+- layout-revised: county-magistracy-example - wave 105: the generated draft's tax archive 24 x 18 ft and its hearing court re-centered on the office hall
+
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame** (`pool/magistracies/*/`), their notes; `docs/buildings.md`.
@@ -83,5 +85,6 @@ in 328's ranking and this spec.
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame**, their notes; `docs/buildings.md`;
   0100's drawing page.
 
-- [ ] T08 wave 105's row (FR-001, FR-002)
+- [x] T08 wave 105's row (FR-001, FR-002)
       research: rendering
+      verify: DONE. wave 105: the tax archive at 0100's ceiling on all five sheets, its band and the draft; pack_audit's coverage floor at 0116's 30%; impl-drift IN-STEP; spec-fidelity CLEAR round 2
