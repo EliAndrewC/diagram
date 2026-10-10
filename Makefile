@@ -1225,7 +1225,9 @@ accept:         ## [project] accept a finding with a reason - the work goes on, 
 	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py accept "$(F)" "$(FINDING)" "$(REASON)"
 
-gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375)   F=375 [OVERTURN=<n> TO=<NNN>]
+# GUARD_EDIT_OK: adding an operation - WORDS= keeps the GM's words when a session marks a row he discussed and agreed needs no more action (GM 2026-10-10); nothing loosened.
+gm-reviewed: export GM_WORDS = $(WORDS)
+gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375); WORDS= his words when a session marks a row he discussed   F=375 [OVERTURN=<n> TO=<NNN>] [WORDS="<the GM's words>"]
 	@if [ -z "$(F)" ]; then printf 'make gm-reviewed: F=<feature> is required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py reviewed "$(F)" $(if $(OVERTURN),"$(OVERTURN)" "$(TO)",)
 
