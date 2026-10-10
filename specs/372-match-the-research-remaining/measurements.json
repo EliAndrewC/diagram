@@ -385,8 +385,8 @@
     "quantity": "fire-water tubs off their building's entrance or at a building with none, per sheet, at origin/main and after wave 106",
     "value": {
       "hayakawa": {
-        "before": "13 tubs: 7 far from a door, 3 at a building with no door",
-        "after": "0 of 13 off (a tub at a bath is not judged by a door)"
+        "before": "13 tubs: 8 far from a door, 3 at a building with no door (one more than plan review round 1 counted: the kitchen tub the old bath exemption skipped)",
+        "after": "0 of 13 off"
       },
       "ochiba": {
         "before": "10 tubs: 5 far from a door, 2 at a building with no door",
@@ -408,7 +408,7 @@
         "before": "not measured under the strict reading (generated, not tracked at main)",
         "after": "17 tubs, 0 off"
       },
-      "doors drawn": "ten: Hayakawa's Fire Dragon shrine (west face, toward its torii) and stables (south, the stable yard); Ochiba's compound shrine (west) and stables (east); Ubame's shrine (west), stables (east), granary (south), tally office (south) and office hall (west); the drafts' cell, cinnabar workshop and clerks' room (DOOR_KINDS)",
+      "doors drawn": "nine on the hand sheets: Hayakawa's Fire Dragon shrine (west face, toward its torii) and stables (south, the stable yard); Ochiba's compound shrine (west) and stables (east); Ubame's shrine (south, toward its approach torii), stables (east), granary (south), tally office (south) and office hall (west); and the drafts' cell, cinnabar workshop and clerks' room (DOOR_KINDS)",
       "shoe stones declared": "Hayakawa, Ochiba and Ubame (id=\"shoe-stone\"), and the draft's",
       "limit": "10.5 ft: the kitchen's second tub beside its first at one 6 ft door, past the door's held approach and the draft's 1 ft clearance, stands ~10.2 ft off (compound_model.TUB_DOOR_MAX_FT)"
     }

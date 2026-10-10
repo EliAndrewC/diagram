@@ -80,3 +80,11 @@ def test_the_registry_says_a_doorless_building_tags_no_door() -> None:
     plan = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), _rect(0, 0, 100, 100, "#DDB87A"), _tubgroup('<circle cx="106" cy="50" r="3.8"/>')))
     check = next(c for c in R.CHECKS if c.name == "tubs_off_their_doors")
     assert check.run(R.Context(plan, "", None, None, None)) == ["a fire-water tub at svg(106,50) stands at a building that tags no door"]
+
+
+def test_a_tub_nearer_another_building_than_the_bath_is_judged_by_that_buildings_door() -> None:
+    """The bath exempts only the tub it stands nearest (plan review of wave 106, round 2)."""
+    bath = '<g data-kind="bath"><rect x="100" y="60" width="30" height="30" fill="#C9A57A"/></g>'
+    door = '<rect x="0" y="0" width="18" height="4" fill="#4A3318" data-kind="door"/>'
+    plan = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), _rect(0, 0, 100, 100, "#DDB87A"), door, bath, _tubgroup('<circle cx="103" cy="56" r="3.8"/>')))
+    assert [(t.x, t.y) for t in pa.tubs_off_their_doors(plan)] == [(103, 56)]

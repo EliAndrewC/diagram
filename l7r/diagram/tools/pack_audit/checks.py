@@ -130,8 +130,12 @@ def tubs_off_their_doors(plan: ParsedPlan) -> list[TubOffItsDoor]:
         cx, cy = t.x + t.w / 2, t.y + t.h / 2
         hosts = [b for b in plan.buildings if tub_by_its_eaves((cx / FTPX, cy / FTPX), _ft_box(b))]
         doors = [(dx / FTPX, dy / FTPX) for b in hosts for dx, dy in doors_of(plan, b)]
-        if not hosts or any(plan.label_kinds.get(b.pos) in DOORLESS_KINDS for b in hosts):
-            continue  # a bath's tub stands on its yard side, whatever else's eaves reach it (Ochiba's under the veranda's)
+        if not hosts:
+            continue
+        # a bath's tub stands on its yard side, whatever else's eaves reach it (Ochiba's under the veranda's) - the bath
+        # NEAREST it, not any bath within reach (plan review round 2: a kitchen tub 35 ft from its door passed beside one)
+        if plan.label_kinds.get(min(hosts, key=lambda b: _point_rect_dist(cx, cy, b)).pos) in DOORLESS_KINDS:
+            continue
         if doors and tub_by_its_door((cx / FTPX, cy / FTPX), doors):
             continue
         out.append(TubOffItsDoor(cx, cy, min((math.hypot(cx / FTPX - dx, cy / FTPX - dy) for dx, dy in doors), default=math.inf)))

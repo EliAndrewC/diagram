@@ -209,7 +209,7 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   (R07, research 0104: no genkan - no door is drawn on the veranda); a tub at a bath, entered from the house, is not judged by
   a door (decision c3). The hand sheets are brought to the draft's rule that every building draws its door ("a building with
   no drawn door reads as sealed", pass 5): ten doors drawn, each on the face toward its approach or yard, in each sheet's small
-  dark door style; the drafts' cell, cinnabar workshop and clerks' room join `DOOR_KINDS`. Ten more tubs moved. The roof seat
+  dark door style (nine doors: Hayakawa 2, Ochiba 2, Ubame 5 - Ubame's shrine's on its south face, toward its approach torii, after plan review round 2); the drafts' cell, cinnabar workshop and clerks' room join `DOOR_KINDS`. Ten more tubs moved; the bath exemption holds only where the bath is the tub's nearest building (round 2). The roof seat
   0100 also attests is not drawn (the GM's footprint ruling), now on 0100's drawing page and in the Decisions row; the page's
   bullet takes the record-format check's wording too, in the same edit. m:wave106-tubs-at-doors restated per sheet, strict.
   Hoshigaoka's `glyph-check--door` and `size-audit--door` units are waived: its door ink predates the wave, only the tag is

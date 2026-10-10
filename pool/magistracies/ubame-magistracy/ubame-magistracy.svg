@@ -529,9 +529,9 @@
        which nobody in this county treats as a coincidence. -->
   <g data-kind="compound shrine">
     <rect data-id="compound-shrine-2" x="946" y="232" width="74" height="52" fill="#C9876C" stroke="#6B2A18" stroke-width="2.5"/>
-    <rect x="946" y="252" width="4" height="12" fill="#4A3318" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100) -->
     <rect data-id="compound-shrine-1" x="946" y="232" width="74" height="5" fill="#A03020"/>
     <rect data-id="compound-shrine-3" x="946" y="279" width="74" height="5" fill="#A03020"/>
+    <rect x="976" y="280" width="14" height="4" fill="#4A3318" data-kind="door"/><!-- feature 372 wave 106: its door, on the south face toward its approach torii, so its fire-water tub stands at its entrance (0100) -->
     <g transform="translate(983, 254)">
       <line data-id="compound-shrine-4" x1="-10" y1="0" x2="10" y2="0" stroke="#FFFAE6" stroke-width="2.5"/>
       <line data-id="compound-shrine-5" x1="-12" y1="5" x2="12" y2="5" stroke="#FFFAE6" stroke-width="2"/>
@@ -910,7 +910,7 @@
     <circle cx="412" cy="364.5" r="3.8"/>
     <circle cx="349" cy="387" r="3.8"/>
     <circle cx="532" cy="336.5" r="3.8"/>
-    <circle cx="940" cy="270" r="3.8"/>
+    <circle cx="966" cy="291.5" r="3.8"/>
     <circle cx="352.5" cy="532" r="3.8"/>
     <circle cx="852" cy="610" r="3.8"/>
     <circle cx="855.5" cy="527" r="3.8"/>

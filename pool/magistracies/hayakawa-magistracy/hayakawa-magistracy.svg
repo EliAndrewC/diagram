@@ -827,20 +827,20 @@
        The fireproof plaster tax-archive kura correctly carries none. (Fire-water
        sweep, 2026-07: halls burn, kura endure - so the water lives at the halls.) -->
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs" data-id="fire-water-tubs">
-    <!-- kitchen (2, highest fire risk) - east eaves wall -->
+    <!-- kitchen (2, highest fire risk) - either side of its north door (feature 372 wave 106: each tub beside a door, 0100) -->
     <circle cx="201" cy="312.5" r="3.8"/>
     <circle cx="163" cy="312.5" r="3.8"/>
-    <!-- office hall - west eaves corner -->
+    <!-- office hall - beside its east door -->
     <circle cx="690" cy="535" r="3.8"/>
-    <!-- residence west block (south eaves) -->
+    <!-- residence west block - beside the engawa's door -->
     <circle cx="315" cy="305.5" r="3.8"/>
-    <!-- residence east block (reception and the lord's suite, garden frontage; off the veranda's SE corner) -->
+    <!-- residence east block (reception and the lord's suite) - beside the shoe stone its guests step up from -->
     <circle cx="613" cy="324" r="3.8"/>
-    <!-- the two shrines (against the Fire Dragon shrine's east eaves) -->
+    <!-- the two shrines - beside the Fire Dragon shrine's west door, toward its torii -->
     <circle cx="766" cy="207.5" r="3.8"/>
-    <!-- guest house -->
+    <!-- guest house - beside its south door -->
     <circle cx="918" cy="307.5" r="3.8"/>
-    <!-- granary / east yard (gap coverage) -->
+    <!-- granary - beside its north door -->
     <circle cx="827" cy="542.5" r="3.8"/>
     <!-- barracks (west eaves; moved east with it, pass 3) -->
     <circle cx="696" cy="702" r="3.8"/>
@@ -848,7 +848,7 @@
     <circle cx="334" cy="442" r="3.8"/>
     <!-- gate range (west end) -->
     <circle cx="366" cy="711" r="3.8"/>
-    <!-- stables (NW eaves corner - clear of the stable-yard well to the E) -->
+    <!-- stables - beside its south door, onto the stable yard -->
     <circle cx="186" cy="643.5" r="3.8"/>
     <!-- servants' quarters -->
     <circle cx="375" cy="198" r="3.8"/>
