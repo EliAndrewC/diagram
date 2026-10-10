@@ -1985,5 +1985,20 @@
       "cause": "_homestead_polys rebuilt 111-124 times a track stage, once per spur candidate (_cluster_edge_toward), each rebuild about twice its old cost with wave 87's held parts",
       "pool": "all five maps byte-identical"
     }
+  },
+  "batch11-pair-final": {
+    "quantity": "batch 11's timing pair re-taken on the fix (waves 87-90 and the spur's fabric built once): c77080e23 -> 526457387",
+    "observed": "2026-10-10",
+    "source": "dev/perf-log/20261010T003041Z-328-start-perfbase.json, dev/perf-log/20261010T003345Z-328-end-base.json",
+    "command": "make perf in two detached worktrees, back to back; make perf-report AGAINST=328-start",
+    "method": "on a quiet host (load 1.3 -> 1.2); an intermediate re-take under a review agent's load (3.3) was discarded as load, its growth on stages the batch never touched",
+    "value": {
+      "band": 0,
+      "reference_total_pct": -0.6,
+      "households_10_pct": -1.8,
+      "households_20_pct": -0.4,
+      "households_40_pct": -0.2,
+      "reading": "with the spur's fabric built once (m:batch11-track-fabric-once) the first pair's band 1, audited inconsistent, is gone; nothing owed"
+    }
   }
 }

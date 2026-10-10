@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-10T00:25:44Z",
+  "target": "review-accept",
+  "commit": "526457387",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--barley F2: a nitpick carried: 0006's ripest-color convention; unchanged"
+}
