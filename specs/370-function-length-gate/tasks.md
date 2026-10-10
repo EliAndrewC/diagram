@@ -68,9 +68,9 @@
 - [x] T19 the claims re-check: claims-owed, a bundle per module, impl-drift, claims-checked (D6; FR-007, SC-006)
       research: rendering
       verify: DONE. 13 impl-drift passes over 2 rounds plus 1 on two split claims, all recorded; refusals 39 -> 16, the rest carried in make claims-report for feature 374 (the GM, SC-006 amended); ledger rows written
-- [ ] T20 the whole project under the cap, the gate green, the perf bookends (SC-002)
+- [x] T20 the whole project under the cap, the gate green, the perf bookends (SC-002)
       research: rendering
-      verify: ruff over the five held trees reports no PLR0915; make done green; make perf LABEL=370-end, perf-report AGAINST=370-start
+      verify: DONE. check-function-cap.py exits 0 over the project; make done green (468 s); 370-end bookend, perf-audit justified and confirmed; perf-gate owes nothing (seed 39 -0.7% on its own run)
 - [ ] GM review (make gm-reviewed F=370) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
