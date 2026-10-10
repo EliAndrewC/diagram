@@ -2299,38 +2299,51 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#named rear yard": {
-  "code": "426a3bbd9d037994",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "open ground with the storehouse beyond, as at the Higuchi house",
+  "code": "99b3969f04a17416",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "the Higuchi house: open ground behind the house, the storehouse beyond it",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
   "research": "cde11191e2ae3f5f",
   "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:776d38284e25426e",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:89821f7c125623ad"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#outer privies by service gates": {
-  "code": "6f5c018325d1d5a0",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "against service walls near a gate",
+  "code": "e1e101706023968f",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "against service walls near a gate, by the barracks, stables and servants' row",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
   "rests": [
+   "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Latrines and the rear service strip#privies away from food prep": {
+  "code": "7c9f638de998a563",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "none of the cited material sets a distance between a privy and a kitchen",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Latrines and the rear service strip#privies away from water": {
-  "code": "cba0a39ddf47ef6c",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "consistent with the 15 ft from a well",
+  "code": "af35b849c9cbf9a5",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "the drawing page records the 15 ft distance from a well as a GUESS",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
@@ -2341,10 +2354,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privy count": {
-  "code": "60b7d86e90fc0ba2",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "about one per part of the compound, 3-4",
+  "code": "5b4f5b61d059ab6e",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "about one per part, 3-4 at a county magistracy",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
@@ -2354,11 +2367,20 @@
   ],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Latrines and the rear service strip#privy glyph": {
+  "code": "35f193b06418a5ba",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "the drawing page records the gray square, set apart from the tan buildings, as a map convention",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Latrines and the rear service strip#privy size": {
-  "code": "e8b48fb0f482164d",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "14-20 px allows up to ~6.7 ft; the page draws \"5 ft square, a one-seat privy\"",
+  "code": "1ba6be0bb7f3069d",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "the drawing page records 5 ft square as a GUESS",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
@@ -2366,13 +2388,13 @@
   "rests": [
    "0101-privies-setchin.drawing.html:fc9cf897ba09ad11"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#rear kitchen garden by the sun": {
-  "code": "93b5f06083027aa3",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "six hours of autumn sun",
+  "code": "bc8107bc76421f1a",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "the rear is one of the site knob's sites, ruled out under six hours of autumn sun",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
@@ -2380,33 +2402,49 @@
   "research": "9d4ec9a570c81514",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:518902ab7cde51b3",
-   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d"
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:42bdf96bf8f0f70f",
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d",
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:ff9d9cf36d9635eb"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#rear service alley": {
-  "code": "eed11c6bf2a30527",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "0091.drawing answers it (\"an alley of about 6-10 ft ... its width a GUESS\"); the label should be GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html",
+  "code": "45f2c09a32ecdab9",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "no cited page gives the alley's width",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Latrines and the rear service strip#rear strip the service zone": {
+  "code": "bb5468398fd30013",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "0091 finds only that the formal garden lay south. It calls the rest unsettled (\"what stood behind the house is less settled\") and records a privy and servants' range in the shady rear as \"this project guesses ... a GUESS\". The label should be GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html",
+  "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
+  },
+  "research": "cde11191e2ae3f5f",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:5f52f1f04a224390",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:6218744dea5fe01d",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:ee330933a8458bdd"
   ],
   "verdict": "MISLABELED"
  },
  "docs/buildings.md::Latrines and the rear service strip#residence privy attached": {
-  "code": "c7be35aaf02556bf",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "one privy at a back corner, where the record gives a house two (upper and lower); the drawing page puts the guests' privy behind the reception room; the family-corner site is a GUESS",
+  "code": "9d237838bc3bc3c2",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "the procedure gives the house one attached privy at a back corner, but the page says \"A house might keep two\", and the drawing page gives two: the guests' privy \"centered behind the reception room\" and the family's at the rear corner (a GUESS); the procedure should draw both, the back corner should be labeled GUESS, and the pit toward the service edge is the project's rule",
   "pages": {
    "0101-privies-setchin.html": "f772eb2b05990168"
   },
   "research": "9f2d5a5c6b30a6c8",
   "rests": [
-   "0101-privies-setchin.html:158fc32b3525ad57",
    "0101-privies-setchin.html:18e84aa2b3f392ce",
    "0101-privies-setchin.html:3e6cdef5ad67f277",
    "0101-privies-setchin.html:b7521b5326a035cf"
@@ -2414,20 +2452,40 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip": {
-  "code": "fe968cd6fe8ed04d",
-  "core": "e2c0566b40be1972",
-  "date": "2026-10-08",
-  "note": "0115 houses servants in street-front ranges or under the main roof, never in a nagaya behind the house; the rear siting and ~10 count are 0091's GUESS and should cite it",
+  "code": "4841c8e965b2b6b4",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "0115 puts a household's servants in \"long ranges along the street\" or in the gate range, and a small house's under the main roof, never in a nagaya behind the residence; the ~10 servants is on no page; the rear placement is 0091's GUESS (\"the family privy and any servants' range stood in the shady rear\"), so cite that as a GUESS and give ~10 as a GUESS, or move the range to the street or gate",
   "pages": {
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
   },
   "research": "56857267abb1042e",
   "rests": [
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:0847d626d58b5561",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5b10f481659ec3b8",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:90f6ef1941297876",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:da2aded89607344d"
   ],
   "verdict": "DRIFTED"
+ },
+ "docs/buildings.md::Latrines and the rear service strip#storehouses in the rear strip": {
+  "code": "7f51ce63e814da58",
+  "core": "a829d4f7caea28ae",
+  "date": "2026-10-10",
+  "note": "\"a storehouse could stand behind the house\", and the Higuchi house's storehouse stood behind the house, beyond open ground",
+  "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
+  },
+  "research": "cde11191e2ae3f5f",
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:776d38284e25426e",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:89821f7c125623ad",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#archery bank": {
   "code": "d6e430b5cd7a973d",

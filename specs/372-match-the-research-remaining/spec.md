@@ -164,3 +164,11 @@ occasions are 328's (`specs/328-match-the-research/plan.md`).
   `m:wave97-ubame-charcoal` resolve only in 328's `measurements.json`, not 372's - say so as the third does; the 52 of
   54 baseline (Assumptions, How it starts) carries no pointer - cite m:wave95-overrun-floor in 328's records. Re-derived
   and holding: 204 open rows (kept 166, mode-a 38; E3 161, E4 42, E2 1), the 27-line introduced list, 0.166 s.
+- Round 2 (spec-fidelity, verify, 2026-10-10): FAITHFUL - all six items confirmed in the diff: (1) the GM's 2026-10-09
+  words verbatim in `request.md`, cited in FR-004; (2) SC-004 at 0, the held list after every fixable row, closes on the
+  answers applied, a kept row a Decisions Recorded row, cites FR-005; (3) FR-003's band-3 path asked at once outside FR-005,
+  work going on, the batch landing on sign-off; (4) FR-006 and SC-005 send the sort in 328's landing report; (5) the
+  `field_distances` item gone from FR-001 and "What it carries", filed as 373 (Status: Filed, not folded); (6) the three
+  pointers say they resolve in 328's `measurements.json`, their copies in 372's identical in value (checked on round 2's own
+  run), the 52 of 54 baseline cites m:wave95-overrun-floor in both places. Passages read: request.md, FR-001-FR-006,
+  SC-004/SC-005, Decisions Recorded, Assumptions, What it carries, How it starts.

@@ -256,8 +256,12 @@ See the "Fire discipline" grounding entry for the why.
 ### Latrines and the rear service strip
 
 <!-- Research: privy count - research/questions/0101-privies-setchin.drawing.html: one per functional zone, ~3-4 -->
-<!-- Research: privy size - research/questions/0101-privies-setchin.drawing.html: ~14-20 px square, ~5-7 ft -->
-<!-- Research: privies away from water - research/questions/0101-privies-setchin.drawing.html: away from food prep and water sources -->
+<!-- Research: privy size - GUESS research/questions/0101-privies-setchin.drawing.html: 5 ft square (15 px), a one-seat privy -->
+<!-- Research: privies away from water - GUESS research/questions/0101-privies-setchin.drawing.html: at least 15 ft from any well -->
+<!-- Research: privies away from food prep - UNRESEARCHED: no page we read sets a privy's distance from a kitchen -->
+<!-- Research: privy glyph - CONVENTION: a gray square labeled latrine, apart from the tan buildings (0101's drawing page) -->
+<!-- Research: rear strip the service zone - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: the formal garden to the south (found), the shady north rear the service side (the page's guess) -->
+<!-- Research: storehouses in the rear strip - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: the household's dozo stood behind the house -->
 <!-- Research: residence privy attached - research/questions/0101-privies-setchin.html: at a back corner of the house, cesspit toward a service edge -->
 <!-- Research: outer privies by service gates - research/questions/0101-privies-setchin.drawing.html: against service walls near a gate for the night-soil cart -->
 <!-- Research: servants in the rear strip - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: nagaya for ~10 servants behind the residence -->
@@ -265,7 +269,7 @@ See the "Fire discipline" grounding entry for the why.
 <!-- Research: named rear yard - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: open working ground with storehouses beyond, the Higuchi house -->
 <!-- Research: rear service alley - UNRESEARCHED: ~6-10 ft alley when little goes behind -->
 
-Very small gray rects (~14-20 px square), labeled `latrine`, away from food prep and water sources. Count and placement follow how households and night-soil actually worked (building-review sanitation sweep, 2026-07):
+Very small gray squares, 5 ft (15 px) a side - a one-seat privy (research/questions/0101-privies-setchin.drawing.html; its size a GUESS) - labeled `latrine`, away from food prep and water sources. Count and placement follow how households and night-soil actually worked (building-review sanitation sweep, 2026-07):
 
 - **Count scales with occupancy** - roughly one privy per functional zone (residence/servants, the garrison/barracks, the administrative or stable yard), not a token one or two for the whole compound. A ~40-60-person magistracy runs ~3-4.
 - **The residence privy ATTACHES to the house** - a back (north) corner, the end of an engawa/corridor - never a lone block standing out in open ground. Its cesspit faces a service edge (the rear/service wall) so an outside night-soil collector (night-soil was a valuable, carted-off commodity) reaches it without crossing the inner court.
