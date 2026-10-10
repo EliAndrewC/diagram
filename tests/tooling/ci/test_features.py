@@ -64,3 +64,20 @@ def test_no_spec_file_means_no_verdict(tmp_path: Path) -> None:
 
 def test_status_dataclass_defaults() -> None:
     assert FeatureStatus(name=None).open_tasks == ()
+
+
+def test_a_lands_open_box_the_reviewed_plan_names_does_not_hold_the_merge(tmp_path: Path) -> None:
+    """Feature 375 plan D18: the gated merge asks the push's own rule. A `[lands-open]` box a CLEAR plan names is no open task;
+    a hand-typed one is (batch 2 of 375 was refused here while the push let the same box through)."""
+    import hashlib
+
+    _feature(tmp_path, "375-x", "- [x] T01 done\n- [ ] T99 later batches [lands-open]\n")
+    d = tmp_path / "specs" / "375-x"
+    plan = "# plan\n\n**Lands open**: T99\n"
+    (d / "plan.md").write_text(plan, encoding="utf-8")
+    (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan.encode()).hexdigest(), "plan_text": plan,
+                                                    "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
+    assert feature_status(tmp_path, "375-x").complete
+    (d / "tasks.md").write_text("- [x] T01 done\n- [ ] T98 typed by hand [lands-open]\n", encoding="utf-8")
+    fs = feature_status(tmp_path, "375-x")
+    assert not fs.complete and fs.open_tasks == ("T98 typed by hand [lands-open]",)

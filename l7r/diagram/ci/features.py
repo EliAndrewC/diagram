@@ -11,13 +11,30 @@ part of a feature" declaration: the feature is named the way spec-kit already na
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import os
 import re
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-_OPEN = re.compile(r"^\s*- \[ \] (T\d+[^\n]{0,80})", re.M)
+_OPEN = re.compile(r"^\s*- \[ \] (T\d+[^\n]*)", re.M)
+#: the repository whose `scripts/speckit-todo.py` states which open box holds a landing - this package's own
+REPO = Path(__file__).resolve().parents[3]
+
+
+def holding(d: Path) -> list[str]:
+    """The open boxes of `d/tasks.md` that hold the landing - `speckit-todo.py --holding`'s ONE rule, loaded by path (a script,
+    not a package; as `state.py` loads gate-stamp): a `[lands-open]` box the tooling or a reviewed plan put there does not
+    hold it (feature 375, plan D18). Batch 2 of 375 was the first gated landing to meet one, and this check refused it while
+    the push's own open-task test let it through: two copies of one rule had drifted apart."""
+    spec = importlib.util.spec_from_file_location("speckit_todo", REPO / "scripts" / "speckit-todo.py")
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["speckit_todo"] = mod
+    spec.loader.exec_module(mod)
+    return mod.holding(d)
 
 
 @dataclass(frozen=True)
@@ -73,6 +90,9 @@ def feature_status(root: Path, name: str | None) -> FeatureStatus:
     tasks, spec = d / "tasks.md", d / "spec.md"
     if not tasks.is_file():
         return FeatureStatus(name=name, exists=False)
-    open_tasks = tuple(m.group(1).strip() for m in _OPEN.finditer(tasks.read_text(encoding="utf-8")))
+    held = holding(d)
+    open_tasks = tuple(
+        t[:80] for m in _OPEN.finditer(tasks.read_text(encoding="utf-8")) if any(h.startswith(t := m.group(1).strip()) for h in held)
+    )
     faithful = spec.is_file() and "FAITHFUL" in spec.read_text(encoding="utf-8")
     return FeatureStatus(name=name, exists=True, faithful=faithful, open_tasks=open_tasks)
