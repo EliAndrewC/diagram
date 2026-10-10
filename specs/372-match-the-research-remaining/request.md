@@ -10,3 +10,8 @@ scope of amendment 8 and the usage cap) is this feature's request too. The GM sp
 And set the goal (the `/goal` command):
 
 > After you land this feature on main by spinning out the rest of it into a new feature, then please start on that new feature. And then basically just pick up where you left off. Thanks.
+
+The usage cap the GM set for this work (2026-10-09, during feature 328, verbatim):
+
+> Let's raise the cap on this work from 85% to 90%.
+

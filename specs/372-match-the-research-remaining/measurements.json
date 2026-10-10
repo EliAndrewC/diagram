@@ -1,1 +1,62 @@
-{}
+{
+  "wave98-privy-size": {
+    "quantity": "wave 98 (2026-10-10): the hand sheets' privies redrawn to 0101's 5 ft square",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg before and after; make pack-audit on each",
+    "command": "make pack-audit ARGS=<sheet>",
+    "method": "each privy rect read before and after; the pack audit's whole output diffed",
+    "value": {
+      "privies": 13,
+      "size_px": 15,
+      "before": "Hayakawa 18x14, 16x21, 18x14, 16x17.5, 14x22; Ochiba 16x22, 20x14, 18x14, 18x14; Ubame 18x22, 18x22, 18x22, 18x14",
+      "pack_audit_diff_lines": 0,
+      "reading": "every privy 15 x 15 px (5 ft); the pack audit's output identical before and after on all three sheets"
+    }
+  },
+  "t140-seed25-at-head": {
+    "quantity": "T140 at 328's close (2026-10-10): the 40-household scaling roll of seed 25 at HEAD (copied from feature 328 measurements.json, where it was taken)",
+    "observed": "2026-10-10",
+    "source": "the clone at the split's commit; .../scratchpad/t140.log",
+    "command": "make cohort HOUSEHOLDS=40 N=1 SEED=25",
+    "method": "the one roll, its verdicts read",
+    "value": {
+      "refused": 0,
+      "knots": 1,
+      "knot_ft": 23.8,
+      "reading": "the web is drawn (no WebRefused): T140's refusal is gone; the roll carries one lane knot under wave 93's cohort rule (lanes 1 and 2, ends at (2727.4, 3352.6) and (2748.6, 3363.4), 23.8 ft apart) - a found row for feature 372; 'knob values never rolled' is a one-seed run's artifact"
+    }
+  },
+  "wave97-ubame-charcoal": {
+    "quantity": "wave 97 (2026-10-10): Ubame's charcoal yard redrawn to 0197 and 0199's drawing pages (copied from feature 328 measurements.json, where it was taken)",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg before and after; make pack-audit ARGS=<the sheet> before and after; make map GEN=<its gen>",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the sheet's rects read in px at 3 px = 1 ft; the pack audit run on the sheet before and after the edit",
+    "value": {
+      "weighing_floor": "80 x 80 px (26.7 ft square) -> 48 x 42 px (16 x 14 ft), at x 900-948, y 598-640: against the tally shed's west face and on the cart yard's edge; six posts -> four",
+      "bales": "two 18 x 9 px (6 x 3 ft) -> two 12 x 8 px (4 x 2.7 ft)",
+      "cart_yard": "the apron band 186 x 40 px (13.3 ft deep) -> 186 x 45 px (15 ft), filling the 47 px (15.7 ft) between the tally range (y 640) and the store (y 687); the store and the tally range unmoved",
+      "pack_audit": "coverage 39% unchanged; bare open ground 34% -> 35%; tile r2c2 52% -> 45% built; the tally-store gap reads 15.7 ft both before and after (LOOSE against the audit's 10 ft kura heuristic, the apron's 15-20 ft use); one new vacant rectangle 23 x 51 ft at svg(850,446), the outer court's open ground beside the rowhouse, replacing a 51 x 23 ft central one",
+      "render": "make map REGENERATED; the weighing floor's caption placed outside the floor with a leader, west",
+      "weighing_floor_ft": [
+        16,
+        14
+      ],
+      "bale_long_ft": 4,
+      "cart_yard_ft": 15,
+      "sheets_redrawn": 1
+    }
+  },
+  "wave95-overrun-floor": {
+    "quantity": "wave 95 (2026-10-10): the touch pass's final overrun cut without its 6 ft floor (copied from feature 328 measurements.json, where it was taken)",
+    "observed": "2026-10-10",
+    "source": "make map GEN=pool/hamlets/<map>/<map>.gen.py for the five hamlets; make test-file FILE=tests/hamletgen/test_pool_261.py; make cohort N=48 in a detached worktree on the same patch",
+    "command": "make map; make test-file FILE=tests/hamletgen/test_pool_261.py; make cohort N=48",
+    "method": "the floor removed, the pool rerolled and compared with HEAD, the cohort run",
+    "value": {
+      "cohort_passed": 52,
+      "cohort_48": "52/54 (refused 10, 20), none newly failing",
+      "pool": "no map moved; the knot test 42 passed, 1 xfailed"
+    }
+  }
+}
