@@ -230,16 +230,16 @@ A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 
 ### Fire-water tubs
 
-<!-- Research: tub glyph - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a tub about 2.5 ft across (~r3.8 at 3 px = 1 ft) -->
+<!-- Research: tub glyph - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a tub about 2.5 ft across (~r3.8 at 3 px = 1 ft) -->
 <!-- Research: tub glyph colors - CONVENTION: water-blue circle distinct from square wells -->
 <!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12 tubs; Ubame's sheet draws 19, Ochiba's none at its karo's house or senior retainers' quarters -->
 <!-- Research: kitchen weighting - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 tubs at the kitchen -->
 <!-- Research: tub against its wall - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: tubs stand at the wooden buildings, at the entrance - each beside a door of its building (feature 372 wave 106); the gutter feed and the ~3.5 ft limit from the building are UNRESEARCHED -->
 <!-- Research: tub within 10.5 ft of a door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: within about 10 ft, a CONVENTION of this project - the kitchen's two tubs side by side at one 6 ft door put the far one ~10.2 ft off (compound_model.TUB_DOOR_MAX_FT) -->
 <!-- Research: every wooden building with a tub draws a door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: every wooden building with a tub draws its door, so the tub stands at its entrance -->
-<!-- Research: the reception's shoe stone is its entrance - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: no genkan, the guest steps up at the reception's veranda from the shoe stone, declared id="shoe-stone" -->
+<!-- Research: the reception's shoe stone is its entrance - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: no genkan, the guest enters at the reception's veranda (0104); its tub beside the stone its guests step up from, declared id="shoe-stone" (0100) -->
 <!-- Research: a bath's tub judged by no door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a bath is entered from the house, so its tub stands on its yard side -->
-<!-- Research: no tub on the roof - CANON: the GM's ruling of 2026-07-25/26 keeps every tub out of a building's outline, so 0100's roof seat is not drawn and the entrance is the one seat -->
+<!-- Research: no tub on the roof - DEVIATION research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: water was kept on the roof too, not drawn - no tub stands inside a building's outline (the GM's ruling of 2026-07-25/26), so the entrance is the one seat -->
 <!-- Research: a short face's tub round the corner nearest its door - UNRESEARCHED: a 12 ft face leaves no seat beside a 6 ft door and its held approach, so the tub stands on the face round the nearer corner, still within the 10.5 ft -->
 <!-- Research: a tub that does not fit a narrow alley moved to open ground - UNRESEARCHED: a 7.6 px tub does not fit a 9 px alley between two buildings, so it is moved to the door's other side or a seat facing open ground -->
 <!-- Research: tub clear of the footprint - CANON: the GM's ruling of 2026-07-25, tightened 2026-07-26, no part of a tub glyph in a building's footprint (the downspout discharges and the bucket line forms outside the wall) -->

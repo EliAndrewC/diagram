@@ -934,3 +934,12 @@ def test_every_tub_of_the_county_example_stands_by_a_door_of_its_building() -> N
 
     _prog, _result, svg = _county()
     assert pa.tubs_off_their_doors(pa.parse_svg(svg)) == []
+
+
+def test_a_building_of_no_door_kind_draws_no_door() -> None:
+    """Every draft building carries a door (DOOR_KINDS, feature 372 wave 106); a kind outside the list - a program's own
+    shed - is drawn without one, and its tub takes the court face."""
+    shed = c.BuildingSpec("shed", "service", 20.0, 12.0, "outer", "W", 1, 1, feature="woodshed")
+    prog = _prog(shed)
+    svg = c.emit_svg(prog, c.place(prog))
+    assert "woodshed" not in cp.DOOR_KINDS and 'data-kind="door"' not in svg

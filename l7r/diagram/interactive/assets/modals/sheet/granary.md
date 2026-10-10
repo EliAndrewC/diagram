@@ -21,7 +21,7 @@ Depiction: The plan draws one of the two forms: the storehouse on posts, drawn s
 as dark blocks at its edge, or the earth-walled kura, drawn plastered white with no posts, since how such a kura's floor was
 raised is not recorded. It is labeled a granary, not a rice granary, because other grain was stored beside the rice. The
 plan draws one granary, with a corner of unhulled rice against famine, where in the Edo period the emergency reserve was
-kept apart in community and charity granaries. A wooden granary may have a fire-water tub beside it; an earth-walled one
+kept apart in community and charity granaries. A wooden granary may have a fire-water tub beside its door, where water was kept against fire; an earth-walled one
 has none. On a county office's plan it stands smaller than the residence, since such an office ships its rice on, and a little further from its neighbors than in a real office, so each building reads apart.
 
 Name: granary

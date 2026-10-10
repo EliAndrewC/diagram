@@ -281,17 +281,15 @@
   "code": "e5cea45059f1b862",
   "core": "3a32761dbc263963",
   "date": "2026-10-10",
-  "note": "each tub to one side of a door, the kitchen's two side by side",
+  "note": "the claim says the kitchen's two tubs stand \"side by side\", but the page's default is \"one on either side of its door\", with side by side only \"where one side is taken\" (the procedure's own line 90 fixes neither arrangement); also, a tub at a village shrine at all is recorded as a GUESS (0222 drawing §233), which the claim does not say; the account should read \"either side, or side by side where one side is taken\" and cite 0222 drawing §233 for presence",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "cfa154016d784fe2"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
   },
-  "research": "c55d939bd10cd4db",
+  "research": "bb5cedfdefc68fcd",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:6728dda05fa2783a",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:b06780140b026c2e"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water tub size about 2.5 ft across": {
   "code": "0d0784d9626cdc4f",
@@ -301,14 +299,6 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
- },
- "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water tubs at a village shrine at all (0222 drawing records this as a GUESS, §233; the fire-water claim's 0100 covers only where tubs stand)": {
-  "code": "3a32761dbc263963",
-  "core": "3a32761dbc263963",
-  "date": "2026-10-10",
-  "note": "fire-water tubs at a village shrine at all (0222 drawing records this as a GUESS, §233; the fire-water claim's 0100 covers only where tubs stand)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
   "code": "e40877b1e4595ead",
@@ -926,6 +916,7 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
+  "triage": "touched",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1626,14 +1617,13 @@
   "code": "c279a33af8c5ebae",
   "core": "8becb0440852b395",
   "date": "2026-10-10",
-  "note": "outside, beside a door, clear of the doorway",
+  "note": "outside its building, beside a door, clear of the doorway",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "cfa154016d784fe2"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
   },
-  "research": "c55d939bd10cd4db",
+  "research": "bb5cedfdefc68fcd",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:6728dda05fa2783a"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:b06780140b026c2e"
   ],
   "verdict": "IN-STEP"
  },
@@ -1671,6 +1661,7 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#gate hierarchy": {
@@ -1930,151 +1921,207 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Fire-water tubs#a short face's tub round the corner nearest its door": {
-  "code": "c621ba356f596324",
-  "core": "98807b60c08e5f15",
+ "docs/buildings.md::Fire-water tubs#a bath's tub judged by no door": {
+  "code": "91b9de7bb1a3df7a",
+  "core": "6c077f80b364c895",
   "date": "2026-10-10",
-  "note": "the page does not say what happens when a face is too short; §4 asks only \"just to one side of a door\", and the 10.5 ft limit still holds",
+  "note": "\"A bath is entered from the house, so its tub stands on its yard side\"",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
+  },
+  "research": "bb5cedfdefc68fcd",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:b06780140b026c2e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Fire-water tubs#a short face's tub round the corner nearest its door": {
+  "code": "808bdd823f35dd25",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "the page is silent on a face too short for a seat beside its door",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to the door's other side": {
-  "code": "bcdc9dbbf25fa204",
-  "core": "98807b60c08e5f15",
+  "code": "ffbb385f7813773c",
+  "core": "6c077f80b364c895",
   "date": "2026-10-10",
-  "note": "a placement rule the page does not address; UNRESEARCHED is right",
+  "note": "the page is silent on a tub crowded by a well",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#a tub that does not fit a narrow alley moved to open ground": {
-  "code": "93144999abf7866f",
-  "core": "98807b60c08e5f15",
+  "code": "661fbc909f256ff9",
+  "core": "6c077f80b364c895",
   "date": "2026-10-10",
-  "note": "the page does not address alley fit; moving to the door's other side stays within §4's \"to one side of a door\"",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "docs/buildings.md::Fire-water tubs#kitchen weighting": {
-  "code": "7cb4783ad70af4fe",
-  "core": "98807b60c08e5f15",
-  "date": "2026-10-10",
-  "note": "\"two at the kitchen\"",
-  "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "cfa154016d784fe2"
-  },
-  "research": "c55d939bd10cd4db",
-  "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
-  ],
-  "verdict": "IN-STEP"
- },
- "docs/buildings.md::Fire-water tubs#no tub at the plaster kura": {
-  "code": "ce3db956ba8e9106",
-  "core": "98807b60c08e5f15",
-  "date": "2026-10-10",
-  "note": "dozō \"get no tub\"; a wooden granary \"may get one tub\"",
-  "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "cfa154016d784fe2"
-  },
-  "research": "c55d939bd10cd4db",
-  "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
-  ],
-  "verdict": "IN-STEP"
- },
- "docs/buildings.md::Fire-water tubs#one tub per wooden building": {
-  "code": "5515d24a08a19bb5",
-  "core": "98807b60c08e5f15",
-  "date": "2026-10-10",
-  "note": "the claim records that Ochiba's sheet draws no tub at its karo's house or senior retainers' quarters, but the page finds \"one at each major wooden building\", and the procedure lists residence blocks; the drawing page does not record this as a deviation. Either the page records it as a DEVIATION and the claim cites it that way, or Ochiba draws those tubs. Ubame's 19 is acceptable, since \"the total follows from how many wooden buildings\"",
-  "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "cfa154016d784fe2"
-  },
-  "research": "c55d939bd10cd4db",
-  "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
-  ],
-  "verdict": "DRIFTED"
- },
- "docs/buildings.md::Fire-water tubs#tub against its wall": {
-  "code": "f347d626e62bffeb",
-  "core": "98807b60c08e5f15",
-  "date": "2026-10-10",
-  "note": "the page says \"kept at the wooden buildings, at the entrance\" and \"Each tub stands beside a door of its building\"; the page does not mention a gutter feed or the ~3.5 ft limit, so marking them UNRESEARCHED is correct",
-  "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "cfa154016d784fe2"
-  },
-  "research": "c55d939bd10cd4db",
-  "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:6728dda05fa2783a"
-  ],
-  "verdict": "IN-STEP"
- },
- "docs/buildings.md::Fire-water tubs#tub clear of the footprint": {
-  "code": "ae5f2a84880ac6a2",
-  "core": "98807b60c08e5f15",
-  "date": "2026-10-10",
-  "note": "the claim names the GM's ruling of 2026-07-25 and 2026-07-26",
+  "note": "the page is silent on narrow alleys",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Fire-water tubs#tub glyph": {
-  "code": "ee0fc73ef0f66533",
-  "core": "98807b60c08e5f15",
+ "docs/buildings.md::Fire-water tubs#every wooden building with a tub draws a door": {
+  "code": "6427135f04f3b3ba",
+  "core": "6c077f80b364c895",
   "date": "2026-10-10",
-  "note": "\"about 2.5 ft across\", which the page records as a GUESS; r3.8 is 7.6 px, which is 2.53 ft at 3 px = 1 ft",
+  "note": "\"Every wooden building with a tub draws its door\"",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "cfa154016d784fe2"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
   },
-  "research": "c55d939bd10cd4db",
+  "research": "bb5cedfdefc68fcd",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:4530579a74e75485"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:b06780140b026c2e"
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Fire-water tubs#tub glyph colors": {
-  "code": "ba433f729158d6b3",
-  "core": "98807b60c08e5f15",
+ "docs/buildings.md::Fire-water tubs#kitchen weighting": {
+  "code": "b1c7966b57bbab30",
+  "core": "6c077f80b364c895",
   "date": "2026-10-10",
-  "note": "how the glyph is shown, nothing more",
+  "note": "two at the kitchen, whose cooking fire burns all day",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
+  },
+  "research": "bb5cedfdefc68fcd",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:b06780140b026c2e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Fire-water tubs#no tub at the plaster kura": {
+  "code": "9027461c6fef16f9",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "none at the dozo, a wooden granary may take one",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
+  },
+  "research": "bb5cedfdefc68fcd",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Fire-water tubs#no tub on the roof": {
+  "code": "f5bb9eb9eb8d61d4",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "the research finds water kept on the roof too (\"at the entrance and on the roof\"), and the drawing page records not drawing it as this project's choice; the label should be DEVIATION research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, not CANON",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
+ "docs/buildings.md::Fire-water tubs#one tub per wooden building": {
+  "code": "a88ef30903462c97",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "one at each major wooden building, about 8-12, the total following the building count",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
+  },
+  "research": "bb5cedfdefc68fcd",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Fire-water tubs#the reception's shoe stone is its entrance": {
+  "code": "a820dc9e92df483f",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "neither 0104 page names a shoe stone; the rule that a reception's tub stands \"beside the stone its guests step up from\" is in 0100 drawing §349, which the claim does not cite; 0104 supports only the veranda entry and the genkan placed on the office; add the 0100 drawing pointer",
+  "pages": {
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "b2a74a73e3c362a1"
+  },
+  "research": "2892ce3f903e6811",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "docs/buildings.md::Fire-water tubs#tub against its wall": {
+  "code": "8ba420524d19f4e9",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "at the wooden buildings, at the entrance, beside a door; the gutter feed and the 3.5 ft limit are correctly marked unresearched",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
+  },
+  "research": "bb5cedfdefc68fcd",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:b06780140b026c2e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Fire-water tubs#tub clear of the footprint": {
+  "code": "df2f902c92bbf652",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "the GM's ruling, named, which the drawing page records as \"no tub stands inside a building's outline\"",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Fire-water tubs#tub glyph": {
+  "code": "219089d277ab5e17",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "the page records 2.5 ft as \"a GUESS: no page read gives a rain tub's size\"; the label should be GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
+  },
+  "research": "bb5cedfdefc68fcd",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:4530579a74e75485"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "docs/buildings.md::Fire-water tubs#tub glyph colors": {
+  "code": "137047549702ba0c",
+  "core": "6c077f80b364c895",
+  "date": "2026-10-10",
+  "note": "purely how the glyph is shown",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub seat off the wall": {
-  "code": "f8de4344daf6b4b0",
-  "core": "98807b60c08e5f15",
+  "code": "99082d7a346b379d",
+  "core": "6c077f80b364c895",
   "date": "2026-10-10",
-  "note": "a gap so the outline clears the wall's ink, which is how it is shown",
+  "note": "a drawing clearance from the wall's ink",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub within 10.5 ft of a door": {
-  "code": "c04eedd120e32a22",
-  "core": "98807b60c08e5f15",
+  "code": "d92ec4645a39aedc",
+  "core": "6c077f80b364c895",
   "date": "2026-10-10",
-  "note": "the page calls it a CONVENTION: \"within about 10 ft, the distance the kitchen's second tub needs\"; 10.5 ft fits \"about\"",
+  "note": "the page gives \"within about 10 ft\", recorded as a CONVENTION",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "cfa154016d784fe2"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
   },
-  "research": "c55d939bd10cd4db",
+  "research": "bb5cedfdefc68fcd",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:6728dda05fa2783a"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:b06780140b026c2e"
   ],
   "verdict": "IN-STEP"
  },
@@ -2990,6 +3037,7 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:aea6cd1ed8944b96",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fb5af5b7b0dcb397"
   ],
+  "triage": "touched",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
