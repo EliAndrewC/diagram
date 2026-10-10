@@ -53,6 +53,7 @@ TIERS: dict[str, tuple[str, str]] = {
     "modal-research": ("opus", "medium"),  # feature 319: accuracy, references and gaps against the research; entry-drift's question and more (plan D4)
     "modal-depiction": ("opus", "medium"),  # feature 319 D13: the Depiction tab against the glyph, the drawing pages and the claims
     "escalation-check": ("opus", "medium"),
+    "round-arbiter": ("opus", "high"),  # feature 375 FR-011: judges a process in the GM's place at a round cap; binding
     "spec-fidelity-verify": ("opus", "high"),  # medium tried and missed: research R5
     "spec-fidelity": ("opus", "high"),
     "source-applicability": ("opus", "high"),

@@ -521,6 +521,18 @@ print(json.dumps({"hookSpecificOutput": {
     # GREEN gate (not a running one: US6, a NOT-REVIEWABLE outcome never costs a run) and a cap of two rounds per unit
     # per feature (FR-009); the third needs REVIEW_ROUNDS_OK="<the GM's words>" in the prompt.
     ptext="$(printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' 2>/dev/null)"
+    # GUARD_EDIT_OK: feature 375 FR-003(a) - DECIDE FIRST: a review check waits for its task's decisions' verdict
+    decide_why="$(printf '%s' "$ptext" | python3 -c 'import re,sys; m=re.search(r"\bDECIDE_OK=\"([^\"]*)\"", sys.stdin.read()); r=m.group(1) if m else ""; print(r if len(r.split())>=2 and len(r)>=8 else "")' 2>/dev/null)"
+    if [ -n "$decide_why" ]; then
+      guard_log pair escaped "$decide_why" decide-ok
+    else
+      why="$(python3 "$PAIR_HERE/../gates/plan_gate.py" decided "${CLONE_ROOT:-.}" 2>/dev/null)"
+      if [ -n "$why" ]; then
+        printf '\nBLOCKED: %s\n(or DECIDE_OK="<reason>" in the prompt; scripts/hooks/pair-hooks.sh, feature 375)\n' "$why" >&2
+        guard_log pair blocked "$atype" decide-first
+        exit 2
+      fi
+    fi
     nf="$(mktemp)"; printf '%s' "$ptext" > "$nf"
     named="$(maps_named_by "$nf")"; rm -f "$nf"
     if [ "$(printf '%s\n' $named | grep -c .)" -gt 1 ]; then
@@ -584,11 +596,28 @@ print(json.dumps({"hookSpecificOutput": {
             log_bypass "REVIEW_ROUNDS_OK: $why" "review round $rounds"
             ;;
           *)
-            printf '\n\033[1mBLOCKED: round %s of %s for %s in this feature - the cap is two (feature 294 FR-009).\033[0m\n' "$rounds" "$named" "$atype" >&2
-            printf 'One review round and one fix-verification round. What remains is filed as a feature (make claim), or goes to the GM through\n' >&2
-            printf '`escalation-check`; a third round needs the GM'"'"'s waiver: REVIEW_ROUNDS_OK="<their words>" in the prompt.\n' >&2
-            guard_log pair blocked "$atype:$named" review-round-cap
-            exit 2
+            # GUARD_EDIT_OK: feature 375 FR-011 - past the cap THE ROUND ARBITER rules, not the GM's waiver: each `continue`
+            # ruling lifts the cap by one round; `accept` or `process-fault` closes the unit; an unruled third round trips it.
+            arb="$(python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hm_arbiter as a
+from pathlib import Path
+root, unit, n = Path(sys.argv[2]), sys.argv[3], int(sys.argv[4])
+shut = a.closed(root, f"round:{unit}@")
+if shut:
+    print(f"closed\tthe round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)")
+elif n - 2 > a.continues(root, f"round:{unit}@"):
+    a.trip(root, f"round:{unit}@{n}", "round", unit, f"round {n} of a review check")
+    print("owed\t" + a.refusal([f"round:{unit}@{n}"]))
+else:
+    print("continue\t")' "$PAIR_HERE/lib" "${CLONE_ROOT:-.}" "$atype|$named" "$rounds" 2>/dev/null)"
+            case "$arb" in
+              continue*) guard_log pair permitted "$atype:$named" review-round-arbiter-continue ;;
+              *)
+                printf '\n\033[1mBLOCKED: round %s of %s for %s in this feature - the cap is two (feature 294 FR-009).\033[0m\n' "$rounds" "$named" "$atype" >&2
+                printf '%s\n' "${arb#*$'\t'}" >&2
+                guard_log pair blocked "$atype:$named" review-round-cap
+                exit 2
+                ;;
+            esac
             ;;
         esac
       fi

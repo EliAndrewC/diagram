@@ -80,6 +80,25 @@ echo "7. the seams refuse outside a fixture"
 ( cd "$FIX" && "$HOOK" arm /diagram/.clones/diagram-performance >/dev/null 2>&1 ) && no "arm took a real clone path" || ok "arm refuses a path that is not a fixture"
 ( cd "$FIX" && "$HOOK" disarm /diagram >/dev/null 2>&1 ) && no "disarm took the mirror" || ok "disarm refuses the mirror"
 
+echo "7b. feature 375 FR-007: owed only for findings left open (GUARD_EDIT_OK: new cases for the disposal rule)"
+mkdir -p "$FIX/dev"
+LEDGER_HEAD='## Review checks, measured (feature 294 on)
+
+| date | check | subject | verdict | finding | class | author missed? | acted on | wall | tokens |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-10-10 | glyph-check | an earlier row | PASS | - | nothing | - | - | 10 s | 1k in (1k cached) / 1.0k out |'
+printf '%s\n' "$LEDGER_HEAD" > "$FIX/dev/review-ledger.md"
+agent settlement-review "DELTA review of x" >/dev/null
+printf '%s\n' '| 2026-10-11 | settlement-review | bath on ochiba | PASS | the steam arcs off center | judgment | no | fixed: arcs re-centered | 90 s | 300k in (250k cached) / 8.0k out |' >> "$FIX/dev/review-ledger.md"
+rc=0; stop_call || rc=$?
+[ "$rc" -eq 0 ] && [ -z "$(armed_by)" ] && ok "a review whose findings are all disposed owes nothing, and disarms" || no "a disposed review still owed the filter" "(rc=$rc)"
+printf '%s\n' "$LEDGER_HEAD" > "$FIX/dev/review-ledger.md"
+agent settlement-review "DELTA review of x" >/dev/null
+printf '%s\n' '| 2026-10-11 | settlement-review | bath on ochiba | NEEDS-WORK | the door band | judgment | yes | held for the GM | 90 s | 300k in (250k cached) / 8.0k out |' >> "$FIX/dev/review-ledger.md"
+rc=0; stop_call || rc=$?
+[ "$rc" -eq 2 ] && [ "$(armed_by)" = "settlement-review" ] && ok "a finding left for the GM still owes the filter" || no "an open finding was let through" "(rc=$rc)"
+( cd "$FIX" && "$HOOK" disarm "$FIX" >/dev/null 2>&1 ); rm -f "$FIX/dev/review-ledger.md"
+
 echo "8. outside a work tree the hook does nothing"
 OUT=$(mktemp -d)
 rc=0; printf '{"session_id":"t1"}' | ( cd "$OUT" && "$HOOK" stop 2>/dev/null ) || rc=$?

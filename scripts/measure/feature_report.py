@@ -145,6 +145,44 @@ def tool_detail(events: Sequence[Mapping[str, Any]]) -> Counter[str]:
     return out
 
 
+def tripwires(events: Sequence[Mapping[str, Any]], gate_results: Sequence[tuple[str, str]] = ()) -> list[tuple[str, str]]:
+    """(time, what fired) for every tripwire the events would have tripped (FR-010, replayed): a check's third and later round on
+    one subject, an Edit putting back replaced text, a round run on the GM's waiver, and a second red gate in a row."""
+    out: list[tuple[str, str]] = []
+    count: Counter[tuple[str, str]] = Counter()
+    for e in events:
+        if e["ev"] == "PreToolUse" and e.get("tool") == "Agent" and e.get("cat") in CHECK_CATS:
+            unit = subject(str(e["manifest"])) if e.get("manifest") else str(e.get("unit") or "")
+            if unit:
+                count[(str(e.get("agent")), unit)] += 1
+                n = count[(str(e.get("agent")), unit)]
+                if n > 2:
+                    out.append((str(e["t"]), f"round:{e.get('agent')}|{unit}@{n}" + (" (ran on the GM's waiver)" if e.get("waiver") else "")))
+    out += [(t, f"reversal:{p}") for p, t in reversals(events)]
+    prev = ""
+    for t, result in gate_results:
+        if result == "red" and prev == "red":
+            out.append((t, "red-gate"))
+        prev = result
+    return sorted(out)
+
+
+def gate_sequence(root: Path, shas: set[str], since: str, until: str) -> list[tuple[str, str]]:
+    """(UTC, green|red) of the feature's gate runs in order (`dev/run-log/`)."""
+    out = []
+    for p in sorted((root / "dev" / "run-log").rglob("*.json")):
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        utc = str(d.get("utc") or "")
+        if d.get("target") != "done" or (since and utc < since[:19]) or (until and utc > until[:19] + "Z"):
+            continue
+        if any(s.startswith(str(d.get("commit") or "-")) for s in shas) and d.get("result") != "already-verified":
+            out.append((utc, "red" if str(d.get("result")).startswith("failed") else "green"))
+    return sorted(out)
+
+
 def subject(manifest: str) -> str:
     """The checked thing a MANIFEST path names - `0105` for `/tmp/l7r-check/0105-quote-check/MANIFEST.md`."""
     m = _SUBJECT.search(manifest)
@@ -312,13 +350,17 @@ def report(root: Path, feature: str, transcripts: Sequence[Path] = (), since: st
     out += ["", "## Rounds per checked thing (two or more)", "", "| check | subject | rounds |", "|---|---|---|"]
     out += [f"| {c} | {s} | {n} |" for (c, s), n in sorted(rounds.items(), key=lambda kv: (-kv[1], kv[0])) if n >= 2] or ["| - | - | - |"]
     rv = reversals(events)
+    wires = tripwires(events, gate_sequence(root, shas, since or span[0], until or span[1]))
     out += ["", "## Process signals", "",
             f"- gates: {', '.join(f'{k} {v}' for k, v in sorted(g.items())) or 'none recorded'}",
             f"- spec rounds: {', '.join(f'{k} {v}' for k, v in sorted(spec_rounds(spec_text).items())) or 'none recorded'}",
             f"- plan reviews BLOCKED: {plan_blocks(root, name, shas)} recorded in commits, {vs.get('spec-fidelity', {}).get('BLOCKED', 0)} returned",
             f"- reversals (A -> B -> A): {len(rv)}" + (" - " + "; ".join(f"{Path(p).name} {t[11:16]}" for p, t in rv[:8]) if rv else ""),
             f"- check dispatches {checks} over {lines} changed lines: cascade ratio {checks / lines if lines else 0:.2f}",
-            f"- tasks ticked: {done} of {total}", ""]
+            f"- tasks ticked: {done} of {total}", "",
+            "## Tripwires (FR-010) - what fired, or would have", ""]
+    out += [f"- {t[11:16]} {w}" for t, w in wires] or ["- none"]
+    out += [""]
     out += [f"This report took {time.monotonic() - t0:.1f} s to build; its own runs are the `make feature-report` rows of the "
             "event log (category `other tool`).", ""]
     return "\n".join(out)

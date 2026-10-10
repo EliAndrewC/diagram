@@ -277,7 +277,18 @@ def bundle_less_refusal(check: str, notes: str, reason: str) -> str:
 
 
 def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str = "", notes: str = "", key: str = "", kind: str = "") -> list[str]:
-    """Record the answer for every unit of `check` the bundle carried, or that the tree owes on the named subject."""
+    """Record the answer for every unit of `check` the bundle carried, or that the tree owes on the named subject - and close
+    that check's dispatches on those subjects in the clone's check state (feature 375, FR-003: an answered check no longer
+    freezes its page)."""
+    done = _answer(root, check, result, bundle, q, notes, key, kind)
+    if done:
+        import hm_checks  # noqa: PLC0415
+
+        hm_checks.record_answer(root, check, done)
+    return done
+
+
+def _answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str = "", notes: str = "", key: str = "", kind: str = "") -> list[str]:
     s, done = store(root), []
     if bundle:
         manifest = pathlib.Path(bundle) / "MANIFEST.md"

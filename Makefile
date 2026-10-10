@@ -1117,7 +1117,36 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 ##  F=<feature>        the feature number or slug whose plan.md was reviewed
 ##  FILE=<json>        the reviewer's JSON: plan_sha256, decisions, verdict (feature 243 plan P3)
 ##  AS=spec-fidelity   who is recording - only the subagent may pass this, and nothing else distinguishes the shells
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" record "$(F)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
+	@: "GUARD_EDIT_OK: feature 375 FR-003(a) - TASK= records a decision preflight on one task's plan section"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" $(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
+
+# GUARD_EDIT_OK: feature 375 FR-003(b) adds an operation - close a check that went silent, so its page is not frozen for good
+check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>"
+	@if [ -z "$(SUBJECT)" ] || [ -z "$(REASON)" ]; then printf 'make check-closed: SUBJECT=<q:NNNN or modal:<registry>/<slug>> and REASON="<why>" are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_checks.py close "$(SUBJECT)" "$(REASON)"
+
+# GUARD_EDIT_OK: feature 375 FR-011 adds two operations - the round arbiter's bundle, and the recording of its ruling
+# (only the `round-arbiter` subagent passes AS=round-arbiter; a ruling is binding, one per trigger).
+arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
+	@if [ -z "$(TRIGGER)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" "$(TRIGGER)" --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",)
+
+arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter
+	@if [ -z "$(TRIGGER)" ] || [ -z "$(FILE)" ]; then printf 'make arbiter-ruled: TRIGGER= and FILE= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py ruled "$(TRIGGER)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
+
+# GUARD_EDIT_OK: feature 375 FR-003(a) adds three operations - decide first: name the active task, print its decision
+# preflight's dispatch, print its section's digest. Read-only but for task-start's `<git dir>/active-task`.
+task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict (feature 375)   F=375 T=T13
+	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" task-start "$(F)" "$(T)"
+
+decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375)   F=375 T=T13
+	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" decide "$(F)" "$(T)"
+
+section-sha:    ## [project] {internal} the digest of one task's plan section, which a decision preflight records   F=375 T=T13
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" section-sha "$(F)" "$(T)"
 
 # GUARD_EDIT_OK: feature 197 - adding a new operation (`claim`); no existing guard changes.
 # FEATURE 197 (GM 2026-09-07): THE NUMBER COMES FROM HERE, NEVER FROM A SCAN BY HAND. Two sessions each read

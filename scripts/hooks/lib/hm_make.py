@@ -18,7 +18,11 @@ from hm_shape import _POS, _PY, _strip_heredocs, _strip_quotes, executing_backti
 # a guard file, as the TARGET of a write - the filename adjacent to the operator that writes it
 # GUARD_EDIT_OK: feature 217 - the roster of rolled hamlets (tests/rolls.py) is a guard on the shell route too, so a
 # heredoc or a redirect cannot add a roll row where the Edit tool would have asked for a reason.
+# GUARD_EDIT_OK: feature 375 - a guard firing on correct work: a hook's SUITE (`tests/hooks/test-<guard>-hooks.sh`) matched
+# `-hooks.sh` and an edit to it was refused as a guard write, while guard-file-hooks.sh (the Edit route) exempts exactly those
+# files. One rule on both routes: a suite is not a guard - its path is blanked before the write patterns look (`_SUITE`).
 _GUARD = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py)"
+_SUITE = re.compile(r"[\w./-]*tests/hooks/test-[\w-]*-hooks\.sh")
 
 # GUARD_EDIT_OK: feature 169 - TWO FALSE POSITIVES, one of which blocked a command that wrote
 # nothing at all. These were matched against the RAW command, so:
@@ -116,6 +120,7 @@ def classify(cmd: str) -> str:
     # an ordinary test file whose DOCSTRING mentioned a hook by name. Third time this feature has
     # made the mention-versus-invocation mistake - a grep, a commit message, and now a docstring -
     # which is worth stating plainly: proximity is the signal, presence never is.
+    c, raw = _SUITE.sub("<a-suite>", c), _SUITE.sub("<a-suite>", raw)
     if (
         any(re.search(pat, c) for pat in _GUARD_WRITE_SHELL)          # sanitized: see feature 169
         or any(re.search(pat, raw) for pat in _GUARD_WRITE_PY)        # raw: the name lives in quotes

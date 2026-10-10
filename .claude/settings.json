@@ -134,6 +134,17 @@
         ]
       },
       {
+        "_comment": "GUARD_EDIT_OK: feature 375 FR-003(b) - record-edit-hooks.sh on Bash too: `make apply-edits` on a frozen page is admitted only for its round's own EDIT blocks.",
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/record-edit-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/record-edit-hooks.sh\"; exec \"$h\" pretool-bash",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -346,11 +357,26 @@
             "type": "command",
             "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/checks-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/checks-hooks.sh\"; exec \"$h\" returned  # GUARD_EDIT_OK: feature 375 FR-003 - a returned check's state and its EDIT blocks",
+            "timeout": 10
           }
         ]
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/checks-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/checks-hooks.sh\"; exec \"$h\" launched  # GUARD_EDIT_OK: feature 375 FR-003 - a launched check paired with its agent id",
+            "timeout": 10
+          }
+        ]
+      },
       {
         "hooks": [
           {
