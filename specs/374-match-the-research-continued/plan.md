@@ -141,6 +141,43 @@ while a check on them was outstanding, plan-review BLOCKs on a decision a decisi
 
 The dispatches per closed row of T01-T03 (four rows), from the same report, beside 372's ~10 (375's "Why", an estimate).
 
+## Batch 2 (T06-T09): the claims labeled as the record has them
+
+**The work list read from the claims report** (`make claims-report`, 2026-10-10): 195 in-scope findings - DRIFTED 119,
+MISLABELED 28, UNCLAIMED 21, NEEDS-RESEARCH 16, CANNOT-TELL 11. 328's ranking is stale against it (rows re-checked since: the
+room order and the senior retainers' rows read IN-STEP now, closed by later relabels), and the spec's end state is the report's
+(SC-003), so batches from here take the report's findings, the cheapest first as 328's tiers did: this batch the 28
+MISLABELED, the 21 UNCLAIMED and the 11 CANNOT-TELL - claim labels, new claims and fuller re-checks, no drawn change. A finding
+whose fix is a drawn change (the compound shrine's grove, `#grove inside a compound wall`) waits for the wave that redraws it.
+Docstring and comment edits change no engine key (the gate's short-circuit), so no map moves and no review occasion is owed.
+
+### Wave 115 (T06) - the procedures' four relabels
+
+- `docs/building-programs.md` `#divider gate on the axis`: a GUESS recorded on 0090's drawing page (new sentence: the gate
+  behind the office hall, no page placing a jin'ya's middle gate); "customarily on the main axis" goes from the program's text.
+- `#latrines by zone`: a GUESS on 0101's drawing page (about one per part of the compound, three or four, near service gates).
+- `docs/buildings.md` `#named court spine`: cites 0116's drawing page (the open courts), not 0099.
+- `#office front, residence rear`: a DEVIATION on 0090's drawing page (the yamen's order kept as a deliberate simplification;
+  Takayama's residence stood beside the office); "universal in both traditions" goes from the text.
+- Owed: impl-drift on the four; the record checks the 0090 sentence owes (record-format, quote-check on its block, the pop-ups
+  naming the page triaged).
+
+### Wave 116 (T07) - the hamlet's ways and hinterland labeled
+
+The MISLABELED and UNCLAIMED claims under `l7r/diagram/hamletgen/` (ways, hinterland, plan, rows): each label set to what
+its finding says (a GUESS on the drawing page that records it, CONVENTION, UNRESEARCHED where unsearched, NONE for plumbing),
+each UNCLAIMED decision given its claim; where a finding says the page answers the question, the claim cites the page. A finding
+that needs the code changed (a value the page contradicts) is not relabeled: it stays for its DRIFTED wave.
+
+### Wave 117 (T08) - the settlement, waterfields, labels and interactive claims labeled
+
+The same, for `l7r/diagram/settlement/`, `waterfields/`, `labels/` and `interactive/`.
+
+### Wave 118 (T09) - the CANNOT-TELL re-checks
+
+Each of the 11 CANNOT-TELL claims re-checked by impl-drift with the reader or page it said it lacked added to its bundle
+(`make claims-bundle UNITS=`, the named function or page beside it); a claim that then reads DRIFTED joins the DRIFTED work.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:
