@@ -1,259 +1,119 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: a mechanical cap on function length, held at the gate
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Branch**: none (main, in the session clone) | **Date**: 2026-10-10 | **Spec**: [spec.md](spec.md)
 
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit-plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
+**Input**: `specs/370-function-length-gate/spec.md` (spec-fidelity round 2: FAITHFUL)
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+Turn on ruff's statement rule (`PLR0915`) at 100 in `pyproject.toml` with the survey's reason beside it (research.md R1),
+hold it over the three working trees the lint fence leaves out, refuse a bare or reasonless suppression, amend
+constitution clause 12 to name the cap, and split the twelve functions over it today (research.md R2) without moving a map.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
+**Language/Version**: Python 3.14 (`pyproject.toml` `target-version = "py314"`)
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Primary Dependencies**: ruff (already the gate's linter); no new dependency
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Testing**: pytest through `make test-file` / `make quick` / `make done`; the gate script's own `--selftest`
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Project Type**: the diagram engine and its tooling
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Single-artifact target**: no map changes by design. Proof is the opposite of a sweep: `make maps` over the whole pool on
+the landing commit, every manifest compared with HEAD's (`git diff --stat HEAD -- pool/`) - empty (SC-003).
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Every step is two steps.** Each split is proven on its own first (`make test-file` on its module's tests, then
+`make quick`), and the pool reroll at the end is its own task.
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
-
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
-
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
-
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
-
-**Single-artifact target** (REQUIRED for any generator change, constitution VI): [the ONE named
-artifact this is proven on before any sweep - e.g. `pool/hamlets/inashiro.gen.py`. State its
-rebuild time. `make maps` enforces the order itself: after a failure it runs the reference map alone
-and stops at the first problem, and only widens to the tier once that map is clean. If the feature adds a knob, name one artifact per knob
-VALUE.]
-
-**Every step is two steps.** Each phase below must separate "working on the reference settlement"
-from "working across the pool". The second is its own task with its own verification - if a phase
-lists only the first, it is not finished being planned.
-
-## Performance bookends (REQUIRED for any diagram-generator change, constitution VI)
+## Performance bookends (constitution VI)
 
 | | label | total | median | worst | notes |
 |---|---|---|---|---|---|
-| before | `<NNN>-start` | | | | taken on UNMODIFIED code, before the first edit |
-| after | `<NNN>-end` | | | | taken before the push |
+| before | `370-start` | | | | on unmodified code, before the first engine edit |
+| after | `370-end` | | | | before the push |
 
-`make perf LABEL=<NNN>-start` -> work -> `make perf LABEL=<NNN>-end` -> `make perf-report
-AGAINST=<NNN>-start`. Any seed more than 5% slower is diagnosed here, in writing, with the number -
-fixed, or accepted with a reason. Also read the existing trend before starting: if it has drifted
-since the last feature, say so and deal with that first.
+A split adds function calls and no work; any seed more than 5% slower is diagnosed here in writing.
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+- **I, II**: N/A - no UI in this repository.
+- **III, IV, V, VII, VIII, IX**: N/A - no pool content, SOURCE block, in-world prose or setting detail is written.
+- **VI. Verify before reporting done**: PASS - each split: its module's tests (`make test-file`), then `make quick`; at
+  the end `make done`, the pool reroll diffed against HEAD (SC-003), the perf bookends. No review check is owed: no map
+  changes (`tasks.md` `## Occasions`: none).
+- **X. Python discipline**: PASS - this feature IS clause 12 made real. ruff, format, pyrefly and the 100% floor hold
+  over every edit; the new gate behavior is test-first (the fixture tests fail before the setting lands). No file passes
+  1,000 lines: each split stays in its own module unless that module would cross it, in which case the part moves to a
+  sibling module named in the task.
+- **XII. Historical grounding**: N/A for the world - no generator asserts anything new; every split carries its unit's
+  `Research:` claims with the code they describe (FR-007), and the claims gate's `impl-drift` re-check is run on the
+  units it owes.
+- **XIII. No known regressions**: PASS - baseline is the pool's committed manifests at HEAD and a green `make done` on the
+  unmodified clone (recorded 2026-10-10 by the earlier pushes' stamps); merge requires zero manifest changes and a green
+  gate.
+- **XVI. Do the literal thing**: PASS - splitting is the default for all twelve (FR-003); a function kept whole goes to a
+  `spec-fidelity` exception check of its own first. None is planned to be kept whole.
 
-Each gate must be marked PASS, N/A (with one-line justification), or DEFERRED
-(with a Complexity Tracking entry). DEFERRED gates require explicit GM
-approval before /speckit-tasks may run.
+## Decisions
 
-- **I. Accessibility-First Viewports**: NOT APPLICABLE in this repository
-  (constitution 2.0.0) - it governs gm-assistant's webapp. Write "N/A - no
-  UI in this repository". If a feature ever does add a browser page here,
-  that is the signal to reinstate the gm-assistant entry, not to skip it.
-
-- **II. Bold, Intentional Design**: NOT APPLICABLE in this repository, same
-  reason. Map style is governed by the skill's design doctrine
-  (`SKILL.md`, `settlements/`, `buildings/`) and reviewed under VI.
-
-- **III. Pool Data Conventions**: If the feature adds or modifies generated
-  content of a recurring kind, the plan MUST specify the markdown-with-YAML
-  file format, the per-category directory layout under
-  `/.claude/skills/<skill>/pool/`, the frontmatter schema (including
-  category slug and `clan` tag), and MUST forbid baking specific cities
-  (`Kyuden X`, `Shiro X`, `Shinden X`) into frontmatter or prose.
-
-- **IV. One Canonical Home for GM Source**: If the feature adds or moves
-  SOURCE blocks, the plan MUST identify the single canonical home for each
-  block and list any references-by-path that other files will use.
-
-- **V. Protecting the GM's Writing (NON-NEGOTIABLE)**: The plan MUST NOT
-  include any task that modifies content inside SOURCE markers - there is no
-  sync exception in this repository; SOURCE blocks are frozen excerpts.
-
-- **VI. Verify Before Reporting Done**: The plan MUST list the verification
-  steps each task will run before being marked complete - `make done` for
-  Python, the review checks a map's delta owes (`make verify` names them - feature 294's occasions),
-  spot-check of delegated work. Every generator step is TWO steps (reference
-  settlement, then pool - `make maps`), both as tasks.
-
-- **VII. De-Localized Generation by Default**: If the feature generates pool
-  content, the plan MUST default to generic / reusable framing (clan-level
-  designators, family-level named entities) and MUST NOT lock content to
-  specific cities or campaign-tied figures without explicit GM scoping.
-
-- **VIII. Direct Voice Over Framing Distance**: If the feature writes in-world
-  content, the plan MUST commit to direct-voice phrasing and MUST exclude
-  meta-narrational framings ("the temple holds that…," "tradition says
-  that…," "skeptics report…").
-
-- **IX. Setting Integration**: The plan MUST cross-reference the relevant
-  reference directories (`/setting/`, `/cosmology/`, `/campaigns/`) and
-  MUST NOT invent setting details that contradict GM source notes. New
-  named figures MUST NOT collide with the campaign-names cache.
-
-- **X. Python Discipline (NON-NEGOTIABLE)**: If the feature ships Python
-  code, the plan MUST commit to: `ruff check` + `ruff format --check`
-  passing, the strict type check (pyrefly with the mypy-strict rule set, feature 142) passing on production modules, red-green TDD
-  for new non-trivial behavior (test exists and fails before
-  implementation lands), the coverage floor passing - **100% over the
-  WHOLE engine, no opt-in** (`coverage report --fail-under=100`; Principle
-  X clause 5 as the GM globalized it on 2026-09-02: a new module owes 100%
-  the day it lands, and the measured surface is derived rather than
-  rostered), external boundaries
-  tested via saved fixtures (not transport-layer mocks), pinned
-  dependencies via `requirements.in` → `requirements.txt` (or `uv.lock`),
-  no swallowed exceptions, no `print` in production paths, behavior-named
-  tests, parametrized variants, and ConfigObj / pydantic-settings for
-  configuration (no hardcoded magic). An overlap or proximity check the
-  feature adds within a map - a candidate tested against features already
-  on the map - is performed in its efficient form (clause 15, GM
-  2026-09-08): the plan MUST say which index answers it (a grid, a ring
-  index, an outline of the blocked ground, built once) and MUST NOT walk
-  every item on the map per candidate. Functions stay at human scale
-  (clause 12): no function past 100 statements, ruff's count (`PLR0915`,
-  held by `check-function-cap.py` at the gate and the push) - a plan whose
-  implementation would grow one past it says how it is split into parts at
-  module or class level, or why the body must remain one (`# noqa: PLR0915
-  <why>` on its `def` line), measured in statements, never raw lines. Files
-  stay at human scale too (clause 13, test files included): a plan
-  whose implementation
-  would grow any source or test file past ~1,000 raw lines MUST say so and
-  either plan the package-of-subfiles split (directory-module +
-  CLAUDE.md index) or justify the file remaining whole. And when the
-  oversized file is ROSTER-shaped - re-export lists, `__all__`
-  duplicates, registry rows a machine could regenerate from the code
-  they point at - the plan MUST apply clause 14 (derive, don't maintain
-  or split): census the consumed surface, move the roster's safety
-  property into a guard test proven to fire, then derive the surface;
-  `specs/027-init-star-imports/` is the exemplar.
-
-- **XII. Historical Grounding Bookends (NON-NEGOTIABLE)**: Does the feature
-  change what a generator ASSERTS ABOUT THE WORLD (any `/diagram` settlement
-  or compound change; any generator that draws or states how a place was
-  farmed, built, or lived in)? If yes, the plan MUST commit to BOTH bookends:
-  - **Opening (Phase 0, in `research.md`)**: for each element added or
-    changed, state what the historical reality was (China-first, Japan
-    corroborating) in checkable detail, state explicitly whether the proposed
-    design matches it, and name WHAT DETERMINES the element in reality
-    (topography / season / tenure / economy). A design that does not match is
-    changed or dropped HERE, not implemented and revisited. Grounding that
-    led to REJECTING a design MUST be recorded too.
-- [ ] **XII, decisions for the reader (GM 2026-08-26)**: every rendering decision this plan
-      makes is classified accurate / deviation / guess with its reason, lands in `research/` +
-      the operative doc + a pointer at the point of change, and is listed in the spec's
-      "Decisions Recorded" table. A guess is labelled a guess.
-  - **Closing (final phase, before "done")**: re-examine the RENDERED
-    ARTIFACT (the PNG - not the code, not the intent) and confirm each element
-    still matches the Phase 0 findings. This is separate from the automated
-    gate: `check_village` proves internal consistency, never historical truth.
-    A map can pass every check and still depict something that never existed
-    (see the `rape` overlay failure in the constitution's Principle XII).
-
-- **XIII. No Known Regressions (NON-NEGOTIABLE)**: Does the feature touch
-  shared code with an existing test bed (a cohort, a pool sweep, a regression
-  corpus)? If yes, the plan MUST commit to:
-  - **A MEASURED baseline, taken before any judging** - on unmodified code, in
-    a detached worktree (`git worktree add --detach`), never a stash. Name the
-    command and the number in the plan.
-  - **Zero NEW failures at merge.** Pre-existing failures do not BLOCK this
-    feature's merge (though see Principle XIV - one you actually find is still
-    yours to fix); anything that passed before and fails after is a regression
-    and BLOCKS the merge. Smallness, "only a cohort seed", having documented it,
-    net-positive arithmetic, and a "rotated" residue are explicitly not
-    excuses. Exits: fix, revert, or an explicit GM waiver.
-  - Where a re-roll destroys per-seed comparison, the pass RATE must not drop
-    AND each newly-failing check must be individually diagnosed in the plan's
-    closing notes.
-
-Document each gate's status in a short bulleted Constitution Check section
-in the plan output before proceeding to Phase 0.
+- **D1 - the setting.** `[tool.ruff.lint] select` gains `"PLR0915"`; `[tool.ruff.lint.pylint] max-statements = 100`,
+  with a comment giving the GM's reason (the second most common value on GitHub, 131 of 1,209 repositories, and the most
+  common chosen over the default 50 - research.md R1). No other rule is added (plan review round 1: PGH004 was scope creep).
+- **D2 - one check owns the cap, everywhere it is held.** `scripts/gates/check-function-cap.py` runs ruff's statement rule
+  alone (`ruff check --select PLR0915`, the 100 from D1's config) over all five held trees - `l7r`, `tests`, `scripts`,
+  `pool`, `tests/hooks` (ruff lints an explicitly named path even when `extend-exclude` lists it) - and on a finding prints
+  each function with its count and BOTH ways out: split it into parts at module or class level, or put
+  `# noqa: PLR0915 <why the body must remain one>` on its `def` line (constitution X clause 12) (FR-008). It pins the root config (`--config pyproject.toml`), so no nested `ruff.toml` can lift the cap (plan review 2). It runs
+  FIRST in `make static` and in `make quick` (ahead of quick's own `ruff check`, as `check-file-scale.py` already runs
+  there), so its message is what a session reads, and before every push in `sync-with-main.sh` beside
+  `check-file-scale.py` - a push of `tests/` or `scripts/` alone takes the DIRECT route and runs no gate (plan review 3).
+- **D3 - the suppression is one body, with its reason.** The same script refuses, in every held tree: a `# noqa` naming
+  PLR0915 with fewer than three words after it; one anywhere but on a `def` line; a bare `# noqa` on a `def` line (it
+  silences the cap with no rule named - measured by the plan review); a file-level `# ruff: noqa` or `# flake8: noqa` that is bare or
+  names PLR0915 (it would exempt every function in the file); and any value in `pyproject.toml`'s ruff tables that names
+  PLR0915 or a prefix of it (`ignore`, `extend-ignore`, `per-file-ignores`, `extend-per-file-ignores`, ...) (FR-004). `--selftest` plants each case; the tests pin the messages.
+- **D4 - the splits.** Each of the twelve (research.md R2) is cut along the phases its own comments already name, into
+  module-level (or method-level, for a `Settlement` method) parts that take what they use as parameters - never a nested
+  function (it counts in its parent: spec edge cases). The order of every call, every random draw and every registry
+  write is unchanged, so no map moves. A part carries a `Research:` block with the claims for the code it took; a claim
+  moves out of the parent only when none of the code it rests on stays behind, and is kept by the parent otherwise
+  (FR-007: a split unit keeps its claims). The parent's `Steps:` list names the part where it has one.
+- **D5 - map identity, measured.** After the last split: `make maps` (the whole pool), then `git diff --stat HEAD --
+  pool/` must be empty. Per split, the module's tests are the quick proof; the reroll is the final one.
+- **D6 - the claims re-check.** The split units' code fingerprints change, so `make claims-owed` will name them; one
+  `make claims-bundle` per module and an `impl-drift` dispatch per bundle, run once after the last split, then
+  `make claims-checked`. This is the feature's expected review cost (spec Assumptions).
+- **D7 - the constitution.** Principle X clause 12 is amended to name the measure (ruff's statement count), the cap (100),
+  the escape (`# noqa: PLR0915` with a reason saying why the body stays one), the survey (research.md R1) and where it is
+  held; the deferred-TODO lines in the Sync Impact Report and the "carried" list close; the version goes 2.28.0 -> 2.29.0
+  (a principle's requirement changes). The plan template's clause-12 paragraph is updated to match.
+- **D8 - the docs.** Root `CLAUDE.md`'s "the gate" row gains the cap; `docs/guards.md` gains its record.
 
 ## Project Structure
 
-### Documentation (this feature)
-
 ```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit-plan command output)
-├── research.md          # Phase 0 output (/speckit-plan command)
-├── data-model.md        # Phase 1 output (/speckit-plan command)
-├── quickstart.md        # Phase 1 output (/speckit-plan command)
-├── contracts/           # Phase 1 output (/speckit-plan command)
-└── tasks.md             # Phase 2 output (/speckit-tasks command - NOT created by /speckit-plan)
+pyproject.toml                       D1
+scripts/gates/check-function-cap.py  D2, D3
+Makefile (static, quick), sync-with-main.sh D2 (first in static and quick; before every push)
+tests/tooling/test_function_cap.py   SC-001, SC-004 (the cap fires at 101 with both ways out, passes at 100; every suppression case)
+.specify/memory/constitution.md      D7
+.specify/templates/plan-template.md  D7
+CLAUDE.md, docs/guards.md            D8
+the twelve functions (research.md R2) D4
 ```
-
-### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
-
-```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
-```
-
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+None.
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+## Review history
+
+- **Plan review round 1 (2026-10-10): CHANGES REQUIRED.** (1) FR-008's two ways out were printed nowhere ruff fires - D2 now
+  runs the rule in one script that prints them. (2) PGH004 dropped as scope creep; the bare-noqa hole it closed is D3's,
+  on `def` lines only. (3) The push now covers `tests/` (all five trees). (4) A file-level suppression and a pyproject
+  ignore are refused (D3). D4 reworded: a split unit keeps a claim whose code stays. research.md R2's stale `claims.py`
+  row updated.
+- **Plan review round 2 (2026-10-10): CHANGES REQUIRED.** (1) The check runs in `make quick` too, ahead of its ruff line.
+  (2) `# flake8: noqa` refused as `# ruff: noqa` is. (3) The check pins the root config; every ruff key naming the rule is
+  refused. tasks.md T15's stale figure updated.
