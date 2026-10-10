@@ -14202,6 +14202,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/interactive/assets/modals/sheet/fire-water-tubs.md#what a tub looked like",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "the pop-up never says what a fire-water tub looked like or was made of (the oke of tensuioke suggests a coopered wooden tub; shape, lid): read 0100/0203's record for the tubs' material and build, then a look sentence in About, or a clause that it is not recorded",
+  "files": [
+   "l7r/diagram/interactive/assets/modals/sheet/fire-water-tubs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 106's modal-form check of the fire-water-tubs pop-up, M7 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/interactive/place.py::KINDS#a city's figure takes in its samurai country estates",
   "verdict": "MISLABELED",
   "tier": "E4",

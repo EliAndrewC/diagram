@@ -13,10 +13,11 @@ How much a corner tub held is uncertain: either some 285 gallons (1,080 liters) 
 liters).
 
 Guesses:
-- Which buildings get a tub, and how many, the kitchen, whose cooking fire burned all day, among the first: the habit and
+- Which buildings have a tub and how many, with the kitchen and its cooking fire among the first: the habit and
   the town order are recorded, but not a rule for every building or a ranking of buildings by risk.
 - A tub's size, about 2.5 ft across: no source gives a rain tub's width.
-- Tubs at a village shrine at all: no page names them there; the shrine is drawn as the magistracy is.
+- That a village shrine kept fire-water tubs: none was found named at a shrine, and the tubs recorded served the towns; the
+  shrine's are reckoned from the farmhouse its keeper's dwelling is drawn as.
 
 Depiction: The plan draws each tub as a small blue disc, the water seen from above, beside a door of a wooden building,
 since the water was kept at the entrance, clear of the doorway: two at the kitchen's door, a reception's beside the stone

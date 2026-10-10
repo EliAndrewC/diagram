@@ -2022,14 +2022,15 @@
   "date": "2026-10-10",
   "note": "none at the dozo, a wooden granary may take one",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
   },
-  "research": "bb5cedfdefc68fcd",
+  "research": "9fd73eb86394c59a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#no tub on the roof": {
@@ -2053,14 +2054,15 @@
   "date": "2026-10-10",
   "note": "one at each major wooden building, about 8-12, the total following the building count",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "4c7b87863eb40afe"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
   },
-  "research": "bb5cedfdefc68fcd",
+  "research": "9fd73eb86394c59a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#the reception's shoe stone is its entrance": {
