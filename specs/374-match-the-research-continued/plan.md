@@ -11,6 +11,12 @@ stays the one column; this feature's measurements are its own `measurements.json
 carried, from feature 370's landing (its spec, 2026-10-10): the claims findings on the code 370 split, left in `make
 claims-report` for this feature under the claims gate's escape - rows of the work list like any other.
 
+Two of the spec's carried tooling gaps (FR-007) are placed here, not in a wave: the claims-triage reply parser counting
+"TOUCHES" anywhere is already fixed by 375's D5 (`scripts/record/claims_triage.py` reads only lines opening with `TOUCHES`,
+its test pinning a mid-line mention ignored) - recorded so under SC-006 at batch 1's close; and `make modal-bundle
+FOR=modal-depiction`'s crop on a Mode A sheet is fixed, with its test, before the first modal-depiction check on a Mode A
+sheet that a wave owes (batch 1 edits no drawing page and owes none, as planned).
+
 ## Constitution Check
 
 As 372's (XII research, XIII no known regressions, XIV fix where found, XVI the literal thing). New here: 375's process (decide
@@ -89,9 +95,10 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
 - **Scope**: `docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms` (E3). The procedure says a real
   residence of this footprint held ~18-25 tatami rooms; 0091 sizes the residence to the 49-tsubo district magistrate's house, and
   the one house measured with its rooms, the thousand-koku Kuchiba house of 41-74 tsubo, held six. The fix follows the record:
-  the procedure says each labeled zone compresses a house of about six rooms (0091), and the claim cites it; the sheets label
+  the procedure says the labeled zones TOGETHER compress a house of about six rooms (0091 - the count is the whole house's), and
+  the claim cites it; the sheets label
   zones, not rooms, so no sheet is redrawn. Searched 2026-10-10: Hayakawa's notes alone state the count ("a real residence of
-  this footprint holds ~18-25 tatami rooms"); that line says about six (0091), as the procedure does.
+  this footprint holds ~18-25 tatami rooms"); that line says the house held about six (0091), as the procedure does.
 - **Occasions**: none (no drawn element changes).
 
 ### T04 - 375's SC-003 over T01-T03 (key `sc003-375-first-three-tasks`)
