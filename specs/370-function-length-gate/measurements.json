@@ -1,0 +1,54 @@
+{
+ "perf-audit-seed39-40hh-ab": {
+  "quantity": "seed 39 at 40 households, CPU seconds per roll at 370-start (a1e5f51a0) against 370-end (e9a10bfb2) - the one seed perf-report put at +14.2%",
+  "observed": "2026-10-10",
+  "source": "the perf-audit subagent's A/B: two detached worktrees, each importing its own code, 12 rolls alternating the commits",
+  "command": "the audit's cpu.py over the two worktrees (rows copied from its cpu.jsonl, which the scratchpad does not keep)",
+  "method": "process CPU time per roll and per stage, paired start/end in run order, medians; placer calls and houses equal on both, so the same work",
+  "value": {
+   "start_cpu_s": [
+    12.79,
+    13.43,
+    13.45,
+    12.66,
+    12.68,
+    12.63
+   ],
+   "end_cpu_s": [
+    12.77,
+    12.89,
+    12.39,
+    12.48,
+    12.51,
+    12.51
+   ],
+   "start_median_cpu_s": 12.73,
+   "end_median_cpu_s": 12.51,
+   "paired_end_over_start_median": 0.986,
+   "paired_range": [
+    0.921,
+    0.998
+   ],
+   "placer_calls": [
+    158
+   ],
+   "houses": [
+    40
+   ],
+   "stage_median_cpu_s": {
+    "homesteads": [
+     3.66,
+     3.56
+    ],
+    "windbreak": [
+     1.42,
+     1.36
+    ],
+    "hinterland": [
+     1.28,
+     1.25
+    ]
+   }
+  }
+ }
+}
