@@ -320,14 +320,28 @@ def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str) -> str:
         units = [(f"{mo.DEPICTION_CHECK}:{m.uid}", mo.depiction_fingerprint(root, m))]
     else:
         units = [(f"{c}:{m.uid}", fp_research) for c in mo.RESEARCH_CHECKS]
-    return "## Owed (feature 311)\n\n" + f"owed-checks: {for_}\n" + "".join(f"unit: {s} {fp}\n" for s, fp in units)
+    # feature 375 (plan D1): the pages this check reads, kept as blobs - a later triage shows what changed since THIS read
+    import modal_triage as mt  # noqa: PLC0415
+
+    files = m.drawing_files() if for_ == mo.DEPICTION_CHECK else m.entry_files() if for_ == mo.RESEARCH_AGENT else []
+    pages = [(f, b) for f in files if (b := mt.keep(root, f))]
+    return ("## Owed (feature 311)\n\n" + f"owed-checks: {for_}\n" + "".join(f"unit: {s} {fp}\n" for s, fp in units)
+            + "".join(f"page: {f} {b}\n" for f, b in pages))
 
 
-def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str) -> int:
+def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str = "") -> int:
     m = mo.find(root, kind)
     if m is None:
         print(f"modal-bundle: no About-form modal {kind!r} (a class name or key) under {', '.join(mo.MODAL_DIRS)}", file=sys.stderr)
         return 2
+    import modal_triage as mt  # noqa: PLC0415 - feature 375 FR-001: a unit owed only a triage is triaged first
+
+    refused = mt.refusal(root, m, for_)
+    if refused and len(reason.split()) < 2:
+        print(f'modal-bundle: {refused}. A check the GM asked for, or a backfill: REASON="<why>"', file=sys.stderr)
+        return 3
+    if refused:
+        print(f"modal-bundle: bundled without its triage, because: {reason}")
     out = pathlib.Path(out_arg) if out_arg else DEFAULT_ROOT / f"modal-{m.uid.replace('/', '-')}-{for_}"
     if out.exists():
         if not (out / "MANIFEST.md").is_file():
@@ -402,6 +416,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--out", default="")
     ap.add_argument("--root", default=".")
     ap.add_argument("--prepass", action="store_true")
+    ap.add_argument("--reason", default="", help="bundle a unit owed only a triage anyway (feature 375): why")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root).resolve()
     if args.prepass:
@@ -411,7 +426,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 2
         sys.stdout.write(prepass(root, m))
         return 0
-    return bundle(root, args.kind, args.for_, args.out)
+    return bundle(root, args.kind, args.for_, args.out, args.reason)
 
 
 if __name__ == "__main__":

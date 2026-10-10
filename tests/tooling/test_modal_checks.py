@@ -313,8 +313,10 @@ def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing
     )
     assert [s for s, _w, _f in mo.owed(root, base)] == ["modal-depiction:hamlet/farmhouse"], "a moved drawing page owes the tab's check alone"
     out = tmp_path / "dep"
-    assert mb.bundle(root, "Farmhouse", "modal-depiction", str(out)) == 0
+    assert mb.bundle(root, "Farmhouse", "modal-depiction", str(out)) == 3, "owed only by a moved page: the triage first (feature 375)"
+    assert mb.bundle(root, "Farmhouse", "modal-depiction", str(out), reason="the bundle's own test") == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
+    assert "page: research/questions/0029-farmhouses-minka.drawing.html " in manifest, "the page it read, kept for a later triage"
     assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "DRIFTED | `settlement/houses.py::HousesMixin.house#ridge` | always hipped" in manifest
     assert "## Depiction" in manifest and "The map draws every house alike." in manifest and "no crop" in manifest, "no pool page in the fixture"
     assert "unit: modal-depiction:hamlet/farmhouse " in manifest and "owed-checks: modal-depiction" in manifest

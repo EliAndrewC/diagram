@@ -177,12 +177,14 @@ def _read(store_dir: pathlib.Path, slug: str) -> dict:
         return {}
 
 
-def write_answer(store_dir: pathlib.Path, slug: str, fp: str, result: str) -> None:
+def write_answer(store_dir: pathlib.Path, slug: str, fp: str, result: str, pages: dict[str, str] | None = None) -> None:
     """Record an answer. Every fingerprint ever answered is kept: an answer is about WORDS, so content reverted to words a
     check already passed stays answered (an edit answered and then undone owed its unit again when only the last was kept)."""
     store_dir.mkdir(parents=True, exist_ok=True)
     seen = [f for f in _read(store_dir, slug).get("answered", []) if f != fp] + [fp]
     rec = {"unit": slug, "fingerprint": fp, "answered": seen, "result": result, "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    if pages:  # feature 375 (plan D1): the pages this answer's check read, as blobs - what a later triage diffs against
+        rec["pages"] = pages
     _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
 
 
@@ -206,6 +208,8 @@ def command(u: ru.Unit, now: ru.Record | None = None) -> str:
         keys = list(now.cites.get(stem, {}).get(note, ())) if now else []
         keys = keys or ["<the note's key>"]
         return " ; ".join(f"make check-bundle KEY={k} WHOLE=1" for k in dict.fromkeys(keys)) + f"  then  make record-checked CHECK=source-reader Q={q} NOTES={note}"
+    if check.startswith("modal-") and u.occasion.startswith("a page its "):  # feature 375 FR-001: owed only by a moved page
+        return "make modal-triage  then  make modal-triaged BUNDLE=<its bundle> REPLY=<the reply>  (a kind it names is then bundled as below)"
     if check.startswith("modal-"):  # feature 319: a modal's units; the three research units are one modal-research dispatch
         agent = check if check in ("modal-form", "modal-depiction") else "modal-research"
         return f"make modal-bundle KIND=\"{u.subject}\" FOR={agent}  then  make record-checked CHECK={check} BUNDLE=<its bundle> RESULT=..."
@@ -277,10 +281,12 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
     s, done = store(root), []
     if bundle:
         manifest = pathlib.Path(bundle) / "MANIFEST.md"
+        text = manifest.read_text(encoding="utf-8") if manifest.is_file() else ""
+        pages = dict(re.findall(r"^page: (\S+) ([0-9a-f]{40})$", text, re.M))
         # the slug may hold a space - an entry-drift modal key such as "cart yard" - so the fingerprint is the LAST token
-        for m in re.finditer(r"^unit: (.+) (\S+)$", manifest.read_text(encoding="utf-8") if manifest.is_file() else "", re.M):
+        for m in re.finditer(r"^unit: (.+) (\S+)$", text, re.M):
             if m.group(1).split(":", 1)[0] == check:
-                write_answer(s, m.group(1), m.group(2), result)
+                write_answer(s, m.group(1), m.group(2), result, pages)
                 done.append(m.group(1))
         return done
     wanted = {k for k in notes.split(",") if k}

@@ -30,6 +30,23 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T06 Batch 1 closes: `make done` green; `make hooks-test`; 375's report so far written from this session's transcript; landed
       research: rendering
       verify: DONE. DONE. make done green (476 s, run-log 20261010T170058); hooks-test inside it; 375's report written from this session's transcript (report.md); landed by the push that carries this tick
-- [ ] T99 Batches 2-4 (plan D18) [lands-open]
+## Batch 2 - the owing logic
+
+- [ ] T08 The pop-up triage (plan D1): a modal unit owed only because a page its `Drawing:` or `Entry:` names moved owes a TRIAGE; `make modal-triage` shows each moved page's blocks new, changed or removed since the unit's last answer (the pages a bundle read kept as blobs) beside the kinds naming it; `make modal-triaged BUNDLE= REPLY=` answers the kinds a reply does not name and sends the named on; `make modal-bundle` refuses a unit owed only a triage (FR-001)
+      research: rendering
+      verify: tests red on today's owing (a drawing-page edit owes every kind naming it) and green after; the refusal and its escape tested
+- [ ] T09 Line-scoped procedure claims (plan D2): `tools/claims.py` fingerprints a section claim by its own line and keeps the section's own fingerprint and blocks; a section edit elsewhere owes a triage through `make claims-triage`, a table row being a block; `claims.py backfill-sections` migrates the index without owing anything; 100% coverage on `tools/claims.py` (FR-002)
+      research: rendering
+      verify: tests red on today's fingerprint (one line re-owes the section) and green after; the backfill run owes nothing on the real index
+- [ ] T10 File, don't fix (plan D15, its owing half): every check bundle's MANIFEST lists the blocks the delta changed (`changed-blocks:`), the page checks' contracts put a finding on any other block under `OUTSIDE THE CHANGE`, and `make record-checked REPLY=` files that section as open rows in `specs/NNN/found.jsonl` (FR-006)
+      research: rendering
+      verify: tests over a reply with both sections; the bundle's line checked on a real page
+- [ ] T11 SC-001 replay: 372's waves 106, 108 and 111 through the old and the new owing - modal-depiction units owed in full and impl-drift claims owed - recorded in `measurements.json` against two thirds and four fifths (SC-001)
+      research: rendering
+      verify: the replay's figures recorded; the triages it needs run on the replayed bundles
+- [ ] T12 Batch 2 closes: `make done` green; landed
+      research: rendering
+      verify: the gate's run-log line
+- [ ] T99 Batches 3-4 (plan D18) [lands-open]
       research: rendering
       verify: ticked by the last batch

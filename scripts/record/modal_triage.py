@@ -1,0 +1,210 @@
+#!/usr/bin/env python3
+"""The pop-up triage - a drawing or question page's edit owes a pop-up's checks only where it bears on that pop-up (feature
+375, FR-001, plan D1).
+
+WHY. Measured on feature 372 (2026-10-10): about twelve `modal-depiction` runs came back clean, owed only because 0100's or
+0105's drawing page changed somewhere the pop-up never read - `modal_owed.py` owed every kind whose `Drawing:` or `Entry:`
+names a moved page, whatever moved. `make claims-triage` already answered the same question for claims with one cheap agent
+over the changed blocks (feature 318); this is that triage for the pop-ups.
+
+THE RULE. A modal unit owed ONLY because a page it names moved (`modal_owed.owed`'s "a page its ... names moved") is owed a
+triage first. `make modal-triage` writes one bundle: per moved page, the blocks new, changed or removed since the unit was
+last answered - the page as that check read it, kept as a blob by `make modal-bundle` (`page:` lines in its MANIFEST), else
+the merge base - and each kind naming the page with its About and Depiction. One ad-hoc agent (model opus) replies one
+`TOUCHES <uid> - <which block>` line per kind a change bears on; `make modal-triaged BUNDLE= REPLY=` answers every other unit
+at its current fingerprint (result `triage: untouched` - cleared on the record) and marks the named ones touched, owed the
+full check. `make modal-bundle` refuses a unit owed only a triage until that triage has named it.
+
+    modal_triage.py bundle [--out DIR]               the triage bundle for every unit owed only a triage
+    modal_triage.py record --bundle DIR --reply F    apply a triage reply
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import re
+import subprocess
+import sys
+from collections.abc import Mapping, Sequence
+
+HERE = pathlib.Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+sys.dont_write_bytecode = True
+import modal_owed as mo  # noqa: E402
+import record_owed as ro  # noqa: E402
+import record_units as ru  # noqa: E402
+
+DEFAULT_OUT = pathlib.Path("/tmp/l7r-check/modal-triage")
+#: in the record-checks store: {slug: fingerprint} of the units a triage named, owed the full check at that fingerprint
+TOUCHED = "modal-triage-touched.json"
+_TOUCHES = re.compile(r"^TOUCHES\s+(\S+?)\s+-\s+(.*)$")
+
+
+def triage_only(why: str) -> bool:
+    """Whether `modal_owed.owed` owes the unit only because a page it names moved (its own words unchanged)."""
+    return why.startswith("a page its ")
+
+
+def touched(store: pathlib.Path) -> dict[str, str]:
+    f = store / TOUCHED
+    return json.loads(f.read_text(encoding="utf-8")) if f.is_file() else {}
+
+
+def pending(root: pathlib.Path, base: str, store: pathlib.Path) -> list[tuple[str, str, str]]:
+    """(slug, why, fingerprint) of every unit owed only a triage: unanswered at its fingerprint and not named by a triage."""
+    named = touched(store)
+    return [
+        (slug, why, fp)
+        for slug, why, fp in mo.owed(root, base)
+        if triage_only(why) and not ro.answered(store, slug, fp) and named.get(slug) != fp
+    ]
+
+
+def keep(root: pathlib.Path, path: str) -> str:
+    """The page at `path` written into the clone's object store as it stands; its blob id, or '' (no such file)."""
+    f = root / path
+    if not f.is_file():
+        return ""
+    run = subprocess.run(["git", "-C", str(root), "hash-object", "-w", "--", path], capture_output=True, text=True, check=False)
+    return run.stdout.strip() if run.returncode == 0 else ""
+
+
+def _blob(root: pathlib.Path, blob: str) -> str:
+    run = subprocess.run(["git", "-C", str(root), "cat-file", "-p", blob], capture_output=True, text=True, check=False)
+    return run.stdout if run.returncode == 0 else ""
+
+
+def before(root: pathlib.Path, store: pathlib.Path, slug: str, path: str, base: str) -> str:
+    """The page `path` as the unit's last answer read it (its kept blob), else as the merge base holds it."""
+    blob = dict(ro._read(store, slug).get("pages") or {}).get(path, "")
+    return (_blob(root, blob) if blob else "") or (mo._read_at(root, base)(path) or "" if base else "")
+
+
+def changed_blocks(old: str, new: str) -> tuple[list[str], list[str]]:
+    """(blocks new or changed, blocks removed) between two versions of a page, by their words."""
+    was = [b.words for b in ru.read_page(old).blocks]
+    now = [b.words for b in ru.read_page(new).blocks]
+    return [w for w in now if w not in was], [w for w in was if w not in now]
+
+
+def _pages_of(m: mo.Modal, check: str) -> list[str]:
+    return m.drawing_files() if check == mo.DEPICTION_CHECK else m.entry_files()
+
+
+def bundle(root: pathlib.Path, out: pathlib.Path) -> tuple[pathlib.Path | None, int]:
+    """Write the triage bundle (MANIFEST.md, triage.json); (its MANIFEST, how many units it carries)."""
+    base = ro.merge_base(root)
+    store = ro.store(root)
+    units = pending(root, base, store)
+    if not units:
+        return None, 0
+    modals = {m.uid: m for m in mo.modals_now(root, about_only=False)}
+    by_page: dict[str, dict[str, set[str]]] = {}
+    blocks: dict[str, tuple[list[str], list[str]]] = {}
+    for slug, why, _fp in units:
+        check, uid = slug.split(":", 1)
+        m = modals.get(uid)
+        if m is None:
+            continue
+        for path in _pages_of(m, check):
+            if pathlib.Path(path).name not in why:
+                continue
+            now = (root / path).read_text(encoding="utf-8") if (root / path).is_file() else ""
+            fresh, gone = changed_blocks(before(root, store, slug, path, base), now)
+            prev = blocks.get(path, ([], []))
+            blocks[path] = (sorted(set(prev[0]) | set(fresh)), sorted(set(prev[1]) | set(gone)))
+            by_page.setdefault(path, {}).setdefault(uid, set()).add(check)
+    if out.exists():
+        for f in out.iterdir():
+            f.unlink()
+    out.mkdir(parents=True, exist_ok=True)
+    parts = [
+        "# Triage of pop-up checks (feature 375, FR-001)\n",
+        "owed-checks: modal-triage\n",
+        "Each page below changed since the pop-ups under it were last checked; it lists ONLY its new, changed and REMOVED "
+        "blocks. For each pop-up, decide whether any of those blocks could change what its checks would find - a figure, form, "
+        "rule, guess or convention its About or Depiction states, or one it should now state. Reply one "
+        "`TOUCHES <uid> - <which block, a few words>` line per such pop-up, and nothing for the rest: a pop-up you do not name "
+        "is cleared without its checks. When unsure, name it.\n",
+    ]
+    for path in sorted(by_page):
+        fresh, gone = blocks[path]
+        parts.append(f"## {path}\n\nNew or changed blocks:\n")
+        parts += [f"> {w}\n" for w in fresh] or ["(none)\n"]
+        if gone:
+            parts.append("Removed blocks (no longer on the page):\n")
+            parts += [f"> {w}\n" for w in gone]
+        parts.append("Pop-ups naming it:\n")
+        for uid in sorted(by_page[path]):
+            m = modals[uid]
+            parts.append(f"- UID `{uid}` ({', '.join(sorted(by_page[path][uid]))}): About - {m.tags.get('About', '')[:400]}"
+                         + (f" | Depiction - {m.tags.get('Depiction', '')[:400]}" if m.tags.get("Depiction") else ""))
+        parts.append("")
+    (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
+    (out / "triage.json").write_text(json.dumps({"units": {s: fp for s, _w, fp in units}}, indent=1, sort_keys=True) + "\n",
+                                     encoding="utf-8")
+    return out / "MANIFEST.md", len(units)
+
+
+def record(store: pathlib.Path, units: Mapping[str, str], reply: str) -> list[str]:
+    """Apply a triage reply: a unit of a named uid is marked touched (owed its full check at this fingerprint); every other
+    unit is answered at its fingerprint, `triage: untouched`. Only lines that OPEN with `TOUCHES ` name anything."""
+    named = {m.group(1).strip("`"): m.group(2) for raw in reply.split("\n") if (m := _TOUCHES.match(raw.strip().strip("`")))}
+    uids = {s.split(":", 1)[1] for s in units}
+    msgs = [f"refused: `{u}` is not a pop-up of this triage" for u in sorted(set(named) - uids)]
+    mark = touched(store)
+    for slug, fp in sorted(units.items()):
+        uid = slug.split(":", 1)[1]
+        if uid in named:
+            mark[slug] = fp
+            msgs.append(f"touched: {slug} - {named[uid]}")
+        else:
+            ro.write_answer(store, slug, fp, "triage: untouched")
+    store.mkdir(parents=True, exist_ok=True)
+    (store / TOUCHED).write_text(json.dumps(mark, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    return msgs
+
+
+def refusal(root: pathlib.Path, m: mo.Modal, check: str) -> str:
+    """Why `make modal-bundle` may not bundle `check` on `m` yet: a unit of it owed only a triage that has not named it."""
+    base = ro.merge_base(root)
+    store = ro.store(root)
+    slugs = {f"{c}:{m.uid}" for c in ((check,) if check != mo.RESEARCH_AGENT else mo.RESEARCH_CHECKS)}
+    waiting = [s for s, _w, _fp in pending(root, base, store) if s in slugs]
+    return (f"{', '.join(sorted(waiting))} owe(s) only a TRIAGE (a page it names moved, its own words did not) - "
+            "`make modal-triage` first; it sends on only the pop-ups a change bears on") if waiting else ""
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    b = sub.add_parser("bundle")
+    b.add_argument("--out", default="")
+    r = sub.add_parser("record")
+    r.add_argument("--bundle", required=True)
+    r.add_argument("--reply", required=True)
+    ap.add_argument("--root", default=".")
+    a = ap.parse_args(argv)
+    root = pathlib.Path(a.root).resolve()
+    if a.cmd == "bundle":
+        manifest, n = bundle(root, pathlib.Path(a.out) if a.out else DEFAULT_OUT)
+        if manifest is None:
+            print("modal-triage: no pop-up is owed a triage")
+            return 0
+        print(manifest)
+        print(f"modal-triage: {n} unit(s); dispatch one ad-hoc agent (model opus) on the MANIFEST, save its reply, then "
+              "`make modal-triaged BUNDLE=<dir> REPLY=<file>`")
+        return 0
+    data = json.loads((pathlib.Path(a.bundle) / "triage.json").read_text(encoding="utf-8"))
+    msgs = record(ro.store(root), data["units"], pathlib.Path(a.reply).read_text(encoding="utf-8"))
+    for msg in msgs:
+        print(f"modal-triaged: {msg}")
+    n = sum(1 for msg in msgs if msg.startswith("touched"))
+    print(f"modal-triaged: {n} of {len(data['units'])} unit(s) sent on to their checks; the rest answered `triage: untouched`")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

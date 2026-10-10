@@ -1302,7 +1302,16 @@ page-session: ## [project] start ONE page's work in a FRESH headless session, de
 # GUARD_EDIT_OK: feature 319 D13 - the help line names the third check, modal-depiction; an operation's text, no guard changes.
 modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>]
 	@if [ -z "$(KIND)" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",)
+	@: "GUARD_EDIT_OK: feature 375 FR-001 - REASON= bundles a unit owed only a triage anyway (refused without one)"
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$(REASON)",)
+
+# GUARD_EDIT_OK: feature 375 FR-001 adds two operations - the pop-up triage's bundle and the recording of its reply.
+modal-triage: ## [project] the triage bundle for every pop-up owed only because a page it names moved: the changed blocks beside the kinds naming them, for one ad-hoc agent (feature 375)   [OUT=<dir>]
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_triage.py --root . bundle $(if $(OUT),--out "$(OUT)",)
+
+modal-triaged: ## [project] record a pop-up triage reply: a kind it names (TOUCHES) is sent on to its checks, every other unit of the bundle answered `triage: untouched`   BUNDLE=<dir> REPLY=<file>
+	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make modal-triaged: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_triage.py --root . record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
 modal-prepass: ## [project] the mechanical half of the modal checks for one About-form modal - word band, barred phrases, guesses, Entry files - feature 319   KIND=<class or key>
 	@if [ -z "$(KIND)" ]; then printf 'make modal-prepass: KIND=<class name or key> is required - e.g. make modal-prepass KIND=Farmhouse\n' >&2; exit 2; fi
