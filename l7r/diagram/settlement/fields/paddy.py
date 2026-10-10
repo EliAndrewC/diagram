@@ -56,6 +56,19 @@ def _uf_xy(u: float, f: float) -> Pt:
     return (_UF_RT * (u + f), _UF_RT * (f - u))
 
 
+def _wf_outline(shape: Any, amp: float) -> tuple[list[Pt], tuple[float, ...]]:
+    """A water-first field's organic outline and its bounding box, from a box or a polygon (lifted out of `water_field`
+    by feature 370, the 100-statement cap).
+
+    Research: field outline - UNRESEARCHED: an organic outline wobbled amp px round the given box or polygon"""
+    if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape):
+        return organic_bbox(tuple(shape), amp), tuple(shape)
+    outline = organic_poly(list(shape), amp)
+    xs = [q[0] for q in outline]
+    ys = [q[1] for q in outline]
+    return outline, (min(xs), min(ys), max(xs), max(ys))
+
+
 # IS ANY PADDY LEFT TO REST? (269 B01; research/questions/0013-paddies-left-to-rest-kataarashi.html and
 # research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html, 0013). The record attests
 # two forms of a village's paddy, so it is a KNOB rolled per settlement:
@@ -463,14 +476,7 @@ class PaddyMixin:
             plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns 0.9-1.35 and rows 0.85-1.5 of the grain, 34 px by default
             canal widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: main 3.3, drain 3.0, lateral 2.0, feed and outfall 2.6 px, untapered
             ripe share - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 2.5% of rice plots ripe"""
-        if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape):
-            bbox = tuple(shape)
-            outline = organic_bbox(bbox, amp)
-        else:
-            outline = organic_poly(list(shape), amp)
-            xs = [q[0] for q in outline]
-            ys = [q[1] for q in outline]
-            bbox = (min(xs), min(ys), max(xs), max(ys))
+        outline, bbox = _wf_outline(shape, amp)
         x0, y0, x1, y1 = bbox
         smoothed = smooth_points(outline)
         self.M["fields"].append({"name": name, "bbox": list(bbox), "kind": "paddy", "outline": [[x, y] for (x, y) in smoothed]})
@@ -583,14 +589,7 @@ class PaddyMixin:
         self.add('</g>')
         random.setstate(stt)
 
-        # feed the MAIN at a single point from the pond; empty the DRAIN to the outlet (anchors safely inside).
-        safe = [(t[1], t[2]) for t in interior if edge_dist(t[1], t[2], smoothed) >= 14] or [((x0 + x1) / 2, (y0 + y1) / 2)]
-        msafe = [q for q in main_pts if edge_dist(q[0], q[1], smoothed) >= 11] or main_pts or safe
-        dsafe = [q for q in drain_pts if edge_dist(q[0], q[1], smoothed) >= 11] or drain_pts or safe
-        head_pt = min(msafe, key=lambda q: (q[0] - source[0]) ** 2 + (q[1] - source[1]) ** 2)
-        drain_pt = min(dsafe, key=lambda q: (q[0] - drain[0]) ** 2 + (q[1] - drain[1]) ** 2)
-        self.channel(source, head_pt, {"kind": "pond"}, {"kind": "field", "name": name}, amp=8, width=2.6)
-        self.channel(drain_pt, drain, {"kind": "field", "name": name}, drain_anchor or {"kind": "offmap"}, amp=8, width=2.6)
+        self._wf_feed(name, interior, smoothed, main_pts, drain_pts, bbox, source, drain, drain_anchor)
 
         self.add(f'<path d="{d}" fill="none" stroke="#A98A52" stroke-width="3.5"/>')
         if label:
@@ -600,6 +599,22 @@ class PaddyMixin:
             # into the phase. Found by the round-2 spec review of feature 157 - dormant (no pool map
             # passes `label=` to either field), which is why it is a call swap and not a reflow.
             self.field_name_label(label, (x0, y0, x1, y1))
+
+    def _wf_feed(  # type: ignore[misc]
+        self: Settlement, name: str, interior: list[Any], smoothed: Poly, main_pts: Poly, drain_pts: Poly, bbox: Any, source: Any, drain: Any, drain_anchor: Any
+    ) -> None:
+        """Feed a water-first field's MAIN at a single point from the pond, and empty its DRAIN to the outlet, each anchored
+        safely inside the field (lifted out of `water_field` by feature 370, the 100-statement cap; same order).
+
+        Research: feed and outfall - UNRESEARCHED: the main fed from the source at its nearest point 11 px or more inside the field, the drain emptied at its point nearest the outlet, each channel 2.6 px"""
+        x0, y0, x1, y1 = bbox
+        safe = [(t[1], t[2]) for t in interior if edge_dist(t[1], t[2], smoothed) >= 14] or [((x0 + x1) / 2, (y0 + y1) / 2)]
+        msafe = [q for q in main_pts if edge_dist(q[0], q[1], smoothed) >= 11] or main_pts or safe
+        dsafe = [q for q in drain_pts if edge_dist(q[0], q[1], smoothed) >= 11] or drain_pts or safe
+        head_pt = min(msafe, key=lambda q: (q[0] - source[0]) ** 2 + (q[1] - source[1]) ** 2)
+        drain_pt = min(dsafe, key=lambda q: (q[0] - drain[0]) ** 2 + (q[1] - drain[1]) ** 2)
+        self.channel(source, head_pt, {"kind": "pond"}, {"kind": "field", "name": name}, amp=8, width=2.6)
+        self.channel(drain_pt, drain, {"kind": "field", "name": name}, drain_anchor or {"kind": "offmap"}, amp=8, width=2.6)
 
     def _wf_ditch(self: Settlement, name: str, pairs: Any, w: float, role: str) -> None:  # type: ignore[misc]
         """Draw a water-first field's ditch AND record it, so the checks can validate what was drawn.
