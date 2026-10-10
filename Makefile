@@ -121,6 +121,9 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 #  documentation" then costs seconds, not five minutes. Never for FULL (a different scope). No flag forces either
 #  direction (GUARD_EDIT_OK: the fidelity review removed a FORCE= flag as unrequested). ONE shell block, so `exit 0`
 #  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
+	@: "GUARD_EDIT_OK: feature 375 follow-up (the GM 2026-10-10) - ONE GATE AT A TIME IN A CLONE: a second make done beside a"
+	@: " running one is refused, naming it (two gates on one tree failed together and tripped the arbiter twice; gate_lock.py)."
+	@l="$$(git rev-parse --show-toplevel)/scripts/gates/gate_lock.py"; [ ! -f "$$l" ] || python3 "$$l" acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	@: "GUARD_EDIT_OK: feature 375 FR-004 - THE PREFLIGHT FIRST, ahead of the verified-done reuse too (a stale derived file is"
 	@: " invisible to that key): the derived files, the record and its pointers, make quick and the changed engine lines, in"
 	@: " a minute at most, stopping here on a failure (scripts/gates/preflight.py; 372's wave 106 went red six times on causes"
