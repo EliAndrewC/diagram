@@ -55,8 +55,7 @@ def test_the_last_tick_refuses_without_the_report(tmp_path: pathlib.Path) -> Non
     (d / "plan.md").write_text(plan)
     import hashlib
 
-    (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan.encode()).hexdigest(), "plan_text": plan,
-                                                    "decisions": [], "verdict": "CLEAR"}))
+    (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan.encode()).hexdigest(), "plan_text": plan, "decisions": [], "verdict": "CLEAR"}))
     (d / "spec.md").write_text("# Feature 900\n")
     tick = script("tick-task.py")
     r = subprocess.run(["python3", str(tick), "900", "T02", "done it"], cwd=root, capture_output=True, text=True)
@@ -71,8 +70,11 @@ def test_the_push_asks_every_touched_feature_that_reads_closed(tmp_path: pathlib
     env = {"GIT_AUTHOR_NAME": "a", "GIT_AUTHOR_EMAIL": "a@b", "GIT_COMMITTER_NAME": "a", "GIT_COMMITTER_EMAIL": "a@b", "PATH": "/usr/bin:/bin"}
     subprocess.run(["git", "init", "-q", str(root)], check=True)
     subprocess.run(["git", "-C", str(root), "commit", "-q", "--allow-empty", "-m", "base"], check=True, env=env)
-    for name, tasks, spec in (("901-done", "- [x] T01\n", "**Status**: In progress\n"), ("902-open", "- [ ] T01\n", "x\n"),
-                              ("903-withdrawn", "- [ ] T01\n", "**Status**: Withdrawn - superseded by nothing\n")):
+    for name, tasks, spec in (
+        ("901-done", "- [x] T01\n", "**Status**: In progress\n"),
+        ("902-open", "- [ ] T01\n", "x\n"),
+        ("903-withdrawn", "- [ ] T01\n", "**Status**: Withdrawn - superseded by nothing\n"),
+    ):
         d = root / "specs" / name
         d.mkdir(parents=True)
         (d / "tasks.md").write_text(tasks)

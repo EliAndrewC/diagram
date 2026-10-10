@@ -121,6 +121,12 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 #  documentation" then costs seconds, not five minutes. Never for FULL (a different scope). No flag forces either
 #  direction (GUARD_EDIT_OK: the fidelity review removed a FORCE= flag as unrequested). ONE shell block, so `exit 0`
 #  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
+	@: "GUARD_EDIT_OK: feature 375 FR-004 - THE PREFLIGHT FIRST, ahead of the verified-done reuse too (a stale derived file is"
+	@: " invisible to that key): the derived files, the record and its pointers, make quick and the changed engine lines, in"
+	@: " a minute at most, stopping here on a failure (scripts/gates/preflight.py; 372's wave 106 went red six times on causes"
+	@: " these find). PREFLIGHT_OK=1 skips it when the session has just run make preflight itself."
+	@$(if $(PREFLIGHT_OK),:,python3 "$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" || { printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; })
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram || true; \
 	  : "GUARD_EDIT_OK: the SHORT-CIRCUIT re-stamps rather than earns, and that is what kept a bogus" ; \
@@ -213,6 +219,8 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	med=$$(python3 "$$root/scripts/measure/gatecost.py" $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
 	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts/measure'); import gatecost as _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
 	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else python3 "$$root/scripts/measure/ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
+	: "GUARD_EDIT_OK: feature 375 FR-004 - a tree that moved while the gate ran is not vouched for: no green, the file named"; \
+	python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { $(STATE) failed-gate $(DONE_NAME); exit 1; }; \
 	$(STATE) green-local $(DONE_NAME); \
 	: "GUARD_EDIT_OK: FINDING 2 OF THE NAMING AUDIT - both banners STATED SOMETHING FALSE. Since feature" ; \
 	: "174 the phase list is 'hooks-test test-full (+perf-gate under FULL)', so a plain make done runs the" ; \
@@ -1199,6 +1207,10 @@ replay-owing:   ## [project] replay recorded commits through the old owing and t
 	@if [ -z "$(REVS)" ]; then printf 'make replay-owing: REVS="<commit> ..." is required\n' >&2; exit 2; fi
 	@: "GUARD_EDIT_OK: feature 375 SC-001 - TRIAGE=1 also writes each commit's pop-up triage bundle for the triage to judge"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/replay_owing.py" $(REVS) $(if $(OUT),--out "$(OUT)",) $(if $(TRIAGE),--triage,)
+
+# GUARD_EDIT_OK: feature 375 FR-004 adds an operation - the gate's first phase, runnable on its own
+preflight:      ## [tests] the gate's first phase, in seconds: the derived files regenerated, the record and its pointers, make quick, and the changed engine lines a quick test runs (feature 375)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)"
 
 # GUARD_EDIT_OK: feature 375 FR-012 adds three operations - the GM's review after landing: what waits on him, a finding accepted
 # with a reason (a row he may overturn), and his review recorded (which may close the feature, through its closing check).

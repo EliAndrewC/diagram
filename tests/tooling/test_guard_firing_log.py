@@ -366,7 +366,10 @@ _ESCAPES = {
     ),
     "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/gates/entry-gate.sh (feature 311), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
     "CLAIMS_OK": ("environment", "read as ${CLAIMS_OK:-} by scripts/gates/claims-gate.sh (feature 316), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
-    "CLOSE_OK": ("environment", "read as ${CLOSE_OK:-} by sync-with-main.sh's closing check (feature 375, FR-009/FR-014), which a mention cannot set; reason floor via hm_escape.py reason-ok, recorded with guard_log"),
+    "CLOSE_OK": (
+        "environment",
+        "read as ${CLOSE_OK:-} by sync-with-main.sh's closing check (feature 375, FR-009/FR-014), which a mention cannot set; reason floor via hm_escape.py reason-ok, recorded with guard_log",
+    ),
     "FREEZE_OK": (
         "command",
         "feature 375 FR-003(b)(c): matched in a check dispatch's PROMPT, an Edit's content or a Bash command by the anchored "

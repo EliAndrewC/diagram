@@ -83,7 +83,7 @@
   "quantity": "SC-001: 372's waves 106, 108 and 111 replayed commit by commit through the old owing and the new - modal-depiction units and impl-drift claims each delta owes",
   "observed": "2026-10-10",
   "source": "the clone at T11; 372's commits (git log --grep 'wave 106' / 'Feature 372 wave 108' / 'Feature 372 wave 111', 24 commits); sparse detached worktrees",
-  "command": "make replay-owing REVS=\"<the wave's commits>\" (and TRIAGE=1 over the seven commits owing a pop-up triage)",
+  "command": "make replay-owing REVS=\"$(git log --reverse --format=%h --grep='wave 106')\" OUT=/tmp/l7r-replay106 (then --grep='Feature 372 wave 108' and --grep='Feature 372 wave 111'); TRIAGE=1 over 39a28173c a2d0ba9f9 291c34c88 175cca78a 99a6090b0 d148acd6d 6d5951e5f",
   "method": "per commit: OLD = the commit's own scripts against its parent's claims index, NEW = this tree's scripts with that index migrated (claims-backfill-sections); each counts only what the delta newly owes (owed at the commit less owed at the parent). The seven triage bundles were judged by one ad-hoc opus agent, each MANIFEST independently, as make modal-triage's reply",
   "value": {
    "impl_drift": {
@@ -172,6 +172,23 @@
    "gm_waivers": "2 rounds past the cap ran on the GM's standing waiver (building-review on the county example, 12:45 and 13:36 UTC); both now trip round:building-review|... and go to the round arbiter",
    "red_gates": "4 red-gate trips in wave 106 (12:27, 13:10, 13:19, 13:27 UTC)",
    "reading": "every firing SC-006 names happens, and no round past the cap needs the GM's waiver: each goes to the arbiter"
+  }
+ },
+ "preflight-cost": {
+  "quantity": "FR-004's preflight: its wall time and where it goes (plan D14: 'seconds' measured, not promised)",
+  "observed": "2026-10-10",
+  "source": "the clone at T23, nothing changed in l7r; load average 7.4",
+  "command": "make preflight",
+  "unit": "s",
+  "varies": 0.5,
+  "method": "the preflight's own per-step timings, two runs (62 s and 51 s)",
+  "value": {
+   "total_s": 51,
+   "derived_s": 1,
+   "record_and_pointers_s": 43,
+   "quick_s": 6,
+   "changed_line_coverage_s": 0,
+   "reading": "seconds for every step but the record build (make record CHECK=1, the whole site built in memory), 43 s at load 7.4 - which the spec lists among the preflight's derived files. The whole phase costs about a tenth of a gate (384-488 s this feature) and a red it prevents costs a whole one"
   }
  }
 }
