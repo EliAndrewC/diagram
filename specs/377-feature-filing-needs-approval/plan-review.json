@@ -1,0 +1,58 @@
+{
+ "feature": "377-feature-filing-needs-approval",
+ "plan_sha256": "bf5d7f9f832271df1fb49a9cdf9ad526a0fb19438faaae212f26b1d232ae1630",
+ "plan_text": "# Implementation Plan: no feature is filed without the GM's approval (feature 377)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Model**: `conflict-marker-hooks.sh` (feature 241): a commit-time guard\non what a `git add` / `git commit` would stage, with its decider in `scripts/hooks/lib/`.\n\n## Summary\n\nOne guard and one gate check, both reading one definition of the approval line:\n- **The guard.** `scripts/hooks/feature-approval-hooks.sh` refuses at `git add` and `git commit` (FR-002, FR-005,\n  FR-006), with its decider in `scripts/hooks/lib/hm_approval.py`.\n- **The push backstop.** spec-lint gains a check on the line's form (FR-004).\n- **The text.** The guidelines, `make claim`'s output and spec-fidelity's contract (FR-007, FR-009).\n\nEverything is tooling, so every task is `research: rendering`. No engine file changes, so the landing is DIRECT,\nstamped by `make hooks-test` and the tooling tests.\n\n## Technical Context\n\n- **Code.** Bash guards under `scripts/hooks/`, a stdlib Python decider under `scripts/hooks/lib/`, and spec-lint\n  under `scripts/gates/`.\n- **Tests.** A suite `tests/hooks/test-feature-approval-hooks.sh`, run by `make hooks-test`, which drives the REAL\n  hook with a REAL payload, over a REAL git tree and a fixture transcript. spec-lint's case goes in\n  `tests/tooling/test_spec_lint.py`.\n- **A hard limit of this session.** The guards run from the mirror (`/diagram/scripts/hooks/`), so the new guard\n  fires in no session until it lands. Its proof is the suite. After landing, the first claim of a new feature shows\n  it live.\n\n## Performance bookends\n\nN/A: no generator change. The guard runs on every Bash call, so its cost is kept to the cheap bail-out D6 describes.\n\n## Constitution Check\n\n- **I-V**: N/A - no UI, no pool content, no SOURCE blocks.\n- **VI (performance)**: N/A for maps. The per-call cost is a `case` on the command string, plus python only for a\n  git add/commit (D6).\n- **X (coverage)**: the scripts are tested to the project's habit: every branch the guard takes has a suite case.\n- **XII (research)**: N/A - no physical decision.\n- **XIII (no known regressions)**: `make hooks-test` and the tooling tests are green before and after.\n- **XVI (the literal thing)**: every FR is built as written. The mechanisms chosen are the decisions below.\n\n## Decisions\n\n**D1 - One definition of the line.** `hm_approval.py` holds the form as one regex:\n`^\\*\\*Approved\\*\\*: the GM, (\\d{4}-\\d{2}-\\d{2}), \"(.+)\"\\s*$` on a line of its own, in `spec.md`. It also holds the\nfirst number the rule covers, `FIRST = 377`, and the three-word minimum. spec-lint imports it, adding\n`scripts/hooks/lib` to `sys.path` as the scripts' own convention says, so the commit check and the push check cannot\ndrift apart.\n\n**D2 - What counts as the GM's message.** The guard reads the transcript path from the hook payload's\n`transcript_path` and takes two kinds of record:\n- **A typed prompt.** A `user` record with string content, not `isMeta`, whose `origin.kind` is `human` or whose\n  `promptSource` is `typed`. A record with neither field (an older Claude Code) counts only when its `entrypoint` is\n  not an SDK one. Measured on this session's own transcript (2026-10-10): the GM's four prompts carry\n  `origin.kind=human` and `promptSource=typed`; the session-name reminder is `isMeta`; and a headless page session's\n  first prompt is `promptSource=sdk`, `entrypoint=sdk-cli`.\n- **A message the GM sent mid-turn.** A `queued_command` attachment whose `origin.kind` is `human`, read from its\n  `prompt`. The plan review measured 73 such messages in the last 40 transcripts, 41 of them reaching no `user`\n  record, one of them \"Yes, please go ahead and file this as a feature\". Task notifications, peer relays and\n  auto-continuations carry other origins and do not count.\n- **The GM's answer to a question.** The `tool_result` of an `AskUserQuestion` call (matched by `tool_use_id`), when it\n  is an answer: the record's `toolUseResult.answers`, or the \"Your questions have been answered\" preamble. A declined\n  question is the harness's note, not the GM's words. The text holds the question and the picked answer, so a quote of\n  the two together (`\"<question>\"=\"<answer>\"`) matches it.\n\nText is normalized before the match: runs of whitespace become one space, and curly quotes and apostrophes become\nstraight ones. The quote must be a substring of one such message, at least three words long.\n\n**D3 - What the command would stage** is `hm_conflict.staged_by(cmd, cwd)`, the conflict guard's own parser, reused\nwhole. Of those paths the guard keeps `specs/<NNN>-<slug>/spec.md`.\n\n**D4 - NEW.**\n- **NEW**: the path is absent from HEAD, is not the target of a staged rename (`git diff --cached -M --name-status`),\n  and is not a renumber: a `specs/*-<same slug>/spec.md` in HEAD that has LEFT, gone from the working tree or with its\n  deletion staged. A same-slug spec beside one still in place is a copy, and new (plan review, round 1).\n- **The file to be committed** is the working-tree file, which is what `add` and `commit -a` take. A plain `commit`\n  takes the index copy (`git show :<path>`).\n\n**D5 - Refusals.** Exit 2, with the check that failed (no line / too short / not among the GM's messages), the exact\nline to add, and \"ask the GM in this session; the guard reads the GM's own messages\". The refusal is logged through\n`guard_log`. There is no escape token (FR-006). The suite pins the refusal's text (FR-005).\n\n**D6 - Cost.** The same bail-out as the conflict guard: a `case` that needs `git` and `add` or `commit` in the\ncommand, then `specs/` in what would be staged, before any transcript is read. A Bash call that is not a git\nadd/commit pays one `case`.\n\n**D7 - The push backstop**, as spec-lint check 6 (`check_approval`): for a spec directory numbered `FIRST` or above,\nthe `spec.md` must hold a line of D1's form whose quote has at least three words. It runs on every touched spec,\nlike check 2, with or without a `tasks.md`. A landed spec is judged on what the push introduces, as spec-lint\nalready does.\n\n**D8 - The text.**\n- **CLAUDE.md.** The development-workflow bullet is rewritten: ask the GM before filing a feature; propose in the\n  final message; prefer reopening the source feature. The guard table gains a row.\n- **`docs/spec-kit-and-reviews.md`** gets a section with the GM's words. **`docs/guards.md`** gets the guard's record.\n- **`make claim`** prints the line's form after a claim.\n- **`.claude/agents/spec-fidelity.md`**, Mode 2, gains the subject check (FR-009).\n- **Registration.** `.claude/settings.json` registers the hook beside `conflict-marker-hooks.sh`. It is a guard file,\n  so the edit carries `GUARD_EDIT_OK`.\n\n## Project Structure\n\n```text\nscripts/hooks/feature-approval-hooks.sh        new - the guard\nscripts/hooks/lib/hm_approval.py               new - the decider and the one definition of the line\nscripts/gates/spec-lint.py                     check 6\nscripts/claim-feature.py                       prints the line's form\ntests/hooks/test-feature-approval-hooks.sh     new - the suite\ntests/tooling/test_spec_lint.py                check 6's cases\n.claude/settings.json                          the registration\n.claude/agents/spec-fidelity.md                the subject check\nCLAUDE.md, docs/spec-kit-and-reviews.md, docs/guards.md\n```\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "One definition of the line in hm_approval.py: the regex, FIRST = 377, the three-word minimum; spec-lint imports it",
+   "class": "within",
+   "why": "Encodes FR-001; the numbers are the spec's own."
+  },
+  {
+   "id": "D2",
+   "summary": "The GM's messages: typed user prompts (origin.kind human / promptSource typed, else non-sdk entrypoint), queued_command attachments with origin.kind human (attachment.prompt), and AskUserQuestion results only when answered (toolUseResult.answers or the answered preamble); whitespace and curly quotes normalized",
+   "class": "within",
+   "why": "Round 1's finding resolved. FR-002 counts a message the GM typed or an answer the GM gave; the mid-turn messages are now read. Re-measured 2026-10-10 by running hm_approval.gm_messages over the 40 most recent -diagram* transcripts: 31 of 31 human queued_command prompts captured, 6 of 6 answered AskUserQuestion results captured. origin sits on the attachment, where the code reads it (checked on real records). Excluding peers, task notifications, auto-continuations, sdk prompts and a declined question keeps out text that is not the GM's, which is FR-002's own boundary, not a narrowing."
+  },
+  {
+   "id": "D3",
+   "summary": "What a command stages is hm_conflict.staged_by, reused whole",
+   "class": "within",
+   "why": "Reaches the spec.md however the session stages it."
+  },
+  {
+   "id": "D4",
+   "summary": "NEW = absent from HEAD, not a staged-rename target, and not a renumber (a same-slug HEAD spec.md that has LEFT the working tree or has its deletion staged); a same-slug copy beside one still in place is new. The judged copy is the working tree for add / commit -a, the index for a plain commit",
+   "class": "within",
+   "why": "Round 1's finding resolved: the copy exemption is gone (is_new lines 139-147; suite case 'a COPY beside a same-slug spec still in place is new, and refused' passes). This is FR-002's definition plus the spec's renumber edge case. Judging the copy the command actually commits serves FR-002."
+  },
+  {
+   "id": "D5",
+   "summary": "Refusal: exit 2, the failed check, the exact line, ask the GM; guard_log; no escape; text pinned",
+   "class": "within",
+   "why": "FR-005 and FR-006 as written."
+  },
+  {
+   "id": "D6",
+   "summary": "Cheap bail-out before any transcript read",
+   "class": "within",
+   "why": "Cost only."
+  },
+  {
+   "id": "D7",
+   "summary": "spec-lint check 6 on every touched spec 377+, form only, judged on what the push introduces",
+   "class": "within",
+   "why": "FR-004 as written."
+  },
+  {
+   "id": "D8",
+   "summary": "The text (CLAUDE.md bullet and guard row, spec-kit-and-reviews.md, guards.md, make claim's reminder, spec-fidelity's subject check) and registration in .claude/settings.json",
+   "class": "within",
+   "why": "FR-007 and FR-009; guards.md is the standing record of every guard."
+  }
+ ],
+ "verdict": "CLEAR"
+}

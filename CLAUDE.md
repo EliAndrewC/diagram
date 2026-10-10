@@ -127,9 +127,13 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   without claiming). It prints the `SPECIFY_FEATURE` and `SPECIFY_FEATURE_DIRECTORY` exports; export
   BOTH. Commit and push the spec directory as soon as `spec.md` exists. No feature branches: commit on
   `main` inside the clone.
-- Open work lives in `specs/` only (feature 330: the old backlog directory became features). Defer work by filing a
-  feature - `make claim`, then a `spec.md` whose `**Status**: Filed` says what it is - and ask `make speckit-todo` what
-  is open: filed, planned, in progress. Each spec names what it touches in an `**Affects**:` line (tags from
+- Open work lives in `specs/` only (feature 330: the old backlog directory became features). **A feature is filed only
+  with the GM's approval** (feature 377, GM 2026-10-10: *"spec kit features should not be filed without my explicit
+  approval"*): propose it in the turn's FINAL message, never only mid-stream, and prefer extending and reopening the
+  feature the work came from over a new one. Once the GM says yes, the `spec.md` carries
+  `**Approved**: the GM, YYYY-MM-DD, "<their words, verbatim>"`; from 377 on, a commit staging a new feature without
+  it, or with words the GM did not write in the session, is refused (`feature-approval-hooks.sh`). Ask `make
+  speckit-todo` what is open: filed, planned, in progress. Each spec names what it touches in an `**Affects**:` line (tags from
   `.specify/affects.json`: the diagram kinds, tooling, research, ...), and its stage - `now`, `village`, `town`, `provincial city`,
   `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag, `AFFECTS=<tag>` lists only that tag's; `CHECK=1`, run at the push, holds it). A feature closes when every task is ticked, or when its status line opens
   `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
@@ -249,6 +253,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `main-tree-hooks.sh` | a write that would land in the mirror is moved to the clone; one naming it is refused | `MAIN_TREE_OK` |
 | `discard-hooks.sh` | a checkout or restore that would discard uncommitted work | `DISCARD_OK` |
 | `conflict-marker-hooks.sh` | a `git add` or commit that would stage conflict markers | `CONFLICT_MARKERS_OK` |
+| `feature-approval-hooks.sh` + spec-lint check 6 | a `git add` or commit staging a NEW feature (377 on) whose `spec.md` lacks the GM's `**Approved**:` line, or quotes words the GM did not write in this session (feature 377); the push re-checks the line's form | none - the GM's approval |
 | `ledger-hooks.sh` | a commit staging the review ledger with a measured row short of its check, class or cost | `LEDGER_LINT_OK` |
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
 | `no-branch-hooks.sh` | no local branches. The remote-only `backup/<clone-name>` branches on GitHub are not local branches: `sync-with-main.sh` pushes the clone's HEAD there (fast-forward, never forced) at every `done`/`push`, landed or refused, and deletes each once `main` contains it - its own at landing, any other by the sweep at the same step (feature 321) | `NO_BRANCH_OK` |

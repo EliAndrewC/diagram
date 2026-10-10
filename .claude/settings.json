@@ -179,6 +179,16 @@
         "hooks": [
           {
             "type": "command",
+            "command": "h=/diagram/scripts/hooks/feature-approval-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/feature-approval-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 377 - a NEW guard, the GM 2026-10-10: no feature is filed without the GM's approval",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
             "command": "h=/diagram/scripts/hooks/ledger-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/ledger-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 294 - a NEW guard: a commit staging the review ledger with a measured row short of its check, class or cost",
             "timeout": 10
           }
