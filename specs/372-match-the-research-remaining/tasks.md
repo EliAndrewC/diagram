@@ -99,5 +99,6 @@ in 328's ranking and this spec.
   draft's tub seat (`compound_parts`); `pack_audit` `tubs_off_their_doors`; `docs/buildings.md`, `docs/building-programs.md`;
   0100's drawing page; the fire-water-tubs, storehouse and tax-archive pop-ups.
 
-- [ ] T09 wave 106's row (FR-001, FR-002)
+- [x] T09 wave 106's row (FR-001, FR-002)
       research: rendering
+      verify: DONE. DONE. wave 106: each fire-water tub beside a door of its building (0100) on all six sheets and the draft; every tub-bearing building draws its entrance; tubs_off_their_doors; m:wave106-tubs-at-doors; reviews PASS round 2; plan review CLEAR round 4
