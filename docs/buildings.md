@@ -260,7 +260,7 @@ See the "Fire discipline" grounding entry for the why.
 <!-- Research: privies away from water - GUESS research/questions/0101-privies-setchin.drawing.html: at least 15 ft from any well -->
 <!-- Research: privies away from food prep - UNRESEARCHED: no page we read sets a privy's distance from a kitchen -->
 <!-- Research: privy glyph - CONVENTION: a gray square labeled latrine, apart from the tan buildings (0101's drawing page) -->
-<!-- Research: rear strip the service zone - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: the formal garden to the south (found), the shady north rear the service side (the page's guess) -->
+<!-- Research: rear strip the service zone - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the formal garden to the south (found on the question page), the shady north rear the service side -->
 <!-- Research: storehouses in the rear strip - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: the household's dozo stood behind the house -->
 <!-- Research: residence privy attached - research/questions/0101-privies-setchin.drawing.html: two, the guests' at the rear of the reception room and the family's at a back corner by the living rooms (a GUESS); each pit toward a service edge, the project's rule -->
 <!-- Research: outer privies by service gates - research/questions/0101-privies-setchin.drawing.html: against service walls near a gate for the night-soil cart -->

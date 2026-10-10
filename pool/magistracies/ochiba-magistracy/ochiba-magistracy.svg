@@ -58,7 +58,7 @@
   <g data-kind="road">
     <!-- feature 372 wave 103: the Imperial road runs past the gate at the road's own 30 ft (90 px), 0088's drawing page
          (it was an 8 ft lane drawn into the gate); the gate opens straight onto it, no wider ground before the gate (0088),
-         the threshold stones and the notice board on the road's near edge; which way the road runs here is a GUESS -->
+         the threshold stones at its near edge and the notice board across it; which way the road runs here is a GUESS -->
     <path d="M 180 799.5 L 1020 799.5" stroke="#B89060" stroke-width="90" stroke-linecap="butt" opacity="0.55"/>
     <path d="M 180 799.5 L 1020 799.5" stroke="#9C7448" stroke-width="90" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>

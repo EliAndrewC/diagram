@@ -2434,6 +2434,24 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Latrines and the rear service strip#rear strip the service zone": {
+  "code": "82d0f79e64d173d8",
+  "core": "70ccd133534c2b95",
+  "date": "2026-10-10",
+  "note": "the formal garden on the south is attested, and the drawing page records the shady north band as the service strip, a GUESS reasoned from where the garden stood",
+  "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "2688f28d713d8374"
+  },
+  "research": "1f38e2d63c0f5480",
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:5f6b53f63bb73ef0",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:9ad51c4d62413a83"
+  ],
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Latrines and the rear service strip#residence privy attached": {
   "code": "11fd4bfd35261571",
   "core": "70ccd133534c2b95",

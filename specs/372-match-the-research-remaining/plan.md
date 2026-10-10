@@ -128,9 +128,10 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   boards on the road's near edge; the notice board's glyph check (round 1, NEEDS-WORK, F1) found them in the road.
 - **The board's limit**: `compound_model.NOTICE_BOARD_MAX_FT`, the engine's one predicate behind `pack_audit`'s
   `notice_board_adrift` (feature 287 H29b), was 20 ft, set while boards stood against the wall and on no page; a board facing
-  its gate across the Imperial road's 30 ft stands ~31 ft off, so it is 40 ft, a GUESS claimed on 0190's drawing page. The two
+  its gate across the Imperial road's 30 ft stands beyond 20 ft, so it is 40 ft, this project's figure (UNRESEARCHED). The two
   frozen red fixtures' misplaced boards moved farther out (Ochiba's 90 px, Hayakawa's 80) so the check still fires on them; the
-  generated draft's own board, 8 ft from its gate, is unaffected.
+  generated draft's own board, 8 ft from its gate, is unaffected. Ochiba's road edge set on the wall's outer face (the road
+  check's F6), closing a half-foot strip under the wall.
 - **Records**: m:wave104-notice-boards; the claim; three sheets' notes (their point-glyph lines no longer give 7 x 3 ft).
 - **Occasions**: glyph-redrawn: notice board on ubame-magistracy (the same glyph on all three sheets).
 

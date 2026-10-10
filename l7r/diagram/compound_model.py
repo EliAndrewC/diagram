@@ -225,7 +225,7 @@ NOTICE_BOARD_MAX_FT: float = 40.0
 set while boards stood against the wall): the gate opens straight onto the road it stands on (0088), so its board stands
 beside that road on the far verge facing the gate (0190), across as much as the Imperial road's 30 ft.
 
-Research: board by the gate - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: a board at the office's own gate, beside the road, within 40 ft of the opening across the road"""
+Research: board by the gate - UNRESEARCHED: within 40 ft of the opening, this project's figure, so a board beside the road (0190) can face its gate across the Imperial road's 30 ft (0088)"""
 
 
 @dataclass(frozen=True)

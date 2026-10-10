@@ -1,38 +1,56 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "66acfd6f8feb65e6cbb13fbba71012846084b16f4703d84d2f0a63051ba4646b",
+ "plan_sha256": "1c6939b139a6c254a45a79fb733eb197aab9c1d615f8acdc47dfdc0230ad3867",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W104-size",
-   "summary": "All four gate boards (Ochiba, Hayakawa, Ubame's notice and bounty boards) drawn as 0190's frame: 16 x 6 ft (48 x 18 px), long side to the road, on a footing 2 ft wider all round (60 x 30 px) with a fence line at its edge",
+   "summary": "All four gate boards drawn as 0190's frame: 16 x 6 ft (48 x 18 px), long side to the road, on a footing 2 ft wider all round (60 x 30 px) with a fence line",
    "class": "within",
-   "why": "0190's drawing page draws every board so ('A board is drawn as a roofed frame 16 ft long and 6 ft deep ... footing about 2 ft wider all round, with a fence line at its edge'); the magistrate's-gate board is that page's own GUESS case; magistracies are in scope by 328's amendment 8; the claim's DRIFTED note asked for exactly this"
+   "why": "unchanged since the round-1 CLEAR: 0190's drawing page draws every board so; magistracies are in scope by 328's amendment 8"
   },
   {
    "id": "W104-roof-fence-glyph",
-   "summary": "The roof drawn as a ridge line along the frame, the fence as a dashed line at the footing's edge",
+   "summary": "Roof as a ridge line along the frame, fence as a dashed line at the footing's edge",
    "class": "within",
-   "why": "a drawing of the page's 'roofed' frame and 'fence line at its edge'; no element of the page dropped"
+   "why": "a drawing of the page's roofed frame and fence line; nothing on the page dropped"
   },
   {
    "id": "W104-site",
-   "summary": "Each board on the road's near edge beside its gate (the wave 103 roads); Ubame's bounty board 14 px west to clear the gate range's post",
+   "summary": "Each gate board on the road's far verge straight across from its gate (replacing the near-edge site that stood in the road)",
    "class": "within",
-   "why": "0190 sets the magistrate's board 'at the office's own gate' on a road; a clearance shift keeps it there"
+   "why": "0190: every board stands on a road or street, beside it, never set back and never in it; 0088 (wave 103): the gate opens straight onto the road with no wider ground before it, so the far verge is the only roadside ground at the gate; the board stays 'at the office's own gate' (0190's GUESS). Checked on the ink: Ochiba's footing starts at y 845 against the road's far edge at 844.5, Hayakawa's and Ubame's at 809 against 808.5"
+  },
+  {
+   "id": "W104-bounty-west",
+   "summary": "Ubame's bounty board beside its notice board on the same verge, west, not mirrored about the gate",
+   "class": "within",
+   "why": "both boards stay at the gate beside the road; which side of its neighbor it stands on is a placement detail no page or GM word settles"
+  },
+  {
+   "id": "W104-limit",
+   "summary": "compound_model.NOTICE_BOARD_MAX_FT raised 20 -> 40 ft, a GUESS claimed against 0190's drawing page, so a board facing its gate across the Imperial road's 30 ft passes notice_board_adrift",
+   "class": "within",
+   "why": "the 20 ft is a project tolerance from feature 287's census (H29b), on no research page and no GM ruling, set while boards stood at the wall; held at 20 it would force the boards back into the road or against the wall, contrary to 0190 and 0088. Raising it narrows nothing the GM asked (328's request: make the maps match the research); it changes a project number to let the research's placement stand, labeled GUESS with its why beside it. The check still enforces the board-by-the-gate rule: both red fixtures and the draft test's far case were moved out so it still fires. The 40 over the measured ~30-32 ft (Ochiba's footing/frame from the opening) is slack a GUESS may carry"
+  },
+  {
+   "id": "W104-fixtures",
+   "summary": "The two frozen red fixtures' misplaced boards moved farther out (Ochiba 90 px, Hayakawa 80) and test_compound's far case 40 -> 60 ft, so the check still fails on them",
+   "class": "within",
+   "why": "preserves the enforcement the check exists for under the new limit; no behavior added"
   },
   {
    "id": "W104-occasion",
-   "summary": "glyph-redrawn occasion declared on ubame-magistracy, standing for the same glyph on all three sheets",
+   "summary": "glyph-redrawn occasion on ubame-magistracy standing for the same glyph on all three sheets",
    "class": "within",
-   "why": "the same practice as waves 98 and 103; the review occasion is process, and it does not narrow what is drawn"
+   "why": "process; narrows nothing drawn"
   },
   {
    "id": "W104-records",
-   "summary": "Decisions row ACCURATE for the size; claim relabeled IN-STEP; notes' point-glyph lines changed from 7 x 3 ft",
+   "summary": "Decisions row for the far-verge site and the limit (GUESS), m:wave104-notice-boards updated, the claim, three sheets' notes",
    "class": "within",
-   "why": "the size is the measured frame on 0190; the gate placement's GUESS stays on 0190's page"
+   "why": "records the decisions under their labels"
   }
  ],
  "verdict": "CLEAR"
