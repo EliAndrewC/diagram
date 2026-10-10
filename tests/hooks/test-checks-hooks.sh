@@ -60,6 +60,18 @@ bash_call "make quick"; rc=$?
 [ "$rc" = 64 ] && ok "an unknown mode is a usage error" || no "usage" "rc=$rc"
 grep -rq "frozen-while-checked" "$GUARD_LOG_ROOT" && ok "the refusal is recorded in the firing log" || no "not logged"
 
+# FR-003(a) DECIDE FIRST: a task whose plan section has no verdict yet holds its checks
+mkdir -p "$C/specs/999-x"
+printf -- '- [ ] T01 the bath\n' > "$C/specs/999-x/tasks.md"
+printf '# plan\n\n## T01 the bath\n\n- 10 x 8 ft\n' > "$C/specs/999-x/plan.md"
+printf 'owed-checks: record-format\nunit: record-format:0200 abc\n' > "$T/b/MANIFEST.md"
+python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t9","tool_input":{"subagent_type":"record-format","prompt":"Read "+sys.argv[2]}}))' "$C" "$T/b/MANIFEST.md" \
+  | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
+[ "$rc" = 2 ] && grep -q "decide first" "$T/err" && grep -q "make decide F=999 T=T01" "$T/err" && ok "IT FIRES: a check before its task's decisions are ruled on, with the command" || no "decide-first did not fire" "rc=$rc $(cat "$T/err")"
+python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Agent","tool_use_id":"t10","tool_input":{"subagent_type":"record-format","prompt":"Read "+sys.argv[2]+" DECIDE_OK=\"the GM asked for this check\""}}))' "$C" "$T/b/MANIFEST.md" \
+  | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
+[ "$rc" = 0 ] && ok "STAYS QUIET: DECIDE_OK with a reason" || no "the escape did not pass" "rc=$rc $(cat "$T/err")"
+
 echo
 echo "checks-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" = 0 ]

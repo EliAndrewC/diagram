@@ -119,8 +119,8 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
     """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap)."""
     subjects = subjects_of_manifest(text) if check in PAGE_CHECKS else []
     for s in subjects:
-        same = [d for d in open_round(state, s, now) if d["check"] == check]
-        if same and running(state, s, now):
+        same = [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
+        if same and [d for d in running(state, s, now) if d.get("state") == "running"]:  # launched, not a refused call's record
             return (f"`{check}` is already in {s}'s round and that round has a check still running - all of a round's checks "
                     "return, their edits go in in one pass, then the page is checked once (feature 375 FR-003c)")
         n = state.setdefault("rounds", {}).get(f"{check}|{s}", 0)

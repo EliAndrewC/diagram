@@ -84,6 +84,42 @@ def typo_only(old: str, new: str) -> bool:
     return True
 
 
+_HEAD = re.compile(r"^(#{2,4})\s+(.*)$", re.M)
+_TASK_ID = re.compile(r"\b(T\d+[a-z]?)\b")
+
+
+def task_sections(plan_text: str) -> dict[str, str]:
+    """`{task id: its section}` - every `##`-`####` heading of the plan naming a task id, to the next heading at its level or
+    above (feature 375, FR-003(a), plan D3): the decisions of that task, which a decision preflight rules on alone."""
+    heads = [(m.start(), len(m.group(1)), m.group(2)) for m in _HEAD.finditer(plan_text)]
+    out: dict[str, str] = {}
+    for i, (at, level, title) in enumerate(heads):
+        ids = _TASK_ID.findall(title)
+        if not ids:
+            continue
+        end = next((a for a, lv, _t in heads[i + 1:] if lv <= level), len(plan_text))
+        for t in ids:
+            out.setdefault(t, plan_text[at:end])
+    return out
+
+
+def task_current(review: dict, plan_text: str, task: str) -> bool:
+    """Whether the task's section carries a CLEAR decision verdict that still matches it (a typo aside, as D6)."""
+    section = task_sections(plan_text).get(task)
+    entry = (review.get("tasks") or {}).get(task) or {}
+    if section is None or entry.get("verdict") != "CLEAR":
+        return False
+    return entry.get("section_sha256") == digest(section.encode()) or typo_only(str(entry.get("section_text") or ""), section)
+
+
+def _without(plan_text: str, ids: set[str]) -> str:
+    """The plan with the sections of `ids` taken out."""
+    for t, sec in task_sections(plan_text).items():
+        if t in ids:
+            plan_text = plan_text.replace(sec, "")
+    return plan_text
+
+
 HOW = ("dispatch `spec-fidelity` in its PLAN REVIEW mode with request.md, spec.md and plan.md, then record "
        "its JSON: make plan-verdict F=<feature> FILE=<json> AS=spec-fidelity")
 
@@ -106,7 +142,12 @@ def judge(plan: bytes | None, review_text: str | None) -> tuple[str, str] | None
         review = json.loads(review_text)
     except ValueError:
         return "plan-review-missing", f"{RECORD} is not JSON - {HOW}"
-    if review.get("plan_sha256") != digest(plan) and not typo_only(str(review.get("plan_text") or ""), plan.decode("utf-8", "replace")):
+    text = plan.decode("utf-8", "replace")
+    # every task section that carries its own current verdict (a decision preflight, plan D3) is out of the comparison, in the
+    # reviewed text and in today's: adding or changing it does not stale the plan-stage verdict
+    ruled = {t for t in task_sections(text) if task_current(review, text, t)}
+    if review.get("plan_sha256") != digest(plan) and not typo_only(_without(str(review.get("plan_text") or ""), ruled),
+                                                                   _without(text, ruled)):
         return "plan-review-stale", (f"plan.md changed after its review by more than a typo (FR-004; feature 375 FR-005(b): "
                                      f"a word added or removed, a number, a negation or a quantifier) - {HOW}")
     if review.get("verdict") != "CLEAR":
@@ -188,6 +229,73 @@ def derive_verdict(decisions: list[dict]) -> str:
     return "BLOCKED" if any(d.get("ruling") == "NOT LEGITIMATE" for d in decisions) else "CLEAR"
 
 
+def record_task(spec_dir: pathlib.Path, task: str, review: dict, declared: str, today: str | None = None) -> dict:
+    """A decision preflight's verdict on one task's section (feature 375, FR-003(a), plan D3/D19), kept under `tasks.<id>`."""
+    if declared != REVIEWER:
+        raise PermissionError(f"declined: only the `{REVIEWER}` subagent records a decision preflight (AS={REVIEWER})")
+    plan = spec_dir / "plan.md"
+    section = task_sections(plan.read_text(encoding="utf-8") if plan.is_file() else "").get(task)
+    if section is None:
+        raise ValueError(f"plan.md has no section naming {task} - a task's decisions go under a heading that names it")
+    if review.get("section_sha256") != digest(section.encode()):
+        raise ValueError(f"section_sha256 does not match {task}'s section - it changed while it was being reviewed")
+    decisions = review.get("decisions")
+    if not isinstance(decisions, list):
+        raise ValueError("decisions must be a list")
+    verdict = derive_verdict(decisions)
+    rec_path = spec_dir / RECORD
+    out = json.loads(rec_path.read_text(encoding="utf-8")) if rec_path.is_file() else {"feature": spec_dir.name}
+    out.setdefault("tasks", {})[task] = {"section_sha256": review["section_sha256"], "section_text": section,
+                                         "reviewed": today or datetime.date.today().isoformat(), "declared": declared,
+                                         "decisions": decisions, "verdict": verdict}
+    rec_path.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    return out["tasks"][task]
+
+
+def active_task(root: pathlib.Path) -> tuple[pathlib.Path | None, str]:
+    """(the active feature's directory, its active task): `.git/active-task` (`make task-start`) when it names this feature,
+    else the first open task of `.specify/feature.json`'s feature; (None, '') when no feature is active."""
+    try:
+        fd = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
+    except (OSError, ValueError):
+        return None, ""
+    d = root / str(fd).rstrip("/")
+    if not fd or not (d / "tasks.md").is_file():
+        return None, ""
+    common = subprocess.run(["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"],
+                            capture_output=True, text=True).stdout.strip()
+    try:
+        mark = json.loads((pathlib.Path(common) / "active-task").read_text(encoding="utf-8")) if common else {}
+    except (OSError, ValueError):
+        mark = {}
+    if mark.get("feature") == d.name and mark.get("task"):
+        return d, str(mark["task"])
+    m = re.search(r"^- \[ \] (T\d+[a-z]?)\b", (d / "tasks.md").read_text(encoding="utf-8"), re.M)
+    return d, (m.group(1) if m else "")
+
+
+def decision_refusal(root: pathlib.Path) -> str:
+    """Why a check may not be dispatched yet (feature 375, FR-003(a)): the active task's decisions carry no current CLEAR
+    verdict - its own section's (`make decide`), or, where the plan has no section for it, the plan-stage verdict."""
+    d, task = active_task(root)
+    if d is None or not task:
+        return ""
+    plan = d / "plan.md"
+    text = plan.read_text(encoding="utf-8") if plan.is_file() else ""
+    try:
+        review = json.loads((d / RECORD).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        review = {}
+    if task in task_sections(text):
+        if task_current(review, text, task):
+            return ""
+        return (f"{d.name} {task}: its plan section carries no current CLEAR decision verdict - decide first, then check "
+                f"(feature 375 FR-003a): `make decide F={d.name.split('-')[0]} T={task}` names the review to dispatch")
+    verdict = owed(d)
+    return "" if verdict is None else (f"{d.name} {task}: the plan has no section for this task and its plan-stage review is "
+                                       f"not current and CLEAR ({verdict[0]}) - decide first (feature 375 FR-003a): {verdict[1]}")
+
+
 def record(spec_dir: pathlib.Path, review: dict, declared: str, today: str | None = None) -> dict:
     if declared != REVIEWER:
         raise PermissionError(f"declined: only the `{REVIEWER}` subagent records a plan review (AS={REVIEWER}). "
@@ -204,7 +312,9 @@ def record(spec_dir: pathlib.Path, review: dict, declared: str, today: str | Non
     verdict = derive_verdict(decisions)
     if review.get("verdict") not in (None, verdict):
         raise ValueError(f"the input says {review['verdict']} but its rulings make it {verdict} (P2)")
-    out = {"feature": spec_dir.name, "plan_sha256": review["plan_sha256"],
+    rec_path = spec_dir / RECORD
+    kept = json.loads(rec_path.read_text(encoding="utf-8")).get("tasks", {}) if rec_path.is_file() else {}
+    out = {"feature": spec_dir.name, "plan_sha256": review["plan_sha256"], **({"tasks": kept} if kept else {}),
            "plan_text": plan.read_text(encoding="utf-8"),  # feature 375 FR-005(b): what a later typo is measured against
            "reviewed": today or datetime.date.today().isoformat(), "declared": declared,
            "decisions": decisions, "verdict": verdict}
@@ -254,7 +364,56 @@ def resolve(feature: str, root: pathlib.Path | None = None) -> pathlib.Path | No
     return hits[0] if len(hits) == 1 else None
 
 
+def decide_prompt(spec_dir: pathlib.Path, task: str) -> str:
+    """The dispatch `make decide` prints: a plan review of ONE task's section (plan D19 - a MODE 4 review, so the review-round
+    hook never reroutes it), recorded under `tasks.<id>`."""
+    rel = f"specs/{spec_dir.name}"
+    return (f"MODE 4: PLAN REVIEW of one task's section - feature {spec_dir.name}, task {task} (a decision preflight, feature 375 "
+            f"FR-003a). Read {rel}/request.md and {rel}/spec.md, then ONLY the section of {rel}/plan.md whose heading names {task}. "
+            f"Take the section's sha256 first (the bytes from its heading line to the next heading at its level or above; "
+            f"`make section-sha F={spec_dir.name.split('-')[0]} T={task}` prints it), find its decisions, rule on each narrowing, "
+            f"write the JSON with `section_sha256` in place of `plan_sha256`, and record it with "
+            f"`make plan-verdict F={spec_dir.name.split('-')[0]} TASK={task} FILE=<json> AS=spec-fidelity`.")
+
+
 def main(argv: list[str]) -> int:
+    if argv[:1] == ["decided"]:
+        why = decision_refusal(pathlib.Path(argv[1] if len(argv) > 1 else "."))
+        if why:
+            print(why)
+        return 1 if why else 0
+    if argv[:1] in (["decide"], ["section-sha"]) and len(argv) == 3:
+        d = resolve(argv[1])
+        section = task_sections((d / "plan.md").read_text(encoding="utf-8")).get(argv[2]) if d and (d / "plan.md").is_file() else None
+        if d is None or section is None:
+            print(f"{argv[0]}: no plan section names {argv[2]} in specs/{argv[1]}* - put the task's decisions under a heading that names it", file=sys.stderr)
+            return 2
+        print(digest(section.encode()) if argv[0] == "section-sha" else decide_prompt(d, argv[2]))
+        return 0
+    if argv[:1] == ["task-start"] and len(argv) == 3:
+        d = resolve(argv[1])
+        if d is None:
+            print(f"task-start: no single specs/{argv[1]}* directory", file=sys.stderr)
+            return 2
+        common = subprocess.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
+        pathlib.Path(common, "active-task").write_text(json.dumps({"feature": d.name, "task": argv[2]}) + "\n", encoding="utf-8")
+        print(f"task-start: {d.name} {argv[2]} is the active task - its checks need its decisions ruled first (make decide)")
+        return 0
+    if argv[:1] == ["record-task"] and len(argv) == 6 and argv[4] == "--as":
+        spec_dir = resolve(argv[1])
+        if spec_dir is None:
+            print(f"plan-verdict: no single specs/{argv[1]}* directory", file=sys.stderr)
+            return 2
+        try:
+            out = record_task(spec_dir, argv[2], json.loads(pathlib.Path(argv[3]).read_text(encoding="utf-8")), argv[5])
+        except PermissionError as e:
+            print(f"plan-verdict: {e}", file=sys.stderr)
+            return 2
+        except (OSError, ValueError) as e:
+            print(f"plan-verdict: refused - {e}", file=sys.stderr)
+            return 1
+        print(f"plan-verdict: {out['verdict']} recorded for {spec_dir.name} {argv[2]} ({len(out['decisions'])} decision(s))")
+        return 0
     if argv[:1] == ["owed"] and len(argv) == 2:
         verdict = owed(pathlib.Path(argv[1]))
         if verdict:

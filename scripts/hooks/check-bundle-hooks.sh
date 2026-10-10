@@ -40,6 +40,29 @@ CHECKS="quote-check record-format source-applicability source-reader entry-drift
 pretool() {
   local verdict kind detail reason err
   INPUT="$(cat)"
+  # GUARD_EDIT_OK: feature 375 FR-003(a) - DECIDE FIRST: a record or claims check waits for its task's decisions' verdict
+  if ! err="$(printf '%s' "$INPUT" | CHECKS="$CHECKS" CB_HERE="$CB_HERE" python3 -c '
+import json, os, re, subprocess, sys
+try:
+    p = json.load(sys.stdin)
+except ValueError:
+    sys.exit(0)
+ti = p.get("tool_input") or {}
+if p.get("tool_name") != "Agent" or ti.get("subagent_type") not in os.environ["CHECKS"].split():
+    sys.exit(0)
+if re.search(r"DECIDE_OK=\"[^\"]{8,}\"", str(ti.get("prompt") or "")):
+    sys.exit(0)
+root = subprocess.run(["git", "-C", p.get("cwd") or ".", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip()
+if not root:
+    sys.exit(0)
+r = subprocess.run([sys.executable, os.environ["CB_HERE"] + "/../gates/plan_gate.py", "decided", root], capture_output=True, text=True)
+if r.returncode == 1 and r.stdout.strip():
+    print(r.stdout.strip()); sys.exit(1)
+' 2>&1)"; then
+    printf '\nBLOCKED: %s\n(or DECIDE_OK="<reason>" in the prompt; scripts/hooks/check-bundle-hooks.sh, feature 375)\n' "$err" >&2
+    guard_log check-bundle blocked "dispatch" decide-first "$err"
+    exit 2
+  fi
   # GUARD_EDIT_OK: feature 375 FR-003(c) and FR-010 - a check already in its subject's open round is not re-dispatched while
   # another runs, and a record check's third round on a subject goes to the round arbiter (scripts/hooks/lib/hm_checks.py)
   if ! err="$(printf '%s' "$INPUT" | python3 "$CB_HERE/lib/hm_checks.py" dispatch 2>&1)"; then

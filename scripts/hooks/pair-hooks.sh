@@ -521,6 +521,15 @@ print(json.dumps({"hookSpecificOutput": {
     # GREEN gate (not a running one: US6, a NOT-REVIEWABLE outcome never costs a run) and a cap of two rounds per unit
     # per feature (FR-009); the third needs REVIEW_ROUNDS_OK="<the GM's words>" in the prompt.
     ptext="$(printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' 2>/dev/null)"
+    # GUARD_EDIT_OK: feature 375 FR-003(a) - DECIDE FIRST: a review check waits for its task's decisions' verdict
+    case "$ptext" in *DECIDE_OK=\"??????????*) guard_log pair escaped "$atype" decide-ok ;; *)
+      why="$(python3 "$PAIR_HERE/../gates/plan_gate.py" decided "${CLONE_ROOT:-.}" 2>/dev/null)"
+      if [ -z "$why" ]; then :; else
+        printf '\nBLOCKED: %s\n(or DECIDE_OK="<reason>" in the prompt; scripts/hooks/pair-hooks.sh, feature 375)\n' "$why" >&2
+        guard_log pair blocked "$atype" decide-first
+        exit 2
+      fi ;;
+    esac
     nf="$(mktemp)"; printf '%s' "$ptext" > "$nf"
     named="$(maps_named_by "$nf")"; rm -f "$nf"
     if [ "$(printf '%s\n' $named | grep -c .)" -gt 1 ]; then
