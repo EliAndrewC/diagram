@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import os
 import sys
+from collections.abc import Callable
 from dataclasses import replace
 from typing import Any
 
@@ -547,6 +548,36 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
                 obstacles.append(Obstacle(box(cx - 0.7, cy - 0.7, 1.4, 1.4), WEIGHT_OBSTACLE))
                 parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr("striking posts")}/>')
             parts.append("</g>")
+    _draw_buildings(result, rect, caption, px, parts)
+    parts += _point_features(program, result, rect, caption, ox, oy)
+    # the scale bar every Mode A sheet carries (docs/buildings.md "Scale"; the registered check `scale_bar_present`)
+    sx, sy = ox, oy - 12 * FTPX
+    parts.append(
+        f'<g stroke="#3A2E1C" data-kind="-"><line x1="{sx:.0f}" y1="{sy:.0f}" x2="{sx + 90:.0f}" y2="{sy:.0f}" stroke-width="2"/><line x1="{sx:.0f}" y1="{sy - 5:.0f}" x2="{sx:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 90:.0f}" y1="{sy - 5:.0f}" x2="{sx + 90:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 45:.0f}" y1="{sy - 3:.0f}" x2="{sx + 45:.0f}" y2="{sy + 3:.0f}" stroke-width="1"/></g>'
+    )
+    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 16:.0f}" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="-">30 ft</text>')
+    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 27:.0f}" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830" data-kind="-">(3 px = 1 ft)</text>')
+    obstacles.append(Obstacle(((sx - 2, sy - 6), (sx + 92, sy - 6), (sx + 92, sy + 30), (sx - 2, sy + 30)), WEIGHT_OBSTACLE))  # the scale bar
+    _draw_walls_and_gates(env, result, ox, oy, px, box, obstacles, parts)
+    # A CAPTION MAY HOLD THE SHEET'S EDGE (the review checklist: every edge "held by real content"): the notice board
+    # stands outside the gate, 21 px from the canvas's foot, where no caption fits beside it - the old draft's caption
+    # hung past the edge and was clipped. So the placer is given room below, and the canvas then grows to hug what it
+    # placed there.
+    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), late, program.title)
+    parts += seated
+    if foot + margin_ft * FTPX > ch:
+        grown = foot + margin_ft * FTPX
+        parts[0] = parts[0].replace(f'viewBox="0 0 {cw:.0f} {ch:.0f}"', f'viewBox="0 0 {cw:.0f} {grown:.0f}"')
+        parts[2] = parts[2].replace(f'height="{ch:.0f}"', f'height="{grown:.0f}"')
+    parts.append("</svg>")
+    return "\n".join(parts)
+
+
+def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], px: Callable[[float, float], tuple[float, float]], parts: list[str]) -> None:
+    """Draw every placed building - its fill, its rooms, veranda and dais, its outline and its name - into `parts`, through
+    `emit_svg`'s own `rect` and `caption` (lifted out of it by feature 370, the 100-statement cap; the same order, so the
+    same SVG and the same caption requests)."""
+    ox, oy = px(0.0, 0.0)
     for p in result.placed:  # buildings
         fill, stroke = KINDS.get(p.spec.kind, KINDS["service"])
         # a name that runs wider than its building at 10 px is written at 8 (the gatehouse's overran its 54 px box), measured
@@ -599,15 +630,20 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
             caption("area", ax, ay, aw, ah, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
         else:
             caption("point" if full else "area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
-    parts += _point_features(program, result, rect, caption, ox, oy)
-    # the scale bar every Mode A sheet carries (docs/buildings.md "Scale"; the registered check `scale_bar_present`)
-    sx, sy = ox, oy - 12 * FTPX
-    parts.append(
-        f'<g stroke="#3A2E1C" data-kind="-"><line x1="{sx:.0f}" y1="{sy:.0f}" x2="{sx + 90:.0f}" y2="{sy:.0f}" stroke-width="2"/><line x1="{sx:.0f}" y1="{sy - 5:.0f}" x2="{sx:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 90:.0f}" y1="{sy - 5:.0f}" x2="{sx + 90:.0f}" y2="{sy + 5:.0f}" stroke-width="2"/><line x1="{sx + 45:.0f}" y1="{sy - 3:.0f}" x2="{sx + 45:.0f}" y2="{sy + 3:.0f}" stroke-width="1"/></g>'
-    )
-    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 16:.0f}" text-anchor="middle" font-size="10" fill="#3A2E1C" data-kind="-">30 ft</text>')
-    parts.append(f'<text x="{sx + 45:.0f}" y="{sy + 27:.0f}" text-anchor="middle" font-size="8" font-style="italic" fill="#5C4830" data-kind="-">(3 px = 1 ft)</text>')
-    obstacles.append(Obstacle(((sx - 2, sy - 6), (sx + 92, sy - 6), (sx + 92, sy + 30), (sx - 2, sy + 30)), WEIGHT_OBSTACLE))  # the scale bar
+
+
+def _draw_walls_and_gates(
+    env: Envelope,
+    result: PlaceResult,
+    ox: float,
+    oy: float,
+    px: Callable[[float, float], tuple[float, float]],
+    box: Callable[[float, float, float, float], tuple[tuple[float, float], ...]],
+    obstacles: list[Obstacle],
+    parts: list[str],
+) -> None:
+    """Draw the compound wall, the court divider and every gate's posts into `parts`, each an obstacle to the captions
+    (lifted out of `emit_svg` by feature 370, the 100-statement cap; the same order, so the same SVG)."""
     # compound wall (4 segments; S wall broken by the gate) + divider - each in a `<g stroke=...>` group,
     # the authoring form the audit's gate-opening and divider readers parse (feature 254: the drafts are
     # swept by the gate like the hand-drawn sheets, so they are drawn the way the checks read)
@@ -638,18 +674,6 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
             obstacles.append(Obstacle(box(bx, by, bx2 - bx, by2 - by), WEIGHT_OBSTACLE))
             parts.append(f'<rect x="{ox + bx * FTPX:.0f}" y="{oy + by * FTPX:.0f}" width="{(bx2 - bx) * FTPX:.0f}" height="{(by2 - by) * FTPX:.0f}"/>')
         parts.append("</g>")
-    # A CAPTION MAY HOLD THE SHEET'S EDGE (the review checklist: every edge "held by real content"): the notice board
-    # stands outside the gate, 21 px from the canvas's foot, where no caption fits beside it - the old draft's caption
-    # hung past the edge and was clipped. So the placer is given room below, and the canvas then grows to hug what it
-    # placed there.
-    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), late, program.title)
-    parts += seated
-    if foot + margin_ft * FTPX > ch:
-        grown = foot + margin_ft * FTPX
-        parts[0] = parts[0].replace(f'viewBox="0 0 {cw:.0f} {ch:.0f}"', f'viewBox="0 0 {cw:.0f} {grown:.0f}"')
-        parts[2] = parts[2].replace(f'height="{ch:.0f}"', f'height="{grown:.0f}"')
-    parts.append("</svg>")
-    return "\n".join(parts)
 
 
 # ---- a built-in county-magistracy program ------------------------------------------------

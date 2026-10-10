@@ -135,6 +135,22 @@ run "git add -A"
 [ "$RC" -eq 0 ] && ok "a renumber by plain move (the old spec gone, not yet staged as a rename) is not new" || no "an unstaged renumber was refused" "(rc=$RC) $OUT"
 git -C "$FIX" reset -q --hard >/dev/null 2>&1; rm -rf "$FIX/specs/391-held-feature"
 
+echo "3a. a MERGE that brings main's feature in is not filing it (feature 370's sync-in merged 377 and was refused)"
+_base=$(git -C "$FIX" rev-parse HEAD)
+git -C "$FIX" checkout -q --detach >/dev/null 2>&1
+mkdir -p "$FIX/specs/395-landed-elsewhere" && printf '# 395\n\n**Status**: Filed - approved in its own session\n' > "$FIX/specs/395-landed-elsewhere/spec.md"
+git -C "$FIX" add -A >/dev/null 2>&1 && git -C "$FIX" commit -qm "main's feature" >/dev/null 2>&1
+_theirs=$(git -C "$FIX" rev-parse HEAD)
+git -C "$FIX" checkout -q "$_base" >/dev/null 2>&1
+git -C "$FIX" merge -q --no-ff --no-commit "$_theirs" >/dev/null 2>&1
+run "git commit -m merge"
+[ "$RC" -eq 0 ] && ok "a spec the merge's other side holds passes" || no "a merged-in feature was refused" "(rc=$RC) $OUT"
+git -C "$FIX" merge --abort >/dev/null 2>&1; git -C "$FIX" checkout -q "$_base" >/dev/null 2>&1; rm -rf "$FIX/specs/395-landed-elsewhere"
+mkdir -p "$FIX/specs/396-filed-here" && printf '# 396\n\n**Status**: Filed\n' > "$FIX/specs/396-filed-here/spec.md"
+run "git add specs/396-filed-here"
+[ "$RC" -eq 2 ] && ok "...and a new spec with no merge in progress is still refused" || no "a new spec passed with no merge" "(rc=$RC)"
+rm -rf "$FIX/specs/396-filed-here"
+
 echo "3b. a plain commit judges what is STAGED, not the working tree"
 spec 378-widget-cache ""
 git -C "$FIX" add -A >/dev/null 2>&1
