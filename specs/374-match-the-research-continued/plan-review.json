@@ -1,126 +1,6 @@
 {
  "feature": "374-match-the-research-continued",
- "plan_sha256": "98e73065a5783e924319472c69efed9c732e00e7b4b60fbb12bf8c0762ac8dc9",
- "plan_text": "# Implementation Plan: Match the research - continued (feature 374)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Model**: `specs/372-match-the-research-remaining/plan.md` (its cycle, its batch\nclose and its bookends, themselves 328's) - this plan records only what differs and each wave's decisions.\n\n## Summary\n\nThe work list is 328's ranking's open in-scope rows at 372's close (198: 153 E3, 43 E4, 2 E2 held - counted from `ranking.json` 2026-10-10, rows with no wave in scope), in ranking order, with the\nitems the spec's \"What it carries\" lists. Waves are numbered on from 372's (the first is wave 112), so 328's `audit/waves.json`\nstays the one column; this feature's measurements are its own `measurements.json`, its decisions its own spec's table. Also\ncarried, from feature 370's landing (its spec, 2026-10-10): the claims findings on the code 370 split, left in `make\nclaims-report` for this feature under the claims gate's escape - rows of the work list like any other.\n\nTwo of the spec's carried tooling gaps (FR-007) are placed here, not in a wave: the claims-triage reply parser counting\n\"TOUCHES\" anywhere is already fixed by 375's D5 (`scripts/record/claims_triage.py` reads only lines opening with `TOUCHES`,\nits test pinning a mid-line mention ignored) - recorded so under SC-006 at batch 1's close; and `make modal-bundle\nFOR=modal-depiction`'s crop on a Mode A sheet is fixed, with its test, before the first modal-depiction check on a Mode A\nsheet that a wave owes (batch 1 edits no drawing page and owes none, as planned).\n\n## Constitution Check\n\nAs 372's (XII research, XIII no known regressions, XIV fix where found, XVI the literal thing). New here: 375's process (decide\nfirst, the freeze, the tripwires, the preflight) is in its first real use, and a guard that refuses correct work is fixed with\nits test (spec FR-005).\n\n## The cycle (372's, under 375)\n\n`make task-start F=374 T=<id>` -> the task's section below carries its verdict (this plan's review, or `make decide`) -> the check\nfirst where a rule is drawn (red on the unfixed sheet) -> edit -> `make test-file` -> each Mode A sheet's `make pack-audit` before\nand after -> `make cohort N=48` only when the hamlet's stage code changes -> `impl-drift` on the owed claims (`make claims-owed`,\nthe triage for the rest) -> the record checks a page edit owes (`make record-owed`) -> records -> `make quick` -> tick -> commit. A\nbatch closes with `make done`, its occasions, the timing pair or its recorded \"none owed\", `escalation-check`, and LANDS.\n\n## Batch 1 (T01-T05)\n\nThree waves, the first three rows the ranking leaves open after its two held E2 rows (the door band and `fixture_quota`, held for\nthe GM), with the kitchen's two rows taken as one wave because both redraw the same building; then the two measuring tasks 375\ncarried here (spec FR-006), which are not among the three measured.\n\n**Pair (FR-002)**: none owed if the batch's engine code stays out of what the timing pair rolls (the hamlet's stages) - this\nbatch's engine code is `pack_audit` (a review tool) and `buildings/types.json`'s kitchen band, read by the Mode A draft and the\npack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's stages, the pair is owed and taken.\n\n### Wave 112 (T01) - the veranda's width and faces\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#engawa` (E3). 0102's drawing page: a veranda 3-6 ft wide (half a\n  ken to one ken, Katsura's widths), free to change from face to face, the garden face at the wider end a GUESS; which faces\n  carry it a KNOB between two attested forms - the garden face alone, or a continuous veranda along two or three faces - never\n  all four. The procedure says \"~8 px\" (2.7 ft) along the south face of each block, and every sheet draws 8 px on the garden face (each\n  sheet's `data-kind=\"engawa\"` rects read 2026-10-10, grep of the three SVGs).\n- **Check first**: a `pack_audit` check, `veranda_depths`: every `data-kind=\"engawa\"` strip's short side is 3-6 ft (9-18 px),\n  reading the strip's rect (a `data-kind=\"engawa\"` group's rect too). Red on all three magistracy sheets now; a red fixture\n  beside the others. Its limits cite 0102's drawing page, ACCURATE (Katsura's measured widths).\n- **The knob on the hand sheets**: each sheet rolls its faces as its other knobs are rolled, `random.Random(zlib.crc32(b\"<map>:\n  residence veranda faces\")).choice([\"garden face alone\", \"two or three faces\"])` - **Hayakawa** two or three faces, **Ochiba**\n  and **Ubame** the garden face alone (computed 2026-10-10). Each sheet's notes record the roll and the form drawn, as the\n  shrine-arch knob is recorded.\n- **Widths** (calibrated liberty within 3-6 ft, the garden face at the wider end - 0102's GUESS): every garden-face strip 12 px\n  (4 ft); Hayakawa's turned faces 9 px (3 ft), as Katsura's veranda narrows where it turns the corner. Hayakawa's board veranda to\n  the guests' privy (already 9 px) stays. What a widened strip runs into (a door, a stone, a tub, the garden) moves with it, each\n  move audited.\n- **Hayakawa's two or three faces**: the east block's veranda runs on round its south-east corner up the reception's east end\n  (the formal end, facing the garden's east side), a third face being its north board veranda already drawn; the west block keeps\n  its garden face alone (a hall of its own; the knob is the house's, and the house shows it on its formal hall).\n- **The procedure**: the bullet's veranda sentence says 3-6 ft (9-18 px), the faces a rolled knob between the two forms, never all\n  four; the claim gets the knob and the widths, each labeled (the forms ACCURATE, the garden face wider a GUESS).\n- **The generated draft** (`compound.py`, seedless) keeps its 4 ft garden-face veranda, the form 0102's drawing page records it\n  taking; it cannot roll a knob, and that is recorded there.\n- **Tooling gap fixed here** (spec FR-007, carried from 372): a glyph-check verdict is keyed by element alone, so this batch's\n  second sheet would overwrite the first's; the verdict is keyed by element and map, with a test red on the old keying.\n- **Occasions**: glyph-redrawn: engawa on hayakawa-magistracy (the new turned form); glyph-redrawn: engawa on ochiba-magistracy\n  (the garden-face form; Ubame's the same glyph).\n\n### Wave 113 (T02) - the kitchen at 0091's size, joined as an ell\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#kitchen` (E3) and `#kitchen corridor tagged residence corridor`\n  (E3, after the first; the same building). 0091: the one kitchen measured, the Kuchiba house's east wing, is about 12 tsubo\n  (~440 sq ft, 5.9 x 6.9 m) by the prefecture's measure, about a sixth of the house; a middle-rank house was one block, its kitchen\n  projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens (each kitchen's rect read off the three SVGs, 2026-10-10), and\n  Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.\n- **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), its shape a GUESS, the ceiling ACCURATE (0091's measured\n  wing), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in\n  `buildings/types.json` narrowed so the old size fails it: w 18-26 by h 14-20 ft (either orientation). The procedure's kitchen\n  bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; \"a large institutional daidokoro\" goes (the ranked fix sizes it to\n  the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,\n  read 2026-10-10), already inside the new band.\n- **What stands in the kitchen moves with it**: the kamado range, a well drawn inside the kitchen (0105's drawing page: inside\n  the kitchen on a hand plan), its door, the two tubs at its door (wave 106's rule, `tubs_off_their_doors`), the bath abutting it.\n  The ground the smaller kitchen frees is left as the court or service ground it opens onto. Each move audited.\n- **Occasions**: layout-revised: hayakawa-magistracy (the kitchen joined as an ell, the corridor gone); glyph-redrawn: kitchen on\n  ochiba-magistracy (Ubame's the same change).\n\n### Wave 114 (T03) - the residence's rooms\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms` (E3). The procedure says a real\n  residence of this footprint held ~18-25 tatami rooms; 0091 sizes the residence to the 49-tsubo district magistrate's house, and\n  the one house measured with its rooms, the thousand-koku Kuchiba house of 41-74 tsubo, held six. The fix follows the record:\n  the procedure says the labeled zones TOGETHER compress a house of about six rooms (0091 - the count is the whole house's), and\n  the claim cites it; the sheets label\n  zones, not rooms, so no sheet is redrawn. Searched 2026-10-10: Hayakawa's notes alone state the count (\"a real residence of\n  this footprint holds ~18-25 tatami rooms\"); that line says the house held about six (0091), as the procedure does.\n- **Occasions**: none (no drawn element changes).\n\n### T04 - 375's SC-003 over T01-T03 (key `sc003-375-first-three-tasks`)\n\nFrom `make feature-report F=374` at batch 1's close: red gates and their causes against the preflight's checks, pages re-checked\nwhile a check on them was outstanding, plan-review BLOCKs on a decision a decision preflight had ruled on. Recorded in\n`measurements.json` with its command.\n\n### T05 - 375's SC-004 over T01-T03 (key `sc004-375-dispatches-per-row`)\n\nThe dispatches per closed row of T01-T03 (four rows), from the same report, beside 372's ~10 (375's \"Why\", an estimate).\n\n## Performance bookends (constitution VI)\n\n| batch | waves | pair | gate | close |\n|---|---|---|---|---|\n",
- "reviewed": "2026-10-10",
- "declared": "spec-fidelity",
- "decisions": [
-  {
-   "id": "D1 batch 1 at three waves",
-   "summary": "Batch 1 is waves 112-114 plus the two measuring tasks, against FR-002's carried 'a batch of 4-5 waves'.",
-   "class": "within",
-   "why": "A cadence departure, not a narrowing of any row: 4-5 serves batching the gate and never stacking a batch unpushed, both kept; 372's reviewed batches ran 1-3 waves under the same clause. Unlabeled in the plan; recorded here as seen."
-  },
-  {
-   "id": "D2 370's claims findings joined to the work list",
-   "summary": "Summary adds the findings left on the code feature 370 split to the work list.",
-   "class": "within",
-   "why": "Widens FR-001's enumerated list, but serves 328's 'fix all of it' and is already required by SC-003 (0 in-scope findings at the end)."
-  },
-  {
-   "id": "D3 order taken",
-   "summary": "The first open rows after the two Held E2 rows: engawa, kitchen, kitchen corridor, residence rooms.",
-   "class": "within",
-   "why": "Ranking rows 676-679 are the next open in-scope rows after 471 and 489 (Held); measured from ranking.json."
-  },
-  {
-   "id": "D4 veranda_depths check first",
-   "summary": "pack_audit check: every engawa strip's short side 3-6 ft (9-18 px).",
-   "class": "within",
-   "why": "Enforces the ranked fix. Round 1's re-measurement read the working tree after wave 112's edits; at the plan's own commit (a03b99bc3) all three sheets draw 8 px engawa strips (Hayakawa 288x8, 242x8; Ochiba 270x8; Ubame 270x8, 306x8), so 'red on all three' stands."
-  },
-  {
-   "id": "D5 faces knob rolled per sheet",
-   "summary": "crc32 roll per map between 'garden face alone' and 'two or three faces'; Hayakawa two or three, Ochiba and Ubame garden face alone; rolls recorded in notes.",
-   "class": "within",
-   "why": "The ranked fix and 0102's drawing page: a knob between two attested forms, each plan takes one."
-  },
-  {
-   "id": "D6 widths",
-   "summary": "Garden face 12 px (4 ft), Hayakawa's turned faces 9 px (3 ft); the 9 px board veranda to the privy stays.",
-   "class": "within",
-   "why": "Calibrated liberty inside 0102's 3-6 ft; garden face wider is 0102's own labeled GUESS."
-  },
-  {
-   "id": "D7 Hayakawa's form on the east block",
-   "summary": "East block's veranda turned round its SE corner up the reception's east end (north board veranda counted as a third face); west block garden face alone.",
-   "class": "within",
-   "why": "0102: 'some plans carry it round one or two further faces'; two faces satisfy the form without the north walkway; nothing asks every hall to carry it."
-  },
-  {
-   "id": "D8 the generated draft unrolled",
-   "summary": "compound.py keeps its 4 ft garden-face veranda; it is seedless and cannot roll the knob.",
-   "class": "within",
-   "why": "The ranked row's files are the procedure and three sheets; 0102's drawing page already records the draft taking the first form, so the draft carries no finding."
-  },
-  {
-   "id": "D9 glyph-check keying fixed in wave 112",
-   "summary": "Verdict keyed by element and map, test red on the old keying.",
-   "class": "within",
-   "why": "FR-007, no later than the first batch checking one element on two sheets."
-  },
-  {
-   "id": "D10 kitchen 24 x 18 ft on all three sheets",
-   "summary": "Kitchens 72 x 54 px (from 120 x 100 px, re-measured on all three), shape GUESS, ceiling from 0091.",
-   "class": "within",
-   "why": "The ranked fix verbatim (~12 tsubo, e.g. ~24 x 18 ft)."
-  },
-  {
-   "id": "D11 kitchen band narrowed",
-   "summary": "types.json kitchen band w 18-26 x h 14-20 ft; the draft's 20 x 18 inside it.",
-   "class": "within",
-   "why": "The ranked fix names the kitchen band; enforcement of it."
-  },
-  {
-   "id": "D12 ell, no corridor; daidokoro wording removed",
-   "summary": "Kitchen abuts the house as an ell on every sheet; Hayakawa's covered way removed; 'a large institutional daidokoro' goes from the procedure.",
-   "class": "within",
-   "why": "The corridor row's ranked fix; the wording removal follows the kitchen row's sizing to the measured house."
-  },
-  {
-   "id": "D13 contents move, freed ground left open",
-   "summary": "Kamado, well, door, door tubs and bath move with the kitchen; the freed ground stays court or service ground.",
-   "class": "within",
-   "why": "Consequences of the ranked fix, each audited."
-  },
-  {
-   "id": "D14 residence rooms: procedure and notes only",
-   "summary": "Procedure and Hayakawa's notes say about six rooms (0091), zones not rooms; no sheet redrawn.",
-   "class": "within",
-   "why": "The ranked fix lets the procedure and the sheets' counts follow the record; grep confirms Hayakawa's notes are the only sheet stating 18-25. Round 1's wording hazard fixed in 7a5fdf260: the zones TOGETHER compress a house of about six rooms, the count the whole house's."
-  },
-  {
-   "id": "D15 pair none owed",
-   "summary": "No timing pair for batch 1 while its engine code stays out of the hamlet's stages; taken if a wave touches them.",
-   "class": "within",
-   "why": "FR-002 provides for it as a reviewed plan decision; measured: nothing under hamletgen or settlement reads buildings/types.json."
-  },
-  {
-   "id": "D16 occasions elided for Ubame",
-   "summary": "Ubame's engawa and kitchen ride on Ochiba's glyph check ('the same glyph/change').",
-   "class": "within",
-   "why": "Review process under feature 294's table, not the GM's request; as 372's reviewed batches did. With D4 corrected, Ochiba's strip IS redrawn (8 -> 12 px), so its engawa occasion is owed as the plan declares."
-  },
-  {
-   "id": "D17 T04 and T05 as named measuring tasks",
-   "summary": "375's SC-003 and SC-004 measured over T01-T03 by T04 and T05.",
-   "class": "within",
-   "why": "FR-006 verbatim: named tasks not among the three measured."
-  },
-  {
-   "id": "D18 TOUCHES parser gap recorded already fixed",
-   "summary": "The claims-triage parser gap is recorded under SC-006 as already fixed by 375's D5, not fixed in a wave.",
-   "class": "within",
-   "why": "FR-007 and SC-006 allow 'recorded as already fixed with the evidence'; verified: claims_triage.py's _TOUCHES regex is anchored at line start and tests/tooling/test_claims_scoping.py::test_the_triage_reads_only_lines_that_open_with_touches pins a mid-line mention ignored."
-  },
-  {
-   "id": "D19 modal-bundle crop fixed before its first use",
-   "summary": "The Mode A modal-depiction crop is fixed with its test before the first modal-depiction check on a Mode A sheet a wave owes; batch 1 owes none.",
-   "class": "within",
-   "why": "FR-007's own deadline, 'no later than the first wave whose work it would affect'."
-  }
- ],
- "verdict": "CLEAR",
+ "plan_sha256": "4e9d5cf158d202633aec193e0cc832432fef5151f6b572911d010d0ad775dd3f",
  "tasks": {
   "T02": {
    "section_sha256": "71b9d9b596827875cbc8742f80ba899a1b0314713f985442d7921e0152e3a510",
@@ -272,5 +152,179 @@
    ],
    "verdict": "CLEAR"
   }
- }
+ },
+ "plan_text": "# Implementation Plan: Match the research - continued (feature 374)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Model**: `specs/372-match-the-research-remaining/plan.md` (its cycle, its batch\nclose and its bookends, themselves 328's) - this plan records only what differs and each wave's decisions.\n\n## Summary\n\nThe work list is 328's ranking's open in-scope rows at 372's close (198: 153 E3, 43 E4, 2 E2 held - counted from `ranking.json` 2026-10-10, rows with no wave in scope), in ranking order, with the\nitems the spec's \"What it carries\" lists. Waves are numbered on from 372's (the first is wave 112), so 328's `audit/waves.json`\nstays the one column; this feature's measurements are its own `measurements.json`, its decisions its own spec's table. Also\ncarried, from feature 370's landing (its spec, 2026-10-10): the claims findings on the code 370 split, left in `make\nclaims-report` for this feature under the claims gate's escape - rows of the work list like any other.\n\nTwo of the spec's carried tooling gaps (FR-007) are placed here, not in a wave: the claims-triage reply parser counting\n\"TOUCHES\" anywhere is already fixed by 375's D5 (`scripts/record/claims_triage.py` reads only lines opening with `TOUCHES`,\nits test pinning a mid-line mention ignored) - recorded so under SC-006 at batch 1's close; and `make modal-bundle\nFOR=modal-depiction`'s crop on a Mode A sheet is fixed, with its test, before the first modal-depiction check on a Mode A\nsheet that a wave owes (batch 1 edits no drawing page and owes none, as planned).\n\n## Constitution Check\n\nAs 372's (XII research, XIII no known regressions, XIV fix where found, XVI the literal thing). New here: 375's process (decide\nfirst, the freeze, the tripwires, the preflight) is in its first real use, and a guard that refuses correct work is fixed with\nits test (spec FR-005).\n\n## The cycle (372's, under 375)\n\n`make task-start F=374 T=<id>` -> the task's section below carries its verdict (this plan's review, or `make decide`) -> the check\nfirst where a rule is drawn (red on the unfixed sheet) -> edit -> `make test-file` -> each Mode A sheet's `make pack-audit` before\nand after -> `make cohort N=48` only when the hamlet's stage code changes -> `impl-drift` on the owed claims (`make claims-owed`,\nthe triage for the rest) -> the record checks a page edit owes (`make record-owed`) -> records -> `make quick` -> tick -> commit. A\nbatch closes with `make done`, its occasions, the timing pair or its recorded \"none owed\", `escalation-check`, and LANDS.\n\n## Batch 1 (T01-T05)\n\nThree waves, the first three rows the ranking leaves open after its two held E2 rows (the door band and `fixture_quota`, held for\nthe GM), with the kitchen's two rows taken as one wave because both redraw the same building; then the two measuring tasks 375\ncarried here (spec FR-006), which are not among the three measured.\n\n**Pair (FR-002)**: none owed if the batch's engine code stays out of what the timing pair rolls (the hamlet's stages) - this\nbatch's engine code is `pack_audit` (a review tool) and `buildings/types.json`'s kitchen band, read by the Mode A draft and the\npack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's stages, the pair is owed and taken.\n\n### Wave 112 (T01) - the veranda's width and faces\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#engawa` (E3). 0102's drawing page: a veranda 3-6 ft wide (half a\n  ken to one ken, Katsura's widths), free to change from face to face, the garden face at the wider end a GUESS; which faces\n  carry it a KNOB between two attested forms - the garden face alone, or a continuous veranda along two or three faces - never\n  all four. The procedure says \"~8 px\" (2.7 ft) along the south face of each block, and every sheet draws 8 px on the garden face (each\n  sheet's `data-kind=\"engawa\"` rects read 2026-10-10, grep of the three SVGs).\n- **Check first**: a `pack_audit` check, `veranda_depths`: every `data-kind=\"engawa\"` strip's short side is 3-6 ft (9-18 px),\n  reading the strip's rect (a `data-kind=\"engawa\"` group's rect too). Red on all three magistracy sheets now; a red fixture\n  beside the others. Its limits cite 0102's drawing page, ACCURATE (Katsura's measured widths).\n- **The knob on the hand sheets**: each sheet rolls its faces as its other knobs are rolled, `random.Random(zlib.crc32(b\"<map>:\n  residence veranda faces\")).choice([\"garden face alone\", \"two or three faces\"])` - **Hayakawa** two or three faces, **Ochiba**\n  and **Ubame** the garden face alone (computed 2026-10-10). Each sheet's notes record the roll and the form drawn, as the\n  shrine-arch knob is recorded.\n- **Widths** (calibrated liberty within 3-6 ft, the garden face at the wider end - 0102's GUESS): every garden-face strip 12 px\n  (4 ft); Hayakawa's turned faces 9 px (3 ft), as Katsura's veranda narrows where it turns the corner. Hayakawa's board veranda to\n  the guests' privy (already 9 px) stays. What a widened strip runs into (a door, a stone, a tub, the garden) moves with it, each\n  move audited.\n- **Hayakawa's two or three faces**: the east block's veranda runs on round its south-east corner up the reception's east end\n  (the formal end, facing the garden's east side), a third face being its north board veranda already drawn; the west block keeps\n  its garden face alone (a hall of its own; the knob is the house's, and the house shows it on its formal hall).\n- **The procedure**: the bullet's veranda sentence says 3-6 ft (9-18 px), the faces a rolled knob between the two forms, never all\n  four; the claim gets the knob and the widths, each labeled (the forms ACCURATE, the garden face wider a GUESS).\n- **The generated draft** (`compound.py`, seedless) keeps its 4 ft garden-face veranda, the form 0102's drawing page records it\n  taking; it cannot roll a knob, and that is recorded there.\n- **Tooling gap fixed here** (spec FR-007, carried from 372): a glyph-check verdict is keyed by element alone, so this batch's\n  second sheet would overwrite the first's; the verdict is keyed by element and map, with a test red on the old keying.\n- **Occasions**: glyph-redrawn: engawa on hayakawa-magistracy (the new turned form); glyph-redrawn: engawa on ochiba-magistracy\n  (the garden-face form; Ubame's the same glyph).\n\n### Wave 113 (T02) - the kitchen at 0091's size, joined as an ell\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#kitchen` (E3) and `#kitchen corridor tagged residence corridor`\n  (E3, after the first; the same building). 0091: the one kitchen measured, the Kuchiba house's east wing, is about 12 tsubo\n  (~440 sq ft, 5.9 x 6.9 m) by the prefecture's measure, about a sixth of the house; a middle-rank house was one block, its kitchen\n  projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens (each kitchen's rect read off the three SVGs, 2026-10-10), and\n  Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.\n- **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), the size of 0091's measured wing taken as the\n  kitchen's - a GUESS, as 0091's drawing page holds a kitchen's size (impl-drift, wave 113: the plan first called it an ACCURATE ceiling), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in\n  `buildings/types.json` narrowed so the old size fails it: w 18-24 by h 14-18 ft (either orientation; at most 432 sq ft, under the measured ~440 - the T02 preflight's aside). The procedure's kitchen\n  bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; \"a large institutional daidokoro\" goes (the ranked fix sizes it to\n  the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,\n  read 2026-10-10), already inside the new band.\n- **What stands in the kitchen moves with it**: the kamado range, a well drawn inside the kitchen (0105's drawing page: inside\n  the kitchen on a hand plan), its door, the two tubs at its door (wave 106's rule, `tubs_off_their_doors`), the bath abutting it.\n  The ground the smaller kitchen frees is left as the court or service ground it opens onto. Each move audited.\n- **Amendment 1 (2026-10-10, found in the work)**: (a) Ubame joins its kitchen by a covered corridor too (an L across its service\n  alley, tagged a residence corridor), so its kitchen becomes an ell as Hayakawa's does: it projects south from the west block under\n  the shuttered wing, its door on its west face toward the kitchen postern, the bath on its south face; the west block's veranda\n  starts at the kitchen's east face. Hayakawa's ell projects south from its west block's family end, the bath on its west face, the\n  door on its south face; Ochiba's is the ell it was, shrunk into the house's corner. (b) The generated draft\n  (`compound_parts._point_features`) also joins its kitchen by a covered corridor (`_corridor`, `CORRIDOR_W_FT`) across the 7 ft\n  fire-gap the placer leaves: the procedure now drops that form, so the draft draws the ell - a `BuildingSpec.joins` names the\n  building an ell projects from, the placer abuts the two with no fire-gap (`_place_one`), and the corridor code goes. Its\n  occasion: layout-revised: county-magistracy-example. (c) Knock-ons in the tooling, each fixed where found: `pack_audit` read a\n  kamado tagged `hearth` as a door glyph adrift (`floating_doors`) once a small kitchen put it within a door's reach of a wall -\n  a rect inside a `hearth` element is no door (a test); the round-trip sheet's program kitchen 18 x 24 ft (its court face then\n  seats the bath; at 24 x 18 the bath found no clear run); the frozen red fixtures' kitchens brought to 72 x 54 px against their\n  houses, their contents and baths moved with them, so each fires only its own check (the two whose check counts tubs at the old\n  kitchen keep it).\n- **Amendment 3 (2026-10-10, impl-drift)**: the kitchen claim relabeled GUESS on 0091's drawing page (above), and the\n  corridor claim renamed `#kitchen abuts the house, no corridor` - its old name described the corridor the wave removed.\n- **Amendment 4 (2026-10-10, impl-drift round 2)**: the kitchen's size is taken from the measured wing as a size, whatever the\n  house's size, not as its sixth share - recorded so on 0091's drawing page as a GUESS (the ranked fix's ~12 tsubo kept; sizing\n  every kitchen to a sixth of its house was impl-drift's other way out, and would size the hand sheets' larger houses'\n  kitchens past the measured wing); the claim names that page. The residence-rooms claim (T03) renamed `#residence of about\n  six rooms`. The residence-corridor pop-up's guess bullet gives the drawn width (about 11 ft, Hayakawa's and Ubame's) and its\n  `Covers:` drops \"covered\" (modal-form round 1).\n- **Amendment 2 (2026-10-10, the draft as built)**: with the ell abutting the house's west end, the house's west face keeps 6 ft\n  free below the kitchen, short of a door's 8 ft approach, so the draft's inner entrance opens on the house's rear (north)\n  face at the kitchen end, onto the rear alley; 0107's drawing page said \"on the residence's face toward the kitchen\" and now\n  says \"on the residence's back, at the end the kitchen stands against\" (its record checks owed: the pop-ups naming the\n  page triaged, quote-check on the note in that block, record-format). The house stands 7 ft further west with the gap gone,\n  so the draft's garden zone starts 7 ft west to stay before the whole south face; the family privy at the house's rear west\n  corner stands a foot in from it, its half-foot margin off the kitchen. Hayakawa's kitchen door stands on its south face,\n  its two tubs either side.\n- **Occasions**: layout-revised: hayakawa-magistracy and ubame-magistracy (the kitchen joined as an ell, the corridor gone);\n  layout-revised: county-magistracy-example (the draft's ell); glyph-redrawn: kitchen on ochiba-magistracy.\n\n### Wave 114 (T03) - the residence's rooms\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms` (E3). The procedure says a real\n  residence of this footprint held ~18-25 tatami rooms; 0091 sizes the residence to the 49-tsubo district magistrate's house, and\n  the one house measured with its rooms, the thousand-koku Kuchiba house of 41-74 tsubo, held six. The fix follows the record:\n  the procedure says the labeled zones TOGETHER compress a house of about six rooms (0091 - the count is the whole house's), and\n  the claim cites it; the sheets label\n  zones, not rooms, so no sheet is redrawn. Searched 2026-10-10: Hayakawa's notes alone state the count (\"a real residence of\n  this footprint holds ~18-25 tatami rooms\"); that line says the house held about six (0091), as the procedure does.\n- **Occasions**: none (no drawn element changes).\n\n### T04 - 375's SC-003 over T01-T03 (key `sc003-375-first-three-tasks`)\n\nFrom `make feature-report F=374` at batch 1's close: red gates and their causes against the preflight's checks, pages re-checked\nwhile a check on them was outstanding, plan-review BLOCKs on a decision a decision preflight had ruled on. Recorded in\n`measurements.json` with its command.\n\n### T05 - 375's SC-004 over T01-T03 (key `sc004-375-dispatches-per-row`)\n\nThe dispatches per closed row of T01-T03 (four rows), from the same report, beside 372's ~10 (375's \"Why\", an estimate).\n\n## Landing by batch (375's D18)\n\n374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:\n`tasks.md` holds the current batch's tasks and one standing task, T99, for the batches still to come. A batch whose\ndecisions need no new ruling adds its tasks under its own plan section, decided per task (`make decide`).\n\n**Lands open**: T99\n\n## Performance bookends (constitution VI)\n\n| batch | waves | pair | gate | close |\n|---|---|---|---|---|\n| 1 | 112-114 | none owed: the batch's engine code is the Mode A draft (`compound.py`, `compound_parts.py`, `compound_model.py`: the kitchen ell, the corridor gone), `pack_audit` (`veranda_depths`, the hearth not a door) and `buildings/types.json`'s kitchen band - none in what the timing pair rolls (the hamlet's stages), as 372's batches 3-5 recorded | green 2026-10-10 at engine key 026828713522 | the review occasions running (three building-reviews, two glyph-checks); escalation-check 3 keep |\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1 batch 1 at three waves",
+   "summary": "Batch 1 is waves 112-114 plus the two measuring tasks, against FR-002's carried 'a batch of 4-5 waves'.",
+   "class": "within",
+   "why": "A cadence departure, not a narrowing of any row: 4-5 serves batching the gate and never stacking a batch unpushed, both kept; 372's reviewed batches ran 1-3 waves under the same clause. Unlabeled in the plan; recorded here as seen."
+  },
+  {
+   "id": "D2 370's claims findings joined to the work list",
+   "summary": "Summary adds the findings left on the code feature 370 split to the work list.",
+   "class": "within",
+   "why": "Widens FR-001's enumerated list, but serves 328's 'fix all of it' and is already required by SC-003 (0 in-scope findings at the end)."
+  },
+  {
+   "id": "D3 order taken",
+   "summary": "The first open rows after the two Held E2 rows: engawa, kitchen, kitchen corridor, residence rooms.",
+   "class": "within",
+   "why": "Ranking rows 676-679 are the next open in-scope rows after 471 and 489 (Held); measured from ranking.json."
+  },
+  {
+   "id": "D4 veranda_depths check first",
+   "summary": "pack_audit check: every engawa strip's short side 3-6 ft (9-18 px).",
+   "class": "within",
+   "why": "Enforces the ranked fix. Round 1's re-measurement read the working tree after wave 112's edits; at the plan's own commit (a03b99bc3) all three sheets draw 8 px engawa strips (Hayakawa 288x8, 242x8; Ochiba 270x8; Ubame 270x8, 306x8), so 'red on all three' stands."
+  },
+  {
+   "id": "D5 faces knob rolled per sheet",
+   "summary": "crc32 roll per map between 'garden face alone' and 'two or three faces'; Hayakawa two or three, Ochiba and Ubame garden face alone; rolls recorded in notes.",
+   "class": "within",
+   "why": "The ranked fix and 0102's drawing page: a knob between two attested forms, each plan takes one."
+  },
+  {
+   "id": "D6 widths",
+   "summary": "Garden face 12 px (4 ft), Hayakawa's turned faces 9 px (3 ft); the 9 px board veranda to the privy stays.",
+   "class": "within",
+   "why": "Calibrated liberty inside 0102's 3-6 ft; garden face wider is 0102's own labeled GUESS."
+  },
+  {
+   "id": "D7 Hayakawa's form on the east block",
+   "summary": "East block's veranda turned round its SE corner up the reception's east end (north board veranda counted as a third face); west block garden face alone.",
+   "class": "within",
+   "why": "0102: 'some plans carry it round one or two further faces'; two faces satisfy the form without the north walkway; nothing asks every hall to carry it."
+  },
+  {
+   "id": "D8 the generated draft unrolled",
+   "summary": "compound.py keeps its 4 ft garden-face veranda; it is seedless and cannot roll the knob.",
+   "class": "within",
+   "why": "The ranked row's files are the procedure and three sheets; 0102's drawing page already records the draft taking the first form, so the draft carries no finding."
+  },
+  {
+   "id": "D9 glyph-check keying fixed in wave 112",
+   "summary": "Verdict keyed by element and map, test red on the old keying.",
+   "class": "within",
+   "why": "FR-007, no later than the first batch checking one element on two sheets."
+  },
+  {
+   "id": "D10 kitchen 24 x 18 ft on all three sheets",
+   "summary": "Kitchens 72 x 54 px (from 120 x 100 px), the measured wing's size taken as the kitchen's, labeled GUESS (0091's drawing page; was a ceiling ACCURATE).",
+   "class": "within",
+   "why": "The ranked fix verbatim (~12 tsubo, e.g. ~24 x 18 ft); the relabel makes the label match 0091's page, relaxing nothing."
+  },
+  {
+   "id": "D11 kitchen band narrowed",
+   "summary": "types.json kitchen band w 18-24 x h 14-18 ft, either orientation, at most 432 sq ft; the draft's 20 x 18 inside it.",
+   "class": "within",
+   "why": "The ranked fix names the kitchen band; enforcement of it, now under the measured ~440 sq ft."
+  },
+  {
+   "id": "D12 ell, no corridor; daidokoro wording removed",
+   "summary": "Kitchen abuts the house as an ell on every sheet; Hayakawa's covered way removed; 'a large institutional daidokoro' goes from the procedure.",
+   "class": "within",
+   "why": "The corridor row's ranked fix; the wording removal follows the kitchen row's sizing to the measured house."
+  },
+  {
+   "id": "D13 contents move, freed ground left open",
+   "summary": "Kamado, well, door, door tubs and bath move with the kitchen; the freed ground stays court or service ground.",
+   "class": "within",
+   "why": "Consequences of the ranked fix, each audited."
+  },
+  {
+   "id": "D14 residence rooms: procedure and notes only",
+   "summary": "Procedure and Hayakawa's notes say about six rooms (0091), zones not rooms; no sheet redrawn.",
+   "class": "within",
+   "why": "The ranked fix lets the procedure and the sheets' counts follow the record; grep confirms Hayakawa's notes are the only sheet stating 18-25. Round 1's wording hazard fixed in 7a5fdf260: the zones TOGETHER compress a house of about six rooms, the count the whole house's."
+  },
+  {
+   "id": "D15 pair none owed",
+   "summary": "No timing pair for batch 1: its engine code is the Mode A draft (compound.py, compound_parts.py, compound_model.py), pack_audit and the kitchen band.",
+   "class": "within",
+   "why": "FR-002 provides for it as a reviewed plan decision. Measured this round: no module under hamletgen/ or settlement/ imports compound, compound_parts, compound_model or buildings.types (grep: only word matches of 'compound'; buildings.types is read by pack_audit)."
+  },
+  {
+   "id": "D16 occasions elided for Ubame",
+   "summary": "Ubame's engawa and kitchen ride on Ochiba's glyph check ('the same glyph/change').",
+   "class": "within",
+   "why": "Review process under feature 294's table, not the GM's request; as 372's reviewed batches did. With D4 corrected, Ochiba's strip IS redrawn (8 -> 12 px), so its engawa occasion is owed as the plan declares."
+  },
+  {
+   "id": "D17 T04 and T05 as named measuring tasks",
+   "summary": "375's SC-003 and SC-004 measured over T01-T03 by T04 and T05.",
+   "class": "within",
+   "why": "FR-006 verbatim: named tasks not among the three measured."
+  },
+  {
+   "id": "D18 TOUCHES parser gap recorded already fixed",
+   "summary": "The claims-triage parser gap is recorded under SC-006 as already fixed by 375's D5, not fixed in a wave.",
+   "class": "within",
+   "why": "FR-007 and SC-006 allow 'recorded as already fixed with the evidence'; verified: claims_triage.py's _TOUCHES regex is anchored at line start and tests/tooling/test_claims_scoping.py::test_the_triage_reads_only_lines_that_open_with_touches pins a mid-line mention ignored."
+  },
+  {
+   "id": "D19 modal-bundle crop fixed before its first use",
+   "summary": "The Mode A modal-depiction crop is fixed with its test before the first modal-depiction check on a Mode A sheet a wave owes; batch 1 owes none.",
+   "class": "within",
+   "why": "FR-007's own deadline, 'no later than the first wave whose work it would affect'."
+  },
+  {
+   "id": "D20 T02 amendment 1(a): Ubame's corridor removed too",
+   "summary": "Ubame's covered kitchen corridor removed, its kitchen an ell; per-sheet ell placements.",
+   "class": "within",
+   "why": "The ranked fix is the ell with no corridor; leaving Ubame's would be the exception. Ruled CLEAR in tasks.T02 (A1a-ubame)."
+  },
+  {
+   "id": "D21 T02 amendment 1(b): the draft's corridor removed",
+   "summary": "The generated draft drops its kitchen corridor; BuildingSpec.joins and the placer abut the ell with no fire-gap; corridor code removed; occasion layout-revised: county-magistracy-example.",
+   "class": "within",
+   "why": "The procedure the draft implements no longer has the corridor form; the draft following it is the fix carried through, not added scope."
+  },
+  {
+   "id": "D22 T02 amendment 1(c): tooling knock-ons",
+   "summary": "pack_audit's hearth-not-a-door fix with a test; round-trip sheet kitchen 18 x 24 ft; red fixtures' kitchens resized, two tub-count fixtures keep the old kitchen.",
+   "class": "within",
+   "why": "Defects found in the work and fixed there (constitution XIV); each fixture still fires only its own check, so no check is weakened."
+  },
+  {
+   "id": "D23 T02 amendment 2: the draft's inner entrance on the rear face",
+   "summary": "With the ell abutting, the draft's inner entrance opens on the house's rear face at the kitchen end; 0107's DRAWING page reworded to describe it; garden zone and privy shifted 7 ft with the house.",
+   "class": "within",
+   "why": "0107's changed sentence is the drawing page's description of the generated compound, not the research claim (the cited kotobank passage, the family's everyday door being the inner entrance, is untouched and still drawn); its record checks are owed and listed."
+  },
+  {
+   "id": "D24 T02 amendment 3: claim relabeled and renamed",
+   "summary": "Kitchen claim GUESS on 0091's drawing page; corridor claim renamed '#kitchen abuts the house, no corridor'.",
+   "class": "within",
+   "why": "Makes the claims say what was drawn and what the page holds (impl-drift)."
+  },
+  {
+   "id": "D25 T02 amendment 4: a fixed size, not a sixth share",
+   "summary": "The kitchen sized to the measured wing whatever the house's size; recorded on 0091's drawing page as a GUESS; residence-rooms claim renamed; residence-corridor pop-up wording.",
+   "class": "within",
+   "why": "Keeps the ranked fix's ~12 tsubo, the row's own number; the sixth-share alternative is not what the ranking asked. Ruled CLEAR in tasks.T02 round 4."
+  },
+  {
+   "id": "D26 batch 1 bookends row",
+   "summary": "Batch 1's row: pair none owed (engine code named), gate green at engine key 026828713522, close with occasions and escalation-check.",
+   "class": "within",
+   "why": "The record FR-002/SC-002 ask for a batch whose pair would time unchanged code; see D15's measurement."
+  },
+  {
+   "id": "D27 lands open by batch, T99 standing",
+   "summary": "374 lands batch by batch and stays open between them; tasks.md holds the current batch plus standing T99 marked [lands-open], named on the plan's Lands open line (375's D18).",
+   "class": "within",
+   "why": "Implements FR-002's carried 'LANDS when it closes ... the open-task refusal clears at each close' under 375's closing check, which would otherwise read the feature closed once a batch's boxes are ticked; it holds back no row and keeps every remaining row on the work list (T99's text)."
+  },
+  {
+   "id": "D28 later batches decided per task",
+   "summary": "A batch whose decisions need no new ruling adds its tasks under its own plan section, decided per task with make decide.",
+   "class": "within",
+   "why": "375's decide-first route (a plan section naming the task, reviewed by the decision preflight); every decision is still independently ruled before a tick, so no review is waived."
+  }
+ ],
+ "verdict": "CLEAR"
 }
