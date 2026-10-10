@@ -113,17 +113,17 @@ each one task).
 
 ## Success criteria
 
-- **SC-001** Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
+- **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
   units owed fall by at least two thirds, impl-drift claims owed by at least four fifths, against the counts above.
-- **SC-002** Each FR has a test that fails with the old behavior and passes with the new, run by `make hooks-test` or the gate.
-- **SC-003** (carried to 374) In feature 374's first three tasks: no red gate from a cause FR-004's preflight checks, no page
+- **SC-002** (spec-wide: FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, FR-013, FR-014) Each FR has a test that fails with the old behavior and passes with the new, run by `make hooks-test` or the gate.
+- **SC-003** (FR-003, FR-004; carried to 374) In feature 374's first three tasks: no red gate from a cause FR-004's preflight checks, no page
   re-checked while a check on it was outstanding, and no plan-review BLOCK on a decision the decision preflight had ruled on.
   `Carried: SC-003 -> 374 sc003-375-first-three-tasks`.
-- **SC-004** (carried to 374) The dispatches per closed row of feature 374's first three tasks, recorded beside 372's (~10 per
+- **SC-004** (FR-001, FR-002, FR-003; carried to 374) The dispatches per closed row of feature 374's first three tasks, recorded beside 372's (~10 per
   row). `Carried: SC-004 -> 374 sc004-375-dispatches-per-row`.
-- **SC-005** `make feature-report` runs in under ten seconds on feature 372's record and on a one-task feature, and reproduces
+- **SC-005** (FR-008, FR-009) `make feature-report` runs in under ten seconds on feature 372's record and on a one-task feature, and reproduces
   this spec's measured table within its stated rounding.
-- **SC-006** Replaying 372's waves 106 and 108: the tripwires fire on 0105's and 0100's third rounds and on the bath bullet's
+- **SC-006** (FR-010, FR-011, FR-012) Replaying 372's waves 106 and 108: the tripwires fire on 0105's and 0100's third rounds and on the bath bullet's
   A -> B -> A, and no round past the cap needed a GM waiver.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
@@ -158,3 +158,5 @@ until 375 has landed.
 - Round 2 (spec-fidelity, verify, 2026-10-10): FAITHFUL - all seven resolved; FR-014 faithful as the enforcement of the GM's
   rule. Asides taken: request.md's framing count; "the unit" of FR-011 is the checked thing (a page, pop-up, sheet, spec or
   plan), not the task; 374's measuring tasks do not count among its first three.
+- Lint-only edit after round 2 (2026-10-10, no requirement changed): each success criterion names the FRs it measures, as
+  `spec-lint` asks; SC-002 names all fourteen.

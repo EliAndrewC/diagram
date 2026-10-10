@@ -208,8 +208,7 @@ def test_the_triage_reads_only_lines_that_open_with_touches(tmp_path: pathlib.Pa
     """FR-005(a): a prose mention or a mid-line TOUCHES names nothing; a line that opens with it (bare, or in backticks) does."""
     skill, index, _store = _checked(tmp_path)
     units = {SHARE: {"research": "r", "pages": {}}, FAR: {"research": "r", "pages": {}}}
-    reply = (f"The other claims are cleared; nothing TOUCHES {FAR} - here.\n- TOUCHES {FAR} - a bulleted line\n"
-             f"`TOUCHES {SHARE} - in backticks`\n")
+    reply = f"The other claims are cleared; nothing TOUCHES {FAR} - here.\n- TOUCHES {FAR} - a bulleted line\n`TOUCHES {SHARE} - in backticks`\n"
     out, msgs = cx.record_triage(index, units, reply, "d")
     assert msgs == [f"touched: {SHARE} - in backticks"] and "triage" not in out[FAR]
     assert cx.kept_text(skill / QDIR, "no-such-snapshot") == ""

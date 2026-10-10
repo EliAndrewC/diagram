@@ -39,8 +39,7 @@ def _tool_use(t: str, tid: str, name: str, inp: dict, stop: str | None = None) -
 
 
 def _result(t: str, tid: str, resp: dict | None = None) -> dict:
-    return {"type": "user", "timestamp": t, "sessionId": "s", "toolUseResult": resp or {},
-            "message": {"content": [{"type": "tool_result", "tool_use_id": tid, "content": "ok"}]}}
+    return {"type": "user", "timestamp": t, "sessionId": "s", "toolUseResult": resp or {}, "message": {"content": [{"type": "tool_result", "tool_use_id": tid, "content": "ok"}]}}
 
 
 TRANSCRIPT = [
@@ -56,8 +55,7 @@ TRANSCRIPT = [
     {"type": "user", "timestamp": "2026-10-10T10:05:00.100Z", "sessionId": "s", "message": {"content": "<task-notification> <task-id>ag1</task-id>"}},
     _tool_use("2026-10-10T10:06:00.000Z", "t3", "Edit", {"file_path": "/c/specs/375-x/plan.md", "old_string": "A", "new_string": "B"}),
     _result("2026-10-10T10:06:01.000Z", "t3"),
-    {"type": "assistant", "isSidechain": True, "timestamp": "2026-10-10T10:06:02.000Z", "sessionId": "s",
-     "message": {"content": [{"type": "tool_use", "id": "side", "name": "Read", "input": {}}]}},
+    {"type": "assistant", "isSidechain": True, "timestamp": "2026-10-10T10:06:02.000Z", "sessionId": "s", "message": {"content": [{"type": "tool_use", "id": "side", "name": "Read", "input": {}}]}},
 ]
 
 
@@ -65,9 +63,16 @@ def test_a_transcript_becomes_the_hooks_events() -> None:
     evs = el.from_transcript(TRANSCRIPT)
     kinds = [(e["ev"], e.get("tool") or e.get("agent") or "") for e in evs]
     assert kinds == [
-        ("UserPromptSubmit", ""), ("PreToolUse", "Bash"), ("PostToolUse", "Bash"), ("PreToolUse", "Agent"),
-        ("PostToolUse", "Agent"), ("SubagentStart", "quote-check"), ("Stop", ""), ("SubagentStop", "quote-check"),
-        ("PreToolUse", "Edit"), ("PostToolUse", "Edit"),
+        ("UserPromptSubmit", ""),
+        ("PreToolUse", "Bash"),
+        ("PostToolUse", "Bash"),
+        ("PreToolUse", "Agent"),
+        ("PostToolUse", "Agent"),
+        ("SubagentStart", "quote-check"),
+        ("Stop", ""),
+        ("SubagentStop", "quote-check"),
+        ("PreToolUse", "Edit"),
+        ("PostToolUse", "Edit"),
     ]
     agent = next(e for e in evs if e["ev"] == "PostToolUse" and e["tool"] == "Agent")
     assert agent["aid"] == "ag1" and agent["cat"] == "record check"
@@ -98,8 +103,11 @@ def test_categories_and_make_targets() -> None:
 def test_a_worktree_logs_to_its_clones_git_dir(tmp_path: Path) -> None:
     clone = tmp_path / "clone"
     subprocess.run(["git", "init", "-q", str(clone)], check=True)
-    subprocess.run(["git", "-C", str(clone), "commit", "-q", "--allow-empty", "-m", "x"], check=True,
-                   env={"GIT_AUTHOR_NAME": "a", "GIT_AUTHOR_EMAIL": "a@b", "GIT_COMMITTER_NAME": "a", "GIT_COMMITTER_EMAIL": "a@b", "PATH": "/usr/bin:/bin"})
+    subprocess.run(
+        ["git", "-C", str(clone), "commit", "-q", "--allow-empty", "-m", "x"],
+        check=True,
+        env={"GIT_AUTHOR_NAME": "a", "GIT_AUTHOR_EMAIL": "a@b", "GIT_COMMITTER_NAME": "a", "GIT_COMMITTER_EMAIL": "a@b", "PATH": "/usr/bin:/bin"},
+    )
     wt = tmp_path / "wt"
     subprocess.run(["git", "-C", str(clone), "worktree", "add", "-q", "--detach", str(wt)], check=True)
     assert el.common_git_dir(wt) == (clone / ".git").resolve()
@@ -132,11 +140,16 @@ def test_the_time_is_split_by_what_the_session_was_doing() -> None:
     assert split["waiting: quote-check"] == 235
     assert split["writing the spec"] == 60  # the agent's return to an edit of the feature's own plan
     assert split["edit"] == 1
-    late = [{"t": "2026-10-10T10:00:00Z", "sid": "s", "ev": "Stop"}, {"t": "2026-10-10T12:00:00Z", "sid": "s", "ev": "UserPromptSubmit"},
-            {"t": "2026-10-10T12:00:01Z", "sid": "s", "ev": "Stop"}, {"t": "2026-10-10T12:00:30Z", "sid": "s", "ev": "UserPromptSubmit"},
-            {"t": "2026-10-10T12:00:40Z", "sid": "s", "ev": "Stop"}, {"t": "2026-10-10T12:00:50Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "x", "cat": "gate"},
-            {"t": "2026-10-10T12:01:50Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "y", "cat": "other tool"},
-            {"t": "2026-10-10T12:01:50Z", "sid": "s", "ev": "PostToolUse", "tool": "Bash", "id": "y"}]
+    late = [
+        {"t": "2026-10-10T10:00:00Z", "sid": "s", "ev": "Stop"},
+        {"t": "2026-10-10T12:00:00Z", "sid": "s", "ev": "UserPromptSubmit"},
+        {"t": "2026-10-10T12:00:01Z", "sid": "s", "ev": "Stop"},
+        {"t": "2026-10-10T12:00:30Z", "sid": "s", "ev": "UserPromptSubmit"},
+        {"t": "2026-10-10T12:00:40Z", "sid": "s", "ev": "Stop"},
+        {"t": "2026-10-10T12:00:50Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "x", "cat": "gate"},
+        {"t": "2026-10-10T12:01:50Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "y", "cat": "other tool"},
+        {"t": "2026-10-10T12:01:50Z", "sid": "s", "ev": "PostToolUse", "tool": "Bash", "id": "y"},
+    ]
     split = fr.split_time(late, "375-x")
     assert split["idle (over an hour)"] == 7200 and split["waiting: the GM"] == 29
     assert split["waiting: a background run"] == 10 and split["gate"] == 60
@@ -160,8 +173,15 @@ def test_rounds_reversals_and_subjects() -> None:
 
 
 def _git(repo: Path, *args: str) -> None:
-    env = {"GIT_AUTHOR_NAME": "a", "GIT_AUTHOR_EMAIL": "a@b", "GIT_COMMITTER_NAME": "a", "GIT_COMMITTER_EMAIL": "a@b",
-           "PATH": "/usr/bin:/bin", "GIT_AUTHOR_DATE": "2026-10-10T10:00:30Z", "GIT_COMMITTER_DATE": "2026-10-10T10:00:30Z"}
+    env = {
+        "GIT_AUTHOR_NAME": "a",
+        "GIT_AUTHOR_EMAIL": "a@b",
+        "GIT_COMMITTER_NAME": "a",
+        "GIT_COMMITTER_EMAIL": "a@b",
+        "PATH": "/usr/bin:/bin",
+        "GIT_AUTHOR_DATE": "2026-10-10T10:00:30Z",
+        "GIT_COMMITTER_DATE": "2026-10-10T10:00:30Z",
+    }
     subprocess.run(["git", "-C", str(repo), *args], check=True, env=env, capture_output=True)
 
 
@@ -193,7 +213,7 @@ def test_the_report_end_to_end(tmp_path: Path, capsys) -> None:  # noqa: ANN001
     assert "gates: green 1, red 1" in text and "plan reviews BLOCKED: 1" in text
     assert "check dispatches 1 over 4 changed lines: cascade ratio 0.25" in text  # the SVG is not the feature's own diff
     assert "tasks ticked: 1 of 2" in text and "spec rounds: FAITHFUL 1" in text
-    assert fr.main([ "375", "--root", str(repo), "--write", "--transcript", str(tmp_path / "t.jsonl")]) == 0
+    assert fr.main(["375", "--root", str(repo), "--write", "--transcript", str(tmp_path / "t.jsonl")]) == 0
     assert (d / "report.md").is_file() and "written to specs/375-x/report.md" in capsys.readouterr().out
     empty = fr.report(repo, "375", since="2030-01-01T00:00:00Z", clones=tmp_path / "no-clones")
     assert "no event log and no transcript" in empty
@@ -213,9 +233,16 @@ def test_a_returned_agent_s_verdict_is_read_from_its_reply() -> None:
     assert el.verdict_of("No claims are touched.") == ""
     stop = el.line({"hook_event_name": "SubagentStop", "agent_type": "spec-fidelity", "agent_id": "a", "last_assistant_message": "**FAITHFUL**"})
     assert stop["verdict"] == "FAITHFUL"
-    rows = [_tool_use("2026-10-10T10:00:00Z", "t1", "Agent", {"subagent_type": "spec-fidelity", "prompt": "p"}),
-            _result("2026-10-10T10:00:01Z", "t1", {"status": "async_launched", "agentId": "ag1"}),
-            {"type": "queue-operation", "operation": "enqueue", "timestamp": "2026-10-10T10:03:00Z", "sessionId": "s",
-             "content": "<task-notification> <task-id>ag1</task-id> <result>**Round 3 verdict: CLEAR.** I recorded it</result>"}]
+    rows = [
+        _tool_use("2026-10-10T10:00:00Z", "t1", "Agent", {"subagent_type": "spec-fidelity", "prompt": "p"}),
+        _result("2026-10-10T10:00:01Z", "t1", {"status": "async_launched", "agentId": "ag1"}),
+        {
+            "type": "queue-operation",
+            "operation": "enqueue",
+            "timestamp": "2026-10-10T10:03:00Z",
+            "sessionId": "s",
+            "content": "<task-notification> <task-id>ag1</task-id> <result>**Round 3 verdict: CLEAR.** I recorded it</result>",
+        },
+    ]
     assert el.from_transcript(rows)[-1]["verdict"] == "CLEAR"
     assert fr.verdicts(el.from_transcript(rows)) == {"spec-fidelity": {"CLEAR": 1}}

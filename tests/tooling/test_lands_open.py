@@ -40,8 +40,7 @@ def _feature(root: pathlib.Path, name: str, tasks: str, plan: str | None = PLAN,
     if plan is not None:
         (d / "plan.md").write_text(plan)
         sha = hashlib.sha256(plan.encode()).hexdigest()
-        (d / "plan-review.json").write_text(json.dumps({"plan_sha256": sha, "plan_text": plan, "decisions": [],
-                                                         "verdict": "CLEAR" if clear else "BLOCKED"}))
+        (d / "plan-review.json").write_text(json.dumps({"plan_sha256": sha, "plan_text": plan, "decisions": [], "verdict": "CLEAR" if clear else "BLOCKED"}))
     return d
 
 

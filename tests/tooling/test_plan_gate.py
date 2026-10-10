@@ -198,8 +198,7 @@ def test_the_push_judges_every_touched_feature_with_a_tick_at_HEAD(tmp_path: pat
     assert "specs/001-a" in {f for f, _, _ in gate.push_owed(root, f"{base}..HEAD")}
 
 
-PLAN_375 = (b"# plan\n\n**D1 - the gatehouse.** Each sheet draws its gatehoue at 12 ft, and every tub stands by a door.\n"
-            b"**D2 - the bath.** The bath is 10 x 8 ft.\n")
+PLAN_375 = b"# plan\n\n**D1 - the gatehouse.** Each sheet draws its gatehoue at 12 ft, and every tub stands by a door.\n**D2 - the bath.** The bath is 10 x 8 ft.\n"
 
 
 @pytest.mark.parametrize(
