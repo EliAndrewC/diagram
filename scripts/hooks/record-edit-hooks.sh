@@ -24,9 +24,20 @@ RE_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$RE_HERE/lib/guardlog.sh"
 
+freeze() { # GUARD_EDIT_OK: feature 375 FR-003(b) - a page or pop-up is frozen while its checks run; once they return, only
+  # the edits they proposed go in (scripts/hooks/lib/hm_checks.py). It runs FIRST, for an Edit, a Write and a Bash `make apply-edits`.
+  local err
+  if ! err="$(printf '%s' "$INPUT" | python3 "$RE_HERE/lib/hm_checks.py" edit 2>&1)"; then
+    printf '%s\n' "$err" >&2
+    guard_log record-edit blocked "edit" frozen-while-checked "$err"
+    exit 2
+  fi
+}
+
 pretool() {
   local verdict rule
   INPUT="$(cat)"
+  freeze
   verdict="$(printf '%s' "$INPUT" | python3 "$RE_HERE/lib/hm_record.py" 2>/dev/null)" || exit 0
   case "$verdict" in
     *'"verdict": "rewrite"'*)
@@ -47,6 +58,7 @@ pretool() {
 
 case "$MODE" in
   pretool) pretool ;;
+  pretool-bash) INPUT="$(cat)"; freeze; exit 0 ;;  # GUARD_EDIT_OK: feature 375 - `make apply-edits` admitted only for the round's blocks
   --selftest) python3 "$RE_HERE/lib/hm_record.py" --selftest ;;
-  *) echo "usage: record-edit-hooks.sh pretool|--selftest" >&2; exit 64 ;;
+  *) echo "usage: record-edit-hooks.sh pretool|pretool-bash|--selftest" >&2; exit 64 ;;
 esac

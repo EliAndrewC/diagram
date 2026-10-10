@@ -47,6 +47,32 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T12 Batch 2 closes: `make done` green; landed
       research: rendering
       verify: DONE. DONE. make done green (384 s); landed by the push carrying this tick
-- [ ] T99 Batches 3-4 (plan D18) [lands-open]
+## Batch 3 - the guards and the arbiter
+
+- [ ] T13 Decide, then freeze - the check state (plan D4): `hm_checks.py` keeps every page or pop-up check in flight (dispatch, launch, return, answer); `record-edit-hooks.sh` refuses an Edit to a subject while a check on it runs and, once the round has returned, any edit but the round's own EDIT blocks (`make apply-edits` on a reply of the round admitted); `check-bundle-hooks.sh` refuses a check already in an open round while another runs; `make check-closed` for a silent one (FR-003 b, c)
+      research: rendering
+      verify: the hook suites drive each state; proved red with each refusal removed
+- [ ] T14 EDIT blocks for the three page checks that had none - intro-check, record-style, translation-check - so every proposal on a frozen subject is a block (plan D4)
+      research: rendering
+      verify: each contract's reply form carries the block; the agent-model tier test still green
+- [ ] T15 Decide first (plan D3, D19): `make task-start`, `make decide F= T=` (a plan review of the task's section), `make plan-verdict TASK=`; a check dispatch refused until the active task's decisions carry a CLEAR verdict (FR-003 a)
+      research: rendering
+      verify: suites red on a dispatch before the verdict, green after; a plan with no task sections uses the plan verdict
+- [ ] T16 Tripwires (plan D10): the record checks' round cap (two per subject per feature); an Edit putting back an earlier Edit's old text; a second red gate in a row; the cascade ratio past its measured threshold; a heavy run the quick tier covers - each writing `arbiter-owed` and refusing the next dispatch or gate until a ruling (FR-010)
+      research: rendering
+      verify: each wire fires in its suite on the recorded shape; the threshold from the replay (m:cascade-threshold)
+- [ ] T17 The round arbiter (plan D11): `.claude/agents/round-arbiter.md` (Opus, high, omitClaudeMd, its tier row); `make arbiter-bundle TRIGGER=`, `make arbiter-ruled`; one binding ruling per trigger in `specs/NNN/arbiter.jsonl`; the review checks' cap goes to the arbiter instead of `REVIEW_ROUNDS_OK` (FR-011)
+      research: rendering
+      verify: tests over the bundle, the ruling's three outcomes and a second dispatch refused
+- [ ] T18 The escalation filter owed only for open findings (plan D16): disarmed when the ledger's row for the review shows every finding disposed (FR-007)
+      research: rendering
+      verify: test-escalation-hooks.sh cases for a disposed and an open row
+- [ ] T19 SC-006 replay: 372's waves 106 and 108 through the tripwires - 0105's and 0100's third rounds and the bath bullet's A -> B -> A fire, and no round past the cap needs a GM waiver (SC-006)
+      research: rendering
+      verify: the replay's firings recorded in measurements.json
+- [ ] T20 Batch 3 closes: `make done` green; landed
+      research: rendering
+      verify: the gate's run-log line
+- [ ] T99 Batch 4 (plan D18) [lands-open]
       research: rendering
       verify: ticked by the last batch

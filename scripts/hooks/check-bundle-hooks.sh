@@ -38,8 +38,15 @@ CB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style translation-check intro-check impl-drift modal-form modal-research modal-depiction"
 
 pretool() {
-  local verdict kind detail reason
+  local verdict kind detail reason err
   INPUT="$(cat)"
+  # GUARD_EDIT_OK: feature 375 FR-003(c) and FR-010 - a check already in its subject's open round is not re-dispatched while
+  # another runs, and a record check's third round on a subject goes to the round arbiter (scripts/hooks/lib/hm_checks.py)
+  if ! err="$(printf '%s' "$INPUT" | python3 "$CB_HERE/lib/hm_checks.py" dispatch 2>&1)"; then
+    printf '%s\n' "$err" >&2
+    guard_log check-bundle blocked "dispatch" round-open-or-capped "$err"
+    exit 2
+  fi
   verdict="$(printf '%s' "$INPUT" | CHECKS="$CHECKS" python3 -c '
 import json, os, re, sys
 try:
