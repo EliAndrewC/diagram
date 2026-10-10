@@ -8,7 +8,8 @@ So `make done` begins here and stops here on a failure:
 
 1. THE DERIVED FILES regenerated - `make docs`, `make building-programs`, `make glossary` - and any that moved named, to commit;
 2. THE RECORD builds (`make record CHECK=1`) and its pointers resolve (`check-research-pointers.py`);
-3. THE QUICK TIER (`make quick`: lint, types, spec-lint on the delta, the file-size bar, house style, the unit tests);
+3. THE QUICK TIER (`make quick FROM_PREFLIGHT=1`: lint, types, spec-lint on the delta, the file-size bar, house style, the unit
+   tests - its TIME not judged here: a green but slow quick after a merge of main stopped a gate whose tests all passed);
 4. THE CHANGED ENGINE LINES covered - the quick tree run once more with coverage over just the engine files the delta changed,
    and every changed line it leaves unrun named. A line in a module OFF the hamlet path (no rolled map reaches it; the path
    is `tools/claims.scope`, the import graph of hamlet generation) stops the preflight: only a unit test can cover it, and
@@ -194,7 +195,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"preflight: {what} - the gate stops here (feature 375 FR-004)")
             return 1
     mark("record and pointers")
-    if not a.skip_quick and run(["make", "--no-print-directory", "quick"], root, quiet=False):
+    if not a.skip_quick and run(["make", "--no-print-directory", "quick", "FROM_PREFLIGHT=1"], root, quiet=False):
         print("preflight: `make quick` failed - the gate stops here (feature 375 FR-004)")
         return 1
     mark("quick")
