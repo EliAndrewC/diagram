@@ -896,3 +896,41 @@ def test_a_program_that_requires_a_well_and_has_no_seat_for_one_is_refused() -> 
     with pytest.raises(ValueError, match="no seat for a well"):
         c._point_features(typed, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0)
     assert cp.requires(typed, "well") and not cp.requires(prog, "well") and not cp.requires(typed, "unicorn stable")
+
+
+def test_a_tub_by_its_door_stands_within_the_limit_of_one() -> None:
+    """Feature 372 wave 106: research 0100's water kept at the entrance - a tub's center within TUB_DOOR_MAX_FT of a door."""
+    assert cp.tub_by_its_door((0.0, 0.0), [(50.0, 0.0), (cp.TUB_DOOR_MAX_FT, 0.0)])
+    assert not cp.tub_by_its_door((0.0, 0.0), [(cp.TUB_DOOR_MAX_FT + 0.1, 0.0)])
+    assert not cp.tub_by_its_door((0.0, 0.0), [])
+
+
+def test_the_seats_beside_a_door_flank_it_nearest_first_and_stay_by_the_face() -> None:
+    p = c.Placed(_b("x", 20.0, 10.0, "outer", "N"), 0.0, 0.0)
+    fracs = cp.beside_door_fracs(p, "S", (10.0, 10.0))  # the door mid-face on the south side
+    assert fracs[:2] == pytest.approx(((10.0 - 6.35) / 20.0, (10.0 + 6.35) / 20.0))
+    assert len(fracs) == 8 and min(fracs) == pytest.approx(0.0) and max(fracs) == pytest.approx(1.0)
+    near_end = cp.beside_door_fracs(p, "S", (1.0, 10.0))  # nothing past the tub's half-width beyond the west end
+    assert all(f >= -1.3 / 20.0 for f in near_end) and len(near_end) == 4
+    side = cp.beside_door_fracs(c.Placed(_b("y", 10.0, 20.0, "outer", "W"), 0.0, 0.0), "E", (10.0, 10.0))
+    assert side[0] == pytest.approx(3.65 / 20.0)  # along a west or east face the frac runs down it
+
+
+def test_a_short_face_seats_its_tub_round_the_corner_nearest_its_door() -> None:
+    """A gatehouse's 12 ft end leaves no seat beside its 6 ft door: the faces round its corners, at the door's end."""
+    gate = c.Placed(_b("gatehouse", 18.0, 12.0, "outer", "S"), 0.0, 0.0)
+    assert cp.round_the_corner(gate, "E", (18.0, 6.0)) == [("N", pytest.approx(1 - 1.5 / 18.0)), ("S", pytest.approx(1 - 1.5 / 18.0))]
+    assert cp.round_the_corner(gate, "N", (9.0, 0.0)) == []  # a door mid-way along a long face is too far from either corner
+    long = c.Placed(_b("hall", 60.0, 40.0, "outer", "N"), 0.0, 0.0)
+    assert cp.round_the_corner(long, "W", (0.0, 20.0)) == []
+    small = c.Placed(_b("shed", 12.0, 10.0, "outer", "N"), 0.0, 0.0)
+    assert [face for face, _f in cp.round_the_corner(small, "S", (6.0, 10.0))] == ["W", "E"]
+    assert cp.round_the_corner(small, "S", (6.0, 10.0))[0][1] == pytest.approx(1 - 1.5 / 10.0)
+    assert cp.round_the_corner(small, "N", (6.0, 0.0))[0][1] == pytest.approx(1.5 / 10.0)
+
+
+def test_every_tub_of_the_county_example_stands_by_a_door_of_its_building() -> None:
+    from l7r.diagram.tools import pack_audit as pa
+
+    _prog, _result, svg = _county()
+    assert pa.tubs_off_their_doors(pa.parse_svg(svg)) == []

@@ -896,20 +896,20 @@
          from (794,348) with their buildings. Pass 3: the barracks' west tub from (708,552), where it pinched the east
          walk to ~4.7 ft, to the rowhouse's south face between two doors; the bath's from (370,345) to the bath's south
          face, and the karo's house's from (358,438) with their buildings -->
-    <circle cx="219" cy="436" r="3.8"/>
-    <circle cx="219" cy="210" r="3.8"/>
+    <circle cx="249" cy="322.5" r="3.8"/>
+    <circle cx="352" cy="211" r="3.8"/>
     <circle cx="246" cy="256" r="3.8"/>
-    <circle cx="246" cy="290" r="3.8"/>
+    <circle cx="366" cy="310" r="3.8"/>
     <circle cx="537" cy="232" r="3.8"/>
     <circle cx="844" cy="310" r="3.8"/>
-    <circle cx="370" cy="438" r="3.8"/>
+    <circle cx="412" cy="364.5" r="3.8"/>
     <circle cx="349" cy="387" r="3.8"/>
-    <circle cx="518" cy="352" r="3.8"/>
+    <circle cx="532" cy="336.5" r="3.8"/>
     <circle cx="940" cy="280" r="3.8"/>
     <circle cx="354" cy="558" r="3.8"/>
-    <circle cx="852" cy="600" r="3.8"/>
-    <circle cx="854" cy="560" r="3.8"/>
-    <circle cx="784" cy="712" r="3.8"/>
+    <circle cx="852" cy="610" r="3.8"/>
+    <circle cx="855.5" cy="527" r="3.8"/>
+    <circle cx="643.5" cy="714" r="3.8"/>
     <circle cx="306" cy="697.7" r="3.8"/>
     <circle cx="250" cy="662" r="3.8"/>
     <circle cx="952" cy="646" r="3.8"/>
@@ -918,7 +918,7 @@
   <!-- the tubs' name, grouped with the one tub it stands by (the kitchen's north-east corner): self-tagged, it took
        whichever tub stood nearest where it was written, and flipped between two on every pass (feature 267) -->
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">
-    <circle cx="300" cy="324" r="3.8"/>
+    <circle cx="287" cy="322.5" r="3.8"/>
     <text font-size="8" font-style="italic" stroke="none" fill="#3A5060">fire-water tubs</text>
   </g>
 </svg>

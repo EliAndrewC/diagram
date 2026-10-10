@@ -175,6 +175,38 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   E3, the staff long-house squat against 0097's rowhouse form, predates the wave and was tracked nowhere: a found row, E3,
   in the ranking (`audit/found-wave105.jsonl`). E4, the barracks, is ranked row #barracks, left for its wave.
 
+## Wave 106 (amendment 8, 2026-10-10) - batch 5
+
+- **Scope**: `docs/buildings.md::Fire-water tubs#tub against its wall`. 0100 keeps standing water at a wooden building's
+  ENTRANCE; the sheets and the draft seated each tub at an eaves corner or along its court face. Now each tub stands beside a
+  door of its building - ONE rule, not a knob: the roof seat 0100 also attests is inside the footprint, which the GM's
+  2026-07-25 ruling keeps every tub out of, so the entrance is the one seat a plan can draw.
+- **Check first** (`pack_audit` `tubs_off_their_doors`, the draft's own predicate `compound_parts.tub_by_its_door`): a tub held by
+  a building's eaves stands within `TUB_DOOR_MAX_FT` of a door the sheet TAGS on that building's outline. Two readings were
+  wrong on the way and are recorded at the check: a small dark rect took a hearth for a door, and a door deep inside a
+  footprint is an inner room's. A building that tags no door is not judged. Measured at main: Hayakawa 7 of 13 tubs off,
+  Ochiba 5 of 10, Ubame 9 of 19, Hoshigaoka's 4 unjudged (no door tagged) (m:wave106-tubs-at-doors). Its red fixture
+  `ochiba-tub-off-door-red.svg`.
+- **The limit, a CONVENTION**: the kitchen's two tubs at one door, the second beside the first where the door's other side is
+  taken (the round-trip sheet's bath abuts the kitchen below its door), set it - the door's approach, the draft's clearance and
+  two tub widths put the far tub ~10.2 ft off; 10.5 ft (compound_model, beside the constant; 0100's drawing page; docs/buildings.md).
+- **The draft** (`compound_parts._point_features`): the doors are seated before the tubs, so each building's doors are kept and its
+  tub tried beside one first (`beside_door_fracs`, nearest first, past the door's held approach), then round the corner
+  nearest the door where the face is too short (`round_the_corner`: the gatehouse's 12 ft end), then the court face as before.
+  The county draft and the round-trip sheet pass with every tub at a door.
+- **The hand sheets**: 21 tubs moved, each beside a door of its own building, every move audited; Ochiba's residence tub,
+  whose only tagged door (the family's, west) stands in a notch between the privy and the kitchen, stands at the notch's
+  corner under both eaves, ~5 ft from the door. **Hoshigaoka**: its two doors tagged, two tubs beside each (it drew one at each
+  corner). The count rows (`#one tub per wooden building`, held; the country shrine's `#fire-water` count) are not this row.
+- **Record**: 0100's drawing page gained the rule's bullet; the fire-water-tubs pop-up says it; the checklist and the country
+  shrine's fire-water line say it (their sections' claims re-checked). The checks: quote-check SUPPORTS, record-format clean
+  (its wording suggestion, "the kitchen's two one either side", left: one more visible edit re-owes five checks), modal-depiction
+  clean on the four pop-ups 0100's drawing page feeds (the storehouse's ken given its feet and the archive's "pale" dropped, each
+  as the check proposed; the archive's crop shows the page's highlight, not the drawn fill - the modal-bundle gap this spec lists).
+- **Records**: m:wave106-tubs-at-doors; the six sheets' notes.
+- **Occasions**: placement-changed: fire-water tubs on ubame-magistracy (every hand sheet's tubs re-seated); layout-revised:
+  county-magistracy-example (the draft's tub seat).
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |

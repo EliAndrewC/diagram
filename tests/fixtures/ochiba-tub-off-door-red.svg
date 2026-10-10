@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="180 84 840 816" font-family="Georgia, 'Times New Roman', serif">
+<!-- RED FIXTURE (feature 372 wave 106): Ochiba with the kitchen's tub put back at its east face, 42 ft from the kitchen's one door - tubs_off_their_doors fires on it -->
   <!-- ============================================================ -->
   <!-- Ochiba County Magistracy - top-down diagrammatic plan         -->
   <!-- North at top, main gate facing south (bottom).                -->
@@ -728,7 +729,7 @@
     <!-- pass 3: the kitchen pair moved off the collector's strip inside the west wall (they pinched it to ~2.6 ft) to
          the ell's SW corner under its south eaves and its NE corner in the notch -->
     <circle cx="226" cy="366" r="3.8"/>
-    <circle cx="275" cy="369.5" r="3.8"/>
+    <circle cx="324" cy="258" r="3.8"/>
     <circle cx="581" cy="470.5" r="3.8"/>
     <circle cx="331" cy="257.5" r="3.8"/>
     <circle cx="335" cy="374" r="3.8"/>

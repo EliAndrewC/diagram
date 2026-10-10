@@ -376,5 +376,40 @@
       "comment": "10 ft fire gap below the tax archive (14 ft since feature 372 wave 105 drew the archive at 0100's 24 x 18 ft)",
       "notes_review_log": "feature 267 pass 2's line now reads: a 10 ft fire gap below the tax archive (14 ft since feature 372 wave 105 drew the archive at 24 x 18 ft)"
     }
+  },
+  "wave106-tubs-at-doors": {
+    "observed": "2026-10-10",
+    "source": "the six sheets the row names, read by make pack-audit (tubs_off_their_doors) at origin/main and in the clone",
+    "command": "make pack-audit ARGS=<each sheet's svg>",
+    "method": "tubs_off_their_doors: each tub held by a building's eaves stands within TUB_DOOR_MAX_FT (10.5 ft) of a door the sheet tags on that building's outline; a tub whose buildings tag no door is not judged",
+    "quantity": "fire-water tubs off their building's doors, per sheet, before and after wave 106",
+    "value": {
+      "hayakawa": {
+        "before": "7 of 13",
+        "after": "0 of 13"
+      },
+      "ochiba": {
+        "before": "5 of 10",
+        "after": "0 of 10"
+      },
+      "ubame": {
+        "before": "9 of 19",
+        "after": "0 of 19"
+      },
+      "hoshigaoka": {
+        "before": "0 of 4 judged (no door tagged; all four at the corners)",
+        "after": "0 of 4, its two doors tagged, two tubs beside each"
+      },
+      "county-magistracy-example": {
+        "before": "not measured under the final reading (the first reading, which took a hearth for a door, gave 9 of 14)",
+        "after": "0 of 14"
+      },
+      "ochiba-roundtrip-test": {
+        "before": "not measured under the final reading (the first gave 12 of 17)",
+        "after": "0 of 17"
+      },
+      "limit": "10.5 ft: the kitchen's second tub beside its first at one 6 ft door, past the door's held approach and the draft's 1 ft clearance, stands ~10.2 ft off (compound_model.TUB_DOOR_MAX_FT)",
+      "tests": "test_compound 77 passed, test_pack_audit 90, test_registry 69 (the red fixture ochiba-tub-off-door-red.svg fires), test_mode_a_sheets 27"
+    }
   }
 }

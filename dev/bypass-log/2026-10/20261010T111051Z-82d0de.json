@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-10T11:10:51Z",
+  "target": "claims-gate",
+  "commit": "de5f96acb",
+  "why": "CLAIMS_OK: both introduced findings are open ranked rows of feature 372 (specs/328-match-the-research/ranking.json: #universal shrine and #walled enclosure, E3 DRIFTED), re-raised only because wave 105 changed the tax archive band line in the same section"
+}

@@ -826,12 +826,12 @@
        sweep, 2026-07: halls burn, kura endure - so the water lives at the halls.) -->
   <g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs" data-id="fire-water-tubs">
     <!-- kitchen (2, highest fire risk) - east eaves wall -->
-    <circle cx="286" cy="336" r="3.8"/>
-    <circle cx="286" cy="404" r="3.8"/>
+    <circle cx="201" cy="312.5" r="3.8"/>
+    <circle cx="163" cy="312.5" r="3.8"/>
     <!-- office hall - west eaves corner -->
-    <circle cx="334" cy="494" r="3.8"/>
+    <circle cx="690" cy="535" r="3.8"/>
     <!-- residence west block (south eaves) -->
-    <circle cx="330" cy="304" r="3.8"/>
+    <circle cx="315" cy="305.5" r="3.8"/>
     <!-- residence east block (reception and the lord's suite, garden frontage; off the veranda's SE corner) -->
     <circle cx="706" cy="318" r="3.8"/>
     <!-- the two shrines (against the Fire Dragon shrine's east eaves) -->
@@ -839,17 +839,17 @@
     <!-- guest house -->
     <circle cx="888" cy="210" r="3.8"/>
     <!-- granary / east yard (gap coverage) -->
-    <circle cx="733" cy="560" r="3.8"/>
+    <circle cx="827" cy="542.5" r="3.8"/>
     <!-- barracks (west eaves; moved east with it, pass 3) -->
     <circle cx="696" cy="702" r="3.8"/>
     <!-- karo's house (SW eaves corner, clear of the bath and its west door; pass 3 - it had none) -->
     <circle cx="334" cy="442" r="3.8"/>
     <!-- gate range (west end) -->
-    <circle cx="326" cy="722" r="3.8"/>
+    <circle cx="366" cy="711" r="3.8"/>
     <!-- stables (NW eaves corner - clear of the stable-yard well to the E) -->
     <circle cx="166" cy="580" r="3.8"/>
     <!-- servants' quarters -->
-    <circle cx="392" cy="166" r="3.8"/>
+    <circle cx="375" cy="198" r="3.8"/>
   </g>
   <text font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs" data-names="fire-water-tubs">fire-water tubs</text>
 

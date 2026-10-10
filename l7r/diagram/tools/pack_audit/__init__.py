@@ -50,6 +50,7 @@ from .checks import PassageBlocker as PassageBlocker
 from .checks import StructureOnWall as StructureOnWall
 from .checks import TubAdrift as TubAdrift
 from .checks import TubInBuilding as TubInBuilding
+from .checks import TubOffItsDoor as TubOffItsDoor
 from .checks import TubOnWell as TubOnWell
 from .checks import WallOpening as WallOpening
 from .checks import _gate_openings as _gate_openings
@@ -65,6 +66,7 @@ from .checks import occluded_foreground as occluded_foreground
 from .checks import passage_blockers as passage_blockers
 from .checks import structures_on_walls as structures_on_walls
 from .checks import tubs_in_buildings as tubs_in_buildings
+from .checks import tubs_off_their_doors as tubs_off_their_doors
 from .checks import tubs_on_wells as tubs_on_wells
 from .checks import wall_openings as wall_openings
 from .grids import FTPX as FTPX

@@ -93,6 +93,21 @@
   "scope": "deferred"
  },
  {
+  "key": "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water tubs at a village shrine",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim the decision to draw fire-water tubs at a village shrine at all: 0222's drawing page records it as a GUESS (no page names tubs at a village shrine); the section's fire-water claim cites 0100, which covers only where tubs stand. Write `<!-- Research: fire-water tubs at a village shrine - GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: no page names tubs at a village shrine -->` beside it (the section's claims re-checked with it)",
+  "files": [
+   "docs/building-programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 106's impl-drift of the country shrine's section (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -10167,7 +10182,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E2",
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Every sheet's fire-water tubs group seats its r3.8 tubs at eaves corners/walls (Hayakawa comments 'west eaves corner', 'SW eaves corner'; Ubame 'each sits against its building at an eaves corner'; Hoshigaoka 'at the building's four corners'), so seating them at the entrance moves tubs on all sheets.",
-  "wave": "",
+  "wave": "106",
   "scope": "mode-a"
  },
  {

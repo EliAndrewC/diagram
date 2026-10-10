@@ -17,8 +17,9 @@ Guesses:
   the town order are recorded, but not a rule for every building or a ranking of buildings by risk.
 - A tub's size, about 2.5 ft across: no source gives a rain tub's width.
 
-Depiction: The plan draws each tub as a small blue disc, the water seen from above, beside the wooden buildings: at the
-kitchen, on the bath's yard side against its hearth, at most one at a wooden granary, and none at an earth-walled storehouse,
+Depiction: The plan draws each tub as a small blue disc, the water seen from above, beside a door of a wooden building,
+since the water was kept at the entrance, clear of the doorway: two at the kitchen's door, on the bath's yard
+side against its hearth, at most one at a wooden granary, and none at an earth-walled storehouse,
 which was built not to burn. The tubs are drawn only on building plans: at a town's scale a tub is too small to
 draw, and a walled town or city map shows its fire defense as a watchtower instead.
 

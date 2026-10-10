@@ -70,4 +70,4 @@
 - **genkan**: Not a formal entrance for guests of rank but the dwelling's own entry: a 4 ft earthen-floored vestibule inside the east door, beside the writing room.
 - **latrine**: One privy, the monk's household's, at the west gable's back corner off the kitchen door, near the path to the well.
 - **vegetable garden**: The monk's household bed, 14 by 23 ft, lies in the open ground below the forecourt, west of the approach, the one ground near the house that gets its sun: about 9.5 hours of it in autumn, where the yard by the kitchen door, shaded by the hall and the wood, gets 2.5.
-- **fire-water tubs**: One at each of the building's four corners, against the wall: the one building is hall, kitchen and dwelling at once, so its four tubs serve all three.
+- **fire-water tubs**: Two beside each of the building's two doors - the kitchen's yard door on the west gable and the dwelling's door on the east - where the water was kept, at the entrance: the one building is hall, kitchen and dwelling at once, so its four tubs serve all three.

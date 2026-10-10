@@ -98,12 +98,18 @@ DOOR_ON_WALL_PX = 2.0 * FTPX
 
 def doors_of(plan: ParsedPlan, b: Rect) -> list[tuple[float, float]]:
     """The centers (px) of the doors on building `b`: each rect the sheet tags `door` (its own tags, feature 262 - a
-    small dark rect may as well be a hearth) lying within DOOR_ON_WALL_PX of the footprint."""
+    small dark rect may as well be a hearth) lying on its outline: within DOOR_ON_WALL_PX of the footprint and of one of
+    its edges (an inner room's door, deep inside, is no entrance)."""
     m = DOOR_ON_WALL_PX
     return [
         (d.x + d.w / 2, d.y + d.h / 2)
         for d in plan.fills
-        if plan.label_kinds.get(d.pos) == "door" and d.x >= b.x - m and d.x2 <= b.x2 + m and d.y >= b.y - m and d.y2 <= b.y2 + m
+        if plan.label_kinds.get(d.pos) == "door"
+        and d.x >= b.x - m
+        and d.x2 <= b.x2 + m
+        and d.y >= b.y - m
+        and d.y2 <= b.y2 + m
+        and min(abs(d.x - b.x), abs(d.x2 - b.x2), abs(d.y - b.y), abs(d.y2 - b.y2)) <= m
     ]
 
 

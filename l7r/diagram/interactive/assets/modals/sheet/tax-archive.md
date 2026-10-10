@@ -18,7 +18,7 @@ Guesses:
   governing less is reckoned to have needed no more; no other office's was measured.
 - The proportions the plan draws: no account gives a records storehouse's length and depth.
 
-Depiction: The plan draws the archive as a plastered storehouse, pale and solid. No fire-water tub stands at it: the tubs
+Depiction: The plan draws the archive as a solid plastered storehouse. No fire-water tub stands at it: the tubs
 stand at the wooden buildings, and the archive, like every plastered storehouse, was built not to burn. It stands well below the
 staff's rowhouse in size, as Takayama's small storehouses did. Its door is one small dark block on its wall, standing for
 the pair of plastered leaves that closed a storehouse. Like every building on the plan, it stands a little further from its neighbors than a real office's buildings did, so that each reads apart.

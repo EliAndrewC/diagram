@@ -43,6 +43,7 @@
  "docs/buildings.md::Checklist for a new diagram#size hierarchy": "E2",
  "docs/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner": "E0",
  "docs/buildings.md::Fire-water tubs#one tub per wooden building": "E3",
+ "docs/buildings.md::Fire-water tubs#tub against its wall": "E3",
  "docs/buildings.md::Fire-water tubs#tub clear of the footprint": "E0",
  "docs/buildings.md::Fire-water tubs#tub glyph": "E1",
  "docs/buildings.md::Latrines and the rear service strip#privies away from water": "E4",
