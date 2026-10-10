@@ -106,5 +106,5 @@ the session fills only the judgment cells (verdict, finding, class, author misse
 ## Review history
 
 - **spec-fidelity round 1 (2026-10-10): NOT FAITHFUL.** (1) Record and plan checks out of scope was a carve-out against "our
-  subagent checks" - 60% of the table's rows; now every check the ledger names is logged, at its return. (2) A same-date
+  subagent checks" - 60% of the table's rows on round 1's own run; now every check the ledger names is logged, at its return. (2) A same-date
   subject match could not tell two same-day rounds apart - a pass is now answered by its own cost cells. (3) FR-004 faithful.
