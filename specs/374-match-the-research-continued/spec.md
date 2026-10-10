@@ -36,6 +36,10 @@ a task per wave, the same gates and reviews, batched closes.
 
 ## How it starts
 
+**Feature 375 first** (`specs/375-enforced-wave-process/spec.md`): the wave process this feature runs on is enforced by the
+tooling there - content-scoped record checks, line-scoped claims, decide-then-freeze, a preflight inside the gate. Take no wave
+here until 375 has landed.
+
 `make claim` is done (this directory). Next: `/speckit-specify` over this file and `request.md`, then plan and tasks in
 waves, as 372 did (`specs/372-match-the-research-remaining/` is the worked example). Re-arm the usage cap with the GM's
 current figure before the first wave.
