@@ -412,7 +412,7 @@
     <rect data-id="reception-room-1" x="475" y="287" width="135" height="75" fill="#DDB87A" data-kind="reception room"/>
     <rect data-id="residence-2" x="340" y="212" width="270" height="150" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <!-- the engawa along the garden (south) face only (R01) -->
-    <rect x="340" y="362" width="270" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
+    <rect x="340" y="362" width="270" height="9" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line data-id="residence-3" x1="340" y1="287" x2="610" y2="287" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line data-id="residence-4" x1="475" y1="212" x2="475" y2="362" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <!-- the period gradient runs formal (front) -> the lord -> the family deepest (omote, naka-oku, oku): the

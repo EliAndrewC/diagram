@@ -248,3 +248,22 @@ def sheet_furniture(svg: str) -> list[str]:
     for name in _FURNITURE_ATTR.findall(svg):
         out.append(f"an element marked '{name}' - the sheet draws no compass rose and no key box")
     return out
+
+
+# --- veranda_depths (feature 374 wave 112) ----------------------------------------------------------------------------
+
+#: A veranda's depth in feet: half a ken to one ken, the widths of Katsura's verandas (research/questions/0102-verandas-and-
+#: storm-shutters-engawa-and-amado.drawing.html 'How wide is a drawn veranda?'), ACCURATE; free to change from face to face.
+VERANDA_FT: tuple[float, float] = (3.0, 6.0)
+#: Half a pixel either side: a strip is drawn on whole or half pixels at 3 px to the foot.
+VERANDA_TOL_PX: float = 0.5
+
+
+def veranda_depths(svg: str, band: tuple[float, float] = VERANDA_FT) -> list[str]:
+    """Every veranda strip (a rect tagged `engawa`, or inside a group so tagged) is 3-6 ft deep across its short side."""
+    out: list[str] = []
+    lo, hi = band[0] * FTPX - VERANDA_TOL_PX, band[1] * FTPX + VERANDA_TOL_PX
+    for m in marks(svg):
+        if m.tag == "rect" and m.kind == "engawa" and not lo <= min(m.w, m.h) <= hi:
+            out.append(f"the veranda at svg({m.x:.0f},{m.y:.0f}) is {min(m.w, m.h) / FTPX:.1f} ft deep - the band is {band[0]:.0f}-{band[1]:.0f} ft")
+    return out
