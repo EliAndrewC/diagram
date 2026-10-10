@@ -1,0 +1,46 @@
+{
+ "feature": "378-research-findings-checked-against-code",
+ "plan_sha256": "3f3d72a181dd56dc1098201660b988e52413523ee5c571b611318d22348e8f45",
+ "plan_text": "# Implementation Plan: a research feature ends with its findings checked against the code (feature 378)\n\n**Spec**: `spec.md` | **Request**: `request.md`\n\n## Summary\n\nOne small reader that composes what exists, `scripts/record/impl_check.py`, asked by `make impl-check` and by the closing\ncheck every closing route already asks. It is backed by the template task, the guidelines and a line in each open\nresearch-record spec. Everything is tooling: every task is `research: rendering`. One engine file changes (`l7r/diagram/tools/claims.py`,\nD6), so the landing is GATED on `make done`.\n\n## Technical Context\n\n- **Code.** Python 3 stdlib under `scripts/record/` and `scripts/gates/`.\n- **Tests.** `tests/tooling/` over a real git tree.\n- **Reused, not copied.** The claims index's own reader (`scripts/record/claims.py`: `current`, `owed`, `load_index`)\n  and `make speckit-todo`'s tag line.\n\n## Performance bookends\n\nN/A. A close reads every claim once, about 10 s (observed 2026-10-10; method: `time` on `claims.current`), and only for a\nresearch-record feature whose commits changed a question.\n\n## Constitution Check\n\n- **I-V, VI, XII**: N/A.\n- **X**: every branch has a test.\n- **XIII**: the tooling tests are green before and after.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The changed questions** are read from git: every non-merge commit whose SUBJECT line opens `Feature NNN` or\n`NNN:` (git's `--grep` would match any line, so the subject is filtered here), then each commit's\npaths matching a findings page, `research/questions/NNNN-<id>.html`. Before feature 329 those paths carried the old\n`.claude/skills/diagram/` prefix, so that prefix is accepted. `.notes`, `.drawing` and `.originals` pages are not\nfindings. Measured on real features: 317 changed 0081, 315 changed 0046, 310 changed 0038.\n\n**D2 - A claim cites a question** when one of its pointers names the question's FINDINGS page,\n`research/questions/NNNN-<id>.html`. A pointer to the drawing page alone does not count: such a claim is fingerprinted on\nthe drawing page, so a rewritten finding never re-owes it (plan review, round 1: 31 questions are cited only through\ndrawing pages). **Checked** means it is not in `claims.owed()`: a changed finding re-owes every claim resting on it (feature 318),\nso a finding the feature changed cannot pass on a verdict reached before it. Every reason `owed()` gives counts,\ntriage included (spec review round 1).\n\n**D3 - The record** is `specs/NNN-*/implementation-check.md`, with lines `- NNNN: no code implements it - <why>; searched:\n<units and grep>`. It is for a question NO code decides, and a line without its `searched:` part is missing. Merge\ncommits are read for no feature (`git log --no-merges`).\n\n**D4 - The closing check** (`close_check.reasons`) appends `impl_check.missing(d, <its repository>)`. The tag test runs\nfirst and the commit read second, so a feature that owes nothing pays no claims scan.\n\n**D5 - The text.** The tasks template's standard task, CLAUDE.md's research section, `research/CLAUDE.md`, and a line\nin each spec `make speckit-todo AFFECTS=\"research record\"` lists open at landing (seven on 2026-10-10: 336, 337, 338, 343,\n352, 368, 374).\n\n**D6 - Claimed units outside the hamlet scope** (spec FR-009). `l7r/diagram/tools/claims.py:all_units` also yields,\nthrough `claimed_outside`, every unit of an engine module outside the scope that carries its OWN claim, not one\ninherited from a module docstring, with that module's constants for its fingerprint. `coverage` is unchanged in effect:\nan out-of-scope module's unclaimed units are never yielded, so they owe nothing. Today this brings in 3 units with 4\nclaims (`compound.county_magistracy_program`, `compound_model.NOTICE_BOARD_MAX_FT`, `site_pages.frame`), owed their\n`impl-drift` check before the push (`claims-gate.sh`). It is an engine file (`l7r/**`), so the landing is GATED on\n`make done`.\n\n## Project Structure\n\n```text\nscripts/record/impl_check.py            new\nscripts/gates/close_check.py            the closing requirement\nMakefile                                impl-check\n.specify/templates/tasks-template.md    the standard task\nCLAUDE.md, research/CLAUDE.md, specs/{336,337,338,343,352,368,374}-*/spec.md\ntests/tooling/test_impl_check.py        new\n```\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Changed questions from the feature's non-merge commits whose SUBJECT line opens Feature NNN / NNN:, filtered in Python; findings pages only; the pre-329 prefix accepted",
+   "class": "within",
+   "why": "FR-001's attribution rule and the spec's merge rule as written; changed_questions() reads %s only and test_only_the_subject_line_names_the_feature pins it. The regex also takes 'NNN ' with a space, which still opens with the number."
+  },
+  {
+   "id": "D2",
+   "summary": "A claim cites a question only through a pointer to its FINDINGS page; a drawing-page-only question reads 'no claim cites it'; checked = not in claims.owed() for any reason",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE item resolved. CITED is end-anchored on NNNN-<id>.html and claim pointers are POINTER.fullmatch'd file paths with no anchor, so .drawing/.notes never match and a findings pointer always does. Every counted claim is now fingerprinted on the findings page, so a rewrite re-owes it (FR-001(a)); this owes more, not less, and matches the spec's edge case that only the findings page is owed."
+  },
+  {
+   "id": "D3",
+   "summary": "implementation-check.md line form with a required searched: part; merges read for no feature",
+   "class": "within",
+   "why": "Unchanged since round 1; FR-001(b), FR-003 and the merge rule."
+  },
+  {
+   "id": "D4",
+   "summary": "close_check.reasons appends impl_check.missing; tag test then commit read before any claims scan",
+   "class": "within",
+   "why": "Unchanged since round 1; FR-004."
+  },
+  {
+   "id": "D5",
+   "summary": "Template task, CLAUDE.md, research/CLAUDE.md, a line in the seven open research-record specs",
+   "class": "within",
+   "why": "Unchanged since round 1; FR-005/006/007. The template, CLAUDE.md and research/CLAUDE.md now say the findings page, consistent with D2."
+  },
+  {
+   "id": "D6",
+   "summary": "all_units yields claimed_outside: units outside the hamlet scope with their own claim",
+   "class": "within",
+   "why": "Unchanged since round 1; FR-009 and spec D3."
+  }
+ ],
+ "verdict": "CLEAR"
+}

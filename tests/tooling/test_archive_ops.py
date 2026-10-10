@@ -123,7 +123,13 @@ def test_the_lookup_answers_by_url_key_and_words_and_says_when_nothing_is_held(t
     assert ops.find(root, store, terms="sixty mats|straw", out=out) == 0 and "url: https://a" in out.getvalue()
     assert "attempts: https://a - " in out.getvalue()
     out = io.StringIO()
-    assert ops.find(root, store, terms="sixty mats|rice", out=out) == 1 and "search the web" in out.getvalue()
+    # feature 376's research passes read `a|b` as "a or b": when no text holds every term but one holds a single term, the
+    # answer says so, with each term's count and the one-term command - never "nothing held"
+    assert ops.find(root, store, terms="sixty mats|rice", out=out) == 1
+    assert "no text holds ALL of sixty mats + rice" in out.getvalue() and "sixty mats 1, rice 0" in out.getvalue()
+    assert 'make archive-find TERMS="sixty mats"' in out.getvalue() and "search the web" not in out.getvalue()
+    out = io.StringIO()
+    assert ops.find(root, store, terms="rice|barley", out=out) == 1 and "search the web" in out.getvalue(), "held under no term: the web"
 
 
 def test_the_relayout_moves_the_first_captures_and_rows_into_shards(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -177,7 +183,7 @@ def test_find_prints_the_attempts_and_records_the_look(tmp_path: pathlib.Path) -
 
 def test_only_the_kept_uncited_pages_are_archived(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 312 FR-011, plan D8: the consulted backfill archives what the filter kept, and nothing else."""
-    import _uncited as un  # noqa: PLC0415
+    import uncited as un  # noqa: PLC0415 - scripts/record/uncited.py (the leading underscore went with the 2026-10-08 reorganization)
 
     root, _store, _inbox = _world(tmp_path, monkeypatch)
     monkeypatch.setenv("L7R_ATTEMPTS_ROOT", str(root))

@@ -322,6 +322,21 @@ def test_the_scope_is_the_import_graph_from_the_hamlet_generator(tmp_path: Path)
     assert set(mods) == {"l7r.diagram.hamletgen", "l7r.diagram.hamletgen.a", "l7r.diagram.hamletgen.b", "l7r.diagram.shared", "l7r.diagram.other", "l7r.diagram.other.b"}
 
 
+def test_a_claimed_unit_outside_the_scope_enters_the_index_and_its_unclaimed_neighbors_do_not(tmp_path: Path) -> None:
+    # feature 378: the magistracy's code sits outside the hamlet's imports; a unit there that carries its OWN claim is
+    # read (so its check reaches the index and the report), its module's other units are not, and a module docstring's
+    # claim - which every unit would inherit - brings none in
+    skill = _tree(tmp_path)
+    (skill / "l7r" / "diagram" / "other" / "c.py").write_text(
+        f'"""Research: whole module - NONE"""\nLIMIT = 3\n\n\ndef court():\n    """Research: court size - {Q}"""\n    return LIMIT\n\n\ndef unreached():\n    pass\n'
+    )
+    outside = [(u.path, u.qualname) for u, _e in cl.claimed_outside(skill, set(cl.scope(skill)))]
+    assert outside == [("l7r/diagram/other/c.py", "court")]
+    assert ("l7r/diagram/other/c.py", "court") in [(u.path, u.qualname) for u, _e in cl.all_units(skill, "")]
+    problems = cl.coverage(cl.all_units(skill, ""), questions={"0033-row-villages-resson.html"})
+    assert not [p for p in problems if "other/c.py" in p], "an unclaimed neighbor outside the scope owes no claim"
+
+
 def test_coverage_names_every_unit_without_a_claim_and_every_missing_question(tmp_path: Path) -> None:
     skill = _tree(tmp_path)
     (skill / "l7r" / "diagram" / "other" / "b.py").write_text(f'"""Research: oops\n"""\ndef thing():\n    """Research: t - {Q}"""\n')

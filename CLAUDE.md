@@ -65,6 +65,12 @@ auto-loads when a session edits the record; the archive and the download list ar
 - Where the research supports more than one form, it becomes a knob with per-settlement variance
   rolled from the map's seed, never a choice. A degree along a continuum is calibrated liberty; a
   choice between distinct forms is a knob.
+- A `research record` feature closes only with its findings checked against the code (feature 378, GM 2026-10-10): each
+  question whose findings it changed is cited (its findings page, not only its drawing page) by a `Research:` claim of
+  the code that decides it, checked by
+  `impl-drift`, or, where no code decides it, recorded as implemented nowhere with what was searched (`implementation-check.md`). A DRIFTED claim is a result shown by `make
+  claims-report`; the code is fixed only if the feature's spec asks. `make impl-check F=<n>` says what is owed, and the
+  closing check refuses until it reports nothing.
 - Every rendering decision is recorded in one of four classes - historically accurate, deliberate
   deviation, map drawing convention, guess - in `research/` (the finding), the operative doc (the
   rule), the point of change (the pointer) and the feature's spec under "Decisions Recorded". An

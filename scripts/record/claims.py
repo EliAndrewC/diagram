@@ -545,12 +545,18 @@ def report(
 
 def base_tree(root: Path, base: str, into: Path) -> Path:
     """The engine, procedures and questions at `base`, extracted under `into`; returns the skill directory there."""
+    # ONLY THE PATHS THE BASE HOLDS: `git archive` fails WHOLE on one missing pathspec, and an empty base tree made every
+    # first finding read as introduced (found by feature 378, 2026-10-10: `docs/buildings/` is gone, so for some time the
+    # gate compared every claim with nothing). A path the base lacks is skipped; a failure of the rest is raised.
+    present = [p for p in BASE_PATHS if subprocess.run(["git", "-C", str(root), "cat-file", "-e", f"{base}:{p}"], capture_output=True, check=False).returncode == 0]
     archive = subprocess.run(
-        ["git", "-C", str(root), "archive", "--format=tar", base, "--", *BASE_PATHS],
+        ["git", "-C", str(root), "archive", "--format=tar", base, "--", *present],
         capture_output=True,
         check=False,
     )
-    if archive.returncode == 0:
+    if present and archive.returncode != 0:
+        raise RuntimeError(f"claims: the base tree could not be read at {base}: {archive.stderr.decode(errors='replace').strip()}")
+    if present:
         tar = into / "base.tar"
         tar.write_bytes(archive.stdout)
         with tarfile.open(tar) as t:

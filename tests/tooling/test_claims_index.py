@@ -299,3 +299,18 @@ def test_a_shortened_pointer_in_a_verdict_note_gets_its_full_name() -> None:
     got = cx.unelide(reply, stems)
     assert "0236-a-hamlets-home-plot.drawing.html" in got and "0031-clustered.html" in got
     assert "0019-...-x.html" in got and "9999-...html" in got, "ambiguous or unknown numbers stay as written"
+
+
+def test_the_base_tree_is_read_when_a_listed_path_is_gone(tmp_path: pathlib.Path) -> None:
+    # feature 378: `docs/buildings/` left the repository, `git archive` failed WHOLE on that one pathspec, and the gate's
+    # base tree came back empty - every first finding then read as introduced. The paths the base holds are read.
+    root = _repo(tmp_path)
+    _commit(root, "base")
+    base = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    assert "docs/buildings" in cx.BASE_PATHS and not (root / "docs" / "buildings").exists(), "the fixture lacks a listed path"
+    out = tmp_path / "base"
+    out.mkdir()
+    tree = cx.base_tree(root, base, out)
+    assert (tree / "l7r" / "diagram" / "hamletgen" / "rows.py").is_file()
+    assert (tree / "research" / "questions" / "0033-row-villages-resson.html").is_file()
+    assert "l7r/diagram/hamletgen/rows.py::SHARE" in cx.base_cores(tree), "the base's units are read, so a finding is judged against them"
