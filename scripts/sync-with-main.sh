@@ -343,9 +343,9 @@ push_cmd() {
   # construction, so the two pushes the root CLAUDE.md protects are untouched. Selftest first.
   python3 "$ROOT/scripts/gates/spec-lint.py" --selftest >/dev/null || die "spec-lint selftest failed - the guard itself is broken; fix scripts/gates/spec-lint.py before pushing"
   python3 "$ROOT/scripts/gates/spec-lint.py" --delta "$ROOT" || die "spec-lint found something a review round would otherwise spend itself on (above) - feature 236, the GM: mistakes caught early and cheaply"
-  # GUARD_EDIT_OK: the GM 2026-10-10 - every open feature names the stage it is owed at, held HERE because a spec
+  # GUARD_EDIT_OK: the GM 2026-10-10 - every open feature names what it affects (its stage derives from that), held HERE because a spec
   # is filed by a specs/-only push, which takes the DIRECT route and runs no gate. The message names the line to add.
-  python3 "$ROOT/scripts/speckit-todo.py" --root "$ROOT" --check || die "an open feature names no stage (above): add its **Owed at** line - make speckit-todo CHECK=1 re-checks"
+  python3 "$ROOT/scripts/speckit-todo.py" --root "$ROOT" --check || die "an open feature does not say what it affects (above): add its **Affects** line - make speckit-todo CHECK=1 re-checks"
   # GUARD_EDIT_OK: feature 241 - THE CONFLICT-MARKER BACKSTOP runs here as well as in the gate's static
   # phase, and of the six checks in this block it is the one with the strongest claim to the push: the
   # delta that lands a marker is a MERGE, and a merge's own delta is whatever the two sides touched -

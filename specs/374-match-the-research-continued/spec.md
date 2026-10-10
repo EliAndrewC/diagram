@@ -4,7 +4,7 @@
 **Created**: 2026-10-10
 **Status**: Filed - the open work of feature 372 (itself 328's remainder), moved here at the GM's word for a fresh session
 
-**Owed at**: now
+**Affects**: hamlet, magistracy, research record
 
 **Waits on**: 375 (`make tick` refuses a task here while 375 is open - 375's plan D18)
 

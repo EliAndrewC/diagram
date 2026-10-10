@@ -2,7 +2,7 @@
 
 **Status**: Filed - from future-work/farming-communities.md, "OWED AT CONVERSION and knob candidates (feature 280, the modern-only sweep, 2026-09-29)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: now - its hamlet rows; the frozen villages' forms wait on the village tier
+**Affects**: hamlet, village
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

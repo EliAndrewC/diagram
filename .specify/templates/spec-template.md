@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Owed at**: [now | village | town | provincial city | capital - the earliest stage that needs it]
+**Affects**: [comma-separated tags from .specify/affects.json - e.g. hamlet, magistracy, tooling]
 
 **Input**: User description: "$ARGUMENTS"
 

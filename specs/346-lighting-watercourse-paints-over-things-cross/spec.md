@@ -2,7 +2,7 @@
 
 **Status**: Filed - from future-work/cross-cutting.md, "Lighting a watercourse paints over the things that CROSS it (measured 2026-09-12, feature 230)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: now
+**Affects**: hamlet, interactive page
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

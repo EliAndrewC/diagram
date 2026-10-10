@@ -2,7 +2,7 @@
 
 **Status**: Filed - from future-work/farming-communities.md, "Rename the `grave island` class to `field grave` (settlement-review, Kashikawa 2026-09-28)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: now
+**Affects**: hamlet, interactive page
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

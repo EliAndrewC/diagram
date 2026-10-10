@@ -6,7 +6,7 @@
 filed rather than carried in feature 372. Rewriting this into a full spec, a plan and tasks is the work of whoever picks it
 up (`/speckit-specify` on this directory); until then `make speckit-todo` lists it as filed.
 
-**Owed at**: now
+**Affects**: hamlet, performance
 
 `capacity.field_distances` (wave 20's seat-order tie toward the field, 81a14d318, vectorized 07ca65758) computes a ring
 distance for every free grid point, but the seating uses it only to break ties within one grid pitch. At 40 households, seed

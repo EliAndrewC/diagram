@@ -2,7 +2,7 @@
 
 **Status**: Filed - from future-work/towns.md, "OWED AT CONVERSION: two `s.kiln` glyph defects (settlement-review on Ubame, 2026-08-17)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
-**Owed at**: town
+**Affects**: town, provincial city, capital
 
 **Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
 

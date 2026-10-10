@@ -1,0 +1,22 @@
+{
+  "_about": "The tags a spec's `**Affects**:` line may name, and the stage each is owed at (the GM, 2026-10-10). A feature's stage is the EARLIEST stage among its tags - `now` when any tag is live today - so a farmhouse change tagged with every tier is owed now. A new tag is one entry here: a diagram kind not yet scripted takes its tier's stage, anything else `now`. `make speckit-todo` reads it; `make speckit-todo CHECK=1` refuses a tag not listed here.",
+  "stages": ["now", "village", "town", "provincial city", "capital"],
+  "aliases": {
+    "all settlements": ["hamlet", "village", "town", "provincial city", "capital"]
+  },
+  "tags": {
+    "hamlet": {"stage": "now", "about": "the scripted hamlets (pool/hamlets/)"},
+    "village": {"stage": "village", "about": "village maps - frozen hand-drawn until the village tier is scripted"},
+    "town": {"stage": "town", "about": "town maps - frozen hand-drawn until the town tier is scripted"},
+    "provincial city": {"stage": "provincial city", "about": "provincial city maps - frozen until that tier is scripted"},
+    "capital": {"stage": "capital", "about": "the capital - frozen until that tier is scripted"},
+    "magistracy": {"stage": "now", "about": "the hand-drawn magistracy sheets (Mode A, pool/magistracies/)"},
+    "country shrine": {"stage": "now", "about": "the hand-drawn country shrine sheets (Mode A, pool/country-shrines/)"},
+    "interactive page": {"stage": "now", "about": "the interactive HTML map pages: hover, modals, the raster"},
+    "research record": {"stage": "now", "about": "the research record's content: questions, drawing pages, notes, sources"},
+    "research process": {"stage": "now", "about": "how research is done: page sessions, briefs, record checks"},
+    "review process": {"stage": "now", "about": "the review agents, their occasions and the ledger"},
+    "tooling": {"stage": "now", "about": "gates, guards, hooks, make targets"},
+    "performance": {"stage": "now", "about": "what generation, the gate or a page costs in time or memory"}
+  }
+}

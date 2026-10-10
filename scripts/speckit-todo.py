@@ -11,14 +11,20 @@ its spec's `**Status**:` value begins with one of `CLOSING`. Otherwise it is OPE
 it while holding open tasks, so only the tasks or a closing word decide. A checkbox form this does not read leaves the
 feature OPEN - a parsing miss shows as open work, never as finished work.
 
-THE STAGE (the GM, 2026-10-10). Every open feature says when it is owed in an `**Owed at**:` line under its status:
-`now`, or the tier conversion that needs it - hamlets are scripted first, then villages, towns, provincial cities and
-capitals - and a thing two tiers need is owed at the EARLIER one (*"If something will be required for both towns and
-cities, then it is owed at the towns stage"*). The report groups each state by stage; `--check` refuses an open feature
-without one, because a label typed into some titles and not others is what this replaced.
+WHAT IT AFFECTS, AND THE STAGE FROM THAT (the GM, 2026-10-10). Every open feature names what it affects in an
+`**Affects**:` line under its status - comma-separated tags from `.specify/affects.json`: the kinds of diagram (the
+five settlement tiers, the magistracy and country shrine sheets) and the kinds of work that are no diagram (tooling,
+performance, the research record, ...). The stage it is owed at is DERIVED: hamlets are scripted first, then villages,
+towns, provincial cities and capitals, and a feature is owed at the earliest stage among its tags - `now` when any
+tag is live today (*"If something will be required for both towns and cities, then it is owed at the towns stage"*;
+a farmhouse change touches every tier, so it is owed now). An `**Owed at**:` line with a reason overrides the derived
+stage where it is wrong. The report groups each state by stage, or by tag with `--by-affects`; `--check` refuses an
+open feature with no tag or an unknown one.
 
     speckit-todo.py [--root <repo>] [--all]     --all adds the closed features and why each is closed
-    speckit-todo.py [--root <repo>] --check     exit 1, with the line to add, when an open feature has no valid stage
+    speckit-todo.py [--root <repo>] --affects T,U   only the features carrying any of those tags, same layout
+    speckit-todo.py [--root <repo>] --by-affects     the open features grouped by tag (a feature under each of its tags)
+    speckit-todo.py [--root <repo>] --check     exit 1, with the line to add, when an open feature's tags are missing or unknown
     speckit-todo.py --state <specs/NNN-slug>     one feature's state
     speckit-todo.py --closed-by-status <dir>     `yes` when the spec's status line closes it (CLOSING), else `no` - the
                                                  push's in-progress refusal keeps its own open-box test and asks only this
@@ -34,6 +40,7 @@ and `--holding` says why, so the mark cannot become an escape nobody logged.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from dataclasses import dataclass
@@ -46,10 +53,13 @@ CLOSING = ("done", "superseded by", "withdrawn")
 STATES = ("filed", "planned", "in progress")
 #: when an open feature is owed, in the order the work reaches it (the GM, 2026-10-10)
 STAGES = ("now", "village", "town", "provincial city", "capital")
+#: the tag vocabulary, relative to the repository root
+AFFECTS = Path(".specify/affects.json")
 
 _TASK = re.compile(r"^- \[( |x|X)\] ", re.M)
 _STATUS = re.compile(r"^\*\*Status\*\*:?\s*(.+)$|^\*\*Status:\*\*\s*(.+)$", re.M)
 _OWED = re.compile(r"^\*\*Owed at\*\*:?\s*(.+)$|^\*\*Owed at:\*\*\s*(.+)$", re.M)
+_AFFECTS = re.compile(r"^\*\*Affects\*\*:?\s*(.+)$|^\*\*Affects:\*\*\s*(.+)$", re.M)
 _TITLE = re.compile(r"^#\s+(?:Feature(?: Specification)?\s*(?:\d+)?\s*[:-]\s*)?(.+)$", re.M)
 
 
@@ -63,17 +73,52 @@ class Feature:
     no_spec: bool
     why: str
     owed: str = ""
+    affects: tuple[str, ...] = ()
+    unknown: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class Vocabulary:
+    stage: dict[str, str]
+    aliases: dict[str, tuple[str, ...]]
+
+
+def vocabulary(root: Path) -> Vocabulary:
+    """The tags and the stage of each, from `.specify/affects.json`; none when the file is absent."""
+    path = root / AFFECTS
+    data = json.loads(path.read_text()) if path.is_file() else {}
+    tags = data.get("tags", {})
+    return Vocabulary({t: v["stage"] for t, v in tags.items()}, {a: tuple(ts) for a, ts in data.get("aliases", {}).items()})
+
+
+def affects(text: str, vocab: Vocabulary) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """The known tags an `**Affects**:` line names (aliases expanded, in order, once each) and the unknown ones."""
+    m = _AFFECTS.search(text)
+    words = [w.strip().lower() for w in (m.group(1) or m.group(2)).split(",")] if m else []
+    known: list[str] = []
+    unknown: list[str] = []
+    for w in filter(None, words):
+        for t in vocab.aliases.get(w, (w,)):
+            (known if t in vocab.stage else unknown).append(t)
+    return tuple(dict.fromkeys(known)), tuple(dict.fromkeys(unknown))
+
+
+def derived_stage(tags: tuple[str, ...], vocab: Vocabulary) -> str:
+    """The earliest stage among the tags, `""` for none."""
+    stages = [vocab.stage[t] for t in tags if vocab.stage[t] in STAGES]
+    return min(stages, key=STAGES.index) if stages else ""
 
 
 def owed_at(text: str) -> str:
-    """The stage an `**Owed at**:` line names, or `""` when there is none or it names no stage (a note may follow)."""
+    """The stage an overriding `**Owed at**:` line names, or `""` when there is none or it names no stage (a reason may follow)."""
     m = _OWED.search(text)
     value = (m.group(1) or m.group(2)).strip().lower() if m else ""
     return next((st for st in STAGES if value == st or value.startswith((st + " ", st + " -", st + ","))), "")
 
 
-def feature(d: Path) -> Feature:
-    """One feature directory's state, from its own files."""
+def feature(d: Path, vocab: Vocabulary | None = None) -> Feature:
+    """One feature directory's state, tags and stage, from its own files."""
+    vocab = vocab or vocabulary(d.parent.parent)
     spec = d / "spec.md"
     text = spec.read_text(errors="replace") if spec.is_file() else ""
     m = _TITLE.search(text)
@@ -92,7 +137,9 @@ def feature(d: Path) -> Feature:
         state, why = "filed", ""
     else:
         state, why = ("planned" if ticked == 0 else "in progress"), ""
-    return Feature(d.name, title, state, ticked, total, not spec.is_file(), why, owed_at(text))
+    known, unknown = affects(text, vocab)
+    owed = owed_at(text) or derived_stage(known, vocab)
+    return Feature(d.name, title, state, ticked, total, not spec.is_file(), why, owed, known, unknown)
 
 
 def closed_by_status(d: Path) -> bool:
@@ -150,7 +197,8 @@ def holding(d: Path) -> list[str]:
 
 def features(specs: Path) -> list[Feature]:
     """Every feature directory; a tree with no `specs/` has none (the push runs `--check` in any repository)."""
-    return [feature(d) for d in sorted(specs.iterdir()) if d.is_dir()] if specs.is_dir() else []
+    vocab = vocabulary(specs.parent)
+    return [feature(d, vocab) for d in sorted(specs.iterdir()) if d.is_dir()] if specs.is_dir() else []
 
 
 def _line(f: Feature, extra: str = "") -> str:
@@ -159,22 +207,47 @@ def _line(f: Feature, extra: str = "") -> str:
         parts.append(f"{f.ticked}/{f.total}")
     if f.no_spec:
         parts.append("(no spec.md)")
+    if f.affects and f.state != "closed":
+        parts.append(f"[{', '.join(f.affects)}]")
     if extra:
         parts.append(extra)
     return "  " + "  ".join(parts)
 
 
-def report(specs: Path, show_closed: bool = False) -> str:
-    fs = features(specs)
+def _by_stage(group: list[Feature]) -> list[str]:
     out: list[str] = []
+    for stage in (*STAGES, ""):
+        staged = [f for f in group if f.owed == stage]
+        if staged:
+            out.append(f"  owed at {stage or 'NO STAGE (make speckit-todo CHECK=1 says how to set it)'} ({len(staged)})")
+            out.extend("  " + _line(f) for f in staged)
+    return out
+
+
+def _by_affects(group: list[Feature], tags: list[str]) -> list[str]:
+    out: list[str] = []
+    for tag in (*tags, ""):
+        tagged = [f for f in group if (tag in f.affects if tag else not f.affects)]
+        if tagged:
+            out.append(f"  affects {tag or 'NOTHING NAMED (make speckit-todo CHECK=1 says how to set it)'} ({len(tagged)})")
+            out.extend("  " + _line(f) for f in tagged)
+    return out
+
+
+def wanted(words: str, vocab: Vocabulary) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """The tags a filter names (comma-separated, aliases expanded) and the ones the vocabulary does not know."""
+    return affects(f"**Affects**: {words}", vocab)
+
+
+def report(specs: Path, show_closed: bool = False, by_affects: bool = False, only: tuple[str, ...] = ()) -> str:
+    """The features by state, grouped by stage or by tag; `only` keeps the features carrying any of those tags."""
+    fs = [f for f in features(specs) if not only or set(only) & set(f.affects)]
+    tags = list(vocabulary(specs.parent).stage)
+    out: list[str] = [f"affects {', '.join(only)}", ""] if only else []
     for state in STATES:
         group = [f for f in fs if f.state == state]
         out.append(f"{state.upper()} ({len(group)})")
-        for stage in (*STAGES, ""):
-            staged = [f for f in group if f.owed == stage]
-            if staged:
-                out.append(f"  owed at {stage or 'NO STAGE (make speckit-todo CHECK=1 says how to set it)'} ({len(staged)})")
-                out.extend("  " + _line(f) for f in staged)
+        out.extend(_by_affects(group, tags) if by_affects else _by_stage(group))
         out.append("")
     closed = [f for f in fs if f.state == "closed"]
     if show_closed:
@@ -182,26 +255,39 @@ def report(specs: Path, show_closed: bool = False) -> str:
         out.extend(_line(f, f.why) for f in closed)
         out.append("")
     n = {s: sum(f.state == s for f in fs) for s in STATES}
-    out.append(f"open: {n['filed']} filed, {n['planned']} planned, {n['in progress']} in progress; closed: {len(closed)}")
+    scope = f" (affects {', '.join(only)})" if only else ""
+    out.append(f"open: {n['filed']} filed, {n['planned']} planned, {n['in progress']} in progress; closed: {len(closed)}{scope}")
     return "\n".join(out) + "\n"
 
 
-def unstaged(specs: Path) -> list[Feature]:
-    """The open features whose spec names no stage."""
-    return [f for f in features(specs) if f.state != "closed" and not f.owed]
+def untagged(specs: Path) -> list[Feature]:
+    """The open features that name no known tag, or an unknown one - none in a repository with no vocabulary."""
+    if not (specs.parent / AFFECTS).is_file():
+        return []
+    return [f for f in features(specs) if f.state != "closed" and (not f.affects or f.unknown)]
 
 
-def check_message(missing: list[Feature]) -> str:
-    """The refusal, with the line to add - empty when nothing is missing."""
+def _problem(f: Feature) -> str:
+    if f.no_spec:
+        return "no spec.md - write one first"
+    if f.unknown:
+        return "unknown: " + ", ".join(f.unknown)
+    return "no **Affects** line"
+
+
+def check_message(missing: list[Feature], vocab: Vocabulary | None = None) -> str:
+    """The refusal, with the line to add and the tags it may name - empty when nothing is missing."""
     if not missing:
         return ""
-    names = "\n".join(f"  specs/{f.name}/spec.md" + ("  (no spec.md - write one first)" if f.no_spec else "") for f in missing)
+    names = "\n".join(f"  specs/{f.name}/spec.md  ({_problem(f)})" for f in missing)
+    known = ", ".join([*(vocab.stage if vocab else ()), *(vocab.aliases if vocab else ())])
     return (
-        f"speckit-todo: {len(missing)} open feature(s) say not when they are owed:\n{names}\n"
-        "Add this line under the **Status** line, naming ONE stage:\n"
-        "  **Owed at**: now | village | town | provincial city | capital\n"
-        "`now` unless it concerns a tier not yet scripted (its code, its maps or its generator - a city-only fold is `provincial city`); a thing two tiers need is owed at the earlier one "
-        "(hamlets, then villages, towns, provincial cities, capitals - the GM, 2026-10-10).\n"
+        f"speckit-todo: {len(missing)} open feature(s) do not say what they affect:\n{names}\n"
+        "Add this line under the **Status** line, naming every tag it touches, comma-separated:\n"
+        "  **Affects**: hamlet, magistracy\n"
+        f"Tags: {known}.\n"
+        "A new tag is one entry in .specify/affects.json. The stage is derived - the earliest among the tags, a tier not\n"
+        "yet scripted counting its code too; a thing two tiers need is owed at the earlier one (the GM, 2026-10-10).\n"
     )
 
 
@@ -209,7 +295,9 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="list the spec-kit features not yet closed")
     ap.add_argument("--root", default=".", help="the repository root (default: the current directory)")
     ap.add_argument("--all", action="store_true", help="also list the closed features and why")
-    ap.add_argument("--check", action="store_true", help="exit 1 when an open feature names no stage")
+    ap.add_argument("--check", action="store_true", help="exit 1 when an open feature's tags are missing or unknown")
+    ap.add_argument("--affects", metavar="TAGS", help="only the features carrying any of these tags (comma-separated)")
+    ap.add_argument("--by-affects", action="store_true", help="group the open features by tag, not by stage")
     ap.add_argument("--state", metavar="DIR", help="print one feature directory's state and nothing else")
     ap.add_argument("--closed-by-status", metavar="DIR", help="print yes when the spec's status line closes it, else no")
     ap.add_argument("--holding", metavar="DIR", help="print the open boxes that hold the landing, one a line")
@@ -221,13 +309,21 @@ def main(argv: list[str]) -> int:
         sys.stdout.write(("yes" if closed_by_status(Path(args.closed_by_status)) else "no") + "\n")
         return 0
     if args.check:
-        msg = check_message(unstaged(Path(args.root) / "specs"))
+        msg = check_message(untagged(Path(args.root) / "specs"), vocabulary(Path(args.root)))
         sys.stderr.write(msg)
         return 1 if msg else 0
     if args.state:
         sys.stdout.write(feature(Path(args.state)).state + "\n")
         return 0
-    sys.stdout.write(report(Path(args.root) / "specs", show_closed=args.all))
+    only: tuple[str, ...] = ()
+    if args.affects:
+        vocab = vocabulary(Path(args.root))
+        only, unknown = wanted(args.affects, vocab)
+        if unknown or not only:
+            known = ", ".join([*vocab.stage, *vocab.aliases])
+            sys.stderr.write(f"speckit-todo: AFFECTS names no tag it knows: {', '.join(unknown) or args.affects}\nTags: {known}.\n")
+            return 2
+    sys.stdout.write(report(Path(args.root) / "specs", show_closed=args.all, by_affects=args.by_affects, only=only))
     return 0
 
 
