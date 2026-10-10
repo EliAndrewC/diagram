@@ -10133,24 +10133,6 @@
   "scope": "mode-a"
  },
  {
-  "key": "docs/buildings.md::Fire-water tubs#one tub per wooden building",
-  "tier": "E3",
-  "fix": "tubs one per major wooden building plus two at the kitchen: Ubame's 19 cut to that rule, a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)",
-  "files": [
-   "docs/buildings.md",
-   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
-  ],
-  "after": [
-   "docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
-  "scope": "mode-a"
- },
- {
   "key": "docs/buildings.md::Fire-water tubs#tub against its wall",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -10274,6 +10256,24 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Fire-water tubs#one tub per wooden building",
+  "tier": "E3",
+  "fix": "tubs one per major wooden building plus two at the kitchen: Ubame's 19 cut to that rule, a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)",
+  "files": [
+   "docs/buildings.md",
+   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
+  ],
+  "after": [
+   "docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart"
+  ],
+  "flag": "Held behind #senior retainers housed apart (row 21, its after): feature 372 wave 99's plan review - Ochiba's tubs added only if the karo's house stays, Ubame's tubs counted per building then",
+  "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "mode-a"

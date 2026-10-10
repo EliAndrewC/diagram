@@ -1993,10 +1993,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#one tub per wooden building": {
-  "code": "5bfacfa680a7b91e",
+  "code": "2ed3e4254f208792",
   "core": "9566f0c2425a41fb",
   "date": "2026-10-10",
-  "note": "one tub at each major wooden building and two at the kitchen, with the total following the count, as the page states; Ubame's 19 follows that rule",
+  "note": "the procedure puts one tub at each major wooden building, about 8-12 for a dozen-building compound, which matches the page; the page says the total follows from how many wooden buildings there are",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },

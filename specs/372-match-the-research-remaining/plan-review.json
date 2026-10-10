@@ -1,107 +1,99 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "d1ed0cd0f0c0d62771872031015005328c440d231af6ca660ac6b45a23cccca0",
+ "plan_sha256": "4f85b1e347b3b1fa04777dec11093d4ee74a969ba74bb94c409453ad98254775",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W98-scope",
-   "summary": "wave 98 takes 328's ranked E3 row 22 (privy size) and redraws the hand sheets' privies to 0101's 5 ft square",
+   "summary": "wave 98 takes 328's ranked E3 row 22 (privy size): the hand sheets' privies at 0101's 5 ft square",
    "class": "within",
-   "why": "a ranked open row (FR-001); the fix is the ranking's own fix text; sheets named per 328's FR-009"
+   "why": "unchanged since round 2: a ranked open row (FR-001), the ranking's own fix text, sheets per 328's FR-009"
   },
   {
    "id": "W98-sheet-count",
-   "summary": "Hayakawa 5, Ochiba 4, Ubame 5 (two in the residence's group) - 14 privies, every one 15 x 15 px",
+   "summary": "Hayakawa 5, Ochiba 4, Ubame 5 - 14 privies, every one 15 x 15 px",
    "class": "within",
-   "why": "round 1's finding cleared: re-read on the sheets, every latrine rect on the three is 15 x 15 (Hayakawa 5, Ochiba 4, Ubame 5 incl. latrine-2), 14 in all, as the plan, m:wave98-privy-size and the Decisions row now say; the working tree's uncommitted edits touch no latrine rect"
+   "why": "unchanged since round 2, where it was re-read on the sheets"
   },
   {
    "id": "W98-anchor",
-   "summary": "each resized privy kept against the face it stood on, anchored on the side with the smaller measured gap",
+   "summary": "each resized privy kept against the face it stood on",
    "class": "within",
-   "why": "how to carry out the requested resize without re-siting anything"
+   "why": "how the requested resize is carried out without re-siting"
   },
   {
    "id": "W98-generated-already",
-   "summary": "the generated sheets and Hoshigaoka untouched because they already draw 15 px",
+   "summary": "generated sheets and Hoshigaoka untouched (already 15 px)",
    "class": "within",
-   "why": "checked in round 1: their latrine rects are 15 x 15; PRIVY_FT is 5 ft"
+   "why": "checked in round 1"
   },
   {
    "id": "W98-away-from-water",
-   "summary": "E4 'privies away from water' closed by splitting the claim: 15 ft from a well a GUESS on 0101's drawing page, the food-prep distance UNRESEARCHED",
+   "summary": "E4 'privies away from water' split: 15 ft from a well a GUESS on 0101, food-prep half UNRESEARCHED",
    "class": "within",
-   "why": "the ranking's own fix text prescribes it and 328 closed E4 rows the same way; every privy measured 29.5 ft or more from a well"
+   "why": "the ranking's own fix text; 328 closed E4 rows the same way"
   },
   {
    "id": "W98-new-claims",
-   "summary": "three unclaimed decisions claimed (privy glyph CONVENTION; rear strip the service zone GUESS on 0091; storehouses in the rear strip on 0091)",
+   "summary": "three unclaimed decisions claimed as impl-drift read them",
    "class": "within",
-   "why": "claiming what the procedure already does, labeled as impl-drift read it (FR-004's MISLABELED fix)"
+   "why": "FR-004's MISLABELED fix carried"
   },
   {
    "id": "W98-drifted-left",
-   "summary": "'residence privy attached' and 'servants in the rear strip' re-read DRIFTED and left for their place",
+   "summary": "'residence privy attached' and 'servants in the rear strip' left for their place",
    "class": "within",
    "why": "ranked rows of their own; FR-001 keeps 328's order"
   },
   {
-   "id": "W98-occasion",
-   "summary": "one glyph-redrawn occasion, latrine on ubame-magistracy, standing for the three sheets",
-   "class": "within",
-   "why": "glyph-check's unit is the element on one map where it stands"
-  },
-  {
-   "id": "W98-decisions-row",
-   "summary": "Decisions row: the Mode A privy at 0101's one-seat size, GUESS, 14 privies",
-   "class": "within",
-   "why": "FR-002 carries 328's FR-008; class matches the page's Evidence label"
-  },
-  {
-   "id": "W99-ubame-tubs-unchanged",
-   "summary": "row 14's fix 'Ubame's 19 cut to that rule' dropped: the plan says Ubame's 19 tubs for its ~19 wooden buildings already follow the rule, and the claim is restated to assert it",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "the accepted ranked fix (FR-001) says cut Ubame's 19 to one per major wooden building plus two at the kitchen; the plan drops the cut on a premise nobody measured - m:wave99-tubs-and-pillars records Ochiba's count and the pillars, nothing on Ubame's buildings or its tubs per building, and '~19' is the sheet's own old note. Measured on the sheet (identical at HEAD): the west residence wing (residence-2) carries two tubs on one face, (246,256) and (246,290), and the east wing (residence-5) two, at (537,232) and (844,310), while the rule gives two only to the kitchen; several wooden buildings carry none. Nothing makes the cut impossible, the request does not imply it, and the row's purpose is the one-per-building placement. Measure Ubame's buildings and tubs per building into the record, apply the rule, and put any 'a long wing takes two' through a MODE 1 exception check as a labeled deviation, not as the rule."
-  },
-  {
-   "id": "W99-row14-before-row21",
-   "summary": "row 14 taken ahead of the row it depends on: a tub added at Ochiba's karo's house while E3 row 21 ('senior retainers housed apart': karo's house removed from inside the walls, Ochiba, Hayakawa) stands open",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "row 14's 'after' names row 21 and its fix says 'a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)'; 328's FR-003, carried by 372's FR-001/FR-002, requires a row to follow any row it depends on. The plan neither records the order break nor measures whether the buildings survive; row 21's fix removes the karo's house the new tub serves. Nothing made row 21 impossible first (no hold flag on it). Take row 21 first, or hold row 14's Ochiba half until it lands, and record the order in the plan."
-  },
-  {
    "id": "W99-pillars",
-   "summary": "Ubame's two boundary pillars drawn 3 ft square (9 x 9 px), the plinth form of 0083's band, claim labeled GUESS",
+   "summary": "Ubame's two boundary pillars 3 ft square (9 x 9 px), the plinth form of 0083's band",
    "class": "within",
-   "why": "the ranked fix offers exactly this form ('~1.5 ft shaft (or ~3 ft square with plinth)'); measured 9 x 9 on the sheet"
+   "why": "the ranked fix offers exactly this form; re-read on the sheet: both rects (1066,423) and (1066,553) are 9 x 9"
+  },
+  {
+   "id": "W99-row14-held",
+   "summary": "row 14 (one tub per wooden building) held behind row 21 entirely: Ochiba's two tubs removed, the claim, waves.json and ranking back to their pre-wave-99 state, Ubame's tubs to be counted per building when the row is taken",
+   "class": "within",
+   "why": "carries out round 2's ruling: 328's FR-003 (by 372's FR-002) puts a row after any row it names in 'after', and row 14's 'after' is row 21, which is open. Verified against ac7e4b1bc^: no tub circle differs on Ochiba or Ubame, and the claim, waves.json and ranking entries match byte for byte. Nothing of row 14's fix is dropped: the plan promises the whole row, Ubame's cut included, after row 21. Note: the ranking's wave column still reads '4 (IN-STEP ...)', which FR-001's 'rows with no wave' reads as not open, so the hold lives in the plan's prose alone; give the row a flag in ranking.json so the next wave's selection finds it"
   },
   {
    "id": "W99-gate-posts-passed",
-   "summary": "E3 row 49 'main gate posts' passed over for now, its place kept",
+   "summary": "E3 row 49 'main gate posts' passed over, its place kept",
    "class": "within",
-   "why": "an order choice within one tier, the row kept open for its own wave; SC-003 constrains tier order only and no dependency names it. Not a carve-out, so long as the row is fixed as written in its wave"
+   "why": "an order choice within one tier, the row kept open for its own wave (unchanged since round 2)"
   },
   {
-   "id": "W99-eaves-corner",
-   "summary": "the new Ochiba tubs seated at an eaves corner 2.2 px off the wall, as the procedure seats every tub",
+   "id": "W100-scope",
+   "summary": "wave 100 takes E3 row 11 (cart lane to a side gate): Hayakawa's 10.7 ft and Ubame's 9 ft lanes drawn 6 ft (18 px)",
    "class": "within",
-   "why": "follows the procedure as it stands; row 15 (tub at the entrance) is its own open row and moves every tub together"
+   "why": "the next open in-scope row in ranking order (rows 1-9 deferred, row 10 done in wave 99), 'after' empty; the ranking's fix text names exactly these two lanes, these widths and 18 px; re-read on the sheets: both paths now stroke-width 18 (were 32 and 27); m:wave100-cart-lanes re-run, make pack-audit exits 0 on both"
   },
   {
-   "id": "W99-decisions-rows",
-   "summary": "two Decisions rows: tubs RECONSTRUCTION on 0100 (Ochiba 12), pillars GUESS on 0083",
+   "id": "W100-gates-keep-widths",
+   "summary": "the gates themselves keep their widths (Ubame's cart gate 9 ft, Hayakawa's landing gate 10 ft)",
    "class": "within",
-   "why": "FR-008 carried; classes match the pages' Evidence labels (0100: reconstruction of placement by risk)"
+   "why": "the fix names the lanes only; nothing in it reaches the gates"
   },
   {
-   "id": "W99-occasions",
-   "summary": "glyph-redrawn boundary stones on ubame; placement-changed fire-water tubs on ochiba",
+   "id": "W100-ubame-fox-road-run",
+   "summary": "on Ubame the narrowed path is the Fox road's whole run from the map edge to the cart gate, including the stretch east of the fork to the parley path",
    "class": "within",
-   "why": "the occasions the edits open, declared as 328 declared them"
+   "why": "that 27 px path is the one element the ranked fix names by its 9 ft; nothing narrower or wider was taken. What width the Fox road itself keeps east of the fork is row 12's (road at the gate, 0088), still open"
+  },
+  {
+   "id": "W100-decisions-row",
+   "summary": "Decisions row: a cart lane at 0082's allowance, GUESS",
+   "class": "within",
+   "why": "FR-008 carried; the class matches 0082's Evidence label ('guess (a cart lane of about 6 ft ...)')"
+  },
+  {
+   "id": "W100-occasion",
+   "summary": "one glyph-redrawn occasion, road on hayakawa-magistracy, standing for both sheets",
+   "class": "within",
+   "why": "the occasion the edit opens, declared as wave 98's was"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

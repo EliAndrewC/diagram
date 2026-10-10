@@ -14,19 +14,22 @@ in 328's ranking and this spec.
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame** (`pool/magistracies/*/`), their notes; `docs/buildings.md`.
 
-- [ ] T01 wave 98's row (FR-001, FR-002)
+- [x] T01 wave 98's row (FR-001, FR-002)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the wave's claims; spec-fidelity CLEAR (plan round 3); sheets regenerated, pack audits checked
 
 ## Phase 2 - wave 99 (amendment 2): the pillars at 0083's plinth
 
 - Sheet redrawn (FR-002, under 328's hand-drawn-maps rule): **Ubame**, its notes; `docs/buildings.md`.
 
-- [ ] T02 wave 99's rows (FR-001, FR-002)
+- [x] T02 wave 99's rows (FR-001, FR-002)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the wave's claims; spec-fidelity CLEAR (plan round 3); sheets regenerated, pack audits checked
 
 ## Phase 3 - wave 100 (amendment 3): the cart lanes at 0082's 6 ft
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ubame**, their notes; `docs/buildings.md`.
 
-- [ ] T03 wave 100's row (FR-001, FR-002)
+- [x] T03 wave 100's row (FR-001, FR-002)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the wave's claims; spec-fidelity CLEAR (plan round 3); sheets regenerated, pack audits checked

@@ -70,7 +70,7 @@
     <path d="M 633 830 L 633 754" stroke="#9C7448" stroke-width="36" stroke-dasharray="14 12" fill="none" opacity="0.4"/>
   </g>
   <!-- The Fox road: arrives from the east across the border, forking to the cart gate
-       (goods) and, by a narrower path, to the parley room's outer door (people). -->
+       (goods) and, by a path of the same 6 ft, to the parley room's outer door (people). -->
   <g data-kind="road">
     <!-- the cart lane to the cart gate, 6 ft (18 px), 0082's allowance over the hand cart's bed
          (research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html; feature 372 wave 100:

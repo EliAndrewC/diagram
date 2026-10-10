@@ -3212,5 +3212,8 @@
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
   "fix": "no fire gap drawn round the charcoal store (0197); Ubame's cart yard drawn as the 15 ft loading apron between the tally range and the store (0116's 15-20 ft, no wider than its use), the store unmoved since the apron is the space's use (wave 97, spec-fidelity W97-5)"
+ },
+ "docs/buildings.md::Fire-water tubs#one tub per wooden building": {
+  "flag": "Held behind #senior retainers housed apart (row 21, its after): feature 372 wave 99's plan review - Ochiba's tubs added only if the karo's house stays, Ubame's tubs counted per building then"
  }
 }
