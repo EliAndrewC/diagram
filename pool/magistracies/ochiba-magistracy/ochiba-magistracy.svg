@@ -595,7 +595,7 @@
        of the residence or a small addition to it - the Takayama residence's with its well and kitchen - never a
        building of its own). Pass 2 moved it with the kitchen ell. The size is a guess. -->
   <g data-kind="bath">
-    <rect x="290" y="362" width="40" height="33" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="290" y="362" width="30" height="24" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/><!-- feature 372 wave 108: 10 x 8 ft, 0105 drawing page's guess (it was 13 x 11) -->
     <!-- small steam plume suggestion -->
     <path d="M 302 376 q 3 -8 -2 -14 M 316 376 q 3 -8 -2 -14" stroke="#A8B4C8" stroke-width="1" fill="none" opacity="0.7"/>
     <text font-size="12" font-weight="bold" fill="#3A2E1C">bath</text>
@@ -733,7 +733,7 @@
     <circle cx="275" cy="369.5" r="3.8"/>
     <circle cx="581" cy="470.5" r="3.8"/>
     <circle cx="331" cy="257.5" r="3.8"/>
-    <circle cx="335" cy="374" r="3.8"/>
+    <circle cx="305" cy="393.5" r="3.8"/>
     <circle cx="872.5" cy="231" r="3.8"/>
     <circle cx="939" cy="608.5" r="3.8"/>
     <circle cx="651" cy="710" r="3.8"/>

@@ -498,5 +498,52 @@
     "value": {
       "entry": "2026-10-10 feature 372 wave 106 (the fire-water tubs at the entrance)"
     }
+  },
+  "wave108-bath-size": {
+    "observed": "2026-10-10",
+    "source": "the three hand sheets' bath rects; l7r/diagram/buildings/types.json; make pack-audit on each sheet",
+    "command": "grep -n 'data-kind=\"bath\"' -A2 pool/magistracies/*/*.svg; make pack-audit ARGS=<each sheet>",
+    "method": "the bath rect's size in px at 3 px = 1 ft, before (origin/main) and after",
+    "quantity": "the bath's drawn size on each sheet, and the band",
+    "value": {
+      "ochiba": {
+        "before_ft": [
+          13.3,
+          11
+        ],
+        "after_ft": [
+          10,
+          8
+        ]
+      },
+      "ubame": {
+        "before_ft": [
+          10,
+          11
+        ],
+        "after_ft": [
+          10,
+          8
+        ]
+      },
+      "hayakawa": {
+        "kept_ft": [
+          18,
+          12
+        ],
+        "reading": "the sheet's rolled resident particular, 'an enlarged bath' (its notes, knob 7)"
+      },
+      "draft": {
+        "ft": [
+          10,
+          8
+        ],
+        "reading": "compound_model.BATH_W_FT, BATH_H_FT, unchanged"
+      },
+      "band_before": "w 8-22, h 8-22 ft",
+      "band_after": "w 8-18, h 6-12 ft (admits the 10 x 8 guess either way round and Hayakawa's 18 x 12 particular)",
+      "tubs": "each bath's tub moved to stay on its yard side: Ochiba (335,374)->(305,393.5), Ubame (349,387)->(349,379.5); pack_audit clean",
+      "tests": "test_registry 69, test_mode_a_sheets 27, test_building_programs 5 passed"
+    }
   }
 }

@@ -27,6 +27,8 @@ in 328's ranking and this spec.
 
 - (reviewed PASS at batch 5's close, 2026-10-10, round 2) layout-revised: county-magistracy-example - wave 106: the draft seats each tub beside a door of its building
 
+- glyph-redrawn: bath on ochiba-magistracy - wave 108: the bath 10 x 8 ft, 0105's guess, on Ochiba and Ubame
+
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame** (`pool/magistracies/*/`), their notes; `docs/buildings.md`.
@@ -110,3 +112,10 @@ in 328's ranking and this spec.
 - [x] T10 wave 107's rows (FR-001)
       research: rendering
       verify: DONE. DONE. wave 107: three claims labeled as the record has them (two-court zoning DEVIATION 0090 drawing; commuting clerks DEVIATION 0113 drawing; the hill shrine's burial ground GUESS 0236 drawing); impl-drift IN-STEP; plan review CLEAR round 2
+
+## Phase 11 - wave 108 (amendment 8): the bath at 0105's 10 x 8 ft
+
+- Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Ochiba**, **Ubame**, their notes; `docs/buildings.md`; the bath band.
+
+- [ ] T11 wave 108's row (FR-001, FR-002)
+      research: rendering

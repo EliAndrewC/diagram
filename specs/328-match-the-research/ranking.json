@@ -372,6 +372,21 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Inner court (private / sacred)#the residence along the north range",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim the procedure's placing of the residence along the north range of the inner court: cite the page that records it (0091's drawing page on the house's orientation) or label it a GUESS",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 108's impl-drift of the inner court section (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -7156,7 +7171,7 @@
    "l7r/diagram/buildings/types.json"
   ],
   "after": [],
-  "flag": "",
+  "flag": "Held: question for the GM, deferred to the feature's end (goal amendment 2026-10-07). research/questions/0117-doorways-and-doors-to.drawing.html records the sheets' doors (mostly 8-8.7 ft) as a drawing CONVENTION, two to three times a real door, and the draft's 6 ft as following it; the size audit's 3-6 ft band and the GM's standing rule that to-scale plans draw true sizes (raising legibility, not inflating) would narrow them to 3-6 ft. Which stands: the recorded convention, or true-size doors on every sheet?",
   "found": "wave 106's size-audit of the door on hoshigaoka-shrine, Q1 (feature 372, 2026-10-10)",
   "tier_as_ranked": "E2",
   "wave": "",
@@ -10260,7 +10275,7 @@
   "tier_as_ranked": "E1",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "108",
   "scope": "mode-a"
  },
  {
@@ -10315,6 +10330,24 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the residence is sized to 49 tsubo (0091's drawing page), within the thousand-koku Kuchiba house's 41-74 tsubo, which held six rooms, while the 38-room karo mansion stood on 280 tsubo: 18-25 rooms does not fit a 49-tsubo house; the procedure and the sheets' room counts follow the record (about six) or the claim is relabeled",
+  "files": [
+   "docs/buildings.md",
+   "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 108's impl-drift of the inner court section (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "docs/buildings.md::Inner court (private / sacred)#room order",

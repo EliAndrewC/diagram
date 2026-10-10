@@ -671,7 +671,7 @@
        kitchen, so it has no door of its own. The size is a guess. The steam wisps went with the move: above the bath
        they would cross the corridor. -->
   <g data-kind="bath">
-    <rect x="334" y="348" width="30" height="33" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="334" y="348" width="30" height="24" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/><!-- feature 372 wave 108: 10 x 8 ft, 0105 drawing page's guess (it was 10 x 11) -->
     <text font-size="10" font-weight="bold" fill="#3A2E1C">bath</text>
   </g>
 
@@ -908,7 +908,7 @@
     <circle cx="772" cy="330" r="3.8"/>
     <circle cx="801" cy="330" r="3.8"/>
     <circle cx="412" cy="364.5" r="3.8"/>
-    <circle cx="349" cy="387" r="3.8"/>
+    <circle cx="349" cy="379.5" r="3.8"/>
     <circle cx="532" cy="336.5" r="3.8"/>
     <circle cx="966" cy="291.5" r="3.8"/>
     <circle cx="352.5" cy="532" r="3.8"/>
