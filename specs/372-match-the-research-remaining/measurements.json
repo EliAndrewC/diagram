@@ -271,5 +271,49 @@
       "pack_audit": "every check OK on all three; the gaps round the smaller archive read LOOSE (kura >10 ft) on Hayakawa (24 and 14 ft) and Ubame (18 and 13 ft), heuristic notes, not checks",
       "reading": "three archives 24 x 18 ft, each door face where it stood"
     }
+  },
+  "wave105-draft-and-band": {
+    "quantity": "wave 105 round 2 (2026-10-10): the tax archive's band, the generated draft and the roundtrip sheet at 0100's ceiling; pack_audit's coverage floor at 0116's 30%",
+    "observed": "2026-10-10",
+    "source": "l7r/diagram/buildings/types.json, l7r/diagram/compound.py, pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py; make map and make pack-audit on the two generated sheets; make test-file on test_compound and test_mode_a_sheets",
+    "command": "make pack-audit ARGS=pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "method": "the band and the program sizes read; both generated sheets regenerated and audited; the compound and sheet tests run",
+    "value": {
+      "band_ft": {
+        "before": "w 20-48 by h 10-36",
+        "after": "w 18-24 by h 12-18"
+      },
+      "draft_archive_ft": [
+        [
+          34,
+          34
+        ],
+        [
+          24,
+          18
+        ]
+      ],
+      "roundtrip_archive_ft": [
+        [
+          32,
+          28
+        ],
+        [
+          24,
+          18
+        ]
+      ],
+      "draft_coverage_pct": 32,
+      "roundtrip_coverage_pct": 37,
+      "coverage_floor": [
+        0.33,
+        0.3
+      ],
+      "oshirasu_x_ft": [
+        59.5,
+        75.5
+      ],
+      "reading": "the band now admits no archive over 432 sq ft; the draft, at 24 x 18, covers 32% - under the old 33% floor, which predated 0116's correction to 30-42% (Takayama's measured ~31% the bottom), so the floor follows the page; the draft's hearing court re-centered on the hall the smaller archive let slide east; test_compound 72 passed, test_mode_a_sheets 27 passed"
+    }
   }
 }

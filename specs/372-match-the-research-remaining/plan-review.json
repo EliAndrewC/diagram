@@ -1,75 +1,77 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "d9007ada86936fb1846d10be272d690df3daf6562665a392e7587c6793f7dae0",
+ "plan_sha256": "419891347d7fa29a83fef8016c323f3968f9f7dd68b873771da0339b4952ac47",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W104-size",
-   "summary": "All four gate boards drawn as 0190's frame 16 x 6 ft on a footing 2 ft wider all round with a fence line",
+   "id": "W105-size",
+   "summary": "Tax archive on Hayakawa, Ochiba, Ubame drawn 24 x 18 ft (72 x 54 px, 432 sq ft)",
    "class": "within",
-   "why": "unchanged since the earlier CLEAR rounds: 0190's drawing page draws every board so"
+   "why": "0100's drawing page: no more than ~450 sq ft, about 24 x 18 ft a GUESS; rects read at HEAD"
   },
   {
-   "id": "W104-roof-fence-glyph",
-   "summary": "Roof as a ridge line, fence as a dashed line at the footing's edge",
+   "id": "W105-door",
+   "summary": "Each archive's door face kept where it stood",
    "class": "within",
-   "why": "a drawing of the page's roofed frame and fence; nothing dropped"
+   "why": "the door rects sit on each new rect's east face (checked on all three)"
   },
   {
-   "id": "W104-site",
-   "summary": "Each gate board on the road's far verge straight across from its gate",
+   "id": "W105-procedure",
+   "summary": "docs/buildings.md bullet and claim rewritten; strongroom role within the same ceiling",
    "class": "within",
-   "why": "0190 beside the road never in it; 0088 the gate opens straight onto the road; checked on the ink (m batch3-boards-off-the-road)"
+   "why": "the row's prose target; claim IN-STEP"
   },
   {
-   "id": "W104-bounty-west",
-   "summary": "Ubame's bounty board beside its notice board on the same verge, west",
-   "class": "within",
-   "why": "a placement detail no page or GM word settles; both boards stay at the gate beside the road"
+   "id": "W105-band",
+   "summary": "The declared band (l7r/diagram/buildings/types.json tax_archive, rendered at docs/building-programs.md:90) left at 20-48 by 10-36 ft",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "ranking row 37 names three targets: the three sheets, the band and the prose. The band is unchanged and unmentioned in the plan; it is what pack_audit size_bands holds a sheet to, and it passes a 48 x 36 ft (1,728 sq ft) archive, about four times the ceiling the row enforces. Nothing makes it impossible, no GM word implies it, and leaving it defeats the row's purpose"
   },
   {
-   "id": "W104-limit",
-   "summary": "NOTICE_BOARD_MAX_FT 20 -> 40 ft, now labeled this project's figure, UNRESEARCHED (was worded GUESS against 0190)",
-   "class": "within",
-   "why": "the 20 ft was a project tolerance on no page; held at 20 it would push the boards back into the road against 0190 and 0088. The relabel is the more honest class: 0190 gives no distance, so the number is this project's; code claim, plan and spec Decisions row agree (compound_model.py docstring, spec line 86)"
+   "id": "W105-page-bullet",
+   "summary": "0100 drawing page's bullet 'Our plans draw the records storehouse larger than this ceiling, about 32 to 36 ft long' removed because 'the plans no longer do'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "the premise was not measured and is false: compound.py:807 draws the generated archive 34 x 34 ft and its claim (:667) cites this very page for 'a 34 x 34 ft kura (~1,160 sq ft)'; county-magistracy-example.svg draws 102 x 102 px and ochiba-roundtrip-test.svg (Ochiba's program measured off the sheet) 96 x 84 px. A true record of a remaining mismatch was deleted instead of corrected, and the wave's scope silently stops at the hand sheets (waves 98 and 104 stated what the generated draft does). Either bring compound.py and the two generated sheets to the ceiling or keep the bullet naming the generated draft and record it as left"
   },
   {
-   "id": "W104-fixtures",
-   "summary": "Red fixtures' boards moved farther out so notice_board_adrift still fires",
+   "id": "W105-loose-left",
+   "summary": "Pack audit's LOOSE gaps round the smaller archive (Hayakawa 24/14 ft, Ubame 18/13 ft) left as found",
    "class": "within",
-   "why": "keeps the enforcement under the new limit; no behavior added"
+   "why": "a heuristic note, not a check; the plan's legibility spacing is a recorded convention (0116); figure re-run and reproduces"
   },
   {
-   "id": "W104-road-edge",
-   "summary": "Ochiba's road edge set on the wall's outer face, closing a half-foot strip under the wall (road check F6)",
+   "id": "W105-modals",
+   "summary": "Four pop-ups citing 0100's drawing page re-checked; tax archive, granary, storehouse given what their Depiction tabs lacked",
    "class": "within",
-   "why": "0088: the gate opens straight onto the road with no ground before it; the strip contradicted that, so closing it carries the wave-103 rule out"
+   "why": "the record checks the page edit owed; fixes where found (XIV)"
   },
   {
-   "id": "B3-no-pair",
-   "summary": "Batch 3 bookends: no timing pair owed, the batch's engine code (pack_audit shared.py crop check and registry.py hint text; compound_model.NOTICE_BOARD_MAX_FT) not in what the pair rolls",
+   "id": "W105-granary-claim",
+   "summary": "One unclaimed decision claimed: kura granary door on the apron, UNRESEARCHED",
    "class": "within",
-   "why": "measured, not asserted: make perf runs perf_snapshot, which rolls hamletgen's reference hamlet stages (perf_snapshot.py lines 112-114); grep finds no import of compound_model, compound_parts or tools.pack_audit anywhere under hamletgen, settlement or waterfields - the constant's readers are compound_parts.board_by_a_gate (the compound draft) and pack_audit only. A pair would time byte-identical code on its path, so skipping it narrows nothing the pair exists to catch; the gate (make done) still ran green at the engine key that holds the change. Same reasoning as batches 1-2. The row says 'pack_audit's crop check' and omits registry.py's fix-hint string (20 -> 40 ft), also pack_audit - an omission of wording, not of substance"
+   "why": "claims coverage of an existing decision; no behavior change"
   },
   {
-   "id": "B3-note-box",
-   "summary": "Ubame's border note box moved below the road (round 2 F7: the caption placer had put the note on the road)",
+   "id": "W105-drifted-left",
+   "summary": "Five DRIFTED rows in the section (barracks, forecourt, the stables' three) left for their ranked places",
    "class": "within",
-   "why": "a fix of a defect the review found, following from wave 103's road; narrows nothing"
+   "why": "FR-001 keeps the ranking's order"
   },
   {
-   "id": "B3-roofed-wording",
-   "summary": "Ubame's notes drop 'roofed' as the bounty board's distinguishing word",
+   "id": "W105-crop-gap",
+   "summary": "modal-bundle glyph crop gap recorded in What it carries; depiction checks judged from the SVG",
    "class": "within",
-   "why": "every board is now 0190's roofed frame, so 'a second, roofed board' wrongly implied the first was not; the drawing is unchanged"
+   "why": "a recorded tooling defect; the checks still ran on the right ink"
   },
   {
-   "id": "B3-close",
-   "summary": "Batch 3 closed: road PASS, notice board NEEDS-WORK then PASS round 2, ledger rows written, occasions retired",
+   "id": "B4-open",
+   "summary": "Batch 4 bookends owed at the close",
    "class": "within",
-   "why": "process; the ledger rows and the tasks.md occasion lines match the reported verdicts"
+   "why": "FR-003 as written"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

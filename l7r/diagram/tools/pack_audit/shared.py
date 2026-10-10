@@ -30,7 +30,9 @@ OVERLAP_SHARE: float = 0.30
 # size-audited footprint (the audit of 2026-07 shrank four laundered sizes AFTER the entry called it
 # 37-38%): inside the attested spread, so the exact 37 was the check's defect, not the sheet's
 # (feature 254 T06/T08, plan D9); the entry's stale sentence is corrected in the same work.
-COVERAGE_FLOOR: float = 0.33
+# FEATURE 372 WAVE 105: the floor follows 0116's drawing page as corrected on 2026-10-01 - about 30-42%, the bottom the one
+# office measured (Takayama's floors ~31% of its site); the 33 above was read off the entry before that correction.
+COVERAGE_FLOOR: float = 0.30
 COVERAGE_CEILING: float = 0.42
 COVERAGE_TOL: float = 0.02
 # The hugging floor is DERIVED, not typed from a source: the five pool sheets measure 51-58% of

@@ -36,7 +36,7 @@ def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | N
     hug = perimeter_hugging_pct(plan, cell=cell)
     lines = [
         f"walled interior: {(maxx - minx) / FTPX:.0f} x {(maxy - miny) / FTPX:.0f} ft = {inside * cell * cell / (FTPX * FTPX):,.0f} sqft",
-        f"building coverage: {100 * built / inside:.0f}%  (a jin'ya runs ~33-42% built: Takayama's floor to the record's band)",
+        f"building coverage: {100 * built / inside:.0f}%  (a jin'ya runs ~30-42% built: Takayama's ~31% floor to the record's band, 0116)",
         f"purposeful open (garden/court/glyphs): {100 * openc / inside:.0f}%  (features)",
         f"bare open ground: {100 * empty / inside:.0f}%  (courts are open - not a defect alone)",
         f"perimeter-hugging: {100 * hug:.0f}% of building footprint within 25 ft of a wall  (high = buildings ring the courts)",

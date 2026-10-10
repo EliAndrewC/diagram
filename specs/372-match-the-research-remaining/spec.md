@@ -85,6 +85,7 @@ many maps; a newly failing cohort seed is a regression, reverted with its measur
 | A gate's notice board drawn as 0190's roofed frame on its footing inside a fence (wave 104) | ACCURATE (the frames measured at two post towns, the Kanagawa board's roof, footing and fence) | the sheets drew smaller boards; 4 boards redrawn on 3 sheets (m:wave104-notice-boards) | the three sheets; `docs/buildings.md` Approaches |
 | A gate's board stands on the road's far verge across from the gate; the board's limit from its gate raised to cross the road (wave 104) | GUESS on 0190's drawing page (a board beside the road at the office's own gate); the limit this project's figure (UNRESEARCHED) | the boards stood in the road once each road met its wall; the limit was a number on no page, set while boards stood at the wall (m:wave104-notice-boards) | the three sheets; `compound_model.NOTICE_BOARD_MAX_FT` |
 | A tax archive drawn at 0100's records-store ceiling (wave 105) | ACCURATE for the ceiling (Takayama's measured book storehouse); GUESS for its shape | the sheets drew it larger, a kitchen storehouse's size; 3 archives redrawn (m:wave105-tax-archive) | the three sheets; `docs/buildings.md` Outer court |
+| A compound's coverage held to 0116's band, its floor at Takayama's measured bottom (wave 105) | ACCURATE for the floor (the one office measured); GUESS for the ceiling | the check's floor predated the page's correction and refused the draft at its research-sized archive (m:wave105-draft-and-band) | `pack_audit/shared.py` COVERAGE_FLOOR |
 
 ## Assumptions
 

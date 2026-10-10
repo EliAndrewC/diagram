@@ -664,7 +664,7 @@ def county_magistracy_program() -> CompoundProgram:
     has to overlap it.
 
     Research:
-        tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a 34 x 34 ft kura (~1,160 sq ft)
+        tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a 24 x 18 ft kura (432 sq ft), under the ~450 sq ft records-store ceiling, its shape a GUESS
         barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 45 x 34 ft range, 34 ft deep
     """
     # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
@@ -696,7 +696,7 @@ def county_magistracy_program() -> CompoundProgram:
         # stands; 32 ft deep (36 until pass 5) keeps the cart slot to the stables and room for the stable well before
         # them (docs/buildings.md "Hearing court"). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its
         # size is a GUESS - no roofed court's size was found.
-        CourtZone("oshirasu", 59.5, 130.0, 80.0, 32.0),  # y 130 since pass 6: the office hall is 38 ft deep
+        CourtZone("oshirasu", 75.5, 130.0, 80.0, 32.0),  # y 130 since pass 6: the office hall is 38 ft deep; x 75.5 since feature 372 wave 105, centered again on the hall the smaller tax archive let slide east
         # just inside the main gate (131-139), east of the gatehouse that stands beside it, and 55 ft wide (it was 36)
         # to take the ground east of the gate the hearing court gave up when it shrank to the hall's length; a
         # marshalling apron's width is a GUESS
@@ -803,8 +803,8 @@ def county_magistracy_program() -> CompoundProgram:
             extra_doors=("W",),
             door_fracs=(0.8, 0.7),
         ),
-        # 34 x 34 ft (it was 34 x 30; pass 6, returning the house's mass - a GUESS in the band 20-48 x 10-36)
-        b("tax archive", "kura", 34.0, 34.0, "outer", "W", order=6, feature="tax archive"),
+        # 24 x 18 ft, under 0100's ~450 sq ft records-store ceiling (feature 372 wave 105; it was 34 x 34, pass 6's mass)
+        b("tax archive", "kura", 24.0, 18.0, "outer", "W", order=6, feature="tax archive"),
         # 50 ft long (it was 60): the hearing court, now centered on the hall, starts at x 59.5, and the retainers'
         # east face must keep a 7 ft run in front of it for its tub and door
         # The staff long-house (pass 6): the senior retainers' quarters, 50 x 36 ft, with the KARO'S BAY at its north end,
@@ -827,7 +827,7 @@ def county_magistracy_program() -> CompoundProgram:
         ),
         # 60 x 30 ft (it was 52 x 28), the top of the granary band (30-60 x 14-36): pass 5 returned the ~2,000 sq ft the
         # house gave up (research 0091) to the compound's working stores and lodgings, holding coverage in the
-        # jin'ya band (33-42%) without shrinking the envelope (docs/buildings.md). A GUESS in the band.
+        # jin'ya band (30-42%, 0116's drawing page) without shrinking the envelope (docs/buildings.md). A GUESS in the band.
         b("granary", "kura", 60.0, 30.0, "outer", "E", order=6, feature="granary"),
         # 45 ft long (it was 33): the platoon lodged on the grounds (staff housing option (a)) is ~10-20 men, and the
         # watch's range should out-foot the stable by a margin (docs/buildings.md "Barracks": ~27-53 ft); pass 5. A GUESS.
@@ -838,7 +838,9 @@ def county_magistracy_program() -> CompoundProgram:
         b("cell", "cell", 12.0, 10.0, "outer", "E", order=1, feature="cell"),
         # The gatehouse stands BESIDE the gate, a building of its own (R19's Takayama form, research buildings 420),
         # 18 x 12 ft - the one measured freestanding guardroom (Kita-in's 3 x 2 ken). It was 42 x 15 ft in the SW
-        # corner, 83 ft from the gate; ~40 ft is the gate range's scale.
+        # corner, 83 ft from the gate; ~40 ft is the gate range's scale. Left as found by feature 372 wave 105: 0093 now draws
+        # a gatehouse of its own ~40 ft (the hand sheets since wave 101), but at 40 ft the stables find no seat on this
+        # south wall - the draft's own row (`docs/building-programs.md` walled enclosure).
         # Its door opens on the gate passage (east), where the gatekeepers watch - not on the court.
         b("gatehouse", "dark", 18.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True, door_face="E"),
         # 42 x 24 ft (it was 33 x 23; passes 5 and 6, the same return of mass), still under the barracks as docs/buildings.md

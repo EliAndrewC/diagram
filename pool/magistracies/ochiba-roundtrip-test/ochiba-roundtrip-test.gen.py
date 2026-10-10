@@ -58,7 +58,7 @@ def ochiba_program() -> C.CompoundProgram:
         b("karo's house", "lord", 37.0, 23.0, "inner", "divider", order=3, feature="karo's house"),
         # outer (administrative) court
         b("office hall", "lord", 120.0, 28.0, "outer", "divider", order=10, feature="office hall"),
-        b("tax archive", "kura", 32.0, 28.0, "outer", "W", order=6, feature="tax archive"),
+        b("tax archive", "kura", 24.0, 18.0, "outer", "W", order=6, feature="tax archive"),  # feature 372 wave 105: 0100's ceiling, as Ochiba's sheet
         b("senior retainers", "service", 51.0, 17.0, "outer", "W", order=4, feature="retainers' quarters"),
         b("granary", "kura", 50.0, 26.0, "outer", "E", order=6, feature="granary"),
         b("barracks", "service", 31.0, 33.0, "outer", "E", order=4, feature="barracks"),

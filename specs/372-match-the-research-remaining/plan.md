@@ -143,6 +143,16 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
   **Hayakawa**, **Ochiba** and **Ubame** drawn 24 x 18 ft (72 x 54 px), each door face where it stood; the procedure's bullet
   (its strongroom role now within the same ceiling) and claim, and the drawing page's bullet that recorded our plans drawing it
   larger (removed: the plans no longer do).
+- **Round 2 (plan review BLOCKED W105-band and W105-page-bullet)**: the ranked fix names "the band and prose" too, and the
+  generated draft still drew 34 x 34 ft. Now: the `tax_archive` band in `types.json` is w 18-24 by h 12-18 ft (it was 20-48 by
+  10-36, which admitted four times the ceiling); `compound.py`'s draft archive and its claim 24 x 18 ft; the roundtrip sheet's
+  program (Ochiba's measured sizes) 24 x 18 ft. The draft then covers 32%, under `pack_audit`'s 33% floor - a floor read off
+  0116 before its 2026-10-01 correction to 30-42% (Takayama's measured ~31% the bottom), so it follows the page at 0.30
+  (fixed where found; the report line with it). The draft's hearing court, a fixed zone, re-centered on the office hall the
+  smaller archive let slide east (test_compound's own rule). The drawing page's bullet stays removed: no plan now draws the
+  archive larger. Left as found: the draft's gatehouse, 18 x 12 ft where 0093 now draws ~40 ft - at 40 its stables find no
+  seat on that wall; it is the draft's own row (`docs/building-programs.md` walled enclosure), recorded at its line
+  (m:wave105-draft-and-band).
 - **Left as found**: the pack audit reads the gaps round the smaller archive LOOSE (a heuristic note, not a check) on
   Hayakawa and Ubame; the open ground is outer court.
 - **The record checks the drawing page's edit owed**: four pop-ups citing 0100's drawing page re-checked (modal-depiction): the
