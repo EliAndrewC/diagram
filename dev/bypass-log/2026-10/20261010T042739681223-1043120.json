@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-10T04:27:39Z",
+  "target": "review-accept",
+  "commit": "cb7dbbccd",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--barley F7: a PASS round's confirmation; no action asked"
+}
