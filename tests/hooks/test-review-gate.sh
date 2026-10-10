@@ -56,6 +56,14 @@ NEW='{"v":2,"ink_classes":{"farmhouse":1,"well":1}}'
 mkrepo b withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll
 check "a map gaining an element with no review recorded" b blocked
 
+# GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - a render older than main's reads as a new element; the gate redraws
+# what an owed unit sits on (the stub `map` puts main's census back, as a real redraw did for 374's corridor) and asks again
+mkrepo b1 withmap; git checkout -q main; echo "# gen" > "$POOL/m.gen.py"
+printf 'map:\n\t@printf %%s %s > %s\n' "'{\"v\":1,\"ink_classes\":{\"farmhouse\":1}}'" "$POOL/m.json" >> Makefile
+git add -A; git commit -qm gen; git update-ref refs/remotes/origin/main main; git checkout -q -b stale
+echo work >> seed.txt; git add -A; git commit -qm work; echo "$NEW" > "$POOL/m.json"
+check "a stale render that its redraw clears owes nothing" b1 ok
+
 # The two shapes the bare `grep FAITHFUL` used to let through (feature 156, 2026-08-29). The first is
 # the dangerous one: a spec a reviewer REJECTED shipped as if it had passed.
 mkrepo b2; printf '# spec\n\n## Review history\n- **Round 1 (2026-08-29): NOT FAITHFUL.** FR-003 carved out a case.\n' > specs/900-x/spec.md
