@@ -42,7 +42,11 @@ mkdir -p "$FEATURE_DIR"
 
 # Copy plan template if it exists
 TEMPLATE=$(resolve_template "plan-template" "$REPO_ROOT") || true
-if [[ -n "$TEMPLATE" ]] && [[ -f "$TEMPLATE" ]]; then
+# Never over an existing plan: 2026-10-10 a stale SPECIFY_FEATURE pointed this at feature 370's reviewed plan.md,
+# which was replaced by the bare template and carried in a commit of 371 until the push's plan gate caught it.
+if [[ -s "$IMPL_PLAN" ]]; then
+    echo "Kept the existing $IMPL_PLAN (not overwritten; if this is the wrong feature, export SPECIFY_FEATURE for the right one)" >&2
+elif [[ -n "$TEMPLATE" ]] && [[ -f "$TEMPLATE" ]]; then
     cp "$TEMPLATE" "$IMPL_PLAN"
     echo "Copied plan template to $IMPL_PLAN"
 else
