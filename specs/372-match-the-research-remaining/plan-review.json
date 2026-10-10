@@ -1,150 +1,42 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "c1951e44dcc2904bd16524b252029eb2fe256096bd95a31d16395493c378fa0b",
+ "plan_sha256": "a43b5c07cd77b55d50e42ec307af0f263829f8dcbeec465116772da00bb8812c",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W106-a one rule, not a knob (roof seat not drawn)",
-   "summary": "each tub beside a door of its building; the roof seat 0100 also attests is not drawn",
+   "id": "W108-ochiba-ubame-10x8",
+   "summary": "Ochiba's bath (40x33 px, 13.3 x 11 ft) and Ubame's (30x33 px, 10 x 11 ft) redrawn 30x24 px = 10 x 8 ft against their kitchens, each tub moved to its yard side; the procedure's claim and text say 10 x 8 ft; the draft unchanged at 10 x 8",
+   "class": "within",
+   "why": "The ranked fix verbatim ('bath drawn ~10 x 8 ft (30 x 24 px) in the procedure; Ochiba (13 x 11 ft) and Ubame (10 x 11 ft) resized'). Before sizes re-read at 0b1dace57 and after sizes in the sheets match m:wave108-bath-size. The tub moves follow wave 106's accepted tub rule."
+  },
+  {
+   "id": "W108-found-rows",
+   "summary": "Three rows impl-drift found in the inner court section (the residence along the north range E0, the karo's house E0, 18-25 tatami rooms E3) added to 328's ranking, scope kept, no wave yet",
+   "class": "within",
+   "why": "FR-001 carries 'the found rows' into the work list in rank order; adding them and not fixing them in this wave narrows nothing."
+  },
+  {
+   "id": "W108-hayakawa-held",
+   "summary": "Hayakawa's bath kept at 54x36 px = 18 x 12 ft as its rolled resident particular and HELD for the GM (found-wave108, E2 UNCLAIMED), the procedure naming it as 'the program's knob' unclaimed, the spec's Decisions row recording it as kept",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 holds QUESTIONS for the GM, not fixes (spec review round 1: 'the GM deferred the QUESTIONS to the end, not the fixes'), and the GM's 2026-09-12 and 2026-10-02 rulings say a session decides a tradeoff between its own choices by the record and does not ask. No GM word stands behind the enlarged bath: make canon finds none of Hajime, 'enlarged bath', 'sweaty'; the particular entered on 2026-07-12 as the session's reading of the OP traits (Permanent Wound, sweaty), and the notes' list of GM rulings names the karo, the massing, the shrine and the lineage, not the bath. The record's silence is on a bath's SIZE, a research question 0105's GUESS label already answers; the held question is which of two project choices wins (0105's 10 x 8 guess or the rolled particular), the kind of tradeoff the 2026-10-02 ruling leaves to the session. The question as framed also rests on an unmeasured premise - that keeping the particular is what takes Hayakawa's house past 49 tsubo. Measured today (make size-table on the sheet): the residence blocks 2,429 + 2,042 sq ft and the kitchen 1,332, about 5,800 sq ft (~163 tsubo) without the bath, against which the enlargement over 10 x 8 adds 136 sq ft (~3.8 tsubo); the house's size is the open E3 row Scale#residence wing length, not this one. The plan names which fix it takes: record the enlarged bath as a labeled GUESS particular (a knob-7 roll) on 0105's drawing page and claim the procedure's line - a page edit, through 328's FR-004 exception path to spec-fidelity, not to the GM - or draw it 10 x 8 like the others. The spec's Decisions row 'kept as its rolled particular' follows whichever is taken."
+  },
+  {
+   "id": "W108-bath-band",
+   "summary": "types.json's bath band 8-22 x 8-22 ft tightened to w 8-18 by h 6-12 ft (the building-programs table row with it)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Tightening is the ranked fix, but the ceiling's only stated basis (m:wave108-bath-size band_after) is to admit Hayakawa's held 18 x 12 particular, so it is the same narrowing as W108-hayakawa-held and falls with it: if the particular is recorded as a labeled knob the 18 x 12 ceiling stands with that why; if Hayakawa is resized the ceiling comes down to the guess. The h floor of 6 ft is below anything drawn or recorded (10 x 8 either way round needs h >= 8) and carries no stated why - give it one or raise it to 8 when the band is settled."
+  },
+  {
+   "id": "door-band-held",
+   "summary": "The types.json#door band row (E2, UNCLAIMED; size-audit's 3-6 ft) flagged Held for the GM: 0117's drawing page records the sheets' 8-8.7 ft doors as a drawing CONVENTION, against the GM's true-size rule",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Rounds 1-3's ruling stands; plan.md's text for it is unchanged by the HEAD~1 diff (the GM's 2026-07-25/26 footprint ruling leaves the roof seat undrawable)."
-  },
-  {
-   "id": "W106-b the 10.5 ft limit",
-   "summary": "TUB_DOOR_MAX_FT 10.5 ft, a CONVENTION",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged since round 3."
-  },
-  {
-   "id": "W106-c1 door tolerance widened to 4 ft",
-   "summary": "doors_of reads a tagged door up to 4 ft off its wall",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged since round 2."
-  },
-  {
-   "id": "W106-c2 a tub at a building with no entrance FAILS",
-   "summary": "tubs_off_their_doors fails a tub whose hosts tag no door; nine doors drawn on the hand sheets, three draft kinds added to DOOR_KINDS",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Round 3's residue confirmed fixed: the round-1 bullet now reads 'doors drawn, each on the face toward its approach or yard ... (nine doors: Hayakawa 2, Ochiba 2, Ubame 5 ...)' - the stale 'ten' struck, nine stated once. Round 3's aside also done: m:wave106-ubame-gate-tub's command no longer greps the superseded shrine seat (940,270)."
-  },
-  {
-   "id": "W106-c3 the bath's tub is not judged by a door",
-   "summary": "a tub is exempt only where its NEAREST host is a bath",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Round 3's ruling stands; the text is unchanged by the diff."
-  },
-  {
-   "id": "W106-shoe the reception's shoe stone as its entrance",
-   "summary": "a declared shoe stone on a building's outline counts as its entrance",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged."
-  },
-  {
-   "id": "W106-faces doors drawn on the face toward the approach or yard",
-   "summary": "each new door on the face toward its approach or yard",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged; holds for all nine doors since round 3."
-  },
-  {
-   "id": "W106-ubame-shrine Ubame's shrine entrance on its south face toward its approach torii, its tub beside it",
-   "summary": "door on the south face, tub at (966,291.5)",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged in the sheet. m:wave106-ubame-shrine-tub (F3) is now corrected to the current seat: command greps cx=966 cy=291.5 and the door rect x=976 y=280, value after [966,291.5] with the door [976,280,14,4], matching round 3's own measurement of the sheet."
-  },
-  {
-   "id": "W106-gate-tubs two tubs out of main gates' tracks (review fixes)",
-   "summary": "Ubame's gate-range tub to (655.5,714); the draft's gatehouse tub to (404,596)",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged; the gate-tub record's command now greps the gate tub alone."
-  },
-  {
-   "id": "W106-hoshigaoka-doors Hoshigaoka's door glyph/size checks run, both PASS",
-   "summary": "the plan no longer waives glyph-check--door and size-audit--door on Hoshigaoka: both were run and passed",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Supersedes round 3's W106-hoshigaoka-waiver: the plan's sentence now says the units were run (the tooling owed them; the tag is new to the sheet). Verified in dev/review-ledger.md: glyph-check door on hoshigaoka-shrine round 2 PASS (row 662) and size-audit door round 2 PASS (row 664), each after a NOT-REVIEWABLE round 1 (the gate red mid-run). Running a check rather than waiving it removes an omission; nothing narrowed."
-  },
-  {
-   "id": "W106-corner round the corner for a short face",
-   "summary": "a face too short for a tub beside its door takes one round the nearest corner, within 10.5 ft",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged."
-  },
-  {
-   "id": "W106-d Ochiba's residence tub at the family's door",
-   "summary": "the residence's tub by the family's door",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged."
-  },
-  {
-   "id": "W106-e record-format wording",
-   "summary": "the drawing page takes the 'one either side' wording",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged."
-  },
-  {
-   "id": "W106-f count rows left to their own rows",
-   "summary": "#one tub per wooden building and the country shrine's #fire-water count not this wave's",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged."
-  },
-  {
-   "id": "W106-g Hoshigaoka's doors tagged, two tubs beside each",
-   "summary": "four corner tubs re-seated two per door",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged."
-  },
-  {
-   "id": "W106-h pop-up fixes",
-   "summary": "the storehouse's ken, the archive's 'pale', the tubs pop-up's fire-watch wording and village-shrine GUESS",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged."
-  },
-  {
-   "id": "W106-i found rows left for their waves",
-   "summary": "found-wave106.jsonl rows",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Unchanged."
-  },
-  {
-   "id": "W106-j occasions",
-   "summary": "placement-changed on ubame-magistracy; layout-revised on the county draft; both now retired in tasks.md as reviewed PASS at batch 5's close, round 2",
-   "class": "within",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Feature 294's procedure. The retirement is backed by the reviews the bookends row names (tubs glyph-check NEEDS-WORK then PASS, building-review county NEEDS-WORK then PASS); the occasions' text is otherwise unchanged."
-  },
-  {
-   "id": "B5-no-pair",
-   "summary": "Bookends row 5: no timing pair at batch 5's (wave 106's) close because its engine code is off the pair's path",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Carried from wave 107's round 1; HEAD~1 changes plan.md only in the Wave 107 bullet. Narrows FR-003's literal 'one timing pair and its perf-audit', exactly as B4-no-pair did, and B4's stated condition (holds only while a batch's engine code stays off the hamlet roll path) is re-measured here, not carried over. The batch's engine delta (git diff de5f96acb..HEAD on l7r/pool): compound_model.py, compound_parts.py, pack_audit (__init__, checks, registry), buildings/types.json (the tubs_off_their_doors check name added to two types' check lists), and four modal .md files; no pool gen or pool json. Measured: importing exactly what perf_snapshot imports (hamletgen, hamletgen.driver, hamletgen.plan, settlement, _invocation, tools.perf_bands) loads 247 l7r modules, none of compound, compound_model, compound_parts, pack_audit or buildings.*; the one name-alike, settlement.structures.compounds, imports only _geom and _knobs; no file under hamletgen/ or settlement/ reads types.json, DOOR_KINDS or TUB_DOOR_MAX_FT; _invocation names compound and pack_audit only as strings in a table. So the pair would time byte-identical code and could detect nothing this batch did - the rule's purpose cannot be served, and a band-3 noise reading would send the GM a sign-off on nothing. The gate premise also checks: .git/verification-state.json records make done green-local at 7817f4a30, engine key 4ade95493877..., the current key, and HEAD changes no engine path after it. Residue (not a ruling): the row's list of the batch's engine code omits buildings/types.json, which batch 4's row named; add it so the row states the whole delta it rests on."
-  },
-  {
-   "id": "W107-a two-court zoning relabeled DEVIATION 0090.drawing",
-   "summary": "the #two-court zoning claim relabeled DEVIATION on 0090's drawing page: residence behind the office is a deliberate simplification (at Takayama the residence stood beside the office)",
-   "class": "within",
-   "why": "328 FR-004: a MISLABELED/E0 fix corrects the claim. The new label is ranking row 18's fix word for word, and 0090's drawing page (line 17 of its text) says it: 'Drawing the residence behind the office in a Japanese compound is a deliberate simplification: at the intendant's office at Takayama the residence stood beside the office'."
-  },
-  {
-   "id": "W107-b commuting clerks relabeled DEVIATION 0113 with the scribes as CANON",
-   "summary": "the #commuting clerks claim relabeled DEVIATION on 0113: an intendant's clerks lived in huts and row houses inside the compound; the setting's 3-4 heimen scribes commute (CANON)",
-   "class": "within",
-   "why": "Unchanged ruling; round 1's aside done: the claim now cites research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html, whose bullet 'Our maps house the clerks in town, not at the office' records the intendant's huts and row houses and calls the setting's commuting heimen scribes 'a deliberate deviation from the Japanese record'. The label is exactly what the page records; the drawing is unchanged (GM canon). impl-drift IN-STEP on that page."
-  },
-  {
-   "id": "W107-c the hill shrine's burial ground claimed GUESS 0236.drawing",
-   "summary": "the claim now reads 'GUESS research/questions/0236-...drawing.html: a village whose shrine stands on a hill takes a ground apart; no source says so outright', and the plan's Wave 107 bullet says the same (not UNRESEARCHED, not 0226)",
-   "class": "within",
-   "why": "Round 1's BLOCKED item answered word for word: the docs/building-programs.md line is the text round 1 prescribed, and plan.md's bullet now reads 'claimed as 0236's drawing page records it, a GUESS (no source says so outright; plan review: not UNRESEARCHED, and not 0226 as the ranked fix had it - 0226 says nothing of a hill shrine)'. Verified against the page: 0236's drawing page line 16, 'Our maps never put a village's graves at a shrine on a hill ... a village whose shrine stands on a hill always takes a ground apart ... a GUESS: no source we read says so outright', and its Evidence comment lists 'the hill shrine keeping no graves' among the guesses. The claim now states the research the implementation has, which is 328 FR-004's E0 fix; no narrowing remains. impl-drift IN-STEP with that page."
-  },
-  {
-   "id": "W107-d claim lines only, no sheet, no engine code",
-   "summary": "wave 107 edits only the three claim comments in docs/building-programs.md plus the records (waves.json, ranking, closed-tiers)",
-   "class": "within",
-   "why": "328 FR-004: 'A MISLABELED or E0 fix corrects the claim, which is the implementation's own statement of what backs it.' All three rows are E0 claim fixes, so no drawing change is owed."
+   "why": "A GM ruling collides with what the record states, the shape of the earlier held fixture_quota row. The GM ruled on 2026-07-21 that the to-scale maps draw true sizes ('I do not want that. We're trying to be perfectly to scale, remember?', against parcels drawn larger for legibility), and 0117's drawing page records the sheets' doors as a legibility CONVENTION at two to three times a real door ('so that they read at the sheet's scale'). Applying the size audit's 3-6 ft band contradicts the recorded convention; keeping it contradicts the GM's ruling, whose reach over Mode A's diagrammatic sheets the GM has not stated. That is a decision only the GM can make, deferred to the end by the GM's 2026-10-07 amendment and recorded with what was found. overrides.json's only changed row since 0b1dace57 is this one (its flag); the rest of that file's diff is formatting. Not recorded in plan.md's wave 108 section, only in the ranking and overrides."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

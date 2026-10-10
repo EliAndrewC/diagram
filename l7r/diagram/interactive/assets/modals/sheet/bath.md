@@ -18,7 +18,7 @@ Guesses:
 Depiction: The plan draws the bath as a small addition to the house on its service side, abutting the kitchen, with the
 kitchen's well beyond it, the three kept together as the Takayama residence listed its kitchen, well and bath - and never
 as a pavilion in a garden or a court, since no samurai bath is known standing apart. A curl of steam above it marks it as the bath, and a fire-water tub stands
-on its yard side against its hearth.
+on its yard side against its hearth. A plan whose magistrate is fond of the bath may draw it larger, still on the service side.
 
 Name: bath
 Covers: the bath, its steam mark and its label

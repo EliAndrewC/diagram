@@ -25,4 +25,4 @@ Name: well
 Covers: every well curb glyph and its label
 Sources: ido-jawiki, fujiclean-ido, jta-aoyagi-kakunodate, semboku-bukeyashiki, shirobito-1717-takayama, kanda-josui-jawiki, saijo-mizu-rekishikan, ndl-crd-tsurube-ido, yamaguchi-ouchi-ido, kotobank-tsurube-ido, kotobank-kurumaido, kotobank-idoyakata
 Entry: research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html, research/questions/0196-communal-wells-ido.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html
-Drawing: research/questions/0196-communal-wells-ido.drawing.html, research/questions/0105-baths-furo.drawing.html, research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
+Drawing: research/questions/0196-communal-wells-ido.drawing.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html, research/questions/0105-baths-furo.drawing.html, research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

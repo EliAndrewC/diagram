@@ -234,11 +234,12 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 - **Scope**: `docs/buildings.md::Inner court (private / sacred)#bath`. 0105's drawing page draws the bath 10 x 8 ft, a GUESS (no page
   gives a bath's size; drawn small so the whole house keeps to the 49-tsubo residence); the procedure said 12-15 ft. **Ochiba**'s
   bath (13 x 11 ft) and **Ubame**'s (10 x 11 ft) drawn 10 x 8 ft against their kitchens, each bath's tub moved to stay on its yard
-  side; the procedure's claim and text say 10 x 8 ft; the band in `types.json` tightened from 8-22 to w 8-18 by h 6-12 ft.
+  side; the procedure's claim and text say 10 x 8 ft; the band in `types.json` tightened from 8-22 to w 8-18 by h 8-12 ft.
 - **Hayakawa's bath kept at 18 x 12 ft**: its notes roll it as a resident particular ("superstitious Hajime keeps TWO well-tended
-  modest shrines and an enlarged bath", knob 7), so the band admits it; whether that particular stands is HELD for the GM (found-wave108: 0105 keeps the bath
-  10 x 8 ft so the house stays at 49 tsubo, and the record checks asked which rule wins - a bullet recording the enlarged bath on
-  0105's drawing page was drafted and withdrawn). The procedure still names it, unclaimed, as it did before the wave. The ranked fix named only Ochiba and Ubame; the draft already drew 10 x 8.
+  modest shrines and an enlarged bath", knob 7), so the band admits it. The particular is kept and recorded, a GUESS, on 0105's drawing page (plan review: the
+  choice between two of this project's readings is the session's to make, not the GM's - the GM's 2026-10-02 ruling - and the
+  49-tsubo concern was unmeasured: Hayakawa's house is ~163 tsubo without its bath, which adds ~4); the procedure claims it there.
+  The band's height floor raised to 8 ft (the 10 x 8 bath either way round). The ranked fix named only Ochiba and Ubame; the draft already drew 10 x 8.
 - **Records**: m:wave108-bath-size; the two sheets' notes.
 - **Review**: glyph-check bath (Ochiba) PASS round 1; its nitpicks left - the bath now nearer a door tab in size, its steam arcs
   drawn for the old room (the east one ~2 px inside the wall's stroke), its tub on the room's center line.

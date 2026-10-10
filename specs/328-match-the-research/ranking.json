@@ -7057,23 +7057,6 @@
   "scope": "mode-a"
  },
  {
-  "key": "docs/buildings.md::Inner court (private / sacred)#an enlarged bath as a resident particular",
-  "verdict": "UNCLAIMED",
-  "tier": "E2",
-  "fix": "Hayakawa's bath is drawn 18 x 12 ft as its rolled resident particular ('an enlarged bath', its notes, knob 7), but 0105's drawing page draws the bath 10 x 8 ft so the whole house keeps to the 49-tsubo residence; no page gives a bath's size to enlarge it to",
-  "files": [
-   "docs/buildings.md",
-   "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-   "research/questions/0105-baths-furo.drawing.html"
-  ],
-  "after": [],
-  "flag": "Held: question for the GM, deferred to the feature's end. Hayakawa's enlarged bath (18 x 12 ft) is this project's roll of a resident particular, not canon; 0105's drawing page keeps the bath 10 x 8 ft so the house stays at 49 tsubo, and the quote-check, record-format and modal-depiction checks each asked which rule wins. Keep the particular (and record the house exceeding 49 tsubo at Hayakawa), or draw Hayakawa's bath 10 x 8 ft like the others and drop 'an enlarged bath' from its particulars?",
-  "found": "wave 108's record checks of 0105's drawing page (feature 372, 2026-10-10)",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "docs/buildings.md::Outer court (administrative / public)#granary forms",
   "verdict": "MISLABELED",
   "tier": "E2",

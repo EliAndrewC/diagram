@@ -541,7 +541,7 @@
         "reading": "compound_model.BATH_W_FT, BATH_H_FT, unchanged"
       },
       "band_before": "w 8-22, h 8-22 ft",
-      "band_after": "w 8-18, h 6-12 ft (admits the 10 x 8 guess either way round and Hayakawa's 18 x 12 particular)",
+      "band_after": "w 8-18, h 8-12 ft (admits the 10 x 8 guess either way round and Hayakawa's 18 x 12 particular)",
       "tubs": "each bath's tub moved to stay on its yard side: Ochiba (335,374)->(305,393.5), Ubame (349,387)->(349,379.5); pack_audit clean",
       "tests": "test_registry 69, test_mode_a_sheets 27, test_building_programs 5 passed"
     }
