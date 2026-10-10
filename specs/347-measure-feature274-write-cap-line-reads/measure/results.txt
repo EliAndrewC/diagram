@@ -1,0 +1,870 @@
+327 sessions 91 groups
+662 sessions 299 groups
+
+=== analyze.py r1 2026-09-27T22:30
+group                                         start             ses    q/m/k  total M peak K /thing M
+250:diagram-research-1:urban-features         2026-09-27T05:00    1    7/0/7     1.65     70     0.12  (incomplete)
+250:diagram-research-3:buildings              2026-09-27T05:05    3    6/0/5     6.47     91     0.59  (incomplete)
+267:diagram-buildings:g1b                     2026-09-27T05:11    3   6/0/18     7.24    109     0.30  (incomplete)
+250:diagram-research-1:split-urban-features-0 2026-09-27T05:23    1    0/0/0     0.99     64        -  (incomplete)
+267:diagram-buildings:g2                      2026-09-27T05:24    5   8/0/20    16.44    211     0.59
+250:diagram-research-1:split-homesteads-140   2026-09-27T05:25    1    0/0/0     0.64     52        -  (incomplete)
+250:diagram-research-1:split-urban-features-0 2026-09-27T05:28    1    0/0/0     0.61     58        -  (incomplete)
+250:diagram-research-3:cities-capitals        2026-09-27T05:29    5    8/0/0    14.36    136     1.80
+269:diagram-supplemental:h1                   2026-09-27T05:56    4    6/0/9    17.54    266     1.17
+267:diagram-buildings:g3                      2026-09-27T06:01    4    6/0/8    13.25    191     0.95
+250:diagram-research-1:split-fields-070       2026-09-27T06:58    1    0/0/0     0.95     70        -  (incomplete)
+250:diagram-research-2:owed-archetypes-2      2026-09-27T07:03    1    0/7/0     0.85     44     0.12  (incomplete)
+250:diagram-research-3:owed-fields-2          2026-09-27T07:03    1    0/2/0     0.23     26     0.12  (incomplete)
+267:diagram-buildings:g3b                     2026-09-27T07:04    5   7/0/11    17.84    233     0.99
+250:diagram-research-3:owed-homesteads-4      2026-09-27T07:04    1    0/1/0     0.22     25     0.22  (incomplete)
+250:diagram-research-3:owed-urban-features    2026-09-27T07:05    1    0/3/0     0.57     59     0.19  (incomplete)
+250:diagram-research-2:owed-archetypes-3      2026-09-27T07:05    1    0/8/0     0.66     44     0.08  (incomplete)
+250:diagram-research-2:owed-archetypes-4      2026-09-27T07:07    1    0/7/0     0.81     68     0.12  (incomplete)
+269:diagram-supplemental:v1                   2026-09-27T07:08    4   6/0/13    23.22    226     1.22
+250:diagram-research-1:owed-buildings         2026-09-27T07:12    1   0/13/0     1.59     90     0.12  (incomplete)
+250:diagram-research-3:owed-buildings-6       2026-09-27T07:12    1   0/11/0     1.15     72     0.10  (incomplete)
+250:diagram-research-2:owed-urban-features-2  2026-09-27T07:12    1   0/11/0     1.17     72     0.11  (incomplete)
+250:diagram-research-2:owed-urban-features-3  2026-09-27T07:14    1    0/7/0     0.61     37     0.09  (incomplete)
+250:diagram-research-3:owed-buildings-7       2026-09-27T07:14    1   0/14/0     1.64     85     0.12  (incomplete)
+250:diagram-research-1:owed-buildings-2       2026-09-27T07:15    1   0/11/0     1.13     73     0.10  (incomplete)
+250:diagram-research-2:owed-towns             2026-09-27T07:15    1    0/4/0     0.46     36     0.12  (incomplete)
+250:diagram-research-2:owed-ways              2026-09-27T07:17    1    0/3/0     0.30     28     0.10  (incomplete)
+250:diagram-research-3:owed-buildings-8       2026-09-27T07:17    1   0/12/0     0.89     50     0.07  (incomplete)
+250:diagram-research-1:owed-buildings-3       2026-09-27T07:17    1   0/12/0     1.12     56     0.09  (incomplete)
+250:diagram-research-3:owed-buildings-9       2026-09-27T07:18    1   0/13/0     1.19     56     0.09  (incomplete)
+250:diagram-research-1:owed-buildings-4       2026-09-27T07:19    1   0/15/0     1.43     67     0.10  (incomplete)
+250:diagram-research-3:owed-buildings-10      2026-09-27T07:20    1    0/7/0     0.83     44     0.12  (incomplete)
+250:diagram-research-1:owed-buildings-5       2026-09-27T07:22    1    0/9/0     0.68     42     0.08  (incomplete)
+267:diagram-buildings:g4                      2026-09-27T07:49    4   6/0/15    14.61    203     0.70
+269:diagram-supplemental:h2                   2026-09-27T07:55    3    3/0/4     9.84    154     1.41
+269:diagram-supplemental:f1                   2026-09-27T08:18    5   7/5/12    25.51    246     1.06
+267:diagram-buildings:g5                      2026-09-27T08:30    3   4/0/11     8.65    132     0.58
+267:diagram-buildings:g6                      2026-09-27T08:47    6   9/0/22    22.61    237     0.73
+269:diagram-supplemental:w1                   2026-09-27T09:06    5   5/0/15    18.02    194     0.90
+267:diagram-buildings:g7                      2026-09-27T09:29    3   4/0/12    14.78    243     0.92
+269:diagram-supplemental:f2                   2026-09-27T09:52    4   5/0/10    15.85    221     1.06
+267:diagram-buildings:g8                      2026-09-27T10:01    2    2/0/3     4.05     89     0.81
+269:diagram-supplemental:v2                   2026-09-27T10:20    7  12/0/10    35.86    274     1.63
+269:diagram-supplemental:a1                   2026-09-27T12:00    6    9/0/9    19.57    207     1.09
+271:diagram-research-2:v3                     2026-09-27T12:03    4   6/5/17    25.44    260     0.91
+271:diagram-research-1:v1                     2026-09-27T12:03    5   7/0/12    21.17    235     1.11
+271:diagram-research-3:v6                     2026-09-27T12:03    4   5/0/16    21.05    275     1.00
+271:diagram-research-5:t3                     2026-09-27T12:05    5   8/1/16    26.62    270     1.06
+271:diagram-research-4:t1                     2026-09-27T12:05    5   8/1/15    22.61    260     0.94
+271:diagram-research-2:v4                     2026-09-27T13:03    5   7/3/26    36.82    357     1.02
+271:diagram-research-1:v2                     2026-09-27T13:04    4   6/0/12    22.39    213     1.24
+272:diagram-shrines-1:s                       2026-09-27T13:05    8  14/7/16    46.45    369     1.26
+272:diagram-shrines-2:r2                      2026-09-27T13:05    4   5/0/17    24.03    304     1.09
+272:diagram-shrines-3:r4                      2026-09-27T13:05    4   5/0/29    28.09    284     0.83
+271:diagram-research-5:t4                     2026-09-27T13:06    6   9/0/12    24.55    257     1.17
+269:diagram-supplemental:r1                   2026-09-27T13:06    4    6/0/7    18.36    210     1.41
+271:diagram-research-3:w1                     2026-09-27T13:09    4   5/0/22    24.28    315     0.90
+271:diagram-research-4:t2                     2026-09-27T13:15    6  10/0/11    24.23    263     1.15
+271:diagram-research-1:v7                     2026-09-27T16:44    5   7/0/18    29.99    274     1.20
+271:diagram-research-3:u1                     2026-09-27T16:47    6   9/3/20    24.48    246     0.76
+272:diagram-shrines-2:r3                      2026-09-27T16:47    4   6/0/14    35.43    385     1.77
+269:diagram-supplemental:h3                   2026-09-27T16:48    4   6/0/10    19.17    224     1.20
+271:diagram-research-5:r1                     2026-09-27T16:57    4   5/1/11    19.54    249     1.15
+271:diagram-research-4:g1                     2026-09-27T17:03    6  10/18/7    28.43    230     0.81
+272:diagram-shrines-3:t                       2026-09-27T17:07    4   5/0/20    21.62    242     0.86
+271:diagram-research-2:v5                     2026-09-27T17:11    6   9/5/15    27.74    302     0.96
+271:diagram-research-6:k2                     2026-09-27T17:23    6  10/1/17    31.51    295     1.13
+272:diagram-shrines-1:b37                     2026-09-27T17:23    4   5/0/12    17.25    221     1.01
+271:diagram-research-5:w2                     2026-09-27T17:36    5   7/0/13    30.20    329     1.51
+269:diagram-supplemental:f3                   2026-09-27T17:37    3   4/0/10     8.10    143     0.58
+271:diagram-research-4:g2                     2026-09-27T17:49    6   9/7/13    25.65    264     0.88
+271:diagram-research-1:u2                     2026-09-27T21:39    5   7/0/10    23.08    266     1.36
+271:diagram-research-3:k1                     2026-09-27T21:39    6  10/0/17    20.81    246     0.77
+269:diagram-supplemental:w2                   2026-09-27T21:45    4    6/0/4    16.29    187     1.63
+271:diagram-research-6:k4                     2026-09-27T21:58    3   9/0/15    21.00    292     0.88
+271:diagram-research-2:k5                     2026-09-27T22:21    1   7/0/13    12.20    277     0.61  (incomplete)
+271:diagram-research-5:t5                     2026-09-27T22:21    1  10/0/17    18.26    313     0.68  (incomplete)
+271:diagram-research-4:k7                     2026-09-27T22:21    1   9/0/13    11.01    258     0.50  (incomplete)
+271:diagram-research-1:u3                     2026-09-27T22:22    1   9/0/14    17.96    359     0.78  (incomplete)
+271:diagram-research-3:k3                     2026-09-27T22:25    1   9/0/19    18.92    326     0.68  (incomplete)
+269:diagram-supplemental:a2                   2026-09-27T22:26    1   6/0/11     8.31    220     0.49  (incomplete)
+
+r1 until 2026-09-27T22:30 features all: 261 sessions, 81 groups, 48 complete, 1049 M main
+per thing checked (complete groups): median 1.04 M (IQR 0.88-1.20); group total median 22.0 M for a median 21.0 things
+largest context of any turn: 385 K; complete groups' peak median 246 K
+write sessions: 58, turns median 76 (max 109), mean turn 152 K, peak median 246 K, max 385 K
+continuations: 0
+
+=== analyze.py r1 2026-09-27T22:30 269
+group                                         start             ses    q/m/k  total M peak K /thing M
+269:diagram-supplemental:h1                   2026-09-27T05:56    4    6/0/9    17.54    266     1.17
+269:diagram-supplemental:v1                   2026-09-27T07:08    4   6/0/13    23.22    226     1.22
+269:diagram-supplemental:h2                   2026-09-27T07:55    3    3/0/4     9.84    154     1.41
+269:diagram-supplemental:f1                   2026-09-27T08:18    5   7/5/12    25.51    246     1.06
+269:diagram-supplemental:w1                   2026-09-27T09:06    5   5/0/15    18.02    194     0.90
+269:diagram-supplemental:f2                   2026-09-27T09:52    4   5/0/10    15.85    221     1.06
+269:diagram-supplemental:v2                   2026-09-27T10:20    7  12/0/10    35.86    274     1.63
+269:diagram-supplemental:a1                   2026-09-27T12:00    6    9/0/9    19.57    207     1.09
+269:diagram-supplemental:r1                   2026-09-27T13:06    4    6/0/7    18.36    210     1.41
+269:diagram-supplemental:h3                   2026-09-27T16:48    4   6/0/10    19.17    224     1.20
+269:diagram-supplemental:f3                   2026-09-27T17:37    3   4/0/10     8.10    143     0.58
+269:diagram-supplemental:w2                   2026-09-27T21:45    4    6/0/4    16.29    187     1.63
+269:diagram-supplemental:a2                   2026-09-27T22:26    1   6/0/11     8.31    220     0.49  (incomplete)
+
+r1 until 2026-09-27T22:30 features ['269']: 54 sessions, 13 groups, 12 complete, 201 M main
+per thing checked (complete groups): median 1.18 M (IQR 1.06-1.41); group total median 18.2 M for a median 15.5 things
+largest context of any turn: 274 K; complete groups' peak median 216 K
+write sessions: 13, turns median 65 (max 96), mean turn 128 K, peak median 220 K, max 274 K
+continuations: 0
+
+=== analyze.py post - 269
+group                                         start             ses    q/m/k  total M peak K /thing M
+269:diagram-supplemental:c3                   2026-09-28T04:21    3    5/0/7     6.41     69     0.53  (incomplete)
+269:diagram-supplemental:c4a                  2026-09-28T04:36    4    5/0/6    11.43    159     1.04
+269:diagram-supplemental:c4b                  2026-09-28T05:07    2    2/0/3     7.70    130     1.54
+269:diagram-supplemental:x1a                  2026-09-28T05:24    3    4/0/4     8.55    186     1.07
+269:diagram-supplemental:x1b                  2026-09-28T05:46    3    4/0/3    10.80    173     1.54
+269:diagram-supplemental:x1c                  2026-09-28T06:16    2    2/0/5     4.09    102     0.58
+269:diagram-supplemental:fx1                  2026-09-28T07:33    4    5/0/2    13.05    202     1.86
+269:diagram-supplemental:fx2                  2026-09-28T08:02    3    4/0/0     6.11     86     1.53
+269:diagram-supplemental:fx3                  2026-09-28T08:16    3    3/0/0     3.21     94     1.07
+269:diagram-supplemental:fx4                  2026-09-28T08:27    2    1/0/3     2.17     61     0.54
+269:diagram-supplemental:sp1                  2026-09-28T08:33    7   11/0/0    20.97    159     1.91
+269:diagram-supplemental:sp2                  2026-09-28T09:29    5    8/0/0    10.86    101     1.36
+269:diagram-supplemental:fin                  2026-09-28T09:56    7   14/0/0    13.54     90     0.97  (incomplete)
+
+post until 9999 features ['269']: 48 sessions, 13 groups, 11 complete, 100 M main
+per thing checked (complete groups): median 1.36 M (IQR 1.04-1.54); group total median 8.6 M for a median 7 things
+largest context of any turn: 202 K; complete groups' peak median 130 K
+write sessions: 11, turns median 46 (max 65), mean turn 85 K, peak median 130 K, max 202 K
+continuations: 0
+
+=== analyze.py post - 269,280,291,317
+group                                         start             ses    q/m/k  total M peak K /thing M
+269:diagram-supplemental:c3                   2026-09-28T04:21    3    5/0/7     6.41     69     0.53  (incomplete)
+269:diagram-supplemental:c4a                  2026-09-28T04:36    4    5/0/6    11.43    159     1.04
+269:diagram-supplemental:c4b                  2026-09-28T05:07    2    2/0/3     7.70    130     1.54
+269:diagram-supplemental:x1a                  2026-09-28T05:24    3    4/0/4     8.55    186     1.07
+269:diagram-supplemental:x1b                  2026-09-28T05:46    3    4/0/3    10.80    173     1.54
+269:diagram-supplemental:x1c                  2026-09-28T06:16    2    2/0/5     4.09    102     0.58
+269:diagram-supplemental:fx1                  2026-09-28T07:33    4    5/0/2    13.05    202     1.86
+269:diagram-supplemental:fx2                  2026-09-28T08:02    3    4/0/0     6.11     86     1.53
+269:diagram-supplemental:fx3                  2026-09-28T08:16    3    3/0/0     3.21     94     1.07
+269:diagram-supplemental:fx4                  2026-09-28T08:27    2    1/0/3     2.17     61     0.54
+269:diagram-supplemental:sp1                  2026-09-28T08:33    7   11/0/0    20.97    159     1.91
+269:diagram-supplemental:sp2                  2026-09-28T09:29    5    8/0/0    10.86    101     1.36
+269:diagram-supplemental:fin                  2026-09-28T09:56    7   14/0/0    13.54     90     0.97  (incomplete)
+280:diagram-supplemental-2:w2                 2026-09-28T12:21    4    5/0/5    17.58    219     1.76
+280:diagram-supplemental-2:w1                 2026-09-28T12:53    4   5/0/11    18.16    244     1.13
+280:diagram-supplemental-2:f1                 2026-09-28T13:30    3    4/0/4    10.22    143     1.28
+280:diagram-supplemental-2:f3                 2026-09-28T13:54    2    2/0/6    15.80    209     1.98
+280:diagram-supplemental-2:f2                 2026-09-28T14:30    3    4/0/4    13.51    219     1.69
+280:diagram-supplemental-2:h2                 2026-09-28T15:01    4    5/0/6    20.65    226     1.88
+280:diagram-supplemental-2:h1                 2026-09-28T15:45    3    4/0/3    15.10    221     2.16
+280:diagram-supplemental-2:y1                 2026-09-28T17:27    2    1/0/5     6.45    122     1.08
+280:diagram-supplemental-2:u1                 2026-09-28T17:48    3    4/0/9    12.50    219     0.96
+280:diagram-supplemental-2:r2                 2026-09-28T18:24    2    2/0/4     5.92    142     0.99
+280:diagram-supplemental-2:r1                 2026-09-28T18:42    5    7/0/7    17.79    240     1.27
+280:diagram-supplemental-2:b1                 2026-09-28T19:15    3    4/0/5     9.78    169     1.09
+280:diagram-supplemental-2:b2                 2026-09-28T19:37    3    4/0/4     8.29    141     1.04
+280:diagram-supplemental-2:a2                 2026-09-28T19:57    3    4/0/5    12.81    217     1.42
+280:diagram-supplemental-2:a1                 2026-09-28T20:33    3    4/0/6    12.64    133     1.26
+280:diagram-supplemental-2:t3                 2026-09-28T21:17    3    3/0/9     9.02    178     0.75
+280:diagram-supplemental-2:t1                 2026-09-28T21:38    3    3/0/7    13.43    183     1.34
+280:diagram-supplemental-2:t2                 2026-09-28T22:23    3    3/0/6     7.29    150     0.81
+280:diagram-supplemental-2:u4                 2026-09-28T22:40    2    2/0/5     9.33    133     1.33
+280:diagram-supplemental-2:u2                 2026-09-28T23:04    4    5/0/6    10.97    172     1.00
+280:diagram-supplemental-2:u3                 2026-09-28T23:32    4    5/0/8    14.89    203     1.15
+280:diagram-supplemental-2:c1                 2026-09-29T00:01    3    4/0/5    12.51    169     1.39
+280:diagram-supplemental-2:c2                 2026-09-29T00:29    3    4/0/3     9.52    157     1.36
+280:diagram-supplemental-2:c3                 2026-09-29T00:51    3    3/0/5    11.28    161     1.41
+280:diagram-supplemental-2:r3                 2026-09-29T01:15    3    3/0/7    10.20    167     1.02
+280:diagram-supplemental-2:b3                 2026-09-29T01:36    3    3/0/7    12.86    185     1.29
+280:diagram-supplemental-2:f4                 2026-09-29T02:05    3    3/0/3    12.32    255     2.05
+280:diagram-supplemental-2:w3                 2026-09-29T02:28    2    2/0/3     6.46    149     1.29
+280:diagram-supplemental-2:w4                 2026-09-29T02:44    2    2/0/7    12.03    227     1.34
+280:diagram-supplemental-2:h3                 2026-09-29T03:07    4    6/0/6    16.15    223     1.35
+280:diagram-supplemental-2:h4                 2026-09-29T03:47    3    3/0/3    12.29    198     2.05
+280:diagram-supplemental-2:h5                 2026-09-29T04:15    5    7/0/5    12.93    188     1.08
+280:diagram-supplemental-2:v1                 2026-09-29T04:47    5    7/0/5    14.23    163     1.19
+280:diagram-supplemental-2:finish-a2b         2026-09-29T05:23    1    0/0/0     1.82     58        -  (incomplete)
+280:diagram-supplemental-2:finish-f1a         2026-09-29T05:28    1    0/0/0     2.08     63        -  (incomplete)
+280:diagram-supplemental-2:recheck-merge      2026-09-29T05:33    1    0/0/0     1.80     56        -  (incomplete)
+280:diagram-supplemental-2:v3                 2026-09-29T05:55    4    6/0/5    12.81    184     1.16
+280:diagram-supplemental-2:v2                 2026-09-29T06:24    3    4/0/2     9.67    152     1.61
+280:diagram-supplemental-2:a3                 2026-09-29T06:49    3    4/0/5    14.25    179     1.58
+280:diagram-supplemental-2:a4                 2026-09-29T07:18    3    4/0/2    11.35    157     1.89
+280:diagram-supplemental-2:r4                 2026-09-29T07:44    4    5/0/3    16.95    206     2.12
+280:diagram-supplemental-2:t4                 2026-09-29T08:30    3    3/0/6    12.74    201     1.42
+280:diagram-supplemental-2:c5                 2026-09-29T08:58    3    4/0/5    16.50    187     1.83
+280:diagram-supplemental-2:r5                 2026-09-29T09:37    2    2/0/2    10.18    175     2.54
+291:diagram-readability-2:r1                  2026-09-29T14:45    3    3/0/0     5.74    109     1.91
+291:diagram-readability-2:r2                  2026-09-29T15:03    2    2/0/0     2.45     58     1.23
+291:diagram-readability-2:r3                  2026-09-29T15:10    2    1/0/0     0.90     29     0.90
+291:diagram-readability-2:r4                  2026-09-29T15:15    1    0/1/0     1.15     77     1.15  (incomplete)
+291:diagram-readability-2:r5                  2026-09-29T17:57    3    4/0/0     4.20     63     1.05
+291:diagram-readability-2:r6                  2026-09-29T21:30    2    3/0/0    13.10    257     4.37
+291:diagram-readability-2:r7                  2026-09-29T23:54    3    4/0/0     9.91    149     2.48
+291:diagram-readability-2:r8                  2026-09-30T00:52    2    1/0/0     2.05     57     2.05
+291:diagram-readability-2:r9                  2026-09-30T02:30    2    1/0/0     1.31     46     1.31
+291:diagram-readability-2:r10                 2026-09-30T03:01    2    2/0/0     5.48     89     2.74
+291:diagram-readability-2:r11                 2026-09-30T04:33    2    1/0/0     1.39     47     1.39
+291:diagram-readability-2:r12                 2026-09-30T05:27    2    2/0/0    15.38    216     7.69
+291:diagram-readability-2:r13                 2026-09-30T10:55    2    2/0/0     3.28    100     1.64
+317:diagram-performance:r1                    2026-10-03T03:28    2   1/15/0    23.83    304     1.49
+317:diagram-performance:r2                    2026-10-03T05:24    2    1/6/0    41.18    332     5.88
+
+post until 9999 features ['269', '280', '291', '317']: 213 sessions, 72 groups, 66 complete, 659 M main
+per thing checked (complete groups): median 1.36 M (IQR 1.08-1.87); group total median 11.3 M for a median 8.0 things
+largest context of any turn: 332 K; complete groups' peak median 169 K
+write sessions: 66, turns median 54 (max 80), mean turn 105 K, peak median 165 K, max 257 K
+continuations: 0
+
+=== analyze.py post - 292
+group                                         start             ses    q/m/k  total M peak K /thing M
+292:diagram-reorg:buildings-G02               2026-09-30T05:06    3    0/9/0    13.88    180     1.54
+292:diagram-reorg-2:religion-and-death-G01    2026-09-30T05:25    3    0/0/0    11.15    148        -  (incomplete)
+292:diagram-reorg-2:religion-and-death-G02    2026-09-30T06:52    2    0/1/0     7.59    160     7.59
+292:diagram-reorg:buildings-G01               2026-09-30T06:58    2   0/13/0    11.28    193     0.87
+292:diagram-reorg-2:religion-and-death-G03    2026-09-30T07:17    2    0/4/0    12.68    218     3.17
+292:diagram-reorg:buildings-G03               2026-09-30T07:24    2    0/1/0     5.08    111     5.08
+292:diagram-reorg:buildings-G04               2026-09-30T07:41    2    0/2/0     5.26    128     2.63
+292:diagram-reorg-2:religion-and-death-G04    2026-09-30T07:48    2    0/3/0     9.41    167     3.14
+292:diagram-reorg:buildings-G05               2026-09-30T08:00    2   0/10/0     6.62    150     0.66
+292:diagram-reorg-2:religion-and-death-G05    2026-09-30T08:09    2    0/1/0     7.52    135     7.52
+292:diagram-reorg:buildings-G06               2026-09-30T08:20    2    0/1/0     6.18    144     6.18
+292:diagram-reorg-2:religion-and-death-G06    2026-09-30T08:33    2    0/3/0     8.24    160     2.75
+292:diagram-reorg:buildings-G07               2026-09-30T08:40    2    0/8/0     8.25    164     1.03
+292:diagram-reorg-2:religion-and-death-G07    2026-09-30T08:58    2    0/0/0     8.36    148        -  (incomplete)
+292:diagram-reorg:buildings-G08               2026-09-30T09:01    2    0/3/0     7.16    172     2.39
+292:diagram-reorg:buildings-G09               2026-09-30T09:21    2    0/6/0    10.10    166     1.68
+292:diagram-reorg-2:religion-and-death-G08    2026-09-30T09:30    2    0/0/0     5.54    121        -  (incomplete)
+292:diagram-reorg:buildings-G10               2026-09-30T09:54    2    0/6/0     6.97    154     1.16
+292:diagram-reorg:buildings-G11               2026-09-30T10:15    2    0/3/0     7.82    140     2.61
+292:diagram-reorg:buildings-G12               2026-09-30T10:35    2    0/5/0    11.78    198     2.36
+292:diagram-reorg-2:religion-and-death-G09    2026-09-30T10:35    2    0/0/0     5.49    128        -  (incomplete)
+292:diagram-reorg-2:religion-and-death-G10    2026-09-30T10:56    2    0/0/0    12.74    219        -  (incomplete)
+292:diagram-reorg:buildings-G13               2026-09-30T11:00    2    0/2/0     5.07    131     2.54
+292:diagram-reorg:buildings-G14               2026-09-30T11:14    2    0/5/0    10.48    174     2.10
+292:diagram-reorg-2:religion-and-death-G11    2026-09-30T11:21    2    0/0/0    12.25    177        -  (incomplete)
+292:diagram-reorg:buildings-G15               2026-09-30T11:39    2    0/3/0    13.85    180     4.62
+292:diagram-reorg-2:religion-and-death-G12    2026-09-30T11:47    2    0/0/0     5.94    148        -  (incomplete)
+292:diagram-reorg:buildings-G16               2026-09-30T12:05    2    0/3/0     6.96    147     2.32
+292:diagram-reorg-2:religion-and-death-G13    2026-09-30T12:05    2    0/0/0     6.23    123        -  (incomplete)
+292:diagram-reorg:buildings-G17               2026-09-30T12:21    2    0/4/0    13.41    198     3.35
+292:diagram-reorg-2:religion-and-death-G14    2026-09-30T12:26    2    0/0/0     7.33    141        -  (incomplete)
+292:diagram-reorg-2:religion-and-death-G15    2026-09-30T12:41    2    0/3/0    19.58    293     6.53
+292:diagram-reorg:buildings-G18               2026-09-30T12:55    2    0/3/0    10.54    212     3.51
+292:diagram-reorg-2:religion-and-death-G16    2026-09-30T13:16    2    0/1/0    24.78    294    24.78
+292:diagram-reorg:buildings-G19               2026-09-30T13:30    2    0/1/0     3.82    102     3.82
+292:diagram-reorg:buildings-G20               2026-09-30T13:42    2    0/3/0     9.47    174     3.16
+292:diagram-reorg-2:religion-and-death-G17    2026-09-30T14:01    2    0/0/0    10.49    174        -  (incomplete)
+292:diagram-reorg:buildings-G21               2026-09-30T14:12    2    0/4/0    11.61    202     2.90
+292:diagram-reorg-2:religion-and-death-G18    2026-09-30T14:30    2    0/0/0     9.35    172        -  (incomplete)
+292:diagram-reorg:buildings-G22               2026-09-30T14:44    2    0/0/0     9.16    171        -  (incomplete)
+292:diagram-reorg-3:cities-capitals-G01       2026-09-30T14:48    2    0/0/0    11.03    199        -  (incomplete)
+292:diagram-reorg-2:religion-and-death-G19    2026-09-30T14:54    2    0/2/0     7.25    154     3.62
+292:diagram-reorg-3:cities-capitals-G02       2026-09-30T15:07    2    0/0/0    17.18    227        -  (incomplete)
+292:diagram-reorg:urban-features-G01          2026-09-30T15:13    2    0/2/0     7.38    162     3.69
+292:diagram-reorg-2:settlements-G01           2026-09-30T15:14    2    0/0/0     8.74    153        -  (incomplete)
+292:diagram-reorg-2:settlements-G02           2026-09-30T15:33    2    0/1/0     5.41    130     5.41
+292:diagram-reorg:urban-features-G02          2026-09-30T15:37    2    0/2/0    12.06    213     6.03
+292:diagram-reorg-3:cities-capitals-G03       2026-09-30T15:39    2    0/0/0    11.67    203        -  (incomplete)
+292:diagram-reorg-2:fields-G01                2026-09-30T15:47    2    0/2/0    19.32    249     9.66
+292:diagram-reorg-3:cities-capitals-G04       2026-09-30T16:10    2    0/0/0     7.57    147        -  (incomplete)
+292:diagram-reorg:urban-features-G03          2026-09-30T17:22    2    0/0/0     6.03    127        -  (incomplete)
+292:diagram-reorg-2:fields-G02                2026-09-30T17:27    2    0/3/0    14.37    248     4.79
+292:diagram-reorg-3:cities-capitals-G05       2026-09-30T17:35    2    0/0/0    14.06    217        -  (incomplete)
+292:diagram-reorg:urban-features-G04          2026-09-30T17:41    2    0/3/0    18.76    282     6.25
+292:diagram-reorg-2:fields-G03                2026-09-30T17:54    2    0/1/0    10.59    184    10.59
+292:diagram-reorg-3:cities-capitals-G06       2026-09-30T18:06    2    0/0/0     8.78    158        -  (incomplete)
+292:diagram-reorg-2:fields-G04                2026-09-30T18:18    2    0/5/0    13.59    237     2.72
+292:diagram-reorg:urban-features-G05          2026-09-30T18:23    2    0/0/0    10.49    184        -  (incomplete)
+292:diagram-reorg-3:cities-capitals-G07       2026-09-30T18:29    2    0/0/0     9.87    161        -  (incomplete)
+292:diagram-reorg-2:fields-G05                2026-09-30T18:51    2    0/4/0    19.28    248     4.82
+292:diagram-reorg-3:cities-capitals-G08       2026-09-30T18:53    2    0/0/0    14.53    233        -  (incomplete)
+292:diagram-reorg:urban-features-G06          2026-09-30T18:54    2    0/0/0     9.85    198        -  (incomplete)
+292:diagram-reorg:urban-features-G07          2026-09-30T19:21    2    0/0/0     6.63    161        -  (incomplete)
+292:diagram-reorg-2:fields-G06                2026-09-30T19:27    2    0/0/0     8.77    156        -  (incomplete)
+292:diagram-reorg-3:cities-defenses-G01       2026-09-30T19:28    2    0/0/0    10.10    187        -  (incomplete)
+292:diagram-reorg:urban-features-G08          2026-09-30T19:43    2    0/0/0     5.90    139        -  (incomplete)
+292:diagram-reorg-2:fields-G07                2026-09-30T19:52    2    0/0/0     5.37    121        -  (incomplete)
+292:diagram-reorg-3:cities-defenses-G02       2026-09-30T19:52    2    0/0/0     5.70    138        -  (incomplete)
+292:diagram-reorg-2:water-G01                 2026-09-30T20:07    2    0/2/0    15.07    189     7.54
+292:diagram-reorg:urban-features-G09          2026-09-30T20:07    2    0/0/0     6.16    150        -  (incomplete)
+292:diagram-reorg-3:cities-defenses-G03       2026-09-30T20:09    2    0/0/0     5.91    130        -  (incomplete)
+292:diagram-reorg-3:cities-defenses-G04       2026-09-30T20:25    2    0/0/0     7.25    147        -  (incomplete)
+292:diagram-reorg:urban-features-G10          2026-09-30T20:28    2    0/0/0     7.69    145        -  (incomplete)
+292:diagram-reorg-2:water-G02                 2026-09-30T20:31    2    0/2/0    16.55    209     8.27
+292:diagram-reorg:urban-features-G11          2026-09-30T22:36    2    0/1/0     6.51    131     6.51
+292:diagram-reorg-3:cities-defenses-G05       2026-09-30T22:38    2    0/0/0     5.66    121        -  (incomplete)
+292:diagram-reorg-2:water-G03                 2026-09-30T22:52    2    0/2/0    15.44    204     7.72
+292:diagram-reorg:urban-features-G12          2026-09-30T22:56    2    0/6/0     8.32    161     1.39
+292:diagram-reorg-3:cities-defenses-G06       2026-09-30T23:00    2    0/0/0     3.54    108        -  (incomplete)
+292:diagram-reorg-3:cities-fabric-G01         2026-09-30T23:11    2    0/0/0     8.37    149        -  (incomplete)
+292:diagram-reorg-2:water-G04                 2026-09-30T23:16    2    0/3/0    13.07    204     4.36
+292:diagram-reorg:urban-features-G13          2026-09-30T23:18    2    0/2/0    15.00    282     7.50
+292:diagram-reorg-3:cities-fabric-G02         2026-09-30T23:28    2    0/0/0     5.21    121        -  (incomplete)
+292:diagram-reorg-3:cities-fabric-G03         2026-09-30T23:46    2    0/0/0     5.81    120        -  (incomplete)
+292:diagram-reorg-2:water-G05                 2026-09-30T23:47    2    0/0/0     9.50    165        -  (incomplete)
+292:diagram-reorg:urban-features-G14          2026-10-01T00:01    2    0/0/0     5.98    115        -  (incomplete)
+292:diagram-reorg-3:cities-fabric-G04         2026-10-01T00:02    2    0/0/0     8.85    191        -  (incomplete)
+292:diagram-reorg-2:water-G06                 2026-10-01T00:07    2    0/2/0     9.62    163     4.81
+292:diagram-reorg:urban-features-G15          2026-10-01T00:19    2    0/0/0     9.56    195        -  (incomplete)
+292:diagram-reorg-2:water-G07                 2026-10-01T00:28    2    0/1/0     7.43    145     7.43
+292:diagram-reorg-3:cities-fabric-G05         2026-10-01T00:30    2    0/0/0     4.27    102        -  (incomplete)
+292:diagram-reorg-3:cities-fabric-G06         2026-10-01T00:40    2    0/0/0     6.77    133        -  (incomplete)
+292:diagram-reorg-2:water-G08                 2026-10-01T00:45    2    0/0/0     8.97    161        -  (incomplete)
+292:diagram-reorg:urban-features-G16          2026-10-01T00:45    2    0/0/0     7.44    148        -  (incomplete)
+292:diagram-reorg-3:cities-government-G01     2026-10-01T01:02    2    0/0/0    10.42    213        -  (incomplete)
+292:diagram-reorg:urban-features-G17          2026-10-01T01:08    2    0/0/0     8.20    145        -  (incomplete)
+292:diagram-reorg-2:water-G09                 2026-10-01T01:13    2    0/0/0     7.96    142        -  (incomplete)
+292:diagram-reorg-3:cities-government-G02     2026-10-01T01:26    2    0/0/0     9.83    176        -  (incomplete)
+292:diagram-reorg:urban-features-G18          2026-10-01T01:28    2    0/0/0    10.94    200        -  (incomplete)
+292:diagram-reorg-2:water-G10                 2026-10-01T01:34    2    0/0/0     2.62     96        -  (incomplete)
+292:diagram-reorg-2:water-G11                 2026-10-01T01:44    2    0/1/0    14.23    214    14.23
+292:diagram-reorg-3:cities-government-G03     2026-10-01T01:47    2    0/0/0     8.45    160        -  (incomplete)
+292:diagram-reorg:urban-features-G19          2026-10-01T01:58    2    0/4/0     4.35    112     1.09
+292:diagram-reorg-2:water-G12                 2026-10-01T02:10    2    0/0/0     5.44    117        -  (incomplete)
+292:diagram-reorg:towns-G01                   2026-10-01T02:11    2    0/0/0     6.71    138        -  (incomplete)
+292:diagram-reorg-3:cities-government-G04     2026-10-01T02:11    2    0/0/0     6.56    142        -  (incomplete)
+292:diagram-reorg-2:water-G13                 2026-10-01T03:26    2    0/0/0    10.32    221        -  (incomplete)
+292:diagram-reorg-3:cities-government-G05     2026-10-01T03:29    2    0/7/0     8.56    154     1.22
+292:diagram-reorg:towns-G02                   2026-10-01T03:31    2    0/1/0     6.36    135     6.36
+292:diagram-reorg:towns-G03                   2026-10-01T03:49    2    0/0/0     6.07    124        -  (incomplete)
+292:diagram-reorg-2:water-G14                 2026-10-01T03:50    2    0/0/0     3.65     99        -  (incomplete)
+292:diagram-reorg-3:cities-government-G06     2026-10-01T03:53    2    0/0/0     7.80    141        -  (incomplete)
+292:diagram-reorg-2:archetypes-G01            2026-10-01T04:02    2    0/1/0    11.66    173    11.66
+292:diagram-reorg:towns-G04                   2026-10-01T04:08    2    0/0/0     6.07    153        -  (incomplete)
+292:diagram-reorg-3:cities-hinterland-G01     2026-10-01T04:19    2    0/0/0     8.71    159        -  (incomplete)
+292:diagram-reorg:towns-G05                   2026-10-01T04:28    2    0/3/0     4.89    126     1.63
+292:diagram-reorg-2:archetypes-G02            2026-10-01T04:28    2    0/0/0     4.18    119        -  (incomplete)
+292:diagram-reorg-3:cities-hinterland-G02     2026-10-01T04:39    2    0/0/0     6.98    152        -  (incomplete)
+292:diagram-reorg:towns-G06                   2026-10-01T04:43    2    0/0/0     3.75    101        -  (incomplete)
+292:diagram-reorg-2:archetypes-G03            2026-10-01T04:43    2    0/2/0    13.30    200     6.65
+292:diagram-reorg-3:cities-hinterland-G03     2026-10-01T04:55    2    0/0/0     9.33    151        -  (incomplete)
+292:diagram-reorg:towns-G07                   2026-10-01T04:57    2    0/0/0     7.93    174        -  (incomplete)
+292:diagram-reorg-2:archetypes-G04            2026-10-01T05:15    2    0/0/0     5.49    122        -  (incomplete)
+292:diagram-reorg-3:cities-river-cities-G01   2026-10-01T05:21    2    0/0/0    11.83    174        -  (incomplete)
+292:diagram-reorg:towns-G08                   2026-10-01T05:24    2    0/0/0     9.93    154        -  (incomplete)
+292:diagram-reorg-2:archetypes-G05            2026-10-01T05:30    2    0/2/0    12.03    178     6.02
+292:diagram-reorg-3:cities-river-cities-G02   2026-10-01T05:47    2    0/3/0     9.03    160     3.01
+292:diagram-reorg:towns-G09                   2026-10-01T05:57    2    0/0/0     3.43     89        -  (incomplete)
+292:diagram-reorg-2:archetypes-G06            2026-10-01T06:00    2    0/4/0    13.86    198     3.46
+292:diagram-reorg:towns-G10                   2026-10-01T06:09    2    0/0/0    10.78    175        -  (incomplete)
+292:diagram-reorg-3:cities-river-cities-G03   2026-10-01T06:12    2    0/4/0     8.85    184     2.21
+292:diagram-reorg-2:archetypes-G07            2026-10-01T06:30    2    0/4/0     8.56    146     2.14
+292:diagram-reorg-3:cities-river-cities-G04   2026-10-01T06:32    2    0/2/0     7.99    181     4.00
+292:diagram-reorg:towns-G11                   2026-10-01T06:33    2    0/0/0     7.22    148        -  (incomplete)
+292:diagram-reorg-2:archetypes-G08            2026-10-01T06:48    2    0/3/0    10.03    188     3.34
+292:diagram-reorg-3:cities-sizing-G01         2026-10-01T06:53    2    0/0/0    14.23    190        -  (incomplete)
+292:diagram-reorg:towns-G12                   2026-10-01T06:58    2    0/0/0    10.35    216        -  (incomplete)
+292:diagram-reorg-2:archetypes-G09            2026-10-01T07:05    2    0/2/0     7.23    129     3.62
+292:diagram-reorg-2:archetypes-G10            2026-10-01T07:22    2    0/3/0    10.91    174     3.64
+292:diagram-reorg:towns-G13                   2026-10-01T07:25    2    0/0/0     7.31    154        -  (incomplete)
+292:diagram-reorg-2:presentation-G01          2026-10-01T07:45    2    0/0/0     2.67     80        -  (incomplete)
+292:diagram-reorg:towns-G14                   2026-10-01T07:49    2    0/0/0     8.10    175        -  (incomplete)
+292:diagram-reorg:towns-G15                   2026-10-01T08:15    2    0/0/0     5.52    123        -  (incomplete)
+292:diagram-reorg:archetypes-G01              2026-10-01T08:32    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G02              2026-10-01T08:32    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G03              2026-10-01T08:32    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G04              2026-10-01T08:32    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G05              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G06              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G07              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G08              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G09              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G10              2026-10-01T08:34    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:presentation-G01            2026-10-01T08:34    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:presentation-G02            2026-10-01T08:34    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg-2:presentation-G02          2026-10-01T08:41    2    0/0/0     3.97     96        -  (incomplete)
+292:diagram-reorg-3:ways-G01                  2026-10-01T09:00    2    0/4/0    13.00    207     3.25
+292:diagram-reorg-2:vegetation-G01            2026-10-01T09:00    2    0/2/0    10.20    161     5.10
+292:diagram-reorg:homesteads-G01              2026-10-01T09:00    2    0/1/0     7.18    157     7.18
+292:diagram-reorg:homesteads-G02              2026-10-01T09:22    2   0/10/0    13.60    194     1.36
+292:diagram-reorg-3:ways-G02                  2026-10-01T09:31    2    0/1/0     6.81    170     6.81
+292:diagram-reorg-2:vegetation-G02            2026-10-01T09:33    2    0/1/0    13.45    241    13.45
+292:diagram-reorg-3:ways-G03                  2026-10-01T09:47    2    0/0/0     4.75    126        -  (incomplete)
+292:diagram-reorg:homesteads-G03              2026-10-01T09:54    2    0/1/0    16.28    227    16.28
+292:diagram-reorg-3:ways-G04                  2026-10-01T09:59    2    0/5/0     7.87    136     1.57
+292:diagram-reorg-2:vegetation-G03            2026-10-01T10:00    2    0/3/0     7.92    154     2.64
+292:diagram-reorg-3:ways-G05                  2026-10-01T10:18    2    0/1/0     8.57    171     8.57
+292:diagram-reorg-2:vegetation-G04            2026-10-01T10:23    2    0/1/0    10.76    150    10.76
+292:diagram-reorg:homesteads-G04              2026-10-01T10:29    2    0/3/0    10.15    192     3.38
+292:diagram-reorg-3:ways-G06                  2026-10-01T10:36    2    0/0/0     5.24    129        -  (incomplete)
+292:diagram-reorg-2:vegetation-G05            2026-10-01T10:42    2    0/1/0    11.87    194    11.87
+292:diagram-reorg-3:ways-G07                  2026-10-01T10:51    2    0/0/0    12.53    203        -  (incomplete)
+292:diagram-reorg:homesteads-G05              2026-10-01T10:59    2    0/1/0    10.14    196    10.14
+292:diagram-reorg-2:vegetation-G06            2026-10-01T11:11    2    0/0/0     9.88    157        -  (incomplete)
+292:diagram-reorg-3:fields-A01                2026-10-01T11:17    2    0/0/0    13.05    168        -  (incomplete)
+292:diagram-reorg:homesteads-G06              2026-10-01T11:23    2    0/3/0     9.73    157     3.24
+292:diagram-reorg-2:vegetation-G07            2026-10-01T11:36    2    0/1/0     5.04    134     5.04
+292:diagram-reorg-3:homesteads-G12            2026-10-01T11:45    2    0/2/0    11.17    163     5.59
+292:diagram-reorg:homesteads-G07              2026-10-01T11:49    2    0/2/0     9.56    204     4.78
+292:diagram-reorg-2:vegetation-G08            2026-10-01T11:55    2    0/3/0     9.60    143     3.20
+292:diagram-reorg-3:homesteads-G13            2026-10-01T12:10    2    0/0/0     2.46     82        -  (incomplete)
+292:diagram-reorg:homesteads-G08              2026-10-01T12:16    2    0/3/0    13.45    245     4.48
+292:diagram-reorg-3:homesteads-G14            2026-10-01T12:18    2    0/0/0     7.15    144        -  (incomplete)
+292:diagram-reorg-2:vegetation-G09            2026-10-01T12:23    2    0/0/0     3.91     94        -  (incomplete)
+292:diagram-reorg-2:buildings-A01             2026-10-01T13:20    2    0/0/0     4.90    118        -  (incomplete)
+292:diagram-reorg-3:homesteads-G15            2026-10-01T13:22    2    0/0/0    11.24    202        -  (incomplete)
+292:diagram-reorg:homesteads-G09              2026-10-01T13:35    2    0/1/0     4.69    159     4.69
+292:diagram-reorg-2:homesteads-G10            2026-10-01T13:37    2    0/2/0     9.58    166     4.79
+292:diagram-reorg:homesteads-G10              2026-10-01T13:51    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G11              2026-10-01T13:51    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G12              2026-10-01T13:51    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg-3:homesteads-G16            2026-10-01T13:51    2    0/0/0     5.13    127        -  (incomplete)
+292:diagram-reorg:homesteads-G13              2026-10-01T13:52    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G14              2026-10-01T13:52    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G15              2026-10-01T13:52    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G16              2026-10-01T13:52    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg-2:homesteads-G11            2026-10-01T14:03    2    0/2/0    12.36    166     6.18
+292:diagram-reorg-2:C1                        2026-10-01T14:36    1    0/0/0    11.30    220        -  (incomplete)
+292:diagram-reorg-3:C3                        2026-10-01T14:36    1    0/6/0    30.82    418     5.14  (incomplete)
+292:diagram-reorg-2:C2                        2026-10-01T14:49    1    0/0/0    10.02    213        -  (incomplete)
+292:diagram-reorg-3:C4                        2026-10-01T15:00    1   0/19/0    24.98    367     1.31  (incomplete)
+
+post until 9999 features ['292']: 400 sessions, 201 groups, 86 complete, 1504 M main
+per thing checked (complete groups): median 4.18 M (IQR 2.64-6.56); group total median 9.9 M for a median 2.5 things
+largest context of any turn: 418 K; complete groups' peak median 172 K
+write sessions: 197, turns median 38 (max 73), mean turn 110 K, peak median 148 K, max 294 K
+continuations: 0
+
+=== analyze.py post - 319
+group                                         start             ses    q/m/k  total M peak K /thing M
+319:diagram-html:f1                           2026-10-03T17:51    2    3/2/0    60.68    521    12.14
+319:diagram-html:g1                           2026-10-04T22:23    2    1/1/0    27.13    239    13.56
+319:diagram-html:g2                           2026-10-05T00:00    2    2/0/0    10.32    182     5.16
+319:diagram-html:g3                           2026-10-05T00:32    2    1/6/0     8.47    127     1.21
+319:diagram-html:g4                           2026-10-05T01:15    2   1/23/0    13.28    229     0.55
+319:diagram-html:g5                           2026-10-05T01:36    2    3/3/0    17.10    183     2.85
+319:diagram-html:g5b                          2026-10-05T02:15    1    0/2/0     6.82    128     3.41  (incomplete)
+319:diagram-html:g6                           2026-10-05T02:38    2    1/0/0     8.56    115     8.56
+319:diagram-html:h1                           2026-10-05T04:54    2    4/0/0    65.09    601    16.27
+319:diagram-html-2:h3                         2026-10-05T06:08    2    4/0/0    43.29    518    10.82
+319:diagram-html-3:h7                         2026-10-05T06:08    2    4/0/0    28.94    350     7.23
+319:diagram-html:h12                          2026-10-05T06:12    2    5/0/0    27.24    271     5.45
+319:diagram-html:h2                           2026-10-05T06:51    2    3/0/0    12.65    176     4.22
+319:diagram-html-3:h9                         2026-10-05T06:55    2    4/0/0    15.33    174     3.83
+319:diagram-html-2:h4                         2026-10-05T07:03    2    4/0/0    19.51    217     4.88
+319:diagram-html:h5                           2026-10-05T07:10    2    4/0/0    18.16    214     4.54
+319:diagram-html-3:h13                        2026-10-05T07:20    2    4/0/0    43.21    473    10.80
+319:diagram-html-2:h6                         2026-10-05T07:29    2    3/0/0    46.86    434    15.62
+319:diagram-html:h8                           2026-10-05T07:34    2    4/0/0    29.62    341     7.41
+319:diagram-html-3:h14                        2026-10-05T08:15    2    5/0/0     6.07    138     1.21
+319:diagram-html-2:h11                        2026-10-05T08:22    2    4/0/0    10.07    143     2.52
+319:diagram-html:h15                          2026-10-05T13:05    2    3/0/0    12.86    216     4.29
+319:diagram-html-2:h10                        2026-10-05T13:21    2    4/0/0    15.63    225     3.91
+319:diagram-html:h16                          2026-10-05T14:16    2    3/0/0     5.10     98     1.70
+
+post until 9999 features ['319']: 47 sessions, 24 groups, 23 complete, 385 M main
+per thing checked (complete groups): median 4.88 M (IQR 2.85-10.80); group total median 17.1 M for a median 4 things
+largest context of any turn: 601 K; complete groups' peak median 217 K
+write sessions: 23, turns median 37 (max 81), mean turn 91 K, peak median 134 K, max 188 K
+continuations: 0
+
+=== analyze.py post -
+group                                         start             ses    q/m/k  total M peak K /thing M
+269:diagram-supplemental:c3                   2026-09-28T04:21    3    5/0/7     6.41     69     0.53  (incomplete)
+269:diagram-supplemental:c4a                  2026-09-28T04:36    4    5/0/6    11.43    159     1.04
+269:diagram-supplemental:c4b                  2026-09-28T05:07    2    2/0/3     7.70    130     1.54
+269:diagram-supplemental:x1a                  2026-09-28T05:24    3    4/0/4     8.55    186     1.07
+269:diagram-supplemental:x1b                  2026-09-28T05:46    3    4/0/3    10.80    173     1.54
+269:diagram-supplemental:x1c                  2026-09-28T06:16    2    2/0/5     4.09    102     0.58
+269:diagram-supplemental:fx1                  2026-09-28T07:33    4    5/0/2    13.05    202     1.86
+269:diagram-supplemental:fx2                  2026-09-28T08:02    3    4/0/0     6.11     86     1.53
+269:diagram-supplemental:fx3                  2026-09-28T08:16    3    3/0/0     3.21     94     1.07
+269:diagram-supplemental:fx4                  2026-09-28T08:27    2    1/0/3     2.17     61     0.54
+269:diagram-supplemental:sp1                  2026-09-28T08:33    7   11/0/0    20.97    159     1.91
+269:diagram-supplemental:sp2                  2026-09-28T09:29    5    8/0/0    10.86    101     1.36
+269:diagram-supplemental:fin                  2026-09-28T09:56    7   14/0/0    13.54     90     0.97  (incomplete)
+280:diagram-supplemental-2:w2                 2026-09-28T12:21    4    5/0/5    17.58    219     1.76
+280:diagram-supplemental-2:w1                 2026-09-28T12:53    4   5/0/11    18.16    244     1.13
+280:diagram-supplemental-2:f1                 2026-09-28T13:30    3    4/0/4    10.22    143     1.28
+280:diagram-supplemental-2:f3                 2026-09-28T13:54    2    2/0/6    15.80    209     1.98
+280:diagram-supplemental-2:f2                 2026-09-28T14:30    3    4/0/4    13.51    219     1.69
+280:diagram-supplemental-2:h2                 2026-09-28T15:01    4    5/0/6    20.65    226     1.88
+280:diagram-supplemental-2:h1                 2026-09-28T15:45    3    4/0/3    15.10    221     2.16
+280:diagram-supplemental-2:y1                 2026-09-28T17:27    2    1/0/5     6.45    122     1.08
+280:diagram-supplemental-2:u1                 2026-09-28T17:48    3    4/0/9    12.50    219     0.96
+280:diagram-supplemental-2:r2                 2026-09-28T18:24    2    2/0/4     5.92    142     0.99
+280:diagram-supplemental-2:r1                 2026-09-28T18:42    5    7/0/7    17.79    240     1.27
+280:diagram-supplemental-2:b1                 2026-09-28T19:15    3    4/0/5     9.78    169     1.09
+280:diagram-supplemental-2:b2                 2026-09-28T19:37    3    4/0/4     8.29    141     1.04
+280:diagram-supplemental-2:a2                 2026-09-28T19:57    3    4/0/5    12.81    217     1.42
+280:diagram-supplemental-2:a1                 2026-09-28T20:33    3    4/0/6    12.64    133     1.26
+280:diagram-supplemental-2:t3                 2026-09-28T21:17    3    3/0/9     9.02    178     0.75
+280:diagram-supplemental-2:t1                 2026-09-28T21:38    3    3/0/7    13.43    183     1.34
+280:diagram-supplemental-2:t2                 2026-09-28T22:23    3    3/0/6     7.29    150     0.81
+280:diagram-supplemental-2:u4                 2026-09-28T22:40    2    2/0/5     9.33    133     1.33
+280:diagram-supplemental-2:u2                 2026-09-28T23:04    4    5/0/6    10.97    172     1.00
+280:diagram-supplemental-2:u3                 2026-09-28T23:32    4    5/0/8    14.89    203     1.15
+280:diagram-supplemental-2:c1                 2026-09-29T00:01    3    4/0/5    12.51    169     1.39
+280:diagram-supplemental-2:c2                 2026-09-29T00:29    3    4/0/3     9.52    157     1.36
+280:diagram-supplemental-2:c3                 2026-09-29T00:51    3    3/0/5    11.28    161     1.41
+280:diagram-supplemental-2:r3                 2026-09-29T01:15    3    3/0/7    10.20    167     1.02
+280:diagram-supplemental-2:b3                 2026-09-29T01:36    3    3/0/7    12.86    185     1.29
+280:diagram-supplemental-2:f4                 2026-09-29T02:05    3    3/0/3    12.32    255     2.05
+280:diagram-supplemental-2:w3                 2026-09-29T02:28    2    2/0/3     6.46    149     1.29
+280:diagram-supplemental-2:w4                 2026-09-29T02:44    2    2/0/7    12.03    227     1.34
+280:diagram-supplemental-2:h3                 2026-09-29T03:07    4    6/0/6    16.15    223     1.35
+280:diagram-supplemental-2:h4                 2026-09-29T03:47    3    3/0/3    12.29    198     2.05
+280:diagram-supplemental-2:h5                 2026-09-29T04:15    5    7/0/5    12.93    188     1.08
+280:diagram-supplemental-2:v1                 2026-09-29T04:47    5    7/0/5    14.23    163     1.19
+280:diagram-supplemental-2:finish-a2b         2026-09-29T05:23    1    0/0/0     1.82     58        -  (incomplete)
+280:diagram-supplemental-2:finish-f1a         2026-09-29T05:28    1    0/0/0     2.08     63        -  (incomplete)
+280:diagram-supplemental-2:recheck-merge      2026-09-29T05:33    1    0/0/0     1.80     56        -  (incomplete)
+280:diagram-supplemental-2:v3                 2026-09-29T05:55    4    6/0/5    12.81    184     1.16
+280:diagram-supplemental-2:v2                 2026-09-29T06:24    3    4/0/2     9.67    152     1.61
+280:diagram-supplemental-2:a3                 2026-09-29T06:49    3    4/0/5    14.25    179     1.58
+280:diagram-supplemental-2:a4                 2026-09-29T07:18    3    4/0/2    11.35    157     1.89
+280:diagram-supplemental-2:r4                 2026-09-29T07:44    4    5/0/3    16.95    206     2.12
+280:diagram-supplemental-2:t4                 2026-09-29T08:30    3    3/0/6    12.74    201     1.42
+280:diagram-supplemental-2:c5                 2026-09-29T08:58    3    4/0/5    16.50    187     1.83
+280:diagram-supplemental-2:r5                 2026-09-29T09:37    2    2/0/2    10.18    175     2.54
+291:diagram-readability-2:r1                  2026-09-29T14:45    3    3/0/0     5.74    109     1.91
+291:diagram-readability-2:r2                  2026-09-29T15:03    2    2/0/0     2.45     58     1.23
+291:diagram-readability-2:r3                  2026-09-29T15:10    2    1/0/0     0.90     29     0.90
+291:diagram-readability-2:r4                  2026-09-29T15:15    1    0/1/0     1.15     77     1.15  (incomplete)
+291:diagram-readability-2:r5                  2026-09-29T17:57    3    4/0/0     4.20     63     1.05
+291:diagram-readability-2:r6                  2026-09-29T21:30    2    3/0/0    13.10    257     4.37
+291:diagram-readability-2:r7                  2026-09-29T23:54    3    4/0/0     9.91    149     2.48
+291:diagram-readability-2:r8                  2026-09-30T00:52    2    1/0/0     2.05     57     2.05
+291:diagram-readability-2:r9                  2026-09-30T02:30    2    1/0/0     1.31     46     1.31
+291:diagram-readability-2:r10                 2026-09-30T03:01    2    2/0/0     5.48     89     2.74
+291:diagram-readability-2:r11                 2026-09-30T04:33    2    1/0/0     1.39     47     1.39
+292:diagram-reorg:buildings-G02               2026-09-30T05:06    3    0/9/0    13.88    180     1.54
+292:diagram-reorg-2:religion-and-death-G01    2026-09-30T05:25    3    0/0/0    11.15    148        -  (incomplete)
+291:diagram-readability-2:r12                 2026-09-30T05:27    2    2/0/0    15.38    216     7.69
+292:diagram-reorg-2:religion-and-death-G02    2026-09-30T06:52    2    0/1/0     7.59    160     7.59
+292:diagram-reorg:buildings-G01               2026-09-30T06:58    2   0/13/0    11.28    193     0.87
+292:diagram-reorg-2:religion-and-death-G03    2026-09-30T07:17    2    0/4/0    12.68    218     3.17
+292:diagram-reorg:buildings-G03               2026-09-30T07:24    2    0/1/0     5.08    111     5.08
+292:diagram-reorg:buildings-G04               2026-09-30T07:41    2    0/2/0     5.26    128     2.63
+292:diagram-reorg-2:religion-and-death-G04    2026-09-30T07:48    2    0/3/0     9.41    167     3.14
+292:diagram-reorg:buildings-G05               2026-09-30T08:00    2   0/10/0     6.62    150     0.66
+292:diagram-reorg-2:religion-and-death-G05    2026-09-30T08:09    2    0/1/0     7.52    135     7.52
+292:diagram-reorg:buildings-G06               2026-09-30T08:20    2    0/1/0     6.18    144     6.18
+292:diagram-reorg-2:religion-and-death-G06    2026-09-30T08:33    2    0/3/0     8.24    160     2.75
+292:diagram-reorg:buildings-G07               2026-09-30T08:40    2    0/8/0     8.25    164     1.03
+292:diagram-reorg-2:religion-and-death-G07    2026-09-30T08:58    2    0/0/0     8.36    148        -  (incomplete)
+292:diagram-reorg:buildings-G08               2026-09-30T09:01    2    0/3/0     7.16    172     2.39
+292:diagram-reorg:buildings-G09               2026-09-30T09:21    2    0/6/0    10.10    166     1.68
+292:diagram-reorg-2:religion-and-death-G08    2026-09-30T09:30    2    0/0/0     5.54    121        -  (incomplete)
+292:diagram-reorg:buildings-G10               2026-09-30T09:54    2    0/6/0     6.97    154     1.16
+292:diagram-reorg:buildings-G11               2026-09-30T10:15    2    0/3/0     7.82    140     2.61
+292:diagram-reorg:buildings-G12               2026-09-30T10:35    2    0/5/0    11.78    198     2.36
+292:diagram-reorg-2:religion-and-death-G09    2026-09-30T10:35    2    0/0/0     5.49    128        -  (incomplete)
+291:diagram-readability-2:r13                 2026-09-30T10:55    2    2/0/0     3.28    100     1.64
+292:diagram-reorg-2:religion-and-death-G10    2026-09-30T10:56    2    0/0/0    12.74    219        -  (incomplete)
+292:diagram-reorg:buildings-G13               2026-09-30T11:00    2    0/2/0     5.07    131     2.54
+292:diagram-reorg:buildings-G14               2026-09-30T11:14    2    0/5/0    10.48    174     2.10
+292:diagram-reorg-2:religion-and-death-G11    2026-09-30T11:21    2    0/0/0    12.25    177        -  (incomplete)
+292:diagram-reorg:buildings-G15               2026-09-30T11:39    2    0/3/0    13.85    180     4.62
+292:diagram-reorg-2:religion-and-death-G12    2026-09-30T11:47    2    0/0/0     5.94    148        -  (incomplete)
+292:diagram-reorg:buildings-G16               2026-09-30T12:05    2    0/3/0     6.96    147     2.32
+292:diagram-reorg-2:religion-and-death-G13    2026-09-30T12:05    2    0/0/0     6.23    123        -  (incomplete)
+292:diagram-reorg:buildings-G17               2026-09-30T12:21    2    0/4/0    13.41    198     3.35
+292:diagram-reorg-2:religion-and-death-G14    2026-09-30T12:26    2    0/0/0     7.33    141        -  (incomplete)
+292:diagram-reorg-2:religion-and-death-G15    2026-09-30T12:41    2    0/3/0    19.58    293     6.53
+292:diagram-reorg:buildings-G18               2026-09-30T12:55    2    0/3/0    10.54    212     3.51
+292:diagram-reorg-2:religion-and-death-G16    2026-09-30T13:16    2    0/1/0    24.78    294    24.78
+292:diagram-reorg:buildings-G19               2026-09-30T13:30    2    0/1/0     3.82    102     3.82
+292:diagram-reorg:buildings-G20               2026-09-30T13:42    2    0/3/0     9.47    174     3.16
+292:diagram-reorg-2:religion-and-death-G17    2026-09-30T14:01    2    0/0/0    10.49    174        -  (incomplete)
+292:diagram-reorg:buildings-G21               2026-09-30T14:12    2    0/4/0    11.61    202     2.90
+292:diagram-reorg-2:religion-and-death-G18    2026-09-30T14:30    2    0/0/0     9.35    172        -  (incomplete)
+292:diagram-reorg:buildings-G22               2026-09-30T14:44    2    0/0/0     9.16    171        -  (incomplete)
+292:diagram-reorg-3:cities-capitals-G01       2026-09-30T14:48    2    0/0/0    11.03    199        -  (incomplete)
+292:diagram-reorg-2:religion-and-death-G19    2026-09-30T14:54    2    0/2/0     7.25    154     3.62
+292:diagram-reorg-3:cities-capitals-G02       2026-09-30T15:07    2    0/0/0    17.18    227        -  (incomplete)
+292:diagram-reorg:urban-features-G01          2026-09-30T15:13    2    0/2/0     7.38    162     3.69
+292:diagram-reorg-2:settlements-G01           2026-09-30T15:14    2    0/0/0     8.74    153        -  (incomplete)
+292:diagram-reorg-2:settlements-G02           2026-09-30T15:33    2    0/1/0     5.41    130     5.41
+292:diagram-reorg:urban-features-G02          2026-09-30T15:37    2    0/2/0    12.06    213     6.03
+292:diagram-reorg-3:cities-capitals-G03       2026-09-30T15:39    2    0/0/0    11.67    203        -  (incomplete)
+292:diagram-reorg-2:fields-G01                2026-09-30T15:47    2    0/2/0    19.32    249     9.66
+292:diagram-reorg-3:cities-capitals-G04       2026-09-30T16:10    2    0/0/0     7.57    147        -  (incomplete)
+292:diagram-reorg:urban-features-G03          2026-09-30T17:22    2    0/0/0     6.03    127        -  (incomplete)
+292:diagram-reorg-2:fields-G02                2026-09-30T17:27    2    0/3/0    14.37    248     4.79
+292:diagram-reorg-3:cities-capitals-G05       2026-09-30T17:35    2    0/0/0    14.06    217        -  (incomplete)
+292:diagram-reorg:urban-features-G04          2026-09-30T17:41    2    0/3/0    18.76    282     6.25
+292:diagram-reorg-2:fields-G03                2026-09-30T17:54    2    0/1/0    10.59    184    10.59
+292:diagram-reorg-3:cities-capitals-G06       2026-09-30T18:06    2    0/0/0     8.78    158        -  (incomplete)
+292:diagram-reorg-2:fields-G04                2026-09-30T18:18    2    0/5/0    13.59    237     2.72
+292:diagram-reorg:urban-features-G05          2026-09-30T18:23    2    0/0/0    10.49    184        -  (incomplete)
+292:diagram-reorg-3:cities-capitals-G07       2026-09-30T18:29    2    0/0/0     9.87    161        -  (incomplete)
+292:diagram-reorg-2:fields-G05                2026-09-30T18:51    2    0/4/0    19.28    248     4.82
+292:diagram-reorg-3:cities-capitals-G08       2026-09-30T18:53    2    0/0/0    14.53    233        -  (incomplete)
+292:diagram-reorg:urban-features-G06          2026-09-30T18:54    2    0/0/0     9.85    198        -  (incomplete)
+292:diagram-reorg:urban-features-G07          2026-09-30T19:21    2    0/0/0     6.63    161        -  (incomplete)
+292:diagram-reorg-2:fields-G06                2026-09-30T19:27    2    0/0/0     8.77    156        -  (incomplete)
+292:diagram-reorg-3:cities-defenses-G01       2026-09-30T19:28    2    0/0/0    10.10    187        -  (incomplete)
+292:diagram-reorg:urban-features-G08          2026-09-30T19:43    2    0/0/0     5.90    139        -  (incomplete)
+292:diagram-reorg-2:fields-G07                2026-09-30T19:52    2    0/0/0     5.37    121        -  (incomplete)
+292:diagram-reorg-3:cities-defenses-G02       2026-09-30T19:52    2    0/0/0     5.70    138        -  (incomplete)
+292:diagram-reorg-2:water-G01                 2026-09-30T20:07    2    0/2/0    15.07    189     7.54
+292:diagram-reorg:urban-features-G09          2026-09-30T20:07    2    0/0/0     6.16    150        -  (incomplete)
+292:diagram-reorg-3:cities-defenses-G03       2026-09-30T20:09    2    0/0/0     5.91    130        -  (incomplete)
+292:diagram-reorg-3:cities-defenses-G04       2026-09-30T20:25    2    0/0/0     7.25    147        -  (incomplete)
+292:diagram-reorg:urban-features-G10          2026-09-30T20:28    2    0/0/0     7.69    145        -  (incomplete)
+292:diagram-reorg-2:water-G02                 2026-09-30T20:31    2    0/2/0    16.55    209     8.27
+292:diagram-reorg:urban-features-G11          2026-09-30T22:36    2    0/1/0     6.51    131     6.51
+292:diagram-reorg-3:cities-defenses-G05       2026-09-30T22:38    2    0/0/0     5.66    121        -  (incomplete)
+292:diagram-reorg-2:water-G03                 2026-09-30T22:52    2    0/2/0    15.44    204     7.72
+292:diagram-reorg:urban-features-G12          2026-09-30T22:56    2    0/6/0     8.32    161     1.39
+292:diagram-reorg-3:cities-defenses-G06       2026-09-30T23:00    2    0/0/0     3.54    108        -  (incomplete)
+292:diagram-reorg-3:cities-fabric-G01         2026-09-30T23:11    2    0/0/0     8.37    149        -  (incomplete)
+292:diagram-reorg-2:water-G04                 2026-09-30T23:16    2    0/3/0    13.07    204     4.36
+292:diagram-reorg:urban-features-G13          2026-09-30T23:18    2    0/2/0    15.00    282     7.50
+292:diagram-reorg-3:cities-fabric-G02         2026-09-30T23:28    2    0/0/0     5.21    121        -  (incomplete)
+292:diagram-reorg-3:cities-fabric-G03         2026-09-30T23:46    2    0/0/0     5.81    120        -  (incomplete)
+292:diagram-reorg-2:water-G05                 2026-09-30T23:47    2    0/0/0     9.50    165        -  (incomplete)
+292:diagram-reorg:urban-features-G14          2026-10-01T00:01    2    0/0/0     5.98    115        -  (incomplete)
+292:diagram-reorg-3:cities-fabric-G04         2026-10-01T00:02    2    0/0/0     8.85    191        -  (incomplete)
+292:diagram-reorg-2:water-G06                 2026-10-01T00:07    2    0/2/0     9.62    163     4.81
+292:diagram-reorg:urban-features-G15          2026-10-01T00:19    2    0/0/0     9.56    195        -  (incomplete)
+292:diagram-reorg-2:water-G07                 2026-10-01T00:28    2    0/1/0     7.43    145     7.43
+292:diagram-reorg-3:cities-fabric-G05         2026-10-01T00:30    2    0/0/0     4.27    102        -  (incomplete)
+292:diagram-reorg-3:cities-fabric-G06         2026-10-01T00:40    2    0/0/0     6.77    133        -  (incomplete)
+292:diagram-reorg-2:water-G08                 2026-10-01T00:45    2    0/0/0     8.97    161        -  (incomplete)
+292:diagram-reorg:urban-features-G16          2026-10-01T00:45    2    0/0/0     7.44    148        -  (incomplete)
+292:diagram-reorg-3:cities-government-G01     2026-10-01T01:02    2    0/0/0    10.42    213        -  (incomplete)
+292:diagram-reorg:urban-features-G17          2026-10-01T01:08    2    0/0/0     8.20    145        -  (incomplete)
+292:diagram-reorg-2:water-G09                 2026-10-01T01:13    2    0/0/0     7.96    142        -  (incomplete)
+292:diagram-reorg-3:cities-government-G02     2026-10-01T01:26    2    0/0/0     9.83    176        -  (incomplete)
+292:diagram-reorg:urban-features-G18          2026-10-01T01:28    2    0/0/0    10.94    200        -  (incomplete)
+292:diagram-reorg-2:water-G10                 2026-10-01T01:34    2    0/0/0     2.62     96        -  (incomplete)
+292:diagram-reorg-2:water-G11                 2026-10-01T01:44    2    0/1/0    14.23    214    14.23
+292:diagram-reorg-3:cities-government-G03     2026-10-01T01:47    2    0/0/0     8.45    160        -  (incomplete)
+292:diagram-reorg:urban-features-G19          2026-10-01T01:58    2    0/4/0     4.35    112     1.09
+292:diagram-reorg-2:water-G12                 2026-10-01T02:10    2    0/0/0     5.44    117        -  (incomplete)
+292:diagram-reorg:towns-G01                   2026-10-01T02:11    2    0/0/0     6.71    138        -  (incomplete)
+292:diagram-reorg-3:cities-government-G04     2026-10-01T02:11    2    0/0/0     6.56    142        -  (incomplete)
+292:diagram-reorg-2:water-G13                 2026-10-01T03:26    2    0/0/0    10.32    221        -  (incomplete)
+292:diagram-reorg-3:cities-government-G05     2026-10-01T03:29    2    0/7/0     8.56    154     1.22
+292:diagram-reorg:towns-G02                   2026-10-01T03:31    2    0/1/0     6.36    135     6.36
+292:diagram-reorg:towns-G03                   2026-10-01T03:49    2    0/0/0     6.07    124        -  (incomplete)
+292:diagram-reorg-2:water-G14                 2026-10-01T03:50    2    0/0/0     3.65     99        -  (incomplete)
+292:diagram-reorg-3:cities-government-G06     2026-10-01T03:53    2    0/0/0     7.80    141        -  (incomplete)
+292:diagram-reorg-2:archetypes-G01            2026-10-01T04:02    2    0/1/0    11.66    173    11.66
+292:diagram-reorg:towns-G04                   2026-10-01T04:08    2    0/0/0     6.07    153        -  (incomplete)
+292:diagram-reorg-3:cities-hinterland-G01     2026-10-01T04:19    2    0/0/0     8.71    159        -  (incomplete)
+292:diagram-reorg:towns-G05                   2026-10-01T04:28    2    0/3/0     4.89    126     1.63
+292:diagram-reorg-2:archetypes-G02            2026-10-01T04:28    2    0/0/0     4.18    119        -  (incomplete)
+292:diagram-reorg-3:cities-hinterland-G02     2026-10-01T04:39    2    0/0/0     6.98    152        -  (incomplete)
+292:diagram-reorg:towns-G06                   2026-10-01T04:43    2    0/0/0     3.75    101        -  (incomplete)
+292:diagram-reorg-2:archetypes-G03            2026-10-01T04:43    2    0/2/0    13.30    200     6.65
+292:diagram-reorg-3:cities-hinterland-G03     2026-10-01T04:55    2    0/0/0     9.33    151        -  (incomplete)
+292:diagram-reorg:towns-G07                   2026-10-01T04:57    2    0/0/0     7.93    174        -  (incomplete)
+292:diagram-reorg-2:archetypes-G04            2026-10-01T05:15    2    0/0/0     5.49    122        -  (incomplete)
+292:diagram-reorg-3:cities-river-cities-G01   2026-10-01T05:21    2    0/0/0    11.83    174        -  (incomplete)
+292:diagram-reorg:towns-G08                   2026-10-01T05:24    2    0/0/0     9.93    154        -  (incomplete)
+292:diagram-reorg-2:archetypes-G05            2026-10-01T05:30    2    0/2/0    12.03    178     6.02
+292:diagram-reorg-3:cities-river-cities-G02   2026-10-01T05:47    2    0/3/0     9.03    160     3.01
+292:diagram-reorg:towns-G09                   2026-10-01T05:57    2    0/0/0     3.43     89        -  (incomplete)
+292:diagram-reorg-2:archetypes-G06            2026-10-01T06:00    2    0/4/0    13.86    198     3.46
+292:diagram-reorg:towns-G10                   2026-10-01T06:09    2    0/0/0    10.78    175        -  (incomplete)
+292:diagram-reorg-3:cities-river-cities-G03   2026-10-01T06:12    2    0/4/0     8.85    184     2.21
+292:diagram-reorg-2:archetypes-G07            2026-10-01T06:30    2    0/4/0     8.56    146     2.14
+292:diagram-reorg-3:cities-river-cities-G04   2026-10-01T06:32    2    0/2/0     7.99    181     4.00
+292:diagram-reorg:towns-G11                   2026-10-01T06:33    2    0/0/0     7.22    148        -  (incomplete)
+292:diagram-reorg-2:archetypes-G08            2026-10-01T06:48    2    0/3/0    10.03    188     3.34
+292:diagram-reorg-3:cities-sizing-G01         2026-10-01T06:53    2    0/0/0    14.23    190        -  (incomplete)
+292:diagram-reorg:towns-G12                   2026-10-01T06:58    2    0/0/0    10.35    216        -  (incomplete)
+292:diagram-reorg-2:archetypes-G09            2026-10-01T07:05    2    0/2/0     7.23    129     3.62
+292:diagram-reorg-2:archetypes-G10            2026-10-01T07:22    2    0/3/0    10.91    174     3.64
+292:diagram-reorg:towns-G13                   2026-10-01T07:25    2    0/0/0     7.31    154        -  (incomplete)
+292:diagram-reorg-2:presentation-G01          2026-10-01T07:45    2    0/0/0     2.67     80        -  (incomplete)
+292:diagram-reorg:towns-G14                   2026-10-01T07:49    2    0/0/0     8.10    175        -  (incomplete)
+292:diagram-reorg:towns-G15                   2026-10-01T08:15    2    0/0/0     5.52    123        -  (incomplete)
+292:diagram-reorg:archetypes-G01              2026-10-01T08:32    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G02              2026-10-01T08:32    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G03              2026-10-01T08:32    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G04              2026-10-01T08:32    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G05              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G06              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G07              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G08              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G09              2026-10-01T08:33    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:archetypes-G10              2026-10-01T08:34    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:presentation-G01            2026-10-01T08:34    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg:presentation-G02            2026-10-01T08:34    2    0/0/0     0.07     17        -  (incomplete)
+292:diagram-reorg-2:presentation-G02          2026-10-01T08:41    2    0/0/0     3.97     96        -  (incomplete)
+292:diagram-reorg-3:ways-G01                  2026-10-01T09:00    2    0/4/0    13.00    207     3.25
+292:diagram-reorg-2:vegetation-G01            2026-10-01T09:00    2    0/2/0    10.20    161     5.10
+292:diagram-reorg:homesteads-G01              2026-10-01T09:00    2    0/1/0     7.18    157     7.18
+292:diagram-reorg:homesteads-G02              2026-10-01T09:22    2   0/10/0    13.60    194     1.36
+292:diagram-reorg-3:ways-G02                  2026-10-01T09:31    2    0/1/0     6.81    170     6.81
+292:diagram-reorg-2:vegetation-G02            2026-10-01T09:33    2    0/1/0    13.45    241    13.45
+292:diagram-reorg-3:ways-G03                  2026-10-01T09:47    2    0/0/0     4.75    126        -  (incomplete)
+292:diagram-reorg:homesteads-G03              2026-10-01T09:54    2    0/1/0    16.28    227    16.28
+292:diagram-reorg-3:ways-G04                  2026-10-01T09:59    2    0/5/0     7.87    136     1.57
+292:diagram-reorg-2:vegetation-G03            2026-10-01T10:00    2    0/3/0     7.92    154     2.64
+292:diagram-reorg-3:ways-G05                  2026-10-01T10:18    2    0/1/0     8.57    171     8.57
+292:diagram-reorg-2:vegetation-G04            2026-10-01T10:23    2    0/1/0    10.76    150    10.76
+292:diagram-reorg:homesteads-G04              2026-10-01T10:29    2    0/3/0    10.15    192     3.38
+292:diagram-reorg-3:ways-G06                  2026-10-01T10:36    2    0/0/0     5.24    129        -  (incomplete)
+292:diagram-reorg-2:vegetation-G05            2026-10-01T10:42    2    0/1/0    11.87    194    11.87
+292:diagram-reorg-3:ways-G07                  2026-10-01T10:51    2    0/0/0    12.53    203        -  (incomplete)
+292:diagram-reorg:homesteads-G05              2026-10-01T10:59    2    0/1/0    10.14    196    10.14
+292:diagram-reorg-2:vegetation-G06            2026-10-01T11:11    2    0/0/0     9.88    157        -  (incomplete)
+292:diagram-reorg-3:fields-A01                2026-10-01T11:17    2    0/0/0    13.05    168        -  (incomplete)
+292:diagram-reorg:homesteads-G06              2026-10-01T11:23    2    0/3/0     9.73    157     3.24
+292:diagram-reorg-2:vegetation-G07            2026-10-01T11:36    2    0/1/0     5.04    134     5.04
+292:diagram-reorg-3:homesteads-G12            2026-10-01T11:45    2    0/2/0    11.17    163     5.59
+292:diagram-reorg:homesteads-G07              2026-10-01T11:49    2    0/2/0     9.56    204     4.78
+292:diagram-reorg-2:vegetation-G08            2026-10-01T11:55    2    0/3/0     9.60    143     3.20
+292:diagram-reorg-3:homesteads-G13            2026-10-01T12:10    2    0/0/0     2.46     82        -  (incomplete)
+292:diagram-reorg:homesteads-G08              2026-10-01T12:16    2    0/3/0    13.45    245     4.48
+292:diagram-reorg-3:homesteads-G14            2026-10-01T12:18    2    0/0/0     7.15    144        -  (incomplete)
+292:diagram-reorg-2:vegetation-G09            2026-10-01T12:23    2    0/0/0     3.91     94        -  (incomplete)
+292:diagram-reorg-2:buildings-A01             2026-10-01T13:20    2    0/0/0     4.90    118        -  (incomplete)
+292:diagram-reorg-3:homesteads-G15            2026-10-01T13:22    2    0/0/0    11.24    202        -  (incomplete)
+292:diagram-reorg:homesteads-G09              2026-10-01T13:35    2    0/1/0     4.69    159     4.69
+292:diagram-reorg-2:homesteads-G10            2026-10-01T13:37    2    0/2/0     9.58    166     4.79
+292:diagram-reorg:homesteads-G10              2026-10-01T13:51    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G11              2026-10-01T13:51    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G12              2026-10-01T13:51    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg-3:homesteads-G16            2026-10-01T13:51    2    0/0/0     5.13    127        -  (incomplete)
+292:diagram-reorg:homesteads-G13              2026-10-01T13:52    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G14              2026-10-01T13:52    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G15              2026-10-01T13:52    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg:homesteads-G16              2026-10-01T13:52    2    0/0/0     0.06     16        -  (incomplete)
+292:diagram-reorg-2:homesteads-G11            2026-10-01T14:03    2    0/2/0    12.36    166     6.18
+292:diagram-reorg-2:C1                        2026-10-01T14:36    1    0/0/0    11.30    220        -  (incomplete)
+292:diagram-reorg-3:C3                        2026-10-01T14:36    1    0/6/0    30.82    418     5.14  (incomplete)
+292:diagram-reorg-2:C2                        2026-10-01T14:49    1    0/0/0    10.02    213        -  (incomplete)
+292:diagram-reorg-3:C4                        2026-10-01T15:00    1   0/19/0    24.98    367     1.31  (incomplete)
+317:diagram-performance:r1                    2026-10-03T03:28    2   1/15/0    23.83    304     1.49
+317:diagram-performance:r2                    2026-10-03T05:24    2    1/6/0    41.18    332     5.88
+319:diagram-html:f1                           2026-10-03T17:51    2    3/2/0    60.68    521    12.14
+?:diagram-html-backup:backup-branches-brief   2026-10-04T20:35    1    0/0/0     1.31     66        -  (incomplete)
+319:diagram-html:g1                           2026-10-04T22:23    2    1/1/0    27.13    239    13.56
+319:diagram-html:g2                           2026-10-05T00:00    2    2/0/0    10.32    182     5.16
+319:diagram-html:g3                           2026-10-05T00:32    2    1/6/0     8.47    127     1.21
+319:diagram-html:g4                           2026-10-05T01:15    2   1/23/0    13.28    229     0.55
+319:diagram-html:g5                           2026-10-05T01:36    2    3/3/0    17.10    183     2.85
+319:diagram-html:g5b                          2026-10-05T02:15    1    0/2/0     6.82    128     3.41  (incomplete)
+319:diagram-html:g6                           2026-10-05T02:38    2    1/0/0     8.56    115     8.56
+?:diagram-html-rulings:rulings-brief          2026-10-05T04:36    1    0/0/0     0.12     22        -  (incomplete)
+319:diagram-html:h1                           2026-10-05T04:54    2    4/0/0    65.09    601    16.27
+319:diagram-html-2:h3                         2026-10-05T06:08    2    4/0/0    43.29    518    10.82
+319:diagram-html-3:h7                         2026-10-05T06:08    2    4/0/0    28.94    350     7.23
+319:diagram-html:h12                          2026-10-05T06:12    2    5/0/0    27.24    271     5.45
+319:diagram-html:h2                           2026-10-05T06:51    2    3/0/0    12.65    176     4.22
+319:diagram-html-3:h9                         2026-10-05T06:55    2    4/0/0    15.33    174     3.83
+319:diagram-html-2:h4                         2026-10-05T07:03    2    4/0/0    19.51    217     4.88
+319:diagram-html:h5                           2026-10-05T07:10    2    4/0/0    18.16    214     4.54
+319:diagram-html-3:h13                        2026-10-05T07:20    2    4/0/0    43.21    473    10.80
+319:diagram-html-2:h6                         2026-10-05T07:29    2    3/0/0    46.86    434    15.62
+319:diagram-html:h8                           2026-10-05T07:34    2    4/0/0    29.62    341     7.41
+319:diagram-html-3:h14                        2026-10-05T08:15    2    5/0/0     6.07    138     1.21
+319:diagram-html-2:h11                        2026-10-05T08:22    2    4/0/0    10.07    143     2.52
+319:diagram-html:h15                          2026-10-05T13:05    2    3/0/0    12.86    216     4.29
+319:diagram-html-2:h10                        2026-10-05T13:21    2    4/0/0    15.63    225     3.91
+319:diagram-html:h16                          2026-10-05T14:16    2    3/0/0     5.10     98     1.70
+
+post until 9999 features all: 662 sessions, 299 groups, 175 complete, 2549 M main
+per thing checked (complete groups): median 2.63 M (IQR 1.36-5.16); group total median 10.8 M for a median 4 things
+largest context of any turn: 601 K; complete groups' peak median 174 K
+write sessions: 286, turns median 40 (max 81), mean turn 107 K, peak median 149 K, max 294 K
+continuations: 0
+
+=== split.py
+| selection | complete groups | things a group | write M/thing | check M/thing | agents M/thing | total M/thing | check sessions a group | write turns a thing |
+|---|---|---|---|---|---|---|---|---|
+| R1 window (before 274) | 48 | 21 | 0.56 | 0.37 | 0.11 | 1.04 | 3 | 3.5 |
+| 269 before 274 | 12 | 16 | 0.56 | 0.47 | 0.15 | 1.18 | 3 | 4.3 |
+| 269 after 274 | 11 | 7 | 0.59 | 0.59 | 0.15 | 1.36 | 2 | 6.2 |
+| research groups after 274 | 66 | 8 | 0.63 | 0.53 | 0.18 | 1.36 | 2 | 6.8 |
+
+=== coord.py r1 2026-09-27T22:30
+   24.1M   243 calls  161 sessions  claims cat
+   15.4M   158 calls  135 sessions  handoff cat
+    9.6M   250 calls  160 sessions  checks cat
+    1.9M   117 calls   88 sessions  claims sed
+    1.8M    41 calls   20 sessions  claims Read
+    1.5M    86 calls   78 sessions  handoff grep
+    1.0M    91 calls   69 sessions  claims grep
+    1.0M    49 calls   47 sessions  checks grep
+    0.7M    46 calls   44 sessions  handoff sed
+    0.4M    14 calls   14 sessions  handoff tail
+    0.4M    36 calls   36 sessions  checks tail
+    0.3M    31 calls   30 sessions  claims tail
+    0.2M    23 calls   23 sessions  handoff head
+    0.1M     7 calls    7 sessions  checks head
+    0.1M     3 calls    3 sessions  handoff echo
+    0.1M    17 calls   15 sessions  checks sed
+    0.1M     4 calls    4 sessions  claims head
+    0.0M     1 calls    1 sessions  handoff Read
+    0.0M    14 calls   13 sessions  handoff printf
+    0.0M     8 calls    7 sessions  handoff other
+    0.0M     1 calls    1 sessions  claims awk
+    0.0M     1 calls    1 sessions  checks awk
+    0.0M     9 calls    9 sessions  claims printf
+    0.0M     6 calls    6 sessions  checks printf
+    0.0M     4 calls    4 sessions  claims other
+    0.0M     2 calls    2 sessions  checks echo
+    0.0M     3 calls    3 sessions  checks other
+261 sessions; all calls 1265 carrying 58.4 M; whole reads (cat, Read) 693 carrying 50.8 M; make lines 0, make append 0
+
+=== coord.py post - 269,280,291,317
+   16.0M   266 calls  189 sessions  claims lines
+    8.3M   206 calls  132 sessions  handoff lines
+    2.5M   276 calls  173 sessions  claims append
+    0.8M    10 calls   10 sessions  claims echo
+    0.5M    20 calls   18 sessions  checks lines
+    0.4M    11 calls   10 sessions  handoff cat
+    0.3M    26 calls   22 sessions  handoff grep
+    0.3M    13 calls   12 sessions  claims head
+    0.2M    55 calls   48 sessions  handoff append
+    0.2M     9 calls    9 sessions  handoff sed
+    0.2M    14 calls   12 sessions  handoff tail
+    0.2M     5 calls    5 sessions  handoff echo
+    0.1M   151 calls  131 sessions  checks append
+    0.1M    12 calls   10 sessions  checks head
+    0.1M    18 calls   16 sessions  checks grep
+    0.1M     6 calls    6 sessions  checks cat
+    0.1M    18 calls   15 sessions  claims grep
+    0.0M    11 calls   10 sessions  handoff head
+    0.0M    11 calls    9 sessions  claims tail
+    0.0M     7 calls    6 sessions  checks tail
+    0.0M    21 calls   21 sessions  handoff other
+    0.0M     2 calls    2 sessions  claims sed
+    0.0M    55 calls   46 sessions  checks other
+    0.0M     4 calls    4 sessions  claims other
+    0.0M     3 calls    3 sessions  checks echo
+    0.0M     1 calls    1 sessions  handoff awk
+    0.0M     1 calls    1 sessions  claims cat
+213 sessions; all calls 1232 carrying 30.5 M; whole reads (cat, Read) 18 carrying 0.5 M; make lines 492, make append 482
+
+=== coord.py post -
+   47.1M   595 calls  409 sessions  claims lines
+   14.0M   880 calls  517 sessions  claims append
+    9.6M   262 calls  188 sessions  handoff lines
+    4.4M    69 calls   64 sessions  handoff cat
+    1.9M   266 calls  249 sessions  handoff append
+    1.8M   118 calls  100 sessions  handoff grep
+    1.1M    11 calls   11 sessions  claims cat
+    1.1M    26 calls   23 sessions  checks lines
+    1.0M    32 calls   30 sessions  handoff sed
+    0.8M    55 calls   46 sessions  claims grep
+    0.8M    12 calls   12 sessions  claims echo
+    0.7M    44 calls   35 sessions  checks grep
+    0.4M    12 calls   12 sessions  checks cat
+    0.3M    34 calls   32 sessions  claims head
+    0.3M    21 calls   18 sessions  claims tail
+    0.3M    64 calls   53 sessions  handoff head
+    0.2M   360 calls  318 sessions  checks append
+    0.2M    24 calls   21 sessions  checks head
+    0.2M    20 calls   17 sessions  handoff tail
+    0.2M    38 calls   32 sessions  claims other
+    0.2M    10 calls   10 sessions  handoff echo
+    0.1M     5 calls    5 sessions  checks sed
+    0.1M   118 calls   99 sessions  handoff other
+    0.0M     6 calls    6 sessions  claims sed
+    0.0M   168 calls  148 sessions  checks other
+    0.0M    10 calls    9 sessions  checks tail
+    0.0M     5 calls    5 sessions  checks echo
+    0.0M     2 calls    2 sessions  handoff awk
+662 sessions; all calls 3267 carrying 86.6 M; whole reads (cat, Read) 92 carrying 5.8 M; make lines 883, make append 1506
+
+=== continuations in every clone's run logs
+0

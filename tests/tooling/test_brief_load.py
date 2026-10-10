@@ -6,7 +6,8 @@ of empty question files, `record/questions/NNNN-q<n>.html`: 269's V2, C1 and X1 
 272's S (a range and an id list) 8, and each is refused with its split named; 271's `g1-check-a` and 269's
 `h1-check-a` count 2 though their do-not-edit paragraphs name dozens of sections; 250's owed-modal brief of six
 sections passes on its declared `check`. A one-line item naming six questions counts six, a number that is no question
-on disk is not counted, a code reference is not a question, and a brief assigning nothing is refused.
+on disk is not counted, a code reference is not a question, an id an item's prose cites (269's FX1, "B16's finding")
+is not a question, and a brief assigning nothing is refused.
 """
 
 from __future__ import annotations
@@ -73,6 +74,17 @@ def test_one_line_naming_six_questions_counts_six_and_only_questions_on_disk_cou
     assert bl.count("## Your items\n- B1 `0020`\n", RECORD / "empty")[1] == ["B1"], "no record, no questions"
     pairs = "**Your pairs:** KIND=X (Q=0030), KIND=Y (Q=0031, 0032)\n"
     assert bl.load(pairs, RECORD)[2] == ["0030", "0031", "0032"]
+
+
+def test_an_item_that_cites_another_items_finding_is_still_one_question() -> None:
+    # 269's FX1 (feature 347's measurement): four items, counted six, because two lines cite another item's finding
+    # ("B16's finding", "B19's remaining claims") and every id on a line was counted as a question of its own.
+    fx1 = (
+        "## Your items\n\n- F01 `homesteads/060`: the byre sentence points to homesteads 300 (B16's finding: in the house).\n"
+        "- F02 `homesteads/240`: the heading says what the section finds.\n- F03 `homesteads/180`: B19's village-form claims.\n"
+        "- F04 `homesteads/130`: the farmhouse is twice the usual size.\n\n## The procedure\n"
+    )
+    assert bl.load(fx1, RECORD)[1:] == (4, ["F01", "F02", "F03", "F04"])
 
 
 def test_the_exempt_kinds_pass_and_anything_else_is_refused() -> None:

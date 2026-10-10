@@ -1,0 +1,457 @@
+[
+ {
+  "group": "319:diagram-html:f1",
+  "start": "2026-10-03T17:51",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 3,
+  "m": 2,
+  "k": 0,
+  "things": 5,
+  "total": 60682293,
+  "main": 52020493,
+  "agents": 8661800,
+  "peak": 521227,
+  "per_thing": 12136458.6,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:g1",
+  "start": "2026-10-04T22:23",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 1,
+  "k": 0,
+  "things": 2,
+  "total": 27127238,
+  "main": 20708792,
+  "agents": 6418446,
+  "peak": 238921,
+  "per_thing": 13563619.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:g2",
+  "start": "2026-10-05T00:00",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 2,
+  "m": 0,
+  "k": 0,
+  "things": 2,
+  "total": 10318646,
+  "main": 7433825,
+  "agents": 2884821,
+  "peak": 182227,
+  "per_thing": 5159323.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:g3",
+  "start": "2026-10-05T00:32",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 6,
+  "k": 0,
+  "things": 7,
+  "total": 8473753,
+  "main": 6304667,
+  "agents": 2169086,
+  "peak": 126914,
+  "per_thing": 1210536.142857143,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:g4",
+  "start": "2026-10-05T01:15",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 23,
+  "k": 0,
+  "things": 24,
+  "total": 13279135,
+  "main": 10620165,
+  "agents": 2658970,
+  "peak": 228544,
+  "per_thing": 553297.2916666666,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:g5",
+  "start": "2026-10-05T01:36",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 3,
+  "m": 3,
+  "k": 0,
+  "things": 6,
+  "total": 17096341,
+  "main": 13204989,
+  "agents": 3891352,
+  "peak": 183361,
+  "per_thing": 2849390.1666666665,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:g5b",
+  "start": "2026-10-05T02:15",
+  "sessions": 1,
+  "kinds": {
+   "check": 1
+  },
+  "q": 0,
+  "m": 2,
+  "k": 0,
+  "things": 2,
+  "total": 6816771,
+  "main": 3821331,
+  "agents": 2995440,
+  "peak": 127841,
+  "per_thing": 3408385.5,
+  "complete": false
+ },
+ {
+  "group": "319:diagram-html:g6",
+  "start": "2026-10-05T02:38",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 1,
+  "m": 0,
+  "k": 0,
+  "things": 1,
+  "total": 8561101,
+  "main": 5645918,
+  "agents": 2915183,
+  "peak": 114589,
+  "per_thing": 8561101.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:h1",
+  "start": "2026-10-05T04:54",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 65092481,
+  "main": 37998800,
+  "agents": 27093681,
+  "peak": 601103,
+  "per_thing": 16273120.25,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-2:h3",
+  "start": "2026-10-05T06:08",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 43289751,
+  "main": 27632574,
+  "agents": 15657177,
+  "peak": 517613,
+  "per_thing": 10822437.75,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-3:h7",
+  "start": "2026-10-05T06:08",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 28937688,
+  "main": 16330704,
+  "agents": 12606984,
+  "peak": 350271,
+  "per_thing": 7234422.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:h12",
+  "start": "2026-10-05T06:12",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 5,
+  "m": 0,
+  "k": 0,
+  "things": 5,
+  "total": 27244556,
+  "main": 17937404,
+  "agents": 9307152,
+  "peak": 271220,
+  "per_thing": 5448911.2,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:h2",
+  "start": "2026-10-05T06:51",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 3,
+  "m": 0,
+  "k": 0,
+  "things": 3,
+  "total": 12652296,
+  "main": 10634494,
+  "agents": 2017802,
+  "peak": 176296,
+  "per_thing": 4217432.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-3:h9",
+  "start": "2026-10-05T06:55",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 15325740,
+  "main": 12429119,
+  "agents": 2896621,
+  "peak": 174249,
+  "per_thing": 3831435.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-2:h4",
+  "start": "2026-10-05T07:03",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 19507081,
+  "main": 14264970,
+  "agents": 5242111,
+  "peak": 216775,
+  "per_thing": 4876770.25,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:h5",
+  "start": "2026-10-05T07:10",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 18164240,
+  "main": 11757067,
+  "agents": 6407173,
+  "peak": 214371,
+  "per_thing": 4541060.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-3:h13",
+  "start": "2026-10-05T07:20",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 43211167,
+  "main": 28435587,
+  "agents": 14775580,
+  "peak": 473244,
+  "per_thing": 10802791.75,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-2:h6",
+  "start": "2026-10-05T07:29",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 3,
+  "m": 0,
+  "k": 0,
+  "things": 3,
+  "total": 46859915,
+  "main": 28846116,
+  "agents": 18013799,
+  "peak": 433867,
+  "per_thing": 15619971.666666666,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:h8",
+  "start": "2026-10-05T07:34",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 29624469,
+  "main": 21635998,
+  "agents": 7988471,
+  "peak": 341400,
+  "per_thing": 7406117.25,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-3:h14",
+  "start": "2026-10-05T08:15",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 5,
+  "m": 0,
+  "k": 0,
+  "things": 5,
+  "total": 6071085,
+  "main": 5135209,
+  "agents": 935876,
+  "peak": 138292,
+  "per_thing": 1214217.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-2:h11",
+  "start": "2026-10-05T08:22",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 10071768,
+  "main": 8778451,
+  "agents": 1293317,
+  "peak": 142787,
+  "per_thing": 2517942.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:h15",
+  "start": "2026-10-05T13:05",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 3,
+  "m": 0,
+  "k": 0,
+  "things": 3,
+  "total": 12859715,
+  "main": 9055057,
+  "agents": 3804658,
+  "peak": 216253,
+  "per_thing": 4286571.666666667,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html-2:h10",
+  "start": "2026-10-05T13:21",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 4,
+  "m": 0,
+  "k": 0,
+  "things": 4,
+  "total": 15628292,
+  "main": 10109480,
+  "agents": 5518812,
+  "peak": 225137,
+  "per_thing": 3907073.0,
+  "complete": true
+ },
+ {
+  "group": "319:diagram-html:h16",
+  "start": "2026-10-05T14:16",
+  "sessions": 2,
+  "kinds": {
+   "write": 1,
+   "check": 1
+  },
+  "q": 3,
+  "m": 0,
+  "k": 0,
+  "things": 3,
+  "total": 5097648,
+  "main": 4394905,
+  "agents": 702743,
+  "peak": 97924,
+  "per_thing": 1699216.0,
+  "complete": true
+ }
+]
