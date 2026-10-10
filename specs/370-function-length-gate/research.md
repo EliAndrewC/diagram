@@ -38,6 +38,9 @@ The ten at 100: `settlement/homestead_parts/stands.py` `village_grove` (190), `h
 `commons` (115), `settlement/fields/paddy.py` (106), `compound_parts.py` (105), `hamletgen/ways/web.py` (103). In
 `scripts/`: `record/uncited.py:831` (122), `record/claims.py:786` (104).
 
+Per tree at 100 (2026-10-10, the spec review re-running the same command): `l7r` 10, `tests` 0, `scripts` 2,
+`pool` 0, `tests/hooks` 0; outside the cap, `specs` 3 and `legacy-hand-authored-pool` 0.
+
 ## R3. The constitution's measure, and why ruff's statement count stands for it
 
 Principle X clause 12 measures a function "in logic units (statements/expressions), never raw lines" and names ~1,000 as

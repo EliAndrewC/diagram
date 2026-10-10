@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08 (filed); specified 2026-10-10
 
-**Status**: Draft
+**Status**: Draft - spec-fidelity round 2 verdict FAITHFUL (2026-10-10)
 
 **Affects**: tooling
 
@@ -36,7 +36,7 @@ the function, its count and the cap, with the two ways out: split it, or justify
 
 **Acceptance Scenarios**:
 
-1. **Given** a function with 101 statements in the engine, tests or scripts, **When** the lint step runs, **Then** it
+1. **Given** a function with 101 statements in the engine, `tests/`, `scripts/`, `pool/` or `tests/hooks/`, **When** the lint step runs, **Then** it
    fails naming the file, the line, the count and the cap of 100.
 2. **Given** the same function carrying the justification marker with a reason, **When** the lint step runs, **Then** it
    passes.
@@ -129,7 +129,7 @@ survey, its date and its numbers.
 
 ## Out of Scope
 
-- Bringing `scripts/` under the rest of the lint rules (the fence stays as feature 329 left it).
+- Bringing `scripts/`, `pool/` or `tests/hooks/` under the rest of the lint rules (the fence stays as features 161 and 329 left it).
 - A cyclomatic-complexity cap or any other size measure.
 - Lowering the cap later; the survey's numbers stay in research.md for whoever reconsiders it.
 
@@ -138,8 +138,8 @@ survey, its date and its numbers.
 - **D1 - 100 statements** (the GM, 2026-10-10, from research.md R1). Class: deliberate choice on measured evidence.
 - **D2 - ruff's count, in the linter** (the GM: *"I do like the idea of just doing that in our linter"*). Class: tooling
   convention.
-- **D3 - `scripts/` held by this rule alone** (FR-002): the GM asked for a cap on function length, and `scripts/` is the
-  project's own code; the rest of its lint stays out of scope. Class: scope decision.
+- **D3 - `scripts/`, `pool/` and `tests/hooks/` held by this rule alone** (FR-002): the GM asked for a cap on function
+  length, and those trees are the project's own code; the rest of their lint stays out of scope. Class: scope decision.
 
 ## Review history
 
@@ -149,3 +149,5 @@ survey, its date and its numbers.
   (FR-003, FR-004). (4) FR-005 / SC-005 now state the GM's reason. (5) The nested-function edge case was wrong (ruff counts
   a nested body in its parent) - corrected, and FR-003 says a nested part does not count. (6) research.md R3's figures
   dated and given their method.
+- **spec-fidelity round 2 (2026-10-10): FAITHFUL.** Every round-1 item confirmed, the counts re-measured. Three tidies applied:
+  US1 scenario 1 and D3 / Out of Scope name all three trees FR-002 holds; the per-tree counts are in research.md R2.
