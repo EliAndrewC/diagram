@@ -1,7 +1,15 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.27.0 → 2.28.0
+Version change: 2.28.0 → 2.29.0
+
+Version 2.29.0 (amended 2026-10-10, feature 370): Principle X clause 12's cap is HELD - ruff's statement count (PLR0915), 100
+statements a function, by `scripts/gates/check-function-cap.py` first in `make static` and `make quick` and before every push,
+over every tree but the write-once legacy pool and `specs/`. The GM: "Please go with 100. And we can document why 100 is the
+number that we went with, like that it is the second most common value on GitHub from our initial survey" (131 of 1,209
+repositories; specs/370-function-length-gate/research.md R1). This CLOSES clause 12's deferred expression-counting gate check,
+carried as a TODO since v1.5.0. The escape is the clause's own annotation, now spelled: `# noqa: PLR0915 <why>` on the `def`
+line. MINOR (a principle's requirement changes: ~1,000 logic units to 100 statements, and a check enforces it).
 
 Version 2.28.0 (amended 2026-10-01, feature 294): map review runs on its OCCASION, not per changed map - the glyph check when
 an element is new to a map, its glyph redrawn or its placement rule substantially changed; the whole-map review when a map is
@@ -1121,10 +1129,20 @@ any single rule is reason enough to refuse "done" status.
     does, and a deep-but-cohesive engine function is legitimate at a
     scale a utility function never is. The failure mode is GROWTH: no
     single edit crosses the line, so the line must be checked rather
-    than felt. Deferred future work, recorded here so it is not lost:
-    an automated gate check counting expressions per function, failing
-    past the threshold unless the justification annotation is present.
-    Motivating case: `check_village.py`'s `gate()` reached 12,944
+    than felt. HELD SINCE v2.29.0 (feature 370, the GM 2026-10-10: *"Please
+    go with 100"*): the measure is ruff's statement count (`PLR0915`), the
+    cap is 100 statements a function, and `scripts/gates/check-function-cap.py`
+    holds it over `l7r/`, `tests/`, `scripts/`, `pool/` and `tests/hooks/` -
+    first in `make static` and `make quick`, and before every push. Why 100
+    and not the default 50: in a survey of 1,209 public repositories that set
+    the value (GitHub code search, 2026-10-10), 100 was the second most
+    common value - 131 of 1,209 - and the most common one chosen over the
+    default (`specs/370-function-length-gate/research.md` R1). A nested
+    function's statements count in its parent, so a split is into parts at
+    module or class level. The justification annotation is
+    `# noqa: PLR0915 <why the body must remain one>` on the `def` line, three
+    words or more; a bare `# noqa` on a `def` line, a file-level suppression
+    and a config ignore of the rule are refused. Motivating case: `check_village.py`'s `gate()` reached 12,944
     lines one check at a time, and the cost surfaced as an
     architecture problem - nothing inside it could be invoked
     separately - long before anyone would have chosen that shape.
@@ -2275,4 +2293,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.28.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-01
+**Version**: 2.29.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-10

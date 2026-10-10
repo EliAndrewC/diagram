@@ -20,39 +20,39 @@
 
 ## Phase 2 - the twelve splits (D4), each proven by its module's tests, then make quick
 
-- [ ] T05 settlement/homestead_parts/stands.py `village_grove` (190)
+- [x] T05 settlement/homestead_parts/stands.py `village_grove` (190)
       research: rendering
-      verify: make test-file on its tests; ruff PLR0915 silent on the module
-- [ ] T06 hamletgen/homesteads/stages.py `_seat_households` (169)
+      verify: DONE. village_grove -> grove_fill.py's four parts; homestead_parts, woods, belt and grove_blocks tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T06 hamletgen/homesteads/stages.py `_seat_households` (169)
       research: rendering
-      verify: as T05
-- [ ] T07 hamletgen/ways/touch.py `_touch_junctions` (144)
+      verify: DONE. _seat_households -> _seat_rank_rounds, _ground_push, _offer_seat; homesteads tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T07 hamletgen/ways/touch.py `_touch_junctions` (144)
       research: rendering
-      verify: as T05
-- [ ] T08 settlement/finish.py `finish` (133)
+      verify: DONE. _touch_junctions -> _one_network; touch, matrix and clearance tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T08 settlement/finish.py `finish` (133)
       research: rendering
-      verify: as T05
-- [ ] T09 compound.py `emit_svg` (127)
+      verify: DONE. finish -> _record_scatter_frame, _water_block; finish and core tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T09 compound.py `emit_svg` (127)
       research: rendering
-      verify: as T05; the Mode A sheets' SVGs byte-identical
-- [ ] T10 hamletgen/hinterland/parcels.py `open_ground_patches` (118)
+      verify: DONE. emit_svg -> _draw_buildings, _draw_walls_and_gates; compound and labels tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T10 hamletgen/hinterland/parcels.py `open_ground_patches` (118)
       research: rendering
-      verify: as T05
-- [ ] T11 settlement/land/cover.py `commons` (115)
+      verify: DONE. open_ground_patches -> _patch_keepouts, _beyond_the_fields; woodland and hinterland tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T11 settlement/land/cover.py `commons` (115)
       research: rendering
-      verify: as T05
-- [ ] T12 settlement/fields/paddy.py (106)
+      verify: DONE. commons -> _stock_woodland; woods and homestead tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T12 settlement/fields/paddy.py (106)
       research: rendering
-      verify: as T05
-- [ ] T13 compound_parts.py (105)
+      verify: DONE. water_field -> _wf_outline, _wf_feed; fields tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T13 compound_parts.py (105)
       research: rendering
-      verify: as T09
-- [ ] T14 hamletgen/ways/web.py `stage_web` (103)
+      verify: DONE. _point_features -> _draw_point_parts; compound tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T14 hamletgen/ways/web.py `stage_web` (103)
       research: rendering
-      verify: as T05
-- [ ] T15 scripts/record/uncited.py (122) and scripts/record/claims.py (110)
+      verify: DONE. stage_web -> _web_cut_lines; web tests green (ruff PLR0915 silent; the pool identity is T18's)
+- [x] T15 scripts/record/uncited.py (122) and scripts/record/claims.py (110)
       research: rendering
-      verify: make test-file on their tests
+      verify: DONE. claims.py and uncited.py main -> _parser; their tests green; check-function-cap.py exits 0 over the project (ruff PLR0915 silent; the pool identity is T18's)
 
 ## Phase 3 - the record, and the proof
 
