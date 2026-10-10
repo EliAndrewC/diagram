@@ -19,12 +19,12 @@ Guesses:
 - The proportions the plan draws: no account gives a records storehouse's length and depth.
 
 Depiction: The plan draws the archive as a plastered storehouse, pale and solid. No fire-water tub stands at it: the tubs
-stand at the wooden buildings, and the archive is the one kind of building made not to burn. It stands well below the
+stand at the wooden buildings, and the archive, like every plastered storehouse, was built not to burn. It stands well below the
 staff's rowhouse in size, as Takayama's small storehouses did. Its door is one small dark block on its wall, standing for
-the pair of plastered leaves that closed a storehouse.
+the pair of plastered leaves that closed a storehouse. Like every building on the plan, it stands a little further from its neighbors than a real office's buildings did, so that each reads apart.
 
 Name: tax archive
 Covers: the plastered archive kura and its label
 Sources: takayama-jinya-gifu, takayama-jinya-jawiki, sado-bugyosho-fires, takayama-jinya-city, edo-no-kaji-jawiki, tfd-hongou-fire-history, dozo-jawiki, fires-in-edo-enwiki, qing-yamen-tushuo
 Entry: research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html, research/questions/0197-charcoal-yards-and-charcoal-stores.html, research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.html
-Drawing: research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0117-doorways-and-doors-to.drawing.html
+Drawing: research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0117-doorways-and-doors-to.drawing.html, research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html

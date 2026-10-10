@@ -22,7 +22,7 @@ as dark blocks at its edge, or the earth-walled kura, drawn plastered white with
 raised is not recorded. It is labeled a granary, not a rice granary, because other grain was stored beside the rice. The
 plan draws one granary, with a corner of unhulled rice against famine, where in the Edo period the emergency reserve was
 kept apart in community and charity granaries. A wooden granary may have a fire-water tub beside it; an earth-walled one
-has none.
+has none. On a county office's plan it stands smaller than the residence, since such an office ships its rice on, and a little further from its neighbors than in a real office, so each building reads apart.
 
 Name: granary
 Covers: the granary, on posts or earth-walled, and its label

@@ -253,5 +253,23 @@
       "road_near_edge_y": 754.5,
       "reading": "the road's near edge at the wall's outer face, closing the half-foot strip"
     }
+  },
+  "wave105-tax-archive": {
+    "quantity": "wave 105 (2026-10-10): the tax archive on every hand sheet at 0100's records-store ceiling",
+    "observed": "2026-10-10",
+    "source": "the tax-archive rects of pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg before and after; make pack-audit on each",
+    "command": "make pack-audit ARGS=pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "the rects read; the audits diffed",
+    "value": {
+      "archives": 3,
+      "after_px": [
+        72,
+        54
+      ],
+      "after_sqft": 432,
+      "before_px": "Hayakawa 96 x 78, Ochiba 96 x 84, Ubame 96 x 84 (32 x 26-28 ft, ~830-900 sq ft)",
+      "pack_audit": "every check OK on all three; the gaps round the smaller archive read LOOSE (kura >10 ft) on Hayakawa (24 and 14 ft) and Ubame (18 and 13 ft), heuristic notes, not checks",
+      "reading": "three archives 24 x 18 ft, each door face where it stood"
+    }
   }
 }

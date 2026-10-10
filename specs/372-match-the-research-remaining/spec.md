@@ -84,6 +84,7 @@ many maps; a newly failing cohort seed is a regression, reverted with its measur
 | The road at a gate drawn at the width of the road the compound stands on, running past the gate (wave 103) | ACCURATE for the Imperial road's width (0088's drawing page, its 1605 width) and the lesser highway's band; GUESS that Hayakawa's and Ubame's roads are lesser highways, and for each road's route past its gate (Ochiba's east-west, Hayakawa's west to the bank street, Ubame's west then south) | the roads were drawn at their gates' widths; 3 sheets redrawn (m:wave103-road-at-the-gate) | the three sheets; `docs/buildings.md` Road to gate |
 | A gate's notice board drawn as 0190's roofed frame on its footing inside a fence (wave 104) | ACCURATE (the frames measured at two post towns, the Kanagawa board's roof, footing and fence) | the sheets drew smaller boards; 4 boards redrawn on 3 sheets (m:wave104-notice-boards) | the three sheets; `docs/buildings.md` Approaches |
 | A gate's board stands on the road's far verge across from the gate; the board's limit from its gate raised to cross the road (wave 104) | GUESS on 0190's drawing page (a board beside the road at the office's own gate); the limit this project's figure (UNRESEARCHED) | the boards stood in the road once each road met its wall; the limit was a number on no page, set while boards stood at the wall (m:wave104-notice-boards) | the three sheets; `compound_model.NOTICE_BOARD_MAX_FT` |
+| A tax archive drawn at 0100's records-store ceiling (wave 105) | ACCURATE for the ceiling (Takayama's measured book storehouse); GUESS for its shape | the sheets drew it larger, a kitchen storehouse's size; 3 archives redrawn (m:wave105-tax-archive) | the three sheets; `docs/buildings.md` Outer court |
 
 ## Assumptions
 
@@ -124,6 +125,10 @@ many maps; a newly failing cohort seed is a regression, reverted with its measur
 - **A tooling gap found at batch 2's close**: a glyph-check verdict is keyed by its element alone (`glyph-check--latrine`), so a
   check of the same element on another sheet overwrites the first sheet's record; key the verdict by element and map (the
   latrine check of 2026-10-10 carried Ubame's open findings forward by hand).
+
+- **A tooling gap found at wave 105**: `make modal-bundle FOR=modal-depiction`'s glyph crop on a Mode A sheet catches the wrong
+  building (the tax archive's and the storehouse's crops showed a yellow building, though both are drawn #F2EFE4); the
+  depiction checks judged from the sheet's SVG instead. Fix the crop to the kind's own `data-kind` ink.
 
 ## The filed features, sorted (328's close, 2026-10-10)
 

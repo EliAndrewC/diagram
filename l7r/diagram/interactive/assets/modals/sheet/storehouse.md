@@ -16,10 +16,10 @@ Guesses:
 
 Depiction: The plan draws the household's storehouses behind the house, beyond an open rear yard, each at the common 2 by 3
 ken. As buildings made not to burn they carry no fire-water tub, and they stand a little apart from their neighbors as a
-fire gap.
+fire gap. Its doorway is drawn as one dark block on the wall, standing for the pair of plastered doors, and its width is set so the door shows on the plan, not taken from a measured door.
 
 Name: storehouse
 Covers: the household storehouse and its label
 Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, edo-no-kaji-jawiki, tfd-hongou-fire-history, bunka-yokota-dozo, suumo-kura-size, dozo-jawiki, bunka-sado-tsuchiya-dozo, minami-alps-nishikawa-dozo, tsuchiya-makabe-dozo, kotobank-dozo, boso-no-mura-kazusa
 Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0040-farm-storehouses-kura.html, research/questions/0117-doorways-and-doors-to.html
-Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html
+Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0117-doorways-and-doors-to.drawing.html

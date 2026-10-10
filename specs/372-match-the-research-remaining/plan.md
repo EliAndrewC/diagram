@@ -135,6 +135,25 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 - **Records**: m:wave104-notice-boards; the claim; three sheets' notes (their point-glyph lines no longer give 7 x 3 ft).
 - **Occasions**: glyph-redrawn: notice board on ubame-magistracy (the same glyph on all three sheets).
 
+## Wave 105 (amendment 8, 2026-10-10) - batch 4
+
+- **Scope**: `docs/buildings.md::Outer court (administrative / public)#tax archive size`. 0100's drawing page sets an office's
+  records storehouse at no more than ~450 sq ft (the one measured, Takayama's book storehouse, ~446 sq ft, served a whole
+  province - accurate as a ceiling), its shape about 24 x 18 ft (a GUESS); the sheets drew 32 x 26-28 ft. The tax archive on
+  **Hayakawa**, **Ochiba** and **Ubame** drawn 24 x 18 ft (72 x 54 px), each door face where it stood; the procedure's bullet
+  (its strongroom role now within the same ceiling) and claim, and the drawing page's bullet that recorded our plans drawing it
+  larger (removed: the plans no longer do).
+- **Left as found**: the pack audit reads the gaps round the smaller archive LOOSE (a heuristic note, not a check) on
+  Hayakawa and Ubame; the open ground is outer court.
+- **The record checks the drawing page's edit owed**: four pop-ups citing 0100's drawing page re-checked (modal-depiction): the
+  fire-water tubs clean; the tax archive, granary and storehouse each given what their tabs left out (the legibility spacing
+  of 0116, the granary's rank below the residence, the storehouse door's convention and its 0117 link; "the one kind of
+  building made not to burn" said of every plastered storehouse), then clean on round 2. The section's claims (35): the tax
+  archive IN-STEP; one unclaimed decision claimed (the kura granary's door on the apron, UNRESEARCHED); five DRIFTED rows read
+  as ranked (barracks, forecourt, the stables' three), left for their places.
+- **Records**: m:wave105-tax-archive; three sheets' notes.
+- **Occasions**: glyph-redrawn: tax archive on hayakawa-magistracy (the same glyph on all three sheets).
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |
@@ -142,3 +161,4 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 | 1 | 98-100 | none owed: the batch changed no engine code (hand sheets, their notes and the procedure only), so the engine key is the landed one and a pair would time the same code | green 2026-10-10 (already verified on the landed engine key) | closed: glyph checks latrine, boundary stones, road PASS; escalation-check |
 | 2 | 101-102 | none owed: no engine code changed (hand sheets, their notes, a modal, the procedure) | green 2026-10-10 on the landed engine key | closed: glyph checks gatehouse (Ubame) and latrine (Ochiba) PASS; Ochiba's building review NEEDS-WORK (E1: the gatehouse's pop-up and building-programs.md gave the old size - fixed, the pop-up's record checks clean on round 3) then PASS round 2 |
 | 3 | 103-104 | none owed: the batch's engine code is a review tool (`pack_audit`'s crop check) and `compound_model.NOTICE_BOARD_MAX_FT`, read only by the generated compound draft's board check and the pack audit - neither in what the timing pair rolls (the hamlet's stages) | green 2026-10-10 at the board limit's engine key | closed: glyph checks road (Ochiba) PASS and notice board (Ubame) NEEDS-WORK then PASS round 2; the border note box moved below the road (round 2's F7); escalation-check |
+| 4 | 105- | owed at the batch close | at the batch close | open |

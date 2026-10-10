@@ -194,8 +194,11 @@
 
   <!-- Tax archive (W side) - sealed plaster kura: the ledgers are the
        county's tax base, so they get fireproof walls -->
+  <!-- feature 372 wave 105: the records storehouse 24 x 18 ft (72 x 54 px), 432 sq ft, under the ~450 sq ft that the one
+       measured records store (Takayama's book storehouse) sets (research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html;
+       its shape a GUESS); it was 32 x 26-28 ft. Its door face kept where it stood. -->
   <g data-kind="tax archive">
-    <rect x="220" y="500" width="96" height="84" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
+    <rect x="244" y="515" width="72" height="54" fill="#F2EFE4" stroke="#4A3318" stroke-width="2.5"/>
     <rect x="308" y="535" width="8" height="14" fill="#4A3318" data-kind="door"/>
     <text font-size="13" font-weight="bold" fill="#3A2E1C"><tspan>tax</tspan><tspan>archive</tspan></text>
   </g>

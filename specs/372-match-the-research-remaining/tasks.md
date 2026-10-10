@@ -19,6 +19,8 @@ in 328's ranking and this spec.
 
 - (reviewed PASS at batch 3's close, 2026-10-10, round 2) glyph-redrawn: notice board on ubame-magistracy - wave 104: 0190's roofed frame 16 x 6 ft on its stone footing inside a fence, on all four gate boards
 
+- glyph-redrawn: tax archive on hayakawa-magistracy - wave 105: the records storehouse 24 x 18 ft, under 0100's ~450 sq ft, on all three sheets
+
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame** (`pool/magistracies/*/`), their notes; `docs/buildings.md`.
@@ -75,3 +77,11 @@ in 328's ranking and this spec.
 - [x] T07 wave 104's row (FR-001, FR-002)
       research: rendering
       verify: DONE. wave 104: the four gate boards at 0190's roofed frame on its footing; impl-drift IN-STEP; spec-fidelity CLEAR
+
+## Phase 8 - wave 105 (amendment 8): the tax archive at 0100's ceiling
+
+- Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame**, their notes; `docs/buildings.md`;
+  0100's drawing page.
+
+- [ ] T08 wave 105's row (FR-001, FR-002)
+      research: rendering

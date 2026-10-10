@@ -298,14 +298,15 @@
   "date": "2026-10-08",
   "note": "the procedure puts \"a tub at the hall's corners, one at the dwelling end\". 0100's drawing page gives \"one at each major wooden building and two at the kitchen\", and here the kitchen is in the dwelling end, so that end should get two and the hall one",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
+  "triaged": "2026-10-10",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water tub size about 2.5 ft across": {
@@ -952,15 +953,16 @@
   "date": "2026-10-10",
   "note": "in step",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
@@ -1661,13 +1663,14 @@
   "date": "2026-10-10",
   "note": "the page finds water \"kept standing beside\" the wooden buildings, so each tub sits outside its building against the wall; the ~2 px clearance only decides how the tub is shown",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#clear gateways": {
@@ -1695,9 +1698,9 @@
   "date": "2026-10-10",
   "note": "~8-12, two at the kitchen, none at the kura, as 0100 draws them",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
@@ -1705,6 +1708,7 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#gate hierarchy": {
@@ -1983,14 +1987,15 @@
   "date": "2026-10-08",
   "note": "two tubs at the kitchen",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#no tub at the plaster kura": {
@@ -1999,13 +2004,14 @@
   "date": "2026-10-08",
   "note": "none at a plaster storehouse, one may stand at a wooden granary",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#one tub per wooden building": {
@@ -2014,14 +2020,15 @@
   "date": "2026-10-10",
   "note": "the procedure puts one tub at each major wooden building, about 8-12 for a dozen-building compound, which matches the page; the page says the total follows from how many wooden buildings there are",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub against its wall": {
@@ -2030,12 +2037,13 @@
   "date": "2026-10-08",
   "note": "tubs stand at the wooden buildings, at the entrance",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub clear of the footprint": {
@@ -2054,12 +2062,13 @@
   "date": "2026-10-08",
   "note": "a tub about 2.5 ft across, recorded as a GUESS",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:4530579a74e75485"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub glyph colors": {
@@ -2509,10 +2518,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#archery bank": {
-  "code": "d6e430b5cd7a973d",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "yaba about 250 x 8 ft with the azuchi at its end; a range inside a residence is attested",
+  "code": "3dd50c3f5723b108",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "250 x 8 ft, azuchi at its end",
   "pages": {
    "0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html": "6690901d517f62f4"
   },
@@ -2524,10 +2533,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks": {
-  "code": "81cfd13dd407db4c",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "the claim's county example of 45 x 34 ft, 34 ft deep breaks the drawing page's \"12 to 24 ft deep ... never a square or squat block\"; the barracks should be <=24 ft deep and divided into dwellings",
+  "code": "24fbdce5c0aa5ab7",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "the drawing page says the barracks is \"never a square or squat block\", \"drawn 12 to 24 ft deep\"; the claim's 45 x 34 ft (34 ft deep) and ~27-53 ft long make a squat block. Depth should be at most 24 ft and length set by bays of 12-18 ft",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "d4c70185f30440ae",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
@@ -2535,32 +2544,27 @@
   "research": "e843cbfa61680fd4",
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:5af10000ff095a2e",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213",
    "0097-staff-rowhouses-and-barracks-nagaya.html:38677c449de74f4d",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:6d3c8454a171bb85",
    "0097-staff-rowhouses-and-barracks-nagaya.html:b10862c89c3c5c24"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men": {
-  "code": "6cff44607282f8a7",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "the page records ten to twenty men as the project's own figure, a guess",
+  "code": "4580618b8102695a",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "recorded as this project's guess",
   "pages": {},
   "research": "",
-  "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8a9c6454630327b1"
-  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
-  "code": "9521a802b86ac635",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-09",
-  "note": "no set fire gap round a plastered store, which stands at the ordinary spacing; the 15 ft apron is inside the 15-20 ft band",
+  "code": "0d8116981eaa65b9",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "no set gap; a 15 ft apron is inside 15-20 ft",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
@@ -2568,24 +2572,22 @@
   "research": "fdc09ba7d3987100",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:0ad7edfc766bacb6",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:7a657acf6f84c329"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell": {
-  "code": "9cb240eeb59f09f5",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "12 x 10 ft sits at the small end of the 6-18 mat cells, its size a guess in that span; temporary cell held in the compound",
+  "code": "ad9296e4cc370cb0",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "small end of the 6-18 mat span",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
   },
   "research": "86def40e24cced5e",
   "rests": [
    "0096-holding-cells-agariya-and-roya.html:46d27721497d60b0",
-   "0096-holding-cells-agariya-and-roya.html:798a67666670807f",
    "0096-holding-cells-agariya-and-roya.html:937c7af5507a1c15",
    "0096-holding-cells-agariya-and-roya.html:bc94fea1004fa3d9",
    "0096-holding-cells-agariya-and-roya.html:f1e5972ca3458ff3"
@@ -2593,22 +2595,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks": {
-  "code": "fb1115c67ef9bb22",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "no cited page ranks a cell against the barracks",
+  "code": "92e0168b0a436c2b",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "no page ranks them",
   "pages": {},
   "research": "",
-  "rests": [
-   "0096-holding-cells-agariya-and-roya.html:937c7af5507a1c15"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": {
-  "code": "237fbc25a05ae69c",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-09",
-  "note": "drawn about 4 ft by convention, keeping the 2 x 1.3 ft proportion",
+  "code": "1f8266245eb694e8",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "drawn ~4 ft by convention, about twice the real size",
   "pages": {
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html": "c4e837038c94b2f6"
   },
@@ -2620,10 +2620,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal weighing floor": {
-  "code": "e0403728d2c36792",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-09",
-  "note": "16 x 14 ft as the page gives",
+  "code": "6a737a31a0edd397",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "16 x 14 ft",
   "pages": {
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
@@ -2635,10 +2635,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#clerk positions at the dais": {
-  "code": "3be5ff6fb74321e8",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "the drawing page records clerks flanking level with the dais as a deliberate deviation from Edo",
+  "code": "02c24ff68db4016b",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "deviation recorded",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -2650,27 +2650,27 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#forecourt": {
-  "code": "f5e2948e1bccae47",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "this section's text has no forecourt. Calling the strip behind the office hall the \"forecourt\" goes against the cited pages, where that ground lies in front: the plaza before the jin'ya, and the open ground inside the gate that the entrance faces",
+  "code": "18cf04657a514f1e",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "the pages put the open ground before the entrance just inside the main gate (\"gate, then open ground... then the step\"; Joge's entrance \"faces the open ground inside the main gate\"). Hayakawa's \"forecourt\" label on the strip behind the office hall contradicts this; the label belongs on the ground inside the gate",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
   },
   "research": "ec238eaee630004b",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:294ade5001734dd1"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary forms": {
-  "code": "7da56050d88135e1",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "raised on posts or earth-walled kura, one of two forms",
+  "code": "53ae197d39eee402",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "two attested forms, rolled as a knob",
   "pages": {
    "0098-storehouses-for-the-tax-rice.html": "b0964dae032a23e9"
   },
@@ -2683,10 +2683,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary kept under a residence block": {
-  "code": "59cc70ac4f2b6b36",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "ranked by the rice held, as recorded in 0116; the link to rice held is a GUESS; the landing/office lean is noted",
+  "code": "6ec014ae5a430d61",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "tie to rice held recorded as a guess",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
@@ -2699,26 +2699,26 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary label": {
-  "code": "0db42d036b1690cc",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-09",
-  "note": "the page backs the \"granary\" label: an office store held rice beside a local reserve, a reserve held \"rice and other grain\", and kura stored unhulled grain as well as rice",
+  "code": "a8ee58b21ca2479d",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "rice plus other grain",
   "pages": {
    "0098-storehouses-for-the-tax-rice.html": "b0964dae032a23e9"
   },
   "research": "f2e5561095446765",
   "rests": [
-   "0098-storehouses-for-the-tax-rice.html:73d9a0065ef28793",
-   "0098-storehouses-for-the-tax-rice.html:b8fb4a1535a30a42",
-   "0098-storehouses-for-the-tax-rice.html:f74ffe27121393ae"
+   "0098-storehouses-for-the-tax-rice.html:b6335c8e15112f63",
+   "0098-storehouses-for-the-tax-rice.html:f74ffe27121393ae",
+   "0098-storehouses-for-the-tax-rice.html:f9057530817b91e7"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary size": {
-  "code": "691a901f9a5baff1",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "43-50 x 25-27 ft, a GUESS as recorded",
+  "code": "51e442abf50da88b",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "recorded guess",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
@@ -2729,37 +2729,37 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing cart slot": {
-  "code": "4b8b66e676d4696e",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "no cited page speaks to it",
+  "code": "5def7c73ee2df3e2",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "no page gives it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing court": {
-  "code": "adc119cc14bb05e5",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "roofed; white gravel or river cobbles as a knob; a room of the office; size a guess",
+  "code": "2a55027a268c5276",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "roofed; gravel or cobbles as a knob",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
   },
   "research": "81ffa6b221f0f767",
   "rests": [
    "0099-the-hearing-court-shirasu.html:1c5a6e5edd21f113",
-   "0099-the-hearing-court-shirasu.html:2b4df310fcb5d01c",
    "0099-the-hearing-court-shirasu.html:700e8e156074abca",
+   "0099-the-hearing-court-shirasu.html:9b989aee73ca5a35",
    "0099-the-hearing-court-shirasu.html:fd2431d8cc8f2d5a"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing court posts": {
-  "code": "af256f9cd4ed4b9d",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "posts along the roofed court's open side, two ken apart and 1 ft square, recorded as a guess",
+  "code": "5001924cff2c96ee",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "recorded guess",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -2771,10 +2771,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing mat size": {
-  "code": "8813463f6bf6b805",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "6 x 3 ft, recorded as a GUESS",
+  "code": "c8d152cd483b3fbd",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "recorded guess",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -2785,25 +2785,33 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing mats": {
-  "code": "ccd4585c2b301817",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "accused at the center, plaintiff and officials behind",
+  "code": "60d1f2ca125cd47d",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "Edo arrangement",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
   },
   "research": "81ffa6b221f0f767",
   "rests": [
-   "0099-the-hearing-court-shirasu.html:8f23e38817efeb5b",
-   "0099-the-hearing-court-shirasu.html:df1c5d05bbf98460"
+   "0099-the-hearing-court-shirasu.html:8f23e38817efeb5b"
   ],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Outer court (administrative / public)#kura granary door on the apron": {
+  "code": "81e576d7bbfcb48b",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "no cited question places a kura granary's door; 0116's drawing page gives only the apron's width (a GUESS), not where the door faces, so UNRESEARCHED holds",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Outer court (administrative / public)#office hall": {
-  "code": "863a366592064351",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "~360x84 px (120x28 ft, ~3,360 sq ft) sits inside 80-150 by 20-45 ft and 1,600-6,750 sq ft; day office and study behind the dais band",
+  "code": "ac004bd9ac767361",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "120 x 28 ft is inside the band; rooms behind the dais",
   "pages": {
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "44879b9fd51f7154"
   },
@@ -2817,43 +2825,40 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#one storehouse at the office": {
-  "code": "439a4b8a39dc49ad",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "a single storehouse at the office; any row stands at the landing",
+  "code": "0fb3cb656c422c20",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "in step",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
   "research": "f1206af177a61c95",
   "rests": [
    "0098-storehouses-for-the-tax-rice.drawing.html:0dfd560c49d1636d",
-   "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d",
-   "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655"
+   "0098-storehouses-for-the-tax-rice.drawing.html:28b329b6bfe7881f",
+   "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground": {
-  "code": "b75ad6e6e4a7718b",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "swept patch, rack and posts, no hall; a dojo only as a particular of the place",
+  "code": "4d379e459842321e",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "in step",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
   "rests": [
-   "0165-martial-training-grounds-and-dojo.drawing.html:6b3ccf7746ee08c1",
-   "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
-   "0165-martial-training-grounds-and-dojo.drawing.html:de4325f24196505d",
-   "0165-martial-training-grounds-and-dojo.drawing.html:eaaa0e49753241f1"
+   "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground area": {
-  "code": "ce5cb6b0a3a53c40",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "90-135 sq ft per drilling samurai, a GUESS",
+  "code": "487abce987ffe7cf",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "recorded guess",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -2864,10 +2869,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground placement": {
-  "code": "66889273c7d4d3aa",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "beside the guards' quarters",
+  "code": "c3c1312a802fc4ab",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "in step",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -2878,20 +2883,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground shared with cart staging or muster": {
-  "code": "3c97be6fbc45da3b",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "no cited page speaks to it",
+  "code": "bf44f2a7a0d06122",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "no page gives it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground striking posts": {
-  "code": "d85cbb0f2484f666",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "upright posts only; the marker is a convention, the count a GUESS",
+  "code": "c8c6b5b88dce291f",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "count a guess, marker a convention",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -2903,10 +2908,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground weapon rack": {
-  "code": "9b0949c3d5cd1841",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "~8 x 2 ft, a GUESS",
+  "code": "52df856ada1b3016",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "recorded guess",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -2917,10 +2922,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable below barracks": {
-  "code": "dd708978ad9b8cb0",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "recorded as a GUESS",
+  "code": "9512225c238464e9",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "recorded guess",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
@@ -2931,10 +2936,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters": {
-  "code": "5801d112b36a5f83",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "the doc draws stalls only, but 0108's drawing page draws the stable \"with quarters in it for the grooms and an earth-floored passage before the stalls\"; draw both, or have the page record a deviation",
+  "code": "68f39587bd3f761f",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "the drawing page says our maps draw the stable \"with quarters in it for the grooms and an earth-floored passage before the stalls\", and the research attests both. The sheets and the procedure leave both out; either draw them or record the omission as a DEVIATION on 0108.drawing",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
@@ -2945,10 +2950,10 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable stall width": {
-  "code": "cf7f415b18a89f58",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "3 stalls of ~9.3-9.7 ft against the drawing page's \"stalls are drawn about one ken (~6 ft) wide\"",
+  "code": "86a6790dd3dc659a",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "the drawing page has stalls \"about one ken (~6 ft) wide\", but the sheets draw ~9.3-9.7 ft. Stalls should be ~6 ft, or the departure recorded as a DEVIATION",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
@@ -2959,72 +2964,64 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#stables": {
-  "code": "f62ca2bf12aecc9a",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "0108 gives no stall depth, stable size or horse count; the drawing page records depth and count as GUESS; label it GUESS research/questions/0108-stables-umaya.drawing.html",
+  "code": "d42096b26913ade0",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "a small stable was \"three bays long\" with stalls \"one bay wide\", so 28-32 ft for 3 stalls is beyond what the page finds. The 2-4 horse count is unattested (\"No page we read says\"), so the count should be a GUESS citing 0108.drawing",
   "pages": {
    "0108-stables-umaya.html": "e28bb721c804f4bf"
   },
   "research": "f6f01652a6a060e2",
   "rests": [
-   "0108-stables-umaya.html:12a3224dd5a29b03",
    "0108-stables-umaya.html:41dd4a78c52512c9",
+   "0108-stables-umaya.html:593523e7ce195b4d",
    "0108-stables-umaya.html:e24e1c344ed689f1"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark": {
-  "code": "ac698c07c6135efc",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "fill, stroke and door mark are only how the plastered kura is shown",
+  "code": "5249ddc093f75345",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "how it is shown",
   "pages": {},
   "research": "",
-  "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9"
-  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive size": {
-  "code": "ccecdef0e0d55659",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "the drawing page's rule is a records kura of \"no more than about 450 sq ft\" (e.g. 24 x 18 ft); 32-36 ft is noted there but not recorded as a deviation; shrink it, or record it as a DEVIATION",
+  "code": "0d720b69f8d6afd1",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "at most ~450 sq ft; 24 x 18 ft a guess",
   "pages": {
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "34c337b67b5d5f04"
   },
-  "research": "5292b7fa7abf1048",
+  "research": "be518c38d22a2a7a",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:2282c61a5b1e4912",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:33510cb335904fa2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:9ba0f5fcb5d7014a",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:aea6cd1ed8944b96",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fb5af5b7b0dcb397"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive strongroom role": {
-  "code": "b55a928c94634b99",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "no cited page gives the combined role",
+  "code": "418308c08e54a5dd",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "no page gives it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#the kura granary's vents not drawn": {
-  "code": "bba248c44d2cfbc6",
-  "core": "5a31cf1e47f2f0bf",
-  "date": "2026-10-08",
-  "note": "only how the wall is shown",
+  "code": "68f5472743fb58d1",
+  "core": "050f0bde3a602b79",
+  "date": "2026-10-10",
+  "note": "in step",
   "pages": {},
   "research": "",
-  "rests": [
-   "0098-storehouses-for-the-tax-rice.drawing.html:7b5dcbded97fb530",
-   "0098-storehouses-for-the-tax-rice.html:dd3661cdd179fb46"
-  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Period defaults: Edo for the civil, Sengoku for the military#L5R divergences kept": {
