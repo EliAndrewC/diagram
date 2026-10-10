@@ -78,5 +78,52 @@
    "reading": "under SC-005's ten seconds; the git log over the whole history is the cost"
   },
   "unit": "s"
+ },
+ "sc001-replay": {
+  "quantity": "SC-001: 372's waves 106, 108 and 111 replayed commit by commit through the old owing and the new - modal-depiction units and impl-drift claims each delta owes",
+  "observed": "2026-10-10",
+  "source": "the clone at T11; 372's commits (git log --grep 'wave 106' / 'Feature 372 wave 108' / 'Feature 372 wave 111', 24 commits); sparse detached worktrees",
+  "command": "make replay-owing REVS=\"<the wave's commits>\" (and TRIAGE=1 over the seven commits owing a pop-up triage)",
+  "method": "per commit: OLD = the commit's own scripts against its parent's claims index, NEW = this tree's scripts with that index migrated (claims-backfill-sections); each counts only what the delta newly owes (owed at the commit less owed at the parent). The seven triage bundles were judged by one ad-hoc opus agent, each MANIFEST independently, as make modal-triage's reply",
+  "value": {
+   "impl_drift": {
+    "old": 385,
+    "new_full": 19,
+    "new_owed_a_triage": 378,
+    "by_wave": {
+     "106": [
+      258,
+      12
+     ],
+     "108": [
+      109,
+      3
+     ],
+     "111": [
+      18,
+      4
+     ]
+    },
+    "reading": "claims owed impl-drift in full fall 95% (SC-001: four fifths); the rest owe one triage per delta, which could name up to 58 of them and still meet four fifths"
+   },
+   "modal_depiction": {
+    "old": 26,
+    "new_owed_by_own_edit": 13,
+    "new_owed_only_by_a_page": 13,
+    "page_driven_named_by_the_triage": 3,
+    "by_wave_old": {
+     "106": 14,
+     "108": 6,
+     "111": 6
+    },
+    "reading": "against the spec's baseline - the runs owed only because a drawing page changed elsewhere - 13 fall to 3 (77%; SC-001: two thirds). Counted over every depiction unit, 26 fall to 16: the other 13 are the waves' own edits to the pop-ups' Depiction tabs, owed by FR-001's own rule and untouched by it"
+   },
+   "triage_replies": {
+    "triage-39a28173c8": "sheet/granary",
+    "triage-a2d0ba9f95": "sheet/granary",
+    "triage-99a6090b0d": "sheet/bath",
+    "others (4)": "none"
+   }
+  }
  }
 }
