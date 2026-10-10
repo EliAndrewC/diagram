@@ -11,9 +11,17 @@ from __future__ import annotations
 import json
 import pathlib
 
+import pytest
+
 from tests.tooling.test_modal_checks import _load
 
 hc = _load("hm_checks")
+
+
+@pytest.fixture(autouse=True)
+def _isolated_census(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """An escape taken here is recorded - in a throwaway census, never the live one (feature 169)."""
+    monkeypatch.setenv("GUARD_LOG_DIR", str(tmp_path / "guard-log"))
 
 MANIFEST = "owed-checks: quote-check\nunit: quote-check:0105.drawing#bath-size abc123\nunit: quote-check:0105#well x\n"
 MODAL = "owed-checks: modal-depiction\nunit: modal-depiction:sheet/bath f00\n"

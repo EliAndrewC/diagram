@@ -366,6 +366,21 @@ _ESCAPES = {
     ),
     "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/gates/entry-gate.sh (feature 311), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
     "CLAIMS_OK": ("environment", "read as ${CLAIMS_OK:-} by scripts/gates/claims-gate.sh (feature 316), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
+    "FREEZE_OK": (
+        "command",
+        "feature 375 FR-003(b)(c): matched in a check dispatch's PROMPT, an Edit's content or a Bash command by the anchored "
+        "regex `\\bFREEZE_OK=\"<reason>\"` in hm_checks.escaped, which takes it only with a reason of two words and eight "
+        "characters and records it in the guard census - never a bare substring",
+    ),
+    "ARBITER_OK": (
+        "command",
+        "feature 375 FR-010: matched on a `make done` command by hm_checks.escaped's anchored regex, reason floor and record, as FREEZE_OK",
+    ),
+    "DECIDE_OK": (
+        "command",
+        "feature 375 FR-003(a): matched in a check dispatch's PROMPT by an anchored regex with the reason floor (check-bundle-hooks.sh "
+        "and pair-hooks.sh), each recording the escape with guard_log",
+    ),
     "CHECK_BUNDLE_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_BUNDLE_OK=\"...\"` read off the prompt's own text in "

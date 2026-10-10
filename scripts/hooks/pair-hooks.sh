@@ -522,14 +522,17 @@ print(json.dumps({"hookSpecificOutput": {
     # per feature (FR-009); the third needs REVIEW_ROUNDS_OK="<the GM's words>" in the prompt.
     ptext="$(printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' 2>/dev/null)"
     # GUARD_EDIT_OK: feature 375 FR-003(a) - DECIDE FIRST: a review check waits for its task's decisions' verdict
-    case "$ptext" in *DECIDE_OK=\"??????????*) guard_log pair escaped "$atype" decide-ok ;; *)
+    decide_why="$(printf '%s' "$ptext" | python3 -c 'import re,sys; m=re.search(r"\bDECIDE_OK=\"([^\"]*)\"", sys.stdin.read()); r=m.group(1) if m else ""; print(r if len(r.split())>=2 and len(r)>=8 else "")' 2>/dev/null)"
+    if [ -n "$decide_why" ]; then
+      guard_log pair escaped "$decide_why" decide-ok
+    else
       why="$(python3 "$PAIR_HERE/../gates/plan_gate.py" decided "${CLONE_ROOT:-.}" 2>/dev/null)"
-      if [ -z "$why" ]; then :; else
+      if [ -n "$why" ]; then
         printf '\nBLOCKED: %s\n(or DECIDE_OK="<reason>" in the prompt; scripts/hooks/pair-hooks.sh, feature 375)\n' "$why" >&2
         guard_log pair blocked "$atype" decide-first
         exit 2
-      fi ;;
-    esac
+      fi
+    fi
     nf="$(mktemp)"; printf '%s' "$ptext" > "$nf"
     named="$(maps_named_by "$nf")"; rm -f "$nf"
     if [ "$(printf '%s\n' $named | grep -c .)" -gt 1 ]; then

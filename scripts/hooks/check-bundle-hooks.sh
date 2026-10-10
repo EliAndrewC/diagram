@@ -50,8 +50,9 @@ except ValueError:
 ti = p.get("tool_input") or {}
 if p.get("tool_name") != "Agent" or ti.get("subagent_type") not in os.environ["CHECKS"].split():
     sys.exit(0)
-if re.search(r"DECIDE_OK=\"[^\"]{8,}\"", str(ti.get("prompt") or "")):
-    sys.exit(0)
+m = re.search(r"\bDECIDE_OK=\"([^\"]*)\"", str(ti.get("prompt") or ""))
+if m and len(m.group(1).split()) >= 2 and len(m.group(1)) >= 8:
+    print("ESCAPED " + m.group(1)); sys.exit(0)
 root = subprocess.run(["git", "-C", p.get("cwd") or ".", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip()
 if not root:
     sys.exit(0)
@@ -63,6 +64,7 @@ if r.returncode == 1 and r.stdout.strip():
     guard_log check-bundle blocked "dispatch" decide-first "$err"
     exit 2
   fi
+  case "$err" in ESCAPED\ *) guard_log check-bundle escaped "${err#ESCAPED }" decide-ok ;; esac
   # GUARD_EDIT_OK: feature 375 FR-003(c) and FR-010 - a check already in its subject's open round is not re-dispatched while
   # another runs, and a record check's third round on a subject goes to the round arbiter (scripts/hooks/lib/hm_checks.py)
   if ! err="$(printf '%s' "$INPUT" | python3 "$CB_HERE/lib/hm_checks.py" dispatch 2>&1)"; then

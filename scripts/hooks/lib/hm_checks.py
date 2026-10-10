@@ -361,6 +361,20 @@ def _feature(root: Path) -> str:
 CHECK_KINDS = PAGE_CHECKS | {"impl-drift"}
 
 
+def escaped(token: str, text: str) -> bool:
+    """`TOKEN="<a reason of two words and eight characters>"` in `text`: the escape is taken, and RECORDED in the guard census
+    (`guardlog.sh`, as every guard's escape is - feature 170); a bare token or a thin reason is no escape."""
+    m = re.search(rf'\b{token}="([^"]*)"', text)
+    if not m or len(m.group(1).split()) < 2 or len(m.group(1)) < 8:
+        return False
+    import subprocess  # noqa: PLC0415
+
+    here = Path(__file__).resolve().parent
+    subprocess.run(["bash", "-c", '. "$1/guardlog.sh"; guard_log checks escaped "$2" "$3"', "_", str(here), m.group(1)[:200],
+                    token.lower().replace("_", "-")], capture_output=True, check=False)
+    return True
+
+
 def _root(payload: Mapping[str, Any]) -> Path | None:
     p = Path(str(payload.get("cwd") or ".")).resolve()
     return next((d for d in (p, *p.parents) if (d / ".git").exists()), None)
@@ -406,7 +420,7 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
             if root is not None and m and m.group(1).strip() in hm_arbiter.rulings(root):
                 return f"{m.group(1).strip()} is already ruled - one ruling per trigger, binding (feature 375 FR-011)"
             return ""
-        if check not in CHECK_KINDS or re.search(r'FREEZE_OK="[^"]{8,}"', str(ti.get("prompt") or "")):
+        if check not in CHECK_KINDS or escaped("FREEZE_OK", str(ti.get("prompt") or "")):
             return ""
         manifest, text = _manifest_of(str(ti.get("prompt") or ""))
         if root is not None and check in PAGE_CHECKS:  # FR-010: the subject's versions as each dispatch found it
@@ -437,11 +451,11 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
         root = _root(payload)
         if root is not None and re.search(r"(?:^|[;&|(]\s*)(?:[A-Z_]+=\S*\s+)*make\s+(?:-\S+\s+)*done\b", command, re.M):
             held = hm_arbiter.blocking(root, gate=True)
-            if held and not re.search(r'ARBITER_OK="[^"]{8,}"', command):
+            if held and not escaped("ARBITER_OK", command):
                 return hm_arbiter.refusal(held)
-        return "" if re.search(r'FREEZE_OK="[^"]{8,}"', command) else apply_refusal(state, command, now)
+        return "" if escaped("FREEZE_OK", command) else apply_refusal(state, command, now)
     elif mode == "edit" and payload.get("tool_name") in ("Edit", "Write", "MultiEdit"):
-        if re.search(r'FREEZE_OK="[^"]{8,}"', " ".join(str(v) for v in ti.values())):
+        if escaped("FREEZE_OK", " ".join(str(v) for v in ti.values())):
             return ""
         old = str(ti.get("old_string") or "") if payload.get("tool_name") == "Edit" else ""
         return edit_refusal(state, str(ti.get("file_path") or ""), old, str(ti.get("new_string") or ti.get("content") or ""), now)
