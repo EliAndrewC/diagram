@@ -656,7 +656,10 @@ def _draw_point_parts(
 def _roji_parts(program: CompoundProgram, result: PlaceResult, taken: list[Box], rect: Callable[..., str], parts: list[str], ox: float, oy: float) -> None:
     """The guest's way (R07's no-genkan form, research 0104): from the middle gate a stepping-stone path, the
     roji, straight to a shoe stone at the reception room's veranda - drawn where the program has a middle gate and a
-    building with a `reception room` and an engawa. The stones are a part of the garden they cross (Hayakawa's form)."""
+    building with a `reception room` and an engawa. The stones are a part of the garden they cross (Hayakawa's form).
+
+    Research:
+        guest's way out of doors - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: a guest goes on from the office to the residence out of doors, through the middle gate and across the garden to the reception's veranda"""
     env = program.envelope
     mid = _middle_gate(env, result.placed)
     host = next((p for p in result.placed if p.spec.engawa_ft and any(r[0] == "reception room" for r in p.spec.rooms)), None)

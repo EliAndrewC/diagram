@@ -3911,3 +3911,23 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [Google: 百度百科 平遥县衙 2409876](https://www.google.com/search?q=%E7%99%BE%E5%BA%A6%E7%99%BE%E7%A7%91+%E5%B9%B3%E9%81%A5%E5%8E%BF%E8%A1%99+2409876)
 - **Rests on it:** the same absence note on `cities/government.html` (diagram feature 292): an early pass (2026-08-28) took from this entry, unfetched, a clerks' lodging (公廨房) built behind the west office range in 1619 and a yamen about 200 by 100 m; the registry entry `pingyao-yamen` stays *Not cited* until someone reads it. If the entry says so, quote the passages word for word, in Chinese.
 - Blocked by: Baidu's security check; the WebFetch tool and curl with a browser user agent both get 403 and the "百度安全验证" page (diagram features 195 and 292, 2026-08-28 and 2026-10-01).
+
+### 307. 高山陣屋 天保元年(1830)絵図 - the 1830 drawing of the Takayama Jin'ya the 1996 restoration followed
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+- **[Japanese Wikipedia, 高山陣屋 - names the 1830 drawing ("1830年（天保元年）の絵図を基に"); the drawing itself is held by the Takayama Jin'ya](https://ja.wikipedia.org/wiki/高山陣屋)**
+- Fallback: [Google: 高山陣屋 天保元年 絵図](https://www.google.com/search?q=%E9%AB%98%E5%B1%B1%E9%99%A3%E5%B1%8B+%E5%A4%A9%E4%BF%9D%E5%85%83%E5%B9%B4+%E7%B5%B5%E5%9B%B3)
+- **Rests on it:** research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html - whether a guest's way from the office to the residence ran under roof in the Edo period (feature 336); look for how the office (御役所) and the residence (役宅) join, and any covered corridor (渡廊下).
+- Blocked by: not on the web; an archive or the Jin'ya's own office.
+
+### 308. 『旧小関家住宅修理工事報告書』(白石市, 1994) - the old Koseki house's repair report
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+- **[Shiroishi castle site, the old Koseki house - the house the report repaired; the report itself is printed (白石市教育委員会, 1994)](https://www.shiro-f.jp/shiroishijo/residence)**
+- Fallback: [Google: 旧小関家住宅修理工事報告書](https://www.google.com/search?q=%E6%97%A7%E5%B0%8F%E9%96%A2%E5%AE%B6%E4%BD%8F%E5%AE%85%E4%BF%AE%E7%90%86%E5%B7%A5%E4%BA%8B%E5%A0%B1%E5%91%8A%E6%9B%B8)
+- **Rests on it:** research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html - where the Koseki house's middle gate (塀中門) and roji stood against its gate and house (feature 338); look for the plan's gate court, the roji wall and the middle gate.
+- Blocked by: a printed municipal report; not on the web.

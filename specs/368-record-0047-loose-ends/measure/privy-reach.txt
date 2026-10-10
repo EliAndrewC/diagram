@@ -1,0 +1,8 @@
+| map | privies seated | in the sunny sector | nearer another house | beyond 45 ft |
+|---|---|---|---|---|
+| inashiro | 13 | 7 (53.8%) | 0 | 1 |
+| kashikawa | 17 | 3 (17.6%) | 0 | 1 |
+| kuwabata | 14 | 4 (28.6%) | 0 | 1 |
+| mizuguchi | 11 | 4 (36.4%) | 0 | 3 |
+| sawada | 17 | 4 (23.5%) | 0 | 3 |
+| all five | 72 | 22 (30.6%) | 0 | 9 |

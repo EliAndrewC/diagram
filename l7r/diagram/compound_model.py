@@ -82,7 +82,8 @@ DOOR_W_FT, DOOR_D_FT = 6.0, 4.0 / 3.0
 # The kinds given a door. The kitchen's is its one outside door, the service entrance on its earth floor (research
 # rendering/buildings 'How our maps draw kitchens (daidokoro)'); the residence's is the household's inner entrance, apart from the kitchen's (the same) - the guest's
 # way is the middle gate and the roji to the reception's veranda (R07, research 0104), so the residence
-# carries no genkan. The stables, the kura and the shrine carry theirs too (pass 5, building-review round 4: a building
+# carries no genkan - an out-of-doors way 0104 now finds departs from the Takayama evidence; the claim that records it
+# is `compound_parts._roji_parts`'s (feature 336). The stables, the kura and the shrine carry theirs too (pass 5, building-review round 4: a building
 # with no drawn door reads as sealed). `BuildingSpec.door_face` sets the face a door goes on; the court face otherwise.
 DOOR_KINDS: frozenset[str] = frozenset(
     {
