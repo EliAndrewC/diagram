@@ -265,6 +265,13 @@ def claim(
         f"claim-feature: claimed specs/{name}/ in {root}  ({maxima}); .specify/feature.json points at it",
         file=err,
     )
+    # feature 377 (the GM, 2026-10-10): a feature is filed only with the GM's approval, and the commit guard holds it
+    print(
+        "claim-feature: its spec.md needs the GM's approval, verbatim, on a line of its own - "
+        f'**Approved**: the GM, {time.strftime("%Y-%m-%d")}, "<their words>" - or no commit will take it '
+        "(feature-approval-hooks.sh). Not approved yet? Propose it in your final message instead.",
+        file=err,
+    )
     print(f"export SPECIFY_FEATURE={name}", file=err)
     print(f"export SPECIFY_FEATURE_DIRECTORY=specs/{name}", file=err)
     return name

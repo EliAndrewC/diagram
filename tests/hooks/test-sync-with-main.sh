@@ -409,7 +409,8 @@ grep -qx B "$C/dev/x.md" 2>/dev/null && yes_ || no_ "the clone's edit did not la
 echo "16. an open feature with no **Affects** tag, or an unknown one, is refused at the push, a specs/-only DIRECT one included (the GM, 2026-10-10)"
 D=$(topology ow)
 ( cd "$D/main/.clones/c" && mkdir -p specs/400-x .specify && cp "$HERE/../../.specify/affects.json" .specify/ \
-  && printf -- '# Feature Specification: x\n\n**Status**: Filed - deferred work\n' > specs/400-x/spec.md && git add -A && git commit -qm "filed, no tag" )
+  && printf -- '# Feature Specification: x\n\n**Status**: Filed - deferred work\n\n**Approved**: the GM, 2026-10-10, "file the x feature"\n' > specs/400-x/spec.md && git add -A && git commit -qm "filed, no tag" )
+# (the approval line, feature 377: spec-lint's check 6 asks it of every feature from 377 on; this case is about tags)
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a filed spec with no tag -> refused" 1 $?
 expect_out "**Affects**: hamlet, magistracy"
 ( cd "$D/main/.clones/c" && printf -- '\n**Affects**: towns\n' >> specs/400-x/spec.md && git add -A && git commit -qm "a typo" )
