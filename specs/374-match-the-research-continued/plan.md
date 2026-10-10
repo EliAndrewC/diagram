@@ -5,7 +5,7 @@ close and its bookends, themselves 328's) - this plan records only what differs 
 
 ## Summary
 
-The work list is 328's ranking's open in-scope rows at 372's close (198: 153 E3, 43 E4, 2 E2 held), in ranking order, with the
+The work list is 328's ranking's open in-scope rows at 372's close (198: 153 E3, 43 E4, 2 E2 held - counted from `ranking.json` 2026-10-10, rows with no wave in scope), in ranking order, with the
 items the spec's "What it carries" lists. Waves are numbered on from 372's (the first is wave 112), so 328's `audit/waves.json`
 stays the one column; this feature's measurements are its own `measurements.json`, its decisions its own spec's table. Also
 carried, from feature 370's landing (its spec, 2026-10-10): the claims findings on the code 370 split, left in `make
@@ -40,7 +40,8 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
 - **Scope**: `docs/buildings.md::Inner court (private / sacred)#engawa` (E3). 0102's drawing page: a veranda 3-6 ft wide (half a
   ken to one ken, Katsura's widths), free to change from face to face, the garden face at the wider end a GUESS; which faces
   carry it a KNOB between two attested forms - the garden face alone, or a continuous veranda along two or three faces - never
-  all four. The procedure says "~8 px" (2.7 ft) along the south face of each block, and every sheet draws 8 px on the garden face.
+  all four. The procedure says "~8 px" (2.7 ft) along the south face of each block, and every sheet draws 8 px on the garden face (each
+  sheet's `data-kind="engawa"` rects read 2026-10-10, grep of the three SVGs).
 - **Check first**: a `pack_audit` check, `veranda_depths`: every `data-kind="engawa"` strip's short side is 3-6 ft (9-18 px),
   reading the strip's rect (a `data-kind="engawa"` group's rect too). Red on all three magistracy sheets now; a red fixture
   beside the others. Its limits cite 0102's drawing page, ACCURATE (Katsura's measured widths).
@@ -69,14 +70,14 @@ pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's s
 - **Scope**: `docs/buildings.md::Inner court (private / sacred)#kitchen` (E3) and `#kitchen corridor tagged residence corridor`
   (E3, after the first; the same building). 0091: the one kitchen measured, the Kuchiba house's east wing, is about 12 tsubo
   (~440 sq ft, 5.9 x 6.9 m) by the prefecture's measure, about a sixth of the house; a middle-rank house was one block, its kitchen
-  projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens, and
+  projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens (each kitchen's rect read off the three SVGs, 2026-10-10), and
   Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.
 - **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), its shape a GUESS, the ceiling ACCURATE (0091's measured
   wing), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in
   `buildings/types.json` narrowed so the old size fails it: w 18-26 by h 14-20 ft (either orientation). The procedure's kitchen
   bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; "a large institutional daidokoro" goes (the ranked fix sizes it to
-  the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen, if it is larger, is brought into
-  the band in the same wave.
+  the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,
+  read 2026-10-10), already inside the new band.
 - **What stands in the kitchen moves with it**: the kamado range, a well drawn inside the kitchen (0105's drawing page: inside
   the kitchen on a hand plan), its door, the two tubs at its door (wave 106's rule, `tubs_off_their_doors`), the bath abutting it.
   The ground the smaller kitchen frees is left as the court or service ground it opens onto. Each move audited.
