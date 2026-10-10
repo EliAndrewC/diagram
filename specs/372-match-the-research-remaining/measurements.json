@@ -165,5 +165,26 @@
       ],
       "reading": "Ochiba's Imperial road 30 ft running past its gate, the gate opening straight onto it; Hayakawa's and Ubame's roads 18 ft, each running past its gate, the gate opening onto it; no road ends at a gate; every audit check OK on all three (gate_feeds_its_road, roads_leave_the_frame, viewbox_cropped), the crop check after pack_audit learned to read a stroke's width (a 90 px road read at its centerline had counted 45 px of its own ink as empty margin)"
     }
+  },
+  "wave104-notice-boards": {
+    "quantity": "wave 104 (2026-10-10): the gate boards drawn as 0190's roofed frame on its footing",
+    "observed": "2026-10-10",
+    "source": "pool/magistracies/{ochiba,hayakawa,ubame}-magistracy/*.svg before and after; make pack-audit on each",
+    "command": "make pack-audit ARGS=pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "the board rects read before and after; the audits diffed",
+    "value": {
+      "boards": 4,
+      "frame_px": [
+        48,
+        18
+      ],
+      "footing_px": [
+        60,
+        30
+      ],
+      "before_px": "Ochiba, Hayakawa, Ubame's notice boards 21 x 9; Ubame's bounty board 28 x 12",
+      "pack_audit_diff": "no check changed on Hayakawa or Ubame; Ochiba lost one LOOSE-gap line (a 13.3 ft gap the board no longer bounds)",
+      "reading": "four boards 16 x 6 ft frames with a ridge line, each on a 20 x 10 ft footing with a dashed fence line, long side to the road, on the road's near edge beside its gate; Ubame's bounty board 14 px west to clear the gate range's post"
+    }
   }
 }

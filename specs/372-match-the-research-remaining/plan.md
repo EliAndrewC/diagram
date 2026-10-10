@@ -116,6 +116,17 @@ seed is a regression, reverted with its measurement) -> `impl-drift` on the owed
 - **Records**: m:wave103-road-at-the-gate; the procedure's Road to gate bullet and its two claims; three sheets' notes.
 - **Occasions**: glyph-redrawn: road on ochiba-magistracy (the Imperial road at 30 ft past the gate; the streets on Hayakawa and Ubame the same glyph).
 
+## Wave 104 (amendment 7, 2026-10-10) - batch 3
+
+- **Scope**: `docs/buildings.md::Approaches and surroundings#notice board size` (row 13, after row 12). 0190's drawing page draws
+  a board as a roofed frame 16 x 6 ft, its long side to the road, on a stone footing about 2 ft wider all round with a fence
+  line at its edge (the Kanagawa board); the sheets drew ~7 x 3 ft gate boards and a ~9 x 4 ft bounty board. All four boards -
+  **Ochiba**'s, **Hayakawa**'s and **Ubame**'s two - drawn so (a 48 x 18 px frame with a ridge line for its roof, on a 60 x 30 px
+  stone footing with a dashed fence line), on the road's near edge beside the gate now that each road passes its gate (wave
+  103); Ubame's bounty board moved 14 px west to clear the gate range's post.
+- **Records**: m:wave104-notice-boards; the claim; three sheets' notes (their point-glyph lines no longer give 7 x 3 ft).
+- **Occasions**: glyph-redrawn: notice board on ubame-magistracy (the same glyph on all three sheets).
+
 ## Performance bookends (constitution VI)
 
 | batch | waves | pair | gate | close |

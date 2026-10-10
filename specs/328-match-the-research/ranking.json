@@ -10096,23 +10096,6 @@
   "scope": "mode-a"
  },
  {
-  "key": "docs/buildings.md::Approaches and surroundings#road at the gate",
-  "tier": "E3",
-  "fix": "road at each gate drawn at the road's own width: 30 ft (90 px) on Ochiba's Imperial road, 15-24 ft on Hayakawa's street and Ubame's road; gate approach, stones and board re-laid",
-  "files": [
-   "docs/buildings.md",
-   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-   "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "103",
-  "scope": "mode-a"
- },
- {
   "key": "docs/buildings.md::Approaches and surroundings#notice board size",
   "tier": "E3",
   "fix": "gate notice board drawn as the roofed frame 16 x 6 ft on a stone footing inside a fence (Ochiba, Hayakawa, Ubame's two boards), gate approach re-laid; registry size note updated",
@@ -10129,7 +10112,24 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "104",
+  "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Approaches and surroundings#road at the gate",
+  "tier": "E3",
+  "fix": "road at each gate drawn at the road's own width: 30 ft (90 px) on Ochiba's Imperial road, 15-24 ft on Hayakawa's street and Ubame's road; gate approach, stones and board re-laid",
+  "files": [
+   "docs/buildings.md",
+   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": "103",
   "scope": "mode-a"
  },
  {

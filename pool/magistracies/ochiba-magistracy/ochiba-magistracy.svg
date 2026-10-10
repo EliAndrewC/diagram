@@ -151,9 +151,12 @@
        it faced the formal approach off to the east before, ~32 ft from any gate; GM 2026-07) -->
   <g data-kind="notice board">
     <!-- 3 ft nearer the main gate (feature 266): measured by its own rect, the board stood 22.1 ft from the opening, past the 20 ft a kosatsu is read at -->
-    <rect x="470.5" y="759.5" width="21" height="9" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
-    <circle cx="465" cy="772" r="1.5" fill="#4A3318"/>
-    <circle cx="497" cy="772" r="1.5" fill="#4A3318"/>
+    <!-- feature 372 wave 104: a roofed frame 16 x 6 ft (48 x 18 px), its long side to the road, on a stone footing 2 ft
+         wider all round with a fence line at its edge (research/questions/0190-notice-boards-kosatsuba.drawing.html, the
+         Kanagawa board; it was drawn ~7 x 3 ft) -->
+    <rect x="451" y="757" width="60" height="30" fill="#CFC6B4" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <rect x="457" y="763" width="48" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
+    <line x1="457" y1="772" x2="505" y2="772" stroke="#6B4F2A" stroke-width="1.2"/>
     <text font-size="9" font-style="italic" fill="#5C4830">notice board</text>
   </g>
 

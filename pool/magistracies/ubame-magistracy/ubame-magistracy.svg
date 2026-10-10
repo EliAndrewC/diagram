@@ -815,18 +815,23 @@
   <!-- ============================================================ -->
   <g data-kind="notice board">
     <!-- The bench's ordinary board: verdicts and edicts -->
-    <rect x="674" y="759" width="21" height="9" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
-    <circle cx="669" cy="772" r="1.5" fill="#4A3318"/>
-    <circle cx="700" cy="772" r="1.5" fill="#4A3318"/>
+    <!-- feature 372 wave 104: a roofed frame 16 x 6 ft (48 x 18 px), its long side to the road, on a stone footing 2 ft
+         wider all round with a fence line at its edge (research/questions/0190-notice-boards-kosatsuba.drawing.html, the
+         Kanagawa board; it was drawn ~7 x 3 ft) -->
+    <rect x="664" y="757" width="60" height="30" fill="#CFC6B4" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <rect x="670" y="763" width="48" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
+    <line x1="670" y1="772" x2="718" y2="772" stroke="#6B4F2A" stroke-width="1.2"/>
     <text font-size="9" font-style="italic" fill="#5C4830">notice board</text>
   </g>
   <g data-kind="notice board">
     <!-- The bounty board: roofed, and at present carrying one bill (set 7 px lower in feature 267 pass 2, so its roof
          clears the gate range's south face, now on the wall line) -->
-    <rect x="568" y="764" width="28" height="12" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
-    <path d="M 564 764 L 582 757 L 600 764" fill="none" stroke="#6B4F2A" stroke-width="1.6"/>
-    <circle cx="566" cy="781" r="1.5" fill="#4A3318"/>
-    <circle cx="598" cy="781" r="1.5" fill="#4A3318"/>
+    <!-- feature 372 wave 104: a roofed frame 16 x 6 ft (48 x 18 px), its long side to the road, on a stone footing 2 ft
+         wider all round with a fence line at its edge (research/questions/0190-notice-boards-kosatsuba.drawing.html, the
+         Kanagawa board; it was drawn ~9 x 4 ft) -->
+    <rect x="540" y="757" width="60" height="30" fill="#CFC6B4" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <rect x="546" y="763" width="48" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="1"/>
+    <line x1="546" y1="772" x2="594" y2="772" stroke="#6B4F2A" stroke-width="1.2"/>
     <text font-size="9" font-style="italic" fill="#5C4830">bounty board</text>
     <text font-size="8" font-style="italic" fill="#7A4030" data-cont="1">100 koku - the hermit Shoda</text>
   </g>

@@ -1552,10 +1552,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#notice board size": {
-  "code": "f5c607796692bf3b",
+  "code": "f0da6ad557c3cd41",
   "core": "98c24242ed8d6f1b",
   "date": "2026-10-10",
-  "note": "the sheets draw the gate board ~7 x 3 ft and Ubame's bounty board ~9 x 4 ft, but the page says \"drawn as a roofed frame 16 ft long and 6 ft deep\", from frames measured at \"about 16 to 18 ft along the road and 5 to 6 ft deep\". Its 7 x 3 ft is only the size the siting search tests, \"shorter than every frame measured\". Either draw the boards at 16 x 6 ft, or record the smaller gate boards as a DEVIATION or GUESS on 0190's drawing page and relabel the claim",
+  "note": "a 16 x 6 ft roofed frame, long side parallel to the road, on a footing 2 ft wider all round with a fence, as the drawing page gives it; the size is fixed inside the measured 16-18 x 5-6 ft; the gate and bounty boards drawn the same way match the page's guess for a magistrate's-gate board",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
   },
@@ -1565,10 +1565,10 @@
    "0190-notice-boards-kosatsuba.drawing.html:0d8ca713e70426df",
    "0190-notice-boards-kosatsuba.drawing.html:2932684d882f47f9",
    "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923",
-   "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1",
+   "0190-notice-boards-kosatsuba.drawing.html:cf39d6663b05b586",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#road at the gate": {
   "code": "2b9a902e67eaa84d",

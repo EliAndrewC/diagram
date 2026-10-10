@@ -17,6 +17,8 @@ in 328's ranking and this spec.
 
 - glyph-redrawn: road on ochiba-magistracy - wave 103: the Imperial road at 30 ft past the gate (0088); Hayakawa's and Ubame's roads 18 ft past theirs
 
+- glyph-redrawn: notice board on ubame-magistracy - wave 104: 0190's roofed frame 16 x 6 ft on its stone footing inside a fence, on all four gate boards
+
 ## Phase 1 - wave 98 (amendment 1): the privy at 0101's 5 ft
 
 - Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Hayakawa**, **Ochiba**, **Ubame** (`pool/magistracies/*/`), their notes; `docs/buildings.md`.
@@ -65,3 +67,11 @@ in 328's ranking and this spec.
 - [x] T06 wave 103's row (FR-001, FR-002)
       research: rendering
       verify: DONE. wave 103: the road at each gate at the width of the road the compound stands on, running past the gate (0088); pack_audit's crop check reads a stroke's width; impl-drift IN-STEP; spec-fidelity CLEAR round 2
+
+## Phase 7 - wave 104 (amendment 7): the gate boards at 0190's frame
+
+- Sheets redrawn (FR-002, under 328's hand-drawn-maps rule): **Ochiba**, **Hayakawa**, **Ubame**, their notes; `docs/buildings.md`.
+
+- [x] T07 wave 104's row (FR-001, FR-002)
+      research: rendering
+      verify: DONE. wave 104: the four gate boards at 0190's roofed frame on its footing; impl-drift IN-STEP; spec-fidelity CLEAR

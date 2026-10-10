@@ -1,56 +1,38 @@
 {
  "feature": "372-match-the-research-remaining",
- "plan_sha256": "5287aae7f413a0a9161d815e50944f0fea38ffca0399c69d9fa550842a8127e3",
+ "plan_sha256": "66acfd6f8feb65e6cbb13fbba71012846084b16f4703d84d2f0a63051ba4646b",
  "reviewed": "2026-10-10",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W103-scope",
-   "summary": "wave 103 takes row 12 (Approaches and surroundings#road at the gate, E3 mode-a), next in ranking order; row 13 (notice board) next",
+   "id": "W104-size",
+   "summary": "All four gate boards (Ochiba, Hayakawa, Ubame's notice and bounty boards) drawn as 0190's frame: 16 x 6 ft (48 x 18 px), long side to the road, on a footing 2 ft wider all round (60 x 30 px) with a fence line at its edge",
    "class": "within",
-   "why": "328's order as carried by FR-001; the ranked fix text is the scope"
+   "why": "0190's drawing page draws every board so ('A board is drawn as a roofed frame 16 ft long and 6 ft deep ... footing about 2 ft wider all round, with a fence line at its edge'); the magistrate's-gate board is that page's own GUESS case; magistracies are in scope by 328's amendment 8; the claim's DRIFTED note asked for exactly this"
   },
   {
-   "id": "W103-ochiba-imperial-road",
-   "summary": "Ochiba's 8 ft lane replaced by the Imperial road at 30 ft (90 px) running east-west past the gate across the whole frame (x 180-1020), direction a GUESS, the gate opening straight onto it; the sheet 32 px taller",
+   "id": "W104-roof-fence-glyph",
+   "summary": "The roof drawn as a ridge line along the frame, the fence as a dashed line at the footing's edge",
    "class": "within",
-   "why": "row 12's fix and 0088's drawing page (the compound opens its gate onto the road it stands on; no wider ground before a compound's gate). Round 1's two corrections are applied: the SVG's 'the ROAD is 8 ft wide' comment is gone and the plan's 'its 8 ft approach is the feeder' sentence is replaced by 'No road now ends at a gate'"
+   "why": "a drawing of the page's 'roofed' frame and 'fence line at its edge'; no element of the page dropped"
   },
   {
-   "id": "W103-lesser-highway-18ft",
-   "summary": "Hayakawa's street and Ubame's road read as lesser highways (GUESS) and drawn 18 ft, inside 0088's 15-24 ft",
+   "id": "W104-site",
+   "summary": "Each board on the road's near edge beside its gate (the wave 103 roads); Ubame's bounty board 14 px west to clear the gate range's post",
    "class": "within",
-   "why": "row 12's fix names 15-24 ft for exactly these two; 18 ft is calibrated liberty inside the band and the reading is labeled GUESS"
+   "why": "0190 sets the magistrate's board 'at the office's own gate' on a road; a clearance shift keeps it there"
   },
   {
-   "id": "W103-past-the-gate",
-   "summary": "Hayakawa's and Ubame's lesser highways redrawn as Ochiba's is: running past the gate (Hayakawa's from the west frame to the bank street, Ubame's from the west frame turning south off the sheet short of the border wall), each gate opening straight onto it; the old N-S paths, the narrowing, the 'road narrows to its gate' CANON claim and the bullet's narrowing clause removed",
+   "id": "W104-occasion",
+   "summary": "glyph-redrawn occasion declared on ubame-magistracy, standing for the same glyph on all three sheets",
    "class": "within",
-   "why": "the fix round 1 named for W103-narrow-to-gate (NOT LEGITIMATE), applied: each road's near edge sits on its gate's south face (Hayakawa 781.5-27 = 754.5, Ubame 781-27 = 754, the old paths' ends); pack-audit re-run on all three sheets in the clone: gate_feeds_its_road, roads_leave_the_frame, viewbox_cropped OK; grep finds no 'narrows to its gate', 'last ~13' or 'feeder' in docs/buildings.md, the plan, the sheets or dev/claims-index.json. Correction owed, not a ruling: the routes' directions on Hayakawa and Ubame (west, and Ubame's turn south) are rendering choices the spec's Decisions row does not label, while it labels Ochiba's direction GUESS; label them alike"
+   "why": "the same practice as waves 98 and 103; the review occasion is process, and it does not narrow what is drawn"
   },
   {
-   "id": "W103-pack-audit-stroke",
-   "summary": "pack_audit's ink_bounds counts a stroke's half-width as ink, with a unit test red on the old code",
+   "id": "W104-records",
+   "summary": "Decisions row ACCURATE for the size; claim relabeled IN-STEP; notes' point-glyph lines changed from 7 x 3 ft",
    "class": "within",
-   "why": "XIV fix where found; the defect made the requested 30 ft road read as empty margin; every sheet's crop check stays OK"
-  },
-  {
-   "id": "W103-sheet-follows-map-canon",
-   "summary": "the 'sheet follows its map' claim relabeled NONE -> CANON, the GM's 2026-09-20 ruling (feature 257)",
-   "class": "within",
-   "why": "the section's claim re-check under impl-drift; feature 257's request is the GM's of 2026-09-20"
-  },
-  {
-   "id": "W103-threshold-stones",
-   "summary": "Ochiba's threshold stones left in place, now on the Imperial road's near edge flanking the gate's passage",
-   "class": "within",
-   "why": "they still flank the passage just outside the gate without blocking it (the GM's 2026-07-25 ruling); the notice board is row 13's, taken next"
-  },
-  {
-   "id": "W103-occasions",
-   "summary": "glyph-redrawn: road on ochiba-magistracy; Hayakawa's and Ubame's roads the same glyph",
-   "class": "within",
-   "why": "the occasion the redrawn road opens; which sheets owe a pass is review_owed.py's, not a fidelity question"
+   "why": "the size is the measured frame on 0190; the gate placement's GUESS stays on 0190's page"
   }
  ],
  "verdict": "CLEAR"
