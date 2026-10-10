@@ -34,7 +34,7 @@ def holding(d: Path) -> list[str]:
     mod = importlib.util.module_from_spec(spec)
     sys.modules["speckit_todo"] = mod
     spec.loader.exec_module(mod)
-    return mod.holding(d)
+    return [str(line) for line in mod.holding(d)]
 
 
 @dataclass(frozen=True)
@@ -91,8 +91,6 @@ def feature_status(root: Path, name: str | None) -> FeatureStatus:
     if not tasks.is_file():
         return FeatureStatus(name=name, exists=False)
     held = holding(d)
-    open_tasks = tuple(
-        t[:80] for m in _OPEN.finditer(tasks.read_text(encoding="utf-8")) if any(h.startswith(t := m.group(1).strip()) for h in held)
-    )
+    open_tasks = tuple(t[:80] for m in _OPEN.finditer(tasks.read_text(encoding="utf-8")) if any(h.startswith(t := m.group(1).strip()) for h in held))
     faithful = spec.is_file() and "FAITHFUL" in spec.read_text(encoding="utf-8")
     return FeatureStatus(name=name, exists=True, faithful=faithful, open_tasks=open_tasks)

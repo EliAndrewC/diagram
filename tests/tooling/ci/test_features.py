@@ -75,8 +75,7 @@ def test_a_lands_open_box_the_reviewed_plan_names_does_not_hold_the_merge(tmp_pa
     d = tmp_path / "specs" / "375-x"
     plan = "# plan\n\n**Lands open**: T99\n"
     (d / "plan.md").write_text(plan, encoding="utf-8")
-    (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan.encode()).hexdigest(), "plan_text": plan,
-                                                    "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
+    (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan.encode()).hexdigest(), "plan_text": plan, "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
     assert feature_status(tmp_path, "375-x").complete
     (d / "tasks.md").write_text("- [x] T01 done\n- [ ] T98 typed by hand [lands-open]\n", encoding="utf-8")
     fs = feature_status(tmp_path, "375-x")
