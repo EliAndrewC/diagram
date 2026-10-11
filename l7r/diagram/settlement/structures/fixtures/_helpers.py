@@ -62,16 +62,31 @@ let the traffic term drag the board off the anchor, which is the defect this fea
 Research: anchored siting band - UNRESEARCHED: 60 ft from the best seat, the board's siting distance reused"""
 
 
-def bridgehead_anchor(M: Any, houses: list[tuple[float, float]]) -> tuple[float, float] | None:
-    """Where a `bridgehead` board is measured to (feature 374 wave 120): the settlement's widest bridge - a brook's bridge
-    before a field ditch's plank - and of equal spans the one nearest the houses. 0190 puts village boards "before the gates
-    of the village officials' houses, as well as bridge ends", and the bakufu's "at the foot of bridges", where traffic was
-    heaviest; which bridge of a village's no page says.
+def bridges_on_a_way(M: Any, ftpx: float = 1.0) -> list[dict[str, Any]]:
+    """The bridges a way reaches: each within `KOSATSUBA_ANCHOR_BAND_FT` of a recorded lane or road - the band within which
+    a board belongs to the way it stands on (feature 374 wave 120's glyph-check of Kuwabata: its six bridges are pond-grid
+    planks no lane comes within 136 ft of, and a board rolled to a bridge end stood 884 ft from its bridge, at the lane spot
+    nearest it). 0190: every site the record names is ON a road or street, the foot of a bridge among them.
+
+    Research: a bridge end on a way - research/questions/0190-notice-boards-kosatsuba.html: every named site on a road or street, the foot of a bridge among them; a bridge counts within the board's 60 ft band of a way"""
+    ways = [[(float(x), float(y)) for x, y in w.get("pts") or []] for w in [*(M.get("lanes") or []), *(M.get("roads") or [])] if isinstance(w, dict)]
+    road = M.get("road")
+    if isinstance(road, dict) and road.get("pts"):
+        ways.append([(float(x), float(y)) for x, y in road["pts"]])
+    reach = KOSATSUBA_ANCHOR_BAND_FT / ftpx
+    return [b for b in (M.get("bridges") or []) if "x" in b and "y" in b and any(seg_dist(float(b["x"]), float(b["y"]), a, c) <= reach for w in ways for a, c in zip(w, w[1:], strict=False))]
+
+
+def bridgehead_anchor(M: Any, houses: list[tuple[float, float]], ftpx: float = 1.0) -> tuple[float, float] | None:
+    """Where a `bridgehead` board is measured to (feature 374 wave 120): of the bridges a way reaches (`bridges_on_a_way`),
+    the widest - a brook's bridge before a field ditch's plank - and of equal spans the one nearest the houses. 0190 puts
+    village boards "before the gates of the village officials' houses, as well as bridge ends", and the bakufu's "at the foot
+    of bridges", where traffic was heaviest; which bridge of a village's no page says.
 
     Research:
         a board at a bridge's foot - research/questions/0190-notice-boards-kosatsuba.html: the ground before the officials' gates, as well as bridge ends
-        which bridge - GUESS: the widest span, ties to the one nearest the houses"""
-    bridges = [b for b in (M.get("bridges") or []) if "x" in b and "y" in b]
+        which bridge - GUESS: of the bridges a way reaches, the widest span, ties to the one nearest the houses"""
+    bridges = bridges_on_a_way(M, ftpx)
     if not bridges or not houses:
         return None
     cx, cy = sum(h[0] for h in houses) / len(houses), sum(h[1] for h in houses) / len(houses)
@@ -87,14 +102,15 @@ def kosatsuba_affordances(M: Any) -> dict[str, bool]:
     `role == "headman"`, which every pool VILLAGE records exactly once and no hamlet records at all.
 
     Research:
-        the board's offered sites - research/questions/0190-notice-boards-kosatsuba.html: an entrance where a road or connector is recorded, an official's gate where a headman's house is, a bridge end where any bridge is recorded, a field ditch's plank included
+        the board's offered sites - research/questions/0190-notice-boards-kosatsuba.html: an entrance where a road or connector is recorded, an official's gate where a headman's house is, a bridge end where a way reaches a bridge, a field ditch's plank included
     """
     lanes = M.get("lanes") or []
     has_approach = bool(M.get("road") or (M.get("roads") or []) or any(ln.get("connector") for ln in lanes))
     return {
         "has_approach": has_approach,
         "has_headman_house": any(h.get("role") == "headman" for h in (M.get("houses") or [])),
-        "has_bridge": bool(M.get("bridges")),  # feature 374 wave 120: a board at a bridge's foot (0190)
+        # feature 374 wave 120: a board at a bridge's foot (0190) - a bridge a way reaches, never a plank out in the ponds
+        "has_bridge": bool(bridges_on_a_way(M, float((M.get("meta") or {}).get("ftpx") or 1.0))),
     }
 
 
@@ -247,7 +263,7 @@ def kosatsuba_anchor(M: Any, placement: str, ftpx: float = 1.0) -> tuple[float, 
         gate = next((h for h in (M.get("houses") or []) if h.get("role") == "headman" and "x" in h), None)
         return (float(gate["x"]), float(gate["y"])) if gate else None
     if placement == "bridgehead":
-        return bridgehead_anchor(M, houses)
+        return bridgehead_anchor(M, houses, ftpx)
 
     def _at_the_buildings(q: tuple[float, float]) -> bool:
         """Has the approach arrived? Measured to the nearest DWELLING, never to a centroid radius."""

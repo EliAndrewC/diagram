@@ -264,9 +264,11 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
   "Beside" has no figure on the page: 46 ft, the width over which the maps draw reeds and grass interleaving at a marsh's
   edge, recorded on 0077's drawing page as a GUESS (its record checks owed), and the claims label it so.
 - `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
-  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).
-  The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only
-  shrine is a dooryard hokora). The new form is anchored at the settlement's widest bridge, a brook's before a ditch's plank, and of two alike
+  qualifier; the bridgehead joins the seat's forms where a way reaches one of the settlement's bridges - within the board's
+  60 ft band of a lane or road (`bridges_on_a_way`), since every site 0190 names is ON a road or street (the glyph-check of
+  Kuwabata: its bridges are pond-grid planks no lane comes within 136 ft of, and a board rolled to one stood 884 ft off it).
+  The shrine precinct stays withheld, its claim giving the reason: 0190 names a precinct only as its own GUESS, no
+  page it read naming one. The new form is anchored at the widest of the bridges a way reaches, a brook's before a ditch's plank, and of two alike
   the one nearest the houses (`bridgehead_anchor`): which of a village's bridges held its board no page says, so 0190's
   drawing page records the choice as a GUESS. The form takes its title-card label ("at the foot of a bridge") and a pop-up
   of its own (`choice/kosatsuba_seat--bridgehead`, written from 0190 as its three siblings are), which owe the record

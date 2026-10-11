@@ -150,7 +150,12 @@ def test_the_board_affordances_are_read_from_the_manifest_the_checks_read() -> N
     from l7r.diagram.settlement.structures.fixtures import kosatsuba_affordances
 
     assert kosatsuba_affordances({}) == {"has_approach": False, "has_headman_house": False, "has_bridge": False}
-    assert kosatsuba_affordances({"bridges": [{"x": 1.0, "y": 1.0, "span": 8.0}]})["has_bridge"] is True
+    lane = {"pts": [(0.0, 0.0), (100.0, 0.0)]}
+    assert kosatsuba_affordances({"bridges": [{"x": 1.0, "y": 1.0, "span": 8.0}], "lanes": [lane]})["has_bridge"] is True
+    # Kuwabata (feature 374 wave 120's glyph-check): a plank out in the ponds no way reaches is no bridge end to post at
+    assert kosatsuba_affordances({"bridges": [{"x": 50.0, "y": 140.0, "span": 8.0}], "lanes": [lane]})["has_bridge"] is False
+    assert kosatsuba_affordances({"bridges": [{"x": 50.0, "y": 50.0}], "road": {"pts": [(0.0, 0.0), (100.0, 0.0)]}})["has_bridge"] is True
+    assert kosatsuba_affordances({"bridges": [{"x": 50.0, "y": 70.0}], "lanes": [lane], "meta": {"ftpx": 2.0}})["has_bridge"] is False, "the band in feet"
     assert kosatsuba_affordances({"lanes": [{"pts": [], "connector": True}]})["has_approach"] is True
     assert kosatsuba_affordances({"road": [(0, 0), (10, 10)]})["has_approach"] is True
     assert kosatsuba_affordances({"roads": [{"pts": [(0, 0), (1, 1)]}]})["has_approach"] is True
@@ -213,7 +218,11 @@ def test_the_bridgehead_anchor_is_the_widest_bridge_nearest_the_houses() -> None
 
     houses = [{"x": 0.0, "y": 0.0}, {"x": 20.0, "y": 0.0}]
     bridges = [{"x": 500.0, "y": 0.0, "span": 27.0}, {"x": 30.0, "y": 0.0, "span": 8.0}, {"x": 60.0, "y": 0.0, "span": 27.0}]
-    assert kosatsuba_anchor({"houses": houses, "bridges": bridges}, "bridgehead") == (60.0, 0.0), "widest, then nearest"
+    lane = {"pts": [(0.0, 0.0), (600.0, 0.0)]}
+    assert kosatsuba_anchor({"houses": houses, "bridges": bridges, "lanes": [lane]}, "bridgehead") == (60.0, 0.0), "widest, then nearest"
+    off_the_way = [{"x": 60.0, "y": 300.0, "span": 40.0}, *bridges]
+    assert kosatsuba_anchor({"houses": houses, "bridges": off_the_way, "lanes": [lane]}, "bridgehead") == (60.0, 0.0), "only a bridge a way reaches"
+    assert kosatsuba_anchor({"houses": houses, "bridges": bridges}, "bridgehead") is None, "no way reaches a bridge"
     assert kosatsuba_anchor({"houses": houses}, "bridgehead") is None
 
 

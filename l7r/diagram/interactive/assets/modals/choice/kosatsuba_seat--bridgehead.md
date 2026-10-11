@@ -15,7 +15,7 @@ Guesses:
 - That a village's board was the size of a post town's: no measurement of a village board was found.
 - How often a settlement's board stands at a bridge rather than its center, its way in or an official's gate: the one source that ranks them puts the center first but gives no share, so the map rolls evenly among the seats a settlement can site - one in four where all four can be sited.
 
-Depiction: Only a settlement whose map draws a bridge takes this seat. The map seats the board
+Depiction: Only a settlement where a lane or road reaches a bridge takes this seat. The map seats the board
 on the way at the foot of the bridge, close by the way's edge where there is room, otherwise a little back from it, and turned broadside to it. It is drawn as a roofed
 frame on a stone footing inside a fence. On a village or city map a frame the size of those measured at two post towns, about
 16 ft by 6 ft, would be too small to see, so the map draws a larger marker in its place, footing and all, and its label says
