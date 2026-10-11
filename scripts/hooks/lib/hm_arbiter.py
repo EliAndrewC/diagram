@@ -202,7 +202,9 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit", ""),
            **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
            "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when,
-           **({"tooling_fix": fix, "fix": "open"} if fix else {})}
+           **({"tooling_fix": fix, "fix": "open"} if fix else {}),
+           # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
+           **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {})}
     d.mkdir(parents=True, exist_ok=True)
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
@@ -215,6 +217,29 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     if state.pop(trigger, None) is not None:
         path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
     return row
+
+
+def spec_body_sha(d: Path) -> str:
+    """sha256 of feature `d`'s spec.md above its Review history (the record of rounds and rulings grows; the spec does not)."""
+    import hashlib  # noqa: PLC0415
+
+    text = (d / "spec.md").read_text(encoding="utf-8") if (d / "spec.md").is_file() else ""
+    return hashlib.sha256(text.split("\n## Review history", 1)[0].encode()).hexdigest()
+
+
+def spec_ruled(d: Path) -> str:
+    """The arbiter's `accept` or `process-fault` on feature `d`'s spec review that stands for its verdict - one ruled on the
+    spec as it reads now - or '' (feature 379 amendment 2; `review-gate.sh` asks this)."""
+    f, sha = d / "arbiter.jsonl", spec_body_sha(d)
+    for line in f.read_text(encoding="utf-8").splitlines() if f.is_file() else []:
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        if str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{d.name}#") and r.get("ruling") in ("accept", "process-fault") \
+                and r.get("spec_sha") == sha:
+            return str(r["trigger"])
+    return ""
 
 
 def _gm_row(d: Path, row: Mapping[str, Any]) -> None:
@@ -321,6 +346,8 @@ def main(argv: list[str]) -> int:
             return 1
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
         return 0
+    if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # review-gate.sh: does a ruling stand for this spec's verdict?
+        return 0 if spec_ruled(Path(argv[1])) else 1
     if argv[:1] == ["ask"] and len(argv) == 3:  # `make arbiter-ask` (feature 379 amendment 2, FR-008/FR-009)
         subject, why = argv[1].strip(), argv[2].strip()
         if not re.fullmatch(r"[\w.-]+", subject) or len(why.split()) < 2 or len(why) < 8:

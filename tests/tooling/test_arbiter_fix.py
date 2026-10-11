@@ -165,3 +165,17 @@ def test_a_spec_review_trigger_points_the_arbiter_at_the_review_history(root: pa
     ha.trip(root, "round:spec-fidelity|900-z@6", "round", "spec-fidelity|900-z", "round 6 of specs/900-z's spec review")
     manifest = ab.bundle(root, "round:spec-fidelity|900-z@6", tmp_path / "out").read_text()
     assert "## Rounds - the spec review of 900-z" in manifest and "Review history" in manifest
+
+
+def test_a_spec_ruling_stands_only_for_the_spec_it_ruled_on(root: pathlib.Path) -> None:
+    """Amendment 2's plan review: an amended spec never ships on an earlier ruling, whichever clone pushes it."""
+    d = root / "specs" / "900-z"
+    ha.trip(root, "round:spec-fidelity|900-z#1@6", "round", "spec-fidelity|900-z", "round 6")
+    row = ha.record_ruling(root, "round:spec-fidelity|900-z#1@6", {"ruling": "accept", "why": "the last round only reworded"}, "round-arbiter")
+    assert row["spec_sha"] == ha.spec_body_sha(d) and ha.spec_ruled(d) == "round:spec-fidelity|900-z#1@6"
+    (d / "spec.md").write_text((d / "spec.md").read_text() + "\n## Review history\n- the ruling recorded\n")
+    assert ha.spec_ruled(d) and ha.main(["spec-ruled", str(d)]) == 0, "the Review history growing is no amendment"
+    (d / "spec.md").write_text("# Feature 900, amended\n")
+    assert ha.spec_ruled(d) == "" and ha.main(["spec-ruled", str(d)]) == 1
+    (d / "arbiter.jsonl").write_text((d / "arbiter.jsonl").read_text() + "not json\n")
+    assert ha.spec_ruled(root / "specs" / "nowhere") == ""

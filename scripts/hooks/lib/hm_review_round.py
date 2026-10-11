@@ -68,14 +68,11 @@ def spec_cap_prefix(feature: str, pass_no: int) -> str:
 
 def spec_cap_refusal(root: pathlib.Path, feature: str, round_no: int, prompt: str, pass_no: int = 1) -> str:
     """Why a spec review's round `round_no` waits for the round arbiter, or ''. Each `continue` on this PASS of the review
-    lifts its cap by one round; an `accept` or `process-fault` closes it (the review gate takes that ruling as the verdict)."""
+    lifts its cap by one round; an `accept` or `process-fault` closes it (the review gate takes that ruling as the verdict,
+    while the spec is the one ruled on)."""
     if round_no <= SPEC_ROUND_CAP:
         return ""
-    prefix = spec_cap_prefix(feature, pass_no)
-    shut = hm_arbiter.closed(root, prefix)
-    if shut:
-        return (f"BLOCKED: the round arbiter closed specs/{feature}'s review ({shut}) - the spec stands as the last round "
-                "left it, and the review gate takes that ruling as its verdict; the GM reviews it after landing.")
+    prefix = spec_cap_prefix(feature, pass_no)  # a pass the arbiter closed never reaches here: the next dispatch starts a new pass
     if round_no - SPEC_ROUND_CAP <= hm_arbiter.continues(root, prefix):
         return ""
     trigger = f"{prefix}{round_no}"
@@ -389,7 +386,10 @@ def judge(payload: dict, clone: str) -> dict:
         if candidates:
             return {"event": "blocked", "rule": "stale-terms", "detail": f"{feature}: {len(candidates)} candidate(s)", "exit": 2, "stdout": "", "stderr": _stale_refusal(feature, candidates)}
     diff = diff_since(snap, feature_dir)
-    new_pass = v_word == "FAITHFUL"
+    # an ARBITER's accept or process-fault accepts the spec too (feature 379): a dispatch after it is an amendment's new pass,
+    # exactly as after FAITHFUL (plan review round 2: without this the amended spec could never be reviewed)
+    ruled_closed = bool(root) and bool(hm_arbiter.closed(root, spec_cap_prefix(feature, read_pass(state))))
+    new_pass = v_word == "FAITHFUL" or ruled_closed
     round_no = 1 if new_pass else (prev_round if v_word == "NOT-REVIEWABLE" else prev_round + 1)
     pass_no = read_pass(state) + (1 if new_pass else 0)
     held = spec_cap_refusal(root, feature, round_no, prompt, pass_no) if root else ""  # before the snapshot moves: nothing spent

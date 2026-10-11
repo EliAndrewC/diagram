@@ -75,20 +75,20 @@ echo work >> seed.txt; git add -A; git commit -qm s
 check "a spec that merely MENTIONS the word in prose" b3 blocked
 
 # GUARD_EDIT_OK: feature 379 amendment 2 - the round arbiter's accept on the spec's review stands in for FAITHFUL
-mkrepo b4; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md
-printf '%s\n' '{"trigger": "round:spec-fidelity|900-x#1@6", "kind": "round", "ruling": "accept", "why": "w", "utc": "t"}' > specs/900-x/arbiter.jsonl
+# the ruling carries the spec's hash (hm_arbiter.spec_body_sha): it stands only while the spec reads as it was ruled on
+SHA=$(printf '# spec\n' | sha256sum | cut -d' ' -f1)
+ruling() { printf '{"trigger": "round:spec-fidelity|900-x#1@6", "kind": "round", "ruling": "%s", "why": "w", "utc": "t", "spec_sha": "%s"}\n' "$1" "${2:-$SHA}" > specs/900-x/arbiter.jsonl; }
+mkrepo b4; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling accept
 echo work >> seed.txt; git add -A; git commit -qm s
 check "a spec the round arbiter accepted past the cap ships" b4 ok
-mkrepo b5; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md
-printf '%s\n' '{"trigger": "round:spec-fidelity|900-x#1@6", "kind": "round", "ruling": "continue", "why": "w", "utc": "t"}' > specs/900-x/arbiter.jsonl
+mkrepo b5; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling continue
 echo work >> seed.txt; git add -A; git commit -qm s
 check "...but a continue ruling is no verdict" b5 blocked
-mkrepo b6; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md
-printf '%s\n' '{"trigger": "round:spec-fidelity|900-x#1@6", "kind": "round", "ruling": "process-fault", "why": "w", "utc": "t"}' > specs/900-x/arbiter.jsonl
+mkrepo b6; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling process-fault
 echo work >> seed.txt; git add -A; git commit -qm s
 check "...a process-fault ruling stands in too" b6 ok
-mkdir -p .git/review-round/900-x; echo 2 > .git/review-round/900-x/pass
-check "...but not once the spec is amended into a later pass" b6 blocked
+printf '# spec, amended\n\n## Review history\n- round 5: CHANGES REQUIRED\n- the ruling\n' > specs/900-x/spec.md; git add -A; git commit -qm amend
+check "...but not for the spec once it is amended, whichever clone pushes it" b6 blocked
 
 # feature 330: a FILED spec (status Filed, no tasks.md) is deferred work, not an implementation - it ships with other
 # files and no verdict; the same spec given a tasks.md is being implemented and owes its verdict again

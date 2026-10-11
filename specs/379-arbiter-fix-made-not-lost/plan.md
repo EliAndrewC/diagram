@@ -88,15 +88,18 @@ fixture gains an `origin/main` holding the test, in the same edit (SC-004).
 review's rounds (the counter back to one when a round returns FAITHFUL, and a new pass for an amendment). Where it computes
 the round, before the snapshot moves (so a refused dispatch spends nothing), a round past `SPEC_ROUND_CAP = 5` beyond the
 `continue` rulings on this PASS of the review, `round:spec-fidelity|<feature>#<pass>@` (the pass counted beside the
-round in `.git/review-round/<feature>/pass`, one more each time a FAITHFUL round is followed by an amendment - so a ruling
-on one pass neither lifts nor closes a later pass's cap; plan review round 1), trips that trigger (`hm_arbiter.trip`, kind `round`) and refuses
+round in `.git/review-round/<feature>/pass`, one more each time a dispatch follows an ACCEPTED pass - a FAITHFUL round, or
+the arbiter's `accept` or `process-fault` on that pass, which accept the spec as FAITHFUL does - so a ruling on one pass
+neither lifts nor closes a later pass's cap; plan review rounds 1 and 2), trips that trigger (`hm_arbiter.trip`, kind `round`) and refuses
 with `hm_arbiter.refusal`, as `pair-hooks.sh` does for a review check's third round; `ARBITER_OK="<reason>"` in the prompt
 is the escape (the hook's own census row). An `accept` or `process-fault` ruling closes the review: the refusal says so.
 
 **D12 - An `accept` or `process-fault` is the spec's verdict at the push.** `review-gate.sh` refuses a spec with no
-FAITHFUL verdict; an arbiter's `accept` or `process-fault` on the review's CURRENT pass, `round:spec-fidelity|<feature>#<pass>@N`
-in that feature's `arbiter.jsonl` (the pass read from the clone's `.git/review-round/<feature>/pass`), answers it; a
-`continue` does not, and a ruling on an earlier pass does not pass an amended spec (the spec stands as
+FAITHFUL verdict; an arbiter's `accept` or `process-fault` on the review, `round:spec-fidelity|<feature>#<pass>@N` in that
+feature's tracked `arbiter.jsonl`, answers it only while the spec reads as it did when ruled: the ruling row carries
+`spec_sha`, the hash of `spec.md` above its Review history (`hm_arbiter.spec_body_sha`), and the gate asks
+`hm_arbiter.py spec-ruled` - no untracked per-clone state, so any clone's push of an amended spec is refused on an old
+ruling (plan review round 2). A `continue` does not answer it (the spec stands as
 the last round left it, the GM reviewing the ruling after landing). Without it, "accept" would leave the feature unable to
 land - the stop the GM asked to remove.
 

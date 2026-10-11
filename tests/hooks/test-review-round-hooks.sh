@@ -240,10 +240,12 @@ out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, th
 out=$(agent spec-fidelity 'MODE 2: SPECIFICATION REVIEW of specs/301-fixture. ARBITER_OK="the arbiter bundle cannot be built in this fixture"')
 [ "$(rc)" -eq 0 ] && [ "$(cat "$SR")" = 7 ] && ok "ARBITER_OK with a reason passes, recorded" || no "the escape did not pass" "(rc=$(rc))"
 printf '%s\n' '{"trigger": "round:spec-fidelity|301-fixture#1@8", "kind": "round", "ruling": "accept", "why": "w", "utc": "t"}' >> "$FIX/specs/301-fixture/arbiter.jsonl"
-out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the next round")
-[ "$(rc)" -eq 2 ] && grep -q "closed specs/301-fixture's review (accept)" "$T/err" && ok "an accept closes the review: no more rounds" || no "a round passed after accept" "(rc=$(rc)) $(head -c 200 "$T/err")"
-# the plan review of amendment 2: rulings are PER PASS - pass 1's accept neither closes nor lifts an amendment's pass 2
-echo 2 > "$FIX/.git/review-round/301-fixture/pass"; echo 5 > "$SR"
+# an accept ACCEPTS the spec, as FAITHFUL does: the next dispatch is an amendment's new pass, from round 1 (plan review round 2)
+echo "amended after the ruling" >> "$FIX/specs/301-fixture/spec.md"
+out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the amendment")
+[ "$(rc)" -eq 0 ] && [ "$(cat "$SR")" = 1 ] && [ "$(cat "$FIX/.git/review-round/301-fixture/pass")" = 2 ] && ok "after the arbiter's accept the amendment starts pass 2 at round 1" || no "the amendment did not start a new pass" "(rc=$(rc) round=$(cat "$SR")) $(head -c 200 "$T/err")"
+# rulings are PER PASS - pass 1's accept neither closes nor lifts pass 2's cap
+echo 5 > "$SR"
 out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the amendment's sixth round")
 [ "$(rc)" -eq 2 ] && grep -q "make arbiter-bundle" "$T/err" && grep -q 'round:spec-fidelity|301-fixture#2@6' "$FIX/.git/arbiter-owed.json" && ok "a later pass's sixth round owes its own ruling (pass 1's accept does not carry over)" || no "pass 1's ruling carried over" "(rc=$(rc)) $(head -c 200 "$T/err")"
 

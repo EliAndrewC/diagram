@@ -115,12 +115,10 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   # GUARD_EDIT_OK: feature 379 amendment 2 (the GM 2026-10-10: "things should go to the arbiter at the point where they were
   # previously coming to me") - past five rounds the round arbiter rules on a spec review, and its accept or process-fault
   # stands in for the FAITHFUL verdict (the GM reviews the ruling after landing); without this the ruling could not bind
-  # only a ruling on the review's CURRENT pass (hm_review_round.py writes it): an amended spec is not passed on an old ruling
+  # only a ruling on the spec AS IT READS NOW (the ruling carries the spec's hash; plan review round 2): an amended spec is
+  # never passed on an old ruling, whichever clone pushes it
   ruled=""
-  arb="$(dirname "$spec")/arbiter.jsonl"
-  fname="$(basename "$(dirname "$spec")")"
-  pass="$(cat "$(git rev-parse --git-dir 2>/dev/null)/review-round/$fname/pass" 2>/dev/null || echo 1)"
-  [ -f "$arb" ] && grep -E "\"trigger\": *\"round:spec-fidelity\|$fname#$pass@" "$arb" | grep -qE '"ruling": *"(accept|process-fault)"' && ruled=yes
+  python3 "$RG_HERE/../hooks/lib/hm_arbiter.py" spec-ruled "$(dirname "$spec")" 2>/dev/null && ruled=yes
   if [ -z "$ruled" ] && ! grep -E 'FAITHFUL' "$spec" | grep -viE 'NOT[[:space:]]+\**FAITHFUL' | grep -qiE 'status|verdict|round|spec-fidelity'; then
     printf '\n\033[1mREVIEW GATE: %s has no fidelity verdict.\033[0m\n' "$spec"
     printf 'Constitution XVI: a specification is reviewed against the GM'"'"'S OWN WORDS before\n'
