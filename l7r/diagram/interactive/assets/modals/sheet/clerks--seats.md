@@ -2,17 +2,17 @@ About: The clerks' seats were the places in the hall above the hearing court whe
 Edo's South Town Magistracy, by a plan of 1810, the court was a stepped hall whose top level, a tatami room, was divided
 into three: the magistrate sat in the innermost room, the examining officer and the clerk in the middle one, and a
 witnessing officer in the room nearest the court. Some magistracies set an upper level apart for the examiners and the
-scribes, below the magistrate's own room; others did not. The clerks sat in the hall, never on the court floor, where
-officers crouched at either side and the parties knelt on straw mats.
+scribes, below the magistrate's own room; others did not. The clerks sat in the hall, not on the court floor, where
+officers crouched at either side and the commoner parties knelt on straw mats.
 
-The middle room was a tatami room like the magistrate's, the hall's board veranda running along the front below it.
+The middle room was a tatami room like the magistrate's; the hall's board veranda ran along the front of the whole room, beyond the witnessing officer's.
 At Edo one clerk sat there; how large a clerk's place was is not recorded.
 
 Guesses:
-- The size of the seats the plan draws, about 27 by 7 ft each: no account gives how much room a clerk's place took.
+- The size of the seats the map draws, about 27 by 7 ft each: no account gives how much room a clerk's place took.
 
-Depiction: The plan seats the clerks to either side of the magistrate, level with the dais, rather than in a room of
-their own below it as at Edo - a simplification.
+Depiction: Our maps seat the clerks to either side of the magistrate, level with the dais, rather than in a room of
+their own in front of the magistrate's, as at Edo - a simplification.
 
 Name: clerks' seats
 Covers: the two seats flanking the dais and their labels

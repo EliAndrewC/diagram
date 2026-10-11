@@ -1,6 +1,6 @@
 About: The kneeling positions were the straw mats on the floor of the hearing court where the parties to a case knelt
 before the magistrate, who sat above them in the hall. At Edo the plaintiffs and defendants sat on straw mats spread on
-the court's gravel, and so did the peasants, townsmen and lesser ronin called before it, while samurai, priests and
+the court's gravel, and so did the peasants, townsmen and lesser ronin called before any hearing court, while samurai, priests and
 monks sat on the hall's verandas instead. The accused sat at the center, roped, a servant holding the rope's end; behind
 them sat the town officials, headmen and landlords on straw matting to one side, and the plaintiff to the other. In
 China the county court at Neixiang marked two places, with kneeling stones of the Ming dynasty: the plaintiff's to
@@ -13,7 +13,7 @@ earth floor inside the building.
 How large the mats were is not recorded.
 
 Guesses:
-- That a county court seated its parties as Edo's did: the arrangement is recorded only at Edo.
+- That a county court seated its parties as Edo's did: the accused at the center with the plaintiff and the officials behind is recorded only at Edo, and Neixiang's county court marks only the plaintiff's and the defendant's places.
 - The mats' sizes on the plan, about 6 by 3 ft for the accused and 12 ft long for the village officials, and their
   spacing: no account gives them.
 

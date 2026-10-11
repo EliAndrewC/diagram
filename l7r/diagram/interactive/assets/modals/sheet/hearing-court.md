@@ -23,7 +23,7 @@ Guesses:
 Depiction: The plan draws the court roofed, with a building's solid outline and posts along its open side, against the
 front of the office hall where the magistrate sits, since at Takayama the examination room was part of the one office.
 Its floor is white gravel or river cobbles, each plan taking one, and every place a party kneels is drawn with its straw
-mat. The clerks sit level with the dais to either side of the magistrate rather than in a room of their own below it, as
+mat. The clerks sit level with the dais to either side of the magistrate rather than in a room of their own between the dais and the court as they did
 at Edo, for simplicity.
 
 Name: hearing court (oshirasu)

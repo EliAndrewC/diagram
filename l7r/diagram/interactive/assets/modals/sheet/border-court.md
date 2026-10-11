@@ -11,9 +11,9 @@ palanquin could cross, then the step of the formal entrance. No real border post
 receiving a neighboring domain's officials; that use of it is the setting's own.
 
 Guesses:
-- That the court is a garden set with a stone lantern rather than open ground: no garden is known between the gate
+- That the court is a garden set with a stone lantern rather than open ground: no page on the formal entrance puts a garden between the gate
   and a guest's formal entrance, and where a drawing shows the ground just inside a gate, it is open. One old
-  garden-book plate does run a stone path on through a second gateway to an entrance, but of an unnamed house and
+  garden-book plate does show a garden approach, a stone path on through a second gateway to an entrance, but of an unnamed house and
   only loosely dated.
 - What the court's ground is: at Edo's South Town Magistracy, by enthusiasts' accounts, a stone path ran from the main
   gate to the entrance with small black gravel spread beside it, but what lay before an entrance outside Edo, whether

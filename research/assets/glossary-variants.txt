@@ -856,6 +856,7 @@ echigo	Echigo
 echigo province	Echigo
 echinochloa	Echinochloa crus-galli
 echinochloa crus-galli	Echinochloa crus-galli
+echizen-no-kami	no-kami
 edago	hongo
 edauchi	edauchi
 edge castle	edge castle
