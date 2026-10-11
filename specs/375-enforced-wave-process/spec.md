@@ -232,3 +232,4 @@ until 375 has landed.
   asked ahead) and that the tooling steers to it (the refusal names the batch; a single ruling is refused while its batch is
   owed); SC-009 replays 343's shape and tests the refusal. The aside (a ruling row asked ahead lost its unit) is fixed with
   FR-018's parser.
+- spec-fidelity-verify, amendment 2 round 2 (2026-10-11): FAITHFUL - round 1's three items and its aside resolved.
