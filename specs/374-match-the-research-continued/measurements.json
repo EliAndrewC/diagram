@@ -385,5 +385,39 @@
       "beside_372": 10,
       "reading": "higher than 372's ~10: three applied EDIT blocks each re-owed the check that proposed them (a second round per pop-up, three to the arbiter), one sentence on 0091's drawing page owed 16 pop-ups their triage twice, the building reviews ran three rounds on two sheets, and first use of 375 met four tooling gaps (each fixed with its test)"
     }
+  },
+  "kuwabata-board-r1-F1-seat": {
+    "subject": "glyph-check--notice-board--kuwabata",
+    "answers": "a5561194a0bd",
+    "observed": "2026-10-11",
+    "source": "pool/hamlets/kuwabata/kuwabata.json, read with bridges_on_a_way and kosatsuba_affordances from l7r/diagram/settlement/structures/fixtures/_helpers.py",
+    "method": "the bridgehead seat is offered only where a lane or road comes within KOSATSUBA_ANCHOR_BAND_FT of a bridge; Kuwabata rerolled with make map; tests/settlement/structures/test_fixtures.py holds the rule",
+    "verifies": "F1",
+    "quantity": "Kuwabata's rolled board seat after the fix (a bridge-end seat was 884 ft from its bridge in round 1)",
+    "value": "center",
+    "unit": "seat"
+  },
+  "kuwabata-board-r1-F2-reached": {
+    "subject": "glyph-check--notice-board--kuwabata",
+    "answers": "a5561194a0bd",
+    "observed": "2026-10-11",
+    "source": "pool/hamlets/kuwabata/kuwabata.json, read with bridges_on_a_way and kosatsuba_affordances from l7r/diagram/settlement/structures/fixtures/_helpers.py",
+    "method": "the bridgehead seat is offered only where a lane or road comes within KOSATSUBA_ANCHOR_BAND_FT of a bridge; Kuwabata rerolled with make map; tests/settlement/structures/test_fixtures.py holds the rule",
+    "verifies": "F2",
+    "quantity": "bridges a lane or road reaches on Kuwabata, which gate the bridge-end seat",
+    "value": 0,
+    "unit": "bridges of 6"
+  },
+  "batch3-cpu-interleaved": {
+    "quantity": "user CPU seconds of the reference hamlet, base (merge base ab378e08) against head, interleaved, 3 repeats: seeds 4 and 25 at 10 households, 39 and 47 at 20",
+    "value": {
+      "base_total": 186.6,
+      "head_total": 169.3,
+      "change": "-9%"
+    },
+    "unit": "s",
+    "observed": "2026-10-11",
+    "source": "scratchpad cpu-pair.txt / cpu-pair20.txt: make hamlet --no-render in a detached worktree at the merge base and in the clone, alternating, timed with bash `times` (children's user CPU)",
+    "method": "three wall-clock bookend pairs of the same code read 24.1 s, 24.0 s and 42.5 s for the identical end leg at a host load of 5-8 on 22 cores; CPU time interleaved removes the drift. Single runs scatter about 30%; the head is faster or level on every seed's mean except 47 at 20 households (+11%)"
   }
 }
