@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - amendment 2 (the arbiter before the GM); amendments up to 1 landed 2026-10-10
+**Status**: Done 2026-10-10 - amendment 2 landed: spec FAITHFUL (round 3), plan CLEAR (round 5), every task ticked; make done green
 
 **Amendment 1 approved**: the GM, 2026-10-10, "yes please"
 
