@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-11T03:44:19Z",
+  "target": "record-checked",
+  "commit": "f317c359c",
+  "why": "quote-check on quote-check:0104#arrival-garden-absence quote-check:0104#entrance-ground-surface-absence quote-check:0104#fuchu-joge-pamphlet-4 quote-check:0104#genkan-forecourt-absence quote-check:0104#kazusa-bugyosho quote-check:0104#middle-gate-office-absence quote-check:0104#morse-1886-homes quote-check:0104#morse-1886-homes-2 quote-check:0104#orange-hatchobori-yoriki quote-check:0104#shirobito-1717-takayama quote-check:0104#shiroishi-koseki quote-check:0104#takayama-edo-plan-absence quote-check:0104#takayama-jinya-city quote-check:0104#takayama-jinya-en-tour quote-check:0104#takayama-jinya-gifu quote-check:0104#takayama-jinya-jawiki quote-check:0104#wheatbaku-machibugyosho-yashiki quote-check:0104.drawing#arrival-garden-absence quote-check:0104.drawing#fuchu-joge-pamphlet-4 quote-check:0104.drawing#hayakawa-guest-door-grounds quote-check:0104.drawing#middle-gate-office-absence quote-check:0104.drawing#morse-1886-homes quote-check:0104.drawing#shirobito-1717-takayama quote-check:0104.drawing#shiroishi-koseki: the round arbiter accepted (round:quote-check|q:0104@3, M1c): converged at 16 SUPPORTS; the bare-earth clause and the ' and ' -> '; ' joins on shiroishi-koseki and shirobito-1717-takayama (the arbiter's own fix, no new round) change no passage"
+}
