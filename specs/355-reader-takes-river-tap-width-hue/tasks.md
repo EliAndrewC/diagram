@@ -4,7 +4,7 @@
 
 ## Occasions
 
-- glyph-redrawn: irrigation ditch on sawada - the head race (an irrigation ditch), its's first 30 ft tapered from the brook's hue to the supply hue (after T02)
+- glyph-redrawn: irrigation ditch on sawada - the head race (an irrigation ditch), its first 30 ft tapered from the brook's hue to the supply hue (after T02)
 
 ## Tasks
 
