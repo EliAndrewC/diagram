@@ -1,13 +1,13 @@
 # Tasks: feature 352
 
-- [ ] T01 The search and the record on 0036 (D1, FR-001, FR-002): the answer or its absence, footnoted or searched
+- [x] T01 The search and the record on 0036 (D1, FR-001, FR-002): the answer or its absence, footnoted or searched
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: make record-owed UNANSWERED=1 lists nothing
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0036's findings page asks 'Did a lane ever run between a farmhouse and its grove?': no page read shows one (absence note naming the Japanese, Chinese and English searches, archive first); where an account places the way it runs outside the grove (isa-auf-fukugi-2011 notes 2-3, otsubo-2005-jobo-chiba). source-reader READ, quote-check, record-format, translation-check FAITHFUL, source-applicability HONEST, 29 pop-ups checked; round 3s accepted by the round arbiter; make record-owed UNANSWERED=1 lists nothing
 - [ ] T02 The claims (D3, FR-003): each unit FR-003 lists cites 0036's findings page, judged by impl-drift
       research: rendering
       verify: make claims-report lists each with a verdict; make claims-owed owes none

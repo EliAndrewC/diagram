@@ -101,7 +101,17 @@ finding: IN-STEP with its evidence, or DRIFTED from it.
 
 ## Decisions Recorded
 
-(none yet)
+- **The finding** (FR-002), historically accurate as far as it goes: no page read shows a lane between a farmhouse and its
+  own grove; where an account places the way it runs outside the grove or through a gap in it to the house (0036's new
+  bullet and its absence note). That no lane EVER ran between them is a GUESS, recorded on 0036's drawing page.
+- **The claims' pages** (FR-003): a claim that holds a way off the woodlots' seats as part of a wider rule (`reserved.py`,
+  `gap_ways.py`, `passage.py`, `track.py`, `growth.py`) cites 0036's findings page beside the pages it cited before. A claim
+  whose detail no page gives (a buffer's distance, a seat region, the track's octagon, the web's routing) stays a GUESS,
+  and the claim grammar lets a GUESS name only the DRAWING page that records it (`l7r/diagram/tools/claims.py`), so these
+  six cite 0036's drawing page, whose bullet records the guess and carries the findings page's absence note. Five of them
+  were UNRESEARCHED before.
+- **Not implemented** (FR-003, FR-005): a lane kept out of the ground between a house and its own seats - recorded in
+  `implementation-check.md` with the search; not built (FR-004).
 
 ## Review history
 
