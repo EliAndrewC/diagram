@@ -11,9 +11,10 @@ THE RULE. A modal unit owed ONLY because a page it names moved (`modal_owed.owed
 triage first. `make modal-triage` writes one bundle: per moved page, the blocks new, changed or removed since the unit was
 last answered - the page as that check read it, kept as a blob by `make modal-bundle` (`page:` lines in its MANIFEST), else
 the merge base - and each kind naming the page with its About and Depiction. One ad-hoc agent (model opus) replies one
-`TOUCHES <uid> - <which block>` line per kind a change bears on; `make modal-triaged BUNDLE= REPLY=` answers every other unit
-at its current fingerprint (result `triage: untouched` - cleared on the record) and marks the named ones touched, owed the
-full check. `make modal-bundle` refuses a unit owed only a triage until that triage has named it.
+`TOUCHES <uid> @ <page file name> - <which block>` line per (kind, page) a change bears on; `make modal-triaged BUNDLE= REPLY=`
+answers every other unit at its current fingerprint (result `triage: untouched` - cleared on the record) and marks touched only
+the units whose check READS a named page - a question page owes the research checks, a drawing page `modal-depiction` (feature
+375 amendment 1: 343's triage owed 11 of 61 units for pages their checks never read); a line naming no page owes them all. `make modal-bundle` refuses a unit owed only a triage until that triage has named it.
 
     modal_triage.py bundle [--out DIR]               the triage bundle for every unit owed only a triage
     modal_triage.py record --bundle DIR --reply F    apply a triage reply
@@ -39,7 +40,9 @@ import record_units as ru  # noqa: E402
 DEFAULT_OUT = pathlib.Path("/tmp/l7r-check/modal-triage")
 #: in the record-checks store: {slug: fingerprint} of the units a triage named, owed the full check at that fingerprint
 TOUCHED = "modal-triage-touched.json"
-_TOUCHES = re.compile(r"^TOUCHES\s+(\S+?)\s+-\s+(.*)$")
+#: `TOUCHES <uid> [@ <page file name>] - <block>` (feature 375 amendment 1, FR-015: the page scopes which of the pop-up's checks
+#: are owed - a question page its research checks, a drawing page its `modal-depiction`; a line naming no page owes them all)
+_TOUCHES = re.compile(r"^TOUCHES\s+`?(\S+?)`?(?:\s+@\s+`?(\S+?)`?)?\s+-\s+(.*)$")
 
 
 def triage_only(why: str) -> bool:
@@ -104,6 +107,7 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
     modals = {m.uid: m for m in mo.modals_now(root, about_only=False)}
     by_page: dict[str, dict[str, set[str]]] = {}
     blocks: dict[str, tuple[list[str], list[str]]] = {}
+    reads: dict[str, list[str]] = {}  # slug -> the moved pages its check reads (FR-015: a reply line owes only the units reading its page)
     for slug, why, _fp in units:
         check, uid = slug.split(":", 1)
         m = modals.get(uid)
@@ -117,6 +121,7 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
             prev = blocks.get(path, ([], []))
             blocks[path] = (sorted(set(prev[0]) | set(fresh)), sorted(set(prev[1]) | set(gone)))
             by_page.setdefault(path, {}).setdefault(uid, set()).add(check)
+            reads.setdefault(slug, []).append(path)
     if out.exists():
         for f in out.iterdir():
             f.unlink()
@@ -127,8 +132,10 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
         "Each page below changed since the pop-ups under it were last checked; it lists ONLY its new, changed and REMOVED "
         "blocks. For each pop-up, decide whether any of those blocks could change what its checks would find - a figure, form, "
         "rule, guess or convention its About or Depiction states, or one it should now state. Reply one "
-        "`TOUCHES <uid> - <which block, a few words>` line per such pop-up, and nothing for the rest: a pop-up you do not name "
-        "is cleared without its checks. When unsure, name it.\n",
+        "`TOUCHES <uid> @ <page file name> - <which block, a few words>` line per (pop-up, page) whose blocks bear on it, and "
+        "nothing for the rest: a pop-up you do not name is cleared without its checks. The page decides which checks are owed - "
+        "a question page its research checks, a `.drawing.html` page its depiction check - so name the page the block stands "
+        "on, and a block standing on two pages on both. When unsure, name it.\n",
     ]
     for path in sorted(by_page):
         fresh, gone = blocks[path]
@@ -144,23 +151,36 @@ def bundle(root: pathlib.Path, out: pathlib.Path, base: str = "") -> tuple[pathl
                          + (f" | Depiction - {m.tags.get('Depiction', '')[:400]}" if m.tags.get("Depiction") else ""))
         parts.append("")
     (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
-    (out / "triage.json").write_text(json.dumps({"units": {s: fp for s, _w, fp in units}}, indent=1, sort_keys=True) + "\n",
-                                     encoding="utf-8")
+    (out / "triage.json").write_text(json.dumps({"units": {s: fp for s, _w, fp in units}, "pages": reads}, indent=1, sort_keys=True)
+                                     + "\n", encoding="utf-8")
     return out / "MANIFEST.md", len(units)
 
 
-def record(store: pathlib.Path, units: Mapping[str, str], reply: str) -> list[str]:
-    """Apply a triage reply: a unit of a named uid is marked touched (owed its full check at this fingerprint); every other
-    unit is answered at its fingerprint, `triage: untouched`. Only lines that OPEN with `TOUCHES ` name anything."""
-    named = {m.group(1).strip("`"): m.group(2) for raw in reply.split("\n") if (m := _TOUCHES.match(raw.strip().strip("`")))}
+def _reads(page: str, unit_pages: Sequence[str]) -> bool:
+    """Does a unit whose checks read `unit_pages` read the page a reply line named (by its file name, or its stem)?"""
+    name = pathlib.Path(page).name
+    return any(pathlib.Path(p).name in (name, name + ".html") for p in unit_pages)
+
+
+def record(store: pathlib.Path, units: Mapping[str, str], reply: str, pages: Mapping[str, Sequence[str]] | None = None) -> list[str]:
+    """Apply a triage reply: a unit is marked touched (owed its full check at this fingerprint) when a line names its pop-up AT
+    one of the pages the unit's check reads (`pages`, from triage.json - FR-015), or names its pop-up with no page (owing all of
+    its units, failing toward checking); every other unit is answered at its fingerprint, `triage: untouched`. Only lines that
+    OPEN with `TOUCHES ` name anything."""
+    named: dict[str, list[tuple[str, str]]] = {}
+    for raw in reply.split("\n"):
+        if m := _TOUCHES.match(raw.strip().strip("`")):
+            named.setdefault(m.group(1).strip("`"), []).append((m.group(2) or "", m.group(3)))
     uids = {s.split(":", 1)[1] for s in units}
     msgs = [f"refused: `{u}` is not a pop-up of this triage" for u in sorted(set(named) - uids)]
     mark = touched(store)
     for slug, fp in sorted(units.items()):
         uid = slug.split(":", 1)[1]
-        if uid in named:
+        lines = named.get(uid, [])
+        hit = [why for page, why in lines if not page or pages is None or slug not in pages or _reads(page, pages[slug])]
+        if hit:
             mark[slug] = fp
-            msgs.append(f"touched: {slug} - {named[uid]}")
+            msgs.append(f"touched: {slug} - {hit[0]}")
         else:
             ro.write_answer(store, slug, fp, "triage: untouched")
     store.mkdir(parents=True, exist_ok=True)
@@ -199,7 +219,7 @@ def main(argv: Sequence[str] | None = None) -> int:
               "`make modal-triaged BUNDLE=<dir> REPLY=<file>`")
         return 0
     data = json.loads((pathlib.Path(a.bundle) / "triage.json").read_text(encoding="utf-8"))
-    msgs = record(ro.store(root), data["units"], pathlib.Path(a.reply).read_text(encoding="utf-8"))
+    msgs = record(ro.store(root), data["units"], pathlib.Path(a.reply).read_text(encoding="utf-8"), data.get("pages"))
     for msg in msgs:
         print(f"modal-triaged: {msg}")
     n = sum(1 for msg in msgs if msg.startswith("touched"))

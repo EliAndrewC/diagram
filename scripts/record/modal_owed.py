@@ -366,10 +366,14 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
         # Depiction or Drawing - and by a page its Drawing: names moving, WHETHER OR NOT the modal has the tab (the plan review,
         # 2026-10-04: a conversion that dropped its drawing pages from Entry: and wrote no Depiction: would otherwise land with
         # its conventions and drawing links silently gone, every check green - the case FR-014 and SC-008 exist to catch)
+        # FEATURE 375 AMENDMENT 1 (FR-015; the GM 2026-10-10): owed by the words the check READS - new to the About form, its
+        # Depiction tab or Drawing: list, its About (drawing statements that belong in Depiction) or its Entry: (the candidate
+        # drawing pages `modal_bundle.drawing_candidates` builds from it, the case above). A Guesses, Name or Form edit alone owes
+        # `modal-form` and the research checks, not this one: 343's run re-checked depiction on such edits.
         moved_drawing = [
             f for f in m.drawing_files() if f in changed_pages
         ]
-        if moved_text or was.depiction != m.depiction:
+        if was is None or was.depiction != m.depiction or was.tags.get("About", "") != m.tags.get("About", "") or was.entry != m.entry:
             rows.append(
                 (
                     f"{DEPICTION_CHECK}:{m.uid}",

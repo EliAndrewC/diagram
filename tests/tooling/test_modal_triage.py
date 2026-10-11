@@ -99,3 +99,64 @@ def test_the_command_line(drawn: pathlib.Path, capsys: pytest.CaptureFixture[str
     assert mt.main(["--root", str(drawn), "record", "--bundle", str(drawn.parent / "t"), "--reply", str(drawn.parent / "r.txt")]) == 0
     assert "1 of 1 unit(s) sent on to their checks" in capsys.readouterr().out
     assert mt.keep(drawn, "research/questions/no-such.html") == ""
+
+
+FIX = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "modal-triage-343"
+Q99 = "research/questions/0099-the-hearing-court-shirasu.html"
+Q104 = "research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html"
+D104 = "research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html"
+
+
+def test_343s_triage_owes_a_check_only_for_the_pages_it_reads(tmp_path: pathlib.Path) -> None:
+    """Feature 375 amendment 1, SC-007: the kept triage of feature 343 (61 units). The old reply named pop-ups, and every check of
+    a named pop-up was owed - 11 units for pages their checks never read. Restated with the page each block stands on, a
+    question page owes the research checks and the drawing page owes depiction; the old page-less reply still owes them all."""
+    units = json.loads((FIX / "triage.json").read_text())["units"]
+    pages = {s: [D104] if s.startswith("modal-depiction") else [Q99, Q104] for s in units}
+    old = mt.record(tmp_path / "old", units, (FIX / "reply.md").read_text(), pages)
+    new = mt.record(tmp_path / "new", units, (FIX / "reply-paged.md").read_text(), pages)
+    owed_old = {m.split(" ")[1] for m in old if m.startswith("touched")}
+    owed_new = {m.split(" ")[1] for m in new if m.startswith("touched")}
+    cleared = owed_old - owed_new
+    assert cleared == {"modal-depiction:sheet/main-gate", "modal-depiction:sheet/residence"} | {
+        f"{c}:sheet/{u}" for c in ("modal-accuracy", "modal-references", "modal-gaps") for u in ("door", "guest-quarters", "side-gate")
+    }, "the 11 units of 61 owed only for a page their check never reads"
+    assert len(cleared) == 11 and owed_new < owed_old
+    for kept in ("modal-depiction:sheet/nakamon", "modal-depiction:sheet/garden", "modal-depiction:sheet/genkan", "modal-depiction:sheet/door"):
+        assert kept in owed_new, f"{kept}: its block stands on the drawing page - still owed"
+    assert ro.answered(tmp_path / "new", "modal-depiction:sheet/main-gate", units["modal-depiction:sheet/main-gate"])
+    # a line naming no page owes every check of its pop-up (failing toward checking); a unit with no recorded pages too
+    assert {m.split(" ")[1] for m in mt.record(tmp_path / "bare", units, "TOUCHES sheet/door - something\n", pages) if m.startswith("touched")} == {
+        s for s in units if s.endswith(":sheet/door")
+    }
+    assert mt.record(tmp_path / "nopages", {"modal-depiction:sheet/door": "f"}, f"TOUCHES sheet/door @ {Q104.split('/')[-1]} - x\n", {}) == [
+        "touched: modal-depiction:sheet/door - x"
+    ]
+
+
+def _kind(root: pathlib.Path, old: str, new: str) -> None:
+    f = next((root / "l7r").rglob("*.py"), None)
+    for p in (root / "l7r").rglob("*.py"):
+        if old in p.read_text(encoding="utf-8"):
+            f = p
+    assert f is not None
+    f.write_text(f.read_text(encoding="utf-8").replace(old, new), encoding="utf-8")
+
+
+def test_depiction_is_owed_by_the_words_it_reads(drawn: pathlib.Path) -> None:
+    """Feature 375 amendment 1, SC-007 (FR-015): a Guesses edit alone owes `modal-form` and the research checks, not depiction;
+    an About edit - where the check finds drawing statements that belong in Depiction - still owes it."""
+    base = ro.merge_base(drawn)
+    _kind(drawn, "no small house was measured.", "no small house was ever measured.")
+    owed = {s.split(":")[0] for s, _w, _f in mo.owed(drawn, base)}
+    assert "modal-form" in owed and "modal-accuracy" in owed and "modal-depiction" not in owed
+    _kind(drawn, "It was thatched.", "It was thatched with rice straw.")
+    assert "modal-depiction" in {s.split(":")[0] for s, _w, _f in mo.owed(drawn, base)}
+
+
+def test_the_bundle_records_the_pages_each_unit_reads(drawn: pathlib.Path) -> None:
+    _edit(drawn, "Wells stand by the door.", "Wells stand by the kitchen.")
+    manifest, _n = mt.bundle(drawn, drawn.parent / "t")
+    data = json.loads((manifest.parent / "triage.json").read_text())
+    assert data["pages"] == {DEP: ["research/questions/0029-farmhouses-minka.drawing.html"]}
+    assert "TOUCHES <uid> @ <page file name>" in manifest.read_text(encoding="utf-8")
