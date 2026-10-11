@@ -186,7 +186,10 @@ def test_a_round_is_a_capped_check_that_ran() -> None:
     assert fr.tripwires(evs) == []
     evs.append({"ev": "PostToolUse", "tool": "Agent", "id": "a4"})
     assert fr.tripwires(evs) == [("4", "round:building-review|building-review--x@3")]
-    assert el.line({"hook_event_name": "PreToolUse", "tool_name": "Agent", "tool_input": {"subagent_type": "building-review", "prompt": "UNIT: building-review--y, on the sheet"}})["unit"] == "building-review--y"
+    assert (
+        el.line({"hook_event_name": "PreToolUse", "tool_name": "Agent", "tool_input": {"subagent_type": "building-review", "prompt": "UNIT: building-review--y, on the sheet"}})["unit"]
+        == "building-review--y"
+    )
 
 
 def _git(repo: Path, *args: str) -> None:
