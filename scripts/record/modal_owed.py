@@ -305,8 +305,10 @@ def fingerprints(root: pathlib.Path, m: Modal) -> tuple[str, str]:
 
 
 def depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
-    """The Depiction unit's fingerprint (plan D13): the modal's About and Depiction words, its Drawing: list and those pages."""
-    return digest([m.uid, m.prose, m.depiction, *_pages(root, m.drawing_files())])
+    """The Depiction unit's fingerprint: exactly what `modal-depiction` reads (feature 375 amendment 1, FR-015) - the About, the
+    Entry: list (its drawing candidates), the Depiction tab, the Drawing: list and those pages. Not Guesses, Name or Form: with
+    them in it, a Guesses edit after the check had answered re-owed it in full (the plan review of amendment 1)."""
+    return digest([m.uid, m.tags.get("About", ""), m.entry, m.depiction, *_pages(root, m.drawing_files())])
 
 
 def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:

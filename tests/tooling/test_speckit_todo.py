@@ -340,3 +340,21 @@ def test_an_open_feature_is_shown_as_its_active_clone_holds_it(tmp_path: Path) -
     (d / "tasks.md").write_text("- [x] T01 done\n- [x] T02 next\n")
     assert "[in going (done there), not landed]" in st.report(main / "specs")
     assert st.clones_dir(main / ".clones" / "same") == main / ".clones" and st.unlanded(tmp_path / "not-a-repo") == set()
+
+
+def test_a_feature_closed_on_main_and_reopened_in_a_clone_is_shown(tmp_path: Path) -> None:
+    """The plan review of 375's amendment 1: an amendment in progress reopens a closed feature in its clone."""
+    main = tmp_path / "main"
+    _feature(main, "002-y", "Done 2026-10-10", "- [x] T01 built\n", "Closed thing")
+    _git("init", "-q", "-b", "main", str(main))
+    _git("-C", str(main), "add", "-A")
+    _git("-C", str(main), "commit", "-qm", "base")
+    c = main / ".clones" / "amending"
+    _git("clone", "-q", str(main), str(c))
+    (c / ".git" / "l7r-events").mkdir()
+    (c / ".git" / "l7r-events" / "002-y.jsonl").write_text("{}\n")
+    (c / "specs" / "002-y" / "spec.md").write_text("# Feature Specification: Closed thing\n\n**Status**: In progress - amendment 1\n")
+    (c / "specs" / "002-y" / "tasks.md").write_text("- [x] T01 built\n- [ ] T02 the amendment\n")
+    out = st.report(main / "specs")
+    assert "002-y  Closed thing  1/2  [in amending, not landed]" in out and "IN PROGRESS (1)" in out
+    assert "002-y" not in st.report(main / "specs", clones=False)

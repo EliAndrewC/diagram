@@ -294,15 +294,16 @@ def in_clones(root: Path, fs: list[Feature], active_only: bool = False) -> dict[
     if active_only:
         clones = [c for c in clones if active(c)]
     vocab = vocabulary(root)
-    open_names = {f.name for f in fs if f.state != "closed"}
-    work = {c: unlanded(c) & open_names for c in clones}
+    names = {f.name for f in fs}
+    work = {c: unlanded(c) & names for c in clones}
     for f in fs:
-        if f.state == "closed":
-            continue
         for c in clones:
             there = c / "specs" / f.name
             if f.name in work[c] and there.is_dir():
                 cf = feature(there, vocab)
+                if f.state == "closed" and cf.state == "closed":
+                    continue  # closed on main and in the clone: nothing open to show
+                # a feature closed on main and REOPENED in the clone (an amendment in progress) is shown too (the plan review)
                 # a feature closed in the clone but not landed is still open on main: shown IN PROGRESS, marked done there
                 state = "in progress" if cf.state == "closed" else cf.state
                 out.setdefault(f.name, []).append(dataclasses.replace(cf, state=state, clone=c.name + (" (done there)" if cf.state == "closed" else "")))

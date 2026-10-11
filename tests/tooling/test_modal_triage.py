@@ -160,3 +160,29 @@ def test_the_bundle_records_the_pages_each_unit_reads(drawn: pathlib.Path) -> No
     data = json.loads((manifest.parent / "triage.json").read_text())
     assert data["pages"] == {DEP: ["research/questions/0029-farmhouses-minka.drawing.html"]}
     assert "TOUCHES <uid> @ <page file name>" in manifest.read_text(encoding="utf-8")
+
+
+def test_a_page_the_bundle_never_showed_owes_everything(tmp_path: pathlib.Path) -> None:
+    """The plan review of amendment 1: a misnamed or bare page must fail toward checking, never clear the pop-up."""
+    units = {"modal-depiction:sheet/door": "f1", "modal-accuracy:sheet/door": "f2"}
+    pages = {"modal-depiction:sheet/door": [D104], "modal-accuracy:sheet/door": [Q104]}
+    msgs = mt.record(tmp_path, units, "TOUCHES sheet/door @ 0104 - the river door\n", pages)
+    assert sorted(m.split(" ")[1] for m in msgs) == sorted(units)
+    msgs = mt.record(tmp_path / "b", units, f"TOUCHES sheet/door @ {D104.split('/')[-1]} - the river door\n", pages)
+    assert [m.split(" ")[1] for m in msgs] == ["modal-depiction:sheet/door"]
+
+
+def test_a_guesses_edit_after_the_check_answered_does_not_reowe_depiction(drawn: pathlib.Path) -> None:
+    """The plan review of amendment 1: from a pop-up whose About already differs from the base and whose depiction was
+    answered, a later Guesses edit keeps it answered; an Entry: edit re-owes it."""
+    base = ro.merge_base(drawn)
+    store = ro.store(drawn)
+    _kind(drawn, "It was thatched.", "It was thatched with rice straw.")
+    (slug, _w, fp) = next(u for u in mo.owed(drawn, base) if u[0].startswith("modal-depiction"))
+    ro.write_answer(store, slug, fp, "PASS")
+    _kind(drawn, "no small house was measured.", "no small house was ever measured.")
+    (_s, _w, fp2) = next(u for u in mo.owed(drawn, base) if u[0].startswith("modal-depiction"))
+    assert fp2 == fp and ro.answered(store, slug, fp2), "a Guesses edit leaves what depiction read unchanged"
+    _kind(drawn, "0029-farmhouses-minka.html\n", "0029-farmhouses-minka.html, research/questions/0030-x.html\n")
+    (_s, _w, fp3) = next(u for u in mo.owed(drawn, base) if u[0].startswith("modal-depiction"))
+    assert fp3 != fp and not ro.answered(store, slug, fp3), "an Entry: edit re-owes it"

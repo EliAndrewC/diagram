@@ -177,7 +177,10 @@ def record(store: pathlib.Path, units: Mapping[str, str], reply: str, pages: Map
     for slug, fp in sorted(units.items()):
         uid = slug.split(":", 1)[1]
         lines = named.get(uid, [])
-        hit = [why for page, why in lines if not page or pages is None or slug not in pages or _reads(page, pages[slug])]
+        known = [p for ps in (pages or {}).values() for p in ps]
+        # a page the bundle never showed (misnamed, bare, unchanged) is read as no page: it owes all, never clears (plan review)
+        hit = [why for page, why in lines
+               if not page or pages is None or slug not in pages or not _reads(page, known) or _reads(page, pages[slug])]
         if hit:
             mark[slug] = fp
             msgs.append(f"touched: {slug} - {hit[0]}")
