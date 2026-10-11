@@ -295,6 +295,7 @@ def test_each_return_of_a_resumed_check_is_logged_with_its_own_cells(tmp_path: p
         )
     assert hc.log_pass(tmp_path, "returned", payload, 0.0)
     first, second = _log(tmp_path)
+    assert (first["segment"], second["segment"]) == (0, 1), "each line names its return, for ledger_owed to settle"
     assert second["wall"] == "40 s" and (first["wall"], first["tokens"]) != (second["wall"], second["tokens"])
     assert f"{second['wall']} | {second['tokens']}" == rc.cells(rc.cost(rc.segments(t.read_text().splitlines())[-1]))
     bg = {"tool_input": {"subagent_type": "spec-fidelity"}, "tool_response": {"status": "async_launched", "agentId": "a3"}}

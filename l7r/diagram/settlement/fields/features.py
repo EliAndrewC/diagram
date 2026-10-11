@@ -489,14 +489,14 @@ class FieldFeaturesMixin:
         if net is not None:
             carve_around_grave(net["plots"], disc, tuple(plot["poly"][at % len(plot["poly"])]), self._grave_context(net, disc))
             net.setdefault("grave_discs", []).append(disc)
-        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="6.5" ry="4.5" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.1"/>', "grave island")
+        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="6.5" ry="4.5" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.1"/>', "field grave")
         markers = ""
         # the second stone stands IN FRONT of the first, lower and to one side - two stones abreast read as a pair of
         # eyes (the island's rule, feature 230 pass 11)
         for i in range(rng.randint(1, 2)):
             sx, base, h = ((-2.2, -1.0, 6.5), (1.6, 2.2, 3.5))[i]
             markers += f'<rect x="{cx + sx:.1f}" y="{cy + base - h:.1f}" width="2.4" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
-        self._field_feature_ink(ink, f'<g>{markers}</g>', "grave island")
+        self._field_feature_ink(ink, f'<g>{markers}</g>', "field grave")
         self.M.setdefault("field_graves", []).append({"x": cx, "y": cy, "form": "corner"})
         return True
 
@@ -513,6 +513,7 @@ class FieldFeaturesMixin:
 
         Research:
             grave island - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: a mound inside a plot
+            basins carved round the island - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no ring passes under the mound
             grave island size - UNRESEARCHED: mound 0.55 of the plot's half-span, at least 18 x 12 px, two or three stones"""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
         cx, cy = round(cx, 1), round(cy, 1)
@@ -523,7 +524,7 @@ class FieldFeaturesMixin:
         if net is not None:
             carve_around_grave(net["plots"], disc, None, self._grave_context(net, disc))
             net.setdefault("grave_discs", []).append(disc)
-        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2"/>', "grave island")  # feature 134
+        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2"/>', "field grave")  # feature 134
         markers = ""
         # THE STONES ARE STAGGERED AND UNEQUAL, NEVER A MATCHED PAIR (settlement-review, feature 230 pass 11). Two equal stones
         # side by side in the upper half of an egg-shaped mound read, at every zoom, as a pair of eyes - a face on Mizuguchi's
@@ -535,7 +536,7 @@ class FieldFeaturesMixin:
             h = (8.0, 5.0, 6.5)[i]
             by = cy - up
             markers += f'<rect x="{mx - 1.3:.1f}" y="{by - h:.1f}" width="2.6" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
-        self._field_feature_ink(ink, f'<g>{markers}</g>', "grave island")
+        self._field_feature_ink(ink, f'<g>{markers}</g>', "field grave")
         self.M.setdefault("field_graves", []).append({"x": cx, "y": cy})
         return True
 

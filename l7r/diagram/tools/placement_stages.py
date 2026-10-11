@@ -360,7 +360,7 @@ def elsewhere_in_the_pool(named: set[str], skill: str) -> list[tuple[str, str]]:
 
     The stage lists are derived from ONE map's ink, so they can only name what that map has - and the pool
     deliberately draws five different kinds of place, so fourteen classes were left unnamed by Inashiro's
-    roll: the dike kinds and their ponds belong to the polder, the grave island to Kashikawa, and a few are
+    roll: the dike kinds and their ponds belong to the polder, the field grave to Kashikawa, and a few are
     features a given roll did not happen to place. The GM's rule is about what a READER can click
     (2026-09-12): *"anything that I can click on after having it highlighted when I move my mouse over it on
     the HTML version of the map should be mentioned on the page ... Otherwise, how can I hit control f and

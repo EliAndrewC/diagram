@@ -456,14 +456,18 @@ def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | 
         if check not in ledger_lint.CHECKS or not tpath or not Path(tpath).is_file():
             return False
         lines = Path(tpath).read_text(encoding="utf-8", errors="replace").splitlines()
-        # THIS RETURN's cells: the transcript's last segment (a resumed agent's earlier returns are passes of their own,
-        # logged at their own stops - plan review 2), as `make review-cost` prints them
-        wall, tokens = review_cost.cells(review_cost.cost(review_cost.segments(lines)[-1])).split(" | ", 1)
-        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid, "wall": wall, "tokens": tokens}
+        # THIS RETURN is the transcript's last segment (a resumed agent's earlier returns are passes of their own, logged at
+        # their own stops - plan review 2). GUARD_EDIT_OK: fixing the log's cells, which were read too early. The cells here
+        # are PROVISIONAL: at SubagentStop the agent's last call is not yet on disk (measured 2026-10-10: a 13 s check logged
+        # as 4 s, its final call missing), so `ledger_owed.py` recomputes them from the finished transcript by `segment`, and
+        # these stand only where that transcript is gone.
+        parts = review_cost.segments(lines)
+        wall, tokens = review_cost.cells(review_cost.cost(parts[-1])).split(" | ", 1)
+        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid,
+               "segment": len(parts) - 1, "wall": wall, "tokens": tokens}
         log = git_dir / PASS_LOG
         prior = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()] if log.is_file() else []
-        mine = [r for r in prior if r.get("agent") == aid]
-        if mine and (mine[-1].get("wall"), mine[-1].get("tokens")) == (wall, tokens):
+        if any(r.get("agent") == aid and r.get("segment") == len(parts) - 1 for r in prior):
             return False  # the same return seen by both events (a foreground check): one pass, logged once
         with log.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(rec) + "\n")

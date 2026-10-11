@@ -31,7 +31,7 @@ basins cut back to run up round it, which is the Chinese form.
 [grave_form=corner] Here the grave is a small mound with one or two stones in a plot's corner against its bunds, which is
 the Japanese form. The map sets the mound a short step in from the corner, clear of any ditch or path along the plot's edge, so it reads as standing in the corner, and carries the plot's bund round it; such a grave stood in a field's corner, beside its bunds.
 
-Name: grave island
+Name: field grave
 Covers: `field_graves` - a grave mound inside a paddy plot or in its corner
 Sources: henriot-shanghai-graves, ryobosei-jawiki, yashikibaka-ibaraki-blog, eisi-yashikibaka, kotobank-ryobosei, buck-1930-farm-economy, tanigawa-1992, henriot-shanghai-count, where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot
 Entry: research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0235-village-burial-grounds-bochi.html

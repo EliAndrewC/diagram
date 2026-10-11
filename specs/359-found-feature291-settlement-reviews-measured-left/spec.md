@@ -1,6 +1,6 @@
 # Feature Specification: Found by feature 291's settlement-reviews (2026-09-30), measured and left
 
-**Status**: Filed - from future-work/farming-communities.md, "Found by feature 291's settlement-reviews (2026-09-30), measured and left", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Superseded by 358 (2026-10-10): carried word for word into the one re-roll wave of map-moving review fixes (the GM, 2026-10-10: "Yes, please."). Was: Filed - from future-work/farming-communities.md, "Found by feature 291's settlement-reviews (2026-09-30), measured and left", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: hamlet
 

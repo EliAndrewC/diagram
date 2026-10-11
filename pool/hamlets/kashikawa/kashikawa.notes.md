@@ -118,7 +118,7 @@ so cannot move; the name can.*
   a separate thing.
 
 - **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
-- **grave island**: Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot, against its bunds, not an island in the plot's middle (each hamlet takes one form).
+- **field grave**: Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot, against its bunds, not an island in the plot's middle (each hamlet takes one form).
 
 ## 2026-09-27 - feature 267: the field grave is the corner form
 

@@ -27675,6 +27675,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/interactive/classes/water_and_ways.py::FieldGrave#modal explanation": {
+  "code": "08d0f59b8b1a2d87",
+  "core": "689fe6ff4f665130",
+  "date": "2026-10-10",
+  "note": "the class's name and key string are labels and decide nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/interactive/classes/water_and_ways.py::FieldPond#modal explanation": {
   "code": "ee4b4f4261205779",
   "core": "45bdcc81b1f14559",
@@ -27694,14 +27704,6 @@
  "l7r/diagram/interactive/classes/water_and_ways.py::Footbridge#modal explanation": {
   "code": "0fcfada50848aad6",
   "core": "3d6f356a286a81ec",
-  "date": "2026-10-03",
-  "note": "key and modal text only; no physical or drawing decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/interactive/classes/water_and_ways.py::GraveIsland#modal explanation": {
-  "code": "e645f9b38e7124cf",
-  "core": "4a18559f90b7a570",
   "date": "2026-10-03",
   "note": "key and modal text only; no physical or drawing decision",
   "research": "",
@@ -44191,10 +44193,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_corner_grave#corner grave": {
-  "code": "4851fa82669edfe3",
-  "core": "e58868cb40f1f622",
-  "date": "2026-10-05",
-  "note": "mound in a plot's corner against its bunds, the bund carried round",
+  "code": "bf839e79f96b6f9c",
+  "core": "2e994d9a7718def6",
+  "date": "2026-10-10",
+  "note": "a mound at a corner of a plot it picks at random, set in from the corner, with the bund carried round it; this is the Japanese form of the even-odds knob",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "3d5e34940b9d67aa"
   },
@@ -44206,18 +44208,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_corner_grave#corner grave size": {
-  "code": "8b53ccd5fa5c4e08",
-  "core": "e58868cb40f1f622",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "code": "afaf22439b896300",
+  "core": "2e994d9a7718def6",
+  "date": "2026-10-10",
+  "note": "the 13 x 9 px mound with one or two stones is not something the page sizes",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_grave_island#basins carved round the island": {
+  "code": "75f2d81ba98e889f",
+  "core": "3e6a7b3867230d6f",
+  "date": "2026-10-10",
+  "note": "carve_around_grave cuts every ring back off the mound disc (radius plus GRAVE_BANK_PX) and halves the host through it, as the drawing page sets out (\"No flooded basin runs under a field grave: the paddy is carved round it ... host plot is split in two through the mound ... each half stops short\"), and that page records the split as its own GUESS",
+  "pages": {
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+  },
+  "research": "2b8a8213b9c89d51",
+  "rests": [
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_grave_island#grave island": {
-  "code": "64180bad4822ace6",
-  "core": "649151acad388c4b",
-  "date": "2026-10-05",
-  "note": "mound inside a plot, the host split, recorded GUESS",
+  "code": "61514cb5af70478b",
+  "core": "3e6a7b3867230d6f",
+  "date": "2026-10-10",
+  "note": "a mound at the middle of the plot; this is the Chinese form of the even-odds knob, and the page records drawing it in a paddy plot as a guess",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "3d5e34940b9d67aa"
   },
@@ -44228,11 +44246,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_grave_island#grave island size": {
-  "code": "806995ba562458ce",
-  "core": "649151acad388c4b",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "code": "efe0b78052520aa5",
+  "core": "3e6a7b3867230d6f",
+  "date": "2026-10-10",
+  "note": "0.55 of the half-span, at least 18 x 12 px, two or three stones; the page does not size the island",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#bank, margin and water proportions": {
