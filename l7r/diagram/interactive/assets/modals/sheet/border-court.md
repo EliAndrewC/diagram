@@ -10,19 +10,21 @@ palanquin could cross, then the step of the formal entrance. No real border post
 receiving a neighboring domain's officials; that use of it is the setting's own.
 
 Guesses:
-- That the court is a garden set with a stone lantern rather than open ground: no account puts a garden between the
-  gate and a guest's formal entrance. The two drawings found of the ground inside a gate both show it open: Joge's,
-  and a garden-book plate Morse reproduced in 1886, whose stone path runs through a second gateway to the entrance and
-  which he dates only loosely, to Sakai "nearly two hundred years ago".
-- What the court's ground is: no source read says the ground before a formal entrance was swept, raked, graveled,
-  sanded or left bare earth before modern times, so the plan gives it no surface of its own.
+- That the court is a garden set with a stone lantern rather than open ground: no garden is known between the gate
+  and a guest's formal entrance, and where a drawing shows the ground just inside a gate, it is open. One old
+  garden-book plate does run a stone path on through a second gateway to an entrance, but of an unnamed house and
+  only loosely dated.
+- What the court's ground is: at Edo's South Town Magistracy, by enthusiasts' accounts, a stone path ran from the main
+  gate to the entrance with small black gravel spread beside it, but what lay before an entrance outside Edo, whether
+  gravel, swept earth or sand, is not known, so the plan draws the court only as the garden's stippled earth.
 
 Depiction: The plan draws the border court as a garden of its own, stippled and set with a stone lantern, inside the
-guests' door and apart from the hearing court.
+guests' door and apart from the hearing court. The ground inside a real gate, before a guest's entrance, was open
+ground a palanquin could cross; the garden is the plan's guess (see Guesses).
 
 Name: border court
 Covers: the receiving court behind a border posting's parley door, and its label
 Form: particular
-Sources: kotobank-bansho, bunka-nuruyu-bansho, kominkai-genkan
+Sources: kotobank-bansho, bunka-nuruyu-bansho, kominkai-genkan, fuchu-joge-pamphlet, morse-1886-homes, wheatbaku-machibugyosho-yashiki, kazusa-bugyosho
 Entry: research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
 Drawing: research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

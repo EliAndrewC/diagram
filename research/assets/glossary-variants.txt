@@ -1863,6 +1863,9 @@ jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
 kabuki	kabuki
+kabuki gate	kabuki gate
+kabuki-mon	kabuki gate
+kabukimon	kabuki gate
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
@@ -2542,6 +2545,7 @@ myōjin	Myojin
 myōken	Myōken
 myōshu	myoshu
 naca	NACA
+nachi gravel	Nachi gravel
 nagachi	nagachi
 nagachi type	nagachi
 nagachi-gata	nagachi

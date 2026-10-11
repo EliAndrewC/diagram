@@ -16178,5 +16178,19 @@
   "variants": [
    "Nanhai"
   ]
+ },
+ "Nachi gravel": {
+  "def": "Small black stones, named for Nachi, spread over the ground of a formal approach. At Edo's South Town Magistracy it was laid outside the paved path from the main gate to the entrance.",
+  "variants": [
+   "Nachi gravel"
+  ]
+ },
+ "kabuki gate": {
+  "def": "A plain gate of two posts with a beam laid across their tops. The record meets it facing the road at the houses granted to the yoriki of Edo's town magistracies.",
+  "variants": [
+   "kabuki gate",
+   "kabukimon",
+   "kabuki-mon"
+  ]
  }
 }
