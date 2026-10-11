@@ -477,188 +477,200 @@
    "verdict": "CLEAR"
   },
   "T10": {
-   "section_sha256": "fa61eabf7df57a58a0d6afc754afd81ee5bb914e043a825e1f4f4e31491bc515",
-   "section_text": "### Wave 119 (T10) - the hamlet's lanes\n\n- `settle.py::_unkinked#a returning leg of 40 ft or more`: 0081 §19 cuts only \"a returning leg under 40 ft\" (its one\n  exception a folded field spur); the code keeps the longer arm whatever the lengths, so the 40 ft does nothing. The cut\n  is made only below 40 ft, and the claim cites 0081's drawing page.\n- `settle.py::settle_shapes#no hairpin or zigzag`: the same rule in the settle's shape pass.\n- `serve.py::lay_door_paths#door path off a grove band`: 0036 lays a lane through a grove band \"with a footpath's\n  clearance and some working room kept off the trees on each side\" (about 22 ft of a 36 ft opening); the code's 0.5 ft\n  margin becomes that working room, and the claim cites 0036.\n- Maps: every pool hamlet is rerolled; a hamlet whose web changes owes no glyph-check (no glyph is redrawn) - the lane\n  law's acceptance sweep and the cohort hold the change.\n\n",
+   "section_sha256": "02dc82285fde783bfd0dfca901fe27517d07ae779685905b60586be662e6d303",
+   "section_text": "### Wave 119 (T10) - the hamlet's lanes\n\n- `settle.py::_unkinked#a returning leg of 40 ft or more`: 0081's drawing page says both \"A lane never doubles back in a\n  hairpin\" (a turn of more than 140 degrees) and \"a returning leg under 40 ft is cut\". A returning leg of 40 ft or more is\n  still a hairpin the first sentence forbids, so the page cuts it too; the code's shorter-arm cut at any length does what the\n  page says, and the claim cites both sentences of 0081's drawing page in place of its GUESS label. impl-drift rules on it;\n  if it reads DRIFTED, the code is changed to the reading it gives.\n- `settle.py::settle_shapes#no hairpin or zigzag`: the same reading in the settle's shape pass.\n- `serve.py::lay_door_paths#door path off a grove band`: 0036 lays a lane through a grove band \"with a footpath's\n  clearance and some working room kept off the trees on each side\" (about 22 ft of a 36 ft opening: about 9.5 ft each side\n  of a 3 ft tread); the code's 0.5 ft margin becomes that working room, and the claim cites 0036. Measured on the hamlet\n  cohort before it is kept: a farm the wider berth leaves unreached is a conflict put to `spec-fidelity` (rule 1).\n- Maps: every pool hamlet is rerolled; a hamlet whose web changes owes no glyph-check (no glyph is redrawn) - the lane\n  law's acceptance sweep and the cohort hold the change.\n\n",
    "reviewed": "2026-10-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "B3-1",
      "class": "within",
-     "summary": "The batch's work list: 328's ranking brought current - 39 rows closed by batch 2's re-checks marked wave 118, 197 open rows (133 E3 DRIFTED).",
-     "why": "FR-001's starting point, kept as the one record. Re-derived from 37c8221bc: waves.json gains exactly 39 keys, all '118', every one open at 37c8221bc~1; open in-scope rows 236 -> 197, E3 DRIFTED 133; none of the 39 is a finding in today's make claims-report, and every in-scope report finding has an open row (0 missing)."
+     "summary": "The work list: 328's ranking brought current - 39 rows closed by batch 2's re-checks (wave 118), then audit/scope.py re-run on today's cache; the plan states 18 more rows re-marked deferred, 179 open (124 E3 DRIFTED), 158 DEFERRED in the claims report.",
+     "why": "FR-001's starting point kept as the one record, and the counts re-derive from ranking.json at fa7491c3c exactly as stated (179 open in scope, 124 E3 DRIFTED; make claims-report: DEFERRED 158, owed 0; no open kept row the report reads DEFERRED). The scope of four of the 18 re-marked rows is ruled separately (B3-1a)."
+    },
+    {
+     "id": "B3-1a",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "summary": "The scope.py re-run marks four open rows on docs/building-programs.md scope: deferred - Country shrine #hall in the middle of the one roof (E3), #building size anchors (E4), #innermost arch one pitch off the hall (E4), and Magistrate's manor #universal shrine (E3) - so they leave the work list.",
+     "why": "The GM's amendment 8 keeps exactly these: 'code actually executed by magistracies, country shrines, and scripted hamlets', and 328 FR-010 names 'the Mode A procedures' as kept. Measured: all four were 'kept' at 37c8221bc and 'deferred' at fa7491c3c; today's make claims-report (the claims gate's own scope, which covers 'the engine and the Mode A procedures') reads all four in scope as DRIFTED. Cause, read in the code: scope_of's Mode A test is path.startswith(('buildings', 'docs/buildings')), which 'docs/building-programs.md' does not match, so the row falls through to the terminal return 'deferred'; the new '::' guard does not reach it (these keys carry '::'). 372 wave 107 fixed building-programs rows as in scope. Rule 3 as a rule is right (B3-5); this application of it narrows FR-001 by a defective measurement. Should say: scope_of treats docs/building-programs.md as mode-a (the same Mode A procedure set the claims gate covers), scope.py re-run, the four rows (and the closed building-programs rows' column) re-marked, and the plan's counts restated (183 open if nothing else moves). None of the four is E0-E2, so the waves themselves are unchanged."
     },
     {
      "id": "B3-2",
      "class": "within",
      "summary": "Rule 1, default: a row whose fix text says 'label it a DEVIATION and have the drawing page record it' is fixed by changing the code to match the page (W118-2).",
-     "why": "328 FR-004 and its Edge Cases verbatim: a fix changes the implementation to match the research; recording a DEVIATION is the exception path (amendment 5). The GM: 'I'm not sure there's any reason for our implementation to not match for anything.'"
+     "why": "328 FR-004 and its Edge Cases: a fix changes the implementation to match the research; a recorded DEVIATION is the exception path."
     },
     {
      "id": "B3-3",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "summary": "Rule 1, fallback: where a change 'still looks wrong', the exception goes to spec-fidelity and is recorded only if LEGITIMATE; 'otherwise the row goes to the GM's held list'.",
-     "why": "A NOT LEGITIMATE ruling says there is no legitimate reason not to match, so the literal outcome (XVI, 328's Edge Cases) is the code changed. Routing it to the held list instead lets a row the GM asked fixed reach the end unfixed after a failed exception check - ten open rows are flagged 'deviation-tempting' in the ranking, and each would have this route. 374 FR-004's held list is for a question the GM must answer, recorded with what was searched and found; SC-003 sends it only rows the session cannot fix. Rewrite: '...recorded only if ruled LEGITIMATE; otherwise the code is changed to match the page.' (A row whose fix turns on a ruling or canon only the GM holds already has FR-004's route and needs no plan rule.)"
+     "class": "within",
+     "summary": "Rule 1, fallback: a change that still looks wrong goes to spec-fidelity with the GM's words, recorded only if ruled LEGITIMATE; otherwise the code is changed to match the page.",
+     "why": "Round 1's rewrite applied verbatim: a NOT LEGITIMATE ruling now ends in the literal outcome (XVI), not the held list. A gate on exceptions, not an exception."
     },
     {
      "id": "B3-4",
      "class": "within",
-     "summary": "Rule 2, engine discipline: make quick per fix; reroll only reached maps, compared by git diff HEAD; one impl-drift per wave over re-owed claims; declared occasions on a green gate, engine frozen meanwhile; one make done at the batch close with the timing pair, perf-audit at band 1 or more.",
-     "why": "328 FR-005 (batched, GM 2026-10-08) and 372 FR-003 as carried by 374 FR-002. perf-audit at band 1+ is that agent's own contract (.claude/agents/perf-audit.md: 'Use whenever ... reports a band of 1 or more')."
+     "summary": "Rule 2, engine discipline: make quick per fix; reroll only reached maps, compared by git diff HEAD; one impl-drift per wave; declared occasions on a green gate, engine frozen meanwhile; one make done at the batch close with the timing pair, perf-audit at band 1 or more.",
+     "why": "328 FR-005 (batched, GM 2026-10-08) and 372 FR-003 as carried by 374 FR-002."
     },
     {
      "id": "B3-5",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "summary": "Rule 3 as worded: a row on code 'no live map executes' (named by module: paddy and ribbon builders, a town's kiln, a city's matrix permissions) is not in this batch and 'waits for a batch that rules on legacy-only code'.",
-     "why": "Not a narrowing of FR-001 in SUBSTANCE: FR-001 takes rows 'in scope', and 328 FR-010 (carried by FR-002) defers code only legacy maps run. But FR-010 decides it by the execution record (audit/scope.py -> dev/claims-deferred.json), stamps the rows 'scope: deferred', and says no wave takes them; the plan decides by name and promises a future batch that 'rules' on them - the session's judgment in place of the measure, which 328's amendment 8 round 1 already refused ('the scope judged by module and name'). Measured: 13 open rows ranked 'scope: kept' read DEFERRED in today's make claims-report, so the 197 counts them while FR-010 says they are out; the plan's own explanation ('rows on overlap/taxonomy.py or settlement/fields/paddy.py are in the ranking and not in the report') is wrong - they ARE in the report, as DEFERRED; and paddy.py::PaddyMixin._wf_feed, called only from the deferred water_field (paddy.py:594), reads DRIFTED in scope because claims-deferred.json predates it - a name-based rule would drop it, the measure keeps it until scope.py is re-run. Rewrite: 'A row whose unit audit/scope.py derives DEFERRED (328 FR-010, re-run on today's cache) leaves the work list; its ranking row is re-stamped scope: deferred and no wave takes it.' - and drop the future batch."
+     "class": "within",
+     "summary": "Rule 3: a row whose unit audit/scope.py derives DEFERRED (328 FR-010, re-run on today's cache) is re-marked scope: deferred and no wave takes it; the future 'legacy-only batch' dropped.",
+     "why": "Round 1's rewrite applied: scope decided by the execution record FR-010 names, not by module name. The scope.py patch keeping a row on no code unit at its recorded scope is sound (FR-010 decides code units by execution; no execution can decide a row with no unit). The instrument's defect on docs/building-programs.md is B3-1a."
     },
     {
      "id": "B3-6",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "summary": "Not in this batch: the seven named legacy rows - paddy.py water_field (canals set in, row bunds staggered, plot size), hill.py build_ribbon, trades.py kiln, taxonomy.py _MATRIX_ALLOWED_KEYS (ways and water through the rampart) and _OVERLAP_EXEMPT (merchant estate court).",
-     "why": "Already implied by the GM's own words (amendment 8, 2026-10-07: 'limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets; legacy hand-drawn settlements shall have their findings marked as DEFERRED'). Measured, not assumed: all seven read DEFERRED in today's make claims-report and are listed in dev/claims-deferred.json (units, or the matrix row by key). Their ranking rows still say 'scope: kept' - see B3-5."
+     "summary": "Not in this batch: the legacy rows (paddy water_field, hill build_ribbon, trades kiln, taxonomy matrix and overlap rows), now re-marked scope: deferred by the re-run.",
+     "why": "Already implied by the GM's own words (amendment 8, 2026-10-07: 'legacy hand-drawn settlements shall have their findings marked as DEFERRED'), and now decided by the measure FR-010 names: ranking.json marks them deferred and make claims-report reads them DEFERRED; paddy.py _wf_feed and _wf_outline joined dev/claims-deferred.json in the same re-run."
     },
     {
      "id": "B3-7",
      "class": "within",
      "summary": "Not in this batch: the two held rows (the door band, fixture_quota).",
-     "why": "374 FR-004 and 'What it carries': held for the GM, asked at the feature's end (328's goal amendment)."
+     "why": "374 FR-004: held for the GM, asked at the feature's end (328's goal amendment)."
     },
     {
      "id": "B3-8",
      "class": "within",
-     "summary": "Not in this batch: oblique_at's square crossing (E0 DRIFTED), whose question is the E4 row beside it.",
-     "why": "328 FR-003: a row follows any row it depends on; its own fix text names the E4 row (law_water.py::oblique_at#a channel crossing at its way's angle) as the question. Note: its ranking 'after' field is empty and should carry that key."
+     "summary": "Not in this batch: oblique_at#square ditch crossing (E0 DRIFTED), waiting on the E4 row oblique_at#a channel crossing at its way's angle, 'named in its after'.",
+     "why": "328 FR-003: a row follows the row it depends on. But the plan's premise is false of the record: ranking.json's row has after [] - found-wave118.jsonl carries the E4 key, and merge.py applies overrides.json after the found files (rows[k].update(o)), where this key's override has after: [], so it wins. Should say: the override carries the E4 key in after (merge re-run, which also re-tiers the row E4 by the merge's own propagation), so the hold rests on the ranking, not on plan text. Not a narrowing: the exclusion itself is the right one."
     },
     {
      "id": "B3-9",
      "class": "within",
-     "summary": "Batch 3 is three waves (119-121), against FR-002's 4-5.",
-     "why": "Measured: the three waves take every E0-E2 open row not held, not measured DEFERRED and not waiting on an E4 row (10 of the 20 rows tiered E0-E2); the next rows are E3 sheet redraws. A smaller batch lands sooner and narrows nothing asked; batch 1 cleared at three. Worth one line in the plan saying why."
+     "summary": "Batch 3 is three waves (119-121); 'the three waves take every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research'.",
+     "why": "Re-derived from ranking.json: 13 open in-scope E0-E2 rows - two held, oblique_at waiting on its E4 row, the other ten across waves 119-121. The line round 1 asked for is present. (If W119-1/W119-2 go to research as ruled, the sentence still holds: they then wait on research.)"
     },
     {
      "id": "W119-1",
-     "class": "within",
-     "summary": "settle.py::_unkinked: the cut made only for a returning leg under 40 ft (a folded field spur cut at the fold); claim cites 0081's drawing page.",
-     "why": "0081 drawing, verbatim: 'where a lane turns back on itself, a returning leg under 40 ft is cut. A folded field spur is cut at the fold, an exception to the 40 ft rule.' The code keeps the longer arm whatever the lengths, so the 40 ft does nothing; the page's general sentence ('never doubling back on itself') is stated by the page as this threshold, so no page conflict for research. Code toward page (FR-004)."
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "summary": "settle.py::_unkinked#a returning leg of 40 ft or more: read 0081's 'A lane never doubles back in a hairpin' as cutting a returning leg of any length, so the code's shorter-arm cut at any length 'does what the page says'; the claim drops its GUESS label and cites both sentences; impl-drift rules, DRIFTED meaning the code changes to its reading.",
+     "why": "0081's drawing page, verbatim: 'A lane never doubles back in a hairpin. A turn of more than 140 degrees is a hairpin, and where a lane turns back on itself, a returning leg under 40 ft is cut. A folded field spur is cut at the fold, an exception to the 40 ft rule.' Under the plan's reading every returning leg is cut, so the 40 ft does nothing and the field spur has no '40 ft rule' to be an exception to - the page's own number and its own exception go dead, the defect round 1 found in the code. The page's parallel bullet shows the threshold has bite ('A tail of under 40 ft beyond a crossing is cut ... its tail cut however long it is, an exception to the 40 ft rule'). Yet the headline forbids the hairpin a longer leg leaves. So the page forbids the shape and gives no remedy for the longer leg: that is the gap wave 45's spec-fidelity filed as this same key's E4 row ('the page gives no remedy for a hairpin whose returning leg is 40 ft or more; the code cuts it as a shorter one (GUESS)'). The plan completes the page's thought so the current code matches it, and turns a labeled GUESS into a citation - an unlabeled guess, the record's one failure. Handing the question to impl-drift does not cure it: impl-drift has already ruled on this question (batch 2, MISLABELED: 'a longer leg is not cut'), and 375 puts a task's decisions' verdict before its checks. Neither literal fix is available (cutting only under 40 ft would draw the hairpins the headline forbids and the lane law refuses - wave 45 measured the settle looping and the last resort dropping the lane). Should say: the row is not taken in this batch; it waits on research - re-tiered E4 (its wave-45 question: what a worn path did where it turned back over a longer stretch), or the page's conflict put to the GM through FR-004's held list - listed under 'Not in this batch' as waiting on research; meanwhile the code keeps its cut and the claim keeps its GUESS label."
     },
     {
      "id": "W119-2",
-     "class": "within",
-     "summary": "settle.py::settle_shapes: the same 40 ft rule in the settle's shape pass.",
-     "why": "Row 559's own fix ('cuts as the fixed _unkinked does'); same page, same direction."
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "summary": "settle.py::settle_shapes#no hairpin or zigzag: 'the same reading in the settle's shape pass'.",
+     "why": "settle_shapes cuts by calling _unkinked (its claim: 'cut as `_unkinked` cuts it'), and its row's own fix is 'cuts as the fixed _unkinked does (40 ft leg, ...)': it rests on W119-1's reading and falls with it. Should say: it follows _unkinked's row and waits with it (its after naming that row)."
     },
     {
      "id": "W119-3",
      "class": "within",
-     "summary": "serve.py::lay_door_paths: the 0.5 ft margin through a grove band becomes 0036's working room; claim cites 0036.",
-     "why": "0036 drawing, verbatim: 'a footpath's clearance and some working room kept off the trees on each side, about 22 ft of the opening'; code today grow = 2.0 * (1.5 + 0.5) (serve.py:457). Code toward page."
+     "summary": "serve.py::lay_door_paths: the 0.5 ft margin off a grove band becomes 0036's working room (about 9.5 ft each side of a 3 ft tread, 22 ft of a 36 ft opening); the claim cites 0036; measured on the hamlet cohort, a farm the wider berth leaves unreached put to spec-fidelity under rule 1.",
+     "why": "0036 drawing, verbatim: 'the maps lay a lane with a footpath's clearance and some working room kept off the trees on each side, about 22 ft of the opening'; (22 - 3) / 2 = 9.5. Code toward page (FR-004). The cohort measurement and the route through rule 1 (now ending in code-toward-page on NOT LEGITIMATE) are a valve, not a carve-out."
     },
     {
      "id": "W119-4",
      "class": "within",
      "summary": "Every pool hamlet rerolled; no glyph-check owed (no glyph redrawn); the lane law's acceptance sweep and the cohort hold the change.",
-     "why": "328 FR-005 / feature 294: occasions are an element new, a glyph redrawn, or an element re-placed by substantially different rules (docs/reviews.md); a threshold restored to its page reshapes lanes without a new placement rule. review_owed.py remains the mechanical judge."
+     "why": "Feature 294's occasions; review_owed.py remains the mechanical judge."
     }
    ],
    "verdict": "BLOCKED"
   },
   "T11": {
-   "section_sha256": "7f7255e3c89a73413e15bd9d280e326b35513f8122a02614dbe246f811fd27f5",
-   "section_text": "### Wave 120 (T11) - the hamlet's ground\n\n- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page places the wood beyond the fields and refuses\n  ground below the houses only \"beside a river or marsh\"; the dry-ground refusal goes, and the claim cites the page.\n- `fields/comb.py::_comb_draw_source#feeder brook width`: a brook about 7 ft wide (0059, 0068) drawn in feet,\n  `self.px(7.0)`, not 7 px.\n- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size\n  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge, and the shrine precinct, only that\n  page's GUESS, stays withheld with its claim labeled GUESS.\n- Maps: the pool hamlets rerolled; the feeder brook is a glyph redrawn at its true width, so a glyph-check on one hamlet\n  that draws it is the wave's occasion.\n\n",
+   "section_sha256": "cc17e1dd4282fc9c2a5e9429e6f5970aeed966f5cdf72aa88b609e4a98890652",
+   "section_text": "### Wave 120 (T11) - the hamlet's ground\n\n- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page places the wood beyond the fields and refuses\n  ground below the houses only \"beside a river or marsh\"; the dry-ground refusal goes, and the claim cites the page.\n- `fields/comb.py::_comb_draw_source#feeder brook width`: a brook about 7 ft wide (0059, 0068) drawn in feet,\n  `self.px(7.0)`, not 7 px.\n- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size\n  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).\n  The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only\n  shrine is a dooryard hokora).\n- Maps: the pool hamlets rerolled. Occasions: the feeder brook is a glyph redrawn at its true width (a glyph-check on one\n  hamlet that draws it), and the board's new bridgehead seat and the wood's newly allowed ground are elements re-placed\n  (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).\n\n",
    "reviewed": "2026-10-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "B3-1",
      "class": "within",
-     "summary": "The batch's work list: 328's ranking brought current - 39 rows closed by batch 2's re-checks marked wave 118, 197 open rows (133 E3 DRIFTED).",
-     "why": "FR-001's starting point, kept as the one record. Re-derived from 37c8221bc: waves.json gains exactly 39 keys, all '118', every one open at 37c8221bc~1; open in-scope rows 236 -> 197, E3 DRIFTED 133; none of the 39 is a finding in today's make claims-report, and every in-scope report finding has an open row (0 missing)."
+     "summary": "The work list: 328's ranking brought current - 39 rows closed by batch 2's re-checks (wave 118), then audit/scope.py re-run on today's cache; the plan states 18 more rows re-marked deferred, 179 open (124 E3 DRIFTED), 158 DEFERRED in the claims report.",
+     "why": "FR-001's starting point kept as the one record, and the counts re-derive from ranking.json at fa7491c3c exactly as stated (179 open in scope, 124 E3 DRIFTED; make claims-report: DEFERRED 158, owed 0; no open kept row the report reads DEFERRED). The scope of four of the 18 re-marked rows is ruled separately (B3-1a)."
+    },
+    {
+     "id": "B3-1a",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "summary": "The scope.py re-run marks four open rows on docs/building-programs.md scope: deferred - Country shrine #hall in the middle of the one roof (E3), #building size anchors (E4), #innermost arch one pitch off the hall (E4), and Magistrate's manor #universal shrine (E3) - so they leave the work list.",
+     "why": "The GM's amendment 8 keeps exactly these: 'code actually executed by magistracies, country shrines, and scripted hamlets', and 328 FR-010 names 'the Mode A procedures' as kept. Measured: all four were 'kept' at 37c8221bc and 'deferred' at fa7491c3c; today's make claims-report (the claims gate's own scope, which covers 'the engine and the Mode A procedures') reads all four in scope as DRIFTED. Cause, read in the code: scope_of's Mode A test is path.startswith(('buildings', 'docs/buildings')), which 'docs/building-programs.md' does not match, so the row falls through to the terminal return 'deferred'; the new '::' guard does not reach it (these keys carry '::'). 372 wave 107 fixed building-programs rows as in scope. Rule 3 as a rule is right (B3-5); this application of it narrows FR-001 by a defective measurement. Should say: scope_of treats docs/building-programs.md as mode-a (the same Mode A procedure set the claims gate covers), scope.py re-run, the four rows (and the closed building-programs rows' column) re-marked, and the plan's counts restated (183 open if nothing else moves). None of the four is E0-E2, so the waves themselves are unchanged."
     },
     {
      "id": "B3-2",
      "class": "within",
      "summary": "Rule 1, default: a row whose fix text says 'label it a DEVIATION and have the drawing page record it' is fixed by changing the code to match the page (W118-2).",
-     "why": "328 FR-004 and its Edge Cases verbatim: a fix changes the implementation to match the research; recording a DEVIATION is the exception path (amendment 5). The GM: 'I'm not sure there's any reason for our implementation to not match for anything.'"
+     "why": "328 FR-004 and its Edge Cases: a fix changes the implementation to match the research; a recorded DEVIATION is the exception path."
     },
     {
      "id": "B3-3",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "summary": "Rule 1, fallback: where a change 'still looks wrong', the exception goes to spec-fidelity and is recorded only if LEGITIMATE; 'otherwise the row goes to the GM's held list'.",
-     "why": "A NOT LEGITIMATE ruling says there is no legitimate reason not to match, so the literal outcome (XVI, 328's Edge Cases) is the code changed. Routing it to the held list instead lets a row the GM asked fixed reach the end unfixed after a failed exception check - ten open rows are flagged 'deviation-tempting' in the ranking, and each would have this route. 374 FR-004's held list is for a question the GM must answer, recorded with what was searched and found; SC-003 sends it only rows the session cannot fix. Rewrite: '...recorded only if ruled LEGITIMATE; otherwise the code is changed to match the page.' (A row whose fix turns on a ruling or canon only the GM holds already has FR-004's route and needs no plan rule.)"
+     "class": "within",
+     "summary": "Rule 1, fallback: a change that still looks wrong goes to spec-fidelity with the GM's words, recorded only if ruled LEGITIMATE; otherwise the code is changed to match the page.",
+     "why": "Round 1's rewrite applied verbatim: a NOT LEGITIMATE ruling now ends in the literal outcome (XVI), not the held list. A gate on exceptions, not an exception."
     },
     {
      "id": "B3-4",
      "class": "within",
-     "summary": "Rule 2, engine discipline: make quick per fix; reroll only reached maps, compared by git diff HEAD; one impl-drift per wave over re-owed claims; declared occasions on a green gate, engine frozen meanwhile; one make done at the batch close with the timing pair, perf-audit at band 1 or more.",
-     "why": "328 FR-005 (batched, GM 2026-10-08) and 372 FR-003 as carried by 374 FR-002. perf-audit at band 1+ is that agent's own contract (.claude/agents/perf-audit.md: 'Use whenever ... reports a band of 1 or more')."
+     "summary": "Rule 2, engine discipline: make quick per fix; reroll only reached maps, compared by git diff HEAD; one impl-drift per wave; declared occasions on a green gate, engine frozen meanwhile; one make done at the batch close with the timing pair, perf-audit at band 1 or more.",
+     "why": "328 FR-005 (batched, GM 2026-10-08) and 372 FR-003 as carried by 374 FR-002."
     },
     {
      "id": "B3-5",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "summary": "Rule 3 as worded: a row on code 'no live map executes' (named by module: paddy and ribbon builders, a town's kiln, a city's matrix permissions) is not in this batch and 'waits for a batch that rules on legacy-only code'.",
-     "why": "Not a narrowing of FR-001 in SUBSTANCE: FR-001 takes rows 'in scope', and 328 FR-010 (carried by FR-002) defers code only legacy maps run. But FR-010 decides it by the execution record (audit/scope.py -> dev/claims-deferred.json), stamps the rows 'scope: deferred', and says no wave takes them; the plan decides by name and promises a future batch that 'rules' on them - the session's judgment in place of the measure, which 328's amendment 8 round 1 already refused ('the scope judged by module and name'). Measured: 13 open rows ranked 'scope: kept' read DEFERRED in today's make claims-report, so the 197 counts them while FR-010 says they are out; the plan's own explanation ('rows on overlap/taxonomy.py or settlement/fields/paddy.py are in the ranking and not in the report') is wrong - they ARE in the report, as DEFERRED; and paddy.py::PaddyMixin._wf_feed, called only from the deferred water_field (paddy.py:594), reads DRIFTED in scope because claims-deferred.json predates it - a name-based rule would drop it, the measure keeps it until scope.py is re-run. Rewrite: 'A row whose unit audit/scope.py derives DEFERRED (328 FR-010, re-run on today's cache) leaves the work list; its ranking row is re-stamped scope: deferred and no wave takes it.' - and drop the future batch."
+     "class": "within",
+     "summary": "Rule 3: a row whose unit audit/scope.py derives DEFERRED (328 FR-010, re-run on today's cache) is re-marked scope: deferred and no wave takes it; the future 'legacy-only batch' dropped.",
+     "why": "Round 1's rewrite applied: scope decided by the execution record FR-010 names, not by module name. The scope.py patch keeping a row on no code unit at its recorded scope is sound (FR-010 decides code units by execution; no execution can decide a row with no unit). The instrument's defect on docs/building-programs.md is B3-1a."
     },
     {
      "id": "B3-6",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "summary": "Not in this batch: the seven named legacy rows - paddy.py water_field (canals set in, row bunds staggered, plot size), hill.py build_ribbon, trades.py kiln, taxonomy.py _MATRIX_ALLOWED_KEYS (ways and water through the rampart) and _OVERLAP_EXEMPT (merchant estate court).",
-     "why": "Already implied by the GM's own words (amendment 8, 2026-10-07: 'limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets; legacy hand-drawn settlements shall have their findings marked as DEFERRED'). Measured, not assumed: all seven read DEFERRED in today's make claims-report and are listed in dev/claims-deferred.json (units, or the matrix row by key). Their ranking rows still say 'scope: kept' - see B3-5."
+     "summary": "Not in this batch: the legacy rows (paddy water_field, hill build_ribbon, trades kiln, taxonomy matrix and overlap rows), now re-marked scope: deferred by the re-run.",
+     "why": "Already implied by the GM's own words (amendment 8, 2026-10-07: 'legacy hand-drawn settlements shall have their findings marked as DEFERRED'), and now decided by the measure FR-010 names: ranking.json marks them deferred and make claims-report reads them DEFERRED; paddy.py _wf_feed and _wf_outline joined dev/claims-deferred.json in the same re-run."
     },
     {
      "id": "B3-7",
      "class": "within",
      "summary": "Not in this batch: the two held rows (the door band, fixture_quota).",
-     "why": "374 FR-004 and 'What it carries': held for the GM, asked at the feature's end (328's goal amendment)."
+     "why": "374 FR-004: held for the GM, asked at the feature's end (328's goal amendment)."
     },
     {
      "id": "B3-8",
      "class": "within",
-     "summary": "Not in this batch: oblique_at's square crossing (E0 DRIFTED), whose question is the E4 row beside it.",
-     "why": "328 FR-003: a row follows any row it depends on; its own fix text names the E4 row (law_water.py::oblique_at#a channel crossing at its way's angle) as the question. Note: its ranking 'after' field is empty and should carry that key."
+     "summary": "Not in this batch: oblique_at#square ditch crossing (E0 DRIFTED), waiting on the E4 row oblique_at#a channel crossing at its way's angle, 'named in its after'.",
+     "why": "328 FR-003: a row follows the row it depends on. But the plan's premise is false of the record: ranking.json's row has after [] - found-wave118.jsonl carries the E4 key, and merge.py applies overrides.json after the found files (rows[k].update(o)), where this key's override has after: [], so it wins. Should say: the override carries the E4 key in after (merge re-run, which also re-tiers the row E4 by the merge's own propagation), so the hold rests on the ranking, not on plan text. Not a narrowing: the exclusion itself is the right one."
     },
     {
      "id": "B3-9",
      "class": "within",
-     "summary": "Batch 3 is three waves (119-121), against FR-002's 4-5.",
-     "why": "Measured: the three waves take every E0-E2 open row not held, not measured DEFERRED and not waiting on an E4 row (10 of the 20 rows tiered E0-E2); the next rows are E3 sheet redraws. A smaller batch lands sooner and narrows nothing asked; batch 1 cleared at three. Worth one line in the plan saying why."
+     "summary": "Batch 3 is three waves (119-121); 'the three waves take every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research'.",
+     "why": "Re-derived from ranking.json: 13 open in-scope E0-E2 rows - two held, oblique_at waiting on its E4 row, the other ten across waves 119-121. The line round 1 asked for is present. (If W119-1/W119-2 go to research as ruled, the sentence still holds: they then wait on research.)"
     },
     {
      "id": "W120-1",
      "class": "within",
      "summary": "hinterland/parcels.py::_beyond_the_fields: the dry-ground refusal of a wood below the houses goes; the claim cites 0077's drawing page.",
-     "why": "0077 drawing: the wood beyond the fields, on the level where no hill; 'Low ground by a river or marsh is left to grass' - the only refusal. Code (parcels.py:300 'if k < 2', claim at :274) refuses on any ground. Code toward page."
+     "why": "0077 drawing, verbatim: 'Low ground by a river or marsh is left to grass, not wood. A wood seated below the houses, past the fields and beside a river or marsh, would stand where the record puts a village's grass ...' - the only refusal; the code's 'if k < 2' refuses on any ground. Code toward page."
     },
     {
      "id": "W120-2",
      "class": "within",
      "summary": "fields/comb.py::_comb_draw_source: the feeder brook drawn self.px(7.0), about 7 ft, not 7 px.",
-     "why": "Row 421's own fix (0059, 0068). A unit error corrected toward the page."
+     "why": "The row's own fix (0059, 0068); a unit error corrected toward the page."
     },
     {
      "id": "W120-3",
      "class": "within",
      "summary": "_knobs.py::_kosatsuba_seat_ok: the bridgehead joins the seat forms where the settlement has a bridge.",
-     "why": "0190 attests boards at 'bridge ends' (adachi-kosatsu) with no size qualifier. Measured live, not inert: every pool hamlet's manifest records bridges (Inashiro 9, Kashikawa 9, Kuwabata 6, Mizuguchi 4, Sawada 10; most 27 ft spans). Code toward page."
+     "why": "0190 attests boards at bridge ends with no size qualifier ('a verge, the front of a gate, the foot of a bridge'); every pool hamlet records four to ten bridges (round 1's manifests). Code toward page."
     },
     {
      "id": "W120-4",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "summary": "_knobs.py::_kosatsuba_seat_ok: the shrine precinct, only 0190's GUESS, stays withheld, its claim labeled GUESS.",
-     "why": "Physically impossible on every kept map: no pool hamlet has a shrine precinct (each manifest's 'shrines' is [] and 'shrine' None; the only shrine is a 6 x 6 ft farm_fixtures hokora in a dooryard, private ground off the way). Note for the wording: the claim should say that reason (no precinct on a hamlet), not present the withholding as a guess against the page's guess; a seat 'where the settlement has a shrine precinct', as the bridgehead is written, would carry it if one appears."
+     "summary": "_knobs.py::_kosatsuba_seat_ok: the shrine precinct stays withheld, its claim giving the reason - no kept map draws a precinct (the pool hamlets' only shrine is a dooryard hokora).",
+     "why": "Physically impossible on every kept map: no pool hamlet has a shrine precinct (round 1 measured each manifest's shrines [] and shrine None). Round 1's wording note applied: the claim states that reason rather than a guess against the page's guess."
     },
     {
      "id": "W120-5",
      "class": "within",
-     "summary": "The pool hamlets rerolled; the feeder brook is a glyph redrawn at true width, so a glyph-check on one hamlet that draws it is the wave's occasion.",
-     "why": "feature 294's glyph-redrawn occasion. Note: the board's new bridgehead seat and the wood's newly admitted ground may each be an element 're-placed by substantially different rules' (docs/reviews.md, placement-changed:); declare or rule them out when the wave's occasions are written - review_owed.py and pair-hooks hold it."
+     "summary": "The pool hamlets rerolled; occasions: glyph-redrawn for the feeder brook at true width, and placement-changed for the board's bridgehead seat and the wood's newly allowed ground, a glyph-check each on one hamlet where the roll moves them.",
+     "why": "Feature 294's occasions (glyph redrawn; element re-placed by substantially different rules), round 1's note applied."
     }
    ],
    "verdict": "BLOCKED"
@@ -672,71 +684,76 @@
     {
      "id": "B3-1",
      "class": "within",
-     "summary": "The batch's work list: 328's ranking brought current - 39 rows closed by batch 2's re-checks marked wave 118, 197 open rows (133 E3 DRIFTED).",
-     "why": "FR-001's starting point, kept as the one record. Re-derived from 37c8221bc: waves.json gains exactly 39 keys, all '118', every one open at 37c8221bc~1; open in-scope rows 236 -> 197, E3 DRIFTED 133; none of the 39 is a finding in today's make claims-report, and every in-scope report finding has an open row (0 missing)."
+     "summary": "The work list: 328's ranking brought current - 39 rows closed by batch 2's re-checks (wave 118), then audit/scope.py re-run on today's cache; the plan states 18 more rows re-marked deferred, 179 open (124 E3 DRIFTED), 158 DEFERRED in the claims report.",
+     "why": "FR-001's starting point kept as the one record, and the counts re-derive from ranking.json at fa7491c3c exactly as stated (179 open in scope, 124 E3 DRIFTED; make claims-report: DEFERRED 158, owed 0; no open kept row the report reads DEFERRED). The scope of four of the 18 re-marked rows is ruled separately (B3-1a)."
+    },
+    {
+     "id": "B3-1a",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "summary": "The scope.py re-run marks four open rows on docs/building-programs.md scope: deferred - Country shrine #hall in the middle of the one roof (E3), #building size anchors (E4), #innermost arch one pitch off the hall (E4), and Magistrate's manor #universal shrine (E3) - so they leave the work list.",
+     "why": "The GM's amendment 8 keeps exactly these: 'code actually executed by magistracies, country shrines, and scripted hamlets', and 328 FR-010 names 'the Mode A procedures' as kept. Measured: all four were 'kept' at 37c8221bc and 'deferred' at fa7491c3c; today's make claims-report (the claims gate's own scope, which covers 'the engine and the Mode A procedures') reads all four in scope as DRIFTED. Cause, read in the code: scope_of's Mode A test is path.startswith(('buildings', 'docs/buildings')), which 'docs/building-programs.md' does not match, so the row falls through to the terminal return 'deferred'; the new '::' guard does not reach it (these keys carry '::'). 372 wave 107 fixed building-programs rows as in scope. Rule 3 as a rule is right (B3-5); this application of it narrows FR-001 by a defective measurement. Should say: scope_of treats docs/building-programs.md as mode-a (the same Mode A procedure set the claims gate covers), scope.py re-run, the four rows (and the closed building-programs rows' column) re-marked, and the plan's counts restated (183 open if nothing else moves). None of the four is E0-E2, so the waves themselves are unchanged."
     },
     {
      "id": "B3-2",
      "class": "within",
      "summary": "Rule 1, default: a row whose fix text says 'label it a DEVIATION and have the drawing page record it' is fixed by changing the code to match the page (W118-2).",
-     "why": "328 FR-004 and its Edge Cases verbatim: a fix changes the implementation to match the research; recording a DEVIATION is the exception path (amendment 5). The GM: 'I'm not sure there's any reason for our implementation to not match for anything.'"
+     "why": "328 FR-004 and its Edge Cases: a fix changes the implementation to match the research; a recorded DEVIATION is the exception path."
     },
     {
      "id": "B3-3",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "summary": "Rule 1, fallback: where a change 'still looks wrong', the exception goes to spec-fidelity and is recorded only if LEGITIMATE; 'otherwise the row goes to the GM's held list'.",
-     "why": "A NOT LEGITIMATE ruling says there is no legitimate reason not to match, so the literal outcome (XVI, 328's Edge Cases) is the code changed. Routing it to the held list instead lets a row the GM asked fixed reach the end unfixed after a failed exception check - ten open rows are flagged 'deviation-tempting' in the ranking, and each would have this route. 374 FR-004's held list is for a question the GM must answer, recorded with what was searched and found; SC-003 sends it only rows the session cannot fix. Rewrite: '...recorded only if ruled LEGITIMATE; otherwise the code is changed to match the page.' (A row whose fix turns on a ruling or canon only the GM holds already has FR-004's route and needs no plan rule.)"
+     "class": "within",
+     "summary": "Rule 1, fallback: a change that still looks wrong goes to spec-fidelity with the GM's words, recorded only if ruled LEGITIMATE; otherwise the code is changed to match the page.",
+     "why": "Round 1's rewrite applied verbatim: a NOT LEGITIMATE ruling now ends in the literal outcome (XVI), not the held list. A gate on exceptions, not an exception."
     },
     {
      "id": "B3-4",
      "class": "within",
-     "summary": "Rule 2, engine discipline: make quick per fix; reroll only reached maps, compared by git diff HEAD; one impl-drift per wave over re-owed claims; declared occasions on a green gate, engine frozen meanwhile; one make done at the batch close with the timing pair, perf-audit at band 1 or more.",
-     "why": "328 FR-005 (batched, GM 2026-10-08) and 372 FR-003 as carried by 374 FR-002. perf-audit at band 1+ is that agent's own contract (.claude/agents/perf-audit.md: 'Use whenever ... reports a band of 1 or more')."
+     "summary": "Rule 2, engine discipline: make quick per fix; reroll only reached maps, compared by git diff HEAD; one impl-drift per wave; declared occasions on a green gate, engine frozen meanwhile; one make done at the batch close with the timing pair, perf-audit at band 1 or more.",
+     "why": "328 FR-005 (batched, GM 2026-10-08) and 372 FR-003 as carried by 374 FR-002."
     },
     {
      "id": "B3-5",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "summary": "Rule 3 as worded: a row on code 'no live map executes' (named by module: paddy and ribbon builders, a town's kiln, a city's matrix permissions) is not in this batch and 'waits for a batch that rules on legacy-only code'.",
-     "why": "Not a narrowing of FR-001 in SUBSTANCE: FR-001 takes rows 'in scope', and 328 FR-010 (carried by FR-002) defers code only legacy maps run. But FR-010 decides it by the execution record (audit/scope.py -> dev/claims-deferred.json), stamps the rows 'scope: deferred', and says no wave takes them; the plan decides by name and promises a future batch that 'rules' on them - the session's judgment in place of the measure, which 328's amendment 8 round 1 already refused ('the scope judged by module and name'). Measured: 13 open rows ranked 'scope: kept' read DEFERRED in today's make claims-report, so the 197 counts them while FR-010 says they are out; the plan's own explanation ('rows on overlap/taxonomy.py or settlement/fields/paddy.py are in the ranking and not in the report') is wrong - they ARE in the report, as DEFERRED; and paddy.py::PaddyMixin._wf_feed, called only from the deferred water_field (paddy.py:594), reads DRIFTED in scope because claims-deferred.json predates it - a name-based rule would drop it, the measure keeps it until scope.py is re-run. Rewrite: 'A row whose unit audit/scope.py derives DEFERRED (328 FR-010, re-run on today's cache) leaves the work list; its ranking row is re-stamped scope: deferred and no wave takes it.' - and drop the future batch."
+     "class": "within",
+     "summary": "Rule 3: a row whose unit audit/scope.py derives DEFERRED (328 FR-010, re-run on today's cache) is re-marked scope: deferred and no wave takes it; the future 'legacy-only batch' dropped.",
+     "why": "Round 1's rewrite applied: scope decided by the execution record FR-010 names, not by module name. The scope.py patch keeping a row on no code unit at its recorded scope is sound (FR-010 decides code units by execution; no execution can decide a row with no unit). The instrument's defect on docs/building-programs.md is B3-1a."
     },
     {
      "id": "B3-6",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "summary": "Not in this batch: the seven named legacy rows - paddy.py water_field (canals set in, row bunds staggered, plot size), hill.py build_ribbon, trades.py kiln, taxonomy.py _MATRIX_ALLOWED_KEYS (ways and water through the rampart) and _OVERLAP_EXEMPT (merchant estate court).",
-     "why": "Already implied by the GM's own words (amendment 8, 2026-10-07: 'limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets; legacy hand-drawn settlements shall have their findings marked as DEFERRED'). Measured, not assumed: all seven read DEFERRED in today's make claims-report and are listed in dev/claims-deferred.json (units, or the matrix row by key). Their ranking rows still say 'scope: kept' - see B3-5."
+     "summary": "Not in this batch: the legacy rows (paddy water_field, hill build_ribbon, trades kiln, taxonomy matrix and overlap rows), now re-marked scope: deferred by the re-run.",
+     "why": "Already implied by the GM's own words (amendment 8, 2026-10-07: 'legacy hand-drawn settlements shall have their findings marked as DEFERRED'), and now decided by the measure FR-010 names: ranking.json marks them deferred and make claims-report reads them DEFERRED; paddy.py _wf_feed and _wf_outline joined dev/claims-deferred.json in the same re-run."
     },
     {
      "id": "B3-7",
      "class": "within",
      "summary": "Not in this batch: the two held rows (the door band, fixture_quota).",
-     "why": "374 FR-004 and 'What it carries': held for the GM, asked at the feature's end (328's goal amendment)."
+     "why": "374 FR-004: held for the GM, asked at the feature's end (328's goal amendment)."
     },
     {
      "id": "B3-8",
      "class": "within",
-     "summary": "Not in this batch: oblique_at's square crossing (E0 DRIFTED), whose question is the E4 row beside it.",
-     "why": "328 FR-003: a row follows any row it depends on; its own fix text names the E4 row (law_water.py::oblique_at#a channel crossing at its way's angle) as the question. Note: its ranking 'after' field is empty and should carry that key."
+     "summary": "Not in this batch: oblique_at#square ditch crossing (E0 DRIFTED), waiting on the E4 row oblique_at#a channel crossing at its way's angle, 'named in its after'.",
+     "why": "328 FR-003: a row follows the row it depends on. But the plan's premise is false of the record: ranking.json's row has after [] - found-wave118.jsonl carries the E4 key, and merge.py applies overrides.json after the found files (rows[k].update(o)), where this key's override has after: [], so it wins. Should say: the override carries the E4 key in after (merge re-run, which also re-tiers the row E4 by the merge's own propagation), so the hold rests on the ranking, not on plan text. Not a narrowing: the exclusion itself is the right one."
     },
     {
      "id": "B3-9",
      "class": "within",
-     "summary": "Batch 3 is three waves (119-121), against FR-002's 4-5.",
-     "why": "Measured: the three waves take every E0-E2 open row not held, not measured DEFERRED and not waiting on an E4 row (10 of the 20 rows tiered E0-E2); the next rows are E3 sheet redraws. A smaller batch lands sooner and narrows nothing asked; batch 1 cleared at three. Worth one line in the plan saying why."
+     "summary": "Batch 3 is three waves (119-121); 'the three waves take every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research'.",
+     "why": "Re-derived from ranking.json: 13 open in-scope E0-E2 rows - two held, oblique_at waiting on its E4 row, the other ten across waves 119-121. The line round 1 asked for is present. (If W119-1/W119-2 go to research as ruled, the sentence still holds: they then wait on research.)"
     },
     {
      "id": "W121-1",
      "class": "within",
      "summary": "farm_fixtures.py::KURA_PARTS: the UNCLAIMED west annex row is the claim '#west annex' already carries; the unit re-checked clears it.",
-     "why": "Measured: farm_fixtures.py:80 carries 'west annex - research/questions/0040-farm-storehouses-kura.drawing.html: 0.26 x 0.75 of the house ...'. An E0 record fix, impl-drift deciding."
+     "why": "An E0 record fix, impl-drift deciding; no code or page moves."
     },
     {
      "id": "W121-2",
      "class": "within",
      "summary": "belt_law.py BeltReading.holes#continuous planting, stands.py village_grove#clump inside the page window, bundle.py _bundle_layout#south band off an unkept yard: each claim worded to what the code does and re-checked; one that then reads DRIFTED joins the DRIFTED work.",
-     "why": "328 FR-003 E0/FR-004: a claim corrects the implementation's own statement where a page already says what the code does (impl-drift judges); the plan's own valve sends any DRIFTED re-check to code work, and no page is edited. The clump window as a CONVENTION and the unkept yard's band as UNRESEARCHED are honest labels, not departures."
+     "why": "328 FR-003 E0 / FR-004: a claim corrects the implementation's own statement; a DRIFTED re-check sends the row to code work, and no page is edited."
     }
    ],
    "verdict": "BLOCKED"

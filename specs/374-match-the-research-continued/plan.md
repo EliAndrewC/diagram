@@ -198,8 +198,9 @@ stays open until the polder and the dike-pond pass their cohort and are rolled.
 **The work list** is 328's ranking brought current (2026-10-11): batch 2's re-checks closed 39 more rows (36 whose unit
 now carries no UNCLAIMED or MISLABELED finding, or whose claim reads IN-STEP; three UNCLAIMED rows whose decisions now
 carry claims), marked wave 118 in `audit/waves.json`; then `audit/scope.py` was re-run on today's cache (328 FR-010, the execution
-record) and re-marked 18 more open rows `scope: deferred` (the paddy and ribbon builders, a town's kiln, a city's matrix
-permissions among them), leaving **179 open rows** in scope (124 E3 DRIFTED). `make claims-report` shows the deferred
+record) and re-marked 14 more open rows `scope: deferred` (the paddy and ribbon builders, a town's kiln, a city's matrix
+permissions among them; `scope.py` now counts `docs/building-programs.md` among the Mode A procedures, which it had sent to
+deferred), leaving **183 open rows** in scope (126 E3 DRIFTED). `make claims-report` shows the deferred
 units' claims as DEFERRED (158).
 
 **Three rules for every wave of this batch:**
@@ -216,36 +217,36 @@ units' claims as DEFERRED (158).
 
 **Not in this batch:** the two held rows (the door band, `fixture_quota`: the GM's); `oblique_at`'s square crossing,
 which waits on the E4 research row beside it (`law_water.py::oblique_at#a channel crossing at its way's angle`, named in its
-`after`). The three waves take every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research.
+`after`); and `settle.py::_unkinked#a returning leg of 40 ft or more` with `settle_shapes#no hairpin or zigzag`, which cuts
+through it: 0081's drawing page forbids the hairpin a returning leg of 40 ft or more leaves and gives the cut only under
+40 ft, its folded spur and joining stub named exceptions to that threshold, so what a longer leg becomes is a research
+question (both rows re-tiered E4; meanwhile the code keeps its cut and the claim its GUESS label). The three waves take
+every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research.
 
 ### Wave 119 (T10) - the hamlet's lanes
 
-- `settle.py::_unkinked#a returning leg of 40 ft or more`: 0081's drawing page says both "A lane never doubles back in a
-  hairpin" (a turn of more than 140 degrees) and "a returning leg under 40 ft is cut". A returning leg of 40 ft or more is
-  still a hairpin the first sentence forbids, so the page cuts it too; the code's shorter-arm cut at any length does what the
-  page says, and the claim cites both sentences of 0081's drawing page in place of its GUESS label. impl-drift rules on it;
-  if it reads DRIFTED, the code is changed to the reading it gives.
-- `settle.py::settle_shapes#no hairpin or zigzag`: the same reading in the settle's shape pass.
 - `serve.py::lay_door_paths#door path off a grove band`: 0036 lays a lane through a grove band "with a footpath's
   clearance and some working room kept off the trees on each side" (about 22 ft of a 36 ft opening: about 9.5 ft each side
   of a 3 ft tread); the code's 0.5 ft margin becomes that working room, and the claim cites 0036. Measured on the hamlet
   cohort before it is kept: a farm the wider berth leaves unreached is a conflict put to `spec-fidelity` (rule 1).
-- Maps: every pool hamlet is rerolled; a hamlet whose web changes owes no glyph-check (no glyph is redrawn) - the lane
+- Maps: every pool hamlet is rerolled; a hamlet whose paths change owes no glyph-check (no glyph is redrawn) - the lane
   law's acceptance sweep and the cohort hold the change.
 
 ### Wave 120 (T11) - the hamlet's ground
 
 - `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page places the wood beyond the fields and refuses
   ground below the houses only "beside a river or marsh"; the dry-ground refusal goes, and the claim cites the page.
-- `fields/comb.py::_comb_draw_source#feeder brook width`: a brook about 7 ft wide (0059, 0068) drawn in feet,
-  `self.px(7.0)`, not 7 px.
+- `fields/comb.py::_comb_draw_source#feeder brook width`: the code already draws the brook at `self.px(7.0)`; the
+  finding today is that 0068's drawing page ladder puts "a village creek at roughly three and a half times" the 1.5 ft floor
+  (about 5.25 ft) while its own question page gives a village brook "about 2 m (~7 ft)", a GUESS, and 0059 draws 7 ft. The
+  drawing page's ratio is corrected to its own question page ("roughly four and a half times it"); the code is unchanged.
 - `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
   qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).
   The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only
   shrine is a dooryard hokora).
-- Maps: the pool hamlets rerolled. Occasions: the feeder brook is a glyph redrawn at its true width (a glyph-check on one
-  hamlet that draws it), and the board's new bridgehead seat and the wood's newly allowed ground are elements re-placed
-  (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).
+- Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are
+  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them); the brook's page
+  edit owes the record checks a drawing-page change owes (record-format, quote-check, the pop-ups' triage).
 
 ### Wave 121 (T12) - claims the rows name
 

@@ -254,7 +254,7 @@ def knob_of_constant(skill: Path, path: str, name: str) -> str | None:
 def scope_of(uid: str, ran: set[tuple[str, str]], read: set[str], knobs: set[str] = frozenset(), skill: Path | None = None, label: str = "") -> str:
     path, unit = uid.split("::", 1)
     path = path.replace(".claude/skills/diagram/", "")
-    if path.startswith(("buildings", "docs/buildings")):
+    if path.startswith(("buildings", "docs/buildings", "docs/building-programs")):  # both Mode A procedure docs (374 batch 3: building-programs.md had fallen to deferred)
         return "mode-a"
     if f"{path}::{unit}#{label}" in DEFERRED_ON_MEASURE:
         return "deferred"

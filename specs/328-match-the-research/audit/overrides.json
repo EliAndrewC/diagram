@@ -1277,7 +1277,9 @@
     "tier": "E4"
   },
   "l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing": {
-    "after": [],
+    "after": [
+      "l7r/diagram/hamletgen/ways/law_water.py::oblique_at#a channel crossing at its way's angle"
+    ],
     "e0_basis": "a claim written against the page that answers",
     "files": [
       "l7r/diagram/hamletgen/ways/law_water.py"
@@ -1398,14 +1400,16 @@
     "tier": "E2"
   },
   "l7r/diagram/hamletgen/ways/settle.py::settle_shapes#no hairpin or zigzag": {
-    "after": [],
+    "after": [
+      "l7r/diagram/hamletgen/ways/settle.py::_unkinked#a returning leg of 40 ft or more"
+    ],
     "files": [
       "l7r/diagram/hamletgen/ways/settle.py"
     ],
-    "fix": "settle_shapes cuts as the fixed _unkinked does (40 ft leg, zigzag pulled straight)",
+    "fix": "waits on settle.py::_unkinked#a returning leg of 40 ft or more (it cuts through `_unkinked`)",
     "flag": "",
     "moved": "",
-    "tier": "E2"
+    "tier": "E4"
   },
   "l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)": {
     "after": [],
