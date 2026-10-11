@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-11
-**Status**: In progress - specified
+**Status**: Done - 0036 answers the question (an absence: no page shows a lane between a farmhouse and its own grove; the way runs outside it or through a gap), 43 claims judged by impl-drift (42 IN-STEP, 1 DRIFTED recorded), the ground between a house and its own seats recorded as implemented nowhere (implementation-check.md); landed with the GM's review of the arbiter's rulings open
 
 **Affects**: hamlet, research record
 
