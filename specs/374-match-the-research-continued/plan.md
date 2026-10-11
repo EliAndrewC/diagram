@@ -193,6 +193,62 @@ never records a DEVIATION to close it (328's exception path, amendment 5). The p
 (`ROLLED_ARCHETYPES`) is one, with the dike-pond block beside it: 0019's drawing page names both a known gap, and the row
 stays open until the polder and the dike-pond pass their cohort and are rolled.
 
+## Batch 3: the hamlet's code brought to the research
+
+**The work list** is 328's ranking brought current (2026-10-11): batch 2's re-checks closed 39 more rows (36 whose unit
+now carries no UNCLAIMED or MISLABELED finding, or whose claim reads IN-STEP; three UNCLAIMED rows whose decisions now
+carry claims), marked wave 118 in `audit/waves.json`, leaving **197 open rows** (133 E3 DRIFTED). The count is the
+ranking's: `make claims-report` counts only the units the claims gate covers (the hamlet's roll and the Mode A
+procedures), so rows on `overlap/taxonomy.py` or `settlement/fields/paddy.py` are in the ranking and not in the report.
+
+**Three rules for every wave of this batch:**
+- A row's fix text that says "label it a DEVIATION and have the drawing page record it" predates the plan review's
+  ruling (batch 2, W118-2): the code is changed to match the page (328 FR-004). Where a change still looks wrong, the
+  exception goes to `spec-fidelity` with the GM's words and is recorded only if ruled LEGITIMATE; otherwise the row goes
+  to the GM's held list.
+- Engine discipline: `make quick` per fix; reroll only the maps the change reaches and compare their manifests with
+  `git diff HEAD`; one `impl-drift` per wave over the claims the wave's code edits re-owe; the review occasions a
+  wave declares in `tasks.md ## Occasions` dispatched on a green gate, with no engine edit while one runs; one `make done`
+  at the batch's close with the timing pair, `perf-audit` on a band of 1 or more.
+- A row on code that no live map executes (the paddy and ribbon builders the frozen legacy maps alone call, a town's
+  kiln, a city's matrix permissions) is not in this batch: it waits for a batch that rules on legacy-only code.
+
+**Not in this batch:** the two held rows (the door band, `fixture_quota`: the GM's); `oblique_at`'s square crossing,
+whose own question is the E4 research row beside it; the paddy, ribbon and kiln rows and the two `taxonomy.py`
+CANNOT-TELL rows (legacy or other tiers, above).
+
+### Wave 119 (T10) - the hamlet's lanes
+
+- `settle.py::_unkinked#a returning leg of 40 ft or more`: 0081 §19 cuts only "a returning leg under 40 ft" (its one
+  exception a folded field spur); the code keeps the longer arm whatever the lengths, so the 40 ft does nothing. The cut
+  is made only below 40 ft, and the claim cites 0081's drawing page.
+- `settle.py::settle_shapes#no hairpin or zigzag`: the same rule in the settle's shape pass.
+- `serve.py::lay_door_paths#door path off a grove band`: 0036 lays a lane through a grove band "with a footpath's
+  clearance and some working room kept off the trees on each side" (about 22 ft of a 36 ft opening); the code's 0.5 ft
+  margin becomes that working room, and the claim cites 0036.
+- Maps: every pool hamlet is rerolled; a hamlet whose web changes owes no glyph-check (no glyph is redrawn) - the lane
+  law's acceptance sweep and the cohort hold the change.
+
+### Wave 120 (T11) - the hamlet's ground
+
+- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page places the wood beyond the fields and refuses
+  ground below the houses only "beside a river or marsh"; the dry-ground refusal goes, and the claim cites the page.
+- `fields/comb.py::_comb_draw_source#feeder brook width`: a brook about 7 ft wide (0059, 0068) drawn in feet,
+  `self.px(7.0)`, not 7 px.
+- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
+  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge, and the shrine precinct, only that
+  page's GUESS, stays withheld with its claim labeled GUESS.
+- Maps: the pool hamlets rerolled; the feeder brook is a glyph redrawn at its true width, so a glyph-check on one hamlet
+  that draws it is the wave's occasion.
+
+### Wave 121 (T12) - claims the rows name
+
+- `farm_fixtures.py::KURA_PARTS#west annex`: the row is the claim `#west annex` already carries; the unit re-checked
+  clears it.
+- `belt_law.py::BeltReading.holes#continuous planting`, `stands.py::village_grove#clump inside the page window`,
+  `bundle.py::_bundle_layout#south band off an unkept yard`: each claim worded to what the code does and re-checked; a
+  claim that then reads DRIFTED joins the DRIFTED work.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:
@@ -206,3 +262,4 @@ decisions need no new ruling adds its tasks under its own plan section, decided 
 | batch | waves | pair | gate | close |
 |---|---|---|---|---|
 | 1 | 112-114 | none owed: the batch's engine code is the Mode A draft (`compound.py`, `compound_parts.py`, `compound_model.py`: the kitchen ell, the corridor gone), `pack_audit` (`veranda_depths`, the hearth not a door) and `buildings/types.json`'s kitchen band - none in what the timing pair rolls (the hamlet's stages), as 372's batches 3-5 recorded | green 2026-10-10 at engine key 026828713522 | the review occasions running (three building-reviews, two glyph-checks); escalation-check 3 keep |
+| 2 | 115-118 | none owed: the batch's engine edits are `Research:` docstrings and claim wording only (no engine token moves, the maps unchanged: `git diff origin/main -- pool/` empty after the gate's roll) | green 2026-10-11 on the merged tree | the record and claims checks answered; no review occasion (no sheet or glyph moved) |

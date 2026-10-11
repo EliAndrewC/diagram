@@ -64,6 +64,17 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. wave 118: the CANNOT-TELL claims re-checked with their context (b7-ct1, b7-ct2, b8-ct1, b8-ct2): 0 CANNOT-TELL left; WITH= and PAGES= added to claims-bundle; the polder/dike-pond roll a known gap and an open DRIFTED row (plan review CLEAR)
 
+## Phase 6 - batch 3: the hamlet's code brought to the research
+
+- [ ] T10 wave 119: the hamlet's lanes - the 40 ft returning leg in `_unkinked` and `settle_shapes`, a door path's working room through a grove band (FR-001, FR-004)
+      research: rendering
+
+- [ ] T11 wave 120: the hamlet's ground - no wood below the houses only beside water, the feeder brook in feet, the board at a bridgehead (FR-001, FR-004)
+      research: rendering
+
+- [ ] T12 wave 121: claims the rows name - the kura's west annex re-checked; the belt's holes, the clump window and the south band worded to the code and re-checked (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]
