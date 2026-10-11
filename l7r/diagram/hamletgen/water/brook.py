@@ -770,14 +770,21 @@ def open_race_mouth(s: Settlement, sluice: Pt) -> None:
 
 RACE_TAPER_FT = 30.0
 """How far down the head race its hue tapers from the brook's to the supply hue (feature 355): the entry's own sketch, "taper
-its first ~30 ft from the brook's hue to its own" - a map drawing convention."""
-BROOK_BED_HUE = "#9CB4C8"  # the brook's bed (`Settlement.stream`)
+its first ~30 ft from the brook's hue to its own" - a map drawing convention.
+
+Research: race mouth hue taper - CONVENTION: the race's first 30 ft drawn from the brook's hue to the supply hue, so the dug ditch does not read as the river"""
+BROOK_BED_HUE = "#9CB4C8"
+"""The brook's bed hue (`Settlement.stream`), the taper's first stop.
+
+Research: brook bed hue - CONVENTION: the brook's pale gray-blue bed, where the race-mouth taper starts"""
 
 
 def race_taper(pts: Sequence[Pt], length: float, width: float, gid: str) -> str:
     """The head race's first `length` px drawn over its bed in a gradient from the brook's hue at its first point to the
     supply hue where the stretch ends (feature 355) - the race's own line and width, so only its hue changes; empty when the
-    race is a single point. The overlay ends in the race's own color, so it joins the bed beneath without a seam."""
+    race is a single point. The overlay ends in the race's own color, so it joins the bed beneath without a seam.
+
+    Research: race mouth hue taper - CONVENTION: the race's first 30 ft drawn from the brook's hue to the supply hue, so the dug ditch does not read as the river"""
     out: list[Pt] = [pts[0]] if pts else []
     left = length
     for a, b in zip(pts, pts[1:], strict=False):
