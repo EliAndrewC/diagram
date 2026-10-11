@@ -40,8 +40,8 @@ the class, the sentence still reaches the modal.
 
 ## Success Criteria
 
-- **SC-001**: No shipped hamlet's manifest or page names `grave island` as a class; Kashikawa's names `field grave`.
-- **SC-002**: The interactive tests pass, and Kashikawa's manifest differs from before only in `ink_classes` (its geometry unchanged).
+- **SC-001** (FR-001, FR-003): No shipped hamlet's manifest or page names `grave island` as a class - Kashikawa's names `field grave` - while the island form's choice, drawer and glossary term keep their name.
+- **SC-002** (FR-002, FR-004): The interactive tests pass - the snapshot test among them, through its renaming table - and Kashikawa's manifest differs from before only in `ink_classes` (its geometry unchanged).
 
 ## Decisions Recorded
 
