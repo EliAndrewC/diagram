@@ -2,11 +2,13 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-10 - amendment 2 landed: spec FAITHFUL (round 3), plan CLEAR (round 5), every task ticked; make done green
+**Status**: In progress - amendment 3 (band 3 to the arbiter); amendments up to 2 landed 2026-10-10
 
 **Amendment 1 approved**: the GM, 2026-10-10, "yes please"
 
 **Amendment 2 approved**: the GM, 2026-10-10, "we should change that so that it goes to the arbiter first"
+
+**Amendment 3 approved**: the GM, 2026-10-10, "yes it covers the band-3 perf signoff too"
 
 **Affects**: review process, tooling
 
@@ -84,6 +86,19 @@ than overrule.
   review check's third round through on the GM's waiver instead of the arbiter; it is retired, and its refusal names the
   arbiter route.
 
+### Amendment 3 - the band-3 sign-off goes to the arbiter too (`request.md`, Amendment 3)
+
+The GM answered amendment 2's question: "yes it covers the band-3 perf signoff too". The band-3 exclusion above no
+longer holds.
+
+- **FR-011 The band-3 sign-off goes to the arbiter first.** A performance increase in band 3, which today waits for the GM's
+  sign-off at a terminal before the push, is put to the round arbiter with one command that records the question and
+  builds its bundle, the perf report in it. An `accept` ruling bound to that bookend pair's exact numbers satisfies the
+  push as the GM's sign-off does; `continue` (keep optimizing) and `process-fault` do not; a ruling on other numbers is
+  stale. The GM reviews the ruling after landing, like every other. The GM's own terminal sign-off still counts. The places
+  that state band 3 as the GM's alone say the arbiter first: the constitution's band table, `perf_review.py`'s refusal,
+  `docs/guards.md`, `dev/performance.md`, `l7r/diagram/CLAUDE.md` and the `perf-signoff` target.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-003, FR-004) Replaying 2026-10-10's research-session ruling: the recorded `tooling_fix` is an
@@ -104,6 +119,9 @@ than overrule.
   in `CLAUDE.md`, `docs/spec-kit-and-reviews.md` and the constitution (XIII); `wakeup-hooks.sh`'s two "a question for the
   GM" lines; the stop-and-ask rule in `CLAUDE.md` and `docs/spec-kit-and-reviews.md`, split as FR-009 says; and
   `.claude/agents/escalation-check.md`'s "a question or a decision" for the GM.
+- **SC-007** (FR-011) With a band-3 bookend pair and its band-2 records: the push check refuses with no sign-off, naming the
+  arbiter command; an arbiter `accept` bound to the pair's numbers passes it; a `continue`, or an `accept` on other numbers,
+  does not; the GM's terminal sign-off still passes it. The tests fail on today's code.
 
 ## Review history
 

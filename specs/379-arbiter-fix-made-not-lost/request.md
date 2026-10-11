@@ -31,3 +31,10 @@ The GM:
 > I mean, the rule should basically be that things should go to the arbiter at the point where they were previously coming to me. So if there is something that currently in the process gets escalated to be prior to going to the arbiter, then we should change that so that it goes to the arbiter first.
 
 (Dictated: "escalated to be prior to going to the arbiter" reads as "escalated to me prior to going to the arbiter".)
+
+## Amendment 3 (2026-10-10, same session)
+
+Amendment 2 left the band-3 performance sign-off with the GM, on the GM's earlier words "I must personally sign off on this
+before it is committed back to main", and asked whether the new rule covers it. The GM:
+
+> yes it covers the band-3 perf signoff too
