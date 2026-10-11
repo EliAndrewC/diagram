@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08 (filed by feature 330); specified 2026-10-11
 
-**Status**: Done (2026-10-11) - every task ticked (T01-T08; the GM's review of the arbiter rows lands open); the four sheets re-measured at 0 px steps past the revetment, 0 doors off their walls, 0 silhouette torii (m:steps-past-revetment-after, m:doors-off-walls-after, m:torii-not-in-plan-after); carries 339, 341 and 342 word for word (the GM, 2026-10-11: *"If some of them should be undled together that's fine"*)
+**Status**: In progress - landed; every task ticked (T01-T08) but the GM's review of the round arbiter's five rulings (make gm-review); the four sheets re-measured at 0 px steps past the revetment, 0 doors off their walls, 0 silhouette torii (m:steps-past-revetment-after, m:doors-off-walls-after, m:torii-not-in-plan-after); carries 339, 341 and 342 word for word (the GM, 2026-10-11: *"If some of them should be undled together that's fine"*)
 
 **Affects**: magistracy, country shrine
 
