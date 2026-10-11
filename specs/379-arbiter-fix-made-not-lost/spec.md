@@ -58,22 +58,30 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
 ### Amendment 2 - the arbiter before the GM (`request.md`, Amendment 2)
 
 The rule: wherever the PROCESS stops and comes to the GM, it goes to the round arbiter first - its ruling binds, and the GM
-reviews it after landing, as feature 375's round caps already do. An inventory of the process (2026-10-10) found three such
-points still coming to the GM; the rest already go to the arbiter, or are not the process stopping but decisions the GM
-owns (approving a new feature, signing off a band-3 slowdown, a content question the record cannot answer) or actions only
-the GM can take (renaming a session), which this amendment leaves as they are.
+reviews it after landing, as feature 375's round caps already do. Left as they are: approving a new feature (the GM in this
+feature's request: "I really don't want sessions just filing new features ... without my say-so"), a content question the
+record cannot answer (not the process; a ruling would invent canon), renaming a session (only the GM can), and the band-3
+performance sign-off, which the GM reserved in their own words - "I must personally sign off on this before it is
+committed back to main" (constitution VI's band table; `perf_review.py`) - and which this amendment puts to the GM rather
+than overrule.
 
 - **FR-007 The spec review's round cap goes to the arbiter.** A spec review's sixth round on one feature (five rounds, the
-  counter reset when a spec is accepted or amended - the GM's 2026-09-12 ruling) is held until the round arbiter rules, as
-  a review check's third round is; each `continue` allows one more round. The cap is one number in every place that states
-  it: five (today CLAUDE.md says five, the constitution three, `review-gate.sh` two).
-- **FR-008 The regression exit goes to the arbiter.** A regression the session cannot fix or revert, which today waits on "an
-  explicit GM waiver", goes to the round arbiter, whose ruling (`continue`: fix it; `accept`: it stands, waived) is
+  counter reset when a spec is accepted or amended - the GM's 2026-09-12 ruling) is held until the round arbiter rules, as a
+  review check's third round is; each `continue` allows one more round. The ruling binds: `review-gate.sh` takes an
+  `accept` or `process-fault` ruling on the spec's review in place of a FAITHFUL verdict, the GM reviewing it after
+  landing. The places that send a failing fifth round to the GM send it to the arbiter: `CLAUDE.md` ("then stop and
+  escalate"), the constitution's XVI ("STOP and put it to the GM", and its two stale sentences counting three rounds),
+  and `.claude/agents/spec-fidelity.md`. The review checks' own two-round cap is not this cap and stays.
+- **FR-008 The regression exit goes to the arbiter.** A regression the session cannot fix or revert, which today waits on
+  "an explicit GM waiver", goes to the round arbiter, whose ruling (`continue`: fix it; `accept`: it stands, waived) is
   recorded and reviewed by the GM after landing.
 - **FR-009 Any other process stop goes to the arbiter first.** A session about to stop and ask the GM how the process
   should go - a cap, a waiver, a stuck choice between process routes - asks the round arbiter first, through one command
   that records the question as a trigger and builds its bundle; the GM sees the ruling in the review after landing. A
-  question about what the GM wants built, or a decision the GM owns (above), still goes to the GM.
+  question about what the GM wants built, or one of the decisions left above, still goes to the GM.
+- **FR-010 No GM waiver past a review check's round cap.** `REVIEW_ROUNDS_OK="<the GM's words>"` (`pair-hooks.sh`) let a
+  review check's third round through on the GM's waiver instead of the arbiter; it is retired, and its refusal names the
+  arbiter route.
 
 ## Success criteria
 
@@ -86,11 +94,15 @@ the GM can take (renaming a session), which this amendment leaves as they are.
   clean; a change naming a non-tooling path is refused, and so is one that does not apply cleanly onto main; and a landed
   test that fails without work still held in the clone is refused, with main unchanged.
 - **SC-004** (FR-006) `make arbiter-fix-done` refuses while the fix's test is not on main, and passes once it is.
-- **SC-005** (FR-007) A spec review's sixth round on one feature is refused naming `make arbiter-bundle`, spending nothing; a
-  `continue` ruling lets exactly one more round through; a round after an accepted spec counts from one again. The test
-  fails on today's code. Every place that states the cap says five.
-- **SC-006** (FR-008, FR-009) The question command records a trigger the arbiter can rule on, its ruling lands on the GM's
-  review, and the docs that sent a regression waiver or a process question to the GM send it to the arbiter first.
+- **SC-005** (FR-007) A spec review's sixth round on one feature is refused naming `make arbiter-bundle`, spending nothing;
+  a `continue` ruling lets exactly one more round through; a round after an accepted spec counts from one again; an
+  `accept` ruling lets the review gate pass the spec. The tests fail on today's code. Every statement of the SPEC review's
+  cap says five rounds, then the arbiter.
+- **SC-006** (FR-008, FR-009, FR-010) The question command records a trigger the arbiter can rule on, and its ruling lands
+  on the GM's review; `REVIEW_ROUNDS_OK` is refused naming the arbiter; and these say the arbiter first: the regression exit
+  in `CLAUDE.md`, `docs/spec-kit-and-reviews.md` and the constitution (XIII); `wakeup-hooks.sh`'s two "a question for the
+  GM" lines; the stop-and-ask rule in `CLAUDE.md` and `docs/spec-kit-and-reviews.md`, split as FR-009 says; and
+  `.claude/agents/escalation-check.md`'s "a question or a decision" for the GM.
 
 ## Review history
 
@@ -106,3 +118,9 @@ the GM can take (renaming a session), which this amendment leaves as they are.
 - spec-fidelity-verify, amendment 1 round 2 (2026-10-10): CHANGES REQUIRED - FR-005's landed-test refusal had no success
   criterion. Applied: SC-003 adds a landed test failing without work held in the clone, refused with main unchanged.
 - spec-fidelity-verify, amendment 1 round 3 (2026-10-10): FAITHFUL - round 2's item resolved.
+- spec-fidelity, amendment 2 round 1 (2026-10-10): CHANGES REQUIRED. Applied:
+  - Band 3 is kept with the GM on the GM's own words ("I must personally sign off on this before it is committed back to
+    main"), quoted, and put to the GM rather than overruled.
+  - FR-007 names the true places that state the spec cap (the constitution says five already, with two stale "three"
+    sentences; `review-gate.sh`'s "two" is the review checks' cap, which stays) and that the review gate honors the ruling.
+  - FR-010 retires `REVIEW_ROUNDS_OK`; SC-006 names every file it changes, the wakeup hook included.
