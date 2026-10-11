@@ -17,3 +17,6 @@
 - [ ] T04 Close: no map changed (FR-004); the gate green; report; landed
       research: rendering
       verify: the push accepted
+- [ ] GM review (make gm-reviewed F=352) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
