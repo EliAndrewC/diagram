@@ -35,3 +35,12 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T08 Close: the text (CLAUDE.md's session-clones bullet and guard table, `docs/session-clones.md`), tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
       verify: DONE. CLAUDE.md session-clones bullet + docs/session-clones.md; make done green (short-circuit: no engine change), tests/tooling 1582 passed, make hooks-test green incl. land-tooling 17/17 and feature-approval 48/48; report written; landed by the push carrying this tick
+
+## Amendment 2 (the GM 2026-10-10: the arbiter before the GM)
+
+- [ ] T09 The spec review's round cap (plan D11, D12): the trip and refusal in `hm_review_round.py`, the `accept` read by `review-gate.sh`; tests red on today's code (SC-005)
+      research: rendering
+- [ ] T10 `make arbiter-ask` and the contract and bundle for spec rounds and asks (plan D13); tests (SC-006)
+      research: rendering
+- [ ] T11 The text (plan D14): CLAUDE.md, the constitution, `review-gate.sh`'s message, `docs/spec-kit-and-reviews.md`; tooling tests and `make hooks-test` green, the gate, the report, landed
+      research: rendering
