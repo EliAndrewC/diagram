@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import contextlib
 import fcntl
+import hashlib
 import json
 import os
 import re
@@ -155,6 +156,28 @@ def fresh_reading(state: Mapping[str, Any], unit: str, notes: set[str]) -> bool:
     return bool(notes) and read is not None and "*" not in read and not notes & set(read)
 
 
+def sentences(blocks: list[str]) -> list[str]:
+    """A subject's visible sentences, whitespace-normalized - the unit a check is said to have READ."""
+    return [s for b in blocks for s in re.split(r"(?<=[.!?])\s+", " ".join(b.split())) if s]
+
+
+def first_look(state: Mapping[str, Any], unit: str, current: list[str]) -> bool:
+    """A dispatch whose only unread sentences came from OTHER checks' edits is a first look, not a repeat round (feature 374
+    wave 120, the round arbiter on 0190: record-format's third round was owed only by sentences the depiction checks had
+    asked for, and the cap fired on text the check had never read). A sentence inside an edit this check itself proposed is
+    its own fix, read again - a repeat. A unit with no reading recorded counts as before."""
+    seen = set(state.get("seen", {}).get(unit) or [])
+    if not seen:
+        return False
+    unseen = [s for s in current if _sentence_key(s) not in seen]
+    own = " ".join(" ".join(n.split()) for n in state.get("own_edits", {}).get(unit) or [])
+    return bool(unseen) and not any(s in own for s in unseen)
+
+
+def _sentence_key(s: str) -> str:
+    return hashlib.sha1(s.encode("utf-8")).hexdigest()[:12]
+
+
 def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None, freeze_ok: bool = False, arbiter_ok: bool = False) -> str:
     """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap and the tripwires, which
     the round arbiter rules on - `hm_arbiter.py`)."""
@@ -164,6 +187,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         held = hm_arbiter.blocking(root, "")
         if held:
             return hm_arbiter.refusal(held)
+    current = {s: sentences(subject_blocks(root, s)) for s in subjects} if root is not None else {}
     for s in subjects:
         same = [] if freeze_ok else [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
         if same and [d for d in running(state, s, now) if d.get("state") == "running"]:  # launched, not a refused call's record
@@ -173,7 +197,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             )
         n = state.setdefault("rounds", {}).get(f"{check}|{s}", 0)
         unit = f"{check}|{s}"
-        if root is not None and not arbiter_ok and not fresh_reading(state, unit, notes):
+        if root is not None and not arbiter_ok and not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):
             shut = hm_arbiter.closed(root, f"round:{unit}@")
             moved = moved_since_answer(root, text, s) if shut else ""
             if shut and not moved:
@@ -190,8 +214,11 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
         unit = f"{check}|{s}"
-        if not fresh_reading(state, unit, notes):  # a fresh reading of new notes is not a repeat round
-            state["rounds"][unit] = state["rounds"].get(unit, 0) + 1  # every other dispatch let through is a round
+        if not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):  # a fresh reading is no repeat
+            state.setdefault("rounds", {})[unit] = state.get("rounds", {}).get(unit, 0) + 1  # every other dispatch let through is a round
+        if s in current:  # what this check has now read of the subject, for the next dispatch's first-look test
+            seen = state.setdefault("seen", {}).setdefault(unit, [])
+            seen.extend(sorted({_sentence_key(x) for x in current[s]} - set(seen)))
         read = state.setdefault("notes_read", {}).setdefault(unit, [])
         read.extend(sorted((notes or {"*"}) - set(read)))  # "*": a whole-page reading, every note read
     state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending",
@@ -236,6 +263,8 @@ def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None
             for path, old, new in _blocks(reply):
                 for s in d["subjects"]:
                     state.setdefault("edits", {}).setdefault(s, []).append([path, old, new])
+                    # the check's OWN proposals: a sentence inside one is its fix read again, never a first look
+                    state.setdefault("own_edits", {}).setdefault(f"{d['check']}|{s}", []).append(new)
 
 
 #: the answers one `modal-research` dispatch is recorded as (`make record-checked CHECK=modal-accuracy` ...)
