@@ -14,10 +14,12 @@ magistracy sheet is reviewed once, after all its redraws.
 
 ## Phase 1 - the tools (red before green)
 
-- [ ] T01 aligned gaps across a third building (FR-014, D9)
+- [x] T01 aligned gaps across a third building (FR-014, D9)
       research: rendering
-- [ ] T02 the three checks, each red on its frozen fixture: `steps_past_revetment`, `doors_off_their_walls`, `arch_in_plan` (FR-002, FR-005, FR-008; D1-D3)
+      verify: DONE. DONE. _blocked tested the third building's y-extent against the gap's x-interval in the horizontal case; one test now; tests/tools/test_pack_audit.py: three-in-a-row low on the sheet red then green, Ochiba's 28.7 ft pair gone (m:ochiba-aligned-gap)
+- [x] T02 the three checks, each red on its frozen fixture: `steps_past_revetment`, `doors_off_their_walls`, `arch_in_plan` (FR-002, FR-005, FR-008; D1-D3)
       research: rendering
+      verify: DONE. DONE. marks_drawn.py: steps_past_revetment, doors_off_their_walls (by tag; outside or floating), arch_in_plan; registered with red fixtures hayakawa-steps-and-doors-red.svg and ubame-torii-silhouette-red.svg (test_registry fires on each); door check red on HEAD Ochiba 7 and Ubame 14; unit tests test_pack_audit_marks.py; green on every pool sheet after the redraws
 
 ## Phase 2 - the record
 
