@@ -2,11 +2,13 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-10 - amendment 2 landed: spec FAITHFUL (round 3), plan CLEAR (round 5), every task ticked; make done green
+**Status**: Done 2026-10-10 - amendment 3 landed: spec FAITHFUL (round 2), plan CLEAR, every task ticked; make done green
 
 **Amendment 1 approved**: the GM, 2026-10-10, "yes please"
 
 **Amendment 2 approved**: the GM, 2026-10-10, "we should change that so that it goes to the arbiter first"
+
+**Amendment 3 approved**: the GM, 2026-10-10, "yes it covers the band-3 perf signoff too"
 
 **Affects**: review process, tooling
 
@@ -60,10 +62,9 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
 The rule: wherever the PROCESS stops and comes to the GM, it goes to the round arbiter first - its ruling binds, and the GM
 reviews it after landing, as feature 375's round caps already do. Left as they are: approving a new feature (the GM in this
 feature's request: "I really don't want sessions just filing new features ... without my say-so"), a content question the
-record cannot answer (not the process; a ruling would invent canon), renaming a session (only the GM can), and the band-3
-performance sign-off, which the GM reserved in their own words - "I must personally sign off on this before it is
-committed back to main" (constitution VI's band table; `perf_review.py`) - and which this amendment puts to the GM rather
-than overrule.
+record cannot answer (not the process; a ruling would invent canon), and renaming a session (only the GM can). (The band-3
+performance sign-off was left here too, on the GM's earlier "I must personally sign off on this before it is committed back
+to main"; amendment 3 moves it to the arbiter on the GM's answer.)
 
 - **FR-007 The spec review's round cap goes to the arbiter.** A spec review's sixth round on one feature (five rounds, the
   counter reset when a spec is accepted or amended - the GM's 2026-09-12 ruling) is held until the round arbiter rules, as a
@@ -83,6 +84,23 @@ than overrule.
 - **FR-010 No GM waiver past a review check's round cap.** `REVIEW_ROUNDS_OK="<the GM's words>"` (`pair-hooks.sh`) let a
   review check's third round through on the GM's waiver instead of the arbiter; it is retired, and its refusal names the
   arbiter route.
+
+### Amendment 3 - the band-3 sign-off goes to the arbiter too (`request.md`, Amendment 3)
+
+The GM answered amendment 2's question: "yes it covers the band-3 perf signoff too". The band-3 exclusion above no
+longer holds.
+
+- **FR-011 The band-3 sign-off goes to the arbiter first.** A performance increase in band 3, which today waits for the GM's
+  sign-off before the push, is put to the round arbiter with one command that records the question and
+  builds its bundle, the perf report in it. An `accept` ruling bound to that bookend pair's exact numbers satisfies the
+  push as the GM's sign-off does; `continue` (keep optimizing) and `process-fault` do not; a ruling on other numbers is
+  stale. The GM reviews the ruling after landing, like every other. The session NEVER asks the GM for a band-3 sign-off:
+  the arbiter question is its only route, and the push's refusal names that command alone. A sign-off the GM gives on
+  their own, unprompted, still counts, recorded from their words as today. The places that state band 3 as the GM's say the
+  arbiter: the constitution's band table, `perf_review.py` (its docstring, the check's refusal and the signoff refusal),
+  `perf_bands.py` (its band table, its "needs the GM" and the band-3 line every report prints), `perf_snapshot.py`'s
+  comment, `.claude/agents/perf-audit.md`'s band-3 section, `docs/guards.md`, `dev/performance.md`, `l7r/diagram/CLAUDE.md`,
+  `scripts/sync-with-main.sh`'s comment, and the Makefile's comment and `perf-signoff` help line.
 
 ## Success criteria
 
@@ -104,6 +122,10 @@ than overrule.
   in `CLAUDE.md`, `docs/spec-kit-and-reviews.md` and the constitution (XIII); `wakeup-hooks.sh`'s two "a question for the
   GM" lines; the stop-and-ask rule in `CLAUDE.md` and `docs/spec-kit-and-reviews.md`, split as FR-009 says; and
   `.claude/agents/escalation-check.md`'s "a question or a decision" for the GM.
+- **SC-007** (FR-011) With a band-3 bookend pair and its band-2 records: the push check refuses with no sign-off, naming the
+  arbiter command and not `perf-signoff`; an arbiter `accept` bound to the pair's numbers passes it; a `continue`, or an
+  `accept` on other numbers, does not; a GM sign-off recorded from their words still passes it; and every report's band-3
+  line names the arbiter. The tests fail on today's code.
 
 ## Review history
 
@@ -128,3 +150,8 @@ than overrule.
 - spec-fidelity-verify, amendment 2 round 2 (2026-10-10): CHANGES REQUIRED. Applied: FR-007 adds `spec-fidelity-verify.md`
   and `docs/spec-kit-and-reviews.md`; SC-005 tests a `process-fault` ruling at the review gate too.
 - spec-fidelity-verify, amendment 2 round 3 (2026-10-10): FAITHFUL - both round 2 items resolved.
+- spec-fidelity, amendment 3 round 1 (2026-10-10): CHANGES REQUIRED. Applied: FR-011 says the session never asks the GM for a
+  band-3 sign-off (the arbiter is its only route; a GM sign-off given unprompted still counts, recorded from their words), the
+  push's refusal names the arbiter alone, and FR-011 lists every text that gave band 3 to the GM; amendment 2's preamble
+  no longer leaves band 3 out; the session memory that said to ask the GM's go-ahead is rewritten.
+- spec-fidelity-verify, amendment 3 round 2 (2026-10-10): FAITHFUL - both round 1 items resolved (FR-011's opening no longer says "at a terminal", the aside applied).

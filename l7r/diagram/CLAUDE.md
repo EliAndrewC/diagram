@@ -90,7 +90,8 @@ diagnosed and the tooling improved.
   failing run lists before re-running, and never write a number into a record that was not measured on the artifact.
 - **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the
   band, and the push refuses until its records exist - your `make perf-explain`, the **`perf-audit` subagent's**
-  confirmation or audit (never pass `AS=perf-audit` yourself), and above band 2 the GM's sign-off.
+  confirmation or audit (never pass `AS=perf-audit` yourself), and above band 2 the sign-off - the round arbiter's first
+  (`make perf-arbiter`, feature 379), the GM reviewing it after landing.
 
 **Placement** ([`dev/placement.md`](../../dev/placement.md))
 

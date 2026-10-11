@@ -61,6 +61,15 @@ SPEC_ROUND_CAP = 5
 ARBITER_TOKEN = "ARBITER_OK"
 
 
+def accepted_pass(payload: dict, feature: str, spec_md: pathlib.Path, root: pathlib.Path | None, state: pathlib.Path) -> bool:
+    """Did the review's last pass end ACCEPTED - its last round FAITHFUL, or the round arbiter's accept or process-fault on it?"""
+    v_text, v_word = previous_verdict(str(payload.get("transcript_path") or ""), feature)
+    if not v_text:
+        v_text = review_history(spec_md)
+        v_word = verdict_of(v_text) if v_text else ""
+    return v_word == "FAITHFUL" or (root is not None and bool(hm_arbiter.closed(root, spec_cap_prefix(feature, read_pass(state)))))
+
+
 def spec_cap_prefix(feature: str, pass_no: int) -> str:
     """The trigger prefix of one PASS of a feature's spec review - `review-gate.sh` builds the same string."""
     return f"round:spec-fidelity|{feature}#{pass_no}@"
@@ -338,7 +347,13 @@ def judge(payload: dict, clone: str) -> dict:
             return {"event": "blocked", "rule": f"{TOKEN}-no-reason", "detail": prompt[:200], "exit": 2, "stdout": "", "stderr": _refusal(TOKEN)}
         if feature_dir and feature_dir.is_dir():
             take_snapshot(feature_dir, snap)
-            _write_state(state, _read_round(state) or 1)
+            # a full re-read after an ACCEPTED pass is an amendment's first round, as on the routed path (feature 379: the escape
+            # kept the old round, so amendment 3's first round counted as round 4 of a finished pass, toward the arbiter's cap)
+            if accepted_pass(payload, feature, feature_dir / "spec.md", root, state):
+                _write_state(state, 1)
+                (state / "pass").write_text(f"{read_pass(state) + 1}\n")
+            else:
+                _write_state(state, _read_round(state) or 1)
         return {"event": "escaped", "rule": "review-round-ok", "detail": reason, "exit": 0, "stdout": "", "stderr": ""}
     if not feature_dir or not feature_dir.is_dir():
         return {"event": "permitted", "rule": "no-feature", "detail": feature or "no specs/NNN-slug in the prompt", "exit": 0, "stdout": "", "stderr": ""}

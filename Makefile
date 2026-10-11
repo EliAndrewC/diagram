@@ -28,8 +28,8 @@
 
 # ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
 # Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
-# subagent's confirmation; >5% total / >10% seed owes the escalated audit; >10% / >20% owes the GM's
-# personal sign-off before the push. `perf-report` and `perf-gate` PRINT the verdict (FR-009b);
+# subagent's confirmation; >5% total / >10% seed owes the escalated audit; >10% / >20% owes the round
+# arbiter's sign-off before the push (make perf-arbiter; GUARD_EDIT_OK: feature 379 amendment 3 - never asked of the GM). `perf-report` and `perf-gate` PRINT the verdict (FR-009b);
 # `perf-review` (run by sync-with-main.sh at the push) ENFORCES it. A subagent's shell is not
 # distinguishable from the session's (research R1), so confirm/audit PROMPT and decline without
 # AS=perf-audit - the declaration is recorded, and the record's content is what a self-grant fakes.
@@ -54,8 +54,15 @@ perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=jus
 ##  NO_WAY_AROUND=<text>                              was there no good way around it?
 ##  AS=perf-audit                                     who is recording - only the subagent may pass this
 	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-signoff:   ## [performance] band 3 - the GM, at a terminal   WHY="..."
-##  WHY=<text>  the GM's own reason, given at a terminal - band 3
+# GUARD_EDIT_OK: feature 379 amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too") - band 3 goes to the
+# round arbiter first; its accept, bound to the pair's numbers, stands for the sign-off and the GM reviews it after landing.
+perf-arbiter:   ## [performance] band 3 - put the increase to the round arbiter first (feature 379)   [ENV=local|codebuild]
+	@s="$$($(PERF_REVIEW) arbiter-subject --environment "$(or $(ENV),local)")" || exit 2; \
+	 $(MAKE) --no-print-directory arbiter-ask SUBJECT="$$s" WHY="band 3 on $(or $(ENV),local) for $(SPECIFY_FEATURE): accept this performance increase, or keep optimizing? The perf report is perf-report.txt beside this MANIFEST, the band-1 and band-2 records are in dev/perf-log/, and the band-3 standard is the GM's: necessary, commensurate, no way around it" && \
+	 $(PERF_REVIEW) show --environment "$(or $(ENV),local)" > "/tmp/l7r-check/arbiter-ask-$$s/perf-report.txt"
+perf-signoff:   ## [performance] band 3 - records a sign-off the GM gave UNPROMPTED, in their words (a session asks the arbiter: make perf-arbiter)   WHY="..."
+##  WHY=<text>  the GM's own words, given unprompted - band 3
+	@: "GUARD_EDIT_OK: feature 379 amendment 3 - the help line: a session never asks the GM for band 3"
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
 perf-review:    ## [performance] does every environment's newest bookend pair carry the records its band owes? (the push runs this)
 	@$(PERF_REVIEW) check

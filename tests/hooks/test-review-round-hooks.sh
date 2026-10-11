@@ -248,6 +248,12 @@ out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, th
 echo 5 > "$SR"
 out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the amendment's sixth round")
 [ "$(rc)" -eq 2 ] && grep -q "make arbiter-bundle" "$T/err" && grep -q 'round:spec-fidelity|301-fixture#2@6' "$FIX/.git/arbiter-owed.json" && ok "a later pass's sixth round owes its own ruling (pass 1's accept does not carry over)" || no "pass 1's ruling carried over" "(rc=$(rc)) $(head -c 200 "$T/err")"
+# a REVIEW_ROUND_OK full re-read after a FAITHFUL round is an amendment's round 1 too (feature 379 amendment 3's own first round
+# counted as round 4 of the finished pass)
+transcript "$SUB/agent-11.jsonl" "MODE 3 of specs/301-fixture" "## round\n\nall resolved.\n\n**FAITHFUL**"
+touch -d '2031-01-01' "$SUB/agent-11.jsonl"; echo 3 > "$SR"
+out=$(agent spec-fidelity 'MODE 2 of specs/301-fixture REVIEW_ROUND_OK="an amendment adds requirements - read them whole"')
+[ "$(rc)" -eq 0 ] && [ "$(cat "$SR")" = 1 ] && [ "$(cat "$FIX/.git/review-round/301-fixture/pass")" = 3 ] && ok "a full re-read after FAITHFUL starts a new pass at round 1" || no "the escape kept the old round" "(round=$(cat "$SR") pass=$(cat "$FIX/.git/review-round/301-fixture/pass"))"
 
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"

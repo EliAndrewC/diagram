@@ -882,16 +882,16 @@ artifacts. Specifically:
   2026-08-25; feature 129 - this replaces the two-band rule of 2026-08-24,
   whose 10% "cap" is now band 3's total line rather than a merge-blocking
   ceiling: *"there is no ceiling for allowing it to go forward so long as the
-  subagent reviewer agrees"*, with the GM's own sign-off above it):
+  subagent reviewer agrees"*, with a sign-off above it - the round arbiter's since feature 379):
 
       band            on the TOTAL     on ANY SINGLE SEED   what it takes
       1  explain      over the line    over the line        a written explanation AND a perf-audit subagent confirming it matches the stage delta
       2  audit        > 5%             > 10%                the subagent independently finds the increase NECESSARY, COMMENSURATE with the functionality gained, and with NO GOOD WAY AROUND IT
-      3  GM sign-off  > 10%            > 20%                the GM personally, at a terminal, BEFORE the work is committed back to main
+      3  sign-off     > 10%            > 20%                the round arbiter first (`make perf-arbiter`; GM 2026-10-10: "yes it covers the band-3 perf signoff too"), its accept bound to the numbers, the GM reviewing it after landing - or the GM personally, at a terminal - BEFORE the work is committed back to main
 
   - A band fires when EITHER measurement crosses its line; each rung keeps
     everything below it. Feature 128's pair - total -29.9%, seed 47 +30.7% -
-    is band 3: faster overall, and still the GM's to sign off.
+    is band 3: faster overall, and still owes its sign-off (the round arbiter's first, since feature 379).
   - **BAND 1'S LINE IS PER ENVIRONMENT** (GM 2026-09-04, feature 179:
     *"let's make the band one threshold per environment. with a noise floor of
     about two percent"*): **0.0% local, 2.0% CodeBuild**, and an environment

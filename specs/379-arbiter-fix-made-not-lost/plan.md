@@ -90,7 +90,8 @@ the round, before the snapshot moves (so a refused dispatch spends nothing), a r
 `continue` rulings on this PASS of the review, `round:spec-fidelity|<feature>#<pass>@` (the pass counted beside the
 round in `.git/review-round/<feature>/pass`, one more each time a dispatch follows an ACCEPTED pass - a FAITHFUL round, or
 the arbiter's `accept` or `process-fault` on that pass, which accept the spec as FAITHFUL does - so a ruling on one pass
-neither lifts nor closes a later pass's cap; plan review rounds 1 and 2), trips that trigger (`hm_arbiter.trip`, kind `round`) and refuses
+neither lifts nor closes a later pass's cap; plan review rounds 1 and 2; a `REVIEW_ROUND_OK` full re-read after an accepted
+pass starts the new pass too, found when amendment 3's first round counted as round 4), trips that trigger (`hm_arbiter.trip`, kind `round`) and refuses
 with `hm_arbiter.refusal`, as `pair-hooks.sh` does for a review check's third round; `ARBITER_OK="<reason>"` in the prompt
 is the escape (the hook's own census row). An `accept` or `process-fault` ruling closes the pass: it accepts the spec as FAITHFUL does, so the next dispatch is an
 amendment's new pass at round 1.
@@ -128,6 +129,22 @@ as FR-009 says - how the process goes to the arbiter first, what to build to the
 branch, so a third round past the cap meets only the arbiter path (the refusal naming `make arbiter-bundle`); its census
 entry in `tests/tooling/test_guard_firing_log.py` goes, its suite's waiver cases become a refusal case, and
 `docs/reviews.md`'s sentence names the arbiter. The event log's `waiver` flag stays, reading old transcripts.
+
+## Amendment 3 - the band-3 sign-off to the arbiter (FR-011)
+
+**D16 - A band-3 increase is an `ask` the push reads.** `make perf-arbiter [ENV=]` takes the pair's subject from
+`perf_review.py arbiter-subject` - `perf-band3-<environment>-<first 12 of the pair's binding>`, so the question is bound to
+that commit, environment and those exact percentages - and runs `make arbiter-ask` with it (D13: the trigger recorded and
+the bundle built in one command), writing `perf_review.py show`'s report beside the MANIFEST as `perf-report.txt`. Only a
+band-3 pair has a subject. `perf_review.check` counts an arbiter `accept` on `ask:<that subject>` in the feature's
+`arbiter.jsonl` as the band-3 record (`arbiter_signed`); `continue`, `process-fault` and a ruling on other numbers do not
+(a new pair has a new subject). The push's MISSING line names `make perf-arbiter` alone, "never a question to the GM"; the
+`signoff` command stays only to record a sign-off the GM gives unprompted, in their words, and its refusal names the
+arbiter. The arbiter's contract states the band-3 standard it rules by. Every text FR-011 lists says the arbiter:
+`perf_bands.py`'s table and the band-3 line every report prints, `perf_review.py`'s docstring and both refusals,
+`perf_snapshot.py`'s comment, `perf-audit.md`'s band-3 section, the constitution's band table, `dev/performance.md`,
+`docs/guards.md`, `l7r/diagram/CLAUDE.md`, `sync-with-main.sh`'s comment, the Makefile's comment and `perf-signoff` help.
+The session memory that told sessions to ask the GM's go-ahead is rewritten (outside the repository). `perf_review.py` is engine code under the 100% floor: its tests carry both functions.
 
 ## Tasks
 
