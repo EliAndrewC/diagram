@@ -50,5 +50,17 @@
         }
       ]
     }
+  },
+  "composition-timing": {
+    "quantity": "the program example's composition (compound.emit_svg), best of 5 in one process, with the one view and with the composer's own index (the one view switched off)",
+    "observed": "2026-10-11",
+    "source": "l7r/diagram/compound.py",
+    "command": "make spec-harness SPEC=specs/340-program-example-captions-hand-sheet-placer OUT=/tmp/h340.json",
+    "method": "harness.py test_time; varies with load; before ObstacleIndex.copy the one view took 1.543 s",
+    "value": {
+      "one_view_s": 1.237,
+      "own_index_s": 0.237,
+      "varies": true
+    }
   }
 }

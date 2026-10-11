@@ -167,3 +167,29 @@ def test_measure(monkeypatch) -> None:  # noqa: ANN001
     }
     OUT.write_text(json.dumps(out, indent=1), encoding="utf-8")
     assert re.search(r"data-names", svg)
+
+
+def test_time(monkeypatch) -> None:  # noqa: ANN001
+    """Plan D5: the example's composition timed with the one view and with the composer's own index (the one view switched
+    off), best of five each, in one process."""
+    import time
+
+    from l7r.diagram import compound as c
+
+    prog = c.county_magistracy_program()
+    res = c.place(prog)
+
+    def best() -> float:
+        out = []
+        for _ in range(5):
+            t = time.perf_counter()
+            c.emit_svg(prog, res)
+            out.append(time.perf_counter() - t)
+        return min(out)
+
+    one_view = best()
+    monkeypatch.setattr(c, "_one_view", lambda *a: None)
+    own_index = best()
+    data = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
+    data["timing_s"] = {"one_view": round(one_view, 3), "own_index": round(own_index, 3)}
+    OUT.write_text(json.dumps(data, indent=1), encoding="utf-8")

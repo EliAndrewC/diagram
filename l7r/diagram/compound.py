@@ -375,7 +375,8 @@ def _one_view(sheet: str, requests: list[Request], declared: list[str]) -> OneVi
             kind, dark = requests[i][5], hand_sheet._luma(requests[i][4]) <= hand_sheet.LIGHT  # a name in dark ink takes no dark fill
             base = hand_sheet.classify(shapes, view, subject=list(sub.poly), area=sub.kind == "area", kind=kind, dark_inside=dark, named=named)
             mine = {tuple(shapes[k].poly) for k in owned[i]}
-            cache[key] = ObstacleIndex([o for o in base.obstacles if not (o.inner and o.weight != hand_sheet.WEIGHT_DARK and tuple(o.poly) in mine)], list(base.ways))
+            kept = [o for o in base.obstacles if not (o.inner and o.weight != hand_sheet.WEIGHT_DARK and tuple(o.poly) in mine)]
+            cache[key] = base if len(kept) == len(base.obstacles) else ObstacleIndex(kept, list(base.ways))
         return cache[key]
 
     subjects: list[list[Subject]] = []
@@ -439,8 +440,7 @@ def _caption_index(
     kind - its every weighted obstacle a block, inner ink included, but never a shape the caption declares (plan D4) - and the
     composer's own list is not read; the seated captions are added as before."""
     if view is not None and subject is not None:
-        base = view(caption, subject)
-        index = ObstacleIndex(list(base.obstacles), list(base.ways))
+        index = view(caption, subject).copy()
         for k, p in enumerate(seats):
             if k != lifted:
                 index.add(Obstacle(p.block, WEIGHT_OBSTACLE))

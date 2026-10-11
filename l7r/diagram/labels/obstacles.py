@@ -114,6 +114,15 @@ class ObstacleIndex:
         for w in ways or []:
             self.add_way(w)
 
+    def copy(self) -> ObstacleIndex:
+        """A copy to add to without touching this one, its buckets copied rather than rebuilt (feature 340: the draft's one
+        view copies a caption's classified sheet for every seat it tries, and re-adding each obstacle was most of the cost)."""
+        new = ObstacleIndex()
+        new.obstacles, new._boxes, new._level, new.ways, new._seg_boxes = list(self.obstacles), list(self._boxes), list(self._level), list(self.ways), list(self._seg_boxes)
+        new._ob.update({k: list(v) for k, v in self._ob.items()})
+        new._segs.update({k: list(v) for k, v in self._segs.items()})
+        return new
+
     def add(self, o: Obstacle) -> None:
         i = len(self.obstacles)
         self.obstacles.append(o)

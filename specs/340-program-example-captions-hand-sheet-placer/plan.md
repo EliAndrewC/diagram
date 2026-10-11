@@ -53,8 +53,13 @@ measurement and the plan is amended and re-reviewed before it is built.
   apart; with the two kept, 3 (m:caption-disagreements-after). Foot growth (`CAPTION_GROWTHS`) and the refusal message are
   unchanged and run only when no subject in the list has a free seat. The roofed court's late obstacles are retired with the
   composer's own index (the classification reads the court as built).
-- **D5 - performance (FR-005)**: the example's gen timed before and after (`make map ... PROFILE=1`); `make perf-report` read;
-  any band crossed explained and audited.
+- **D5 - performance (FR-005)**: measured (m:composition-timing, best of five, varies with load): the composition takes 1.237 s
+  under the one view against 0.237 s with the composer's own index. Profiled: index building was most of it - three indexes a
+  seat tried - so `ObstacleIndex.copy` copies a classified sheet's buckets instead of re-adding them (1.543 s -> 1.237 s);
+  the rest is `hand_sheet.classify` itself, once per caption and subject, which IS the one view the entry asks for. The
+  priced alternative, classifying the sheet once and adjusting per subject, rewrites `classify` for every hand sheet and is
+  not this feature's. The cost is accepted (the session, 2026-10-11; on the GM's review): about 1 s more on a pool gen whose
+  render takes longer, and no generator in `GEN_TIME_BUDGETS` or the hamlet perf bookends is touched.
 - **D6 - tests**: `tests/test_compound.py` keeps its refusal test unchanged; a declarations test (D1, seats unchanged); the D3
   switch's tests as D3 settles them, with 100% coverage of what changes.
 

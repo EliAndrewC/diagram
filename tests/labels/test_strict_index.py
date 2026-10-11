@@ -110,3 +110,14 @@ def test_outlines_whose_boxes_stand_apart_are_measured_vertex_to_edge() -> None:
     far = nearest_points(rect(0.0, 0.0, 1.0, 1.0), rect(10.0, 0.0, 1.0, 1.0))
     assert far == ((1.0, -1.0), (9.0, -1.0))
     assert poly_gap(rect(0.0, 0.0, 5.0, 5.0), rect(0.0, 0.0, 1.0, 1.0)) == 0.0, "one holds the other: boxes meet, tested"
+
+
+def test_a_copied_index_answers_as_the_original_and_grows_apart_from_it() -> None:
+    """Feature 340: `ObstacleIndex.copy` - the draft's one view copies a caption's classified sheet for every seat it tries."""
+    base = ObstacleIndex([Obstacle(tuple(rect(10, 10, 20, 20)), 1000.0)], [Way(((0.0, 50.0), (100.0, 50.0)), 3.0)])
+    dup = base.copy()
+    assert dup.obstacles == base.obstacles and dup.ways == base.ways
+    assert dup.blocked(tuple(rect(12, 12, 4, 4)), 1.0, 0.0) == base.blocked(tuple(rect(12, 12, 4, 4)), 1.0, 0.0)
+    dup.add(Obstacle(tuple(rect(60, 60, 10, 10)), 1000.0))
+    assert len(dup.obstacles) == 2 and len(base.obstacles) == 1
+    assert dup.blocked(tuple(rect(62, 62, 4, 4)), 1.0, 0.0) and not base.blocked(tuple(rect(62, 62, 4, 4)), 1.0, 0.0)
