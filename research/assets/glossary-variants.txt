@@ -2409,6 +2409,8 @@ middle moat	middle moat
 middle moats	middle moat
 middle rowhouse	middle rowhouse
 middle rowhouses	middle rowhouse
+middle-rank retainer	retainer
+middle-rank retainers	retainer
 midori-tsumi	midori-tsumi
 military commissioner	military commissioner
 military commissioners	military commissioner
@@ -3082,8 +3084,10 @@ resson	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
+retainer	retainer
 retainer terrace	row house
 retainer terraces	row house
+retainers	retainer
 retirement house	inkyo
 retirement houses	inkyo
 retiring house	retiring house
@@ -3323,6 +3327,8 @@ sendai plain	Sendai
 sengisho	sengisho
 sengoku	Sengoku
 sengoku house	Sengoku house
+senior retainer	retainer
+senior retainers	retainer
 senkomizu	senkomizu
 senmaida	senmaida
 senryu	senryu

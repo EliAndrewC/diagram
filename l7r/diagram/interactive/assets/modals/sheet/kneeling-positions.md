@@ -1,14 +1,14 @@
-About: The kneeling positions were the straw mats on the floor of the hearing court where the parties to a case knelt
+About: The kneeling positions were the places, usually straw mats, on the floor of the hearing court where the parties to a case knelt
 before the magistrate, who sat above them in the hall. At Edo the plaintiffs and defendants sat on straw mats spread on
-the court's gravel, and so did the peasants, townsmen and lesser ronin called before any hearing court, while samurai, priests and
+the court's gravel, and so did the peasants, townsfolk and lesser ronin called before any hearing court, while samurai, priests and
 monks sat on the hall's verandas instead. The accused sat at the center, roped, a servant holding the rope's end; behind
 them sat the town officials, headmen and landlords on straw matting to one side, and the plaintiff to the other. In
-China the county court at Neixiang marked two places, with kneeling stones of the Ming dynasty: the plaintiff's to
-the east, and the defendant's.
+China the county court at Neixiang marked the places of plaintiff and defendant with kneeling stones of the Ming
+dynasty, the plaintiff's to the east.
 
 The mats lay on the court's floor, which in the oldest courts was bare earth and later white gravel; at Takayama, in a
-province with no sea and too little white sand, it was cobbles from the riverbed. The court itself was roofed, or was an
-earth floor inside the building.
+province with no sea and too little white sand, it was cobbles from the riverbed. Some courts were roofed over; others
+were an earth floor inside the building itself.
 
 How large the mats were is not recorded.
 

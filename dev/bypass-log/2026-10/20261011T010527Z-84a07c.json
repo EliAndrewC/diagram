@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-11T01:05:27Z",
+  "target": "record-checked",
+  "commit": "7238afd90",
+  "why": "source-reader on source-reader:0099#oshirasu-jawiki-3: the source-reader's own finding (the passage is the overview's opening sentence) and quote-check's semicolon join were applied; no claim changed"
+}
