@@ -4,19 +4,23 @@
     "observed": "2026-10-11",
     "source": "l7r/diagram/compound.py emit_svg on county_magistracy_program(); labels/hand_sheet.seat",
     "command": "make spec-harness SPEC=specs/340-program-example-captions-hand-sheet-placer OUT=/tmp/h340.json",
-    "method": "harness.py: C recorded from compound._seat_all; H from hand_sheet.seat on the same declared text; composer variants with one source swapped (the base loop reproduces C on all 45)",
+    "method": "harness.py: C recorded from compound._seat_all; H from hand_sheet.seat on the same declared text; composer variants with one source swapped (the base loop reproduces C on all 45); each variant tries a caption's subjects in order, the first with a free seat winning, as hand_sheet.seat's one() does (plan review round 2)",
     "value": {
       "captions": 45,
       "base_loop_reproduces_C": 45,
       "disagreements": 11,
-      "explained_by_the_three": 6,
+      "explained_by_the_three": 10,
       "by_source": {
         "view": 5,
-        "subject": 1,
+        "subject": 2,
         "width": 0
       },
       "fix1_removes": 5,
-      "fix2_removes": 2
+      "fix2_removes": 2,
+      "after_switch_apart": [
+        "clerk"
+      ],
+      "after_switch_soft": []
     }
   }
 }

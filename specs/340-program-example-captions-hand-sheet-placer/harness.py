@@ -74,8 +74,8 @@ def test_measure(monkeypatch) -> None:  # noqa: ANN001
     # the variants' pieces
     ns, nview = hs.read_sheet(nocap)
     named = frozenset(h.kind for h in heads)
-    sub_c = [r[1] for r in requests]
-    sub_h = [hs.subjects(o, h.size)[0] for o, h in zip(owns, heads, strict=True)]
+    sub_c = [[r[1]] for r in requests]
+    sub_h = [hs.subjects(o, h.size) for o, h in zip(owns, heads, strict=True)]  # the whole ordered list, as `one()` tries it
     cw_c = [CHAR_W_EM] * len(requests)
     cw_h = [hs.char_w_of(h.element, h.text, h.size) for h in heads]
 
@@ -89,11 +89,18 @@ def test_measure(monkeypatch) -> None:  # noqa: ANN001
         return index
 
     def seat_loop(subs, cws, index_fn):  # noqa: ANN001, ANN202
+        # each subject in order, the first with a free seat winning (as `hand_sheet.seat`'s `one()` takes them); where none
+        # has one, the cheapest seat over all of them
         seats = []
         for i, (text, _s, size, *_r) in enumerate(requests):
-            index = index_fn(i, subs[i], seats)
-            p = c.place_caption(text, size, subs[i], index, frame, strict=True, char_w=cws[i])
-            seats.append(p if p is not None else c.place_caption(text, size, subs[i], index, frame, char_w=cws[i]))
+            got = None
+            for sub in subs[i]:
+                got = c.place_caption(text, size, sub, index_fn(i, sub, seats), frame, strict=True, char_w=cws[i])
+                if got is not None:
+                    break
+            if got is None:
+                got = min((c.place_caption(text, size, sub, index_fn(i, sub, seats), frame, char_w=cws[i]) for sub in subs[i]), key=lambda q: q.cost)
+            seats.append(got)
         return seats
 
     base = seat_loop(sub_c, cw_c, idx_composer)
@@ -103,9 +110,10 @@ def test_measure(monkeypatch) -> None:  # noqa: ANN001
         "width": seat_loop(sub_c, cw_h, idx_composer),
         "all": seat_loop(sub_h, cw_h, idx_view),
     }
+    switch = variants["all"]  # D3's switch: the view, the subjects and the width all the hand-sheet placer's
 
     # FIX 2: the hand-sheet placer taking the composer's subjects
-    by_own = {id(o): sub_c[k] for k, o in enumerate(owns)}
+    by_own = {id(o): sub_c[k][0] for k, o in enumerate(owns)}
     real_dp, real_sub = hs.declared_parts, hs.subjects
     made: list[list] = []
 
@@ -154,6 +162,8 @@ def test_measure(monkeypatch) -> None:  # noqa: ANN001
         "fix1_removes": sum(r["fix1_view_removes"] for r in rows),
         "fix2_removes": sum(r["fix2_hand_sheet_takes_composer_subjects_removes"] for r in rows),
         "rows": rows,
+        "after_switch_apart": [requests[i][0] for i in range(len(requests)) if not _same(switch[i], H[i])],
+        "after_switch_soft": [requests[i][0] for i in range(len(requests)) if switch[i].cost > 0],
     }
     OUT.write_text(json.dumps(out, indent=1), encoding="utf-8")
     assert re.search(r"data-names", svg)

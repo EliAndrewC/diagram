@@ -29,21 +29,26 @@ measurement and the plan is amended and re-reviewed before it is built.
   subjects), fix 2 the hand-sheet placer taking the composer's subjects. For each caption whose `C` and `H` differ by more than
   1 px it records the sources that remove the difference; one no source removes is reported with its cause (strictness, order,
   clearance, repair) and kept out of N. Recorded in `measurements.json`.
-- **D3 - the switch (FR-003)**, decided by D2's measurement (m:caption-disagreements, 2026-10-11): of 45 captions, 11 seat
-  apart; 6 are explained by the three sources - the obstacle VIEW 5 (garden, straw mats, practice ground, two wells), the
-  SUBJECT 1 (the fire-water tubs: the composer names the roomiest tub, the declaration all of them), the WIDTH 0. Fix 1 (the
-  composer indexing with `classify`) removes the 5; fix 2 (the hand-sheet placer taking the composer's subjects) removes 2, the
-  residence and the gatehouse, which no single source explains (an order interaction), and none of the 6. So, per source:
-  VIEW - fix 1: `emit_svg` builds each caption's index with `hand_sheet.classify` over the sheet it has drawn (its captions not
-  yet written), the seated captions added as now, and no obstacle list or late obstacles of its own; SUBJECT - the composer
-  takes the hand-sheet placer's reading of the declared subject (`hand_sheet.subjects` over the declared parts, first
-  subject), which removes the tubs' difference where fix 2 removes none of the subject-source ones; WIDTH - unchanged (no
-  difference). The 5 the three do not explain (residence, gatehouse, cell and two clerks: order, clearance or repair, and one
-  clerk where the hand-sheet seat covers ink) are reported, not unified (FR-003). After the switch the harness re-runs: the 6
-  go to 0, each remaining disagreement listed with its cause.
-- **D4 - strictness under the one view (FR-004)**: a seat is free when it touches no ink the caption does not name: the
-  `inner` obstacles `classify` marks for the caption's own subject (its partitions, its mats) do not make a seat unfree; every
-  other weighted obstacle does, as today. Foot growth (`CAPTION_GROWTHS`) and the refusal message are unchanged.
+- **D3 - the switch (FR-003)**, decided by D2's measurement (m:caption-disagreements, re-run 2026-10-11 after plan review round
+  2: every variant now tries a caption's subjects in order, the first with a free seat winning, as `hand_sheet.seat` does): of
+  45 captions, 11 seat apart; 10 are explained by the three sources - the obstacle VIEW alone 5 (garden, straw mats, practice
+  ground, two wells), the SUBJECT alone 2 (the residence; the fire-water tubs, which the composer names by the roomiest tub
+  where the declaration names all of them), the three TOGETHER 3 (gatehouse, cell, one clerk); WIDTH alone moves none. Fix 1
+  (the composer indexing with `classify`) removes 5; fix 2 (the hand-sheet placer taking the composer's subjects) removes 2.
+  The switch takes, per source: VIEW - fix 1: `emit_svg` builds each caption's index with `hand_sheet.classify` over the sheet
+  it has drawn (its captions not yet written), the seated captions added as now, and no obstacle list or late obstacles of its
+  own; SUBJECT - the composer takes the hand-sheet placer's reading of the declared subject, `hand_sheet.subjects` over the
+  declared parts, the whole ordered list tried as the hand-sheet placer tries it (inside, then beside; the first with a free
+  seat wins), since the composer's own single subject is what differs; WIDTH - the composer measures each caption with
+  `hand_sheet.char_w_of` (FR-003: the source no longer differs, though on this example it moves no seat). Measured with all
+  three swapped: 44 of 45 agree; the one left apart is a clerk (order, clearance or repair - not one of the three), reported
+  and not unified; and every caption finds a strict seat (none soft). After the switch the harness re-runs on the built code.
+- **D4 - strictness under the one view (FR-004)**: a seat is free when it touches nothing outside the caption's declared parts:
+  every weighted obstacle `classify` gives blocks, the ones it flags `inner` (partitions, a court's buildings, a named room
+  inside the subject) included - a caption named for a building does not name its partitions (plan review round 2 reversed the
+  first D4, which let inner ink through). The placer's own `blocked` already waives the subject's own outline. Foot growth
+  (`CAPTION_GROWTHS`) and the refusal message are unchanged; the growth and refusal run only when no subject in the list has a
+  free seat.
 - **D5 - performance (FR-005)**: the example's gen timed before and after (`make map ... PROFILE=1`); `make perf-report` read;
   any band crossed explained and audited.
 - **D6 - tests**: `tests/test_compound.py` keeps its refusal test unchanged; a declarations test (D1, seats unchanged); the D3
