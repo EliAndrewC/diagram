@@ -229,15 +229,15 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
 
 def spec_body_sha(d: Path) -> str:
     """sha256 of what a review of feature `d`'s spec judged: spec.md above its Review history (the record of rounds and rulings
-    grows), without the `**Key**: value` header lines before the first `## ` heading (a Status line rewritten at landing is no
-    amendment - plan review round 3 found an accepted feature refused at its own landing push)."""
+    grows): its title and everything from the first `## ` heading, the header block between them dropped WHOLE - a Status line
+    rewritten at landing is no amendment, wrapped onto a second line or not (plan review rounds 3 and 4 found an accepted
+    feature refused at its own landing push, the second time by a two-line Status)."""
     import hashlib  # noqa: PLC0415
 
     text = (d / "spec.md").read_text(encoding="utf-8") if (d / "spec.md").is_file() else ""
     body = text.split("\n## Review history", 1)[0]
     head, sep, rest = body.partition("\n## ")
-    head = "\n".join(ln for ln in head.splitlines() if not re.match(r"\*\*[^*]+\*\*:", ln))
-    return hashlib.sha256((head + sep + rest).encode()).hexdigest()
+    return hashlib.sha256((head.split("\n", 1)[0] + sep + rest).encode()).hexdigest()
 
 
 def spec_ruled(d: Path) -> str:

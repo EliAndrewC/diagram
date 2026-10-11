@@ -98,9 +98,10 @@ amendment's new pass at round 1.
 **D12 - An `accept` or `process-fault` is the spec's verdict at the push.** `review-gate.sh` refuses a spec with no
 FAITHFUL verdict; an arbiter's `accept` or `process-fault` on the review, `round:spec-fidelity|<feature>#<pass>@N` in that
 feature's tracked `arbiter.jsonl`, answers it only while the spec reads as it did when ruled: the ruling row carries
-`spec_sha`, the hash of what the review judged - `spec.md` above its Review history, without the `**Key**: value` header
-lines before the first `## ` heading, so a Status line rewritten at landing keeps the ruling while a requirement edit
-cancels it (plan review round 3; `hm_arbiter.spec_body_sha`) - and the gate asks
+`spec_sha`, the hash of what the review judged - `spec.md`'s title and everything from its first `## ` heading to its
+Review history, the header block between them dropped WHOLE, so a Status line rewritten at landing (one line or wrapped onto
+two) keeps the ruling while a requirement edit cancels it (plan review rounds 3 and 4; `hm_arbiter.spec_body_sha`) - and the
+gate asks
 `hm_arbiter.py spec-ruled` - no untracked per-clone state, so any clone's push of an amended spec is refused on an old
 ruling (plan review round 2). A `continue` does not answer it (the spec stands as
 the last round left it, the GM reviewing the ruling after landing). Without it, "accept" would leave the feature unable to

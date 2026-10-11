@@ -76,13 +76,15 @@ check "a spec that merely MENTIONS the word in prose" b3 blocked
 
 # GUARD_EDIT_OK: feature 379 amendment 2 - the round arbiter's accept on the spec's review stands in for FAITHFUL
 # the ruling carries the spec's hash (hm_arbiter.spec_body_sha): it stands only while the spec reads as it was ruled on
-SHA=$(printf '# spec\n' | sha256sum | cut -d' ' -f1)
+SHA=$(printf '# spec' | sha256sum | cut -d' ' -f1)   # the title and the sections; the header block is not hashed
 ruling() { printf '{"trigger": "round:spec-fidelity|900-x#1@6", "kind": "round", "ruling": "%s", "why": "w", "utc": "t", "spec_sha": "%s"}\n' "$1" "${2:-$SHA}" > specs/900-x/arbiter.jsonl; }
 mkrepo b4; printf '# spec\n\n**Status**: In progress\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling accept
 echo work >> seed.txt; git add -A; git commit -qm s
 check "a spec the round arbiter accepted past the cap ships" b4 ok
 printf '# spec\n\n**Status**: Done 2026-10-10 - landed\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; git add -A; git commit -qm done
 check "...and still ships once its Status line says Done (a header line is no amendment)" b4 ok
+printf '# spec\n\n**Status**: Done 2026-10-10 - landed: spec FAITHFUL, plan CLEAR, every task ticked; the gate green\n  and the report written\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; git add -A; git commit -qm wrapped
+check "...or a Status line wrapped onto two lines (plan review round 4)" b4 ok
 mkrepo b5; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling continue
 echo work >> seed.txt; git add -A; git commit -qm s
 check "...but a continue ruling is no verdict" b5 blocked
