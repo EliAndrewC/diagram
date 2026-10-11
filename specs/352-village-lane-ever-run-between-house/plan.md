@@ -12,7 +12,8 @@ off a household's wood share tagged against that finding, each claim judged by `
 - **The record.** Written and checked by FRESH page sessions from briefs (`make page-session BRIEF="m1-write.md
   m1-check.md"`): one write session (the search pass, archive first, and the record on 0036), one check-and-apply session.
   One question; new registry keys only where a source is found and cited.
-- **The claims.** The units FR-003 lists, found by its recorded command over `dev/claims-index.json`. Their claims are
+- **The claims.** The ten claims FR-003 lists, found by its recorded search over the claims index's keys and notes and
+  the `Research:` claim text in the code (its five exclusions stated there). Their claims are
   edited in this session after the record lands (a docstring's `Research:` lines - no engine line), then bundled with
   `make claims-bundle` and judged by `impl-drift`; `make claims-checked` records the verdicts.
 
@@ -61,5 +62,8 @@ l7r/diagram/hamletgen/homesteads/stages.py            a docstring's claims
 l7r/diagram/hamletgen/homesteads/growth.py            a docstring's claims
 l7r/diagram/hamletgen/ways/track.py                   a docstring's claims
 l7r/diagram/hamletgen/ways/web.py                     a docstring's claims
+l7r/diagram/settlement/rolling/gap_ways.py            a docstring's claims
+l7r/diagram/settlement/rolling/passage.py             a docstring's claims
+l7r/diagram/settlement/homestead_parts/wood_share.py  a docstring's claims
 specs/352-village-lane-ever-run-between-house/briefs/  m1-write.md, m1-check.md
 ```
