@@ -189,12 +189,19 @@ def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None
                     state.setdefault("edits", {}).setdefault(s, []).append([path, old, new])
 
 
+#: the answers one `modal-research` dispatch is recorded as (`make record-checked CHECK=modal-accuracy` ...)
+RESEARCH_UNITS: frozenset[str] = frozenset({"modal-accuracy", "modal-references", "modal-gaps"})
+
+
 def answered(state: dict[str, Any], check: str, subjects: list[str]) -> int:
     """Close the dispatches of `check` on any of `subjects` - its answer is recorded (`make record-checked`), or `make
     check-closed` closed a silent one (check `*`)."""
     n = 0
+    # GUARD_EDIT_OK: feature 374 FR-005 - one modal-research dispatch is answered as three units (its accuracy, references and
+    # gaps); matched by the unit's own name it was never closed, its round never ended, and its next round was refused
+    names = {check, *(("modal-research",) if check in RESEARCH_UNITS else ())}
     for d in state.get("dispatches", {}).values():
-        if d["check"] in (check, "*") or check == "*":
+        if d["check"] in names or d["check"] == "*" or check == "*":
             if set(d["subjects"]) & set(subjects) and d.get("state") != "answered":
                 d["state"] = "answered"
                 n += 1
