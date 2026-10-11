@@ -29,12 +29,14 @@ page, and their counts reach FR-010 alone.
 
 from __future__ import annotations
 
+import contextlib
+import fcntl
 import json
 import os
 import re
 import sys
 import time
-from collections.abc import Mapping
+from collections.abc import Iterator, Mapping
 from pathlib import Path
 from typing import Any
 
@@ -105,9 +107,20 @@ def load(path: Path) -> dict[str, Any]:
         return {}
 
 
+@contextlib.contextmanager
+def locked(path: Path) -> Iterator[None]:
+    """The state file's read-modify-write held by one process at a time: six checks launched in one message run one hook
+    process each, and unlocked, a later save dropped an earlier one's agent id - its reply was then never kept, and the round
+    arbiter read "no reply kept" for the round (feature 374 wave 120, the arbiter's tooling fix)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.with_suffix(".lock").open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        yield
+
+
 def save(path: Path, state: Mapping[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(".tmp")
+    tmp = path.with_suffix(f".{os.getpid()}.tmp")
     tmp.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
     os.replace(tmp, path)
 
@@ -249,9 +262,10 @@ def record_answer(root: Path, check: str, slugs: list[str]) -> None:
     path = state_path(str(root))
     if path is None or not path.is_file():
         return
-    state = load(path)
-    if answered(state, check, sorted({s for slug in slugs if (s := subject_of_unit(slug.split(":", 1)[-1]))})):
-        save(path, state)
+    with locked(path):
+        state = load(path)
+        if answered(state, check, sorted({s for slug in slugs if (s := subject_of_unit(slug.split(":", 1)[-1]))})):
+            save(path, state)
 
 
 def proposed(state: Mapping[str, Any], subject: str, old: str, new: str) -> bool:
@@ -551,11 +565,16 @@ def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | 
 
 
 def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> str:
-    """One hook event. Returns a refusal message (the hook exits 2 with it) or ''."""
-    now = time.time() if now is None else now
+    """One hook event. Returns a refusal message (the hook exits 2 with it) or ''. Held under the state's lock."""
     path = state_path(str(payload.get("cwd") or os.getcwd()))
     if path is None:
         return ""
+    with locked(path):
+        return _handle(mode, payload, path, time.time() if now is None else now)
+
+
+def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> str:
+    """`handle`'s body, with the state file's path and the lock held."""
     if mode in ("returned", "launched"):
         log_pass(path.parent, mode, payload, now)  # every check's pass, apart from the page-check state (feature 371)
     state = load(path)
@@ -627,7 +646,14 @@ def close(root: Path, subject: str, reason: str, now: float) -> int:
     each use with its reason in the guard census. A live check is never closed here (the plan review of amendment 1: closing
     any check at any time was an unlogged way past the freeze)."""
     path = state_path(str(root))
-    state = load(path) if path else {}
+    if path is None:
+        return _close(None, {}, subject, reason, now)
+    with locked(path):
+        return _close(path, load(path), subject, reason, now)
+
+
+def _close(path: Path | None, state: dict[str, Any], subject: str, reason: str, now: float) -> int:
+    """`close`'s body, with the state loaded under its lock."""
     if not escaped("CHECK_CLOSED", f'CHECK_CLOSED="{reason}"'):
         print("check-closed: REASON needs two words and eight characters - it is what a later audit reads", file=sys.stderr)
         return 2
