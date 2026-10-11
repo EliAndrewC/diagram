@@ -261,6 +261,30 @@ change; a batch that needs a new decision amends this plan and is reviewed again
 task's section, so `review-round-hooks.sh`'s classifier passes it as a plan review and never reroutes it to the verify
 twin; `make plan-verdict TASK=<id>` records it under `tasks.<id>`.
 
+### Amendment 1 (FR-015, FR-016)
+
+**D20 - The triage names the page, and a unit is owed only for its own pages (FR-015).** `modal_triage.bundle` already lists
+the changed blocks per page and the pop-ups under each; `triage.json` now also records, per unit, the pages it reads
+(`_pages_of`: a research unit its `Entry:` pages, `modal-depiction` its `Drawing:` pages). The MANIFEST asks for one line per
+(pop-up, page): `TOUCHES <uid> @ <page file name> - <which block>`. `record()` marks a unit touched only when a line names its
+uid at one of ITS pages; a line naming no page (the old form) still names all of that uid's units in the bundle - failing
+toward checking, reported as such - so a malformed reply never clears what it meant to keep. One bundle and one dispatch, as
+now (the advisor's split-by-family alternative costs a second dispatch whenever both families are owed, as in 343's triage).
+The SC-007 replay restates the kept reply's 14 lines with the pages they name in their own words ("0099 ..." the question
+page, "0104 drawing: ..." the drawing page): `tests/fixtures/modal-triage-343/`.
+
+**D21 - Depiction owed by its own words (FR-015).** In `modal_owed.owed`, `modal-depiction` is owed when the pop-up is new to
+the About form or its `depiction` (the Depiction tab and the `Drawing:` list) changed, or a page its `Drawing:` names moved
+(the triage then decides) - no longer when only its About, Guesses or Entry changed. Feature 319's plan-review case - a
+conversion that dropped its drawing links and wrote no Depiction - is a pop-up new to the About form, still owed; the comment
+at the rule says so.
+
+**D22 - The clones' view in `make speckit-todo`, display only (FR-016).** An active clone is a directory under `.clones/`
+whose event log (`.git/l7r-events/`, a line per hook event, so per tool call of its session) was written in the last 12 hours -
+no process scan. For each open feature whose `spec.md` or `tasks.md` in an active clone differs from main's, the listing shows
+the clone's state in that state's section, `[in <clone>, not landed]`, one row per differing clone. Only the listing does
+this: `--holding`, `--closed-by-status`, `CHECK=1` and `tick-task.py` read the directory they are given, as before.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

@@ -96,3 +96,12 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T99 The last batch (plan D18) [lands-open]
       research: rendering
       verify: DONE. DONE. batches 1-4 landed (plan D18): measurement and the fixes, the owing logic, the guards and the arbiter, the gates and the doctrine
+
+## Amendment 1 (the GM 2026-10-10: "yes to each of those possible changes")
+
+- [ ] T27 The triage names the page (plan D20) and depiction owed by its own words (plan D21); the 343 replay fixture and tests red on today's code (SC-007)
+      research: rendering
+- [ ] T28 The clones' view in `make speckit-todo` (plan D22); its fixture test (SC-008)
+      research: rendering
+- [ ] T29 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
+      research: rendering
