@@ -1,39 +1,45 @@
 {
  "feature": "337-big-was-roofed-hearing-court",
- "plan_sha256": "34385547c5acb9c06405135c4fe35f976272b8eb39e5f5124a7309090c5704a8",
- "plan_text": "# Implementation Plan: how big was a roofed hearing court? (feature 337)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The absence note** (FR-001): 0099's findings page gains an absence note on the roofed court's size, naming what\nwas searched as FR-001 lists it: the record, the archive, Takayama's official and city pages, Japanese Wikipedia, imidas,\nkotobank, and coverage of the Edo, Sado and Suibara magistracies. research.md R1 now records each of these searches (plan\nreview round 1 found the summary had left them out). Written by the shared write session, committed `337: ...`.\n\n**D2 - The Why's \"49 mats\"** was struck from the spec; R1 now carries the tourist pages' 49-mat great hall as what it is,\na search summary about the great hall, not the court.\n\n**D3 - `make open-questions`** must list it (SC-001): the note's form is the one `open-questions` reads.\n\n**D4 - The implementation check** (FR-091): the claims citing 0099's findings (`ROOFED_ZONES` in `compound_model.py` and\nthe procedure sections) are re-owed and checked.\n\n## Project Structure\n\n```text\nresearch/questions/0099-the-hearing-court-shirasu{.html,.notes.html}\n```\n",
- "reviewed": "2026-10-10",
+ "plan_sha256": "d2d3f7042ecd47b079fef910e01ba8f1304d4b54e93a867809130eb5b13a0458",
+ "plan_text": "# Implementation Plan: how big was a roofed hearing court? (feature 337)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The absence note** (FR-001): 0099's findings page gains an absence note on the roofed court's size, naming what\nwas searched as FR-001 lists it: the record, the archive, Takayama's official and city pages, Japanese Wikipedia, imidas,\nkotobank, and coverage of the Edo, Sado and Suibara magistracies. research.md R1 now records each of these searches (plan\nreview round 1 found the summary had left them out). Written by the shared write session, committed `337: ...`.\n\n**D2 - The Why's \"49 mats\"** was struck from the spec; R1 now carries the tourist pages' 49-mat great hall as what it is,\na search summary about the great hall, not the court.\n\n**D3 - `make open-questions`** must list it (SC-001): the note's form is the one `open-questions` reads.\n\n**D4 - The implementation check** (FR-091): the claims citing 0099's findings (`ROOFED_ZONES` in `compound_model.py` and\nthe procedure sections) are re-owed and checked.\n\n## Project Structure\n\n```text\nresearch/questions/0099-the-hearing-court-shirasu.html\nresearch/questions/0099-the-hearing-court-shirasu.notes.html\n```\n",
+ "reviewed": "2026-10-11",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "0099's absence note names what was searched exactly as FR-001 lists it; research.md R1 now records each search",
+   "summary": "0099's absence note on the roofed court's size names what was searched exactly as FR-001 lists it; research.md R1 records each search",
    "class": "within",
-   "why": "FR-001's list unchanged, no amendment. Every item is now in R1, and R1's additions match the research pass's own final report (subagent agent-a18bb3413d9560b09, read 2026-10-10): Japanese Wikipedia, imidas and kotobank on the court; Takayama official, city and tourist pages; Edo site totals; Sado and Suibara; survey and repair reports - with the report's 'search summaries, not read pages' caveat kept."
+   "why": "FR-001 and the request's 'add one or answer it'; the search list is FR-001's own, unchanged"
   },
   {
    "id": "D2",
-   "summary": "the 49 mats struck from the spec's Why; R1 carries the tourist pages' 49-mat great hall as a search summary about the hall, not the court",
+   "summary": "the 49 mats stay struck from the spec's Why; R1 carries the tourist pages' 49-mat great hall as a search summary about the hall, not the court",
    "class": "within",
-   "why": "spec.md's Why no longer carries it; R1 states it as the pass reported it"
+   "why": "a correction of a research summary, narrows nothing the request or FR-001 asks"
   },
   {
    "id": "D3",
    "summary": "the note in the form make open-questions reads",
    "class": "within",
-   "why": "SC-001"
+   "why": "SC-001; the request names make open-questions as the purpose of the note"
   },
   {
    "id": "D4",
-   "summary": "claims citing 0099 (ROOFED_ZONES, procedure sections) re-owed and checked",
+   "summary": "claims citing 0099's findings (ROOFED_ZONES, the procedure sections) re-owed and checked",
    "class": "within",
    "why": "FR-091"
   },
   {
    "id": "TC-shared",
-   "summary": "shared write/check sessions, one commit per feature",
+   "summary": "shared write and check-and-apply page sessions with 336, 338, 343; one commit per feature",
    "class": "within",
-   "why": "the record's process"
+   "why": "the record's process; the GM's 2026-10-10 words allow the features 'all at once or however is easiest'"
+  },
+  {
+   "id": "PS-pointers",
+   "summary": "Project Structure names the two record files in full instead of the brace form (commit 0389f93d8)",
+   "class": "within",
+   "why": "the same two files as before, written so the pointer check resolves them; both exist; no scope change"
   }
  ],
  "verdict": "CLEAR"

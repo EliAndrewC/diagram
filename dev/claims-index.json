@@ -1045,14 +1045,15 @@
   "date": "2026-10-10",
   "note": "the one genkan is on the office hall, the residence has none, and the visitors' way runs on through the office to the house, as the page draws a shared compound; the roji form without a genkan is the page's second attested form",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "b2a74a73e3c362a1"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff"
   },
-  "research": "2892ce3f903e6811",
+  "research": "093d6357243ac064",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
   ],
   "section": "03a6c88a20bdb161",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
@@ -1382,6 +1383,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "section": "03a6c88a20bdb161",
+  "triage": "touched",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -2305,6 +2307,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
   ],
   "section": "6c077f80b364c895",
+  "triage": "touched",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -4652,6 +4655,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_parts.py::_roji_parts#shoe stone": {
@@ -5615,15 +5619,15 @@
   "date": "2026-10-05",
   "note": "dry furrows only, up to 8 degrees on a hamlet, paddy never tilted",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
-  "research": "95bd9df648285dfa",
+  "research": "d2a695abb2df0233",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::GROSS_ACRES_PER_HOUSEHOLD#paddy per household": {
@@ -9713,12 +9717,13 @@
   "date": "2026-10-09",
   "note": "0.85-0.95 rolled per hamlet",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2648f7d12e71c15a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#wood shed share": {
@@ -9750,12 +9755,13 @@
   "date": "2026-10-09",
   "note": "160 ft, recorded as the page's GUESS",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::PIT_FIELD_SHARE_BAND#field pit share": {
@@ -9764,14 +9770,15 @@
   "date": "2026-10-09",
   "note": "2 of 83 to 15 of 18, rolled per hamlet",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "22fc88c9ad28fcc5",
+  "research": "3919cf19cc381174",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
    "0047-farm-privies-and-their-night-soil-benjo.html:ddf6bf2590cee847"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PIT_CANDIDATES#fixture drawing plumbing": {
@@ -9796,16 +9803,17 @@
   "date": "2026-10-09",
   "note": "four places in the page's order at 35/30/20/15, a recorded GUESS",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "22fc88c9ad28fcc5",
+  "research": "3919cf19cc381174",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22",
    "0047-farm-privies-and-their-night-soil-benjo.html:2448eb7f2dfe9d3a",
    "0047-farm-privies-and-their-night-soil-benjo.html:b8871624fb928e66",
    "0047-farm-privies-and-their-night-soil-benjo.html:d9b8f2f66a035aff"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_WEIGHT_SPREAD#privy weights per hamlet": {
@@ -9814,12 +9822,13 @@
   "date": "2026-10-09",
   "note": "\"up or down by as much as half\"",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_laid#which pits go to the field": {
@@ -9828,12 +9837,13 @@
   "date": "2026-10-09",
   "note": "the hamlet's rolled field share, the rest beside the privy",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#a lane between pit and house allowed": {
@@ -9842,12 +9852,13 @@
   "date": "2026-10-09",
   "note": "the pit at the field or road edge, the laid seat as fallback",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#field pit off a lane": {
@@ -9886,12 +9897,13 @@
   "date": "2026-10-09",
   "note": "160 ft, the page's GUESS",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_flexible_clear#pit off every grove": {
@@ -9971,12 +9983,13 @@
   "date": "2026-10-09",
   "note": "both attested seats, the field seat sought first",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::field_edge_seats#pit at the field or road edge": {
@@ -9985,14 +9998,15 @@
   "date": "2026-10-09",
   "note": "the nearest paddy or road edge",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "22fc88c9ad28fcc5",
+  "research": "3919cf19cc381174",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
    "0047-farm-privies-and-their-night-soil-benjo.html:1a8a94917bee238f"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_form#fixture drawing plumbing": {
@@ -10037,12 +10051,13 @@
   "date": "2026-10-09",
   "note": "the hamlet's rolled weights",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": {
@@ -10076,12 +10091,13 @@
   "date": "2026-10-09",
   "note": "each base weight scaled 0.5-1.5 per hamlet, renormalized",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::record_drawn_forms#fixture drawing plumbing": {
@@ -13439,12 +13455,13 @@
   "date": "2026-10-09",
   "note": "KNOWN (found row E2). The 0047 drawing page records no \"sty drawn alone\"; §32 calls privy-with-muck a GUESS, and §147 attests the latrine built over the pigsty. Fix: record the departure on the drawing page, or cite 0049/0025",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:65691607dc814b44"
   ],
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sties at the dike-pond only": {
@@ -15304,10 +15321,10 @@
   "date": "2026-10-03",
   "note": "matches 0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::FAN_MIDDLE#wild weighting": {
@@ -34758,10 +34775,10 @@
   "date": "2026-10-03",
   "note": "0006 neighbors abut continuously",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_KEY_OK#one continuous work": {
@@ -43843,6 +43860,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
   ],
+  "triage": "touched",
   "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
@@ -43870,14 +43888,14 @@
   "date": "2026-10-07",
   "note": "drops plots on other rice, on water or on its own ditch",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem placement": {
@@ -43886,15 +43904,15 @@
   "date": "2026-10-07",
   "note": "plots upslope of the supply canal, as the net lays them",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot": {
@@ -44177,10 +44195,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#junction pile size": {
@@ -44299,10 +44317,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::recorded_water#plumbing": {
@@ -45048,10 +45066,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/grain.py::top_up#top-up order": {
@@ -45567,10 +45585,10 @@
   "date": "2026-10-03",
   "note": "theta = uniform(-0.6, 0.6) per plot independently, where 0006 has plots in tracts sharing one direction (\"along the contour or down to its outfall\"), each plot turning \"about 3 degrees\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#row ink": {
@@ -45587,10 +45605,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._split_convex#plumbing": {
@@ -45846,6 +45864,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each plot's green": {
@@ -47107,12 +47126,13 @@
   "date": "2026-10-09",
   "note": "default 35/30/20/15 in the page's order",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#retirement house size and gaps": {
@@ -47180,12 +47200,13 @@
   "date": "2026-10-09",
   "note": "edge 8 ft off the front wall, the page's GUESS",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SIZES_FT#privy sizes": {
@@ -47194,12 +47215,13 @@
   "date": "2026-10-09",
   "note": "16 sizes from 5x5 to 27x15: ten at 18x12 or under, five at 24x12, equally likely",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SUNNY_SHARE#privies on the sunny side": {
@@ -47208,12 +47230,13 @@
   "date": "2026-10-09",
   "note": "72.7% taken as given",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SUN_MAX_FT#sun-side search reach": {
@@ -47237,13 +47260,14 @@
   "date": "2026-10-09",
   "note": "from 18 ft",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:0a66664e8ca81f96",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall": {
@@ -47252,12 +47276,13 @@
   "date": "2026-10-09",
   "note": "KNOWN, held E3. The edge stands 9.5 ft off the back wall (6 + 3.5 gap); the page says \"a ken (about 6 ft) off the back wall\" and records no hold",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::SALT#plumbing": {
@@ -47443,12 +47468,13 @@
   "date": "2026-10-09",
   "note": "KNOWN, held E3. Same as above: the 9.5 ft edge against the page's \"a ken (about 6 ft) off the back wall\"",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": {
@@ -47457,14 +47483,15 @@
   "date": "2026-10-09",
   "note": "sun sector on a 72.7% roll, else yard/front/stable at the hamlet's weights, no barn",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2697271aa3082865",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#retirement house": {
@@ -47541,6 +47568,7 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_sunlit#persimmon out of the plots' sun": {
@@ -47613,12 +47641,13 @@
   "date": "2026-10-09",
   "note": "stops before the outer edge passes the gable: \"while the whole privy still stands along the wall\"",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::along_its_wall#slid toward its own end only": {
@@ -47783,13 +47812,14 @@
   "note": "6 x 6 ft is one tsubo, the low end of the bath's range, and lies within the privy table's 5x5 to 27x15 sizes (PRIVY_SIZES_FT holds (6, 6))",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3f14ee71151c4b1b",
+  "research": "5c1240c3c3e5458a",
   "rests": [
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#other fixtures' sizes": {
@@ -47821,12 +47851,13 @@
   "date": "2026-10-09",
   "note": "uniform over the sixteen",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#retirement house size": {
@@ -48049,14 +48080,15 @@
   "date": "2026-10-09",
   "note": "the barn left out while hamlets draw none; open work recorded",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2697271aa3082865",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size": {
@@ -48080,13 +48112,14 @@
   "date": "2026-10-09",
   "note": "rolled place slid along its wall first; a sunny miss falls back to first spots; the threshing-yard cover is recorded open work (row 564)",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#the ken past the wall gap": {
@@ -53295,6 +53328,7 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#row direction": {
@@ -53303,10 +53337,10 @@
   "date": "2026-10-03",
   "note": "theta = ri*0.9 + cj*1.5 turns every plot from every neighbor; 0006 has \"Neighboring plots form tracts that share one row direction\" (2-4 strips, about 3 degrees within a tract, seams at least 20 degrees)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#basin rows and bounds": {
@@ -65587,10 +65621,10 @@
   "date": "2026-10-03",
   "note": "0006: a plot that \"would lap onto another canal's rice is dropped\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall": {
@@ -65902,16 +65936,16 @@
   "date": "2026-10-09",
   "note": "the inner edge sits at the stroke's local half-width plus CANAL_BERM_FT, converted correctly by ft*g/2",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
-  "research": "5cb608c6c81f73b4",
+  "research": "d20ccbe759d24da2",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#crop per plot": {
@@ -65920,15 +65954,15 @@
   "date": "2026-10-09",
   "note": "one of the four attested crops, drawn from the map's one mix",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#dry plot size": {
@@ -65937,12 +65971,13 @@
   "date": "2026-10-09",
   "note": "46g x 36g px is 92 x 72 ft at both village and hamlet scale, about 0.15 acre, which matches the page's 0.16-0.17 for the village and about 0.15 for the hamlet.",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#end plot floor": {
@@ -65963,12 +65998,13 @@
   "date": "2026-10-09",
   "note": "halving any end cell past 1.35 widths, at every grain, caps it near 0.2 acre, inside the page's \"under 0.25 acre\" and \"never dwarfs the rice basins\".",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#hem depth": {
@@ -66032,17 +66068,17 @@
   "date": "2026-10-09",
   "note": "`gap - halfw < 0.5` holds plots only 0.5 px off any other supply stroke's painted edge, but 0055 says \"A bare earth bank 5 ft wide runs between a supply canal and the fields beside it\", and neither drawing page records the 0.5 px floor as a deliberate choice; record it as a DEVIATION on 0055, or move the code to the bank",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
-  "research": "388f1d7134acd022",
+  "research": "6dc604b4424a63ce",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#row direction": {
@@ -66051,14 +66087,14 @@
   "date": "2026-10-09",
   "note": "each plot turns up to 0.05 rad (about 2.9 degrees) off its tract's heading, matching \"about 3 degrees either way\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#squared to the canal": {
@@ -66067,15 +66103,15 @@
   "date": "2026-10-09",
   "note": "laid out along the canal's arc length, squared to it, with shared mitred seams",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_root_f#sector bounds": {
@@ -66114,13 +66150,13 @@
   "date": "2026-10-09",
   "note": "one weight per crop, rolled once per map.",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::dry_crop_mix#the weights": {
@@ -66745,10 +66781,10 @@
   "date": "2026-10-03",
   "note": "steep ground owes no seam (0006); literal 0.3 duplicates STEEP_SPREAD_RAD",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::finish_comb#one rice green": {
@@ -67042,10 +67078,10 @@
   "date": "2026-10-03",
   "note": "nothing sheared or stepped (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_pip#frame geometry": {
@@ -67155,10 +67191,10 @@
   "date": "2026-10-03",
   "note": "~6 deg (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::STEEP_SPREAD_RAD#steep ground runs the contour": {
@@ -67167,10 +67203,10 @@
   "date": "2026-10-03",
   "note": "steep rows on the contour (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::THETA_ROUNDING_RAD#row-direction geometry": {
@@ -67211,10 +67247,10 @@
   "date": "2026-10-03",
   "note": "20 deg convention (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::_center#row-direction geometry": {
@@ -67255,13 +67291,14 @@
   "date": "2026-10-09",
   "note": "the tract turns as a whole; it tries the 20-degree seam less two plot turns first, then the 6-degree line; with theta0 every turn stays within a way",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::settle_tract_seams#hemmed-in tract joins a neighbor": {
@@ -67270,13 +67307,14 @@
   "date": "2026-10-09",
   "note": "takes the number and heading of the neighbor with the closest rows; 0006 leaves tract size open",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::settle_tract_seams#turn kept to the two ways": {
@@ -67285,12 +67323,13 @@
   "date": "2026-10-09",
   "note": "a turn is admitted only where way_lean(head+d, theta0) <= 0.3 rad (17.2 deg), against the contour or the fall a right angle off it; this matches \"turned up to about 17 degrees\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_heading#tract heading": {
@@ -67309,10 +67348,10 @@
   "date": "2026-10-03",
   "note": "0006 tract/seam rule",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#seam turn": {
@@ -67321,10 +67360,10 @@
   "date": "2026-10-03",
   "note": "flips to the other way (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#tract lean and size": {
@@ -67333,10 +67372,10 @@
   "date": "2026-10-03",
   "note": "0006 figures",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#two row directions": {
@@ -67345,10 +67384,10 @@
   "date": "2026-10-03",
   "note": "contour or fall, rolled per tract (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::way_lean#the two ways": {
@@ -67357,12 +67396,13 @@
   "date": "2026-10-09",
   "note": "the smaller lean off the contour or the fall at theta0 + pi/2, \"the two a right angle apart\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::BoxedRings#hem plumbing": {
@@ -67439,13 +67479,14 @@
   "date": "2026-10-09",
   "note": "_dry_fields lays the hem upslope of supply canal A, keeping to the dry side of the supply strokes",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band depth": {
@@ -67492,14 +67533,15 @@
   "date": "2026-10-09",
   "note": "only when furrow_spread >= STEEP_SPREAD_RAD (steep ground runs the contour, so no seam is needed); covers every band and the reserve, and now passes the contour heading _dry_fields lays from",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#wild middle": {
@@ -67508,12 +67550,13 @@
   "date": "2026-10-09",
   "note": "on a wild fan only the toe's share of the a-side hem is drawn, and the middle goes to middle_reserve",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_ring_mean#hem plumbing": {
@@ -67530,10 +67573,10 @@
   "date": "2026-10-03",
   "note": "0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::middle_reserve#clearing order": {
@@ -67586,10 +67629,10 @@
   "date": "2026-10-03",
   "note": "0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hill.py::build_ribbon#acreage scale": {
@@ -67924,10 +67967,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::FLOODED#wet-paddy tint": {

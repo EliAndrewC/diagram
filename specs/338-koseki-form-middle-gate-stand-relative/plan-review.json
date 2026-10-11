@@ -1,39 +1,45 @@
 {
  "feature": "338-koseki-form-middle-gate-stand-relative",
- "plan_sha256": "15201f88cbf7835d523dc31a00a4ec2416af9308a11afaf970c2001c48602430",
- "plan_text": "# Implementation Plan: where did the Koseki form's middle gate stand? (feature 338)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The record write** (FR-001): 0104's findings page states what the Koseki house shows of its middle gate (a gate in\nthe roji wall, from the gate court to the principal room's veranda; a house with no offices), and an absence note that no\nsource places a middle gate relative to an office hall. Committed `338: ...` by the shared write session.\n\n**D2 - The drawing page** (FR-002): 0104's drawing page labels the divider gate behind the office hall a GUESS no source\nplaces. The spec's Why is reworded so the silence is not stated as a refutation (\"the premise does not hold\" becomes\n\"no source places it\").\n\n**D3 - The download list**: the 1994 repair report 『旧小関家住宅修理工事報告書』 goes to `research/to-download.md` through\n`make download-add`.\n\n**D4 - The implementation check** (FR-091): the claims citing 0104's findings are re-owed and checked.\n\n## Project Structure\n\n```text\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan{.html,.drawing.html,.notes.html}\nresearch/to-download.md   through make download-add\n```\n",
- "reviewed": "2026-10-10",
+ "plan_sha256": "fcf0620076908a37892f5d2947006ea0f017d49ef8eacb48d43e76204e7e9cd2",
+ "plan_text": "# Implementation Plan: where did the Koseki form's middle gate stand? (feature 338)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The record write** (FR-001): 0104's findings page states what the Koseki house shows of its middle gate (a gate in\nthe roji wall, from the gate court to the principal room's veranda; a house with no offices), and an absence note that no\nsource places a middle gate relative to an office hall. Committed `338: ...` by the shared write session.\n\n**D2 - The drawing page** (FR-002): 0104's drawing page labels the divider gate behind the office hall a GUESS no source\nplaces. The spec's Why is reworded so the silence is not stated as a refutation (\"the premise does not hold\" becomes\n\"no source places it\").\n\n**D3 - The download list**: the 1994 repair report 『旧小関家住宅修理工事報告書』 goes to `research/to-download.md` through\n`make download-add`.\n\n**D4 - The implementation check** (FR-091): the claims citing 0104's findings are re-owed and checked.\n\n## Project Structure\n\n```text\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.notes.html\nresearch/to-download.md   through make download-add\n```\n",
+ "reviewed": "2026-10-11",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "0104 states the Koseki house's middle gate (roji wall gate, no offices) and an absence note on a middle gate relative to an office hall",
+   "summary": "0104's findings page states the Koseki house's middle gate (a roji-wall gate from the gate court to the principal room's veranda; a house with no offices) and an absence note that no source places a middle gate relative to an office hall",
    "class": "within",
-   "why": "FR-001 as written"
+   "why": "FR-001 as written; answers the request's question with what the research found"
   },
   {
    "id": "D2",
-   "summary": "0104's drawing page labels the divider gate behind the office hall a GUESS no source places; the Why reworded to 'no source places it'",
+   "summary": "0104's drawing page labels the divider gate behind the office hall a GUESS no source places; the spec's Why reworded to 'no source places it'",
    "class": "within",
-   "why": "FR-002 as written; the reword is the round-1 note and already in the spec"
+   "why": "FR-002 as written; the reword is already in the spec and states the silence as a silence, not a refutation"
   },
   {
    "id": "D3",
-   "summary": "the 1994 Koseki repair report to the download list",
+   "summary": "the 1994 Koseki house repair report goes to research/to-download.md through make download-add",
    "class": "within",
-   "why": "an addition under the research doctrine's standing step for an unread source; narrows nothing"
+   "why": "the research doctrine's standing step for a source only the GM can fetch; it adds to the search and narrows nothing"
   },
   {
    "id": "D4",
-   "summary": "claims citing 0104 re-owed and checked",
+   "summary": "the claims citing 0104's findings are re-owed and checked",
    "class": "within",
    "why": "FR-091"
   },
   {
    "id": "TC-shared",
-   "summary": "shared write/check sessions, one commit per feature",
+   "summary": "one shared write session and one check-and-apply session across 336, 337, 338 and 343, one commit per feature",
    "class": "within",
-   "why": "the record's process"
+   "why": "the record's two-session process; the GM allowed the five features done 'all at once or however is easiest'"
+  },
+  {
+   "id": "PS-files",
+   "summary": "the project structure names 0104's .html, .drawing.html and .notes.html in full (commit 0389f93d8, replacing the brace form)",
+   "class": "within",
+   "why": "the same three files the brace form named; a pointer-format fix, no change of scope"
   }
  ],
  "verdict": "CLEAR"

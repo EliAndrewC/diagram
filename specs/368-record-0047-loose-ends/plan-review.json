@@ -1,69 +1,81 @@
 {
  "feature": "368-record-0047-loose-ends",
- "plan_sha256": "cc2b1d696924fcb940ae6eaab243edb1fc8a48f74db3e7cc62ae3716089be184",
- "plan_text": "# Implementation Plan: loose ends in the privy record (0047), and two of 0006's (feature 368)\n\n**Spec**: `spec.md` | **Request**: `request.md`\n\n## Summary\n\nA research-record feature: five record defects fixed on two questions, their checks answered, and the implementation\ncheck. The record edits are `research: physical` where they touch a quotation (items 2, 3); the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Edits made by FRESH page sessions from briefs (`make page-session BRIEF=\"m2-write.md m2-check.md\"`): one\n  write session for 0047 and 0006, one check-and-apply session. Two questions, no new registry key expected.\n- **The figures.** `measure/privy_reach.py` over the five pool hamlets' recorded manifests; its output\n  `measure/privy-reach.txt` is the page's source (FR-001). The script is the feature's, kept in its directory.\n- **The stroke.** The same tan-brown outline (stroke `#A98C58`, width 1.4) is drawn at THREE sites, each with its own\n  seams (FR-005: \"every dry plot\", read from the code that draws it):\n  - the hem: `l7r/diagram/settlement/fields/comb.py` (the dry-crop polygon), its plots and seams built by\n    `l7r/diagram/waterfields/carve.py` `_dry_fields` (shared column lines that read the family strips apart);\n  - the row village's holdings: `l7r/diagram/hamletgen/homesteads/rows.py` (`cls=\"farm holding\"`), its seams the\n    `HOLDING_CELL_FT` cuts, which the code calls a map drawing convention;\n  - the town near ring: `l7r/diagram/settlement/land/nearring.py` `near_ring_cropland`, its seams the cell tiler's.\n  The write session reads all three.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the figures are measured on today's maps and the method stated; quotations re-read on the paper.\n- **XIII**: tooling tests green.\n- **XVI**: built as written; the code is not changed (FR-007).\n\n## Decisions\n\n**D1 - Item 1** (FR-001): 0047's drawing page gives `measure/privy-reach.txt`'s figures and its method (privies only;\ncenter to center, not the engine's corner-to-wall reach; the house's own frame; the half-degree tolerance). The August\ntable stays whole and dated, apart from today's rows; the \"15 of 86\" run is marked an unrecorded August run. Every share\nstatement (the lead's \"fewer than half\", the table, the paragraph, the bullet) agrees.\n\n**D2 - Items 2 and 3** (FR-002, FR-003): the Kyoto PDF read for p.2242's spelling (the archive first); both copies of\n`wang-ochiai-2022-5` set to it. `wang-ochiai-2022-2`'s \"Type V1\" glossed from the paper's definition if it stands\nthere, else cut at the \"...\". Both owe quote-check.\n\n**D3 - Items 4 and 5** (FR-004, FR-005): 0006 gains a visible clause pointing to 0033's holdings; its drawing page says\nwhat the dry plot's stroke stands for at the outer edge and at the seam AT EACH OF THE THREE SITES in Technical Context\n(the hem, the row village's holdings, the near ring), and whether it is drawn wider than real, read from that code.\n\n**D4 - The checks** (FR-006): `make record-owed` after the write; every owed unit dispatched from its bundle by the check\nsession (quote-check, record-format, entry-drift, and the depiction checks of 0006's modals).\n\n**D5 - The implementation check** (FR-007): the claims citing 0047's and 0006's findings, re-owed by the change, are\ntriaged or re-checked with `impl-drift`; a claim the new figures contradict is recorded DRIFTED, the code unchanged.\n\n## Project Structure\n\n```text\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo{.html,.notes.html,.drawing.html,.drawing.notes.html}\nresearch/questions/0006-dry-fields-and-their-crops-hatake{.html,.drawing.html}\nspecs/368-record-0047-loose-ends/measure/   the script and its output\n```\n",
- "reviewed": "2026-10-10",
+ "plan_sha256": "f67ae0076141203a4443513f0063a7f61d45fe6e983a3aa0afded2cc858c07c2",
+ "plan_text": "# Implementation Plan: loose ends in the privy record (0047), and two of 0006's (feature 368)\n\n**Spec**: `spec.md` | **Request**: `request.md`\n\n## Summary\n\nA research-record feature: five record defects fixed on two questions, their checks answered, and the implementation\ncheck. The record edits are `research: physical` where they touch a quotation (items 2, 3); the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Edits made by FRESH page sessions from briefs (`make page-session BRIEF=\"m2-write.md m2-check.md\"`): one\n  write session for 0047 and 0006, one check-and-apply session. Two questions, no new registry key expected.\n- **The figures.** `measure/privy_reach.py` over the five pool hamlets' recorded manifests; its output\n  `measure/privy-reach.txt` is the page's source (FR-001). The script is the feature's, kept in its directory.\n- **The stroke.** The same tan-brown outline (stroke `#A98C58`, width 1.4) is drawn at THREE sites, each with its own\n  seams (FR-005: \"every dry plot\", read from the code that draws it):\n  - the hem: `l7r/diagram/settlement/fields/comb.py` (the dry-crop polygon), its plots and seams built by\n    `l7r/diagram/waterfields/carve.py` `_dry_fields` (shared column lines that read the family strips apart);\n  - the row village's holdings: `l7r/diagram/hamletgen/homesteads/rows.py` (`cls=\"farm holding\"`), its seams the\n    `HOLDING_CELL_FT` cuts, which the code calls a map drawing convention;\n  - the town near ring: `l7r/diagram/settlement/land/nearring.py` `near_ring_cropland`, its seams the cell tiler's.\n  The write session reads all three.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the figures are measured on today's maps and the method stated; quotations re-read on the paper.\n- **XIII**: tooling tests green.\n- **XVI**: built as written; the code is not changed (FR-007).\n\n## Decisions\n\n**D1 - Item 1** (FR-001): 0047's drawing page gives `measure/privy-reach.txt`'s figures and its method (privies only;\ncenter to center, not the engine's corner-to-wall reach; the house's own frame; the half-degree tolerance). The August\ntable stays whole and dated, apart from today's rows; the \"15 of 86\" run is marked an unrecorded August run. Every share\nstatement (the lead's \"fewer than half\", the table, the paragraph, the bullet) agrees.\n\n**D2 - Items 2 and 3** (FR-002, FR-003): the Kyoto PDF read for p.2242's spelling (the archive first); both copies of\n`wang-ochiai-2022-5` set to it. `wang-ochiai-2022-2`'s \"Type V1\" glossed from the paper's definition if it stands\nthere, else cut at the \"...\". Both owe quote-check.\n\n**D3 - Items 4 and 5** (FR-004, FR-005): 0006 gains a visible clause pointing to 0033's holdings; its drawing page says\nwhat the dry plot's stroke stands for at the outer edge and at the seam AT EACH OF THE THREE SITES in Technical Context\n(the hem, the row village's holdings, the near ring), and whether it is drawn wider than real, read from that code.\n\n**D4 - The checks** (FR-006): `make record-owed` after the write; every owed unit dispatched from its bundle by the check\nsession (quote-check, record-format, entry-drift, and the depiction checks of 0006's modals).\n\n**D5 - The implementation check** (FR-007): the claims citing 0047's and 0006's findings, re-owed by the change, are\ntriaged or re-checked with `impl-drift`; a claim the new figures contradict is recorded DRIFTED, the code unchanged.\n\n## Project Structure\n\n```text\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo.html\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo.notes.html\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.notes.html\nresearch/questions/0006-dry-fields-and-their-crops-hatake.html\nresearch/questions/0006-dry-fields-and-their-crops-hatake.drawing.html\nspecs/368-record-0047-loose-ends/measure/   the script and its output\n```\n",
+ "reviewed": "2026-10-11",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "Summary",
    "summary": "Tasks touching a quotation (items 2, 3) are research: physical; the rest research: rendering.",
    "class": "within",
-   "why": "Unchanged since round 1; nothing the request asked is dropped."
+   "why": "Classifies the work; drops none of the five items."
   },
   {
    "id": "TC-record",
-   "summary": "Fresh page sessions from briefs: one write session for 0047 and 0006, one check-and-apply.",
+   "summary": "Fresh page sessions from briefs: one write session for 0047 and 0006, one check-and-apply session; no new registry key expected.",
    "class": "within",
-   "why": "Unchanged; the standing record process, narrows none of the five items."
+   "why": "The standing record process; narrows none of the five items."
   },
   {
    "id": "TC-figures",
-   "summary": "measure/privy_reach.py over the five pool hamlets' recorded manifests; measure/privy-reach.txt is the page's source.",
+   "summary": "measure/privy_reach.py over the five pool hamlets' recorded manifests; measure/privy-reach.txt is the page's source; the script kept in the feature directory.",
    "class": "within",
-   "why": "Unchanged; exactly FR-001 and the spec's D1."
+   "why": "Request item 1 asks the figures re-derived from the sample maps' runs; this is FR-001 and the spec's D1."
   },
   {
    "id": "TC-stroke",
-   "summary": "The #A98C58 / 1.4 outline is drawn at three sites, each with its own seams: the hem (fields/comb.py, seams from waterfields/carve.py _dry_fields), the row village's holdings (hamletgen/homesteads/rows.py cls 'farm holding', seams at HOLDING_CELL_FT), the near ring (settlement/land/nearring.py near_ring_cropland, the cell tiler's seams); the write session reads all three.",
+   "summary": "The #A98C58 / 1.4 dry-plot outline is read at all three sites that draw it (hem: fields/comb.py with carve.py _dry_fields seams; row-village holdings: homesteads/rows.py with HOLDING_CELL_FT seams; near ring: land/nearring.py near_ring_cropland).",
    "class": "within",
-   "why": "Round 1's finding resolved. A grep of l7r/ for A98C58 (any case) finds the dry-plot polygon stroke at exactly comb.py:396, rows.py:347 and nearring.py:185; the other hits (retirement rect, farm_fixtures rect, the azuchi butt, a house palette, the lane shoulder) are not dry plots. _dry_fields (carve.py:62), HOLDING_CELL_FT (rows.py:207, its docstring 'a map drawing convention') and near_ring_cropland (nearring.py:34) all exist as named. Every dry plot's emitter is now read, as 'every dry plot' and FR-005's 'read from the code that draws it' require."
+   "why": "Request item 5 says 'every dry plot ... the seam between two plots included'. Re-grepped this round: the polygon stroke stands at comb.py:396, rows.py:347 and nearring.py:186 (one line from round 2's 185, same call); _dry_fields carve.py:62, HOLDING_CELL_FT rows.py:207, near_ring_cropland nearring.py:34. The other A98C58 hits are rects, a palette entry and a lane edge, not dry plots."
+  },
+  {
+   "id": "PerfBookends",
+   "summary": "N/A: no generator change.",
+   "class": "within",
+   "why": "Nothing in the request asks a generator change; FR-007 keeps the code unchanged."
   },
   {
    "id": "D1",
-   "summary": "0047's drawing page gives privy-reach.txt's figures and method; August table whole, dated, apart; the 15 of 86 run marked unrecorded; every share statement agrees.",
+   "summary": "0047's drawing page gives privy-reach.txt's figures and method; the August table whole, dated, apart; the '15 of 86' run marked an unrecorded August run; every share statement agrees.",
    "class": "within",
-   "why": "Unchanged; FR-001 clause for clause."
+   "why": "Item 1 asks the figures re-derived and paragraph and table brought into agreement; marking (rather than dropping) is one of FR-001's two allowed options."
   },
   {
    "id": "D2",
-   "summary": "Kyoto PDF p.2242 (archive first) decides wang-ochiai-2022-5's spelling in both copies; Type V1 glossed from the paper's definition, else cut at the '...'; both owe quote-check.",
+   "summary": "Kyoto PDF p.2242 (archive first) decides wang-ochiai-2022-5's spelling in both copies; 'Type V1' glossed from the paper's definition, else the quotation cut at its '...'; both owe quote-check.",
    "class": "within",
-   "why": "Unchanged; FR-002 and FR-003 as written."
+   "why": "Items 2 and 3 as the GM wrote them: both of item 3's options are the request's own, and the quote-check is asked."
   },
   {
    "id": "D3",
-   "summary": "0006 gains a visible clause pointing to 0033's holdings; its drawing page says what the stroke stands for at the outer edge and at the seam AT EACH OF THE THREE SITES, and whether it is drawn wider than real, read from that code.",
+   "summary": "0006 gains a visible clause pointing to 0033's holdings; its drawing page says what the stroke stands for at the outer edge and the seam at each of the three sites, and whether drawn wider than real, read from the code.",
    "class": "within",
-   "why": "Round 1's finding resolved: the item-5 half now covers every site, per site, matching the request's 'every dry plot ... the seam between two plots included' and FR-005. The write brief (briefs/m2-write.md item 5) carries the same three sites and the per-site instruction, with the request's own options (a field edge, a path, a balk) plus 'only a drawing cut', which widens rather than narrows what may be recorded. The item-4 half is within FR-004."
+   "why": "Items 4 and 5 and FR-004/FR-005, covering every dry plot per site."
   },
   {
    "id": "D4",
    "summary": "make record-owed after the write; every owed unit dispatched from its bundle (quote-check, record-format, entry-drift, the depiction checks of 0006's modals).",
    "class": "within",
-   "why": "Unchanged; FR-006."
+   "why": "Items 2-5 name the checks they re-owe; FR-006."
   },
   {
    "id": "D5",
    "summary": "Claims citing 0047's and 0006's findings, re-owed by the change, triaged or re-checked with impl-drift; a contradicted claim recorded DRIFTED, code unchanged.",
    "class": "within",
-   "why": "Unchanged; FR-007."
+   "why": "FR-007 and feature 378's closing rule; the request asks no code change."
   },
   {
    "id": "Constitution-XVI",
    "summary": "Built as written; the code is not changed.",
    "class": "within",
-   "why": "Unchanged; matches FR-007."
+   "why": "Matches FR-007."
+  },
+  {
+   "id": "ProjectStructure",
+   "summary": "Record files named in full: 0047's .html, .notes.html, .drawing.html, .drawing.notes.html; 0006's .html and .drawing.html; plus measure/. (Commit 0389f93d8 expanded the brace forms; content unchanged.)",
+   "class": "within",
+   "why": "The same six files as round 2's brace forms, each confirmed to exist under research/questions/. The set covers every page the five items name (0047's drawing page and both notes files; 0006's visible text and drawing page). No decision added or removed."
   }
  ],
  "verdict": "CLEAR"

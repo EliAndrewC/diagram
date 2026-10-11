@@ -1,39 +1,51 @@
 {
  "feature": "343-receiving-court-swept",
- "plan_sha256": "d261486f72afdf5e0f7c7f014ff8725632f76265c2190a9992fa67ae7ffa5e7b",
- "plan_text": "# Implementation Plan: is the receiving court \"swept\"? (feature 343)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The record write** (FR-001, amendment 1): 0104's findings page gains the Edo gravel (the South Town Magistracy and\nthe officers' houses, each source with its limits), the absence note for swept, raked, sanded or bare earth and for any\nsurface outside Edo, and the two-drawings sentence; written by the shared write session, committed `343: ...`.\n\n**D2 - The modal** (FR-002): `border-court.md` reworded by this session after the record lands (its Entry and Drawing name\n0104 and 0110). It owes `modal-form`, `modal-research` and `modal-depiction` (`make record-owed` names them), each from\n`make modal-bundle`.\n\n**D3 - The sheet's comments** (FR-005): the three \"swept\" comments of `ubame-magistracy.svg` reworded. No drawn element\nchanges, so no review check is owed (feature 294).\n\n**D4 - The implementation check** (FR-004): the claims citing 0104's findings, re-owed by the change, are triaged or\nre-checked; a question no code decides is recorded per feature 378.\n\n## Project Structure\n\n```text\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan{.html,.notes.html}\nl7r/diagram/interactive/assets/modals/sheet/border-court.md\npool/magistracies/ubame-magistracy/ubame-magistracy.svg   comments only\n```\n",
- "reviewed": "2026-10-10",
+ "plan_sha256": "b0d4265ae32a0a0158f1ffce68ed494b8ce75ccf5cc787fb671dd81383dbb9e5",
+ "plan_text": "# Implementation Plan: is the receiving court \"swept\"? (feature 343)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The record write** (FR-001, amendment 1): 0104's findings page gains the Edo gravel (the South Town Magistracy and\nthe officers' houses, each source with its limits), the absence note for swept, raked, sanded or bare earth and for any\nsurface outside Edo, and the two-drawings sentence; written by the shared write session, committed `343: ...`.\n\n**D2 - The modal** (FR-002): `border-court.md` reworded by this session after the record lands (its Entry and Drawing name\n0104 and 0110). It owes `modal-form`, `modal-research` and `modal-depiction` (`make record-owed` names them), each from\n`make modal-bundle`.\n\n**D3 - The sheet's comments** (FR-005): the three \"swept\" comments of `ubame-magistracy.svg` reworded. No drawn element\nchanges, so no review check is owed (feature 294).\n\n**D4 - The implementation check** (FR-004): the claims citing 0104's findings, re-owed by the change, are triaged or\nre-checked; a question no code decides is recorded per feature 378.\n\n## Project Structure\n\n```text\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.notes.html\nl7r/diagram/interactive/assets/modals/sheet/border-court.md\npool/magistracies/ubame-magistracy/ubame-magistracy.svg   comments only\n```\n",
+ "reviewed": "2026-10-11",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "D1",
-   "summary": "0104's findings page gains the Edo gravel (South Town Magistracy and the officers' houses, each source with its limits), the absence note for swept, raked, sanded or bare earth and for any surface outside Edo, and the two-drawings sentence; written by the shared write session, committed '343: ...'",
+   "id": "TC-record",
+   "summary": "The record edits are made by a fresh write session then a check-and-apply session from a brief shared with 336, 337, 338, one commit per feature opening with its number",
    "class": "within",
-   "why": "FR-001 as amended (amendment 1): every element D1 names is an FR-001 element, and D1 cites FR-001, so the parts it does not restate (Morse's Sakai drawing and why it is not counted, 0224's reading) remain carried by the accepted spec rather than dropped; nothing is excepted or narrowed"
+   "why": "Process for carrying out FR-001 under the record's two-session rule; the GM's 2026-10-10 words allow doing the five features 'in any order or all at once'. Narrows nothing asked."
+  },
+  {
+   "id": "TC-claims",
+   "summary": "Claims handled through the existing claims commands and feature 378's make impl-check",
+   "class": "within",
+   "why": "The means of FR-004; adds and removes nothing."
+  },
+  {
+   "id": "D1",
+   "summary": "0104's findings page gains the Edo gravel with each source's limits, the absence note for swept, raked, sanded or bare earth and any surface outside Edo, and the two-drawings sentence",
+   "class": "within",
+   "why": "Restates FR-001 (amendment 1); a summary that does not drop any FR-001 item (the Sakai drawing and the 0224 reading remain owed by FR-001, which the plan does not narrow). Serves the request's research pass on whether the court's surface is attested swept or raked before modern times."
   },
   {
    "id": "D2",
-   "summary": "border-court.md reworded after the record lands; modal-form, modal-research, modal-depiction each from make modal-bundle",
+   "summary": "border-court.md reworded by this session after the record lands; owes modal-form, modal-research, modal-depiction from make modal-bundle",
    "class": "within",
-   "why": "FR-002 and FR-003; sequencing and tooling only"
+   "why": "FR-002 and FR-003; the request's 'the modal reworded if not'. Sequencing after the record is ordering, not scope."
   },
   {
    "id": "D3",
-   "summary": "the three 'swept' comments of ubame-magistracy.svg reworded; no drawn element changes, so no review check owed",
+   "summary": "The three 'swept' comments of ubame-magistracy.svg reworded; no drawn element changes, so no review check is owed under feature 294",
    "class": "within",
-   "why": "FR-005/SC-004; measured 2026-10-10 by grep: the svg at HEAD now carries no 'swept' (the earlier verdict measured three, lines 33, 353, 383)"
+   "why": "FR-005. Measured: the sheet carried 3 lines matching 'swept' before commit b5dae6685 and 0 now; the remaining 'raked white gravel' line (698) is the dry garden's, not the court's surface. No review occasion arises without a drawn change, so omitting a review check removes nothing the spec asks."
   },
   {
    "id": "D4",
-   "summary": "claims citing 0104's findings, re-owed by the change, triaged or re-checked; a question no code decides recorded per feature 378",
+   "summary": "Claims citing 0104's findings, re-owed by the change, triaged or re-checked; a question no code decides recorded per feature 378",
    "class": "within",
-   "why": "FR-004"
+   "why": "FR-004 as written."
   },
   {
-   "id": "TC-shared",
-   "summary": "one shared write session and one check-and-apply session for 336/337/338/343, one commit per feature",
+   "id": "Structure",
+   "summary": "Files touched: 0104's .html and .notes.html (now named in full on separate lines), border-court.md, the ubame sheet comments only",
    "class": "within",
-   "why": "the record's own process; decides how, not what"
+   "why": "The only change since the CLEAR verdict (commit 0389f93d8) splits the brace form into two full pointers naming the same two files; scope is unchanged and matches FR-001, FR-002, FR-005."
   }
  ],
  "verdict": "CLEAR"
