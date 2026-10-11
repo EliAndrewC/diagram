@@ -41,13 +41,13 @@ hue `~30 ft` along it (a gradient on the race's own line), and the rest of the r
 - **SC-000** (FR-000): a `glyph-check` verdict on Sawada's head-race mouth at 9x, on main's map, is recorded in this spec before
   any map change.
 - **SC-001** (FR-001, FR-003): if SC-000's verdict is that the race reads as the river, every pool hamlet's race mouth carries the
-  taper - its bed holds one gradient overlay of the race's first `~30 ft`, starting at the tap in the brook's hue - and the pool
+  taper - its bed holds one gradient overlay of the race's first `~30 ft` (R1), starting at the tap in the brook's hue - and the pool
   gate stays green; otherwise no hamlet's map changes and the pool gate stays green.
 - **SC-002** (FR-002, FR-004): the race's drawn width is unchanged on every pool hamlet; 358 names the item done by 355.
 
 ## Decisions Recorded
 
-- **D1 (map drawing convention)**: the taper is a drawn gradient on the race's own first `~30 ft`, the entry's sketch; no research
+- **D1 (map drawing convention)**: the taper is a drawn gradient on the race's own first `~30 ft` (R1), the entry's sketch; no research
   is owed for a hue transition, which is a drawing convention for where a dug ditch leaves a brook.
 
 ## The entry, as filed
