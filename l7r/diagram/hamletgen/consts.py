@@ -392,7 +392,7 @@ WEST_SUN_FT = 50.0
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
 # applied after the grid is drawn, and the ring-canal crossing caps.
 FIELD_ARCHETYPES = ("valley_paddy", "polder_grid", "mulberry_dike_fishpond")
-"""The field forms a hamlet may roll.
+"""The field forms a hamlet's map may name; only `ROLLED_ARCHETYPES` are dealt at random.
 
 Research:
     field forms drawn - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: valley fan, rice polder, dike-pond

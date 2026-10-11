@@ -85,6 +85,8 @@ def test_findings_are_marked_new_repeated_or_reversing() -> None:
     m1, m2 = ab.mark_rounds([r1, r2])
     assert [k for k, _f in m1] == ["NEW", "NEW"]
     assert [k for k, _f in m2] == ["REPEATED", "NEW", "REVERSING"]
+    numbered = "1. **the dike's breadth** told as a convention\n\n- the sluices match the page and are fine\n"
+    assert ab.mark_rounds([numbered]) == [[("NEW", "**the dike's breadth** told as a convention")]], "confirmations are no finding"
 
 
 def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
@@ -108,8 +110,10 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
         json.dumps(
             {
                 "dispatches": {
-                    "t1": {"check": "quote-check", "subjects": ["q:0105"], "t": 1, "state": "answered", "reply": str(reply)},
+                    "t1": {"check": "quote-check", "subjects": ["q:0105"], "t": 1, "state": "answered", "reply": str(reply),
+                           "owed": ["quote-check:0105#bath - a note's passage changed"]},
                     "t2": {"check": "quote-check", "subjects": ["q:0105"], "t": 2, "state": "answered"},
+                    "t3": {"check": "quote-check", "subjects": ["q:0105"], "t": 2.5, "state": "answered", "aid": "a77"},
                 }
             }
         )
@@ -118,7 +122,14 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
     monkeypatch.delenv("L7R_EVENTS_DIR", raising=False)
     el = _load("event_log")
     el.append({"hook_event_name": "PreToolUse", "cwd": str(root), "tool_name": "Edit", "tool_input": {"file_path": str(q / "0105-baths.html"), "old_string": "a", "new_string": "b"}})
+    # a round whose reply the hook missed (its answer was recorded first) is read from the agent's own transcript (374)
+    sub = tmp_path / "projects" / "-x" / "s1" / "subagents"
+    sub.mkdir(parents=True)
+    (sub / "agent-a77.jsonl").write_text(json.dumps({"message": {"content": [{"type": "text", "text": "1. the well sits wrong in the yard\n"}]}}) + "\n")
+    monkeypatch.setattr(ab, "TRANSCRIPTS", tmp_path / "projects")
     manifest = ab.bundle(root, "round:quote-check|q:0105@3", tmp_path / "out").read_text()
+    assert "Owed by: quote-check:0105#bath - a note's passage changed" in manifest, "what made the round due"
+    assert "Owed by: (not recorded" in manifest and "- NEW: the well sits wrong in the yard" in manifest
     assert "trigger: round:quote-check|q:0105@3" in manifest and "### Round 1" in manifest and "### Round 2" in manifest
     assert "- NEW: the bath size has no footnote at all" in manifest and "(no reply kept for this round)" in manifest
     assert (tmp_path / "out" / "round-1-quote-check.md").read_text() == "1. the bath size has no footnote at all\n"

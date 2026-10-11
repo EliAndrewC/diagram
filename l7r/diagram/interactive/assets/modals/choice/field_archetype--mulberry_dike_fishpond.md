@@ -23,7 +23,7 @@ Depiction: The map draws the block as a polder converted nearly or wholly wall t
 are four-sided but uneven, their lattice of canals bent out of line so the block reads as a mosaic.
 Each pond is ringed by a bank of mottled earth planted with one crop for the whole
 settlement, mulberry, fruit trees or tea; the title card says which. A village's dikes could carry these crops side by side, but the map gives each settlement one, so it reads as one kind of dike-pond village. The sluices drawn are the polder's own, in its outer dike, not one in every pond,
-and that outer dike is drawn as any polder's is, with its own rows of willow and mulberry and a single canal round the inside of its foot: canals ran inside a polder's dike, but the one ring at its foot is the map's convention.
+and that outer dike is drawn as any polder's is. It is kept broader than the pond banks so it reads as the greater bank, the one holding the water off the whole block; how broad a village's dike was before modern times is not recorded. Its rows of willow and mulberry are set on its faces, so they read as its own planting, where a Ming river manual set such rows on the ground off its foot. A single canal runs round the inside of its foot: canals ran inside a polder's dike, but the one ring at its foot is the map's convention.
 
 Name: Fishponds ringed by mulberry dikes
 Covers: `meta.field_archetype = mulberry_dike_fishpond`

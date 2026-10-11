@@ -161,7 +161,8 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
         state["rounds"][f"{check}|{s}"] = state["rounds"].get(f"{check}|{s}", 0) + 1  # every dispatch let through is a round
-    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending"}
+    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending",
+                                                "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
     return ""
 
 
@@ -177,12 +178,14 @@ def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None
     """A check's return: its state, its EDIT blocks on its subjects, and (with `keep`, the clone's `check-replies/`) its reply,
     which the round arbiter's bundle compares round to round (FR-011)."""
     for tid, d in state.get("dispatches", {}).items():
+        # the reply is kept whatever the state: an answer recorded before SubagentStop fired had closed the dispatch, and the
+        # round arbiter's bundle then read "no reply kept" for that round (feature 374, the mulberry pop-up's round 2)
+        if d.get("aid") == agent_id and keep is not None and reply and not d.get("reply"):
+            keep.mkdir(parents=True, exist_ok=True)
+            (keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md").write_text(reply, encoding="utf-8")
+            d["reply"] = str(keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md")
         if d.get("aid") == agent_id and d.get("state") == "running":
             d["state"] = "returned"
-            if keep is not None and reply:
-                keep.mkdir(parents=True, exist_ok=True)
-                (keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md").write_text(reply, encoding="utf-8")
-                d["reply"] = str(keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md")
             for path, old, new in _blocks(reply):
                 for s in d["subjects"]:
                     state.setdefault("edits", {}).setdefault(s, []).append([path, old, new])

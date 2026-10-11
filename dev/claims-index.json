@@ -5492,22 +5492,23 @@
  "l7r/diagram/hamletgen/consts.py::FIELD_ARCHETYPES#field forms drawn": {
   "code": "c7afa5dae85661f2",
   "core": "5f10b1edca08dcfe",
-  "date": "2026-10-05",
-  "note": "hamlet comb fan, rice polder on a grid, dike-ponds throughout",
+  "date": "2026-10-10",
+  "note": "the comb fan, the rice polder and a dike-pond built as the polder taken wholly to ponds are each attested, and the corrected docstring says what the code does",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
-  "research": "e01ae013f0a9b9bb",
+  "research": "af2c16ea42ed5900",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:5fee94012929bfb6",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:b53810ad8bfaff92",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FIELD_ARCHETYPES#no jori grid rolled": {
@@ -5830,15 +5831,21 @@
  "l7r/diagram/hamletgen/consts.py::POLDER_ARCHETYPES#dike-pond built as a polder": {
   "code": "7055efd8b156b0be",
   "core": "893783f3cb5ce2be",
-  "date": "2026-10-03",
-  "note": "0020: \"The two are one system at two scales\"",
+  "date": "2026-10-10",
+  "note": "the tuple counts the dike-pond block as a polder archetype beside the rice polder; 0019 draws both inside a polder dike, the rice polder on a grid and the dike-pond as a mosaic, and 0020 calls them \"one system at two scales\"; the gap that neither form is dealt at random sits in the dealing code, not in this constant, and the page records it as \"a known gap\"",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
-  "research": "f7cbba5cbd825f33",
-  "triage": "touched",
-  "triaged": "2026-10-05",
+  "research": "5c03ff595d140594",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::POLDER_FABRIC#polder parcel fabric": {
@@ -5868,10 +5875,10 @@
   "date": "2026-10-05",
   "note": "0019's drawing page records two pond layouts, the mosaic and Qu Dajun's 1678 chessboard, and says \"the layout would be rolled block by block\"; the code fixes the mosaic, and its comment that the chessboard is found \"only as today's aerial view\" contradicts 0024's 1678 chessboard",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc",
    "0024-fish-fry-and-nursery-ponds-yumiao.html": "ba9d1b1138aae7b8"
   },
-  "research": "1d1ba43d6d69a0e7",
+  "research": "01b1397e1440bebd",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4",
    "0024-fish-fry-and-nursery-ponds-yumiao.html:efccfa3a4275db98"
@@ -5885,9 +5892,9 @@
   "date": "2026-10-03",
   "note": "the page calls it a calibrated liberty set on Kuwabata",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -5924,18 +5931,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled": {
-  "code": "0784d2454f256f1e",
+  "code": "f1722848ace43757",
   "core": "04076665195f7fe6",
   "date": "2026-10-10",
-  "note": "only valley_paddy is rolled and the polder is drawn only when a map asks for one, which the page records as a deliberate deviation for now",
+  "note": "`ROLLED_ARCHETYPES = (\"valley_paddy\",)` deals only the fan, though the page has the polder and the dike-pond \"attested too ... both are a known gap\". A known gap is not a deliberate choice (plan review 2026-10-10), so the code should roll polder_grid and mulberry_dike_fishpond per settlement, and until then the claim stands as drift, never a DEVIATION",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:3e8ae1cd9bfa3c93"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/consts.py::ROW_LINES#row village's line": {
   "code": "0e895450ce19fddc",
@@ -6740,9 +6747,9 @@
   "date": "2026-10-03",
   "note": "0019: water crosses the dike only at gated sluices",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -12817,18 +12824,18 @@
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values": {
   "code": "43b4ac7e3b80e0e4",
   "core": "ca3e6fe251d95850",
-  "date": "2026-10-07",
-  "note": "the page records mosaic-only, with the chessboard as a known gap",
+  "date": "2026-10-10",
+  "note": "`POND_LAYOUTS = ('mosaic',)` refuses the chessboard, though the page records two layouts: \"the layout would be rolled block by block; our maps draw only the mosaic, so the chessboard of ponds is a known gap\". By the same ruling a known gap is not a DEVIATION, so the label is wrong and the code should accept the chessboard and roll between the two layouts",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
   ],
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#water sink values": {
   "code": "7fdac7285dc77d1a",
@@ -13024,18 +13031,17 @@
  "l7r/diagram/hamletgen/plan.py::plan_site#dike-pond knobs only on a dike-pond": {
   "code": "e015d3e7cb5cdcf4",
   "core": "2f7a5353ce68377c",
-  "date": "2026-10-07",
-  "note": "a rice polder is fixed to the grid; layout, crop, leftover and fry form are rolled only on a dike-pond",
+  "date": "2026-10-10",
+  "note": "a rice polder gets pond_layout \"grid\", the surveyed grid the page draws, and dike_crop, leftover and fry_form are rolled only on a dike-pond",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
   ],
-  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#flood-prone ground": {
@@ -13139,9 +13145,9 @@
   "date": "2026-10-07",
   "note": "a rice polder is drawn on a surveyed grid",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
@@ -13996,9 +14002,9 @@
   "date": "2026-10-03",
   "note": "0019 sluices only",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -15568,9 +15574,9 @@
   "date": "2026-10-07",
   "note": "the rows run along the fall, so the inlet is at the head (high end) and the outfall at the tail (low end), matching \"an inlet at the polder's head and an outfall at its tail\"",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
@@ -15691,9 +15697,9 @@
   "date": "2026-10-03",
   "note": "the pond feeds the polder; joining it is geometry",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -15742,9 +15748,9 @@
   "date": "2026-10-03",
   "note": "wild water outside the dike, per 0019 drawing",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -15803,10 +15809,10 @@
   "date": "2026-10-07",
   "note": "the feeding water stands outside the dike at the polder's head, which is its high end, and a reservoir sits above what it waters; the code walks the pond uphill from the ring's head until it clears the crop",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
   },
-  "research": "3f4e6f0526258039",
+  "research": "8b845a3416853b89",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
@@ -15856,9 +15862,9 @@
   "date": "2026-10-08",
   "note": "the page attests two pond layouts (\"a mosaic ... and a chessboard ... the layout would be rolled block by block\"), but the code fixes the dike-pond block to the mosaic (POND_LAYOUT_MOSAIC 0.5) and never rolls the chessboard; either roll the chessboard per block or relabel the claim DEVIATION with the page recording a deliberate choice, not a known gap; 0.5 on Kuwabata and 0.0 for the rice polder are otherwise in step",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
@@ -15885,9 +15891,9 @@
   "date": "2026-10-03",
   "note": "0019 drawing",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -15905,10 +15911,10 @@
   "date": "2026-10-05",
   "note": "above the fields it waters, clear of the crop",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
   },
-  "research": "3f4e6f0526258039",
+  "research": "8b845a3416853b89",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:23d33365fc99a589",
@@ -15923,9 +15929,9 @@
   "date": "2026-10-03",
   "note": "matches the pool layout 0019 drawing describes",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -37189,19 +37195,27 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#settlement_form forms": {
-  "code": "0cb8ee00bcb68aa1",
+  "code": "9d81e8149420f593",
   "core": "62959f8ccbbbe70a",
-  "date": "2026-10-03",
-  "note": "`Knob(\"settlement_form\", ...)` has no weights, so nucleated, linear and dispersed roll evenly, where 0031 drawing sets \"Half ... clustered, three in ten scattered and two in ten as rows\"; and no cited question attests water_town (0031 drawing: \"one of three forms\"), so that form should be labeled UNRESEARCHED",
+  "date": "2026-10-10",
+  "note": "the clustered, row and scattered forms are attested, and so is housing in a line on a dike or a polder's raised margin (dike_top). The knob registers each of them",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc",
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321",
    "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
   },
-  "research": "0b9d08c1052e084d",
-  "triage": "touched",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "research": "6e204e7b86fc1725",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
+   "0031-clustered-and-scattered-villages-shuson-sanson.html:08eb14588c11c0e3",
+   "0031-clustered-and-scattered-villages-shuson-sanson.html:16ae76f064c850db",
+   "0031-clustered-and-scattered-villages-shuson-sanson.html:2afa77b5b6a4c810",
+   "0031-clustered-and-scattered-villages-shuson-sanson.html:b715f40392141212",
+   "0033-row-villages-resson.html:61167d80a1335f3c",
+   "0033-row-villages-resson.html:a46cc0e9dbe13048",
+   "0033-row-villages-resson.html:df9dd5bb88c20304"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#water_source_position forms": {
   "code": "7263d2ba78b91175",
@@ -37213,6 +37227,16 @@
   },
   "research": "4e7ba7479292ad40",
   "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/_knobs.py::<module>#water_town form": {
+  "code": "e62e83f2c765a5ff",
+  "core": "62959f8ccbbbe70a",
+  "date": "2026-10-10",
+  "note": "the claim names the GM's setting canon (Lion lands, or a map that declares a canal), and no question in the bundle covers canal-fronting towns",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::BOUNDARY_MARKER_FT#boundary stone size": {
@@ -37579,15 +37603,18 @@
  "l7r/diagram/settlement/_knobs.py::_settlement_form_ok#dike-top needs low ground": {
   "code": "c317e3aee0db5c23",
   "core": "8957b432570f43a1",
-  "date": "2026-10-03",
-  "note": "0019 drawing: dike-top seating for a polder with water on every flank",
+  "date": "2026-10-10",
+  "note": "`return ctx.get(\"terrain\") == \"low\"` lets dike_top onto any low site, but §19 puts dike-top houses only on \"a polder with water on every flank and no shore to build on\", and §17 puts a shore polder's village on the dry ground off the dike; the gate should need a polder with no landward shore",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "7e58acaa9e345ce6",
-  "triage": "touched",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "research": "06800d53a01b6476",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2"
+  ],
+  "triaged": "2026-10-10",
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/_knobs.py::_settlement_form_ok#water town needs a canal": {
   "code": "783aab49a9f6561b",
@@ -45752,14 +45779,13 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each plot's green": {
-  "code": "79fa5a4b9d4f25ea",
+  "code": "fcaa7e0d491be4c6",
   "core": "1dbc88c8837680db",
   "date": "2026-10-10",
-  "note": "the class is right (a colour), but the only RICE_GREENS in the bundle (hill.py's) is one green repeated three times, which would make \"so neighboring plots read apart\" false; need paddy.py's RICE_GREENS",
+  "note": "the shade of one green is a display choice; it matches \"Rice basins are drawn one green\"",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#flooded near the ditches": {
   "code": "c97d29b8a4b8314f",
@@ -52801,9 +52827,9 @@
   "date": "2026-10-08",
   "note": "seats the gate where water crosses the dike; the 20 ft snap reach only lines the gate up with the drawn stroke",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
@@ -52842,9 +52868,9 @@
   "date": "2026-10-08",
   "note": "a gate at every dike gap, turned along the crest so it lies across the water; water crosses only at gated sluices",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
@@ -52869,9 +52895,9 @@
   "date": "2026-10-05",
   "note": "single file on the crest, widened platform, recorded GUESS",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:38971cde89340d36",
@@ -52963,9 +52989,9 @@
   "date": "2026-10-03",
   "note": "per 0019 (dike-top form is its own knob)",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -53027,9 +53053,9 @@
   "date": "2026-10-03",
   "note": "per 0019",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -53039,9 +53065,9 @@
   "date": "2026-10-03",
   "note": "per 0019",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -53942,9 +53968,9 @@
   "date": "2026-10-03",
   "note": "0019: a reed fringe on every flank but the landward one",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -54096,9 +54122,9 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -68544,9 +68570,9 @@
   "date": "2026-10-09",
   "note": "the east toe is tagged as the settlement side, the village on the dry ground to the east",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2"
@@ -68560,9 +68586,9 @@
   "date": "2026-10-09",
   "note": "an inlet at the NW (pond) corner and an outfall south from the drain, the dike notched at each; two sluices for a village polder",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
@@ -68607,9 +68633,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -68633,9 +68659,9 @@
   "date": "2026-10-07",
   "note": "a gentle low-frequency wander that bends the whole surveyed grid as one piece, which the page calls a drawing convention",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
@@ -68663,9 +68689,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -68735,9 +68761,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -68747,9 +68773,9 @@
   "date": "2026-10-05",
   "note": "the inlet is at the head (the high corner), toward the feeding pond in the northwest",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
@@ -68763,9 +68789,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -68775,9 +68801,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -68855,9 +68881,9 @@
   "date": "2026-10-09",
   "note": "`mosaic` 0 keeps the rice polder's surveyed grid",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
@@ -68931,9 +68957,9 @@
   "date": "2026-10-09",
   "note": "diked block, ring canal inside the dike, water crosses only at an inlet and an outfall",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
   },
-  "research": "d6a30ed4908ecf7d",
+  "research": "06800d53a01b6476",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"

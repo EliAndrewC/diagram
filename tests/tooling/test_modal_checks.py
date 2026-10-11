@@ -320,6 +320,7 @@ def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing
     assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "DRIFTED | `settlement/houses.py::HousesMixin.house#ridge` | always hipped" in manifest
     assert "## Depiction" in manifest and "The map draws every house alike." in manifest and "no crop" in manifest, "no pool page in the fixture"
     assert "unit: modal-depiction:hamlet/farmhouse " in manifest and "owed-checks: modal-depiction" in manifest
+    assert "owed: modal-depiction:hamlet/farmhouse - a page its Drawing: names moved" in manifest, "why the unit is due (374)"
 
 
 def test_a_modal_with_no_drawing_list_is_still_handed_its_kinds_drawing_page_as_a_candidate(

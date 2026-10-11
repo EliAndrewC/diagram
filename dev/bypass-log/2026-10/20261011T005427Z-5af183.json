@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-11T00:54:27Z",
+  "target": "record-checked",
+  "commit": "adc0e13e6",
+  "why": "record-format on record-format:0019: the only change since the round-2 bundle is quote-check round 2's own EDIT applied word for word (two links to the attesting pages, their titles as the pages give them)"
+}

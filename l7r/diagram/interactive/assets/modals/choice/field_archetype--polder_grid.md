@@ -22,11 +22,11 @@ Guesses:
 
 Depiction: The map encloses the polder with its dike all the way round, and water crosses it only at gated sluices, an inlet
 high on the polder and an outfall low on it. The dike is drawn as a band of mottled earth that swells and pinches along its
-length, up to about 40 ft across, its broadest stretches wider than the 18 ft foot of a domain's river dike, which a village's dike stood
-below, so that it reads as the bank holding off the water. Willow runs along its water side and mulberry along its field side, the willows spaced wider than a planted row of willow so their crowns read as touching trees, not one hedge, and both rows set on the bank's faces, where a
+length, up to about 40 ft across, between the 18 ft foot of a domain's river dike and the raised margin of about 33 to 98 ft (10 to 30 m) that served one Lake Tai village as its dike.
+Willow runs along its water side and mulberry along its field side, the willows spaced wider than a planted row of willow so their crowns read as touching trees, not one hedge, and both rows set on the bank's faces, where a
 Ming river manual set them on the ground off its foot, so they read as the dike's own planting. Inside the dike a ring canal
 runs round its foot, a convention: a polder had channels inside its dike, but no one set ring. The paddies are laid on a
-surveyed grid of canals drawn in long, nearly straight reaches that waver gently. Reeds fringe the flanks where the dike
+surveyed grid of canals drawn in long, nearly straight reaches that waver gently, a convention of the drawing. Reeds fringe the flanks where the dike
 holds water back. The lowest rows of paddies are tinted blue-green as wet paddies, ground that stayed waterlogged;
 which plots take the tint is a convention of the drawing, not a survey.
 

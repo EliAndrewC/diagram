@@ -330,8 +330,11 @@ def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str) -> str:
 
     files = m.drawing_files() if for_ == mo.DEPICTION_CHECK else m.entry_files() if for_ == mo.RESEARCH_AGENT else []
     pages = [(f, b) for f in files if (b := mt.keep(root, f))]
+    import record_owed  # noqa: PLC0415 - what made each unit due, read back per round by the arbiter's bundle (374)
+
+    why = {u.slug: u.occasion for u in record_owed.units(root)}
     return ("## Owed (feature 311)\n\n" + f"owed-checks: {for_}\n" + "".join(f"unit: {s} {fp}\n" for s, fp in units)
-            + "".join(f"page: {f} {b}\n" for f, b in pages))
+            + "".join(f"page: {f} {b}\n" for f, b in pages) + "".join(f"owed: {s} - {why[s]}\n" for s, _fp in units if why.get(s)))
 
 
 def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str = "") -> int:

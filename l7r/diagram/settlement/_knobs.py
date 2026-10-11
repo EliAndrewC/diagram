@@ -1,7 +1,8 @@
 """Split from settlement.py by feature 025 - see settlement/CLAUDE.md for the index.
 
 Research:
-    settlement_form forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0033-row-villages-resson.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: nucleated, linear, dispersed, water_town, dike_top
+    settlement_form forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0033-row-villages-resson.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: nucleated, linear, dispersed, dike_top
+    water_town form - CANON: houses fronting a canal, a form of Lion lands or a map that declares a canal (the GM's setting canon)
     field_archetype forms - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: valley_paddy, contour_terraces, polder_grid, ribbon_valley, mulberry_dike_fishpond
     land_use_overlay forms - DEVIATION research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: none, mulberry_fishpond, lotus, tea_fringe; bund tea, the second tea form, is never rolled
     kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage

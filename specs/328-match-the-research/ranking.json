@@ -12124,6 +12124,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "accept the chessboard pond layout beside the mosaic and roll between them block by block (0019: Qu Dajun's 1678 chessboard; the drawing page names it a known gap); the same work as POND_LAYOUTS#dike-pond layout",
+  "files": [
+   "l7r/diagram/hamletgen/plan.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked (a known gap is no DEVIATION)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind",
   "tier": "E3",
   "fix": "roll the fall over every direction, with the high-windward case one outcome among several (share a GUESS), and let seat_cluster seat a margin whose back is to the wind but not upslope",
@@ -13049,6 +13064,21 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "117",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/_knobs.py::_settlement_form_ok#dike-top needs low ground",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "gate dike_top on a polder with water on every flank and no landward shore (0019 \u00a719), not on any low site; a shore polder's village stands on the dry ground off the dike (\u00a717)",
+  "files": [
+   "l7r/diagram/settlement/_knobs.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
   "scope": "kept"
  },
  {

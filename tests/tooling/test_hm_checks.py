@@ -328,3 +328,15 @@ def test_the_refusal_names_the_escape_that_reaches_its_rule() -> None:
     assert hc.escape_for("the round arbiter closed quote-check|q:0105 (accept)") == "ARBITER_OK"
     assert hc.escape_for("round 3 of `quote-check` on q:0105 ... make arbiter-bundle") == "ARBITER_OK"
     assert hc.escape_for("`quote-check` is already in q:0105's round") == "FREEZE_OK"
+
+
+def test_a_dispatch_keeps_why_its_units_were_due_and_a_late_reply(tmp_path: pathlib.Path) -> None:
+    """Feature 374 (the round arbiter's tooling fixes): each dispatch keeps the `owed:` lines of its bundle, and a reply that
+    arrives after the answer closed the dispatch is still kept, so the arbiter's bundle has every round's reply."""
+    st: dict = {}
+    hc.dispatch(st, "t1", "modal-depiction", "/m", MODAL + "owed: modal-depiction:sheet/bath - a page its Drawing: names moved\n", 0)
+    assert st["dispatches"]["t1"]["owed"] == ["modal-depiction:sheet/bath - a page its Drawing: names moved"]
+    hc.launched(st, "t1", "ag1", True)
+    hc.answered(st, "modal-depiction", ["modal:sheet/bath"])
+    hc.returned(st, "ag1", "1. a finding", tmp_path / "keep")
+    assert pathlib.Path(st["dispatches"]["t1"]["reply"]).read_text() == "1. a finding"
