@@ -23,3 +23,12 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T05 Close: the tooling tests and `make hooks-test` green, the gate, `make feature-report F=379 WRITE=1`, landed
       research: rendering
       verify: DONE. make done green (gate log done379.log), hooks-test green, tooling tests 34 passed, feature-report written; landed by the push carrying this tick
+
+## Amendment 1 (the GM 2026-10-10: a tooling fix lands alone, mid-feature)
+
+- [ ] T06 `scripts/land-tooling.sh` and `make land-tooling FILES=` (plan D8, D9); its suite `tests/hooks/test-land-tooling.sh` over real git repos (SC-003)
+      research: rendering
+- [ ] T07 Done means landed (plan D10): `settle_fix` compares the TEST's blob on origin/main; tests (SC-004)
+      research: rendering
+- [ ] T08 Close: the text (CLAUDE.md's session-clones bullet and guard table, `docs/session-clones.md`), tooling tests and `make hooks-test` green, the gate, the report, landed
+      research: rendering
