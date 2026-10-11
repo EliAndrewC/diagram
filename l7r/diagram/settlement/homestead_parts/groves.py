@@ -620,6 +620,7 @@ class GrovesMixin:
                 stepped out past the yard and garden
             band leaves the morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html
             band within two house spans - UNRESEARCHED
+            thin band halved - UNRESEARCHED: a thin band's run is halved where the full run does not fit
         """
         t = self._grove_room_depth("thin")
         step = max(2.0, 0.16 * hh)

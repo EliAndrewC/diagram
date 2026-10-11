@@ -40,6 +40,7 @@ exists at the head. A finding at both ends is pre-existing whatever changed; a p
 from __future__ import annotations
 
 import argparse
+import ast
 import datetime
 import json
 import re
@@ -265,7 +266,26 @@ def _source(root: Path, unit: Any) -> str:  # noqa: ANN401
     return "\n".join(lines[start:end])
 
 
-def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path) -> Path:
+def context_source(root: Path, ref: str) -> str:
+    """The source of `path::qualname` - a function, method, class or module-level constant - shown in a bundle as context
+    (feature 374: a CANNOT-TELL re-check asked for a helper's body, a constant or a caller the judged unit only names)."""
+    path, _, qual = ref.partition("::")
+    text = (root / path).read_text(encoding="utf-8")
+    body: list[ast.stmt] = ast.parse(text).body
+    node: ast.AST | None = None
+    for name in qual.split("."):
+        node = next(
+            (n for n in body if (isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and n.name == name)
+             or (isinstance(n, (ast.Assign, ast.AnnAssign)) and name in [t.id for t in (n.targets if isinstance(n, ast.Assign) else [n.target]) if isinstance(t, ast.Name)])),
+            None,
+        )
+        if node is None:
+            raise ValueError(f"no `{qual}` in {path}")
+        body = getattr(node, "body", [])
+    return ast.get_source_segment(text, node) or ""
+
+
+def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, context: Sequence[str] = (), pages: Sequence[str] = ()) -> Path:
     """Write the bundle for `keys` (rows of `cur`) under `out`: MANIFEST.md with every source and question inline, and
     units.json with the fingerprints the check reads - what `record` writes into the index (spec FR-007)."""
     if out.exists():
@@ -303,6 +323,14 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path) -> P
                 name = ptr.rsplit("/", 1)[1]
                 if name not in cited and (qdir / name).is_file():
                     cited.append(name)
+    if context:
+        parts.append("# Context (read it; it is not judged)\n\nCode the units above call or read, shown so a verdict can see it:\n")
+        for ref in context:
+            parts.append(f"## CONTEXT {ref}\n\n```python\n{context_source(root, ref)}\n```\n")
+    for p in (p.rsplit("/", 1)[-1] for p in pages):  # a path or a bare name; a page named and not found is an error, never
+        if not (qdir / p).is_file():                   # dropped (feature 374: a pointer-form path was skipped in silence)
+            raise ValueError(f"PAGES: no question file {p} under {qdir}")
+        cited += [p] if p not in cited else []
     # THE QUESTIONS ARE FILES BESIDE THE MANIFEST, as their reader meets them (heading and blocks, intro marked, no markup),
     # each once however many units cite it: inline whole pages made the audit's per-file bundles 23 MB (measured 2026-10-03)
     (out / "questions").mkdir()
@@ -650,6 +678,8 @@ def _parser() -> argparse.ArgumentParser:
     b.add_argument("--units", default="")
     b.add_argument("--out", default="")
     b.add_argument("--reason", default="")
+    b.add_argument("--with", dest="context", default="", help="path::qualname,... shown as context, not judged")
+    b.add_argument("--pages", default="", help="question files (NNNN-<id>[.drawing].html,...) added to the bundle")
     r = sub.add_parser("record")
     r.add_argument("--bundle", required=True)
     r.add_argument("--reply", required=True)
@@ -784,7 +814,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             (args.module or ("owed" if args.owed else keys[0])).lower(),
         ).strip("-")[-60:]
         out = Path(args.out) if args.out else DEFAULT_OUT / f"claims-{slug}"
-        print(bundle(root, cur, keys, out))
+        print(bundle(root, cur, keys, out, [c for c in args.context.split(",") if c], [p for p in args.pages.split(",") if p]))
         if not_owed:
             print(f"claims-bundle: re-check of {len(not_owed)} claim(s) not owed, because: {args.reason}")
         return 0

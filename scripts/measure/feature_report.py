@@ -245,10 +245,11 @@ def utc(iso: str) -> str:
 
 
 def commits(root: Path, feature: str, since: str = "", until: str = "") -> list[tuple[str, str, str]]:
-    """(sha, UTC time, subject) of every commit whose message names the feature (`Feature 375`, `375 T04`), in [since, until]."""
+    """(sha, UTC time, subject) of every commit whose message names the feature (`Feature 375`, `375 T04`, `375: ...`), in
+    [since, until]. The colon form is the research clone's: missing it read 343's 69 dispatches over 1 changed line."""
     fmt = "%H\x1f%aI\x1f%s"
     out = []
-    for raw in _git(root, "log", "--all", "-E", f"--grep=(Feature|feature) {int(feature)}\\b|^{int(feature)} ", f"--format={fmt}").splitlines():
+    for raw in _git(root, "log", "--all", "-E", f"--grep=(Feature|feature) {int(feature)}\\b|^{int(feature)}[ :]", f"--format={fmt}").splitlines():
         sha, t, subj = raw.split("\x1f", 2)
         t = utc(t)
         if (since and t < since[:19]) or (until and t > until[:19] + "Z"):
@@ -298,7 +299,7 @@ def spec_rounds(text: str) -> Counter[str]:
     for line in text.splitlines():
         m = re.match(r"\s*-\s*Round \d+ \(.*?\):\s*([A-Z][A-Z -]+?)\s+-", line)
         # the other form in use (377, 379): "- spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED. Applied:"
-        m = m or re.match(r"\s*-\s*spec-fidelity[\w-]*, Mode \d, round \d+ \(.*?\):\s*([A-Z][A-Z ]+?)(?=[.:]|\s+-|$)", line)
+        m = m or re.match(r"\s*-\s*spec-fidelity[\w-]*, (?:Mode \d,|amendment \d+) round \d+ \(.*?\):\s*([A-Z][A-Z ]+?)(?=[.:]|\s+-|$)", line)
         if m:
             out[m.group(1).strip()] += 1
     return out

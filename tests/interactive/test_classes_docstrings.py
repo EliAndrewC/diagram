@@ -33,6 +33,9 @@ SINCE_189: dict[str, tuple[str, ...]] = {
     # house (M22) and the firewood is kept in a wood shed (M21); renamed, the prose and data carried over unchanged
     "bathhouse": ("bath room",),
     "woodpile": ("wood shed",),
+    # feature 349 (settlement-review, Kashikawa 2026-09-28): the class covers both forms of the field grave knob, the island
+    # and the corner, so it is named for the grave rather than the island; the prose and data carried over, the name renamed
+    "grave island": ("field grave",),
 }
 #: Kinds the map draws that the snapshot's registry did not have at all.
 ADDED_SINCE_189: tuple[str, ...] = (

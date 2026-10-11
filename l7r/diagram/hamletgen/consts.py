@@ -392,7 +392,7 @@ WEST_SUN_FT = 50.0
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
 # applied after the grid is drawn, and the ring-canal crossing caps.
 FIELD_ARCHETYPES = ("valley_paddy", "polder_grid", "mulberry_dike_fishpond")
-"""The field forms a hamlet may roll.
+"""The field forms a hamlet's map may name; only `ROLLED_ARCHETYPES` are dealt at random.
 
 Research:
     field forms drawn - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: valley fan, rice polder, dike-pond
@@ -533,7 +533,7 @@ DIKEPOND_CONVERSION = 0.9
 # in the mix. Rolling an archetype with open failures mixes them into the valley tier's own numbers
 # and destroys the one measurement that says this process is consistent.
 ROLLED_ARCHETYPES = ("valley_paddy",)
-"""Research: field forms rolled - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html: only the valley fan is rolled, the attested polder opt-in until its cohort is green"""
+"""Research: field forms rolled - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: only the valley fan is rolled; the attested polder and dike-pond are opt-in until their cohort is green, the page's known gap"""
 
 # HOW MUCH GROUND ONE HOMESTEAD TAKES, in px at 1 ft/px - the pitch the cluster band is sized on.
 # A bundle's reserved rects come to ~71 x 57 ft. 92 px per household leaves the cluster dense enough

@@ -31,7 +31,7 @@ def _draw_tree_lane(s: Any, run: Poly, width: float, role: str, **extra: Any) ->
 
     Research:
         a tree lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE`, the lane's 18 ft room, as a web lane's
-        worn look - CONVENTION: drawn as a worn path"""
+        worn look - research/questions/0081-village-lanes.drawing.html: bare, packed earth with a soft worn edge"""
     s.lane(_rounded(run), width=width, clearance=WEB_CLEARANCE, worn=True)
     s.M["lanes"][-1].update({"role": role, **extra})
 

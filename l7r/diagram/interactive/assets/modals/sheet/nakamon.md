@@ -10,13 +10,13 @@ How wide such a gate was and how it was built are not recorded.
 
 Guesses:
 - That the gate was guarded: no account says so.
-- Its width, about 6 to 8 ft between its posts: no gate between a compound's courts is measured.
+- Its width, about 6 to 8 ft between its posts: no gate between a compound's courts is measured, so it is reckoned from a gate of one bay, which ran about 6 to 9 ft across.
 - Its place in the dividing wall behind the office hall: a Chinese yamen set its residence gate there, but where the middle gate of a Japanese intendant's office stood is not recorded; the one Japanese middle gate whose place is given led from a retainer's street gate to the veranda of the principal room.
 
-Depiction: The plan draws the gate as a pair of posts in the wall between the outer and inner courts. Every plan sets the office in front and the residence behind, the Chinese order, as a simplification: at the one Japanese intendant's office still standing, the residence stood beside the office, not behind it.
+Depiction: The plan draws the gate as a pair of posts in the wall between the outer and inner courts, each a dark block thicker than the wall so the gate reads; how the real posts were built is not recorded. Every plan sets the office in front and the residence behind, the Chinese order, as a simplification: at the one Japanese intendant's office still standing, the residence stood beside the office, not behind it.
 
 Name: nakamon
 Covers: the posts of the household door in the court divider
 Sources: yamen-enwiki, neixiang-yamen-zhwiki, henan-neixiang, shiroishi-koseki, bjd-qing-yamen, takayama-jinya-city, takayama-jinya-jawiki
-Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.html
+Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html
 Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

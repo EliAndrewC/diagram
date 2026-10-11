@@ -54,6 +54,34 @@ puts it on the GM's review; a second ruling declined puts the reason there.
 **D7 - Where it is written down.** CLAUDE.md's `checks-hooks.sh` guard row gains the hold (one clause); the two targets
 carry `##` lines for `make docs`. The guard-file edits (Makefile) carry GUARD_EDIT_OK.
 
+## Amendment 1 - a tooling fix lands alone (FR-005, FR-006)
+
+**D8 - A subset landing, not a flag.** The open-task refusal keeps its "there is no flag" (GM 2026-08-25) and is not
+touched: the sessions' deltas mix engine or record work with tooling, so an exemption for an all-tooling delta would never
+fire. `make land-tooling FILES="<paths>"` (`scripts/land-tooling.sh`) builds a NEW commit on top of the latest main holding
+only those files' changes since the clone's merge base with main (`git diff <merge-base> HEAD -- FILES`, applied with plain
+`git apply --index`: a failure IS FR-005's "does not apply cleanly"), in a detached worktree at
+`.clones/<clone>-tooling` (a detached worktree is no local branch; the project already uses one for baselines), and lands
+that commit with `scripts/sync-with-main.sh done` run from the worktree, so every push check runs unchanged. The clone's
+own history is untouched; its next merge of main meets identical hunks and is clean (SC-003). The worktree is removed on
+every exit. Measured: `.specify/feature.json` is untracked, so the worktree carries no feature pointer and the open-task
+check finds no feature in a delta that touches no `specs/`; `sync-with-main.sh` requires only that its root sit under
+`.clones/`.
+
+**D9 - FILES is required and named, never inferred.** A file lands whole, and mid-feature a `CLAUDE.md`, a test or the
+`Makefile` edit may describe engine work that has not landed; so with no FILES the command lists the tooling paths the
+delta changed and exits 2 (the guard producing the compliant command). A path outside FR-005's set - `scripts/`, `tests/`,
+`.claude/agents/`, `.claude/skills/`, any `CLAUDE.md`, the `Makefile`, `.claude/settings.json`, `docs/make-targets.html` -
+is refused naming it; so is a FILE with uncommitted changes (only committed work lands). A `Makefile` among them
+regenerates `docs/make-targets.html` in the worktree. The checks before the push: `make hooks-test`, `make test-file
+FILE=tests/tooling`, and `make test-file` on every test file among FILES (a test needing work not yet landed fails there,
+not on main), in the worktree, logged, the tail shown on failure.
+The commit is the GM's identity with the clone's commit subjects that touched the files, and the co-author line.
+
+**D10 - Done means landed (FR-006).** `settle_fix(..., "done", ...)` fetches main and refuses unless the TEST file's blob
+on `origin/main` equals its blob at the clone's HEAD, naming `make land-tooling FILES="<the test> ..."`. The existing test
+fixture gains an `origin/main` holding the test, in the same edit (SC-004).
+
 ## Tasks
 
 T01 the field, the record, `open_fixes`, the found row retired (D1, D2); T02 the holds (D3) and the two commands (D4, D5);

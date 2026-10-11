@@ -112,9 +112,17 @@ def rulings(root: Path) -> dict[str, dict[str, Any]]:
     return out
 
 
-def continues(root: Path, prefix: str) -> int:
-    """How many `continue` rulings the round triggers of one unit carry - each lifts its cap by one round."""
-    return sum(1 for t, r in rulings(root).items() if t.startswith(prefix) and r.get("ruling") == "continue")
+def continues(root: Path, prefix: str, after: int = 0) -> int:
+    """How many `continue` rulings the round triggers of one unit carry - each lifts its cap by one round; with `after`, only
+    those past round `after` (a run counted afresh after a later change, feature 374 FR-005)."""
+    return sum(1 for t, r in rulings(root).items()
+               if t.startswith(prefix) and r.get("ruling") == "continue" and _round_no(t) > after)
+
+
+def _round_no(trigger: str) -> int:
+    """`round:<unit>@7` -> 7; 0 where the trigger names no round."""
+    tail = trigger.rpartition("@")[2]
+    return int(tail) if tail.isdigit() else 0
 
 
 def closed(root: Path, prefix: str) -> str:
@@ -281,6 +289,8 @@ def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "",
         t = (root / test).resolve() if test else None
         if t is None or not t.is_file() or (root / "tests").resolve() not in t.parents:
             raise ValueError(f"TEST={test or '<none>'} is not a file under tests/ - a fix is done with the test that proves it")
+        if not on_main(root, test):  # amendment 1, FR-006: made in one clone is not done for the sessions on the mirror's hooks
+            raise ValueError(f"{test} is not on main as it is here - land the fix first: make land-tooling FILES=\"{test} <the fix's files>\"")
     elif status != "declined":
         raise ValueError("status is done or declined")
     when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -290,6 +300,19 @@ def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "",
     _gm_row(d, {"kind": f"arbiter-fix-{status}", "trigger": trigger, "tooling_fix": fix, "note": note,
                 **({"test": test} if status == "done" else {}), "utc": when})
     return row
+
+
+def on_main(root: Path, path: str) -> bool:
+    """Is `path` on main (after a fetch) with the same content as at the clone's HEAD (feature 379 amendment 1, FR-006)?"""
+    import subprocess  # noqa: PLC0415
+
+    def blob(ref: str) -> str:
+        r = subprocess.run(["git", "-C", str(root), "rev-parse", "-q", "--verify", f"{ref}:{path}"], capture_output=True, text=True)
+        return r.stdout.strip() if r.returncode == 0 else ""
+
+    subprocess.run(["git", "-C", str(root), "fetch", "-q", "origin"], capture_output=True)
+    here = blob("HEAD")
+    return bool(here) and here == blob("origin/main")
 
 
 def env_ok(name: str, text: str) -> bool:

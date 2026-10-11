@@ -659,7 +659,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
 	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
+	: "GUARD_EDIT_OK: feature 379 amendment 1 - scripts/land-tooling.sh lands on main, so its suite runs with the guards'"; \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  : "(GUARD_EDIT_OK: feature 311 - entry-gate.sh and plan-gate.sh join it: both refuse at the push, both had companions that nothing ran, and entry-gate's had rotted)"; \
 	  : "(GUARD_EDIT_OK: feature 316 - claims-gate.sh joins it: it refuses at the push)"; \
@@ -1156,6 +1157,11 @@ arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what wa
 	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
 
+# GUARD_EDIT_OK: feature 379 amendment 1 (the GM 2026-10-10, "yes please") - tooling lands alone, mid-feature, as a new commit
+# on main built in a detached worktree; the open-task refusal is untouched.
+land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
+	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)
+
 arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, to the GM's review, never filed (feature 379)   ID=<trigger> REASON="<why>"
 	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
@@ -1281,8 +1287,9 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 claims-owed: ## [project] every research claim of the engine or the Mode A procedures owed an impl-drift check (no index row, or its code or cited research moved since), and why
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" owed
 
-claims-bundle: ## [project] the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed   MODULE=<file> | OWED=1 | UNITS="<key>,<key>"   [OUT=<dir>] [REASON="<why>" for claims not owed]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$(UNITS)",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$(REASON)",)
+# GUARD_EDIT_OK: feature 374 FR-007 - WITH= and PAGES= bring a CANNOT-TELL re-check the helper bodies and pages it asked for.
+claims-bundle: ## [project] the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed   MODULE=<file> | OWED=1 | UNITS="<key>,<key>"   [OUT=<dir>] [REASON="<why>" for claims not owed] [WITH="<path>::<qualname>,..." context] [PAGES="<question file>,..."]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$(UNITS)",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$(REASON)",) $(if $(WITH),--with "$(WITH)",) $(if $(PAGES),--pages "$(PAGES)",)
 
 claims-checked: ## [project] record an impl-drift reply into the claims index, at the fingerprints its bundle read   BUNDLE=<dir> REPLY=<file holding the agent's reply>
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-checked: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi

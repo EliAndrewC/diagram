@@ -68,7 +68,7 @@ class Kind:
     noun: str
     # The sentence that follows "<Name> is a <noun>". MIND THE WORDS THE CLASS VOCABULARY ALSO USES:
     # the hamlet's line said "no shrine" on a page whose own `household shrine` class describes a
-    # hokora with a torii, and "no burial ground" on maps that draw a `grave island`. Both were true
+    # hokora with a torii, and "no burial ground" on maps that draw a `field grave` (then keyed `grave island`). Both were true
     # and both read as contradictions, because the card and the classes were using one word for two
     # things (settlement-review, 2026-08-29 - live on the reference map, not merely predicted).
     what: str

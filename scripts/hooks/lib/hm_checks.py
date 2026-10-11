@@ -51,6 +51,7 @@ STALE_S = 90 * 60
 #: a dispatch recorded at PreToolUse and never launched (another guard refused the call) stops counting after this
 PENDING_S = 120
 _UNIT = re.compile(r"^unit: (\S+?):(\S.*?) \S+$", re.M)
+_UNIT_FP = re.compile(r"^unit: (\S+?:\S.*?) (\S+)$", re.M)
 _Q = re.compile(r"\b(\d{4})(?:[.#-]|$)")
 _EDIT = re.compile(
     r"^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n(?P=ind)<<<\n(?P<old>.*?)\n(?P=ind)===\n(?P<new>.*?)\n?(?P=ind)>>>[ \t]*$",
@@ -68,6 +69,19 @@ def subject_of_unit(slug_tail: str) -> str:
         return f"modal:{slug_tail}"
     m = _Q.match(slug_tail)
     return f"q:{m.group(1)}" if m else ""
+
+
+def moved_since_answer(root: Path, text: str, subject: str) -> str:
+    """The fingerprint of a unit on `subject` the bundle carries that no recorded answer covers, or ''. An arbiter's accept
+    closes a unit at the words it ruled on; once a later change (a page the pop-up links, its own file) re-owes it, the record
+    gate owes a check the closure refused - a deadlock (feature 374 FR-005, the residence pop-up after 0090 moved). So the
+    closure holds only while every unit the bundle carries on the subject is answered at its fingerprint."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "record"))
+    import record_owed  # noqa: PLC0415
+
+    store = record_owed.store(root)
+    return next((fp for slug, fp in _UNIT_FP.findall(text)
+                 if subject_of_unit(slug.partition(":")[2]) == subject and not record_owed.answered(store, slug, fp)), "")
 
 
 def subjects_of_manifest(text: str) -> list[str]:
@@ -148,9 +162,14 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         unit = f"{check}|{s}"
         if root is not None and not arbiter_ok and not fresh_reading(state, unit, notes):
             shut = hm_arbiter.closed(root, f"round:{unit}@")
-            if shut:
+            moved = moved_since_answer(root, text, s) if shut else ""
+            if shut and not moved:
                 return f"the round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)"
-            cap = ROUND_CAP + hm_arbiter.continues(root, f"round:{unit}@")
+            base = state.setdefault("rebased", {})
+            if moved and base.get(unit, {}).get("fp") != moved:
+                base[unit] = {"fp": moved, "n": n}  # a new change: its rounds count from here (feature 374 FR-005)
+            n0 = base.get(unit, {}).get("n", 0) if shut else 0
+            cap = n0 + ROUND_CAP + hm_arbiter.continues(root, f"round:{unit}@", n0)
             if n >= cap:
                 hm_arbiter.trip(root, f"round:{unit}@{n + 1}", "round", unit, f"round {n + 1} of {check} on {s}", now)
                 return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"])
@@ -162,7 +181,8 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             state["rounds"][unit] = state["rounds"].get(unit, 0) + 1  # every other dispatch let through is a round
         read = state.setdefault("notes_read", {}).setdefault(unit, [])
         read.extend(sorted((notes or {"*"}) - set(read)))  # "*": a whole-page reading, every note read
-    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending"}
+    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending",
+                                                "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
     return ""
 
 
@@ -192,12 +212,14 @@ def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None
     """A check's return: its state, its EDIT blocks on its subjects, and (with `keep`, the clone's `check-replies/`) its reply,
     which the round arbiter's bundle compares round to round (FR-011)."""
     for tid, d in state.get("dispatches", {}).items():
+        # the reply is kept whatever the state: an answer recorded before SubagentStop fired had closed the dispatch, and the
+        # round arbiter's bundle then read "no reply kept" for that round (feature 374, the mulberry pop-up's round 2)
+        if d.get("aid") == agent_id and keep is not None and reply and not d.get("reply"):
+            keep.mkdir(parents=True, exist_ok=True)
+            (keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md").write_text(reply, encoding="utf-8")
+            d["reply"] = str(keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md")
         if d.get("aid") == agent_id and d.get("state") == "running":
             d["state"] = "returned"
-            if keep is not None and reply:
-                keep.mkdir(parents=True, exist_ok=True)
-                (keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md").write_text(reply, encoding="utf-8")
-                d["reply"] = str(keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md")
             for path, old, new in _blocks(reply):
                 for s in d["subjects"]:
                     state.setdefault("edits", {}).setdefault(s, []).append([path, old, new])
@@ -488,22 +510,19 @@ def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | 
         if check not in ledger_lint.CHECKS or not tpath or not Path(tpath).is_file():
             return False
         lines = Path(tpath).read_text(encoding="utf-8", errors="replace").splitlines()
-        # THIS RETURN's cells: the transcript's last segment (a resumed agent's earlier returns are passes of their own,
-        # logged at their own stops - plan review 2), as `make review-cost` prints them
-        segs = review_cost.segments(lines)
-        wall, tokens = review_cost.cells(review_cost.cost(segs[-1])).split(" | ", 1)
-        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid, "wall": wall, "tokens": tokens, "seg": len(segs)}
+        # THIS RETURN is the transcript's last segment (a resumed agent's earlier returns are passes of their own, logged at
+        # their own stops - plan review 2). GUARD_EDIT_OK: fixing the log's cells, which were read too early. The cells here
+        # are PROVISIONAL: at SubagentStop the agent's last call is not yet on disk (measured 2026-10-10: a 13 s check logged
+        # as 4 s, its final call missing), so `ledger_owed.py` recomputes them from the finished transcript by `segment`, and
+        # these stand only where that transcript is gone.
+        parts = review_cost.segments(lines)
+        wall, tokens = review_cost.cells(review_cost.cost(parts[-1])).split(" | ", 1)
+        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid,
+               "segment": len(parts) - 1, "wall": wall, "tokens": tokens}
         log = git_dir / PASS_LOG
         prior = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()] if log.is_file() else []
-        mine = [i for i, r in enumerate(prior) if r.get("agent") == aid]
-        if mine and (prior[mine[-1]].get("wall"), prior[mine[-1]].get("tokens")) == (wall, tokens):
+        if any(r.get("agent") == aid and r.get("segment") == len(parts) - 1 for r in prior):
             return False  # the same return seen by both events (a foreground check): one pass, logged once
-        if mine and prior[mine[-1]].get("seg") == len(segs):
-            # the SAME return seen again with the transcript grown since (two stop events for one return, the first before
-            # its last turn was written - 2026-10-10, 0104's source-readers each listed twice): the later cells replace it
-            prior[mine[-1]] = rec
-            log.write_text("".join(json.dumps(r) + "\n" for r in prior), encoding="utf-8")
-            return True
         with log.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(rec) + "\n")
         return True
@@ -602,6 +621,12 @@ def close(root: Path, subject: str, reason: str, now: float) -> int:
     return 0
 
 
+def escape_for(msg: str) -> str:
+    """The escape that reaches the rule which refused: the arbiter's holds take ARBITER_OK, never FREEZE_OK (feature 374: the
+    tip named FREEZE_OK on a closed unit, and FREEZE_OK does not reach that rule)."""
+    return "ARBITER_OK" if "arbiter" in msg else "FREEZE_OK"
+
+
 def main(argv: list[str]) -> int:
     mode = argv[0] if argv else ""
     if mode == "close" and len(argv) == 3:  # make check-closed SUBJECT= REASON=
@@ -612,7 +637,7 @@ def main(argv: list[str]) -> int:
         return 0
     msg = handle(mode, payload)
     if msg:
-        print(f"BLOCKED: {msg}\n(scripts/hooks/lib/hm_checks.py; escape FREEZE_OK=\"<reason>\" in the prompt or the edit)", file=sys.stderr)
+        print(f"BLOCKED: {msg}\n(scripts/hooks/lib/hm_checks.py; escape {escape_for(msg)}=\"<reason>\" in the prompt or the edit)", file=sys.stderr)
         return 2
     return 0
 

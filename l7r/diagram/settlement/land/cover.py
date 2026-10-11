@@ -343,6 +343,9 @@ class GroundCoverMixin:
         made - so the scan that offers a parcel and the commons that stocks it read one answer: a parcel whose room is
         under `WOODLAND_MIN_CROWNS` is not offered, and a parcel whose throws seat fewer is stocked from its room.
 
+
+        Research:
+            crowns on a lattice - UNRESEARCHED: crowns seated on a regular square lattice at the page's density
         Research: coppice stocking grid - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown every COMMONS_SPACING_FT on dry ground, none under another"""
         xs, ys = [float(q[0]) for q in poly], [float(q[1]) for q in poly]
         x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
@@ -637,6 +640,7 @@ class GroundCoverMixin:
             crowns and pines clear of the crops - UNRESEARCHED: a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
             woodland stocked to read - UNRESEARCHED: a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
+            crowns thin to the wood's edge - UNRESEARCHED: a throw within the feather of the parcel's edge is kept with chance (d / feather) ** 0.6
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         x0, y0, x1, y1 = box
         _wd_crowns = 0

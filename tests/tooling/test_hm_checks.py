@@ -75,11 +75,13 @@ def _clone(tmp: pathlib.Path) -> pathlib.Path:
     return tmp
 
 
-def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path) -> None:
+def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """FR-010/FR-011: the record checks' cap of two rounds per subject per feature; the third trips the arbiter, whose
     `continue` lifts the cap by one and whose `accept` closes the unit for good."""
     root = _clone(tmp_path)
-    ha = _load("hm_arbiter")
+    ha, ro = _load("hm_arbiter"), _load("record_owed")
+    store = tmp_path / "record-checks"
+    monkeypatch.setenv("RECORD_CHECKS_DIR", str(store))
     st: dict = {}
     for i in range(2):
         assert hc.dispatch(st, f"t{i}", "quote-check", "/m", MANIFEST, i, root) == ""
@@ -92,7 +94,14 @@ def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path) -> None:
     hc.answered(st, "quote-check", ["q:0105"])
     assert "passes its cap of 3" in hc.dispatch(st, "t10", "quote-check", "/m", MANIFEST, 6, root)
     ha.record_ruling(root, "round:quote-check|q:0105@4", {"ruling": "accept", "why": "what is left is wording"}, "round-arbiter")
+    for slug, fp in (("quote-check:0105.drawing#bath-size", "abc123"), ("quote-check:0105#well", "x")):
+        ro.write_answer(store, slug, fp, "accepted")  # what the accept answers (hm_arbiter.accept_answers)
     assert "the round arbiter closed quote-check|q:0105 (accept)" in hc.dispatch(st, "t11", "quote-check", "/m", MANIFEST, 7, root)
+    moved = MANIFEST.replace("abc123", "def456")  # a later change re-owes the unit: the accept no longer closes it (374 FR-005)
+    for i in range(2):
+        assert hc.dispatch(st, f"m{i}", "quote-check", "/m", moved, 8 + i, root) == "", "the new change's rounds count afresh"
+        hc.answered(st, "quote-check", ["q:0105"])
+    assert "round 6 of `quote-check` on q:0105 in this feature passes its cap of 5" in hc.dispatch(st, "m2", "quote-check", "/m", moved, 11, root)
     assert hc.dispatch(st, "ti", "impl-drift", "/m", "unit: impl-drift:x 1\n", 5) == "" and st["dispatches"]["ti"]["subjects"] == []
 
 
@@ -318,6 +327,7 @@ def test_each_return_of_a_resumed_check_is_logged_with_its_own_cells(tmp_path: p
         )
     assert hc.log_pass(tmp_path, "returned", payload, 0.0)
     first, second = _log(tmp_path)
+    assert (first["segment"], second["segment"]) == (0, 1), "each line names its return, for ledger_owed to settle"
     assert second["wall"] == "40 s" and (first["wall"], first["tokens"]) != (second["wall"], second["tokens"])
     assert f"{second['wall']} | {second['tokens']}" == rc.cells(rc.cost(rc.segments(t.read_text().splitlines())[-1]))
     bg = {"tool_input": {"subagent_type": "spec-fidelity"}, "tool_response": {"status": "async_launched", "agentId": "a3"}}
@@ -326,16 +336,16 @@ def test_each_return_of_a_resumed_check_is_logged_with_its_own_cells(tmp_path: p
 
 def test_one_return_seen_twice_as_its_transcript_grows_is_one_pass(tmp_path: pathlib.Path) -> None:
     """2026-10-10: each of 0104's source-reader passes was listed twice by `make ledger-owed`, the first with the cells of a
-    transcript not yet finished. The same segment seen again replaces its pass; a resumed segment is a pass of its own."""
+    transcript not yet finished. The same segment seen again is the same pass, logged once by its `segment`; its cells are
+    provisional, and `ledger_owed.py` recomputes them from the finished transcript (374 batch 2's design, kept at the merge)."""
     t = _transcript(tmp_path, "a5", "Check the bundle")
     payload = {"agent_type": "source-reader", "agent_id": "a5", "agent_transcript_path": str(t)}
     assert hc.log_pass(tmp_path, "returned", payload, 0.0)
     with t.open("a") as fh:  # the last turn written after the first stop event
         fh.write(json.dumps({"timestamp": "2026-10-10T10:09:00Z", "requestId": "r9", "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 10, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 900}}}) + "\n")
-    assert hc.log_pass(tmp_path, "returned", payload, 0.0)
+    assert not hc.log_pass(tmp_path, "returned", payload, 0.0)
     (only,) = _log(tmp_path)
-    _lint, rc = hc._reviews()
-    assert only["seg"] == 1 and f"{only['wall']} | {only['tokens']}" == rc.cells(rc.cost(rc.segments(t.read_text().splitlines())[-1]))
+    assert only["segment"] == 0 and only["agent"] == "a5"
 
 
 def test_a_foreground_check_is_logged_when_its_tool_call_completes(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -362,3 +372,20 @@ def test_a_foreground_check_keeps_its_reply_and_its_edits(tmp_path: pathlib.Path
     assert d["state"] == "returned" and pathlib.Path(d["reply"]).read_text() == REPLY
     assert st["edits"]["q:0105"] == [["research/questions/0105-baths-furo.drawing.html", "about 10 by 8 ft", "about 10 by 8 feet"]]
     assert hc.response_text({"content": "plain"}) == "plain" and hc.response_text({}) == ""
+
+def test_the_refusal_names_the_escape_that_reaches_its_rule() -> None:
+    assert hc.escape_for("the round arbiter closed quote-check|q:0105 (accept)") == "ARBITER_OK"
+    assert hc.escape_for("round 3 of `quote-check` on q:0105 ... make arbiter-bundle") == "ARBITER_OK"
+    assert hc.escape_for("`quote-check` is already in q:0105's round") == "FREEZE_OK"
+
+
+def test_a_dispatch_keeps_why_its_units_were_due_and_a_late_reply(tmp_path: pathlib.Path) -> None:
+    """Feature 374 (the round arbiter's tooling fixes): each dispatch keeps the `owed:` lines of its bundle, and a reply that
+    arrives after the answer closed the dispatch is still kept, so the arbiter's bundle has every round's reply."""
+    st: dict = {}
+    hc.dispatch(st, "t1", "modal-depiction", "/m", MODAL + "owed: modal-depiction:sheet/bath - a page its Drawing: names moved\n", 0)
+    assert st["dispatches"]["t1"]["owed"] == ["modal-depiction:sheet/bath - a page its Drawing: names moved"]
+    hc.launched(st, "t1", "ag1", True)
+    hc.answered(st, "modal-depiction", ["modal:sheet/bath"])
+    hc.returned(st, "ag1", "1. a finding", tmp_path / "keep")
+    assert pathlib.Path(st["dispatches"]["t1"]["reply"]).read_text() == "1. a finding"
