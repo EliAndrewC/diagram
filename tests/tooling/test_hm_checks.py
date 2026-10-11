@@ -423,3 +423,32 @@ def test_checks_launched_at_once_each_keep_their_agent(tmp_path: pathlib.Path) -
     kept = hc.load(path)["dispatches"]
     assert sorted(d.get("aid") for d in kept.values()) == sorted(f"a{i}" for i in range(20)), kept
     assert not list(tmp_path.glob(".git/*.tmp")), "each writer's temporary file is its own and is renamed into place"
+
+
+def test_a_first_look_at_sentences_other_checks_added_is_no_round(tmp_path: pathlib.Path) -> None:
+    """Feature 374 wave 120, the round arbiter on 0190: record-format's third round was owed only by sentences the depiction
+    checks had asked for, and the cap fired on text the check had never read. Unread sentences from OTHER checks' edits are
+    a first look; a sentence inside the check's OWN proposed edit is its fix read again, a repeat; no history counts."""
+    assert hc.sentences(["One. Two  words!", "Three?"]) == ["One.", "Two words!", "Three?"]
+    unit = "record-format|modal:sheet/x"
+    state: dict = {}
+    assert not hc.first_look(state, unit, ["A new sentence."]), "no reading recorded: counted as before"
+    state["seen"] = {unit: [hc._sentence_key("Old sentence.")]}
+    assert not hc.first_look(state, unit, ["Old sentence."]), "nothing unread"
+    assert hc.first_look(state, unit, ["Old sentence.", "Added for depiction."])
+    state["own_edits"] = {unit: ["Old sentence. Its own fix, as proposed."]}
+    assert not hc.first_look(state, unit, ["Old sentence.", "Its own fix, as proposed."]), "its own fix read again"
+    # through dispatch: the third round after two counted ones is let through, uncounted, when its text is new to it
+    root = tmp_path / "c"
+    (root / ".git").mkdir(parents=True)
+    modal = root / "l7r/diagram/interactive/assets/modals/sheet/x.md"
+    modal.parent.mkdir(parents=True)
+    modal.write_text("About: Old sentence.\n")
+    st: dict = {"rounds": {"modal-form|modal:sheet/x": hc.ROUND_CAP}}
+    text = "MANIFEST\nunit: modal-form:sheet/x abc123\n"
+    subjects = hc.subjects_of_manifest(text)
+    assert subjects == ["modal:sheet/x"], subjects
+    st["seen"] = {"modal-form|modal:sheet/x": [hc._sentence_key(s) for s in hc.sentences(hc.subject_blocks(root, "modal:sheet/x"))]}
+    modal.write_text("About: Old sentence. Added for depiction.\n")
+    assert hc.dispatch(st, "t1", "modal-form", "m", text, 1.0, root) == ""
+    assert st["rounds"]["modal-form|modal:sheet/x"] == hc.ROUND_CAP, "a first look is not counted"
