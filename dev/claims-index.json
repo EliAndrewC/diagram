@@ -5779,17 +5779,16 @@
   "code": "82100c9d3ec0c2a8",
   "core": "da8b3ebe7fbaaf7c",
   "date": "2026-10-11",
-  "note": "the one form is the page's busiest frontage, else where the most buildings stand",
+  "note": "one form: by the busiest main way, or else where the most buildings stand",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "ef12f1f13da5b2ba"
+   "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
-  "research": "29e2822e7dc02397",
+  "research": "41b4e592c65fd2d9",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
    "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor": {
@@ -6938,7 +6937,7 @@
   "code": "0caef07019100fc9",
   "core": "b6e9ace8b4fdfa51",
   "date": "2026-10-11",
-  "note": "delegates to place_kosatsuba, the siter that keeps the board on the verge of a way",
+  "note": "set on the verge, on a way",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
@@ -37428,7 +37427,7 @@
   "code": "4d8057a42dc434cc",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
-  "note": "the four attested forms (center, entrance, officials' gate, bridge ends) are a seeded per-settlement knob; the shrine precinct, only the page's GUESS, is left out",
+  "note": "all four attested sites are rolled, and the bridgehead is offered only where a way reaches a bridge (has_bridge comes from bridges_on_a_way)",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799",
    "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
@@ -61415,13 +61414,14 @@
   "code": "1b7b7f5dfa8486d9",
   "core": "5efeb905b7d48b3f",
   "date": "2026-10-11",
-  "note": "the page records 6 ft as the project's own figure for a hamlet or village",
+  "note": "6 ft at hamlet and village, the project's own figure",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
   "research": "41b4e592c65fd2d9",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:2ebf2e079d27562b"
+   "0190-notice-boards-kosatsuba.drawing.html:2ebf2e079d27562b",
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62"
   ],
   "verdict": "IN-STEP"
  },
@@ -61453,7 +61453,7 @@
   "code": "7bf05c7b2e67298f",
   "core": "d60680a098ccb7a2",
   "date": "2026-10-11",
-  "note": "anchors at a bridge, which the page attests as \"bridge ends\"",
+  "note": "\"as well as bridge ends\"",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
   },
@@ -61468,7 +61468,7 @@
   "code": "90ef467bfbb0a88f",
   "core": "d60680a098ccb7a2",
   "date": "2026-10-11",
-  "note": "the page is silent (\"Nor does any say which of a village's bridges\"); the drawing page records widest span, ties to nearest the houses, as a GUESS, and the code does that",
+  "note": "widest span, ties to the bridge nearest the houses; the drawing page records this as a GUESS and the research page says no page names the bridge",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -61477,7 +61477,7 @@
   "code": "2cd5a0ca13de9be6",
   "core": "5ccb27cb27aa54cf",
   "date": "2026-10-11",
-  "note": "only bridges a lane or road reaches are offered, matching \"every site ... on a road or street ... the foot of a bridge\"",
+  "note": "every named site is on a road or street, including the foot of a bridge",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
   },
@@ -61492,10 +61492,9 @@
   "code": "094169c897aec0fd",
   "core": "5ccb27cb27aa54cf",
   "date": "2026-10-11",
-  "note": "nothing cited gives a figure for how far a bridge may stand from a way and still count; 60 ft is honestly UNRESEARCHED",
+  "note": "the page gives no distance for \"a way reaches\" a bridge, so the 60 ft is unresearched",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::departure_routes#board-siting plumbing": {
@@ -61528,14 +61527,13 @@
   "code": "7184f3ed10ee797a",
   "core": "ea48166442cb9126",
   "date": "2026-10-11",
-  "note": "entrance where an approach is recorded, gate where a headman's house is, bridge where a way reaches one; all attested sites",
+  "note": "entrance, officials' gate, and a bridge end a way reaches, a field ditch's plank included",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
   },
   "research": "6f8da4bbe606a612",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
-   "0190-notice-boards-kosatsuba.html:c1b40e481f7a5b1c"
+   "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
   ],
   "verdict": "IN-STEP"
  },
@@ -61543,7 +61541,7 @@
   "code": "faeebcce3bf82dc0",
   "core": "ca150595c6f59f04",
   "date": "2026-10-11",
-  "note": "the bridgehead case returns bridgehead_anchor's bridge, as the drawing page says",
+  "note": "delegates to bridgehead_anchor's bridge",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
@@ -61557,7 +61555,7 @@
   "code": "2e4c7415bdd4fa07",
   "core": "ca150595c6f59f04",
   "date": "2026-10-11",
-  "note": "nothing cited covers it; falling back to the approach's point nearest the houses is honestly UNRESEARCHED",
+  "note": "nothing cited answers it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -61567,13 +61565,14 @@
   "code": "da391d39cb116542",
   "core": "ca150595c6f59f04",
   "date": "2026-10-11",
-  "note": "center is left unanchored, entrance and frontage (the headman's gate) are anchored; all attested; the bridgehead case is under its own claim",
+  "note": "center, entrance, the officials' gate",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
   },
   "research": "6f8da4bbe606a612",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
+   "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
   ],
   "verdict": "IN-STEP"
  },
@@ -61581,14 +61580,15 @@
   "code": "e6a470243a29ba61",
   "core": "ca150595c6f59f04",
   "date": "2026-10-11",
-  "note": "takes the handover, else the first point where the approach reaches a dwelling; a way of finding the attested \"entrance\" on the map",
+  "note": "entrances are attested sites, and the handover / first-reach point is a reading of \"entrance\"",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
   },
   "research": "6f8da4bbe606a612",
   "rests": [
    "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
-   "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1"
+   "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
   ],
   "verdict": "IN-STEP"
  },
@@ -62258,7 +62258,7 @@
   "code": "fec7f585564c60eb",
   "core": "367f9dea6d71f505",
   "date": "2026-10-11",
-  "note": "at the lane tiers, unless widened, only seats within 6 ft of the tread compete when any exist; otherwise falls back to the 60 ft band, as the page says",
+  "note": "at the lane tiers only seats within 6 ft compete when any exist; otherwise the 60 ft band",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
@@ -62312,17 +62312,16 @@
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#main ways only": {
   "code": "d251a1b6a76a2372",
   "core": "b24e7464d2552701",
-  "date": "2026-10-09",
-  "note": "only roads and main town streets are sampled when any exist, as the page says (\"the search looks only along those\")",
+  "date": "2026-10-11",
+  "note": "roads and main streets only when the map has any; otherwise the whole network",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "ef12f1f13da5b2ba"
+   "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
-  "research": "29e2822e7dc02397",
+  "research": "41b4e592c65fd2d9",
   "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
    "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#no main way, the whole network": {
@@ -62400,7 +62399,7 @@
   "code": "5ed524fd75f2e9e2",
   "core": "db09472c978363c0",
   "date": "2026-10-11",
-  "note": "samples the verge first and the whole 60 ft band only when the verge holds no seat",
+  "note": "samples the verge before the 60 ft band",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
@@ -62446,7 +62445,7 @@
   "code": "55611981ac4ea072",
   "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-11",
-  "note": "the first offset puts the drawn footing's near edge 6 ft from the road's edge, and the gap is measured footing to road",
+  "note": "the gap runs from the road edge to the drawn footing's near edge, starting at 6 ft",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
@@ -62488,7 +62487,7 @@
   "code": "06d794fa56abef8e",
   "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-11",
-  "note": "seats are kept off every way's bed, clear of water and inside the view, so the board stays on the verge and never in the roadbed",
+  "note": "every seat stands off the way's bed, on the verge",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
@@ -62512,16 +62511,16 @@
   "code": "559823c467045a2a",
   "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-11",
-  "note": "counts the houses and buildings near each seat",
+  "note": "counts the dwellings and buildings near each seat",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "ef12f1f13da5b2ba"
+   "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
-  "research": "29e2822e7dc02397",
+  "research": "41b4e592c65fd2d9",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
-   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#the nearer weighted": {
@@ -62642,17 +62641,16 @@
   "code": "dd29d8e647be795f",
   "core": "74ebfe35e64f1cca",
   "date": "2026-10-11",
-  "note": "with no rolled siting the default is \"frontage\", the busiest built ground",
+  "note": "the busiest-frontage default, the only form",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "ef12f1f13da5b2ba"
+   "0190-notice-boards-kosatsuba.drawing.html": "e2b795e1d19d6799"
   },
-  "research": "29e2822e7dc02397",
+  "research": "41b4e592c65fd2d9",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
    "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#the caption proved against the board": {

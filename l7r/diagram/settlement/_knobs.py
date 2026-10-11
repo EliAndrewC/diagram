@@ -304,7 +304,7 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 
     A BRIDGEHEAD (feature 374 wave 120): 0190 puts village boards "before the gates of the village officials' houses, as
     well as bridge ends", with no size given - it was withheld as "the foot of large bridges" until the impl-drift check read
-    the village passage. It is offered where the settlement records a bridge, anchored at its widest (`bridgehead_anchor`).
+    the village passage. Offered where a way reaches a bridge (`bridges_on_a_way`), at the widest (`bridgehead_anchor`).
 
     WITHHELD, DELIBERATELY, and not by this rule - absent from the value space, so nothing can roll it: the SHRINE PRECINCT,
     which 0190 names only as its own GUESS, no page it read naming one; a board there would also break "every attested
