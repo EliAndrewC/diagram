@@ -1,6 +1,6 @@
 # Feature Specification: What a reader takes for the river at the tap: the width and the hue (feature 230 pass 12, 2026-09-13)
 
-**Status**: Draft (reopened 2026-10-11 at the GM's word - the session's goal names it: *"Please implement features 355, 339, 340, 341, and 342."*; its item is taken out of 358's wave, where the GM had carried it on 2026-10-10)
+**Status**: Done 2026-10-11 - the head race's first 30 ft taper from the brook's hue to the supply hue on every pool hamlet (`race_taper`); glyph-check before: reads as the river: YES, after: NO (PASS); width unchanged; claims IN-STEP; reopened at the GM's word (the goal named 355), its item taken out of 358
 
 **Affects**: hamlet
 
