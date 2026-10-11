@@ -577,8 +577,8 @@
    "verdict": "CLEAR"
   },
   "T11": {
-   "section_sha256": "0478175f214011a817ac675dbfa858d2e91cb134af76c074eff63077da715138",
-   "section_text": "### Wave 120 (T11) - the hamlet's ground\n\n- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page refuses only \"a wood seated below\n  the houses, past the fields and beside a river or marsh\". The wood follows the page's two tiers alone - the slope higher\n  than the field beside it, then the level beyond the fields (`woodland_tier` no longer ranks by the houses) - and a seat is\n  refused only where it is below the houses' median height and its square comes within `LOW_BY_WATER_FT` of a river's course\n  or a marsh (`low_by_the_water`, measured from the square's circumscribed reach, as the keep-outs measure a turned parcel:\n  every seat the keep-outs pass stands a half off the water, so a reach from the seat alone refused nothing). Inashiro's\n  woodland moves under it.\n  \"Beside\" has no figure on the page: 46 ft, the width over which the maps draw reeds and grass interleaving at a marsh's\n  edge, recorded on 0077's drawing page as a GUESS (its record checks owed), and the claims label it so.\n- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size\n  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).\n  The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only\n  shrine is a dooryard hokora). The new form is anchored at the settlement's widest bridge, a brook's before a ditch's plank, and of two alike\n  the one nearest the houses (`bridgehead_anchor`): which of a village's bridges held its board no page says, so 0190's\n  drawing page records the choice as a GUESS. The form takes its title-card label (\"at the foot of a bridge\") and a pop-up\n  of its own (`choice/kosatsuba_seat--bridgehead`, written from 0190 as its three siblings are), which owe the record\n  checks a new pop-up and a drawing-page sentence owe.\n- Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are\n  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).\n\n",
+   "section_sha256": "4c42456f490147fe28016a0329a3adad7758f733da96a252d2011786f48cb7ea",
+   "section_text": "### Wave 120 (T11) - the hamlet's ground\n\n- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page refuses only \"a wood seated below\n  the houses, past the fields and beside a river or marsh\". The wood follows the page's two tiers alone - the slope higher\n  than the field beside it, then the level beyond the fields (`woodland_tier` no longer ranks by the houses) - and a seat is\n  refused only where it is below the houses' median height and its square comes within `LOW_BY_WATER_FT` of a river's course\n  or a marsh (`low_by_the_water`, measured from the square's circumscribed reach, as the keep-outs measure a turned parcel:\n  every seat the keep-outs pass stands a half off the water, so a reach from the seat alone refused nothing). It is asked in\n  the scan's one qualification (`_ok`), so every seat the nudge, the row step, the size roll and the aspect steps move is\n  asked it again at its own square; the water is one geometry built once (`WaterZone`), its cost measured at 0.05 s of a\n  10 s roll. Inashiro's woodland moves under it.\n  \"Beside\" has no figure on the page: 46 ft, the width over which the maps draw reeds and grass interleaving at a marsh's\n  edge, recorded on 0077's drawing page as a GUESS (its record checks owed), and the claims label it so.\n- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size\n  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).\n  The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only\n  shrine is a dooryard hokora). The new form is anchored at the settlement's widest bridge, a brook's before a ditch's plank, and of two alike\n  the one nearest the houses (`bridgehead_anchor`): which of a village's bridges held its board no page says, so 0190's\n  drawing page records the choice as a GUESS. The form takes its title-card label (\"at the foot of a bridge\") and a pop-up\n  of its own (`choice/kosatsuba_seat--bridgehead`, written from 0190 as its three siblings are), which owe the record\n  checks a new pop-up and a drawing-page sentence owe.\n- Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are\n  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).\n\n",
    "reviewed": "2026-10-11",
    "declared": "spec-fidelity",
    "decisions": [
@@ -586,139 +586,144 @@
      "id": "B3-1",
      "class": "within",
      "summary": "The work list: 328's ranking brought current - 39 rows closed by batch 2's re-checks (wave 118), audit/scope.py re-run on today's cache, 14 more rows re-marked deferred, 183 open in scope (126 E3 DRIFTED), 158 DEFERRED in the claims report.",
-     "why": "FR-001's one record. Re-derived from ranking.json at 7dc55cde9: 183 open in scope, 126 E3 DRIFTED (unchanged since round 3); DEFERRED 158 as round 3 measured, no scope change since. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "FR-001's one record. Re-derived from ranking.json at 7dc55cde9: 183 open in scope, 126 E3 DRIFTED (unchanged since round 3); DEFERRED 158 as round 3 measured, no scope change since. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-1a",
      "class": "within",
      "summary": "scope.py's Mode A test now takes docs/building-programs ('buildings', 'docs/buildings', 'docs/building-programs'); the four procedure rows re-marked in scope.",
-     "why": "Round 2's NOT LEGITIMATE item applied as asked. Read in ranking.json: Country shrine #hall in the middle of the one roof (E3), #building size anchors (E4), #innermost arch one pitch off the hall (E4), Magistrate's manor #universal shrine (E3) all scope mode-a and open - amendment 8's 'magistracies, country shrines' and 328 FR-010's Mode A procedures kept. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Round 2's NOT LEGITIMATE item applied as asked. Read in ranking.json: Country shrine #hall in the middle of the one roof (E3), #building size anchors (E4), #innermost arch one pitch off the hall (E4), Magistrate's manor #universal shrine (E3) all scope mode-a and open - amendment 8's 'magistracies, country shrines' and 328 FR-010's Mode A procedures kept. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-2",
      "class": "within",
      "summary": "Rule 1, default: a row whose fix text says 'label it a DEVIATION and have the drawing page record it' is fixed by changing the code to match the page (W118-2).",
-     "why": "328 FR-004: the implementation is brought to the research; a recorded DEVIATION is the exception path. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "328 FR-004: the implementation is brought to the research; a recorded DEVIATION is the exception path. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-3",
      "class": "within",
      "summary": "Rule 1, fallback: a change that still looks wrong goes to spec-fidelity with the GM's words, recorded only if LEGITIMATE; otherwise the code changes.",
-     "why": "A gate on exceptions ending in the literal outcome (XVI), unchanged since round 2. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "A gate on exceptions ending in the literal outcome (XVI), unchanged since round 2. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-4",
      "class": "within",
      "summary": "Rule 2, engine discipline: make quick per fix, reached maps rerolled and compared by git diff HEAD, one impl-drift per wave, declared occasions on a green gate, one make done at the close with the timing pair.",
-     "why": "328 FR-005 and 372 FR-003 as 374 FR-002 carries them; unchanged. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "328 FR-005 and 372 FR-003 as 374 FR-002 carries them; unchanged. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-5",
      "class": "within",
      "summary": "Rule 3: a row whose unit scope.py derives DEFERRED is re-marked scope: deferred and no wave takes it.",
-     "why": "328 FR-010 decides scope by the execution record; the instrument's building-programs defect is now fixed (B3-1a). Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "328 FR-010 decides scope by the execution record; the instrument's building-programs defect is now fixed (B3-1a). Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-6",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "summary": "Not in this batch: the legacy rows re-marked deferred by the re-run (paddy, ribbon, a town's kiln, a city's matrix permissions).",
-     "why": "Implied by the GM's own words (amendment 8: 'legacy hand-drawn settlements shall have their findings marked as DEFERRED'), decided by FR-010's measure; unchanged since round 2. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Implied by the GM's own words (amendment 8: 'legacy hand-drawn settlements shall have their findings marked as DEFERRED'), decided by FR-010's measure; unchanged since round 2. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-7",
      "class": "within",
      "summary": "Not in this batch: the held door band and fixture_quota.",
-     "why": "374 FR-004: held for the GM at the feature's end. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "374 FR-004: held for the GM at the feature's end. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-8",
      "class": "within",
      "summary": "Not in this batch: oblique_at#square ditch crossing, waiting on its E4 row.",
-     "why": "Round 2's item applied: overrides.json now carries the E4 key in after, and ranking.json's row reads tier E4, after [oblique_at#a channel crossing at its way's angle] - the hold rests on the ranking. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Round 2's item applied: overrides.json now carries the E4 key in after, and ranking.json's row reads tier E4, after [oblique_at#a channel crossing at its way's angle] - the hold rests on the ranking. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-8a",
      "class": "within",
      "summary": "Not in this batch: settle.py::_unkinked#a returning leg of 40 ft or more and settle_shapes#no hairpin or zigzag, re-tiered E4; the code keeps its cut and the claim its GUESS label.",
-     "why": "Round 2's W119-1/W119-2 rulings applied as asked: found-wave118.jsonl carries _unkinked E4 (the research question: what a longer returning leg becomes), the settle_shapes override tier E4 with after naming _unkinked, both read so in ranking.json. Waiting on research is FR-001's tier order (E4 researched before code), not a carve-out. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Round 2's W119-1/W119-2 rulings applied as asked: found-wave118.jsonl carries _unkinked E4 (the research question: what a longer returning leg becomes), the settle_shapes override tier E4 with after naming _unkinked, both read so in ranking.json. Waiting on research is FR-001's tier order (E4 researched before code), not a carve-out. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-8b",
      "class": "within",
      "summary": "Not in this batch: comb.py::_comb_draw_source#feeder brook width - its E1 fix (self.px(7.0)) is in the code; what reads DRIFTED is the E4 question #feeder brook width against the ladder, named in the row's after through its override; code and both pages unchanged meanwhile.",
-     "why": "Round 3's W120-2 item applied exactly as asked. Verified: overrides.json gives the row after [#feeder brook width against the ladder] and ranking.json reads it tier E4 with that after (merge re-run); git diff 04cc18418..HEAD touches no code and no research page; comb.py:628 still self.px(7.0); 0068's drawing page still reads 'roughly three and a half times it'. Waiting on research is FR-001's tier order (E4 researched before code), as B3-8a; nothing the GM asked is dropped, only sequenced behind its research row. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Round 3's W120-2 item applied exactly as asked. Verified: overrides.json gives the row after [#feeder brook width against the ladder] and ranking.json reads it tier E4 with that after (merge re-run); git diff 04cc18418..HEAD touches no code and no research page; comb.py:628 still self.px(7.0); 0068's drawing page still reads 'roughly three and a half times it'. Waiting on research is FR-001's tier order (E4 researched before code), as B3-8a; nothing the GM asked is dropped, only sequenced behind its research row. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "B3-9",
      "class": "within",
      "summary": "'The three waves take every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research.'",
-     "why": "Re-derived from ranking.json at 7dc55cde9: 9 open in-scope E0-E2 rows - two held (door band, fixture_quota), seven in waves 119-121 (serve; parcels, kosatsuba; KURA_PARTS, belt_law, stands, bundle). The feeder brook width row now reads tier E4 with after naming #feeder brook width against the ladder, so it is 'waiting on research' and the sentence holds. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Re-derived from ranking.json at 7dc55cde9: 9 open in-scope E0-E2 rows - two held (door band, fixture_quota), seven in waves 119-121 (serve; parcels, kosatsuba; KURA_PARTS, belt_law, stands, bundle). The feeder brook width row now reads tier E4 with after naming #feeder brook width against the ladder, so it is 'waiting on research' and the sentence holds. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-1",
      "class": "within",
      "summary": "_beyond_the_fields#no wood below the houses: the dry-ground refusal of a seat below the houses (`if k < 2`) goes.",
-     "why": "0077's drawing page refuses only 'a wood seated below the houses, past the fields and beside a river or marsh'; the blanket refusal of dry ground below the houses stays gone (rule 1, W118-2). Unchanged. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "0077's drawing page refuses only 'a wood seated below the houses, past the fields and beside a river or marsh'; the blanket refusal of dry ground below the houses stays gone (rule 1, W118-2). Unchanged. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-1a",
      "class": "within",
      "summary": "The wood follows 0077's two tiers alone: woodland_tier(p, fall, field_height) ranks the slope higher than the field beside it first, the level beyond the fields next; the houses' height no longer ranks a seat, and 'below the houses last' is gone from the code and both claims.",
-     "why": "Last round's W120-1a item, second option, applied: the rank now follows the page's own text (0077 drawing page: higher than the fields beside it, then the level where there is no higher ground). Read in wood_rank.py at 3182dbbea: `return 0 if h > field_height else 1`, no house term; the claims cite 0077 for the two tiers only, which the page carries. No uncited rank remains. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Last round's W120-1a item, second option, applied: the rank now follows the page's own text (0077 drawing page: higher than the fields beside it, then the level where there is no higher ground). Read in wood_rank.py at 3182dbbea: `return 0 if h > field_height else 1`, no house term; the claims cite 0077 for the two tiers only, which the page carries. No uncited rank remains. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-1b",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "summary": "'a seat is refused only where it is below the houses' median height and its square comes within LOW_BY_WATER_FT of a river's course or a marsh (low_by_the_water, measured from the square's circumscribed reach ...)' - implemented in _beyond_the_fields as reach = s.px(46) + half*sqrt(2) on the lattice seat, before the accept block.",
-     "why": "Last round's fix is applied exactly as asked at the scan (6198031d6: _reach = s.px(LOW_BY_WATER_FT) + half*sqrt(2); the new test drives _beyond_the_fields with half=60 - flush below refused, flush above kept, dry ground kept - and passes the case). But the rule is asked ONCE, at the lattice seat with the rung's half, and the accept block that follows re-asks only `_ok`, whose marsh pad is `half` alone (open_ground_region, parcels.py:958-962: a square flush against a marsh passes): seat_off_the_row (parcels.py:554, ok=_ok), the jitter jx/jy of up to +/-45 px a side (587-588, taken at 618 if _ok passes), the band size up to 1.18x half (616-621) and the aspect ladder _ok(x, y, half_used*sqrt(_try)) (~693). Walked: half=60, a seat kept at 130.9 px off a marsh below the houses, jittered 45 px toward it (85.9), _ok(jx, jy, 70.8) passes, drawn edge 15 ft off the marsh; at the square-fallback rung the edge reaches 0 ft. So the drawn wood can still sit within 46 ft of a marsh below the houses - the case 0077's drawing page now says the maps 'refuse a wood there' - and the code's own invariant at the jitter ('this can only move a legal seat to another legal seat, never widen what the scan admits') is false for this rule. Rivers are largely covered (the stream keep-out holds the square 60 px off the course, past 46); the gap is at marshes. The pool's woods (Inashiro 252.6 px off the nearest marsh, Kashikawa > 2,000) are one roll each, not the guarantee. Not impossible, not implied by the GM's words (328: bring the code to the research), and it leaves the named case reachable through the ordinary accept path. Fix: ask low_by_the_water wherever _ok is re-asked for a seat (the row step, the jitter, the band, the aspect ladder) at that candidate's own reach (46 ft + the candidate's circumscribing half), or once more at the final center with the drawn parcel's reach before it is accepted, the ladder's existing step-down/drop as the fallback; correct the jitter comment; and test it through the accept path (open_ground_patches, or the jitter/ladder with a real half): a seat that clears the scan's reach but whose jittered or grown square comes within 46 ft of a marsh below the houses is not drawn there."
+     "class": "within",
+     "summary": "A seat is refused only where it is below the houses' median height and its square comes within LOW_BY_WATER_FT of a river's course or a marsh, measured at the square's circumscribed reach; asked in the scan's one qualification (_ok), so every seat the nudge, the row step, the size roll and the aspect steps move is asked it again at its own square.",
+     "why": "Last round's NOT LEGITIMATE item applied as asked. Read at a9abacc7d: _ok (parcels.py ~515-523) now returns False when low_by_the_water((x,y), fall, house_floor, WaterZone, marshes, s.px(46) + half*sqrt(2)) with half the candidate's own; the scan-only filter in _beyond_the_fields is gone. Walked every accept path: the lattice scan _ok(x,y); seat_off_the_row's ok(q); the jitter/band _ok(jx,jy,_cand) and _ok(x,y,_cand); and - decisive - every ring that is drawn has passed either the aspect ladder _ok(x, y, half_used*sqrt(_try)) or fit_square_parcel's _ok(x, y, _h) at its FINAL center and its long half (hw), and _parcel_outline draws inside the ellipse of half-axes (hw, hh), radius <= hw < hw*sqrt(2); follow_the_bounds only pulls the ring in. So no drawn wood below the houses can come within 46 ft of a marsh or river course - the case 0077's drawing page says the maps refuse - and the jitter comment's invariant now holds for this rule. The only caller (stages.py:125) passes the rings through unmoved. Refusing on the circumscribed reach rather than the drawn ring errs toward refusal by at most hw*(sqrt(2)-0.8); that is the keep-outs' own convention applied to a GUESS degree (W120-1c), the measure last round asked for, not a narrowing. The new test drives the real open_ground_patches with low_by_the_water patched to refuse east of a line and passes (make test-file, 7 passed, 2026-10-11)."
     },
     {
      "id": "W120-1c",
      "class": "within",
      "summary": "'Beside' given a figure: 46 ft (LOW_BY_WATER_FT), the width of the maps' reed feather at a marsh's edge, recorded as a new GUESS sentence on 0077's drawing page with its record checks owed, the claims labeled GUESS.",
-     "why": "0077 gives 'beside' no figure, so a reach must be chosen to apply the page at all; a degree along a continuum is calibrated liberty, recorded as a GUESS on the drawing page (W115-1's path) with the claim labeled GUESS. Premise checked: MARSH_FEATHER_BS = 46 in settlement/land/wet.py:95 ('the reeds thin to nothing over this band'). The figure is not a narrowing; how it is measured is W120-1b's finding. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "0077 gives 'beside' no figure, so a reach must be chosen to apply the page at all; a degree along a continuum is calibrated liberty, recorded as a GUESS on the drawing page (W115-1's path) with the claim labeled GUESS. Premise checked: MARSH_FEATHER_BS = 46 in settlement/land/wet.py:95 ('the reeds thin to nothing over this band'). The figure is not a narrowing; how it is measured is W120-1b's finding. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-3",
      "class": "within",
      "summary": "_kosatsuba_seat_ok: the bridgehead joins the seat forms where the settlement records a bridge (has_bridge).",
-     "why": "0190.html line 15: the village's board 'before the gates of the village officials' houses, as well as bridge ends', no size qualifier. Code toward page; confirmed in _knobs.py and kosatsuba_affordances. Unchanged. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "0190.html line 15: the village's board 'before the gates of the village officials' houses, as well as bridge ends', no size qualifier. Code toward page; confirmed in _knobs.py and kosatsuba_affordances. Unchanged. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-4",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "summary": "_kosatsuba_seat_ok: the shrine precinct stays withheld, its claim giving the reason - no kept map draws a precinct.",
-     "why": "Physically impossible on every kept map (the pool hamlets' only shrine is a dooryard hokora); 0190.html itself calls a shrine precinct its GUESS. Unchanged. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Physically impossible on every kept map (the pool hamlets' only shrine is a dooryard hokora); 0190.html itself calls a shrine precinct its GUESS. Unchanged. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-6",
      "class": "within",
      "summary": "The bridgehead form is anchored at the settlement's widest bridge (a brook's before a ditch's plank), ties to the one nearest the houses (`bridgehead_anchor`), and 0190's drawing page records the choice as a GUESS in a new sentence.",
-     "why": "The record is silent on which of a village's bridges held its board (0190.html names bridge ends, none ranked), so a choice is required to site the attested form at all, and W115-1's path is followed: a GUESS recorded on the drawing page, the claim labeled GUESS (_helpers.py 'which bridge - GUESS'). Widest leans toward the bakufu's 'the foot of large bridges'. Not a choice among attested forms, so no knob is owed. Measured: every pool manifest's bridges carry `span` (7.0-27.7), so the rule discriminates. Not a DEVIATION recorded to fit code (W118-2): it records a silence, as W115-1 allows. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "The record is silent on which of a village's bridges held its board (0190.html names bridge ends, none ranked), so a choice is required to site the attested form at all, and W115-1's path is followed: a GUESS recorded on the drawing page, the claim labeled GUESS (_helpers.py 'which bridge - GUESS'). Widest leans toward the bakufu's 'the foot of large bridges'. Not a choice among attested forms, so no knob is owed. Measured: every pool manifest's bridges carry `span` (7.0-27.7), so the rule discriminates. Not a DEVIATION recorded to fit code (W118-2): it records a silence, as W115-1 allows. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-7",
      "class": "within",
      "summary": "The new form takes its title-card label ('at the foot of a bridge', choices.json) and a pop-up of its own (choice/kosatsuba_seat--bridgehead.md, written from 0190 as its three siblings are), owing the record checks a new pop-up and a drawing-page sentence owe.",
-     "why": "A rollable form with no label or pop-up would be a seat the interactive map cannot explain; its three siblings carry both, so this is the form's ordinary completion. The record checks owed are verification of the requested change. Last round's aside resolved: 0190's GUESS sentence now follows the kosatsu-jawiki-11 footnote (3182dbbea), so the footnote no longer reads as citing it. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "A rollable form with no label or pop-up would be a seat the interactive map cannot explain; its three siblings carry both, so this is the form's ordinary completion. The record checks owed are verification of the requested change. Last round's aside resolved: 0190's GUESS sentence now follows the kosatsu-jawiki-11 footnote (3182dbbea), so the footnote no longer reads as citing it. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-5",
      "class": "within",
      "summary": "Pool hamlets rerolled; placement-changed occasions (a glyph-check each on one hamlet where the roll moves them) for the board's bridgehead seat and the wood's newly allowed ground.",
-     "why": "Feature 294's occasions for the two re-placed elements. Unchanged. Unchanged this round (git show 6198031d6 touches only the W120-1b bullet of plan.md)."
+     "why": "Feature 294's occasions for the two re-placed elements. Unchanged. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
     },
     {
      "id": "W120-8",
      "class": "within",
      "summary": "In the same commit, outside the plan's text: crossing.crossed_through_many makes the field outline valid (shapely.make_valid) before measuring a walk, with a bowtie test.",
-     "why": "A defect found in the work (constitution XIV): cohort seed 5 raised a GEOS side location conflict once the walks reached seats below the houses; 374's edge cases name a newly failing cohort seed as a regression. Recorded at the point of change. Not a plan decision and no narrowing of anything asked."
+     "why": "A defect found in the work (constitution XIV): cohort seed 5 raised a GEOS side location conflict once the walks reached seats below the houses; 374's edge cases name a newly failing cohort seed as a regression. Recorded at the point of change. Not a plan decision and no narrowing of anything asked. Unchanged this round (git diff 6198031d6..a9abacc7d touches only the W120-1b bullet of plan.md)."
+    },
+    {
+     "id": "W120-9",
+     "class": "within",
+     "summary": "The rivers' courses and the marshes built once per size as one prepared geometry (wood_rank.WaterZone), a seat's distance one GEOS read; the height test asked first.",
+     "why": "Implementation of the same rule (distance <= reach to the union of the same courses and marshes, inside a marsh included, as the old point_in_poly/seg_dist loops measured); it changes no seat's answer and narrows nothing asked. Its stated cost (0.05 s of a 10 s roll) is a performance note, not a fidelity premise."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T12": {
    "section_sha256": "62faa9e43a34d519e4aafed5098d1dea401687e7fecb3cce7d5233671c1c8580",
