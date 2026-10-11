@@ -598,7 +598,7 @@ if shut:
     print(f"closed\tthe round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)")
 elif n - 2 > a.continues(root, f"round:{unit}@"):
     a.trip(root, f"round:{unit}@{n}", "round", unit, f"round {n} of a review check")
-    print("owed\t" + a.refusal([f"round:{unit}@{n}"]))
+    print("owed\t" + a.refusal([f"round:{unit}@{n}"], root))  # GUARD_EDIT_OK: feature 375 amendment 2 - a batch at the cap is named as one
 else:
     print("continue\t")' "$PAIR_HERE/lib" "${CLONE_ROOT:-.}" "$atype|$named" "$rounds" 2>/dev/null)"
             case "$arb" in

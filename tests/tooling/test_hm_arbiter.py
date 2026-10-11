@@ -298,7 +298,7 @@ def test_a_round_trigger_lost_from_the_owed_record_still_bundles_its_rounds(tmp_
     manifest = ab.bundle(root, "round:modal-form|modal:sheet/door@3", tmp_path / "out").read_text()
     assert "### Round 1: modal-form" in manifest and "the owed round is the counter's round 3" in manifest.lower()
     assert "- NOT APPLIED: l7r/diagram/interactive/assets/modals/sheet/door.md: 'a door.' -> 'a plank door.'" in manifest
-    assert "(not in arbiter-owed.json; the unit read from the trigger)" in manifest
+    assert "(not in arbiter-owed.json) - the unit read from the trigger" in manifest
     with pytest.raises(ab.MissingRecord, match="a round trigger with no rounds"):
         ab.bundle(root, "round:modal-form|modal:sheet/gate@3", tmp_path / "out2")
 

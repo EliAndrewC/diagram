@@ -172,7 +172,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             cap = n0 + ROUND_CAP + hm_arbiter.continues(root, f"round:{unit}@", n0)
             if n >= cap:
                 hm_arbiter.trip(root, f"round:{unit}@{n + 1}", "round", unit, f"round {n + 1} of {check} on {s}", now)
-                return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"])
+                return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"], root)
     for s in subjects:
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent

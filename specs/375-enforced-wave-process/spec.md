@@ -2,7 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-11 - amendment 1 landed: spec FAITHFUL (round 3), plan CLEAR (round 2), every task ticked; SC-007 and SC-008 tested, the clone measurement recorded; SC-003 and SC-004 carried to 374
+**Status**: Done 2026-10-11 - amendment 2 landed: spec FAITHFUL (round 2), plan CLEAR (round 3), every task ticked; SC-009 and SC-010 tested; SC-003 and SC-004 carried to 374
+
+**Amendment 2 approved**: the GM, 2026-10-11, "it does seem like a whole batch of pop-ups reaching the round cap at once should get a single ruling. because they are likely to be related. And that does sound like it would be more efficient. And then yes, please also do look at that bundle defect."
 
 **Amendment 1 approved**: the GM, 2026-10-10, "yes to each of those possible changes, though for the in-progress features you can probably limit yourself to clones with active sessions, if it helps performance."
 
@@ -136,6 +138,22 @@ work stands; the GM approved both in one answer.
   listing's time reading every clone against reading only the active ones is recorded, and the limit is kept only if it
   helps. Display only: what the push, `make tick` and the closing check read is unchanged.
 
+### Amendment 2 (`request.md`, Amendment 2)
+
+- **FR-017 A batch reaching the round cap together gets one ruling.** When several units are owed a round-cap ruling at the
+  same time - a batch of pop-ups (or pages) whose checks reached the cap together, as 343's 15 pop-ups did - one command
+  builds ONE arbiter bundle covering the batch, each unit with its own rounds and edits, and the round arbiter returns ONE
+  ruling for the batch with an exception for any unit it rules differently. The batch is every round trigger owed at the time
+  (a spec review's own rounds excepted - one spec, ruled alone), plus any round the session names that it is asking about
+  ahead of its cap (FR-018's case, as 343's 13 form checks were); an unrelated unit in it is the arbiter's to except.
+  Recording the ruling records each trigger's (the batch's, or its exception), so every hold, closure and GM-review row works
+  per unit as before. The tooling steers to it: while more than one round trigger of a batch is owed, the refusal names the
+  batch command, and a single trigger's ruling is refused, pointing to the batch; a unit is ruled alone only when no other
+  trigger of its batch is owed.
+- **FR-018 A round trigger's bundle carries its rounds.** An arbiter bundle for a round trigger shows that unit's rounds,
+  replies and edits whether or not the guard recorded the trigger as owed (the unit is read from the trigger itself) - 343's
+  session asked ahead for 13 form checks' third round, and each bundle reached the arbiter with no round history.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -161,6 +179,13 @@ work stands; the GM approved both in one answer.
   same files as main adds nothing; if the measurement keeps the active-only limit, an inactive clone's change is not shown.
   `--holding`, `--closed-by-status` and `CHECK=1` give what they gave before. The measurement is a key of
   `measurements.json`.
+- **SC-009** (FR-017) In 343's shape - several pop-ups at the cap on more than one check, one round asked about ahead and named
+  to join: one bundle carries them all (the asked-ahead one included, a spec review's round not), each with its rounds; one
+  batch ruling with one exception records every trigger - the exception's unit under its own ruling, the rest under the
+  batch's - each releasing its own hold and adding its GM-review row; meanwhile the refusal names the batch command, and a
+  single trigger's ruling is refused, pointing to it. The tests fail on today's code.
+- **SC-010** (FR-018) A bundle for a round trigger the guard never recorded as owed carries that unit's rounds (replaying the
+  shape of 343's form-check bundles). The test fails on today's code.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed.
@@ -202,3 +227,9 @@ until 375 has landed.
   uid (the measured leak 11 of 61, each line attributed by where its block stands); this entry.
 - spec-fidelity-verify, amendment 1 round 2 (2026-10-11): CHANGES REQUIRED - FR-016's first sentence still said "active". Applied: "a session clone it reads"; plan D22 follows.
 - spec-fidelity-verify, amendment 1 round 3 (2026-10-11): FAITHFUL - round 2's item resolved.
+- spec-fidelity, amendment 2 round 1 (2026-10-11, the counter reset): CHANGES REQUIRED. Applied: the approval line quotes both
+  of the GM's sentences; FR-017 states what a batch is (every owed round trigger but a spec review's, plus rounds named as
+  asked ahead) and that the tooling steers to it (the refusal names the batch; a single ruling is refused while its batch is
+  owed); SC-009 replays 343's shape and tests the refusal. The aside (a ruling row asked ahead lost its unit) is fixed with
+  FR-018's parser.
+- spec-fidelity-verify, amendment 2 round 2 (2026-10-11): FAITHFUL - round 1's three items and its aside resolved.
