@@ -46,3 +46,6 @@ magistracy sheet is reviewed once, after all its redraws.
 
 - [ ] T08 every sheet through `make pack-audit` and its gen; the harness at SC-001..SC-003; `make done`; the reviews the Occasions owe, each within two rounds (FR-015, SC-004, SC-005)
       research: rendering
+- [ ] GM review (make gm-reviewed F=335) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
