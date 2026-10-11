@@ -126,12 +126,8 @@ def test_343s_triage_owes_a_check_only_for_the_pages_it_reads(tmp_path: pathlib.
         assert kept in owed_new, f"{kept}: its block stands on the drawing page - still owed"
     assert ro.answered(tmp_path / "new", "modal-depiction:sheet/main-gate", units["modal-depiction:sheet/main-gate"])
     # a line naming no page owes every check of its pop-up (failing toward checking); a unit with no recorded pages too
-    assert {m.split(" ")[1] for m in mt.record(tmp_path / "bare", units, "TOUCHES sheet/door - something\n", pages) if m.startswith("touched")} == {
-        s for s in units if s.endswith(":sheet/door")
-    }
-    assert mt.record(tmp_path / "nopages", {"modal-depiction:sheet/door": "f"}, f"TOUCHES sheet/door @ {Q104.split('/')[-1]} - x\n", {}) == [
-        "touched: modal-depiction:sheet/door - x"
-    ]
+    assert {m.split(" ")[1] for m in mt.record(tmp_path / "bare", units, "TOUCHES sheet/door - something\n", pages) if m.startswith("touched")} == {s for s in units if s.endswith(":sheet/door")}
+    assert mt.record(tmp_path / "nopages", {"modal-depiction:sheet/door": "f"}, f"TOUCHES sheet/door @ {Q104.split('/')[-1]} - x\n", {}) == ["touched: modal-depiction:sheet/door - x"]
 
 
 def _kind(root: pathlib.Path, old: str, new: str) -> None:
