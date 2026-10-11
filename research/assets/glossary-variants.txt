@@ -3683,6 +3683,9 @@ suitengu	Suitengu
 suji-bei	suji-bei
 sujibei	suji-bei
 sukego	sukego
+sukiya	sukiya
+sukiya-style	sukiya
+sukiya-zukuri	sukiya
 sumigama	sumigama
 summer siege	summer siege
 summer siege of osaka	summer siege

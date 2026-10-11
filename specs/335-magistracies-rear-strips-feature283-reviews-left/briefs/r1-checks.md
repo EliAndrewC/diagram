@@ -1,0 +1,12 @@
+- 2026-10-11 R1 check | modal-triage (3 passes) | 14 pop-ups -> 9 touched (border-court, door, garden, genkan, kitchen, outer-court, residence, storehouse, tax-archive); after 0104 moved again, outer-court alone re-sent
+- 2026-10-11 R1 check | quote-check 0104.drawing (3 rounds) | R1: 4 VERBATIM/SUPPORTS, 1 absence, CLAIM-FROM-UNREAD on roji-well-absence (encyclopedia span cut by EDIT; Shiroishi span's unquoted roji description cut by hand); R2: clean; R3 accepted by the round-arbiter (only an unfootnoted drawing-choice sentence moved)
+- 2026-10-11 R1 check | quote-check 0117.drawing | 1 VERBATIM, 1 UNFETCHABLE (hongofuji-koiwai, 403; to-download.md 310 added), 2 SUPPORTS, 1 grounds; filed: 0117's "About 3 ft" stronger than its source's upper limit
+- 2026-10-11 R1 check | record-format 0104 (3 rounds) | R1: sukiya glossary term added, "one could stand" -> "a well could stand"; R2: well-placement sentence scoped to houses vs official compounds (EDIT applied); R3 accepted by the round-arbiter; filed: "Zhili" unglossed in 0104 notes
+- 2026-10-11 R1 check | record-format 0117 | clean; filed: kugurido as a variant of the wicket glossary term (optional)
+- 2026-10-11 R1 check | translation-check 0104.drawing | 5 FAITHFUL
+- 2026-10-11 R1 check | source-reader 0104.drawing#roji-well-absence | 1 READ (the Shiroishi page names no well; the only 井 is in 天井)
+- 2026-10-11 R1 check | source-applicability urasenke-jutaku | APPLICABLE-WITH-LIMITS, HONEST
+- 2026-10-11 R1 check | source-applicability adachi-matsue-bukeyashiki (3 rounds) | R1: privy and restored-bath limits added; R2: superseded by the author's 2016-2018 survey, write-up rewritten; R3: HONEST
+- 2026-10-11 R1 check | source-applicability kasama-iwama-jinya (2 rounds) | R1: What it is rewritten (a ten-article page, the tenth on Iwama), three limits added (bamboo fence, unsourced layout, a large jin'ya); R2: HONEST
+- 2026-10-11 R1 check | source-applicability kotobank-teien (2 rounds) | R1: What it is corrected (Heibonsha's worldwide history, its Japan section); R2: HONEST
+- 2026-10-11 R1 check | modal-depiction (9 pop-ups; outer-court twice) | storehouse, tax-archive clean; door, border-court, garden, genkan, kitchen, outer-court, residence returned 13 EDITs, NOT applied (the brief forbids modal edits): carried verbatim in r1-modal-edits.md; genkan's "dark bar" and outer-court's stipple need a render look; filed: garden's Guesses "grander form" vs 0103, 0107's unconditional family door vs 0104's garden-path form

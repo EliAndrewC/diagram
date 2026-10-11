@@ -3911,3 +3911,14 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [Google: 百度百科 平遥县衙 2409876](https://www.google.com/search?q=%E7%99%BE%E5%BA%A6%E7%99%BE%E7%A7%91+%E5%B9%B3%E9%81%A5%E5%8E%BF%E8%A1%99+2409876)
 - **Rests on it:** the same absence note on `cities/government.html` (diagram feature 292): an early pass (2026-08-28) took from this entry, unfetched, a clerks' lodging (公廨房) built behind the west office range in 1619 and a yamen about 200 by 100 m; the registry entry `pingyao-yamen` stays *Not cited* until someone reads it. If the entry says so, quote the passages word for word, in Chinese.
 - Blocked by: Baidu's security check; the WebFetch tool and curl with a browser user agent both get 403 and the "百度安全验证" page (diagram features 195 and 292, 2026-08-28 and 2026-10-01).
+
+### 310. Hongō Fujiyama Park (Yokohama), 古民家ミニ博物館 ("the old farmhouse mini-museum"), the articles on 潜り戸 (the wicket) and 土間 (the earth floor)
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[The museum's page](https://hongofuji.stars.ne.jp/guidance/cultural-property/museum/)**
+- Fallback: [Google: 本郷ふじやま公園 古民家ミニ博物館 潜り戸](https://www.google.com/search?q=%E6%9C%AC%E9%83%B7%E3%81%B5%E3%81%98%E3%82%84%E3%81%BE%E5%85%AC%E5%9C%92+%E5%8F%A4%E6%B0%91%E5%AE%B6%E3%83%9F%E3%83%8B%E5%8D%9A%E7%89%A9%E9%A4%A8+%E6%BD%9C%E3%82%8A%E6%88%B8)
+- **Rests on it:** `research/questions/0117-doorways-and-doors-to.html` and its drawing page `research/questions/0117-doorways-and-doors-to.drawing.html` (diagram feature 335): the notes `hongofuji-koiwai` and `hongofuji-koiwai-2`, a farmhouse's one-ken main door with a wicket. Save the article texts that open from the page's index, the 潜り戸 and 土間 articles above all, so the quoted passages (通常土間の出入口は一間巾の片引きの大戸(潜り戸付)を建て... and 頭を下げなければ通れないような...潜り戸と云います) can be checked word for word, and note each article's own URL if it has one.
+- Blocked by: the host refuses the container with HTTP 403 (quote-verbatim and a quote-check, feature 335, 2026-10-11); the archive's capture of 2026-10-02 holds only the page's index of article titles, not the articles.
