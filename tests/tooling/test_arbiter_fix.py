@@ -183,3 +183,71 @@ def test_a_spec_ruling_stands_only_for_the_spec_it_ruled_on(root: pathlib.Path) 
     assert ha.spec_ruled(d) == "" and ha.main(["spec-ruled", str(d)]) == 1
     (d / "arbiter.jsonl").write_text((d / "arbiter.jsonl").read_text() + "not json\n")
     assert ha.spec_ruled(root / "specs" / "nowhere") == ""
+
+
+def _rounds(root: pathlib.Path, tmp_path: pathlib.Path, uids: tuple[str, ...]) -> None:
+    """Two kept modal-form rounds on each pop-up in `uids`, as the hooks record them in checks-open.json."""
+    disp = {}
+    for i, uid in enumerate(uids):
+        for r in (1, 2):
+            reply = tmp_path / f"r-{i}-{r}.md"
+            reply.write_text(f"1. finding {r} on {uid}\n")
+            disp[f"t{i}{r}"] = {"check": "modal-form", "subjects": [f"modal:{uid}"], "t": i * 10 + r, "state": "answered", "reply": str(reply)}
+    (root / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": disp}))
+
+
+def test_a_batch_at_the_cap_gets_one_bundle_and_one_ruling(root: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """Feature 375 amendment 2, SC-009 (the GM 2026-10-11: "a whole batch of pop-ups reaching the round cap at once should get
+    a single ruling"): every owed round trigger in one bundle, each with its rounds; one ruling, one exception, every trigger
+    recorded and released, each a GM-review row."""
+    d = root / "specs" / "900-z"
+    _rounds(root, tmp_path, ("sheet/a", "sheet/b", "sheet/c"))
+    trig = [f"round:modal-form|modal:sheet/{u}@3" for u in "abc"]
+    for t in trig:
+        ha.trip(root, t, "round", t[len("round:"):-2], "round 3")
+    ha.trip(root, "red-gate", "red-gate", "", "two red gates")
+    assert ab.batch_triggers(root) == trig, "round triggers only"
+    manifest = ab.batch(root, tmp_path / "batch").read_text()
+    assert all(f"`{t}`" in manifest for t in trig) and "ONE JSON object" in manifest and "BATCH=1" in manifest
+    subs = sorted(p.read_text() for p in (tmp_path / "batch").glob("*/MANIFEST.md"))
+    assert len(subs) == 3 and all("## Rounds - modal-form on modal:sheet/" in s and "finding 2 on" in s for s in subs)
+    ruling = {"ruling": "accept", "why": "the form rounds only reword", "triggers": trig,
+              "exceptions": {trig[1]: {"ruling": "continue", "why": "sheet/b's round 2 found a new gap"}}}
+    with pytest.raises(PermissionError):
+        ha.record_batch(root, ruling, "main")
+    with pytest.raises(ValueError, match="does not carry"):
+        ha.record_batch(root, {**ruling, "exceptions": {"round:x|y@3": {"ruling": "accept", "why": "w"}}}, "round-arbiter")
+    with pytest.raises(ValueError, match="names its `triggers`"):
+        ha.record_batch(root, {"ruling": "accept", "why": "w"}, "round-arbiter")
+    rows = ha.record_batch(root, ruling, "round-arbiter")
+    assert [r["ruling"] for r in rows] == ["accept", "continue", "accept"]
+    assert set(ha.owed(root)) == {"red-gate"}, "each trigger released; the red gate not part of the batch"
+    assert ha.closed(root, "round:modal-form|modal:sheet/a@") == "accept" and ha.continues(root, "round:modal-form|modal:sheet/b@") == 1
+    assert sum(1 for ln in (d / "gm-review.jsonl").read_text().splitlines() if '"arbiter"' in ln) == 3
+    with pytest.raises(ValueError, match="already ruled"):
+        ha.record_batch(root, ruling, "round-arbiter")
+
+
+def test_a_round_asked_ahead_of_the_guard_carries_its_rounds(root: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """Feature 375 amendment 2, SC-010: 343's session asked the arbiter about form checks' third round before the cap recorded
+    it, and each bundle reached the arbiter with no round history. The unit is read from the trigger."""
+    _rounds(root, tmp_path, ("sheet/garden",))
+    manifest = ab.bundle(root, "round:modal-form|modal:sheet/garden@3", tmp_path / "ahead").read_text()
+    assert "(not in arbiter-owed.json)" in manifest and "## Rounds - modal-form on modal:sheet/garden" in manifest
+    assert "finding 1 on sheet/garden" in manifest and "finding 2 on sheet/garden" in manifest
+    assert ab.unit_of("round:modal-form|modal:sheet/garden@3") == "modal-form|modal:sheet/garden" and ab.unit_of("red-gate") == ""
+
+
+def test_the_batch_command_line(root: pathlib.Path, tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    monkeypatch.chdir(root)
+    assert ab.main(["--root", str(root), "--batch", "--out", str(tmp_path / "b0")]) == 2 and "nothing to batch" in capsys.readouterr().err
+    assert ab.main(["--root", str(root)]) == 2 and "BATCH=1" in capsys.readouterr().err
+    _rounds(root, tmp_path, ("sheet/a",))
+    ha.trip(root, "round:modal-form|modal:sheet/a@3", "round", "modal-form|modal:sheet/a", "round 3")
+    assert ab.main(["--root", str(root), "--batch", "--out", str(tmp_path / "b1")]) == 0
+    f = tmp_path / "ruling.json"
+    f.write_text(json.dumps({"ruling": "accept", "why": "fine as it stands", "triggers": ["round:modal-form|modal:sheet/a@3"]}))
+    assert ha.main(["ruled-batch", str(f), "--as", "main"]) == 2
+    assert ha.main(["ruled-batch", str(f), "--as", "round-arbiter"]) == 0
+    assert ha.main(["ruled-batch", str(f), "--as", "round-arbiter"]) == 1, "already ruled"
+    assert "BATCH=1" in ha.refusal(["round:x|y@3"])

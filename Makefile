@@ -1151,14 +1151,15 @@ check-closed:   ## [project] close the checks in flight on a page or pop-up whos
 # GUARD_EDIT_OK: feature 375 FR-011 adds two operations - the round arbiter's bundle, and the recording of its ruling
 # (only the `round-arbiter` subagent passes AS=round-arbiter; a ruling is binding, one per trigger).
 arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
-	@if [ -z "$(TRIGGER)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named> is required\n' >&2; exit 2; fi
+	@: "GUARD_EDIT_OK: feature 375 amendment 2 (the GM 2026-10-11) - BATCH=1 bundles every owed round trigger for ONE ruling"
+	@if [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named>, or BATCH=1 for every owed round trigger at once\n' >&2; exit 2; fi
 	@: "GUARD_EDIT_OK: an arbiter tooling fix (368, 2026-10-11) - MISSING_OK bundles a trigger whose rounds kept no reply, with the reason shown to the arbiter"
 	$(if $(MISSING_OK),$(LOGESCAPE) MISSING_OK "$(MISSING_OK)",@:)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" "$(TRIGGER)" --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$(MISSING_OK)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" $(if $(BATCH),--batch,"$(TRIGGER)") --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$(MISSING_OK)",)
 
-arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter
-	@if [ -z "$(TRIGGER)" ] || [ -z "$(FILE)" ]; then printf 'make arbiter-ruled: TRIGGER= and FILE= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py ruled "$(TRIGGER)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
+arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter  (or BATCH=1 FILE=<json> for a batch)
+	@if [ -z "$(FILE)" ] || { [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; }; then printf 'make arbiter-ruled: FILE= and TRIGGER= (or BATCH=1) are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py $(if $(BATCH),ruled-batch,ruled "$(TRIGGER)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
 # GUARD_EDIT_OK: feature 379 (the GM 2026-10-10) - an arbiter's tooling fix is made, not lost: the two ways an open fix is
 # settled, each a row of the GM's review; `make tick` and the closing check refuse while one is open.

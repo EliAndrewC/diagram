@@ -299,6 +299,23 @@ in a clone (an amendment in progress) is shown. For each such feature, the listi
 the clone's state in that state's section, `[in <clone>, not landed]`, one row per differing clone. Only the listing does
 this: `--holding`, `--closed-by-status`, `CHECK=1` and `tick-task.py` read the directory they are given, as before.
 
+### Amendment 2 (FR-017, FR-018)
+
+**D23 - One bundle and one ruling for the round triggers owed together (FR-017).** `make arbiter-bundle BATCH=1`
+(`arbiter_bundle.batch`) bundles every round trigger owed now (`arbiter-owed.json`, kind `round` - the red gate, a reversal,
+a cascade or an `ask:` stay their own), each trigger's own bundle in a subdirectory, under one MANIFEST asking for ONE
+ruling with an `exceptions` map; every missing record is reported at once. `make arbiter-ruled BATCH=1 FILE=`
+(`hm_arbiter.record_batch`) checks the whole reply first (its `triggers`, no stray exception, the declaration, none already
+ruled) and then records each trigger through `record_ruling` - the batch's ruling, or its exception - so holds, closures,
+continues and GM-review rows stay per unit; a batch `tooling_fix` is recorded once, on the first trigger. "Together" is
+"owed now": the triggers a batch of dispatches tripped are owed at the same time, and nothing older lingers because each
+holds its unit until ruled. The round arbiter's contract gains the batch reply; the guard's refusal names `BATCH=1`. A
+single trigger is still ruled alone.
+
+**D24 - A round bundle reads its unit from the trigger (FR-018).** `arbiter_bundle.unit_of` parses `round:<check>|<subject>@N`;
+`bundle()` uses the owed record's unit, else this, so a round asked about ahead of the cap still carries its rounds, replies
+and edits (343's 13 form-check bundles had none).
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

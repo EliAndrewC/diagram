@@ -149,7 +149,9 @@ def refusal(triggers: list[str]) -> str:
     t = triggers[0]
     return (f"a tripwire is owed its ruling first ({', '.join(triggers)}; feature 375 FR-010/FR-011): make arbiter-bundle "
             f"TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" "
-            "FILE=<its JSON> AS=round-arbiter. The feature goes on elsewhere meanwhile. (Claude Code picks up a new agent file "
+            "FILE=<its JSON> AS=round-arbiter. Several units at their cap together (a batch of pop-ups or pages)? `make "
+            "arbiter-bundle BATCH=1` puts every owed round trigger to ONE ruling (feature 375 amendment 2). "
+            "The feature goes on elsewhere meanwhile. (Claude Code picks up a new agent file "
             "mid-session - this one did on 2026-10-10 - so only if `round-arbiter` is missing from the session's agent list: "
             "restart it, or carry ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - logged.)")
 
@@ -231,6 +233,33 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     if state.pop(trigger, None) is not None:
         path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
     return row
+
+
+def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str | None = None) -> list[dict[str, Any]]:
+    """Record ONE ruling for a batch of round triggers (feature 375 amendment 2, FR-017; the GM 2026-10-11: "a whole batch of
+    pop-ups reaching the round cap at once should get a single ruling"): each trigger under the batch's ruling or its own
+    exception, so each unit's hold, closure and GM-review row work as they do alone. A batch `tooling_fix` is one fix, recorded
+    on the first trigger only. Everything is checked before anything is written."""
+    triggers = [str(t) for t in ruling.get("triggers") or []]
+    exceptions = ruling.get("exceptions") or {}
+    if not triggers:
+        raise ValueError("a batch ruling names its `triggers` - every trigger its bundle carried")
+    stray = sorted(set(exceptions) - set(triggers))
+    if stray:
+        raise ValueError(f"an exception names a trigger the batch does not carry: {', '.join(stray)}")
+    if declared != "round-arbiter":
+        raise PermissionError("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, "
+                              "recorded, not a proof")
+    done = sorted(set(triggers) & set(rulings(root)))
+    if done:
+        raise ValueError(f"already ruled: {', '.join(done)} - one ruling per trigger, binding")
+    base = {k: v for k, v in ruling.items() if k not in ("triggers", "exceptions")}
+    rows = []
+    for i, t in enumerate(triggers):
+        own = dict(exceptions.get(t) or {})
+        one = own if own else {k: v for k, v in base.items() if i == 0 or k != "tooling_fix"}
+        rows.append(record_ruling(root, t, one, declared, now))
+    return rows
 
 
 def spec_body_sha(d: Path) -> str:
@@ -364,6 +393,20 @@ def main(argv: list[str]) -> int:
             print(f"arbiter-ruled: refused - {e}", file=sys.stderr)
             return 1
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
+        return 0
+    if argv[:1] == ["ruled-batch"] and len(argv) == 4 and argv[2] == "--as":  # `make arbiter-ruled BATCH=1` (375 FR-017)
+        root = Path(".").resolve()
+        try:
+            rows = record_batch(root, json.loads(Path(argv[1]).read_text(encoding="utf-8")), argv[3])
+        except PermissionError as e:
+            print(f"arbiter-ruled: {e}", file=sys.stderr)
+            return 2
+        except (OSError, ValueError) as e:
+            print(f"arbiter-ruled: refused - {e}", file=sys.stderr)
+            return 1
+        for row in rows:
+            print(f"arbiter-ruled: {row['trigger']} - {row['ruling']}")
+        print(f"arbiter-ruled: the batch's {len(rows)} triggers recorded (binding; each in arbiter.jsonl and for the GM's review)")
         return 0
     if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # review-gate.sh: does a ruling stand for this spec's verdict?
         return 0 if spec_ruled(Path(argv[1])) else 1

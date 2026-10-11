@@ -108,3 +108,12 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T29 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
       verify: DONE. make done green (reuse: scripts only); tests/tooling 1608 passed after the ledger row fix; make hooks-test green; report written; landed by the push carrying this tick
+
+## Amendment 2 (the GM 2026-10-11: one ruling for a batch at the round cap; the bundle defect)
+
+- [ ] T30 One bundle and one ruling for a batch (plan D23): `arbiter_bundle.batch`, `hm_arbiter.record_batch`, `make arbiter-bundle/arbiter-ruled BATCH=1`, the contract, the refusal; tests red on today's code (SC-009)
+      research: rendering
+- [ ] T31 A round bundle reads its unit from the trigger (plan D24); its test (SC-010)
+      research: rendering
+- [ ] T32 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
+      research: rendering
