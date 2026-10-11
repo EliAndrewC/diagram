@@ -2,7 +2,7 @@
 
 Saved pages: `/tmp/l7r-335r1/sr/<urasenke|adachi|kasama|teien|shiroishi>/` (one source-reader bundle each; all READ,
 recorded with `make record-checked CHECK=source-reader Q=0104 NOTES=...`). One new registry key, `urasenke-jutaku`
-(source-applicability owed). Jo-an (Uraku-en) not cited: it is named only in the absence note's search comment. The
+(source-applicability owed). Jo-an (Uraku-en) is not cited or named: this session did not read it. The
 claims sheet row was made with `make research-claim Q="0104 0117" FEATURE=335` (feature 376), not by appending to the sheet.
 Corrected on the way, from the source-reader: `adachi-matsue-bukeyashiki`'s "so late Edo" (the source says only within
 200 years of 2012) and "kitchen and bath" (it says kitchen or bath).
