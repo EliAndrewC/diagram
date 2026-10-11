@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08 (filed by feature 330); specified 2026-10-11
 
-**Status**: Draft (specified 2026-10-11 from its filed form)
+**Status**: Draft (specified 2026-10-11 from its filed form; spec-fidelity FAITHFUL round 2)
 
 **Affects**: magistracy
 
@@ -80,3 +80,4 @@ change the program") passes unchanged; every seated caption of the example lies 
 
 - 2026-10-11, round 1: CHANGES REQUIRED - FR-003 chose the fix before measuring (now the measured one, per source); N -> 0
   could not hold under FR-004 (now only the three sources' disagreements, the rest reported with their cause). FR-004 within.
+- 2026-10-11, round 2 (spec-fidelity-verify): FAITHFUL - both items resolved.
