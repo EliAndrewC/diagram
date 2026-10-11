@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - amendment 1 (the gravel finding) under review
+**Status**: In progress - amendment 1 FAITHFUL; checks and close
 
 **Affects**: magistracy, research record
 
@@ -86,5 +86,5 @@ before modern times, and the modal reworded if not.
   said "not dated" and named an owner no source gives. Applied, with FR-002's list matching FR-001's.
 
 - spec-fidelity-verify, round 3 (2026-10-10): **FAITHFUL**. Nothing to change.
-- Amendment 1 (2026-10-10): the record write found the Edo gravel; the Why, FR-001 and FR-002 follow the finding. Review
-  owed (the counter resets).
+- Amendment 1 (2026-10-10): the record write found the Edo gravel; the Why, FR-001 and FR-002 follow the finding.
+- spec-fidelity-verify, amendment 1 round 1 (2026-10-10): **FAITHFUL**.

@@ -29,8 +29,9 @@ N/A: no generator change.
 
 ## Decisions
 
-**D1 - The record write** (FR-001): 0104's findings page gains the absence note and the two-drawings sentence, from
-research.md R1; written by the shared write session, committed `343: ...`.
+**D1 - The record write** (FR-001, amendment 1): 0104's findings page gains the Edo gravel (the South Town Magistracy and
+the officers' houses, each source with its limits), the absence note for swept, raked, sanded or bare earth and for any
+surface outside Edo, and the two-drawings sentence; written by the shared write session, committed `343: ...`.
 
 **D2 - The modal** (FR-002): `border-court.md` reworded by this session after the record lands (its Entry and Drawing name
 0104 and 0110). It owes `modal-form`, `modal-research` and `modal-depiction` (`make record-owed` names them), each from
