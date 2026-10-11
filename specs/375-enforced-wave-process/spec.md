@@ -201,3 +201,4 @@ until 375 has landed.
   limit is decided by a recorded measurement, as the GM's "if it helps performance" made it; SC-007 names the cleared units by
   uid (the measured leak 11 of 61, each line attributed by where its block stands); this entry.
 - spec-fidelity-verify, amendment 1 round 2 (2026-10-11): CHANGES REQUIRED - FR-016's first sentence still said "active". Applied: "a session clone it reads"; plan D22 follows.
+- spec-fidelity-verify, amendment 1 round 3 (2026-10-11): FAITHFUL - round 2's item resolved.
