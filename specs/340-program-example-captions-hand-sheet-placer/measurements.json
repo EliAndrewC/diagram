@@ -1,0 +1,66 @@
+{
+  "caption-disagreements": {
+    "quantity": "captions of the declared program example the composer and the hand-sheet placer seat more than 1 px apart, attributed to the entry's three sources, and what each fix removes",
+    "observed": "2026-10-11",
+    "source": "l7r/diagram/compound.py emit_svg on county_magistracy_program(); labels/hand_sheet.seat",
+    "command": "make spec-harness SPEC=specs/340-program-example-captions-hand-sheet-placer OUT=/tmp/h340.json",
+    "method": "harness.py: C recorded from compound._seat_all; H from hand_sheet.seat on the same declared text; composer variants with one source swapped (the base loop reproduces C on all 45); each variant tries a caption's subjects in order, the first with a free seat winning, as hand_sheet.seat's one() does (plan review round 2)",
+    "value": {
+      "captions": 45,
+      "base_loop_reproduces_C": 45,
+      "disagreements": 11,
+      "explained_by_the_three": 10,
+      "by_source": {
+        "view": 5,
+        "subject": 2,
+        "width": 0
+      },
+      "fix1_removes": 5,
+      "fix2_removes": 2,
+      "after_switch_apart": [
+        "clerk"
+      ],
+      "after_switch_soft": []
+    }
+  },
+  "caption-disagreements-after": {
+    "quantity": "captions of the program example the composer (with the one view built) and the hand-sheet placer seat more than 1 px apart, and how many the entry's three sources explain",
+    "observed": "2026-10-11",
+    "source": "l7r/diagram/compound.py emit_svg after T03; labels/hand_sheet.seat",
+    "command": "make spec-harness SPEC=specs/340-program-example-captions-hand-sheet-placer OUT=/tmp/h340.json",
+    "method": "harness.py on the built code: C recorded from compound._seat_all, H from hand_sheet.seat; each remaining difference with its cause",
+    "value": {
+      "disagreements": 3,
+      "explained_by_the_three": 0,
+      "remaining": [
+        {
+          "caption": "straw mats",
+          "moved_px": 4.6,
+          "cause": "order, clearance or repair"
+        },
+        {
+          "caption": "clerk",
+          "moved_px": 3.5,
+          "cause": "strictness (the hand-sheet seat covers ink)"
+        },
+        {
+          "caption": "clerk",
+          "moved_px": 84.2,
+          "cause": "order, clearance or repair"
+        }
+      ]
+    }
+  },
+  "composition-timing": {
+    "quantity": "the program example's composition (compound.emit_svg), best of 5 in one process, with the one view and with the composer's own index (the one view switched off)",
+    "observed": "2026-10-11",
+    "source": "l7r/diagram/compound.py",
+    "command": "make spec-harness SPEC=specs/340-program-example-captions-hand-sheet-placer OUT=/tmp/h340.json",
+    "method": "harness.py test_time; varies with load; before ObstacleIndex.copy the one view took 1.543 s",
+    "value": {
+      "one_view_s": 1.237,
+      "own_index_s": 0.237,
+      "varies": true
+    }
+  }
+}

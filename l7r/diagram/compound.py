@@ -53,6 +53,7 @@ from .compound_model import (
     _kind_attr,
 )
 from .compound_parts import _clerk_seats, _court_side, _dais, _engawa, _gate_posts, _lattice, _mats, _middle_gate, _point_features, _rear_band, _roof_posts, _wall_runs
+from .compound_view import OneView, View, one_view
 from .labels import Obstacle, ObstacleIndex, Placement, Subject
 from .labels import place as place_caption
 from .labels.standard import CHAR_W_EM, WEIGHT_OBSTACLE
@@ -339,12 +340,17 @@ Request = tuple[str, Subject, float, bool, str, str]
 
 
 def _seat_captions(
-    requests: list[Request], obstacles: list[Obstacle], frame: tuple[float, float, float, float], late: dict[int, list[Obstacle]] | None = None, title: str = ""
+    requests: list[Request],
+    obstacles: list[Obstacle],
+    frame: tuple[float, float, float, float],
+    title: str = "",
+    names: list[str] | None = None,
+    one: OneView | None = None,
 ) -> tuple[list[str], float]:
     """Place every requested caption by the ONE placer (feature 266), in order, each an obstacle to the next, and write
-    it - with its leader when the standard gives it one (FR-005). `late[i]` are obstacles that join the index once
-    caption i is seated: ground only that caption may stand on (a roofed court's floor is its own caption's, and no
-    other caption stands under its roof). Returns the strings and the lowest point drawn.
+    it - with its leader when the standard gives it one (FR-005). Returns the strings and the lowest point drawn. (The roofed
+    court's floor joined the index only once its own captions were seated - feature 340 retired that: under the one view the
+    hand-sheet placer's classification reads the court as built, as it reads a hand sheet's.)
 
     NO CAPTION LIES ON A FEATURE IT DOES NOT NAME (feature 287, labels L15; plan D7): each is placed STRICTLY - a free
     seat or none (`place(strict=True)`). A caption with none has one seated neighbor lifted and the pair re-seated
@@ -353,7 +359,7 @@ def _seat_captions(
     composer is seedless, so this is an impossible program, refused before any sheet exists."""
     stuck = 0
     for grow in range(CAPTION_GROWTHS + 1):
-        seats, stuck_at = _seat_all(requests, obstacles, (frame[0], frame[1], frame[2], frame[3] + grow * CAPTION_ROOM), late or {})
+        seats, stuck_at = _seat_all(requests, obstacles, (frame[0], frame[1], frame[2], frame[3] + grow * CAPTION_ROOM), one)
         if stuck_at is None:
             break
         stuck = stuck_at
@@ -361,24 +367,37 @@ def _seat_captions(
         raise ValueError(f"{title}: the caption {requests[stuck][0]!r} has no seat clear of every feature, even with a neighbor lifted and the sheet grown - change the program")
     out: list[str] = []
     foot = 0.0
-    for (_text, _subject, size, italic, fill, kind), p in zip(requests, seats, strict=True):
-        out.append(caption_svg(p, size, ' font-style="italic"' if italic else ' font-weight="bold"', fill, kind))
+    for i, ((_text, _subject, size, italic, fill, kind), p) in enumerate(zip(requests, seats, strict=True)):
+        out.append(caption_svg(p, size, ' font-style="italic"' if italic else ' font-weight="bold"', fill, kind, names[i] if names else ""))
         if p.leader is not None:
             out.append(leader_svg(p, size, fill, kind))
         foot = max(foot, *(q[1] for q in p.block))
     return out, foot
 
 
-def _caption_index(obstacles: list[Obstacle], seats: list[Placement], late: dict[int, list[Obstacle]], lifted: int | None = None, subject: Subject | None = None) -> ObstacleIndex:
-    """The index a caption is placed against: the drawn features, every caption seated (but a `lifted` one) and the late
-    ground of every caption seated. For an AREA caption the features holding its area are waived - a room's name lies in
-    its building by necessity, as the hand sheets waive the building holding a named room (feature 267)."""
+def _caption_index(
+    obstacles: list[Obstacle],
+    seats: list[Placement],
+    lifted: int | None = None,
+    subject: Subject | None = None,
+    view: View | None = None,
+    caption: int = 0,
+) -> ObstacleIndex:
+    """The index a caption is placed against: the drawn features and every caption seated (but a `lifted` one). For an AREA caption the features holding its area are waived - a room's name lies in
+    its building by necessity, as the hand sheets waive the building holding a named room (feature 267). Given the one
+    `view` (feature 340), the drawn features are the hand-sheet placer's classification of the sheet for this subject and
+    kind - its every weighted obstacle a block, inner ink included, but never a shape the caption declares (plan D4) - and the
+    composer's own list is not read; the seated captions are added as before."""
+    if view is not None and subject is not None:
+        index = view(caption, subject).copy()
+        for k, p in enumerate(seats):
+            if k != lifted:
+                index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
+        return index
     index = ObstacleIndex([o for o in obstacles if subject is None or subject.kind != "area" or not _holds(o.poly, subject.poly)])
     for k, p in enumerate(seats):
         if k != lifted:
             index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
-        for ob in late.get(k, []):
-            index.add(ob)
     return index
 
 
@@ -388,36 +407,67 @@ def _holds(outer: tuple[tuple[float, float], ...], inner: tuple[tuple[float, flo
     return a[0] <= b[0] + 1 and a[1] <= b[1] + 1 and a[2] >= b[2] - 1 and a[3] >= b[3] - 1 and (a[2] - a[0]) * (a[3] - a[1]) > (b[2] - b[0]) * (b[3] - b[1]) + 1
 
 
-def _seat_all(requests: list[Request], obstacles: list[Obstacle], frame: tuple[float, float, float, float], late: dict[int, list[Obstacle]]) -> tuple[list[Placement], int | None]:
+def _seat_all(requests: list[Request], obstacles: list[Obstacle], frame: tuple[float, float, float, float], one: OneView | None = None) -> tuple[list[Placement], int | None]:
     """Every caption placed strictly in order, repaired where stranded; the placements, and the first caption no repair
-    frees (None when all are seated)."""
+    frees (None when all are seated). Under the one view (feature 340) a caption's subjects are tried in order, inside then
+    beside, the first with a free seat winning, as the hand-sheet placer tries them - and only when none has one is a
+    neighbor lifted for it."""
     seats: list[Placement] = []
     for i, (text, subject, size, *_style) in enumerate(requests):
-        p = place_caption(text, size, subject, _caption_index(obstacles, seats, late, subject=subject), frame, strict=True) or _repair(i, requests, obstacles, seats, late, frame)
+        subs = one.subjects[i] if one else [subject]
+        p = None
+        for sub in subs:
+            p = place_caption(text, size, sub, _view_index(obstacles, seats, sub, one, i), frame, strict=True, char_w=_width(one, i))
+            if p is not None:
+                break
+        for sub in subs:
+            if p is not None:
+                break
+            p = _repair(i, requests, obstacles, seats, frame, one, sub)
         if p is None:
             return seats, i
         seats.append(p)
     return seats, None
 
 
-def _repair(i: int, requests: list[Request], obstacles: list[Obstacle], seats: list[Placement], late: dict[int, list[Obstacle]], frame: tuple[float, float, float, float]) -> Placement | None:
+def _view_index(obstacles: list[Obstacle], seats: list[Placement], subject: Subject, one: OneView | None, caption: int, lifted: int | None = None) -> ObstacleIndex:
+    """`_caption_index` for caption `caption` under the one view when there is one, else the composer's own."""
+    return _caption_index(obstacles, seats, lifted=lifted, subject=subject, view=one.view if one else None, caption=caption)
+
+
+def _width(one: OneView | None, i: int) -> float:
+    """Caption `i`'s character width: the hand-sheet placer's measure of its face under the one view, else the standard's."""
+    return one.widths[i] if one else CHAR_W_EM
+
+
+def _repair(
+    i: int,
+    requests: list[Request],
+    obstacles: list[Obstacle],
+    seats: list[Placement],
+    frame: tuple[float, float, float, float],
+    one: OneView | None = None,
+    sub: Subject | None = None,
+) -> Placement | None:
     """Caption `i`, stranded, seated with one neighbor lifted and the neighbor re-seated after it - both on free seats, or
     neither moves (feature 286's repair, `labels.hand_sheet.repair`, on the generated sheets). The neighbors tried are
     the seated captions standing within `CAPTION_REPAIR_EM` ems plus their own length of the stranded caption's subject."""
     text, subject, size, *_style = requests[i]
+    subject = sub or subject
     sx0, sy0, sx1, sy1 = _box(subject.poly)
     for j, done in enumerate(seats):
         bx0, by0, bx1, by1 = _box(done.block)
         reach = CAPTION_REPAIR_EM * size + max(bx1 - bx0, by1 - by0)
         if max(bx0 - sx1, sx0 - bx1, by0 - sy1, sy0 - by1, 0.0) > reach:
             continue
-        pi = place_caption(text, size, subject, _caption_index(obstacles, seats, late, lifted=j, subject=subject), frame, strict=True)
+        pi = place_caption(text, size, subject, _view_index(obstacles, seats, subject, one, i, lifted=j), frame, strict=True, char_w=_width(one, i))
         if pi is None:
             continue
         jt, js, jsize, *_jstyle = requests[j]
-        index = _caption_index(obstacles, seats, late, lifted=j, subject=js)
+        js = one.subjects[j][0] if one else js
+        index = _view_index(obstacles, seats, js, one, j, lifted=j)
         index.add(Obstacle(pi.block, WEIGHT_OBSTACLE))
-        pj = place_caption(jt, jsize, js, index, frame, strict=True)
+        pj = place_caption(jt, jsize, js, index, frame, strict=True, char_w=_width(one, j))
         if pj is not None:
             seats[j] = pj
             return pi
@@ -467,7 +517,11 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
     # requests are placed and written last, in order, each an obstacle to the next.
     obstacles: list[Obstacle] = []
     requests: list[tuple[str, Subject, float, bool, str, str]] = []
-    late: dict[int, list[Obstacle]] = {}
+    # THE DECLARATIONS (feature 340, plan D1): every visible rect carries a `data-id`, and each caption's `data-names` lists
+    # the drawn shapes it names, the hand sheets' form - so `labels.hand_sheet` reads the draft as it reads a hand sheet.
+    # Additive: the composer still seats each caption by its own subject.
+    drawn: list[tuple[tuple[float, float, float, float], str]] = []
+    declared: list[str] = []
 
     def px(x: float, y: float) -> tuple[float, float]:
         return ox + x * FTPX, oy + y * FTPX
@@ -481,14 +535,32 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
         if kind not in _GROUND_KINDS:
             obstacles.append(Obstacle(box(x, y, w, h), WEIGHT_OBSTACLE))
         whole = f' data-part-of="{part_of}"' if part_of else ""
-        return (
-            f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}{whole}/>'
-        )
+        sid = ""
+        if fill != "none" or stroke != "none":  # a visible rect: a shape a caption may name (an invisible stand-in never is)
+            sid = f' data-id="d{len(drawn)}"'
+            drawn.append(((round(x, 3), round(y, 3), round(w, 3), round(h, 3)), f"d{len(drawn)}"))
+        return f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}{whole}{sid}/>'
 
-    def caption(where: str, x: float, y: float, w: float, h: float, s: str, size: int, italic: bool, fill: str, kind: str = "") -> str:
+    def caption(
+        where: str,
+        x: float,
+        y: float,
+        w: float,
+        h: float,
+        s: str,
+        size: int,
+        italic: bool,
+        fill: str,
+        kind: str = "",
+        names: tuple[str, ...] | None = None,
+        of: tuple[float, float, float, float] | None = None,
+    ) -> str:
         """Ask the placer for a caption naming the feature at (x, y, w, h) in feet - `where` "area" (the name lies
-        inside it) or "point" (the name stands beside it). Drawn at the end; returns nothing to splice now."""
+        inside it) or "point" (the name stands beside it). Drawn at the end; returns nothing to splice now. Its declaration
+        (feature 340): `names` when given, else every drawn rect at `of` (the subject's own box when `of` is None)."""
         requests.append((s, Subject(where, box(x, y, w, h)), float(size), italic, fill, kind))
+        at = tuple(round(v, 3) for v in (of or (x, y, w, h)))
+        declared.append(" ".join(names if names is not None else [sid for b, sid in drawn if b == at]))
         return ""
 
     def plain(cx: float, cy: float, s: str, size: int, italic: bool, fill: str) -> str:
@@ -525,11 +597,12 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
             # caption under the roof; the court's floor joins the obstacles once both are seated
             parts.append(f'<g{_kind_attr("kneeling positions")}><g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">')
             mats = _mats(z)
+            first = len(drawn)
             parts += [rect(mx, my, mx2 - mx, my2 - my, "#C8B078", "#7A5430", 0.6) for mx, my, mx2, my2 in mats]
             parts.append("</g></g>")
             ax, ay, ax2, ay2 = mats[-1]
-            caption("point", ax, ay, ax2 - ax, ay2 - ay, "straw mats", 8, True, "#7A5C30", "kneeling positions")
-            late[len(requests) - 1] = [Obstacle(box(z.x_ft, z.y_ft, z.w_ft, z.h_ft), WEIGHT_OBSTACLE)]
+            # it names EVERY mat, as a hand sheet's caption names its group (plan review round 1); the composer seats it by the last
+            caption("point", ax, ay, ax2 - ax, ay2 - ay, "straw mats", 8, True, "#7A5C30", "kneeling positions", names=tuple(sid for _b, sid in drawn[first:]))
             # the posts carrying the roof along the open (south) side, the court's own ink (ROOFED_ZONES)
             # its solid outline is a building's edge, so no caption crosses it (the ground inside stays free)
             corners = [px(z.x_ft, z.y_ft), px(z.x2, z.y_ft), px(z.x2, z.y2), px(z.x_ft, z.y2)]
@@ -547,11 +620,11 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
             # as itself and with the ground.
             parts.append(f"<g{_kind_attr(zk)}>")
             parts.append(rect(z.x_ft + z.w_ft / 2 - 4, z.y2 - 2, 8, 2, "#8C6F3E", "#4A3318", 0.8, "", "weapon rack"))
-            caption("point", z.x_ft + z.w_ft / 2 - 5.7, z.y_ft + 13.3, 11.4, 14.4, "striking posts", 8, True, "#5C4830", "striking posts")
-            for dx_ft, dy_ft in ((-5.0, 14.0), (5.0, 27.0)):
+            caption("point", z.x_ft + z.w_ft / 2 - 5.7, z.y_ft + 13.3, 11.4, 14.4, "striking posts", 8, True, "#5C4830", "striking posts", names=("post-0", "post-1"))
+            for k, (dx_ft, dy_ft) in enumerate(((-5.0, 14.0), (5.0, 27.0))):
                 cx, cy = z.x_ft + z.w_ft / 2 + dx_ft, z.y_ft + dy_ft
                 obstacles.append(Obstacle(box(cx - 0.7, cy - 0.7, 1.4, 1.4), WEIGHT_OBSTACLE))
-                parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr("striking posts")}/>')
+                parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr("striking posts")} data-id="post-{k}"/>')
             parts.append("</g>")
     _draw_buildings(result, rect, caption, px, parts)
     parts += _point_features(program, result, rect, caption, ox, oy)
@@ -568,7 +641,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
     # stands outside the gate, 21 px from the canvas's foot, where no caption fits beside it - the old draft's caption
     # hung past the edge and was clipped. So the placer is given room below, and the canvas then grows to hug what it
     # placed there.
-    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), late, program.title)
+    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), program.title, declared, one_view("\n".join([*parts, "</svg>"]), requests, declared))
     parts += seated
     if foot + margin_ft * FTPX > ch:
         grown = foot + margin_ft * FTPX
@@ -632,7 +705,7 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
         full = sum(r[3] * r[4] for r in p.spec.rooms) >= 0.9 * p.spec.w_ft * (p.spec.h_ft - p.spec.engawa_ft)
         if full and p.spec.inset_ft >= 5.0:
             ax, ay, aw, ah = _rear_band(p)
-            caption("area", ax, ay, aw, ah, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+            caption("area", ax, ay, aw, ah, p.spec.name, size, False, "#3A2E1C", p.spec.feature, of=(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft))  # declared: the block
         else:
             caption("point" if full else "area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
 

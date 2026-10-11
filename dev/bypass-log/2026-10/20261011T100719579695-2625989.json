@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-11T10:07:19Z",
+  "target": "review-accept",
+  "commit": "75b0a4b2d",
+  "outcome": "permitted",
+  "why": "review-accept building-review--county-magistracy-example N1: fixed by a feature 340 line in the notes Review log"
+}

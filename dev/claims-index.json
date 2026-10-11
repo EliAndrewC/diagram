@@ -32631,6 +32631,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/labels/obstacles.py::ObstacleIndex.copy#obstacle index": {
+  "code": "b1d8f8afd71a5eff",
+  "core": "0b857b59fde8622f",
+  "date": "2026-10-11",
+  "note": "copies the index's lists and buckets and changes nothing a reader would see on the map; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/labels/obstacles.py::ObstacleIndex.cost#obstacle index": {
   "code": "5cc58b338c5f0a77",
   "core": "c76ed1cc6a26d640",

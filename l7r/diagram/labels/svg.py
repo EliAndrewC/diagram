@@ -20,8 +20,9 @@ def _kind(kind: str) -> str:
     return f' data-kind="{kind}"' if kind else ""
 
 
-def caption_svg(p: Placement, size: float, style: str, fill: str, kind: str = "") -> str:
-    """The `<text>` for a placement. `style` is the element's own font attributes (` font-style="italic"`)."""
+def caption_svg(p: Placement, size: float, style: str, fill: str, kind: str = "", names: str = "") -> str:
+    """The `<text>` for a placement. `style` is the element's own font attributes (` font-style="italic"`); `names`, the
+    `data-id`s of the drawn shapes the caption names, written as its `data-names` - a hand sheet's declaration (feature 340)."""
     cx, cy = p.x, p.y - CENTER_ABOVE_BASELINE_EM * size
     turn = f' transform="rotate({p.angle:.1f} {cx:.1f} {cy:.1f})"' if round(p.angle, 1) else ""
     n = len(p.lines)
@@ -29,7 +30,7 @@ def caption_svg(p: Placement, size: float, style: str, fill: str, kind: str = ""
     y0 = p.y - (n - 1) * pitch / 2
     one = _esc(p.lines[0])
     body = one if n == 1 else "".join(f'<tspan x="{p.x:.1f}" dy="{0 if i == 0 else pitch:.1f}">{_esc(ln)}</tspan>' for i, ln in enumerate(p.lines))
-    return f'<text x="{p.x:.1f}" y="{y0:.1f}" text-anchor="middle" font-size="{size:g}"{style} fill="{fill}"{turn}{_kind(kind)}>{body}</text>'
+    return f'<text x="{p.x:.1f}" y="{y0:.1f}" text-anchor="middle" font-size="{size:g}"{style} fill="{fill}"{turn}{_kind(kind)}{f' data-names="{names}"' if names else ''}>{body}</text>'
 
 
 def leader_svg(p: Placement, size: float, stroke: str, kind: str = "", mark: bool = False) -> str:
