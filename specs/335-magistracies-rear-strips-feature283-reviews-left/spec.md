@@ -113,11 +113,11 @@ recorded "no longer applies" with the measurement.
   note on whether a wicket stood there), the choice recorded.
 - **FR-011**: Hayakawa's working well at the middle gate's mouth beside the guests' first stone - a research pass on whether a
   draw-well ever stood on a roji's line, then the well kept, moved or labeled as the research decides.
-- **FR-012**: Hayakawa's 33 x 12 ft rear pocket - judged as dead space and either put to use or closed up, the judgment recorded.
+- **FR-012**: Hayakawa's rear pocket (the filed entry's `33 x 12 ft`) - judged as dead space and either put to use or closed up, the judgment recorded.
 - **FR-013**: Ubame's servants' quarters - the four bays' divisions MUST read as sliding partitions (research buildings 910, the
   common-room form), redrawn if they read as walls.
 - **FR-014**: `pack_audit`'s aligned-gap finder (`tools/pack_audit/checks.py` `aligned_gaps`) MUST NOT pair two buildings across a
-  third; a test pins Ochiba's nagaya-to-storehouse "28.7 ft" pair as not a gap.
+  third; a test pins Ochiba's nagaya-to-storehouse 28.7 ft pair (m:ochiba-aligned-gap) as not a gap.
 
 **Across the whole**
 
