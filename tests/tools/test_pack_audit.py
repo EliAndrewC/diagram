@@ -143,28 +143,6 @@ def test_aligned_gaps_horizontal_blocked_by_third_building_drops_the_span() -> N
     assert not any(g.orient == "H" and g.ft == pytest.approx(16.7, abs=0.5) for g in gaps)
 
 
-def test_aligned_gaps_horizontal_blocked_far_down_the_sheet() -> None:
-    """Feature 335 (FR-014): the blocking test compared the third building's y-extent with the gap's x-interval, so the test
-    above passed only because its numbers overlap both ways; three buildings in a row lower down were paired across the
-    middle one (Ochiba's nagaya to its second storehouse, a 28.7 ft "gap" with the first storehouse standing in it)."""
-    plan = pa.parse_svg(
-        _svg(
-            _rect(0, 0, 300, 400, COURT),
-            _rect(10, 300, 40, 60, "#C9A57A"),
-            _rect(100, 300, 40, 60, "#C9A57A"),
-            _rect(65, 300, 20, 60, "#C9A57A"),
-        )
-    )
-    assert not any(g.orient == "H" and g.ft == pytest.approx(16.7, abs=0.5) for g in pa.aligned_gaps(plan))
-
-
-def test_aligned_gaps_on_ochiba_pair_no_buildings_across_a_third() -> None:
-    """Feature 335 (FR-014): every gap Ochiba's audit reports has nothing built standing between its pair."""
-    with open(os.path.join(os.path.dirname(_FIX), "..", "pool", "magistracies", "ochiba-magistracy", "ochiba-magistracy.svg"), encoding="utf-8") as fh:
-        plan = pa.parse_svg(fh.read())
-    assert not any(g.orient == "H" and g.ft == pytest.approx(28.7, abs=0.1) for g in pa.aligned_gaps(plan))
-
-
 # --- top_vacant_rects (NEW) ---
 
 

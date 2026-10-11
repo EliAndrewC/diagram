@@ -121,7 +121,7 @@ PARTS: dict[str, list[tuple[str, str]]] = {
     ],
     "hayakawa-magistracy": _SHARED
     + [
-        ("well", "vegetable garden"),  # the garden well: the formal garden's, or since feature 283 the bed's it waters
+        # no garden well since feature 335 (D6): it stood on the guests' roji, where no page we read puts one
         ("stone lantern", "garden"),
         ("garden pines", "garden"),
         ("engawa", "residence"),

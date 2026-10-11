@@ -129,12 +129,14 @@ recorded "no longer applies" with the measurement.
 
 ### Measurable Outcomes
 
-- **SC-001**: Hayakawa's steps past the revetment's river face: 12 px -> 0 px (m:steps-past-revetment).
-- **SC-002**: Doors not wholly inside their building, over the four sheets: 35 -> 0 (m:doors-off-walls).
-- **SC-003**: Torii groups not in plan, over the four sheets: 1 -> 0 (m:torii-not-in-plan).
-- **SC-004**: Each of the three new checks red on its frozen unfixed fixture and green on every pool sheet (`make test-file`).
-- **SC-005**: Every FR-009..FR-014 finding has a recorded outcome with its measurement; every revised sheet's `building-review`
-  passes within two rounds (or the round arbiter rules).
+- **SC-001** (FR-001, FR-002): Hayakawa's steps past the revetment's river face: 12 px -> 0 px (m:steps-past-revetment, research.md R1).
+- **SC-002** (FR-003, FR-004, FR-005): Doors not wholly inside their building, over the four sheets: 35 -> 0 (m:doors-off-walls, research.md R1).
+- **SC-003** (FR-006, FR-007, FR-008): Torii groups not in plan, over the four sheets: 1 -> 0 (m:torii-not-in-plan, research.md R1).
+- **SC-004** (FR-002, FR-005, FR-008, FR-014): Each new check red on its frozen unfixed fixture and green on every pool sheet; the
+  aligned-gap test red before its fix and green after (`make test-file`).
+- **SC-005** (FR-009, FR-010, FR-011, FR-012, FR-013, FR-015, FR-016): Every FR-009..FR-013 finding has a recorded outcome with its
+  measurement (FR-011's from the search pass, research.md R2); every revised sheet passes `make pack-audit` and its
+  `building-review` within two rounds (or the round arbiter rules); 339, 341 and 342 read `Superseded by 335`.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
