@@ -136,7 +136,13 @@ CHECKS: tuple[Check, ...] = (
     Check("occluded_foreground", _occluded, True, "ubame-occlusion-red.svg", "move the buried glyph or feature to the top layer"),
     Check("floating_doors", _doors, True, "ochiba-layout-red.svg", "set the door glyph on the wall it opens through"),
     # feature 335: the door convention by TAG (light-filled doors included), the stepped landing, the plan arch
-    Check("doors_off_their_walls", _doors_off, True, "hayakawa-steps-and-doors-red.svg", "set the door wholly inside its building, its outer edge on the wall it opens through (research 0117's drawing page)"),
+    Check(
+        "doors_off_their_walls",
+        _doors_off,
+        True,
+        "hayakawa-steps-and-doors-red.svg",
+        "set the door wholly inside its building, its outer edge on the wall it opens through (research 0117's drawing page)",
+    ),
     Check("steps_past_revetment", _steps, True, "hayakawa-steps-and-doors-red.svg", "notch the flight into the revetment: no tread past its water-side face (research 0176)"),
     Check("arch_in_plan", _arches, True, "ubame-torii-silhouette-red.svg", "draw the torii in plan - the beam across the approach, the two post squares and the id=\"arch\" rect (docs/buildings.md)"),
     Check("passage_blockers", _passage, True, "ochiba-stones-in-passage-red.svg", "move the object clear of the track - stones and posts FLANK a passage"),
