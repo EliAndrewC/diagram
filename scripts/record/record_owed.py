@@ -337,11 +337,9 @@ def file_outside(root: pathlib.Path, check: str, reply: str) -> list[dict]:
              "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())} for f, b, x in outside(reply)]
     if not rows:
         return []
-    try:
-        feature = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
-    except (OSError, ValueError):
-        feature = ""
-    target = root / (feature or "specs/_unfiled") / "found.jsonl"
+    import hm_arbiter  # the one reader of the active feature: a page session's own first (reading feature.json here filed 343's rows under 378)
+
+    target = (hm_arbiter.feature_dir(root) or root / "specs/_unfiled") / "found.jsonl"
     target.parent.mkdir(parents=True, exist_ok=True)
     with target.open("a", encoding="utf-8") as fh:
         fh.writelines(json.dumps(r, ensure_ascii=False) + "\n" for r in rows)

@@ -18,8 +18,11 @@
 set -uo pipefail
 
 die() { printf 'land-tooling: %s\n' "$*" >&2; exit "${2:-1}"; }
-# FR-005: the proposal's scripts/, tests/ and agent instruction files, plus the wiring a scripts/ fix needs to take effect
-tooling() { case "$1" in scripts/*|tests/*|.claude/agents/*|.claude/skills/*|CLAUDE.md|*/CLAUDE.md|Makefile|.claude/settings.json|docs/make-targets.html) return 0 ;; *) return 1 ;; esac; }
+# FR-005: the proposal's scripts/, tests/ and agent instruction files, plus the wiring a scripts/ fix needs to take effect.
+# GUARD_EDIT_OK: fixing a route that refused correct work - the review ledger too: the push checks every logged check pass
+# against the LEDGER it lands, and the pass log is the clone's, so a session that had run checks could never land tooling
+# without its rows (368, 2026-10-11: 168 passes owed against main's ledger). The ledger is append-only and merges by union.
+tooling() { case "$1" in scripts/*|tests/*|.claude/agents/*|.claude/skills/*|CLAUDE.md|*/CLAUDE.md|Makefile|.claude/settings.json|docs/make-targets.html|dev/review-ledger.md) return 0 ;; *) return 1 ;; esac; }
 
 ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a git checkout"
 [ "$(basename "$(dirname "$ROOT")")" = ".clones" ] || die "$ROOT is not a session clone under .clones/"

@@ -128,7 +128,11 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
     sub.mkdir(parents=True)
     (sub / "agent-a77.jsonl").write_text(json.dumps({"message": {"content": [{"type": "text", "text": "1. the well sits wrong in the yard\n"}]}}) + "\n")
     monkeypatch.setattr(ab, "TRANSCRIPTS", tmp_path / "projects")
-    manifest = ab.bundle(root, "round:quote-check|q:0105@3", tmp_path / "out").read_text()
+    with pytest.raises(ab.MissingRecord, match=r"no reply kept for round 2 \(quote-check"):
+        ab.bundle(root, "round:quote-check|q:0105@3", tmp_path / "out")  # 368's rulings: never a bundle of "no reply kept"
+    assert not (tmp_path / "out").exists()
+    manifest = ab.bundle(root, "round:quote-check|q:0105@3", tmp_path / "out", "round 2 ran before replies were kept").read_text()
+    assert "## Missing from the record (bundled anyway: round 2 ran before replies were kept)" in manifest
     assert "Owed by: quote-check:0105#bath - a note's passage changed" in manifest, "what made the round due"
     assert "Owed by: (not recorded" in manifest and "- NEW: the well sits wrong in the yard" in manifest
     assert "trigger: round:quote-check|q:0105@3" in manifest and "### Round 1" in manifest and "### Round 2" in manifest
@@ -148,6 +152,78 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
     assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "round-arbiter"]) == 0
     assert ha.main(["ruled", "round:quote-check|q:0105@3", str(v), "--as", "round-arbiter"]) == 1, "binding: once"
     assert ha.main(["bogus"]) == 2
+
+
+def test_an_edit_reversal_bundles_every_check_on_its_file_and_its_history(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    """368's ruling on 0047 (2026-10-11): a reversal the edit wire caught names a FILE, and its bundle had no rounds, no diffs and
+    an empty cascade. Now its rounds are every check's on the file's subject and its A -> B -> A the file's own history; with
+    neither it is refused."""
+    import subprocess
+
+    root = tmp_path / "c"
+    root.mkdir()
+    git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/343-x"}')
+    (root / "specs" / "368-x").mkdir(parents=True)
+    monkeypatch.setenv("L7R_FEATURE_DIRECTORY", "specs/368-x")
+    monkeypatch.setenv("L7R_EVENTS_DIR", str(tmp_path / "events"))
+    q = root / "research" / "questions"
+    q.mkdir(parents=True)
+    page = q / "0047-privies.drawing.html"
+    for text in ("<p>far corner</p>", "<p>center</p>", "<p>far corner</p>"):
+        page.write_text(text)
+        subprocess.run([*git, "add", "-A"], check=True)
+        subprocess.run([*git, "commit", "-qm", text], check=True)
+    trigger = f"reversal:{page}"
+    ha.trip(root, trigger, "reversal", str(page), "A -> B -> A", 1)
+    reply = tmp_path / "r.md"
+    reply.write_text("1. the reach is measured from the privy's far corner\n")
+    (root / ".git" / "checks-open.json").write_text(
+        json.dumps(
+            {
+                "dispatches": {
+                    "t1": {"check": "record-format", "subjects": ["q:0047"], "t": 1, "state": "answered", "reply": str(reply)},
+                    "t2": {"check": "quote-check", "subjects": ["q:0047"], "t": 2, "state": "answered", "reply": str(reply)},
+                    "t3": {"check": "quote-check", "subjects": ["q:0105"], "t": 3, "state": "answered", "reply": str(reply)},
+                }
+            }
+        )
+    )
+    manifest = ab.bundle(root, trigger, tmp_path / "out").read_text()
+    assert "## Rounds - every check on q:0047" in manifest and "### Round 1: record-format" in manifest and "### Round 2: quote-check" in manifest
+    assert "### Round 3" not in manifest, "another subject's round is not this file's"
+    diff = (tmp_path / "out" / "edits.diff").read_text()
+    assert "research/questions/0047-privies.drawing.html" in manifest and diff.count("+<p>far corner</p>") == 2 and "+<p>center</p>" in diff
+    ha.trip(root, "reversal:q:0047@4", "reversal", "q:0047", "a block dropped earlier is back", 2)  # the block wire's form
+    sub = ab.bundle(root, "reversal:q:0047@4", tmp_path / "out1").read_text()
+    assert "## Rounds - every check on q:0047" in sub and "### Round 2: quote-check" in sub and (tmp_path / "out1" / "edits.diff").is_file()
+    (root / ".git" / "checks-open.json").write_text("{}")
+    other = root / "a.md"
+    ha.trip(root, f"reversal:{other}", "reversal", str(other), "A -> B -> A", 2)
+    assert ab.main([f"reversal:{other}", "--root", str(root), "--out", str(tmp_path / "out2")]) == 2
+    assert "a reversal with no check rounds" in capsys.readouterr().err and not (tmp_path / "out2").exists()
+    assert ab.main([f"reversal:{other}", "--root", str(root), "--out", str(tmp_path / "out2"), "--missing-ok", "gone"]) == 2, "two words"
+    assert ab.main([f"reversal:{other}", "--root", str(root), "--out", str(tmp_path / "out2"), "--missing-ok", "a hand edit"]) == 0
+    el = _load("event_log")
+    assert el.feature_of(root) == "368-x", "a page session logs under its own feature, not the clone's"
+
+
+def test_a_feature_with_no_event_log_bundles_an_empty_cascade(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    # 368's check session, 2026-10-10: a reversal tripwire on a feature whose sessions had logged nothing crashed the bundle
+    import subprocess
+
+    root = tmp_path / "c"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/368-x"}')
+    (root / "specs" / "368-x").mkdir(parents=True)
+    monkeypatch.setenv("L7R_EVENTS_DIR", str(tmp_path / "no-events"))
+    manifest = ab.bundle(root, "red-gate", tmp_path / "out").read_text()
+    assert "the feature's last 0 edits and dispatches" in manifest
+    assert (tmp_path / "out" / "cascade.txt").read_text() == "\n"
 
 
 def test_the_cascade_wire_stays_live_after_any_ruling(tmp_path: pathlib.Path) -> None:

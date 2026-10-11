@@ -75,7 +75,13 @@ printf 'import sys\nsys.exit(0)\n' > "$C/tests/test_ok.py"; git -C "$C" add test
 LAND_TOOLING_TEST="python3 " land tests/test_ok.py; rc=$?
 ok "a test standing alone lands" '[ "$rc" -eq 0 ] && [ -n "$(on_main tests/test_ok.py)" ]'
 
-echo "4. outside a session clone it refuses"
+echo "4. the review ledger lands with the tooling (the push checks the clone's passes against the ledger it lands - 368, 2026-10-11)"
+setup
+mkdir -p "$C/dev"; printf '| row |\n' > "$C/dev/review-ledger.md"; git -C "$C" add dev; git -C "$C" commit -qm "the checks' rows"
+land scripts/a.sh dev/review-ledger.md; rc=$?
+ok "the ledger's rows land beside the guard fix" '[ "$rc" -eq 0 ] && [ "$(on_main dev/review-ledger.md)" = "| row |" ]'
+
+echo "5. outside a session clone it refuses"
 ( cd "$T/seed" && "$LAND" scripts/a.sh ) >"$T/out" 2>&1; rc=$?
 ok "not under .clones/" '[ "$rc" -ne 0 ] && grep -q "not a session clone" "$T/out"'
 
