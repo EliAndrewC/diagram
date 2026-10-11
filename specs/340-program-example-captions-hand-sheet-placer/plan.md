@@ -29,8 +29,18 @@ measurement and the plan is amended and re-reviewed before it is built.
   subjects), fix 2 the hand-sheet placer taking the composer's subjects. For each caption whose `C` and `H` differ by more than
   1 px it records the sources that remove the difference; one no source removes is reported with its cause (strictness, order,
   clearance, repair) and kept out of N. Recorded in `measurements.json`.
-- **D3 - the switch (FR-003)**: DECIDED BY D2's MEASUREMENT, per source; the plan is amended with the figures and the choice
-  and re-reviewed before any of it is built.
+- **D3 - the switch (FR-003)**, decided by D2's measurement (m:caption-disagreements, 2026-10-11): of 45 captions, 11 seat
+  apart; 6 are explained by the three sources - the obstacle VIEW 5 (garden, straw mats, practice ground, two wells), the
+  SUBJECT 1 (the fire-water tubs: the composer names the roomiest tub, the declaration all of them), the WIDTH 0. Fix 1 (the
+  composer indexing with `classify`) removes the 5; fix 2 (the hand-sheet placer taking the composer's subjects) removes 2, the
+  residence and the gatehouse, which no single source explains (an order interaction), and none of the 6. So, per source:
+  VIEW - fix 1: `emit_svg` builds each caption's index with `hand_sheet.classify` over the sheet it has drawn (its captions not
+  yet written), the seated captions added as now, and no obstacle list or late obstacles of its own; SUBJECT - the composer
+  takes the hand-sheet placer's reading of the declared subject (`hand_sheet.subjects` over the declared parts, first
+  subject), which removes the tubs' difference where fix 2 removes none of the subject-source ones; WIDTH - unchanged (no
+  difference). The 5 the three do not explain (residence, gatehouse, cell and two clerks: order, clearance or repair, and one
+  clerk where the hand-sheet seat covers ink) are reported, not unified (FR-003). After the switch the harness re-runs: the 6
+  go to 0, each remaining disagreement listed with its cause.
 - **D4 - strictness under the one view (FR-004)**: a seat is free when it touches no ink the caption does not name: the
   `inner` obstacles `classify` marks for the caption's own subject (its partitions, its mats) do not make a seat unfree; every
   other weighted obstacle does, as today. Foot growth (`CAPTION_GROWTHS`) and the refusal message are unchanged.

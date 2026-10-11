@@ -1,0 +1,22 @@
+{
+  "caption-disagreements": {
+    "quantity": "captions of the declared program example the composer and the hand-sheet placer seat more than 1 px apart, attributed to the entry's three sources, and what each fix removes",
+    "observed": "2026-10-11",
+    "source": "l7r/diagram/compound.py emit_svg on county_magistracy_program(); labels/hand_sheet.seat",
+    "command": "make spec-harness SPEC=specs/340-program-example-captions-hand-sheet-placer OUT=/tmp/h340.json",
+    "method": "harness.py: C recorded from compound._seat_all; H from hand_sheet.seat on the same declared text; composer variants with one source swapped (the base loop reproduces C on all 45)",
+    "value": {
+      "captions": 45,
+      "base_loop_reproduces_C": 45,
+      "disagreements": 11,
+      "explained_by_the_three": 6,
+      "by_source": {
+        "view": 5,
+        "subject": 1,
+        "width": 0
+      },
+      "fix1_removes": 5,
+      "fix2_removes": 2
+    }
+  }
+}
