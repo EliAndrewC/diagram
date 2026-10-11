@@ -38,9 +38,11 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 2 (the GM 2026-10-10: the arbiter before the GM)
 
-- [ ] T09 The spec review's round cap (plan D11, D12): the trip and refusal in `hm_review_round.py`, an `accept` or `process-fault` ruling read by `review-gate.sh` (a `continue` not); tests red on today's code (SC-005)
+- [x] T09 The spec review's round cap (plan D11, D12): the trip and refusal in `hm_review_round.py`, an `accept` or `process-fault` ruling read by `review-gate.sh` (a `continue` not); tests red on today's code (SC-005)
       research: rendering
-- [ ] T10 `make arbiter-ask` and the contract and bundle for spec rounds and asks (plan D13); tests (SC-006)
+      verify: DONE. hm_review_round spec_cap_refusal per pass (round:spec-fidelity|<f>#<pass>@N), a closed pass starts a new one; review-gate takes accept/process-fault via hm_arbiter spec-ruled on the spec's hash; test-review-round-hooks 77/77, test-review-gate 38/38, test_arbiter_fix 9 - red on old code
+- [x] T10 `make arbiter-ask` and the contract and bundle for spec rounds and asks (plan D13); tests (SC-006)
       research: rendering
+      verify: DONE. make arbiter-ask records ask:<subject> and builds its bundle in one command; the contract and bundle cover spec rounds and asks; test_arbiter_fix asks/bundle tests; exercised end to end in a scratch repo
 - [ ] T11 The text (plan D14) and the retired waiver (plan D15): CLAUDE.md, the constitution, both fidelity agents, `escalation-check.md`, `wakeup-hooks.sh`, `docs/spec-kit-and-reviews.md`, `docs/reviews.md`, `pair-hooks.sh`; tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
