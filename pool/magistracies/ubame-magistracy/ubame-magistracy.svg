@@ -486,8 +486,9 @@
     <line x1="277" y1="162" x2="277" y2="204" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="340" y1="162" x2="340" y2="204" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="403" y1="162" x2="403" y2="204" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <!-- the door inside one bay (feature 267 pass 2: it straddled the bay partition at x=340) -->
-    <rect x="358" y="198" width="26" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <!-- the one door, on the range's EAST END face (feature 335, building review: on the south face its tub stood mid-way in
+         the 4.7 ft alley that is the rear yard's only service way in; feature 267 pass 2 had moved it off the partition) -->
+    <rect x="462" y="170" width="6" height="26" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <text font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
   </g>
 
@@ -502,7 +503,7 @@
        one, 2026-09-28). -->
   <g data-kind="rear yard">
     <polygon points="536,158 912,158 912,326 838,326 838,232 536,232" fill="none"/>
-    <path d="M 536 216 H 787 V 200 M 647 216 V 200" fill="none" stroke="#C8B080" stroke-width="7" stroke-linecap="butt" stroke-linejoin="round"/>
+    <path d="M 540 214 H 787 V 200 M 647 214 V 200" fill="none" stroke="#C8B080" stroke-width="7" stroke-linecap="butt" stroke-linejoin="round"/>
     <text font-size="9" font-style="italic" fill="#7A6A4A">rear yard</text>
   </g>
   <!-- Household storehouses (dozo), two as the Matsushiro retainer's house kept (feature 283: the shady rear the
@@ -522,6 +523,10 @@
   <!-- Shrine grove (chinju no mori) enclosing the Inari shrine, its approach torii,
        and the wood-kami altar -->
   <rect x="912" y="164" width="144" height="278" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3" data-kind="shrine grove"/>
+  <!-- the shrine's approach: a trodden way in from the grove's west edge, turning north under the arch to the hall's door
+       (feature 335, glyph check of the torii: "the arch is the one built thing a way runs under", docs/buildings.md; the
+       grove is entered from the west, by the rear yard's strip; its line between the trees a GUESS) -->
+  <path d="M 912 348 H 983 V 286" fill="none" stroke="#C8B080" stroke-width="7" stroke-linejoin="round" data-kind="shrine grove"/>
   <!-- the wood stands in the grove's margins, clear of the hall, its labels, the altar, the tub and each other
        (feature 257: a canopy covers open ground and nothing else) -->
   <g fill="#7A8C5C" opacity="0.75" data-kind="shrine grove">
@@ -640,11 +645,11 @@
   </g>
 
 
-  <!-- Privies attached to the house: one at the guest/reception end, one at the family end -->
+  <!-- Privies attached to the house: one at the guest/reception end, one at the family end - the family's at the corridor's rear corner by the family's rooms, its pit facing the rear yard (feature 335, building review; research 0101: "by the family's rooms ... in a corner of the corridor"; it hung off the closed shuttered wing) -->
   <g data-kind="latrine" data-part-of="residence">
     <rect data-id="latrine-1" x="838" y="241.5" width="15" height="15" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
     <text font-size="7.5" font-style="italic" fill="#5C4830" data-names="latrine-1">latrine</text>
-    <rect data-id="latrine-2" x="237" y="221.5" width="15" height="15" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
+    <rect data-id="latrine-2" x="522" y="218" width="15" height="15" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
     <text font-size="7.5" font-style="italic" fill="#5C4830" data-names="latrine-2">latrine</text>
   </g>
 
@@ -923,7 +928,7 @@
     <!-- feature 374 wave 113: the kitchen pair either side of its west door (this one and the label's), the bath's on its
          south face, each moved with the smaller kitchen -->
     <circle cx="337.5" cy="312" r="3.8"/>
-    <circle cx="352" cy="211" r="3.8"/>
+    <circle cx="474" cy="166" r="3.8"/>
     <circle cx="425" cy="310" r="3.8"/>
     <circle cx="461" cy="310" r="3.8"/>
     <circle cx="772" cy="330" r="3.8"/>

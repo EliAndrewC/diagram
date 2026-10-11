@@ -5,7 +5,7 @@ magistracy sheet is reviewed once, after all its redraws.
 
 ## Occasions
 
-- layout-revised: hayakawa-magistracy - the landing steps notched into the revetment, 14 doors set inside their walls, the garden well removed, the woodshed lengthened over the rear pocket
+- layout-revised: hayakawa-magistracy - the landing steps notched into the revetment, 14 doors set inside their walls, the garden well removed, the storehouses slid west over the rear pocket
 - layout-revised: ochiba-magistracy - 7 doors set inside their walls
 - layout-revised: ubame-magistracy - 14 doors set inside their walls, the torii in plan, the rear yard reaching the reception privy, the servants' partitions as sliding partitions
 - glyph-redrawn: torii on ubame-magistracy - the approach arch from an elevation silhouette to the plan form
