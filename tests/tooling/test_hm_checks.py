@@ -124,6 +124,7 @@ def test_a_dispatch_another_guard_refused_never_freezes_the_page() -> None:
     assert hc.edit_refusal(st, PAGE, "a", "b", hc.PENDING_S + 1) == "", "never launched: it stops counting"
     hc.dispatch(st, "t2", "modal-depiction", "/m", MODAL, 0)
     hc.launched(st, "t2", "ag2", background=False)
+    assert st["dispatches"]["t2"]["state"] == "returned"
     assert "no edit to apply" in hc.edit_refusal(st, "/c/l7r/diagram/interactive/assets/modals/sheet/bath.md", "a", "b", 1), "a foreground check returns with its call"
     hc.launched(st, "unknown", "agX", True)
 
@@ -349,3 +350,15 @@ def test_a_foreground_check_is_logged_when_its_tool_call_completes(tmp_path: pat
 def test_a_return_with_no_transcript_or_a_broken_one_never_raises(tmp_path: pathlib.Path) -> None:
     assert not hc.log_pass(tmp_path, "returned", {"agent_type": "glyph-check", "agent_id": "a5", "agent_transcript_path": str(tmp_path / "gone.jsonl")}, 0.0)
     assert not hc.log_pass(tmp_path / "no-such-dir", "returned", {"agent_type": "glyph-check", "agent_id": "a6", "agent_transcript_path": str(_transcript(tmp_path, "a6", "x"))}, 0.0)
+
+
+def test_a_foreground_check_keeps_its_reply_and_its_edits(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on 0104 (2026-10-10) found "no reply kept" for every source-reader round: a foreground check's
+    SubagentStop fires while its dispatch is pending, so its reply is taken from the tool's response at PostToolUse."""
+    st: dict = {}
+    hc.dispatch(st, "t1", "quote-check", "/m", MANIFEST, 0)
+    hc.launched(st, "t1", "ag1", False, hc.response_text({"content": [{"type": "text", "text": REPLY}]}), tmp_path / "keep")
+    d = st["dispatches"]["t1"]
+    assert d["state"] == "returned" and pathlib.Path(d["reply"]).read_text() == REPLY
+    assert st["edits"]["q:0105"] == [["research/questions/0105-baths-furo.drawing.html", "about 10 by 8 ft", "about 10 by 8 feet"]]
+    assert hc.response_text({"content": "plain"}) == "plain" and hc.response_text({}) == ""

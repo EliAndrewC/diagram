@@ -632,7 +632,10 @@ def _roji_parts(program: CompoundProgram, result: PlaceResult, taken: list[Box],
     building with a `reception room` and an engawa. The stones are a part of the garden they cross (Hayakawa's form).
 
     Research:
-        guest's way out of doors - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: a guest goes on from the office to the residence out of doors, through the middle gate and across the garden to the reception's veranda"""
+        guest's way out of doors - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: the roji form - a gate in the roji wall, then a garden path straight to the principal room's veranda - is attested only at a middle-rank retainer's house with no office (Koseki); that a guest goes on from an OFFICE to the residence this way, out of doors, is a GUESS - the record leaves open whether that way ran indoors, and no page places a middle gate against an office hall
+        stepping stones - GUESS: the walled garden path drawn as stepping stones of 2 x 1.33 ft (Hayakawa's form); the record names the path, not its stones
+        shoe stone - GUESS: a 4 x 1.67 ft shoe stone at the veranda's edge, centered on the reception room, where the path arrives; the record names none
+        gate seat - CONVENTION: the path starts 2.5 ft off the divider at the middle gate's midpoint and ends 2 ft out from the court face, keeping the stones clear of the walls"""
     env = program.envelope
     mid = _middle_gate(env, result.placed)
     host = next((p for p in result.placed if p.spec.engawa_ft and any(r[0] == "reception room" for r in p.spec.rooms)), None)

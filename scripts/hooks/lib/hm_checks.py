@@ -166,12 +166,26 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
     return ""
 
 
-def launched(state: dict[str, Any], tid: str, agent_id: str, background: bool) -> None:
+def launched(state: dict[str, Any], tid: str, agent_id: str, background: bool, reply: str = "", keep: Path | None = None) -> None:
+    """A dispatch's launch. A FOREGROUND check has already returned by its PostToolUse, and its SubagentStop fired while the
+    dispatch was still pending with no agent id, so `returned` could not match it: its reply - the arbiter's round-to-round
+    record and its EDIT blocks - is taken here from the tool's response (the round arbiter on 0104's fifth source-reader
+    round, 2026-10-10, found "no reply kept" for every round)."""
     d = state.get("dispatches", {}).get(tid)
     if d is None:
         return
     d["aid"] = agent_id
-    d["state"] = "running" if background else "returned"
+    d["state"] = "running"
+    if not background:
+        returned(state, agent_id, reply, keep)
+
+
+def response_text(resp: Mapping[str, Any]) -> str:
+    """The text of an Agent tool's response: its `content` blocks, or a plain string."""
+    c = resp.get("content")
+    if isinstance(c, str):
+        return c
+    return "\n".join(str(b.get("text") or "") for b in c if isinstance(b, Mapping)) if isinstance(c, list) else ""
 
 
 def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None = None) -> None:
@@ -545,7 +559,7 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
                 hm_arbiter.trip(root, trigger, "cascade", "", f"{n} check dispatches over {lines} changed lines", now)
     elif mode == "launched" and payload.get("tool_name") == "Agent":
         resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
-        launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched")
+        launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched", response_text(resp), path.parent / "check-replies")
     elif mode == "returned":
         returned(state, str(payload.get("agent_id") or ""), _reply_of(str(payload.get("agent_transcript_path") or ""), str(payload.get("last_assistant_message") or "")), path.parent / "check-replies")
     elif mode == "edit" and payload.get("tool_name") == "Bash":
