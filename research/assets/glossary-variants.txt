@@ -3821,6 +3821,8 @@ tax-free plot	tax-free plot
 tayu	tayu
 tayū	tayu
 tazuke kusayama	kusayama
+tea garden	tea garden
+tea gardens	tea garden
 tedai	tedai
 teien	teien
 teikaku	teikaku

@@ -27,7 +27,7 @@ Guesses:
 Depiction: The plan draws each side gate as a pair of posts in the compound wall, narrower than the main gate: a kitchen
 postern, a service gate by the stables or the stores, a gate to a river landing (opening onto the bank street, with the
 landing's steps across it), a cart gate, or a guests' door. A cart gate has a cart yard inside it and a cart lane leading to it, and a guests' door opens inside onto open ground a palanquin can cross (or, where a plan draws one, a garden), never against the side of a building. Service
-gates are set where the night-soil collectors reach the outer privies from outside without crossing the inner court where
+gates stand near the outer privies, which are set against the service walls so the night-soil collectors reach them from outside without crossing the inner court where
 the household lives.
 
 Name: side gate
