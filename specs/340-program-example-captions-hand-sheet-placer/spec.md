@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08 (filed by feature 330); specified 2026-10-11
 
-**Status**: Draft (specified 2026-10-11 from its filed form; spec-fidelity FAITHFUL round 2)
+**Status**: Done (2026-10-11) - every task ticked (T01-T04); the program example's captions seated by the hand-sheet placer's one view: 11 of 45 seated apart before, 10 of them from the entry's three sources; 3 apart after, none from the three (m:caption-disagreements, m:caption-disagreements-after); building-review PASS
 
 **Affects**: magistracy
 
