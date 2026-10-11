@@ -204,6 +204,7 @@ def test_an_edit_reversal_bundles_every_check_on_its_file_and_its_history(tmp_pa
     ha.trip(root, f"reversal:{other}", "reversal", str(other), "A -> B -> A", 2)
     assert ab.main([f"reversal:{other}", "--root", str(root), "--out", str(tmp_path / "out2")]) == 2
     assert "a reversal with no check rounds" in capsys.readouterr().err and not (tmp_path / "out2").exists()
+    assert ab.main([f"reversal:{other}", "--root", str(root), "--out", str(tmp_path / "out2"), "--missing-ok", "gone"]) == 2, "two words"
     assert ab.main([f"reversal:{other}", "--root", str(root), "--out", str(tmp_path / "out2"), "--missing-ok", "a hand edit"]) == 0
     el = _load("event_log")
     assert el.feature_of(root) == "368-x", "a page session logs under its own feature, not the clone's"

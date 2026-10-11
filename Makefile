@@ -1146,6 +1146,7 @@ check-closed:   ## [project] close the checks in flight on a page or pop-up whos
 arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
 	@if [ -z "$(TRIGGER)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named> is required\n' >&2; exit 2; fi
 	@: "GUARD_EDIT_OK: an arbiter tooling fix (368, 2026-10-11) - MISSING_OK bundles a trigger whose rounds kept no reply, with the reason shown to the arbiter"
+	$(if $(MISSING_OK),$(LOGESCAPE) MISSING_OK "$(MISSING_OK)",@:)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" "$(TRIGGER)" --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$(MISSING_OK)",)
 
 arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter

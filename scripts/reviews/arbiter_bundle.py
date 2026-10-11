@@ -192,6 +192,9 @@ def main(argv: list[str] | None = None) -> int:
     a = ap.parse_args(argv)
     root = Path(a.root).resolve()
     slug = re.sub(r"[^a-z0-9]+", "-", a.trigger.lower()).strip("-")[-60:]
+    if a.missing_ok.strip() and len(a.missing_ok.split()) < 2:  # every escape states a reason of two words or more
+        print('arbiter-bundle: MISSING_OK needs a reason of two words or more - MISSING_OK="<why the reply is gone>"', file=sys.stderr)
+        return 2
     try:
         print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}", a.missing_ok.strip()))
     except MissingRecord as e:
