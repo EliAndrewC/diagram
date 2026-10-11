@@ -30,11 +30,13 @@ entry names (the obstacle view, the subject, the character width); then the seat
 
 ### User Story 1 - The draft and the hand sheets are read by one view (Priority: P1)
 
-The GM sees the program example's captions seated exactly as the hand-sheet placer seats the same declarations: one
-classification of the drawn sheet, one reading of what a caption names, one measure of its width.
+The GM sees the program example's captions read by one view with the hand sheets wherever the entry's three sources made
+them differ: one classification of the drawn sheet, one reading of what a caption names, one measure of its width. What
+still differs for another reason (the draft's strict seating, the placers' order, clearance or repair) is reported with that
+cause.
 
-**Independent Test**: `harness.py` - the draft's captions against `hand_sheet.seat` on the same declared draft: N disagreements
-before (each attributed), 0 after.
+**Independent Test**: `harness.py` - the draft's captions against `hand_sheet.seat` on the same declared draft: the
+disagreements the three sources explain, N before (each attributed), 0 after; every remaining one listed with its own cause.
 
 ### User Story 2 - The draft's strictness survives (Priority: P1)
 
@@ -50,10 +52,13 @@ change the program") passes unchanged; every seated caption of the example lies 
 - **FR-001**: the composed draft MUST declare each caption the way a hand sheet does (`data-id` on the shapes it names,
   `data-names` on the caption, or the caption alone in the tagged group it names), so `hand_sheet` can read it.
 - **FR-002**: a harness MUST measure, on that declared draft, every caption whose seat differs between `compound.py` and
-  `hand_sheet.seat`, and attribute each difference to the obstacle view, the subject or the character width by toggling each.
-- **FR-003**: `compound.py` MUST then seat its captions through the hand-sheet placer's one view (its classification, its reading
-  of the declared subject, its width measure), with no second obstacle index of its own; the entry's two sketches are measured
-  beside it in the harness, and the one taken is recorded with its measurement.
+  `hand_sheet.seat`, attribute each difference to the obstacle view, the subject or the character width by toggling each, and
+  report which disagreements each of the entry's two fixes removes (the composer indexing with `hand_sheet.classify`; the
+  hand-sheet placer taking the composer's subjects). A difference none of the three explains is reported with its own cause
+  (strictness, order, clearance, repair) - the entry's reasons were read from the code, not measured.
+- **FR-003**: the seating MUST then switch to whichever of the entry's two fixes the FR-002 measurement supports - one of them,
+  or a mix per source - so the three sources no longer differ; the fix taken is named and recorded with its measurement. The
+  placers' other differences (order, clearance, repair) are not unified by this feature.
 - **FR-004**: the strict rule (feature 287) MUST hold under the one view: a seat touching ink the caption does not name is not
   free; the foot grows up to `CAPTION_GROWTHS` steps; then the program is refused with today's message.
 - **FR-005**: the example's generation MUST stay inside its `GEN_TIME_BUDGETS` entry; any performance band the change crosses is
@@ -61,8 +66,9 @@ change the program") passes unchanged; every seated caption of the example lies 
 
 ## Success Criteria
 
-- **SC-001** (FR-001, FR-002, FR-003): disagreements between the draft's seats and the hand-sheet placer's on the declared draft:
-  N -> 0 (harness), each of the N attributed.
+- **SC-001** (FR-001, FR-002, FR-003): disagreements the three sources explain between the draft's seats and the hand-sheet
+  placer's on the declared draft: N -> 0 (harness), each attributed; every remaining disagreement reported with its cause and not
+  counted in N.
 - **SC-002** (FR-004): the refusal test passes unchanged, and no seated caption overlaps ink outside its subject.
 - **SC-003** (FR-005): the example's gen time within its budget; `make perf-report` band recorded.
 
@@ -72,4 +78,5 @@ change the program") passes unchanged; every seated caption of the example lies 
 
 ## Review history
 
-- (spec-fidelity rounds are recorded here)
+- 2026-10-11, round 1: CHANGES REQUIRED - FR-003 chose the fix before measuring (now the measured one, per source); N -> 0
+  could not hold under FR-004 (now only the three sources' disagreements, the rest reported with their cause). FR-004 within.
