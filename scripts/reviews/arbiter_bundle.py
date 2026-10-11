@@ -19,6 +19,7 @@ here is handed every CLAUDE.md above it - feature 250):
 from __future__ import annotations
 
 import argparse
+import difflib
 import re
 import shutil
 import subprocess
@@ -101,8 +102,31 @@ def _repeats(f: str, earlier: list[str]) -> bool:
 def _near_reversal(o: str, n: str, earlier: list[tuple[str, str]]) -> bool:
     """An EDIT that adds back two or more content words an earlier EDIT deleted - the same paragraph moved back toward wording
     a fix replaced, though not word for word (343's garden-pond and border-court rulings: 'stones' and 'gravel' came back)."""
+    inserted = _insertion(o, n)
+    if inserted is not None:
+        # a PURE ADDITION: every word of the old text kept, in order, words added. Two loose content words shared with any
+        # earlier deletion flagged all three of copse_siting's depiction additions (352, 2026-10-11, the arbiter's tooling
+        # fix: "a prefix of its replacement, not reversals"), so an addition reverses only where a run of its added words is
+        # a run an earlier EDIT took out
+        tail = _trigrams(inserted)
+        return any(tail & (_trigrams(eo) - _trigrams(en)) for eo, en in earlier)
     added = _content(n) - _content(o)
     return any(len(added & (_content(eo) - _content(en))) >= 2 for eo, en in earlier)
+
+
+def _insertion(o: str, n: str) -> str | None:
+    """The words `n` adds to `o` when it keeps every word of `o` in order (an append or an insertion), else None."""
+    a, b = _words(o).split(), _words(n).split()
+    ops = difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes()
+    if not a or any(tag in ("delete", "replace") for tag, *_ in ops):
+        return None
+    return " ".join(w for tag, _i1, _i2, j1, j2 in ops if tag == "insert" for w in b[j1:j2])
+
+
+def _trigrams(text: str) -> set[tuple[str, ...]]:
+    """Every run of three content words in `text`, in order - a phrase, where `_content` is a bag."""
+    w = [x for x in _words(text).split() if len(x) > 3 and x not in _STOP]
+    return {tuple(w[i:i + 3]) for i in range(len(w) - 2)}
 
 
 def mark_rounds(replies: list[str], others: list[tuple[str, str]] | None = None) -> list[list[tuple[str, str]]]:
@@ -386,10 +410,38 @@ def feature_section(root: Path, out: Path, d: Path | None, trigger: str) -> str:
 batch_triggers = ha.batch_triggers  # THE BATCH, defined once (feature 375 amendment 2, FR-017)
 
 
+def counted(root: Path, unit: str) -> int:
+    """The rounds the dispatch counter holds for `unit` in the active feature (`checks-open.json`); 0 where it holds none."""
+    state = hc.load(hc.state_path(str(root)) or Path("/nonexistent"))
+    d = ha.feature_dir(root)
+    if d is None or state.get("feature") != d.name:
+        return 0
+    return int(state.get("rounds", {}).get(unit, 0))
+
+
+def misnumbered(root: Path, triggers: tuple[str, ...] | list[str]) -> list[str]:
+    """Each round trigger the session NAMED (not one the counter fired) whose `@N` is not the unit's next round - with the one
+    to ask about. 352's check session named all 21 pop-up units `@3` in one loop; seven modal-form units and windbreak's
+    depiction had run once, and the bundle told the arbiter "the counter's round 3" (2026-10-11, the arbiter's tooling fix)."""
+    fired = ha.owed(root)
+    out = []
+    for t in triggers:
+        unit = ha.unit_of(t)
+        if not unit or t in fired or t.startswith("round:spec-fidelity|"):
+            continue
+        want = f"round:{unit}@{counted(root, unit) + 1}"
+        if t != want:
+            out.append(f"{t} - the counter holds {counted(root, unit)} round(s) of {unit}: ask about `{want}`")
+    return out
+
+
 def batch(root: Path, out: Path, allow_missing: str = "", extra: tuple[str, ...] = ()) -> Path:
     """ONE bundle for every owed round trigger (FR-017; the GM 2026-10-11: "a whole batch of pop-ups reaching the round cap at
     once should get a single ruling. because they are likely to be related"): each trigger's own bundle in a subdirectory, and
     a MANIFEST asking for ONE ruling with an exception per unit ruled differently. Raises MissingRecord with every gap at once."""
+    wrong = misnumbered(root, extra)
+    if wrong:
+        raise ValueError("a named round is not its unit's next: " + "; ".join(wrong))
     triggers = batch_triggers(root, extra)
     if not triggers:
         raise ValueError("no round trigger is owed a ruling - nothing to batch")
@@ -414,6 +466,7 @@ def batch(root: Path, out: Path, allow_missing: str = "", extra: tuple[str, ...]
         f"Clone root (for `make arbiter-ruled`): {root}\n",
         "## The triggers\n",
         *rows,
+        *(["\nLeft out - owed in another feature, ruled or rulable there, not in this batch:\n", *(f"- {a}" for a in ha.aside(root))] if ha.aside(root) else []),
         "\n## Reply\n\nONE JSON object: the batch's ruling, and an exception for each unit you rule differently:\n\n"
         '    {"ruling": "continue|accept|process-fault", "why": "...", "what": "...", "tooling_fix": "<or omit>",\n'
         '     "triggers": [<every trigger above>], "exceptions": {"<trigger>": {"ruling": "...", "why": "...", "what": "..."}}}\n\n'
@@ -445,6 +498,9 @@ def main(argv: list[str] | None = None) -> int:
         if a.batch:
             print(batch(root, Path(a.out) if a.out else DEFAULT_OUT / "arbiter-batch", a.missing_ok.strip(), tuple(a.triggers.split())))
         else:
+            wrong = misnumbered(root, [a.trigger])
+            if wrong:
+                raise ValueError("a named round is not its unit's next: " + "; ".join(wrong))
             print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}", a.missing_ok.strip()))
     except ValueError as e:
         print(f"arbiter-bundle: {e}", file=sys.stderr)
