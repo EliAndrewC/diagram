@@ -23,7 +23,7 @@ Guesses:
 Depiction: The map draws a privy on most farmsteads as a small roofed building at one of the sixteen privy sizes counted in
 one village, with a dark circle at one end standing for its night soil, so it does not read as a wood shed; the real night soil was kept
 in a tank beside it or in a pit out by the fields. About three privies in four are sought first on the house's sunny side, as about three in four stood at one village's farmsteads,
-but the work yard takes much of that ground, so fewer than half end up there; most of the rest stand behind the house, because the work yard covers the ground in front of the house and under the stable's eaves, where real privies stood too.
+but the work yard takes much of that ground, so across the maps fewer than half end up there; most of the rest stand behind the house, because the work yard covers the ground in front of the house and under the stable's eaves, where real privies stood too.
 
 Name: privy
 Covers: `farm_fixtures[kind=privy]`
