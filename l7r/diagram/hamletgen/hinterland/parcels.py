@@ -268,9 +268,7 @@ def _patch_keepouts(
     return keep, keep_rects, lanes, streams, marshes, crops, crop_pts, (sum(_hx) / len(_hx), sum(_hy) / len(_hy))
 
 
-def _beyond_the_fields(
-    s: Settlement, plan: SitePlan, scored: list[tuple[float, float, float]], crop_pts: Any, cc: tuple[float, float]
-) -> list[tuple[float, float, float]]:
+def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, float, float]], crop_pts: Any, cc: tuple[float, float]) -> list[tuple[float, float, float]]:
     """The scored seats ranked by `woodland_tier` and kept only beyond the fields from the houses (lifted out of
     `open_ground_patches` by feature 370, the 100-statement cap; the same reads in the same order).
 
@@ -363,6 +361,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     size, floor_px = s.px(size), s.px(_COMMONS_FLOOR_FT)
     dx, dy = plan.fall
     keep, keep_rects, lanes, streams, marshes, crops, crop_pts, (ccx, ccy) = _patch_keepouts(s, plan)
+    # the houses' floor and the water, built ONCE for the whole scan: `_ok` asks every seat whether it is low by the water (0077)
+    _floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], plan.fall)
+    _rivers = WaterZone([st for st, _ in streams], marshes)
 
     # THE PATCHES MUST NOT STRETCH THE FRAME. `crop_to_content` frames the map to its HARD features,
     # and a woodland patch is one - so a patch parked in a far corner of the working canvas drags the
@@ -482,8 +483,6 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # ONE REGION PER SIZE ASKED (feature 297; the trap feature 284 recorded): `_ok` is re-asked with a different `half`
             # when the size roll re-tests a seat, and every keep-out is grown by `half`, so each size paints its own.
             regions: dict[tuple[float, float, float], Any] = {}
-            _floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], plan.fall)
-            _rivers = WaterZone([st for st, _ in streams], marshes)  # built once a size, asked per seat
 
             def _ok(
                 x: float,
