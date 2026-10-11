@@ -195,7 +195,29 @@ def answered(store_dir: pathlib.Path, slug: str, fp: str) -> bool:
 
 def unanswered(root: pathlib.Path) -> list[ru.Unit]:
     s = store(root)
-    return [u for u in units(root) if not answered(s, u.slug, u.fingerprint)]
+    return [u for u in units(root) if not answered(s, u.slug, u.fingerprint) and not legacy_depiction_answered(root, s, u.slug)]
+
+
+def legacy_depiction_answered(root: pathlib.Path, store_dir: pathlib.Path, slug: str) -> bool:
+    """A modal-depiction answer recorded under the fingerprint's OLD formula (before feature 375 amendment 1) still answers
+    the words it read. The new formula covers what the check reads - About, Entry:, Depiction, Drawing: and its pages - and
+    dropped Name, Guesses and Form; the old one covered all of those but Entry:. So an old-formula answer that matches today's
+    content answers today's unit when the Entry: line is the one the modal carried when the answer was recorded. Without
+    this, the formula change re-owed every depiction answer in every clone at once (343's sheet pop-ups and 368's hamlet
+    pop-ups: 31 units, checked and answered, all owed again on the merge, 2026-10-11)."""
+    if not slug.startswith("modal-depiction:"):
+        return False
+    import modal_owed as mo  # noqa: PLC0415
+
+    rec = _read(store_dir, slug)
+    m = mo.find(root, slug.split(":", 1)[1])
+    if m is None or not rec.get("utc") or not answered(store_dir, slug, mo.legacy_depiction_fingerprint(root, m)):
+        return False
+    path = m.origin.rsplit(":", 1)[0] if re.search(r":\d+$", m.origin) else m.origin
+    rel = str(pathlib.Path(path).resolve().relative_to(root)) if pathlib.Path(path).is_absolute() else path
+    then = _git(root, "rev-list", "-1", f"--before={rec['utc']}", "HEAD", "--", rel).strip()
+    old = mo.choice_modal(rel, _git(root, "show", f"{then}:{rel}")) if then and rel.endswith(".md") else None
+    return old is not None and old.entry == m.entry
 
 
 def command(u: ru.Unit, now: ru.Record | None = None) -> str:
