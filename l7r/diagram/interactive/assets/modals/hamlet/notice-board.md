@@ -21,7 +21,7 @@ Guesses:
 
 Depiction: The map gives every settlement, down to a hamlet, a board on a road or street where passers-by meet it, most often beside its busiest main road or street, its face turned
 broadside to the traffic; where no way is a main one, it stands where the most buildings stand nearby. The title card says
-where this settlement's board stands - its busiest frontage, its entrance, a bridge end or another seat - and which frontage it faces. It is placed last, once everything else stands, weighing
+where this settlement's board stands - its busiest frontage, its entrance, a bridge end or another seat - and which frontage it faces. It is sited weighing
 the passers-by it would meet, as those who set up a real board did. It is drawn as a small roofed frame, its long side along
 the road, on a stone footing inside a fence. On a village or city map a frame the size of those measured at two post towns, about 16 ft by 6 ft, would be too small to see, so the map draws a larger marker in its place, footing and all, and its label says what it is. A city draws several boards, its principal one at the central market and one on the approach to each main gate, and labels only one of them. It may stand under a tree's crown, since its label is drawn above every crown; whether a real board ever stood
 under a tree is not recorded.

@@ -8,7 +8,7 @@ The boards measured at two post towns were frames about 10 ft high and 16 to 18 
 stands on a stone base inside a fence, under a roof, its notices hung high above the passers-by. A village's board could be
 built the same way, but its size is not recorded.
 
-Boards were most often set where most people passed, at the village center or at a crossroads of main highways; how many villages kept theirs at a bridge instead is not recorded.
+Boards were most often set where people passed, at the village center or at a crossroads of main highways; how many villages kept theirs at a bridge instead is not recorded.
 
 Guesses:
 - Which of a settlement's bridges its board stood by: no source says, so the map takes the widest, a brook's bridge before a ditch's plank, and of two alike the one nearest the houses.

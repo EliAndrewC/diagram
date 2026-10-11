@@ -7957,14 +7957,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a seat is refused within LOW_BY_WATER_FT, plus the square's circumscribed reach, of water below the houses": {
-  "code": "d774bd653e03d206",
-  "core": "d774bd653e03d206",
-  "date": "2026-10-11",
-  "note": "a seat is refused within LOW_BY_WATER_FT, plus the square's circumscribed reach, of water below the houses",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#aspect and bearing": {
   "code": "56f68af42ed1394c",
   "core": "d774bd653e03d206",
@@ -8007,6 +7999,20 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:62655ffbea173c76"
   ],
   "triaged": "2026-10-11",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#low ground by the water": {
+  "code": "701aa8d7f88a36c4",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "the code refuses a seat below the houses whose square comes within 46 ft of a river or marsh; the drawing page gives that rule and that width, and records \"about 46 ft\" as a GUESS.",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+  },
+  "research": "f6d46e12d32321f7",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": {
@@ -37346,13 +37352,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#other defaults": {
-  "code": "201c12b82b8f1680",
+  "code": "99eeedd9861ade34",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
-  "note": "research has looked at the inn: 0184's drawing page says nothing records how common either form was, and 0184 calls the carters' inn the commoner Ming inn; the wagon default should be GUESS or cite 0184, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the page says \"nothing says how common either was\", so the wagon fallback where no roll is asked is a fair GUESS and decides no rolled map's form. The default overlay \"none\" is one of the attested choices.",
+  "pages": {
+   "0184-inns-hatago-and-carters-inns.drawing.html": "b3735e4f3896a821"
+  },
+  "research": "fe264888c0649ea3",
+  "rests": [
+   "0184-inns-hatago-and-carters-inns.drawing.html:00779ba3916debd0"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#plot_regularity forms": {
   "code": "ae0440e793066844",
@@ -61644,16 +61655,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/board_seat.py::entrance_seat_ok#entrance board near the entrance": {
-  "code": "26e02b5d456c163e",
+  "code": "33f6afdb84b8ea9a",
   "core": "2230b9199b4506fe",
   "date": "2026-10-11",
-  "note": "0190 gives no distance from the entrance, and the code allows 60+60 = 120 ft, not the claimed 160 ft; should read UNRESEARCHED: 120 ft",
-  "pages": {
-   "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
-  },
-  "research": "6f8da4bbe606a612",
-  "rests": [],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "the code's limit is (60+60)/ftpx, which is 120 ft. 0190 names the entrance as a site but gives no distance from it; its 6 ft and 60 ft figures measure from the road, not the entrance.",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/board_seat.py::entrance_seat_ok#passed by every way out": {
   "code": "2ef6101a7630d8a6",
