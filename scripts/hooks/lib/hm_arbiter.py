@@ -56,6 +56,12 @@ def common_dir(root: Path) -> Path:
 
 
 def feature_dir(root: Path) -> Path | None:
+    """The active feature: a page session's own (`L7R_FEATURE_DIRECTORY`, set by the page-session runner from its brief's
+    directory), else `.specify/feature.json`. Without the first, feature 343's page session filed its round ruling under
+    378, the feature the clone's main session had last worked (2026-10-10)."""
+    own = os.environ.get("L7R_FEATURE_DIRECTORY", "").strip().rstrip("/")
+    if own:
+        return root / own
     try:
         fd = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", "")
     except (OSError, ValueError):
