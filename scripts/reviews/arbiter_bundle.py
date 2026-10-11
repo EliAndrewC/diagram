@@ -13,13 +13,12 @@ here is handed every CLAUDE.md above it - feature 250):
 - the oscillation - every reversal in the event log;
 - the feature's `request.md` and `spec.md`.
 
-    arbiter_bundle.py <trigger> [--root DIR] [--out DIR]
+    arbiter_bundle.py <trigger> [--root DIR] [--out DIR] [--missing-ok REASON]
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import shutil
 import subprocess
@@ -87,7 +86,13 @@ def subject_files(root: Path, subject: str) -> list[str]:
     return []
 
 
-def bundle(root: Path, trigger: str, out: Path) -> Path:
+class MissingRecord(Exception):
+    """What the loop's own record lacks for a ruling (each a line the refusal prints)."""
+
+
+def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path:
+    """The MANIFEST for `trigger`; raises `MissingRecord` where a round kept no reply or a reversal has no record, unless
+    `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh)."""
     owed = ha.owed(root).get(trigger, {})
     d = ha.feature_dir(root)
     if out.exists():
@@ -98,28 +103,51 @@ def bundle(root: Path, trigger: str, out: Path) -> Path:
              f"Clone root (for `make arbiter-ruled`): {root}\n"]
     unit = str(owed.get("unit") or "")
     check, _, subject = unit.partition("|")
+    files: list[str] = []
+    if trigger.startswith("reversal:") and "|" not in unit:
+        # a reversal the EDIT wire caught names a FILE, not a check|subject: its rounds are every check's on that file's
+        # subject, its A -> B -> A the file's own history (368's ruling on 0047, 2026-10-11: the bundle had neither)
+        path = Path(unit or trigger.split(":", 1)[1].split("@", 1)[0])
+        check, subject = "", hc.subject_of_path(str(path))  # no "|": partition put the whole path in `check`
+        files = [str(path.resolve().relative_to(root)) if path.is_absolute() and path.resolve().is_relative_to(root) else str(path)]
     state = hc.load(hc.state_path(str(root)) or Path("/nonexistent"))
-    if check and subject:
-        rounds = sorted((v for v in state.get("dispatches", {}).values() if v.get("check") == check and subject in v.get("subjects", [])),
+    missing: list[str] = []
+    rounds: list[dict] = []
+    if subject:
+        rounds = sorted((v for v in state.get("dispatches", {}).values() if (not check or v.get("check") == check) and subject in v.get("subjects", [])),
                         key=lambda v: v.get("t", 0))
         replies = [reply_of(v) for v in rounds]
-        parts.append(f"## Rounds - {check} on {subject}\n")
+        parts.append(f"## Rounds - {check or 'every check'} on {subject}\n")
         for i, (v, marked) in enumerate(zip(rounds, mark_rounds(replies), strict=True), 1):
-            parts.append(f"### Round {i} ({v.get('state')}; verdict: {el.verdict_of(replies[i - 1]) or 'no reply kept'})\n")
+            c = str(v.get("check"))
+            parts.append(f"### Round {i}: {c} ({v.get('state')}; verdict: {el.verdict_of(replies[i - 1]) or 'no reply kept'})\n")
             parts += [f"Owed by: {o}" for o in v.get("owed", [])] or ["Owed by: (not recorded - a dispatch before feature 374 kept no occasion)"]
             if replies[i - 1]:
                 # THE REPLY ITSELF, beside the MANIFEST: the marks read numbered and bulleted lines only, and a check that words its
                 # findings otherwise (modal-form's sections) left the arbiter with "no findings" on 374's first day (2026-10-10)
-                (out / f"round-{i}-{check}.md").write_text(replies[i - 1], encoding="utf-8")
-                parts.append(f"The whole reply: `round-{i}-{check}.md` beside this file.")
+                (out / f"round-{i}-{c}.md").write_text(replies[i - 1], encoding="utf-8")
+                parts.append(f"The whole reply: `round-{i}-{c}.md` beside this file.")
+            else:
+                missing.append(f"round {i} ({c}, bundle {v.get('manifest') or '?'})")
             parts += [f"- {m}: {f}" for m, f in marked] or ["- (no numbered or bulleted findings - read the whole reply)" if replies[i - 1]
                                                              else "- (no reply kept for this round)"]
             parts.append("")
-        files = subject_files(root, subject)
-        if files:
-            diff = _git(root, "log", "-p", "--format=--- %h %ad %s", "--date=iso", "-20", "--", *files) + _git(root, "diff", "--", *files)
-            (out / "edits.diff").write_text(diff or "(no edits)\n", encoding="utf-8")
-            parts.append(f"## Edits between rounds\n\n`edits.diff` beside this file: the last 20 commits touching {', '.join(files)}, then the working tree.\n")
+        files = files or subject_files(root, subject)
+    diff = ""
+    if files:
+        diff = _git(root, "log", "-p", "--format=--- %h %ad %s", "--date=iso", "-20", "--", *files) + _git(root, "diff", "--", *files)
+        (out / "edits.diff").write_text(diff or "(no edits)\n", encoding="utf-8")
+        parts.append(f"## Edits between rounds\n\n`edits.diff` beside this file: the last 20 commits touching {', '.join(files)}, then the working tree.\n")
+    # the arbiter cannot rule on a loop it cannot see: a round with no reply kept, or a reversal with neither rounds nor history,
+    # is refused with what is missing (368's three rulings, 2026-10-11, each found "no reply kept" and ruled on an account)
+    gaps = [f"no reply kept for {m}" for m in missing]
+    if trigger.startswith("reversal:") and not rounds and not diff.strip():
+        gaps.append(f"a reversal with no check rounds on {subject or unit or '?'} and no history of {', '.join(files) or '?'}")
+    if gaps and not allow_missing:
+        shutil.rmtree(out)
+        raise MissingRecord(gaps)
+    if gaps:
+        parts.append("## Missing from the record (bundled anyway: " + allow_missing + ")\n\n" + "\n".join(f"- {g}" for g in gaps) + "\n")
     # a feature whose sessions logged nothing yet has no log file: no events, not a crash (368's check session, 2026-10-10)
     log = el.log_path(root, d.name) if d else None
     events = list(el.read_jsonl(log)) if log and log.is_file() else []
@@ -146,10 +174,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("trigger")
     ap.add_argument("--root", default=".")
     ap.add_argument("--out", default="")
+    ap.add_argument("--missing-ok", default="", help="the reason to bundle with a reply or a reversal's record missing")
     a = ap.parse_args(argv)
     root = Path(a.root).resolve()
     slug = re.sub(r"[^a-z0-9]+", "-", a.trigger.lower()).strip("-")[-60:]
-    print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}"))
+    try:
+        print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}", a.missing_ok.strip()))
+    except MissingRecord as e:
+        print("arbiter-bundle: the record lacks what the arbiter rules on - " + "; ".join(e.args[0]) + " (neither the hook's kept "
+              "reply nor the agent's transcript has it). Bundle anyway, so the arbiter weighs the gap: "
+              '`make arbiter-bundle TRIGGER=... MISSING_OK="<why it is gone>"`', file=sys.stderr)
+        return 2
     print("arbiter-bundle: dispatch `round-arbiter` on that MANIFEST; it records its own ruling (make arbiter-ruled)")
     return 0
 

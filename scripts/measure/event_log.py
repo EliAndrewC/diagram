@@ -192,7 +192,13 @@ def common_git_dir(root: Path) -> Path:
 
 
 def feature_of(root: Path) -> str:
-    """The clone's active feature directory name (`375-enforced-wave-process`), or '' when none is set."""
+    """The active feature directory name (`375-enforced-wave-process`), or '' when none is set: a page session's own
+    (`L7R_FEATURE_DIRECTORY`, as `hm_arbiter.feature_dir` reads it), else the clone's `.specify/feature.json`. Without the
+    first, 368's page sessions logged every edit under 343, and the round arbiter's bundle for 368 found no event log at all
+    (its ruling on 0047's reversal, 2026-10-11)."""
+    own = Path(os.environ.get("L7R_FEATURE_DIRECTORY", "").strip().rstrip("/")).name
+    if own:
+        return own
     try:
         data = json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8"))
     except (OSError, ValueError):

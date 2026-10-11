@@ -342,7 +342,16 @@ def test_one_return_seen_twice_as_its_transcript_grows_is_one_pass(tmp_path: pat
     payload = {"agent_type": "source-reader", "agent_id": "a5", "agent_transcript_path": str(t)}
     assert hc.log_pass(tmp_path, "returned", payload, 0.0)
     with t.open("a") as fh:  # the last turn written after the first stop event
-        fh.write(json.dumps({"timestamp": "2026-10-10T10:09:00Z", "requestId": "r9", "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 10, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 900}}}) + "\n")
+        fh.write(
+            json.dumps(
+                {
+                    "timestamp": "2026-10-10T10:09:00Z",
+                    "requestId": "r9",
+                    "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 10, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 900}},
+                }
+            )
+            + "\n"
+        )
     assert not hc.log_pass(tmp_path, "returned", payload, 0.0)
     (only,) = _log(tmp_path)
     assert only["segment"] == 0 and only["agent"] == "a5"
@@ -372,6 +381,7 @@ def test_a_foreground_check_keeps_its_reply_and_its_edits(tmp_path: pathlib.Path
     assert d["state"] == "returned" and pathlib.Path(d["reply"]).read_text() == REPLY
     assert st["edits"]["q:0105"] == [["research/questions/0105-baths-furo.drawing.html", "about 10 by 8 ft", "about 10 by 8 feet"]]
     assert hc.response_text({"content": "plain"}) == "plain" and hc.response_text({}) == ""
+
 
 def test_the_refusal_names_the_escape_that_reaches_its_rule() -> None:
     assert hc.escape_for("the round arbiter closed quote-check|q:0105 (accept)") == "ARBITER_OK"

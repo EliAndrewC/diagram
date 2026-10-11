@@ -1145,7 +1145,8 @@ check-closed:   ## [project] close the checks in flight on a page or pop-up whos
 # (only the `round-arbiter` subagent passes AS=round-arbiter; a ruling is binding, one per trigger).
 arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
 	@if [ -z "$(TRIGGER)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" "$(TRIGGER)" --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",)
+	@: "GUARD_EDIT_OK: an arbiter tooling fix (368, 2026-10-11) - MISSING_OK bundles a trigger whose rounds kept no reply, with the reason shown to the arbiter"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" "$(TRIGGER)" --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$(MISSING_OK)",)
 
 arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter
 	@if [ -z "$(TRIGGER)" ] || [ -z "$(FILE)" ]; then printf 'make arbiter-ruled: TRIGGER= and FILE= are required\n' >&2; exit 2; fi
@@ -1585,6 +1586,9 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 # GUARD_EDIT_OK: feature 212 - `K=` carries the `-k` filter the GM named ("even a specific test case"),
 # so the make-only guard can rewrite a targeted bare pytest into this target instead of refusing it.
 # gate-hooks records a `K=` (or a `::` node id) run as the same SUBSET a bare `pytest -k` is.
+# GUARD_EDIT_OK: adding a refusal - with FILE unset (`F=` mistyped, 2026-10-10) pytest collected the WHOLE suite under
+# a low-memory warning; an empty FILE now refuses with the variable's name instead.
+	@if [ -z "$(strip $(FILE))" ]; then echo "test-file: no FILE given - run \`make test-file FILE=tests/<path>\` (the variable is FILE, not F); \`make test-full\` runs every test" >&2; exit 2; fi
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
 
 # GUARD_EDIT_OK: feature 216 - the audit that answered "are you really not able to combine?" is a command now, for any
