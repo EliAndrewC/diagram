@@ -901,8 +901,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:14a6adb4a8440bc9",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:be635f0990c5e3da"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#alley behind the office hall": {
@@ -912,17 +912,18 @@
   "note": "no page sets out an alley between the hall and the divider wall; 0090 places only the divider gate behind the hall (GUESS), and 0091's alley is the north service strip, not this one",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#border court as a garden": {
   "code": "22ebf57590e78d1d",
-  "core": "03a6c88a20bdb161",
+  "core": "cf960bbd80430094",
   "date": "2026-10-11",
-  "note": "a garden where a court should be is recorded as a GUESS by 0104's drawing page, and a lantern in the guest court as a GUESS by 0103's drawing page",
+  "note": "GUESS; 0104's drawing page records a garden in the court's place as a guess, and 0103's records the lantern in the reception court as one",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
+  "section": "cf960bbd80430094",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables": {
@@ -933,8 +934,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais": {
@@ -950,8 +951,8 @@
    "0099-the-hearing-court-shirasu.drawing.html:400ef23a77443c5c",
    "0099-the-hearing-court-shirasu.drawing.html:a82abb47f7fed2c5"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
@@ -968,8 +969,8 @@
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:45e428be060a17da",
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:dd1082c27eb94aa1"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face": {
@@ -980,8 +981,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate": {
@@ -998,7 +999,8 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "section": "03a6c88a20bdb161",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
@@ -1014,8 +1016,8 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate width": {
@@ -1026,8 +1028,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#fire-water tubs": {
@@ -1045,36 +1047,34 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
   "code": "7d977d70881b8660",
-  "core": "03a6c88a20bdb161",
-  "date": "2026-10-10",
-  "note": "the one genkan is on the office hall, the residence has none, and the visitors' way runs on through the office to the house, as the page draws a shared compound; the roji form without a genkan is the page's second attested form",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "genkan on the office, way to the residence through the office, as the drawing page draws it; the divider gate's place is a recorded guess",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff"
   },
   "research": "093d6357243ac064",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:da69c5f5c1d09f0a"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-11",
+  "section": "cf960bbd80430094",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
   "code": "ca1134809466bdaa",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "no page places a garden or stable well",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "GUESS; no page places a garden or stables well, and 0091 records only the rear well as a guess",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob": {
@@ -1085,8 +1085,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
@@ -1103,15 +1103,15 @@
    "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d",
    "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#guest doors feed courts": {
   "code": "86d02c3ccd9bc973",
-  "core": "03a6c88a20bdb161",
+  "core": "cf960bbd80430094",
   "date": "2026-10-11",
-  "note": "the rule names \"a court, a garden, a graveled forecourt\" as equally good ground for a guest door to open onto, but 0104 finds \"open ground a palanquin can cross\" and says \"a garden in its place is a guess\"; the split GUESS claim covers only Ubame's border court, so the rule's general garden option is a form the question does not attest and nothing labels it. Either label the garden option GUESS in the rule or widen the GUESS claim beyond Ubame. The 0103 drawing pointer backs nothing in this claim (its lantern block belongs on the split claim)",
+  "note": "the rule offers \"a court, a garden, a graveled forecourt\" as equal grounds for a guest door, but 0104's drawing page draws \"an open court, and a garden in its place is a guess\"; the rule's garden option should be labeled GUESS (or the border-court guess widened to cover it)",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html": "48d206623f86d1e3",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff",
@@ -1125,9 +1125,12 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:8f8b12557da86306",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:ad36b13336976f6e",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:758003c2792cf6e7"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:758003c2792cf6e7",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:ad71105579b890e5"
   ],
-  "section": "03a6c88a20bdb161",
+  "section": "cf960bbd80430094",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
@@ -1137,8 +1140,8 @@
   "note": "0101's drawing page names no night-soil gate at a samurai house",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
@@ -1149,27 +1152,29 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone": {
   "code": "a48d5ee3558a38c7",
-  "core": "958d4bc05bb7b9db",
-  "date": "2026-10-10",
-  "note": "0101's drawing page records \"about one to each part of it, three or four\" as a GUESS and calls the service-wall-near-a-gate placement the project's own reading; the privy built into the house is its finding",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "the prose gives the residence one privy (\"the residence privy attached to the house\"; the rear strip names only \"the attached family privy\"), but 0101's drawing page says \"Our maps give a residence two privies, the guests' and the family's\"; the prose and the claim should name both. Three or four by zone, by service walls near a gate, is in step",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
   "rests": [
+   "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
-   "0101-privies-setchin.drawing.html:8299420f832f4bd1"
+   "0101-privies-setchin.drawing.html:721f2a29c982e0b4",
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1",
+   "0101-privies-setchin.drawing.html:f2dbc20c5097bdd3"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "section": "cf960bbd80430094",
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
   "code": "11bd32587fe08b18",
@@ -1192,8 +1197,8 @@
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:fc44e5419b7307af",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:ff9d9cf36d9635eb"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
@@ -1213,8 +1218,8 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
@@ -1230,8 +1235,8 @@
    "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923",
    "0190-notice-boards-kosatsuba.drawing.html:cf39d6663b05b586"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
@@ -1247,8 +1252,8 @@
    "0099-the-hearing-court-shirasu.drawing.html:36f49b610deb6fb9",
    "0099-the-hearing-court-shirasu.drawing.html:6f3e1d8136359675"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall rooms": {
@@ -1258,8 +1263,8 @@
   "note": "no page places these rooms (0113's drawing page records it as a GUESS)",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate": {
@@ -1274,8 +1279,8 @@
   "rests": [
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners": {
@@ -1286,8 +1291,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth knob": {
@@ -1302,8 +1307,8 @@
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:28f3b3b08cf308d9"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth's rich end": {
@@ -1313,8 +1318,8 @@
   "note": "qualitative, no figure recorded",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground": {
@@ -1331,8 +1336,8 @@
    "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
    "0165-martial-training-grounds-and-dojo.drawing.html:eaaa0e49753241f1"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground placement and gear": {
@@ -1351,46 +1356,55 @@
    "0165-martial-training-grounds-and-dojo.drawing.html:d49d656131981f70",
    "0165-martial-training-grounds-and-dojo.drawing.html:e5d173fb8d7dcb4a"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#rear service strip": {
-  "code": "79d688043dad6125",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "service strip or alley a GUESS, rear storehouses and rear yard attested",
+  "code": "c481f7c696b9a266",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "the procedure always puts \"the servants' nagaya\" in the shady north strip behind the residence. 0115 records several other places servants lived: \"long ranges along the street\", \"the front gate cut through one of them\" (the gate range) and \"under the main roof\" in a small house. A great house too kept \"the rooms of the maids and servants\" inside the house. Its summary puts servants \"in the range or row along its boundary ... or inside the house\". The only support for the rear is one chugen hut outside a back door (Miwa), and 0091's drawing page calls the rear placement a GUESS, not a deliberate departure. Fix one of two ways: make where the servants live a seeded knob among the forms 0115 records (gate or street range, under the main roof, rear range), or record the rear range as a DEVIATION on 0091's drawing page and label the claim DEVIATION. The storehouses, rear yard and attached privy are in step.",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
   },
-  "research": "599c1caf9eb1593b",
+  "research": "fcb65d612223c620",
   "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:3fbca2091d585e8c",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:6adb1f4ed30e77e9",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:0847d626d58b5561",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5960e566a4bd1d74",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5b10f481659ec3b8",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5d741be14a8de53e",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:75a2ed72bd40172c",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:90f6ef1941297876"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "section": "cf960bbd80430094",
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#residence entrances": {
   "code": "d113493f815e21df",
-  "core": "03a6c88a20bdb161",
+  "core": "cf960bbd80430094",
   "date": "2026-10-11",
-  "note": "one formal genkan; the household uses an inner entrance; the roji form is admitted",
+  "note": "one main genkan, an inner entrance for the household, and the roji form as the alternative",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
   },
   "research": "52ce328e87da1094",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
-  "section": "03a6c88a20bdb161",
+  "section": "cf960bbd80430094",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars knob": {
@@ -1405,8 +1419,8 @@
   "rests": [
    "0165-martial-training-grounds-and-dojo.drawing.html:de4325f24196505d"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo": {
@@ -1417,8 +1431,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#road checkpoint tier": {
@@ -1435,8 +1449,8 @@
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:ae79afce1ebb08ba",
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:b24bcf640dc2cb0f"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#sand hearing court": {
@@ -1454,8 +1468,8 @@
    "0099-the-hearing-court-shirasu.drawing.html:b55c5a1de66c7efa",
    "0099-the-hearing-court-shirasu.drawing.html:b803d460a0101855"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court": {
@@ -1465,8 +1479,8 @@
   "note": "the page puts a jail in the walls but names no court",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#shrine smaller than the residence": {
@@ -1482,8 +1496,8 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
@@ -1503,8 +1517,8 @@
    "0097-staff-rowhouses-and-barracks-nagaya.html:885233a681119793",
    "0097-staff-rowhouses-and-barracks-nagaya.html:a452c3a25fb046fd"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staffing anchors": {
@@ -1515,8 +1529,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tenure character knob": {
@@ -1527,8 +1541,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob": {
@@ -1550,8 +1564,8 @@
    "0114-the-imperial-magistrates-compound-in-a-capital.html:a325a11b4634b47d",
    "0114-the-imperial-magistrates-compound-in-a-capital.html:bb14a65377ab7b59"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
@@ -1567,8 +1581,8 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine": {
@@ -1587,8 +1601,8 @@
    "0218-the-compounds-own-shrine-yashikigami.html:19a8b2635c1b3c76",
    "0218-the-compounds-own-shrine-yashikigami.html:28d396983ee76947"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary contents": {
@@ -1604,8 +1618,8 @@
    "0098-storehouses-for-the-tax-rice.drawing.html:1ae871342edf3960",
    "0098-storehouses-for-the-tax-rice.drawing.html:38cdaa6bf4104e0b"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wall display": {
@@ -1616,8 +1630,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
@@ -1636,15 +1650,15 @@
    "0097-staff-rowhouses-and-barracks-nagaya.html:79b867ffa7ca309a",
    "0097-staff-rowhouses-and-barracks-nagaya.html:a29a90d662b98d5d"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wells by use": {
   "code": "75de2f763360d38f",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "the kitchen well kept with the kitchen and bath is a GUESS that 0105's drawing page records (\"that the one well also filled the bath is our reading\"); \"by the kitchen\" covers both the generated plans' spot and the hand-drawn plans' spot inside the kitchen",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "the rule always places wells by use (kitchen, garden, stables), but 0091 places the houses' wells it found \"through the gate\", \"on the east side of the main house\" and \"indoors, in the Miwa house's doma\"; the kitchen well should roll among these attested placements (the hand-drawn plans' well inside the kitchen already matches the doma form), or the claim should say why the generated plans leave them out",
   "pages": {
    "0105-baths-furo.drawing.html": "de13b621fc93a424"
   },
@@ -1653,9 +1667,8 @@
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:c2529d4d294eb292"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "section": "cf960bbd80430094",
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Adding a building type#type workflow": {
   "code": "5786d60dfca21978",
