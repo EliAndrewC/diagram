@@ -244,7 +244,9 @@ The full spec and every failure mode: `docs/session-clones.md`.
   locked fast-forward push); engine code (`l7r/**/*.py`, `pool/*.gen.py|*.json`; a comment-only or
   formatting edit does not count) -> GATED on a green local `make done`, with a CodeBuild build only
   when `remote` is on and main moved on engine paths. A feature with an open task lands nothing
-  except its own `specs/` claim.
+  except its own `specs/` claim - and its TOOLING, alone: `make land-tooling FILES="<paths>"` lands the named `scripts/`,
+  `tests/`, agent-instruction, Makefile or settings files as a new commit on main, so a guard fix made mid-feature reaches
+  every session's hooks (feature 379; an arbiter's fix is not done until it has).
 - Never rewrite history (no rebase, squash, amend or force push); never commit or push against
   `/host-l7r-repo`. `git -C <path>` for every git call, one tree per command, no bare `cd`.
 - A paid prompt (`make ci-image`, any `FULL=1` dispatch) may be answered by the session; the logged

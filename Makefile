@@ -659,7 +659,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
 	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
+	: "GUARD_EDIT_OK: feature 379 amendment 1 - scripts/land-tooling.sh lands on main, so its suite runs with the guards'"; \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  : "(GUARD_EDIT_OK: feature 311 - entry-gate.sh and plan-gate.sh join it: both refuse at the push, both had companions that nothing ran, and entry-gate's had rotted)"; \
 	  : "(GUARD_EDIT_OK: feature 316 - claims-gate.sh joins it: it refuses at the push)"; \
@@ -1155,6 +1156,11 @@ arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the 
 arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID=<trigger> NOTE="<what was built>" TEST=tests/...
 	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
+
+# GUARD_EDIT_OK: feature 379 amendment 1 (the GM 2026-10-10, "yes please") - tooling lands alone, mid-feature, as a new commit
+# on main built in a detached worktree; the open-task refusal is untouched.
+land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
+	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)
 
 arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, to the GM's review, never filed (feature 379)   ID=<trigger> REASON="<why>"
 	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
