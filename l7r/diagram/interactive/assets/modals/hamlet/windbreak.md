@@ -4,13 +4,13 @@ the north and west of many a farmhouse, and from 1682 one domain planted a belt 
 Ryukyu islands a belt stood round a settlement on the west, the south and the east.
 
 In China's Huizhou a village's wood belonged to no household. Its lineage held it in common, closed it to cutting by rules
-on stone and fined anyone who cut a tree - in one village, the cost of an opera performance; a tree the wind brought
+on stone and fined anyone who cut a tree - in one village, the cost of an opera performance, and there a tree the wind brought
 down was announced to all and taken for common use. A Japanese household's grove gave it firewood, timber and leaves for
 manure.
 
-The Japanese grove mixed many trees, led by tall cedar, with bamboo low on its windward
+The Japanese grove mixed many trees, led by cedar and standing today mostly 33 to 72 ft (10 to 22 m) tall, with bamboo low on its windward
 side. Surviving southern Chinese woods are mixed evergreen broadleaf, dense and dark, their tallest
-trees often over 65 ft (20 m). The Ryukyu belt, about 50 ft (16 m) wide at first, was probably planted in 1742, with
+trees often over 65 ft (20 m). The Ryukyu belt, about 1.1 miles (1.8 km) long today and about 50 ft (16 m) wide at first, was probably planted in 1742, with
 fukugi, an evergreen, and Alexandrian laurel.
 
 Of the woods that survive, a Fujian village commonly keeps about two, a Hong Kong village's back wood is about 2.5 acres
@@ -38,6 +38,6 @@ off the sun of the farmyards and kitchen beds.
 
 Name: windbreak forest
 Covers: `village_groves[role=windbreak]`
-Sources: afcd-ncsc-9-06, hk-herbarium-fsw, tonami-kainyoclub, miura-2019-yashikiyama, yashikirin-jawiki, irie-2020-igune, forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan, bian-li-huizhou-forest-steles, maff-tarama-giahs, kashima-kainyo-1987, jpgreen-byobuzan, kotobank-shuson
-Entry: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0245-who-kept-a-southern-chinese-villages-fengshui-woods-and-what-could-villagers-take-from-them.html, research/questions/0075-bamboo-groves-chikurin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0124-farmsteads-at-a-town.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html [settlement_form=nucleated], research/questions/0033-row-villages-resson.html [settlement_form=nucleated]
+Sources: afcd-ncsc-9-06, hk-herbarium-fsw, tonami-kainyoclub, miura-2019-yashikiyama, yashikirin-jawiki, irie-2020-igune, forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan, bian-li-huizhou-forest-steles, maff-tarama-giahs, kashima-kainyo-1987, jpgreen-byobuzan, kotobank-shuson, sendai-igune-list, forestry-jp-tarama-hogo
+Entry: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0245-who-kept-a-southern-chinese-villages-fengshui-woods-and-what-could-villagers-take-from-them.html, research/questions/0075-bamboo-groves-chikurin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0038-sunlight-and-shade-on-the-farm.html, research/questions/0124-farmsteads-at-a-town.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html [settlement_form=nucleated], research/questions/0033-row-villages-resson.html [settlement_form=nucleated]
 Drawing: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0124-farmsteads-at-a-town.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html
