@@ -200,7 +200,9 @@ now carries no UNCLAIMED or MISLABELED finding, or whose claim reads IN-STEP; th
 carry claims), marked wave 118 in `audit/waves.json`; then `audit/scope.py` was re-run on today's cache (328 FR-010, the execution
 record) and re-marked 14 more open rows `scope: deferred` (the paddy and ribbon builders, a town's kiln, a city's matrix
 permissions among them; `scope.py` now counts `docs/building-programs.md` among the Mode A procedures, which it had sent to
-deferred), leaving **183 open rows** in scope (126 E3 DRIFTED). `make claims-report` shows the deferred
+deferred), leaving **183 open rows** in scope (126 E3 DRIFTED) at the batch's start; by its close, with the rows its checks filed
+(`audit/found-wave120.jsonl`, `found-wave121.jsonl`) and the two a reopened key brought back (`audit/reopen.py`), 185 open,
+131 of them E3 DRIFTED (2026-10-11, the plan review's count). `make claims-report` shows the deferred
 units' claims as DEFERRED (158).
 
 **Three rules for every wave of this batch:**
@@ -243,7 +245,7 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
   unchanged. Measured: the 48-seed cohort and its six pinned rows pass but seeds 10 and 20, both refused at HEAD before the
   change (the baseline 52/54).
 - Kashikawa, rerolled, was refused for a "needle" the law found where two door paths end on the skeleton at the point it
-  bends: a face 0.09 ft round, three lanes noded a hair apart, no ground at all. A pre-existing defect of the law's face test
+  bends: a face 0.09 ft round (measured on the refused roll's manifest, 2026-10-11), three lanes noded a hair apart, no ground at all. A pre-existing defect of the law's face test
   (constitution XIV): `law.needle_loops` skips a face whose perimeter is under `NODING_SPECK_FT` (1 ft); a real needle runs
   the length of its ways. Kashikawa then rolls, its door paths moved; the other four pool hamlets are unchanged, and the
   cohort with the rule matches the baseline (52/54).
@@ -298,3 +300,4 @@ decisions need no new ruling adds its tasks under its own plan section, decided 
 |---|---|---|---|---|
 | 1 | 112-114 | none owed: the batch's engine code is the Mode A draft (`compound.py`, `compound_parts.py`, `compound_model.py`: the kitchen ell, the corridor gone), `pack_audit` (`veranda_depths`, the hearth not a door) and `buildings/types.json`'s kitchen band - none in what the timing pair rolls (the hamlet's stages), as 372's batches 3-5 recorded | green 2026-10-10 at engine key 026828713522 | the review occasions running (three building-reviews, two glyph-checks); escalation-check 3 keep |
 | 2 | 115-118 | none owed: the batch's engine edits are `Research:` docstrings and claim wording only (no engine token moves, the maps unchanged: `git diff origin/main -- pool/` empty after the gate's roll) | green 2026-10-11 on the merged tree | the record and claims checks answered; no review occasion (no sheet or glyph moved) |
+| 3 | 119-121 | owed (the hamlet's stages changed). The pair `374-start` / `374-end` reads band 3 (+25.0%), but it is the host's load, not the code: two earlier back-to-back pairs of the same code (`374-b3-*`) read the end leg's reference at 24.1 s and 24.0 s against 42.5 s here, at load 5-8 on 22 shared cores; user CPU interleaved base and head over 18 rolls, 186.6 s against 169.3 s (-9%, `m:batch3-cpu-interleaved`) | green 2026-10-11 on the bridge fix | the record and claims checks answered; the glyph-checks of the wood on Inashiro (PASS) and the board on Kuwabata (NEEDS-WORK, fixed, PASS); the band's explanation, `perf-audit` and the arbiter's band-3 ruling |
