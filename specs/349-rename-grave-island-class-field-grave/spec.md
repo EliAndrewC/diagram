@@ -1,6 +1,6 @@
 # Feature Specification: Rename the `grave island` class to `field grave`
 
-**Status**: In progress (2026-10-10) - the GM: "Yes, please."
+**Status**: In progress (2026-10-10) - the GM: "Yes, please."; spec-fidelity round 2 FAITHFUL
 
 **Affects**: hamlet, interactive page
 
@@ -73,3 +73,9 @@ snapshot `tests/fixtures/classes_before_189.json` (through `SINCE_189`, the rena
   Measured, no change needed: Mizuguchi's manifest names no grave class at HEAD; `overlap/taxonomy.py` keys
   `field_graves`, its "grave island" is a comment. Implementation note under FR-001: `interactive/place.py:71`'s comment
   still names the class as `grave island`.
+- spec-fidelity, Mode 3 (verify), round 2 (2026-10-10): FAITHFUL.
+  1. RESOLVED - FR-003 names the glossary term `grave island` as kept, with the reason (its definition names the island
+     form since feature 267); the quoted definition matches `glossary.json` at HEAD; plan D5 now agrees with the spec.
+  2. RESOLVED - FR-002 names the two `siblings.json` texts (paddy, field rock); its quoted wording matches the file.
+  Read in full: the FR-002 and FR-003 diff hunks, plan D2/D5, the `siblings.json` pair texts, the glossary entry and
+  `place.py:68-73`. Aside: FR-002 no longer lists "the PNG" by name; "nothing a reader sees" still covers it.
