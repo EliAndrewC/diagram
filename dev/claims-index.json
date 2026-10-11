@@ -1057,14 +1057,15 @@
   "date": "2026-10-11",
   "note": "genkan on the office, way to the residence through the office, as the drawing page draws it; the divider gate's place is a recorded guess",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73"
   },
-  "research": "093d6357243ac064",
+  "research": "20c3b70fa4a4761c",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:da69c5f5c1d09f0a"
   ],
   "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
@@ -1114,10 +1115,10 @@
   "note": "the rule offers \"a court, a garden, a graveled forecourt\" as equal grounds for a guest door, but 0104's drawing page draws \"an open court, and a garden in its place is a guess\"; the rule's garden option should be labeled GUESS (or the border-court guess widened to cover it)",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html": "48d206623f86d1e3",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
   },
-  "research": "cbd9b611e22dde64",
+  "research": "1e1314546b9c37a0",
   "rests": [
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html:bd9cbe65b5055f66",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
@@ -1131,6 +1132,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:ad71105579b890e5"
   ],
   "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
@@ -2316,14 +2318,15 @@
   "note": "the tub beside the veranda stone is recorded; the roji leads to the zashiki's veranda",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73"
   },
-  "research": "d7b1e52ba60fb77d",
+  "research": "8031999f25bee91d",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
   ],
   "section": "6c077f80b364c895",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub against its wall": {
@@ -2428,8 +2431,8 @@
    "0105-baths-furo.drawing.html:5ac8b5f9c5612dfb",
    "0105-baths-furo.drawing.html:87595aae6ed4540e"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#bath": {
@@ -2452,8 +2455,24 @@
    "0105-baths-furo.html:d8d19b4eb5351d97",
    "0105-baths-furo.html:f9880c41b621a58b"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Inner court (private / sacred)#door set wholly inside its building": {
+  "code": "afe67d1f1bdbd0d6",
+  "core": "9c074481721a23c6",
+  "date": "2026-10-11",
+  "note": "the Doors rule matches what 0117's drawing page says word for word: the door sits wholly inside its building with its outer edge on the wall, never outside it, across it or floating inside it, and the page itself calls this a map drawing convention every plan follows",
+  "pages": {
+   "0117-doorways-and-doors-to.drawing.html": "bc909b837c49efa6"
+  },
+  "research": "f16a2000e7083c6f",
+  "rests": [
+   "0117-doorways-and-doors-to.drawing.html:3cbff3e9dce4a3e9",
+   "0117-doorways-and-doors-to.drawing.html:83f2a66640fa734f"
+  ],
+  "section": "9c074481721a23c6",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#engawa": {
@@ -2479,8 +2498,8 @@
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:e50acf31e21172cd",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:efc9c3619bf2373e"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#formal reception room": {
@@ -2496,8 +2515,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:80ac18283316ac77",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:e20e108d786f655f"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan": {
@@ -2515,7 +2534,8 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
-  "section": "ae0a5605f51e7f36",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan porch size": {
@@ -2526,8 +2546,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#inner garden": {
@@ -2547,8 +2567,8 @@
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:ba5b5b37436fe857",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:c29c96fc559c5cb1"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kamado range size": {
@@ -2559,8 +2579,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kitchen": {
@@ -2575,7 +2595,8 @@
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:4e5371e6e55b47e9"
   ],
-  "section": "ae0a5605f51e7f36",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kitchen abuts the house, no corridor": {
@@ -2592,7 +2613,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
   ],
-  "section": "ae0a5605f51e7f36",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#reception at one end": {
@@ -2613,8 +2635,8 @@
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:414f8be338415f3b",
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:56590e800f15cbe0"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#residence massing": {
@@ -2635,7 +2657,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d59d56dfc182e6ec"
   ],
-  "section": "ae0a5605f51e7f36",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#residence of about six rooms": {
@@ -2654,7 +2677,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:dcabdf9948afb679",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:f7d5825ee9a50598"
   ],
-  "section": "ae0a5605f51e7f36",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#room order": {
@@ -2671,8 +2695,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d39a6c083ed2ffa",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:c46fa707abad1ec6"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart": {
@@ -2690,8 +2714,8 @@
    "0106-the-chief-retainers-house-karo-yashiki.html:80b0dad39e3061bf",
    "0106-the-chief-retainers-house-karo-yashiki.html:9003bd375cdf6745"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#suites as labeled zones": {
@@ -2701,7 +2725,8 @@
   "note": "the drawing page calls a labeled room standing for a compressed suite a drawing convention.",
   "pages": {},
   "research": "",
-  "section": "ae0a5605f51e7f36",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#the karo's own house as a lodging block inside the compound": {
@@ -2717,8 +2742,8 @@
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html:820e8a9256c1e84c",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html:e10a3a961134047e"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#the residence along the north range": {
@@ -2736,8 +2761,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:9ad51c4d62413a83"
   ],
-  "section": "ae0a5605f51e7f36",
-  "triaged": "2026-10-10",
+  "section": "9c074481721a23c6",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#named rear yard": {
@@ -3553,7 +3578,8 @@
   "rests": [
    "0224-ground-swept-clear-around-shrines-and-graves.html:5b400e21e086078a"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch dimensions": {
@@ -3565,6 +3591,7 @@
   "research": "",
   "rests": [],
   "section": "43c7197f86c0cc1c",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch in plan": {
@@ -3582,6 +3609,7 @@
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9"
   ],
   "section": "43c7197f86c0cc1c",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#bare precinct earth": {
@@ -3598,7 +3626,8 @@
    "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a",
    "0224-ground-swept-clear-around-shrines-and-graves.html:ede9f63d0b1336c9"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#burial ground beside the precinct": {
@@ -3615,7 +3644,8 @@
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:3cb31f36e31e3029",
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:658031ef79aa2d75"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#compound shrine arch": {
@@ -3632,7 +3662,8 @@
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:52ba5c2f9e830511",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:5dbe6218f548b7d9"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#compound shrine tree": {
@@ -3649,7 +3680,8 @@
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:169483752db7d7f8",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#grave markers": {
@@ -3668,7 +3700,8 @@
    "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350",
    "0235-village-burial-grounds-bochi.drawing.html:d222af3b26079b80"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "NEEDS-RESEARCH"
  },
  "docs/buildings.md::Sacred features#grove": {
@@ -3687,7 +3720,8 @@
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2ae7827162453585",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#grove crown size": {
@@ -3705,7 +3739,8 @@
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#grove inside a compound wall": {
@@ -3720,7 +3755,8 @@
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:64714d0dd61608a5"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "MISLABELED"
  },
  "docs/buildings.md::Sacred features#hall and dwelling": {
@@ -3741,7 +3777,8 @@
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:f24d361f0a0d9421"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#hall and dwelling order": {
@@ -3755,7 +3792,8 @@
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#hall shrine ceiling": {
@@ -3773,7 +3811,8 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:810821d06441c9f0",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#kitchen garden at the dwelling": {
@@ -3784,7 +3823,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#modest compound shrine": {
@@ -3800,7 +3840,8 @@
    "0218-the-compounds-own-shrine-yashikigami.html:834a4967c2ef0c57",
    "0218-the-compounds-own-shrine-yashikigami.html:b15f43848fbd0e18"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#more than one kami in a hall": {
@@ -3815,7 +3856,8 @@
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#precinct unenclosed": {
@@ -3834,7 +3876,8 @@
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d14e5a627deab202",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d284e5af358a3a1f"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#privy at the dwelling": {
@@ -3845,7 +3888,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#sanctuary": {
@@ -3864,7 +3908,8 @@
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:45ce51e0ab9fc655",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8645ca661afbf310"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#shrine vermilion edging": {
@@ -3877,7 +3922,8 @@
   "rests": [
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:1abd0863c503614b"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence": {
@@ -3891,7 +3937,8 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
   ],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#workshop colonnade": {
@@ -3902,7 +3949,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "43c7197f86c0cc1c",
+  "section": "794c7ddb8c6c9e98",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#buildings at true size": {
