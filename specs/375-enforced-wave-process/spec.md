@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - amendment 2 (one ruling for a batch at the round cap; a bundle carries its rounds); amendment 1 landed 2026-10-11; SC-003 and SC-004 carried to 374
+**Status**: Done 2026-10-11 - amendment 2 landed: spec FAITHFUL (round 2), plan CLEAR (round 3), every task ticked; SC-009 and SC-010 tested; SC-003 and SC-004 carried to 374
 
 **Amendment 2 approved**: the GM, 2026-10-11, "it does seem like a whole batch of pop-ups reaching the round cap at once should get a single ruling. because they are likely to be related. And that does sound like it would be more efficient. And then yes, please also do look at that bundle defect."
 
