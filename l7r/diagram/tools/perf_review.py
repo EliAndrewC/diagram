@@ -3,7 +3,7 @@
     python3 -m l7r.diagram.tools.perf_review explain --why "..." --control <key>   (the session; or --unverified "<reason>")
     python3 -m l7r.diagram.tools.perf_review confirm --verdict consistent --as perf-audit
     python3 -m l7r.diagram.tools.perf_review audit --verdict justified --necessary ... --commensurate ... --no-way-around ... --as perf-audit
-    python3 -m l7r.diagram.tools.perf_review signoff --why "..." --as GM         (a terminal)
+    python3 -m l7r.diagram.tools.perf_review signoff --why "..." --as GM         (a terminal; the round arbiter rules first: arbiter-subject)
     python3 -m l7r.diagram.tools.perf_review check                               (the push)
 
 Every record is ONE FILE in dev/perf-log/ (never a shared log - concurrent clones), BOUND to the
@@ -194,6 +194,27 @@ def binding(v: perf_bands.Verdict) -> str:
     return hashlib.sha256(json.dumps([v.cur["commit"], v.environment, v.measurements], sort_keys=True).encode()).hexdigest()
 
 
+def arbiter_subject(v: perf_bands.Verdict) -> str:
+    """The `make arbiter-ask` subject of this pair's band-3 question, bound to its numbers (feature 379 amendment 3)."""
+    return f"perf-band3-{v.environment}-{binding(v)[:12]}"
+
+
+def arbiter_signed(specs_dir: Path, feature: str, v: perf_bands.Verdict) -> bool:
+    """Has the round arbiter ACCEPTED this pair's band-3 increase (feature 379 amendment 3, the GM 2026-10-10: "yes it covers
+    the band-3 perf signoff too")? Its `accept` on `ask:<arbiter_subject>` in the feature's arbiter.jsonl stands for the GM's
+    sign-off, who reviews it after landing; `continue` (keep optimizing), `process-fault` and a ruling on other numbers do not."""
+    trigger = "ask:" + arbiter_subject(v)
+    for f in sorted(specs_dir.glob(f"{feature_number(feature)}-*/arbiter.jsonl")):
+        for line in f.read_text(encoding="utf-8").splitlines():
+            try:
+                r = json.loads(line)
+            except ValueError:
+                continue
+            if r.get("trigger") == trigger and r.get("ruling") == "accept":
+                return True
+    return False
+
+
 def write(log_dir: Path, feature: str, v: perf_bands.Verdict, kind: str, verdict: str, declared: str, **fields: Any) -> Path:
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     clone = log_dir.resolve().parts[log_dir.resolve().parts.index(".clones") + 1] if ".clones" in log_dir.resolve().parts else "main"
@@ -215,7 +236,7 @@ def write(log_dir: Path, feature: str, v: perf_bands.Verdict, kind: str, verdict
     return path
 
 
-def check(log_dir: Path, feature: str) -> tuple[bool, str]:
+def check(log_dir: Path, feature: str, specs_dir: Path | None = None) -> tuple[bool, str]:
     """Does every environment's newest pair carry the records its band owes? (the push's question)"""
     vs = pairs(log_dir, feature)
     # FR-009: an `-end` with no `-start` on the SAME machine has nothing to regress against - a first
@@ -243,8 +264,8 @@ def check(log_dir: Path, feature: str) -> tuple[bool, str]:
             need.append("a perf-audit confirmation (make perf-confirm VERDICT=consistent AS=perf-audit, by the subagent)")
         if v.band >= 2 and "audit" not in have:
             need.append("the escalated audit (make perf-audit VERDICT=justified NECESSARY=... COMMENSURATE=... NO_WAY_AROUND=... AS=perf-audit)")
-        if v.band >= 3 and "signoff" not in have:
-            need.append("the GM's sign-off (make perf-signoff WHY=..., at a terminal)")
+        if v.band >= 3 and "signoff" not in have and not (specs_dir and arbiter_signed(specs_dir, feature, v)):
+            need.append(f"the round arbiter's ruling first (make perf-arbiter ENV={env}) - or the GM's sign-off at a terminal (make perf-signoff WHY=...)")
         head = f"[{env}] {v.cur['label']} vs {v.base['label']} at {v.cur['commit']}: band {v.band}" + (f" ({'; '.join(v.crossed)})" if v.crossed else "")
         if need:
             ok = False
@@ -260,7 +281,7 @@ def check(log_dir: Path, feature: str) -> tuple[bool, str]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["explain", "confirm", "audit", "signoff", "check", "show", "has-start"])
+    ap.add_argument("command", choices=["explain", "confirm", "audit", "signoff", "check", "show", "has-start", "arbiter-subject"])
     ap.add_argument("--feature", default=os.environ.get("SPECIFY_FEATURE", ""))
     ap.add_argument("--environment", default="local")
     ap.add_argument("--log-dir", default=os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "dev", "perf-log"))
@@ -290,7 +311,7 @@ def main(argv: list[str] | None = None) -> int:
         # FR-017: the in-build bookend guard, asking the SNAPSHOT rather than the filename.
         return 0 if has_start_for_this_machine(log_dir, a.feature) else 1
     if a.command == "check":
-        ok, text = check(log_dir, a.feature)
+        ok, text = check(log_dir, a.feature, Path(a.specs_dir))
         print(text)
         if not ok:
             print(
@@ -308,6 +329,12 @@ def main(argv: list[str] | None = None) -> int:
     v = vs[a.environment]
     if a.command == "show":
         print(perf_bands.render(v))
+        return 0
+    if a.command == "arbiter-subject":  # `make perf-arbiter` (feature 379 amendment 3)
+        if v.band < 3:
+            print(f"perf-review: {a.environment} is band {v.band} - only band 3 goes to the round arbiter", file=sys.stderr)
+            return 2
+        print(arbiter_subject(v))
         return 0
     if a.command == "explain":
         if not a.why.strip():
@@ -339,7 +366,9 @@ def main(argv: list[str] | None = None) -> int:
         is_tty = (a.tty == "yes") if a.tty is not None else sys.stdin.isatty()
         if not is_tty:
             print(
-                "perf-review: REFUSED - the GM's sign-off is given at a terminal, in person (band 3: 'I must personally sign off on this before it is committed back to main'). No terminal is attached.",
+                "perf-review: REFUSED - the GM's own sign-off is given at a terminal, in person, and no terminal is attached. A session "
+                "puts band 3 to the round arbiter first (the GM 2026-10-10: 'yes it covers the band-3 perf signoff too'): "
+                f"make perf-arbiter ENV={a.environment}",
                 file=sys.stderr,
             )
             return 1

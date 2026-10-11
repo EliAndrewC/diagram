@@ -401,3 +401,35 @@ def test_unverified_needs_a_reason_and_not_both_kinds_of_evidence(log: Path, tmp
     assert run(log, "explain", "--why", "cause", "--unverified", "no time to run it", "--specs-dir", str(specs)) == 0
     rec = json.loads(next(log.glob("*-explanation-*.json")).read_text())
     assert rec["unverified"] == "no time to run it" and "control" not in rec
+
+
+def test_band_3_goes_to_the_round_arbiter_first(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 379 amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too"): an arbiter `accept` bound to
+    the pair's numbers stands for the sign-off; `continue`, or an accept on other numbers, does not."""
+    band(log, 25.0)
+    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
+    run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
+    run(log, "audit", "--verdict", "justified", "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit")
+    specs = tmp_path / "specs"
+    (specs / F).mkdir(parents=True)
+
+    def check() -> int:
+        return pr.main(["check", "--feature", F, "--log-dir", str(log), "--specs-dir", str(specs)])
+
+    assert check() == 1 and "make perf-arbiter ENV=local" in capsys.readouterr().out
+    assert run(log, "arbiter-subject") == 0
+    subject = capsys.readouterr().out.strip()
+    assert subject.startswith("perf-band3-local-") and len(subject) == len("perf-band3-local-") + 12
+    arb = specs / F / "arbiter.jsonl"
+    arb.write_text(json.dumps({"trigger": f"ask:{subject}", "ruling": "continue", "why": "keep optimizing"}) + "\n" + "not json\n")
+    assert check() == 1, "continue: keep optimizing"
+    arb.write_text(json.dumps({"trigger": "ask:perf-band3-local-000000000000", "ruling": "accept", "why": "other numbers"}) + "\n")
+    assert check() == 1, "an accept on other numbers is stale"
+    arb.write_text(json.dumps({"trigger": f"ask:{subject}", "ruling": "accept", "why": "a whole tier gained"}) + "\n")
+    assert check() == 0, "the arbiter's accept stands for the sign-off"
+    assert run(log, "signoff", "--why", "ok", "--tty", "no") == 1 and "make perf-arbiter ENV=local" in capsys.readouterr().err
+
+
+def test_only_band_3_goes_to_the_arbiter(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    band(log, 0.5)
+    assert run(log, "arbiter-subject") == 2 and "only band 3" in capsys.readouterr().err

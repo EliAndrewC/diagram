@@ -129,6 +129,19 @@ branch, so a third round past the cap meets only the arbiter path (the refusal n
 entry in `tests/tooling/test_guard_firing_log.py` goes, its suite's waiver cases become a refusal case, and
 `docs/reviews.md`'s sentence names the arbiter. The event log's `waiver` flag stays, reading old transcripts.
 
+## Amendment 3 - the band-3 sign-off to the arbiter (FR-011)
+
+**D16 - A band-3 increase is an `ask` the push reads.** `make perf-arbiter [ENV=]` takes the pair's subject from
+`perf_review.py arbiter-subject` - `perf-band3-<environment>-<first 12 of the pair's binding>`, so the question is bound to
+that commit, environment and those exact percentages - and runs `make arbiter-ask` with it (D13: the trigger recorded and
+the bundle built in one command), writing `perf_review.py show`'s report beside the MANIFEST as `perf-report.txt`. Only a
+band-3 pair has a subject. `perf_review.check` counts an arbiter `accept` on `ask:<that subject>` in the feature's
+`arbiter.jsonl` as the band-3 record (`arbiter_signed`); `continue`, `process-fault` and a ruling on other numbers do not
+(a new pair has a new subject). The GM's terminal `signoff` still counts, and its refusal names `make perf-arbiter`. The
+arbiter's contract states the band-3 standard it rules by. The texts that gave band 3 to the GM alone say the arbiter
+first: the constitution's band table, `dev/performance.md`, `docs/guards.md`, `l7r/diagram/CLAUDE.md`, the `perf-signoff`
+target's help line. `perf_review.py` is engine code under the 100% floor: its tests carry both functions.
+
 ## Tasks
 
 T01 the field, the record, `open_fixes`, the found row retired (D1, D2); T02 the holds (D3) and the two commands (D4, D5);

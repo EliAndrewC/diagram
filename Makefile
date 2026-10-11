@@ -54,7 +54,13 @@ perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=jus
 ##  NO_WAY_AROUND=<text>                              was there no good way around it?
 ##  AS=perf-audit                                     who is recording - only the subagent may pass this
 	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-signoff:   ## [performance] band 3 - the GM, at a terminal   WHY="..."
+# GUARD_EDIT_OK: feature 379 amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too") - band 3 goes to the
+# round arbiter first; its accept, bound to the pair's numbers, stands for the sign-off and the GM reviews it after landing.
+perf-arbiter:   ## [performance] band 3 - put the increase to the round arbiter first (feature 379)   [ENV=local|codebuild]
+	@s="$$($(PERF_REVIEW) arbiter-subject --environment "$(or $(ENV),local)")" || exit 2; \
+	 $(MAKE) --no-print-directory arbiter-ask SUBJECT="$$s" WHY="band 3 on $(or $(ENV),local) for $(SPECIFY_FEATURE): accept this performance increase, or keep optimizing? The perf report is perf-report.txt beside this MANIFEST, the band-1 and band-2 records are in dev/perf-log/, and the band-3 standard is the GM's: necessary, commensurate, no way around it" && \
+	 $(PERF_REVIEW) show --environment "$(or $(ENV),local)" > "/tmp/l7r-check/arbiter-ask-$$s/perf-report.txt"
+perf-signoff:   ## [performance] band 3 - the GM, at a terminal (the round arbiter rules first: make perf-arbiter)   WHY="..."
 ##  WHY=<text>  the GM's own reason, given at a terminal - band 3
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
 perf-review:    ## [performance] does every environment's newest bookend pair carry the records its band owes? (the push runs this)

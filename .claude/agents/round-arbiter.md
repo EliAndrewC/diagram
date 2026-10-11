@@ -61,6 +61,11 @@ previously coming to me"*), so two more kinds of trigger reach you:
   a stuck choice of route: `continue` means go on as the question proposes (for a regression: fix it); `accept` means it
   stands (a waiver); `process-fault` means the process is wrong, its `tooling_fix` named. A question about WHAT the GM wants
   built is not yours: say so in `why` and rule `continue`, with `what` naming it as the GM's question.
+- a BAND-3 PERFORMANCE INCREASE (`ask:perf-band3-<environment>-<binding>`, from `make perf-arbiter`; the GM 2026-10-10: "yes it
+  covers the band-3 perf signoff too"): read `perf-report.txt` beside the MANIFEST and the band-2 audit in `dev/perf-log/`.
+  `accept` lets the increase land - only when it is NECESSARY, COMMENSURATE with what it buys, and has NO GOOD WAY AROUND IT
+  (the band-2 standard, held to its strictest); `continue` means keep optimizing; `process-fault` means the measurement or the
+  process is wrong, its `tooling_fix` named. Your accept is bound to these exact numbers: new numbers need a new ruling.
 
 ## A tooling fix is a field, never prose
 

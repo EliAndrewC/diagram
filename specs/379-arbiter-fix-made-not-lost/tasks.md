@@ -47,3 +47,8 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T11 The text (plan D14) and the retired waiver (plan D15): CLAUDE.md, the constitution, both fidelity agents, `escalation-check.md`, `wakeup-hooks.sh`, `docs/spec-kit-and-reviews.md`, `docs/reviews.md`, `pair-hooks.sh`; tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
       verify: DONE. the text (CLAUDE.md, constitution XIII/XVI, both fidelity agents, escalation-check, wakeup-hooks, spec-kit-and-reviews, reviews, guards) and the retired waiver; make done green (419 s), tooling tests 1591 passed, hooks-test green; report written; landed by the push carrying this tick
+
+## Amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too")
+
+- [ ] T12 Band 3 to the arbiter (plan D16): `perf_review.py` (`arbiter_subject`, `arbiter_signed`, `check`, the refusal), `make perf-arbiter`, the arbiter's contract, the texts; tests red on today's code (SC-007); the gate, the report, landed
+      research: rendering
