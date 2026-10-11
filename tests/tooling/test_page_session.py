@@ -588,3 +588,17 @@ def test_a_session_s_checks_and_rulings_are_its_brief_s_feature(tmp_path: pathli
     assert ha.feature_dir(tmp_path) == tmp_path / "specs/378-x"
     monkeypatch.setenv("L7R_FEATURE_DIRECTORY", "specs/343-receiving-court-swept/")
     assert ha.feature_dir(tmp_path) == tmp_path / "specs/343-receiving-court-swept"
+
+
+def test_a_session_s_end_writes_its_passes_ledger_rows(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """2026-10-11: headless sessions wrote no review-ledger rows; the runner writes them as each session ends."""
+    calls: list[list[str]] = []
+    monkeypatch.setattr(ps.subprocess, "run", lambda cmd, **_kw: calls.append(cmd))
+    ps.ledger_rows(str(tmp_path), {"brief": "b.md", "sid": "s0"})
+    assert calls == [], "no ledger tool in the root: nothing run"
+    (tmp_path / "scripts" / "reviews").mkdir(parents=True)
+    (tmp_path / "scripts" / "reviews" / "ledger_owed.py").write_text("")
+    ps.ledger_rows(str(tmp_path), {"brief": str(tmp_path / "specs" / "368-x" / "briefs" / "m2-check.md"), "sid": "s9"})
+    (cmd,) = calls
+    assert cmd[1].endswith("scripts/reviews/ledger_owed.py") and cmd[cmd.index("--session") + 1] == "s9"
+    assert cmd[cmd.index("--write") + 1] == "specs/368-x/briefs's checks file"
