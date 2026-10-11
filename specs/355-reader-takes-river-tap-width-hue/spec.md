@@ -76,3 +76,11 @@ the brook (the width step too small to show the rank, the saturated hue reversin
 mouth itself is clean (the race leaves the bank). The tool recorded the unit NOT-REVIEWABLE only because this clone's gate was red
 with the change the verdict gates; the verdict's text is the reviewer's. It also noted, pre-existing and not this entry's, that
 research page 0068's drawing note says the brook arrives narrower than the race, where Sawada draws it wider. So FR-001's taper is built.
+
+## Review history
+
+- 2026-10-11, round 1: CHANGES REQUIRED - the taper rested on the author's eye-read, not the sketch's 9x review (now FR-000, a
+  glyph-check first); a stale sentence; request.md garbled. FR-002 and the reopen out of 358 ruled faithful.
+- 2026-10-11, round 2 (spec-fidelity-verify): CHANGES REQUIRED - glyph-check as the 9x judge ruled faithful; SC-001 contradicted
+  FR-000 (now SC-000 and a conditional SC-001); a wrong pointer.
+- 2026-10-11, round 3 (spec-fidelity-verify): FAITHFUL - both items resolved.
