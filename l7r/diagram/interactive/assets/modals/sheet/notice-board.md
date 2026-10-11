@@ -17,8 +17,8 @@ The frames measured at two post towns on the Tokaido stood about 10 to 11 ft hig
 Guesses:
 - That a magistracy kept a freestanding board at its own gate: it joins the Japanese board to the Chinese office's gate
   walls, since no board at a Japanese office was found.
-- Its size, about 7 to 9 ft long and 3 to 4 ft deep: no office's or village's board was measured; the frames measured
-  at two post towns on the Tokaido run 16 to 18 ft.
+- Its size, a frame 16 ft long and 6 ft deep, the size of those measured at two post towns on the Tokaido: no office's or
+  village's board was measured.
 
 Depiction: The plan stands the board just outside the main gate, within a few paces of the gateway, where everyone who
 comes to the court passes it.

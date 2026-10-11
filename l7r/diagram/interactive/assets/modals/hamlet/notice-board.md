@@ -19,7 +19,7 @@ Guesses:
 - That even a hamlet keeps a board of its own: boards are recorded for every village, and a hamlet's is reckoned from the one
   reader a board needs.
 
-Depiction: The map gives every settlement, down to a hamlet, a board on a road or street where passers-by meet it, most often beside its busiest main road or street, its face turned
+Depiction: The map gives every settlement, down to a hamlet, a board on a road or street where passers-by meet it, by default beside its busiest main road or street, its face turned
 broadside to the traffic; where no way is a main one, it stands where the most buildings stand nearby. The title card says
 where this settlement's board stands - its busiest frontage, its entrance, a bridge end or another seat - and which frontage it faces. It is sited weighing
 the passers-by it would meet, as those who set up a real board did. It is drawn as a small roofed frame, its long side along
