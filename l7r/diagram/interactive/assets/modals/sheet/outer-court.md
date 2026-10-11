@@ -9,7 +9,7 @@ governor-general's office planted its front court with dozens of stout junipers.
 hearing court, and around a compound's courts its storehouses and service buildings. A Chinese county office ran its
 courts one after another; at Neixiang a visitor going north from the main gate crossed two rectangular courts in turn.
 
-At Takayama, the one office measured, most of the compound lay open: the floors of all its buildings came to about three-tenths of its site without the plaza in front of the office, and the
+How large the outer court itself was is not recorded. At Takayama, the one office whose buildings are measured, most of the compound lay open: the floors of all its buildings came to about three-tenths of its site without the plaza in front of the office, and the
 plaza itself was about an eighth of the whole designated site, some 15,000 of about 120,000 sq ft. The smallest Japanese office
 known, a branch post of three officials at Joge, stood on a site of about 230 by 90 ft.
 

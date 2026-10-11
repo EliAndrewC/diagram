@@ -4,10 +4,12 @@ was staged: the gate, then open ground a palanquin could cross, then the step of
 
 In Japan it took one of two forms. The nagaya-mon was a gate opened through the middle of a long range of rooms, its design
 fixed by the standing of the house; the surviving ranges of a domain's seat at Kaibara and an intendant's office at Omori
-run about 81 and 108 ft long and 12 to 13 ft deep, and Kaibara's holds a guardroom of eight mats on one side of the gate. The yakuimon was a gate of one bay. Gatekeepers sat in a room of the gate range or, as at Takayama, in a gatehouse of their own, a gabled building of one story; at Matsue a samurai house's gate range housed its gatekeepers and servants. A Chinese county office's gate was a roofed building, three bays wide by law, with
+run about 81 and 108 ft long and 12 to 13 ft deep, and Kaibara's holds a guardroom of eight mats (about 140 sq ft) on one side of the gate. The yakuimon was a gate of one bay. Gatekeepers sat in a room of the gate range or, as at Takayama, in a gatehouse of their own, a gabled building of one story; at Matsue a samurai house's gate range housed its gatekeepers and servants.
+
+A Chinese county office's gate was a roofed building, three bays wide by law, with
 two black-lacquered leaves in each bay, and a Chinese office faced south by regulation.
 
-A registered nagaya-mon opens in its central two ken, about 12 ft, closed by double-leaf board doors, and three registered one-bay gates measure about 6 to 9
+A nagaya-mon opened in its central two ken, about 12 ft, closed by double-leaf board doors, and a one-bay gate was about 6 to 9
 ft across. How wide a Chinese office's gate was is not recorded.
 
 Guesses:

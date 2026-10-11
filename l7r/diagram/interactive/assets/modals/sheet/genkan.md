@@ -4,7 +4,7 @@ entrance with a shikidai, the low board step where guests were bowed in and seen
 
 A guest of rank came by palanquin, and the palanquin was brought right alongside the step, so that its rider went into the
 building without setting foot on the ground. So an arrival was staged: the gate, then open ground a palanquin could cross, then
-the step. On a drawing of 1869, the office at Jōge has its entrance with its step facing the open ground inside its main
+the step. At the branch office at Jōge, the entrance and its step faced the open ground inside its main
 gate. Where an intendant's office and residence shared a compound, at Takayama, the genkan was on the office, and a visitor today goes in by it and round
 the rooms of the office on to the residence; whether that way ran indoors in the Edo period is not recorded.
 

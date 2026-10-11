@@ -12,8 +12,8 @@ house's walls and roof were made of is not recorded. The formal garden lay south
 crossed open ground inside the gate to the genkan, the formal entrance.
 
 A 150-koku district magistrate's house at Matsushiro had about 1,740 sq ft on grounds of about 0.8 acre; a
-thousand-koku samurai's house at Hagi ran about 1,470 to 2,630 sq ft, by two measures that disagree. Takayama's restored
-residence, for an intendant over a whole province, is about 6,400 sq ft. Its servants lived in, with rooms of their own in the house; a samurai household had to keep as many as its koku required, and how many lived in this one is not recorded.
+thousand-koku samurai's house at Hagi ran somewhere between about 1,470 and 2,630 sq ft. Takayama's restored
+residence, for an intendant over a whole province, is about 6,400 sq ft. A samurai household's servants lived in, with rooms of their own in the house, and it had to keep as many as its koku required; how many lived in a magistrate's house, family or servants, is not recorded.
 
 Guesses:
 - That any servants' range stood on the shady ground behind the

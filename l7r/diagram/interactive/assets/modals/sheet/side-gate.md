@@ -1,5 +1,5 @@
 About: A walled compound could have lesser gates beside its main one: even a magistrate's
-branch office of three officials, at the end of the shogunate, had a small gate beside its main gate. The formal entrance
+branch office of three officials, at the end of the shogunate, had a small gate beside its main gate. Inside the wall, the house's own doors were divided by who used them: the formal entrance
 was kept for the head of the household and honored guests, the family came and went by an inner entrance, and the
 kitchen had its own door from outside, the katteguchi.
 

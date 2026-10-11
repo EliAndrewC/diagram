@@ -4,14 +4,14 @@ the office in front, where the magistrate tried cases and held ceremonies, and t
 
 A Japanese samurai house could have one too. At a middle-rank retainer's house at Shiroishi, which had no formal entrance
 with a step for guests, a guest passed through a middle gate in the wall and along a walled garden path straight to the
-veranda of the principal room, while the path from the outer gate led on to the kitchen entrance, which served as the house's front entrance. An intendant's office had one as well: a middle gate survives at Takayama, the one such office still standing, though where it stood among the office's buildings is not recorded.
+veranda of the principal room. The path from the outer gate led on to the kitchen entrance, which served as the house's front entrance. An intendant's office had one as well: a middle gate survives at Takayama, the one such office still standing, though where it stood among the office's buildings is not recorded.
 
 How wide such a gate was and how it was built are not recorded.
 
 Guesses:
 - That the gate was guarded: no account says so.
 - Its width, about 6 to 8 ft between its posts: no gate between a compound's courts is measured.
-- Its place in the dividing wall behind the office hall: no account places a middle gate relative to an office hall; the one middle gate whose place is given led from a retainer's street gate to the veranda of the principal room.
+- Its place in the dividing wall behind the office hall: a Chinese yamen set its residence gate there, but where the middle gate of a Japanese intendant's office stood is not recorded; the one Japanese middle gate whose place is given led from a retainer's street gate to the veranda of the principal room.
 
 Depiction: The plan draws the gate as a pair of posts in the wall between the outer and inner courts. Every plan sets the office in front and the residence behind, the Chinese order, as a simplification: at the one Japanese intendant's office still standing, the residence stood beside the office, not behind it.
 
