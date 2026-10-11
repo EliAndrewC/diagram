@@ -152,12 +152,10 @@ def subject_files(root: Path, subject: str) -> list[str]:
     if subject.startswith("q:"):
         return sorted(str(p.relative_to(root)) for p in (root / "research" / "questions").glob(f"{subject[2:]}-*"))
     if subject.startswith("modal:"):
-        own = [f"l7r/diagram/interactive/assets/modals/{subject[6:]}.md"]
-        sys.path.insert(0, str((HERE / "../record").resolve()))
-        import modal_owed as mo  # noqa: PLC0415
-
-        m = mo.find(root, subject[6:]) if (root / own[0]).is_file() else None
-        return own + ([f for f in dict.fromkeys([*m.entry_files(), *m.drawing_files()]) if (root / f).is_file()] if m else [])
+        own = f"l7r/diagram/interactive/assets/modals/{subject[6:]}.md"
+        text = (root / own).read_text(encoding="utf-8") if (root / own).is_file() else ""
+        linked = re.findall(r"research/questions/[^\s,;]+?\.html", "\n".join(re.findall(r"^(?:Entry|Drawing):(.*)$", text, re.M)))
+        return [own, *(f for f in dict.fromkeys(linked) if (root / f).is_file())]
     return []
 
 
