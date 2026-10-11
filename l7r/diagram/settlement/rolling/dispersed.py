@@ -29,7 +29,7 @@ yard drying strip width - UNRESEARCHED: a 22 px strip south of the yard, a width
 # A physical necessity; the width is a GUESS - no old page gives an opening's width, and the old entrances found stood on
 # a grove's open side, which a ring does not have (research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html).
 WAY_IN_FT = 36.0
-"""Research: way in through a ring - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one 36 ft break at the front's middle"""
+"""Research: way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one 36 ft break at the front's middle"""
 # THE LANE'S ROOM BETWEEN TWO FARMS' GROVES: a farm's frame is padded by half of it on every side, so two neighbors' groves
 # stand at least this far apart. Unpadded, the frames packed 2-3 ft apart (16 of seed 12's 17 farms) and the neighbors'
 # bands walled off every front, so the web could reach no door. `MIN_WEB_GAP` (hamletgen/consts.py, 18 ft: both
@@ -38,7 +38,7 @@ WAY_IN_FT = 36.0
 # stranded at least eight farms (the trace listed eight before it was cut), at 32 none. A physical necessity at a
 # GUESSED width - no page gives the gap between two groves.
 LANE_ROOM_FT = 32.0
-"""Research: lane room between groves - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: neighbors' groves at least 32 ft apart"""
+"""Research: lane room between groves - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: neighbors' groves at least 32 ft apart"""
 # THE SERVICE STRIP BEHIND THE HOUSE AND OFF ITS WINDWARD END: the windward stand stands this far off the back wall and
 # the west end wall (`canonical_farmstead`), so a wood shed (24 x 12 ft,
 # `FIXTURE_FT`) fits a step (`_WOODSHED_STEP_FT`, 6 ft) off it with a wall gap to spare. Hard against the wall, the stand
@@ -99,6 +99,7 @@ def canonical_farmstead(
         service strip - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand `back` (`SERVICE_STRIP_FT`, 24 ft) off the back and windward end walls, sized to seat a wood shed
         deep bands off the works - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the west and north bands `gap` + `back` off the westmost and northmost house, yard, bed or well; where that ground lies in a plot's 50 ft reach (0038) its crowns are culled where the band is drawn (`groves.py`, `_sun_keepouts`), so the band's GROUND may lie there and its trees never do
         way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one `way_in` (`WAY_IN_FT`, 36 ft) break at the front band's middle, sized so a lane can be routed through
+        wellhead off the house's front wall - UNRESEARCHED: a well pocket beside a shallow yard moved down until its wellhead stands `gap` / 3 (1 ft) clear of the house's front wall
         well pocket in the dooryard - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside the yard on its west, off the way in (where on the lot is a GUESS)
     """
     gw, gh = garden
@@ -197,7 +198,7 @@ def dispersed_layout(
     Research:
         homestead turned to the map's wind - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the canonical northwest frame carried by a symmetry of the square
         garden beside the yard when turned - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: so it never stands on the house's north or west wall
-        frame padded for a lane - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: half `LANE_ROOM_FT` on every side
+        frame padded for a lane - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: half `LANE_ROOM_FT` on every side
     """
     moved = turn != (1, 0, 0, 1)
     cw, ch = (hh, hw) if turns_axes(turn) else (hw, hh)

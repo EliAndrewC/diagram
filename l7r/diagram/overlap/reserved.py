@@ -136,7 +136,7 @@ class Reservations:
 
         Research:
             access corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way kept clear, but its own parts - every one placed before the ways are reserved (feature 320), and its way laid round them
-            wood seats - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a reserved copse seat kept off occupied ground and a lane's buffer
+            wood seats - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: a reserved copse seat kept off occupied ground and a lane's buffer - in every account of a farmhouse grove found, the way runs outside the grove or through a gap in it to the house
         """
         if not self:
             return []

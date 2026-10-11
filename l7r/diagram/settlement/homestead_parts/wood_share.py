@@ -253,7 +253,7 @@ class WoodShares:
                 `west_sun_lane` west and southwest of each yard and bed, as the copse plants it; none where it declares none
             copse clump size - UNRESEARCHED: `COPSE_CLUMP_BS`, 22 bscale units, the copse's clump
             copse seat pitch - UNRESEARCHED: `SEAT_PITCH_BS`, the clump radius times the square root of two, so the reserved crowns cover every point of a cell
-            seat off a lane - UNRESEARCHED: the corridor's half plus the copse's lane buffer
+            seat off a lane - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the corridor's half plus the copse's lane buffer; no page read gives how far a way kept off a farmhouse's grove
         """
         self.clump = COPSE_CLUMP_BS * s.bscale
         self.cr = round(self.clump / 2.0, 1)  # the radius the planted copse records and `wood_canopy` counts at
@@ -331,6 +331,7 @@ class WoodShares:
         Research:
             each household's floor reserved - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
                 crowns covering the floor on ground no other household holds, or the seat refused
+            seats behind the house - UNRESEARCHED: taken nearest a point `FOCUS_DEPTH` (0.7) of the reach behind the house
         """
         hx, hy = float(geom["house"][0]), float(geom["house"][1])
         th = math.radians(rot)

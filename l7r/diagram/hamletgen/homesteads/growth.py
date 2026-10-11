@@ -110,7 +110,7 @@ def footprint(s: Settlement, rec: dict[str, Any]) -> Reach:
 
     Research:
         sun owed to the south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` and 2 ft south of the yard and each bed
-        the household's wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: its reserved copse seats inside its footprint
+        the household's wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: its reserved copse seats inside its footprint, beside its house, so no lane comes between them - in every account found the way runs outside the grove or through a gap in it to the house
     """
     g = rec.get("geom") or {}
     hx, hy = float(rec["x"]), float(rec["y"])

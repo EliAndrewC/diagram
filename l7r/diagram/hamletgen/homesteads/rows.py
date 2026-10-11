@@ -269,7 +269,9 @@ def door_clear(frame: tuple[float, float, float, float], front: Sequence[float],
     """Is a frame's front door - the middle of its FRONT edge, less its lane pad, `FOOTPATH_DOOR_OUT_FT` out - at least `room`
     off the hard ground? The front is the page face the farm's grove leaves open, where its way in is.
 
-    Research: way in at the open front - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the door on the lee face the grove leaves open
+    Research:
+        way in at the open front - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the door on the lee face the grove leaves open
+        door point out past the front - UNRESEARCHED: set `FOOTPATH_DOOR_OUT_FT` (12 ft) past the frame's front edge, where `front_door` uses 8 ft
     """
     if hard is None:
         return True

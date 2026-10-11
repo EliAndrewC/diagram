@@ -85,7 +85,7 @@ class SeatRegion:
         """Paint what has come to stand since the last call - the tree's new corridors, newly seated homesteads and the wood
         seats their households reserved - and drop the reachable raster, recomputed on its next read.
 
-        Research: reserved wood seats bar lane ground - UNRESEARCHED: a household's reserved wood seats are no ground its way runs on
+        Research: reserved wood seats bar lane ground - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a household's reserved wood seats are no ground its way runs on; no page read shows a way through a household's grove
         """
         s = self.s
         tree = getattr(s, "_access", None)
