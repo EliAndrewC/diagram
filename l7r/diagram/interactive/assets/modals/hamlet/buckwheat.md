@@ -26,9 +26,9 @@ Guesses:
 Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
 paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
 fan's dry middle is left to scrub and the plots keep to its toe. No grain plot is drawn beside a house: the plot a
-household worked there was most likely its kitchen bed. A row village whose farms line both sides of its street is the exception: each farm across the street from the paddy has its holding drawn behind it as a strip of dry field, and the title card says whether this settlement is one. Every plot is furrowed, and neighboring plots form a tract whose rows run
-one way, each tract turned well apart from the next so the strips can be told apart. Buckwheat is drawn pale with reddish
-stems, the color of the ripe crop rather than of the map's season; in high summer, the season of the paddies, a field might be in flower or still bare ground
+household worked there was most likely its kitchen bed. A row village whose farms line both sides of its street is the exception: each farm across the street from the paddy has its holding drawn behind it as a strip of dry field, cut across into plots all of one crop, the cuts standing for nothing on the ground, and the title card says whether this settlement is one. Every plot is furrowed, and neighboring plots form a tract whose rows run
+one way, each tract turned well apart from the next so the strips can be told apart. Buckwheat is drawn a pale tan, the color of the ripe crop, which stood pale on reddish
+stems, rather than of the map's season; in high summer, the season of the paddies, a field might be in flower or still bare ground
 awaiting its autumn sowing. Each plot is outlined in a thin tan-brown line, drawn wider than a field's edge so the plots read: a real field's edge was only where its crop stopped, and the line between two plots stands for no path or balk.
 
 [winter_crop=none] This settlement's paddies lie bare over the winter, so where its field lies at the toe of a fan whose

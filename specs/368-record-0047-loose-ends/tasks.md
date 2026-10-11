@@ -28,3 +28,6 @@ The quotation edits are `research: physical` with their five boxes; the rest are
 - [ ] T05 Close: the tooling tests green; report; landed
       research: rendering
       verify: the push accepted
+- [ ] GM review (make gm-reviewed F=368) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
