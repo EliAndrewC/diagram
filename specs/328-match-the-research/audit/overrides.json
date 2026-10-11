@@ -2093,7 +2093,9 @@
     "tier": "E4"
   },
   "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width": {
-    "after": [],
+    "after": [
+      "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width against the ladder"
+    ],
     "files": [
       "l7r/diagram/settlement/fields/comb.py"
     ],

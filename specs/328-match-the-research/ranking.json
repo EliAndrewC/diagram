@@ -6467,22 +6467,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "comb.py:651: width=7 -> width=self.px(7.0) (0059/0068: a brook about 7 ft wide), and drop \"in px rather than feet\" from the claim at comb.py:630",
-  "files": [
-   "l7r/diagram/settlement/fields/comb.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 9 re-check (tiered by its work at T38a)",
-  "tier_as_ranked": "E1",
-  "moved": "T38a: tiered by its work - One literal becomes a scaled value; logic unchanged.",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder width",
   "tier": "E1",
   "fix": "pond feeder from width=6 to ~3 ft (twice the 1.5 ft floor), converted per map",
@@ -15501,6 +15485,24 @@
   "flag": "",
   "found": "wave 10 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "comb.py:651: width=7 -> width=self.px(7.0) (0059/0068: a brook about 7 ft wide), and drop \"in px rather than feet\" from the claim at comb.py:630",
+  "files": [
+   "l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [
+   "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width against the ladder"
+  ],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E1",
+  "moved": "T38a: tiered by its work - One literal becomes a scaled value; logic unchanged.",
   "wave": "",
   "scope": "kept"
  },
