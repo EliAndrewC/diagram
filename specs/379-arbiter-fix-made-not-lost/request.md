@@ -22,3 +22,12 @@ tooling (`scripts/`, `tests/`, the agent instruction files) land on its own in t
 checks, added to 379 rather than filed as a new feature. The GM:
 
 > yes please
+
+## Amendment 2 (2026-10-10, same session)
+
+The hourly check asked whether a code unit's impl-drift rounds should go to the round arbiter like the record checks'.
+The GM:
+
+> I mean, the rule should basically be that things should go to the arbiter at the point where they were previously coming to me. So if there is something that currently in the process gets escalated to be prior to going to the arbiter, then we should change that so that it goes to the arbiter first.
+
+(Dictated: "escalated to be prior to going to the arbiter" reads as "escalated to me prior to going to the arbiter".)

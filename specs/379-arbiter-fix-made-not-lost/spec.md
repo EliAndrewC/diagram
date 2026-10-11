@@ -2,9 +2,11 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-10 - amendment 1 landed: spec FAITHFUL (amendment round 3), plan CLEAR, every task ticked; tests/hooks/test-land-tooling.sh 17/17, tooling tests 1582 passed
+**Status**: In progress - amendment 2 (the arbiter before the GM); amendments up to 1 landed 2026-10-10
 
 **Amendment 1 approved**: the GM, 2026-10-10, "yes please"
+
+**Amendment 2 approved**: the GM, 2026-10-10, "we should change that so that it goes to the arbiter first"
 
 **Affects**: review process, tooling
 
@@ -53,6 +55,26 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
   main as it is in the clone, naming the landing command: a fix made but held in one clone leaves every other session on
   the misfire it mends.
 
+### Amendment 2 - the arbiter before the GM (`request.md`, Amendment 2)
+
+The rule: wherever the PROCESS stops and comes to the GM, it goes to the round arbiter first - its ruling binds, and the GM
+reviews it after landing, as feature 375's round caps already do. An inventory of the process (2026-10-10) found three such
+points still coming to the GM; the rest already go to the arbiter, or are not the process stopping but decisions the GM
+owns (approving a new feature, signing off a band-3 slowdown, a content question the record cannot answer) or actions only
+the GM can take (renaming a session), which this amendment leaves as they are.
+
+- **FR-007 The spec review's round cap goes to the arbiter.** A spec review's sixth round on one feature (five rounds, the
+  counter reset when a spec is accepted or amended - the GM's 2026-09-12 ruling) is held until the round arbiter rules, as
+  a review check's third round is; each `continue` allows one more round. The cap is one number in every place that states
+  it: five (today CLAUDE.md says five, the constitution three, `review-gate.sh` two).
+- **FR-008 The regression exit goes to the arbiter.** A regression the session cannot fix or revert, which today waits on "an
+  explicit GM waiver", goes to the round arbiter, whose ruling (`continue`: fix it; `accept`: it stands, waived) is
+  recorded and reviewed by the GM after landing.
+- **FR-009 Any other process stop goes to the arbiter first.** A session about to stop and ask the GM how the process
+  should go - a cap, a waiver, a stuck choice between process routes - asks the round arbiter first, through one command
+  that records the question as a trigger and builds its bundle; the GM sees the ruling in the review after landing. A
+  question about what the GM wants built, or a decision the GM owns (above), still goes to the GM.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-003, FR-004) Replaying 2026-10-10's research-session ruling: the recorded `tooling_fix` is an
@@ -64,6 +86,11 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
   clean; a change naming a non-tooling path is refused, and so is one that does not apply cleanly onto main; and a landed
   test that fails without work still held in the clone is refused, with main unchanged.
 - **SC-004** (FR-006) `make arbiter-fix-done` refuses while the fix's test is not on main, and passes once it is.
+- **SC-005** (FR-007) A spec review's sixth round on one feature is refused naming `make arbiter-bundle`, spending nothing; a
+  `continue` ruling lets exactly one more round through; a round after an accepted spec counts from one again. The test
+  fails on today's code. Every place that states the cap says five.
+- **SC-006** (FR-008, FR-009) The question command records a trigger the arbiter can rule on, its ruling lands on the GM's
+  review, and the docs that sent a regression waiver or a process question to the GM send it to the arbiter first.
 
 ## Review history
 
