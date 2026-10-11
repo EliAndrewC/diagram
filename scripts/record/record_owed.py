@@ -17,7 +17,8 @@ THE ANSWER RECORD (plan D6). `--answer CHECK` writes, per unit, `<git common dir
 fingerprint; the unit is answered while its fingerprint now equals the recorded one. From a bundle (`--bundle DIR`: the
 fingerprints the bundle recorded when it was built, i.e. what the check read) or from the tree now (`--q`, `--notes`, `--key`,
 `--kind`: `source-reader`, which reads before the note exists, and fixes that apply the check's own findings). In the clone
-that pushes, as the review records are.
+that pushes, as the review records are. A round's own EDIT blocks applied verbatim by `make apply-edits` SETTLE with that
+round's answer instead of owing the unit again (`settle`; feature 335's round arbiter, 2026-10-11).
 
     record_owed.py [--root DIR] [--q NNNN] [--unanswered] [--slugs]   the owed units, with the command that answers each
     record_owed.py --between A B                                       a historical commit pair
@@ -181,11 +182,64 @@ def write_answer(store_dir: pathlib.Path, slug: str, fp: str, result: str, pages
     """Record an answer. Every fingerprint ever answered is kept: an answer is about WORDS, so content reverted to words a
     check already passed stays answered (an edit answered and then undone owed its unit again when only the last was kept)."""
     store_dir.mkdir(parents=True, exist_ok=True)
-    seen = [f for f in _read(store_dir, slug).get("answered", []) if f != fp] + [fp]
+    old = _read(store_dir, slug)
+    seen = [f for f in old.get("answered", []) if f != fp] + [fp]
+    settles = dict(old.get("settles", {}))
+    if fp in settles:  # the round's own EDITs were applied before this answer was recorded: they settle with it (see settle)
+        seen.append(settles.pop(fp))
     rec = {"unit": slug, "fingerprint": fp, "answered": seen, "result": result, "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     if pages:  # feature 375 (plan D1): the pages this answer's check read, as blobs - what a later triage diffs against
         rec["pages"] = pages
+    if settles:
+        rec["settles"] = settles
     _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
+
+
+#: what an answer settled by its round's own EDIT blocks records as its result
+SETTLED = "settled - only its round's own EDIT blocks were applied, verbatim, since it was answered (make apply-edits)"
+
+
+def settle(store_dir: pathlib.Path, slug: str, before: str, after: str) -> str:
+    """A unit whose content moved from `before` to `after` by NOTHING but its last round's own EDIT blocks, applied verbatim
+    by `make apply-edits`, is not owed that check again (feature 335's round arbiter, 2026-10-11, rulings
+    `round:record-format|q:0104@3` and `ask:f335-garden-modal-depiction`: applying a round's own words re-owed the unit, the
+    next round found nothing new, and the round cap fired on a loop of the tooling's making).
+
+    Order-independent: if `before` is already answered, `after` is answered now ("answered"); if not (the reply applied
+    before `make record-checked` records it - a frozen page's own order), `{before: after}` is kept pending and
+    `write_answer` adds `after` when it records `before` ("pending"). Narrow: it fires only where `before` is EXACTLY the
+    content the round answered, so any other change since that round - a hand edit, another reply - still owes the unit."""
+    if not before or not after or before == after:
+        return ""
+    rec = _read(store_dir, slug)
+    if answered(store_dir, slug, before):
+        if after not in rec.get("answered", []):
+            # the round's own counts are kept beside the note: a reader of `result` still sees what the check returned
+            write_answer(store_dir, slug, after, f"{SETTLED}; was: {rec.get('result', '')}", rec.get("pages"))
+        return "answered"
+    store_dir.mkdir(parents=True, exist_ok=True)
+    rec.setdefault("unit", slug)
+    rec["settles"] = {**rec.get("settles", {}), before: after}
+    _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
+    return "pending"
+
+
+#: a reply's counts line names its agent; modal-research answers three units
+_AGENT_CHECKS = {"modal-research": ("modal-accuracy", "modal-references", "modal-gaps")}
+
+
+def reply_checks(reply: str) -> tuple[str, ...]:
+    """The checks whose units a reply answers, from its FIRST line (`record-format: 33 of 33 ...`), else ()."""
+    first = next((ln.strip() for ln in reply.splitlines() if ln.strip()), "")
+    m = re.match(r"`?([a-z]+(?:-[a-z]+)+):", first)
+    if not m:
+        return ()
+    return _AGENT_CHECKS.get(m.group(1), (m.group(1),))
+
+
+def fingerprints(root: pathlib.Path, checks: Sequence[str]) -> dict[str, str]:
+    """{slug: fingerprint} of every owed unit of `checks` in the working tree now."""
+    return {u.slug: u.fingerprint for u in units(root) if u.check in checks}
 
 
 def answered(store_dir: pathlib.Path, slug: str, fp: str) -> bool:

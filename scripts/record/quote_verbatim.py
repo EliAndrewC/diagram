@@ -101,10 +101,19 @@ class _Visible(HTMLParser):
             self.out.append(data)
 
 
+#: CJK punctuation, kana, the ideographs (with their compatibility forms) and the fullwidth forms - script written without spaces
+_CJK = "　-〿぀-ヿ㐀-䶿一-鿿豈-﫿＀-￯"
+_CJK_GAP = re.compile(f"(?<=[{_CJK}]) (?=[{_CJK}])")
+
+
 def squeeze(text: str) -> str:
     # NFC: a CJK compatibility ideograph (a page's 社 written as U+FA4C) is canonically the same character as the
     # unified one a quote carries, so it is not a difference (feature 268, three Sano quotes flagged NOT-ON-PAGE).
-    return unicodedata.normalize("NFC", re.sub(r"\s+", " ", text)).strip()
+    # A space between two CJK characters is a LINE BREAK, never a word gap - Japanese and Chinese are written without
+    # spaces - so it is taken out on both sides: an archived PDF's text breaks its lines mid-sentence, and a quote spanning
+    # one (adachi-matsue-bukeyashiki#2, broken after 「あると」) was left NOT-CHECKED and redone by hand each round (feature
+    # 335's round arbiter, 2026-10-11, `round:quote-check|q:0104@3`). A space between Latin words stays a difference.
+    return _CJK_GAP.sub("", unicodedata.normalize("NFC", re.sub(r"\s+", " ", text)).strip())
 
 
 def visible_text(markup: str) -> str:

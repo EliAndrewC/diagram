@@ -23,6 +23,14 @@ meant - and only under the record (`research/`) or a modal's class file (`intera
 it by hand. A glossary term already on file is skipped. `--skip 2,5` leaves those blocks alone (the session
 disagrees with them); `--dry-run` reports without writing. The input is the agent's reply saved as text, or its
 transcript (`.jsonl`, or the `.output` link the dispatch names), whose last reply is read.
+
+THE ROUND SETTLES (feature 335's round arbiter, 2026-10-11, rulings `round:record-format|q:0104@3` and
+`ask:f335-garden-modal-depiction`). Applying a round's own blocks used to re-owe the unit it answered - its words had moved -
+so the next round read the check's own words back, found nothing new, and the round cap fired on a loop the tooling made. Now
+the owed units of the reply's check (its counts line names it) are fingerprinted before and after the blocks go in, and a
+unit whose content moved by them alone settles with its round's answer (`record_owed.settle`: at once when the answer is
+recorded at the content before them, else when `make record-checked` records it). A record-format unit whose prepass now
+raises a word the round never ruled on stays owed, and so does any unit changed in any other way.
 """
 
 from __future__ import annotations
@@ -174,6 +182,100 @@ def _reserve():  # noqa: ANN202
     return mod
 
 
+def _sibling(name: str):  # noqa: ANN202
+    """A record script beside this one, imported flat (`record_owed`, `record_prepass`)."""
+    import importlib  # noqa: PLC0415
+
+    here = str(pathlib.Path(__file__).resolve().parent)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    return importlib.import_module(name)
+
+
+_QUESTION = re.compile(r"(?:^|/)research/questions/(\d{4})-[^/]*\.html$")
+
+
+def touched_questions(found: list[dict]) -> set[str]:
+    """The question numbers whose files the report's EDIT blocks name."""
+    return {m.group(1) for b in found if b["kind"] == "edit" and (m := _QUESTION.search(b["path"]))}
+
+
+def prepass_words(root: pathlib.Path, q: str) -> set[str]:
+    """Every word `make record-prepass` hands record-format to rule on for question `q` (its candidate lines and its rare
+    words), over the question's pages as they stand now. The prepass memoizes the corpus; it is cleared so that words the
+    edit just wrote are counted."""
+    rp = _sibling("record_prepass")
+    for f in vars(rp).values():
+        if callable(getattr(f, "cache_clear", None)):
+            f.cache_clear()
+    qdir = root / RECORD / "questions"
+    pages = [p for p in sorted(qdir.glob(f"{q}-*.html")) if not p.name.endswith((".notes.html", ".originals.html"))]
+    gloss = root / rp.GLOSSARY
+    glossary = json.loads(gloss.read_text(encoding="utf-8")) if gloss.is_file() else {}
+    listing = rp.prepass("\n".join(p.read_text(encoding="utf-8") for p in pages), glossary, str(root / rp.RESEARCH))
+    return {i["match"] for s in listing for i in s["items"]} | {w for s in listing for w, _n in s["rare"]}
+
+
+def is_repo(root: pathlib.Path) -> bool:
+    """`root` is a clone's top level - where the record checks' units and answers are (a bare record tree has none)."""
+    import subprocess  # noqa: PLC0415
+
+    p = subprocess.run(["git", "-C", str(root), "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=False)
+    return p.returncode == 0 and pathlib.Path(p.stdout.strip()).resolve() == root.resolve()
+
+
+class Round:
+    """What `settle` needs from BEFORE the blocks are applied: the owed fingerprints of the reply's own checks, and for a
+    record-format reply the prepass words of each question it edits (feature 335's round arbiter, 2026-10-11)."""
+
+    def __init__(self, root: pathlib.Path, report: str, found: list[dict]) -> None:
+        self.root, self.ro = root, _sibling("record_owed")
+        self.checks = self.ro.reply_checks(report)
+        self.before = self.ro.fingerprints(root, self.checks) if self.checks else {}
+        rf = "record-format" in self.checks
+        self.words = {q: prepass_words(root, q) for q in touched_questions(found)} if rf else {}
+
+    def settle(self) -> list[str]:
+        """Each owed unit of the reply's checks whose content moved by this run's blocks alone: answered where the round's
+        answer already stands at the content before them, pending where it is not recorded yet; a record-format unit whose
+        prepass now raises a word the round never ruled on stays owed. Any unit changed some other way stays owed."""
+        out = []
+        after = self.ro.fingerprints(self.root, self.checks) if self.checks else {}
+        store = self.ro.store(self.root)
+        for slug, fp in sorted(after.items()):
+            before = self.before.get(slug, "")
+            if not before or before == fp:
+                continue
+            q = slug.split(":", 1)[1]
+            if slug.startswith("record-format:") and q in self.words and (new := sorted(prepass_words(self.root, q) - self.words[q])):
+                out.append(f"  {slug}: still owed - its prepass now raises {', '.join(new[:8])}, which the round never ruled on")
+                continue
+            said = self.ro.settle(store, slug, before, fp)
+            out.append(f"  {slug}: {'settled with its answered round' if said == 'answered' else 'settles when `make record-checked` records this round'}")
+        return out
+
+
+def settle_round(root: pathlib.Path, report: str, found: list[dict], apply) -> int:  # noqa: ANN001
+    """Run `apply` (the blocks, written) inside the settling: fingerprints before, then after (feature 335's round arbiter).
+    The settling never stops the edits: a failure is reported, and the round is answered as before."""
+    rnd = None
+    if is_repo(root):
+        try:
+            rnd = Round(root, report, found)
+        except Exception as e:  # noqa: BLE001 - the edits go in regardless; the unit stays owed, as it did before this
+            print(f"apply-edits: could not read the round's units ({type(e).__name__}: {e}) - its units stay owed")
+    applied = apply()
+    if rnd is not None and rnd.checks and applied:
+        try:
+            lines = rnd.settle()
+        except Exception as e:  # noqa: BLE001
+            lines = [f"  could not settle ({type(e).__name__}: {e}) - its units stay owed"]
+        if lines:
+            print(f"apply-edits: the {'/'.join(rnd.checks)} round's own EDITs, applied verbatim:")
+            print("\n".join(lines))
+    return applied
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("report", help="the agent's reply saved as text, or its transcript (.jsonl / .output)")
@@ -190,14 +292,26 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     skip = {int(s) for s in args.skip.split(",") if s.strip()}
     refused = terms = 0
-    for b in found:
-        if b["n"] in skip:
-            print(f"  {b['n']}. skipped (--skip)")
-            continue
-        said = apply_edit(root, b, args.dry_run, form) if b["kind"] == "edit" else apply_term(root, b, args.dry_run)
-        refused += said.startswith("REFUSED")
-        terms += said.startswith("added")
-        print(f"  {b['n']}. {said}   ({b.get('path') or 'GLOSSARY ' + b['term']})")
+
+    def apply() -> int:
+        nonlocal refused, terms
+        edited = 0
+        for b in found:
+            if b["n"] in skip:
+                print(f"  {b['n']}. skipped (--skip)")
+                continue
+            said = apply_edit(root, b, args.dry_run, form) if b["kind"] == "edit" else apply_term(root, b, args.dry_run)
+            refused += said.startswith("REFUSED")
+            terms += said.startswith("added")
+            edited += said.startswith("applied")
+            print(f"  {b['n']}. {said}   ({b.get('path') or 'GLOSSARY ' + b['term']})")
+        return edited
+
+    # a dry run writes nothing, so it settles nothing; a reply with no EDIT block changes no unit's words
+    if args.dry_run or not any(b["kind"] == "edit" for b in found):
+        apply()
+    else:
+        settle_round(root, report, found, apply)
     tail = " - then `make glossary`" if terms else ""
     print(f"apply-edits: {len(found)} block(s), {refused} refused{' (dry run, nothing written)' if args.dry_run else ''}{tail}")
     return 1 if refused else 0
