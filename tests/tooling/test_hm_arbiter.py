@@ -138,6 +138,22 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
     assert ha.main(["bogus"]) == 2
 
 
+def test_a_feature_with_no_event_log_bundles_an_empty_cascade(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    # 368's check session, 2026-10-10: a reversal tripwire on a feature whose sessions had logged nothing crashed the bundle
+    import subprocess
+
+    root = tmp_path / "c"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/368-x"}')
+    (root / "specs" / "368-x").mkdir(parents=True)
+    monkeypatch.setenv("L7R_EVENTS_DIR", str(tmp_path / "no-events"))
+    manifest = ab.bundle(root, "red-gate", tmp_path / "out").read_text()
+    assert "the feature's last 0 edits and dispatches" in manifest
+    assert (tmp_path / "out" / "cascade.txt").read_text() == "\n"
+
+
 def test_the_cascade_wire_stays_live_after_any_ruling(tmp_path: pathlib.Path) -> None:
     """The plan review of amendment 1: after a ruling the id advances and the count restarts from the dispatches then - an
     `accept` does not switch the wire off, and a `continue` allows a round's worth of checks, not a threshold's."""

@@ -105,7 +105,9 @@ def bundle(root: Path, trigger: str, out: Path) -> Path:
             diff = _git(root, "log", "-p", "--format=--- %h %ad %s", "--date=iso", "-20", "--", *files) + _git(root, "diff", "--", *files)
             (out / "edits.diff").write_text(diff or "(no edits)\n", encoding="utf-8")
             parts.append(f"## Edits between rounds\n\n`edits.diff` beside this file: the last 20 commits touching {', '.join(files)}, then the working tree.\n")
-    events = list(el.read_jsonl(el.log_path(root, d.name if d else ""))) if d else []
+    # a feature whose sessions logged nothing yet has no log file: no events, not a crash (368's check session, 2026-10-10)
+    log = el.log_path(root, d.name) if d else None
+    events = list(el.read_jsonl(log)) if log and log.is_file() else []
     flow = [f"{e['t'][11:19]} {e.get('tool')} {e.get('path') or e.get('agent') or e.get('make') or ''}"
             for e in events if e.get("ev") == "PreToolUse" and (e.get("cat") == "edit" or e.get("tool") == "Agent")]
     (out / "cascade.txt").write_text("\n".join(flow[-200:]) + "\n", encoding="utf-8")
