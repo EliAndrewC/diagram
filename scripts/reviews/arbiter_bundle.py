@@ -228,6 +228,14 @@ def rounds_section(root: Path, out: Path, check: str, subject: str, trigger: str
     return parts, rounds, missing, last
 
 
+def git_flow(root: Path, files: list[str]) -> list[str]:
+    """The commits touching `files`, oldest first, as cascade lines (`HH:MM:SS commit <hash> <subject>`) - the fallback where
+    the event log holds no edit on a unit's files (feature 374's bridgehead ruling: cascade.txt read 0 edits beside three
+    commits on the pop-up); none outside a git repository."""
+    r = subprocess.run(["git", "-C", str(root), "log", "--reverse", "--format=%cI %h %s", "--", *files], capture_output=True, text=True, check=False)
+    return [f"{ln[11:19]} commit {ln.split(' ', 1)[1]}" for ln in r.stdout.splitlines() if " " in ln] if r.returncode == 0 else []
+
+
 def flow_sections(root: Path, out: Path, d: Path | None, files: list[str]) -> list[str]:
     """The cascade and the oscillation - for a unit, only the edits and reversals on its own files: a pop-up's bundle listed
     feature 368's 0047 reversal as its own loop (343's clerks--seats, office-hall, door and magistrate-s-dais rulings)."""
@@ -240,8 +248,11 @@ def flow_sections(root: Path, out: Path, d: Path | None, files: list[str]) -> li
         for e in events
         if e.get("ev") == "PreToolUse" and ((e.get("cat") == "edit" and mine(e.get("path"))) or (e.get("tool") == "Agent" and not files))
     ]
+    source = ""
+    if files and not flow:  # 374's bridgehead ruling: apply-edits and scripted edits never pass the Edit tool, so the log held none
+        flow, source = git_flow(root, files), " (from the git log - the event log held no edit on them)"
     (out / "cascade.txt").write_text("\n".join(flow[-200:]) + "\n", encoding="utf-8")
-    scope = "the unit's files" if files else "the feature"
+    scope = ("the unit's files" if files else "the feature") + source
     sys.path.insert(0, str((HERE / "../measure").resolve()))
     import feature_report as fr  # noqa: PLC0415
 
