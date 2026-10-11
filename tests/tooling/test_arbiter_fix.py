@@ -175,6 +175,8 @@ def test_a_spec_ruling_stands_only_for_the_spec_it_ruled_on(root: pathlib.Path) 
     assert row["spec_sha"] == ha.spec_body_sha(d) and ha.spec_ruled(d) == "round:spec-fidelity|900-z#1@6"
     (d / "spec.md").write_text((d / "spec.md").read_text() + "\n## Review history\n- the ruling recorded\n")
     assert ha.spec_ruled(d) and ha.main(["spec-ruled", str(d)]) == 0, "the Review history growing is no amendment"
+    (d / "spec.md").write_text("# Feature 900\n**Status**: Done 2026-10-10 - landed\n" + (d / "spec.md").read_text().split("\n", 1)[1])
+    assert ha.spec_ruled(d), "nor is a Status line rewritten at landing (plan review round 3)"
     (d / "spec.md").write_text("# Feature 900, amended\n")
     assert ha.spec_ruled(d) == "" and ha.main(["spec-ruled", str(d)]) == 1
     (d / "arbiter.jsonl").write_text((d / "arbiter.jsonl").read_text() + "not json\n")

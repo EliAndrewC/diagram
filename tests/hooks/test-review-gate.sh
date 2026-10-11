@@ -78,13 +78,15 @@ check "a spec that merely MENTIONS the word in prose" b3 blocked
 # the ruling carries the spec's hash (hm_arbiter.spec_body_sha): it stands only while the spec reads as it was ruled on
 SHA=$(printf '# spec\n' | sha256sum | cut -d' ' -f1)
 ruling() { printf '{"trigger": "round:spec-fidelity|900-x#1@6", "kind": "round", "ruling": "%s", "why": "w", "utc": "t", "spec_sha": "%s"}\n' "$1" "${2:-$SHA}" > specs/900-x/arbiter.jsonl; }
-mkrepo b4; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling accept
+mkrepo b4; printf '# spec\n\n**Status**: In progress\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling accept
 echo work >> seed.txt; git add -A; git commit -qm s
 check "a spec the round arbiter accepted past the cap ships" b4 ok
+printf '# spec\n\n**Status**: Done 2026-10-10 - landed\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; git add -A; git commit -qm done
+check "...and still ships once its Status line says Done (a header line is no amendment)" b4 ok
 mkrepo b5; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling continue
 echo work >> seed.txt; git add -A; git commit -qm s
 check "...but a continue ruling is no verdict" b5 blocked
-mkrepo b6; printf '# spec\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling process-fault
+mkrepo b6; printf '# spec\n\n**Status**: In progress\n\n## Review history\n- round 5: CHANGES REQUIRED\n' > specs/900-x/spec.md; ruling process-fault
 echo work >> seed.txt; git add -A; git commit -qm s
 check "...a process-fault ruling stands in too" b6 ok
 printf '# spec, amended\n\n## Review history\n- round 5: CHANGES REQUIRED\n- the ruling\n' > specs/900-x/spec.md; git add -A; git commit -qm amend
