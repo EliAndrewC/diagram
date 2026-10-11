@@ -216,8 +216,8 @@
 
     <!-- feature 267 pass 2: the hall's rear (north) door toward the nakamon - the visitors' way runs on through the
          office to the house (0104) -->
-    <rect x="590" y="478" width="20" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <rect x="420" y="478" width="360" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
+    <rect x="590" y="478" width="20" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <line x1="420" y1="528" x2="780" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="540" y1="478" x2="540" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <line x1="660" y1="478" x2="660" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
