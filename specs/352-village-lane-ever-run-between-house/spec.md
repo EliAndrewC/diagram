@@ -61,17 +61,24 @@ finding: IN-STEP with its evidence, or DRIFTED from it.
   gains the answer under a heading a reader would ask, each assertion footnoted to a passage quoted verbatim from a page the
   reader can open, or, where nothing is found, an absence note naming the searches. The record's checks owed by the change
   are answered (`make record-owed`).
-- **FR-003 - The claims.** The units whose claims decide the question are found by a recorded command - the claims index
-  searched for a wood or copse seat claim that bears on a lane, track or route (`dev/claims-index.json`, keys and notes
-  matching `(wood|copse)[ -]seat`, kept where the rule is a way's) - and, on 2026-10-11, are:
+- **FR-003 - The claims.** The units whose claims decide the question are found by a recorded search: the claims index's
+  keys and notes (`dev/claims-index.json`) and the `Research:` claim text in the code and the procedures, each matched against
+  `(wood|woodlot|copse)s?'?[ -]seats?|seat off a lane|lane gap`, kept where the claim governs how a way stands to a
+  household's wood seats. On 2026-10-11 they are:
   - `overlap/reserved.py` `Reservations.conflicts` (#wood seats);
   - `hamletgen/homesteads/household_ways.py` `seat_walls` and `seated_parts` (#the track off the wood seats);
   - `hamletgen/homesteads/region.py` `SeatRegion.sync` (#reserved wood seats bar lane ground);
   - `hamletgen/homesteads/stages.py` `reserve_the_seating` (#a lane's buffer about a copse seat);
   - `hamletgen/ways/track.py` `_connector_through` (#gives up a wood seat as last resort);
   - `hamletgen/ways/web.py` `stage_web` (#web lanes routed round the households' reserved wood seats as fabric);
-  - and the seating's placement of a household's seats beside its house (`hamletgen/homesteads/growth.py`, which cites
-    0036's drawing page), the code that may decide whether a lane can come BETWEEN a house and its own seats.
+  - `settlement/rolling/gap_ways.py` `Layers` and `lane_layers` (#lane ground);
+  - `settlement/rolling/passage.py` `walk_clear` (#walk crosses nothing standing);
+  - `settlement/homestead_parts/wood_share.py` `WoodShares.__init__` (#seat off a lane);
+  - `hamletgen/homesteads/growth.py` `footprint` (#the household's wood): the seating's placement of a household's seats
+    beside its house, the code that may decide whether a lane can come BETWEEN a house and its own seats.
+  Left out, each because its rule is not a way's: the bamboo stands' (`hinterland/bamboo.py` `bamboo_seats`,
+  `homesteads/bamboo.py` `household_bamboo`), the grove fill's (`grove_fill.py` `grove_blocks`, `reseat_clump`), the seats'
+  own pitch (`wood_share.py` #copse seat pitch) and their reservation (`stages.py` #wood seats reserved).
   Each of these claims cites 0036's FINDINGS page and is re-judged by `impl-drift`, so `make claims-report` shows each IN-STEP
   with evidence or DRIFTED from it. Where the finding does not reach a claim's detail (a buffer's distance the sources do not
   give), that claim stays a labeled guess citing 0036's absence. Any part of the question no code decides is recorded as
@@ -102,3 +109,7 @@ finding: IN-STEP with its evidence, or DRIFTED from it.
   several UNRESEARCHED, and `conflicts` does not decide "between". Applied: FR-003 lists the units a recorded command finds,
   each re-judged against 0036's findings, the seating's placement named, and what no code decides goes to
   `implementation-check.md`; US2 and SC-002 reworded to match.
+- Round 2 (spec-fidelity-verify, 2026-10-11): CHANGES REQUIRED - the list omitted `gap_ways.py`, which the search returned,
+  and the pattern missed the code's own wording ("woodlots' seats", "seat off a lane"). Applied: the search reads the claim
+  text too, with a widened pattern; `gap_ways.py` (`Layers`, `lane_layers`), `passage.py` `walk_clear` and `wood_share.py`
+  (#seat off a lane) added; `growth.py` named by its claim; the exclusions stated with their reason.
