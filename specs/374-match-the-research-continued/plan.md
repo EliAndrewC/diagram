@@ -257,8 +257,10 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
   than the field beside it, then the level beyond the fields (`woodland_tier` no longer ranks by the houses) - and a seat is
   refused only where it is below the houses' median height and its square comes within `LOW_BY_WATER_FT` of a river's course
   or a marsh (`low_by_the_water`, measured from the square's circumscribed reach, as the keep-outs measure a turned parcel:
-  every seat the keep-outs pass stands a half off the water, so a reach from the seat alone refused nothing). Inashiro's
-  woodland moves under it.
+  every seat the keep-outs pass stands a half off the water, so a reach from the seat alone refused nothing). It is asked in
+  the scan's one qualification (`_ok`), so every seat the nudge, the row step, the size roll and the aspect steps move is
+  asked it again at its own square; the water is one geometry built once (`WaterZone`), its cost measured at 0.05 s of a
+  10 s roll. Inashiro's woodland moves under it.
   "Beside" has no figure on the page: 46 ft, the width over which the maps draw reeds and grass interleaving at a marsh's
   edge, recorded on 0077's drawing page as a GUESS (its record checks owed), and the claims label it so.
 - `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size

@@ -62,21 +62,20 @@ def test_low_ground_by_the_water_is_refused_and_dry_ground_below_the_houses_is_n
 
 
 def test_a_seat_below_the_houses_on_dry_ground_is_kept_by_its_tier(monkeypatch) -> None:  # noqa: ANN001
-    """Feature 374 wave 120: the ranking reads the field alone, and a seat low by the water is dropped before it."""
+    """Feature 374 wave 120: the ranking reads the field alone - the slope, then the level, any seat kept."""
     from types import SimpleNamespace
 
     from l7r.diagram.hamletgen.hinterland import parcels
 
     tiers = {(1.0, 1.0): 0, (2.0, 2.0): 1, (3.0, 3.0): 1}
     monkeypatch.setattr(parcels, "woodland_tier", lambda p, *a: tiers[p])
-    monkeypatch.setattr(parcels, "house_floor", lambda *a: 0.0)
     monkeypatch.setattr(parcels, "field_height_near", lambda *a: 0.0)
-    monkeypatch.setattr(parcels, "low_by_the_water", lambda p, *a: p == (3.0, 3.0))
     monkeypatch.setattr(parcels, "crossed_through_many", lambda env, c, seats: [True] * len(seats))
     s = SimpleNamespace(M={"houses": []}, px=lambda v: v)
     plan = SimpleNamespace(fall=(0.0, 1.0), envelope=[])
     out = parcels._beyond_the_fields(s, plan, [(5.0, 1.0, 1.0), (5.0, 2.0, 2.0), (5.0, 3.0, 3.0)], None, (0.0, 0.0))  # type: ignore[arg-type]
-    assert [(x, y) for _sc, x, y in sorted(out, reverse=True)] == [(1.0, 1.0), (2.0, 2.0)], "the slope, then the level; none by the water"
+    ranked = [(x, y) for _sc, x, y in sorted(out, reverse=True)]
+    assert ranked[0] == (1.0, 1.0) and set(ranked) == {(1.0, 1.0), (2.0, 2.0), (3.0, 3.0)}, "the slope first, every seat kept"
 
 
 def test_a_walk_through_a_field_whose_outline_crosses_itself_is_measured() -> None:
@@ -89,22 +88,36 @@ def test_a_walk_through_a_field_whose_outline_crosses_itself_is_measured() -> No
     assert len(got) == 2 and all(isinstance(v, bool) for v in got)
 
 
-def test_a_wood_flush_against_a_marsh_below_the_houses_is_refused_by_its_square(monkeypatch) -> None:  # noqa: ANN001
-    """Feature 374 wave 120 (the plan review): the 46 ft is measured from the wood's square, not its seat - every seat the
-    keep-outs pass stands a half off the water, so a square flush against a marsh (its seat a half away) is the case."""
-    from types import SimpleNamespace
-
+def test_every_drawn_wood_was_asked_the_water_rule_at_its_own_square(monkeypatch) -> None:  # noqa: ANN001
+    """Feature 374 wave 120 (the plan review): the water rule is in the scan's one qualification (`_ok`), so a seat the nudge,
+    the row step, the size roll or the aspect steps move is asked it again at its own square. A refusal patched over the
+    canvas's east half keeps every drawn wood west of the line, its whole square included; unpatched, woods stand east too."""
     from l7r.diagram.hamletgen.hinterland import parcels
+    from l7r.diagram.settlement import Settlement
+    from l7r.diagram.settlement.land.cover import ring_center
 
-    half = 60.0
-    marsh = [[(0.0, 700.0), (400.0, 700.0), (400.0, 900.0), (0.0, 900.0)]]
-    seat = (5.0, 200.0, 700.0 - half)  # its square's edge on the marsh line, its seat a half off it
-    monkeypatch.setattr(parcels, "woodland_tier", lambda p, *a: 0)
-    monkeypatch.setattr(parcels, "field_height_near", lambda *a: 0.0)
-    monkeypatch.setattr(parcels, "crossed_through_many", lambda env, c, seats: [True] * len(seats))
-    plan = SimpleNamespace(fall=(0.0, 1.0), envelope=[])  # heights run up -y
-    below = SimpleNamespace(M={"houses": [{"x": 0.0, "y": 100.0}]}, px=lambda v: v)  # the houses' floor at -100: the seat is below
-    above = SimpleNamespace(M={"houses": [{"x": 0.0, "y": 900.0}]}, px=lambda v: v)  # the floor at -900: the seat is above
-    assert parcels._beyond_the_fields(below, plan, [seat], None, (0.0, 0.0), [], marsh, half) == [], "flush, below the houses"  # type: ignore[arg-type]
-    assert parcels._beyond_the_fields(above, plan, [seat], None, (0.0, 0.0), [], marsh, half) == [seat], "flush, above the houses"  # type: ignore[arg-type]
-    assert parcels._beyond_the_fields(below, plan, [(5.0, 200.0, 400.0)], None, (0.0, 0.0), [], marsh, half) == [(5.0, 200.0, 400.0)], "dry ground"  # type: ignore[arg-type]
+    from ._builders import a_plan
+
+    monkeypatch.setattr(parcels, "crossed_through_many", lambda field, frm, tos, share=0.5: [True] * len(tos))
+    plan = a_plan()
+
+    def scan() -> list:  # type: ignore[type-arg]
+        s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+        s.M["fields"] = []
+        plan.belt = []
+        plan.title_pocket = None
+        return parcels.open_ground_patches(s, plan, count=6)
+
+    free = sorted(ring_center(r)[0] for r in scan())
+    assert len(free) >= 2, "non-vacuity: the open canvas seats woods"
+    line = (free[0] + free[-1]) / 2.0  # between the westmost and eastmost woods: unpatched, one stands east of it
+    reaches: list[float] = []
+
+    def east(p, fall, floor, rivers, marshes, reach):  # type: ignore[no-untyped-def]
+        reaches.append(reach)
+        return p[0] + reach > line
+
+    monkeypatch.setattr(parcels, "low_by_the_water", east)
+    drawn = scan()
+    assert drawn and all(max(x for x, _y in r) <= line + 1.0 for r in drawn), "every wood's square west of the line"
+    assert min(reaches) > parcels.LOW_BY_WATER_FT, "asked at the square's reach, not the seat's"

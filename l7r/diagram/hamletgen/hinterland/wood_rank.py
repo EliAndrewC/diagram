@@ -7,6 +7,7 @@ Research: plumbing - NONE: the ranking's helpers
 
 import math
 from collections.abc import Sequence
+from typing import Any
 
 from ..consts import Poly, Pt
 
@@ -100,15 +101,33 @@ maps draw reeds and grass interleaving at a marsh's edge (0077), taken for a riv
 Research: beside a river or marsh - GUESS research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within 46 ft of the water's edge, the reed and grass margin"""
 
 
-def low_by_the_water(p: Pt, fall: Pt, house_floor: float, rivers: Sequence[Sequence[Pt]], marshes: Sequence[Poly], reach: float) -> bool:
+class WaterZone:
+    """The rivers' courses and the marshes as ONE geometry, built once and asked per seat (feature 374 wave 120: asked of every
+    lattice seat by distance loops, the hinterland stage ran a pool roll 2.5 times slower): a seat's distance to it is one
+    GEOS read, whatever the reach the square's size gives."""
+
+    def __init__(self, rivers: Sequence[Sequence[Pt]], marshes: Sequence[Poly]) -> None:
+        import shapely  # noqa: PLC0415 - bound on first use
+        from shapely.ops import unary_union  # noqa: PLC0415
+
+        parts = [shapely.LineString(list(r)) for r in rivers if len(r) >= 2] + [shapely.make_valid(shapely.Polygon(list(m))) for m in marshes if len(m) >= 3]
+        self.zone: Any = unary_union(parts) if parts else None
+        if self.zone is not None:
+            shapely.prepare(self.zone)
+
+    def near(self, p: Pt, reach: float) -> bool:
+        """Is `p` within `reach` of a river's course or of a marsh (inside it included)?"""
+        import shapely  # noqa: PLC0415
+
+        return self.zone is not None and float(shapely.distance(self.zone, shapely.Point(p[0], p[1]))) <= reach
+
+
+def low_by_the_water(p: Pt, fall: Pt, house_floor: float, rivers: Sequence[Sequence[Pt]] | WaterZone, marshes: Sequence[Poly], reach: float) -> bool:
     """Is a wood seat low ground by a river or marsh - below the houses' median height (`house_floor`) and within `reach` of
     a river's course or a marsh? There 0077 puts the village's grass and riverbank commons, not its wood.
 
     Research: low ground left to grass - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood seated below the houses, past the fields and beside a river or marsh refused"""
-    from l7r.diagram.settlement import point_in_poly, seg_dist  # local: the settlement's geometry, as parcels reads it
-
     if -(p[0] * fall[0] + p[1] * fall[1]) >= house_floor:
-        return False
-    near_river = any(seg_dist(p[0], p[1], a, b) <= reach for r in rivers for a, b in zip(r, r[1:], strict=False))
-    near_marsh = any(point_in_poly(p[0], p[1], m) or any(seg_dist(p[0], p[1], a, b) <= reach for a, b in zip(m, [*m[1:], m[0]], strict=False)) for m in marshes if len(m) >= 3)
-    return near_river or near_marsh
+        return False  # asked first: most seats stand above the houses, and need no zone at all
+    zone = rivers if isinstance(rivers, WaterZone) else WaterZone(rivers, marshes)
+    return zone.near(p, reach)
