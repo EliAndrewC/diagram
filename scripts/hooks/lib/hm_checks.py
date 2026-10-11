@@ -57,6 +57,8 @@ _EDIT = re.compile(
     re.S | re.M,
 )
 _PAGE = re.compile(r"research/questions/(\d{4})-[^/]*\.html$")
+#: a bundle scoped to named notes (`check_bundle.py`: "ONLY the notes a, b and the blocks that carry them")
+_NOTES = re.compile(r"ONLY the notes (.+?) and the blocks that carry them")
 _MODAL = re.compile(r"interactive/assets/modals/((?:sheet|hamlet|choice)/[^/]+)\.md$")
 
 
@@ -113,10 +115,24 @@ def open_round(state: Mapping[str, Any], subject: str, now: float | None = None)
     return [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", []) and d.get("state") != "answered" and _live(d, now)]
 
 
+def notes_of_manifest(text: str) -> set[str]:
+    """The notes a note-scoped bundle reads; empty for a bundle of the whole page."""
+    return {n.strip() for m in _NOTES.findall(text) for n in m.split(",") if n.strip()}
+
+
+def fresh_reading(state: Mapping[str, Any], unit: str, notes: set[str]) -> bool:
+    """A dispatch reading only notes no earlier round of the unit read is a FIRST reading, not a repeat round: three features
+    adding their own notes to one page, one after another, are three first readings (the round arbiter on 0104, 2026-10-10:
+    "the cap fired because the round counter counts one page across features, not because a check repeated")."""
+    read = state.get("notes_read", {}).get(unit)
+    return bool(notes) and read is not None and "*" not in read and not notes & set(read)
+
+
 def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None, freeze_ok: bool = False, arbiter_ok: bool = False) -> str:
     """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap and the tripwires, which
     the round arbiter rules on - `hm_arbiter.py`)."""
     subjects = subjects_of_manifest(text) if check in PAGE_CHECKS else []
+    notes = notes_of_manifest(text)
     if root is not None and not arbiter_ok:
         held = hm_arbiter.blocking(root, "")
         if held:
@@ -130,7 +146,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             )
         n = state.setdefault("rounds", {}).get(f"{check}|{s}", 0)
         unit = f"{check}|{s}"
-        if root is not None and not arbiter_ok:
+        if root is not None and not arbiter_ok and not fresh_reading(state, unit, notes):
             shut = hm_arbiter.closed(root, f"round:{unit}@")
             if shut:
                 return f"the round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)"
@@ -141,7 +157,11 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
     for s in subjects:
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
-        state["rounds"][f"{check}|{s}"] = state["rounds"].get(f"{check}|{s}", 0) + 1  # every dispatch let through is a round
+        unit = f"{check}|{s}"
+        if not fresh_reading(state, unit, notes):  # a fresh reading of new notes is not a repeat round
+            state["rounds"][unit] = state["rounds"].get(unit, 0) + 1  # every other dispatch let through is a round
+        read = state.setdefault("notes_read", {}).setdefault(unit, [])
+        read.extend(sorted((notes or {"*"}) - set(read)))  # "*": a whole-page reading, every note read
     state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending"}
     return ""
 
@@ -351,10 +371,8 @@ def subject_blocks(root: Path, subject: str) -> list[str]:
 
 
 def _feature(root: Path) -> str:
-    try:
-        return Path(str(json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", ""))).name
-    except OSError, ValueError:
-        return ""
+    d = hm_arbiter.feature_dir(root)  # one reader of the active feature: a page session's own first
+    return d.name if d else ""
 
 
 #: every check a dispatch is counted for: the page checks freeze their subject; impl-drift and the triages count to FR-010 only
@@ -451,13 +469,20 @@ def log_pass(git_dir: Path, mode: str, payload: Mapping[str, Any], now: float | 
         lines = Path(tpath).read_text(encoding="utf-8", errors="replace").splitlines()
         # THIS RETURN's cells: the transcript's last segment (a resumed agent's earlier returns are passes of their own,
         # logged at their own stops - plan review 2), as `make review-cost` prints them
-        wall, tokens = review_cost.cells(review_cost.cost(review_cost.segments(lines)[-1])).split(" | ", 1)
-        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid, "wall": wall, "tokens": tokens}
+        segs = review_cost.segments(lines)
+        wall, tokens = review_cost.cells(review_cost.cost(segs[-1])).split(" | ", 1)
+        rec = {"date": time.strftime("%Y-%m-%d", time.localtime(now or time.time())), "check": check, "subject": _first_prompt(lines), "agent": aid, "wall": wall, "tokens": tokens, "seg": len(segs)}
         log = git_dir / PASS_LOG
         prior = [json.loads(ln) for ln in log.read_text(encoding="utf-8").splitlines() if ln.strip()] if log.is_file() else []
-        mine = [r for r in prior if r.get("agent") == aid]
-        if mine and (mine[-1].get("wall"), mine[-1].get("tokens")) == (wall, tokens):
+        mine = [i for i, r in enumerate(prior) if r.get("agent") == aid]
+        if mine and (prior[mine[-1]].get("wall"), prior[mine[-1]].get("tokens")) == (wall, tokens):
             return False  # the same return seen by both events (a foreground check): one pass, logged once
+        if mine and prior[mine[-1]].get("seg") == len(segs):
+            # the SAME return seen again with the transcript grown since (two stop events for one return, the first before
+            # its last turn was written - 2026-10-10, 0104's source-readers each listed twice): the later cells replace it
+            prior[mine[-1]] = rec
+            log.write_text("".join(json.dumps(r) + "\n" for r in prior), encoding="utf-8")
+            return True
         with log.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(rec) + "\n")
         return True

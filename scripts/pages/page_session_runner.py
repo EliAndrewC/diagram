@@ -106,7 +106,16 @@ def session_env(env: dict[str, str], item: dict) -> dict[str, str]:
     out |= {"L7R_PAGE_SESSION": item["sid"], "L7R_CONTINUE": os.path.join(item["log"], "continue.md")}
     if item.get("write"):
         out["L7R_KEY_CAP"] = str(KEY_CAP)
+    if fd := brief_feature(item["brief"]):
+        out["L7R_FEATURE_DIRECTORY"] = fd  # its checks and rulings are its brief's feature's (hm_arbiter.feature_dir)
     return out
+
+
+def brief_feature(brief: str) -> str:
+    """`specs/NNN-slug` for a brief under a feature's directory, else ''."""
+    parts = os.path.realpath(brief).replace(os.sep, "/").split("/")
+    i = len(parts) - 1 - parts[::-1].index("specs") if "specs" in parts else -1
+    return f"specs/{parts[i + 1]}" if 0 <= i < len(parts) - 2 else ""
 
 
 def command(root: str, name: str, extra: list[str], brief: str, sid: str) -> list[str]:

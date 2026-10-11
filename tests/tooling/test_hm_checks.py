@@ -96,6 +96,28 @@ def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path) -> None:
     assert hc.dispatch(st, "ti", "impl-drift", "/m", "unit: impl-drift:x 1\n", 5) == "" and st["dispatches"]["ti"]["subjects"] == []
 
 
+def test_a_first_reading_of_new_notes_is_not_a_repeat_round(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on 0104 (2026-10-10): three features each added their own notes to one page, and the third
+    source-reader dispatch - the first reading of the third feature's notes - tripped the cap. A note-scoped dispatch whose
+    notes no earlier round read is a first reading; one that re-reads a note, or follows a whole-page reading, is a round."""
+    root = _clone(tmp_path)
+    scoped = lambda *ns: MANIFEST + f"| the question - ONLY the notes {', '.join(ns)} and the blocks that carry them |\n"  # noqa: E731
+    assert hc.notes_of_manifest(scoped("a", "b")) == {"a", "b"} and hc.notes_of_manifest(MANIFEST) == set()
+    st: dict = {}
+    for i, notes in enumerate((("a", "b"), ("c",), ("d", "e"))):
+        assert hc.dispatch(st, f"t{i}", "quote-check", "/m", scoped(*notes), i, root) == "", notes
+        hc.answered(st, "quote-check", ["q:0105"])
+    assert st["rounds"]["quote-check|q:0105"] == 1
+    assert hc.dispatch(st, "t5", "quote-check", "/m", scoped("c"), 5, root) == ""  # re-reads c: round 2
+    hc.answered(st, "quote-check", ["q:0105"])
+    assert "round 3 of `quote-check` on q:0105" in hc.dispatch(st, "t6", "quote-check", "/m", scoped("a", "z"), 6, root)
+    st2: dict = {}
+    for i in range(2):  # a whole-page reading reads every note: a later scoped one is a round
+        assert hc.dispatch(st2, f"w{i}", "quote-check", "/m", MANIFEST if i == 0 else scoped("q"), i, root) == ""
+        hc.answered(st2, "quote-check", ["q:0105"])
+    assert st2["rounds"]["quote-check|q:0105"] == 2
+
+
 def test_a_dispatch_another_guard_refused_never_freezes_the_page() -> None:
     st: dict = {}
     hc.dispatch(st, "t1", "quote-check", "/m", MANIFEST, 0)
@@ -289,6 +311,20 @@ def test_each_return_of_a_resumed_check_is_logged_with_its_own_cells(tmp_path: p
     assert f"{second['wall']} | {second['tokens']}" == rc.cells(rc.cost(rc.segments(t.read_text().splitlines())[-1]))
     bg = {"tool_input": {"subagent_type": "spec-fidelity"}, "tool_response": {"status": "async_launched", "agentId": "a3"}}
     assert not hc.log_pass(tmp_path, "launched", bg, 0.0) and len(_log(tmp_path)) == 2
+
+
+def test_one_return_seen_twice_as_its_transcript_grows_is_one_pass(tmp_path: pathlib.Path) -> None:
+    """2026-10-10: each of 0104's source-reader passes was listed twice by `make ledger-owed`, the first with the cells of a
+    transcript not yet finished. The same segment seen again replaces its pass; a resumed segment is a pass of its own."""
+    t = _transcript(tmp_path, "a5", "Check the bundle")
+    payload = {"agent_type": "source-reader", "agent_id": "a5", "agent_transcript_path": str(t)}
+    assert hc.log_pass(tmp_path, "returned", payload, 0.0)
+    with t.open("a") as fh:  # the last turn written after the first stop event
+        fh.write(json.dumps({"timestamp": "2026-10-10T10:09:00Z", "requestId": "r9", "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 10, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 900}}}) + "\n")
+    assert hc.log_pass(tmp_path, "returned", payload, 0.0)
+    (only,) = _log(tmp_path)
+    _lint, rc = hc._reviews()
+    assert only["seg"] == 1 and f"{only['wall']} | {only['tokens']}" == rc.cells(rc.cost(rc.segments(t.read_text().splitlines())[-1]))
 
 
 def test_a_foreground_check_is_logged_when_its_tool_call_completes(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
