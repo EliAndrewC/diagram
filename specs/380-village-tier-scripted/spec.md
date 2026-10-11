@@ -113,3 +113,13 @@ stretch of edge 50 ft or longer within a crown's radius of one line).
 ## Later tiers
 
 The capital has no placeholder yet (nothing is owed at it alone). Items above marked *Also owed at: capital* are confirmed when the capital is scripted; the first capital-only item becomes that tier's placeholder.
+
+## Carried: from 357 (the modern-only sweep's frozen villages)
+
+Moved word for word on 2026-10-10 (the GM, 2026-10-10: "Yes, please."); 357 keeps its hamlet items and points here.
+
+- **The frozen villages' owed forms**: Hoshigaoka - M12 (the pond sized by command area), M65 and M81 (the sanctuary fence),
+  M66 (the swept collars), M68 (a hamlet's own burial ground),
+  M70 (the roofed pyre ground, platform and hut), M71 (six jizo at a cremation ground alone), M80 (the basin's roof,
+  drawn plain, its roof a guess); Kikuta - M56, M58. (M50, M52, M53 and M64 were kept by the GM on 2026-09-29.)
+

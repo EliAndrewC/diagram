@@ -1,6 +1,6 @@
 # Feature Specification: DEFERRED 2026-08-27 (GM, feature 133 T60): seasonal maps - the straw rick, the hasa frames, the drained paddies
 
-**Status**: Filed - from future-work/farming-communities.md, "DEFERRED 2026-08-27 (GM, feature 133 T60): seasonal maps - the straw rick, the hasa frames, the drained paddies", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Superseded by 369 (2026-10-10): carried word for word into the season knob's feature, which makes the harvest-season features drawable in their season (the GM, 2026-10-10: "Yes, please."). Was: Filed - from future-work/farming-communities.md, "DEFERRED 2026-08-27 (GM, feature 133 T60): seasonal maps - the straw rick, the hasa frames, the drained paddies", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: all settlements
 
