@@ -290,7 +290,9 @@ def test_a_round_trigger_lost_from_the_owed_record_still_bundles_its_rounds(tmp_
     (root / "specs" / "343-x").mkdir(parents=True)
     modal = root / "l7r" / "diagram" / "interactive" / "assets" / "modals" / "sheet"
     modal.mkdir(parents=True)
-    (modal / "door.md").write_text("About: a door.\n\nName: door\n")
+    (modal / "door.md").write_text("About: a door.\n\nName: door\nEntry: research/questions/0104-genkan.html\n")
+    (root / "research" / "questions").mkdir(parents=True)
+    (root / "research" / "questions" / "0104-genkan.html").write_text("<p>a page</p>")
     reply = tmp_path / "r.md"
     reply.write_text("1. the door's About repeats the Name\n\nEDIT l7r/diagram/interactive/assets/modals/sheet/door.md\n<<<\na door.\n===\na plank door.\n>>>\n")
     (root / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": {"t1": {"check": "modal-form", "subjects": ["modal:sheet/door"], "t": 1, "state": "answered", "reply": str(reply)}}}))
@@ -299,6 +301,9 @@ def test_a_round_trigger_lost_from_the_owed_record_still_bundles_its_rounds(tmp_
     assert "### Round 1: modal-form" in manifest and "the owed round is the counter's round 3" in manifest.lower()
     assert "- NOT APPLIED: l7r/diagram/interactive/assets/modals/sheet/door.md: 'a door.' -> 'a plank door.'" in manifest
     assert "(not in arbiter-owed.json) - the unit read from the trigger" in manifest
+    # 368's privy ruling: the pages a pop-up's Entry: and Drawing: name are in edits.diff, since an edit there re-owes it
+    assert ab.subject_files(root, "modal:sheet/door") == ["l7r/diagram/interactive/assets/modals/sheet/door.md", "research/questions/0104-genkan.html"]
+    assert "research/questions/0104-genkan.html" in manifest
     with pytest.raises(ab.MissingRecord, match="a round trigger with no rounds"):
         ab.bundle(root, "round:modal-form|modal:sheet/gate@3", tmp_path / "out2")
 
