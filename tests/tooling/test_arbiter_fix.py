@@ -185,14 +185,17 @@ def test_a_spec_ruling_stands_only_for_the_spec_it_ruled_on(root: pathlib.Path) 
     assert ha.spec_ruled(root / "specs" / "nowhere") == ""
 
 
-def _rounds(root: pathlib.Path, tmp_path: pathlib.Path, uids: tuple[str, ...]) -> None:
-    """Two kept modal-form rounds on each pop-up in `uids`, as the hooks record them in checks-open.json."""
+def _rounds(root: pathlib.Path, tmp_path: pathlib.Path, uids: tuple[str, ...], checks: tuple[str, ...] = ("modal-form",)) -> None:
+    """Two kept rounds of each of `checks` (modal-form unless named) on each pop-up in `uids`, as the hooks record them in
+    checks-open.json. A round trigger fires only when a dispatch is refused, so every check a test trips has rounds here: a
+    round trigger with none is refused by the bundle (343's M1c rulings, 2026-10-11)."""
     disp = {}
     for i, uid in enumerate(uids):
-        for r in (1, 2):
-            reply = tmp_path / f"r-{i}-{r}.md"
-            reply.write_text(f"1. finding {r} on {uid}\n")
-            disp[f"t{i}{r}"] = {"check": "modal-form", "subjects": [f"modal:{uid}"], "t": i * 10 + r, "state": "answered", "reply": str(reply)}
+        for c in checks:
+            for r in (1, 2):
+                reply = tmp_path / f"r-{i}-{c}-{r}.md"
+                reply.write_text(f"1. finding {r} on {uid}\n")
+                disp[f"t{i}{c}{r}"] = {"check": c, "subjects": [f"modal:{uid}"], "t": i * 10 + r, "state": "answered", "reply": str(reply)}
     (root / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": disp}))
 
 
@@ -256,7 +259,7 @@ def test_the_tooling_steers_a_batch_to_one_ruling(root: pathlib.Path, tmp_path: 
     """Feature 375 amendment 2, SC-009 (spec review round 1): 343's shape - pop-ups at the cap on two checks, one form round
     asked about ahead and named to join, a spec review's round apart. While the batch is owed the refusal names the batch and a
     single ruling is refused; the asked-ahead round joins the bundle, the spec review's round does not."""
-    _rounds(root, tmp_path, ("sheet/a", "sheet/b"))
+    _rounds(root, tmp_path, ("sheet/a", "sheet/b"), ("modal-form", "modal-depiction", "modal-research"))
     owed_now = ["round:modal-depiction|modal:sheet/a@3", "round:modal-research|modal:sheet/a@3", "round:modal-depiction|modal:sheet/b@3"]
     for t in owed_now:
         ha.trip(root, t, "round", ha.unit_of(t), "round 3")
@@ -325,3 +328,22 @@ def test_a_batch_reply_is_refused_whole_and_never_drops_a_fix(root: pathlib.Path
     rows = ha.record_batch(root, {**both, "exceptions": {a: both["exceptions"][a], b: {"ruling": "continue", "why": "y"}}}, "round-arbiter")
     assert rows[0]["tooling_fix"] == "G" and rows[1]["tooling_fix"] == "F", "G kept; F on the first exception without a fix"
     assert sorted(ha.open_fixes(d)) == [(a, "G"), (b, "F")]
+
+
+def test_several_fixes_one_change_made_settle_together(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """2026-10-11: 343 carried 36 open tooling fixes, many naming the same few bundle defects (one ruling each before the
+    batch ruling). One command settles the ones a single change made; an unknown ID refuses the whole call, writing nothing."""
+    d = root / "specs" / "900-z"
+    a, b = "reversal:/a.md", "reversal:/b.md"
+    for t in (a, b):
+        ha.trip(root, t, "reversal", t, "A -> B -> A")
+        ha.record_ruling(root, t, {"ruling": "process-fault", "why": "the bundle hid its rounds", "tooling_fix": f"bundle fix for {t}"}, "round-arbiter")
+    git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run([*git, "add", "tests"], check=True)
+    subprocess.run([*git, "commit", "-qm", "the test"], check=True)
+    subprocess.run([*git, "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
+    monkeypatch.chdir(root)
+    assert ha.main(["fix", "done", f"{a} reversal:/nope.md", "one bundle change", "tests/tooling/test_gate_lock.py"]) == 1
+    assert len(ha.open_fixes(d)) == 2, "an unknown ID writes nothing"
+    assert ha.main(["fix", "done", f"{a} {b}", "the bundle now carries every round", "tests/tooling/test_gate_lock.py"]) == 0
+    assert ha.open_fixes(d) == []

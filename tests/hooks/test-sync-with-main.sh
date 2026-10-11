@@ -316,6 +316,12 @@ in_progress() { # $1 = topology dir: a feature with an open task plus an unrelat
     && echo "${2:-docs}" > note.md && git add -A && git commit -qm "feature plus docs ${2:-}" )
 }
 
+echo "11b. SYNC_BACKUP=off (land-tooling's worktree) backs nothing up, even on a refused stop"
+D=$(topology bkoff)
+in_progress "$D"
+OUT=$(CI_ROUTE=DIRECT SYNC_BACKUP=off syncmain "$D" done); check "a refused done keeps its exit code with the backup off" 1 $?
+[ -z "$(git -C "$D/github.git" for-each-ref --format='%(refname)' refs/heads/backup/)" ] && yes_ || no_ "a backup branch was pushed with SYNC_BACKUP=off"
+
 echo "11. a REFUSED stop backs the clone's HEAD up to backup/<clone-name>, and nothing else (feature 321, SC-001, SC-002)"
 D=$(topology bk)
 git -C "$D/github.git" config core.logAllRefUpdates always

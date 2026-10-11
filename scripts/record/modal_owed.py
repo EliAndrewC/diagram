@@ -311,6 +311,13 @@ def depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
     return digest([m.uid, m.tags.get("About", ""), m.entry, m.depiction, *_pages(root, m.drawing_files())])
 
 
+def legacy_depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
+    """The depiction fingerprint as it was computed before feature 375 amendment 1 (the modal's prose - Name, About, Guesses,
+    Form - its Depiction and its Drawing: pages): what every depiction answer recorded before that change holds. Read by
+    `record_owed.legacy_depiction_answered`, so the formula change did not re-owe answers to words that had not moved."""
+    return digest([m.uid, m.prose, m.depiction, *_pages(root, m.drawing_files())])
+
+
 def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
     """(slug, occasion, fingerprint) for every unit an About-form modal owes against `base`."""
     before = modals_at(root, base) if base else {}

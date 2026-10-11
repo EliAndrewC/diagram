@@ -646,6 +646,8 @@ backup_delete() { # <branch> <tip judged contained in origin/main>
 
 backup_step() {
   local name br tip head out b t
+  # land-tooling's worktree (SYNC_BACKUP=off): its work is the clone's own commits, backed up at the clone's stop
+  [ "${SYNC_BACKUP:-}" = off ] && return 0
   name=$(basename "$ROOT"); br=backup/$name
   if ! out=$(git fetch -q --prune origin 2>&1); then
     echo "sync-with-main: backup NOT checked - cannot reach origin: $(backup_last "$out")" >&2; return 0

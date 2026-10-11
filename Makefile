@@ -1164,7 +1164,8 @@ arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the 
 
 # GUARD_EDIT_OK: feature 379 (the GM 2026-10-10) - an arbiter's tooling fix is made, not lost: the two ways an open fix is
 # settled, each a row of the GM's review; `make tick` and the closing check refuse while one is open.
-arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID=<trigger> NOTE="<what was built>" TEST=tests/...
+arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=tests/...
+	@: "GUARD_EDIT_OK: 2026-10-11 hourly check - several fixes one change made settle in one command (343 carried 36 open)"
 	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
 

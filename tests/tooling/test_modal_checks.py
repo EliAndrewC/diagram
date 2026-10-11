@@ -6,6 +6,7 @@ seeing"* - so the candidates are the UNION rule, and the farmhouse's own case (0
 from __future__ import annotations
 
 import importlib.util
+import json
 import pathlib
 import subprocess
 import sys
@@ -410,6 +411,7 @@ def test_the_glyph_crop_shows_the_drawn_fill_never_the_highlight(tmp_path: pathl
     )
     out = tmp_path / "glyph.png"
     assert mb.glyph_crop(page, "kitchen", out)
+    assert "kitchen" in pathlib.Path(str(out) + ".kinds").read_text().split(), "the kinds in the crop, each a pop-up a click opens (343 office-hall)"
     from PIL import Image  # noqa: PLC0415
 
     with Image.open(out) as im:
@@ -424,3 +426,40 @@ def test_a_depiction_bundle_says_which_maps_draw_what_its_conditions_name() -> N
     assert "## land_use_overlay" in note and "mulberry_fishpond" in note and "def _land_use_ok" in note
     assert "rolling/roll.py" in note, "where the engine resolves it"
     assert mb.knobs_note("no condition here") == ""
+
+
+def test_a_key_with_an_apostrophe_is_found_and_its_glyph_s_parts_read(tmp_path: pathlib.Path) -> None:
+    """343's clerks--seats ruling, 2026-10-11: the page writes `data-k="clerks&#x27; seats"`, so a key with an apostrophe was
+    on no page by its raw mark and its check ran with no crop; and with no crop it had no drawn size to check a stated one."""
+    page = tmp_path / "pool" / "magistracies" / "ubame" / "ubame.html"
+    page.parent.mkdir(parents=True)
+    page.write_text(
+        '<svg viewBox="0 0 800 600"><g class="f f-clerks--seats" data-k="clerks&#x27; seats">'
+        '<rect x="292" y="418" width="24" height="15" stroke-width="0.5"></rect></g>'
+        '<g class="f f-door" data-k="door"><rect x="1" y="1" width="9" height="9"></rect></g></svg>'
+    )
+    assert mb.pool_page_with(tmp_path, "clerks' seats", sheet=True) == page
+    shape = mb.drawn_geometry(page, "clerks' seats")
+    assert '<rect> x="292" y="418" width="24" height="15"' in shape and "viewBox 0 0 800 600" in shape
+    assert "0.5" not in shape and 'width="9"' not in shape, "not stroke-width, and not the next kind's parts"
+
+
+def test_research_fixed_wording_is_listed_for_the_form_round(tmp_path: pathlib.Path) -> None:
+    """343's border-court ruling: a form fix undid a research fix's scope words unseen. The research rounds' EDITs that still
+    stand are what the form round must keep."""
+    (tmp_path / ".git").mkdir()
+    reply = tmp_path / "r.md"
+    reply.write_text("EDIT m.md\n<<<\nnothing known of the formal entrance\n===\nno page on the formal entrance\n>>>\nEDIT m.md\n<<<\nold\n===\nwording later replaced\n>>>\n")
+    (tmp_path / ".git" / "checks-open.json").write_text(
+        json.dumps(
+            {
+                "dispatches": {
+                    "t1": {"check": "modal-research", "subjects": ["modal:sheet/border-court"], "t": 1, "reply": str(reply)},
+                    "t2": {"check": "modal-form", "subjects": ["modal:sheet/border-court"], "t": 2, "reply": str(reply)},
+                }
+            }
+        )
+    )
+    text = "About: no page on the formal entrance puts a garden there.\n"
+    assert mb.research_held(tmp_path, "sheet/border-court", text) == ["no page on the formal entrance"]
+    assert mb.research_held(tmp_path, "sheet/door", text) == []
