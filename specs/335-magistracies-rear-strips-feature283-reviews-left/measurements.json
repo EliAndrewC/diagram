@@ -86,5 +86,226 @@
       "orient": "H",
       "between": "storehouse at svg (486,158) 54 x 36 px"
     }
+  },
+  "v-hk-br-q1": {
+    "quantity": "the north-east corner named as the night-soil carriers' standing ground, not carters'",
+    "observed": "2026-10-11",
+    "verifies": "Q1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -cF 'night-soil carriers' standing ground' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-hk-br-n2": {
+    "quantity": "the vegetable garden's comment says it has no well of its own",
+    "observed": "2026-10-11",
+    "verifies": "N2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -cF 'has no well of its own since feature 335' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-hk-br-n3": {
+    "quantity": "the occasion line names the storehouses slid west",
+    "observed": "2026-10-11",
+    "verifies": "N3",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "specs/335-magistracies-rear-strips-feature283-reviews-left/tasks.md",
+    "command": "grep -cF 'the storehouses slid west over the rear pocket' specs/335-magistracies-rear-strips-feature283-reviews-left/tasks.md",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-hk-br-n4": {
+    "quantity": "the tally office draws a door on its south face",
+    "observed": "2026-10-11",
+    "verifies": "N4",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -cF '<rect x=\"728\" y=\"514\" width=\"24\" height=\"6\"' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-oc-br-e1": {
+    "quantity": "the barracks has a door to each dwelling, none across the partition",
+    "observed": "2026-10-11",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "grep -cF '<rect x=\"894\" y=\"680\" width=\"6\" height=\"24\"' pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-oc-br-e2": {
+    "quantity": "the servants' quarters have a door to each dwelling (knob rolled)",
+    "observed": "2026-10-11",
+    "verifies": "E2",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "grep -cF 'a door to each dwelling' pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-oc-br-e3": {
+    "quantity": "the senior retainers' three dwellings have a door each",
+    "observed": "2026-10-11",
+    "verifies": "E3",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "grep -cF '<rect x=\"347\" y=\"644\" width=\"24\" height=\"6\"' pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-oc-br-e4": {
+    "quantity": "the barracks is 72 x 100 px (24 x 33 ft), no more than 24 ft deep",
+    "observed": "2026-10-11",
+    "verifies": "E4",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "grep -cF '<rect x=\"894\" y=\"616\" width=\"72\" height=\"100\"' pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-oc-br-n1": {
+    "quantity": "the doors bullet stands after the vegetable garden's settings line",
+    "observed": "2026-10-11",
+    "verifies": "N1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "grep -cF '   - doors (feature 335' pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-ub-br-e1": {
+    "quantity": "the servants' door on the range's east end, its tub beside it, out of the alley",
+    "observed": "2026-10-11",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -cF '<rect x=\"462\" y=\"170\" width=\"6\" height=\"26\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-ub-br-e2": {
+    "quantity": "the family privy at the corridor's rear corner",
+    "observed": "2026-10-11",
+    "verifies": "E2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -cF '<rect data-id=\"latrine-2\" x=\"522\" y=\"218\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-ub-br-n1": {
+    "quantity": "the doors bullet stands after the kitchen garden's settings line",
+    "observed": "2026-10-11",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep -cF '   - doors (feature 335' pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-ub-br-n2": {
+    "quantity": "the notes' largest vacancy re-measured: the kitchen yard, 47 x 59 ft",
+    "observed": "2026-10-11",
+    "verifies": "N2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep -cF 'is the kitchen yard, 47 x 59 ft' pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-hk-door-f1": {
+    "quantity": "storehouse 2's door slid north on its east face, off the corner",
+    "observed": "2026-10-11",
+    "verifies": "F1",
+    "subject": "glyph-check--door--hayakawa-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -cF '<rect x=\"630\" y=\"172\" width=\"8\" height=\"12\"' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-hk-door-f2": {
+    "quantity": "the office hall's east door a dark block, unlike the clerks' seats",
+    "observed": "2026-10-11",
+    "verifies": "F2",
+    "subject": "glyph-check--door--hayakawa-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -cF '<rect x=\"674\" y=\"544\" width=\"6\" height=\"24\" fill=\"#4A3318\"' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-hk-door-f3": {
+    "quantity": "the Fire Dragon shrine's door light against its outline, the altar square moved clear",
+    "observed": "2026-10-11",
+    "verifies": "F3",
+    "subject": "glyph-check--door--hayakawa-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -cF '<rect x=\"779\" y=\"219\" width=\"8\" height=\"8\"' pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
+  },
+  "v-ub-torii-f2": {
+    "quantity": "a trodden approach runs under the arch to the hall's door",
+    "observed": "2026-10-11",
+    "verifies": "F2",
+    "subject": "glyph-check--torii--ubame-magistracy",
+    "answers": "4ed2d43d9e58",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -cF '<path d=\"M 912 348 H 983 V 286\"' pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "method": "read after the edit",
+    "value": {
+      "matches": 1
+    }
   }
 }
