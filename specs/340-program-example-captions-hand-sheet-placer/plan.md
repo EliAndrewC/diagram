@@ -14,8 +14,9 @@ measurement and the plan is amended and re-reviewed before it is built.
 
 - **D1 - the declarations (FR-001)**: `emit_svg`'s `rect` gains a `data-id` argument and `caption` a `names` argument; the
   written caption carries `data-names` listing the drawn shapes it names. Each call site names the shape(s) the caption is
-  about: a zone's, a building's or a room's own rect; the dais and each clerk's seat; the bath, a well, a latrine, a tub, the
-  notice board; the straw mats' last mat; the striking posts' two circles. Where the composer seats a caption on ground that
+  about: a zone's, a building's or a room's own rect; the dais and each clerk's seat; the bath, a well, a latrine, every tub, the
+  notice board; EVERY straw mat (the hand sheets' form: the caption names all the mats of its group - plan review round 1:
+  naming only the last mat would hide the entry's 'one mat' difference before D2 measures it); the striking posts' two circles. Where the composer seats a caption on ground that
   is not a drawn shape (a block's name in its rear alley, `_rear_band`), the declaration names the block itself - that IS the
   subject difference the entry names, and the harness counts it. No invisible stand-in is added (the entry counts those as a
   difference). Nothing else changes: the composer still seats by its own subjects, so every seat is unchanged and a test

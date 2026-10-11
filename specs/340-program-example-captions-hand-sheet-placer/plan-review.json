@@ -1,0 +1,59 @@
+{
+ "feature": "340-program-example-captions-hand-sheet-placer",
+ "plan_sha256": "0037f235526540beb27715ef4fdf917770eeb75b91c8b0ce02dad35f2ffeffe8",
+ "plan_text": "# Implementation Plan: one view of the sheet for the program example's captions (340)\n\n**Spec**: `spec.md` (FAITHFUL, round 2) | **Measurements**: `harness.py` (`make spec-harness SPEC=specs/340-program-example-captions-hand-sheet-placer OUT=<json>`)\n\n## Summary\n\nThree steps, as the spec orders them: the composed draft declares its captions the hand sheets' way (additive - no seat\nmoves); a harness measures, on that one declared draft, every caption the composer and the hand-sheet placer seat\ndifferently, attributing each to the entry's three sources and reporting what each of the entry's two fixes removes; then the\nseating switches to the fix the measurement supports, per source, keeping feature 287's strict rule. D3 is decided by the\nmeasurement and the plan is amended and re-reviewed before it is built.\n\n## Decisions\n\n- **D1 - the declarations (FR-001)**: `emit_svg`'s `rect` gains a `data-id` argument and `caption` a `names` argument; the\n  written caption carries `data-names` listing the drawn shapes it names. Each call site names the shape(s) the caption is\n  about: a zone's, a building's or a room's own rect; the dais and each clerk's seat; the bath, a well, a latrine, a tub, the\n  notice board; the straw mats' last mat; the striking posts' two circles. Where the composer seats a caption on ground that\n  is not a drawn shape (a block's name in its rear alley, `_rear_band`), the declaration names the block itself - that IS the\n  subject difference the entry names, and the harness counts it. No invisible stand-in is added (the entry counts those as a\n  difference). Nothing else changes: the composer still seats by its own subjects, so every seat is unchanged and a test\n  asserts the declared draft's caption positions equal the undeclared draft's.\n- **D2 - the harness (FR-002)**: on the declared draft, `C` = the composer's seats as emitted, `H` = `labels.hand_sheet.seat` on\n  the same text. Variants of the composer's seating, each one source swapped for the hand-sheet placer's: the obstacle view\n  (`hand_sheet.classify` over the drawn sheet less its captions, in place of `emit_svg`'s own obstacle list and the roofed\n  court's late obstacles), the subject (`hand_sheet.subjects` over the declared parts), the width (`char_w_of` per caption in\n  place of `CHAR_W_EM`); and the two fixes as the entry words them - fix 1 the composer indexing with `classify` (its own\n  subjects), fix 2 the hand-sheet placer taking the composer's subjects. For each caption whose `C` and `H` differ by more than\n  1 px it records the sources that remove the difference; one no source removes is reported with its cause (strictness, order,\n  clearance, repair) and kept out of N. Recorded in `measurements.json`.\n- **D3 - the switch (FR-003)**: DECIDED BY D2's MEASUREMENT, per source; the plan is amended with the figures and the choice\n  and re-reviewed before any of it is built.\n- **D4 - strictness under the one view (FR-004)**: a seat is free when it touches no ink the caption does not name: the\n  `inner` obstacles `classify` marks for the caption's own subject (its partitions, its mats) do not make a seat unfree; every\n  other weighted obstacle does, as today. Foot growth (`CAPTION_GROWTHS`) and the refusal message are unchanged.\n- **D5 - performance (FR-005)**: the example's gen timed before and after (`make map ... PROFILE=1`); `make perf-report` read;\n  any band crossed explained and audited.\n- **D6 - tests**: `tests/test_compound.py` keeps its refusal test unchanged; a declarations test (D1, seats unchanged); the D3\n  switch's tests as D3 settles them, with 100% coverage of what changes.\n\n## Constitution Check\n\n- XVI literal: the entry's \"measure first which disagreements each removes\" is D2, run before D3 is chosen.\n- XIII/XIV: the refusal test and the pool sheet's checks hold; any finding the re-seating causes is fixed here.\n- VI: D5.\n- Occasions: `layout-revised: county-magistracy-example` (its captions re-seated) - one `building-review` after D3 lands.\n",
+ "reviewed": "2026-10-11",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1-mats",
+   "summary": "D1 declares the 'straw mats' caption as naming only the straw mats' LAST mat (the composer's own chosen subject, compound.py:530 mats[-1]).",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001 requires each caption declared 'the way a hand sheet does'; the hand sheets declare this caption alone in <g data-kind=\"kneeling positions\"> holding every mat (ochiba-magistracy.svg 270-276), so hand_sheet reads its subject as all the mats. Declaring only the last mat writes the composer's subject into the declaration, so H reads the same subject as C and the entry's named subject difference ('one mat', 'straw mats' seat and leader' among the 9) is erased before D2 can measure or attribute it - gutting FR-002 for that caption and FR-003's subject fix with it. D1's own rear-alley rule (declare the block, so the difference is counted) is the correct treatment and is not applied here. Nothing makes the hand-sheet form impossible: the mats are already drawn as rects (compound.py:528) under the 'kneeling positions' kind. D4's 'its mats' (plural) presumes the all-mats declaration. Fix: declare the caption over every mat (the caption alone in the tagged 'kneeling positions' group with all the mats, or data-names listing each)."
+  },
+  {
+   "id": "D1",
+   "summary": "The rest of D1: rect gains data-id, caption gains names/data-names; each caption names its zone/building/room rect, dais, each clerk's own seat, bath/well/latrine/tub/board, the striking posts' two circles; rear-alley captions name the block; no invisible stand-ins; seats unchanged, held by a test.",
+   "class": "within",
+   "why": "FR-001's declaration, additive as the spec's three steps order. Clerks match the hand sheets (one 'clerk' caption per clerks-seats-N, hayakawa 649-653). Striking posts naming the two drawn circles (not the composer's synthetic 11.4 x 14.4 rect) and the rear-alley caption naming the block both preserve the entry's subject difference for D2 to count. No stand-ins added keeps the entry's stand-in difference measurable."
+  },
+  {
+   "id": "D2",
+   "summary": "Harness: C = composer seats, H = hand_sheet.seat on the declared draft; variants swapping each of the three sources and the two fixes as the entry words them; differences over 1 px attributed, unexplained ones reported with cause and kept out of N; recorded in measurements.json.",
+   "class": "within",
+   "why": "FR-002 clause by clause: the three sources, the two fixes, the residual causes. The 1 px tolerance is a comparison threshold, not a figure claimed about the artifact."
+  },
+  {
+   "id": "D3",
+   "summary": "The switch is decided by D2's measurement, per source; the plan is amended with figures and choice and re-reviewed before it is built.",
+   "class": "within",
+   "why": "FR-003 requires the measured fix; deciding now would contradict it. Amending plan.md moves its sha256, so this record stops matching and the plan gate holds T03 until the amended D3 is reviewed - the re-review is owed by construction."
+  },
+  {
+   "id": "D4",
+   "summary": "Strictness: a seat is free when it touches no ink the caption does not name; classify's inner obstacles of its own subject do not block; growth and refusal message unchanged.",
+   "class": "within",
+   "why": "FR-004 and User Story 2 verbatim."
+  },
+  {
+   "id": "D5",
+   "summary": "Gen timed before and after, perf-report read, any band crossed explained and audited.",
+   "class": "within",
+   "why": "FR-005 / SC-003."
+  },
+  {
+   "id": "D6",
+   "summary": "Refusal test unchanged; a declarations test (seats unchanged); D3's tests as D3 settles them at 100% coverage.",
+   "class": "within",
+   "why": "SC-002 and FR-001's additive step; tests that enforce what was asked."
+  },
+  {
+   "id": "tasks",
+   "summary": "T01-T04 map D1, D2, D3+D4, D5 plus make done and the Occasions' building-review; all research: rendering; D3 amended and re-reviewed before T03.",
+   "class": "within",
+   "why": "Mirror the plan and the spec's Occasions; no task adds or drops scope."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
