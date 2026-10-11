@@ -3931,3 +3931,14 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [Google: 旧小関家住宅修理工事報告書](https://www.google.com/search?q=%E6%97%A7%E5%B0%8F%E9%96%A2%E5%AE%B6%E4%BD%8F%E5%AE%85%E4%BF%AE%E7%90%86%E5%B7%A5%E4%BA%8B%E5%A0%B1%E5%91%8A%E6%9B%B8)
 - **Rests on it:** research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html - where the Koseki house's middle gate (塀中門) and roji stood against its gate and house (feature 338); look for the plan's gate court, the roji wall and the middle gate.
 - Blocked by: a printed municipal report; not on the web.
+
+### 309. Wheatbaku's post on the Edo town magistracies' compounds (wheatbaku-machibugyosho-yashiki)
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[The cited page](https://wheatbaku.exblog.jp/20939714)**
+- Fallback: [Google: wheatbaku 町奉行所 屋敷 那智黒](https://www.google.com/search?q=wheatbaku%20%E7%94%BA%E5%A5%89%E8%A1%8C%E6%89%80%20%E5%B1%8B%E6%95%B7%20%E9%82%A3%E6%99%BA%E9%BB%92)
+- **Rests on it:** research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html - the stone path and black Nachi gravel from the South Town Magistracy's main gate to its entrance (note wheatbaku-machibugyosho-yashiki). The archived copy of 2026-10-03 holds every quoted passage VERBATIM; what is asked is only whether the post opens in an ordinary browser, so the citation's link can be called readable.
+- Blocked by: wheatbaku.exblog.jp answers this container's fetches with HTTP 403 (quote-check rounds 1 and 2, feature 343, 2026-10-10).
