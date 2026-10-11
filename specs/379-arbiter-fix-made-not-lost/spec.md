@@ -61,7 +61,8 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
 - **SC-002** (FR-002, FR-004) Each refusal has a test that fails on today's code.
 - **SC-003** (FR-005) In a fixture clone with a feature in progress holding both engine work and a guard fix: the tooling lands
   on main alone, main carries none of the engine work, the full push is still refused, and the clone's next merge of main is
-  clean; a change naming a non-tooling path is refused, and so is one that does not apply cleanly onto main.
+  clean; a change naming a non-tooling path is refused, and so is one that does not apply cleanly onto main; and a landed
+  test that fails without work still held in the clone is refused, with main unchanged.
 - **SC-004** (FR-006) `make arbiter-fix-done` refuses while the fix's test is not on main, and passes once it is.
 
 ## Review history
@@ -75,3 +76,5 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
     and every test it lands is run before the push; `docs/` dropped for `docs/make-targets.html` alone; `.claude/skills/`
     added; the Makefile and settings named as the session's reading of "tooling", with why.
   - SC-003 also covers a change that does not apply cleanly onto main.
+- spec-fidelity-verify, amendment 1 round 2 (2026-10-10): CHANGES REQUIRED - FR-005's landed-test refusal had no success
+  criterion. Applied: SC-003 adds a landed test failing without work held in the clone, refused with main unchanged.

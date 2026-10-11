@@ -68,7 +68,7 @@ every exit. Measured: `.specify/feature.json` is untracked, so the worktree carr
 check finds no feature in a delta that touches no `specs/`; `sync-with-main.sh` requires only that its root sit under
 `.clones/`.
 
-**D9 - FILES is required and named, never inferred.** A file lands whole, and mid-feature a `CLAUDE.md`, `docs/` or
+**D9 - FILES is required and named, never inferred.** A file lands whole, and mid-feature a `CLAUDE.md`, a test or the
 `Makefile` edit may describe engine work that has not landed; so with no FILES the command lists the tooling paths the
 delta changed and exits 2 (the guard producing the compliant command). A path outside FR-005's set - `scripts/`, `tests/`,
 `.claude/agents/`, `.claude/skills/`, any `CLAUDE.md`, the `Makefile`, `.claude/settings.json`, `docs/make-targets.html` -
