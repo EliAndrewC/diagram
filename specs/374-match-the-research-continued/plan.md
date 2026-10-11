@@ -242,6 +242,11 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
   no way - the derivation `dry_exit.GROVE_EXIT_CELL_FT` records, paid where needed. The lane room stays 32 ft and 0036 is
   unchanged. Measured: the 48-seed cohort and its six pinned rows pass but seeds 10 and 20, both refused at HEAD before the
   change (the baseline 52/54).
+- Kashikawa, rerolled, was refused for a "needle" the law found where two door paths end on the skeleton at the point it
+  bends: a face 0.09 ft round, three lanes noded a hair apart, no ground at all. A pre-existing defect of the law's face test
+  (constitution XIV): `law.needle_loops` skips a face whose perimeter is under `NODING_SPECK_FT` (1 ft); a real needle runs
+  the length of its ways. Kashikawa then rolls, its door paths moved; the other four pool hamlets are unchanged, and the
+  cohort with the rule matches the baseline (52/54).
 - Maps: every pool hamlet is rerolled; a hamlet whose paths change owes no glyph-check (no glyph is redrawn) - the lane
   law's acceptance sweep and the cohort hold the change.
 
