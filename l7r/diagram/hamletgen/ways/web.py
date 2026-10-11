@@ -549,7 +549,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         web lanes off the water - UNRESEARCHED: web cuts and joins clipped at the watercourses and drawn channels, no web lane crossing water
         orphan stub joined - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes are one network, so a stranded stub is joined into it
         orphan stub's reach - research/questions/0081-village-lanes.drawing.html: within `_STUB_REACH_FT`, 25 ft, the page's join reach, a stub is joined into the network
-        web lanes routed round the households' reserved wood seats as fabric - UNRESEARCHED: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading
+        web lanes routed round the households' reserved wood seats as fabric - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading; no page read shows a lane through a household's grove
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
         a row farm's door point - UNRESEARCHED: set 8 ft past its yard (`front_door` at FOOTPATH_FABRIC_GAP + 4), where its street's trim and arrival are judged from

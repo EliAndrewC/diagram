@@ -5510,14 +5510,15 @@
  "l7r/diagram/hamletgen/consts.py::COPSE_HOUSE_REACH_FT#copse among the houses": {
   "code": "8fe5d67fb83864e8",
   "core": "33ed5702fb519815",
-  "date": "2026-10-05",
-  "note": "90 ft dooryard reach",
+  "date": "2026-10-11",
+  "note": "90 ft is the drawing page's dooryard reach",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36"
   ],
   "verdict": "IN-STEP"
  },
@@ -8284,10 +8285,10 @@
   "date": "2026-10-03",
   "note": "belt, copse and groves together, per 0036 drawing's fill",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::plant_the_belt#belt clipped at the page edge": {
@@ -8423,13 +8424,13 @@
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse among the homes": {
   "code": "1673c413768a9528",
   "core": "6f390401dade8cf4",
-  "date": "2026-10-07",
-  "note": "the copse is spread through the gaps between the houses and counted as the homesteads' own wood",
+  "date": "2026-10-11",
+  "note": "copse seated over the house cluster, in the gaps between the houses",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
-  "research": "ace53309b90df32c",
+  "research": "d6922e8e8cc132d1",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
@@ -8455,12 +8456,12 @@
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse reach from a house": {
   "code": "ba742f2646c89913",
   "core": "6f390401dade8cf4",
-  "date": "2026-10-07",
-  "note": "a clump stands only within 90 ft of a house",
+  "date": "2026-10-11",
+  "note": "s.px(COPSE_HOUSE_REACH_FT) bounds each clump to 90 ft of a house",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa"
   ],
@@ -8472,9 +8473,9 @@
   "date": "2026-10-07",
   "note": "each homestead's wood is rolled per farm, and the copse is filled to what the belt and the farm groves leave; the range itself is checked in copse_goal",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:25f4f196d0bea56e",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:56bf66b98afe5452",
@@ -8482,6 +8483,7 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ccde3c4c44be3d3c"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#no copse without a belt or a reserved seat": {
@@ -10324,15 +10326,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::footprint#the household's wood": {
-  "code": "d0cc7081fd6741e4",
+  "code": "e9b8c55a4fbf82e4",
   "core": "a5ca995c1f2f5078",
-  "date": "2026-10-03",
-  "note": "matches its backing",
+  "date": "2026-10-11",
+  "note": "reserved seats inside the homestead's envelope, so no lane comes between a house and its wood",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "01524c146ada7ad0",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:e1115986b4f542bc"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/growth.py::grow_gap#a lane's room between homesteads": {
@@ -10665,15 +10671,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/household_ways.py::seat_walls#the track off the wood seats": {
-  "code": "1d3babe30a2708f6",
+  "code": "71c5cd587dd4675d",
   "core": "2dc324db46b4fad2",
-  "date": "2026-10-04",
-  "note": "figures match code; record silent on a lane's gap off a copse seat",
-  "pages": {},
-  "research": "",
+  "date": "2026-10-11",
+  "note": "GUESS the page records; the buffer distance is the project's own",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
   "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab"
   ],
   "verdict": "IN-STEP"
  },
@@ -10703,15 +10710,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/household_ways.py::seated_parts#the track off the wood seats": {
-  "code": "3e638dd2912d6524",
+  "code": "feddde1e328421e3",
   "core": "e2eafd2fee3c4ec0",
-  "date": "2026-10-04",
-  "note": "the lanes page names house, yard, beds, well, sheds and fixtures but not wood seats, so UNRESEARCHED is right; the octagon is plumbing",
-  "pages": {},
-  "research": "",
+  "date": "2026-10-11",
+  "note": "seats as octagons of seat_walls' reach, under the recorded GUESS",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
   "rests": [
-   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
-   "0081-village-lanes.drawing.html:8648abc7a601036d"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab"
   ],
   "verdict": "IN-STEP"
  },
@@ -10918,11 +10926,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/region.py::SeatRegion.sync#reserved wood seats bar lane ground": {
-  "code": "73ca4ad53e7c0c96",
+  "code": "854889e88e5be4a3",
   "core": "a50f92f025052dbc",
-  "date": "2026-10-03",
-  "note": "the bundle's pages are silent on it",
-  "research": "",
+  "date": "2026-10-11",
+  "note": "seats barred to lanes; the drawing page records \"no lane between house and grove\" as a GUESS",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/region.py::_clip#seat region": {
@@ -11435,16 +11449,28 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/rows.py::door_clear#door point out past the front": {
+  "code": "0e9ced731d1a4bb5",
+  "core": "c387c225c3452b80",
+  "date": "2026-10-11",
+  "note": "no cited page says where a door point stands past the front edge",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/rows.py::door_clear#way in at the open front": {
   "code": "b42a7b7613aca957",
   "core": "c387c225c3452b80",
-  "date": "2026-10-03",
-  "note": "matches its backing",
+  "date": "2026-10-11",
+  "note": "the door is judged on the front face the grove leaves open",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#cell on a lane or stream left undrawn": {
@@ -12069,15 +12095,16 @@
   "date": "2026-10-10",
   "note": "a clustered household is seated only where it reserves the 6,000 sq ft floor of copse within the 90 ft dooryard reach",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:56bf66b98afe5452",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a pushed front seat's retry": {
@@ -12392,18 +12419,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::reserve_the_seating#a lane's buffer about a copse seat": {
-  "code": "05293b12dc5c6238",
+  "code": "6e52ac93404ca599",
   "core": "7884d7e6a7ec6627",
-  "date": "2026-10-04",
-  "note": "`max(clump*0.45 + 4, crown_reach(clump, 0, lift=crown_lift))` matches; the unscaled +4 is 4 ft at the hamlet's 1 ft to the pixel; no bundle question gives a lane buffer about a dooryard-copse seat (0036 §168 and §170 are about grove rings and grove gaps)",
-  "pages": {},
-  "research": "",
+  "date": "2026-10-11",
+  "note": "the cited pages give no distance a way kept off a farm's grove; the buffer is a guess on the recorded lane-free rule",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d29b90e1874b90f4",
-   "0081-village-lanes.drawing.html:91a5765af6230403"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "verdict": "IN-STEP"
  },
@@ -13189,13 +13215,14 @@
   "date": "2026-10-07",
   "note": "polder archetypes or dike-top houses; GROVE_SIDES_FLOOD matches 37.5/22.5/40",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:1e95485641126947",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ab7093914db746be"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#grove sides refused outside two to four": {
@@ -13204,14 +13231,15 @@
   "date": "2026-10-07",
   "note": "two, three or four sides; the rolled weights match 50/30/20 and the flood weights 37.5/22.5/40",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:1e95485641126947",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ab7093914db746be"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#harvest weather default": {
@@ -17937,19 +17965,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#across the groves": {
-  "code": "989954170c494510",
+  "code": "4efe55b7caf86298",
   "core": "b80839d24d112268",
-  "date": "2026-10-10",
-  "note": "the code drops kind \"village_groves\" from the walls (`kind not in (\"commons\", \"village_groves\")`, \"a path crosses ground cover\"), but the cited page has a lane keep \"a footpath's clearance and some working room kept off the trees\". Either wall the groves at that clearance or relabel the claim as the deliberate crossing it is",
+  "date": "2026-10-11",
+  "note": "village_groves are left out of the walls, as a lane crosses the belt with planting on both sides",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "5892781a1ab23bcb",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way off the steadings": {
   "code": "db7e8fbb7fd9b3bf",
@@ -17996,6 +18024,31 @@
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
   "triaged": "2026-10-09",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/corridors.py::field_router#off the farm groves": {
+  "code": "1f38d9f6042bee94",
+  "core": "b80839d24d112268",
+  "date": "2026-10-11",
+  "note": "farm grove bands stay walls at the router gap: no lane through a farm's own wood, a footpath's clearance off the trees",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/corridors.py::field_router#out of its own house": {
+  "code": "b41b83d7f941d1ad",
+  "core": "b80839d24d112268",
+  "date": "2026-10-11",
+  "note": "an ownership and start tolerance that lets a route leave its own door; nothing a reader reads off the map",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#the brook at its fords": {
@@ -21866,13 +21919,16 @@
  "l7r/diagram/hamletgen/ways/serve.py::front_door#the way in at the front": {
   "code": "0ef7172eea77b01e",
   "core": "efb613335224cd5d",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "date": "2026-10-11",
+  "note": "door past the yard on the open lee front, taking the middle of a split front's gap",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::front_to_flank_open#plumbing": {
@@ -21992,15 +22048,18 @@
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#off the fixtures and grove bands": {
   "code": "e81304de73bf1fbd",
   "core": "735b4eb618a90a66",
-  "date": "2026-10-09",
-  "note": "fixtures and grove bands are added to the walls, with the bands grown by a footpath's half-tread plus a margin",
+  "date": "2026-10-11",
+  "note": "fixtures and every grove band, the farm's own included, are walls to the door path",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "69df9bcb15b25786",
+  "research": "9f5938e6528bfee9",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a8a9cdf0aa655990"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
@@ -25017,18 +25076,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_connector_through#gives up a wood seat as last resort": {
-  "code": "e8472dfa63117a71",
+  "code": "19071812c2e5569d",
   "core": "74800c63d50ab983",
-  "date": "2026-10-04",
-  "note": "copse kept off the main road",
-  "pages": {
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
-  },
-  "research": "90cf9ff106c766c9",
-  "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
-  ],
-  "triaged": "2026-10-05",
+  "date": "2026-10-11",
+  "note": "0036 keeps a lane out of a farm's wood and lets a copse fall short where the ground is used up; it never weighs a through-way against a seat",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::_out_of_bands#track plumbing": {
@@ -25066,17 +25119,17 @@
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#never across a grove": {
   "code": "492e3f6fc24f4101",
   "core": "7b3c192fb1a20f28",
-  "date": "2026-10-07",
-  "note": "a lane is kept off the trees, so the track goes round the bands",
+  "date": "2026-10-11",
+  "note": "the grove fallback routes and clips round the bands at FOOTPATH_FABRIC_GAP (4 ft, `_route(..., gap=FOOTPATH_FABRIC_GAP)`, `clip_to_clear(kept[::-1], bands, FOOTPATH_FABRIC_GAP)`) for a 6 ft track, where the page lays a lane \"with a footpath's clearance and some working room kept off the trees\" (connector_dry_exit's calibration is 4 + 3 = 7 ft); the gap should be FOOTPATH_FABRIC_GAP + CONNECTOR_WIDTH / 2, or the claim should record 4 ft as a deviation",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track kept off drawn water": {
   "code": "c0e33236de135a0c",
@@ -25183,12 +25236,12 @@
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#grove band gap": {
   "code": "c9c1212fc0a68ccd",
   "core": "5782ad61a819dfae",
-  "date": "2026-10-10",
-  "note": "4 + 3 ft off the bands on a 7 ft grid fits the page's ~22 ft opening and its 32 ft between groves",
+  "date": "2026-10-11",
+  "note": "4 + 3 = 7 ft off the bands on a 7 ft grid, a calibration of the lane's clearance that fits between groves 32 ft apart",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
@@ -25208,13 +25261,14 @@
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#track start out of the grove bands": {
   "code": "272a4d860ed7be59",
   "core": "5782ad61a819dfae",
-  "date": "2026-10-10",
-  "note": "the same lane clearance off the trees; the 0.71 x cell + 1 ft added is grid plumbing",
+  "date": "2026-10-11",
+  "note": "the start is walked out of the bands by the lane's clearance plus a grid margin (plumbing); no track starts in a grove",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "verdict": "IN-STEP"
@@ -27007,13 +27061,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes routed round the households' reserved wood seats as fabric": {
-  "code": "e5079655b5bb7f37",
+  "code": "2dcfeb15d87db5fc",
   "core": "5cbb09d85f0e950c",
-  "date": "2026-10-10",
-  "note": "none of the cited questions rules on the reserved wood seats",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "date": "2026-10-11",
+  "note": "GUESS the page records: no lane through a farm's own wood, copse clumps kept free of lanes",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#a tail kept as a house's only way": {
@@ -29532,10 +29590,10 @@
   "date": "2026-10-03",
   "note": "windward pair, open front with yard and way in, ring broken once at front",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/place.py::crop_sentence#card plumbing": {
@@ -29574,23 +29632,34 @@
   "date": "2026-10-03",
   "note": "four sides likelier on flood ground, Izumo's flood bank",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/place.py::homestead_grove_default#grove side count": {
   "code": "43b6d7a037013d57",
   "core": "f79f9fe3e190cdf4",
-  "date": "2026-10-03",
-  "note": "2/3/4 sides, one roll a settlement",
+  "date": "2026-10-11",
+  "note": "two, three or four sides, one roll a settlement; sentences match the windward pair, the open front and the ring broken at the front",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "b4135792ca6aaee1"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785"
   },
-  "research": "4d1003db37c96843",
-  "triaged": "2026-10-05",
+  "research": "dd3ce5066b825445",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:072f98d7b458fdcb",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a2869616958ab3d2",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a33deb5f90d7f688",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:06916dd3fcb28cae",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:5b8d8251b7fcb16d",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:7f55a826c9fa36f2",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:ccf9eee33993c358"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/place.py::homestead_grove_default#no side sentence on a nucleated map": {
@@ -34150,18 +34219,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/reserved.py::Reservations.conflicts#wood seats": {
-  "code": "daf886a74fd51d11",
+  "code": "6e22451843bf2863",
   "core": "3ed5fce5d4690e03",
-  "date": "2026-10-05",
-  "note": "a copse seat kept off occupied ground and off a lane",
+  "date": "2026-10-11",
+  "note": "seat kept off occupied ground and a lane's buffer; matches clumps never on a building and the way running outside the grove",
   "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
-  "research": "90cf9ff106c766c9",
+  "research": "d3bf4d117f7e43ca",
   "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:e1115986b4f542bc",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:8869ee12a8b6d77d"
   ],
   "verdict": "IN-STEP"
  },
@@ -34971,10 +35041,10 @@
   "note": "kura on the west wall (scattered) or north wall (clustered) is the recorded drawing convention; the grove takes its rolled 2-4 sides, the windward stand about 24 ft off the house, thin bands beside it",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
-  "research": "a131ceba7d0c42fd",
+  "research": "8bf4154cb971fb14",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:072f98d7b458fdcb",
@@ -34986,6 +35056,7 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#bookkeeping records": {
@@ -47040,10 +47111,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._farmstead_nudges#plumbing": {
@@ -49060,12 +49131,13 @@
   "date": "2026-10-07",
   "note": "the service-strip GUESS; a tree with no box (the persimmon) is not tested",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band east of a garden": {
@@ -49115,22 +49187,26 @@
   "date": "2026-10-03",
   "note": "per-settlement sides, per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_rules.py::groves_crossed_by_lanes#no lane through a grove": {
   "code": "795b8fdd88b2847d",
   "core": "a3cc598df63a331e",
-  "date": "2026-10-03",
-  "note": "way in by the open front, per 0036",
+  "date": "2026-10-11",
+  "note": "flags a lane tread overlapping a farm grove band; the way in comes by the open front",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_rules.py::groves_off_windward#deep bands to windward": {
@@ -49139,11 +49215,11 @@
   "date": "2026-10-03",
   "note": "deep stand on windward faces, per 0036/0072",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
-  "research": "5fa4614371d9115f",
-  "triaged": "2026-10-08",
+  "research": "a27db1691bef4915",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::GROVE_FLANKS#cardinal wind's second face": {
@@ -49160,10 +49236,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or the label",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::GROVE_SIDES_FLOOD#flood ground side count": {
@@ -49172,10 +49248,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or the label",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::THIN_BAND_FT#thin band depth": {
@@ -49184,10 +49260,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or the label",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::_CLOCKWISE#face geometry": {
@@ -49209,12 +49285,17 @@
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::_TURNS#yard on the lee face": {
   "code": "10b1c3dd72d3d460",
   "core": "a6f5573559089db9",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "date": "2026-10-11",
+  "note": "yard on the lee face (SW wind gives an east front, as on the Tonami plain; NW gives south, which Sendai often leaves open)",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "b4135792ca6aaee1"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785"
   },
-  "research": "dd08b00eed01ad64",
+  "research": "ad1c5b1267ac451b",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:0d8373ca91f4bc07",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:666cce295d307b2e",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:7f55a826c9fa36f2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::bundle_turn#face geometry": {
@@ -49231,10 +49312,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or the label",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::grove_faces#which faces": {
@@ -49243,10 +49324,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or the label",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::turn_face#face geometry": {
@@ -49271,10 +49352,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or the label",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::<module>#plumbing": {
@@ -49402,9 +49483,10 @@
   "date": "2026-10-03",
   "note": "NW default = N+W pair, per-map windward knob, as Sendai",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "b4135792ca6aaee1"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785"
   },
-  "research": "dd08b00eed01ad64",
+  "research": "ad1c5b1267ac451b",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._belt_ranks#conifer rows": {
@@ -49681,12 +49763,13 @@
   "date": "2026-10-10",
   "note": "the dooryard mix gets b_th = c_th = 0, so it draws broadleaf only, with no conifer and no bamboo",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon": {
@@ -49786,10 +49869,10 @@
   "date": "2026-10-03",
   "note": "the windward pair deep, the other sides thin, per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#grove area": {
@@ -49798,10 +49881,10 @@
   "date": "2026-10-03",
   "note": "the ~6:1 target held inside 6,000-28,000 sq ft",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#narrow run": {
@@ -49818,10 +49901,10 @@
   "date": "2026-10-03",
   "note": "the code starts at d0 = 1.4*hh and deepens up to 3.6*hh to reach the 6:1 area; 0036 says \"each windward stand 1.57 house depths deep - about 44 ft\". Neither 1.4 nor 3.6 is on the page, and at a 46 x 28 ft house the 6:1 target needs ~2.1 house depths. Fix: reconcile the page's depth with the area-target code",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#windward ladder floor": {
@@ -49838,10 +49921,10 @@
   "date": "2026-10-03",
   "note": "_grove_arm_rect(..., d, 1.5, run) seats the stand 1.5 px off the wall, but 0036 drawing says \"The windward stand is set about 24 ft off the house\" (service strip); move to ~24 ft, or record a DEVIATION on the drawing page",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_arm_rect#arm off the wall": {
@@ -49850,10 +49933,10 @@
   "date": "2026-10-03",
   "note": "the gap comes from the caller",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_arm_rect#arm wraps the windward corner": {
@@ -49862,10 +49945,10 @@
   "date": "2026-10-03",
   "note": "an L on the windward pair, per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_arm_specs#deep pair and thin bands": {
@@ -49874,10 +49957,10 @@
   "date": "2026-10-03",
   "note": "per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_candidate#every farm a grove": {
@@ -49886,10 +49969,10 @@
   "date": "2026-10-03",
   "note": "every farm's grove, per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_fits#grove off the crops": {
@@ -49966,10 +50049,10 @@
   "date": "2026-10-03",
   "note": "one tree, 17 ft, per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_room_depth#least windward arm": {
@@ -49986,10 +50069,10 @@
   "date": "2026-10-03",
   "note": "50/30/20, with the flood table 37.5/22.5/40, matching 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._shades_a_garden#garden's morning sun": {
@@ -50039,10 +50122,10 @@
   "date": "2026-10-03",
   "note": "0036: a thin band \"beside the house closes only the house's own side\", and \"standing it beyond the sun's reach\" is rejected; the code steps the band out up to two house spans until it clears the yard and garden, where _draw_grove's 50 ft sun ground then removes its crowns. Fix: the band should stand beside the house only",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._wants_grove#no grove inside a city wall": {
@@ -50091,10 +50174,10 @@
   "date": "2026-10-03",
   "note": "6,000-28,000 sq ft, as 0036 states",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::HOUSEHOLD_BAMBOO_PREVALENCE#farms with bamboo": {
@@ -50103,14 +50186,15 @@
   "date": "2026-10-05",
   "note": "three in five, recorded GUESS",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "b4135792ca6aaee1",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785",
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
-  "research": "0d146edd25c5f6e7",
+  "research": "761c8dd78c1e1486",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.html:fb074db8b2769c5d",
    "0075-bamboo-groves-chikurin.drawing.html:e6d16be9cc94af32"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size": {
@@ -50598,15 +50682,16 @@
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse filled to the homesteads' wood": {
   "code": "ec33f48fc2642006",
   "core": "fe8b7beea6919809",
-  "date": "2026-10-10",
-  "note": "the reserved seats are planted first, then the grid and its offsets fill to `area`, with no rule relaxed, so the copse stays short where the ground is used up",
+  "date": "2026-10-11",
+  "note": "reserved seats planted first, then the grid fills to the goal and stops when it is met",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:25f4f196d0bea56e",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da"
   ],
@@ -50618,12 +50703,13 @@
   "date": "2026-10-10",
   "note": "a copse takes the \"dooryard\" mix: fruit and broadleaf, no bamboo",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse stragglers dropped to its stocking": {
@@ -50978,10 +51064,10 @@
   "date": "2026-10-03",
   "note": "per 0036 (the copse is drawn short where the ground is used up)",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_goal.py::attainable_band#homestead wood range": {
@@ -50990,10 +51076,10 @@
   "date": "2026-10-03",
   "note": "per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_goal.py::canopy_of#plumbing": {
@@ -51010,10 +51096,10 @@
   "date": "2026-10-03",
   "note": "per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_goal.py::rolled_wood#log-uniform roll": {
@@ -51022,10 +51108,10 @@
   "date": "2026-10-03",
   "note": "log-uniform, per 0036",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_goal.py::trim_to_goal#plumbing": {
@@ -51050,10 +51136,10 @@
   "date": "2026-10-03",
   "note": "0036 drawing gives the crown (8.5 ft mean radius), not a clump's size; the 22-unit clump is UNRESEARCHED, as village_grove's own \"clump grid\" claim labels it",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_FT#bed's morning lane": {
@@ -51162,13 +51248,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#seat off a lane": {
-  "code": "dcfcf1586782756f",
+  "code": "4e4bcaa463921814",
   "core": "c49c058705369a69",
-  "date": "2026-10-08",
-  "note": "nothing cited answers it",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "date": "2026-10-11",
+  "note": "corridor half plus the copse's lane buffer; the cited pages give no figure for it",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": {
@@ -51262,10 +51353,10 @@
   "date": "2026-10-03",
   "note": "reach from caller, 0036 drawing's 90 ft",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.seats_on#plumbing": {
@@ -51279,13 +51370,27 @@
  "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.share#each household's floor reserved": {
   "code": "9179dee82b1d93b9",
   "core": "c822d82eeea90695",
-  "date": "2026-10-03",
-  "note": "floor reserved per 0036 drawing (docstring's \"half the reach\" is stale vs FOCUS_DEPTH 0.7)",
+  "date": "2026-10-11",
+  "note": "crowns on cells no other household holds, up to the floor, within reach, or the homestead is refused",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:56bf66b98afe5452",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.share#seats behind the house": {
+  "code": "b538c4b3fbafc964",
+  "core": "c822d82eeea90695",
+  "date": "2026-10-11",
+  "note": "0036 holds the copse within the dooryard reach beside its house but says nothing on where within that reach",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/wood_share.py::bundle_parts#plumbing": {
@@ -55392,9 +55497,9 @@
   "date": "2026-10-07",
   "note": "sides rolled, turned to the wind, 17 ft thin band, 36 ft way in, 32 ft between groves, 24 ft service strip",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:072f98d7b458fdcb",
@@ -55406,6 +55511,7 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:effd653c04180008"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket": {
@@ -55431,12 +55537,12 @@
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#frame padded for a lane": {
   "code": "596066ff37cc3cc8",
   "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "16 ft pad each side gives the page's 32 ft guess",
+  "date": "2026-10-11",
+  "note": "pad = px(LANE_ROOM_FT)/2, so groves stand 32 ft apart; the drawing page records the 32 ft as a GUESS",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366"
   ],
@@ -55548,12 +55654,13 @@
   "date": "2026-10-07",
   "note": "24 ft off the back and windward walls, as the page guesses",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band kept off the yard's sun": {
@@ -55616,24 +55723,25 @@
   "date": "2026-10-07",
   "note": "17 ft, one tree deep, a guess the page records",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#way in through a ring": {
   "code": "b2c8546c5685f6b9",
   "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "36 ft break at the front's middle, a guess the page records",
+  "date": "2026-10-11",
+  "note": "passes way_in=px(WAY_IN_FT), 36 ft; the page records its width and place as a GUESS",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
@@ -55867,22 +55975,24 @@
   "date": "2026-10-03",
   "note": "1.57 house depths",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::LANE_ROOM_FT#lane room between groves": {
-  "code": "f1cbab0587e74123",
+  "code": "ca2fff4a7fbd41c6",
   "core": "ba716b4a7da14591",
-  "date": "2026-10-03",
-  "note": "32 ft",
+  "date": "2026-10-11",
+  "note": "the drawing page records 32 ft between neighbors' groves as a GUESS",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::SERVICE_STRIP_FT#service strip behind the house": {
@@ -55891,22 +56001,24 @@
   "date": "2026-10-03",
   "note": "24 ft",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::WAY_IN_FT#way in through a ring": {
-  "code": "b04cc9ed1fe3377e",
+  "code": "5a6e367691a97a0c",
   "core": "534f1c6a3a270f45",
-  "date": "2026-10-03",
-  "note": "36 ft at the front's middle",
+  "date": "2026-10-11",
+  "note": "the drawing page records one break of about 36 ft at the front's middle as a GUESS",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::YARD_SUN_STRIP#yard drying strip kept from bands": {
@@ -55965,14 +56077,15 @@
   "date": "2026-10-08",
   "note": "offset off the works is the recorded service-strip GUESS; crowns kept out of the plots' sun as 0038 requires",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:784ca5d6e795312e"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#garden placement": {
@@ -55996,9 +56109,9 @@
   "date": "2026-10-08",
   "note": "deep N+W at 1.57 house depths, thin E then S, front left open away from the wind, east band ending at the house on a sun map",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:784ca5d6e795312e",
@@ -56009,6 +56122,7 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#service strip": {
@@ -56017,12 +56131,13 @@
   "date": "2026-10-08",
   "note": "24 ft off the back and windward end walls, recorded as a GUESS",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#south strip off an unkept yard": {
@@ -56047,29 +56162,31 @@
   "date": "2026-10-08",
   "note": "east band past 50 ft from the bed; south band past 50 ft plus a crown on every scripted map",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
-  "research": "0e2c0ccedd2f9c0f",
+  "research": "e03e68f7b9b7b880",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:24c94c3020a1389e",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:c3578d51ce1e884d",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#way in through a ring": {
   "code": "5f279d2ce449b6d0",
   "core": "b80c7eb2000bacc0",
-  "date": "2026-10-08",
-  "note": "one 36 ft break at the middle of the farm's front (centered on the yard and house), recorded as a GUESS",
+  "date": "2026-10-11",
+  "note": "when sides == 4 the south band breaks once at the yard's middle, mid +/- way_in/2",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a33deb5f90d7f688"
   ],
   "verdict": "IN-STEP"
  },
@@ -56086,6 +56203,15 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b326e625eaeec6d4"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#wellhead off the house's front wall": {
+  "code": "3453685dc9820e91",
+  "core": "b80c7eb2000bacc0",
+  "date": "2026-10-11",
+  "note": "0031 places the well in the dooryard as a GUESS and says nothing on how far the wellhead stands off the wall",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#yard on the south front": {
@@ -56122,14 +56248,14 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#frame padded for a lane": {
-  "code": "5fc02c16f3378398",
+  "code": "d03aec0ea6dc18aa",
   "core": "ad883923fc825c76",
-  "date": "2026-10-08",
-  "note": "half the lane room on each side gives the whole gap between neighbors' groves",
+  "date": "2026-10-11",
+  "note": "padding every side by half of LANE_ROOM_FT keeps neighbors' groves at least 32 ft apart, the recorded GUESS",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366"
   ],
@@ -56156,13 +56282,14 @@
   "date": "2026-10-08",
   "note": "the canonical NW frame carried to the map's windward quarter (S+W for a Tonami-like wind), front away from the wind",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:effd653c04180008"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin#draw-order and footprint plumbing": {
@@ -56243,13 +56370,14 @@
   "date": "2026-10-08",
   "note": "the band gives up one crown radius on the house side, which keeps the 24 ft service strip clear",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:02dd5d25f9e2f806",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#no tree over a building": {
@@ -56268,13 +56396,14 @@
   "date": "2026-10-08",
   "note": "a non-deep band is drawn with the dooryard mix: broadleaf, no conifer, the mix recorded as a GUESS",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_legacy#every farm keeps a yard and a garden": {
@@ -56296,10 +56425,10 @@
   "date": "2026-10-03",
   "note": "prevalence roll, groves after the plots",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_legacy#no grove inside a city wall": {
@@ -57136,21 +57265,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::Layers#lane ground": {
-  "code": "71d2516ffda52993",
+  "code": "2b907ba4833dee88",
   "core": "45d47d15b58c96af",
-  "date": "2026-10-05",
-  "note": "lane ground off homesteads, crops and water; wood seats UNRESEARCHED",
+  "date": "2026-10-11",
+  "note": "a data container for the lane ground the claim describes; it decides nothing itself",
   "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "7b40c2c01cfba682",
+  "research": "2a6cfc0f17043b9c",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:e1115986b4f542bc",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::Layers.__init__#plumbing": {
@@ -57313,19 +57442,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::lane_layers#lane ground": {
-  "code": "161f38435004c593",
+  "code": "9262001fc85434d6",
   "core": "6df2847c6606618b",
-  "date": "2026-10-05",
-  "note": "homesteads held off by the half-width, site ground refused; wood gap UNRESEARCHED",
+  "date": "2026-10-11",
+  "note": "holds the way off every homestead by half its width, off ground the site refuses, and off wood seats by lane_gap; GAP_MARGIN_PX and GAP_CELL are raster plumbing",
   "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "7b40c2c01cfba682",
+  "research": "2a6cfc0f17043b9c",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:e1115986b4f542bc",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::lane_layers#the half-width from the way's line": {
@@ -58137,18 +58268,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/passage.py::walk_clear#walk crosses nothing standing": {
-  "code": "e0f50c086984740b",
+  "code": "4d03ad2242297d63",
   "core": "784391eea7e84bd2",
-  "date": "2026-10-05",
-  "note": "crosses no part of either household, nothing else standing",
+  "date": "2026-10-11",
+  "note": "checks both households' house, beds, sheds and fixtures, every other homestead whole, the site's refused ground and the wood seats, as the page's \"cross no house, garden bed, shed or fixture of either\"",
   "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "7b40c2c01cfba682",
+  "research": "2a6cfc0f17043b9c",
   "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.html:e1115986b4f542bc",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/passage.py::walk_of#walk to the neighbor's threshing yard": {
@@ -58380,10 +58512,10 @@
   "date": "2026-10-03",
   "note": "one sides roll per settlement, every farm gets all its sides (0036)",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
-  "triaged": "2026-10-05",
+  "research": "45be621f47448e34",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/place.py::PlacerMixin.headman#headman a plain farmstead enlarged": {

@@ -107,7 +107,7 @@ class Layers:
     """Lane ground over the cluster (`lane_layers`): cell centers `cx`, `cy`; `cover`, how many homesteads hold each cell off;
     `spans`, each homestead box's cell span (`id(box)` keyed); `site`, the site's ground and the wood seats.
 
-    Research: lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane keeps its clearance off every homestead, crop and water (the woodlots' seats: UNRESEARCHED)
+    Research: lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: a lane keeps its clearance off every homestead, crop and water, and off the woodlots' seats - no account of a farmhouse grove found runs a way through it
     """
 
     def __init__(self, x0: float, y0: float, nx: int, ny: int, cell: float) -> None:
@@ -151,7 +151,7 @@ def lane_layers(s: Settlement, boxes: Sequence[Any], segs: Sequence[tuple[Pt, Pt
     """Lane ground over the homesteads `boxes` (`(cx, cy, w, h)`) and the way out `segs`, `GAP_MARGIN_PX` round them.
 
     Research:
-        lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way keeps the corridor's half-width off every homestead and to ground the site admits; the lane gap off the woodlots' seats is UNRESEARCHED
+        lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: a way keeps the corridor's half-width off every homestead and to ground the site admits, and off the woodlots' seats - no account of a farmhouse grove found runs a way through it
         the half-width from the way's line - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: lane ground held 7 ft from the way's line, so a footpath's edge may pass 5.5 ft off a fence
     """
     import numpy as np

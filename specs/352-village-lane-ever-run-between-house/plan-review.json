@@ -1,0 +1,52 @@
+{
+ "feature": "352-village-lane-ever-run-between-house",
+ "plan_sha256": "382405673f501afe79cf9aaaeba11ee3940bd62db233bf5bbc5939c557b723a6",
+ "plan_text": "# Implementation Plan: did a village lane ever run between a house and its own grove? (feature 352)\n\n**Spec**: `spec.md` | **Request**: `request.md`\n\n## Summary\n\nA research-record feature: one question searched and its answer or absence recorded on 0036, then the code that keeps lanes\noff a household's wood share tagged against that finding, each claim judged by `impl-drift`. No map changes.\n\n## Technical Context\n\n- **The record.** Written and checked by FRESH page sessions from briefs (`make page-session BRIEF=\"m1-write.md\n  m1-check.md\"`): one write session (the search pass, archive first, and the record on 0036), one check-and-apply session.\n  One question; new registry keys only where a source is found and cited.\n- **The claims.** The ten claims FR-003 lists, found by its recorded search over the claims index's keys and notes and\n  the `Research:` claim text in the code (its five exclusions stated there). Their claims are\n  edited in this session after the record lands (a docstring's `Research:` lines - no engine line), then bundled with\n  `make claims-bundle` and judged by `impl-drift`; `make claims-checked` records the verdicts.\n\n## Performance bookends\n\nN/A: no generator change (FR-004).\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the search runs the archive before the web; China first, Japan as tiebreaker; every assertion\n  footnoted to a quoted passage, or an absence note naming the search.\n- **XIII**: tooling tests and the gate green.\n- **XVI**: built as written; a DRIFTED claim is recorded, the code not changed (FR-004).\n\n## Decisions\n\n**D1 - The search and the record** (FR-001, FR-002): the write session searches the archive (`make archive-find`) and then\nthe web, in Chinese and Japanese, for whether a lane or path ran between a farmhouse and its own homestead grove or dooryard\ncopse, and records on 0036's findings page, under a heading a reader would ask, the answer with footnoted passages or an\nabsence note naming each search. Its drawing page says how our maps settle it (the copse seats reserved and kept off by\nlanes, feature 287 woods W25).\n\n**D2 - The checks** (FR-002): `make record-owed` after the write; the check session dispatches every owed unit from its\nbundle (source-reader, quote-check, record-format, source-applicability for a new source) and answers each.\n\n**D3 - The claims** (FR-003): each claim FR-003 lists is rewritten to cite 0036's findings page (keeping the pages it cites\nnow) and to say what the code does in the finding's terms; where the finding does not reach a claim's detail (a buffer's\ndistance), the claim stays a labeled guess citing 0036's absence. `make claims-bundle UNITS=...` (or `OWED=1`) and one\n`impl-drift` pass; MISLABELED is relabeled and re-checked; DRIFTED is recorded.\n\n**D4 - What no code decides** (FR-003, FR-005): if no unit keeps a lane out of the gap between a house and its own seats,\n`implementation-check.md` records it as implemented nowhere, with the search (the recorded command and a grep over the\nseating and the ways for the house-to-seat gap). `make impl-check F=352` reports nothing missing.\n\n## Project Structure\n\n```text\nresearch/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html\nresearch/questions/0036-groves-of-trees-around-farmhouses-yashikirin.notes.html\nresearch/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html\nl7r/diagram/overlap/reserved.py                       a docstring's claims\nl7r/diagram/hamletgen/homesteads/household_ways.py    a docstring's claims\nl7r/diagram/hamletgen/homesteads/region.py            a docstring's claims\nl7r/diagram/hamletgen/homesteads/stages.py            a docstring's claims\nl7r/diagram/hamletgen/homesteads/growth.py            a docstring's claims\nl7r/diagram/hamletgen/ways/track.py                   a docstring's claims\nl7r/diagram/hamletgen/ways/web.py                     a docstring's claims\nl7r/diagram/settlement/rolling/gap_ways.py            a docstring's claims\nl7r/diagram/settlement/rolling/passage.py             a docstring's claims\nl7r/diagram/settlement/homestead_parts/wood_share.py  a docstring's claims\nspecs/352-village-lane-ever-run-between-house/briefs/  m1-write.md, m1-check.md\n```\n",
+ "reviewed": "2026-10-11",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "TC-record",
+   "summary": "The record is written and checked by fresh page sessions from two briefs (write, then check-and-apply); one question; new registry keys only where a source is found and cited.",
+   "class": "within",
+   "why": "A process choice for FR-001/FR-002; it drops no part of the search or the record the request and spec ask for."
+  },
+  {
+   "id": "TC-claims",
+   "summary": "The ten claims FR-003 lists, found by its recorded search with its five stated exclusions, are edited after the record lands (docstring Research: lines only), bundled with make claims-bundle, judged by impl-drift, verdicts recorded with make claims-checked.",
+   "class": "within",
+   "why": "Carries FR-003 exactly (the ten units and five exclusions the round-3 verdict confirmed) and FR-004 (no engine line); this is the request's 'update the implementation's tagging so that it shows up on the claims report'."
+  },
+  {
+   "id": "D1",
+   "summary": "Search the archive then the web, in Chinese and Japanese, for whether a lane or path ran between a farmhouse and its own homestead grove or dooryard copse; record the answer or an absence naming each search on 0036's findings page; its drawing page states how our maps settle it (feature 287 woods W25).",
+   "class": "within",
+   "why": "FR-001/FR-002 as written; 'in Chinese and Japanese' adds search languages alongside the two regions FR-001 names and excludes nothing, and the drawing-page sentence is the record's own form for a rendering decision, not a narrowing."
+  },
+  {
+   "id": "D2",
+   "summary": "make record-owed after the write; the check session dispatches every owed record check from its bundle and answers each.",
+   "class": "within",
+   "why": "FR-002's 'the record's checks owed by the change are answered'."
+  },
+  {
+   "id": "D3",
+   "summary": "Each listed claim is rewritten to cite 0036's findings page (keeping its current citations) in the finding's terms; a detail the finding does not reach stays a labeled guess citing 0036's absence; one impl-drift pass; MISLABELED relabeled and re-checked; DRIFTED recorded, not fixed.",
+   "class": "within",
+   "why": "FR-003 word for word, including its guess carve-out, which the accepted spec already carries; recording DRIFTED without a fix is FR-004 and the GM's 'or which is not implemented in accordance with our research'."
+  },
+  {
+   "id": "D4",
+   "summary": "If no unit keeps a lane out of the gap between a house and its own seats, implementation-check.md records it as implemented nowhere with the search; make impl-check F=352 reports nothing missing.",
+   "class": "within",
+   "why": "FR-003's last sentence and FR-005. The conditional names the one part of the question the spec singles out; FR-003's 'any part of the question no code decides' still governs and impl-check is the backstop, so nothing is dropped."
+  },
+  {
+   "id": "PS",
+   "summary": "Project Structure: 0036's findings, notes and drawing pages; the ten engine files of FR-003's units (docstring claims only); the two briefs.",
+   "class": "within",
+   "why": "The ten files match FR-003's ten units one for one (all exist in the clone); the round-3 aside (Technical Context and Project Structure predating round 2) is resolved. implementation-check.md, conditional on D4, is not listed, which omits no scope since D4 states it."
+  }
+ ],
+ "verdict": "CLEAR"
+}

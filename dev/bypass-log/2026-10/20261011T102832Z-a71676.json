@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-11T10:28:32Z",
+  "target": "claims-gate",
+  "commit": "7e83ea857",
+  "why": "CLAIMS_OK: feature 352 FR-004 and the 378 doctrine: a DRIFTED claim is a result recorded on the claims report, the code fixed only where the spec asks; _thread_the_fabric's code is unchanged, the finding is new only because 0036's page moved"
+}

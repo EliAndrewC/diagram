@@ -164,7 +164,7 @@ def walk_clear(s: Settlement, door: Pt, foot: Pt, geom: Any, rec: Any, hgap: flo
     leg tests; of the neighbor's house, beds, sheds and fixtures by the same (its yard is the ground the walk arrives on); of
     every other placed homestead whole; of the static ground the site refuses; of the reserved wood seats.
 
-    Research: walk crosses nothing standing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no house, garden bed, shed or fixture of either household; every other homestead, the refused ground and the wood seats kept clear as a corridor keeps them
+    Research: walk crosses nothing standing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: no house, garden bed, shed or fixture of either household; every other homestead, the refused ground and the wood seats kept clear as a corridor keeps them - no account of a farmhouse grove found runs a way through it
     """
     if not (house_clear(door, foot, geom, hgap) and fixtures_clear(s, door, foot, geom) and parts_clear(s, door, foot, geom)):
         return False

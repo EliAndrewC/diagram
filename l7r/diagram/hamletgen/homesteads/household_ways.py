@@ -45,7 +45,7 @@ def seat_walls(s: Settlement) -> tuple[list[Pt], float]:
     """Every household's reserved wood seats and the reach a lane keeps off each: the buffer the registry reserves them with
     (`stages.reserve_the_seating`) and half the track's tread.
 
-    Research: the track off the wood seats - UNRESEARCHED: a lane kept off a household's copse seat by the crown's reach (or 0.45 of the clump and 4 ft) and 4 ft more; the record keeps the copse off the main road, not the reverse"""
+    Research: the track off the wood seats - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane kept off a household's copse seat by the crown's reach (or 0.45 of the clump and 4 ft) and 4 ft more; no page read shows a lane between a farmhouse and its own grove, and none gives how far a way kept off one"""
     clump = COPSE_CLUMP_BS * s.bscale
     reach = max(clump * 0.45 + 4, crown_reach(clump, 0.0, lift=crown_lift(s.bscale))) + 4.0
     seats = [(float(p[0]), float(p[1])) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
@@ -65,7 +65,7 @@ def seated_parts(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
 
     Research:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out keeps off every homestead's house, yard, beds, well, sheds and fixtures as they will be drawn
-        the track off the wood seats - UNRESEARCHED: each seat an octagon of the reach a lane keeps off it (`seat_walls`)
+        the track off the wood seats - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each seat an octagon of the reach a lane keeps off it (`seat_walls`); no page read shows a lane between a farmhouse and its own grove
         a persimmon by its trunk alone - GUESS: held off by `TRUNK_FT`, the crown free to overhang the track"""
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses") or []:

@@ -338,7 +338,9 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
 
     Research:
         off the crop and marsh - research/questions/0081-village-lanes.drawing.html: the field, the dry hem and the marsh hard
-        across the groves - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees
+        across the groves - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the village groves are no wall to a field way, as a lane crosses the belt and the planting resumes on both sides
+        off the farm groves - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a farm's own grove bands are walls, kept 7 ft (`FIELD_ROUTE_GAP_FT`) off - a footpath's clearance and some working room off the trees
+        out of its own house - NONE: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of its own house is not walled by it, so it can leave the door
         across the commons - UNRESEARCHED: the commons are not a wall to a path
         the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the

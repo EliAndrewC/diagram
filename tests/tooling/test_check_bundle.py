@@ -188,6 +188,21 @@ def test_a_recheck_excerpt_keeps_a_block_whose_close_tag_is_implicit() -> None:
     assert "Last." in cut and "One." not in cut, "an unclosed last paragraph is still a block"
 
 
+def test_a_recheck_excerpt_keeps_a_mark_after_a_nested_list() -> None:
+    """Feature 352: 0036's lane block carried its absence mark after its nested list; the excerpt cut the item at the
+    first inner `<li>`, and two quote-check rounds reported the mark missing."""
+    fragment = (
+        '<h2 id="q">Q</h2>\n<li><strong>Lead?</strong><br>None shows one.\n<ul>\n'
+        '<li>Inner.<sup class="fn" data-note="a"></sup></li>\n</ul>\nTail.<sup class="fn" data-note="b"></sup></li>\n'
+        '<li>Next.<sup class="fn" data-note="c"></sup></li>\n'
+    )
+    cut = cb.excerpt(fragment, {"b"})
+    assert "None shows one." in cut and "Tail." in cut and 'data-note="b"' in cut and "Next." not in cut
+    assert cut.count("Inner.") == 1, "the kept item is shown whole, its inner items once"
+    assert "Inner." in cb.excerpt(fragment, {"a"}) and "Tail." not in cb.excerpt(fragment, {"a"}), "an inner mark keeps only its item"
+    assert "None shows one." not in cb.excerpt(fragment, {"c"}, bare=True), "a lead whose tail carries a mark is not a bare block"
+
+
 def test_a_recheck_verbatim_report_keeps_the_notes_the_excerpt_quotes(tmp_path: pathlib.Path) -> None:
     # passages are dicts and the excerpt wraps its lines: the cut used to keep nothing (feature 250, 2d)
     (tmp_path / "q.notes.html").write_text('<li data-note="a">「Zuihoden, in Otamayashita, Aoba-ku,\n  Sendai, is a mausoleum.」</li>\n', encoding="utf-8")
