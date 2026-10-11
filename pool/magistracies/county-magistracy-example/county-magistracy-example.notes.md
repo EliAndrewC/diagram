@@ -311,3 +311,4 @@ Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check p
   label in the notes. All applied in pass 7 above.
 - **2026-09-27 building-review round 7**: pass 7's five items confirmed; the rear alley closed at its west end (the
   house's privies ~400 ft from a service edge) and the vegetable ground's way misstated. Applied in pass 8 above.
+- **2026-10-11 feature 340**: the captions are seated by the hand-sheet placer's one view (its classification of the drawn sheet, each caption's declared subjects tried in order, its width measure), so the caption seats the dated lines above describe - the gatehouse's name in its box, the fire-water tubs' caption on the roomiest tub - are superseded; no building or point feature moved. building-review PASS.
