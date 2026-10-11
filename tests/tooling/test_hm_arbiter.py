@@ -177,3 +177,23 @@ def test_an_accept_on_a_round_cap_answers_its_units(monkeypatch: pytest.MonkeyPa
     assert ha.accept_answers(root, "quote-check|q:0091", "accepted") == ["quote-check:x"]
     assert calls[-1] == ("quote-check", {"q": "0091"}) and calls[0] == ("modal-accuracy", {"kind": "sheet/x"})
     assert ha.accept_answers(root, "impl-drift|", "accepted") == [], "no subject: nothing to answer"
+
+
+def test_the_cascade_counts_only_the_dispatches_since_the_last_landing(tmp_path: pathlib.Path) -> None:
+    """Feature 374 (the round arbiter's cascade@1 tooling fix): a landed batch's dispatches were counted against the next
+    batch's changed lines; the window opens at the merge base's commit time, and a ruling made before it sets no floor."""
+    hc = _load("hm_checks")
+    state = {"dispatches": {"a": {"t": 10.0}, "b": {"t": 20.0}, "c": {"t": 30.0}, "d": {}}}
+    assert hc.dispatches_since(state, 15.0) == 2 and hc.dispatches_since(state, 0.0) == 4
+    assert hc.window_start(tmp_path) == 0.0, "no repository: the window is the whole state"
+    root = tmp_path / "c"
+    root.mkdir()
+    (root / ".git").mkdir()
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    ha.trip(root, "cascade@1", "cascade", "", "40 check dispatches over 10 changed lines", 1)
+    ha.record_ruling(root, "cascade@1", {"ruling": "continue", "why": "a landed batch's checks"}, "round-arbiter", now="2026-10-10T01:00:00Z")
+    assert ha.cascade_state(root, 0.0) == ("cascade@2", 40)
+    after = ha._epoch("2026-10-11T00:00:00Z")
+    assert ha.cascade_state(root, after) == ("cascade@2", 0), "a ruling before the window sets no floor"
+    assert ha._epoch("not a time") == 0.0

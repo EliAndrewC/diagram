@@ -7739,15 +7739,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#no wood below the houses": {
-  "code": "6287a7e1c0f72eff",
-  "core": "9eb1c2509648dae1",
-  "date": "2026-10-10",
-  "note": "the record is not silent: §2/§3 place the wood beyond the fields (on the level where there's no slope) with no floor at the houses' height, and §4 refuses ground below the houses only \"beside a river or marsh\". Refusing every seat below `house_floor` on dry ground (`if k < 2`) goes further than the page, so the label should be DEVIATION, and the drawing page should record the departure (it records it only for wet ground)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#the fields beside a seat": {
   "code": "443268ec547358f7",
   "core": "9eb1c2509648dae1",
@@ -20191,6 +20182,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/law.py::NODING_SPECK_FT#noding speck": {
+  "code": "3ba4ca2af0a166bc",
+  "core": "7276802b5dc226e3",
+  "date": "2026-10-11",
+  "note": "a polygonize-artifact tolerance (a face under 1 ft round is a noding speck); nothing a reader reads off the map",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/law.py::STEADING_REACH_FT#an end reaches a steading": {
   "code": "af40d6a957b0a7df",
   "core": "e558226d98ba699d",
@@ -20699,11 +20700,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::needle_loops#plumbing and wrappers": {
-  "code": "b73be8634261d62b",
-  "core": "796480c331c6d09f",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "3d1d31b46d65c072",
+  "core": "4adea84a52e832a7",
+  "date": "2026-10-11",
+  "note": "finds faces and their bounding ways; the 1 ft way floor, 0.5 ft buffer and speck skip are plumbing; the needle width is decided at NEEDLE_LOOP_FT, not here",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::over_a_fixture#off the fixtures": {
@@ -21421,6 +21424,15 @@
   "research": "d47738a05844fe19",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/serve.py::DOOR_FINE_CELL_FT#door router's finer lattice": {
+  "code": "3f5ab6917ddbde7b",
+  "core": "eab5cc0df856d783",
+  "date": "2026-10-11",
+  "note": "a router lattice size used only as a fallback; its derivation (3 + 2x9.5 = 22 ft lane inside the 32 ft gap, cell at most about 4.1 ft) agrees with the page",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/serve.py::DOOR_REACH_FT#a door reached": {
   "code": "751954a8f5690f9c",
   "core": "c0101826cceee8b7",
@@ -21443,6 +21455,21 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::GROVE_WORKING_ROOM_FT#working room off the trees": {
+  "code": "7e5abcf6b96aaa73",
+  "core": "1736ddb9dccf5e22",
+  "date": "2026-10-11",
+  "note": "9.5 ft each side of a 3 ft tread = 22 ft, the page's \"about 22 ft of the opening\"",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_arrives_at#a door path arrives at its farm": {
@@ -21761,38 +21788,43 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#a flank door only where the front has none": {
-  "code": "c88402efb8b330db",
-  "core": "735b4eb618a90a66",
-  "date": "2026-10-09",
-  "note": "nothing in the bundle covers flank doors",
+  "code": "61fb742655fa8836",
+  "core": "af106eb8b72ef58d",
+  "date": "2026-10-11",
+  "note": "the pages put the way in at the front and say nothing of a flank fallback",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off a grove band": {
-  "code": "106572932a9e9d66",
-  "core": "735b4eb618a90a66",
-  "date": "2026-10-10",
-  "note": "0036 answers this: a lane is laid \"with a footpath's clearance and some working room kept off the trees on each side\" (about 22 ft of a 36 ft opening). The label should cite 0036, and against that the code's 0.5 ft margin (grow = 2*(1.5+0.5)) is a drift",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "code": "33d5154994271777",
+  "core": "af106eb8b72ef58d",
+  "date": "2026-10-11",
+  "note": "grow = 2*(1.5+9.5) keeps the tread edge 9.5 ft off each band, the page's 22 ft lane",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off the house and the fixtures": {
-  "code": "558609ed84204cf7",
-  "core": "735b4eb618a90a66",
-  "date": "2026-10-10",
-  "note": "8 ft (4+4) and 5 ft (4+1) match the claim; 0246 says the path goes round the fixtures but gives no figure",
+  "code": "7785d10a99ac7f4c",
+  "core": "af106eb8b72ef58d",
+  "date": "2026-10-11",
+  "note": "the 8 ft door offset and the 5 ft fixture clearance are figures the pages do not give (§37 names the rule but gives no figure)",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#every grove farm reached at its door": {
-  "code": "6192221971cc63d7",
-  "core": "735b4eb618a90a66",
-  "date": "2026-10-10",
-  "note": "a 3 ft footpath from the dooryard where no way stands within the page's 60 ft GUESS reach",
+  "code": "d37b2f1c6c2f8cbd",
+  "core": "af106eb8b72ef58d",
+  "date": "2026-10-11",
+  "note": "a 3 ft footpath drawn where the door stands more than 60 ft from the ways, matching the 60 ft reach and the footpath's width",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -21806,40 +21838,49 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#no path to a household reached across a yard": {
-  "code": "ae966946510b2bdf",
-  "core": "735b4eb618a90a66",
-  "date": "2026-10-09",
-  "note": "a reached_across household is skipped and \"shows no lane of its own\"",
+  "code": "ba96c40b21392c7b",
+  "core": "af106eb8b72ef58d",
+  "date": "2026-10-11",
+  "note": "a reached_across household is skipped, \"it shows no lane of its own\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#off the fixtures and grove bands": {
-  "code": "e81304de73bf1fbd",
-  "core": "735b4eb618a90a66",
-  "date": "2026-10-09",
-  "note": "fixtures and grove bands are added to the walls, with the bands grown by a footpath's half-tread plus a margin",
+  "code": "fa1962e74dfface5",
+  "core": "af106eb8b72ef58d",
+  "date": "2026-10-11",
+  "note": "fixtures and grove bands become walls to the path, as the way leaves round its fixtures and groves wall off the fronts",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "69df9bcb15b25786",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a8a9cdf0aa655990"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#round the grove to the street": {
-  "code": "3a446d1571a5cef7",
-  "core": "735b4eb618a90a66",
-  "date": "2026-10-09",
-  "note": "a path round the grove to its own street, recorded as a GUESS",
+  "code": "39c76231e261a7fe",
+  "core": "af106eb8b72ef58d",
+  "date": "2026-10-11",
+  "note": "a row farm's path goes to its own street, routed round its grove, a GUESS on the page",
   "pages": {
    "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
   },
   "research": "3f66a452776b32a9",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1",
+   "0033-row-villages-resson.drawing.html:f5e09c253273ce75"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::own_street#a row farm fronts its street": {
@@ -21863,10 +21904,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::route_from_door#plumbing": {
-  "code": "48e220b81c5972f7",
-  "core": "706a8d800fd81796",
-  "date": "2026-10-09",
-  "note": "lattice routing, with a one- or two-cell escape step out of a boxed-in door cell; the gap is passed in and defined by constants that carry their own claims, and door_path judges the whole path",
+  "code": "f5d043b57391317b",
+  "core": "375e9fcb44ee987e",
+  "date": "2026-10-11",
+  "note": "steps of one or two cells out of a boxed-in door and the finer-lattice retry are router plumbing; the law still judges the path",
   "pages": {},
   "research": "",
   "rests": [],
@@ -37514,17 +37555,6 @@
   "research": "5608ff3916f4c674",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld": {
-  "code": "c8ef616fa6d0618e",
-  "core": "2c26f933a0ec71c9",
-  "date": "2026-10-09",
-  "note": "the drawing page says nothing on seat forms; the research page attests bridge ends with no \"large\" qualifier, and the shrine precinct is only that page's GUESS. Withholding the bridgehead should be a DEVIATION that the drawing page records, citing 0190.html",
-  "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
-  },
-  "research": "f69092eeadc87044",
-  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#seats a settlement can site": {
   "code": "624ada929c868bfe",
