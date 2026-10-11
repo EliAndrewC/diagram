@@ -1,4 +1,4 @@
-About: The main gate was the compound's formal entrance in its front wall, the way in for visitors on business; even a
+About: The main gate was the compound's formal entrance in its front wall, the way a guest of rank came in; even a
 branch office of three officials had one, with a small gate and a gatekeepers' room beside it. Behind it a guest's arrival
 was staged: the gate, then open ground a palanquin could cross, then the step of the formal entrance.
 
@@ -13,13 +13,13 @@ ft across. How wide a Chinese office's gate was is not recorded.
 Guesses:
 - A Chinese office's gate drawn 18 to 24 ft wide: no record gives such a gate's width.
 - That the gate faces what the compound fronts, the town or the road beside it: no record says which way a Japanese seat's
-  gate faced; south, where nothing else decides it, is the Chinese office's facing.
-- A gatehouse of its own drawn about 40 ft long: the one measured, beside a temple gate, is about 18 ft.
+  gate generally faced (the one branch office drawn had its gate in its east wall); south, where nothing else decides it, is the Chinese office's facing.
+- A gatehouse of its own drawn about 40 ft long: the one measured end to end, beside a temple gate, is about 18 ft, and Takayama's has about 400 sq ft of floor.
 
 Depiction: The plan draws a Japanese office's gate in one of its two forms, a one-bay gate about 6 to 8.5 ft wide or a
 nagaya-mon opening about 12 ft, each plan taking one, and a Chinese office's as a roofed building of three bays. Its
 gatekeepers sit in a gatehouse beside it or a guardroom in the range, about 12 ft deep either way, each plan taking one.
-Its posts are drawn as dark blocks about 3 to 5 ft across, so the opening reads on the plan.
+Its posts are drawn as dark blocks, so the opening reads on the plan.
 
 Name: main gate
 Covers: the posts flanking the main opening

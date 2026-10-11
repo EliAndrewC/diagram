@@ -18,11 +18,11 @@ How large a guest room was is not recorded.
 Guesses:
 - A guest house drawn as a building of its own: none is known at a samurai house, and the nearest form, the honjin's suite
   of honor, belonged to a post town's lodging house, not to an office.
-- A garden between the gate and a guest's door, where a plan draws one: none is recorded there, and the one drawing of that
-  ground shows it open.
+- A garden between the gate and a guest's formal entrance, where a plan draws one: none is recorded there, and the two drawings of that
+  ground show it open; only a house without such an entrance led its guest along a walled garden path.
 
-Depiction: The plan draws the guest quarters as the guest room of the residence, by the reception, or as a guest house of
-its own. A guest's door opens onto open ground a palanquin could cross, never straight from the street or against the side
+Depiction: The plan draws the guest quarters as one labeled room, though the real guest space was the zashiki and the rooms beside it. That room is the guest room of the residence, by the reception, or a guest house of
+its own. A guest's door opens onto the ground inside the gate - an open court a palanquin could cross, or on some plans a garden - never straight from the street or against the side
 of a building.
 
 Name: guest quarters

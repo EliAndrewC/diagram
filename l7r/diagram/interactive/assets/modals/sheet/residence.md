@@ -3,7 +3,7 @@ they ran. In a Chinese county office the home stood behind the office by regulat
 at Takayama, the one Japanese intendant's office that survives, the residence stood beside it.
 
 Such a house was usually one block under one roof; halls joined by corridors belonged to the mansions of shoguns and
-daimyo, and at the Katsura villa halls were added one at a time, each stepped back from the last. In a great house the
+daimyo, and at the Katsura villa halls were added in three phases over about half a century, each stepped back from the last. In a lord's palace the
 rooms ran from the reception at the front, through the master's own rooms, to the family's beyond; a smaller house could
 set its formal room deepest in.
 
@@ -13,18 +13,18 @@ crossed open ground inside the gate to the genkan, the formal entrance.
 
 A 150-koku district magistrate's house at Matsushiro had about 1,740 sq ft on grounds of about 0.8 acre; a
 thousand-koku samurai's house at Hagi ran about 1,470 to 2,630 sq ft, by two measures that disagree. Takayama's restored
-residence, for an intendant over a whole province, is about 6,400 sq ft. Its servants lived in, as many as its koku required; how many lived in it is not recorded.
+residence, for an intendant over a whole province, is about 6,400 sq ft. Its servants lived in, with rooms of their own in the house; a samurai household had to keep as many as its koku required, and how many lived in this one is not recorded.
 
 Guesses:
-- That the household's service - the servants' range, a well, the family privy - stood on the shady ground behind the
-  house: only a storehouse is recorded there, so the rest is reasoned from the garden's place in the sunny south.
+- That any servants' range stood on the shady ground behind the
+  house, with the storehouse: one house's servants' hut stood outside its back door, and the rest is reasoned from the garden's place in the sunny south.
 
 Depiction: The plan sets the residence in an inner court behind the office hall, with a gate between the two courts - the
-Chinese county office's order, kept for every plan, though at Takayama the residence stood beside the office. It draws the
+Chinese county office's order, kept for every plan, though at Takayama the residence stood beside the office. The genkan is drawn on the office hall, not on the house: the way to the residence runs on through the office, as it did at Takayama. It draws the
 house either as one block under one roof or as two or three halls stepped back one behind the next, each joined to the
-last by a corridor, as the great houses joined their halls. The reception stands at one end of the house, with
+last by a corridor, as the great houses joined their halls. Every house is drawn at the size of a district magistrate's house, about 1,780 sq ft with its kitchen and bath, not at the size of an intendant's far larger residence. The reception stands at one end of the house, with
 the garden before it on the sunny side where the buildings allow, and each labeled room - the master's, the family's, the
-inner rooms - stands for a suite of several rooms. The pale strip along the garden face is the veranda, always drawn open: the plan shows the house by day, its storm shutters stowed in their boxes, as they stood in daylight.
+inner rooms - stands for a suite of several rooms. The pale strip along the garden face, carried round one or two more faces on some plans, is the veranda, drawn open: the plan shows the house by day, its storm shutters stowed in their boxes, as they stood in daylight.
 
 Name: residence
 Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label

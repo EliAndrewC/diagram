@@ -6,7 +6,7 @@ hills and planting, with stepping stones, stone lanterns and fences.
 Both forms stood beside samurai rooms. The two government offices whose gardens are known, the office of the
 shogunate's intendants at Takayama and the seat of a small domain at Okutono, both kept pond gardens; Okutono's lay on two
 levels, the lower one seen from the formal room. Among the seven samurai-house gardens kept at Chiran, one is a pond
-garden and six are dry. At Matsushiro the samurai houses set their garden on the south side, generally with a pond, and
+garden and six are dry. At Matsushiro the samurai houses set their garden on the south side, generally with a pond, carp kept in it and a made hill planted with trees beyond it, and
 the house of a middle-rank district magistrate there has one in its grounds today.
 
 How large a residence garden's pond was is not recorded. A temple's dry garden beside its formal room, at the Daisen-in,
@@ -16,11 +16,11 @@ Guesses:
 - The pond's form and size: no residence pond's size is recorded, so it is drawn small, within sight of the rooms that face
   the garden.
 - How often a small posting kept a pond rather than a dry garden: no figure weighs the two for an office (Chiran's
-  samurai gardens were mostly dry, Matsushiro's mostly had a pond), and the pond is taken as the grander form, since both offices known to have one were far grander than a county post.
+  samurai gardens were mostly dry, Matsushiro's mostly had a pond, and a district magistrate's house there kept one), so neither form is taken as the grander, and how often a map draws each is our own choice.
 - A pond on the way from the gate to the entrance, where a plan draws one: no account describes one there.
 
-Depiction: Each plan takes one of the two forms, a small open oval of water or a dry garden of white gravel and stones,
-set among the planting within sight of the rooms that face it; the plan's notes say which.
+Depiction: Each plan takes one of the two forms, a small pond or a dry garden of white gravel and stones standing for water,
+within sight of the rooms that face it; the plan's notes say which.
 
 Name: garden pond
 Covers: the pond, or the dry garden, in the inner garden

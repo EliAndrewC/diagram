@@ -1,21 +1,21 @@
-About: The genkan was a samurai house's formal entrance, a room or small building at its front, kept for the head of the household and honored guests; the rest of
+About: The genkan was a samurai house's formal entrance, a room or building at its front, kept for the head of the household and honored guests; the rest of
 the household came and went by an inner entrance, and the kitchen had a door of its own. In the Edo period the word meant an
 entrance with a shikidai, the low board step where guests were bowed in and seen off.
 
 A guest of rank came by palanquin, and the palanquin was brought right alongside the step, so that its rider went into the
 building without setting foot on the ground. So an arrival was staged: the gate, then open ground a palanquin could cross, then
 the step. On a drawing of 1869, the office at Jōge has its entrance with its step facing the open ground inside its main
-gate. Where an intendant's office and residence shared a compound, at Takayama, a visitor came in by the genkan and went round
-the rooms of the office on to the residence.
+gate. Where an intendant's office and residence shared a compound, at Takayama, the genkan was on the office, and a visitor today goes in by it and round
+the rooms of the office on to the residence; whether that way ran indoors in the Edo period is not recorded.
 
 Not every house had one, and it marked standing. The houses of senior retainers did; a village headman was allowed a
 shikidai where other farmers were not; and at Kakegawa's castle palace only the lord and senior retainers came in by the
 formal porch. A middle-rank house could do without, and bring its guest through a middle gate and along a walled garden
-path to the reception room's veranda. How large a house's genkan was is not recorded.
+path to the reception room's veranda. How large an ordinary house's genkan was is not recorded; a great lord's was far larger, and at Kawagoe's castle palace the great entrance and carriage porch ran 19 by 5 ken, about 113 by 30 ft.
 
 Guesses:
 - Its size on the plans, about 10 to 11 ft across and 4 to 6 ft deep, with a step 4 to 5 ft wide: no account read gives the
-  size of a house's or an office's genkan or of its step.
+  size of a samurai house's or an intendant's office's genkan or of its step; the only ones measured are castle palaces', far larger.
 
 Depiction: Where the office and the residence share a compound, the plan draws the genkan on the office hall, and the way to
 the residence runs on through the office; where the residence stands alone, the genkan is on the residence. A guest's door
