@@ -3582,7 +3582,7 @@
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds staggered",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "0014.drawing covers this: it never draws a wall that \"steps a few feet sideways and carries on\" (an offset past ~30 ft is an L-shaped plot); rows rolled per column put neighbouring row bunds a few feet apart, so cite \u00a7336-337 and the code drifts from it",
+  "fix": "0014.drawing covers this: it never draws a wall that \"steps a few feet sideways and carries on\" (an offset past ~30 ft is an L-shaped plot); rows rolled per column put neighboring row bunds a few feet apart, so cite \u00a7336-337 and the code drifts from it",
   "files": [
    "l7r/diagram/settlement/fields/paddy.py"
   ],
@@ -6589,7 +6589,7 @@
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each plot's green",
   "verdict": "CANNOT-TELL",
   "tier": "E1",
-  "fix": "the class is right (a colour), but the only RICE_GREENS in the bundle (hill.py's) is one green repeated three times, which would make \"so neighboring plots read apart\" false; need paddy.py's RICE_GREENS",
+  "fix": "the class is right (a color), but the only RICE_GREENS in the bundle (hill.py's) is one green repeated three times, which would make \"so neighboring plots read apart\" false; need paddy.py's RICE_GREENS",
   "files": [
    "l7r/diagram/settlement/fields/paddy.py"
   ],

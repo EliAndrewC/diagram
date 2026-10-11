@@ -112,8 +112,7 @@ def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pat
         json.dumps(
             {
                 "dispatches": {
-                    "t1": {"check": "quote-check", "subjects": ["q:0105"], "t": 1, "state": "answered", "reply": str(reply),
-                           "owed": ["quote-check:0105#bath - a note's passage changed"]},
+                    "t1": {"check": "quote-check", "subjects": ["q:0105"], "t": 1, "state": "answered", "reply": str(reply), "owed": ["quote-check:0105#bath - a note's passage changed"]},
                     "t2": {"check": "quote-check", "subjects": ["q:0105"], "t": 2, "state": "answered"},
                     "t3": {"check": "quote-check", "subjects": ["q:0105"], "t": 2.5, "state": "answered", "aid": "a77"},
                 }
