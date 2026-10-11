@@ -10,3 +10,15 @@ The session proposed: the fix as a field of the ruling, the next `make tick` hel
 feature or declined as an overhaul, a decline going to the GM's review rather than a feature filed or a question asked. The GM:
 
 > I agree with your recommendations around the arbiter tooling fixes as well, by the way. So yeah, please go ahead and implement that as well. Where kind of things that overhaul the process are not done in line and do require GM review in the way that you mean, but that smaller things like the one that we are doing now for making sure that make done cannot be run twice at the same time get done very very soon with tool enforcement about that.
+
+## Amendment 1 (2026-10-10, same session)
+
+The hourly check found both monitored sessions fixing shared tooling partway through a feature - the round cap, a ruling
+filed under the wrong feature, an "accept" ruling deadlocking a check a later change owed - with each fix held in its own
+clone until the whole feature closes (a feature with open tasks lands nothing but its spec). Meanwhile hooks run from
+`/diagram`, so other sessions hit the same misfire, fixes were copied by hand between clones, and both sessions were editing
+`hm_arbiter.py` and `hm_checks.py`, the files this feature changed. The session proposed letting a commit that touches only
+tooling (`scripts/`, `tests/`, the agent instruction files) land on its own in the middle of a feature, through the normal
+checks, added to 379 rather than filed as a new feature. The GM:
+
+> yes please

@@ -2,7 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-10 - spec FAITHFUL (round 2), plan CLEAR, every task ticked; make done green; tests/tooling/test_arbiter_fix.py replays 378's ruling
+**Status**: In progress - amendment 1 (a tooling fix lands alone, mid-feature); the original FR-001 to FR-004 landed 2026-10-10
+
+**Amendment 1 approved**: the GM, 2026-10-10, "yes please"
 
 **Affects**: review process, tooling
 
@@ -37,12 +39,27 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
   without the GM's say-so, and the session never stops to ask: the decline is the GM's to review after landing.
 - **FR-004 The closing check holds it too.** A feature does not close (feature 375's closing check) with an open item.
 
+### Amendment 1 - a tooling fix lands alone, mid-feature (`request.md`, Amendment 1)
+
+- **FR-005 Tooling lands on its own.** A session whose feature is in progress lands a commit's TOOLING - files under
+  `scripts/`, `tests/tooling/`, `tests/hooks/`, `.claude/agents/`, `docs/`, and `.claude/settings.json`, the `Makefile` and
+  `CLAUDE.md` - on main by itself, while the feature's other work stays in the clone until the feature closes as today. It
+  lands on top of the latest main, through the checks a push of that change runs, with no history rewritten and no local
+  branch. A change to any other path is refused, naming it; so is one that does not apply cleanly onto main.
+- **FR-006 The arbiter's fix is landed, not only made.** `make arbiter-fix-done` (FR-002) refuses until the fix's test is on
+  main as it is in the clone, naming the landing command: a fix made but held in one clone leaves every other session on
+  the misfire it mends.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-003, FR-004) Replaying 2026-10-10's research-session ruling: the recorded `tooling_fix` is an
   open item; `make tick` refuses until it is done or declined, and so does the closing check at the push; a decline, and a
   fix made, are each on the GM's review.
 - **SC-002** (FR-002, FR-004) Each refusal has a test that fails on today's code.
+- **SC-003** (FR-005) In a fixture clone with a feature in progress holding both engine work and a guard fix: the tooling lands
+  on main alone, main carries none of the engine work, the full push is still refused, and the clone's next merge of main is
+  clean; a change naming a non-tooling path is refused.
+- **SC-004** (FR-006) `make arbiter-fix-done` refuses while the fix's test is not on main, and passes once it is.
 
 ## Review history
 
