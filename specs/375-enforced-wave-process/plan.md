@@ -273,15 +273,19 @@ now (the advisor's split-by-family alternative costs a second dispatch whenever 
 The SC-007 replay restates the kept reply's 14 lines with the pages they name in their own words ("0099 ..." the question
 page, "0104 drawing: ..." the drawing page): `tests/fixtures/modal-triage-343/`.
 
-**D21 - Depiction owed by its own words (FR-015).** In `modal_owed.owed`, `modal-depiction` is owed when the pop-up is new to
-the About form or its `depiction` (the Depiction tab and the `Drawing:` list) changed, or a page its `Drawing:` names moved
-(the triage then decides) - no longer when only its About, Guesses or Entry changed. Feature 319's plan-review case - a
-conversion that dropped its drawing links and wrote no Depiction - is a pop-up new to the About form, still owed; the comment
-at the rule says so.
+**D21 - Depiction owed by the words it reads (FR-015).** In `modal_owed.owed`, `modal-depiction` is owed when the pop-up is new
+to the About form, or its `depiction` (the Depiction tab and the `Drawing:` list), its About or its `Entry:` changed, or a page
+its `Drawing:` names moved (the triage then decides) - no longer when only its Guesses (or Name, Form) changed. About and
+`Entry:` stay because the check reads them (About for drawing statements that belong in Depiction, `Entry:` for the candidate
+drawing pages `modal_bundle.drawing_candidates` builds - feature 319's plan-review case); the comment at the rule says so.
+The SC-007 replay's restated reply attributes each kept line by where its quoted block stands: a block on both 0104 pages
+(garden, genkan) or only on the drawing page (nakamon's divider gate) keeps depiction owed.
 
-**D22 - The clones' view in `make speckit-todo`, display only (FR-016).** An active clone is a directory under `.clones/`
-whose event log (`.git/l7r-events/`, a line per hook event, so per tool call of its session) was written in the last 12 hours -
-no process scan. For each open feature whose `spec.md` or `tasks.md` in an active clone differs from main's, the listing shows
+**D22 - The clones' view in `make speckit-todo`, display only (FR-016).** Which clones are read is measured first (FR-016): the
+listing's wall time reading every clone under `.clones/` against only the active ones - a clone whose event log
+(`.git/l7r-events/`, a line per tool call of its session) was written in the last 12 hours, no process scan - recorded as
+`m:375-a1-speckit-todo-clones` in `measurements.json`; the active-only limit is kept only if it saves a measurable share of
+the listing's time, else every clone is read. For each open feature whose `spec.md` or `tasks.md` in an active clone differs from main's, the listing shows
 the clone's state in that state's section, `[in <clone>, not landed]`, one row per differing clone. Only the listing does
 this: `--holding`, `--closed-by-status`, `CHECK=1` and `tick-task.py` read the directory they are given, as before.
 

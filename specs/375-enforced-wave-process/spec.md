@@ -120,18 +120,21 @@ work stands; the GM approved both in one answer.
 
 - **FR-015 A pop-up check is owed only by what it reads.** FR-001's triage named a pop-up and owed every check of it, so an edit
   to a question page re-owed the pop-up's `modal-depiction` and an edit to a drawing page re-owed its research checks
-  (`modal-research`'s accuracy, references and gaps) - measured on feature 343's kept triage, 14 of its 61 units. Now a
-  changed block owes a check only when it is on a page that check reads: a question page (its `Entry:`) owes the research
-  checks, a drawing page (its `Drawing:`) owes `modal-depiction`. And an edit to the pop-up itself owes `modal-depiction`
-  only when it changes what that check reads of the pop-up - its Depiction tab, its `Drawing:` list, or the pop-up new to
-  the About form (the case feature 319's plan review kept: a conversion that dropped its drawing links must not land with
-  every check green); an edit to its About, Guesses or Entry text alone owes the research checks and `modal-form`, not
-  `modal-depiction`.
+  (`modal-research`'s accuracy, references and gaps) - measured on feature 343's kept triage, 11 of its 61 units (each
+  reply line attributed by where its quoted block appears; spec review round 1). Now a changed block owes a check only when
+  it is on a page that check reads: a question page (its `Entry:`) owes the research checks, a drawing page (its `Drawing:`)
+  owes `modal-depiction`; a line whose block stands on both pages, or names no page, owes both (failing toward checking).
+  And an edit to the pop-up itself owes `modal-depiction` only when it changes what that check reads of the pop-up: the
+  pop-up new to the About form, or its Depiction tab, its `Drawing:` list, its About or its `Entry:` changed (About is where
+  the check finds drawing statements that belong in Depiction; `Entry:` is where it finds the drawing pages a pop-up should
+  link - feature 319's plan-review case, a missing drawing link landing with every check green). An edit to its Guesses alone
+  owes `modal-form` and the research checks, not `modal-depiction`.
 - **FR-016 An open feature's state as its session clone holds it.** `make speckit-todo` shows each open feature as an active
   session clone holds it when that differs from main - its spec accepted, its plan written, tasks ticked - in the section
-  that state belongs to, marked with the clone it is in and that it has not landed. Active clones only (the GM: "you can
-  probably limit yourself to clones with active sessions, if it helps performance"). Display only: what the push, `make
-  tick` and the closing check read is unchanged.
+  that state belongs to, marked with the clone it is in and that it has not landed. Which clones it reads is decided by a
+  measurement (the GM: "you can probably limit yourself to clones with active sessions, if it helps performance"): the
+  listing's time reading every clone against reading only the active ones is recorded, and the limit is kept only if it
+  helps. Display only: what the push, `make tick` and the closing check read is unchanged.
 
 ## Success criteria
 
@@ -147,14 +150,17 @@ work stands; the GM approved both in one answer.
   this spec's measured table within its stated rounding.
 - **SC-006** (FR-010, FR-011, FR-012) Replaying 372's waves 106 and 108: the tripwires fire on 0105's and 0100's third rounds and on the bath bullet's
   A -> B -> A, and no round past the cap needed a GM waiver.
-- **SC-007** (FR-015) Replaying feature 343's kept triage (61 units, its reply): the 5 `modal-depiction` units named only for a
-  question-page block and the 9 research units named only for a drawing-page block are not owed; the others named are; and an
-  edit to a pop-up's About text alone owes `modal-form` and the research checks but not `modal-depiction`, while an edit to its
-  Depiction tab, its `Drawing:` list, or a pop-up new to the About form still owes it. The tests fail on today's code.
-- **SC-008** (FR-016) With a fixture main and two session clones, one active holding a feature's accepted spec and ticked
-  tasks, one inactive holding another change: `make speckit-todo` lists the first feature in the clone's section, marked with
-  its clone and not landed, and nothing from the inactive clone; `--holding`, `--closed-by-status` and `CHECK=1` give what they
-  gave before.
+- **SC-007** (FR-015) Replaying feature 343's kept triage (61 units, its reply restated with the page each quoted block stands
+  on): `modal-depiction` of `sheet/main-gate` and `sheet/residence` (named only for question-page blocks) and the research
+  units of `sheet/door`, `sheet/guest-quarters` and `sheet/side-gate` (named only for drawing-page blocks) are not owed; every
+  other named unit, `sheet/nakamon`, `sheet/garden` and `sheet/genkan`'s depiction among them, is. An edit to a pop-up's
+  Guesses alone owes `modal-form` and the research checks but not `modal-depiction`; an edit to its About, `Entry:`, Depiction
+  tab or `Drawing:` list, or a pop-up new to the About form, still owes it. The tests fail on today's code.
+- **SC-008** (FR-016) With a fixture main and session clones, one holding a feature's accepted spec and ticked tasks: `make
+  speckit-todo` lists that feature in the clone's section, marked with its clone and not landed, and a clone holding the
+  same files as main adds nothing; if the measurement keeps the active-only limit, an inactive clone's change is not shown.
+  `--holding`, `--closed-by-status` and `CHECK=1` give what they gave before. The measurement is a key of
+  `measurements.json`.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed.
@@ -190,3 +196,7 @@ until 375 has landed.
   plan), not the task; 374's measuring tasks do not count among its first three.
 - Lint-only edit after round 2 (2026-10-10, no requirement changed): each success criterion names the FRs it measures, as
   `spec-lint` asks; SC-002 names all fourteen.
+- spec-fidelity, amendment 1 round 1 (2026-10-10, the counter reset): CHANGES REQUIRED. Applied: `modal-depiction` stays owed
+  by an About or `Entry:` edit (it reads both; feature 319's case), only a Guesses-only edit dropped; FR-016's active-only
+  limit is decided by a recorded measurement, as the GM's "if it helps performance" made it; SC-007 names the cleared units by
+  uid (the measured leak 11 of 61, each line attributed by where its block stands); this entry.
