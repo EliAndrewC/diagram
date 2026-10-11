@@ -1,7 +1,7 @@
 # Brief - feature 335, R1: a well on a guest's roji (0104) and the door rule (0117). Session 1: write
 
 You are a FRESH session for one part of feature 335. This brief is the whole of what you need; do not read the feature's spec
-or plan. Work in this clone (`/diagram/.clones/diagram-magistracies`); the project's CLAUDE.md files apply to you, the research
+or plan. Work in this clone (`/diagram/.clones/diagram-magistracies-2`); the project's CLAUDE.md files apply to you, the research
 record's `CLAUDE.md` above all.
 
 **Why.** Feature 335 redraws the hand-drawn magistracy sheets. Two of its decisions rest on the record, and the record must say

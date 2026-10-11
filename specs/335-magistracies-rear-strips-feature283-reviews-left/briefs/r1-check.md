@@ -2,7 +2,7 @@
 # Brief - feature 335, R1, session 2: check and apply
 
 You are a FRESH session for one part of feature 335. This brief is the whole of what you need. Work in this clone
-(`/diagram/.clones/diagram-magistracies`); the project's CLAUDE.md files apply to you, the research record's `CLAUDE.md` above all.
+(`/diagram/.clones/diagram-magistracies-2`); the project's CLAUDE.md files apply to you, the research record's `CLAUDE.md` above all.
 
 **What moved.** Session 1 recorded that a guest's roji carries no well (0104's drawing page) and the one door convention -
 wholly inside the building, flush to the wall it opens through (0117's drawing page). Its handoff is
