@@ -393,3 +393,37 @@ def test_the_cascade_counts_only_the_dispatches_since_the_last_landing(tmp_path:
     after = ha._epoch("2026-10-11T00:00:00Z")
     assert ha.cascade_state(root, after) == ("cascade@2", 0), "a ruling before the window sets no floor"
     assert ha._epoch("not a time") == 0.0
+
+
+def test_the_nit_an_accept_asked_for_answers_its_unit_again(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 374 wave 120: the bridgehead pop-up's nit, made as the accept asked, re-owed the check the ruling had closed and
+    a second ruling was spent on it. `make arbiter-nit` answers the unit again - only for the wording the ruling quotes."""
+    import json
+    import sys
+    import types
+
+    calls: list[tuple[str, dict]] = []
+    fake = types.ModuleType("record_owed")
+    fake.answer = lambda root, check, result, **kw: calls.append((check, kw)) or [f"{check}:x"]  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "record_owed", fake)
+    monkeypatch.delenv("L7R_FEATURE_DIRECTORY", raising=False)
+    root = _clone(tmp_path)
+    d = root / "specs" / "375-x"
+    d.mkdir(parents=True)
+    trig = "round:modal-depiction|modal:choice/b@3"
+    row = {"trigger": trig, "kind": "round", "unit": "modal-depiction|modal:choice/b", "ruling": "accept", "why": "converged",
+           "what": "About says 'where most people passed' where 0190 says 'where people passed'"}
+    (d / "arbiter.jsonl").write_text(json.dumps(row) + "\n")
+    modal = root / "l7r/diagram/interactive/assets/modals/choice/b.md"
+    modal.parent.mkdir(parents=True)
+    modal.write_text("About: boards stood where most people passed.\n")
+    with pytest.raises(ValueError, match="must hold NEW"):
+        ha.nit_answers(root, trig, "where most people passed", "where people passed")
+    modal.write_text("About: boards stood where people passed.\n")
+    with pytest.raises(ValueError, match="must quote both"):
+        ha.nit_answers(root, trig, "stood where", "where people passed")
+    with pytest.raises(ValueError, match="no `accept` ruling"):
+        ha.nit_answers(root, "round:modal-form|modal:choice/b@3", "where most people passed", "where people passed")
+    assert calls == []
+    assert ha.nit_answers(root, trig, "where most people passed", "where people passed") == ["modal-depiction:x"]
+    assert calls == [("modal-depiction", {"kind": "choice/b"})]
