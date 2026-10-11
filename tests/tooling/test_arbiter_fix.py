@@ -204,15 +204,14 @@ def test_a_batch_at_the_cap_gets_one_bundle_and_one_ruling(root: pathlib.Path, t
     _rounds(root, tmp_path, ("sheet/a", "sheet/b", "sheet/c"))
     trig = [f"round:modal-form|modal:sheet/{u}@3" for u in "abc"]
     for t in trig:
-        ha.trip(root, t, "round", t[len("round:"):-2], "round 3")
+        ha.trip(root, t, "round", t[len("round:") : -2], "round 3")
     ha.trip(root, "red-gate", "red-gate", "", "two red gates")
     assert ab.batch_triggers(root) == trig, "round triggers only"
     manifest = ab.batch(root, tmp_path / "batch").read_text()
     assert all(f"`{t}`" in manifest for t in trig) and "ONE JSON object" in manifest and "BATCH=1" in manifest
     subs = sorted(p.read_text() for p in (tmp_path / "batch").glob("*/MANIFEST.md"))
     assert len(subs) == 3 and all("## Rounds - modal-form on modal:sheet/" in s and "finding 2 on" in s for s in subs)
-    ruling = {"ruling": "accept", "why": "the form rounds only reword", "triggers": trig,
-              "exceptions": {trig[1]: {"ruling": "continue", "why": "sheet/b's round 2 found a new gap"}}}
+    ruling = {"ruling": "accept", "why": "the form rounds only reword", "triggers": trig, "exceptions": {trig[1]: {"ruling": "continue", "why": "sheet/b's round 2 found a new gap"}}}
     with pytest.raises(PermissionError):
         ha.record_batch(root, ruling, "main")
     with pytest.raises(ValueError, match="does not carry"):
@@ -289,8 +288,13 @@ def test_a_batch_tooling_fix_is_one_fix_held_by_one_row(root: pathlib.Path, tmp_
     with pytest.raises(ValueError, match="one of"):
         ha.record_batch(root, bad, "round-arbiter")
     assert not (d / "arbiter.jsonl").exists(), "a bad row writes nothing"
-    fault = {"ruling": "process-fault", "why": "the form rounds reverse each other", "tooling_fix": "the form check reads the drawing",
-             "triggers": trig, "exceptions": {trig[0]: {"ruling": "accept", "why": "settled"}}}
+    fault = {
+        "ruling": "process-fault",
+        "why": "the form rounds reverse each other",
+        "tooling_fix": "the form check reads the drawing",
+        "triggers": trig,
+        "exceptions": {trig[0]: {"ruling": "accept", "why": "settled"}},
+    }
     rows = ha.record_batch(root, fault, "round-arbiter")
     assert [r["ruling"] for r in rows] == ["accept", "process-fault", "process-fault"]
     assert rows[1]["tooling_fix"] == fault["tooling_fix"] and rows[2]["tooling_fix_on"] == trig[1] and "tooling_fix" not in rows[0]
@@ -308,8 +312,13 @@ def test_a_batch_reply_is_refused_whole_and_never_drops_a_fix(root: pathlib.Path
         ha.trip(root, t, "round", ha.unit_of(t), "round 3")
     with pytest.raises(ValueError, match="named twice"):
         ha.record_batch(root, {"ruling": "accept", "why": "w", "triggers": [a, a, b]}, "round-arbiter")
-    both = {"ruling": "accept", "why": "w", "tooling_fix": "F", "triggers": [a, b],
-            "exceptions": {a: {"ruling": "process-fault", "why": "x", "tooling_fix": "G"}, b: {"ruling": "process-fault", "why": "y", "tooling_fix": "H"}}}
+    both = {
+        "ruling": "accept",
+        "why": "w",
+        "tooling_fix": "F",
+        "triggers": [a, b],
+        "exceptions": {a: {"ruling": "process-fault", "why": "x", "tooling_fix": "G"}, b: {"ruling": "process-fault", "why": "y", "tooling_fix": "H"}},
+    }
     with pytest.raises(ValueError, match="where does the batch's fix go"):
         ha.record_batch(root, both, "round-arbiter")
     assert not (d / "arbiter.jsonl").exists(), "a refused reply writes nothing"
