@@ -40,8 +40,8 @@ finding: IN-STEP with its evidence, or DRIFTED from it.
 
 **Acceptance Scenarios**:
 
-1. **Given** the reservation's code, **When** `make claims-report` runs, **Then** a `Research:` claim of that code cites
-   0036's findings page and carries an `impl-drift` verdict.
+1. **Given** the code FR-003 lists, **When** `make claims-report` runs, **Then** each of its `Research:` claims cites
+   0036's findings page and carries an `impl-drift` verdict, and what no code decides is in `implementation-check.md`.
 
 ### Edge Cases
 
@@ -61,9 +61,21 @@ finding: IN-STEP with its evidence, or DRIFTED from it.
   gains the answer under a heading a reader would ask, each assertion footnoted to a passage quoted verbatim from a page the
   reader can open, or, where nothing is found, an absence note naming the searches. The record's checks owed by the change
   are answered (`make record-owed`).
-- **FR-003 - The claim.** The code that decides the question - `Reservations.conflicts` in `l7r/diagram/overlap/reserved.py`,
-  whose wood-seat rule keeps a lane off a household's reserved copse seats - carries a `Research:` claim citing 0036's
-  findings page, and `impl-drift` judges it, so `make claims-report` lists it IN-STEP or DRIFTED.
+- **FR-003 - The claims.** The units whose claims decide the question are found by a recorded command - the claims index
+  searched for a wood or copse seat claim that bears on a lane, track or route (`dev/claims-index.json`, keys and notes
+  matching `(wood|copse)[ -]seat`, kept where the rule is a way's) - and, on 2026-10-11, are:
+  - `overlap/reserved.py` `Reservations.conflicts` (#wood seats);
+  - `hamletgen/homesteads/household_ways.py` `seat_walls` and `seated_parts` (#the track off the wood seats);
+  - `hamletgen/homesteads/region.py` `SeatRegion.sync` (#reserved wood seats bar lane ground);
+  - `hamletgen/homesteads/stages.py` `reserve_the_seating` (#a lane's buffer about a copse seat);
+  - `hamletgen/ways/track.py` `_connector_through` (#gives up a wood seat as last resort);
+  - `hamletgen/ways/web.py` `stage_web` (#web lanes routed round the households' reserved wood seats as fabric);
+  - and the seating's placement of a household's seats beside its house (`hamletgen/homesteads/growth.py`, which cites
+    0036's drawing page), the code that may decide whether a lane can come BETWEEN a house and its own seats.
+  Each of these claims cites 0036's FINDINGS page and is re-judged by `impl-drift`, so `make claims-report` shows each IN-STEP
+  with evidence or DRIFTED from it. Where the finding does not reach a claim's detail (a buffer's distance the sources do not
+  give), that claim stays a labeled guess citing 0036's absence. Any part of the question no code decides is recorded as
+  implemented nowhere in `implementation-check.md`, with what was searched (feature 378).
 - **FR-004 - No map change.** No generator, placer or map changes; a DRIFTED verdict is recorded, not fixed (the GM's scope).
 - **FR-005 - The implementation check.** `make impl-check F=352` reports nothing missing.
 
@@ -71,7 +83,7 @@ finding: IN-STEP with its evidence, or DRIFTED from it.
 
 - **SC-001** (FR-001, FR-002): 0036's findings page answers the question or states its absence with the search named, and
   `make record-owed UNANSWERED=1` lists nothing.
-- **SC-002** (FR-003, FR-005): `make claims-report` lists the reservation's claim citing 0036 with a verdict, and
+- **SC-002** (FR-003, FR-005): `make claims-report` lists every claim FR-003 names citing 0036 with a verdict, and
   `make impl-check F=352` reports nothing missing.
 - **SC-003** (FR-004): the delta changes no engine line beyond a docstring's claim, and no map.
 
@@ -83,3 +95,10 @@ finding: IN-STEP with its evidence, or DRIFTED from it.
 ## Decisions Recorded
 
 (none yet)
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-11): CHANGES REQUIRED - FR-003 named one claim where the rule is claimed in seven units,
+  several UNRESEARCHED, and `conflicts` does not decide "between". Applied: FR-003 lists the units a recorded command finds,
+  each re-judged against 0036's findings, the seating's placement named, and what no code decides goes to
+  `implementation-check.md`; US2 and SC-002 reworded to match.
