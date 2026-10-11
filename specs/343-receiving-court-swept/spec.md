@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - amendment 1 FAITHFUL; checks and close
+**Status**: Done 2026-10-11 - 0104 states the Edo gravel and the silence elsewhere (swept, raked, sanded or bare earth) with its search; border-court.md and the Ubame sheet no longer call the court swept; make impl-check F=343 reports nothing missing; report.md. The GM's review of its round-arbiter rulings is open (make gm-review)
 
 **Affects**: magistracy, research record
 

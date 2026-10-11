@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec FAITHFUL (round 1), plan next
+**Status**: Done 2026-10-11 - 0104 records the Koseki middle gate and that no source places one against an office hall; the divider gate's place a labeled guess; the 1994 repair report on the download list (item 308); make impl-check F=338 reports nothing missing; report.md
 
 **Affects**: magistracy, research record
 

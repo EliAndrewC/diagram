@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec FAITHFUL (round 1), plan next
+**Status**: Done 2026-10-11 - 0099's absence note on the roofed court's size, with its search; the hearing-court claims IN-STEP; make impl-check F=337 reports nothing missing; report.md
 
 **Affects**: magistracy, research record
 

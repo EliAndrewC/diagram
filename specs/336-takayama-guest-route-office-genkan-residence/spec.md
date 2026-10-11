@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec FAITHFUL (round 3), plan next
+**Status**: Done 2026-10-11 - 0104 carries the Takayama sources with their limits; the 1830 drawing on the download list (item 307); _roji_parts' claims checked (the roji's trigger DRIFTED: no knob chooses genkan or roji); Ochiba's hand-drawn route recorded in implementation-check.md; make impl-check F=336 reports nothing missing; report.md
 
 **Affects**: magistracy, research record
 
