@@ -102,7 +102,16 @@ def test_the_printed_row_keeps_its_ten_cells_whatever_its_subject() -> None:
 
 
 def _call(stamp: str, rid: str, out: int) -> str:
-    return json.dumps({"timestamp": stamp, "requestId": rid, "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 1000, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": out}}}) + "\n"
+    return (
+        json.dumps(
+            {
+                "timestamp": stamp,
+                "requestId": rid,
+                "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 1000, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": out}},
+            }
+        )
+        + "\n"
+    )
 
 
 def test_a_pass_is_settled_from_the_finished_transcript_not_the_cells_logged_at_the_stop(tmp_path: Path) -> None:
