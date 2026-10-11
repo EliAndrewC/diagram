@@ -1,0 +1,78 @@
+{
+ "feature": "335-magistracies-rear-strips-feature283-reviews-left",
+ "plan_sha256": "d5df6c09a3837575d210c6917de2b4ad4508925ae3d45a86d14a11051bff8ecb",
+ "plan_text": "# Implementation Plan: the magistracy sheets' open findings (335, carrying 339, 341, 342)\n\n**Spec**: `spec.md` | **Measurements**: `harness.py` (`make spec-harness SPEC=specs/335-magistracies-rear-strips-feature283-reviews-left OUT=<json>`)\n\n## Summary\n\nThree new `tools/pack_audit/` checks, each proven red on a frozen copy of an unfixed sheet before the sheet is fixed (the\nlanding steps past the revetment, a door not wholly inside a building, a torii not drawn in plan); one bug fixed in the\naligned-gap finder; then each hand sheet redrawn ONCE - Hayakawa (steps, 14 doors, the rear-strip items), Ochiba (7 doors),\nUbame (14 doors, the torii, the rear yard, the servants' partitions) - re-audited, rendered, and reviewed once.\n\n## Decisions\n\n- **D1 - the steps (FR-001, FR-002; research 0176, historically accurate)**: the flight is redrawn notched into the revetment and\n  the bank: x 1058-1072 (its water-side end ON the revetment's river face, x 1072; 4.7 ft of run for the treads, its landward 6 px\n  cut into the bank street's edge as before), its tread lines at x 1061.5, 1065 and 1068.5, 15 ft wide as drawn (y 492-538). The\n  barge's two lines start at the new face (x 1072). The check `steps_past_revetment` reads the rect of the group declared\n  `data-id=\"landing-steps\"` and the `data-kind=\"revetment\"` rect, takes the water side as the side facing the `river` shape, and\n  reports the px the steps run past that face; red fixture `tests/fixtures/hayakawa-steps-past-revetment-red.svg` (the sheet as\n  drawn today, trimmed to the landing).\n- **D2 - the door rule (FR-003..FR-005; map drawing convention)**: a door's block is wholly inside the building it is the door of,\n  flush to the wall it opens through. Each OUTSIDE or STRADDLE door (`harness.py`'s list) is moved across the edge it abuts or\n  crosses by exactly the depth that puts its outer edge on that edge; its size is kept. The host is the building whose tagged group\n  holds the door (the harness's max-overlap/nearest host was checked against each group by eye on the list; where they differ the\n  group wins). The check `doors_off_their_walls` reads every `data-kind=\"door\"` rect (tag, not fill - the old `door_rects` sees only\n  dark fills) and reports one not wholly inside any built footprint (1 px tolerance for the stroke), or wholly inside one but with no edge\n  on that footprint's wall (floating just inside it - spec-fidelity's note: the old `floating_doors` reads dark fills only); red fixture a trimmed copy of\n  Hayakawa's servants' range and kitchen as drawn today. The rule is written in `docs/buildings.md` (operative), research 0117's\n  drawing page (the finding: its \"A door glyph sits flush\" paragraph says inside, and its program paragraph's \"as they set one\"\n  becomes true), at each sheet's door comment, and here. After the move every sheet is re-audited: a tub now outside\n  `TUB_DOOR_MAX_FT` or a door approach the move closed is fixed in the same pass.\n- **D3 - the arches (FR-006..FR-008; drawing rule already settled by feature 268)**: Ubame's approach torii redrawn in plan at the\n  shrine's south door, the approach running north-south: the beam a 4.5 px vermilion line x 960.5-1005.5 at y 303, the two\n  3.6 px posts at x 964 and 998.4 (10.3 ft clear), the invisible `id=\"arch\"` rect (960.5, 300, 45 x 6). The check `arch_in_plan`\n  reports a `data-kind=\"torii\"` group with no `id=\"arch\"` rect; red fixture the Ubame torii as drawn today. Ochiba's altar marker is\n  not a torii group and is left (spec D2). If `arch_on_approach` then wants Ubame's approach declared, the approach is declared\n  (`id=\"approach\"`) along the shrine's way, not the check waived. The \"Modest shrine\" clause goes; Ubame's notes record one arch.\n- **D4 - Ubame's rear yard (FR-009)**, re-measured 2026-10-11: (a) the garden no longer reaches the rear strip (the garden rect is\n  y 326-444, south of the house): NO LONGER APPLIES, recorded. (b) The two storehouse doors already stand inside their south faces\n  onto the open rear yard (`harness.py`: INSIDE): the way to them is the yard's open earth; no stepping stones are drawn - a rear\n  yard is working ground, and stepping stones are the garden's (a GUESS either way; drawing none adds nothing the record does not\n  hold). (c) The 19 x 31 ft strip east of the reception (x 838-900, y 232-326) joins the rear yard at its top and is clear of the\n  garden: it IS the reception privy's service way - the carters come from the rear yard to the privy's east face without crossing\n  the garden. Settled by declaring it part of the rear yard: the yard's polygon becomes an L reaching down the strip to the garden's\n  top, so the strip is named ground, not leftover. (The finding \"its cesspit has no approach that avoids a garden\" no longer holds\n  on today's sheet; the measurement is recorded.)\n- **D5 - Hayakawa's family way out of the inner garden (FR-010)**: NONE drawn. Read at full zoom 2026-10-11: the garden is a\n  dashed edge, not a fence, and its west side (x 460, y 326-374) opens onto the court strip between the kitchen and the karo's\n  house, which the family's own rooms face; the family walks out there. A wicket is drawn nowhere (research 0104 holds an absence\n  note on a wicket; drawing none adds nothing the record does not hold). Recorded at the garden's comment on the sheet.\n- **D6 - the well at the middle gate (FR-011; research: physical; historically accurate)**: the search pass (2026-10-11, archive then\n  web) found no draw-well on a residence's guest roji: a roji carries stepping stones and a basin; working wells stood by the\n  kitchen or bath (Matsue's Shiomi-nawate house, Kaminoyama, Kitsuki, the Urasenke house) or in an official compound's front court\n  beside the formal entrance (Iwama jin'ya, 1827); the one tea-roji well curb (Jo-an, 1615) is an homage copy. So the garden well\n  at the middle gate's mouth is REMOVED; the kitchen's own well (x 422-444) stands about 13 ft from the bed it watered. The finding\n  is recorded on 0104's drawing page (cited, its checks run) by the page sessions in `briefs/r1-write.md` and `r1-check.md`, and the\n  sheet's comment points at it.\n- **D7 - Hayakawa's rear pocket (FR-012)**: judged 2026-10-11 at full zoom: the ground between the woodshed (x 400-490) and the first\n  storehouse (x 590), on the north wall, reaches no door and serves no way the alley below it does not - dead space. Sliding the\n  storehouses west only moves the void to the north-east corner, so the WOODSHED is lengthened east to a 6 ft fire gap from the\n  storehouse (x 400-572, about 57 x 10 ft), its cordwood stack run its length. The size stays a GUESS (a year's firewood for the\n  kamado and the bath of a house this size; no page gives one), recorded at its comment.\n- **D8 - Ubame's servants' partitions (FR-013; research buildings 910)**: the three bay lines are drawn as sliding partitions - the\n  dashed thin line the residences' internal partitions use (`stroke-dasharray`) - instead of solid walls.\n- **D9 - aligned gaps (FR-014)**: `_blocked` compares a third building's y-extent with the gap's x-interval in the horizontal case\n  (the arguments are passed x-range first, as in the vertical case, but tested the other way round). Fixed: one test for both\n  orientations; a unit test with three buildings in a row (the middle one blocks) for each orientation, and Ochiba's 28.7 ft pair\n  gone from `aligned_gaps`.\n\n## Constitution Check\n\n- XII research: D6 is a physical task with the five boxes; D1, D3 rest on the record; D2, D8 are labeled conventions; D4/D5/D7 each\n  recorded with their measurement or class.\n- XIII/XIV: the checks are red before the fix; every sheet re-audited; any finding the redraw causes is fixed here.\n- XVI literal: each carried entry's ask is a decision above; nothing dropped.\n- Performance: no generator stage changes; the three checks run in `pack_audit` on four sheets (linear in their rects).\n\n## Occasions (for tasks.md)\n\n- layout-revised: hayakawa-magistracy, ochiba-magistracy, ubame-magistracy (one `building-review` each, after all its redraws)\n- glyph-redrawn: ubame-magistracy torii; hayakawa-magistracy river landing (the steps)\n- placement-changed: hayakawa-magistracy door (the door rule)\n",
+ "reviewed": "2026-10-11",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Hayakawa's flight redrawn x 1058-1072, its water end on the revetment's river face; barge lines from x 1072; steps_past_revetment check with a frozen red fixture",
+   "class": "within",
+   "why": "Carries FR-001/FR-002 and 339's 'redraw them if they do' exactly: 0 px past the face, treads kept, barge lines at the new face, check red on the unfixed sheet first."
+  },
+  {
+   "id": "D2",
+   "summary": "One door rule (wholly inside the host building, flush to its wall); each outside/straddle door moved inward by its depth, size kept; host = the tagged group holding it; doors_off_their_walls also reports a door floating inside; written in buildings.md, 0117, each sheet's comment; re-audit and fix tub/approach fallout",
+   "class": "within",
+   "why": "Carries FR-003..FR-005 and the spec's edge cases (host by group, re-audit). The floating-door report enforces FR-003's 'flush to the wall' and adds no behavior. Fixture is one trimmed Hayakawa copy, matching FR-005/SC-004's singular fixture."
+  },
+  {
+   "id": "D3",
+   "summary": "Ubame torii redrawn in plan (45 x 4.5 px beam, 3.6 px posts 10.3 ft clear, id=arch rect); arch_in_plan check red on Ubame first; approach declared if arch_on_approach asks; Ochiba altar marker left; 'Modest shrine' clause removed; notes record one arch",
+   "class": "within",
+   "why": "Carries FR-006..FR-008 at the bullet's own figures (3 px/ft); the altar marker is spec D2; declaring the approach rather than waiving a check serves FR-015."
+  },
+  {
+   "id": "D4a",
+   "summary": "Ubame: 'end the garden at the storehouses' south faces' recorded NO LONGER APPLIES (inner garden y 326-444, south of the house)",
+   "class": "within",
+   "why": "US4 explicitly allows a recorded 'no longer applies' with its measurement; the rear garden the finding addressed (ledger 2026-09-28, ubame round 4) no longer exists - the band is open yard and the only garden lies south of the house, so it cannot reach past the storehouses."
+  },
+  {
+   "id": "D4b",
+   "summary": "Ubame: no stepping stones or path drawn to the two storehouse doors; the doors open inside their south faces onto the open rear yard, which is the way (labeled GUESS)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-009 names 'a way (stepping stones or a path)' to the two storehouse doors and the plan draws neither. The filed entry was written AFTER the ground became open yard - it opens 'Ubame's rear yard (open ground since the GM's 2026-09-28 ruling ...)' and still asks for 'stepping stones or a way' - so 'the open earth is the way' is not today's sheet answering an old finding; it declines the item on the plan's own argument (itself labeled a GUESS) that a working yard needs no path. Drawing a trodden path or stones on bare earth is not impossible, nothing in the GM's or the entry's words implies 'unless the yard is open', and drawing one does not defeat any purpose. Fix: D4 draws a way (stepping stones or a trodden path) from the house or service side to the two storehouse doors, its class labeled, then the plan is re-reviewed on its new digest."
+  },
+  {
+   "id": "D4c",
+   "summary": "Ubame: the 19 x 31 ft strip east of the reception (x 838-900, y 232-326) declared part of the rear yard (an L polygon), serving as the reception privy's service way clear of the garden",
+   "class": "within",
+   "why": "Settles the strip and gives the privy (latrine-1 at x 838-853, inside the strip) an approach from the rear yard that never enters the garden (garden starts y 326) - FR-009's second and third items in one move."
+  },
+  {
+   "id": "D5",
+   "summary": "Hayakawa: no family way/wicket drawn out of the inner garden; the dashed-edge garden opens west onto the court strip; recorded at the garden's comment",
+   "class": "within",
+   "why": "FR-010 and the filed entry ('draws a labeled guess or none') allow 'not drawn, the choice recorded'."
+  },
+  {
+   "id": "D6",
+   "summary": "Hayakawa: after a search pass finding no draw-well on a guest roji, the garden well at the middle gate's mouth is REMOVED; the kitchen's own well serves the bed; finding recorded and cited on 0104's drawing page (T03, physical, five boxes)",
+   "class": "narrowing",
+   "why": "FR-011 lists 'kept, moved or labeled as the research decides'; removal is a fourth outcome, so a narrowing of the spec's letter. Legitimate on the purpose test: the filed entry asks only the research question ('was a draw-well ever on the roji's line?') and leaves the outcome to it; the research places working wells by the kitchen, and Hayakawa's kitchen already holds one (well-1, x 422-444), so 'moved there' would draw a duplicate glyph, and the bed's watering stays accounted for. The finding is recorded and cited on 0104's drawing page by a physical task with its five boxes (T03).",
+   "ruling": "LEGITIMATE"
+  },
+  {
+   "id": "D7",
+   "summary": "Hayakawa: the rear pocket judged dead space; the woodshed lengthened east to a 6 ft fire gap from the storehouse (x 400-572), size a labeled GUESS",
+   "class": "within",
+   "why": "FR-012 / the filed 'judge it as dead space': judged, then put to use, the judgment and the guess recorded."
+  },
+  {
+   "id": "D8",
+   "summary": "Ubame servants' three bay lines redrawn as dashed sliding partitions",
+   "class": "within",
+   "why": "FR-013: the lines are measured solid walls today (x 277/340/403, stroke-width 1, no dasharray), so they are redrawn as partitions."
+  },
+  {
+   "id": "D9",
+   "summary": "aligned_gaps' _blocked tests the x-interval against x and y against y for both orientations; unit tests for both; Ochiba's 28.7 ft pair gone",
+   "class": "within",
+   "why": "FR-014 exactly, with the test it names."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

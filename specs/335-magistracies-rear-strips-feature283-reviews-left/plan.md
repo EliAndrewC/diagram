@@ -28,7 +28,12 @@ Ubame (14 doors, the torii, the rear yard, the servants' partitions) - re-audite
   Hayakawa's servants' range and kitchen as drawn today. The rule is written in `docs/buildings.md` (operative), research 0117's
   drawing page (the finding: its "A door glyph sits flush" paragraph says inside, and its program paragraph's "as they set one"
   becomes true), at each sheet's door comment, and here. After the move every sheet is re-audited: a tub now outside
-  `TUB_DOOR_MAX_FT` or a door approach the move closed is fixed in the same pass.
+  `TUB_DOOR_MAX_FT` or a door approach the move closed is fixed in the same pass. Done 2026-10-11: the check is red on the sheets
+  as they stood (Hayakawa 14, Ochiba 7, Ubame 14 doors - the red runs on Ochiba and Ubame the plan review asked for, from HEAD);
+  the move forced four further fixes - Hayakawa's household door from across its two rooms' partition into the family quarters
+  (x 310), the karo's house door 6 px down so its tub stays within 10.5 ft, Ubame's kitchen door 6 px down off the kitchen's well
+  glyph, and Ochiba's office-hall door drawn after the hall's outline, which painted over it. The one old fixture that must fail
+  only its own check (`ochiba-no-scale-red.svg`) took the same door move.
 - **D3 - the arches (FR-006..FR-008; drawing rule already settled by feature 268)**: Ubame's approach torii redrawn in plan at the
   shrine's south door, the approach running north-south: the beam a 4.5 px vermilion line x 960.5-1005.5 at y 303, the two
   3.6 px posts at x 964 and 998.4 (10.3 ft clear), the invisible `id="arch"` rect (960.5, 300, 45 x 6). The check `arch_in_plan`
@@ -36,10 +41,11 @@ Ubame (14 doors, the torii, the rear yard, the servants' partitions) - re-audite
   not a torii group and is left (spec D2). If `arch_on_approach` then wants Ubame's approach declared, the approach is declared
   (`id="approach"`) along the shrine's way, not the check waived. The "Modest shrine" clause goes; Ubame's notes record one arch.
 - **D4 - Ubame's rear yard (FR-009)**, re-measured 2026-10-11: (a) the garden no longer reaches the rear strip (the garden rect is
-  y 326-444, south of the house): NO LONGER APPLIES, recorded. (b) The two storehouse doors already stand inside their south faces
-  onto the open rear yard (`harness.py`: INSIDE): the way to them is the yard's open earth; no stepping stones are drawn - a rear
-  yard is working ground, and stepping stones are the garden's (a GUESS either way; drawing none adds nothing the record does not
-  hold). (c) The 19 x 31 ft strip east of the reception (x 838-900, y 232-326) joins the rear yard at its top and is clear of the
+  y 326-444, south of the house): NO LONGER APPLIES, recorded. (b) A TRODDEN PATH to the two storehouse doors (plan review round 1: FR-009 asks for a drawn way, the open yard is not one):
+  a 7 px (about 2.3 ft) band of trodden earth, lighter than the court's, from the rear alley's service end (x 536, the west end
+  of the yard, where the servants' range and the kitchen side meet it) east across the yard at y 216, with a spur up to each
+  door (x 647 and x 787). A path, not stepping stones: a rear yard is working ground and stepping stones are a garden's. Its
+  class: a GUESS - no page we read draws a way to a storehouse door; drawn because the building review asked for one. (c) The 19 x 31 ft strip east of the reception (x 838-900, y 232-326) joins the rear yard at its top and is clear of the
   garden: it IS the reception privy's service way - the carters come from the rear yard to the privy's east face without crossing
   the garden. Settled by declaring it part of the rear yard: the yard's polygon becomes an L reaching down the strip to the garden's
   top, so the strip is named ground, not leftover. (The finding "its cesspit has no approach that avoids a garden" no longer holds
@@ -56,12 +62,18 @@ Ubame (14 doors, the torii, the rear yard, the servants' partitions) - re-audite
   is recorded on 0104's drawing page (cited, its checks run) by the page sessions in `briefs/r1-write.md` and `r1-check.md`, and the
   sheet's comment points at it.
 - **D7 - Hayakawa's rear pocket (FR-012)**: judged 2026-10-11 at full zoom: the ground between the woodshed (x 400-490) and the first
-  storehouse (x 590), on the north wall, reaches no door and serves no way the alley below it does not - dead space. Sliding the
-  storehouses west only moves the void to the north-east corner, so the WOODSHED is lengthened east to a 6 ft fire gap from the
-  storehouse (x 400-572, about 57 x 10 ft), its cordwood stack run its length. The size stays a GUESS (a year's firewood for the
-  kamado and the bath of a house this size; no page gives one), recorded at its comment.
+  storehouse (x 590), on the north wall, reaches no door and serves no way the alley below it does not - dead space. CLOSED by
+  sliding both storehouses 82 px (27 ft) west, the first to a 6 ft fire gap from the woodshed (x 508). The north-east corner this
+  frees (x 638-741) is in use: the second storehouse's door faces east onto it, and it is the carters' ground across the alley
+  from the guest privy's cleanout. Tried first and withdrawn: lengthening the woodshed over the pocket (57 x 10 ft) - the woodshed
+  is tagged `kitchen` (no woodshed kind exists), so it became the largest `kitchen` footprint and failed the kitchen's size band;
+  a woodshed kind of its own would add a modal and its checks, out of this feature's scope.
 - **D8 - Ubame's servants' partitions (FR-013; research buildings 910)**: the three bay lines are drawn as sliding partitions - the
   dashed thin line the residences' internal partitions use (`stroke-dasharray`) - instead of solid walls.
+- **D10 - a rear yard is open ground to a caption** (found 2026-10-11, fixed here, constitution XIV): `labels/hand_sheet.py`
+  `GROUND_KINDS` lacked `rear yard` (feature 283 added the kind), so its outline weighed as an obstacle; once Ubame's yard reached
+  the reception privy (D4c), the privy's name was led across the yard into the shrine grove. Added, with a unit test; it re-seats
+  captions on Ochiba and Ubame only (the two sheets with a rear yard), both revised and reviewed here.
 - **D9 - aligned gaps (FR-014)**: `_blocked` compares a third building's y-extent with the gap's x-interval in the horizontal case
   (the arguments are passed x-range first, as in the vertical case, but tested the other way round). Fixed: one test for both
   orientations; a unit test with three buildings in a row (the middle one blocks) for each orientation, and Ochiba's 28.7 ft pair
