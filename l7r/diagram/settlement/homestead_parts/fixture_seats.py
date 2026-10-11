@@ -164,12 +164,13 @@ def weighted(weights: Sequence[tuple[str, float]], u: float) -> str:
 
 def privy_sun_reach_ft(w_ft: float, d_ft: float) -> float:
     """How far from its house's center the sun-side search may seat a privy of `w_ft` x `d_ft`: `PRIVY_SUN_MAX_FT`, whatever
-    its size (feature 328: 0047 puts the privy's center within 48 ft; feature 280's widening for a large privy, after 7 of
-    17 privies of 18 x 12 ft or more fell to the north-east seat at Sawada, is gone).
+    its size (feature 280's widening for a large privy, after 7 of 17 privies of 18 x 12 ft or more fell to the north-east
+    seat at Sawada, is gone). A SEARCH BOUND only, measured to the privy's center: whether a seat is within the reach 0047
+    gives is `within_reach_of`'s far-corner-to-walls measure (feature 368).
 
     Research:
-        sun-side reach by size - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the privy's center within 48 ft of its house, whatever its size"""
-    return PRIVY_SUN_MAX_FT  # its center within 48 ft of the house, whatever its size (0047)
+        sun-side reach by size - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the search bound for the sun-side seats, 48 ft to the privy's center whatever its size; the reach 0047 gives runs from the privy's far corner to the house's walls, which within_reach_of tests"""
+    return PRIVY_SUN_MAX_FT  # the search bound, to the privy's center; the reach itself is within_reach_of's (0047)
 
 
 def fixture_ft(kind: str, forms: FixtureForms, roll: Callable[[float], float] | None = None) -> tuple[float, float]:
