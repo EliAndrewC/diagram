@@ -14,14 +14,20 @@ A feature with a row of either kind carries ONE box, `- [ ] GM review (make gm-r
 adds; `make speckit-todo` reads such a feature `Done - GM review pending`; `make gm-reviewed F=NNN` marks its rows reviewed
 and ticks the box, and `OVERTURN=<row> TO=<feature>` turns a ruling the GM overturns into an open row of that feature.
 
+A row the GM DISCUSSED with a session and agreed needs no more action is reviewed: the session runs `make gm-reviewed F=NNN
+WORDS="<his words, verbatim>"` in that turn, and the words are kept on each row it marks (the GM, 2026-10-10: *"if we have a
+discussion like the one we had and then we agree that it doesn't need any more action, then shouldn't that count as me
+reviewing it"* - 370's one row sat pending after exactly that discussion).
+
     gm_review.py list                                   every feature's held and to-review rows
     gm_review.py accept F FINDING REASON                a finding accepted with a reason: a to-review row
-    gm_review.py reviewed F [--overturn ROW --to G]     the GM has reviewed F's rows
+    gm_review.py reviewed F [ROW G]                     the GM has reviewed F's rows (GM_WORDS= in the environment: his words)
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import time
@@ -78,6 +84,8 @@ def listing(root: Path) -> str:
         open_rows = [(i, r) for i, r in enumerate(rows(d)) if "reviewed" not in r]
         if open_rows:
             out.append(f"TO REVIEW - {d.name} (landed; the GM may overturn): make gm-reviewed F={int(d.name.split('-', 1)[0])}")
+            out.append('  (discussed with the GM and agreed no more action? that is his review: make gm-reviewed F=NNN WORDS="<his words>")'.replace(
+                "NNN", str(int(d.name.split("-", 1)[0]))))
             out += [f"  [{i}] {r.get('kind')}: {r.get('trigger') or r.get('finding', '')} - {r.get('ruling', 'accepted')}: {r.get('why', '')[:140]}"
                     for i, r in open_rows]
     return "\n".join(out) + "\n" if out else "gm-review: nothing waits on the GM\n"
@@ -94,9 +102,12 @@ def accept(d: Path, finding: str, reason: str) -> dict:
     return row
 
 
-def reviewed(root: Path, d: Path, overturn: int | None = None, to: Path | None = None) -> list[str]:
+def reviewed(root: Path, d: Path, overturn: int | None = None, to: Path | None = None, words: str = "") -> list[str]:
     """The GM has reviewed `d`'s rows: each marked reviewed; an overturned one becomes an open row of the feature `to`; the
-    GM-review box is ticked - through the closing check, since it may close the feature (FR-009)."""
+    GM-review box is ticked - through the closing check, since it may close the feature (FR-009). `words`, when a session marks
+    the review on the GM's behalf after discussing it with him, are his words, kept on each row it marks."""
+    if words and len(words.split()) < 2:
+        raise ValueError("WORDS are the GM's own, two words or more")
     rs = rows(d)
     msgs = []
     if overturn is not None:
@@ -116,7 +127,7 @@ def reviewed(root: Path, d: Path, overturn: int | None = None, to: Path | None =
         if why:
             raise ValueError("the GM's box closes the feature, and: " + "; ".join(why))
     today = time.strftime("%Y-%m-%d", time.gmtime())
-    (d / ROWS).write_text("".join(json.dumps({**r, "reviewed": r.get("reviewed", today)}, ensure_ascii=False) + "\n" for r in rs),
+    (d / ROWS).write_text("".join(json.dumps({**r, "reviewed": r.get("reviewed", today), **({"gm_words": words} if words and "reviewed" not in r else {})}, ensure_ascii=False) + "\n" for r in rs),
                           encoding="utf-8")
     if box(d) in text:
         tasks.write_text(text.replace(box(d), box(d).replace("- [ ] ", "- [x] ")), encoding="utf-8")
@@ -141,7 +152,8 @@ def main(argv: list[str]) -> int:
             print("accept: recorded for the GM's review after landing")
         elif argv[:1] == ["reviewed"] and len(argv) in (2, 4):
             ov = int(argv[2]) if len(argv) == 4 else None
-            for m in reviewed(root, _feature(root, argv[1]), ov, _feature(root, argv[3]) if len(argv) == 4 else None):
+            to = _feature(root, argv[3]) if len(argv) == 4 else None
+            for m in reviewed(root, _feature(root, argv[1]), ov, to, os.environ.get("GM_WORDS", "").strip()):
                 print(f"gm-reviewed: {m}")
         else:
             print(__doc__.split("\n\n")[-1], file=sys.stderr)

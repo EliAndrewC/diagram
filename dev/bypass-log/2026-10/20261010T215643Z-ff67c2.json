@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-10T21:56:43Z",
+  "target": "record-checked",
+  "commit": "803d6cd92",
+  "why": "modal-references on modal-references:sheet/residence-corridor: the round arbiter accepted this unit; the accept-answers fix lands with this batch"
+}

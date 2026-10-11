@@ -207,6 +207,13 @@ CHECKS: tuple[Check, ...] = (
         "ochiba-road-wider-than-gate-red.svg",
         "narrow the road to the gate's passage (a foot of grain at most), or widen the gate if the record calls for a wider one",
     ),
+    Check(
+        "veranda_depths",
+        lambda ctx: pr.veranda_depths(ctx.text),
+        True,
+        "ochiba-veranda-narrow-red.svg",
+        "draw the veranda 3 to 6 ft deep (9-18 px), half a ken to one ken (research 0102's drawing page)",
+    ),
     # --- fire-water: required by BOTH programs, so both declarations list it (spec 254 FR-003, round-1 item 2) ---
     Check("fire_water_adrift", _tub_adrift, False, "ochiba-tub-adrift-red.svg", "move the tub to a wall or eaves corner - a tensuioke is gutter-fed"),
     Check("tubs_off_their_doors", _tub_off_its_door, False, "ochiba-tub-off-door-red.svg", "move the tub beside a door of its building - research 0100 keeps the water at the entrance"),

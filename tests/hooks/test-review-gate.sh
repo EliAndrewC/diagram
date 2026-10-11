@@ -56,6 +56,14 @@ NEW='{"v":2,"ink_classes":{"farmhouse":1,"well":1}}'
 mkrepo b withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll
 check "a map gaining an element with no review recorded" b blocked
 
+# GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - a render older than main's reads as a new element; the gate redraws
+# what an owed unit sits on (the stub `map` puts main's census back, as a real redraw did for 374's corridor) and asks again
+mkrepo b1 withmap; git checkout -q main; echo "# gen" > "$POOL/m.gen.py"
+printf 'map:\n\t@printf %%s %s > %s\n' "'{\"v\":1,\"ink_classes\":{\"farmhouse\":1}}'" "$POOL/m.json" >> Makefile
+git add -A; git commit -qm gen; git update-ref refs/remotes/origin/main main; git checkout -q -b stale
+echo work >> seed.txt; git add -A; git commit -qm work; echo "$NEW" > "$POOL/m.json"
+check "a stale render that its redraw clears owes nothing" b1 ok
+
 # The two shapes the bare `grep FAITHFUL` used to let through (feature 156, 2026-08-29). The first is
 # the dangerous one: a spec a reviewer REJECTED shipped as if it had passed.
 mkrepo b2; printf '# spec\n\n## Review history\n- **Round 1 (2026-08-29): NOT FAITHFUL.** FR-003 carved out a case.\n' > specs/900-x/spec.md
@@ -164,9 +172,9 @@ check "a map that has no notes file" f ok
 # verdict record is NOT-REVIEWABLE is refused even with its notes updated, and a PASS lets it through.
 mkrepo nr withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-13" >> "$POOL/m.notes.md"
 git add -A; git commit -qm reroll-with-notes; mkdir -p .git/review-verdicts
-echo '{"map":"glyph-check--well","engine_key":"k","verdict":"NOT-REVIEWABLE","findings":[]}' > .git/review-verdicts/glyph-check--well.json
+echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"NOT-REVIEWABLE","findings":[]}' > .git/review-verdicts/glyph-check--well--m.json
 check "an owed unit whose last verdict is NOT-REVIEWABLE, notes updated or not" nr blocked
-echo '{"map":"glyph-check--well","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/nr/.git/review-verdicts/glyph-check--well.json"
+echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/nr/.git/review-verdicts/glyph-check--well--m.json"
 check "...and the same map once a review returned PASS" nr ok
 
 # GUARD_EDIT_OK: feature 248 FR-006 (GM 2026-09-14) - THE REVIEWER'S RECORD IS THE ONE RECORD. Three passes and three
@@ -176,16 +184,16 @@ check "...and the same map once a review returned PASS" nr ok
 # no notes touch refuses (case b above).
 echo
 echo "3. A MAP SHIPS ON ITS REVIEWER'S RECORD (feature 248)"
-V=.git/review-verdicts/glyph-check--well.json
+V=.git/review-verdicts/glyph-check--well--m.json
 mkrepo r1 withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
-echo '{"map":"glyph-check--well","engine_key":"k","verdict":"PASS","findings":[]}' > "$V"
+echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$V"
 check "a PASS record at this engine key, no notes touch" r1 ok
-echo '{"map":"glyph-check--well","engine_key":"k","verdict":"NEEDS-WORK","findings":[{"id":"F1"}]}' > "$T/r1/$V"
+echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"NEEDS-WORK","findings":[{"id":"F1"}]}' > "$T/r1/$V"
 check "...a NEEDS-WORK record at this key too (the findings are fixed under the same key)" r1 ok
-echo '{"map":"glyph-check--well","engine_key":"stale","verdict":"PASS","findings":[]}' > "$T/r1/$V"
+echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$T/r1/$V"
 check "a PASS record at ANOTHER key, no notes touch: refused" r1 blocked
 mkrepo r2 withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-14" >> "$POOL/m.notes.md"; git add -A; git commit -qm reroll
-mkdir -p .git/review-verdicts; echo '{"map":"glyph-check--well","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
+mkdir -p .git/review-verdicts; echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
 check "...and a stale-key record with the notes touched is refused too (D5: no substitute on a map with a record)" r2 blocked
 # GUARD_EDIT_OK: feature 294 D2 - the rendering waiver is gone; drawing or placement code that moved must DECLARE its occasions
 mkrepo r3 withmap; mkdir -p .specify specs/901-r l7r

@@ -215,7 +215,7 @@ def test_by_affects_lists_a_feature_under_each_of_its_tags(tmp_path: Path) -> No
 def test_check_names_the_open_features_with_no_tag_or_an_unknown_one_and_the_line_to_add(tmp_path: Path) -> None:
     _tagged(tmp_path, "001-open", None)
     _tagged(tmp_path, "002-typo", "hamlets")
-    _tagged(tmp_path, "003-tagged", "village")
+    _tagged(tmp_path, "003-tagged", "hamlet, village")
     _feature(tmp_path, "004-closed", "Withdrawn (GM)", None)
     r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--root", str(tmp_path), "--check"], capture_output=True, text=True, check=False)
     assert r.returncode == 1
@@ -277,3 +277,26 @@ def test_the_affects_option_expands_aliases_and_refuses_an_unknown_tag(tmp_path:
     assert r.returncode == 0 and "001-town" in r.stdout and "002-tool" in r.stdout
     r = subprocess.run([*run, "tools"], capture_output=True, text=True, check=False)
     assert r.returncode == 2 and "AFFECTS names no tag it knows: tools" in r.stderr and "Tags: hamlet, village" in r.stderr
+
+
+def test_a_later_tier_item_outside_its_placeholder_is_refused_with_where_it_goes(tmp_path: Path) -> None:
+    """The GM, 2026-10-10: everything owed when a tier is scripted is ONE feature, that tier's placeholder."""
+    _tagged(tmp_path, "010-village-tier", "village")
+    _tagged(tmp_path, "011-shrine-grove", "village")
+    _tagged(tmp_path, "012-both", "hamlet, village")
+    _tagged(tmp_path, "013-capital-thing", "capital")
+    _feature(tmp_path, "014-old", "Superseded by 010 (2026-10-10)", None)
+    vocab = json.loads((tmp_path / st.AFFECTS).read_text())
+    (tmp_path / st.AFFECTS).write_text(json.dumps({**vocab, "placeholders": {"village": "010-village-tier"}}))
+    r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--root", str(tmp_path), "--check"], capture_output=True, text=True, check=False)
+    assert r.returncode == 1
+    assert "specs/011-shrine-grove/  (owed at village): carry its text into specs/010-village-tier/spec.md" in r.stderr
+    assert "Superseded by 010" in r.stderr
+    assert 'make it the capital tier\'s placeholder - add "capital": "013-capital-thing"' in r.stderr
+    assert "010-village-tier/ " not in r.stderr and "012-both" not in r.stderr and "014-old" not in r.stderr
+
+
+def test_every_later_tier_item_in_the_repository_is_in_its_placeholder() -> None:
+    v = st.vocabulary(REPO)
+    assert st.placeholder_message(st.off_placeholder(REPO / "specs", v), v) == ""
+    assert all((REPO / "specs" / name).is_dir() for name in v.placeholders.values())

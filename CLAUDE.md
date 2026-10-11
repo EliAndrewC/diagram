@@ -143,7 +143,9 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   it, or with words the GM did not write in the session, is refused (`feature-approval-hooks.sh`). Ask `make
   speckit-todo` what is open: filed, planned, in progress. Each spec names what it touches in an `**Affects**:` line (tags from
   `.specify/affects.json`: the diagram kinds, tooling, research, ...), and its stage - `now`, `village`, `town`, `provincial city`,
-  `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag, `AFFECTS=<tag>` lists only that tag's; `CHECK=1`, run at the push, holds it). A feature closes when every task is ticked, or when its status line opens
+  `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag, `AFFECTS=<tag>` lists only that tag's; `CHECK=1`, run at the push, holds it). Everything owed when a tier is scripted is ONE feature, that tier's placeholder
+  (`placeholders` in `.specify/affects.json`: 380 village, 381 town, 382 provincial city; GM 2026-10-10): a new item owed at
+  a tier is added to its placeholder, never filed on its own (`CHECK=1` refuses one). A feature closes when every task is ticked, or when its status line opens
   `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
 - Every task is `research: rendering` or `research: physical`; a physical task carries the boxes
   `research pass`, `source-reader confirmed`, `recorded and cited`, `quote-check confirmed` and
@@ -151,7 +153,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Every feature ends with `make feature-report F=NNN WRITE=1` - where its time and dispatches went, from the hooks' event
   log; its last `make tick`, a closing status line and `make gm-reviewed` refuse without it, and without any measurement
   another spec carried to it (`Carried: SC-nnn -> NNN <key>`). A feature lands with the GM's review open when it has a row
-  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.)
+  for him (an arbiter ruling, `make accept`); `make gm-review` lists them. (Feature 375.) A row the GM discussed in the session and
+  agreed needs no more action IS his review: run `make gm-reviewed F=NNN WORDS="<his words, verbatim>"` in that turn (GM 2026-10-10).
 - Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
   or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's
   to judge: its refusal names `make arbiter-bundle`, and an advisor asked about a loop is handed that MANIFEST too.
@@ -291,7 +294,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `stall-watchdog-hooks.sh` | one loop outside every session: a session silent an hour with unfinished work, not waiting on the GM, gets its tab marked and the bell, and a nudge typed when its own input line is empty (once per stall); a paneless one is marked on its host's tab, never nudged | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |
 | `event-log-hooks.sh` | every hook event is a line of the feature's event log (`<git dir>/l7r-events/`); `make feature-report F=NNN` turns it into where the time and dispatches went (feature 375) | none - it never refuses |
-| `checks-hooks.sh` + `hm_checks.py`, `hm_arbiter.py` | each check's launch and return (the freeze's state); the TRIPWIRES - a check's third round on one subject, a block an earlier version had and a later dropped coming back, a second red gate in a row, check dispatches past 1.0 a changed line - each owing the `round-arbiter`'s one binding ruling (`make arbiter-bundle`, then the agent records it) before the next check or gate; the feature goes on elsewhere (feature 375) | `ARBITER_OK` |
+| `checks-hooks.sh` + `hm_checks.py`, `hm_arbiter.py` | each check's launch and return (the freeze's state); the TRIPWIRES - a check's third round on one subject, a block an earlier version had and a later dropped coming back, a second red gate in a row, check dispatches past 1.0 a changed line - each owing the `round-arbiter`'s one binding ruling (`make arbiter-bundle`, then the agent records it) before the next check or gate; the feature goes on elsewhere (feature 375); a ruling's `tooling_fix` holds every `make tick` and the closing check until `make arbiter-fix-done` or `arbiter-fix-declined` (feature 379) | `ARBITER_OK` |
 | at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh` (the record gate: every record check a delta owes answered, feature 311), `claims-gate.sh` (feature 316), `check-file-scale.py`, `spec-lint.py` (a spec directory that existed before the push is judged on what the push adds), `check-research-pointers.py`, `downloads.py check` (the download list append-only), `make record CHECK=1` (the record builds cleanly), `hm_conflict.py --tracked`, `perf_review.py --check`, `close_check.py` (a touched feature that reads closed has its report and its carried keys, feature 375; `CLOSE_OK`), the open-task refusal (a `[lands-open]` box only where the tooling or a reviewed plan's `**Lands open**:` put it, feature 375); at push and sync-in, a clone whose history shares no commit with main's | per script, each with a reason |
 | the gate | the PREFLIGHT first (`make preflight`: the derived files, the record, its pointers, `make quick`, the changed engine lines a quick test runs; feature 375), the 100% floor, the 1,000-line bar, the 100-statement function cap (`check-function-cap.py`, first in `static` and `quick` and at the push - feature 370), `ratchet.py` (a target that gets slower fails), the perf bands, `test_agent_models.py` (the pinned tiers, and `omitClaudeMd` on every agent file but the one the test names) | `FILE_SIZE_OK` in the file, `PREFLIGHT_OK`; no green when the tree moved during the run |
 

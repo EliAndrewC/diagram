@@ -1,6 +1,6 @@
 # Feature Specification: Two `s.kiln` glyph defects (settlement-review on Ubame, 2026-08-17)
 
-**Status**: Filed - from future-work/towns.md, "OWED AT CONVERSION: two `s.kiln` glyph defects (settlement-review on Ubame, 2026-08-17)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Superseded by 381 (2026-10-10): carried word for word into the town tier's placeholder, `specs/381-town-tier-scripted/` (the GM, 2026-10-10: "I agree with your approach, so please do it."). Was: Filed - from future-work/towns.md, "OWED AT CONVERSION: two `s.kiln` glyph defects (settlement-review on Ubame, 2026-08-17)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: town, provincial city, capital
 

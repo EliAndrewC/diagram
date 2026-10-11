@@ -79,8 +79,17 @@ class Unit:
 
     @property
     def slug(self) -> str:
-        """The unit's file-safe name: the verdict record, the snapshot folder and the dispatch's `UNIT:` line use it."""
-        return f"{self.check}--{re.sub(r'[^A-Za-z0-9]+', '-', self.subject).strip('-').lower()}"
+        """The unit's file-safe name: the verdict record, the snapshot folder and the dispatch's `UNIT:` line use it.
+
+        A glyph check judges an element WHERE IT STANDS, so its name carries the map too (feature 374 FR-007, carried
+        from 372): keyed by the element alone, a check of the latrine on a second sheet overwrote the first sheet's
+        record, and two declared occasions of one element on two sheets collapsed into one unit."""
+        name = f"{self.check}--{_safe(self.subject)}"
+        return f"{name}--{_safe(self.on)}" if self.check == "glyph-check" and self.on else name
+
+
+def _safe(text: str) -> str:
+    return re.sub(r"[^A-Za-z0-9]+", "-", text).strip("-").lower()
 
 
 def _git(root: Path, *args: str) -> str | None:

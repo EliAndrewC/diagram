@@ -121,6 +121,9 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 #  documentation" then costs seconds, not five minutes. Never for FULL (a different scope). No flag forces either
 #  direction (GUARD_EDIT_OK: the fidelity review removed a FORCE= flag as unrequested). ONE shell block, so `exit 0`
 #  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
+	@: "GUARD_EDIT_OK: feature 375 follow-up (the GM 2026-10-10) - ONE GATE AT A TIME IN A CLONE: a second make done beside a"
+	@: " running one is refused, naming it (two gates on one tree failed together and tripped the arbiter twice; gate_lock.py)."
+	@l="$$(git rev-parse --show-toplevel)/scripts/gates/gate_lock.py"; [ ! -f "$$l" ] || python3 "$$l" acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	@: "GUARD_EDIT_OK: feature 375 FR-004 - THE PREFLIGHT FIRST, ahead of the verified-done reuse too (a stale derived file is"
 	@: " invisible to that key): the derived files, the record and its pointers, make quick and the changed engine lines, in"
 	@: " a minute at most, stopping here on a failure (scripts/gates/preflight.py; 372's wave 106 went red six times on causes"
@@ -1147,6 +1150,16 @@ arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the 
 	@if [ -z "$(TRIGGER)" ] || [ -z "$(FILE)" ]; then printf 'make arbiter-ruled: TRIGGER= and FILE= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py ruled "$(TRIGGER)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
+# GUARD_EDIT_OK: feature 379 (the GM 2026-10-10) - an arbiter's tooling fix is made, not lost: the two ways an open fix is
+# settled, each a row of the GM's review; `make tick` and the closing check refuse while one is open.
+arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID=<trigger> NOTE="<what was built>" TEST=tests/...
+	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
+
+arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, to the GM's review, never filed (feature 379)   ID=<trigger> REASON="<why>"
+	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
+
 # GUARD_EDIT_OK: feature 375 FR-003(a) adds three operations - decide first: name the active task, print its decision
 # preflight's dispatch, print its section's digest. Read-only but for task-start's `<git dir>/active-task`.
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict (feature 375)   F=375 T=T13
@@ -1225,7 +1238,9 @@ accept:         ## [project] accept a finding with a reason - the work goes on, 
 	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py accept "$(F)" "$(FINDING)" "$(REASON)"
 
-gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375)   F=375 [OVERTURN=<n> TO=<NNN>]
+# GUARD_EDIT_OK: adding an operation - WORDS= keeps the GM's words when a session marks a row he discussed and agreed needs no more action (GM 2026-10-10); nothing loosened.
+gm-reviewed: export GM_WORDS = $(WORDS)
+gm-reviewed:    ## [project] the GM has reviewed a feature's rows; OVERTURN=<row> TO=<feature> turns one into an open row there (feature 375); WORDS= his words when a session marks a row he discussed   F=375 [OVERTURN=<n> TO=<NNN>] [WORDS="<the GM's words>"]
 	@if [ -z "$(F)" ]; then printf 'make gm-reviewed: F=<feature> is required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py reviewed "$(F)" $(if $(OVERTURN),"$(OVERTURN)" "$(TO)",)
 
@@ -1662,11 +1677,16 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	  : " entirely. Judging either against a warm baseline would fail on the first run in every new"; \
 	  : " clone - a guard firing on correct work, which is how guards get routed around.)"; \
 	  root=$$(git rev-parse --show-toplevel); \
-	  if [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then python3 "$$root/scripts/measure/ratchet.py" quick "$$el" || exit 1; \
+	  : "(GUARD_EDIT_OK: feature 375 follow-up - a guard firing on correct work: inside the gate's preflight (FROM_PREFLIGHT=1)"; \
+	  : " quick's TIME is not judged - a green but slow quick (a big selection after a merge of main, a loaded host) stopped a"; \
+	  : " gate whose tests all passed; the ratchet and the budget still judge every quick a session runs itself)"; \
+	  if [ -n "$(FROM_PREFLIGHT)" ]; then [ $$el -lt 15 ] || printf '\nquick took %ss inside the preflight - not judged here (feature 375).\n' "$$el"; \
+	  elif [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then python3 "$$root/scripts/measure/ratchet.py" quick "$$el" || exit 1; \
 	  elif [ $$el -ge 15 ]; then printf '\nquick took %ss, but this run was %s - not judged against the 15s bar (feature 171).\n' "$$el" "$$([ "$$warm" = yes ] && echo "ALL=1, so unselective" || echo "COLD: it built .testmondata")"; fi; \
 	  : "(GUARD_EDIT_OK: feature 318 found it - the BUDGET judges the same runs the ratchet does, a warm selective one;"; \
 	  : " ALL=1 ran 9,247 tests in 78 s, every one passing, and failed here as 'something slow is running')"; \
-	  if [ "$$warm" = yes ] && [ -z "$(ALL)" ] && [ $$el -gt $(QUICK_BUDGET) ]; then \
+	  : "(GUARD_EDIT_OK: feature 375 follow-up - nor the budget, inside the gate's preflight: the same misfire as the ratchet's)"; \
+	  if [ -z "$(FROM_PREFLIGHT)" ] && [ "$$warm" = yes ] && [ -z "$(ALL)" ] && [ $$el -gt $(QUICK_BUDGET) ]; then \
 	    printf '\n\033[1mquick took %ss, over its %ss budget.\033[0m\n' "$$el" "$(QUICK_BUDGET)"; \
 	    printf 'Something slow is running that should not be. Find it:  \033[1mmake durations\033[0m\n'; \
 	    printf 'A test near the top of that list without @pytest.mark.rolls_map is the cause.\n\n'; \

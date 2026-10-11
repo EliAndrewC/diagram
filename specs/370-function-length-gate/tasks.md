@@ -71,6 +71,6 @@
 - [x] T20 the whole project under the cap, the gate green, the perf bookends (SC-002)
       research: rendering
       verify: DONE. check-function-cap.py exits 0 over the project; make done green (468 s); 370-end bookend, perf-audit justified and confirmed; perf-gate owes nothing (seed 39 -0.7% on its own run)
-- [ ] GM review (make gm-reviewed F=370) [lands-open]
+- [x] GM review (make gm-reviewed F=370) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

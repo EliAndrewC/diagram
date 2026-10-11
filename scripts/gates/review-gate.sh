@@ -139,6 +139,17 @@ if [ -n "$undeclared" ]; then
   fail="$fail occasions"; rules="$rules occasions-undeclared"
 fi
 owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" 2>/dev/null || true)"
+# GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - A STALE RENDER IS NO OCCASION. A sheet's SVG is a gitignored render,
+# and a clone never re-renders on a merge (GM 2026-07-22), so a render drawn before main moved read as an element "new to"
+# its sheet: a spec-only push owed 374's glyph-check and size-audit on a corridor main no longer drew. Redraw what each owed
+# unit sits on (`make map` answers CACHED when the render is current), then ask again.
+if [ -n "$owed_units" ]; then
+  for on in $(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --units 2>/dev/null | awk -F'\t' '{print $4}' | sort -u); do
+    g="$(find "$ROOT/pool" -path "*/$on/$on.gen.py" 2>/dev/null | head -1)"
+    [ -n "$g" ] && ( cd "$ROOT" && make -s map GEN="${g#"$ROOT"/}" >/dev/null 2>&1 )
+  done
+  owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" 2>/dev/null || true)"
+fi
 if [ -n "$owed_units" ]; then
   tree_key="$( cd "$ROOT" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
 fi

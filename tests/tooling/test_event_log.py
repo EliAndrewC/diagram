@@ -174,6 +174,24 @@ def test_rounds_reversals_and_subjects() -> None:
     assert fr.subject("/tmp/l7r-check/claims-triage/MANIFEST.md") == "claims-triage"
     assert fr.spec_rounds("- Round 1 (spec-fidelity, d): CHANGES REQUIRED - x\n- Round 2 (v, d): FAITHFUL - y\n") == {"CHANGES REQUIRED": 1, "FAITHFUL": 1}
     assert fr._hm(3700) == "1 h 02 min" and fr._hm(90) == "2 min"
+    other = "- spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED. Applied:\n- spec-fidelity-verify, Mode 3, round 2 (2026-10-10): FAITHFUL - ok\n"
+    assert fr.spec_rounds(other) == {"CHANGES REQUIRED": 1, "FAITHFUL": 1}, "377's and 379's form (2026-10-10)"
+
+
+def test_a_round_is_a_capped_check_that_ran() -> None:
+    """374, 2026-10-10: three building-review dispatches the pair hook refused, then the three that ran, read as third rounds;
+    so did a general-purpose modal triage. A refused dispatch has no PostToolUse; an ad-hoc agent has no cap."""
+    br = {"ev": "PreToolUse", "tool": "Agent", "cat": "review check", "agent": "building-review", "unit": "building-review--x,"}
+    evs = [{**br, "t": str(i), "id": f"a{i}"} for i in range(5)]
+    evs += [{"ev": "PostToolUse", "tool": "Agent", "id": i} for i in ("a0", "a3")]
+    evs += [{"ev": "PreToolUse", "tool": "Agent", "cat": "record check", "agent": "general-purpose", "manifest": "/t/modal-triage/MANIFEST.md", "t": str(9 + i)} for i in range(3)]
+    assert fr.tripwires(evs) == []
+    evs.append({"ev": "PostToolUse", "tool": "Agent", "id": "a4"})
+    assert fr.tripwires(evs) == [("4", "round:building-review|building-review--x@3")]
+    assert (
+        el.line({"hook_event_name": "PreToolUse", "tool_name": "Agent", "tool_input": {"subagent_type": "building-review", "prompt": "UNIT: building-review--y, on the sheet"}})["unit"]
+        == "building-review--y"
+    )
 
 
 def _git(repo: Path, *args: str) -> None:

@@ -352,7 +352,18 @@ def test_a_malformed_census_is_no_elements() -> None:
 
 
 def test_the_slug_is_file_safe() -> None:
-    assert owed.Unit("glyph-check", "manure heap", "inashiro", "x").slug == "glyph-check--manure-heap"
+    assert owed.Unit("size-audit", "manure heap", "inashiro", "x").slug == "size-audit--manure-heap"
+
+
+def test_a_glyph_check_is_keyed_by_its_element_and_its_map() -> None:
+    """Feature 374 FR-007: keyed by the element alone, a second sheet's check overwrote the first's verdict."""
+    assert owed.Unit("glyph-check", "manure heap", "inashiro", "x").slug == "glyph-check--manure-heap--inashiro"
+    assert owed.Unit("glyph-check", "manure heap", "", "x").slug == "glyph-check--manure-heap"
+
+
+def test_one_element_redrawn_on_two_maps_is_two_units(clone: Path) -> None:
+    _tasks(clone, ["glyph-redrawn: farmhouse on inashiro", "glyph-redrawn: farmhouse on sawada"])
+    assert sorted(units(clone)) == [("glyph-check", "farmhouse", "inashiro"), ("glyph-check", "farmhouse", "sawada")]
 
 
 def test_pool_map_names_lists_maps_and_sheets_of_both_trees(clone: Path) -> None:
@@ -362,9 +373,9 @@ def test_pool_map_names_lists_maps_and_sheets_of_both_trees(clone: Path) -> None
 def test_main_prints_slugs_units_the_ruling_and_the_declaration(clone: Path, capsys: pytest.CaptureFixture[str]) -> None:
     _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "well": 1}, renders=True)
     assert owed.main(["--root", str(clone)]) == 0
-    assert capsys.readouterr().out.strip() == "glyph-check--well"
+    assert capsys.readouterr().out.strip() == "glyph-check--well--inashiro"
     owed.main(["--root", str(clone), "--units"])
-    assert capsys.readouterr().out.strip().split("\t")[:4] == ["glyph-check--well", "glyph-check", "well", "inashiro"]
+    assert capsys.readouterr().out.strip().split("\t")[:4] == ["glyph-check--well--inashiro", "glyph-check", "well", "inashiro"]
     owed.main(["--root", str(clone), "--why"])
     assert "glyph-check:well on inashiro" in capsys.readouterr().out
     (clone / "l7r" / "engine.py").write_text("X = 9\n")
@@ -401,12 +412,12 @@ def pair(tmp_path: Path) -> tuple[Path, Path]:
 
 def test_the_snapshot_takes_both_sides_and_writes_the_checks_prompt(pair: tuple[Path, Path], capsys: pytest.CaptureFixture[str]) -> None:
     _, inner = pair
-    assert snap.main(["--root", str(inner), "--key", "abc", "glyph-check--well"]) == 0
+    assert snap.main(["--root", str(inner), "--key", "abc", "glyph-check--well--inashiro"]) == 0
     out = capsys.readouterr().out
-    base = inner / ".git" / "review-snapshot" / "glyph-check--well"
+    base = inner / ".git" / "review-snapshot" / "glyph-check--well--inashiro"
     assert (base / "clone" / "inashiro.json").is_file() and (base / "main" / "inashiro.json").is_file()
     prompt = (base / "dispatch.md").read_text()
-    assert prompt.startswith("UNIT: glyph-check--well\n") and "'well'" in prompt and "UNIT=glyph-check--well" in prompt
+    assert prompt.startswith("UNIT: glyph-check--well--inashiro\n") and "'well'" in prompt and "UNIT=glyph-check--well--inashiro" in prompt
     assert "prompt" in out and "on inashiro" in out
 
 
