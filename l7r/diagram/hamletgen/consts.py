@@ -533,7 +533,7 @@ DIKEPOND_CONVERSION = 0.9
 # in the mix. Rolling an archetype with open failures mixes them into the valley tier's own numbers
 # and destroys the one measurement that says this process is consistent.
 ROLLED_ARCHETYPES = ("valley_paddy",)
-"""Research: field forms rolled - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html: only the valley fan is rolled, the attested polder opt-in until its cohort is green"""
+"""Research: field forms rolled - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: only the valley fan is rolled, the attested polder opt-in until its cohort is green"""
 
 # HOW MUCH GROUND ONE HOMESTEAD TAKES, in px at 1 ft/px - the pitch the cluster band is sized on.
 # A bundle's reserved rects come to ~71 x 57 ft. 92 px per household leaves the cluster dense enough

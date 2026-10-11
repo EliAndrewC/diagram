@@ -152,10 +152,12 @@ def test_a_bundle_carries_the_context_and_the_pages_a_re_check_asks_for(tmp_path
     cur = cx.current(skill)
     keys = sorted(cur)
     ctx = ["l7r/diagram/hamletgen/rows.py::far_row", "l7r/diagram/hamletgen/rows.py::SHARE"]
-    manifest = cx.bundle(skill, cur, keys, tmp_path / "b", ctx, ["0033-row-villages-resson.drawing.html", "9999-none.html"]).read_text()
+    added = "research/questions/0033-row-villages-resson.drawing.html"  # the pointer form, as a claim names it, or a bare name
+    manifest = cx.bundle(skill, cur, keys, tmp_path / "b", ctx, [added]).read_text()
     assert "## CONTEXT l7r/diagram/hamletgen/rows.py::far_row" in manifest and "SHARE = 0.5" in manifest
     assert (tmp_path / "b" / "questions" / "0033-row-villages-resson.drawing.html.txt").exists(), "an added page"
-    assert not (tmp_path / "b" / "questions" / "9999-none.html.txt").exists(), "a page that is not a file is skipped"
+    with pytest.raises(ValueError, match="no question file 9999-none.html"):  # a page named and not found is never skipped
+        cx.bundle(skill, cur, keys, tmp_path / "b2", ctx, ["9999-none.html"])
     with pytest.raises(ValueError):
         cx.context_source(skill, "l7r/diagram/hamletgen/rows.py::nothing")
 

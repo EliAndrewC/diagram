@@ -901,8 +901,18 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:14a6adb4a8440bc9",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:be635f0990c5e3da"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
+  "verdict": "IN-STEP"
+ },
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#alley behind the office hall": {
+  "code": "0b957ccee67d3787",
+  "core": "03a6c88a20bdb161",
+  "date": "2026-10-10",
+  "note": "no page sets out an alley between the hall and the divider wall; 0090 places only the divider gate behind the hall (GUESS), and 0091's alley is the north service strip, not this one",
+  "pages": {},
+  "research": "",
+  "section": "03a6c88a20bdb161",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables": {
@@ -913,7 +923,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -930,7 +940,7 @@
    "0099-the-hearing-court-shirasu.drawing.html:400ef23a77443c5c",
    "0099-the-hearing-court-shirasu.drawing.html:a82abb47f7fed2c5"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -948,7 +958,7 @@
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:45e428be060a17da",
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:dd1082c27eb94aa1"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -960,25 +970,25 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate": {
   "code": "92e632718de209b5",
-  "core": "0564c190350b66a9",
+  "core": "03a6c88a20bdb161",
   "date": "2026-10-10",
-  "note": "a gate between the two courts",
+  "note": "a gate in the divider wall between the office court and the residence court, as the page draws it; its place behind the hall is the separate GUESS claim",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
   },
-  "research": "b9f86fd8593ec1ea",
+  "research": "57c4f6365aa66772",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "section": "0ab41672ec7df598",
-  "triaged": "2026-10-10",
+  "section": "03a6c88a20bdb161",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
@@ -994,7 +1004,8 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517"
   ],
-  "section": "958d4bc05bb7b9db",
+  "section": "03a6c88a20bdb161",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate width": {
@@ -1005,7 +1016,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1024,25 +1035,24 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
   "code": "7d977d70881b8660",
-  "core": "0564c190350b66a9",
+  "core": "03a6c88a20bdb161",
   "date": "2026-10-10",
-  "note": "in a shared compound the genkan is on the office and the way runs on through it",
+  "note": "the one genkan is on the office hall, the residence has none, and the visitors' way runs on through the office to the house, as the page draws a shared compound; the roji form without a genkan is the page's second attested form",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "b2a74a73e3c362a1"
   },
   "research": "2892ce3f903e6811",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
   ],
-  "section": "0ab41672ec7df598",
-  "triaged": "2026-10-10",
+  "section": "03a6c88a20bdb161",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
@@ -1052,7 +1062,7 @@
   "note": "no page places a garden or stable well",
   "pages": {},
   "research": "",
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1064,7 +1074,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1082,7 +1092,7 @@
    "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d",
    "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1107,7 +1117,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1118,7 +1128,7 @@
   "note": "0101's drawing page names no night-soil gate at a samurai house",
   "pages": {},
   "research": "",
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1130,7 +1140,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1148,7 +1158,8 @@
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
    "0101-privies-setchin.drawing.html:8299420f832f4bd1"
   ],
-  "section": "958d4bc05bb7b9db",
+  "section": "03a6c88a20bdb161",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
@@ -1172,7 +1183,7 @@
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:fc44e5419b7307af",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:ff9d9cf36d9635eb"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1193,7 +1204,8 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
@@ -1209,7 +1221,7 @@
    "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923",
    "0190-notice-boards-kosatsuba.drawing.html:cf39d6663b05b586"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1226,7 +1238,7 @@
    "0099-the-hearing-court-shirasu.drawing.html:36f49b610deb6fb9",
    "0099-the-hearing-court-shirasu.drawing.html:6f3e1d8136359675"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1237,7 +1249,7 @@
   "note": "no page places these rooms (0113's drawing page records it as a GUESS)",
   "pages": {},
   "research": "",
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1253,7 +1265,7 @@
   "rests": [
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1265,7 +1277,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1275,13 +1287,13 @@
   "date": "2026-10-10",
   "note": "the page records how a poor office looked as a GUESS",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
   },
-  "research": "b9f86fd8593ec1ea",
+  "research": "57c4f6365aa66772",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:28f3b3b08cf308d9"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1292,7 +1304,7 @@
   "note": "qualitative, no figure recorded",
   "pages": {},
   "research": "",
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1310,7 +1322,7 @@
    "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
    "0165-martial-training-grounds-and-dojo.drawing.html:eaaa0e49753241f1"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1330,7 +1342,7 @@
    "0165-martial-training-grounds-and-dojo.drawing.html:d49d656131981f70",
    "0165-martial-training-grounds-and-dojo.drawing.html:e5d173fb8d7dcb4a"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1350,7 +1362,7 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:6adb1f4ed30e77e9",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1369,7 +1381,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1385,7 +1397,7 @@
   "rests": [
    "0165-martial-training-grounds-and-dojo.drawing.html:de4325f24196505d"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1397,7 +1409,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1415,7 +1427,7 @@
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:ae79afce1ebb08ba",
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:b24bcf640dc2cb0f"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1434,7 +1446,7 @@
    "0099-the-hearing-court-shirasu.drawing.html:b55c5a1de66c7efa",
    "0099-the-hearing-court-shirasu.drawing.html:b803d460a0101855"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1445,7 +1457,7 @@
   "note": "the page puts a jail in the walls but names no court",
   "pages": {},
   "research": "",
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1462,7 +1474,7 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1483,7 +1495,7 @@
    "0097-staff-rowhouses-and-barracks-nagaya.html:885233a681119793",
    "0097-staff-rowhouses-and-barracks-nagaya.html:a452c3a25fb046fd"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1495,7 +1507,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1507,7 +1519,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1530,24 +1542,24 @@
    "0114-the-imperial-magistrates-compound-in-a-capital.html:a325a11b4634b47d",
    "0114-the-imperial-magistrates-compound-in-a-capital.html:bb14a65377ab7b59"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
   "code": "8d3d62fd2d0ad5f7",
-  "core": "0564c190350b66a9",
+  "core": "958d4bc05bb7b9db",
   "date": "2026-10-10",
-  "note": "the page records the simplification",
+  "note": "office court in front and residence behind; the drawing page records this as \"a deliberate simplification\" (at Takayama the residence stood beside the office)",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
   },
-  "research": "b9f86fd8593ec1ea",
+  "research": "57c4f6365aa66772",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1567,7 +1579,7 @@
    "0218-the-compounds-own-shrine-yashikigami.html:19a8b2635c1b3c76",
    "0218-the-compounds-own-shrine-yashikigami.html:28d396983ee76947"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "DRIFTED"
  },
@@ -1584,7 +1596,7 @@
    "0098-storehouses-for-the-tax-rice.drawing.html:1ae871342edf3960",
    "0098-storehouses-for-the-tax-rice.drawing.html:38cdaa6bf4104e0b"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1596,7 +1608,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1606,17 +1618,17 @@
   "date": "2026-10-10",
   "note": "wall and main gate; gate range as at Omori and Kaibara",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
   },
-  "research": "9e1a07c01bbfed26",
+  "research": "9adb5b8ce8b7bf80",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
    "0097-staff-rowhouses-and-barracks-nagaya.html:21b1183d8cab06e5",
    "0097-staff-rowhouses-and-barracks-nagaya.html:79b867ffa7ca309a",
    "0097-staff-rowhouses-and-barracks-nagaya.html:a29a90d662b98d5d"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1633,7 +1645,7 @@
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:c2529d4d294eb292"
   ],
-  "section": "0ab41672ec7df598",
+  "section": "03a6c88a20bdb161",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -2026,7 +2038,8 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
-  "section": "a9243672fea7539a",
+  "section": "2cb5aa094943faa7",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#coverage band": {
@@ -2041,7 +2054,8 @@
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1"
   ],
-  "section": "a9243672fea7539a",
+  "section": "2cb5aa094943faa7",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#few large masses": {
@@ -2056,7 +2070,8 @@
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512"
   ],
-  "section": "a9243672fea7539a",
+  "section": "2cb5aa094943faa7",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#named court spine": {
@@ -2097,7 +2112,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "a9243672fea7539a",
+  "section": "2cb5aa094943faa7",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#second rank": {
@@ -2115,7 +2131,8 @@
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1"
   ],
-  "section": "a9243672fea7539a",
+  "section": "2cb5aa094943faa7",
+  "triaged": "2026-10-10",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Compound programs#catalog pointer": {
@@ -3924,15 +3941,16 @@
   "date": "2026-10-09",
   "note": "3 px = 1 ft, so drawn compounds fall between Joge and Takayama",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
   },
-  "research": "b9f86fd8593ec1ea",
+  "research": "57c4f6365aa66772",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:4afbca9685190246",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:ae03b2d56e73425e",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03"
   ],
   "section": "d28e8161b6f37cbb",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#residence wing length": {
@@ -4054,11 +4072,11 @@
   "code": "5c42ace4f9676ac8",
   "core": "260aa1c5e1ce4172",
   "date": "2026-10-10",
-  "note": "office in front, residence behind, with a gate between",
+  "note": "a divider wall separating the courts, with its own gate opening, as the page draws the two courts and the gate between them; the front/behind order is the zoning claim's DEVIATION, and this unit's code does not fix it",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f"
   },
-  "research": "b9f86fd8593ec1ea",
+  "research": "57c4f6365aa66772",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
@@ -5031,20 +5049,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#band area": {
-  "code": "d8cee0ab92a6efbc",
+  "code": "1b31a90e8f2ea043",
   "core": "945cf2071cfdf50a",
-  "date": "2026-10-07",
-  "note": "the body of band_extent and its pitch per household are not in the bundle; I need them to check against the yard size the page gives (~890 sq ft)",
-  "pages": {
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
-  },
-  "research": "4cd9ea0eb987d90e",
-  "rests": [
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:9084510422afaec6"
-  ],
-  "triaged": "2026-10-09",
-  "verdict": "CANNOT-TELL"
+  "date": "2026-10-10",
+  "note": "no cited page sizes the seat band; 0246's 18+2 ft parting is a map convention for the gaps between homesteads, not the band's area",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas": {
   "code": "6a5d8a2474837edb",
@@ -5496,6 +5507,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FIELD_ARCHETYPES#no jori grid rolled": {
@@ -5825,6 +5837,7 @@
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
   "research": "f7cbba5cbd825f33",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -5855,14 +5868,15 @@
   "date": "2026-10-05",
   "note": "0019's drawing page records two pond layouts, the mosaic and Qu Dajun's 1678 chessboard, and says \"the layout would be rolled block by block\"; the code fixes the mosaic, and its comment that the chessboard is found \"only as today's aerial view\" contradicts 0024's 1678 chessboard",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a",
    "0024-fish-fry-and-nursery-ponds-yumiao.html": "ba9d1b1138aae7b8"
   },
-  "research": "24faf1b43b89a471",
+  "research": "1d1ba43d6d69a0e7",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4",
    "0024-fish-fry-and-nursery-ponds-yumiao.html:efccfa3a4275db98"
   ],
+  "triaged": "2026-10-10",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/consts.py::POND_LAYOUT_MOSAIC#mosaic strength": {
@@ -5871,10 +5885,10 @@
   "date": "2026-10-03",
   "note": "the page calls it a calibrated liberty set on Kuwabata",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::REF_CANAL_A#reference fan's canal A": {
@@ -5910,16 +5924,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled": {
-  "code": "31f46c2024209d45",
+  "code": "0784d2454f256f1e",
   "core": "04076665195f7fe6",
-  "date": "2026-10-03",
-  "note": "the 0019 research page records no such deviation; the 0019 drawing page, which may record it, is not in the bundle",
+  "date": "2026-10-10",
+  "note": "only valley_paddy is rolled and the polder is drawn only when a map asks for one, which the page records as a deliberate deviation for now",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html": "23cf7fc9c9bae742"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "4531c95b0cf04080",
-  "triaged": "2026-10-05",
-  "verdict": "CANNOT-TELL"
+  "research": "d6a30ed4908ecf7d",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:3e8ae1cd9bfa3c93"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::ROW_LINES#row village's line": {
   "code": "0e895450ce19fddc",
@@ -6059,8 +6075,8 @@
  "l7r/diagram/hamletgen/consts.py::WEB_CLEARANCE#web lane's no-build corridor": {
   "code": "e0ad052ea93d11fc",
   "core": "14aaee2fbe7c7694",
-  "date": "2026-10-07",
-  "note": "needs WEB_CLEARANCE's reader; the comment calls it \"the lane's own half-tread plus a hand's breadth\", held \"off both verges\" like LANE_CLEARANCE, which reads as a distance per side from the lane, and 18 ft per side would make a 36 ft room against §138's 18 ft in all",
+  "date": "2026-10-10",
+  "note": "WEB_CLEARANCE = 18.0 is a corridor HALF-width (lane()'s `clearance` is \"the no-build corridor half-width\", and the constant's comment calls it \"the lane's own half-tread plus a hand's breadth\"), so the corridor is 36 ft, but the page's \"lane's room of 18 ft\" is the WHOLE gap between two homesteads (7 + 4 + 7); the half-width should be 9 ft, or 7 ft measured from the middle per §188",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -6069,7 +6085,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/consts.py::WEB_FABRIC_GAP#web lane off a plot": {
   "code": "7b290fa22671fd6d",
@@ -6724,10 +6740,10 @@
   "date": "2026-10-03",
   "note": "0019: water crosses the dike only at gated sluices",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/frame.py::stage_crossings#ditch footbridge spacing": {
@@ -7051,13 +7067,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#search reach": {
-  "code": "8d84e07952733bc9",
+  "code": "f5b1f953189bd433",
   "core": "4b83bca7081277a6",
   "date": "2026-10-10",
-  "note": "the first search is not held to the row's x-span, and the fallback box is, so THICKET_REACH_FT 220 ft decides how far past the row's ends a thicket may stand: a placement rule, so UNRESEARCHED (or GUESS citing 0075), not NONE",
+  "note": "the page says the thicket stands \"just beyond the back row\" but gives no reach along the row; the 30 ft depth band still holds",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket by the knob": {
   "code": "a26746e483b40ba5",
@@ -11627,24 +11643,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row farm faces its street": {
-  "code": "27deaf1616a8482f",
+  "code": "e6f20281b604c2d9",
   "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "the question attests two forms (grove windward vs house turned to its road, 8 in 10 in Asuka street villages) and the code fixes the first; the drawing page records \"The map draws only the first\", so the claim should be DEVIATION research/questions/0033-row-villages-resson.drawing.html",
+  "date": "2026-10-10",
+  "note": "every frame takes its front from grove_faces(plan.windward, ...), so only the grove-to-windward form is drawn and the house turned to its road never is; the page says \"The map draws only the first\" of the two attested forms",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
   },
-  "research": "5d6cf0f35aef4cde",
+  "research": "3f66a452776b32a9",
   "rests": [
-   "0033-row-villages-resson.drawing.html:f5e09c253273ce75",
-   "0033-row-villages-resson.html:08abea7a9f378a33",
-   "0033-row-villages-resson.html:0ba362c4af8c1cee",
-   "0033-row-villages-resson.html:1eb456dc7effd2fe",
-   "0033-row-villages-resson.html:d4c22c5b8e425229"
+   "0033-row-villages-resson.drawing.html:005c73edae057da1",
+   "0033-row-villages-resson.drawing.html:f5e09c253273ce75"
   ],
-  "triaged": "2026-10-07",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#streets rounded at a corner": {
   "code": "1eadda8bb2e83bf7",
@@ -12809,13 +12820,14 @@
   "date": "2026-10-07",
   "note": "the page records mosaic-only, with the chessboard as a known gap",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#water sink values": {
@@ -13015,14 +13027,15 @@
   "date": "2026-10-07",
   "note": "a rice polder is fixed to the grid; layout, crop, leftover and fry form are rolled only on a dike-pond",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#flood-prone ground": {
@@ -13126,12 +13139,13 @@
   "date": "2026-10-07",
   "note": "a rice polder is drawn on a surveyed grid",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#regional wind": {
@@ -13982,10 +13996,10 @@
   "date": "2026-10-03",
   "note": "0019 sluices only",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::route_refusals#junction turn": {
@@ -15554,12 +15568,13 @@
   "date": "2026-10-07",
   "note": "the rows run along the fall, so the inlet is at the head (high end) and the outfall at the tail (low end), matching \"an inlet at the polder's head and an outfall at its tail\"",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#outer face with the water": {
@@ -15676,10 +15691,10 @@
   "date": "2026-10-03",
   "note": "the pond feeds the polder; joining it is geometry",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::polder_acres_in_band#polder acreage band": {
@@ -15696,10 +15711,11 @@
  "l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#crossings where the village lives": {
   "code": "4dca46feeab64767",
   "core": "00e326596b5ddad8",
-  "date": "2026-10-03",
-  "note": "the docstring rests the clustering on research/0019 (\"people cross to the fields where they LIVE\"), not in the bundle, so whether UNRESEARCHED is right needs 0019; and the account fits only the flank branch (head: 3 on the feeder, 1 per toe; foot: 2 per toe), so it should name all three",
+  "date": "2026-10-10",
+  "note": "0084 in this bundle does answer where crossings stand: \"a long ditch takes a crossing near its middle, and a very long one several\", and every field-to-field and settlement-to-field crossing stands. The caps zero the feeder and the far toe and cluster three by the village, so this departs from 0084: the claim should be DEVIATION 0084 (recorded there) or the caps should follow §191. 0019, which the docstring cites for \"people cross where they live\", says only that farmers lived on or beside the polder",
+  "pages": {},
   "research": "",
-  "verdict": "CANNOT-TELL"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#no plank on the drain": {
   "code": "b5d0569494394e5a",
@@ -15726,10 +15742,10 @@
   "date": "2026-10-03",
   "note": "wild water outside the dike, per 0019 drawing",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::reservoir_uphill_of_field#reservoir above what it waters": {
@@ -15787,16 +15803,17 @@
   "date": "2026-10-07",
   "note": "the feeding water stands outside the dike at the polder's head, which is its high end, and a reservoir sits above what it waters; the code walks the pond uphill from the ring's head until it clears the crop",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
   },
-  "research": "0ca078edb161a2e2",
+  "research": "3f4e6f0526258039",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:23d33365fc99a589",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:55b93ffd30b041ac"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#perimeter dike gapped at crossings": {
@@ -15839,9 +15856,9 @@
   "date": "2026-10-08",
   "note": "the page attests two pond layouts (\"a mosaic ... and a chessboard ... the layout would be rolled block by block\"), but the code fixes the dike-pond block to the mosaic (POND_LAYOUT_MOSAIC 0.5) and never rolls the chessboard; either roll the chessboard per block or relabel the claim DEVIATION with the page recording a deliberate choice, not a known gap; 0.5 on Kuwabata and 0.0 for the rice polder are otherwise in step",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
@@ -15849,6 +15866,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
   ],
+  "triaged": "2026-10-10",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size": {
@@ -15867,10 +15885,10 @@
   "date": "2026-10-03",
   "note": "0019 drawing",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_waterward#strip depth": {
@@ -15887,15 +15905,16 @@
   "date": "2026-10-05",
   "note": "above the fields it waters, clear of the crop",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
   },
-  "research": "0ca078edb161a2e2",
+  "research": "3f4e6f0526258039",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:23d33365fc99a589",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:47356b5374b6ea19"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::waterward_flanks#waterward flanks": {
@@ -15904,10 +15923,10 @@
   "date": "2026-10-03",
   "note": "matches the pool layout 0019 drawing describes",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::grows_grain#grain to thresh": {
@@ -17194,19 +17213,17 @@
  "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#off the crop and wet ground": {
   "code": "045d7e4123d7014d",
   "core": "6f81a1160265d943",
-  "date": "2026-10-07",
-  "note": "the margin is the caller's; needs the callers' values to judge against \"may touch a plot's boundary, since the bund ... is heaped up on the boundary\"",
+  "date": "2026-10-10",
+  "note": "keeping off crop and wet ground follows the page, but holding the \"full margin\" off a plot does not: the page says a lane \"may touch a plot's boundary\". The claim should call the margin a DEVIATION (as stage_web's WEB_HARD_GAP claim does), recorded on 0081, or UNRESEARCHED",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
   "research": "f3435a8848f6237e",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
-   "0081-village-lanes.drawing.html:7237abd9ead63ebe",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "triaged": "2026-10-09",
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#shortest lane": {
   "code": "bea6f50644df90d3",
@@ -17715,13 +17732,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#a defense marsh is no wall": {
-  "code": "f5730411234dbbb8",
+  "code": "2e08d4b5abf95246",
   "core": "b80839d24d112268",
   "date": "2026-10-10",
-  "note": "the code leaves `role == \"defense\"` marshes out of `hard`, so a field way may run through wet ground, which 0081 answers (\"Lanes keep to the bunds and dry ground\", \"A track keeps off wet ground\"). The claim should cite 0081 and is then DRIFTED unless a drawing page records it as a DEVIATION. Its text is also garbled: \"path's own dooryard\" is the wrapped tail of the \"nothing built on a lane\" claim above it",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the code drops role==\"defense\" marshes from the field way's hard ground, but 0081 says \"Lanes keep to the bunds and dry ground\" and \"A track keeps off wet ground\" and records no departure for a defense marsh; either the drawing page records a DEVIATION or the defense marsh stays a wall",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:7237abd9ead63ebe",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#across the commons": {
   "code": "dab4ccab0eb38890",
@@ -17748,19 +17772,26 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way kept 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) off the steadings' built ground": {
-  "code": "b80839d24d112268",
+ "l7r/diagram/hamletgen/ways/corridors.py::field_router#field way off the steadings": {
+  "code": "db7e8fbb7fd9b3bf",
   "core": "b80839d24d112268",
   "date": "2026-10-10",
-  "note": "field way kept 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) off the steadings' built ground",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "7 ft off built ground matches the page's 7 ft at the garden fence; using it for the other built parts is a calibrated choice",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#nothing built on a lane": {
-  "code": "b4f0114c3252d811",
+  "code": "554ff3f360bcbf1c",
   "core": "b80839d24d112268",
   "date": "2026-10-10",
-  "note": "every steading part and every matrix-forbidden part is walled except the start's own threshing yard and house, matching the way leaving its dooryard and nothing standing on the tread",
+  "note": "every steading part is a wall except the path's own dooryard (yard, and house at the start); its own beds and fixtures stay walls",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -18127,6 +18158,31 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#no lane over a bed or a fixture": {
+  "code": "f9086cf3871ec24e",
+  "core": "4e0af8602ae68b2b",
+  "date": "2026-10-10",
+  "note": "admits_lane refuses a way over beds and fixtures, as the page's \"round its own garden beds and fixtures\"",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#no lane over a grave": {
+  "code": "c6baf29dda2fcf25",
+  "core": "4e0af8602ae68b2b",
+  "date": "2026-10-10",
+  "note": "the cited lane pages say nothing about burial grounds",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#shortest way": {
@@ -21708,6 +21764,15 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off a grove band": {
+  "code": "106572932a9e9d66",
+  "core": "735b4eb618a90a66",
+  "date": "2026-10-10",
+  "note": "0036 answers this: a lane is laid \"with a footpath's clearance and some working room kept off the trees on each side\" (about 22 ft of a 36 ft opening). The label should cite 0036, and against that the code's 0.5 ft margin (grow = 2*(1.5+0.5)) is a drift",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off the house and the fixtures": {
   "code": "558609ed84204cf7",
   "core": "735b4eb618a90a66",
@@ -21716,14 +21781,6 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path's tread kept 0.5 ft off a grove band (band grown by 2*(1.5+0.5))": {
-  "code": "735b4eb618a90a66",
-  "core": "735b4eb618a90a66",
-  "date": "2026-10-10",
-  "note": "door path's tread kept 0.5 ft off a grove band (band grown by 2*(1.5+0.5))",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#every grove farm reached at its door": {
   "code": "6192221971cc63d7",
@@ -22169,13 +22226,15 @@
   "research": "e85493504b9ccbc3",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle.py::_cut_gap#lane cut at the water's bank, half its width, 3 ft by default": {
-  "code": "bde3d75e969e7f36",
+ "l7r/diagram/hamletgen/ways/settle.py::_cut_gap#lane cut at the water's bank": {
+  "code": "a6b6b6d554854184",
   "core": "bde3d75e969e7f36",
   "date": "2026-10-10",
-  "note": "lane cut at the water's bank, half its width, 3 ft by default",
+  "note": "no cited page sets where a cut lane stops at a bank",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::_fabric#settle plumbing": {
   "code": "5bf8e0b0c1cf8a5c",
@@ -23796,8 +23855,8 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_drop_end_nubs#nub at a junction dropped": {
   "code": "bf7d52bdb5f03bdc",
   "core": "bca58142c0ff6bf3",
-  "date": "2026-10-05",
-  "note": "drop_end_nubs's body (what counts as a nub) is not in the bundle; need it to compare with 12 ft and 90 degrees",
+  "date": "2026-10-10",
+  "note": "applies drop_end_nubs (last leg of _NUB_FT or less turning _NUB_TURN or more; per its docstring 12 ft / 90 degrees, the values themselves not shown) at both ends; the revert when the result is not clear decides nothing physical",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -23805,8 +23864,7 @@
   "rests": [
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
-  "triaged": "2026-10-09",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link crosses the brook at a crossing place": {
   "code": "dfd2c5b5ed4ccfed",
@@ -26462,8 +26520,8 @@
  "l7r/diagram/hamletgen/ways/web.py::cut_the_overruns#overrun cut": {
   "code": "f344e4186fe21356",
   "core": "031ee80d26e75393",
-  "date": "2026-10-07",
-  "note": "the 12 ft/90 degree hook and the 40 ft tail live in trim_free_stub and cut_past_connector, which are not in the bundle; I need those two bodies",
+  "date": "2026-10-10",
+  "note": "trim_free_stub cuts a free end's last leg of 12 ft or less turning 90 degrees or more; cut_past_connector cuts a loose tail under _PAST_CONNECTOR_FT past the connector, never a house's only way",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -26472,8 +26530,7 @@
    "0081-village-lanes.drawing.html:2ca0b4939aee735d",
    "0081-village-lanes.drawing.html:a857325132f8d4ee"
   ],
-  "triaged": "2026-10-09",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::kept_connector#web plumbing": {
   "code": "9ac89db2c024772a",
@@ -26544,6 +26601,15 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web.py::stage_web#a row farm's door point": {
+  "code": "49f9e242a42631ce",
+  "core": "5cbb09d85f0e950c",
+  "date": "2026-10-10",
+  "note": "0033 says only that a path runs round the grove to the street (GUESS, the gate not found); no page gives a door point or its 8 ft offset",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's middle off the fabric": {
   "code": "ba139488cd55cec3",
   "core": "5cbb09d85f0e950c",
@@ -26607,7 +26673,7 @@
   "code": "dadd806c618afdb4",
   "core": "5cbb09d85f0e950c",
   "date": "2026-10-10",
-  "note": "the page records 12 ft from the steading's built ground as a GUESS, but the code measures it from the door point (`front_door(h, FOOTPATH_FABRIC_GAP + 4.0)`, 8 ft off the house) via `lay_door_paths`/`trim_streets`. I need `front_door` and `street_arrives` to tell whether that point lies on the built ground",
+  "note": "row villages lay door paths and trim streets at STEADING_ARRIVAL_FT 12 ft, which the page records as part of its GUESS of \"within 12 ft of the steading's built ground\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -26615,7 +26681,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#every farmhouse served": {
   "code": "267979e843070ce7",
@@ -26710,13 +26776,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#scrub and commons crossed": {
-  "code": "795118a56ba53780",
+  "code": "350d2c78af5b6482",
   "core": "5cbb09d85f0e950c",
   "date": "2026-10-10",
-  "note": "its village-groves half is answered by 0072 (the belt crossed, planting resuming) and already claimed as \"ground cover is not fabric\"; this claim should name only scrub and commons as UNRESEARCHED",
+  "note": "0072 rules on the belt only; no page in the bundle covers scrub or the commons",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#web lane margin off the hard ground": {
   "code": "70faded8a8df320e",
@@ -26787,13 +26854,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#connector at the gate kept": {
-  "code": "3329ce23d24157d3",
+  "code": "21490c0d10e46111",
   "core": "9071f8c7dae2e70e",
   "date": "2026-10-10",
-  "note": "0246 sets the track out's start on the cluster's edge with every household's way laid to it; should cite research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the track out starts on the cluster's edge and every household's way is laid to it",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#end carried on to the bund": {
   "code": "8cd051030ca220c3",
@@ -26839,21 +26911,30 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#only-way reach: a house with no other way within WEB_REACH_FT, 100 ft, keeps its tail (0246 §6 serves at 60 ft)": {
-  "code": "9071f8c7dae2e70e",
+ "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#only-way reach": {
+  "code": "927a948970da40a5",
   "core": "9071f8c7dae2e70e",
   "date": "2026-10-10",
-  "note": "only-way reach: a house with no other way within WEB_REACH_FT, 100 ft, keeps its tail (0246 §6 serves at 60 ft)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the code treats a house as served by another lane within WEB_REACH_FT 100 ft, but the page counts a way as reaching a farmhouse only \"within 60 ft of the house, or within 12 ft of the steading's built ground\"; its 100 ft is the back-lane count rule. A house with another lane 60-100 ft off can lose its only tail; use the 60 ft/12 ft reach, or cite §113 as a stated calibration",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+  ],
+  "verdict": "DRIFTED"
  },
- "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#shortest lane kept: a trim leaving under _WEB_MIN_FT, 30 ft, is not applied, or the lane is dropped": {
-  "code": "9071f8c7dae2e70e",
+ "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#shortest lane kept": {
+  "code": "e64781855d7aff50",
   "core": "9071f8c7dae2e70e",
   "date": "2026-10-10",
-  "note": "shortest lane kept: a trim leaving under _WEB_MIN_FT, 30 ft, is not applied, or the lane is dropped",
+  "note": "no page sets a least lane length",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::unsplitting_drops#web kept one network": {
   "code": "b94f8f1152d51ad9",
@@ -37118,6 +37199,7 @@
    "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
   },
   "research": "0b9d08c1052e084d",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
@@ -37503,6 +37585,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -41326,19 +41409,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#parish plot at the rear": {
-  "code": "4937373f4a4ad151",
+  "code": "c353b0b59ec7ebe5",
   "core": "af5af1113ad6e23e",
   "date": "2026-10-10",
-  "note": "the cited research page puts the graveyard only in its pointer (§138) and has mausolea outside the southwest cloister (§172), not at the back; \"the graveyard outside the cloister at the back\" is the drawing page's §85, so point the claim at 0227.drawing.html",
+  "note": "the plot is seated 14 px from the rear edge, matching \"the graveyard outside the cloister at the back\"",
   "pages": {
-   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.html": "020f72f3ea3c940e"
+   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html": "1bec445bffd1b1ce"
   },
-  "research": "111f24a02b460cac",
+  "research": "3a59fe0446dc5938",
   "rests": [
-   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.html:3d7de2b1325215af",
-   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.html:91d8a52759a68125"
+   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html:6d70b4374954f453",
+   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html:856869fd7d8bed30"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#parish plot east of the axis": {
   "code": "eb1ee37af6d7862c",
@@ -41903,13 +41986,15 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#scorched patch about half the ground's radii": {
-  "code": "7e27ab1193f62564",
+ "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#scorched patch": {
+  "code": "5338f0675f2fedf8",
   "core": "7e27ab1193f62564",
   "date": "2026-10-10",
-  "note": "scorched patch about half the ground's radii",
+  "note": "0238 does not size a burned patch inside the cleared ground",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#six jizo at a burial ground's entrance": {
   "code": "8bc8d1376c007b8f",
@@ -42851,12 +42936,12 @@
  "l7r/diagram/settlement/core.py::Settlement#layer offsets and the crown pad": {
   "code": "5258b3614a4e80c2",
   "core": "614ffa58ec08ef90",
-  "date": "2026-10-08",
-  "note": "the bundle shows neither the offsets nor CANOPY_PAD's value or readers; a crown's clearance off a roof may be a placement rule rather than NONE. Need the constants and the code that reads them",
+  "date": "2026-10-10",
+  "note": "CANOPY_PAD 0.6 is a margin so crown coordinates rounded to 0.1 px clear a wall (per _crown_covers); it is plumbing, not a fact about the place",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#what sets the frame": {
   "code": "999dcd604d1b014e",
@@ -43339,7 +43424,7 @@
   "code": "4886c451516ed412",
   "core": "47b8c2f5d08a0457",
   "date": "2026-10-10",
-  "note": "the north back-wall seat is the page's convention, but 0.45 h gives 9 ft on a 35x20 house and 12.6 ft on a 46x28 one, against the page's 10-12 ft depth; need kura_rect's clamp and the sizes of the houses that carry a kura",
+  "note": "north annex on the shaded back wall, recorded as the page's drawing convention; 0.46 x 0.45 gives 21.2 x 12.6 ft (1.68:1) on a 46 x 28 house, and kura_rect holds it within 18-27 ft and 1.5-1.8:1",
   "pages": {
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
@@ -43348,7 +43433,7 @@
    "0040-farm-storehouses-kura.drawing.html:90057266aa2f2fa5",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex": {
   "code": "01c800a0d80e2392",
@@ -43364,6 +43449,14 @@
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm": {
+  "code": "47b8c2f5d08a0457",
+  "core": "47b8c2f5d08a0457",
+  "date": "2026-10-10",
+  "note": "west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PERSIMMON_CROWN_FT#persimmon crown": {
   "code": "7287811a2622a75c",
@@ -52201,6 +52294,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#crowns thin to the wood's edge": {
+  "code": "7804b4f9837c8ec7",
+  "core": "d11ad5d1993c96a0",
+  "date": "2026-10-10",
+  "note": "UNRESEARCHED is right: 0080 gives the coppice's stocking and crown size but says nothing about crowns thinning toward a wood's edge; the thinning itself runs inside the passed-in `sparse` filter, which this unit calls as sparse(cx, cy, 0.6, _r_hi)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#no crown in a yard's sun": {
   "code": "c04a18419d50c802",
   "core": "d11ad5d1993c96a0",
@@ -52219,16 +52322,17 @@
   "code": "fb55abaf37ed816a",
   "core": "d11ad5d1993c96a0",
   "date": "2026-10-10",
-  "note": "§61 has two clauses: the new crown's center lies outside every seated crown, AND no seated crown's center lies inside the new one. The code delegates both to `CrownIndex.clear`, which is not in the bundle; I need its test to confirm the second clause",
+  "note": "CrownIndex.clear seats a crown only when the distance d >= max(r, cr), so its center is outside every seated crown and no seated center is inside it; _crowns_near seeds the check from every crown already on the map (the pad covers a large crown just outside the box); the room fallback runs the same test after this wood's throws are deleted",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:1e041da3a717d658",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#woodland stocked to read": {
   "code": "b5381d36c57db6e8",
@@ -52500,13 +52604,14 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.woodland_room#crowns on a lattice": {
-  "code": "eb29013b80425cad",
+  "code": "e576a3fcdd7ea5e5",
   "core": "f5b6bfa17986c093",
   "date": "2026-10-10",
-  "note": "a regular square grid of trees is a claim about how the wood stood (it reads as planted), not how it is shown; 0080 gives the spacing but not the arrangement, so the label should be UNRESEARCHED",
+  "note": "no page in the bundle says how crowns are arranged (0080 is cited by a sibling claim but is not in the bundle)",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::PINE_SPREAD_BS#pine crown reach": {
   "code": "dac8e57a85673cb3",
@@ -52696,12 +52801,13 @@
   "date": "2026-10-08",
   "note": "seats the gate where water crosses the dike; the 20 ft snap reach only lines the gate up with the drawn stroke",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate span": {
@@ -52736,12 +52842,13 @@
   "date": "2026-10-08",
   "note": "a gate at every dike gap, turned along the crest so it lies across the water; water crosses only at gated sluices",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#dike-top house size": {
@@ -52762,15 +52869,16 @@
   "date": "2026-10-05",
   "note": "single file on the crest, widened platform, recorded GUESS",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:38971cde89340d36",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:512d5c1542aebcb7",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f8f889ccce299233"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#house platform": {
@@ -52855,10 +52963,10 @@
   "date": "2026-10-03",
   "note": "per 0019 (dike-top form is its own knob)",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.perimeter_dike#notched at sluices": {
@@ -52919,10 +53027,10 @@
   "date": "2026-10-03",
   "note": "per 0019",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::course_breaches#water crosses only at sluices": {
@@ -52931,10 +53039,10 @@
   "date": "2026-10-03",
   "note": "per 0019",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::dike_band#dike width": {
@@ -53834,10 +53942,10 @@
   "date": "2026-10-03",
   "note": "0019: a reed fringe on every flank but the landward one",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#pond fringe role": {
@@ -53988,10 +54096,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::_ellipse#plumbing": {
@@ -62041,13 +62149,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#ground off the way": {
-  "code": "9bbc80ad0b9482e6",
+  "code": "0a5c0da95e898260",
   "core": "b9346f3c1f09336f",
   "date": "2026-10-10",
-  "note": "keeping the ground off the bed is 0191.drawing's \"never in the roadbed\", so cite it for that; only the extra 3 px margin is UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the seat is refused within h/2 of every bed, matching \"never in the roadbed\"",
+  "pages": {
+   "0191-execution-and-punishment-grounds-keijo.drawing.html": "623d2ba33ede56cd"
+  },
+  "research": "5216b7d49e93a00a",
+  "rests": [
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:5c884125315de956"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#ground size": {
   "code": "96861723ddb15fb5",
@@ -62100,6 +62213,15 @@
   "rests": [
    "0191-execution-and-punishment-grounds-keijo.drawing.html:5c884125315de956"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#margin off the bed": {
+  "code": "92b09d3c71d33c61",
+  "core": "b9346f3c1f09336f",
+  "date": "2026-10-10",
+  "note": "0191 gives no margin past the bed",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#nearness tie-break": {
@@ -63472,14 +63594,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/trades.py::TradesMixin.kiln#four chambers, 9 ft apart": {
-  "code": "3f259e7da1a3253b",
-  "core": "3f259e7da1a3253b",
-  "date": "2026-10-10",
-  "note": "four chambers, 9 ft apart",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/trades.py::TradesMixin.kiln#fuel stack at the stoke end": {
   "code": "91bef30ae8f08f98",
   "core": "3f259e7da1a3253b",
@@ -63493,6 +63607,15 @@
   "core": "3f259e7da1a3253b",
   "date": "2026-10-03",
   "note": "0192.drawing answers the kiln's orientation (\"The kiln is turned so that it climbs its slope\"), and the rot-None default turns it along the nearest way instead; cite the page and either record the road-aligned default as a DEVIATION or derive the angle from the slope",
+  "research": "",
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/settlement/trades.py::TradesMixin.kiln#kiln chambers": {
+  "code": "3267c255986fe4a3",
+  "core": "3f259e7da1a3253b",
+  "date": "2026-10-10",
+  "note": "0192 covers chamber size: one works' kiln has \"its chambers growing larger as they climb\". The label should cite 0192, and against that the code's even 9 ft chamber divisions are a drift unless the page records them as a DEVIATION. The chamber count is unresearched",
+  "pages": {},
   "research": "",
   "verdict": "MISLABELED"
  },
@@ -63535,13 +63658,14 @@
   "research": "90cbac4747cee4c4",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/trades.py::TradesMixin.kiln#works well seated between shed and cottages": {
-  "code": "3f259e7da1a3253b",
+ "l7r/diagram/settlement/trades.py::TradesMixin.kiln#works well seat": {
+  "code": "1381bf71ec529181",
   "core": "3f259e7da1a3253b",
   "date": "2026-10-10",
-  "note": "works well seated between shed and cottages",
+  "note": "0192 gives the works its own well but no seat for it",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/trades.py::TradesMixin.lumber_yard#lumber office size": {
   "code": "111a4a4a9afe67b0",
@@ -64777,20 +64901,14 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#ditch winding": {
-  "code": "f4dc3a60c2918502",
+  "code": "e23e0107578b4e78",
   "core": "4e21c89cd773bbdb",
   "date": "2026-10-10",
-  "note": "0054.drawing covers bend radius, branch angle and junctions but not how far a ditch winds (amp=15); say UNRESEARCHED",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
-  },
-  "research": "a3b4c3a9112374b7",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:7f7b844d39979908",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "0068 covers widths only, not how a ditch winds",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#houses kept off the channel": {
   "code": "ad441b6a2ae8e771",
@@ -68426,13 +68544,14 @@
   "date": "2026-10-09",
   "note": "the east toe is tagged as the settlement side, the village on the dry ground to the east",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_channels#sluices through the dike": {
@@ -68441,13 +68560,14 @@
   "date": "2026-10-09",
   "note": "an inlet at the NW (pond) corner and an outfall south from the drain, the dike notched at each; two sluices for a village polder",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_close#no acute stub": {
@@ -68487,10 +68607,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_lattice#each line wanders": {
@@ -68513,13 +68633,14 @@
   "date": "2026-10-07",
   "note": "a gentle low-frequency wander that bends the whole surveyed grid as one piece, which the page calls a drawing convention",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_lattice#node jitter": {
@@ -68542,10 +68663,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_parcels#gap is what runs in it": {
@@ -68614,10 +68735,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_ring#inlet high": {
@@ -68626,13 +68747,14 @@
   "date": "2026-10-05",
   "note": "the inlet is at the head (the high corner), toward the feeding pond in the northwest",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_ring#ring canal inside the dike": {
@@ -68641,10 +68763,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_ring#rounded corners": {
@@ -68653,10 +68775,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "research": "d6a30ed4908ecf7d",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_thin#polder plumbing": {
@@ -68733,29 +68855,32 @@
   "date": "2026-10-09",
   "note": "`mosaic` 0 keeps the rice polder's surveyed grid",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#low rows wet": {
   "code": "7300d409d5a43448",
   "core": "27c1ff09bae5d2d2",
-  "date": "2026-10-09",
-  "note": "the tint (\"the two lowest rows\", no merge across the band) is decided in `_polder_parcels`/`_polder_close`, which the bundle does not include; I need their source",
+  "date": "2026-10-10",
+  "note": "_polder_parcels makes every plot with r >= rows-2 FLOODED with no draw, and merges never cross the low band, matching \"a polder ... tints every low plot\" at the foot along the drain; two rows is a calibration within that",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
   "research": "45d05a93011e034b",
   "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:3b41256e849c4671",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#module line bow": {
   "code": "d4602df5cf35e0a9",
@@ -68806,13 +68931,14 @@
   "date": "2026-10-09",
   "note": "diked block, ring canal inside the dike, water crosses only at an inlet and an outfall",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "62e4b9408670652a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "d6a30ed4908ecf7d",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#polder size": {

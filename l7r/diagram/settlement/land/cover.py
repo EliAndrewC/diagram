@@ -640,6 +640,7 @@ class GroundCoverMixin:
             crowns and pines clear of the crops - UNRESEARCHED: a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
             woodland stocked to read - UNRESEARCHED: a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
+            crowns thin to the wood's edge - UNRESEARCHED: a throw within the feather of the parcel's edge is kept with chance (d / feather) ** 0.6
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         x0, y0, x1, y1 = box
         _wd_crowns = 0

@@ -191,7 +191,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), toe: Poly | Non
     Research:
         seat on the field's margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: higher, drier ground beside the paddy
         back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the margin facing the northwest unless declared
-        band area - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: households times the homestead's ground
+        band area - UNRESEARCHED: households times the homestead's ground; 0037 sizes only the yard
         no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
         clear ground behind - UNRESEARCHED: refused past 0.30 of the back under dry crop
         not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: seat and anchor off the marsh below the fields

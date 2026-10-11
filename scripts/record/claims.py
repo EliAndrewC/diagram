@@ -327,7 +327,10 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
         parts.append("# Context (read it; it is not judged)\n\nCode the units above call or read, shown so a verdict can see it:\n")
         for ref in context:
             parts.append(f"## CONTEXT {ref}\n\n```python\n{context_source(root, ref)}\n```\n")
-    cited += [p for p in pages if p not in cited and (qdir / p).is_file()]
+    for p in (p.rsplit("/", 1)[-1] for p in pages):  # a path or a bare name; a page named and not found is an error, never
+        if not (qdir / p).is_file():                   # dropped (feature 374: a pointer-form path was skipped in silence)
+            raise ValueError(f"PAGES: no question file {p} under {qdir}")
+        cited += [p] if p not in cited else []
     # THE QUESTIONS ARE FILES BESIDE THE MANIFEST, as their reader meets them (heading and blocks, intro marked, no markup),
     # each once however many units cite it: inline whole pages made the audit's per-file bundles 23 MB (measured 2026-10-03)
     (out / "questions").mkdir()
