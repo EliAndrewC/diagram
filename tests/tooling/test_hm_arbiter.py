@@ -87,6 +87,8 @@ def test_findings_are_marked_new_repeated_or_reversing() -> None:
     assert [k for k, _f in m2] == ["REPEATED", "NEW", "REVERSING"]
     numbered = "1. **the dike's breadth** told as a convention\n\n- the sluices match the page and are fine\n"
     assert ab.mark_rounds([numbered]) == [[("NEW", "**the dike's breadth** told as a convention")]], "confirmations are no finding"
+    bold = "**COVERAGE** clean.\n\n- the mottled band is told on the tab\n\n**1. D3: the breadth is told as a convention**\n"
+    assert ab.mark_rounds([bold]) == [[("NEW", "D3: the breadth is told as a convention**")]], "the bold numbered heading is read"
 
 
 def test_the_bundle_carries_the_rounds_the_cascade_and_the_feature(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001

@@ -415,3 +415,12 @@ def test_the_glyph_crop_shows_the_drawn_fill_never_the_highlight(tmp_path: pathl
     with Image.open(out) as im:
         r, g, b = im.convert("RGB").getpixel((im.width // 2, im.height // 2))
     assert (r, g, b) == (0xC9, 0xA5, 0x7A), f"the crop shows {r:02X}{g:02X}{b:02X}, not the drawn fill"
+
+
+def test_a_depiction_bundle_says_which_maps_draw_what_its_conditions_name() -> None:
+    """Feature 374 (the round arbiter's tooling fix): a conditional Drawing: link was ruled on without knowing which maps carry
+    the knob's form; the bundle now carries each named knob's forms, typing rule and engine lines."""
+    note = mb.knobs_note("Drawing: research/questions/0020-x.drawing.html [land_use_overlay=mulberry_fishpond]\n")
+    assert "## land_use_overlay" in note and "mulberry_fishpond" in note and "def _land_use_ok" in note
+    assert "rolling/roll.py" in note, "where the engine resolves it"
+    assert mb.knobs_note("no condition here") == ""

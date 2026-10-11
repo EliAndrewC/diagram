@@ -37,7 +37,7 @@ DEFAULT_OUT = Path("/tmp/l7r-check")
 _FINDING = re.compile(r"^\s*(?:\d+[.)]|[-*])\s+(.{12,})$", re.M)
 #: a NUMBERED item - a check's finding. A reply that numbers its findings also bullets what it confirmed ("the rest of the tab
 #: matches the pages"), and reading those bullets as findings listed confirmations as NEW (feature 374, the arbiter's fix)
-_NUMBERED = re.compile(r"^\s*\d+[.)]\s+(.{12,})$", re.M)
+_NUMBERED = re.compile(r"^\s*(?:\*\*)?\d+[.)]\s+(.{12,})$", re.M)  # "1. x" and the bold heading "**1. x**" (374)
 #: where a background agent's transcript lives, by its id - the reply when the hook kept none
 TRANSCRIPTS = Path.home() / ".claude" / "projects"
 
