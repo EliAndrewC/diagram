@@ -2,7 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done (2026-10-10) - every task ticked across four landed batches; SC-001, SC-002, SC-005 and SC-006 measured (`measurements.json`, `audit.md`); SC-003 and SC-004 carried to 374 and held there by FR-014; `report.md` written
+**Status**: In progress - amendment 1 (a pop-up check owed only by what it reads; the open features' state in the session clones); the original feature landed 2026-10-10 (SC-003 and SC-004 carried to 374)
+
+**Amendment 1 approved**: the GM, 2026-10-10, "yes to each of those possible changes, though for the in-progress features you can probably limit yourself to clones with active sessions, if it helps performance."
 
 **Affects**: review process, tooling
 
@@ -111,6 +113,26 @@ each one task).
   feature's work is declared in this spec as carried (`Carried: <SC> -> <feature> <measurements key>`); that feature cannot
   close (every route of FR-009) while its `measurements.json` lacks the key, and `make speckit-todo` shows the carry.
 
+### Amendment 1 (`request.md`, Amendment 1)
+
+Both changes are this feature's: FR-015 closes a gap FR-001 left, and FR-016 is the process's own tooling for seeing where
+work stands; the GM approved both in one answer.
+
+- **FR-015 A pop-up check is owed only by what it reads.** FR-001's triage named a pop-up and owed every check of it, so an edit
+  to a question page re-owed the pop-up's `modal-depiction` and an edit to a drawing page re-owed its research checks
+  (`modal-research`'s accuracy, references and gaps) - measured on feature 343's kept triage, 14 of its 61 units. Now a
+  changed block owes a check only when it is on a page that check reads: a question page (its `Entry:`) owes the research
+  checks, a drawing page (its `Drawing:`) owes `modal-depiction`. And an edit to the pop-up itself owes `modal-depiction`
+  only when it changes what that check reads of the pop-up - its Depiction tab, its `Drawing:` list, or the pop-up new to
+  the About form (the case feature 319's plan review kept: a conversion that dropped its drawing links must not land with
+  every check green); an edit to its About, Guesses or Entry text alone owes the research checks and `modal-form`, not
+  `modal-depiction`.
+- **FR-016 An open feature's state as its session clone holds it.** `make speckit-todo` shows each open feature as an active
+  session clone holds it when that differs from main - its spec accepted, its plan written, tasks ticked - in the section
+  that state belongs to, marked with the clone it is in and that it has not landed. Active clones only (the GM: "you can
+  probably limit yourself to clones with active sessions, if it helps performance"). Display only: what the push, `make
+  tick` and the closing check read is unchanged.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -125,6 +147,14 @@ each one task).
   this spec's measured table within its stated rounding.
 - **SC-006** (FR-010, FR-011, FR-012) Replaying 372's waves 106 and 108: the tripwires fire on 0105's and 0100's third rounds and on the bath bullet's
   A -> B -> A, and no round past the cap needed a GM waiver.
+- **SC-007** (FR-015) Replaying feature 343's kept triage (61 units, its reply): the 5 `modal-depiction` units named only for a
+  question-page block and the 9 research units named only for a drawing-page block are not owed; the others named are; and an
+  edit to a pop-up's About text alone owes `modal-form` and the research checks but not `modal-depiction`, while an edit to its
+  Depiction tab, its `Drawing:` list, or a pop-up new to the About form still owes it. The tests fail on today's code.
+- **SC-008** (FR-016) With a fixture main and two session clones, one active holding a feature's accepted spec and ticked
+  tasks, one inactive holding another change: `make speckit-todo` lists the first feature in the clone's section, marked with
+  its clone and not landed, and nothing from the inactive clone; `--holding`, `--closed-by-status` and `CHECK=1` give what they
+  gave before.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed.
