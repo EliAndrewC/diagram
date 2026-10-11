@@ -298,15 +298,17 @@
   <g data-kind="cell">
     <!-- 12 x 10 ft, the small end of the single cells read (feature 267 R24, buildings 460; it was 18 x 15). Pass 2
          ABUTS it to the barracks' west face and raises it to the barracks' top line, closing the guard range under
-         the granary again (feature 007's consolidation; pass 1's shrink had reopened a gap) -->
-    <rect x="838" y="616" width="36" height="30" fill="#B89868" stroke="#5C4318" stroke-width="1.5"/>
+         the granary again (feature 007's consolidation; pass 1's shrink had reopened a gap; feature 335 moved it 20 px east with
+         the narrowed barracks' west face) -->
+    <rect x="858" y="616" width="36" height="30" fill="#B89868" stroke="#5C4318" stroke-width="1.5"/>
     <!-- lattice indication -->
-    <line x1="844" y1="620" x2="844" y2="642" stroke="#3A2010" stroke-width="0.6"/>
-    <line x1="868" y1="620" x2="868" y2="642" stroke="#3A2010" stroke-width="0.6"/>
+    <line x1="864" y1="620" x2="864" y2="642" stroke="#3A2010" stroke-width="0.6"/>
+    <line x1="888" y1="620" x2="888" y2="642" stroke="#3A2010" stroke-width="0.6"/>
     <text font-size="9" font-weight="bold" fill="#3A2E1C">cell</text>
   </g>
 
-  <!-- Bushi / ashigaru barracks (SE) - 31 x 33 ft; the cell abuts its west face, the two forming a guard range
+  <!-- Bushi / ashigaru barracks (SE) - 24 x 33 ft since feature 335 (it was 31 x 33); the cell abuts its west face (moved
+       east with it, feature 335), the two forming a guard range
        under the granary with a real ~16 ft loading apron (not a 24 ft void) below the storehouse (packing
        consolidation, feature 007; the cell re-abutted in feature 267 pass 2) -->
   <g data-kind="barracks">
@@ -749,10 +751,10 @@
     <circle cx="331" cy="257.5" r="3.8"/>
     <circle cx="325" cy="390.5" r="3.8"/>
     <circle cx="872.5" cy="231" r="3.8"/>
-    <circle cx="939" cy="608.5" r="3.8"/>
+    <circle cx="948" cy="608.5" r="3.8"/>
     <circle cx="651" cy="710" r="3.8"/>
     <circle cx="315.5" cy="693" r="3.8"/>
-    <circle cx="366" cy="203.5" r="3.8"/>
+    <circle cx="300" cy="202" r="3.8"/>
   </g>
   <text font-size="8" font-style="italic" fill="#3A5060" data-kind="fire-water tubs" data-names="fire-water-tubs">fire-water tubs</text>
 </svg>
