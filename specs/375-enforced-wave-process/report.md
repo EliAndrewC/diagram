@@ -1,6 +1,6 @@
 # Feature report - 375-enforced-wave-process
 
-Written by `make feature-report F=375` from 1070 events (2026-10-10T16:27 to 2026-10-10T23:17 UTC), 65 commits, the run log and the spec.
+Written by `make feature-report F=375` from 1070 events (2026-10-10T16:27 to 2026-10-10T23:17 UTC), 76 commits, the run log and the spec.
 
 ## Where the time went
 
@@ -47,14 +47,14 @@ Written by `make feature-report F=375` from 1070 events (2026-10-10T16:27 to 202
 ## Process signals
 
 - gates: already-verified 2, green 5, red 3
-- spec rounds: CHANGES REQUIRED 3, FAITHFUL 2
-- plan reviews BLOCKED: 6 recorded in commits, 3 returned
+- spec rounds: CHANGES REQUIRED 4, FAITHFUL 3
+- plan reviews BLOCKED: 8 recorded in commits, 3 returned
 - reversals (A -> B -> A): 0
-- check dispatches 0 over 7003 changed lines: cascade ratio 0.00
-- tasks ticked: 29 of 30
+- check dispatches 0 over 7430 changed lines: cascade ratio 0.00
+- tasks ticked: 32 of 33
 
 ## Tripwires (FR-010) - what fired, or would have
 
 - none
 
-This report took 0.9 s to build; its own runs are the `make feature-report` rows of the event log (category `other tool`).
+This report took 1.4 s to build; its own runs are the `make feature-report` rows of the event log (category `other tool`).
