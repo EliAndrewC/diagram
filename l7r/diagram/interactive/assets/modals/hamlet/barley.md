@@ -29,8 +29,8 @@ Guesses:
 Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
 paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
 fan's dry middle is left to scrub and the plots keep to its toe. No grain plot is drawn beside a house: the plot a
-household worked there was most likely its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
-one way, each tract turned well apart from the next so the strips can be told apart. Barley is drawn in the tan-gold of
+household worked there was most likely its kitchen bed. The one exception is a row village whose farms line both sides of its street (the title card says whether this one does): each farm on the far side from the paddy has a strip of dry field drawn behind it. Every plot is furrowed, and neighboring plots form a tract whose rows run
+one way, each tract turned well apart from the next so the strips can be told apart. Each plot is outlined in a thin tan-brown line, drawn wider than a field's edge so the plots read; it is not a balk or a path between fields. Barley is drawn in the tan-gold of
 its ripening in May, though in high summer, the season of the paddies, it had already been cut.
 
 [winter_crop=barley] This settlement's drained paddies carry barley over the winter after the rice. The map, set in
@@ -44,4 +44,4 @@ Name: barley
 Covers: `dry_plots[crop=barley]` and their furrows
 Sources: omugi-jawiki, fukui-kenshi-noji, hakubaku-omugi-ichinen, zakkoku-kotobank, kotobank-nimosaku, nimosaku-jawiki, kotobank-kanden, shizen-teibo-jawiki, king-forty-centuries, nogyo-zensho-joun-sera, hanshu-daitian-wikisource, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain
 Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html
-Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html
+Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html, research/questions/0033-row-villages-resson.drawing.html

@@ -901,8 +901,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:14a6adb4a8440bc9",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:be635f0990c5e3da"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#alley behind the office hall": {
@@ -912,7 +912,18 @@
   "note": "no page sets out an alley between the hall and the divider wall; 0090 places only the divider gate behind the hall (GUESS), and 0091's alley is the north service strip, not this one",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
+  "verdict": "IN-STEP"
+ },
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#border court as a garden": {
+  "code": "22ebf57590e78d1d",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "GUESS; 0104's drawing page records a garden in the court's place as a guess, and 0103's records the lantern in the reception court as one",
+  "pages": {},
+  "research": "",
+  "section": "cf960bbd80430094",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables": {
@@ -923,8 +934,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais": {
@@ -940,8 +951,8 @@
    "0099-the-hearing-court-shirasu.drawing.html:400ef23a77443c5c",
    "0099-the-hearing-court-shirasu.drawing.html:a82abb47f7fed2c5"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
@@ -958,8 +969,8 @@
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:45e428be060a17da",
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:dd1082c27eb94aa1"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face": {
@@ -970,8 +981,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate": {
@@ -988,7 +999,8 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "section": "03a6c88a20bdb161",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
@@ -1004,8 +1016,8 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate width": {
@@ -1016,8 +1028,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#fire-water tubs": {
@@ -1035,36 +1047,34 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
   "code": "7d977d70881b8660",
-  "core": "03a6c88a20bdb161",
-  "date": "2026-10-10",
-  "note": "the one genkan is on the office hall, the residence has none, and the visitors' way runs on through the office to the house, as the page draws a shared compound; the roji form without a genkan is the page's second attested form",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "genkan on the office, way to the residence through the office, as the drawing page draws it; the divider gate's place is a recorded guess",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "33e63d0ee4a62e19"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff"
   },
-  "research": "5c9e8d422d38d7ca",
+  "research": "093d6357243ac064",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:da69c5f5c1d09f0a"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-11",
+  "section": "cf960bbd80430094",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
   "code": "ca1134809466bdaa",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "no page places a garden or stable well",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "GUESS; no page places a garden or stables well, and 0091 records only the rear well as a guess",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob": {
@@ -1075,8 +1085,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
@@ -1093,34 +1103,35 @@
    "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d",
    "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#guest doors feed courts": {
-  "code": "2a19c51dafbbd4b9",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "open ground before guest doors, garden recorded as a GUESS, kitchen door into work space, a lantern in the reception court a GUESS",
+  "code": "86d02c3ccd9bc973",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "the rule offers \"a court, a garden, a graveled forecourt\" as equal grounds for a guest door, but 0104's drawing page draws \"an open court, and a garden in its place is a guess\"; the rule's garden option should be labeled GUESS (or the border-court guess widened to cover it)",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html": "48d206623f86d1e3",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "33e63d0ee4a62e19",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
   },
-  "research": "15f28c8c9e07c1c2",
+  "research": "cbd9b611e22dde64",
   "rests": [
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html:bd9cbe65b5055f66",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:3bd3b9974993d277",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:5537423845128d56",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:9dd35f14d0d39cdf",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:8f8b12557da86306",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:ad36b13336976f6e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:758003c2792cf6e7",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:ad71105579b890e5"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-11",
-  "verdict": "IN-STEP"
+  "section": "cf960bbd80430094",
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
   "code": "9c6c161902d4d183",
@@ -1129,8 +1140,8 @@
   "note": "0101's drawing page names no night-soil gate at a samurai house",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
@@ -1141,27 +1152,29 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone": {
   "code": "a48d5ee3558a38c7",
-  "core": "958d4bc05bb7b9db",
-  "date": "2026-10-10",
-  "note": "0101's drawing page records \"about one to each part of it, three or four\" as a GUESS and calls the service-wall-near-a-gate placement the project's own reading; the privy built into the house is its finding",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "the prose gives the residence one privy (\"the residence privy attached to the house\"; the rear strip names only \"the attached family privy\"), but 0101's drawing page says \"Our maps give a residence two privies, the guests' and the family's\"; the prose and the claim should name both. Three or four by zone, by service walls near a gate, is in step",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
   "rests": [
+   "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
-   "0101-privies-setchin.drawing.html:8299420f832f4bd1"
+   "0101-privies-setchin.drawing.html:721f2a29c982e0b4",
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1",
+   "0101-privies-setchin.drawing.html:f2dbc20c5097bdd3"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "section": "cf960bbd80430094",
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
   "code": "11bd32587fe08b18",
@@ -1184,8 +1197,8 @@
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:fc44e5419b7307af",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:ff9d9cf36d9635eb"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
@@ -1205,8 +1218,8 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
@@ -1222,8 +1235,8 @@
    "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923",
    "0190-notice-boards-kosatsuba.drawing.html:cf39d6663b05b586"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
@@ -1239,8 +1252,8 @@
    "0099-the-hearing-court-shirasu.drawing.html:36f49b610deb6fb9",
    "0099-the-hearing-court-shirasu.drawing.html:6f3e1d8136359675"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall rooms": {
@@ -1250,8 +1263,8 @@
   "note": "no page places these rooms (0113's drawing page records it as a GUESS)",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate": {
@@ -1266,8 +1279,8 @@
   "rests": [
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners": {
@@ -1278,8 +1291,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth knob": {
@@ -1294,8 +1307,8 @@
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:28f3b3b08cf308d9"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth's rich end": {
@@ -1305,8 +1318,8 @@
   "note": "qualitative, no figure recorded",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground": {
@@ -1323,8 +1336,8 @@
    "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
    "0165-martial-training-grounds-and-dojo.drawing.html:eaaa0e49753241f1"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground placement and gear": {
@@ -1343,47 +1356,55 @@
    "0165-martial-training-grounds-and-dojo.drawing.html:d49d656131981f70",
    "0165-martial-training-grounds-and-dojo.drawing.html:e5d173fb8d7dcb4a"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#rear service strip": {
-  "code": "79d688043dad6125",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "service strip or alley a GUESS, rear storehouses and rear yard attested",
+  "code": "c481f7c696b9a266",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "the procedure always puts \"the servants' nagaya\" in the shady north strip behind the residence. 0115 records several other places servants lived: \"long ranges along the street\", \"the front gate cut through one of them\" (the gate range) and \"under the main roof\" in a small house. A great house too kept \"the rooms of the maids and servants\" inside the house. Its summary puts servants \"in the range or row along its boundary ... or inside the house\". The only support for the rear is one chugen hut outside a back door (Miwa), and 0091's drawing page calls the rear placement a GUESS, not a deliberate departure. Fix one of two ways: make where the servants live a seeded knob among the forms 0115 records (gate or street range, under the main roof, rear range), or record the rear range as a DEVIATION on 0091's drawing page and label the claim DEVIATION. The storehouses, rear yard and attached privy are in step.",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
   },
-  "research": "599c1caf9eb1593b",
+  "research": "fcb65d612223c620",
   "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:3fbca2091d585e8c",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:6adb1f4ed30e77e9",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:0847d626d58b5561",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5960e566a4bd1d74",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5b10f481659ec3b8",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5d741be14a8de53e",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:75a2ed72bd40172c",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:90f6ef1941297876"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "section": "cf960bbd80430094",
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#residence entrances": {
   "code": "d113493f815e21df",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "one formal genkan, an inner entrance for the household, or none at a middle-rank house",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "one main genkan, an inner entrance for the household, and the roji form as the alternative",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
   },
-  "research": "d6575223a27df7a3",
+  "research": "52ce328e87da1094",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars knob": {
@@ -1398,8 +1419,8 @@
   "rests": [
    "0165-martial-training-grounds-and-dojo.drawing.html:de4325f24196505d"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo": {
@@ -1410,8 +1431,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#road checkpoint tier": {
@@ -1428,8 +1449,8 @@
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:ae79afce1ebb08ba",
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:b24bcf640dc2cb0f"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#sand hearing court": {
@@ -1447,8 +1468,8 @@
    "0099-the-hearing-court-shirasu.drawing.html:b55c5a1de66c7efa",
    "0099-the-hearing-court-shirasu.drawing.html:b803d460a0101855"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court": {
@@ -1458,8 +1479,8 @@
   "note": "the page puts a jail in the walls but names no court",
   "pages": {},
   "research": "",
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#shrine smaller than the residence": {
@@ -1475,8 +1496,8 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
@@ -1496,8 +1517,8 @@
    "0097-staff-rowhouses-and-barracks-nagaya.html:885233a681119793",
    "0097-staff-rowhouses-and-barracks-nagaya.html:a452c3a25fb046fd"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staffing anchors": {
@@ -1508,8 +1529,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tenure character knob": {
@@ -1520,8 +1541,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob": {
@@ -1543,8 +1564,8 @@
    "0114-the-imperial-magistrates-compound-in-a-capital.html:a325a11b4634b47d",
    "0114-the-imperial-magistrates-compound-in-a-capital.html:bb14a65377ab7b59"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
@@ -1560,8 +1581,8 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine": {
@@ -1580,8 +1601,8 @@
    "0218-the-compounds-own-shrine-yashikigami.html:19a8b2635c1b3c76",
    "0218-the-compounds-own-shrine-yashikigami.html:28d396983ee76947"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary contents": {
@@ -1597,8 +1618,8 @@
    "0098-storehouses-for-the-tax-rice.drawing.html:1ae871342edf3960",
    "0098-storehouses-for-the-tax-rice.drawing.html:38cdaa6bf4104e0b"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wall display": {
@@ -1609,8 +1630,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
@@ -1629,15 +1650,15 @@
    "0097-staff-rowhouses-and-barracks-nagaya.html:79b867ffa7ca309a",
    "0097-staff-rowhouses-and-barracks-nagaya.html:a29a90d662b98d5d"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wells by use": {
   "code": "75de2f763360d38f",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "the kitchen well kept with the kitchen and bath is a GUESS that 0105's drawing page records (\"that the one well also filled the bath is our reading\"); \"by the kitchen\" covers both the generated plans' spot and the hand-drawn plans' spot inside the kitchen",
+  "core": "cf960bbd80430094",
+  "date": "2026-10-11",
+  "note": "the rule always places wells by use (kitchen, garden, stables), but 0091 places the houses' wells it found \"through the gate\", \"on the east side of the main house\" and \"indoors, in the Miwa house's doma\"; the kitchen well should roll among these attested placements (the hand-drawn plans' well inside the kitchen already matches the doma form), or the claim should say why the generated plans leave them out",
   "pages": {
    "0105-baths-furo.drawing.html": "de13b621fc93a424"
   },
@@ -1646,9 +1667,8 @@
    "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:c2529d4d294eb292"
   ],
-  "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
-  "verdict": "IN-STEP"
+  "section": "cf960bbd80430094",
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Adding a building type#type workflow": {
   "code": "5786d60dfca21978",
@@ -1892,17 +1912,16 @@
  "docs/buildings.md::Checklist for a new diagram#guest and service doors": {
   "code": "70b07f42cac6c0f8",
   "core": "8becb0440852b395",
-  "date": "2026-10-10",
-  "note": "the guest crosses open ground or a garden; the kitchen door leads into the kitchen",
+  "date": "2026-10-11",
+  "note": "open ground inside the gate, or the roji garden path; the kitchen door is the service door",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
   },
-  "research": "d6575223a27df7a3",
+  "research": "52ce328e87da1094",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:ad71105579b890e5",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "section": "8becb0440852b395",
@@ -2293,20 +2312,18 @@
  "docs/buildings.md::Fire-water tubs#the reception's shoe stone is its entrance": {
   "code": "f595fd29dd336ee4",
   "core": "6c077f80b364c895",
-  "date": "2026-10-10",
-  "note": "the tub beside the veranda's stepping stone; the no-genkan forms",
+  "date": "2026-10-11",
+  "note": "the tub beside the veranda stone is recorded; the roji leads to the zashiki's veranda",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "33e63d0ee4a62e19"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "d727507df1369aff"
   },
-  "research": "e3aa1c9597591fbc",
+  "research": "d7b1e52ba60fb77d",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
   ],
   "section": "6c077f80b364c895",
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub against its wall": {
@@ -2411,8 +2428,8 @@
    "0105-baths-furo.drawing.html:5ac8b5f9c5612dfb",
    "0105-baths-furo.drawing.html:87595aae6ed4540e"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#bath": {
@@ -2435,24 +2452,8 @@
    "0105-baths-furo.html:d8d19b4eb5351d97",
    "0105-baths-furo.html:f9880c41b621a58b"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
-  "verdict": "IN-STEP"
- },
- "docs/buildings.md::Inner court (private / sacred)#door set wholly inside its building": {
-  "code": "afe67d1f1bdbd0d6",
-  "core": "9c074481721a23c6",
-  "date": "2026-10-11",
-  "note": "The procedure puts the door block wholly inside its building, outer edge on the wall, never outside, across or floating inside it. The drawing page records this as a convention every plan follows.",
-  "pages": {
-   "0117-doorways-and-doors-to.drawing.html": "bc909b837c49efa6"
-  },
-  "research": "f16a2000e7083c6f",
-  "rests": [
-   "0117-doorways-and-doors-to.drawing.html:3cbff3e9dce4a3e9",
-   "0117-doorways-and-doors-to.drawing.html:83f2a66640fa734f"
-  ],
-  "section": "9c074481721a23c6",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#engawa": {
@@ -2478,8 +2479,8 @@
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:e50acf31e21172cd",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html:efc9c3619bf2373e"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#formal reception room": {
@@ -2495,29 +2496,26 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:80ac18283316ac77",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:e20e108d786f655f"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan": {
   "code": "6327ce37ed782c88",
-  "core": "820eca0d767c15d3",
-  "date": "2026-10-10",
-  "note": "a knob between the two attested forms (a genkan on the office, as at Takayama, or no genkan and a roji path to the zashiki veranda, as at Koseki); other blocks use the inner or kitchen door",
+  "core": "ae0a5605f51e7f36",
+  "date": "2026-10-11",
+  "note": "a knob between the two attested forms (Takayama's genkan, Koseki's roji); other blocks enter by the inner entrance",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
   },
-  "research": "d6575223a27df7a3",
+  "research": "52ce328e87da1094",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan porch size": {
@@ -2528,8 +2526,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#inner garden": {
@@ -2549,8 +2547,8 @@
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:ba5b5b37436fe857",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:c29c96fc559c5cb1"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kamado range size": {
@@ -2561,8 +2559,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kitchen": {
@@ -2577,8 +2575,7 @@
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:4e5371e6e55b47e9"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kitchen abuts the house, no corridor": {
@@ -2595,8 +2592,7 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#reception at one end": {
@@ -2617,8 +2613,8 @@
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:414f8be338415f3b",
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:56590e800f15cbe0"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#residence massing": {
@@ -2639,8 +2635,7 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d59d56dfc182e6ec"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#residence of about six rooms": {
@@ -2659,8 +2654,7 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:dcabdf9948afb679",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:f7d5825ee9a50598"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#room order": {
@@ -2677,8 +2671,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d39a6c083ed2ffa",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:c46fa707abad1ec6"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart": {
@@ -2696,8 +2690,8 @@
    "0106-the-chief-retainers-house-karo-yashiki.html:80b0dad39e3061bf",
    "0106-the-chief-retainers-house-karo-yashiki.html:9003bd375cdf6745"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#suites as labeled zones": {
@@ -2707,8 +2701,7 @@
   "note": "the drawing page calls a labeled room standing for a compressed suite a drawing convention.",
   "pages": {},
   "research": "",
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#the karo's own house as a lodging block inside the compound": {
@@ -2724,8 +2717,8 @@
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html:820e8a9256c1e84c",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html:e10a3a961134047e"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#the residence along the north range": {
@@ -2743,8 +2736,8 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:9ad51c4d62413a83"
   ],
-  "section": "9c074481721a23c6",
-  "triaged": "2026-10-11",
+  "section": "ae0a5605f51e7f36",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#named rear yard": {
@@ -3099,16 +3092,16 @@
  "docs/buildings.md::Outer court (administrative / public)#forecourt": {
   "code": "68190d28978f3b51",
   "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "the pages put the open ground before the entrance just inside the main gate (\"gate, then open ground... then the step\"; Joge's entrance \"faces the open ground inside the main gate\"). Hayakawa's \"forecourt\" label on the strip behind the office hall contradicts this; the label belongs on the ground inside the gate",
+  "date": "2026-10-11",
+  "note": "the claim puts the label \"forecourt\" on the strip behind the office hall (the hall backs the divider wall) and calls the open ground inside the main gate OUTER COURT. The record's forecourt is the open ground inside the main gate that the entrance faces (\"the entrance with its step faces the open ground inside the main gate\"; Takayama's \"plaza in front of the jin'ya\"). The forecourt label belongs on the ground inside the gate",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
   },
-  "research": "ec238eaee630004b",
+  "research": "0b8c2c5bed6f0207",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:ad71105579b890e5",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:294ade5001734dd1"
   ],
   "section": "050f0bde3a602b79",
@@ -3194,16 +3187,17 @@
  "docs/buildings.md::Outer court (administrative / public)#hearing court": {
   "code": "99c82eb56e42afaf",
   "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "roofed; gravel or cobbles as a knob",
+  "date": "2026-10-11",
+  "note": "roofed; floor a knob between white gravel and river cobbles; no size found",
   "pages": {
-   "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
+   "0099-the-hearing-court-shirasu.html": "8af3a22bc37b5446"
   },
-  "research": "81ffa6b221f0f767",
+  "research": "5d21a3098fbb528c",
   "rests": [
    "0099-the-hearing-court-shirasu.html:1c5a6e5edd21f113",
    "0099-the-hearing-court-shirasu.html:700e8e156074abca",
-   "0099-the-hearing-court-shirasu.html:9b989aee73ca5a35",
+   "0099-the-hearing-court-shirasu.html:c32a239cc695fe1f",
+   "0099-the-hearing-court-shirasu.html:fa37df3ee3a69365",
    "0099-the-hearing-court-shirasu.html:fd2431d8cc8f2d5a"
   ],
   "section": "050f0bde3a602b79",
@@ -3246,13 +3240,14 @@
   "date": "2026-10-10",
   "note": "Edo arrangement",
   "pages": {
-   "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
+   "0099-the-hearing-court-shirasu.html": "8af3a22bc37b5446"
   },
-  "research": "81ffa6b221f0f767",
+  "research": "5d21a3098fbb528c",
   "rests": [
    "0099-the-hearing-court-shirasu.html:8f23e38817efeb5b"
   ],
   "section": "050f0bde3a602b79",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#kura granary door on the apron": {
@@ -3558,36 +3553,35 @@
   "rests": [
    "0224-ground-swept-clear-around-shrines-and-graves.html:5b400e21e086078a"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch dimensions": {
   "code": "8944835bc8727848",
-  "core": "794c7ddb8c6c9e98",
-  "date": "2026-10-11",
-  "note": "the drawing page gives the arch's spacing, its distance from the hall and its count, but no beam length, post size or clear span; UNRESEARCHED is the right label",
+  "core": "43c7197f86c0cc1c",
+  "date": "2026-10-08",
+  "note": "no bundle question sizes an arch's beam or posts",
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "794c7ddb8c6c9e98",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch in plan": {
   "code": "18de9b7f6648213e",
-  "core": "794c7ddb8c6c9e98",
-  "date": "2026-10-11",
-  "note": "arches at the 12 ft pitch, the figure the drawing page sets on every map and records as a guess inside its 10-13 ft band",
+  "core": "43c7197f86c0cc1c",
+  "date": "2026-10-08",
+  "note": "12 ft between arches, and 12 ft from the innermost arch to the hall",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9"
   ],
-  "section": "794c7ddb8c6c9e98",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#bare precinct earth": {
@@ -3604,8 +3598,7 @@
    "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a",
    "0224-ground-swept-clear-around-shrines-and-graves.html:ede9f63d0b1336c9"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#burial ground beside the precinct": {
@@ -3622,15 +3615,14 @@
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:3cb31f36e31e3029",
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:658031ef79aa2d75"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#compound shrine arch": {
   "code": "665a59bcd0dd128e",
-  "core": "794c7ddb8c6c9e98",
-  "date": "2026-10-11",
-  "note": "the arch optional (\"may even have a torii\"), shared or one each rolled per map from the seed as both forms are attested; the edited sentence now only points to the arch-in-plan rule",
+  "core": "43c7197f86c0cc1c",
+  "date": "2026-10-08",
+  "note": "the arch is optional, and sharing one arch or having one each is rolled per map",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
@@ -3640,7 +3632,7 @@
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:52ba5c2f9e830511",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:5dbe6218f548b7d9"
   ],
-  "section": "794c7ddb8c6c9e98",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#compound shrine tree": {
@@ -3657,8 +3649,7 @@
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:169483752db7d7f8",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#grave markers": {
@@ -3677,8 +3668,7 @@
    "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350",
    "0235-village-burial-grounds-bochi.drawing.html:d222af3b26079b80"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "NEEDS-RESEARCH"
  },
  "docs/buildings.md::Sacred features#grove": {
@@ -3697,8 +3687,7 @@
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2ae7827162453585",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#grove crown size": {
@@ -3716,8 +3705,7 @@
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#grove inside a compound wall": {
@@ -3732,8 +3720,7 @@
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:64714d0dd61608a5"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "MISLABELED"
  },
  "docs/buildings.md::Sacred features#hall and dwelling": {
@@ -3754,8 +3741,7 @@
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:f24d361f0a0d9421"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#hall and dwelling order": {
@@ -3769,8 +3755,7 @@
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#hall shrine ceiling": {
@@ -3788,8 +3773,7 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:810821d06441c9f0",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#kitchen garden at the dwelling": {
@@ -3800,8 +3784,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#modest compound shrine": {
@@ -3817,8 +3800,7 @@
    "0218-the-compounds-own-shrine-yashikigami.html:834a4967c2ef0c57",
    "0218-the-compounds-own-shrine-yashikigami.html:b15f43848fbd0e18"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#more than one kami in a hall": {
@@ -3833,8 +3815,7 @@
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#precinct unenclosed": {
@@ -3853,8 +3834,7 @@
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d14e5a627deab202",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d284e5af358a3a1f"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#privy at the dwelling": {
@@ -3865,8 +3845,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#sanctuary": {
@@ -3885,8 +3864,7 @@
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:45ce51e0ab9fc655",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8645ca661afbf310"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#shrine vermilion edging": {
@@ -3899,8 +3877,7 @@
   "rests": [
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:1abd0863c503614b"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence": {
@@ -3914,8 +3891,7 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
   ],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#workshop colonnade": {
@@ -3926,8 +3902,7 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "794c7ddb8c6c9e98",
-  "triaged": "2026-10-11",
+  "section": "43c7197f86c0cc1c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#buildings at true size": {
@@ -4663,6 +4638,68 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_roji_parts#gate seat": {
+  "code": "408bfc3b6c7c8e61",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-10",
+  "note": "the offsets only keep the drawn stones clear of the walls.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_roji_parts#guest's way out of doors": {
+  "code": "0b5595827b5d225d",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-11",
+  "note": "the roji is attested only at Koseki; at an office the outdoor way and the middle gate's place are recorded as open",
+  "pages": {
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+  },
+  "research": "52ce328e87da1094",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:64f3adbc05fa69ca",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_roji_parts#roji wherever a middle gate stands": {
+  "code": "ba458973d51ba5d0",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-11",
+  "note": "the code always draws the roji when there is a middle gate and a reception room with a veranda. 0104 records two forms of arrival (the genkan at a senior house, the roji at Koseki), and its drawing page says \"a knob chooses between them\". 0104 also never ties a middle gate to a roji: Takayama has a middle gate and a genkan, and the onward way there is left open. The code should roll the form per settlement, or the claim should label the \"middle gate means roji\" trigger GUESS",
+  "pages": {
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f"
+  },
+  "research": "52ce328e87da1094",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:64f3adbc05fa69ca",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:eb0e9d8c6c61a2d0",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/compound_parts.py::_roji_parts#shoe stone": {
+  "code": "f854e52a176effe1",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-10",
+  "note": "the page names no stone at the veranda's edge, so the stone is a true guess.",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_roji_parts#stepping stones": {
+  "code": "b4821a703b6da61d",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-10",
+  "note": "the page names the walled garden path but not what it was laid with; the stones and their size are a true guess.",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/dwellings.py::BUSINESS_KINDS#commercial frontages": {
@@ -5608,15 +5645,15 @@
   "date": "2026-10-05",
   "note": "dry furrows only, up to 8 degrees on a hamlet, paddy never tilted",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
-  "research": "95bd9df648285dfa",
+  "research": "d2a695abb2df0233",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::GROSS_ACRES_PER_HOUSEHOLD#paddy per household": {
@@ -9706,12 +9743,13 @@
   "date": "2026-10-09",
   "note": "0.85-0.95 rolled per hamlet",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2648f7d12e71c15a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#wood shed share": {
@@ -9743,12 +9781,13 @@
   "date": "2026-10-09",
   "note": "160 ft, recorded as the page's GUESS",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::PIT_FIELD_SHARE_BAND#field pit share": {
@@ -9757,14 +9796,15 @@
   "date": "2026-10-09",
   "note": "2 of 83 to 15 of 18, rolled per hamlet",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "22fc88c9ad28fcc5",
+  "research": "3919cf19cc381174",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
    "0047-farm-privies-and-their-night-soil-benjo.html:ddf6bf2590cee847"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PIT_CANDIDATES#fixture drawing plumbing": {
@@ -9789,16 +9829,17 @@
   "date": "2026-10-09",
   "note": "four places in the page's order at 35/30/20/15, a recorded GUESS",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "22fc88c9ad28fcc5",
+  "research": "3919cf19cc381174",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22",
    "0047-farm-privies-and-their-night-soil-benjo.html:2448eb7f2dfe9d3a",
    "0047-farm-privies-and-their-night-soil-benjo.html:b8871624fb928e66",
    "0047-farm-privies-and-their-night-soil-benjo.html:d9b8f2f66a035aff"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_WEIGHT_SPREAD#privy weights per hamlet": {
@@ -9807,12 +9848,13 @@
   "date": "2026-10-09",
   "note": "\"up or down by as much as half\"",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_laid#which pits go to the field": {
@@ -9821,12 +9863,13 @@
   "date": "2026-10-09",
   "note": "the hamlet's rolled field share, the rest beside the privy",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#a lane between pit and house allowed": {
@@ -9835,12 +9878,13 @@
   "date": "2026-10-09",
   "note": "the pit at the field or road edge, the laid seat as fallback",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#field pit off a lane": {
@@ -9879,12 +9923,13 @@
   "date": "2026-10-09",
   "note": "160 ft, the page's GUESS",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_flexible_clear#pit off every grove": {
@@ -9964,12 +10009,13 @@
   "date": "2026-10-09",
   "note": "both attested seats, the field seat sought first",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::field_edge_seats#pit at the field or road edge": {
@@ -9978,14 +10024,15 @@
   "date": "2026-10-09",
   "note": "the nearest paddy or road edge",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21",
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
-  "research": "22fc88c9ad28fcc5",
+  "research": "3919cf19cc381174",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126",
    "0047-farm-privies-and-their-night-soil-benjo.html:1a8a94917bee238f"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_form#fixture drawing plumbing": {
@@ -10030,12 +10077,13 @@
   "date": "2026-10-09",
   "note": "the hamlet's rolled weights",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": {
@@ -10069,12 +10117,13 @@
   "date": "2026-10-09",
   "note": "each base weight scaled 0.5-1.5 per hamlet, renormalized",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::record_drawn_forms#fixture drawing plumbing": {
@@ -13432,12 +13481,13 @@
   "date": "2026-10-09",
   "note": "KNOWN (found row E2). The 0047 drawing page records no \"sty drawn alone\"; §32 calls privy-with-muck a GUESS, and §147 attests the latrine built over the pigsty. Fix: record the departure on the drawing page, or cite 0049/0025",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:65691607dc814b44"
   ],
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sties at the dike-pond only": {
@@ -15297,10 +15347,10 @@
   "date": "2026-10-03",
   "note": "matches 0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::FAN_MIDDLE#wild weighting": {
@@ -34751,10 +34801,10 @@
   "date": "2026-10-03",
   "note": "0006 neighbors abut continuously",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_KEY_OK#one continuous work": {
@@ -43825,18 +43875,18 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#dry plot ink": {
   "code": "909c5499fe559e4b",
   "core": "242b2b262ce32810",
-  "date": "2026-10-07",
-  "note": "each crop's own fill, with furrows",
+  "date": "2026-10-11",
+  "note": "the crop's fill, furrows, a 1.4 tan-brown outline",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:a97455eb3aeed622",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:f263da6e48629364"
   ],
-  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths": {
@@ -43863,14 +43913,14 @@
   "date": "2026-10-07",
   "note": "drops plots on other rice, on water or on its own ditch",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem placement": {
@@ -43879,15 +43929,15 @@
   "date": "2026-10-07",
   "note": "plots upslope of the supply canal, as the net lays them",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot": {
@@ -44170,10 +44220,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin.bund_junctions#junction pile size": {
@@ -44292,10 +44342,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::recorded_water#plumbing": {
@@ -45041,10 +45091,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/grain.py::top_up#top-up order": {
@@ -45560,10 +45610,10 @@
   "date": "2026-10-03",
   "note": "theta = uniform(-0.6, 0.6) per plot independently, where 0006 has plots in tracts sharing one direction (\"along the contour or down to its outfall\"), each plot turning \"about 3 degrees\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#row ink": {
@@ -45580,10 +45630,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._split_convex#plumbing": {
@@ -45680,20 +45730,19 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.paddy_field#crop mix": {
   "code": "a8c5d5dc370c5078",
   "core": "dd1f3ec0aeeed665",
-  "date": "2026-10-05",
-  "note": "dry/soy plots are scattered inside the paddy outline at 5-29%/3-14% rising toward EVERY rim, but the pages put dry crops as \"a hem ... just upslope of the supply canal\" and \"a plot on the upslope margin\"; neither rate is on either page",
+  "date": "2026-10-11",
+  "note": "`dry_p, soy_p = 0.05 + 0.24 * edge, 0.03 + 0.11 * edge` puts dry and soy plots deep in the paddy's interior (5% and 3%) and on every rim. The pages put them only in the hem upslope of the canal (\"the field's dry crops go only in the hem\"; \"a plot on the upslope margin ... is a dry crop\"), and neither page gives the 5-29% or 3-14% figures",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
-  "research": "526f23bd05fe2333",
+  "research": "276b8ddf8e802e0f",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:8f11acb4f22cddd3",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:33f680a97951ad27",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:a7401b1ec92e2d4b"
   ],
-  "triaged": "2026-10-09",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.paddy_field#field outline": {
@@ -45825,18 +45874,15 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#dry where water fails": {
   "code": "5d999320c950d77e",
   "core": "1dbc88c8837680db",
-  "date": "2026-10-10",
-  "note": "the page places dry plots only \"just upslope of the supply canal\", not below the drain or at the margins. It says \"Each map picks its mix of the four crops at random\", but the code fixes 0.62 dry grain and the rest soy. The plots are paddy quads, not \"square to\" the canal",
+  "date": "2026-10-11",
+  "note": "`un_irrig = fm < fh or fm > fd` and `edgef ... > 0.6` turn the plots below the drain and at every margin dry. 0006 puts dry plots only \"just upslope of the supply canal\" and \"only in the hem\". And `random.random() < 0.62` fixes one grain-to-soy share where \"Each map picks its mix of the four crops at random\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:33f680a97951ad27",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
   "verdict": "DRIFTED"
@@ -47100,12 +47146,13 @@
   "date": "2026-10-09",
   "note": "default 35/30/20/15 in the page's order",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#retirement house size and gaps": {
@@ -47173,12 +47220,13 @@
   "date": "2026-10-09",
   "note": "edge 8 ft off the front wall, the page's GUESS",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SIZES_FT#privy sizes": {
@@ -47187,12 +47235,13 @@
   "date": "2026-10-09",
   "note": "16 sizes from 5x5 to 27x15: ten at 18x12 or under, five at 24x12, equally likely",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SUNNY_SHARE#privies on the sunny side": {
@@ -47201,26 +47250,27 @@
   "date": "2026-10-09",
   "note": "72.7% taken as given",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SUN_MAX_FT#sun-side search reach": {
   "code": "1c3a608c7da1d8bc",
   "core": "8eb43ce07ccbc755",
-  "date": "2026-10-09",
-  "note": "48 ft",
+  "date": "2026-10-11",
+  "note": "48 ft, the project's chosen reach",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5"
   ],
   "verdict": "IN-STEP"
  },
@@ -47230,13 +47280,14 @@
   "date": "2026-10-09",
   "note": "from 18 ft",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:0a66664e8ca81f96",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall": {
@@ -47245,12 +47296,13 @@
   "date": "2026-10-09",
   "note": "KNOWN, held E3. The edge stands 9.5 ft off the back wall (6 + 3.5 gap); the page says \"a ken (about 6 ft) off the back wall\" and records no hold",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::SALT#plumbing": {
@@ -47436,12 +47488,13 @@
   "date": "2026-10-09",
   "note": "KNOWN, held E3. Same as above: the 9.5 ft edge against the page's \"a ken (about 6 ft) off the back wall\"",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": {
@@ -47450,14 +47503,15 @@
   "date": "2026-10-09",
   "note": "sun sector on a 72.7% roll, else yard/front/stable at the hamlet's weights, no barn",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2697271aa3082865",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#retirement house": {
@@ -47524,15 +47578,16 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_sun_sector#sunny-side sector": {
   "code": "d774b6df80942db3",
   "core": "f9ffe087ec94f06b",
-  "date": "2026-10-09",
-  "note": "the SE and S octants, nearest first",
+  "date": "2026-10-11",
+  "note": "112.5 to 202.5 degrees in the house's frame, nearest radius first",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
   "verdict": "IN-STEP"
  },
@@ -47606,12 +47661,13 @@
   "date": "2026-10-09",
   "note": "stops before the outer edge passes the gable: \"while the whole privy still stands along the wall\"",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::along_its_wall#slid toward its own end only": {
@@ -47776,13 +47832,14 @@
   "note": "6 x 6 ft is one tsubo, the low end of the bath's range, and lies within the privy table's 5x5 to 27x15 sizes (PRIVY_SIZES_FT holds (6, 6))",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3f14ee71151c4b1b",
+  "research": "5c1240c3c3e5458a",
   "rests": [
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#other fixtures' sizes": {
@@ -47814,12 +47871,13 @@
   "date": "2026-10-09",
   "note": "uniform over the sixteen",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:263e8bee5801b636"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#retirement house size": {
@@ -48002,15 +48060,17 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the privy's reach": {
   "code": "2249a953f07609de",
   "core": "6aaf843c03b518fc",
-  "date": "2026-10-09",
-  "note": "48 ft cap, privies kept to their own farmstead",
+  "date": "2026-10-11",
+  "note": "every privy seat is filtered by within_reach_of at 48 ft and refused if none is within reach",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
   "verdict": "IN-STEP"
  },
@@ -48042,28 +48102,32 @@
   "date": "2026-10-09",
   "note": "the barn left out while hamlets draw none; open work recorded",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2697271aa3082865",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size": {
-  "code": "5ceba220cd4f8b04",
+  "code": "5aea1c9af93c823c",
   "core": "0216772b2aa00eb2",
-  "date": "2026-10-09",
-  "note": "48 ft whatever the size",
+  "date": "2026-10-11",
+  "note": "the 48 ft search bound to the privy's center matches the project's chosen reach; the page records that the reach itself runs from the privy's far corner to the house's walls, not center to center",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
   "verdict": "IN-STEP"
  },
@@ -48073,13 +48137,14 @@
   "date": "2026-10-09",
   "note": "rolled place slid along its wall first; a sunny miss falls back to first spots; the threshing-yard cover is recorded open work (row 564)",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:307bd5c14d8b116b",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e584f6a7493c6d22"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#the ken past the wall gap": {
@@ -48148,15 +48213,15 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::within_reach_of#the privy's reach": {
   "code": "b59794a0558577f3",
   "core": "f4c0645d63bb6465",
-  "date": "2026-10-09",
-  "note": "no more than 48 ft from its house",
+  "date": "2026-10-11",
+  "note": "the far corner within 48 ft of the house's walls, as 0047 measures it",
   "pages": {
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "b67b0a68681d775c"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
-  "research": "3afa37eec8d71996",
+  "research": "410a08bb56c17449",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
   ],
   "verdict": "IN-STEP"
  },
@@ -53279,16 +53344,17 @@
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#plot size": {
   "code": "84c8793227315620",
   "core": "a240a5da45a80627",
-  "date": "2026-10-09",
-  "note": "`self.px(cell_ft)` with cell_ft=60.0 tiles real 60 x ~60 ft cells, about 0.08 acre. The page says dry plots are \"tiled in real feet at every scale, roughly 92 ft across and 72 ft down a row\", calibrated to registers averaging about 0.12-0.16 acre. Either the cell becomes ~92x72 ft, or the claim becomes a DEVIATION that the page records.",
+  "date": "2026-10-11",
+  "note": "about 60 ft plots with jittered cuts and corners, under the 0.25-acre average",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:d35720ae70cf865b"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#row direction": {
   "code": "13b84746923019ab",
@@ -53296,10 +53362,10 @@
   "date": "2026-10-03",
   "note": "theta = ri*0.9 + cj*1.5 turns every plot from every neighbor; 0006 has \"Neighboring plots form tracts that share one row direction\" (2-4 strips, about 3 degrees within a tract, seams at least 20 degrees)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#basin rows and bounds": {
@@ -65580,10 +65646,10 @@
   "date": "2026-10-03",
   "note": "0006: a plot that \"would lap onto another canal's rice is dropped\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall": {
@@ -65895,16 +65961,16 @@
   "date": "2026-10-09",
   "note": "the inner edge sits at the stroke's local half-width plus CANAL_BERM_FT, converted correctly by ft*g/2",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
-  "research": "5cb608c6c81f73b4",
+  "research": "d20ccbe759d24da2",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#crop per plot": {
@@ -65913,15 +65979,15 @@
   "date": "2026-10-09",
   "note": "one of the four attested crops, drawn from the map's one mix",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#dry plot size": {
@@ -65930,12 +65996,13 @@
   "date": "2026-10-09",
   "note": "46g x 36g px is 92 x 72 ft at both village and hamlet scale, about 0.15 acre, which matches the page's 0.16-0.17 for the village and about 0.15 for the hamlet.",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#end plot floor": {
@@ -65956,12 +66023,13 @@
   "date": "2026-10-09",
   "note": "halving any end cell past 1.35 widths, at every grain, caps it near 0.2 acre, inside the page's \"under 0.25 acre\" and \"never dwarfs the rice basins\".",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#hem depth": {
@@ -66025,17 +66093,17 @@
   "date": "2026-10-09",
   "note": "`gap - halfw < 0.5` holds plots only 0.5 px off any other supply stroke's painted edge, but 0055 says \"A bare earth bank 5 ft wide runs between a supply canal and the fields beside it\", and neither drawing page records the 0.5 px floor as a deliberate choice; record it as a DEVIATION on 0055, or move the code to the bank",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
-  "research": "388f1d7134acd022",
+  "research": "6dc604b4424a63ce",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#row direction": {
@@ -66044,14 +66112,14 @@
   "date": "2026-10-09",
   "note": "each plot turns up to 0.05 rad (about 2.9 degrees) off its tract's heading, matching \"about 3 degrees either way\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#squared to the canal": {
@@ -66060,15 +66128,15 @@
   "date": "2026-10-09",
   "note": "laid out along the canal's arc length, squared to it, with shared mitred seams",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::_root_f#sector bounds": {
@@ -66107,13 +66175,13 @@
   "date": "2026-10-09",
   "note": "one weight per crop, rolled once per map.",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4"
   ],
-  "triaged": "2026-10-09",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::dry_crop_mix#the weights": {
@@ -66738,10 +66806,10 @@
   "date": "2026-10-03",
   "note": "steep ground owes no seam (0006); literal 0.3 duplicates STEEP_SPREAD_RAD",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/comb.py::finish_comb#one rice green": {
@@ -67035,10 +67103,10 @@
   "date": "2026-10-03",
   "note": "nothing sheared or stepped (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/frame.py::_pip#frame geometry": {
@@ -67148,10 +67216,10 @@
   "date": "2026-10-03",
   "note": "~6 deg (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::STEEP_SPREAD_RAD#steep ground runs the contour": {
@@ -67160,10 +67228,10 @@
   "date": "2026-10-03",
   "note": "steep rows on the contour (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::THETA_ROUNDING_RAD#row-direction geometry": {
@@ -67204,10 +67272,10 @@
   "date": "2026-10-03",
   "note": "20 deg convention (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::_center#row-direction geometry": {
@@ -67248,13 +67316,14 @@
   "date": "2026-10-09",
   "note": "the tract turns as a whole; it tries the 20-degree seam less two plot turns first, then the 6-degree line; with theta0 every turn stays within a way",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::settle_tract_seams#hemmed-in tract joins a neighbor": {
@@ -67263,13 +67332,14 @@
   "date": "2026-10-09",
   "note": "takes the number and heading of the neighbor with the closest rows; 0006 leaves tract size open",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::settle_tract_seams#turn kept to the two ways": {
@@ -67278,12 +67348,13 @@
   "date": "2026-10-09",
   "note": "a turn is admitted only where way_lean(head+d, theta0) <= 0.3 rad (17.2 deg), against the contour or the fall a right angle off it; this matches \"turned up to about 17 degrees\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_heading#tract heading": {
@@ -67302,10 +67373,10 @@
   "date": "2026-10-03",
   "note": "0006 tract/seam rule",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#seam turn": {
@@ -67314,10 +67385,10 @@
   "date": "2026-10-03",
   "note": "flips to the other way (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#tract lean and size": {
@@ -67326,10 +67397,10 @@
   "date": "2026-10-03",
   "note": "0006 figures",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::tract_ways#two row directions": {
@@ -67338,10 +67409,10 @@
   "date": "2026-10-03",
   "note": "contour or fall, rolled per tract (0006)",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/furrows.py::way_lean#the two ways": {
@@ -67350,12 +67421,13 @@
   "date": "2026-10-09",
   "note": "the smaller lean off the contour or the fall at theta0 + pi/2, \"the two a right angle apart\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::BoxedRings#hem plumbing": {
@@ -67432,13 +67504,14 @@
   "date": "2026-10-09",
   "note": "_dry_fields lays the hem upslope of supply canal A, keeping to the dry side of the supply strokes",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band depth": {
@@ -67485,14 +67558,15 @@
   "date": "2026-10-09",
   "note": "only when furrow_spread >= STEEP_SPREAD_RAD (steep ground runs the contour, so no seam is needed); covers every band and the reserve, and now passes the contour heading _dry_fields lays from",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#wild middle": {
@@ -67501,12 +67575,13 @@
   "date": "2026-10-09",
   "note": "on a wild fan only the toe's share of the a-side hem is drawn, and the middle goes to middle_reserve",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
+  "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::_ring_mean#hem plumbing": {
@@ -67523,10 +67598,10 @@
   "date": "2026-10-03",
   "note": "0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hem.py::middle_reserve#clearing order": {
@@ -67579,10 +67654,10 @@
   "date": "2026-10-03",
   "note": "0006",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hill.py::build_ribbon#acreage scale": {
@@ -67917,10 +67992,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "2f93d90eef96e5a2"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
-  "research": "b094712e0b419276",
-  "triaged": "2026-10-09",
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::FLOODED#wet-paddy tint": {

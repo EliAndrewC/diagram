@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec FAITHFUL (round 1), plan next
+**Status**: Done 2026-10-11 - 0104 records the Koseki middle gate and that no source places one against an office hall; the divider gate's place a labeled guess; the 1994 repair report on the download list (item 308); make impl-check F=338 reports nothing missing; report.md
 
 **Affects**: magistracy, research record
 
@@ -14,7 +14,7 @@ The record's roji approach (Hayakawa, Ubame) runs a guest of rank behind the off
 whether the middle gate of the "Koseki form" opened off the forecourt instead, which would make the divider gate's place a
 per-sheet form.
 
-**The research pass** (2026-10-10, an agent, read-only; `research.md` R1): the premise does not hold. The record's Koseki form is the old Koseki house at Shiroishi (旧小関家, a middle-rank retainer's
+**The research pass** (2026-10-10, an agent, read-only; `research.md` R1): no source places a middle gate relative to an office hall. The record's Koseki form is the old Koseki house at Shiroishi (旧小関家, a middle-rank retainer's
 house of 1730), a residence with NO office hall: its middle gate is a gate in the roji wall (塀中門), from the gate court
 through the walled roji straight to the principal room's veranda. No source read places a middle gate relative to an
 office hall, in a jin'ya or elsewhere.

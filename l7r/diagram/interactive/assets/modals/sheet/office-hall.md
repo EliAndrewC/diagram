@@ -1,14 +1,14 @@
 About: The office hall was the working building of a magistrate's compound, where the office's public business was done
 and its cases heard. At Takayama, the one intendant's office that survives of more than fifty, the entrance hall,
 examination room, working office and great hall were rebuilt together in the Edo period, most likely as one block, with the roofed
-hearing court against it. The magistrate's household lived apart, in a residence of its own.
+hearing court against it. The intendant's household lived in a residence of its own, beside the office on the lot to the west.
 
 An intendant governed with about ten retainers sent by the shogunate and a few clerks hired from the district; at
-Takayama they worked in a room partitioned from the officials', and the junior staff lived in huts and rowhouses on the
+Takayama they worked in a room partitioned from the officials', and an intendant's staff, retainers and clerks alike, lived in huts and rowhouses on the
 grounds. In Rokugan a county magistrate's clerks are three or four scribes from the county town, who live there and come
 in each day.
 
-Takayama's office was a single-story timber hall roofed with wooden shingles, built with great formality to show the
+Takayama's office was a single-story timber hall roofed with wooden shingles, its examination room paved with cobbles like the court, and built with great formality to show the
 office's rank: its entrance room kept a great alcove marking a rank of 100,000 koku and a wave pattern even daimyo
 refrained from using. Wooden halls burned - the Sado magistracy burned and was rebuilt five times, though Takayama's
 never did.

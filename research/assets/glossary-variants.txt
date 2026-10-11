@@ -147,6 +147,8 @@ bakumatsu	bakumatsu
 bakushu	bakushu
 bald hill	bald hill
 bald hills	bald hill
+balk	baulk
+balks	baulk
 bamboo grass	sasa
 bamboo-grass	sasa
 ban-hinin	banta
@@ -856,6 +858,7 @@ echigo	Echigo
 echigo province	Echigo
 echinochloa	Echinochloa crus-galli
 echinochloa crus-galli	Echinochloa crus-galli
+echizen-no-kami	no-kami
 edago	hongo
 edauchi	edauchi
 edge castle	edge castle
@@ -1863,6 +1866,9 @@ jōsui ido	josui-ido
 kabata	kabata
 kabu-ido	kabu-ido
 kabuki	kabuki
+kabuki gate	kabuki gate
+kabuki-mon	kabuki gate
+kabukimon	kabuki gate
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
@@ -2405,6 +2411,8 @@ middle moat	middle moat
 middle moats	middle moat
 middle rowhouse	middle rowhouse
 middle rowhouses	middle rowhouse
+middle-rank retainer	retainer
+middle-rank retainers	retainer
 midori-tsumi	midori-tsumi
 military commissioner	military commissioner
 military commissioners	military commissioner
@@ -2542,6 +2550,7 @@ myōjin	Myojin
 myōken	Myōken
 myōshu	myoshu
 naca	NACA
+nachi gravel	Nachi gravel
 nagachi	nagachi
 nagachi type	nagachi
 nagachi-gata	nagachi
@@ -3077,8 +3086,10 @@ resson	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
+retainer	retainer
 retainer terrace	row house
 retainer terraces	row house
+retainers	retainer
 retirement house	inkyo
 retirement houses	inkyo
 retiring house	retiring house
@@ -3318,6 +3329,8 @@ sendai plain	Sendai
 sengisho	sengisho
 sengoku	Sengoku
 sengoku house	Sengoku house
+senior retainer	retainer
+senior retainers	retainer
 senkomizu	senkomizu
 senmaida	senmaida
 senryu	senryu

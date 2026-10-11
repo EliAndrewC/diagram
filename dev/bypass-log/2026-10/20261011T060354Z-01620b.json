@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-11T06:03:54Z",
+  "target": "claims-gate",
+  "commit": "12c14a8ae",
+  "why": "CLAIMS_OK: research-record results, not code regressions: the two DRIFTED claims record mismatches in unchanged code that 343/336's changed 0104 findings exposed (the docs' general garden option for a guest door; the roji drawn without the genkan-or-roji knob); feature 378 says a DRIFTED claim is the result claims-report shows and the code is fixed only where the spec asks, and none of 336/338/343 asks"
+}

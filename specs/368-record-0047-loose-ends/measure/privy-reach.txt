@@ -1,0 +1,10 @@
+Privies only (not manure pits); distance center to center; bearing in the house's frame (180 = its front).
+
+| map | privies seated | in the sunny sector | nearer another house | beyond 45 ft, center to center |
+|---|---|---|---|---|
+| inashiro | 13 | 9 (69.2%) | 0 | 5 |
+| kashikawa | 17 | 4 (23.5%) | 0 | 2 |
+| kuwabata | 14 | 7 (50.0%) | 0 | 2 |
+| mizuguchi | 11 | 4 (36.4%) | 0 | 4 |
+| sawada | 17 | 10 (58.8%) | 0 | 6 |
+| all five | 72 | 34 (47.2%) | 0 | 19 |
