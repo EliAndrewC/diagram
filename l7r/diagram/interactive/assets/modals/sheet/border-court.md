@@ -1,6 +1,7 @@
 About: The border court is a receiving court on a magistracy that stands on a clan border. In Rokugan it is where a
 delegation of rank from across the border steps in through a door of its own and is received with ceremony before it is
-shown in. It is kept apart from the hearing court, where the accused kneel, because those who come here are guests.
+shown in. It is kept apart from the hearing court, where the accused kneel, because those who come here are guests. How
+the court itself looked is not recorded; the plan draws it as a small garden with a stone lantern (see Guesses).
 
 It rests on two real things. In the Edo period a domain kept guard posts where its roads crossed into a neighbor's land,
 to watch the people and goods passing and sometimes to tax them; at Nuruyu, one of the few whose buildings survive, the
@@ -25,6 +26,6 @@ ground a palanquin could cross; the garden is the plan's guess (see Guesses).
 Name: border court
 Covers: the receiving court behind a border posting's parley door, and its label
 Form: particular
-Sources: kotobank-bansho, bunka-nuruyu-bansho, kominkai-genkan, fuchu-joge-pamphlet, morse-1886-homes, wheatbaku-machibugyosho-yashiki, kazusa-bugyosho
+Sources: kotobank-bansho, bunka-nuruyu-bansho, bansho-jawiki, kominkai-genkan, fuchu-joge-pamphlet, morse-1886-homes, wheatbaku-machibugyosho-yashiki, kazusa-bugyosho
 Entry: research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
 Drawing: research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
