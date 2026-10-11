@@ -324,6 +324,36 @@ def test_a_unit_s_cascade_and_oscillation_are_its_own_files(tmp_path: pathlib.Pa
     assert "0047.drawing.html" in osc_all, "a feature-wide trigger keeps the feature's oscillation"
 
 
+def test_a_unit_s_cascade_falls_back_to_its_git_log(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """374's bridgehead ruling: cascade.txt read 0 edits on the pop-up beside three commits on it - apply-edits and scripted
+    edits never pass the Edit tool, so the event log held none; the git log of the unit's files stands in."""
+    import subprocess
+
+    root = tmp_path / "c"
+    root.mkdir()
+    git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/375-x"}')
+    (root / "specs" / "375-x").mkdir(parents=True)
+    (root / "m").mkdir()
+    for text, msg in (("a", "first words"), ("b", "second words")):
+        (root / "m" / "door.md").write_text(text)
+        subprocess.run([*git, "add", "-A"], check=True)
+        subprocess.run([*git, "commit", "-q", "-m", msg], check=True)
+    (root / "other.md").write_text("x")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-q", "-m", "not the unit"], check=True)
+    monkeypatch.setenv("L7R_EVENTS_DIR", str(tmp_path / "no-events"))
+    out = tmp_path / "o"
+    out.mkdir()
+    cascade, _osc = ab.flow_sections(root, out, root / "specs" / "375-x", ["m/door.md"])
+    lines = (out / "cascade.txt").read_text().splitlines()
+    assert [ln.split(" ", 3)[3] for ln in lines] == ["first words", "second words"], lines
+    assert "the last 2 edits on the unit's files (from the git log" in cascade
+    assert ab.git_flow(tmp_path / "not-a-repo", ["m/door.md"]) == []
+
+
 def test_triggers_tripped_at_once_are_all_kept(tmp_path: pathlib.Path) -> None:
     """The lost-write race behind 343's empty bundles: 20 processes tripping at once each keep their trigger."""
     import subprocess
