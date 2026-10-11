@@ -2,7 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done (2026-10-10) - every task ticked across four landed batches; SC-001, SC-002, SC-005 and SC-006 measured (`measurements.json`, `audit.md`); SC-003 and SC-004 carried to 374 and held there by FR-014; `report.md` written
+**Status**: Done 2026-10-11 - amendment 1 landed: spec FAITHFUL (round 3), plan CLEAR (round 2), every task ticked; SC-007 and SC-008 tested, the clone measurement recorded; SC-003 and SC-004 carried to 374
+
+**Amendment 1 approved**: the GM, 2026-10-10, "yes to each of those possible changes, though for the in-progress features you can probably limit yourself to clones with active sessions, if it helps performance."
 
 **Affects**: review process, tooling
 
@@ -111,6 +113,29 @@ each one task).
   feature's work is declared in this spec as carried (`Carried: <SC> -> <feature> <measurements key>`); that feature cannot
   close (every route of FR-009) while its `measurements.json` lacks the key, and `make speckit-todo` shows the carry.
 
+### Amendment 1 (`request.md`, Amendment 1)
+
+Both changes are this feature's: FR-015 closes a gap FR-001 left, and FR-016 is the process's own tooling for seeing where
+work stands; the GM approved both in one answer.
+
+- **FR-015 A pop-up check is owed only by what it reads.** FR-001's triage named a pop-up and owed every check of it, so an edit
+  to a question page re-owed the pop-up's `modal-depiction` and an edit to a drawing page re-owed its research checks
+  (`modal-research`'s accuracy, references and gaps) - measured on feature 343's kept triage, 11 of its 61 units (each
+  reply line attributed by where its quoted block appears; spec review round 1). Now a changed block owes a check only when
+  it is on a page that check reads: a question page (its `Entry:`) owes the research checks, a drawing page (its `Drawing:`)
+  owes `modal-depiction`; a line whose block stands on both pages, or names no page, owes both (failing toward checking).
+  And an edit to the pop-up itself owes `modal-depiction` only when it changes what that check reads of the pop-up: the
+  pop-up new to the About form, or its Depiction tab, its `Drawing:` list, its About or its `Entry:` changed (About is where
+  the check finds drawing statements that belong in Depiction; `Entry:` is where it finds the drawing pages a pop-up should
+  link - feature 319's plan-review case, a missing drawing link landing with every check green). An edit to its Guesses alone
+  owes `modal-form` and the research checks, not `modal-depiction`.
+- **FR-016 An open feature's state as its session clone holds it.** `make speckit-todo` shows each open feature as a session
+  clone it reads (below) holds it when that differs from main - its spec accepted, its plan written, tasks ticked - in the section
+  that state belongs to, marked with the clone it is in and that it has not landed. Which clones it reads is decided by a
+  measurement (the GM: "you can probably limit yourself to clones with active sessions, if it helps performance"): the
+  listing's time reading every clone against reading only the active ones is recorded, and the limit is kept only if it
+  helps. Display only: what the push, `make tick` and the closing check read is unchanged.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -125,6 +150,17 @@ each one task).
   this spec's measured table within its stated rounding.
 - **SC-006** (FR-010, FR-011, FR-012) Replaying 372's waves 106 and 108: the tripwires fire on 0105's and 0100's third rounds and on the bath bullet's
   A -> B -> A, and no round past the cap needed a GM waiver.
+- **SC-007** (FR-015) Replaying feature 343's kept triage (61 units, its reply restated with the page each quoted block stands
+  on): `modal-depiction` of `sheet/main-gate` and `sheet/residence` (named only for question-page blocks) and the research
+  units of `sheet/door`, `sheet/guest-quarters` and `sheet/side-gate` (named only for drawing-page blocks) are not owed; every
+  other named unit, `sheet/nakamon`, `sheet/garden` and `sheet/genkan`'s depiction among them, is. An edit to a pop-up's
+  Guesses alone owes `modal-form` and the research checks but not `modal-depiction`; an edit to its About, `Entry:`, Depiction
+  tab or `Drawing:` list, or a pop-up new to the About form, still owes it. The tests fail on today's code.
+- **SC-008** (FR-016) With a fixture main and session clones, one holding a feature's accepted spec and ticked tasks: `make
+  speckit-todo` lists that feature in the clone's section, marked with its clone and not landed, and a clone holding the
+  same files as main adds nothing; if the measurement keeps the active-only limit, an inactive clone's change is not shown.
+  `--holding`, `--closed-by-status` and `CHECK=1` give what they gave before. The measurement is a key of
+  `measurements.json`.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed.
@@ -160,3 +196,9 @@ until 375 has landed.
   plan), not the task; 374's measuring tasks do not count among its first three.
 - Lint-only edit after round 2 (2026-10-10, no requirement changed): each success criterion names the FRs it measures, as
   `spec-lint` asks; SC-002 names all fourteen.
+- spec-fidelity, amendment 1 round 1 (2026-10-10, the counter reset): CHANGES REQUIRED. Applied: `modal-depiction` stays owed
+  by an About or `Entry:` edit (it reads both; feature 319's case), only a Guesses-only edit dropped; FR-016's active-only
+  limit is decided by a recorded measurement, as the GM's "if it helps performance" made it; SC-007 names the cleared units by
+  uid (the measured leak 11 of 61, each line attributed by where its block stands); this entry.
+- spec-fidelity-verify, amendment 1 round 2 (2026-10-11): CHANGES REQUIRED - FR-016's first sentence still said "active". Applied: "a session clone it reads"; plan D22 follows.
+- spec-fidelity-verify, amendment 1 round 3 (2026-10-11): FAITHFUL - round 2's item resolved.

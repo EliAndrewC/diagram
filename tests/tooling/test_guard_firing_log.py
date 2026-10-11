@@ -365,7 +365,10 @@ _ESCAPES = {
         "environment",
         "read as ${LEDGER_ROWS_OK:-} by scripts/sync-with-main.sh at the push (feature 371), which a mention cannot set; reason floor checked there and the escape logged",
     ),
-    "MISSING_OK": ("environment", "a make variable on `make arbiter-bundle` (368's arbiter fix), which a mention cannot set; arbiter_bundle.py holds the two-word reason floor, the firing log via the Makefile's LOGESCAPE, and the reason is printed in the MANIFEST for the arbiter"),
+    "MISSING_OK": (
+        "environment",
+        "a make variable on `make arbiter-bundle` (368's arbiter fix), which a mention cannot set; arbiter_bundle.py holds the two-word reason floor, the firing log via the Makefile's LOGESCAPE, and the reason is printed in the MANIFEST for the arbiter",
+    ),
     "PREFLIGHT_OK": ("environment", "a make variable on `make done` (feature 375 FR-004), which a mention cannot set; reason floor and the firing log via the Makefile's LOGESCAPE, as REF_OK"),
     "CLOSE_OK": (
         "environment",

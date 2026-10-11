@@ -45,6 +45,7 @@ import argparse
 import json
 import re
 import sys
+import dataclasses
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -77,6 +78,7 @@ class Feature:
     owed: str = ""
     affects: tuple[str, ...] = ()
     unknown: tuple[str, ...] = ()
+    clone: str = ""  # feature 375 amendment 1: the session clone this row's state is read from, not yet landed
 
 
 @dataclass(frozen=True)
@@ -219,6 +221,8 @@ def _line(f: Feature, extra: str = "") -> str:
         parts.append("(no spec.md)")
     if f.affects and f.state != "closed":
         parts.append(f"[{', '.join(f.affects)}]")
+    if f.clone:
+        parts.append(f"[in {f.clone}, not landed]")
     if extra:
         parts.append(extra)
     return "  " + "  ".join(parts)
@@ -249,9 +253,70 @@ def wanted(words: str, vocab: Vocabulary) -> tuple[tuple[str, ...], tuple[str, .
     return affects(f"**Affects**: {words}", vocab)
 
 
-def report(specs: Path, show_closed: bool = False, by_affects: bool = False, only: tuple[str, ...] = ()) -> str:
-    """The features by state, grouped by stage or by tag; `only` keeps the features carrying any of those tags."""
+#: an ACTIVE clone's session wrote its event log (a line per tool call) within this many hours (feature 375 amendment 1, D22)
+ACTIVE_HOURS = 12
+
+
+def clones_dir(root: Path) -> Path:
+    """The `.clones/` directory beside this tree: its parent when the tree is itself a session clone, else its own."""
+    return root.parent if root.parent.name == ".clones" else root / ".clones"
+
+
+def active(clone: Path, now: float | None = None) -> bool:
+    """Has the clone's session written its event log (`.git/l7r-events/`) within ACTIVE_HOURS?"""
+    import time  # noqa: PLC0415
+
+    ev = clone / ".git" / "l7r-events"
+    newest = max((p.stat().st_mtime for p in ev.iterdir()), default=0.0) if ev.is_dir() else 0.0
+    return (now if now is not None else time.time()) - newest < ACTIVE_HOURS * 3600
+
+
+def unlanded(clone: Path) -> set[str]:
+    """The feature directories under `specs/` with work in the clone that its main does not hold: committed past
+    `origin/main` or not yet committed. A clone BEHIND main differs from it too, and is not shown (the first run listed two
+    abandoned clones' older copies)."""
+    import subprocess  # noqa: PLC0415
+
+    def names(*args: str) -> set[str]:
+        r = subprocess.run(["git", "-C", str(clone), *args], capture_output=True, text=True, check=False)
+        return {p.split("/")[1] for p in r.stdout.split() if p.startswith("specs/") and p.count("/") >= 2} if r.returncode == 0 else set()
+
+    return names("diff", "--name-only", "origin/main...HEAD", "--", "specs") | names("diff", "--name-only", "HEAD", "--", "specs")
+
+
+def in_clones(root: Path, fs: list[Feature], active_only: bool = False) -> dict[str, list[Feature]]:
+    """{feature name: its state as each session clone holds it, where that differs from this tree's} for every open feature
+    (feature 375 amendment 1, FR-016 - DISPLAY ONLY: `--holding`, `--closed-by-status`, `CHECK=1` and `make tick` never read
+    a clone). A clone's row carries `why` = `in <clone>, not landed`."""
+    out: dict[str, list[Feature]] = {}
+    cdir = clones_dir(root)
+    clones = [c for c in sorted(cdir.iterdir()) if c.is_dir() and c.resolve() != root.resolve()] if cdir.is_dir() else []
+    if active_only:
+        clones = [c for c in clones if active(c)]
+    vocab = vocabulary(root)
+    names = {f.name for f in fs}
+    work = {c: unlanded(c) & names for c in clones}
+    for f in fs:
+        for c in clones:
+            there = c / "specs" / f.name
+            if f.name in work[c] and there.is_dir():
+                cf = feature(there, vocab)
+                if f.state == "closed" and cf.state == "closed":
+                    continue  # closed on main and in the clone: nothing open to show
+                # a feature closed on main and REOPENED in the clone (an amendment in progress) is shown too (the plan review)
+                # a feature closed in the clone but not landed is still open on main: shown IN PROGRESS, marked done there
+                state = "in progress" if cf.state == "closed" else cf.state
+                out.setdefault(f.name, []).append(dataclasses.replace(cf, state=state, clone=c.name + (" (done there)" if cf.state == "closed" else "")))
+    return out
+
+
+def report(specs: Path, show_closed: bool = False, by_affects: bool = False, only: tuple[str, ...] = (), clones: bool = True) -> str:
+    """The features by state, grouped by stage or by tag; `only` keeps the features carrying any of those tags. With `clones`, an
+    open feature a session clone holds differently is shown as the clone holds it, marked (FR-016)."""
     fs = [f for f in features(specs) if not only or set(only) & set(f.affects)]
+    if clones:
+        held = in_clones(specs.parent, fs, active_only=True)  # measured: ~0.14 s against ~0.9 s for every clone, the same rows (m:375-a1-speckit-todo-clones)
+        fs = [g for f in fs for g in (held.get(f.name) or [f])]
     tags = list(vocabulary(specs.parent).stage)
     out: list[str] = [f"affects {', '.join(only)}", ""] if only else []
     for state in STATES:
