@@ -298,7 +298,7 @@ def spec_rounds(text: str) -> Counter[str]:
     for line in text.splitlines():
         m = re.match(r"\s*-\s*Round \d+ \(.*?\):\s*([A-Z][A-Z -]+?)\s+-", line)
         # the other form in use (377, 379): "- spec-fidelity, Mode 2, round 1 (2026-10-10): CHANGES REQUIRED. Applied:"
-        m = m or re.match(r"\s*-\s*spec-fidelity[\w-]*, Mode \d, round \d+ \(.*?\):\s*([A-Z][A-Z ]+?)(?=[.:]|\s+-|$)", line)
+        m = m or re.match(r"\s*-\s*spec-fidelity[\w-]*, (?:Mode \d,|amendment \d+) round \d+ \(.*?\):\s*([A-Z][A-Z ]+?)(?=[.:]|\s+-|$)", line)
         if m:
             out[m.group(1).strip()] += 1
     return out

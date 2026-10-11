@@ -99,6 +99,15 @@ def test_made_with_its_test_it_settles_and_reaches_the_gm(root: pathlib.Path, mo
         ha.settle_fix(root, "red-gate@else", "done", "gate_lock.py refuses a second gate", "tests/tooling/test_gate_lock.py")
     with pytest.raises(ValueError, match="done or declined"):
         ha.settle_fix(root, TRIGGER, "maybe", "gate_lock.py refuses a second gate")
+    # SC-004 (amendment 1, FR-006): made but not landed is not done
+    with pytest.raises(ValueError, match="make land-tooling"):
+        ha.settle_fix(root, TRIGGER, "done", "gate_lock.py refuses a second gate", "tests/tooling/test_gate_lock.py")
+    git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run([*git, "add", "tests"], check=True)
+    subprocess.run([*git, "commit", "-qm", "the fix's test"], check=True)
+    with pytest.raises(ValueError, match="not on main"):
+        ha.settle_fix(root, TRIGGER, "done", "gate_lock.py refuses a second gate", "tests/tooling/test_gate_lock.py")
+    subprocess.run([*git, "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
     monkeypatch.chdir(root)
     assert ha.main(["fix", "done", TRIGGER, "gate_lock.py refuses a second gate", "tests/tooling/test_gate_lock.py"]) == 0
     assert ha.open_fixes(d) == [] and _tick(root, "T02").returncode == 0
