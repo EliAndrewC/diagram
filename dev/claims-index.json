@@ -1043,6 +1043,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510"
   ],
   "section": "0ab41672ec7df598",
+  "triage": "touched",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -1373,6 +1374,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "section": "0ab41672ec7df598",
+  "triage": "touched",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -2068,13 +2070,14 @@
   "date": "2026-10-08",
   "note": "0099 bears only on the hearing court; the open forecourt / hearing court / garden spine is 0116.drawing's, so the pointer should name that page",
   "pages": {
-   "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
+   "0099-the-hearing-court-shirasu.html": "8af3a22bc37b5446"
   },
-  "research": "81ffa6b221f0f767",
+  "research": "5d21a3098fbb528c",
   "rests": [
    "0099-the-hearing-court-shirasu.html:700e8e156074abca"
   ],
   "section": "a9243672fea7539a",
+  "triaged": "2026-10-10",
   "verdict": "MISLABELED"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#office front, residence rear": {
@@ -2283,15 +2286,16 @@
   "note": "the tub beside the veranda's stepping stone; the no-genkan forms",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "b2a74a73e3c362a1"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "840c063a9dd4441a"
   },
-  "research": "ba99a499f6ed4675",
+  "research": "05ad8c6f2ec6de55",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
   ],
   "section": "6c077f80b364c895",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub against its wall": {
@@ -2486,6 +2490,7 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "section": "ae0a5605f51e7f36",
+  "triage": "touched",
   "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
@@ -3076,6 +3081,7 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:294ade5001734dd1"
   ],
   "section": "050f0bde3a602b79",
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary forms": {
@@ -3171,6 +3177,7 @@
    "0099-the-hearing-court-shirasu.html:fd2431d8cc8f2d5a"
   ],
   "section": "050f0bde3a602b79",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing court posts": {
@@ -3210,13 +3217,14 @@
   "date": "2026-10-10",
   "note": "Edo arrangement",
   "pages": {
-   "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
+   "0099-the-hearing-court-shirasu.html": "8af3a22bc37b5446"
   },
-  "research": "81ffa6b221f0f767",
+  "research": "5d21a3098fbb528c",
   "rests": [
    "0099-the-hearing-court-shirasu.html:8f23e38817efeb5b"
   ],
   "section": "050f0bde3a602b79",
+  "triaged": "2026-10-10",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#kura granary door on the apron": {
@@ -4606,6 +4614,23 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_roji_parts#guest's way out of doors": {
+  "code": "0b5595827b5d225d",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-10",
+  "note": "the code draws the Koseki roji form from the middle gate to the principal room's veranda, and the claim says plainly that using it at an office is a guess the record leaves open",
+  "pages": {
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "2d404788df2937ce"
+  },
+  "research": "db743103cf3bef5d",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:64f3adbc05fa69ca",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/dwellings.py::BUSINESS_KINDS#commercial frontages": {

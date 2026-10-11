@@ -25,3 +25,6 @@ The record write is `research: physical` with its five boxes; the rest are `rese
 - [ ] T04 Close: the tooling tests green; report; landed
       research: rendering
       verify: the push accepted
+- [ ] GM review (make gm-reviewed F=343) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
