@@ -44,13 +44,15 @@ measurement and the plan is amended and re-reviewed before it is built.
   three swapped: 44 of 45 agree; the one left apart is a clerk (order, clearance or repair - not one of the three), reported
   and not unified; and every caption finds a strict seat (none soft). After the switch the harness re-ran on the built code (m:caption-disagreements-after): 3 apart - the straw mats 4.6 px and a clerk 84.2 px (order, clearance or repair) and a clerk 3.5 px (the hand-sheet seat covers ink) - none explained by the three sources.
 - **D4 - strictness under the one view (FR-004)**: a shape the caption DECLARES never makes its seat unfree, flagged inner or
-  not (plan review round 3): `classify`'s inner obstacle for a declared shape is dropped from that caption's index (the
-  striking posts are not judged against the posts they name). Every other weighted obstacle blocks - the subject's partitions,
+  not (plan review rounds 3-4): every obstacle `classify` gives for a declared shape is dropped from that caption's index,
+  flagged inner or not (the striking posts are not judged against the posts they name, nor a caption tried beside one mat
+  against the other mats it names); its outline bands are not the shape's own polygon and stay. Every other weighted obstacle blocks - the subject's partitions,
   a court's buildings, any shape the caption does not name - inner or not (round 2). Two rules of the hand-sheet placer's own
   classification are part of the one view and stay: a name in dark ink takes no dark fill it names (a well's shaft), and none
-  lies across its subject's drawn outline; both are legibility, not naming, and the hand sheets keep them. Measured: skipping
-  the declared shapes outright (which drops those two rules too) set three wells' names inside their wells and left 7 captions
-  apart; with the two kept, 3 (m:caption-disagreements-after). Foot growth (`CAPTION_GROWTHS`) and the refusal message are
+  lies across its subject's drawn outline; both are legibility, not naming, and the hand sheets keep them (round 4: LEGITIMATE,
+  each from the entry's own "builds its obstacle index with hand_sheet.classify"). Measured: skipping the declared shapes
+  outright drops both and left 7 captions apart - the outline rule alone accounts for that (it keeps the wells' names off
+  them); the dark-fill rule moves no seat on this example; with both kept, 3 (m:caption-disagreements-after). Foot growth (`CAPTION_GROWTHS`) and the refusal message are
   unchanged and run only when no subject in the list has a free seat. The roofed court's late obstacles are retired with the
   composer's own index (the classification reads the court as built).
 - **D5 - performance (FR-005)**: measured (m:composition-timing, best of five, varies with load): the composition takes 1.237 s
@@ -59,7 +61,8 @@ measurement and the plan is amended and re-reviewed before it is built.
   the rest is `hand_sheet.classify` itself, once per caption and subject, which IS the one view the entry asks for. The
   priced alternative, classifying the sheet once and adjusting per subject, rewrites `classify` for every hand sheet and is
   not this feature's. The cost is accepted (the session, 2026-10-11; on the GM's review): about 1 s more on a pool gen whose
-  render takes longer, and no generator in `GEN_TIME_BUDGETS` or the hamlet perf bookends is touched.
+  render takes longer and runs far inside the 45 s default budget it falls under (it has no `GEN_TIME_BUDGETS` entry of its
+  own); no hamlet perf bookend can move (`ObstacleIndex.copy` is new and only the composer calls it).
 - **D6 - tests**: `tests/test_compound.py` keeps its refusal test unchanged; a declarations test (D1, seats unchanged); the D3
   switch's tests as D3 settles them, with 100% coverage of what changes.
 
