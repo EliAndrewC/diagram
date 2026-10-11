@@ -52,6 +52,32 @@ sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) f
 from hm_escape import escape_reason, reason_is_enough  # noqa: E402
 from stale_terms import read_dir, render as render_stale, stale_candidates  # noqa: E402
 
+import hm_arbiter  # noqa: E402
+
+#: a spec review's rounds before the round arbiter rules (feature 379 amendment 2, FR-007; the five is the GM's 2026-09-12 ruling):
+#: past it the review is held for the arbiter, never for the GM - "things should go to the arbiter at the point where they were
+#: previously coming to me" (the GM 2026-10-10)
+SPEC_ROUND_CAP = 5
+ARBITER_TOKEN = "ARBITER_OK"
+
+
+def spec_cap_refusal(root: pathlib.Path, feature: str, round_no: int, prompt: str) -> str:
+    """Why a spec review's round `round_no` waits for the round arbiter, or ''. Each `continue` on the feature's spec review
+    lifts the cap by one round; an `accept` or `process-fault` closes it (the review gate takes that ruling as the verdict)."""
+    if round_no <= SPEC_ROUND_CAP:
+        return ""
+    prefix = f"round:spec-fidelity|{feature}@"
+    shut = hm_arbiter.closed(root, prefix)
+    if shut:
+        return (f"BLOCKED: the round arbiter closed specs/{feature}'s review ({shut}) - the spec stands as the last round "
+                "left it, and the review gate takes that ruling as its verdict; the GM reviews it after landing.")
+    if round_no - SPEC_ROUND_CAP <= hm_arbiter.continues(root, prefix):
+        return ""
+    trigger = f"{prefix}{round_no}"
+    hm_arbiter.trip(root, trigger, "round", f"spec-fidelity|{feature}", f"round {round_no} of specs/{feature}'s spec review")
+    return (f"BLOCKED: round {round_no} of specs/{feature}'s spec review - past the five-round cap the round arbiter rules, "
+            "not the GM (feature 379). Nothing was dispatched and no round was counted.\n" + hm_arbiter.refusal([trigger]))
+
 #: feature 253 (GM 2026-09-19): before a later round is SPENT, the feature directory is searched for the old
 #: value of whatever changed; candidates refuse the dispatch once, and this token (with a reason) says they
 #: were looked at and are not stale.
@@ -360,6 +386,11 @@ def judge(payload: dict, clone: str) -> dict:
     diff = diff_since(snap, feature_dir)
     new_pass = v_word == "FAITHFUL"
     round_no = 1 if new_pass else (prev_round if v_word == "NOT-REVIEWABLE" else prev_round + 1)
+    held = spec_cap_refusal(root, feature, round_no, prompt) if root else ""  # before the snapshot moves: a held round spends nothing
+    if held and reason_is_enough(escape_reason(prompt, ARBITER_TOKEN)):  # the escape, recorded with its reason on the event
+        held, stale_note = "", f"{stale_note} {ARBITER_TOKEN}: {escape_reason(prompt, ARBITER_TOKEN)}"
+    if held:
+        return {"event": "blocked", "rule": "spec-round-cap", "detail": f"{feature} round {round_no}", "exit": 2, "stdout": "", "stderr": held}
     new_prompt = preamble(feature, round_no, new_pass, v_text, v_from, diff) + prompt
     take_snapshot(feature_dir, snap)
     _write_state(state, round_no)

@@ -398,11 +398,9 @@ printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": 
 refused_for "...an accept closes the unit" "$GLYPH" "the round arbiter closed"
 rm -rf "$CLONE/.specify" "$CLONE/specs/900-x" "$CLONE/.git/arbiter-owed.json"
 printf '{"none":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
-GLYPH_BARE=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\nREVIEW_ROUNDS_OK=\"x\""}')
-refused_for "...and its waiver needs a reason" "$GLYPH_BARE" "needs a REASON"
+# GUARD_EDIT_OK: feature 379 FR-010 (the GM 2026-10-10) - the GM's-words waiver is retired: past the cap only the arbiter rules
 GLYPH_WAIVED=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\nREVIEW_ROUNDS_OK=\"the GM said: one more round is fine\""}')
-check "...and the GM's waiver runs it" '[ "$(rc_pretool "$GLYPH_WAIVED")" -eq 0 ]'
-check "...and logs the waiver" 'grep -rql "one more round is fine" "$SKILL/dev/bypass-log"'
+refused_for "...and the retired GM's-words waiver no longer runs it: the arbiter does" "$GLYPH_WAIVED" "make arbiter-bundle"
 printf '{"none":{"settlement-review--testmap":["k1","%s"]}}' "$KEY" > "$CLONE/.git/review-rounds.json"
 check "a re-dispatch at a key already counted is the same round" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
 rm -f "$CLONE/.git/review-rounds.json" "$CLONE/.git/pairing-state.json"; reset_prereq

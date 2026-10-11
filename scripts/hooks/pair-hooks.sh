@@ -580,21 +580,13 @@ print(json.dumps({"hookSpecificOutput": {
       esac
     fi
     # GUARD_EDIT_OK: feature 294 FR-009 - AT MOST TWO ROUNDS PER UNIT PER FEATURE: a round is a dispatch at a new engine
-    # key; the third is refused unless the prompt carries REVIEW_ROUNDS_OK="<the GM's words>", logged like an escape.
+    # key; the third waits for the round arbiter (GUARD_EDIT_OK: feature 379 FR-010 retired the GM's-words waiver here).
     if [ -n "$named" ] && [ -n "$key" ]; then
       rounds="$(round_number "$named" "$key")"
       if [ "${rounds:-0}" -gt 2 ]; then
+        # GUARD_EDIT_OK: feature 379 amendment 2, FR-010 (the GM 2026-10-10: "things should go to the arbiter at the point where
+        # they were previously coming to me") - the GM's-words waiver of this cap is RETIRED: past it the arbiter alone rules.
         case "$ptext" in
-          *REVIEW_ROUNDS_OK=*)
-            why="$(printf '%s' "$ptext" | python3 -c 'import re,sys; m=re.search(r"REVIEW_ROUNDS_OK=\"([^\"]*)\"", sys.stdin.read()); print(m.group(1) if m else "")' 2>/dev/null)"
-            if [ -z "$why" ] || ! printf '%s' "$why" | python3 "${CLONE_ROOT}/scripts/hooks/lib/hookmatch.py" reason-ok >/dev/null 2>&1; then
-              printf '\n\033[1mBLOCKED: REVIEW_ROUNDS_OK needs a REASON\033[0m (the GM'"'"'s words waiving the cap, in quotes).\n' >&2
-              guard_log pair blocked "$atype" review-rounds-no-reason
-              exit 2
-            fi
-            guard_log pair escaped "$atype:$named" review-rounds-ok
-            log_bypass "REVIEW_ROUNDS_OK: $why" "review round $rounds"
-            ;;
           *)
             # GUARD_EDIT_OK: feature 375 FR-011 - past the cap THE ROUND ARBITER rules, not the GM's waiver: each `continue`
             # ruling lifts the cap by one round; `accept` or `process-fault` closes the unit; an unruled third round trips it.

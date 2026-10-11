@@ -112,7 +112,13 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   # proves the RECORD exists, never that the review was good. Measured against all 56 specs in the
   # repository when it was written - 71 of 71 unchanged, and it is the guard's own "match INVOCATIONS
   # not mentions" rule finally applied to itself.
-  if ! grep -E 'FAITHFUL' "$spec" | grep -viE 'NOT[[:space:]]+\**FAITHFUL' | grep -qiE 'status|verdict|round|spec-fidelity'; then
+  # GUARD_EDIT_OK: feature 379 amendment 2 (the GM 2026-10-10: "things should go to the arbiter at the point where they were
+  # previously coming to me") - past five rounds the round arbiter rules on a spec review, and its accept or process-fault
+  # stands in for the FAITHFUL verdict (the GM reviews the ruling after landing); without this the ruling could not bind
+  ruled=""
+  arb="$(dirname "$spec")/arbiter.jsonl"
+  [ -f "$arb" ] && grep -E "\"trigger\": *\"round:spec-fidelity\|$(basename "$(dirname "$spec")")@" "$arb" | grep -qE '"ruling": *"(accept|process-fault)"' && ruled=yes
+  if [ -z "$ruled" ] && ! grep -E 'FAITHFUL' "$spec" | grep -viE 'NOT[[:space:]]+\**FAITHFUL' | grep -qiE 'status|verdict|round|spec-fidelity'; then
     printf '\n\033[1mREVIEW GATE: %s has no fidelity verdict.\033[0m\n' "$spec"
     printf 'Constitution XVI: a specification is reviewed against the GM'"'"'S OWN WORDS before\n'
     printf 'implementation, by someone other than its author. Run the `spec-fidelity` subagent in\n'

@@ -127,3 +127,4 @@ than overrule.
   - FR-010 retires `REVIEW_ROUNDS_OK`; SC-006 names every file it changes, the wakeup hook included.
 - spec-fidelity-verify, amendment 2 round 2 (2026-10-10): CHANGES REQUIRED. Applied: FR-007 adds `spec-fidelity-verify.md`
   and `docs/spec-kit-and-reviews.md`; SC-005 tests a `process-fault` ruling at the review gate too.
+- spec-fidelity-verify, amendment 2 round 3 (2026-10-10): FAITHFUL - both round 2 items resolved.

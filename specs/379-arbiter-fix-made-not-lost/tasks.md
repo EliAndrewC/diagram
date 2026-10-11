@@ -38,7 +38,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 2 (the GM 2026-10-10: the arbiter before the GM)
 
-- [ ] T09 The spec review's round cap (plan D11, D12): the trip and refusal in `hm_review_round.py`, the `accept` read by `review-gate.sh`; tests red on today's code (SC-005)
+- [ ] T09 The spec review's round cap (plan D11, D12): the trip and refusal in `hm_review_round.py`, an `accept` or `process-fault` ruling read by `review-gate.sh` (a `continue` not); tests red on today's code (SC-005)
       research: rendering
 - [ ] T10 `make arbiter-ask` and the contract and bundle for spec rounds and asks (plan D13); tests (SC-006)
       research: rendering
