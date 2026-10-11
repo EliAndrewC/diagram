@@ -14264,12 +14264,32 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/water/brook.py::BROOK_BED_HUE#brook bed hue": {
+  "code": "b5d533e41c37401b",
+  "core": "bfdb638f9362f957",
+  "date": "2026-10-11",
+  "note": "a color only, it decides how the bed looks, so CONVENTION is right",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/water/brook.py::BrookRefused#plumbing": {
   "code": "ce649edf6a22e5fc",
   "core": "f4a86449f4cc672d",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/brook.py::RACE_TAPER_FT#race mouth hue taper": {
+  "code": "2b14396d58c8397c",
+  "core": "f9869fee1052b437",
+  "date": "2026-10-11",
+  "note": "the length of a color gradient; it changes no physical feature of the race, so CONVENTION is right",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::RULED_BENDS_PER_PASS#plumbing": {
@@ -14789,15 +14809,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::open_race_mouth#bare intake mouth": {
-  "code": "4ee6e6761aa21d97",
-  "core": "b1e9dd573b88a56f",
-  "date": "2026-10-03",
-  "note": "matches 0059",
+  "code": "e5b9df5d89bdafa7",
+  "core": "d7df2811aee97273",
+  "date": "2026-10-11",
+  "note": "the brook's bank cuts the race, so the ditch begins at the bank's edge and is not laid over the stream; no gate or boards are drawn",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
   },
   "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e347e6f14eb81062",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fa4c88323f4920cb"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::outside_stretches#plumbing": {
@@ -14806,6 +14829,16 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/brook.py::race_taper#race mouth hue taper": {
+  "code": "6f3dd6f43b6c7aae",
+  "core": "7d4e348931997636",
+  "date": "2026-10-11",
+  "note": "a gradient over the race's own line and width; only the hue changes, so CONVENTION is right",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook.py::round_the_field#approach bow": {
