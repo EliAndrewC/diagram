@@ -1,6 +1,6 @@
 # Feature Specification: OPEN 2026-09-28: a village's funerary grounds (was feature 275, withdrawn), and the headman's gate
 
-**Status**: Filed - from future-work/farming-communities.md, "OPEN 2026-09-28, OWED AT CONVERSION: a village's funerary grounds (was feature 275, withdrawn), and the headman's gate", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Superseded by 380 (2026-10-10): carried word for word into the village tier's placeholder, `specs/380-village-tier-scripted/` (the GM, 2026-10-10: "I agree with your approach, so please do it."). Was: Filed - from future-work/farming-communities.md, "OPEN 2026-09-28, OWED AT CONVERSION: a village's funerary grounds (was feature 275, withdrawn), and the headman's gate", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: village
 

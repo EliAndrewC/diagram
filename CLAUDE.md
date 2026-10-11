@@ -143,7 +143,9 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   it, or with words the GM did not write in the session, is refused (`feature-approval-hooks.sh`). Ask `make
   speckit-todo` what is open: filed, planned, in progress. Each spec names what it touches in an `**Affects**:` line (tags from
   `.specify/affects.json`: the diagram kinds, tooling, research, ...), and its stage - `now`, `village`, `town`, `provincial city`,
-  `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag, `AFFECTS=<tag>` lists only that tag's; `CHECK=1`, run at the push, holds it). A feature closes when every task is ticked, or when its status line opens
+  `capital` - is derived as the earliest among its tags (`BY=affects` groups by tag, `AFFECTS=<tag>` lists only that tag's; `CHECK=1`, run at the push, holds it). Everything owed when a tier is scripted is ONE feature, that tier's placeholder
+  (`placeholders` in `.specify/affects.json`: 380 village, 381 town, 382 provincial city; GM 2026-10-10): a new item owed at
+  a tier is added to its placeholder, never filed on its own (`CHECK=1` refuses one). A feature closes when every task is ticked, or when its status line opens
   `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
 - Every task is `research: rendering` or `research: physical`; a physical task carries the boxes
   `research pass`, `source-reader confirmed`, `recorded and cited`, `quote-check confirmed` and

@@ -1,6 +1,12 @@
 {
   "_about": "The tags a spec's `**Affects**:` line may name, and the stage each is owed at (the GM, 2026-10-10). A feature's stage is the EARLIEST stage among its tags - `now` when any tag is live today - so a farmhouse change tagged with every tier is owed now. A new tag is one entry here: a diagram kind not yet scripted takes its tier's stage, anything else `now`. `make speckit-todo` reads it; `make speckit-todo CHECK=1` refuses a tag not listed here.",
   "stages": ["now", "village", "town", "provincial city", "capital"],
+  "_placeholders": "Each tier not yet scripted has ONE open feature, its placeholder, holding everything known to be owed when that tier is scripted (the GM, 2026-10-10); `make speckit-todo CHECK=1` refuses any other open feature owed at that tier. The capital has none until something is owed at it alone.",
+  "placeholders": {
+    "village": "380-village-tier-scripted",
+    "town": "381-town-tier-scripted",
+    "provincial city": "382-provincial-city-tier-scripted"
+  },
   "aliases": {
     "all settlements": ["hamlet", "village", "town", "provincial city", "capital"]
   },
