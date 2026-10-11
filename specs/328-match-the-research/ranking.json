@@ -14473,7 +14473,7 @@
   "key": "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#main ways only",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "on a map with a road, the early main-way return also takes the anchored seats, so an official's-gate board stands on the road near the headman's house rather than on the way before it, and an entrance board never gets the approach; exempt the anchored seats from the main-way return (0190's drawing page: the entrance and official's-gate seats)",
+  "fix": "on a map with a road, the early main-way return also takes the anchored seats, so an official's-gate board stands on the road near the headman's house rather than on the way before it, and an entrance board never gets the approach, and a bridge-end board may land on the road rather than at its bridge; exempt the anchored seats from the main-way return (0190's drawing page: the entrance and official's-gate seats)",
   "files": [
    "l7r/diagram/settlement/structures/fixtures/siting.py"
   ],

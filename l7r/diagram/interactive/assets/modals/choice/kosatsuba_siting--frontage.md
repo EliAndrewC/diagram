@@ -12,10 +12,10 @@ How many villages turned their board to the busiest frontage rather than to some
 the only reason, for a village divided between two lords set its board at about the same distance from each half's headman's house.
 
 Guesses:
-- That a settlement's board seeks the busiest frontage or the place water is drawn at even odds: no source counts where
-  village boards stood.
+- That every settlement's board seeks its busiest frontage: no source counts where village boards stood, so the map sites
+  each for the passers-by it meets.
 
-Depiction: Among the seats its other choice on the title card allows, the map looks only beside a main road or street where it has one, and takes, of the seats with room for the board's label, the one with the most houses and buildings near it, so the board meets the most passers-by. It never sets a board midway between the halves of a village divided between two lords, for it draws no such village. In a hamlet or a village it stands a few feet off the way's edge where the verge has room; in a town or a city, or where the verge has no room, it may stand farther back. Either way it is turned broadside to the way.
+Depiction: The map looks only beside a main road or street where it has one, and takes, of the sites with room for the board's label, the one with the most houses and buildings near it, so the board meets the most passers-by. It never sets a board midway between the halves of a village divided between two lords, for it draws no such village. In a hamlet or a village it stands a few feet off the way's edge where the verge has room; in a town or a city, or where the verge has no room, it may stand farther back. Either way it is turned broadside to the way.
 
 Name: Facing the busiest frontage
 Covers: `meta.kosatsuba_siting = frontage`
