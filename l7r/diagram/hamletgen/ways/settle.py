@@ -208,7 +208,9 @@ def _crossing_fault(M: Mapping[str, Any], i: int, p: Poly, wet: Sequence[Poly]) 
 
 
 def _cut_gap(M: Mapping[str, Any], x: Pt) -> float:
-    """Half the width of the widest recorded water within reach of the crossing `x` - where its bank stands."""
+    """Half the width of the widest recorded water within reach of the crossing `x` - where its bank stands.
+
+    Research: lane cut at the water's bank - UNRESEARCHED: a lane cut at a water crossing stops half the widest nearby water's width off the crossing, 3 ft where none is recorded"""
     near = [
         float(w) / 2
         for wpts, w in bridge_crossed_waters(M)

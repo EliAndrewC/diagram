@@ -261,6 +261,7 @@ class FuneraryGroundsMixin:
             keep-clear margin - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: no fire clearance drawn around a pyre; its 120 ft from houses and wells held where it is seated
             pyre ground unwalled - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html: the pyre stands in a walled yard; drawn as an open ragged ground, no wall
             jizo size - research/questions/0235-village-burial-grounds-bochi.drawing.html: about 2 ft tall, drawn 2.0 by 2.7 ft at a 1.4-width pitch
+            scorched patch - UNRESEARCHED: about half the ground's radii
         """
         # TO SCALE (GM 2026-07-19; anchors in research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html): a sanmai's cleared working core is
         # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial

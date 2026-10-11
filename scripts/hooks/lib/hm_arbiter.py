@@ -103,9 +103,17 @@ def rulings(root: Path) -> dict[str, dict[str, Any]]:
     return out
 
 
-def continues(root: Path, prefix: str) -> int:
-    """How many `continue` rulings the round triggers of one unit carry - each lifts its cap by one round."""
-    return sum(1 for t, r in rulings(root).items() if t.startswith(prefix) and r.get("ruling") == "continue")
+def continues(root: Path, prefix: str, after: int = 0) -> int:
+    """How many `continue` rulings the round triggers of one unit carry - each lifts its cap by one round; with `after`, only
+    those past round `after` (a run counted afresh after a later change, feature 374 FR-005)."""
+    return sum(1 for t, r in rulings(root).items()
+               if t.startswith(prefix) and r.get("ruling") == "continue" and _round_no(t) > after)
+
+
+def _round_no(trigger: str) -> int:
+    """`round:<unit>@7` -> 7; 0 where the trigger names no round."""
+    tail = trigger.rpartition("@")[2]
+    return int(tail) if tail.isdigit() else 0
 
 
 def closed(root: Path, prefix: str) -> str:

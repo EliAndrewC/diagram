@@ -342,8 +342,9 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         across the commons - UNRESEARCHED: the commons are not a wall to a path
         the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the
-        a defense marsh is no wall - UNRESEARCHED: a marsh kept for defense is not a wall to the field way
-            path's own dooryard"""
+            path's own dooryard
+        a defense marsh is no wall - research/questions/0081-village-lanes.drawing.html: a marsh kept for defense is not a wall to the field way, though lanes keep to the bunds and dry ground
+        field way off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP) off their built ground, the page's lane-to-fence 7 ft"""
     M = s.M
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]

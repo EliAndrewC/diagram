@@ -420,6 +420,8 @@ class TradesMixin:
             kiln glyph - CONVENTION
             drying ground - UNRESEARCHED: three ware racks between the shed and the pit
             works layout - UNRESEARCHED: kiln and fuel at the back edge, cottages along the front, shed and pit on the flanks
+            kiln chambers - UNRESEARCHED: four chambers, 9 ft apart
+            works well seat - UNRESEARCHED: between the shed and the cottages
         """
         if rot is None:
             # a kiln hauls fuel and clay by CART, so it stands on its haul road and lies along it -

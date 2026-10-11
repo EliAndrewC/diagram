@@ -222,7 +222,7 @@ class WaterBodiesMixin:
             ditch width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: 2.5 px by default, the legibility floor
             ditch class - NONE: drainage when it leaves a drain, else irrigation
             houses kept off the channel - UNRESEARCHED: a 33 px no-build corridor
-            ditch winding - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: an auto-routed ditch winds with a 15 px amplitude by default
+            ditch winding - UNRESEARCHED: an auto-routed ditch winds with a 15 px amplitude by default
         """
         poly = [(p[0], p[1]) for p in pts] if pts else winding(start, end, amp=amp)
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in poly)
