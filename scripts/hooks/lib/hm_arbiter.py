@@ -176,11 +176,24 @@ def cascade(dispatches: int, lines: int, last: int = 0) -> bool:
     return dispatches - last >= CASCADE_MIN and dispatches > CASCADE_RATIO * max(lines, 1)
 
 
-def cascade_state(root: Path) -> tuple[str, int]:
-    """(the next cascade trigger id, the dispatches at the last cascade ruling): the id advances after ANY ruling."""
+def cascade_state(root: Path, since: float = 0.0) -> tuple[str, int]:
+    """(the next cascade trigger id, the dispatches at the last cascade ruling INSIDE the window opened at `since`): the id
+    advances after ANY ruling; a ruling made before the window opened (a landed batch's) sets no floor, its count being of
+    dispatches the window no longer counts (feature 374, cascade@1's tooling fix)."""
     ruled = [r for t, r in rulings(root).items() if t.startswith("cascade@")]
-    last = max((int(r.get("dispatches") or 0) for r in ruled), default=0)
+    inside = [r for r in ruled if _epoch(str(r.get("utc") or "")) >= since]
+    last = max((int(r.get("dispatches") or 0) for r in inside), default=0)
     return f"cascade@{len(ruled) + 1}", last
+
+
+def _epoch(utc: str) -> float:
+    """A ruling's `utc` (`%Y-%m-%dT%H:%M:%SZ`) as epoch seconds; 0 where it reads as none."""
+    import calendar  # noqa: PLC0415
+
+    try:
+        return float(calendar.timegm(time.strptime(utc, "%Y-%m-%dT%H:%M:%SZ")))
+    except ValueError:
+        return 0.0
 
 
 #: the units one `modal-research` dispatch is answered as
