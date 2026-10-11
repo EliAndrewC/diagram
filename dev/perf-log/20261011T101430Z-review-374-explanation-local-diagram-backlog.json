@@ -1,0 +1,392 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ab378e080",
+    "label": "374-start",
+    "utc": "20261011T095952Z"
+  },
+  "binding": "4aecbc426b87b2aad82bfd540ea25db4a4eecbfc942f4532f10624709d3a5924",
+  "control": "batch3-cpu-interleaved",
+  "control_record": {
+    "file": "/diagram/.clones/diagram-backlog/specs/374-match-the-research-continued/measurements.json",
+    "key": "batch3-cpu-interleaved",
+    "method": "three wall-clock bookend pairs of the same code read 24.1 s, 24.0 s and 42.5 s for the identical end leg at a host load of 5-8 on 22 cores; CPU time interleaved removes the drift. Single runs scatter about 30%; the head is faster or level on every seed's mean except 47 at 20 households (+11%)",
+    "observed": "2026-10-11",
+    "quantity": "user CPU seconds of the reference hamlet, base (merge base ab378e08) against head, interleaved, 3 repeats: seeds 4 and 25 at 10 households, 39 and 47 at 20",
+    "source": "scratchpad cpu-pair.txt / cpu-pair20.txt: make hamlet --no-render in a detached worktree at the merge base and in the clone, alternating, timed with bash `times` (children's user CPU)",
+    "unit": "s",
+    "value": {
+      "base_total": 186.6,
+      "change": "-9%",
+      "head_total": 169.3
+    }
+  },
+  "end": {
+    "commit": "e9491c2a8",
+    "label": "374-end",
+    "utc": "20261011T100551Z"
+  },
+  "environment": "local",
+  "explanation": "No measured slowdown: the band comes from host load. Three back-to-back wall-clock pairs of the same code gave the end leg 24.1 s, 24.0 s and 42.5 s at load 5-8 on 22 cores. Interleaved user-CPU runs of base and head over 18 rolls total 186.6 s base against 169.3 s head (-9%), single runs scattering about 30%. Batch 3's engine changes - the door router's fine lattice, the needle-speck skip, the wood's two tiers and water check, the bridge-end gate - add no measurable cost.",
+  "feature": "374-match-the-research-continued",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "39c3cbfa-00fa-4115-85d4-ebf41e287c6c",
+    "utc": "20261011T101430Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 39.3,
+          "39": 95.9,
+          "4": 18.3,
+          "47": 0.0
+        },
+        "total_pct": 32.8
+      },
+      "20": {
+        "seeds": {
+          "25": -12.7,
+          "39": 17.1,
+          "4": 45.9,
+          "47": 4.9
+        },
+        "total_pct": 12.7
+      },
+      "40": {
+        "seeds": {
+          "25": -26.4,
+          "39": -11.5,
+          "4": 19.4,
+          "47": 34.4
+        },
+        "total_pct": 0.9
+      }
+    },
+    "seeds": {
+      "25": 50.0,
+      "39": -6.5,
+      "4": 51.9,
+      "47": 13.8
+    },
+    "total_pct": 25.0
+  },
+  "render": "perf bands [local]: 374-end vs 374-start -> band 3\n  seed   4   +51.9%; grew: homesteads +1.3s, web +1.3s, hinterland +0.6s\n  seed  25   +50.0%; grew: homesteads +1.8s, hinterland +0.6s, windbreak +0.5s\n  seed  39    -6.5%\n  seed  47   +13.8%; grew: windbreak +0.7s, hinterland +0.5s, field +0.4s\n  TOTAL      +25.0%\n  10 households: TOTAL  +32.8% -> band 3\n    seed   4   +18.3%; grew: field +0.4s, windbreak +0.2s, homesteads +0.2s\n    seed  25   +39.3%; grew: hinterland +0.8s, field +0.4s, homesteads +0.3s\n    seed  39   +95.9%; grew: homesteads +1.5s, hinterland +0.8s, field +0.8s\n    seed  47    +0.0%\n  20 households: TOTAL  +12.7% -> band 3\n    seed   4   +45.9%; grew: hinterland +3.4s, homesteads +1.4s, windbreak +1.2s\n    seed  25   -12.7%\n    seed  39   +17.1%; grew: windbreak +0.7s, homesteads +0.5s, hinterland +0.5s\n    seed  47    +4.9%; grew: web +0.6s, hinterland +0.3s, windbreak +0.2s\n  40 households: TOTAL   +0.9% -> band 3\n    seed   4   +19.4%; grew: field +3.4s, homesteads +2.0s, hinterland +0.6s\n    seed  25   -26.4%\n    seed  39   -11.5%\n    seed  47   +34.4%; grew: homesteads +1.6s, web +1.1s, hinterland +1.0s\n  crossed: total +25.0% > 5%\n  crossed: total +25.0% > 10%\n  crossed: seed 4 +51.9% > 10%\n  crossed: seed 4 +51.9% > 20%\n  crossed: seed 25 +50.0% > 10%\n  crossed: seed 25 +50.0% > 20%\n  crossed: seed 47 +13.8% > 10%\n  crossed: 10 households: total +32.8% > 5%\n  crossed: 10 households: total +32.8% > 10%\n  crossed: 10 households: seed 4 +18.3% > 10%\n  crossed: 10 households: seed 25 +39.3% > 10%\n  crossed: 10 households: seed 25 +39.3% > 20%\n  crossed: 10 households: seed 39 +95.9% > 10%\n  crossed: 10 households: seed 39 +95.9% > 20%\n  crossed: 20 households: total +12.7% > 5%\n  crossed: 20 households: total +12.7% > 10%\n  crossed: 20 households: seed 4 +45.9% > 10%\n  crossed: 20 households: seed 4 +45.9% > 20%\n  crossed: 20 households: seed 39 +17.1% > 10%\n  crossed: 40 households: seed 4 +19.4% > 10%\n  crossed: 40 households: seed 47 +34.4% > 10%\n  crossed: 40 households: seed 47 +34.4% > 20%\n  owes: bands 1 and 2, plus the round arbiter's sign-off before the push (make perf-arbiter; never a question to the GM - feature 379)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.14,
+        0.19
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.02
+      ],
+      "field": [
+        1.24,
+        1.42
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.95,
+        1.55
+      ],
+      "homesteads": [
+        2.91,
+        4.72
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.13,
+        0.2
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.08
+      ],
+      "sink": [
+        0.08,
+        0.12
+      ],
+      "track": [
+        0.15,
+        0.21
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        1.31,
+        1.74
+      ],
+      "windbreak": [
+        0.64,
+        1.11
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.14,
+        0.17
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.02,
+        0.02
+      ],
+      "field": [
+        1.32,
+        1.47
+      ],
+      "frame": [
+        0.01,
+        0.02
+      ],
+      "hinterland": [
+        2.2,
+        1.27
+      ],
+      "homesteads": [
+        2.52,
+        3.07
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.16,
+        0.18
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.04,
+        0.05
+      ],
+      "sink": [
+        0.03,
+        0.03
+      ],
+      "track": [
+        0.12,
+        0.16
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        1.47,
+        1.37
+      ],
+      "windbreak": [
+        1.24,
+        0.86
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.14,
+        0.27
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.02,
+        0.03
+      ],
+      "field": [
+        1.73,
+        1.85
+      ],
+      "frame": [
+        0.01,
+        0.02
+      ],
+      "hinterland": [
+        1.28,
+        1.83
+      ],
+      "homesteads": [
+        2.21,
+        3.55
+      ],
+      "labels": [
+        0.01,
+        0.02
+      ],
+      "notice": [
+        0.13,
+        0.18
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.07,
+        0.07
+      ],
+      "sink": [
+        0.03,
+        0.03
+      ],
+      "track": [
+        0.22,
+        0.45
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        1.12,
+        2.41
+      ],
+      "windbreak": [
+        0.7,
+        0.95
+      ],
+      "woodland": [
+        0.0,
+        0.06
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.17,
+        0.11
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.02,
+        0.02
+      ],
+      "field": [
+        1.08,
+        1.45
+      ],
+      "frame": [
+        0.01,
+        0.02
+      ],
+      "hinterland": [
+        1.31,
+        1.85
+      ],
+      "homesteads": [
+        3.53,
+        3.56
+      ],
+      "labels": [
+        0.02,
+        0.03
+      ],
+      "notice": [
+        0.53,
+        0.78
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.05
+      ],
+      "sink": [
+        0.06,
+        0.11
+      ],
+      "track": [
+        0.2,
+        0.13
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        1.68,
+        1.16
+      ],
+      "windbreak": [
+        0.77,
+        1.47
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "verdict": "pending"
+}
