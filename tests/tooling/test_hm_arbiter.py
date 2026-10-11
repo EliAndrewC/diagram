@@ -462,3 +462,33 @@ def test_the_nit_an_accept_asked_for_answers_its_unit_again(tmp_path: pathlib.Pa
     assert calls == []
     assert ha.nit_answers(root, trig, "where most people passed", "where people passed") == ["modal-depiction:x"]
     assert calls == [("modal-depiction", {"kind": "choice/b"})]
+
+
+def test_a_capped_round_names_what_owes_it(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 374 wave 120, the arbiter on the seat pop-ups: the round-3 cause (one word on a drawing page) was named nowhere
+    in the MANIFEST. The section lists the record's owed reason and the commits on the unit's files since the last round."""
+    import subprocess
+    import sys
+    import time
+    import types
+
+    root = tmp_path / "c"
+    root.mkdir()
+    git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / "m.md").write_text("About: the old word.\n")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-q", "-m", "before the round", "--date", "2020-01-01T00:00:00"], check=True, env={**__import__("os").environ, "GIT_COMMITTER_DATE": "2020-01-01T00:00:00"})
+    since = time.time() - 5
+    (root / "m.md").write_text("About: the new word.\n")
+    subprocess.run([*git, "commit", "-qam", "one word on the page"], check=True)
+    unit = types.SimpleNamespace(slug="modal-depiction:choice/x", occasion="a page its Drawing: names moved", check="modal-depiction", subject="choice/x")
+    fake = types.ModuleType("record_owed")
+    fake.unanswered = lambda r: [unit]  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "record_owed", fake)
+    out = tmp_path / "o"
+    out.mkdir()
+    lines = "\n".join(ab.capped_round_cause(root, out, "modal-depiction", "modal:choice/x", ["m.md"], since))
+    assert "## What owes the capped round" in lines and "`modal-depiction:choice/x`: a page its Drawing: names moved" in lines
+    assert "one word on the page" in lines and "before the round" not in lines, lines
+    assert "+About: the new word." in (out / "owes-round.diff").read_text()
