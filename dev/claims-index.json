@@ -5651,18 +5651,17 @@
  "l7r/diagram/hamletgen/consts.py::KOSATSUBA_SITINGS#notice board siting": {
   "code": "82100c9d3ec0c2a8",
   "core": "da8b3ebe7fbaaf7c",
-  "date": "2026-10-09",
-  "note": "frontage, the busiest built ground",
+  "date": "2026-10-11",
+  "note": "the board goes beside the busiest main road, else where the most buildings stand; that is one siting rule, and the knob's single form is that rule",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor": {
@@ -7468,20 +7467,26 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/hinterland/crossing.py::crossed_through#a walk counts as crossing a field once half the field's depth lies on it (REAL_CROSSING_SHARE 0.5)": {
+  "code": "4a1f9ce0341c41fb",
+  "core": "4a1f9ce0341c41fb",
+  "date": "2026-10-11",
+  "note": "a walk counts as crossing a field once half the field's depth lies on it (REAL_CROSSING_SHARE 0.5)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/hinterland/crossing.py::crossed_through#beyond the fields on the level": {
   "code": "29df0d624d237683",
   "core": "4a1f9ce0341c41fb",
-  "date": "2026-10-07",
-  "note": "the walk-through test is how the code reads \"far side of the fields from the houses\"",
+  "date": "2026-10-11",
+  "note": "the test asks whether the walk from the houses runs through the fields, and the page has the wood \"keeps to the far side of the fields from the houses\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/crossing.py::crossed_through_many#walk through the field": {
@@ -7669,13 +7674,15 @@
  "l7r/diagram/hamletgen/hinterland/parcels.py::LOT_BOUND_REACH#lot line reach": {
   "code": "2ef93ca1f23ccaac",
   "core": "6782838fe131ace9",
-  "date": "2026-10-03",
-  "note": "\"Within about 45 ft\"",
+  "date": "2026-10-11",
+  "note": "45 ft matches \"Within about 45 ft of one of those, the patch's line keeps off the feature and follows it\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
-  "triage": "touched",
+  "research": "ea0a2ae4eed84818",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:62655ffbea173c76"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::STREAM_LOT_LINE#lot line along a brook": {
@@ -37197,14 +37204,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/_knobs.py::<module>#defaults outside the hamlet-defaults claim: nucleated, valley_paddy, land use none, kosatsuba center, byre courtyard, inn wagon": {
-  "code": "9a3103912a0619ab",
-  "core": "9a3103912a0619ab",
-  "date": "2026-10-11",
-  "note": "defaults outside the hamlet-defaults claim: nucleated, valley_paddy, land use none, kosatsuba center, byre courtyard, inn wagon",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/_knobs.py::<module>#field_archetype forms": {
   "code": "e6171711dc969ef1",
   "core": "9a3103912a0619ab",
@@ -37331,6 +37330,15 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/_knobs.py::<module>#other defaults": {
+  "code": "ed19fe406e2f1c64",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "the bundle answers 4 of the 6 defaults, so this should be a question claim for each, with UNRESEARCHED only for the no-overlay and wagon-inn defaults: nucleated by 0031 \"the clustered village is the general form\", valley_paddy by 0021 \"the typical farm landscape of the middle ages\", courtyard byre by 0048 inner stable \"widespread across the country\", board at the center by 0190 \"most often set ... at the village center\"",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/settlement/_knobs.py::<module>#plot_regularity forms": {
   "code": "ae0440e793066844",
   "core": "9a3103912a0619ab",
@@ -37385,13 +37393,20 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/_knobs.py::<module>#settlement_form roll weights: none are given here, so the forms roll evenly, where 0031's drawing page sets half clustered, three in ten scattered, two in ten rows": {
-  "code": "9a3103912a0619ab",
+ "l7r/diagram/settlement/_knobs.py::<module>#settlement_form weights": {
+  "code": "71c1b33074c5634a",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
-  "note": "settlement_form roll weights: none are given here, so the forms roll evenly, where 0031's drawing page sets half clustered, three in ten scattered, two in ten rows",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the Knob(\"settlement_form\", ...) call gives no weights, so it rolls its 5 forms evenly (0.2 each), but the page says \"Half our settlements are drawn clustered, three in ten scattered and two in ten as rows\"; the registry should carry 0.5/0.3/0.2 over the page's three forms (where water_town and dike_top sit in those shares is unsettled)",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#water_source_position forms": {
   "code": "5a6b234e90c1f6bf",
@@ -37724,15 +37739,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#shrine precinct withheld": {
-  "code": "0e8e6cf0e185768f",
+  "code": "afbb46a76fd70405",
   "core": "607ab7a34ec3c548",
   "date": "2026-10-11",
-  "note": "the drawing page never mentions a precinct; the backing is 0190.html §208 (\"A shrine precinct ... is this page's GUESS ... no page we read names either\"). The reason the claim gives is also false for villages: 0001's drawing page has \"A village draws ... with a shrine\", and roll_village draws a civic shrine. Re-point to 0190.html and drop \"no kept map draws a precinct\"",
+  "note": "the precinct is absent from the value space, and the page says \"A shrine precinct ... is this page's GUESS ... no page we read names either\"",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
+   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
-  "research": "f398405a25353320",
-  "verdict": "MISLABELED"
+  "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_land_use_ok#overlays are permanent uses, tea on hills": {
   "code": "45bb0356044e2ebc",
@@ -61289,30 +61307,34 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_affordances#any recorded bridge, a field-ditch plank included, makes the map offer a bridgehead board": {
-  "code": "b683347f7ca7589c",
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_affordances#the board's offered sites": {
+  "code": "4342e956c83c83ed",
   "core": "b683347f7ca7589c",
   "date": "2026-10-11",
-  "note": "any recorded bridge, a field-ditch plank included, makes the map offer a bridgehead board",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "entrance, officials' gates and \"bridge ends\", with no bridge size given, each offered only where the manifest records its feature; the drawing page also counts a field ditch's plank as a bridge",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
+  },
+  "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_affordances#board-siting plumbing": {
-  "code": "9812de6eaafbdd7d",
-  "core": "b683347f7ca7589c",
-  "date": "2026-10-11",
-  "note": "this is not plumbing: it decides which board sites a map is offered (an approach is a road or connector, an official's gate is a headman's house, any recorded bridge, field-ditch planks included, affords a bridgehead). Cite 0190.html",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#a bridgehead board is anchored at bridgehead_anchor's bridge": {
-  "code": "bba5ad82e9711c3c",
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#a bridgehead anchored at its bridge": {
+  "code": "5f61b2f57e92c327",
   "core": "bba5ad82e9711c3c",
   "date": "2026-10-11",
-  "note": "a bridgehead board is anchored at bridgehead_anchor's bridge",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "this unit only hands bridgehead to bridgehead_anchor; which bridge it picks (widest, then nearest the houses) is the page's recorded GUESS and is decided inside bridgehead_anchor",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
+  },
+  "research": "f398405a25353320",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:ffcebd538d75ed36"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#an approach that never arrives": {
   "code": "1ca474a5935da7c0",
@@ -62278,19 +62300,18 @@
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#seat scored by traffic": {
   "code": "2c466b1302ce0c13",
   "core": "1ee9fffb5e43d3f9",
-  "date": "2026-10-09",
-  "note": "each seat is scored by the buildings near it, the nearer counted double, which is the page's \"the passers-by it would meet\" and \"most buildings stand nearby\"",
+  "date": "2026-10-11",
+  "note": "the page supports counting the buildings near each seat but says nothing about weighting the nearer ones; the claim should say UNRESEARCHED, and its \"counted double\" is also wrong: `busy = n<260 + 2*n<150` counts a near spot three times",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
    "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09"
   ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#traffic radii": {
   "code": "1fc52d2e55afe758",
