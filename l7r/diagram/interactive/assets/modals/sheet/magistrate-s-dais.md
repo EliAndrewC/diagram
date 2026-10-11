@@ -1,6 +1,6 @@
 About: The dais was the raised floor at the front of the office hall from which a magistrate heard a case, while the
 parties sat below on the floor of the hearing court (shirasu). The hearing court was roofed, and was probably not a building of its own:
-at the Takayama intendant's office the examination room beside it was rebuilt as one part of the office, with its working office and great
+at the Takayama intendant's office the examination room beside it was one part of the office, with its working office and great
 hall, so the magistrate most likely heard cases in the same building where the office's daily business was done.
 
 At the South Town Magistracy in Edo, the shogun's capital, in the early nineteenth century, the hall above the court rose in steps. Its top level was a tatami room,

@@ -6,16 +6,18 @@ the court itself looked is not recorded; the plan draws it as a small garden wit
 It rests on two real things. In the Edo period a domain kept guard posts where its roads crossed into a neighbor's land,
 to watch the people and goods passing and sometimes to tax them; at Nuruyu, one of the few whose buildings survive, the
 road ran in through the gate and past the inspection hall that faced it, so the ground between was where everyone
-crossing passed. And at a house of standing a guest of rank did not step from the road into a room: there was the gate, then open ground a
+crossing passed.
+
+At a house of standing a guest of rank did not step from the road into a room: there was the gate, then open ground a
 palanquin could cross, then the step of the formal entrance. No real border post is known to have kept a court for
 receiving a neighboring domain's officials; that use of it is the setting's own.
 
 Guesses:
-- That the court is a garden set with a stone lantern rather than open ground: no page on the formal entrance puts a garden between the gate
-  and a guest's formal entrance, and where a drawing shows the ground just inside a gate, it is open. One old
+- That the court is a garden set with a stone lantern rather than open ground: nothing known of the formal entrance puts a garden between the gate
+  and a guest's formal entrance, and wherever the ground just inside a gate is pictured, it is open. One old
   garden-book plate does show a garden approach, a stone path on through a second gateway to an entrance, but of an unnamed house and
   only loosely dated.
-- What the court's ground is: at Edo's South Town Magistracy, by enthusiasts' accounts, a stone path ran from the main
+- What the court's ground is: at Edo's South Town Magistracy a stone path is said to have run from the main
   gate to the entrance with small black gravel spread beside it, but what lay before an entrance outside Edo, whether
   gravel, swept earth or sand, is not known, so the plan draws the court only as the garden's stippled earth.
 

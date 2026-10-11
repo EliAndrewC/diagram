@@ -5,8 +5,8 @@ entrance with a shikidai, the low board step where guests were bowed in and seen
 A guest of rank came by palanquin, and the palanquin was brought right alongside the step, so that its rider went into the
 building without setting foot on the ground. So an arrival was staged: the gate, then open ground a palanquin could cross, then
 the step. At the office compound at Jōge, the entrance and its step faced the open ground inside its main
-gate. Where an intendant's office and residence shared a compound, at Takayama, the genkan was on the office, and a visitor today goes in by it and round
-the rooms of the office on to the residence; whether that way ran indoors in the Edo period is not recorded.
+gate. Where an intendant's office and residence shared a compound, at Takayama, the genkan was on the office, and the residence lay beyond the office's rooms; whether a guest went on to it indoors in the Edo period is not recorded.
+
 
 Not every house had one, and it marked standing. The houses of senior retainers did; a village headman was allowed a
 shikidai where other farmers were not; and at Kakegawa's castle palace only the lord and senior retainers came in by the

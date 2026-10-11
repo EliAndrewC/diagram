@@ -7,13 +7,13 @@ China the county court at Neixiang marked the places of plaintiff and defendant 
 dynasty, the plaintiff's to the east.
 
 The mats lay on the court's floor, which in the oldest courts was bare earth and later white gravel; at Takayama, in a
-province with no sea and too little white sand, it was cobbles from the riverbed. Some courts were roofed over; others
-were an earth floor inside the building itself.
+province with no sea and too little white sand, it was cobbles from the riverbed.
+
 
 How large the mats were is not recorded.
 
 Guesses:
-- That a county court seated its parties as Edo's did: the accused at the center with the plaintiff and the officials behind is recorded only at Edo, and Neixiang's county court marks only the plaintiff's and the defendant's places.
+- The plan's seating, the accused at the center with the plaintiff and the officials behind, taken from Edo's court for every court: it is recorded only at Edo, and the county court at Neixiang marks only the plaintiff's and the defendant's places.
 - The mats' sizes on the plan, about 6 by 3 ft for the accused and 12 ft long for the village officials, and their
   spacing: no account gives them.
 

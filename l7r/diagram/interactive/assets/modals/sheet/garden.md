@@ -21,7 +21,7 @@ Guesses:
   taken as the office's form, since both government offices whose gardens could be read, Takayama and Okutono, had one.
 - That the private rooms share the one garden at humbler postings too: it is recorded at Takayama alone.
 - A garden drawn where a guest crosses from a gate to an entrance, or round a compound's shrine: the ground a guest crossed to a formal entrance
-  was an open court, and no garden round a household's shrine was found.
+  was an open court, and no garden round a compound's shrine was found.
 - How many stone lanterns a garden held, and where: no record gives either.
 
 Depiction: The plan draws one ornamental garden in each compound, before the great hall, with the private rooms reaching it

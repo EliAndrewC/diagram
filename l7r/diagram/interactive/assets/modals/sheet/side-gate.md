@@ -9,15 +9,17 @@ for the right to empty the privies of the daimyo estates; by which gate they cam
 
 In Rokugan wagons and carts travel the roads between towns, a charcoal merchant's cartload among them, so a compound's
 goods can come to its gate by cart. Edo Japan kept its carts to the towns and barred them from its highways to the
-end of the shogunate. On a river a samurai residence stood back from the bank behind its wall, and it is thought none
+end of the shogunate. On a river a samurai residence stood back from the bank behind its wall, and probably none
 had a gate opening straight onto a landing.
 
 A guest's way was different: a guest of rank came through the gate across open ground, and the palanquin was brought
-right alongside the entrance step. A middle-rank house could instead bring its guest through a middle gate and along a walled garden path. How wide a side gate was, and how it was built, are not recorded.
+right alongside the entrance step. A middle-rank house could instead bring its guest through a middle gate and along a walled garden path.
+
+How wide a side gate was, and how it was built, are not recorded.
 
 Guesses:
 - A guests' door that opens into a garden rather than an open court, where a plan draws one: no account of an office or a senior
-  retainer's house puts a garden between its gate and its formal entrance.
+  retainer's house puts a garden between its gate and its formal entrance, though a middle-rank house's walled garden path is recorded.
 - That a side gate is a pair of posts, narrower than the main gate: no account gives a side gate's width or how it was
   built.
 - That night-soil collectors came in by a service gate near the privies: no account names such a gate at a samurai house.
