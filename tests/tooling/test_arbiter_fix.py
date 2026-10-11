@@ -297,3 +297,22 @@ def test_a_batch_tooling_fix_is_one_fix_held_by_one_row(root: pathlib.Path, tmp_
     assert ha.open_fixes(d) == [(trig[1], fault["tooling_fix"])], "one fix, opened once, on the first trigger under the batch"
     with pytest.raises(ValueError, match="tooling_fix"):
         ha.record_ruling(root, "round:x|y@3", {"ruling": "process-fault", "why": "w", "tooling_fix_on": trig[1]}, "round-arbiter")
+
+
+def test_a_batch_reply_is_refused_whole_and_never_drops_a_fix(root: pathlib.Path) -> None:
+    """The plan review of 375's amendment 2, round 2: a repeated trigger writes no row; the batch's fix never overwrites an
+    exception's own (it goes on the first exception without one); every exception carrying its own fix is ambiguous."""
+    d = root / "specs" / "900-z"
+    a, b = "round:modal-form|modal:sheet/a@3", "round:modal-form|modal:sheet/b@3"
+    for t in (a, b):
+        ha.trip(root, t, "round", ha.unit_of(t), "round 3")
+    with pytest.raises(ValueError, match="named twice"):
+        ha.record_batch(root, {"ruling": "accept", "why": "w", "triggers": [a, a, b]}, "round-arbiter")
+    both = {"ruling": "accept", "why": "w", "tooling_fix": "F", "triggers": [a, b],
+            "exceptions": {a: {"ruling": "process-fault", "why": "x", "tooling_fix": "G"}, b: {"ruling": "process-fault", "why": "y", "tooling_fix": "H"}}}
+    with pytest.raises(ValueError, match="where does the batch's fix go"):
+        ha.record_batch(root, both, "round-arbiter")
+    assert not (d / "arbiter.jsonl").exists(), "a refused reply writes nothing"
+    rows = ha.record_batch(root, {**both, "exceptions": {a: both["exceptions"][a], b: {"ruling": "continue", "why": "y"}}}, "round-arbiter")
+    assert rows[0]["tooling_fix"] == "G" and rows[1]["tooling_fix"] == "F", "G kept; F on the first exception without a fix"
+    assert sorted(ha.open_fixes(d)) == [(a, "G"), (b, "F")]

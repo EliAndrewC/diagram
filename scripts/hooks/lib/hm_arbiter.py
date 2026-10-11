@@ -278,6 +278,9 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
     exceptions = ruling.get("exceptions") or {}
     if not triggers:
         raise ValueError("a batch ruling names its `triggers` - every trigger its bundle carried")
+    twice = sorted({t for t in triggers if triggers.count(t) > 1})
+    if twice:  # a repeat would write its first row and then refuse - checked before anything is written (plan review round 2)
+        raise ValueError(f"a trigger is named twice: {', '.join(twice)}")
     stray = sorted(set(exceptions) - set(triggers))
     if stray:
         raise ValueError(f"an exception names a trigger the batch does not carry: {', '.join(stray)}")
@@ -290,7 +293,13 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
     base = {k: v for k, v in ruling.items() if k not in ("triggers", "exceptions", "tooling_fix")}
     fix = str(ruling.get("tooling_fix") or "").strip()
     under = [t for t in triggers if t not in exceptions]
-    holder = (under or triggers)[0] if fix else ""
+    # the batch's fix never overwrites an exception's own: with no trigger under the batch's ruling it goes on the first
+    # exception carrying no fix of its own (plan review round 2); every exception with its own fix - the reply is ambiguous
+    free = [t for t in triggers if t in exceptions and not str(exceptions[t].get("tooling_fix") or "").strip()]
+    if fix and not under and not free:
+        raise ValueError("every trigger is an exception with its own `tooling_fix` - where does the batch's fix go? Fold it into "
+                         "one of them, or leave the batch's out")
+    holder = (under or free)[0] if fix else ""
     plan: list[tuple[str, dict[str, Any]]] = []
     for t in triggers:
         one = dict(exceptions[t]) if t in exceptions else dict(base)
