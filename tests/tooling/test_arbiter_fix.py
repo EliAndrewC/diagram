@@ -185,14 +185,17 @@ def test_a_spec_ruling_stands_only_for_the_spec_it_ruled_on(root: pathlib.Path) 
     assert ha.spec_ruled(root / "specs" / "nowhere") == ""
 
 
-def _rounds(root: pathlib.Path, tmp_path: pathlib.Path, uids: tuple[str, ...]) -> None:
-    """Two kept modal-form rounds on each pop-up in `uids`, as the hooks record them in checks-open.json."""
+def _rounds(root: pathlib.Path, tmp_path: pathlib.Path, uids: tuple[str, ...], checks: tuple[str, ...] = ("modal-form",)) -> None:
+    """Two kept rounds of each of `checks` (modal-form unless named) on each pop-up in `uids`, as the hooks record them in
+    checks-open.json. A round trigger fires only when a dispatch is refused, so every check a test trips has rounds here: a
+    round trigger with none is refused by the bundle (343's M1c rulings, 2026-10-11)."""
     disp = {}
     for i, uid in enumerate(uids):
-        for r in (1, 2):
-            reply = tmp_path / f"r-{i}-{r}.md"
-            reply.write_text(f"1. finding {r} on {uid}\n")
-            disp[f"t{i}{r}"] = {"check": "modal-form", "subjects": [f"modal:{uid}"], "t": i * 10 + r, "state": "answered", "reply": str(reply)}
+        for c in checks:
+            for r in (1, 2):
+                reply = tmp_path / f"r-{i}-{c}-{r}.md"
+                reply.write_text(f"1. finding {r} on {uid}\n")
+                disp[f"t{i}{c}{r}"] = {"check": c, "subjects": [f"modal:{uid}"], "t": i * 10 + r, "state": "answered", "reply": str(reply)}
     (root / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": disp}))
 
 
@@ -256,7 +259,7 @@ def test_the_tooling_steers_a_batch_to_one_ruling(root: pathlib.Path, tmp_path: 
     """Feature 375 amendment 2, SC-009 (spec review round 1): 343's shape - pop-ups at the cap on two checks, one form round
     asked about ahead and named to join, a spec review's round apart. While the batch is owed the refusal names the batch and a
     single ruling is refused; the asked-ahead round joins the bundle, the spec review's round does not."""
-    _rounds(root, tmp_path, ("sheet/a", "sheet/b"))
+    _rounds(root, tmp_path, ("sheet/a", "sheet/b"), ("modal-form", "modal-depiction", "modal-research"))
     owed_now = ["round:modal-depiction|modal:sheet/a@3", "round:modal-research|modal:sheet/a@3", "round:modal-depiction|modal:sheet/b@3"]
     for t in owed_now:
         ha.trip(root, t, "round", ha.unit_of(t), "round 3")

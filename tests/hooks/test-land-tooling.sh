@@ -81,6 +81,11 @@ mkdir -p "$C/dev"; printf '| row |\n' > "$C/dev/review-ledger.md"; git -C "$C" a
 land scripts/a.sh dev/review-ledger.md; rc=$?
 ok "the ledger's rows land beside the guard fix" '[ "$rc" -eq 0 ] && [ "$(on_main dev/review-ledger.md)" = "| row |" ]'
 
+echo "6. the push runs with the backup off: the worktree is not a clone (a stale backup/<clone>-tooling, 2026-10-11)"
+setup
+LAND_TOOLING_PUSH='echo "backup=${SYNC_BACKUP:-on}" >&2; exit 1' land scripts/a.sh; rc=$?
+ok "the push saw SYNC_BACKUP=off, and a refusal's reason is shown" '[ "$rc" -ne 0 ] && grep -q "backup=off" "$T/out"'
+
 echo "5. outside a session clone it refuses"
 ( cd "$T/seed" && "$LAND" scripts/a.sh ) >"$T/out" 2>&1; rc=$?
 ok "not under .clones/" '[ "$rc" -ne 0 ] && grep -q "not a session clone" "$T/out"'

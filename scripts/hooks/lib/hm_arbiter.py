@@ -27,6 +27,7 @@ refused). A ruling's `tooling_fix` - a `process-fault` always has one - is an OP
 
 from __future__ import annotations
 
+import fcntl
 import json
 import os
 import re
@@ -85,15 +86,22 @@ def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float
     if trigger in rulings(root):
         return False
     path = common_dir(root) / OWED
-    state = _load(path)
-    if trigger in state:
-        return False
-    state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now}
-    m = re.match(r"(\d+) check dispatches", detail)
-    if m:
-        state[trigger]["dispatches"] = int(m.group(1))
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
+    # UNDER A LOCK: a wave of checks refused at once runs one hook process each, and an unlocked read-modify-write kept only
+    # the last writer's trigger - 343's M1c dispatched 13 modal-form round 3s in one message, and most of their triggers
+    # never reached this file, so their bundles were built with no unit (2026-10-11, the arbiter's tooling fix)
+    with (path.parent / (OWED + ".lock")).open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        state = _load(path)
+        if trigger in state:
+            return False
+        state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now}
+        m = re.match(r"(\d+) check dispatches", detail)
+        if m:
+            state[trigger]["dispatches"] = int(m.group(1))
+        tmp = path.with_suffix(".tmp")
+        tmp.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
+        tmp.replace(path)
     return True
 
 
@@ -258,7 +266,7 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
         raise ValueError("no active feature (.specify/feature.json) to record the ruling in")
     when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     trig = owed(root).get(trigger, {})
-    row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit", "") or unit_of(trigger),
+    row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit") or unit_of(trigger),
            **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
            "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when,
            **({"tooling_fix": fix, "fix": "open"} if fix else {}),
@@ -273,9 +281,11 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     if row["ruling"] == "accept" and row["kind"] == "round":
         accept_answers(root, row["unit"], f"accepted by the round arbiter ({trigger})")
     path = common_dir(root) / OWED
-    state = _load(path)
-    if state.pop(trigger, None) is not None:
-        path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
+    with (path.parent / (OWED + ".lock")).open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        state = _load(path)
+        if state.pop(trigger, None) is not None:
+            path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
     return row
 
 

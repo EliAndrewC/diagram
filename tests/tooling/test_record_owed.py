@@ -291,3 +291,33 @@ def test_kind_names_several_modals_at_once(tmp_path: pathlib.Path, monkeypatch: 
     monkeypatch.setattr(ro, "units", lambda root: us)
     assert ro.answer(tmp_path, "modal-form", "ok", kind="hamlet/a,choice/b--T") == ["modal-form:hamlet/a", "modal-form:choice/b--T"]
     assert ro.answer(tmp_path, "modal-form", "ok", kind="sheet/c") == ["modal-form:sheet/c"], "one unit, as before"
+
+
+def test_a_depiction_answer_under_the_old_formula_answers_the_same_words(tmp_path: pathlib.Path) -> None:
+    """Feature 375 amendment 1 changed the depiction fingerprint's formula, and every depiction answer recorded before it read
+    as owed again on the merge (31 units in 343's and 368's clone, 2026-10-11). An old-formula answer still answers the words
+    it read - unless the Entry: line, which only the new formula covers, moved since it was recorded."""
+    mo = _load("_modal_owed")
+    root = tmp_path / "c"
+    choice = root / mo.MODALS / "choice"
+    choice.mkdir(parents=True)
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+
+    def commit(entry: str, date: str) -> None:
+        (choice / "pit.md").write_text(f"About: a pit.\n\nGuesses: its depth.\n\nDepiction: a dark ring.\n\nName: pit\nEntry: {entry}\n")
+        env = {"GIT_AUTHOR_DATE": date, "GIT_COMMITTER_DATE": date, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t", "PATH": "/usr/bin:/bin"}
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True, env=env)
+        subprocess.run(["git", "-C", str(root), "commit", "-qm", entry], check=True, env=env)
+
+    commit("research/questions/0047-privies.html", "2026-01-01T00:00:00Z")
+    store = tmp_path / "record-checks"
+    m = mo.find(root, "choice/pit")
+    old = mo.legacy_depiction_fingerprint(root, m)
+    assert old != mo.depiction_fingerprint(root, m), "the two formulas differ"
+    ro.write_answer(store, "modal-depiction:choice/pit", old, "0/0/0")
+    rec = json.loads(next(store.iterdir()).read_text())
+    next(store.iterdir()).write_text(json.dumps({**rec, "utc": "2026-01-02T00:00:00Z"}))
+    assert ro.legacy_depiction_answered(root, store, "modal-depiction:choice/pit"), "same words, old formula: answered"
+    assert not ro.legacy_depiction_answered(root, store, "record-format:0047"), "only depiction units"
+    commit("research/questions/0006-dry-fields.html", "2026-01-03T00:00:00Z")
+    assert not ro.legacy_depiction_answered(root, store, "modal-depiction:choice/pit"), "Entry: moved: the new formula's part is unread"

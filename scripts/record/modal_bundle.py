@@ -200,13 +200,16 @@ def pool_page_with(root: pathlib.Path, key: str, sheet: bool = False) -> pathlib
     point of it) is never the crop, and an `-example` page comes after the hand sheets (feature 319, sheet round 1: the
     cinnabar workshop was judged against the round-trip's plain rect). A SHEET kind is looked for on the sheets alone: its
     key may name a hamlet kind too, and the compound garden's crop came out a hamlet's kitchen garden."""
-    mark = f'data-k="{key}"'
+    # the page writes its attribute values ESCAPED: every key with an apostrophe (`clerks' seats`, `magistrate's dais`) was on
+    # no page by the raw mark, and its depiction check ran with no crop (343's clerks--seats ruling, 2026-10-11)
+    marks = {f'data-k="{key}"', f'data-k="{html.escape(key, quote=True)}"'}
     trees = sorted((p for p in (root / POOL).iterdir() if p.is_dir()), key=lambda p: (p.name != HAMLETS, p.name)) if (root / POOL).is_dir() else []
     for d in (t for t in trees if not (sheet and t.name == HAMLETS)):
         pages = [p for p in d.glob("*/*.html") if not p.parent.name.endswith("-test")]
         for page in sorted(pages, key=lambda p: (p.parent.name.endswith("-example"), p.name)):
             with open(page, encoding="utf-8", errors="replace") as fh:
-                if mark in fh.read():
+                text = fh.read()
+                if any(mk in text for mk in marks):
                     return page
     return None
 
@@ -248,9 +251,43 @@ with sync_playwright() as p:
     pg.evaluate("() => document.querySelectorAll('g.f.on').forEach(g => g.classList.remove('on'))"); pg.wait_for_timeout(100)
     cx, cy = x + w / 2, y + h / 2
     cw, ch = min(1200, max(600, w + 60)), min(900, max(500, h + 60))
-    pg.screenshot(path=out, clip={"x": max(0, min(cx - cw / 2, 1200 - cw)), "y": max(0, min(cy - ch / 2, 900 - ch)), "width": cw, "height": ch})
+    clip = {"x": max(0, min(cx - cw / 2, 1200 - cw)), "y": max(0, min(cy - ch / 2, 900 - ch)), "width": cw, "height": ch}
+    pg.screenshot(path=out, clip=clip)
+    # every kind with a part inside the crop: a click on it opens that kind's pop-up (343's office-hall ruling - the check could
+    # not tell whether the hall's front band opens office-hall or magistrate's dais)
+    KINDS = ("(c) => { const st = document.createElement('style'); st.textContent = 'g.f, g.f * { display: inline !important; }';"
+             " document.head.appendChild(st); const out = new Set();"
+             " document.querySelectorAll('g.f[data-k]').forEach(g => { for (const e of g.querySelectorAll('polygon,rect,path,ellipse,circle,line')) {"
+             " const r = e.getBoundingClientRect(); if (r.width > 0 && r.x < c.x + c.width && r.x + r.width > c.x && r.y < c.y + c.height && r.y + r.height > c.y) { out.add(g.dataset.k); break; } } });"
+             " st.remove(); return [...out]; }")
+    open(out + ".kinds", "w").write(chr(10).join(sorted(pg.evaluate(KINDS, clip))))
     b.close()
 """
+
+
+def drawn_geometry(page: pathlib.Path, key: str) -> str:
+    """The kind's first glyph's drawn parts as the sheet's markup gives them (each shape's tag and geometry attributes, in the
+    page's own units, with its viewBox) - so a size the pop-up states ("27 by 7 ft") can be checked against what is drawn even
+    with no crop (343's clerks--seats ruling, 2026-10-11)."""
+    text = page.read_text(encoding="utf-8", errors="replace")
+    at = max(text.find(f'data-k="{key}"'), text.find(f'data-k="{html.escape(key, quote=True)}"'))
+    if at < 0:
+        return ""
+    chunk = text[at : at + 4000]
+    chunk = chunk[: m.start()] if (m := re.search(r"<g[^>]*\bclass=\"f ", chunk[1:])) else chunk
+    shapes = re.findall(r"<(rect|polygon|path|ellipse|circle|line)\b([^>]*)>", chunk)[:8]
+    keep = re.compile(r'(?<![\w-])(x|y|width|height|points|d|cx|cy|r|rx|ry|x1|y1|x2|y2|transform)="([^"]{0,200})"')  # not stroke-width
+    lines = [f"- <{tag}> " + " ".join(f'{a}="{v}"' for a, v in keep.findall(attrs)) for tag, attrs in shapes]
+    box = re.search(r'viewBox="([^"]*)"', text)
+    return (f"\nThe first glyph's drawn parts on `{page.name}` (the page's units; viewBox {box.group(1) if box else '?'}; its scale bar names "
+            "the feet):\n" + "\n".join(lines) + "\n") if lines else ""
+
+
+def click_target(root: pathlib.Path, key: str, m: mo.Modal) -> str:
+    """The pop-up a click on kind `key` opens: the About-form modal of that key in the same registry as `m`, or the key."""
+    registry = m.uid.split("/", 1)[0]
+    hit = next((x for x in mo.modals_now(root) if x.key == key and x.uid.startswith(registry + "/")), None)
+    return f"`{hit.uid}`" if hit else f"the `{key}` pop-up"
 
 
 def glyph_crop(page: pathlib.Path, key: str, out: pathlib.Path) -> bool:
@@ -339,13 +376,45 @@ def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, gre
         str(CLAIMS_INDEX), "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")
     page = pool_page_with(root, m.key, sheet=m.uid.startswith("sheet/"))
     crop = out / "glyph.png"
+    shape = drawn_geometry(page, m.key) if page is not None else ""
     if page is not None and glyph_crop(page, m.key, crop):
         grep_targets.append("glyph.png")
-        put("glyph.txt", f"glyph.png beside this MANIFEST: the kind `{m.key}` as drawn on `{page.relative_to(root)}`, zoomed until its first glyph is about 200 px across; Read it as an image.\n",
+        kinds_file = pathlib.Path(str(crop) + ".kinds")
+        kinds = [k for k in kinds_file.read_text(encoding="utf-8").splitlines() if k] if kinds_file.is_file() else []
+        kinds_file.unlink(missing_ok=True)
+        clicks = "".join(f"\n- `{k}` opens {click_target(root, k, m)}" for k in kinds)
+        put("glyph.txt", f"glyph.png beside this MANIFEST: the kind `{m.key}` as drawn on `{page.relative_to(root)}`, zoomed until its first glyph is about 200 px across; Read it as an image.\n"
+            + (f"\nThe kinds with a part in the crop - a click on each opens its own pop-up:{clicks}\n" if clicks else "") + shape,
             str(page.relative_to(root)), "where the crop came from - Read glyph.png")
     else:
-        put("glyph.txt", f"no crop: the kind `{m.key}` is on no pool page, or the browser was not available - judge from the drawing pages and the claims, and say so.\n",
-            "scripts/record/modal_bundle.py", "why there is no crop")
+        why = (f"the browser could not crop it from `{page.relative_to(root)}` (the kind IS drawn there)" if page is not None
+               else f"the kind `{m.key}` is drawn on no pool page")
+        put("glyph.txt", f"no crop: {why} - judge from the drawing pages, the claims and the geometry below, and say so.\n" + shape,
+            "scripts/record/modal_bundle.py", "why there is no crop, and the drawn geometry")
+
+
+def research_held(root: pathlib.Path, uid: str, text: str) -> list[str]:
+    """The wording `modal-research` rounds fixed on the pop-up `uid` that still stands in `text`: each research EDIT's new text,
+    from the replies the check state kept. A form round may not drop or widen it - on 343's border-court a form fix undid a
+    research fix's scope words unseen ("no page on the formal entrance" -> "nothing known of the formal entrance"; the round
+    arbiter's ruling, 2026-10-11). `apply_edits.py` refuses a modal-form EDIT that drops one."""
+    sys.path.insert(0, str(HERE.parent / "hooks" / "lib"))
+    import hm_checks as hc  # noqa: PLC0415
+
+    state = hc.load(hc.state_path(str(root)) or pathlib.Path("/nonexistent"))
+    out: list[str] = []
+    for v in sorted(state.get("dispatches", {}).values(), key=lambda v: v.get("t", 0)):
+        if v.get("check") != "modal-research" or f"modal:{uid}" not in v.get("subjects", []):
+            continue
+        rp = pathlib.Path(str(v.get("reply") or ""))
+        reply = rp.read_text(encoding="utf-8") if v.get("reply") and rp.is_file() else ""
+        if not reply and v.get("aid"):  # a background check's reply is its transcript's last text (a page session kept no file)
+            found = sorted((pathlib.Path.home() / ".claude" / "projects").glob(f"*/*/subagents/agent-{v['aid']}.jsonl"))
+            reply = hc._reply_of(str(found[0]), "") if found else ""
+        for _p, _o, new in hc._blocks(reply):
+            if new.strip() and new in text and new not in out:
+                out.append(new)
+    return out
 
 
 def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str) -> str:
@@ -405,6 +474,9 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
     grep_targets: list[str] = []
     if for_ == mo.DEPICTION_CHECK:
         depiction_parts(root, m, put, out, grep_targets)
+    if for_ == mo.FORM_CHECK and (held := research_held(root, m.uid, m.doc)):
+        put("research-held.md", "# Wording the research rounds fixed - keep it\n\n" + "\n".join(f"- {h!r}" for h in held) + "\n",
+            "scripts/record/modal_bundle.py", "what modal-research rounds wrote and the record backs: a form EDIT never drops or widens these words")
     if for_ == "modal-research":
         for f in m.entry_files():
             p = root / f

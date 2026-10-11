@@ -167,3 +167,22 @@ def test_a_term_another_clone_is_defining_is_refused_and_the_blocks_after_it_sti
     out = capsys.readouterr().out
     assert "REFUSED - 'Kinki' is already being defined" in out and "2 block(s), 1 refused" in out
     assert "changed" in q.read_text(encoding="utf-8")
+
+
+def test_a_form_edit_that_drops_research_fixed_wording_is_refused(tmp_path, capsys) -> None:  # noqa: ANN001
+    """343's border-court ruling, 2026-10-11: a modal-form EDIT took out the scope words a research round had fixed."""
+    modal = tmp_path / "l7r/diagram/interactive/assets/modals/sheet/border-court.md"
+    modal.parent.mkdir(parents=True)
+    modal.write_text("About: no page on the formal entrance puts a garden there.\n", encoding="utf-8")
+    (tmp_path / ".git").mkdir()
+    research = tmp_path / "research-reply.md"
+    research.write_text(_report(str(modal.relative_to(tmp_path)), "nothing known of the formal entrance", "no page on the formal entrance"))
+    (tmp_path / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": {"t1": {"check": "modal-research", "subjects": ["modal:sheet/border-court"], "t": 1, "reply": str(research)}}}))
+    rel = str(modal.relative_to(tmp_path))
+    form = tmp_path / "form.md"
+    form.write_text("modal-form: border court - 1 finding (1 FIX)\n" + _report(rel, "no page on the formal entrance puts", "nothing known of the formal entrance puts"))
+    assert ae.main([str(form), "--root", str(tmp_path)]) == 1
+    assert "drops wording a research round fixed" in capsys.readouterr().out
+    other = tmp_path / "other.md"  # the same EDIT from another check is not a form round's
+    other.write_text("modal-research: border court - 1\n" + _report(rel, "no page on the formal entrance puts", "nothing known of the formal entrance puts"))
+    assert ae.main([str(other), "--root", str(tmp_path), "--dry-run"]) == 0

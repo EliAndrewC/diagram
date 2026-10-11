@@ -67,8 +67,12 @@ if ! ( cd "$WT" && bash -c "$checks" ) > "$log" 2>&1; then
   die "the checks failed in the worktree (full log: $log) - fix in the clone, commit, run this again"
 fi
 push=${LAND_TOOLING_PUSH:-scripts/sync-with-main.sh done}
-( cd "$WT" && bash -c "$push" ) >> "$log" 2>&1
+# SYNC_BACKUP=off: the worktree is not a clone - its work is the clone's own commits, backed up at the clone's own stop. Backed
+# up under the fixed name backup/<clone>-tooling, a refused landing left a tip no later landing contained, and every one
+# after it warned "HEAD is NOT backed up" (2026-10-11)
+( cd "$WT" && SYNC_BACKUP=off bash -c "$push" ) >> "$log" 2>&1
 rc=$?
-tail -6 "$log"
+# a refusal's reason is above the push's last lines: six lines showed the backup notice and hid the ledger's refusal
+if [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ]; then tail -6 "$log"; else tail -25 "$log" >&2; fi
 [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ] || die "the push failed (exit $rc; log: $log) - nothing landed"
 printf 'land-tooling: landed %s on main. The clone keeps its own commits; its next sync-in merges them cleanly.\n' "$*"
