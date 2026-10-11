@@ -20,3 +20,7 @@
 - [ ] GM review (make gm-reviewed F=352) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
+
+## Occasions
+
+- none: the engine lines in the delta are docstring `Research:` claims only - nothing drawn or placed moved, and no map changed (FR-004; the gate rolled the pool unchanged)
