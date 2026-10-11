@@ -73,7 +73,8 @@ def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
     of Kashikawa's woodland commons: against the lowest house alone, a wood below 19 of the 20 houses ranked as above them);
     -inf with no houses.
 
-    Research: the houses' height - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood below the houses and by the water stands where the record puts grass"""
+    Research: the houses' height - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood below the houses and by the water stands where the record puts grass
+    the median house - UNRESEARCHED: "below the houses" read against their median height, not the lowest house's"""
     hs = sorted(-(x * fall[0] + y * fall[1]) for x, y in houses)
     if not hs:
         return -math.inf

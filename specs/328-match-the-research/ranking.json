@@ -14469,15 +14469,16 @@
  },
  {
   "key": "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#placement knob at the lane tiers",
+  "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "roll town/city board placement among the central crossroads, the entrances and the foot of bridges (a new bridge-foot seat)",
+  "fix": "towns and cities are fixed to the center seat (`else [\"center\"]`), but 0190 attests town boards at its entrances and at the foot of bridges; roll the seat at the town tier",
   "files": [
    "l7r/diagram/settlement/structures/fixtures/siting.py"
   ],
   "after": [],
   "flag": "",
+  "found": "feature 374 wave 120's check (2026-10-11): a finding the ranking lacked",
   "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
  },

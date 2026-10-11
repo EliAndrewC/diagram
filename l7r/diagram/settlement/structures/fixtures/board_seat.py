@@ -227,7 +227,7 @@ def entrance_seat_ok(seat: BoardSeat, anchor: tuple[float, float], reach: RouteR
     household's way out within `KOSATSUBA_HANDOVER_BAND_FT`.
 
     Research:
-        entrance board near the entrance - research/questions/0190-notice-boards-kosatsuba.html: within 160 ft of the entrance anchor
+        entrance board near the entrance - UNRESEARCHED: within 120 ft of the entrance anchor (60 ft reach and a 60 ft band); 0190 gives no distance
         passed by every way out - UNRESEARCHED: every household's departure within 20 ft"""
     if math.hypot(seat.x - anchor[0], seat.y - anchor[1]) > (KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT) / ftpx:
         return False
