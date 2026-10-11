@@ -186,3 +186,111 @@ def test_a_form_edit_that_drops_research_fixed_wording_is_refused(tmp_path, caps
     other = tmp_path / "other.md"  # the same EDIT from another check is not a form round's
     other.write_text("modal-research: border court - 1\n" + _report(rel, "no page on the formal entrance puts", "nothing known of the formal entrance puts"))
     assert ae.main([str(other), "--root", str(tmp_path), "--dry-run"]) == 0
+
+
+# --- the round settles (feature 335's round arbiter, 2026-10-11) --------------------------------------------------------
+# `round:record-format|q:0104@3` and `ask:f335-garden-modal-depiction`: applying a round's own EDIT blocks re-owed the unit
+# it answered, the next round read the check's own words back and found nothing, and the round cap fired on that loop.
+
+PAGE = '<h2 id="rooms">Rooms for a parley</h2>\n<ul>\n<li><strong>At Kyakhta each side built a post.</strong><br>The Russians built theirs at the border.</li>\n</ul>\n'
+REPLY = "record-format: 3 of 3 words ruled on - 0 VOCABULARY, 0 SESSION NOTE, 1 HISTORY\n"
+
+
+def _git(d: pathlib.Path, *a: str) -> str:
+    import subprocess
+
+    return subprocess.run(["git", *a], cwd=d, check=True, capture_output=True, text=True).stdout
+
+
+def _repo(tmp_path: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
+    """A clone whose question 0094 changed since main: it owes record-format, as a page under check does."""
+    d = tmp_path / "r"
+    page = d / ae.RECORD / "questions" / "0094-rooms.html"
+    page.parent.mkdir(parents=True)
+    _git(d, "init", "-q", "-b", "main")
+    _git(d, "config", "user.email", "t@t")
+    _git(d, "config", "user.name", "t")
+    page.write_text(PAGE.replace("built a post", "built one post"), encoding="utf-8")
+    _git(d, "add", "-A")
+    _git(d, "commit", "-qm", "base")
+    _git(d, "update-ref", "refs/remotes/origin/main", "HEAD")
+    page.write_text(PAGE, encoding="utf-8")
+    return d, page
+
+
+def _owed(d: pathlib.Path) -> list[str]:
+    return [u.slug for u in ae._sibling("record_owed").unanswered(d)]
+
+
+def _answer_now(d: pathlib.Path, check: str = "record-format") -> str:
+    ro = ae._sibling("record_owed")
+    fp = ro.fingerprints(d, (check,))[f"{check}:0094"]
+    ro.write_answer(ro.store(d), f"{check}:0094", fp, "3 of 3")
+    return fp
+
+
+def _apply(d: pathlib.Path, page: pathlib.Path, old: str, new: str, reply: str = REPLY) -> str:
+    r = d.parent / "reply.md"
+    r.write_text(reply + _report(str(page.relative_to(d)), old, new), encoding="utf-8")
+    assert ae.main([str(r), "--root", str(d)]) == 0
+    return r.read_text(encoding="utf-8")
+
+
+def test_the_rounds_own_edit_applied_verbatim_settles_the_unit_it_answered(tmp_path, capsys) -> None:
+    d, page = _repo(tmp_path)
+    _answer_now(d)
+    assert "record-format:0094" not in _owed(d)
+    _apply(d, page, "The Russians built theirs at the border.", "The Russians built theirs.")
+    assert "theirs.</li>" in page.read_text(encoding="utf-8")
+    assert "record-format:0094" not in _owed(d), "the round's own words, applied, owe no fourth round"
+    assert "record-format:0094: settled with its answered round" in capsys.readouterr().out
+    ro = ae._sibling("record_owed")
+    assert ro._read(ro.store(d), "record-format:0094")["result"].endswith("; was: 3 of 3"), "the round's counts are kept"
+    page.write_text(page.read_text(encoding="utf-8").replace("each side", "every side"), encoding="utf-8")
+    assert "record-format:0094" in _owed(d), "a hand edit after it still owes the round"
+
+
+def test_a_hand_edit_beside_the_rounds_edits_still_owes_the_unit(tmp_path) -> None:
+    d, page = _repo(tmp_path)
+    _answer_now(d)
+    page.write_text(PAGE.replace("each side", "every side"), encoding="utf-8")
+    _apply(d, page, "The Russians built theirs at the border.", "The Russians built theirs.")
+    assert "record-format:0094" in _owed(d)
+
+
+def test_an_edit_whose_words_the_prepass_raises_anew_still_owes_record_format(tmp_path, capsys) -> None:
+    """The arbiter's second clause: settled only when the prepass finds no word that was not already ruled on."""
+    d, page = _repo(tmp_path)
+    _answer_now(d)
+    _apply(d, page, "The Russians built theirs at the border.", "The Russians built a palisade at the border.")
+    assert "record-format:0094" in _owed(d)
+    assert "its prepass now raises" in capsys.readouterr().out and "palisade" in page.read_text(encoding="utf-8")
+
+
+def test_edits_applied_before_the_round_is_recorded_settle_when_it_is(tmp_path) -> None:
+    """A frozen page takes its round's EDITs BEFORE `make record-checked` (record-edit-hooks.sh): the bundle's answer, at the
+    content the check read, settles the words applied after it."""
+    d, page = _repo(tmp_path)
+    ro = ae._sibling("record_owed")
+    read = ro.fingerprints(d, ("record-format",))["record-format:0094"]
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "MANIFEST.md").write_text(f"## Owed\n\nunit: record-format:0094 {read}\n", encoding="utf-8")
+    _apply(d, page, "The Russians built theirs at the border.", "The Russians built theirs.")
+    assert "record-format:0094" in _owed(d), "not answered until the round is recorded"
+    assert ro.answer(d, "record-format", "3 of 3", bundle=str(bundle)) == ["record-format:0094"]
+    assert "record-format:0094" not in _owed(d)
+
+
+def test_another_checks_reply_settles_only_its_own_units(tmp_path) -> None:
+    d, page = _repo(tmp_path)
+    _answer_now(d)
+    _apply(d, page, "The Russians built theirs at the border.", "The Russians built theirs.", reply="quote-check: 1 note - 1 VERBATIM\n")
+    assert "record-format:0094" in _owed(d), "a quote-check round's edits never answer record-format"
+
+
+def test_the_checks_a_reply_answers_are_read_from_its_counts_line() -> None:
+    ro = ae._sibling("record_owed")
+    assert ro.reply_checks(REPLY) == ("record-format",)
+    assert ro.reply_checks("\nmodal-research: Farmhouse - ACCURACY 0 findings") == ("modal-accuracy", "modal-references", "modal-gaps")
+    assert ro.reply_checks("EDIT notes/x.md\n<<<") == ()

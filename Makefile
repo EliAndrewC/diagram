@@ -1162,6 +1162,12 @@ arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the 
 	@if [ -z "$(FILE)" ] || { [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; }; then printf 'make arbiter-ruled: FILE= and TRIGGER= (or BATCH=1) are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py $(if $(BATCH),ruled-batch,ruled "$(TRIGGER)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
+# GUARD_EDIT_OK: feature 374 wave 120 - the round arbiter's tooling fix: the nit an accept asked for, made, does not re-owe
+# the unit the accept closed; only the wording the ruling quotes, old and new.
+arbiter-nit:  ## [project] answer an accepted unit again after the wording fix its ruling asked for   TRIGGER=<id> OLD="<words>" NEW="<words>"
+	@if [ -z "$(TRIGGER)" ] || [ -z "$(OLD)" ] || [ -z "$(NEW)" ]; then printf 'make arbiter-nit: TRIGGER=, OLD= and NEW= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py nit "$(TRIGGER)" "$(OLD)" "$(NEW)"
+
 # GUARD_EDIT_OK: feature 379 (the GM 2026-10-10) - an arbiter's tooling fix is made, not lost: the two ways an open fix is
 # settled, each a row of the GM's review; `make tick` and the closing check refuse while one is open.
 arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=tests/...

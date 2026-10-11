@@ -3697,6 +3697,9 @@ suitengu	Suitengu
 suji-bei	suji-bei
 sujibei	suji-bei
 sukego	sukego
+sukiya	sukiya
+sukiya-style	sukiya
+sukiya-zukuri	sukiya
 sumigama	sumigama
 summer siege	summer siege
 summer siege of osaka	summer siege
@@ -3819,6 +3822,8 @@ tax-free plot	tax-free plot
 tayu	tayu
 tayū	tayu
 tazuke kusayama	kusayama
+tea garden	tea garden
+tea gardens	tea garden
 tedai	tedai
 teien	teien
 teikaku	teikaku

@@ -12,6 +12,7 @@ Split from one `pack_audit.py` by feature 173, as LAYERS emitted bottom-up (ever
 | `registry.py` | the check REGISTRY (feature 254): every pass/fail question the audit asks of a Mode A sheet, with the building types it applies to, the red fixture that proves it fires, and the compliant fix its failure names. Register a new check here |
 | `shared.py` | the checks feature 254 added: three for every Mode A sheet, three for the magistracy alone |
 | `labels.py` | a program item paired with the footprint that draws it, by the sheet's own tags (feature 254) - the pairing the band check makes |
+| `marks_drawn.py` | three marks drawn by a settled rule (feature 335): the landing steps cut into the revetment, a door inside its wall (by tag), a torii in plan |
 | `sun.py` | a kitchen garden's sun on a hand-drawn sheet (feature 283) |
 | `report.py` | the printed report and the CLI entry point - the only place the checks above are composed into an order |
 | `tagged.py` | the second reader (feature 294): every drawn element with its `data-kind`, the kinds it is a part of (`data-part-of`, its groups) and its inherited paint - what a check needs when it asks what a mark BELONGS to |

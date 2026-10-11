@@ -204,6 +204,25 @@ def _epoch(utc: str) -> float:
         return 0.0
 
 
+def nit_answers(root: Path, trigger: str, old: str, new: str) -> list[str]:
+    """`make arbiter-nit`: the wording an `accept` ruling asked to fix in passing, made, answers the accepted unit again at
+    today's words (feature 374 wave 120: the bridgehead pop-up's nit, made as asked, re-owed the check the ruling had closed,
+    and a second ruling was spent on it). Only that wording: the ruling's `what` quotes both the old words and the new, the
+    unit's file holds the new and no longer the old - any other edit is a new round's business."""
+    r = rulings(root).get(trigger)
+    if not r or r.get("ruling") != "accept" or r.get("kind") != "round":
+        raise ValueError(f"{trigger} has no `accept` ruling on a round - a nit is made only under one")
+    what = str(r.get("what") or "")
+    if not old.strip() or not new.strip() or old not in what or new not in what:
+        raise ValueError(f"the ruling's `what` must quote both OLD and NEW - it reads: {what[:300]}")
+    check, _, subject = str(r.get("unit") or "").partition("|")
+    own = root / f"l7r/diagram/interactive/assets/modals/{subject[6:]}.md" if subject.startswith("modal:") else None
+    text = own.read_text(encoding="utf-8") if own and own.is_file() else ""
+    if new not in text or old in text:
+        raise ValueError(f"{own or subject} must hold NEW and no longer OLD - make the edit first (a page's nit is not this target's)")
+    return accept_answers(root, f"{check}|{subject}", f"the wording the round arbiter's accept asked for ({trigger}): {old!r} -> {new!r}")
+
+
 #: the units one `modal-research` dispatch is answered as
 RESEARCH_UNITS: tuple[str, ...] = ("modal-accuracy", "modal-references", "modal-gaps")
 
@@ -519,7 +538,15 @@ def main(argv: list[str]) -> int:
             return 1
         print(f"arbiter-fix-{argv[1]}: {len(ids)} fix(es) settled - {', '.join(ids)} - on the GM's review (make gm-review)")
         return 0
-    print("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter | fix done|declined <trigger> <note> [<test>]", file=sys.stderr)
+    if argv[:1] == ["nit"] and len(argv) == 4:  # `make arbiter-nit` (feature 374 wave 120, the arbiter's tooling fix)
+        try:
+            done = nit_answers(Path(".").resolve(), argv[1], argv[2], argv[3])
+        except ValueError as e:
+            print(f"arbiter-nit: refused - {e}", file=sys.stderr)
+            return 1
+        print(f"arbiter-nit: {len(done)} unit(s) answered at today's words - {', '.join(done) or 'none owed'}")
+        return 0
+    print("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter | fix done|declined <trigger> <note> [<test>] | nit <trigger> <old> <new>", file=sys.stderr)
     return 2
 
 

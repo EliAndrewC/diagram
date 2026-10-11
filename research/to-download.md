@@ -3942,3 +3942,14 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [Google: wheatbaku 町奉行所 屋敷 那智黒](https://www.google.com/search?q=wheatbaku%20%E7%94%BA%E5%A5%89%E8%A1%8C%E6%89%80%20%E5%B1%8B%E6%95%B7%20%E9%82%A3%E6%99%BA%E9%BB%92)
 - **Rests on it:** research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html - the stone path and black Nachi gravel from the South Town Magistracy's main gate to its entrance (note wheatbaku-machibugyosho-yashiki). The archived copy of 2026-10-03 holds every quoted passage VERBATIM; what is asked is only whether the post opens in an ordinary browser, so the citation's link can be called readable.
 - Blocked by: wheatbaku.exblog.jp answers this container's fetches with HTTP 403 (quote-check rounds 1 and 2, feature 343, 2026-10-10).
+
+### 310. Hongō Fujiyama Park (Yokohama), 古民家ミニ博物館 ("the old farmhouse mini-museum"), the articles on 潜り戸 (the wicket) and 土間 (the earth floor)
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[The museum's page](https://hongofuji.stars.ne.jp/guidance/cultural-property/museum/)**
+- Fallback: [Google: 本郷ふじやま公園 古民家ミニ博物館 潜り戸](https://www.google.com/search?q=%E6%9C%AC%E9%83%B7%E3%81%B5%E3%81%98%E3%82%84%E3%81%BE%E5%85%AC%E5%9C%92+%E5%8F%A4%E6%B0%91%E5%AE%B6%E3%83%9F%E3%83%8B%E5%8D%9A%E7%89%A9%E9%A4%A8+%E6%BD%9C%E3%82%8A%E6%88%B8)
+- **Rests on it:** `research/questions/0117-doorways-and-doors-to.html` and its drawing page `research/questions/0117-doorways-and-doors-to.drawing.html` (diagram feature 335): the notes `hongofuji-koiwai` and `hongofuji-koiwai-2`, a farmhouse's one-ken main door with a wicket. Save the article texts that open from the page's index, the 潜り戸 and 土間 articles above all, so the quoted passages (通常土間の出入口は一間巾の片引きの大戸(潜り戸付)を建て... and 頭を下げなければ通れないような...潜り戸と云います) can be checked word for word, and note each article's own URL if it has one.
+- Blocked by: the host refuses the container with HTTP 403 (quote-verbatim and a quote-check, feature 335, 2026-10-11); the archive's capture of 2026-10-02 holds only the page's index of article titles, not the articles.
