@@ -138,3 +138,30 @@ def test_the_record_reads_through_noise_and_needs_a_feature(root: pathlib.Path) 
     (root / ".specify" / "feature.json").write_text("not json")
     with pytest.raises(ValueError, match="no active feature"):
         ha.settle_fix(root, TRIGGER, "declined", "it rebuilds every gate")
+
+
+ab = _load("arbiter_bundle")
+
+
+def test_a_process_question_goes_to_the_arbiter_first(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path) -> None:
+    """Amendment 2, SC-006 (the GM 2026-10-10: "things should go to the arbiter at the point where they were previously coming
+    to me"): a regression the session cannot fix, put to the arbiter, is ruled once and lands on the GM's review."""
+    d = root / "specs" / "900-z"
+    (d / "request.md").write_text("the GM's words")
+    monkeypatch.chdir(root)
+    assert ha.main(["ask", "bad id!", "a real question here"]) == 2
+    assert ha.main(["ask", "polder-regression", "fails"]) == 2, "the question needs two words"
+    q = "the polder test fails on main too and cannot be fixed in this feature - waive it?"
+    assert ha.main(["ask", "polder-regression", q]) == 0
+    assert ha.owed(root)["ask:polder-regression"]["kind"] == "ask" and ha.blocking(root, "anything") == [], "it holds nothing"
+    manifest = ab.bundle(root, "ask:polder-regression", tmp_path / "out").read_text()
+    assert "## The question" in manifest and q in manifest
+    ha.record_ruling(root, "ask:polder-regression", {"ruling": "accept", "why": "pre-existing and out of scope"}, "round-arbiter")
+    assert json.loads((d / "gm-review.jsonl").read_text().splitlines()[-1])["trigger"] == "ask:polder-regression"
+    assert ha.main(["ask", "polder-regression", q]) == 1, "one ruling per question"
+
+
+def test_a_spec_review_trigger_points_the_arbiter_at_the_review_history(root: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    ha.trip(root, "round:spec-fidelity|900-z@6", "round", "spec-fidelity|900-z", "round 6 of specs/900-z's spec review")
+    manifest = ab.bundle(root, "round:spec-fidelity|900-z@6", tmp_path / "out").read_text()
+    assert "## Rounds - the spec review of 900-z" in manifest and "Review history" in manifest

@@ -519,7 +519,7 @@ print(json.dumps({"hookSpecificOutput": {
     # back the per-unit prompt files `make verify` (or the permit branch above) wrote, one Agent call each.
     # GUARD_EDIT_OK: feature 294 - every one of the five checks is held to the same shape, the same prerequisites, a
     # GREEN gate (not a running one: US6, a NOT-REVIEWABLE outcome never costs a run) and a cap of two rounds per unit
-    # per feature (FR-009); the third needs REVIEW_ROUNDS_OK="<the GM's words>" in the prompt.
+    # per feature (FR-009); past it the round arbiter rules (GUARD_EDIT_OK: feature 379 FR-010 retired the GM's-words waiver).
     ptext="$(printf '%s' "$payload" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("tool_input") or {}).get("prompt") or "")' 2>/dev/null)"
     # GUARD_EDIT_OK: feature 375 FR-003(a) - DECIDE FIRST: a review check waits for its task's decisions' verdict
     decide_why="$(printf '%s' "$ptext" | python3 -c 'import re,sys; m=re.search(r"\bDECIDE_OK=\"([^\"]*)\"", sys.stdin.read()); r=m.group(1) if m else ""; print(r if len(r.split())>=2 and len(r)>=8 else "")' 2>/dev/null)"

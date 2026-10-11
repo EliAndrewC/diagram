@@ -226,22 +226,26 @@ mkdir -p "$FIX/.specify"; printf '{"feature_directory": "specs/301-fixture"}' > 
 SR="$FIX/.git/review-round/301-fixture/round"
 transcript "$SUB/agent-10.jsonl" "MODE 3 of specs/301-fixture" "## round\n\n1. still vague.\n\n**CHANGES REQUIRED**"
 touch -d '2030-01-01' "$SUB/agent-10.jsonl"
-echo 5 > "$SR"
+echo 5 > "$SR"; echo 1 > "$FIX/.git/review-round/301-fixture/pass"
 out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the next round")
 [ "$(rc)" -eq 2 ] && grep -q "make arbiter-bundle" "$T/err" && grep -q "round 6" "$T/err" && ok "round 6 is refused, naming the arbiter bundle" || no "round 6 was not held" "(rc=$(rc)) $(head -c 200 "$T/err")"
 [ "$(cat "$SR")" = 5 ] && ok "...spending nothing (the round stays 5)" || no "the held round was counted" "($(cat "$SR"))"
 logged spec-round-cap && ok "...recorded blocked/spec-round-cap" || no "spec-round-cap not recorded"
-grep -q 'round:spec-fidelity|301-fixture@6' "$FIX/.git/arbiter-owed.json" && ok "...and the trigger is owed" || no "no owed trigger"
-printf '%s\n' '{"trigger": "round:spec-fidelity|301-fixture@6", "kind": "round", "ruling": "continue", "why": "w", "utc": "t"}' > "$FIX/specs/301-fixture/arbiter.jsonl"
+grep -q 'round:spec-fidelity|301-fixture#1@6' "$FIX/.git/arbiter-owed.json" && ok "...and the trigger is owed" || no "no owed trigger"
+printf '%s\n' '{"trigger": "round:spec-fidelity|301-fixture#1@6", "kind": "round", "ruling": "continue", "why": "w", "utc": "t"}' > "$FIX/specs/301-fixture/arbiter.jsonl"
 out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the next round")
 [ "$(rc)" -eq 0 ] && [ "$(cat "$SR")" = 6 ] && ok "a continue ruling lets exactly round 6 through" || no "continue did not lift the cap" "(rc=$(rc) round=$(cat "$SR"))"
 out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the next round")
 [ "$(rc)" -eq 2 ] && [ "$(cat "$SR")" = 6 ] && ok "...and round 7 waits for its own ruling" || no "round 7 passed on round 6's ruling" "(rc=$(rc))"
 out=$(agent spec-fidelity 'MODE 2: SPECIFICATION REVIEW of specs/301-fixture. ARBITER_OK="the arbiter bundle cannot be built in this fixture"')
 [ "$(rc)" -eq 0 ] && [ "$(cat "$SR")" = 7 ] && ok "ARBITER_OK with a reason passes, recorded" || no "the escape did not pass" "(rc=$(rc))"
-printf '%s\n' '{"trigger": "round:spec-fidelity|301-fixture@8", "kind": "round", "ruling": "accept", "why": "w", "utc": "t"}' >> "$FIX/specs/301-fixture/arbiter.jsonl"
+printf '%s\n' '{"trigger": "round:spec-fidelity|301-fixture#1@8", "kind": "round", "ruling": "accept", "why": "w", "utc": "t"}' >> "$FIX/specs/301-fixture/arbiter.jsonl"
 out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the next round")
 [ "$(rc)" -eq 2 ] && grep -q "closed specs/301-fixture's review (accept)" "$T/err" && ok "an accept closes the review: no more rounds" || no "a round passed after accept" "(rc=$(rc)) $(head -c 200 "$T/err")"
+# the plan review of amendment 2: rulings are PER PASS - pass 1's accept neither closes nor lifts an amendment's pass 2
+echo 2 > "$FIX/.git/review-round/301-fixture/pass"; echo 5 > "$SR"
+out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/301-fixture, the amendment's sixth round")
+[ "$(rc)" -eq 2 ] && grep -q "make arbiter-bundle" "$T/err" && grep -q 'round:spec-fidelity|301-fixture#2@6' "$FIX/.git/arbiter-owed.json" && ok "a later pass's sixth round owes its own ruling (pass 1's accept does not carry over)" || no "pass 1's ruling carried over" "(rc=$(rc)) $(head -c 200 "$T/err")"
 
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"

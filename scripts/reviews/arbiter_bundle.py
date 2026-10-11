@@ -84,6 +84,15 @@ def bundle(root: Path, trigger: str, out: Path) -> Path:
              f"Clone root (for `make arbiter-ruled`): {root}\n"]
     unit = str(owed.get("unit") or "")
     check, _, subject = unit.partition("|")
+    # feature 379 amendment 2: the two kinds that used to go to the GM say where their record is
+    if check == "spec-fidelity":
+        parts.append(f"## Rounds - the spec review of {subject}\n\nIts rounds are `spec.md`'s Review history (beside this file): each "
+                     "round's verdict and what was applied. Rule as for any round cap: `accept` lets the spec stand as the last round "
+                     "left it (the review gate takes the ruling as its verdict).\n")
+    if trigger.startswith("ask:"):
+        parts.append(f"## The question\n\n{owed.get('detail', '')}\n\nA process question the session would have put to the GM. "
+                     "`continue`: go on as the question proposes; `accept`: it stands as it is (a waiver); `process-fault`: the "
+                     "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n")
     state = hc.load(hc.state_path(str(root)) or Path("/nonexistent"))
     if check and subject:
         rounds = sorted((v for v in state.get("dispatches", {}).values() if v.get("check") == check and subject in v.get("subjects", [])),
@@ -105,7 +114,8 @@ def bundle(root: Path, trigger: str, out: Path) -> Path:
             diff = _git(root, "log", "-p", "--format=--- %h %ad %s", "--date=iso", "-20", "--", *files) + _git(root, "diff", "--", *files)
             (out / "edits.diff").write_text(diff or "(no edits)\n", encoding="utf-8")
             parts.append(f"## Edits between rounds\n\n`edits.diff` beside this file: the last 20 commits touching {', '.join(files)}, then the working tree.\n")
-    events = list(el.read_jsonl(el.log_path(root, d.name if d else ""))) if d else []
+    log = el.log_path(root, d.name) if d else None
+    events = list(el.read_jsonl(log)) if log and log.is_file() else []  # a feature with no event log yet has no cascade (2026-10-10)
     flow = [f"{e['t'][11:19]} {e.get('tool')} {e.get('path') or e.get('agent') or e.get('make') or ''}"
             for e in events if e.get("ev") == "PreToolUse" and (e.get("cat") == "edit" or e.get("tool") == "Agent")]
     (out / "cascade.txt").write_text("\n".join(flow[-200:]) + "\n", encoding="utf-8")

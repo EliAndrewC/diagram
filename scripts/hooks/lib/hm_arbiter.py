@@ -321,6 +321,19 @@ def main(argv: list[str]) -> int:
             return 1
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
         return 0
+    if argv[:1] == ["ask"] and len(argv) == 3:  # `make arbiter-ask` (feature 379 amendment 2, FR-008/FR-009)
+        subject, why = argv[1].strip(), argv[2].strip()
+        if not re.fullmatch(r"[\w.-]+", subject) or len(why.split()) < 2 or len(why) < 8:
+            print("arbiter-ask: SUBJECT is one short id (letters, digits, . _ -) and WHY the question, two words or more", file=sys.stderr)
+            return 2
+        trigger = f"ask:{subject}"
+        if trigger in rulings(Path(".").resolve()):
+            print(f"arbiter-ask: {trigger} is already ruled - one ruling per trigger, binding; ask a new SUBJECT for a new question", file=sys.stderr)
+            return 1
+        trip(Path(".").resolve(), trigger, "ask", "", why)
+        print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM, who reviews the ruling after landing;"
+              " dispatch `round-arbiter` with the MANIFEST below")
+        return 0
     if argv[:1] == ["fix"] and len(argv) in (4, 5) and argv[1] in ("done", "declined"):
         try:
             settle_fix(Path(".").resolve(), argv[2], argv[1], argv[3], argv[4] if len(argv) == 5 else "")

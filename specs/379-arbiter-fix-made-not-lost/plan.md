@@ -87,21 +87,25 @@ fixture gains an `origin/main` holding the test, in the same edit (SC-004).
 **D11 - The spec review's sixth round trips the arbiter.** `scripts/hooks/lib/hm_review_round.py` already numbers a spec
 review's rounds (the counter back to one when a round returns FAITHFUL, and a new pass for an amendment). Where it computes
 the round, before the snapshot moves (so a refused dispatch spends nothing), a round past `SPEC_ROUND_CAP = 5` beyond the
-`continue` rulings on `round:spec-fidelity|<feature>@` trips that trigger (`hm_arbiter.trip`, kind `round`) and refuses
+`continue` rulings on this PASS of the review, `round:spec-fidelity|<feature>#<pass>@` (the pass counted beside the
+round in `.git/review-round/<feature>/pass`, one more each time a FAITHFUL round is followed by an amendment - so a ruling
+on one pass neither lifts nor closes a later pass's cap; plan review round 1), trips that trigger (`hm_arbiter.trip`, kind `round`) and refuses
 with `hm_arbiter.refusal`, as `pair-hooks.sh` does for a review check's third round; `ARBITER_OK="<reason>"` in the prompt
 is the escape (the hook's own census row). An `accept` or `process-fault` ruling closes the review: the refusal says so.
 
-**D12 - An `accept` is the spec's verdict at the push.** `review-gate.sh` refuses a spec with no FAITHFUL verdict; an
-arbiter's `accept` on `round:spec-fidelity|<feature>@N` in that feature's `arbiter.jsonl` answers it (the spec stands as
+**D12 - An `accept` or `process-fault` is the spec's verdict at the push.** `review-gate.sh` refuses a spec with no
+FAITHFUL verdict; an arbiter's `accept` or `process-fault` on the review's CURRENT pass, `round:spec-fidelity|<feature>#<pass>@N`
+in that feature's `arbiter.jsonl` (the pass read from the clone's `.git/review-round/<feature>/pass`), answers it; a
+`continue` does not, and a ruling on an earlier pass does not pass an amended spec (the spec stands as
 the last round left it, the GM reviewing the ruling after landing). Without it, "accept" would leave the feature unable to
 land - the stop the GM asked to remove.
 
 **D13 - One command for any other process stop.** `make arbiter-ask SUBJECT=<short id> WHY="<the question>"` trips
-`ask:<subject>` (kind `ask`, the question its detail; the escape floor on WHY) and prints the `make arbiter-bundle` line. It
-holds nothing - the session asked because it is stuck - and the ruling lands on the GM's review like any other. The
+`ask:<subject>` (kind `ask`, the question its detail; the escape floor on WHY) and builds its bundle in the same command,
+printing the MANIFEST to dispatch `round-arbiter` on (FR-009's one command). It holds nothing - the session asked because it is stuck - and the ruling lands on the GM's review like any other. The
 round arbiter's contract gains what each ruling means for a spec review (continue: one more round; accept: the spec
 stands; process-fault: the review loop is the fault, its `tooling_fix`) and for an `ask` (continue: go on as the question
-proposed; accept: it stands, waived; process-fault: the process is wrong, its `tooling_fix`). The bundle states, for a
+proposed - for a regression, fix it; accept: it stands, waived; process-fault: the process is wrong, its `tooling_fix`). The bundle states, for a
 spec review, that its rounds are the spec's Review history (copied beside it), and for an `ask`, the question.
 
 **D14 - The cap and the exits written once, as five and the arbiter.** The spec-review cap reads five rounds, then the
