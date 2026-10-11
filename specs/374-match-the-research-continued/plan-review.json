@@ -151,6 +151,330 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T06": {
+   "section_sha256": "b8a93675fce36da2c43cd113c46e74ae5e1b7c7d470e96c39ac17b78db1cae88",
+   "section_text": "## Batch 2 (T06-T09): the claims labeled as the record has them\n\n**The work list** stays 328's ranking (FR-001), brought current with the claims report (`make claims-report`, 2026-10-10:\nDRIFTED 119, MISLABELED 28, UNCLAIMED 21, NEEDS-RESEARCH 16, CANNOT-TELL 11). The ranking had gone stale against it both ways:\n26 of its open rows read IN-STEP now (closed by later relabels - the room order and the senior retainers' rows among them),\nclosed by that re-check and marked wave 115 in `audit/waves.json`; and 56 of the report's findings were not in it, added as\nfound rows (`audit/found-wave115.jsonl`, tiered E0 for a label, E1 for a re-check, E3 for a drift, E4 for a research question)\nand the ranking rebuilt (`audit/merge.py`); then every report finding still without an open row was given one - a row closed\nat an earlier wave whose claim drifts again reopened (Ochiba's clump inside the page window, closed at wave 10; the belt's\ncontinuous planting, wave 47; eleven more), and the procedure rows `audit/scope.json` marked deferred that the report counts in\nscope (the country shrine's three, the manor's universal shrine, the divider gate, the latrines by zone) set in scope: 243 open\nrows, every in-scope finding of the report among them (measured 2026-10-10: 0 findings without an open row). The 34 open rows that are no claim at all - review and cohort\nfindings, Sawada's zigzag, the 20/40-household reach rows, the held door band - stay on the list under T99. This batch takes the\ncheapest tier first, as 328's did: the MISLABELED, UNCLAIMED and CANNOT-TELL claims - labels, new claims, fuller re-checks, no\ndrawn change. A finding whose fix is a drawn change (the compound shrine's grove) or a code change (a label the code\ncontradicts) waits for the wave that makes it. Docstring and comment edits change no engine key (the gate's short-circuit), so no\nmap moves and no review occasion is owed.\n\n### Wave 115 (T06) - the procedures' four relabels\n\n- `docs/building-programs.md` `#divider gate on the axis`: a GUESS recorded on 0090's drawing page (new sentence: the gate\n  behind the office hall, no page placing a jin'ya's middle gate); \"customarily on the main axis\" goes from the program's text.\n- `#latrines by zone`: a GUESS on 0101's drawing page (about one per part of the compound, three or four, near service gates).\n- `docs/buildings.md` `#named court spine`: cites 0116's drawing page (the open courts), not 0099.\n- `#office front, residence rear`: a DEVIATION on 0090's drawing page (the yamen's order kept as a deliberate simplification;\n  Takayama's residence stood beside the office); \"universal in both traditions\" goes from the text.\n- Owed: impl-drift on the six (the four and the two below); the record checks the 0090 sentence owes (record-format, quote-check on its block, the pop-ups\n  naming the page triaged).\n- A re-check's own finding is answered in the same wave: the manor's two-court bullet drops \"never through the divider\n  gate\" (impl-drift: it left formal visitors no way to the house, against 0104's drawing page), and the alley behind the\n  hall, which the bullet names, is claimed UNRESEARCHED.\n\n### Wave 116 (T07) - the hamlet's ways and hinterland labeled\n\nThe MISLABELED and UNCLAIMED claims under `l7r/diagram/hamletgen/` (ways, hinterland, plan, rows): each label set to what\nits finding says (a GUESS on the drawing page that records it, CONVENTION, UNRESEARCHED where unsearched, NONE for plumbing),\neach UNCLAIMED decision given its claim; where a finding says the page answers the question, the claim cites the page. A finding\nthat needs the code changed (a value the page contradicts) is not relabeled: it stays for its DRIFTED wave.\n\n### Wave 117 (T08) - the settlement, waterfields, labels and interactive claims labeled\n\nThe same, for `l7r/diagram/settlement/`, `waterfields/`, `labels/` and `interactive/`.\n\n### Wave 118 (T09) - the CANNOT-TELL re-checks\n\nEach of the 11 CANNOT-TELL claims re-checked by impl-drift with the reader or page it said it lacked added to its bundle\n(`make claims-bundle UNITS=`, the named function or page beside it); a claim that then reads DRIFTED joins the DRIFTED work.\nA re-check that finds a departure the drawing page never recorded reads DRIFTED and joins the DRIFTED work; the session\nnever records a DEVIATION to close it (328's exception path, amendment 5). The polder kept out of the random roll\n(`ROLLED_ARCHETYPES`) is one, with the dike-pond block beside it: 0019's drawing page names both a known gap, and the row\nstays open until the polder and the dike-pond pass their cohort and are rolled.\n\n",
+   "reviewed": "2026-10-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "B2-1",
+     "class": "within",
+     "summary": "Ranking brought current with the claims report: IN-STEP rows closed at wave 115, missing findings added as found rows, reopened rows, the report's in-scope procedure rows set in scope; 243 open rows.",
+     "why": "Serves FR-001 (one ranking, every in-scope finding on it); rows close only on an IN-STEP impl-drift reading and the scope edits only widen. Unchanged."
+    },
+    {
+     "id": "B2-2",
+     "class": "within",
+     "summary": "The 34 open rows that are no claim stay on the list under T99.",
+     "why": "Kept, not dropped. Unchanged."
+    },
+    {
+     "id": "B2-3",
+     "class": "within",
+     "summary": "Cheapest tier first: MISLABELED, UNCLAIMED, CANNOT-TELL.",
+     "why": "328's tier order, carried by 374 FR-002. Unchanged."
+    },
+    {
+     "id": "B2-4",
+     "class": "within",
+     "summary": "A finding whose fix is a drawn or code change waits for its wave; it is not relabeled.",
+     "why": "Sequencing, not exclusion. Unchanged."
+    },
+    {
+     "id": "B2-5",
+     "class": "within",
+     "summary": "Docstring and comment edits owe no review occasion.",
+     "why": "Feature 294's occasion rule; impl-drift and record checks still listed per wave. Unchanged."
+    },
+    {
+     "id": "W115-1",
+     "class": "within",
+     "summary": "#divider gate on the axis: a GUESS on 0090's drawing page; 'customarily on the main axis' dropped.",
+     "why": "impl-drift's MISLABELED prescription; record silent, GUESS is the honest class. Unchanged."
+    },
+    {
+     "id": "W115-2",
+     "class": "within",
+     "summary": "#latrines by zone: a GUESS on 0101's drawing page.",
+     "why": "E0: 0101 already records it. Unchanged."
+    },
+    {
+     "id": "W115-3",
+     "class": "within",
+     "summary": "#named court spine cites 0116, not 0099.",
+     "why": "E0 pointer correction. Unchanged."
+    },
+    {
+     "id": "W115-4",
+     "class": "within",
+     "summary": "#office front, residence rear: a DEVIATION on 0090's drawing page; 'universal in both traditions' dropped.",
+     "why": "0090 already carried the yamen order as a deliberate simplification, not edited for this purpose. Unchanged."
+    },
+    {
+     "id": "W115-5",
+     "class": "within",
+     "summary": "Owed: impl-drift on the six and the 0090 sentence's record checks.",
+     "why": "Verification of the requested fixes. Unchanged."
+    },
+    {
+     "id": "W115-6",
+     "class": "within",
+     "summary": "The manor's two-court bullet drops 'never through the divider gate'.",
+     "why": "Moves the procedure toward an unedited page (0104). Unchanged."
+    },
+    {
+     "id": "W115-7",
+     "class": "within",
+     "summary": "The alley behind the hall claimed UNRESEARCHED.",
+     "why": "Honest label on an UNCLAIMED unit. Unchanged."
+    },
+    {
+     "id": "W116/W117-1",
+     "class": "within",
+     "summary": "Labels set as each finding says.",
+     "why": "E0 claim corrections bound to each finding. Unchanged."
+    },
+    {
+     "id": "W116/W117-2",
+     "class": "within",
+     "summary": "UNCLAIMED decisions given claims.",
+     "why": "328 SC-005's end state. Unchanged."
+    },
+    {
+     "id": "W116/W117-3",
+     "class": "within",
+     "summary": "Claims cite the page a finding says answers the question.",
+     "why": "Toward the research. Unchanged."
+    },
+    {
+     "id": "W116/W117-4",
+     "class": "within",
+     "summary": "A value a page contradicts is not relabeled; it waits for its DRIFTED wave.",
+     "why": "Guards the relabel exit. Unchanged."
+    },
+    {
+     "id": "W118-1",
+     "class": "within",
+     "summary": "Each of the 11 CANNOT-TELL claims re-checked with the missing reader or page; DRIFTED joins the DRIFTED work.",
+     "why": "328's verification route. Unchanged."
+    },
+    {
+     "id": "W118-2",
+     "class": "within",
+     "summary": "A departure the drawing page never recorded reads DRIFTED; the session never records a DEVIATION to close it.",
+     "why": "States 328's FR-004 and amendment 5 as they stand. Unchanged."
+    },
+    {
+     "id": "W118-3",
+     "class": "within",
+     "summary": "The polder and dike-pond kept out of the random roll: 0019's drawing-page bullet names both a known gap, ROLLED_ARCHETYPES's claim unlabeled and names both, the row reopened DRIFTED E3 (waves.json closure removed).",
+     "why": "Confirmed in the working-tree diff: consts.py:536 claim, 0019 drawing bullet ('the polder and the dike-pond block ... both are a known gap'), waves.json entry removed, ranking.json row wave '' scope kept."
+    },
+    {
+     "id": "W118-4",
+     "class": "within",
+     "summary": "The reopened row's fix names both polder_grid and mulberry_dike_fishpond beside valley_paddy once their cohort is green (24/24 and 12/12), flag deviation-tempting restored; the plan closes the row 'until the polder and the dike-pond pass their cohort and are rolled'.",
+     "why": "Last round's NOT LEGITIMATE narrowing is gone: found-wave118.jsonl's last line and the rebuilt ranking.json row both name the two archetypes and carry the flag; the plan's closing condition covers both. Nothing of FIELD_ARCHETYPES' unrolled pair is dropped, so this is within 328's request to match the research."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T07": {
+   "section_sha256": "029bb6715142d350e81a6a1abf836ffbc8d73d3dc0f5f58b4e795af62746cbd8",
+   "section_text": "### Wave 116 (T07) - the hamlet's ways and hinterland labeled\n\nThe MISLABELED and UNCLAIMED claims under `l7r/diagram/hamletgen/` (ways, hinterland, plan, rows): each label set to what\nits finding says (a GUESS on the drawing page that records it, CONVENTION, UNRESEARCHED where unsearched, NONE for plumbing),\neach UNCLAIMED decision given its claim; where a finding says the page answers the question, the claim cites the page. A finding\nthat needs the code changed (a value the page contradicts) is not relabeled: it stays for its DRIFTED wave.\n\n",
+   "reviewed": "2026-10-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "W116-1 labels set as each finding says",
+     "summary": "GUESS/CONVENTION/UNRESEARCHED/NONE per finding.",
+     "class": "within",
+     "why": "E0 claim corrections bound to each finding's own prescription (328 FR-003/FR-004)."
+    },
+    {
+     "id": "W116-2 unclaimed decisions claimed",
+     "summary": "UNCLAIMED units get claims.",
+     "class": "within",
+     "why": "328 SC-005 end state."
+    },
+    {
+     "id": "W116-3 cite the page that answers",
+     "summary": "Claims cite the page a finding names.",
+     "class": "within",
+     "why": "Toward the research."
+    },
+    {
+     "id": "W116-4 contradicted values not relabeled",
+     "summary": "Values a page contradicts stay for their DRIFTED wave.",
+     "class": "within",
+     "why": "Guards the relabel exit (328 FR-003)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T08": {
+   "section_sha256": "b57842b9b4ffeadc5d52088c836d4c75b6aa1b7ddf7c8ac11ae1ebb5199dbe61",
+   "section_text": "### Wave 117 (T08) - the settlement, waterfields, labels and interactive claims labeled\n\nThe same, for `l7r/diagram/settlement/`, `waterfields/`, `labels/` and `interactive/`.\n\n",
+   "reviewed": "2026-10-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "W117-1 labels set as each finding says",
+     "summary": "GUESS/CONVENTION/UNRESEARCHED/NONE per finding.",
+     "class": "within",
+     "why": "E0 claim corrections bound to each finding's own prescription (328 FR-003/FR-004)."
+    },
+    {
+     "id": "W117-2 unclaimed decisions claimed",
+     "summary": "UNCLAIMED units get claims.",
+     "class": "within",
+     "why": "328 SC-005 end state."
+    },
+    {
+     "id": "W117-3 cite the page that answers",
+     "summary": "Claims cite the page a finding names.",
+     "class": "within",
+     "why": "Toward the research."
+    },
+    {
+     "id": "W117-4 contradicted values not relabeled",
+     "summary": "Values a page contradicts stay for their DRIFTED wave.",
+     "class": "within",
+     "why": "Guards the relabel exit (328 FR-003)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T09": {
+   "section_sha256": "b8a93675fce36da2c43cd113c46e74ae5e1b7c7d470e96c39ac17b78db1cae88",
+   "section_text": "## Batch 2 (T06-T09): the claims labeled as the record has them\n\n**The work list** stays 328's ranking (FR-001), brought current with the claims report (`make claims-report`, 2026-10-10:\nDRIFTED 119, MISLABELED 28, UNCLAIMED 21, NEEDS-RESEARCH 16, CANNOT-TELL 11). The ranking had gone stale against it both ways:\n26 of its open rows read IN-STEP now (closed by later relabels - the room order and the senior retainers' rows among them),\nclosed by that re-check and marked wave 115 in `audit/waves.json`; and 56 of the report's findings were not in it, added as\nfound rows (`audit/found-wave115.jsonl`, tiered E0 for a label, E1 for a re-check, E3 for a drift, E4 for a research question)\nand the ranking rebuilt (`audit/merge.py`); then every report finding still without an open row was given one - a row closed\nat an earlier wave whose claim drifts again reopened (Ochiba's clump inside the page window, closed at wave 10; the belt's\ncontinuous planting, wave 47; eleven more), and the procedure rows `audit/scope.json` marked deferred that the report counts in\nscope (the country shrine's three, the manor's universal shrine, the divider gate, the latrines by zone) set in scope: 243 open\nrows, every in-scope finding of the report among them (measured 2026-10-10: 0 findings without an open row). The 34 open rows that are no claim at all - review and cohort\nfindings, Sawada's zigzag, the 20/40-household reach rows, the held door band - stay on the list under T99. This batch takes the\ncheapest tier first, as 328's did: the MISLABELED, UNCLAIMED and CANNOT-TELL claims - labels, new claims, fuller re-checks, no\ndrawn change. A finding whose fix is a drawn change (the compound shrine's grove) or a code change (a label the code\ncontradicts) waits for the wave that makes it. Docstring and comment edits change no engine key (the gate's short-circuit), so no\nmap moves and no review occasion is owed.\n\n### Wave 115 (T06) - the procedures' four relabels\n\n- `docs/building-programs.md` `#divider gate on the axis`: a GUESS recorded on 0090's drawing page (new sentence: the gate\n  behind the office hall, no page placing a jin'ya's middle gate); \"customarily on the main axis\" goes from the program's text.\n- `#latrines by zone`: a GUESS on 0101's drawing page (about one per part of the compound, three or four, near service gates).\n- `docs/buildings.md` `#named court spine`: cites 0116's drawing page (the open courts), not 0099.\n- `#office front, residence rear`: a DEVIATION on 0090's drawing page (the yamen's order kept as a deliberate simplification;\n  Takayama's residence stood beside the office); \"universal in both traditions\" goes from the text.\n- Owed: impl-drift on the six (the four and the two below); the record checks the 0090 sentence owes (record-format, quote-check on its block, the pop-ups\n  naming the page triaged).\n- A re-check's own finding is answered in the same wave: the manor's two-court bullet drops \"never through the divider\n  gate\" (impl-drift: it left formal visitors no way to the house, against 0104's drawing page), and the alley behind the\n  hall, which the bullet names, is claimed UNRESEARCHED.\n\n### Wave 116 (T07) - the hamlet's ways and hinterland labeled\n\nThe MISLABELED and UNCLAIMED claims under `l7r/diagram/hamletgen/` (ways, hinterland, plan, rows): each label set to what\nits finding says (a GUESS on the drawing page that records it, CONVENTION, UNRESEARCHED where unsearched, NONE for plumbing),\neach UNCLAIMED decision given its claim; where a finding says the page answers the question, the claim cites the page. A finding\nthat needs the code changed (a value the page contradicts) is not relabeled: it stays for its DRIFTED wave.\n\n### Wave 117 (T08) - the settlement, waterfields, labels and interactive claims labeled\n\nThe same, for `l7r/diagram/settlement/`, `waterfields/`, `labels/` and `interactive/`.\n\n### Wave 118 (T09) - the CANNOT-TELL re-checks\n\nEach of the 11 CANNOT-TELL claims re-checked by impl-drift with the reader or page it said it lacked added to its bundle\n(`make claims-bundle UNITS=`, the named function or page beside it); a claim that then reads DRIFTED joins the DRIFTED work.\nA re-check that finds a departure the drawing page never recorded reads DRIFTED and joins the DRIFTED work; the session\nnever records a DEVIATION to close it (328's exception path, amendment 5). The polder kept out of the random roll\n(`ROLLED_ARCHETYPES`) is one, with the dike-pond block beside it: 0019's drawing page names both a known gap, and the row\nstays open until the polder and the dike-pond pass their cohort and are rolled.\n\n",
+   "reviewed": "2026-10-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "B2-1",
+     "class": "within",
+     "summary": "Ranking brought current with the claims report: IN-STEP rows closed at wave 115, missing findings added as found rows, reopened rows, the report's in-scope procedure rows set in scope; 243 open rows.",
+     "why": "Serves FR-001 (one ranking, every in-scope finding on it); rows close only on an IN-STEP impl-drift reading and the scope edits only widen. Unchanged."
+    },
+    {
+     "id": "B2-2",
+     "class": "within",
+     "summary": "The 34 open rows that are no claim stay on the list under T99.",
+     "why": "Kept, not dropped. Unchanged."
+    },
+    {
+     "id": "B2-3",
+     "class": "within",
+     "summary": "Cheapest tier first: MISLABELED, UNCLAIMED, CANNOT-TELL.",
+     "why": "328's tier order, carried by 374 FR-002. Unchanged."
+    },
+    {
+     "id": "B2-4",
+     "class": "within",
+     "summary": "A finding whose fix is a drawn or code change waits for its wave; it is not relabeled.",
+     "why": "Sequencing, not exclusion. Unchanged."
+    },
+    {
+     "id": "B2-5",
+     "class": "within",
+     "summary": "Docstring and comment edits owe no review occasion.",
+     "why": "Feature 294's occasion rule; impl-drift and record checks still listed per wave. Unchanged."
+    },
+    {
+     "id": "W115-1",
+     "class": "within",
+     "summary": "#divider gate on the axis: a GUESS on 0090's drawing page; 'customarily on the main axis' dropped.",
+     "why": "impl-drift's MISLABELED prescription; record silent, GUESS is the honest class. Unchanged."
+    },
+    {
+     "id": "W115-2",
+     "class": "within",
+     "summary": "#latrines by zone: a GUESS on 0101's drawing page.",
+     "why": "E0: 0101 already records it. Unchanged."
+    },
+    {
+     "id": "W115-3",
+     "class": "within",
+     "summary": "#named court spine cites 0116, not 0099.",
+     "why": "E0 pointer correction. Unchanged."
+    },
+    {
+     "id": "W115-4",
+     "class": "within",
+     "summary": "#office front, residence rear: a DEVIATION on 0090's drawing page; 'universal in both traditions' dropped.",
+     "why": "0090 already carried the yamen order as a deliberate simplification, not edited for this purpose. Unchanged."
+    },
+    {
+     "id": "W115-5",
+     "class": "within",
+     "summary": "Owed: impl-drift on the six and the 0090 sentence's record checks.",
+     "why": "Verification of the requested fixes. Unchanged."
+    },
+    {
+     "id": "W115-6",
+     "class": "within",
+     "summary": "The manor's two-court bullet drops 'never through the divider gate'.",
+     "why": "Moves the procedure toward an unedited page (0104). Unchanged."
+    },
+    {
+     "id": "W115-7",
+     "class": "within",
+     "summary": "The alley behind the hall claimed UNRESEARCHED.",
+     "why": "Honest label on an UNCLAIMED unit. Unchanged."
+    },
+    {
+     "id": "W116/W117-1",
+     "class": "within",
+     "summary": "Labels set as each finding says.",
+     "why": "E0 claim corrections bound to each finding. Unchanged."
+    },
+    {
+     "id": "W116/W117-2",
+     "class": "within",
+     "summary": "UNCLAIMED decisions given claims.",
+     "why": "328 SC-005's end state. Unchanged."
+    },
+    {
+     "id": "W116/W117-3",
+     "class": "within",
+     "summary": "Claims cite the page a finding says answers the question.",
+     "why": "Toward the research. Unchanged."
+    },
+    {
+     "id": "W116/W117-4",
+     "class": "within",
+     "summary": "A value a page contradicts is not relabeled; it waits for its DRIFTED wave.",
+     "why": "Guards the relabel exit. Unchanged."
+    },
+    {
+     "id": "W118-1",
+     "class": "within",
+     "summary": "Each of the 11 CANNOT-TELL claims re-checked with the missing reader or page; DRIFTED joins the DRIFTED work.",
+     "why": "328's verification route. Unchanged."
+    },
+    {
+     "id": "W118-2",
+     "class": "within",
+     "summary": "A departure the drawing page never recorded reads DRIFTED; the session never records a DEVIATION to close it.",
+     "why": "States 328's FR-004 and amendment 5 as they stand. Unchanged."
+    },
+    {
+     "id": "W118-3",
+     "class": "within",
+     "summary": "The polder and dike-pond kept out of the random roll: 0019's drawing-page bullet names both a known gap, ROLLED_ARCHETYPES's claim unlabeled and names both, the row reopened DRIFTED E3 (waves.json closure removed).",
+     "why": "Confirmed in the working-tree diff: consts.py:536 claim, 0019 drawing bullet ('the polder and the dike-pond block ... both are a known gap'), waves.json entry removed, ranking.json row wave '' scope kept."
+    },
+    {
+     "id": "W118-4",
+     "class": "within",
+     "summary": "The reopened row's fix names both polder_grid and mulberry_dike_fishpond beside valley_paddy once their cohort is green (24/24 and 12/12), flag deviation-tempting restored; the plan closes the row 'until the polder and the dike-pond pass their cohort and are rolled'.",
+     "why": "Last round's NOT LEGITIMATE narrowing is gone: found-wave118.jsonl's last line and the rebuilt ranking.json row both name the two archetypes and carry the flag; the plan's closing condition covers both. Nothing of FIELD_ARCHETYPES' unrolled pair is dropped, so this is within 328's request to match the research."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "plan_text": "# Implementation Plan: Match the research - continued (feature 374)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Model**: `specs/372-match-the-research-remaining/plan.md` (its cycle, its batch\nclose and its bookends, themselves 328's) - this plan records only what differs and each wave's decisions.\n\n## Summary\n\nThe work list is 328's ranking's open in-scope rows at 372's close (198: 153 E3, 43 E4, 2 E2 held - counted from `ranking.json` 2026-10-10, rows with no wave in scope), in ranking order, with the\nitems the spec's \"What it carries\" lists. Waves are numbered on from 372's (the first is wave 112), so 328's `audit/waves.json`\nstays the one column; this feature's measurements are its own `measurements.json`, its decisions its own spec's table. Also\ncarried, from feature 370's landing (its spec, 2026-10-10): the claims findings on the code 370 split, left in `make\nclaims-report` for this feature under the claims gate's escape - rows of the work list like any other.\n\nTwo of the spec's carried tooling gaps (FR-007) are placed here, not in a wave: the claims-triage reply parser counting\n\"TOUCHES\" anywhere is already fixed by 375's D5 (`scripts/record/claims_triage.py` reads only lines opening with `TOUCHES`,\nits test pinning a mid-line mention ignored) - recorded so under SC-006 at batch 1's close; and `make modal-bundle\nFOR=modal-depiction`'s crop on a Mode A sheet is fixed, with its test, before the first modal-depiction check on a Mode A\nsheet that a wave owes (batch 1 edits no drawing page and owes none, as planned).\n\n## Constitution Check\n\nAs 372's (XII research, XIII no known regressions, XIV fix where found, XVI the literal thing). New here: 375's process (decide\nfirst, the freeze, the tripwires, the preflight) is in its first real use, and a guard that refuses correct work is fixed with\nits test (spec FR-005).\n\n## The cycle (372's, under 375)\n\n`make task-start F=374 T=<id>` -> the task's section below carries its verdict (this plan's review, or `make decide`) -> the check\nfirst where a rule is drawn (red on the unfixed sheet) -> edit -> `make test-file` -> each Mode A sheet's `make pack-audit` before\nand after -> `make cohort N=48` only when the hamlet's stage code changes -> `impl-drift` on the owed claims (`make claims-owed`,\nthe triage for the rest) -> the record checks a page edit owes (`make record-owed`) -> records -> `make quick` -> tick -> commit. A\nbatch closes with `make done`, its occasions, the timing pair or its recorded \"none owed\", `escalation-check`, and LANDS.\n\n## Batch 1 (T01-T05)\n\nThree waves, the first three rows the ranking leaves open after its two held E2 rows (the door band and `fixture_quota`, held for\nthe GM), with the kitchen's two rows taken as one wave because both redraw the same building; then the two measuring tasks 375\ncarried here (spec FR-006), which are not among the three measured.\n\n**Pair (FR-002)**: none owed if the batch's engine code stays out of what the timing pair rolls (the hamlet's stages) - this\nbatch's engine code is `pack_audit` (a review tool) and `buildings/types.json`'s kitchen band, read by the Mode A draft and the\npack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's stages, the pair is owed and taken.\n\n### Wave 112 (T01) - the veranda's width and faces\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#engawa` (E3). 0102's drawing page: a veranda 3-6 ft wide (half a\n  ken to one ken, Katsura's widths), free to change from face to face, the garden face at the wider end a GUESS; which faces\n  carry it a KNOB between two attested forms - the garden face alone, or a continuous veranda along two or three faces - never\n  all four. The procedure says \"~8 px\" (2.7 ft) along the south face of each block, and every sheet draws 8 px on the garden face (each\n  sheet's `data-kind=\"engawa\"` rects read 2026-10-10, grep of the three SVGs).\n- **Check first**: a `pack_audit` check, `veranda_depths`: every `data-kind=\"engawa\"` strip's short side is 3-6 ft (9-18 px),\n  reading the strip's rect (a `data-kind=\"engawa\"` group's rect too). Red on all three magistracy sheets now; a red fixture\n  beside the others. Its limits cite 0102's drawing page, ACCURATE (Katsura's measured widths).\n- **The knob on the hand sheets**: each sheet rolls its faces as its other knobs are rolled, `random.Random(zlib.crc32(b\"<map>:\n  residence veranda faces\")).choice([\"garden face alone\", \"two or three faces\"])` - **Hayakawa** two or three faces, **Ochiba**\n  and **Ubame** the garden face alone (computed 2026-10-10). Each sheet's notes record the roll and the form drawn, as the\n  shrine-arch knob is recorded.\n- **Widths** (calibrated liberty within 3-6 ft, the garden face at the wider end - 0102's GUESS): every garden-face strip 12 px\n  (4 ft); Hayakawa's turned faces 9 px (3 ft), as Katsura's veranda narrows where it turns the corner. Hayakawa's board veranda to\n  the guests' privy (already 9 px) stays. What a widened strip runs into (a door, a stone, a tub, the garden) moves with it, each\n  move audited.\n- **Hayakawa's two or three faces**: the east block's veranda runs on round its south-east corner up the reception's east end\n  (the formal end, facing the garden's east side), a third face being its north board veranda already drawn; the west block keeps\n  its garden face alone (a hall of its own; the knob is the house's, and the house shows it on its formal hall).\n- **The procedure**: the bullet's veranda sentence says 3-6 ft (9-18 px), the faces a rolled knob between the two forms, never all\n  four; the claim gets the knob and the widths, each labeled (the forms ACCURATE, the garden face wider a GUESS).\n- **The generated draft** (`compound.py`, seedless) keeps its 4 ft garden-face veranda, the form 0102's drawing page records it\n  taking; it cannot roll a knob, and that is recorded there.\n- **Tooling gap fixed here** (spec FR-007, carried from 372): a glyph-check verdict is keyed by element alone, so this batch's\n  second sheet would overwrite the first's; the verdict is keyed by element and map, with a test red on the old keying.\n- **Occasions**: glyph-redrawn: engawa on hayakawa-magistracy (the new turned form); glyph-redrawn: engawa on ochiba-magistracy\n  (the garden-face form; Ubame's the same glyph).\n\n### Wave 113 (T02) - the kitchen at 0091's size, joined as an ell\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#kitchen` (E3) and `#kitchen corridor tagged residence corridor`\n  (E3, after the first; the same building). 0091: the one kitchen measured, the Kuchiba house's east wing, is about 12 tsubo\n  (~440 sq ft, 5.9 x 6.9 m) by the prefecture's measure, about a sixth of the house; a middle-rank house was one block, its kitchen\n  projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens (each kitchen's rect read off the three SVGs, 2026-10-10), and\n  Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.\n- **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), the size of 0091's measured wing taken as the\n  kitchen's - a GUESS, as 0091's drawing page holds a kitchen's size (impl-drift, wave 113: the plan first called it an ACCURATE ceiling), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in\n  `buildings/types.json` narrowed so the old size fails it: w 18-24 by h 14-18 ft (either orientation; at most 432 sq ft, under the measured ~440 - the T02 preflight's aside). The procedure's kitchen\n  bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; \"a large institutional daidokoro\" goes (the ranked fix sizes it to\n  the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,\n  read 2026-10-10), already inside the new band.\n- **What stands in the kitchen moves with it**: the kamado range, a well drawn inside the kitchen (0105's drawing page: inside\n  the kitchen on a hand plan), its door, the two tubs at its door (wave 106's rule, `tubs_off_their_doors`), the bath abutting it.\n  The ground the smaller kitchen frees is left as the court or service ground it opens onto. Each move audited.\n- **Amendment 1 (2026-10-10, found in the work)**: (a) Ubame joins its kitchen by a covered corridor too (an L across its service\n  alley, tagged a residence corridor), so its kitchen becomes an ell as Hayakawa's does: it projects south from the west block under\n  the shuttered wing, its door on its west face toward the kitchen postern, the bath on its south face; the west block's veranda\n  starts at the kitchen's east face. Hayakawa's ell projects south from its west block's family end, the bath on its west face, the\n  door on its south face; Ochiba's is the ell it was, shrunk into the house's corner. (b) The generated draft\n  (`compound_parts._point_features`) also joins its kitchen by a covered corridor (`_corridor`, `CORRIDOR_W_FT`) across the 7 ft\n  fire-gap the placer leaves: the procedure now drops that form, so the draft draws the ell - a `BuildingSpec.joins` names the\n  building an ell projects from, the placer abuts the two with no fire-gap (`_place_one`), and the corridor code goes. Its\n  occasion: layout-revised: county-magistracy-example. (c) Knock-ons in the tooling, each fixed where found: `pack_audit` read a\n  kamado tagged `hearth` as a door glyph adrift (`floating_doors`) once a small kitchen put it within a door's reach of a wall -\n  a rect inside a `hearth` element is no door (a test); the round-trip sheet's program kitchen 18 x 24 ft (its court face then\n  seats the bath; at 24 x 18 the bath found no clear run); the frozen red fixtures' kitchens brought to 72 x 54 px against their\n  houses, their contents and baths moved with them, so each fires only its own check (the two whose check counts tubs at the old\n  kitchen keep it).\n- **Amendment 3 (2026-10-10, impl-drift)**: the kitchen claim relabeled GUESS on 0091's drawing page (above), and the\n  corridor claim renamed `#kitchen abuts the house, no corridor` - its old name described the corridor the wave removed.\n- **Amendment 4 (2026-10-10, impl-drift round 2)**: the kitchen's size is taken from the measured wing as a size, whatever the\n  house's size, not as its sixth share - recorded so on 0091's drawing page as a GUESS (the ranked fix's ~12 tsubo kept; sizing\n  every kitchen to a sixth of its house was impl-drift's other way out, and would size the hand sheets' larger houses'\n  kitchens past the measured wing); the claim names that page. The residence-rooms claim (T03) renamed `#residence of about\n  six rooms`. The residence-corridor pop-up's guess bullet gives the drawn width (about 11 ft, Hayakawa's and Ubame's) and its\n  `Covers:` drops \"covered\" (modal-form round 1).\n- **Amendment 2 (2026-10-10, the draft as built)**: with the ell abutting the house's west end, the house's west face keeps 6 ft\n  free below the kitchen, short of a door's 8 ft approach, so the draft's inner entrance opens on the house's rear (north)\n  face at the kitchen end, onto the rear alley; 0107's drawing page said \"on the residence's face toward the kitchen\" and now\n  says \"on the residence's back, at the end the kitchen stands against\" (its record checks owed: the pop-ups naming the\n  page triaged, quote-check on the note in that block, record-format). The house stands 7 ft further west with the gap gone,\n  so the draft's garden zone starts 7 ft west to stay before the whole south face; the family privy at the house's rear west\n  corner stands a foot in from it, its half-foot margin off the kitchen. Hayakawa's kitchen door stands on its south face,\n  its two tubs either side.\n- **Occasions**: layout-revised: hayakawa-magistracy and ubame-magistracy (the kitchen joined as an ell, the corridor gone);\n  layout-revised: county-magistracy-example (the draft's ell); glyph-redrawn: kitchen on ochiba-magistracy.\n\n### Wave 114 (T03) - the residence's rooms\n\n- **Scope**: `docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms` (E3). The procedure says a real\n  residence of this footprint held ~18-25 tatami rooms; 0091 sizes the residence to the 49-tsubo district magistrate's house, and\n  the one house measured with its rooms, the thousand-koku Kuchiba house of 41-74 tsubo, held six. The fix follows the record:\n  the procedure says the labeled zones TOGETHER compress a house of about six rooms (0091 - the count is the whole house's), and\n  the claim cites it; the sheets label\n  zones, not rooms, so no sheet is redrawn. Searched 2026-10-10: Hayakawa's notes alone state the count (\"a real residence of\n  this footprint holds ~18-25 tatami rooms\"); that line says the house held about six (0091), as the procedure does.\n- **Occasions**: none (no drawn element changes).\n\n### T04 - 375's SC-003 over T01-T03 (key `sc003-375-first-three-tasks`)\n\nFrom `make feature-report F=374` at batch 1's close: red gates and their causes against the preflight's checks, pages re-checked\nwhile a check on them was outstanding, plan-review BLOCKs on a decision a decision preflight had ruled on. Recorded in\n`measurements.json` with its command.\n\n### T05 - 375's SC-004 over T01-T03 (key `sc004-375-dispatches-per-row`)\n\nThe dispatches per closed row of T01-T03 (four rows), from the same report, beside 372's ~10 (375's \"Why\", an estimate).\n\n## Batch 2 (T06-T09): the claims labeled as the record has them\n\n**The work list** stays 328's ranking (FR-001), brought current with the claims report (`make claims-report`, 2026-10-10:\nDRIFTED 119, MISLABELED 28, UNCLAIMED 21, NEEDS-RESEARCH 16, CANNOT-TELL 11). The ranking had gone stale against it both ways:\n26 of its open rows read IN-STEP now (closed by later relabels - the room order and the senior retainers' rows among them),\nclosed by that re-check and marked wave 115 in `audit/waves.json`; and 56 of the report's findings were not in it, added as\nfound rows (`audit/found-wave115.jsonl`, tiered E0 for a label, E1 for a re-check, E3 for a drift, E4 for a research question)\nand the ranking rebuilt (`audit/merge.py`); then every report finding still without an open row was given one - a row closed\nat an earlier wave whose claim drifts again reopened (Ochiba's clump inside the page window, closed at wave 10; the belt's\ncontinuous planting, wave 47; nine more), and the procedure rows `audit/scope.json` marked deferred that the report counts in\nscope (the country shrine's four, the manor's universal shrine, the divider gate, the latrines by zone) set in scope: 243 open\nrows, every in-scope finding of the report among them (measured 2026-10-10: 0 findings without an open row). The 34 open rows that are no claim at all - review and cohort\nfindings, Sawada's zigzag, the 20/40-household reach rows, the held door band - stay on the list under T99. This batch takes the\ncheapest tier first, as 328's did: the MISLABELED, UNCLAIMED and CANNOT-TELL claims - labels, new claims, fuller re-checks, no\ndrawn change. A finding whose fix is a drawn change (the compound shrine's grove) or a code change (a label the code\ncontradicts) waits for the wave that makes it. Docstring and comment edits change no engine key (the gate's short-circuit), so no\nmap moves and no review occasion is owed.\n\n### Wave 115 (T06) - the procedures' four relabels\n\n- `docs/building-programs.md` `#divider gate on the axis`: a GUESS recorded on 0090's drawing page (new sentence: the gate\n  behind the office hall, no page placing a jin'ya's middle gate); \"customarily on the main axis\" goes from the program's text.\n- `#latrines by zone`: a GUESS on 0101's drawing page (about one per part of the compound, three or four, near service gates).\n- `docs/buildings.md` `#named court spine`: cites 0116's drawing page (the open courts), not 0099.\n- `#office front, residence rear`: a DEVIATION on 0090's drawing page (the yamen's order kept as a deliberate simplification;\n  Takayama's residence stood beside the office); \"universal in both traditions\" goes from the text.\n- Owed: impl-drift on the four; the record checks the 0090 sentence owes (record-format, quote-check on its block, the pop-ups\n  naming the page triaged).\n\n### Wave 116 (T07) - the hamlet's ways and hinterland labeled\n\nThe MISLABELED and UNCLAIMED claims under `l7r/diagram/hamletgen/` (ways, hinterland, plan, rows): each label set to what\nits finding says (a GUESS on the drawing page that records it, CONVENTION, UNRESEARCHED where unsearched, NONE for plumbing),\neach UNCLAIMED decision given its claim; where a finding says the page answers the question, the claim cites the page. A finding\nthat needs the code changed (a value the page contradicts) is not relabeled: it stays for its DRIFTED wave.\n\n### Wave 117 (T08) - the settlement, waterfields, labels and interactive claims labeled\n\nThe same, for `l7r/diagram/settlement/`, `waterfields/`, `labels/` and `interactive/`.\n\n### Wave 118 (T09) - the CANNOT-TELL re-checks\n\nEach of the 11 CANNOT-TELL claims re-checked by impl-drift with the reader or page it said it lacked added to its bundle\n(`make claims-bundle UNITS=`, the named function or page beside it); a claim that then reads DRIFTED joins the DRIFTED work.\n\n## Landing by batch (375's D18)\n\n374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:\n`tasks.md` holds the current batch's tasks and one standing task, T99, for the batches still to come. A batch whose\ndecisions need no new ruling adds its tasks under its own plan section, decided per task (`make decide`).\n\n**Lands open**: T99\n\n## Performance bookends (constitution VI)\n\n| batch | waves | pair | gate | close |\n|---|---|---|---|---|\n| 1 | 112-114 | none owed: the batch's engine code is the Mode A draft (`compound.py`, `compound_parts.py`, `compound_model.py`: the kitchen ell, the corridor gone), `pack_audit` (`veranda_depths`, the hearth not a door) and `buildings/types.json`'s kitchen band - none in what the timing pair rolls (the hamlet's stages), as 372's batches 3-5 recorded | green 2026-10-10 at engine key 026828713522 | the review occasions running (three building-reviews, two glyph-checks); escalation-check 3 keep |\n",

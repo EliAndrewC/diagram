@@ -11843,16 +11843,17 @@
  },
  {
   "key": "l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled",
+  "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "roll the attested polder (and dike-pond) archetypes beside valley_paddy in ROLLED_ARCHETYPES once their cohort is green",
+  "fix": "roll the attested polder and dike-pond archetypes (polder_grid, mulberry_dike_fishpond) beside valley_paddy in ROLLED_ARCHETYPES once their cohort is green (24/24 and 12/12 with them in the mix); 0019 attests the polder and 0020 the dike-pond block, and 0019's drawing page names both omissions a known gap",
   "files": [
    "l7r/diagram/hamletgen/consts.py"
   ],
   "after": [],
-  "flag": "deviation-tempting: the polder cohort is not green, which is why it stays opt-in",
+  "flag": "deviation-tempting",
+  "found": "feature 374 batch 2's plan review (2026-10-10): a departure the page never recorded stays a drift, never a DEVIATION the session records",
   "tier_as_ranked": "E3",
-  "verdict": "CANNOT-TELL",
-  "wave": "118",
+  "wave": "",
   "scope": "kept"
  },
  {

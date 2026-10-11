@@ -613,7 +613,6 @@
   "docs/buildings.md::Composition: perimeter buildings + a named court-spine#named court spine": "115",
   "docs/buildings.md::Composition: perimeter buildings + a named court-spine#office front, residence rear": "115",
   "l7r/diagram/hamletgen/cluster.py::seat_cluster#band area": "118",
-  "l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled": "118",
   "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row farm faces its street": "116",
   "l7r/diagram/hamletgen/ways/reach.py::_draw_tree_lane#worn look": "116",
   "l7r/diagram/hamletgen/ways/sweeps.py::_drop_end_nubs#nub at a junction dropped": "118",
