@@ -113,7 +113,26 @@ def caption_moves(text: str, tol: float = 1.0) -> list[dict]:
     return out
 
 
-def test_caption_moves() -> None:
+def _caption_moves_unreadable() -> None:
     res = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
     res["caption_moves"] = caption_moves("")
+    OUT.write_text(json.dumps(res, indent=1), encoding="utf-8")
+
+
+def test_gaps() -> None:
+    """FR-014: every aligned gap pack_audit reports on Ochiba, and every drawn footprint lying between its pair."""
+    from l7r.diagram.tools.pack_audit.checks import aligned_gaps
+
+    text = (ROOT / SHEETS[1]).read_text(encoding="utf-8")
+    plan = parse_svg(text)
+    res = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
+    rows = []
+    for g in aligned_gaps(plan):
+        between = [
+            [s.x, s.y, s.w, s.h, plan.label_kinds.get(s.pos, "")]
+            for s in plan.structures
+            if abs(s.x + s.w / 2 - g.mx) < (g.ft * 3) / 2 + 20 and abs(s.y + s.h / 2 - g.my) < (g.ft * 3) / 2 + 20 and s.area_px > 30
+        ]
+        rows.append({"ft": round(g.ft, 1), "dir": g.orient, "mx": g.mx, "my": g.my, "near": between})
+    res["ochiba_gaps"] = rows
     OUT.write_text(json.dumps(res, indent=1), encoding="utf-8")

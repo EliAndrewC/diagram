@@ -1,0 +1,44 @@
+{
+  "steps-past-revetment": {
+    "quantity": "Hayakawa's landing steps: px past the revetment rect's river face (east) and past its land face (west)",
+    "observed": "2026-10-11",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make spec-harness SPEC=specs/335-magistracies-rear-strips-feature283-reviews-left OUT=<json>",
+    "method": "harness.py steps(): the rect of the group declared data-id=\"landing-steps\" against the data-kind=\"revetment\" rect",
+    "value": {
+      "steps_x": [1058, 1084],
+      "revetment_x": [1064, 1072],
+      "past_river_face_px": 12,
+      "past_land_face_px": 6
+    }
+  },
+  "doors-off-walls": {
+    "quantity": "data-kind=\"door\" rects per sheet: wholly inside the building they open through, straddling its wall, or wholly outside it",
+    "observed": "2026-10-11",
+    "source": "pool/magistracies/{hayakawa,ochiba,ubame}-magistracy/*.svg, pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+    "command": "make spec-harness SPEC=specs/335-magistracies-rear-strips-feature283-reviews-left OUT=<json>",
+    "method": "harness.py doors(): each door against the built footprint it overlaps most (else the nearest); inside share > 0.99 INSIDE, < 0.01 OUTSIDE, else STRADDLE",
+    "value": {
+      "hayakawa": {"inside": 6, "straddle": 0, "outside": 14},
+      "ochiba": {"inside": 7, "straddle": 0, "outside": 7},
+      "ubame": {"inside": 9, "straddle": 9, "outside": 5},
+      "hoshigaoka": {"inside": 2, "straddle": 0, "outside": 0},
+      "total": 59,
+      "not_inside": 35
+    }
+  },
+  "torii-not-in-plan": {
+    "quantity": "data-kind=\"torii\" groups per sheet drawn in plan (declaring the id=\"arch\" rect) or as a silhouette",
+    "observed": "2026-10-11",
+    "source": "the four hand sheets",
+    "command": "make spec-harness SPEC=specs/335-magistracies-rear-strips-feature283-reviews-left OUT=<json>",
+    "method": "harness.py arches(): each torii group's markup searched for id=\"arch\"",
+    "value": {
+      "hayakawa": {"in_plan": 1, "silhouette": 0},
+      "ochiba": {"in_plan": 0, "silhouette": 0},
+      "ubame": {"in_plan": 0, "silhouette": 1},
+      "hoshigaoka": {"in_plan": 7, "silhouette": 0},
+      "silhouette_total": 1
+    }
+  }
+}

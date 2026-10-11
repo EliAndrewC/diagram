@@ -97,7 +97,7 @@ recorded "no longer applies" with the measurement.
 **The arches (342)**
 
 - **FR-006**: Ubame's approach torii MUST be redrawn in plan as `docs/buildings.md` "Arch (torii) and approach" specifies - the
-  15 x 1.5 ft vermilion top beam across the approach, the two 1.2 ft darker post squares under its ends 10.3 ft clear, and the
+  `15 x 1.5 ft` vermilion top beam across the approach, the two `1.2 ft` darker post squares under its ends `10.3 ft` clear (the bullet's own figures), and the
   invisible `id="arch"` bounding rect - and its notes record the form (one arch).
 - **FR-007**: The "Modest shrine" bullet's clause saying the existing sheets still draw an elevation silhouette MUST be removed once
   no sheet does.
@@ -107,7 +107,7 @@ recorded "no longer applies" with the measurement.
 **The rear strips and 283's open findings (335)**
 
 - **FR-009**: Ubame's rear yard - each item re-measured, then worked: a way (stepping stones or a path) to the two storehouse doors;
-  a service way to the reception's privy whose approach avoids the garden; the 19 x 31 ft strip east of the reception settled;
+  a service way to the reception's privy whose approach avoids the garden; the strip east of the reception (the filed entry's `19 x 31 ft`, from feature 283's 2026-09-28 review) settled;
   the garden ended at the storehouses' south faces.
 - **FR-010**: Hayakawa's family way out of the inner garden - drawn as a labeled guess or not drawn (research 0104 holds an absence
   note on whether a wicket stood there), the choice recorded.
@@ -129,9 +129,9 @@ recorded "no longer applies" with the measurement.
 
 ### Measurable Outcomes
 
-- **SC-001**: Hayakawa's steps past the revetment's river face: 12 px -> 0 px (`harness.py`).
-- **SC-002**: Doors not wholly inside their building, over the four sheets: 35 -> 0 (`harness.py`).
-- **SC-003**: Torii groups not in plan, over the four sheets: 1 -> 0 (`harness.py`).
+- **SC-001**: Hayakawa's steps past the revetment's river face: 12 px -> 0 px (m:steps-past-revetment).
+- **SC-002**: Doors not wholly inside their building, over the four sheets: 35 -> 0 (m:doors-off-walls).
+- **SC-003**: Torii groups not in plan, over the four sheets: 1 -> 0 (m:torii-not-in-plan).
 - **SC-004**: Each of the three new checks red on its frozen unfixed fixture and green on every pool sheet (`make test-file`).
 - **SC-005**: Every FR-009..FR-014 finding has a recorded outcome with its measurement; every revised sheet's `building-review`
   passes within two rounds (or the round arbiter rules).
