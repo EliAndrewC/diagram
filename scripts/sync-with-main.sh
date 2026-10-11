@@ -477,7 +477,8 @@ push_cmd() {
   # be ticked by hand, so the push is where it holds.
   "$(dirname "$0")/gates/plan-gate.sh" || exit 1
   # THE PERFORMANCE BANDS ARE ENFORCED HERE (feature 129, FR-001/FR-002/FR-009): the GM's words for
-  # band 3 are "before it is committed back to main", so the push - not the gate - is where a
+  # band 3 are "before it is committed back to main" (its sign-off the round arbiter's since feature 379 -
+  # GUARD_EDIT_OK: comment only), so the push - not the gate - is where a
   # missing explanation, confirmation, audit or sign-off stops the work. `make perf-review` names
   # exactly which record is owed. CI_PERF_REVIEW is the test seam (a fixture has no skill).
   # THE TEST SEAMS ARE HONORED ONLY IN A FIXTURE (feature 132, Principle XIV - the fidelity

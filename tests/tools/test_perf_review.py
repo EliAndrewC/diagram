@@ -96,14 +96,14 @@ def test_a_negative_or_inconclusive_audit_does_not_pass(log: Path, verdict: str,
     assert run(log, "check") == 1 and f"audit={verdict}" in capsys.readouterr().out
 
 
-def test_band_3_needs_the_GMs_signoff_at_a_terminal(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_band_3_a_GM_signoff_given_unprompted_is_still_recorded(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 25.0)
     run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
     run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
     run(log, "audit", "--verdict", "justified", "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit")
-    assert run(log, "check") == 1 and "GM's sign-off" in capsys.readouterr().out
+    assert run(log, "check") == 1 and "the round arbiter's ruling" in capsys.readouterr().out
     assert run(log, "signoff", "--why", "ok", "--tty", "no") == 1, "no terminal: refused"
-    assert "in person" in capsys.readouterr().err
+    assert "never asks the GM" in capsys.readouterr().err
     assert run(log, "signoff", "--why", "", "--tty", "yes") == 2
     assert run(log, "signoff", "--why", "the map gains a whole tier; accepted", "--tty", "yes") == 0
     assert run(log, "check") == 0
@@ -416,7 +416,9 @@ def test_band_3_goes_to_the_round_arbiter_first(log: Path, tmp_path: Path, capsy
     def check() -> int:
         return pr.main(["check", "--feature", F, "--log-dir", str(log), "--specs-dir", str(specs)])
 
-    assert check() == 1 and "make perf-arbiter ENV=local" in capsys.readouterr().out
+    assert check() == 1
+    out = capsys.readouterr().out
+    assert "make perf-arbiter ENV=local" in out and "never a question to the GM" in out and "perf-signoff" not in out
     assert run(log, "arbiter-subject") == 0
     subject = capsys.readouterr().out.strip()
     assert subject.startswith("perf-band3-local-") and len(subject) == len("perf-band3-local-") + 12

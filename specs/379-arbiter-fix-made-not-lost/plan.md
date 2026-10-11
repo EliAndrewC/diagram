@@ -137,10 +137,13 @@ that commit, environment and those exact percentages - and runs `make arbiter-as
 the bundle built in one command), writing `perf_review.py show`'s report beside the MANIFEST as `perf-report.txt`. Only a
 band-3 pair has a subject. `perf_review.check` counts an arbiter `accept` on `ask:<that subject>` in the feature's
 `arbiter.jsonl` as the band-3 record (`arbiter_signed`); `continue`, `process-fault` and a ruling on other numbers do not
-(a new pair has a new subject). The GM's terminal `signoff` still counts, and its refusal names `make perf-arbiter`. The
-arbiter's contract states the band-3 standard it rules by. The texts that gave band 3 to the GM alone say the arbiter
-first: the constitution's band table, `dev/performance.md`, `docs/guards.md`, `l7r/diagram/CLAUDE.md`, the `perf-signoff`
-target's help line. `perf_review.py` is engine code under the 100% floor: its tests carry both functions.
+(a new pair has a new subject). The push's MISSING line names `make perf-arbiter` alone, "never a question to the GM"; the
+`signoff` command stays only to record a sign-off the GM gives unprompted, in their words, and its refusal names the
+arbiter. The arbiter's contract states the band-3 standard it rules by. Every text FR-011 lists says the arbiter:
+`perf_bands.py`'s table and the band-3 line every report prints, `perf_review.py`'s docstring and both refusals,
+`perf_snapshot.py`'s comment, `perf-audit.md`'s band-3 section, the constitution's band table, `dev/performance.md`,
+`docs/guards.md`, `l7r/diagram/CLAUDE.md`, `sync-with-main.sh`'s comment, the Makefile's comment and `perf-signoff` help.
+The session memory that told sessions to ask the GM's go-ahead is rewritten (outside the repository). `perf_review.py` is engine code under the 100% floor: its tests carry both functions.
 
 ## Tasks
 

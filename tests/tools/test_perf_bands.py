@@ -46,7 +46,7 @@ def test_feature_128s_pair_is_band_3_despite_a_faster_total() -> None:
     v = pb.evaluate(base, end)
     assert v.total_pct == -29.9 and v.seeds[47] == 30.7 and v.band == 3
     assert "seed 47 +30.7% > 20%" in v.crossed and "seed 47 +30.7% > 10%" in v.crossed
-    assert "GM" in v.owes and "perf-signoff" in v.owes
+    assert "round arbiter" in v.owes and "perf-arbiter" in v.owes, "band 3 goes to the arbiter, never a question to the GM (feature 379)"
     assert v.measurements == {"total_pct": -29.9, "seeds": {"4": 13.1, "25": -63.8, "39": 5.5, "47": 30.7}}
 
 
@@ -80,7 +80,7 @@ def test_render_names_the_measurement_the_stage_that_grew_and_what_is_owed() -> 
     text = pb.render(pb.evaluate(base, end))
     assert text.splitlines()[0] == "perf bands [local]: e vs s -> band 3"
     assert "seed  25   +15.0%; grew: web +11.0s, field +1.0s" in text
-    assert "crossed: seed 25 +15.0% > 10%" in text and "owes: bands 1 and 2, plus the GM" in text
+    assert "crossed: seed 25 +15.0% > 10%" in text and "owes: bands 1 and 2, plus the round arbiter's sign-off" in text
     quiet = pb.render(pb.evaluate(snap("s", {1: 10.0}), snap("e", {1: 9.0})))
     assert "grew" not in quiet and "owes: nothing" in quiet
 

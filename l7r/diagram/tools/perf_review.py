@@ -3,7 +3,7 @@
     python3 -m l7r.diagram.tools.perf_review explain --why "..." --control <key>   (the session; or --unverified "<reason>")
     python3 -m l7r.diagram.tools.perf_review confirm --verdict consistent --as perf-audit
     python3 -m l7r.diagram.tools.perf_review audit --verdict justified --necessary ... --commensurate ... --no-way-around ... --as perf-audit
-    python3 -m l7r.diagram.tools.perf_review signoff --why "..." --as GM         (a terminal; the round arbiter rules first: arbiter-subject)
+    python3 -m l7r.diagram.tools.perf_review signoff --why "..." --as GM         (the GM's own words, unprompted; a session uses arbiter-subject)
     python3 -m l7r.diagram.tools.perf_review check                               (the push)
 
 Every record is ONE FILE in dev/perf-log/ (never a shared log - concurrent clones), BOUND to the
@@ -16,7 +16,9 @@ shell from the main session's, so `confirm` and `audit` PROMPT: without `--as pe
 print that the main session must not continue, name the escape, and DECLINE. The declaration is
 recorded with the session id. What a self-grant costs is the record's content - a stated cause
 that must match the stage delta, three criteria each addressed - written into a tracked file.
-`signoff` needs a terminal: the GM has one, a session does not.
+`signoff` records the GM's own words when the GM gives a band-3 sign-off unprompted; a session never asks for one - band 3 goes
+to the round arbiter (`arbiter-subject`, `make perf-arbiter`; feature 379, the GM 2026-10-10: "yes it covers the band-3 perf
+signoff too"), whose accept bound to the pair's numbers stands for it.
 """
 
 from __future__ import annotations
@@ -265,7 +267,8 @@ def check(log_dir: Path, feature: str, specs_dir: Path | None = None) -> tuple[b
         if v.band >= 2 and "audit" not in have:
             need.append("the escalated audit (make perf-audit VERDICT=justified NECESSARY=... COMMENSURATE=... NO_WAY_AROUND=... AS=perf-audit)")
         if v.band >= 3 and "signoff" not in have and not (specs_dir and arbiter_signed(specs_dir, feature, v)):
-            need.append(f"the round arbiter's ruling first (make perf-arbiter ENV={env}) - or the GM's sign-off at a terminal (make perf-signoff WHY=...)")
+            # the session's ONE route (feature 379 amendment 3): it never asks the GM; a GM sign-off given unprompted still counts
+            need.append(f"the round arbiter's ruling (make perf-arbiter ENV={env}) - never a question to the GM")
         head = f"[{env}] {v.cur['label']} vs {v.base['label']} at {v.cur['commit']}: band {v.band}" + (f" ({'; '.join(v.crossed)})" if v.crossed else "")
         if need:
             ok = False
@@ -366,9 +369,9 @@ def main(argv: list[str] | None = None) -> int:
         is_tty = (a.tty == "yes") if a.tty is not None else sys.stdin.isatty()
         if not is_tty:
             print(
-                "perf-review: REFUSED - the GM's own sign-off is given at a terminal, in person, and no terminal is attached. A session "
-                "puts band 3 to the round arbiter first (the GM 2026-10-10: 'yes it covers the band-3 perf signoff too'): "
-                f"make perf-arbiter ENV={a.environment}",
+                "perf-review: REFUSED - a session never asks the GM for a band-3 sign-off: it goes to the round arbiter (the GM "
+                f"2026-10-10: 'yes it covers the band-3 perf signoff too'): make perf-arbiter ENV={a.environment}. A sign-off the GM "
+                "gives unprompted, in their own words, is recorded as before.",
                 file=sys.stderr,
             )
             return 1

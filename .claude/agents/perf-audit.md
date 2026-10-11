@@ -102,8 +102,9 @@ approval. Every criterion must have text; the command refuses an empty one.
 
 ## Band 3 (>10% total or >20% on a seed)
 
-Everything above, AND the GM signs off personally at a terminal (`make perf-signoff`). You cannot
-grant that and must say so in your report: name the measurement and the number that crossed.
+Everything above, AND the round arbiter's sign-off (`make perf-arbiter`; feature 379, the GM 2026-10-10: "yes it covers the
+band-3 perf signoff too" - the session never asks the GM for it). You cannot grant that and must say so in your report: name
+the measurement and the number that crossed, which the arbiter rules on.
 
 ## Your report to the main session
 
