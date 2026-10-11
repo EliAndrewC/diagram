@@ -261,6 +261,44 @@ change; a batch that needs a new decision amends this plan and is reviewed again
 task's section, so `review-round-hooks.sh`'s classifier passes it as a plan review and never reroutes it to the verify
 twin; `make plan-verdict TASK=<id>` records it under `tasks.<id>`.
 
+### Amendment 1 (FR-015, FR-016)
+
+**D20 - The triage names the page, and a unit is owed only for its own pages (FR-015).** `modal_triage.bundle` already lists
+the changed blocks per page and the pop-ups under each; `triage.json` now also records, per unit, the pages it reads
+(`_pages_of`: a research unit its `Entry:` pages, `modal-depiction` its `Drawing:` pages). The MANIFEST asks for one line per
+(pop-up, page): `TOUCHES <uid> @ <page file name> - <which block>`. `record()` marks a unit touched only when a line names its
+uid at one of ITS pages; a line naming no page (the old form), or a page the bundle never showed (misnamed, bare, unchanged),
+still names all of that uid's units in the bundle - failing toward checking - so a malformed reply never clears what it meant
+to keep (plan review round 1). One bundle and one dispatch, as
+now (the advisor's split-by-family alternative costs a second dispatch whenever both families are owed, as in 343's triage).
+The SC-007 replay restates the kept reply's 14 lines with the pages they name in their own words ("0099 ..." the question
+page, "0104 drawing: ..." the drawing page): `tests/fixtures/modal-triage-343/`.
+
+**D21 - Depiction owed by the words it reads (FR-015).** In `modal_owed.owed`, `modal-depiction` is owed when the pop-up is new
+to the About form, or its `depiction` (the Depiction tab and the `Drawing:` list), its About or its `Entry:` changed, or a page
+its `Drawing:` names moved (the triage then decides) - no longer when only its Guesses (or Name, Form) changed. About and
+`Entry:` stay because the check reads them (About for drawing statements that belong in Depiction, `Entry:` for the candidate
+drawing pages `modal_bundle.drawing_candidates` builds - feature 319's plan-review case); the comment at the rule says so.
+The unit's answer follows the same words: `depiction_fingerprint` digests exactly what the check reads - About, `Entry:`, the
+Depiction tab, the `Drawing:` list and those pages - not Guesses, Name or Form, so a Guesses edit after the check answered
+leaves it answered and an `Entry:` edit re-owes it (plan review round 1: owing is judged against the merge base, the answer by
+the fingerprint, so the fingerprint is what decides a later edit). Changing the digest re-owes, once, the depiction units
+already owed against a clone's base.
+The SC-007 replay's restated reply attributes each kept line by where its quoted block stands: a block on both 0104 pages
+(garden, genkan) or only on the drawing page (nakamon's divider gate) keeps depiction owed.
+
+**D22 - The clones' view in `make speckit-todo`, display only (FR-016).** Which clones are read is measured first (FR-016): the
+listing's wall time reading every clone under `.clones/` against only the active ones - a clone whose event log
+(`.git/l7r-events/`, a line per tool call of its session) was written in the last 12 hours, no process scan - recorded as
+`m:375-a1-speckit-todo-clones` in `measurements.json`; the active-only limit is kept only if it saves a measurable share of
+the listing's time, else every clone is read (measured: about 0.14 s against 0.9 s, the same rows - kept). 12 hours: a
+session idle overnight drops out, a session paused for a meal stays. A clone's work is any file under `specs/<feature>/`
+(spec, plan, plan review, tasks) committed past its `origin/main` or not yet committed (`git diff --name-only`) - so a clone
+BEHIND main shows nothing (the first run listed two abandoned clones' older copies), and a feature closed on main but reopened
+in a clone (an amendment in progress) is shown. For each such feature, the listing shows
+the clone's state in that state's section, `[in <clone>, not landed]`, one row per differing clone. Only the listing does
+this: `--holding`, `--closed-by-status`, `CHECK=1` and `tick-task.py` read the directory they are given, as before.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005
