@@ -2014,7 +2014,7 @@
   "tier_as_ranked": "E4",
   "e0_basis": "a claim written against the page that answers",
   "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
-  "wave": "8 (claim written against 0087; its question a found row)",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2399,7 +2399,7 @@
   "flag": "",
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "6 (claim written; what it states against its page is a found row)",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2629,7 +2629,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "3",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2764,7 +2764,7 @@
   "flag": "",
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
-  "wave": "9",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2779,7 +2779,7 @@
   "flag": "",
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
-  "wave": "9",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3545,7 +3545,7 @@
   "tier_as_ranked": "E2",
   "moved": "T122a (fresh reader): tiered by its work - Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) - a <= _BELT_GAP_FT and b - max(v for _u, v in cross) <= _BELT_GAP_FT` - and its docstring says 'an ",
   "e0_basis": "Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) ",
-  "wave": "47",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3804,7 +3804,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "10",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -4173,7 +4173,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "10",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -4674,7 +4674,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The code tints every plot it counts as low, which is what 0007 records for a polder, so only the claim wording changes.",
-  "wave": "11",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -6451,7 +6451,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E1",
   "moved": "T38a: tiered by its work - One literal becomes a scaled value; logic unchanged.",
-  "wave": "10",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -6671,7 +6671,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
-  "wave": "9",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -8488,7 +8488,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "DRIFTED",
-  "wave": "45",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -8519,7 +8519,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "CANNOT-TELL",
-  "wave": "46",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -10730,7 +10730,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob",
@@ -10810,7 +10810,7 @@
   "moved": "wave 1: E0 -> E3, the re-check found the implementation itself differs: Hayakawa's \"two modest shrines\" contradict the drawing page's rule \"a map draws one, a deliberate deviation\". Either the drawing page records Hayakawa as an exception or the sheet draws one",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure",
@@ -11127,7 +11127,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip",
@@ -14749,7 +14749,7 @@
   "tier_as_ranked": "E1",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed and unchanged since T56a tiered this key: the drawing page still says '20 to 35 ft on a side' (0222.drawing.html:8) while the procedure's claim (building-programs.md:179) reads 'worship hall from about 18 ft (Hie about 18 x 12, Rokusha 9 tsubo) to about 35 ft (the band about 18-35 by 12-35 ft)', which matches 0215's measured hall. Only the drawing page lags its own research section, so n",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
@@ -14765,7 +14765,7 @@
   "tier_as_ranked": "E0",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed: 0220.drawing.html:4 still lists 'convention (the innermost arch one pitch off the hall; ...)' and :29 'The innermost arch stands 12 ft off the hall's nearest face, the same as the spacing between arches.' The procedure already draws that distance and already labels it GUESS (building-programs.md:132), so the disagreement is only in the page's class; T56a tiered this same key E4 for that",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis",
@@ -14782,7 +14782,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob",
