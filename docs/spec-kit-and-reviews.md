@@ -68,6 +68,10 @@ a pop-up's checks are triaged against the blocks that moved; a procedure claim i
 stopping**: a tripwire (a third round, a block that comes back, two red gates, checks out of proportion to the change) owes the
 `round-arbiter` one binding ruling - continue, accept or process fault - in place of the GM's waiver, and the GM reviews every
 ruling after the feature lands (`make gm-review`, `make gm-reviewed`). The full record: `specs/375-enforced-wave-process/`.
+A ruling's `tooling_fix` is made, not lost (feature 379, the GM 2026-10-10: *"always implement this kind of tooling change
+when recommended by the arbiter"*): it is an open item that holds every `make tick` and the closing check until `make
+arbiter-fix-done` (what was built, its test) or, for an overhaul of a process, `make arbiter-fix-declined` - each a row of
+the GM's review, and never a feature filed.
 
 ## Review subagents
 

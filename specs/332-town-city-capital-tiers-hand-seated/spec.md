@@ -1,6 +1,6 @@
 # Feature Specification: The town, city and capital tiers' hand-seated captions go through the one placer when their tier is scripted (feature 266, spec D8)
 
-**Status**: Filed - from future-work/cities.md, "The town, city and capital tiers' hand-seated captions go through the one placer when their tier is scripted (feature 266, spec D8)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Superseded by 381 (2026-10-10): carried word for word into the town tier's placeholder, `specs/381-town-tier-scripted/` (the GM, 2026-10-10: "I agree with your approach, so please do it."). Was: Filed - from future-work/cities.md, "The town, city and capital tiers' hand-seated captions go through the one placer when their tier is scripted (feature 266, spec D8)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: town, provincial city, capital
 

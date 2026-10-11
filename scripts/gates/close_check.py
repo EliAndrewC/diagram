@@ -62,7 +62,18 @@ def reasons(d: Path, specs: Path | None = None) -> list[str]:
     # GUARD_EDIT_OK: feature 378 FR-004 - a new closing requirement, the GM 2026-10-10: a `research record` feature closes
     # only once each question it changed is cited by a checked `Research:` claim or recorded as implemented nowhere
     out += _impl_check().missing(d, d.resolve().parents[1])  # the repository holding `specs/<d>`
-    return out
+    hold = _arbiter().fix_hold(d)  # feature 379 FR-004: no feature closes around an open arbiter tooling fix
+    return out + ([hold] if hold else [])
+
+
+def _arbiter():  # noqa: ANN202 - scripts/hooks/lib/hm_arbiter.py by path
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("hm_arbiter", ROOT / "scripts" / "hooks" / "lib" / "hm_arbiter.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def _impl_check():  # noqa: ANN202 - scripts/record/impl_check.py by path (the gates and the record are siblings)

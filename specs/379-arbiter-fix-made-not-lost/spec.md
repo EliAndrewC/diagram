@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress
+**Status**: Done 2026-10-10 - spec FAITHFUL (round 2), plan CLEAR, every task ticked; make done green; tests/tooling/test_arbiter_fix.py replays 378's ruling
 
 **Affects**: review process, tooling
 

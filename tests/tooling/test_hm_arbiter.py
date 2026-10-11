@@ -42,11 +42,11 @@ def test_a_ruling_is_binding_once_and_reaches_the_gm(tmp_path: pathlib.Path) -> 
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "x"}, "main")
     with pytest.raises(ValueError, match="one of"):
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "maybe", "why": "x"}, "round-arbiter")
-    row = ha.record_ruling(root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation over the bath bullet"}, "round-arbiter", "2026-10-10T00:00:00Z")
+    row = ha.record_ruling(root, "reversal:/a.md", {"ruling": "process-fault", "why": "an oscillation over the bath bullet", "tooling_fix": "x"}, "round-arbiter", "2026-10-10T00:00:00Z")
     assert row["kind"] == "reversal" and ha.owed(root) == {}
     d = root / "specs" / "375-x"
     assert json.loads((d / "gm-review.jsonl").read_text())["ruling"] == "process-fault"
-    assert json.loads((d / "found.jsonl").read_text())["block"] == "reversal:/a.md", "a process fault is filed as a tooling row"
+    assert ha.open_fixes(d) == [("reversal:/a.md", "x")], "a process fault is an open tooling fix (feature 379)"
     with pytest.raises(ValueError, match="already ruled"):
         ha.record_ruling(root, "reversal:/a.md", {"ruling": "accept", "why": "again"}, "round-arbiter")
     assert not ha.trip(root, "reversal:/a.md", "reversal", "/a.md", "again", 2), "a ruled trigger does not fire again"

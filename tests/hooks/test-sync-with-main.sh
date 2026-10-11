@@ -416,7 +416,9 @@ expect_out "**Affects**: hamlet, magistracy"
 ( cd "$D/main/.clones/c" && printf -- '\n**Affects**: towns\n' >> specs/400-x/spec.md && git add -A && git commit -qm "a typo" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: an unknown tag -> refused" 1 $?
 expect_out "unknown: towns"
-( cd "$D/main/.clones/c" && sed -i 's/^\*\*Affects\*\*: towns$/**Affects**: town, capital/' specs/400-x/spec.md && git add -A && git commit -qm "tagged" )
+# GUARD_EDIT_OK: fixing a fixture the tier placeholders (380-382) made wrong - a town-only open feature is now refused
+# outside the town placeholder, so the known-tags case is owed now; nothing loosened.
+( cd "$D/main/.clones/c" && sed -i 's/^\*\*Affects\*\*: towns$/**Affects**: hamlet, town/' specs/400-x/spec.md && git add -A && git commit -qm "tagged" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the same spec with known tags -> lands" 0 $?
 
 echo "17. a check's pass with no row in the review ledger is refused at the push, with the row to add (feature 371)"

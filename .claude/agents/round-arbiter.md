@@ -46,15 +46,23 @@ know you need in one message.
 - `accept` - what stands is good enough: the remaining findings are REPEATED wording, taste or out-of-scope, or each is fixed or
   filed. The unit closes; what is left is filed as rows. Say what is left and why it can stand.
 - `process-fault` - the loop is the problem: findings REVERSE earlier fixes, the same block oscillates, or each fix re-owes more
-  checks than it settles. The unit stops; the fault is filed as a tooling row. Name the fault so a tool can be built against it.
+  checks than it settles. The unit stops; the fault is your `tooling_fix` (below), which the record refuses without. Name it
+  so a tool can be built against it.
 
 When unsure between `continue` and anything else, prefer the one that stops spending rounds: the GM sees every ruling.
+
+## A tooling fix is a field, never prose
+
+Any tooling change you recommend - under any ruling, whether or not it caused the loop you judged - goes in `tooling_fix`: one
+sentence naming the tool and the change (a guard that let a known hazard through, a command that misled, a bundle that hid
+what it needed). Never leave one only in `why` or `what`: a fix written there was lost (feature 379). The session MAKES it,
+with its test, before its next tick; one that would overhaul a process goes to the GM's review instead. Nobody files it.
 
 ## Reply and record
 
 Reply with ONE JSON object and nothing after it:
 
-    {"ruling": "continue|accept|process-fault", "why": "<two or three sentences>", "what": "<what the next round looks at, or what is left>"}
+    {"ruling": "continue|accept|process-fault", "why": "<two or three sentences>", "what": "<what the next round looks at, or what is left>", "tooling_fix": "<one sentence, or omit>"}
 
 Then record it yourself, from the clone root the MANIFEST names: write the JSON to a file and run
 `make arbiter-ruled TRIGGER="<the trigger id>" FILE=<that file> AS=round-arbiter`. Only you pass `AS=round-arbiter`. A

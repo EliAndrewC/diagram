@@ -139,6 +139,16 @@ def _todo():  # noqa: ANN202 - `speckit-todo.py` by path (its name has a hyphen)
     return mod
 
 
+def _arbiter():  # noqa: ANN202 - scripts/hooks/lib/hm_arbiter.py by path
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("hm_arbiter", Path(__file__).resolve().parent / "hooks" / "lib" / "hm_arbiter.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def main(argv: list[str]) -> int:
     boxes = "--boxes" in argv
     from_env = "--note-from-env" in argv
@@ -168,7 +178,7 @@ def main(argv: list[str]) -> int:
         print(message, file=sys.stderr if not permitted else sys.stdout)
     if not permitted:
         return 2
-    refusal = waits_or_marks(root, d)
+    refusal = waits_or_marks(root, d) or _arbiter().fix_hold(d)  # feature 379: an open arbiter tooling fix holds every tick
     if refusal:
         print(f"tick: refused - {refusal}", file=sys.stderr)
         return 2
