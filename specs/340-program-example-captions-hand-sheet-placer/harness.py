@@ -12,7 +12,7 @@ Composer variants, re-seated by a loop with the composer's own steps (strict, th
 repair or growth; the loop with every piece the composer's own is checked to reproduce C), each with one source swapped
 for the hand-sheet placer's: VIEW (the obstacle index from `hand_sheet.classify` over the drawn sheet, the seated captions
 added as the composer adds them; the roofed court's late obstacles dropped), SUBJECT (`hand_sheet.subjects` over the
-declared parts, first subject), WIDTH (`hand_sheet.char_w_of` per caption), and ALL three. FIX 1 is VIEW (the composer
+declared parts, every subject tried in order), WIDTH (`hand_sheet.char_w_of` per caption), and ALL three. FIX 1 is VIEW (the composer
 indexing with `classify`). FIX 2 is the hand-sheet placer taking the composer's subjects (`hand_sheet.subjects` patched).
 """
 
@@ -47,9 +47,9 @@ def test_measure(monkeypatch) -> None:  # noqa: ANN001
     runs: list[tuple] = []
     orig = c._seat_all
 
-    def rec(requests, obstacles, frame, late):  # noqa: ANN001, ANN202
-        seats, stuck = orig(requests, obstacles, frame, late)
-        runs.append((list(requests), list(seats), list(obstacles), frame, dict(late)))
+    def rec(requests, obstacles, frame, one=None):  # noqa: ANN001, ANN202
+        seats, stuck = orig(requests, obstacles, frame, one)
+        runs.append((list(requests), list(seats), list(obstacles), frame, {}))
         return seats, stuck
 
     monkeypatch.setattr(c, "_seat_all", rec)
@@ -80,7 +80,7 @@ def test_measure(monkeypatch) -> None:  # noqa: ANN001
     cw_h = [hs.char_w_of(h.element, h.text, h.size) for h in heads]
 
     def idx_composer(i, sub, seats):  # noqa: ANN001, ANN202
-        return c._caption_index(obstacles, seats, late, subject=sub)
+        return c._caption_index(obstacles, seats, subject=sub)
 
     def idx_view(i, sub, seats):  # noqa: ANN001, ANN202
         index = hs.classify(ns, nview, subject=list(sub.poly), area=sub.kind == "area", kind=requests[i][5], named=named)

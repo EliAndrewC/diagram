@@ -42,13 +42,17 @@ measurement and the plan is amended and re-reviewed before it is built.
   seat wins), since the composer's own single subject is what differs; WIDTH - the composer measures each caption with
   `hand_sheet.char_w_of` (FR-003: the source no longer differs, though on this example it moves no seat). Measured with all
   three swapped: 44 of 45 agree; the one left apart is a clerk (order, clearance or repair - not one of the three), reported
-  and not unified; and every caption finds a strict seat (none soft). After the switch the harness re-runs on the built code.
-- **D4 - strictness under the one view (FR-004)**: a seat is free when it touches nothing outside the caption's declared parts:
-  every weighted obstacle `classify` gives blocks, the ones it flags `inner` (partitions, a court's buildings, a named room
-  inside the subject) included - a caption named for a building does not name its partitions (plan review round 2 reversed the
-  first D4, which let inner ink through). The placer's own `blocked` already waives the subject's own outline. Foot growth
-  (`CAPTION_GROWTHS`) and the refusal message are unchanged; the growth and refusal run only when no subject in the list has a
-  free seat.
+  and not unified; and every caption finds a strict seat (none soft). After the switch the harness re-ran on the built code (m:caption-disagreements-after): 3 apart - the straw mats 4.6 px and a clerk 84.2 px (order, clearance or repair) and a clerk 3.5 px (the hand-sheet seat covers ink) - none explained by the three sources.
+- **D4 - strictness under the one view (FR-004)**: a shape the caption DECLARES never makes its seat unfree, flagged inner or
+  not (plan review round 3): `classify`'s inner obstacle for a declared shape is dropped from that caption's index (the
+  striking posts are not judged against the posts they name). Every other weighted obstacle blocks - the subject's partitions,
+  a court's buildings, any shape the caption does not name - inner or not (round 2). Two rules of the hand-sheet placer's own
+  classification are part of the one view and stay: a name in dark ink takes no dark fill it names (a well's shaft), and none
+  lies across its subject's drawn outline; both are legibility, not naming, and the hand sheets keep them. Measured: skipping
+  the declared shapes outright (which drops those two rules too) set three wells' names inside their wells and left 7 captions
+  apart; with the two kept, 3 (m:caption-disagreements-after). Foot growth (`CAPTION_GROWTHS`) and the refusal message are
+  unchanged and run only when no subject in the list has a free seat. The roofed court's late obstacles are retired with the
+  composer's own index (the classification reads the court as built).
 - **D5 - performance (FR-005)**: the example's gen timed before and after (`make map ... PROFILE=1`); `make perf-report` read;
   any band crossed explained and audited.
 - **D6 - tests**: `tests/test_compound.py` keeps its refusal test unchanged; a declarations test (D1, seats unchanged); the D3
