@@ -26,9 +26,11 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 1 (the GM 2026-10-10: a tooling fix lands alone, mid-feature)
 
-- [ ] T06 `scripts/land-tooling.sh` and `make land-tooling FILES=` (plan D8, D9); its suite `tests/hooks/test-land-tooling.sh` over real git repos (SC-003)
+- [x] T06 `scripts/land-tooling.sh` and `make land-tooling FILES=` (plan D8, D9); its suite `tests/hooks/test-land-tooling.sh` over real git repos (SC-003)
       research: rendering
-- [ ] T07 Done means landed (plan D10): `settle_fix` compares the TEST's blob on origin/main; tests (SC-004)
+      verify: DONE. scripts/land-tooling.sh + make land-tooling; tests/hooks/test-land-tooling.sh 17/17 over real git repos (SC-003: alone, no engine work, clean merge, non-tooling/conflict/failed check/unlanded-work test refused); in make hooks-test
+- [x] T07 Done means landed (plan D10): `settle_fix` compares the TEST's blob on origin/main; tests (SC-004)
       research: rendering
+      verify: DONE. settle_fix refuses until the TEST blob on origin/main equals HEAD's (on_main, fetches first); test_arbiter_fix SC-004 refused then passes after update-ref; 14 passed
 - [ ] T08 Close: the text (CLAUDE.md's session-clones bullet and guard table, `docs/session-clones.md`), tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
