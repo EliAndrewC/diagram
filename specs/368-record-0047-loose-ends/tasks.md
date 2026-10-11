@@ -22,9 +22,9 @@ The quotation edits are `research: physical` with their five boxes; the rest are
 - [ ] T03 0006 (D3, FR-004, FR-005): the clause to 0033's holdings; the dry plot's stroke told on the drawing page
       research: rendering
       verify: the record checks and the modal depiction checks owed answered (FR-006)
-- [ ] T04 Implementation check (feature 378): make impl-check F=368 reports nothing missing (D5, FR-007)
+- [x] T04 Implementation check (feature 378): make impl-check F=368 reports nothing missing (D5, FR-007)
       research: rendering
-      verify: make impl-check F=368
+      verify: DONE. make impl-check F=368: its commits changed no question's findings - nothing owed (2026-10-11)
 - [ ] T05 Close: the tooling tests green; report; landed
       research: rendering
       verify: the push accepted

@@ -16,9 +16,9 @@ The record write is `research: physical` with its five boxes; the rest are `rese
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: the record checks owed answered (FR-090)
-- [ ] T02 The download list (D2): the 1830 drawing
+- [x] T02 The download list (D2): the 1830 drawing
       research: rendering
-      verify: make download-add
+      verify: DONE. research/to-download.md item 307 holds the 1830 Takayama drawing, with the Japanese Wikipedia page that names it
 - [ ] T03 The claim on the route's code (D3, D3a, FR-002): _roji_parts cites 0104; impl-drift records it DRIFTED; implementation-check.md records Ochiba's hand-drawn outdoor route as departing from 0104's finding (D3a)
       research: rendering
       verify: make claims-report lists it DRIFTED

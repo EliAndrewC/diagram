@@ -16,9 +16,9 @@ The record write is `research: physical` with its five boxes; the rest are `rese
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: the record checks owed answered (FR-090)
-- [ ] T02 The download list (D3): the 1994 Koseki repair report
+- [x] T02 The download list (D3): the 1994 Koseki repair report
       research: rendering
-      verify: make download-add
+      verify: DONE. research/to-download.md item 308 holds the 1994 Koseki house repair report, with the Shiroishi castle page on the house
 - [ ] T03 Implementation check (feature 378): make impl-check F=338 reports nothing missing (D4, FR-091)
       research: rendering
       verify: make impl-check F=338
