@@ -489,14 +489,11 @@ def _blocked(
     *,
     vert: bool,
 ) -> bool:
-    for k, r in enumerate(buildings):
-        if k in (i, j):
-            continue
-        if vert and r.x < hi and r.x2 > lo and r.y < far and r.y2 > near:
-            return True
-        if not vert and r.y < hi and r.y2 > lo and r.x < far and r.x2 > near:
-            return True
-    return False
+    """Does a third building stand in the corridor between buildings i and j? Both callers pass the corridor's x-interval as
+    (lo, hi) and its y-interval as (near, far), so the one test serves both orientations - the horizontal arm once tested the
+    y-extent against the x-interval and paired Ochiba's nagaya with a storehouse across another (feature 335)."""
+    del vert  # both orientations pass x first: kept so each call site still says which way its gap runs
+    return any(k not in (i, j) and r.x < hi and r.x2 > lo and r.y < far and r.y2 > near for k, r in enumerate(buildings))
 
 
 def aligned_gaps(plan: ParsedPlan) -> list[Gap]:

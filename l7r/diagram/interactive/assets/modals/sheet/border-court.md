@@ -22,8 +22,9 @@ Guesses:
   gravel, swept earth or sand, is not known, so the plan draws the court only as the garden's stippled earth.
 
 Depiction: The plan draws the border court as a garden of its own, stippled and set with a stone lantern, inside the
-guests' door and apart from the hearing court. The ground inside a real gate, before a guest's entrance, was open
-ground a palanquin could cross; the garden is the plan's guess (see Guesses).
+guests' door and apart from the hearing court. It stands where a real border post had the ground between its gate and its
+inspection hall, which everyone crossing passed over. The ground inside a real gate, before a guest's entrance, was open
+ground a palanquin could cross; the garden and its lantern are the plan's guess (see Guesses).
 
 Name: border court
 Covers: the receiving court behind a border posting's parley door, and its label

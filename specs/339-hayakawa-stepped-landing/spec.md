@@ -1,6 +1,6 @@
 # Feature Specification: Hayakawa's stepped landing (sheet check)
 
-**Status**: Filed - from future-work/compounds.md, "Research owed (rewritten by feature 267, 2026-09-27)", piece 4, 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Superseded by 335 (2026-10-11): carried word for word into the one redraw of the magistracy sheets (the GM, 2026-10-11: "If some of them should be undled together that's fine"). Was: Filed - from future-work/compounds.md, "Research owed (rewritten by feature 267, 2026-09-27)", piece 4, 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: magistracy
 

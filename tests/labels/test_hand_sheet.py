@@ -83,6 +83,14 @@ def test_the_sheet_is_classified_by_its_tags() -> None:
     assert len(idx.ways) == 1 and idx.ways[0].half_width == 5.0
 
 
+def test_a_rear_yard_is_open_ground_to_a_caption() -> None:
+    """Feature 335: the rear yard is open working ground, as a cart yard is - its outline weighs nothing to a caption."""
+    src = _sheet('  <polygon points="10,10 200,10 200,80 10,80" fill="none" data-kind="rear yard"/>\n')
+    shapes, view = sl.read_sheet(src)
+    assert "rear yard" in sl.GROUND_KINDS
+    assert not sl.classify(shapes, view).obstacles
+
+
 def test_a_caption_names_its_group_or_its_declared_ids() -> None:
     """Feature 286 (plan D1): a group's one caption names the group's drawn shapes; a caption among several, or tagged
     on its own, names the `data-id`s its `data-names` lists (an id on a group marks everything in it). Where it stands

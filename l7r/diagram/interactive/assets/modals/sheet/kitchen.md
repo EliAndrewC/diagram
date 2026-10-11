@@ -20,8 +20,8 @@ Guesses:
   recorded within the house, to its side, but no source names a kitchen yard or the side of the lot it took.
 
 Depiction: A residence's plan draws the kitchen board-floored, cooking on a kamado that stands either on a small doma at the
-kitchen's edge or, on legs, on the boards with no doma drawn - each plan takes one - and never on a sunken hearth. Its door opens into the work space of
-the service ground, the reverse of a guest's door; the family's own door is the residence's inner entrance. The kitchen is
+kitchen's edge or, on legs, on the boards - each plan takes one - and never on a sunken hearth. Its door opens into the work space of
+the service ground, the reverse of a guest's door; the family's own door is the residence's inner entrance, or, where a guest is brought by a garden path to the veranda and not to a formal entrance, the kitchen door itself. The kitchen is
 drawn at about the size of the Hagi house's kitchen wing, about 24 by 18 ft or a little smaller, whatever the size of the house it serves, and always well short of the house itself; it stands to the side and rear of the house, away from the gate.
 
 Name: kitchen

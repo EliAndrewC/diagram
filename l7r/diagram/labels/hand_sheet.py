@@ -45,10 +45,13 @@ WAY_KINDS = frozenset({"road", "river", "revetment"})
 """The kinds a caption may cross at a way's weight (plan P4, observed 2026-09-27, method: the tag census of the six
 sheets - roads are stroked paths 18 to 40 px wide)."""
 
-GROUND_KINDS = frozenset({"outer court", "inner court", "border court", "practice ground", "garden", "vegetable garden", "garden pines", "cart yard", "shrine grove", "river landing"})
+GROUND_KINDS = frozenset({"outer court", "inner court", "border court", "practice ground", "garden", "vegetable garden", "garden pines", "cart yard", "rear yard", "shrine grove", "river landing"})
 """The sheets' open ground - free space to a caption (plan P4). An explicit list: a name that merely CONTAINS "court"
 is not ground (`court divider` is a wall), and a roofed floor on posts (`weighing floor`) is built - as the hearing court
-is since feature 267 roofed it (research 0099), so another caption no longer takes its floor as open ground."""
+is since feature 267 roofed it (research 0099), so another caption no longer takes its floor as open ground. The `rear
+yard` (feature 283's open working ground behind a house) was missed when it was added: its outline weighed as a drawn
+obstacle, and on Ubame, once the yard reached down to the reception privy (feature 335), the privy's name was led out
+across the yard into the shrine grove."""
 
 WEIGHT_INNER = WEIGHT_OBSTACLE / 4
 """What ground nested inside the ground a caption names costs (feature 267): a court's name takes the court's own open

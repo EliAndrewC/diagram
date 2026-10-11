@@ -23,6 +23,7 @@ from ...buildings.types import BuildingType, load_types
 from . import checks as c
 from . import labels as lbl
 from . import mapmatch as mm
+from . import marks_drawn as md
 from . import palette as pal
 from . import program_rules as pr
 from . import roads as rd
@@ -103,6 +104,18 @@ def _doors(ctx: Context) -> list[str]:
     return [f"a door at svg({d.x:.0f},{d.y:.0f}) floats {d.gap_ft:.1f} ft inside the building" for d in c.floating_doors(ctx.plan)]
 
 
+def _doors_off(ctx: Context) -> list[str]:
+    return [f"a door at svg({d.x:.0f},{d.y:.0f}) is {'outside its wall' if d.how == 'outside' else 'floating inside its building'}" for d in md.doors_off_their_walls(ctx.plan)]
+
+
+def _steps(ctx: Context) -> list[str]:
+    return [f"the landing steps at svg({t.x:.0f},{t.y:.0f}) run {t.past_ft:.1f} ft past the revetment's face" for t in md.steps_past_revetment(ctx.text)]
+
+
+def _arches(ctx: Context) -> list[str]:
+    return [f"the torii at line {n} is drawn as a silhouette, not in plan" for n in md.arches_not_in_plan(ctx.text)]
+
+
 def _on_wall(ctx: Context) -> list[str]:
     return [f"a {w.w_ft:.0f} x {w.h_ft:.0f} ft structure at svg({w.x:.0f},{w.y:.0f}) reaches {w.into_ft:.1f} ft into the {w.wall}" for w in c.structures_on_walls(ctx.plan)]
 
@@ -122,6 +135,16 @@ CHECKS: tuple[Check, ...] = (
     # automated process." The label checks (overlap, dark ink, group labels adrift, a buried label) went with that.
     Check("occluded_foreground", _occluded, True, "ubame-occlusion-red.svg", "move the buried glyph or feature to the top layer"),
     Check("floating_doors", _doors, True, "ochiba-layout-red.svg", "set the door glyph on the wall it opens through"),
+    # feature 335: the door convention by TAG (light-filled doors included), the stepped landing, the plan arch
+    Check(
+        "doors_off_their_walls",
+        _doors_off,
+        True,
+        "hayakawa-steps-and-doors-red.svg",
+        "set the door wholly inside its building, its outer edge on the wall it opens through (research 0117's drawing page)",
+    ),
+    Check("steps_past_revetment", _steps, True, "hayakawa-steps-and-doors-red.svg", "notch the flight into the revetment: no tread past its water-side face (research 0176)"),
+    Check("arch_in_plan", _arches, True, "ubame-torii-silhouette-red.svg", "draw the torii in plan - the beam across the approach, the two post squares and the id=\"arch\" rect (docs/buildings.md)"),
     Check("passage_blockers", _passage, True, "ochiba-stones-in-passage-red.svg", "move the object clear of the track - stones and posts FLANK a passage"),
     Check(
         "gate_widths", lambda ctx: s.gate_widths(ctx.plan), True, "ochiba-capped-gates-red.svg", "draw the opening at passage width from the INK (pull each flanking endpoint back by half a stroke)"
