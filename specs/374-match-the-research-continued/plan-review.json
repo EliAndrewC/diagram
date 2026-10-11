@@ -565,8 +565,8 @@
    "verdict": "CLEAR"
   },
   "T11": {
-   "section_sha256": "203f6564e9a917398db6a87b9ea58abc555498ecddb3ccc87493ea8277069870",
-   "section_text": "### Wave 120 (T11) - the hamlet's ground\n\n- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page places the wood beyond the fields and refuses\n  ground below the houses only \"beside a river or marsh\"; the dry-ground refusal goes, and the claim cites the page.\n- `fields/comb.py::_comb_draw_source#feeder brook width`: the code already draws the brook at `self.px(7.0)`; the\n  finding today is that 0068's drawing page ladder puts \"a village creek at roughly three and a half times\" the 1.5 ft floor\n  (about 5.25 ft) while its own question page gives a village brook \"about 2 m (~7 ft)\", a GUESS, and 0059 draws 7 ft. The\n  drawing page's ratio is corrected to its own question page (\"roughly four and a half times it\"); the code is unchanged.\n- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size\n  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).\n  The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only\n  shrine is a dooryard hokora).\n- Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are\n  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them); the brook's page\n  edit owes the record checks a drawing-page change owes (record-format, quote-check, the pop-ups' triage).\n\n",
+   "section_sha256": "1667d52a18c03d1e5b14d356e6a0aa20de6a8e6c34aee29c63100f321eca57fa",
+   "section_text": "### Wave 120 (T11) - the hamlet's ground\n\n- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page places the wood beyond the fields and refuses\n  ground below the houses only \"beside a river or marsh\"; the dry-ground refusal goes, and the claim cites the page.\n- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size\n  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).\n  The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only\n  shrine is a dooryard hokora).\n- Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are\n  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).\n\n",
    "reviewed": "2026-10-10",
    "declared": "spec-fidelity",
    "decisions": [
@@ -574,7 +574,7 @@
      "id": "B3-1",
      "class": "within",
      "summary": "The work list: 328's ranking brought current - 39 rows closed by batch 2's re-checks (wave 118), audit/scope.py re-run on today's cache, 14 more rows re-marked deferred, 183 open in scope (126 E3 DRIFTED), 158 DEFERRED in the claims report.",
-     "why": "FR-001's one record. Re-derived from ranking.json at 04cc18418: 183 open in scope, 126 E3 DRIFTED; make claims-report run 2026-10-10 in this review: DEFERRED 158."
+     "why": "FR-001's one record. Re-derived from ranking.json at 7dc55cde9: 183 open in scope, 126 E3 DRIFTED (unchanged since round 3); DEFERRED 158 as round 3 measured, no scope change since."
     },
     {
      "id": "B3-1a",
@@ -632,23 +632,22 @@
      "why": "Round 2's W119-1/W119-2 rulings applied as asked: found-wave118.jsonl carries _unkinked E4 (the research question: what a longer returning leg becomes), the settle_shapes override tier E4 with after naming _unkinked, both read so in ranking.json. Waiting on research is FR-001's tier order (E4 researched before code), not a carve-out."
     },
     {
+     "id": "B3-8b",
+     "class": "within",
+     "summary": "Not in this batch: comb.py::_comb_draw_source#feeder brook width - its E1 fix (self.px(7.0)) is in the code; what reads DRIFTED is the E4 question #feeder brook width against the ladder, named in the row's after through its override; code and both pages unchanged meanwhile.",
+     "why": "Round 3's W120-2 item applied exactly as asked. Verified: overrides.json gives the row after [#feeder brook width against the ladder] and ranking.json reads it tier E4 with that after (merge re-run); git diff 04cc18418..HEAD touches no code and no research page; comb.py:628 still self.px(7.0); 0068's drawing page still reads 'roughly three and a half times it'. Waiting on research is FR-001's tier order (E4 researched before code), as B3-8a; nothing the GM asked is dropped, only sequenced behind its research row."
+    },
+    {
      "id": "B3-9",
      "class": "within",
      "summary": "'The three waves take every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research.'",
-     "why": "Re-derived from ranking.json: 10 open in-scope E0-E2 rows - two held, eight in waves 119-121 (serve; parcels, comb feeder brook width, kosatsuba; KURA_PARTS, belt_law, stands, bundle). Holds whatever W120-2 becomes: a brook row moved to wait on its E4 row is then 'waiting on research'."
+     "why": "Re-derived from ranking.json at 7dc55cde9: 9 open in-scope E0-E2 rows - two held (door band, fixture_quota), seven in waves 119-121 (serve; parcels, kosatsuba; KURA_PARTS, belt_law, stands, bundle). The feeder brook width row now reads tier E4 with after naming #feeder brook width against the ladder, so it is 'waiting on research' and the sentence holds."
     },
     {
      "id": "W120-1",
      "class": "within",
      "summary": "hinterland/parcels.py::_beyond_the_fields: the dry-ground refusal of a wood below the houses goes; the claim cites 0077's drawing page.",
      "why": "0077 drawing refuses only low ground 'by a river or marsh'; code toward page. Unchanged."
-    },
-    {
-     "id": "W120-2",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "summary": "fields/comb.py::_comb_draw_source#feeder brook width: the code (self.px(7.0)) stays; 0068's drawing page ladder is changed from 'a village creek at roughly three and a half times' the 1.5 ft floor to 'roughly four and a half times it', called a correction to 0068's own question page.",
-     "why": "This is the page reworded to fit the code (W118-2), not the page brought to its findings. (1) Neither number is a finding: 0068's question page labels the village brook's 'about 2 m (~7 ft)' a GUESS with no readable source (its notes: 'Every width we found from before modern times was a built canal's, none a natural stream's'), and the drawing page's ladder is a map drawing convention with its own stated reason. (2) The ratio is tied to the rest of the same page, which the plan leaves: 0068 drawing, verbatim, 'At the head of the fan the brook arrives narrower than the head race it feeds', the head race being 6.0 ft, with a bullet explaining 'Why might a head race run wider than the brook that feeds it?' - 3.5 x 1.5 = 5.25 ft keeps that true; 4.5 x 1.5 = 6.75 ft breaks it, so the edit leaves the page contradicting itself two bullets down, and the only passage changed is the one that makes self.px(7.0) read right. (3) The ranking already carries this exact conflict as open E4 research rows: comb.py::_comb_draw_source#feeder brook width against the ladder ('research first: 0068's ladder puts a village creek at about 3.5 times the 1.5 ft floor (about 5.25 ft) where 0059 says 7 ft - the record reconciles the two before the code moves'), #feeder brook narrower than the head race (E4), and brook_rules.py::BROOK_DRAWN_W#brook width (E4); comb.py:346's own claim calls it 'the open conflict'. The plan does an E4 row's work inside an E1 wave by picking the code's side of it - the same shape as round 2's W119-1. (4) The E1 row's own ranked fix (7 px -> self.px(7.0), stored in feet) is already in the code (comb.py:628); what claims-report reads DRIFTED today is the E4 subject under the E1 key. impl-drift's 'in the page or in the code' does not decide the direction; the record's own reconciliation does. Should say: the row is not taken in this batch; its after names comb.py::CombMixin._comb_draw_source#feeder brook width against the ladder (overrides or a found row, merge re-run), and it is listed under 'Not in this batch' as waiting on research, beside the hairpin rows; meanwhile the code and both pages stay as they are and the claim keeps citing both. If the session thinks the page should still be edited now, that is an exception put to spec-fidelity under rule 1 with the GM's words, and it must then reconcile the 'brook arrives narrower than the head race' bullet and 0059's 7 ft in the same research pass, not one ratio."
     },
     {
      "id": "W120-3",
@@ -666,11 +665,11 @@
     {
      "id": "W120-5",
      "class": "within",
-     "summary": "Pool hamlets rerolled; placement-changed occasions for the board's bridgehead seat and the wood's newly allowed ground; the brook's page edit owes record-format, quote-check and the pop-ups' triage.",
-     "why": "Feature 294's occasions for the two re-placed elements. The brook clause falls with W120-2: no brook page edit this wave, so no record checks owed for it."
+     "summary": "Pool hamlets rerolled; placement-changed occasions (a glyph-check each on one hamlet where the roll moves them) for the board's bridgehead seat and the wood's newly allowed ground.",
+     "why": "Feature 294's occasions for the two re-placed elements. Round 3's brook clause is gone with the brook bullet (no page edit this wave, so no record checks owed for it)."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T12": {
    "section_sha256": "62faa9e43a34d519e4aafed5098d1dea401687e7fecb3cce7d5233671c1c8580",
