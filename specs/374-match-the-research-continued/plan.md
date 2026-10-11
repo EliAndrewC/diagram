@@ -141,6 +141,58 @@ while a check on them was outstanding, plan-review BLOCKs on a decision a decisi
 
 The dispatches per closed row of T01-T03 (four rows), from the same report, beside 372's ~10 (375's "Why", an estimate).
 
+## Batch 2 (T06-T09): the claims labeled as the record has them
+
+**The work list** stays 328's ranking (FR-001), brought current with the claims report (`make claims-report`, 2026-10-10:
+DRIFTED 119, MISLABELED 28, UNCLAIMED 21, NEEDS-RESEARCH 16, CANNOT-TELL 11). The ranking had gone stale against it both ways:
+26 of its open rows read IN-STEP now (closed by later relabels - the room order and the senior retainers' rows among them),
+closed by that re-check and marked wave 115 in `audit/waves.json`; and 56 of the report's findings were not in it, added as
+found rows (`audit/found-wave115.jsonl`, tiered E0 for a label, E1 for a re-check, E3 for a drift, E4 for a research question)
+and the ranking rebuilt (`audit/merge.py`); then every report finding still without an open row was given one - a row closed
+at an earlier wave whose claim drifts again reopened (Ochiba's clump inside the page window, closed at wave 10; the belt's
+continuous planting, wave 47; eleven more), and the procedure rows `audit/scope.json` marked deferred that the report counts in
+scope (the country shrine's three, the manor's universal shrine, the divider gate, the latrines by zone) set in scope: 243 open
+rows, every in-scope finding of the report among them (measured 2026-10-10: 0 findings without an open row). The 34 open rows that are no claim at all - review and cohort
+findings, Sawada's zigzag, the 20/40-household reach rows, the held door band - stay on the list under T99. This batch takes the
+cheapest tier first, as 328's did: the MISLABELED, UNCLAIMED and CANNOT-TELL claims - labels, new claims, fuller re-checks, no
+drawn change. A finding whose fix is a drawn change (the compound shrine's grove) or a code change (a label the code
+contradicts) waits for the wave that makes it. Docstring and comment edits change no engine key (the gate's short-circuit), so no
+map moves and no review occasion is owed.
+
+### Wave 115 (T06) - the procedures' four relabels
+
+- `docs/building-programs.md` `#divider gate on the axis`: a GUESS recorded on 0090's drawing page (new sentence: the gate
+  behind the office hall, no page placing a jin'ya's middle gate); "customarily on the main axis" goes from the program's text.
+- `#latrines by zone`: a GUESS on 0101's drawing page (about one per part of the compound, three or four, near service gates).
+- `docs/buildings.md` `#named court spine`: cites 0116's drawing page (the open courts), not 0099.
+- `#office front, residence rear`: a DEVIATION on 0090's drawing page (the yamen's order kept as a deliberate simplification;
+  Takayama's residence stood beside the office); "universal in both traditions" goes from the text.
+- Owed: impl-drift on the six (the four and the two below); the record checks the 0090 sentence owes (record-format, quote-check on its block, the pop-ups
+  naming the page triaged).
+- A re-check's own finding is answered in the same wave: the manor's two-court bullet drops "never through the divider
+  gate" (impl-drift: it left formal visitors no way to the house, against 0104's drawing page), and the alley behind the
+  hall, which the bullet names, is claimed UNRESEARCHED.
+
+### Wave 116 (T07) - the hamlet's ways and hinterland labeled
+
+The MISLABELED and UNCLAIMED claims under `l7r/diagram/hamletgen/` (ways, hinterland, plan, rows): each label set to what
+its finding says (a GUESS on the drawing page that records it, CONVENTION, UNRESEARCHED where unsearched, NONE for plumbing),
+each UNCLAIMED decision given its claim; where a finding says the page answers the question, the claim cites the page. A finding
+that needs the code changed (a value the page contradicts) is not relabeled: it stays for its DRIFTED wave.
+
+### Wave 117 (T08) - the settlement, waterfields, labels and interactive claims labeled
+
+The same, for `l7r/diagram/settlement/`, `waterfields/`, `labels/` and `interactive/`.
+
+### Wave 118 (T09) - the CANNOT-TELL re-checks
+
+Each of the 11 CANNOT-TELL claims re-checked by impl-drift with the reader or page it said it lacked added to its bundle
+(`make claims-bundle UNITS=`, the named function or page beside it); a claim that then reads DRIFTED joins the DRIFTED work.
+A re-check that finds a departure the drawing page never recorded reads DRIFTED and joins the DRIFTED work; the session
+never records a DEVIATION to close it (328's exception path, amendment 5). The polder kept out of the random roll
+(`ROLLED_ARCHETYPES`) is one, with the dike-pond block beside it: 0019's drawing page names both a known gap, and the row
+stays open until the polder and the dike-pond pass their cohort and are rolled.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

@@ -307,6 +307,7 @@ class TradesMixin:
             working apron - UNRESEARCHED: an open-fronted shed with a 28 x 20 ft apron in front
             ox-shoeing frame - research/questions/0205-smiths-and-farriers-kajiya.html: about 7 x 4 ft
             forge furniture glyphs - CONVENTION: hearth, hood, anvil, quench tub, post
+            clinker heap - UNRESEARCHED: a heap beside the shed
         """
         sw_, sh_ = self.px(20), self.px(18)  # the forge shed
         aw_, ah_ = self.px(28), self.px(20)  # the working apron in front of it
@@ -417,6 +418,10 @@ class TradesMixin:
             fuel stack at the stoke end - UNRESEARCHED
             kiln along its haul road - UNRESEARCHED: turned along the nearest way within 400 ft when no rot is given
             kiln glyph - CONVENTION
+            drying ground - UNRESEARCHED: three ware racks between the shed and the pit
+            works layout - UNRESEARCHED: kiln and fuel at the back edge, cottages along the front, shed and pit on the flanks
+            kiln chambers - UNRESEARCHED: four chambers, 9 ft apart
+            works well seat - UNRESEARCHED: between the shed and the cottages
         """
         if rot is None:
             # a kiln hauls fuel and clay by CART, so it stands on its haul road and lies along it -

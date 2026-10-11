@@ -115,10 +115,12 @@ class TreeStandsMixin:
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_R_FT, 0.75 to 1.05 of it, emergents 1.05 to 1.4
             emergent share - UNRESEARCHED: 18%
             conifer share - UNRESEARCHED: 34%
-            no crown on a roof or a wellhead - UNRESEARCHED
+            no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a clump drawn on a roof hides the building
+            no crown on a wellhead - UNRESEARCHED
             no crown on a plot's sun ground - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: _sun_keepouts
             no trunk on a lane - UNRESEARCHED
             fringe crowns drawn outside the stand's outline - UNRESEARCHED: `_stand_fringe` outliers give the wood a soft edge; the 0080 drawing page is silent on a wood's fringe
+            no crown under another's canopy - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown is never seated under another's canopy
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]

@@ -112,6 +112,8 @@ def manifest_lines(units: list[ru.Unit], owed_checks: str, escape: str = "") -> 
     if escape:
         lines.append(f"not-owed: {escape}")
     lines += [f"unit: {u.slug} {u.fingerprint}" for u in units]
+    # what made each unit due, read back by the round arbiter's bundle per round (feature 374, the arbiter's tooling fix)
+    lines += [f"owed: {u.slug} - {u.occasion}" for u in units if u.occasion]
     return "\n".join(lines) + "\n"
 
 

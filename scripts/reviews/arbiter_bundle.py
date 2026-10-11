@@ -35,6 +35,11 @@ import hm_checks as hc  # noqa: E402
 
 DEFAULT_OUT = Path("/tmp/l7r-check")
 _FINDING = re.compile(r"^\s*(?:\d+[.)]|[-*])\s+(.{12,})$", re.M)
+#: a NUMBERED item - a check's finding. A reply that numbers its findings also bullets what it confirmed ("the rest of the tab
+#: matches the pages"), and reading those bullets as findings listed confirmations as NEW (feature 374, the arbiter's fix)
+_NUMBERED = re.compile(r"^\s*(?:\*\*)?\d+[.)]\s+(.{12,})$", re.M)  # "1. x" and the bold heading "**1. x**" (374)
+#: where a background agent's transcript lives, by its id - the reply when the hook kept none
+TRANSCRIPTS = Path.home() / ".claude" / "projects"
 
 
 def _words(text: str) -> str:
@@ -50,7 +55,7 @@ def mark_rounds(replies: list[str]) -> list[list[tuple[str, str]]]:
     for reply in replies:
         blocks = [(o, n) for _p, o, n in hc._blocks(reply)]
         marked = []
-        for f in _FINDING.findall(reply):
+        for f in _NUMBERED.findall(reply) or _FINDING.findall(reply):
             w = _words(f)
             marked.append(("REPEATED" if w in seen else "NEW", f.strip()))
             seen.add(w)
@@ -58,6 +63,15 @@ def mark_rounds(replies: list[str]) -> list[list[tuple[str, str]]]:
         edits |= set(blocks)
         out.append(marked)
     return out
+
+
+def reply_of(v: dict) -> str:
+    """A round's reply: the one the hook kept, else the last text of the agent's own transcript (by its id)."""
+    if v.get("reply") and Path(v["reply"]).is_file():
+        return Path(v["reply"]).read_text(encoding="utf-8")
+    aid = str(v.get("aid") or "")
+    found = sorted(TRANSCRIPTS.glob(f"*/*/subagents/agent-{aid}.jsonl")) if aid else []
+    return hc._reply_of(str(found[0]), "") if found else ""
 
 
 def _git(root: Path, *args: str) -> str:
@@ -97,10 +111,11 @@ def bundle(root: Path, trigger: str, out: Path) -> Path:
     if check and subject:
         rounds = sorted((v for v in state.get("dispatches", {}).values() if v.get("check") == check and subject in v.get("subjects", [])),
                         key=lambda v: v.get("t", 0))
-        replies = [Path(v["reply"]).read_text(encoding="utf-8") if v.get("reply") and Path(v["reply"]).is_file() else "" for v in rounds]
+        replies = [reply_of(v) for v in rounds]
         parts.append(f"## Rounds - {check} on {subject}\n")
         for i, (v, marked) in enumerate(zip(rounds, mark_rounds(replies), strict=True), 1):
             parts.append(f"### Round {i} ({v.get('state')}; verdict: {el.verdict_of(replies[i - 1]) or 'no reply kept'})\n")
+            parts += [f"Owed by: {o}" for o in v.get("owed", [])] or ["Owed by: (not recorded - a dispatch before feature 374 kept no occasion)"]
             if replies[i - 1]:
                 # THE REPLY ITSELF, beside the MANIFEST: the marks read numbered and bulleted lines only, and a check that words its
                 # findings otherwise (modal-form's sections) left the arbiter with "no findings" on 374's first day (2026-10-10)

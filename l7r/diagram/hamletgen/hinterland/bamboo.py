@@ -194,6 +194,8 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         crop and water pads - UNRESEARCHED: 12 ft off the crop, 6 ft off marsh, 30 ft off the pond
         keep-out pads - UNRESEARCHED: 2-20 ft round houses, retirement houses, yards, gardens, sheds, byres, wells, the notice board, persimmons, groves, lanes, belt and woods
         irregular outline - CONVENTION: a hard but not ruled edge inside the tested rect
+        just beyond the back row - research/questions/0075-bamboo-groves-chikurin.drawing.html: the stand's near edge within THICKET_ROW_DEPTH_FT, 30 ft, of the back row's back edge, its calibration
+        search reach - UNRESEARCHED: the first search walks THICKET_REACH_FT, 220 ft, from the target, so a thicket may stand that far past the row's ends before the search falls back to the whole back row
     """
     forms = ["thicket"] if plan.bamboo in ("thicket", "both") else []
     houses = s.M.get("houses", [])

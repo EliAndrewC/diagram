@@ -346,9 +346,9 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 
 ## Composition: perimeter buildings + a named court-spine
 
-<!-- Research: office front, residence rear - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: outer office court, inner residence court behind a divider -->
+<!-- Research: office front, residence rear - DEVIATION research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: outer office court, inner residence court behind a divider - the yamen's order, kept for every plan as a deliberate simplification (at Takayama the residence stood beside the office) -->
 <!-- Research: buildings ring the edges - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: court centers held open, ~60% open -->
-<!-- Research: named court spine - research/questions/0099-the-hearing-court-shirasu.html: forecourt, oshirasu, inner garden -->
+<!-- Research: named court spine - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: forecourt, hearing court (oshirasu), garden and the ground between the courts stay open -->
 <!-- Research: perimeter-first placement order - UNRESEARCHED: N/S rows own the corners, then E/W, then the divider hall -->
 <!-- Research: second rank - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: rear rank behind the wall row for servants and stores -->
 <!-- Research: coverage band - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: ~30-42% -->
@@ -356,7 +356,7 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 
 The historical Mode A layout is NOT "buildings scattered inside the walls with bare space left over." It is a **composed courtyard grammar**, and the automated checks reward composing it right - NOT minimizing empty space (a jin'ya is ~60% open BY DESIGN; see the packing grounding). This is the Mode A counterpart of the Mode B water-first layout order.
 
-- **Office-front / residence-rear.** The compound splits into an OUTER (public/administrative) court at the gate and an INNER (private) court behind the divider wall - universal in both traditions (Chinese "front yamen, rear residence"; the Edo jin'ya office wing vs residence wing).
+- **Office-front / residence-rear.** The compound splits into an OUTER (public/administrative) court at the gate and an INNER (private) court behind the divider wall - the Chinese yamen's order ("front yamen, rear residence"), kept for every plan as a deliberate simplification: at Takayama the intendant's residence stood beside the office (research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html).
 - **Buildings ring the edges; the center of each court is OPEN.** Service/storage buildings hug the OUTER walls of the outer court; the **office hall backs the DIVIDER** (its dais overlooking the oshirasu); the residence backs the inner court's north wall / the divider; kitchen, shrine, and retainer housing hug the inner walls. The divider is a legitimate back-wall - a building backing it is well-placed, NOT "floating" (`tools/pack_audit/` counts the divider as a wall for perimeter-hugging).
 - **The open ground is a SPINE OF NAMED COURTS, not undifferentiated slack:** the **forecourt** (marshalling apron just inside the main gate) -> the **oshirasu** (the roofed hearing court before the office-hall dais) -> [divider] -> the **inner garden/court** behind the residence. Every large open region MUST be a named court/garden; an UNNAMED central void is the defect (label it or fill it), never the open ground itself.
 - **So the rule inverts the naive "avoid empty space":** CENTRAL open is GOOD (courtyard - keep it, name it); a PERIMETER gap (open ground against a wall, between edge buildings) is the slack to tighten. Aim for a high **perimeter-hugging %** (most building footprint within ~one building-depth of a wall or the divider) with the court-spine held open in the center.

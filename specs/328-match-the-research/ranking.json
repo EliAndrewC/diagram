@@ -342,6 +342,36 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Composition: perimeter buildings + a named court-spine#named court spine",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0099 bears only on the hearing court; the open forecourt / hearing court / garden spine is 0116.drawing's, so the pointer should name that page",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "115",
+  "scope": "kept"
+ },
+ {
+  "key": "docs/buildings.md::Composition: perimeter buildings + a named court-spine#office front, residence rear",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the page calls the residence behind the office \"a deliberate simplification\" (Takayama's stood beside it), so the label should be DEVIATION, and the doc's \"universal in both traditions\" is wrong",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "115",
+  "scope": "kept"
+ },
+ {
   "key": "docs/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -820,6 +850,36 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#how far \"just beyond the back row\" reaches: the stand's near edge within THICKET_ROW_DEPTH_FT 30 ft of the back row's back edge",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "how far \"just beyond the back row\" reaches: the stand's near edge within THICKET_ROW_DEPTH_FT 30 ft of the back row's back edge",
+  "files": [
+   "l7r/diagram/hamletgen/hinterland/bamboo.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#how far the first search walks from the target: THICKET_REACH_FT 220 ft, before it falls back to the whole back row",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "how far the first search walks from the target: THICKET_REACH_FT 220 ft, before it falls back to the whole back row",
+  "files": [
+   "l7r/diagram/hamletgen/hinterland/bamboo.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads",
   "verdict": "DRIFTED",
   "tier": "E0",
@@ -894,6 +954,21 @@
   "tier_as_ranked": "E0",
   "moved": "T61a: tiered by its work by a fresh reader - research/questions/0075-bamboo-groves-chikurin.drawing.html supports dry ground ('bamboo suits high, level ground and dies in a low field once it gets water') but gives no 3 ft figure, so the code stands and only the claim's label and backing are wrong.",
   "wave": "18",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#no wood below the houses",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the record is not silent: \u00a72/\u00a73 place the wood beyond the fields (on the level where there's no slope) with no floor at the houses' height, and \u00a74 refuses ground below the houses only \"beside a river or marsh\". Refusing every seat below `house_floor` on dry ground (`if k < 2`) goes further than the page, so the label should be DEVIATION, and the drawing page should record the departure (it records it only for wet ground)",
+  "files": [
+   "l7r/diagram/hamletgen/hinterland/parcels.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -1002,6 +1077,21 @@
   "found": "wave 16 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "17",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/hinterland/wood_rank.py::field_height_near#how far \"beside\" reaches: FIELD_BESIDE_FT 300 past the nearest edge point; the page gives no distance, so a GUESS; also, a value named in ft is added to a px distance (`d0 + beside`)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "how far \"beside\" reaches: FIELD_BESIDE_FT 300 past the nearest edge point; the page gives no distance, so a GUESS; also, a value named in ft is added to a px distance (`d0 + beside`)",
+  "files": [
+   "l7r/diagram/hamletgen/hinterland/wood_rank.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -1721,6 +1811,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#a lane keeps 14 ft off water lines by default (`line_margin=14.0`)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a lane keeps 14 ft off water lines by default (`line_margin=14.0`)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/clearance.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#origin on the houses' bank",
   "tier": "E0",
   "fix": "claim wording: the spur crosses the brook squarely on a plank bridge at a crossing place (brook_fords are decked by bridges()), not 'at a ford'",
@@ -1734,6 +1839,51 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/corridors.py::field_router#a defense marsh (role \"defense\") is not a wall to the field way",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a defense marsh (role \"defense\") is not a wall to the field way",
+  "files": [
+   "l7r/diagram/hamletgen/ways/corridors.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/corridors.py::field_router#across ground cover",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0036 does answer whether a lane may cross trees: it lays a lane \"with a footpath's clearance and some working room kept off the trees on each side\"; cite 0036 for groves (under it, letting `village_groves` be crossed would be DRIFTED unless recorded as a DEVIATION); keep UNRESEARCHED for the commons only",
+  "files": [
+   "l7r/diagram/hamletgen/ways/corridors.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#a web lane refused where the overlap matrix forbids a way (burial ground, bed, well)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a web lane refused where the overlap matrix forbids a way (burial ground, bed, well)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/fabric.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -1852,7 +2002,7 @@
  },
  {
   "key": "l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing",
-  "verdict": "NEEDS-RESEARCH",
+  "verdict": "DRIFTED",
   "tier": "E0",
   "fix": "cite 0087 (a carried deck crosses at an angle, solved for it) against the code's 10 degree squaring of a channel crossing; the question is the found row law_water.py::oblique_at#a channel crossing at its way's angle (E4)",
   "files": [
@@ -1861,10 +2011,10 @@
   "after": [],
   "flag": "",
   "found": "wave 6 re-check (tiered by its work at T25a)",
-  "tier_as_ranked": "E4",
+  "tier_as_ranked": "E3",
   "e0_basis": "a claim written against the page that answers",
   "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
-  "wave": "8 (claim written against 0087; its question a found row)",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -1897,6 +2047,21 @@
   "found": "wave 6 re-check",
   "tier_as_ranked": "E0",
   "wave": "7 (claimed under its unit's new label; re-checked)",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/reach.py::_draw_tree_lane#worn look",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "worn=True draws the lane's surface, and the lane page answers that (\"bare, packed earth, with a soft worn edge\"); cite research/questions/0081-village-lanes.drawing.html rather than CONVENTION",
+  "files": [
+   "l7r/diagram/hamletgen/ways/reach.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "116",
   "scope": "kept"
  },
  {
@@ -1994,6 +2159,36 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#a door path starts 8 ft out from the house (`FOOTPATH_FABRIC_GAP + 4.0`) and 5 ft clear of the fixtures (`FOOTPATH_FABRIC_GAP + 1.0`)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a door path starts 8 ft out from the house (`FOOTPATH_FABRIC_GAP + 4.0`) and 5 ft clear of the fixtures (`FOOTPATH_FABRIC_GAP + 1.0`)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/serve.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off a grove band",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0036 answers this: a lane is laid \"with a footpath's clearance and some working room kept off the trees on each side\" (about 22 ft of a 36 ft opening). The label should cite 0036, and against that the code's 0.5 ft margin (grow = 2*(1.5+0.5)) is a drift",
+  "files": [
+   "l7r/diagram/hamletgen/ways/serve.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/serve.py::shadowed_by#no way drawn twice",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -2006,6 +2201,66 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/settle.py::_unkinked#a returning leg of 40 ft or more",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "this is not a GUESS: 0081 answers the question, and the code goes against its answer. \u00a719 cuts only \"a returning leg under 40 ft\" and names its one exception (\"A folded field spur is cut at the fold\"), so a longer leg is not cut. The code keeps the longer arm whatever the lengths, which makes the 40 ft threshold do nothing. 0081 records no guess for this, so the claim should be a DEVIATION that 0081.drawing records (resting on \u00a717 \"never doubling back on itself\"), or \u00a719 should be amended to say any returning leg is cut",
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from NEEDS-RESEARCH",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/settle.py::apply_pieces#a split piece with no width is drawn 3 ft wide",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a split piece with no width is drawn 3 ft wide",
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/settle.py::apply_pieces#settle plumbing",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "not pure plumbing: every split piece is given `clearance=WEB_CLEARANCE` (18 ft of lane room) whatever its source lane kept, and a width of 3 ft when the source has none; claim these against 0246 (lane's room) and 0081 (footpath width)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/settle.py::apply_pieces#split lane pieces keep 18 ft of lane room (WEB_CLEARANCE)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "split lane pieces keep 18 ft of lane room (WEB_CLEARANCE)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2118,18 +2373,48 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled",
+  "key": "l7r/diagram/hamletgen/ways/sweeps.py::_sweep_doubled_remnants#doubled lane dropped",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "0246 walls only a back lane's stretches (\u00a763); the track's walls are in 0081 (\"never crosses row crops\", \"stops at the flooded paddy\", \"keeps off wet ground\"), and keeping off drawn water belongs to 0035's crossing rule; repoint to 0081 (and 0035 for the water)",
+  "fix": "deleting a lane that returns to the way it left, or that runs within 8 ft of another for half its length, decides whether a way exists, not how one is shown; label it UNRESEARCHED (8 ft, 0.5 share, both ends within 25 ft)",
   "files": [
-   "l7r/diagram/hamletgen/ways/track.py"
+   "l7r/diagram/hamletgen/ways/sweeps.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
-  "wave": "6 (claim written; what it states against its page is a found row)",
+  "wave": "116",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/touch.py::_one_network#a routed orphan link held 14 ft off the fabric (`_route` gap WEB_FABRIC_GAP x pad_mult 2.0), against the 7 ft the straight-link claim names",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a routed orphan link held 14 ft off the fabric (`_route` gap WEB_FABRIC_GAP x pad_mult 2.0), against the 7 ft the straight-link claim names",
+  "files": [
+   "l7r/diagram/hamletgen/ways/touch.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a routed junction link held 14 ft off the fabric (pad_mult 2.0), with a retry at 7 ft on a 5 ft lattice for a gap within 25 ft",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a routed junction link held 14 ft off the fabric (pad_mult 2.0), with a retry at 7 ft on a 5 ft lattice for a gap within 25 ft",
+  "files": [
+   "l7r/diagram/hamletgen/ways/touch.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2145,6 +2430,36 @@
   "found": "wave 4 re-check (impl-drift on track.py)",
   "tier_as_ranked": "E0",
   "wave": "5 (claimed; its relabel to 0081 ranked)",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#grove band gap",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0036 bears on this: a lane is laid \"with a footpath's clearance and some working room kept off the trees on each side\"; cite 0036 (and its 32 ft between groves) rather than UNRESEARCHED, with the 4 + 3 ft figure as the calibration",
+  "files": [
+   "l7r/diagram/hamletgen/ways/track.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "116",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#the track's start walked out of grove bands by a footpath gap plus half the tread",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the track's start walked out of grove bands by a footpath gap plus half the tread",
+  "files": [
+   "l7r/diagram/hamletgen/ways/track.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2241,6 +2556,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/tree.py::settle_tree#a tree lane's no-build corridor WEB_CLEARANCE 18 ft",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a tree lane's no-build corridor WEB_CLEARANCE 18 ft",
+  "files": [
+   "l7r/diagram/hamletgen/ways/tree.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -2314,7 +2644,37 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "3",
+  "wave": "116",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/web.py::stage_web#ground cover is not fabric",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0072 answers the belt half: a lane crosses a belt and the planting resumes on both sides, and a visible break is a hole; the claim's \"run along a tree belt\" contradicts both the page and the code's own `belts` pass (cross but not follow). The claim should cite research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html for the belt, and only the grazing scrub and commons half should stay UNRESEARCHED",
+  "files": [
+   "l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "116",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/web.py::stage_web#orphan stub's reach",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "whether a stub is joined into the network is a decision about the place, not how something is shown; it should be a question claim on research/questions/0081-village-lanes.drawing.html (the label `_STUB_REACH_FT` already carries)",
+  "files": [
+   "l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "116",
   "scope": "kept"
  },
  {
@@ -2345,6 +2705,21 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
   "wave": "4",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#a connector starting at the way out's gate is never trimmed",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a connector starting at the way out's gate is never trimmed",
+  "files": [
+   "l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2404,7 +2779,7 @@
   "flag": "",
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
-  "wave": "9",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2419,7 +2794,7 @@
   "flag": "",
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
-  "wave": "9",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2530,6 +2905,21 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the drawing page says nothing on seat forms; the research page attests bridge ends with no \"large\" qualifier, and the shrine precinct is only that page's GUESS. Withholding the bridgehead should be a DEVIATION that the drawing page records, citing 0190.html",
+  "files": [
+   "l7r/diagram/settlement/_knobs.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from DRIFTED",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3048,6 +3438,21 @@
   "scope": "deferred"
  },
  {
+  "key": "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm",
+  "files": [
+   "l7r/diagram/settlement/farm_fixtures.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex larger than a kura",
   "tier": "E0",
   "fix": "cite 0040.drawing (annex 18-27 ft at a shed's size) in place of the spec handoff",
@@ -3129,6 +3534,66 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#canals set in from the edges",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "research answers this. 0053 puts \"one drain gathering the water along the lowest line\", and 0006 puts the dry hem \"just upslope of the supply canal\". The claim should cite them. Then `fd = flo - plot * 1.4`, which leaves plots below the drain, is DRIFTED",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each rice plot's green picked at random from RICE_GREENS",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "each rice plot's green picked at random from RICE_GREENS",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row boundaries rolled independently per column, so row bunds stagger between columns",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "row boundaries rolled independently per column, so row bunds stagger between columns",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds staggered",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0014.drawing covers this: it never draws a wall that \"steps a few feet sideways and carries on\" (an offset past ~30 ft is an L-shaped plot); rows rolled per column put neighboring row bunds a few feet apart, so cite \u00a7336-337 and the code drifts from it",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting",
   "verdict": "DRIFTED",
   "tier": "E0",
@@ -3140,7 +3605,7 @@
   "tier_as_ranked": "E2",
   "moved": "T122a (fresh reader): tiered by its work - Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) - a <= _BELT_GAP_FT and b - max(v for _u, v in cross) <= _BELT_GAP_FT` - and its docstring says 'an ",
   "e0_basis": "Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) ",
-  "wave": "47",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3387,7 +3852,7 @@
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump inside the page window",
-  "verdict": "UNCLAIMED",
+  "verdict": "DRIFTED",
   "tier": "E0",
   "fix": "stands.py:~252: add a claim, CONVENTION, that a clump is kept only when part of its crown falls inside the page window",
   "files": [
@@ -3396,10 +3861,10 @@
   "after": [],
   "flag": "",
   "found": "wave 9 re-check (tiered by its work at T38a)",
-  "tier_as_ranked": "E0",
+  "tier_as_ranked": "E3",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "10",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3582,6 +4047,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.woodland_room#crowns seated on a regular square lattice; \u00a764 gives a density, not a grid pattern",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "crowns seated on a regular square lattice; \u00a764 gives a density, not a grid pattern",
+  "files": [
+   "l7r/diagram/settlement/land/cover.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate glyph at the polder cut",
   "verdict": "CANNOT-TELL",
   "tier": "E0",
@@ -3596,6 +4076,21 @@
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - The code matches the page; only the claim text is stale.",
   "wave": "9",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#a near-ring plot's stand-off from roads, streets and lanes (the `_corridor_buffers(3 * self.bscale)` margin)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a near-ring plot's stand-off from roads, streets and lanes (the `_corridor_buffers(3 * self.bscale)` margin)",
+  "files": [
+   "l7r/diagram/settlement/land/nearring.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3726,7 +4221,7 @@
  },
  {
   "key": "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard",
-  "verdict": "UNCLAIMED",
+  "verdict": "MISLABELED",
   "tier": "E0",
   "fix": "bundle.py:277: add a claim for the non-sun-keeping case (yard_sun=YARD_SUN_STRIP, 22, unscaled, line 382), UNRESEARCHED",
   "files": [
@@ -3738,7 +4233,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "10",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3938,6 +4433,36 @@
   "scope": "deferred"
  },
  {
+  "key": "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no crown on a roof or a wellhead",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the roof half is answered by the 0071 drawing page (\"a clump drawn on a roof ... hides the building\"); cite it for roofs and keep UNRESEARCHED for the wellhead only",
+  "files": [
+   "l7r/diagram/settlement/shrines_wells/woods.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no crown seated under another's canopy (`_crowns_near` / `_canopy_seats`; 0080 drawing \u00a7343)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "no crown seated under another's canopy (`_crowns_near` / `_canopy_seats`; 0080 drawing \u00a7343)",
+  "files": [
+   "l7r/diagram/settlement/shrines_wells/woods.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -4019,6 +4544,36 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#the ground kept h/2 + 3 px off every way's bed (place_kosatsuba claims its twin as UNRESEARCHED)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the ground kept h/2 + 3 px off every way's bed (place_kosatsuba claims its twin as UNRESEARCHED)",
+  "files": [
+   "l7r/diagram/settlement/structures/fixtures/siting.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#the ground may stand inside a lane's house-setback corridor (`_fits(..., corridors=False)`)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the ground may stand inside a lane's house-setback corridor (`_fits(..., corridors=False)`)",
+  "files": [
+   "l7r/diagram/settlement/structures/fixtures/siting.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth",
   "tier": "E0",
   "fix": "label the 15 ft depth as the drawing page's GUESS and fix the constant's comment that claims a measurement",
@@ -4031,6 +4586,21 @@
   "verdict": "MISLABELED",
   "wave": "1",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/trades.py::TradesMixin.kiln#kiln chambers",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0192 covers chamber size: one works' kiln has \"its chambers growing larger as they climb\". The label should cite 0192, and against that the code's even 9 ft chamber divisions are a drift unless the page records them as a DEVIATION. The chamber count is unresearched",
+  "files": [
+   "l7r/diagram/settlement/trades.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/waterfields/carve.py::_dry_fields#end plot split",
@@ -4081,6 +4651,21 @@
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The code already does what the claim will state and 0060 is silent on the last leg's straightness, so only the claim line is written.",
   "wave": "11",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/waterfields/hill.py::build_ribbon#supply down the upper brook",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0021.drawing answers this: \"The valley's brook runs down the middle of the field\" (a GUESS on that page), the whole field; cite \u00a7992, and drawing the channel only down center[:n_bands//2+1] then drifts from it",
+  "files": [
+   "l7r/diagram/waterfields/hill.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -4179,7 +4764,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The code tints every plot it counts as low, which is what 0007 records for a polder, so only the claim wording changes.",
-  "wave": "11",
+  "wave": "118",
   "scope": "kept"
  },
  {
@@ -4943,6 +5528,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/web.py::cut_the_overruns#overrun cut",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "the 12 ft/90 degree hook and the 40 ft tail live in trim_free_stub and cut_past_connector, which are not in the bundle; I need those two bodies",
+  "files": [
+   "l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "118",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/web.py::stage_web#a row street trimmed to end at its outermost door-path joint or last farm door",
   "verdict": "UNCLAIMED",
   "tier": "E1",
@@ -5075,6 +5675,36 @@
   "moved": "wave 7 re-check: two narrower groups left",
   "verdict": "DRIFTED",
   "wave": "8",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ways and water through the rampart",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "the permission covers wall x {road, roads, town_streets, alleys, lanes, canals, channels, streams} anywhere along the wall, while the claim says \"at a gate or a water gate\"; need the check that holds every way or watercourse crossing the wall to a gate or water-gate opening (as city_kido_on_ward_fence does for the ward fence)",
+  "files": [
+   "l7r/diagram/overlap/taxonomy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant estate court",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "a court round its inner building matches, but \u00a7548 keeps the whole court clear of temples, offices, houses and other courts, and a blanket exemption cannot catch a breach; need to know whether another check holds \u00a7548 or the exemption is only against the inner building",
+  "files": [
+   "l7r/diagram/overlap/taxonomy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -5765,6 +6395,21 @@
   "scope": "deferred"
  },
  {
+  "key": "l7r/diagram/settlement/core.py::Settlement#layer offsets and the crown pad",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "the bundle shows neither the offsets nor CANOPY_PAD's value or readers; a crown's clearance off a roof may be a placement rule rather than NONE. Need the constants and the code that reads them",
+  "files": [
+   "l7r/diagram/settlement/core.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "118",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex",
   "tier": "E1",
   "fix": "W annex 0.32 x 0.56 (15 x 16 ft) -> 18-27 ft long, 10-12 ft deep, 1.5-1.8 to one",
@@ -5866,7 +6511,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E1",
   "moved": "T38a: tiered by its work - One literal becomes a scaled value; logic unchanged.",
-  "wave": "10",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -5937,8 +6582,38 @@
   "flag": "",
   "found": "wave 77 re-check, round 3 (tier provisional, by verdict)",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "wave": "117",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each plot's green",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "the class is right (a color), but the only RICE_GREENS in the bundle (hill.py's) is one green repeated three times, which would make \"so neighboring plots read apart\" false; need paddy.py's RICE_GREENS",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#plot size",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "at 1 ft/px the 34 px plot gives about 1,500 sq ft, which matches the hamlet basin. But the page sizes basins \"in real feet at whatever scale\", and `plot` is px. I need the ft-per-px of the maps that call water_field and whether callers scale `plot`",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#ripe share",
@@ -6057,22 +6732,6 @@
   "verdict": "NEEDS-RESEARCH",
   "wave": "9",
   "scope": "deferred"
- },
- {
-  "key": "l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun",
-  "tier": "E1",
-  "fix": "same constant: gardens_east_shaded reads the 50 ft reach (0038) via px()",
-  "files": [
-   "l7r/diagram/settlement/homestead_parts/grove_rules.py"
-  ],
-  "after": [
-   "l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "NEEDS-RESEARCH",
-  "wave": "9",
-  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump ceiling",
@@ -6254,6 +6913,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/land/cover.py::GroundCoverMixin._stock_woodland#no crown under another",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "\u00a761 has two clauses: the new crown's center lies outside every seated crown, AND no seated crown's center lies inside the new one. The code delegates both to `CrownIndex.clear`, which is not in the bundle; I need its test to confirm the second clause",
+  "files": [
+   "l7r/diagram/settlement/land/cover.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "118",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.reserve_clearing#cleared collar",
@@ -7055,6 +7729,23 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E2",
   "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
+  "scope": "deferred"
+ },
+ {
+  "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E2",
+  "fix": "buildings/programs.md line 110: 'The tiny end is a road checkpoint post: 2-3 samurai, one office room, a cell, a barrier gate' has no staff count in the record; research first (a checkpoint post's garrison), or meanwhile split it into its own claim '<!-- Research: checkpoint post's staff and rooms - UNRESEARCHED: 2-3 samurai, one office room -->' and keep line 44's claim to the capital housing knob and the checkpoint as the tiny end.",
+  "files": [
+   "docs/building-programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 15 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 13",
+  "tier_as_ranked": "E4",
+  "moved": "T56a: tiered by its work by a fresh reader - research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.html gives Nuruyu's layout and Hakone's buildings (front post with an upper guardroom, guards' room, rest room, bath, a lockup) but no staff count, so the record does not yet say what the post's staffing should be.",
+  "wave": "115",
   "scope": "deferred"
  },
  {
@@ -7873,7 +8564,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "DRIFTED",
-  "wave": "45",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -7904,7 +8595,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "CANNOT-TELL",
-  "wave": "46",
+  "wave": "118",
   "scope": "kept"
  },
  {
@@ -8128,7 +8819,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "117",
   "scope": "deferred"
  },
  {
@@ -8533,6 +9224,7 @@
  },
  {
   "key": "l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.stables#working yard at a city's gate stables",
+  "verdict": "DRIFTED",
   "tier": "E2",
   "fix": "give a town's gate stables or caravan ground its working yard too (0195), not only a city's or capital's",
   "files": [
@@ -8541,9 +9233,9 @@
   ],
   "after": [],
   "flag": "",
-  "tier_as_ranked": "E1",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from CANNOT-TELL",
+  "tier_as_ranked": "E3",
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
-  "verdict": "CANNOT-TELL",
   "wave": "",
   "scope": "deferred"
  },
@@ -9289,7 +9981,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "117",
   "scope": "deferred"
  },
  {
@@ -9407,7 +10099,7 @@
   "found": "wave 39 re-check, round 3 (tier provisional)",
   "tier_as_ranked": "E2",
   "moved": "T105a (fresh reader): 0080 drawing page: 'The mean crown radius is 8.5 ft ... and each crown is drawn between 0.75 and 1.4 times that' and 'A windbreak's crowns are drawn the same real size as a hill wood's. One crown size serves the hill woods and the windbreak's cedars alike'. woods.py:139 draws `rad * (random.uniform(",
-  "wave": "",
+  "wave": "117",
   "scope": "deferred"
  },
  {
@@ -9708,7 +10400,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "117",
   "scope": "deferred"
  },
  {
@@ -10082,7 +10774,7 @@
   "tier_as_ranked": "E1",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "deferred"
  },
  {
@@ -10099,7 +10791,7 @@
   "tier_as_ranked": "E2",
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Hoshigaoka's fire-water tubs are four circles at the one-roof building's four corners (372/542 x 446/555); one at the hall and two at the kitchen end moves them.",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "deferred"
  },
  {
@@ -10115,7 +10807,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob",
@@ -10132,6 +10824,22 @@
   "verdict": "DRIFTED",
   "wave": "16",
   "scope": "deferred"
+ },
+ {
+  "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone",
+  "tier": "E3",
+  "fix": "program's latrine rule: two residence privies (guests' and family's), one-per-zone cited to 0101.drawing as GUESS",
+  "files": [
+   "docs/building-programs.md"
+  ],
+  "after": [
+   "docs/buildings.md::Latrines and the rear service strip#residence privy attached"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "115",
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun",
@@ -10162,7 +10870,7 @@
   "flag": "",
   "found": "wave 1 re-check",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "115",
   "scope": "deferred"
  },
  {
@@ -10177,7 +10885,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "deferred"
  },
  {
@@ -10195,7 +10903,7 @@
   "moved": "wave 1: E0 -> E3, the re-check found the implementation itself differs: Hayakawa's \"two modest shrines\" contradict the drawing page's rule \"a map draws one, a deliberate deviation\". Either the drawing page records Hayakawa as an exception or the sheet draws one",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure",
@@ -10210,7 +10918,7 @@
   "found": "wave 46 impl-drift on the merged section (earlier checks IN-STEP)",
   "tier_as_ranked": "E2",
   "moved": "T119a (fresh reader): tiered by its work - Not fixed: the claim at docs/building-programs.md:17 still reads 'the gatehouse the office's gate range as at Omori and Kaibara', the band at :103 / types.json:209-217 is still 14-82 by 6-24 ft with the why 'about 18 by 12 ft: it is taken from the one measured, a temple's'. The page that sizes a gatehouse is 0093 drawing: 'How long is a gatehouse of its own drawn? About 40 ft, a GUESS ... The one ",
-  "wave": "",
+  "wave": "115",
   "scope": "deferred"
  },
  {
@@ -10300,6 +11008,24 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Fire-water tubs#one tub per wooden building",
+  "tier": "E3",
+  "fix": "tubs one per major wooden building plus two at the kitchen: Ubame's 19 cut to that rule, a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)",
+  "files": [
+   "docs/buildings.md",
+   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
+  ],
+  "after": [
+   "docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart"
+  ],
+  "flag": "Held behind #senior retainers housed apart (row 21, its after): feature 372 wave 99's plan review - Ochiba's tubs added only if the karo's house stays, Ubame's tubs counted per building then",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "115",
+  "scope": "mode-a"
+ },
+ {
   "key": "docs/buildings.md::Fire-water tubs#tub against its wall",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -10354,7 +11080,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "112",
   "scope": "mode-a"
  },
  {
@@ -10372,7 +11098,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "113",
   "scope": "mode-a"
  },
  {
@@ -10389,7 +11115,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "113",
   "scope": "mode-a"
  },
  {
@@ -10407,7 +11133,7 @@
   "flag": "",
   "found": "wave 108's impl-drift of the inner court section (feature 372, 2026-10-10)",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "114",
   "scope": "kept"
  },
  {
@@ -10425,7 +11151,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "mode-a"
  },
  {
@@ -10442,25 +11168,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
-  "key": "docs/buildings.md::Fire-water tubs#one tub per wooden building",
-  "tier": "E3",
-  "fix": "tubs one per major wooden building plus two at the kitchen: Ubame's 19 cut to that rule, a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)",
-  "files": [
-   "docs/buildings.md",
-   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
-  ],
-  "after": [
-   "docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart"
-  ],
-  "flag": "Held behind #senior retainers housed apart (row 21, its after): feature 372 wave 99's plan review - Ochiba's tubs added only if the karo's house stays, Ubame's tubs counted per building then",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "mode-a"
  },
  {
@@ -10497,22 +11205,6 @@
   "verdict": "DRIFTED",
   "wave": "102",
   "scope": "mode-a"
- },
- {
-  "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone",
-  "tier": "E3",
-  "fix": "program's latrine rule: two residence privies (guests' and family's), one-per-zone cited to 0101.drawing as GUESS",
-  "files": [
-   "docs/building-programs.md"
-  ],
-  "after": [
-   "docs/buildings.md::Latrines and the rear service strip#residence privy attached"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "deferred"
  },
  {
   "key": "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip",
@@ -10640,7 +11332,7 @@
   "tier_as_ranked": "E2",
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): clerks' seats rects sit level with the dais flanking it (Hayakawa 370/570 beside dais 465-555 at y 540-543; Ochiba 455/665 beside 555-645; Ubame 380/590 beside 480-570; county example 244/370 beside 274-364), so moving clerks to a middle level redraws every dais band.",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "115",
   "scope": "mode-a"
  },
  {
@@ -10737,21 +11429,6 @@
   "files": [
    "docs/buildings.md",
    "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
-  "key": "docs/buildings.md::Sacred features#grave markers",
-  "tier": "E3",
-  "fix": "grave markers in rows ~9 ft apart with a taller memorial stone or two in an irregular patch and six jizo at the entrance, no fence reference, size from 0235.drawing",
-  "files": [
-   "docs/buildings.md",
-   "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg"
   ],
   "after": [],
   "flag": "",
@@ -10890,7 +11567,7 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - the procedure text plus every pool sheet's wells redrawn",
-  "wave": "",
+  "wave": "115",
   "scope": "mode-a"
  },
  {
@@ -10967,7 +11644,7 @@
   "tier_as_ranked": "E2",
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Well curbs are 22x22 px rects (~7 ft) on the county example, Hayakawa, Ochiba, Ubame and the roundtrip test, and 15x15 px (5 ft) on Hoshigaoka; a true ~4 ft (12 px) curb resizes every one.",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "mode-a"
  },
  {
@@ -10989,6 +11666,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "mode-a"
+ },
+ {
+  "key": "l7r/diagram/compound.py::county_magistracy_program#barracks size",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the code's b(\"barracks\", \"service\", 45.0, 34.0, ...) draws it 34 ft deep, but the page says it is \"drawn 12 to 24 ft deep\" and \"never a square or squat block\"; the depth should be 24 ft or less.",
+  "files": [
+   "l7r/diagram/compound.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/compound.py::county_magistracy_program#senior retainers' quarters",
@@ -11072,6 +11764,23 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight",
+  "tier": "E3",
+  "fix": "brook penalty weight 3.0 -> a tiebreak below the wind/upslope terms (e.g. 0.05 x crossed share), so a crossed site loses only when otherwise level",
+  "files": [
+   "l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 2: at the page's tiebreak (0.05) the 10-household seed 4 seats astride its brook and the web leaves ten farmhouses unreached; held at 3.0, the row waits for the web to reach such a cluster",
+  "verdict": "DRIFTED",
+  "wave": "115",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/consts.py::HARVEST_WEATHERS#standing rack forms",
   "tier": "E3",
   "fix": "add the two attested standing rack forms (Niigata's living alder posts on the bunds, Ehime's permanent roofed racks) as rolled forms with their own glyphs",
@@ -11134,15 +11843,31 @@
  },
  {
   "key": "l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled",
+  "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "roll the attested polder (and dike-pond) archetypes beside valley_paddy in ROLLED_ARCHETYPES once their cohort is green",
+  "fix": "roll the attested polder and dike-pond archetypes (polder_grid, mulberry_dike_fishpond) beside valley_paddy in ROLLED_ARCHETYPES once their cohort is green (24/24 and 12/12 with them in the mix); 0019 attests the polder and 0020 the dike-pond block, and 0019's drawing page names both omissions a known gap",
   "files": [
    "l7r/diagram/hamletgen/consts.py"
   ],
   "after": [],
-  "flag": "deviation-tempting: the polder cohort is not green, which is why it stays opt-in",
+  "flag": "deviation-tempting",
+  "found": "feature 374 batch 2's plan review (2026-10-10): a departure the page never recorded stays a drift, never a DEVIATION the session records",
   "tier_as_ranked": "E3",
-  "verdict": "CANNOT-TELL",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/consts.py::WEB_CLEARANCE#web lane's no-build corridor",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "WEB_CLEARANCE = 18.0 is a corridor HALF-width (lane()'s `clearance` is \"the no-build corridor half-width\", and the constant's comment calls it \"the lane's own half-tread plus a hand's breadth\"), so the corridor is 36 ft, but the page's \"lane's room of 18 ft\" is the WHOLE gap between two homesteads (7 + 4 + 7); the half-width should be 9 ft, or 7 ft measured from the middle per \u00a7188",
+  "files": [
+   "l7r/diagram/hamletgen/consts.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from CANNOT-TELL",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },
@@ -11162,6 +11887,24 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "moved": "wave 17 (measured): splitting the gap is a change across five modules, E3 by FR-003",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/consts_water.py::BROOK_FLANKS#brook's flank",
+  "tier": "E3",
+  "fix": "let the brook cross the site: lay the brook from the terrain before the seat (not away from it) so a seat that straddles it can arise, then draw both banks with fords/bridges",
+  "files": [
+   "l7r/diagram/hamletgen/consts_water.py",
+   "l7r/diagram/hamletgen/water/brook.py",
+   "l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
@@ -11271,7 +12014,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "116",
   "scope": "kept"
  },
  {
@@ -11381,6 +12124,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "accept the chessboard pond layout beside the mosaic and roll between them block by block (0019: Qu Dajun's 1678 chessboard; the drawing page names it a known gap); the same work as POND_LAYOUTS#dike-pond layout",
+  "files": [
+   "l7r/diagram/hamletgen/plan.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked (a known gap is no DEVIATION)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind",
   "tier": "E3",
   "fix": "roll the fall over every direction, with the high-windward case one outcome among several (share a GUESS), and let seat_cluster seat a margin whose back is to the wind but not upslope",
@@ -11393,7 +12151,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -11542,6 +12300,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/water/polder.py::stage_polder#pond layout",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the page attests two pond layouts (\"a mosaic ... and a chessboard ... the layout would be rolled block by block\"), but the code fixes the dike-pond block to the mosaic (POND_LAYOUT_MOSAIC 0.5) and never rolls the chessboard; either roll the chessboard per block or relabel the claim DEVIATION with the page recording a deliberate choice, not a known gap; 0.5 on Kuwabata and 0.0 for the rice polder are otherwise in step",
+  "files": [
+   "l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir first seated pry  30 px uphill of the ring's head",
   "verdict": "UNCLAIMED",
   "tier": "E3",
@@ -11577,7 +12350,7 @@
  },
  {
   "key": "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund",
-  "verdict": "DRIFTED",
+  "verdict": "NEEDS-RESEARCH",
   "tier": "E3",
   "fix": "In `a_way_onto_the_bund`, an end within `BUND_REACH_FT` of the paddy with no water between is carried on to `paddy.nearest(q)` through `carry_on` (as the water-between case already is) instead of returning \"joined\" where it stands, so no path stops short of the bund, and the claim drops the 6 ft as an arrival bar; and the field spur laid after it kept on its junction (measured: the literal carry alone leaves Mizuguchi's spur foot 22 ft off the street's end, a knot)",
   "files": [
@@ -11586,7 +12359,7 @@
   "after": [],
   "flag": "",
   "found": "wave 8 re-check (tiered by its work at T34a)",
-  "tier_as_ranked": "E1",
+  "tier_as_ranked": "E4",
   "moved": "wave 31 trial (measured 2026-10-08): ends within BUND_REACH_FT carried on to the bund (no water between), only an end within _JOINT_FT joined; Mizuguchi's field_path went joined -> run_on and its field spur, laid after the pass, started 22 ft off the street's end - test_no_lane_ends_knot_short_of_a_join[mizuguchi] failed; keeping a junction end in place did not cure it (the spur is re-laid downstream). The fix spans the bund pass and the spur's laying: E3. Reverted.",
   "wave": "",
   "scope": "kept"
@@ -11674,6 +12447,51 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/clearance.py::clear_runs#off the crop and wet ground",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "keeping off crop and wet ground follows the page, but holding the \"full margin\" off a plot does not: the page says a lane \"may touch a plot's boundary\". The claim should call the margin a DEVIATION (as stage_web's WEB_HARD_GAP claim does), recorded on 0081, or UNRESEARCHED",
+  "files": [
+   "l7r/diagram/hamletgen/ways/clearance.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from CANNOT-TELL",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/corridors.py::field_router#a defense marsh is no wall",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the code drops role==\"defense\" marshes from the field way's hard ground, but 0081 says \"Lanes keep to the bunds and dry ground\" and \"A track keeps off wet ground\" and records no departure for a defense marsh; either the drawing page records a DEVIATION or the defense marsh stays a wall",
+  "files": [
+   "l7r/diagram/hamletgen/ways/corridors.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/corridors.py::field_router#across the groves",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the code drops kind \"village_groves\" from the walls (`kind not in (\"commons\", \"village_groves\")`, \"a path crosses ground cover\"), but the cited page has a lane keep \"a footpath's clearance and some working room kept off the trees\". Either wall the groves at that clearance or relabel the claim as the deliberate crossing it is",
+  "files": [
+   "l7r/diagram/hamletgen/ways/corridors.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#field path to the bund",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -11686,7 +12504,7 @@
   "flag": "",
   "found": "wave 90's diagnosis of baseline cohort seed 10 (feature 328, 2026-10-09)",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -11701,7 +12519,7 @@
   "tier_as_ranked": "E2",
   "moved": "wave 34 (amendment 33 round 1 asked the evidence): `_pull_back_to_service(run, segs, houses, inside, fabric, gap)` (hamletgen/ways/fabric.py:360) is handed no hard ground, walls or water - a joined end however far needs a ROUTED run past them (`route._route(start, goal, hard, walls, water)`), so its caller in web.py (line 344, `kept_connector`) must pass the hard set down and the route search be called: three modules, E3 by FR-003",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -11716,7 +12534,7 @@
   "flag": "",
   "found": "wave 67, spec-fidelity",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -11913,6 +12731,36 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the grove fallback's second and third routes, `(bands, lines), (bands, [])`, wall only the grove bands. The field envelope, crops, toe band and wet ground are no longer walled, and `around` is checked only against the fabric, so the track can cross row crops, the paddy or wet ground, against \"A lane never crosses row crops\", \"A lane stops at the flooded paddy\" and \"A track keeps off wet ground\"; every route should keep `obstacles` walled",
+  "files": [
+   "l7r/diagram/hamletgen/ways/track.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from MISLABELED",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook not crossed",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the fill treats every brook segment as uncrossable and raises NoDryExit, but the page has a way cross \"unless crossing saves it more than about 150 ft\" at crossing places; allow a crossing at a crossing place, or record the ban as a DEVIATION",
+  "files": [
+   "l7r/diagram/hamletgen/ways/track.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -11925,7 +12773,7 @@
   "flag": "deviation-tempting: the spur half runs against the GM's rulings of 2026-10-04 (feature 320: the field way is not placed before the homesteads) and 2026-10-02 (lanes come after houses; planned or paved roads excepted) - the road half may fall in the planned-road exception; the spur half goes to the GM at the feature's end or the exception path, never built as asked",
   "found": "wave 48 impl-drift round 1",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -11941,7 +12789,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -11974,7 +12822,7 @@
   "flag": "",
   "found": "wave 48 impl-drift round 4 (a note on the skeleton form claim)",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -11989,41 +12837,6 @@
   "flag": "",
   "found": "wave 2: the brook tiebreak at 0.05",
   "tier_as_ranked": "E3",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight",
-  "tier": "E3",
-  "fix": "brook penalty weight 3.0 -> a tiebreak below the wind/upslope terms (e.g. 0.05 x crossed share), so a crossed site loses only when otherwise level",
-  "files": [
-   "l7r/diagram/hamletgen/cluster.py"
-  ],
-  "after": [
-   "l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "moved": "wave 2: at the page's tiebreak (0.05) the 10-household seed 4 seats astride its brook and the web leaves ten farmhouses unreached; held at 3.0, the row waits for the web to reach such a cluster",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/consts_water.py::BROOK_FLANKS#brook's flank",
-  "tier": "E3",
-  "fix": "let the brook cross the site: lay the brook from the terrain before the seat (not away from it) so a seat that straddles it can arise, then draw both banks with fords/bridges",
-  "files": [
-   "l7r/diagram/hamletgen/consts_water.py",
-   "l7r/diagram/hamletgen/water/brook.py",
-   "l7r/diagram/hamletgen/cluster.py"
-  ],
-  "after": [
-   "l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
  },
@@ -12096,8 +12909,9 @@
  },
  {
   "key": "l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot",
+  "verdict": "MISLABELED",
   "tier": "E3",
-  "fix": "FOOTPATH_FABRIC_GAP 4.0 -> 7.0 (0246: a lane's middle at least 7 ft from a garden fence, footpath included)",
+  "fix": "0246 answers this: \"a lane's middle keeps at least 7 ft clear of a garden fence\", 3 ft footpath included; 4.0 departs from it, so the claim should be DEVIATION 0246, and 0246 must record the 4 ft (it does not) or the code is DRIFTED; the code comment's \"7 ft SINCE FEATURE 328\" is stale against `= 4.0`",
   "files": [
    "l7r/diagram/hamletgen/consts.py"
   ],
@@ -12105,9 +12919,39 @@
    "l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"
   ],
   "flag": "",
-  "tier_as_ranked": "E1",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from DRIFTED",
+  "tier_as_ranked": "E0",
   "moved": "wave 4: at 7 ft (0246) Kashikawa refuses; held at 4, the row waits for the found E3 row",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/web.py::stage_web#web lane margin off the hard ground",
   "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the DEVIATION is not recorded: 0081 says a lane \"may touch a plot's boundary\" and 0246 says such a stretch \"is cut out\", and no page in the bundle records the 8 ft `WEB_HARD_GAP` stand-off. The drawing page should record the deviation, or the code should follow the page",
+  "files": [
+   "l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#only-way reach",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the code treats a house as served by another lane within WEB_REACH_FT 100 ft, but the page counts a way as reaching a farmhouse only \"within 60 ft of the house, or within 12 ft of the steading's built ground\"; its 100 ft is the back-lane count rule. A house with another lane 60-100 ft off can lose its only tail; use the 60 ft/12 ft reach, or cite \u00a7113 as a stated calibration",
+  "files": [
+   "l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },
@@ -12122,7 +12966,7 @@
   "flag": "deviation-tempting: the drawing page records leaving the mounds out because the frontier magistracy stands on the line",
   "tier_as_ranked": "E3",
   "verdict": "CANNOT-TELL",
-  "wave": "",
+  "wave": "118",
   "scope": "deferred"
  },
  {
@@ -12202,25 +13046,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld",
-  "tier": "E3",
-  "fix": "admit the attested bridge-end seat in _kosatsuba_seat_ok and site a board at a bridge end where the map has one",
-  "files": [
-   "l7r/diagram/settlement/_knobs.py",
-   "l7r/diagram/settlement/structures/fixtures/siting.py",
-   "l7r/diagram/settlement/structures/fixtures/board_seat.py"
-  ],
-  "after": [
-   "l7r/diagram/settlement/_knobs.py::<module>#kosatsuba_seat forms"
-  ],
-  "flag": "deviation-tempting: hamlet crossings are 10 ft planks, a poor board site",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -12237,6 +13063,21 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "117",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/_knobs.py::_settlement_form_ok#dike-top needs low ground",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "gate dike_top on a polder with water on every flank and no landward shore (0019 \u00a719), not on any low site; a shore polder's village stands on the dry ground off the dike (\u00a717)",
+  "files": [
+   "l7r/diagram/settlement/_knobs.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },
@@ -12251,7 +13092,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "117",
   "scope": "deferred"
  },
  {
@@ -12408,6 +13249,36 @@
   "scope": "deferred"
  },
  {
+  "key": "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#stupa and its seats",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the stupa is a fixed 13 px tall at every scale (39 ft at 3 ft/px), but 0235.drawing says \"Every funerary feature is drawn at its real size\" and is never enlarged; size it in feet through px() and leave the seats UNRESEARCHED",
+  "files": [
+   "l7r/diagram/settlement/civic_grounds/funerary.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo size",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "jh = px(2.7) draws the jizo 2.7 ft tall, but the page takes \"a stone jizo ... at about 2 ft tall\"; nothing cited gives the 2.7 ft or the 1.4-width pitch, so draw it 2 ft tall or label the 2.7 and the pitch GUESS",
+  "files": [
+   "l7r/diagram/settlement/civic_grounds/funerary.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#roofed bed the minority",
   "tier": "E3",
   "fix": "roll a second roofed form, the snow-country walled hut 8 to 10 ft square, beside the four-post roof in the roofed minority",
@@ -12418,7 +13289,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "117",
   "scope": "deferred"
  },
  {
@@ -12482,6 +13353,24 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex",
+  "verdict": "MISLABELED",
+  "tier": "E3",
+  "fix": "moves with the free-standing storehouse row (0040)",
+  "files": [
+   "l7r/diagram/settlement/farm_fixtures.py"
+  ],
+  "after": [
+   "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall"
+  ],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the annex rests on the same contradicted sentence",
+  "wave": "117",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -12499,7 +13388,7 @@
  },
  {
   "key": "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank",
-  "verdict": "MISLABELED",
+  "verdict": "DRIFTED",
   "tier": "E3",
   "fix": "roll 0061's two attested bank forms per settlement (a bare bank, or one planted sparsely with mulberry and cudrania), a new element on the bank - a knob, never a fixed choice; then the drawing page describes the new code",
   "files": [
@@ -12507,8 +13396,8 @@
   ],
   "after": [],
   "flag": "",
-  "found": "wave 9 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from MISLABELED",
+  "tier_as_ranked": "E3",
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the page calls the bare bank a gap still to fill, not a decision",
   "wave": "",
   "scope": "kept"
@@ -12554,6 +13443,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._wf_feed#feed and outfall's width",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "`width=2.6` is a fixed px figure (the claim says px), but the page says \"Widths are stored in feet and converted when drawn ... the same real size on every map\". The width should be held in ft and converted (or, if `channel()` already converts, the claim should say ft). 2.6 against \"roughly twice\" the 1.5 ft floor is within tolerance",
+  "files": [
+   "l7r/diagram/settlement/fields/paddy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.paddy_field#crop mix",
@@ -12618,6 +13522,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy in the yard off the back wall",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "KNOWN, held E3. Same as above: the 9.5 ft edge against the page's \"a ken (about 6 ft) off the back wall\"",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats - the barn 0047 names",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -12668,6 +13587,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wall places a ken out",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "`g + px(WOODSHED_STEP_FT)` offers places 9.5 ft off the wall against the page's \"about 6 ft (a ken)\"; same fix as WOODSHED_STEP_FT",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#a main-door bath drawn",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -12679,6 +13613,21 @@
   "after": [],
   "flag": "",
   "found": "wave 20's review (amendment 19 round 1), tier E3: the seat geometry against the yard, and a drawing-page line",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#the ken past the wall gap",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the predicate requires the gap plus 6.0 (9.5 ft) where the page says \"about 6 ft (a ken) off a wall\"; record the hold on 0043's drawing page or return to the ken",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
@@ -12702,6 +13651,66 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/grove_fill.py::close_belt_gaps#belt deep and whole",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the code measures a gap as the straight-line distance `math.dist(_pa, _pb)` between neighbouring seats, ordered along the seats' own principal axis (`_belt_axis`), but the page says \"a bare run wider than about 30 ft, measured across the wind\". That axis can run 31-49 degrees off the across-wind line, and the straight-line distance counts the depth offset too. Either measure the gap across the wind, or have the page record this measure.",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/grove_fill.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/grove_fill.py::ink_and_record_grove#belt alder in the marsh",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the code draws alder only in `marsh_ground(s.M, only=(\"toe\", \"waterside\"))`, but the page says \"A shelter belt's trees standing in the marsh are drawn as alder\", with no marsh kinds excluded. grove_blocks lets belt clumps sit in the margin of every marsh kind, so a clump in another kind's margin is drawn as an ordinary tree. Either widen the alder test to every marsh the belt may stand in, or have the page record the restriction.",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/grove_fill.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/grove_fill.py::reseat_clump#a seat refused for the sun set deeper",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "\u00a757 says a clump that would shade a plot is \"refused and set deeper\", but the rings at L443-444 take the nearest clear point on any of eight bearings starting at 0 deg (east), not deeper into the stand, and L422 returns None for a non-dense grove, so a copse seat in the sun is dropped against the claim's \"rather than dropped\"; the code should search away from the plot, or the claim should say what the code does",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/grove_fill.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/grove_rules.py::NEIGHBOR_REACH_FT#a neighbor's band east of a garden",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the code holds `NEIGHBOR_REACH_FT = 22.0`, but the page keeps every crown 50 ft east of a bed, \"its own farm's or a neighbor's\", and records no hold; fix it to 50 ft, or have the drawing page record the 22 ft and relabel the claim DEVIATION",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/grove_rules.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -12715,6 +13724,21 @@
   "found": "wave 9 re-check (tiered by its work at T38b)",
   "tier_as_ranked": "E3",
   "moved": "T38b: tiered by its work - the constant cannot move alone - at 50 ft the check fails on Mizuguchi until the row framing in dispersed.py seats neighbors' bands differently, a change across the layout and the check.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band east of a garden",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "`NEIGHBOR_REACH_FT` = 22 ft, but the page says no crown \"within 50 ft east ... its own farm's or a neighbor's\" and records no 22 ft departure; the claim names the shortfall but is not a DEVIATION. Either check at 50 ft, or have the drawing page record the 22 ft and label the claim DEVIATION",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/grove_rules.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },
@@ -12735,6 +13759,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the 50 ft own-farm reach matches, but the page's clear ground runs \"from the plot's north edge down\" (to 50 ft below the south edge, \u00a777), while the code tests overlap with gy0..gy1 only, so a band southeast of the bed passes; widen the band to the page's span, or name the unit that checks that corner",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/grove_rules.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from NEEDS-RESEARCH",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#conifer-led clump's lesser share",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -12747,7 +13786,7 @@
   "flag": "",
   "found": "wave 53, impl-drift CANNOT-TELL measured",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -12975,7 +14014,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -13007,6 +14046,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#plot size",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "`self.px(cell_ft)` with cell_ft=60.0 tiles real 60 x ~60 ft cells, about 0.08 acre. The page says dry plots are \"tiled in real feet at every scale, roughly 92 ft across and 72 ft down a row\", calibrated to registers averaging about 0.12-0.16 acre. Either the cell becomes ~92x72 ft, or the claim becomes a DEVIATION that the page records.",
+  "files": [
+   "l7r/diagram/settlement/land/nearring.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#watered basins only",
@@ -13068,7 +14122,7 @@
   "flag": "",
   "found": "wave 91's diagnosis of baseline cohort seed 20 (feature 328, 2026-10-10)",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -13099,30 +14153,12 @@
   "found": "wave 9 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0040's page says the record contradicts the north-wall annex",
-  "wave": "",
+  "wave": "117",
   "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex seat",
   "verdict": "UNCLAIMED",
-  "tier": "E3",
-  "fix": "moves with the free-standing storehouse row (0040)",
-  "files": [
-   "l7r/diagram/settlement/farm_fixtures.py"
-  ],
-  "after": [
-   "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall"
-  ],
-  "flag": "",
-  "found": "wave 9 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the annex rests on the same contradicted sentence",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex",
-  "verdict": "MISLABELED",
   "tier": "E3",
   "fix": "moves with the free-standing storehouse row (0040)",
   "files": [
@@ -13167,8 +14203,8 @@
   "flag": "",
   "e0_basis": "",
   "e0_rechecked": true,
-  "tier_as_ranked": "E0",
-  "verdict": "CANNOT-TELL",
+  "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
  },
@@ -13461,7 +14497,7 @@
   "found": "wave 5 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - a new knob value in _knobs.py:324 with its typing rule, a new anchor case in kosatsuba_anchor (_helpers.py:198) and the board seat search that reads it",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -13477,7 +14513,7 @@
   "found": "wave 9 re-check (tiered by its work at T38b)",
   "tier_as_ranked": "E0",
   "moved": "T38b: tiered by its work - an honest claim states a drift against 0190, and closing it changes the selection rule in two functions in two modules (the floor in _board_for, the open-before-shaded walk in choose_board), so it is not a relabel.",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -13491,6 +14527,21 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#within 60 ft of a street",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "line 290's `off <= lim` measures the way's centerline to the ground's center, but the page says \"measured edge to edge, never center to center\"; edge to edge the code allows only 60 - rw/2 - h/2 ft; test off - rw/2 - h/2 <= lim",
+  "files": [
+   "l7r/diagram/settlement/structures/fixtures/siting.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },
@@ -13737,7 +14788,7 @@
   "flag": "",
   "found": "wave 65, impl-drift",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -13909,11 +14960,11 @@
   "tier_as_ranked": "E1",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed and unchanged since T56a tiered this key: the drawing page still says '20 to 35 ft on a side' (0222.drawing.html:8) while the procedure's claim (building-programs.md:179) reads 'worship hall from about 18 ft (Hie about 18 x 12, Rokusha 9 tsubo) to about 35 ft (the band about 18-35 by 12-35 ft)', which matches 0215's measured hall. Only the drawing page lags its own research section, so n",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
-  "verdict": "MISLABELED",
+  "verdict": "DRIFTED",
   "tier": "E4",
   "fix": "Exception path (FR-004), a page edit: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:4 (Evidence comment, 'convention (the innermost arch one pitch off the hall ...)') and :29 ('so this is a map drawing convention') reclassed as a GUESS. No implementation change: the claim at docs/building-programs.md:132 is already 'GUESS ... the innermost arch 12 ft off the hall's face', and the 12 ft drawn stands.",
   "files": [
@@ -13921,11 +14972,11 @@
   ],
   "after": [],
   "flag": "",
-  "found": "wave 106's impl-drift of the country shrine's section, round 5 (feature 372, 2026-10-10)",
-  "tier_as_ranked": "E0",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from MISLABELED",
+  "tier_as_ranked": "E3",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed: 0220.drawing.html:4 still lists 'convention (the innermost arch one pitch off the hall; ...)' and :29 'The innermost arch stands 12 ft off the hall's nearest face, the same as the spacing between arches.' The procedure already draws that distance and already labels it GUESS (building-programs.md:132), so the disagreement is only in the page's class; T56a tiered this same key E4 for that",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis",
@@ -13941,25 +14992,8 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "deferred"
- },
- {
-  "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E4",
-  "fix": "buildings/programs.md line 110: 'The tiny end is a road checkpoint post: 2-3 samurai, one office room, a cell, a barrier gate' has no staff count in the record; research first (a checkpoint post's garrison), or meanwhile split it into its own claim '<!-- Research: checkpoint post's staff and rooms - UNRESEARCHED: 2-3 samurai, one office room -->' and keep line 44's claim to the capital housing knob and the checkpoint as the tiny end.",
-  "files": [
-   "docs/building-programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 15 re-check (tier provisional, by verdict)",
-  "reopened": "closed in wave 13",
-  "tier_as_ranked": "E4",
-  "moved": "T56a: tiered by its work by a fresh reader - research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.html gives Nuruyu's layout and Hakone's buildings (front post with an upper guardroom, guards' room, rest room, bath, a lockup) but no staff count, so the record does not yet say what the post's staffing should be.",
-  "wave": "",
-  "scope": "deferred"
+  "wave": "115",
+  "scope": "kept"
  },
  {
   "key": "docs/buildings.md::Latrines and the rear service strip#privies away from water",
@@ -13973,6 +15007,21 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "98",
+  "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Sacred features#grave markers",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "the rows match, but 0235 gives no marker size, so ~2x1 ft rests on nothing cited; it also gives ~9 ft spacing, a taller memorial stone or two, six jizo and an irregular patch, none of which this section draws",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from DRIFTED",
+  "tier_as_ranked": "E4",
+  "wave": "",
   "scope": "mode-a"
  },
  {
@@ -13990,7 +15039,7 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "CANNOT-TELL",
-  "wave": "",
+  "wave": "118",
   "scope": "kept"
  },
  {
@@ -14035,7 +15084,7 @@
   "found": "wave 22 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
   "moved": "amendment 22 round 1 (spec-fidelity): NEEDS-RESEARCH is E4 (Edge Cases; amendment 9 ruling) - T71a's E0 withdrawn",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -14065,7 +15114,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E4",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -14155,7 +15204,7 @@
   "e0_basis": "",
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
-  "verdict": "CANNOT-TELL",
+  "verdict": "MISLABELED",
   "wave": "",
   "scope": "kept"
  },
@@ -14171,7 +15220,7 @@
   "tier_as_ranked": "E2",
   "moved": "wave 30 (measured 2026-10-08): the share tried - Kuwabata's reservoir 4.25 acres against its 21.2-acre block - and impl-drift found 0061 gives it only for a field on high ground whose pond is its only water; a polder draws on wild water and no page sizes it: reverted, the fixed ellipse claimed UNRESEARCHED, E4",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -14206,6 +15255,7 @@
  },
  {
   "key": "l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin",
+  "verdict": "NEEDS-RESEARCH",
   "tier": "E4",
   "fix": "the lanes keep 7 ft off a garden fence (0246) and that is in step; the same 7 ft off a threshing yard is on no page (0246 calls the yard open ground) - research the margin off a yard first, then set it",
   "files": [
@@ -14213,14 +15263,15 @@
   ],
   "after": [],
   "flag": "",
-  "tier_as_ranked": "E1",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from DRIFTED",
+  "tier_as_ranked": "E4",
   "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
-  "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
  },
  {
   "key": "l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span",
+  "verdict": "NEEDS-RESEARCH",
   "tier": "E4",
   "fix": "as fouls_fabric: the 7 ft off a threshing yard is on no page; research the margin off a yard first",
   "files": [
@@ -14230,9 +15281,9 @@
    "l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin"
   ],
   "flag": "",
-  "tier_as_ranked": "E1",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from DRIFTED",
+  "tier_as_ranked": "E4",
   "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
-  "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
  },
@@ -14264,21 +15315,6 @@
   "found": "wave 7 re-check (tiered by its work at T29a)",
   "tier_as_ranked": "E4",
   "moved": "T29a (amendment 7): tiered by its work - FORD_HALF (consts_water) is one constant read by off_ford_at at law_water.py line 79, but no page gives the width it should be, so the record comes first.",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/ways/settle.py::_unkinked#a returning leg of 40 ft or more",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E4",
-  "fix": "0081: 'A lane never doubles back in a hairpin ... a returning leg under 40 ft is cut' - the page gives no remedy for a hairpin whose returning leg is 40 ft or more; the code cuts it as a shorter one (GUESS). A research pass: what did a worn path do where it turned back on itself over a longer stretch (two paths? a loop?), or the GM's ruling",
-  "files": [
-   "l7r/diagram/hamletgen/ways/settle.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 45 spec-fidelity round 1",
-  "tier_as_ranked": "E4",
   "wave": "",
   "scope": "kept"
  },
@@ -14321,7 +15357,7 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {
@@ -14373,6 +15409,7 @@
  },
  {
   "key": "l7r/diagram/interactive/place.py::KINDS#what each tier is",
+  "verdict": "DRIFTED",
   "tier": "E4",
   "fix": "0001's question counts a provincial city's ~3,000 within the walls; the GM's feature-156 request has it take in the samurai country estates: record the GM's ruling on 0001's drawing page (a record edit), so the CANON claim and the page agree",
   "files": [
@@ -14380,9 +15417,9 @@
   ],
   "after": [],
   "flag": "",
-  "tier_as_ranked": "E1",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from CANNOT-TELL",
+  "tier_as_ranked": "E3",
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
-  "verdict": "CANNOT-TELL",
   "wave": "",
   "scope": "kept"
  },
@@ -14403,6 +15440,7 @@
  },
  {
   "key": "l7r/diagram/settlement/city/walls.py::WallsMixin._tower#no-build margin",
+  "verdict": "NEEDS-RESEARCH",
   "tier": "E4",
   "fix": "0147's 36 ft clearance is for the gate's three buildings; whether a mural tower keeps any clear ground is on no page - research it first",
   "files": [
@@ -14410,9 +15448,9 @@
   ],
   "after": [],
   "flag": "",
-  "tier_as_ranked": "E1",
+  "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from CANNOT-TELL",
+  "tier_as_ranked": "E4",
   "moved": "wave 5 re-check: NEEDS-RESEARCH",
-  "verdict": "CANNOT-TELL",
   "wave": "",
   "scope": "deferred"
  },
@@ -14667,7 +15705,7 @@
   "flag": "",
   "found": "wave 60, impl-drift",
   "tier_as_ranked": "E4",
-  "wave": "",
+  "wave": "115",
   "scope": "kept"
  },
  {

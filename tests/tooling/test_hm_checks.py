@@ -75,11 +75,13 @@ def _clone(tmp: pathlib.Path) -> pathlib.Path:
     return tmp
 
 
-def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path) -> None:
+def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """FR-010/FR-011: the record checks' cap of two rounds per subject per feature; the third trips the arbiter, whose
     `continue` lifts the cap by one and whose `accept` closes the unit for good."""
     root = _clone(tmp_path)
-    ha = _load("hm_arbiter")
+    ha, ro = _load("hm_arbiter"), _load("record_owed")
+    store = tmp_path / "record-checks"
+    monkeypatch.setenv("RECORD_CHECKS_DIR", str(store))
     st: dict = {}
     for i in range(2):
         assert hc.dispatch(st, f"t{i}", "quote-check", "/m", MANIFEST, i, root) == ""
@@ -92,7 +94,14 @@ def test_the_third_round_goes_to_the_arbiter(tmp_path: pathlib.Path) -> None:
     hc.answered(st, "quote-check", ["q:0105"])
     assert "passes its cap of 3" in hc.dispatch(st, "t10", "quote-check", "/m", MANIFEST, 6, root)
     ha.record_ruling(root, "round:quote-check|q:0105@4", {"ruling": "accept", "why": "what is left is wording"}, "round-arbiter")
+    for slug, fp in (("quote-check:0105.drawing#bath-size", "abc123"), ("quote-check:0105#well", "x")):
+        ro.write_answer(store, slug, fp, "accepted")  # what the accept answers (hm_arbiter.accept_answers)
     assert "the round arbiter closed quote-check|q:0105 (accept)" in hc.dispatch(st, "t11", "quote-check", "/m", MANIFEST, 7, root)
+    moved = MANIFEST.replace("abc123", "def456")  # a later change re-owes the unit: the accept no longer closes it (374 FR-005)
+    for i in range(2):
+        assert hc.dispatch(st, f"m{i}", "quote-check", "/m", moved, 8 + i, root) == "", "the new change's rounds count afresh"
+        hc.answered(st, "quote-check", ["q:0105"])
+    assert "round 6 of `quote-check` on q:0105 in this feature passes its cap of 5" in hc.dispatch(st, "m2", "quote-check", "/m", moved, 11, root)
     assert hc.dispatch(st, "ti", "impl-drift", "/m", "unit: impl-drift:x 1\n", 5) == "" and st["dispatches"]["ti"]["subjects"] == []
 
 
@@ -314,3 +323,21 @@ def test_a_foreground_check_is_logged_when_its_tool_call_completes(tmp_path: pat
 def test_a_return_with_no_transcript_or_a_broken_one_never_raises(tmp_path: pathlib.Path) -> None:
     assert not hc.log_pass(tmp_path, "returned", {"agent_type": "glyph-check", "agent_id": "a5", "agent_transcript_path": str(tmp_path / "gone.jsonl")}, 0.0)
     assert not hc.log_pass(tmp_path / "no-such-dir", "returned", {"agent_type": "glyph-check", "agent_id": "a6", "agent_transcript_path": str(_transcript(tmp_path, "a6", "x"))}, 0.0)
+
+
+def test_the_refusal_names_the_escape_that_reaches_its_rule() -> None:
+    assert hc.escape_for("the round arbiter closed quote-check|q:0105 (accept)") == "ARBITER_OK"
+    assert hc.escape_for("round 3 of `quote-check` on q:0105 ... make arbiter-bundle") == "ARBITER_OK"
+    assert hc.escape_for("`quote-check` is already in q:0105's round") == "FREEZE_OK"
+
+
+def test_a_dispatch_keeps_why_its_units_were_due_and_a_late_reply(tmp_path: pathlib.Path) -> None:
+    """Feature 374 (the round arbiter's tooling fixes): each dispatch keeps the `owed:` lines of its bundle, and a reply that
+    arrives after the answer closed the dispatch is still kept, so the arbiter's bundle has every round's reply."""
+    st: dict = {}
+    hc.dispatch(st, "t1", "modal-depiction", "/m", MODAL + "owed: modal-depiction:sheet/bath - a page its Drawing: names moved\n", 0)
+    assert st["dispatches"]["t1"]["owed"] == ["modal-depiction:sheet/bath - a page its Drawing: names moved"]
+    hc.launched(st, "t1", "ag1", True)
+    hc.answered(st, "modal-depiction", ["modal:sheet/bath"])
+    hc.returned(st, "ag1", "1. a finding", tmp_path / "keep")
+    assert pathlib.Path(st["dispatches"]["t1"]["reply"]).read_text() == "1. a finding"

@@ -504,6 +504,7 @@ def clear_runs(
     Research:
         off the crop and wet ground - research/questions/0081-village-lanes.drawing.html: the full margin
         threads between steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric by default
+        lane off a water line - UNRESEARCHED: 14 ft by default (`line_margin`)
         shortest lane - UNRESEARCHED: a run under 70 ft by default is not a lane"""
     if not obstacles and not lines and not tight:
         return [list(pts)]
@@ -554,6 +555,7 @@ def clip_to_clear(pts: Poly, obstacles: Sequence[Poly], margin: float, step: flo
 
     Research:
         an arm stops at the crop - research/questions/0081-village-lanes.drawing.html: a lane ends where the crop begins
+        lane off a water line - UNRESEARCHED: 14 ft by default
         shortest arm - UNRESEARCHED: under 70 ft is not drawn"""
     if not obstacles and not lines:
         return pts

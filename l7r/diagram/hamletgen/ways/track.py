@@ -902,7 +902,8 @@ def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Se
     Research:
         dry exit off the wet - research/questions/0081-village-lanes.drawing.html: walled by the marsh, the steadings and the field
         pond berth - UNRESEARCHED: 80 ft past the pond's larger half-axis
-        grove band gap - UNRESEARCHED: a footpath's gap plus half the tread, on a finer grid
+        grove band gap - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees; a footpath's gap plus half the tread, on a finer grid, its calibration
+        track start out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walked out of grove bands by a footpath gap plus half the tread, the lane's clearance off the trees
         brook not crossed - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: no water line crossed"""
     # ...A FARM'S GROVE BAND AT A FOOTPATH'S GAP, over a grid fine enough to pass between two (feature 291 on 287): dispersed
     # farms stand a lane's room (32 ft) apart, and at the track's gap on the 20 ft grid every way between them was walled -
