@@ -15,6 +15,7 @@ from collections.abc import Callable, Sequence
 from l7r.diagram.overlap.registry import refuse_unadmitted
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly
 from l7r.diagram.settlement._knobs import Knob, register_knob
+from l7r.diagram.settlement.water_ways.water import SUPPLY_HUE
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 
 from ..consts import (
@@ -746,21 +747,56 @@ def open_race_mouth(s: Settlement, sluice: Pt) -> None:
 
     Beds share one opacity group (`_water`), so the brook painting over the race is a join, not a darker seam. A brook
     with a pond `clip` is not moved (its bed is re-emitted at flush from the early list); a hamlet's brook has none.
-    Research: bare intake mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race opens out of the brook's bank, no gate or boards drawn"""
+    The race's first `RACE_TAPER_FT` taper from the brook's hue to the supply hue (feature 355, `race_taper`): drawn in the
+    supply hue from the bank, the dug race read as the principal watercourse at close zoom (measured on Sawada 2026-10-11).
+    Research: bare intake mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race opens out of the brook's bank, no gate or boards drawn
+    Research: race mouth hue taper - CONVENTION: the race's first 30 ft drawn from the brook's hue to the supply hue, so the dug ditch does not read as the river"""
     tap = (float(sluice[0]), float(sluice[1]))
     brook = next((st for st in s.M.get("streams", []) if any(math.dist(tap, (float(q[0]), float(q[1]))) < 0.5 for q in st["poly"])), None)
     entry = next((w for w in s.water if w["rec"] is brook and w.get("clip") is None), None) if brook is not None else None
     if brook is None or entry is None:
         return
     reach = float(brook.get("w", 7)) / 2.0 + 8.0  # a race trimmed at this bank starts within this of the tap
-    for w in s.late_water:
+    for k, w in enumerate(s.late_water):
         pts = w["rec"].get("pts")
         if pts and 0.05 < math.dist(tap, (float(pts[0][0]), float(pts[0][1]))) <= reach:
             w["bed"] = re.sub(r' d="M', f' d="M{tap[0]:.1f},{tap[1]:.1f} L', w["bed"], count=1)
             pts.insert(0, [round(tap[0], 1), round(tap[1], 1)])
+            w["bed"] += race_taper([(float(q[0]), float(q[1])) for q in pts], s.px(RACE_TAPER_FT), float(w["rec"].get("w0", w["rec"].get("w", 2.5))), f"race-mouth-{k}")
             break
     s.water.remove(entry)
     s.late_water.append(entry)
+
+
+RACE_TAPER_FT = 30.0
+"""How far down the head race its hue tapers from the brook's to the supply hue (feature 355): the entry's own sketch, "taper
+its first ~30 ft from the brook's hue to its own" - a map drawing convention."""
+BROOK_BED_HUE = "#9CB4C8"  # the brook's bed (`Settlement.stream`)
+
+
+def race_taper(pts: Sequence[Pt], length: float, width: float, gid: str) -> str:
+    """The head race's first `length` px drawn over its bed in a gradient from the brook's hue at its first point to the
+    supply hue where the stretch ends (feature 355) - the race's own line and width, so only its hue changes; empty when the
+    race is a single point. The overlay ends in the race's own color, so it joins the bed beneath without a seam."""
+    out: list[Pt] = [pts[0]] if pts else []
+    left = length
+    for a, b in zip(pts, pts[1:], strict=False):
+        d = math.dist(a, b)
+        if d >= left:
+            t = left / d if d else 0.0
+            out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
+            break
+        out.append(b)
+        left -= d
+    if len(out) < 2:
+        return ""
+    (x1, y1), (x2, y2) = out[0], out[-1]
+    dd = "M" + " L".join(f"{x:.1f},{y:.1f}" for x, y in out)
+    return (
+        f'<defs><linearGradient id="{gid}" gradientUnits="userSpaceOnUse" x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}">'
+        f'<stop offset="0" stop-color="{BROOK_BED_HUE}"/><stop offset="1" stop-color="{SUPPLY_HUE}"/></linearGradient></defs>'
+        f'<path d="{dd}" fill="none" stroke="url(#{gid})" stroke-width="{width}" stroke-linecap="butt" stroke-linejoin="round"/>'
+    )
 
 
 def weir_glyph(form: str, poly: Sequence[Pt], c: Pt, along: Pt, down: Pt, half: float, half_t: float) -> str:
