@@ -77,3 +77,34 @@ def test_a_seat_below_the_houses_on_dry_ground_is_kept_by_its_tier(monkeypatch) 
     plan = SimpleNamespace(fall=(0.0, 1.0), envelope=[])
     out = parcels._beyond_the_fields(s, plan, [(5.0, 1.0, 1.0), (5.0, 2.0, 2.0), (5.0, 3.0, 3.0)], None, (0.0, 0.0))  # type: ignore[arg-type]
     assert [(x, y) for _sc, x, y in sorted(out, reverse=True)] == [(1.0, 1.0), (2.0, 2.0)], "the slope, then the level; none by the water"
+
+
+def test_a_walk_through_a_field_whose_outline_crosses_itself_is_measured() -> None:
+    """Feature 374 wave 120 (cohort seed 5): a field outline crossing itself raised GEOS's side location conflict on a walk
+    through the crossing; the outline is made valid first, and the walk's share is measured on it."""
+    from l7r.diagram.hamletgen.hinterland.crossing import crossed_through_many
+
+    bowtie = [(0.0, 0.0), (100.0, 100.0), (100.0, 0.0), (0.0, 100.0)]  # crosses itself at (50, 50)
+    got = crossed_through_many(bowtie, (-50.0, 50.0), [(150.0, 50.0), (50.0, 50.0)])
+    assert len(got) == 2 and all(isinstance(v, bool) for v in got)
+
+
+def test_a_wood_flush_against_a_marsh_below_the_houses_is_refused_by_its_square(monkeypatch) -> None:  # noqa: ANN001
+    """Feature 374 wave 120 (the plan review): the 46 ft is measured from the wood's square, not its seat - every seat the
+    keep-outs pass stands a half off the water, so a square flush against a marsh (its seat a half away) is the case."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.hinterland import parcels
+
+    half = 60.0
+    marsh = [[(0.0, 700.0), (400.0, 700.0), (400.0, 900.0), (0.0, 900.0)]]
+    seat = (5.0, 200.0, 700.0 - half)  # its square's edge on the marsh line, its seat a half off it
+    monkeypatch.setattr(parcels, "woodland_tier", lambda p, *a: 0)
+    monkeypatch.setattr(parcels, "field_height_near", lambda *a: 0.0)
+    monkeypatch.setattr(parcels, "crossed_through_many", lambda env, c, seats: [True] * len(seats))
+    plan = SimpleNamespace(fall=(0.0, 1.0), envelope=[])  # heights run up -y
+    below = SimpleNamespace(M={"houses": [{"x": 0.0, "y": 100.0}]}, px=lambda v: v)  # the houses' floor at -100: the seat is below
+    above = SimpleNamespace(M={"houses": [{"x": 0.0, "y": 900.0}]}, px=lambda v: v)  # the floor at -900: the seat is above
+    assert parcels._beyond_the_fields(below, plan, [seat], None, (0.0, 0.0), [], marsh, half) == [], "flush, below the houses"  # type: ignore[arg-type]
+    assert parcels._beyond_the_fields(above, plan, [seat], None, (0.0, 0.0), [], marsh, half) == [seat], "flush, above the houses"  # type: ignore[arg-type]
+    assert parcels._beyond_the_fields(below, plan, [(5.0, 200.0, 400.0)], None, (0.0, 0.0), [], marsh, half) == [(5.0, 200.0, 400.0)], "dry ground"  # type: ignore[arg-type]

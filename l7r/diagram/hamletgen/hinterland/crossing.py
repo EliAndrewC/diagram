@@ -44,7 +44,9 @@ def crossed_through_many(field: Poly, frm: Pt, tos: Sequence[Pt], share: float =
     import numpy as np  # noqa: PLC0415 - bound on first use
     import shapely  # noqa: PLC0415
 
-    poly = shapely.Polygon(list(field))
+    # MADE VALID: a field outline can cross itself (cohort seed 5: a GEOS side location conflict once feature 374 wave 120
+    # sent the walks to seats below the houses, which no walk had been asked of before)
+    poly = shapely.make_valid(shapely.Polygon(list(field)))
     lines = shapely.linestrings([[frm, to] for to in tos])
     inside = shapely.length(shapely.intersection(lines, poly))
     d = np.asarray(tos, dtype=float) - np.asarray(frm, dtype=float)

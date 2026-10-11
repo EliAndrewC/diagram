@@ -268,7 +268,14 @@ def _patch_keepouts(
 
 
 def _beyond_the_fields(
-    s: Settlement, plan: SitePlan, scored: list[tuple[float, float, float]], crop_pts: Any, cc: tuple[float, float], rivers: Sequence[Sequence[Pt]] = (), marshes: Sequence[Poly] = ()
+    s: Settlement,
+    plan: SitePlan,
+    scored: list[tuple[float, float, float]],
+    crop_pts: Any,
+    cc: tuple[float, float],
+    rivers: Sequence[Sequence[Pt]] = (),
+    marshes: Sequence[Poly] = (),
+    half: float = 0.0,
 ) -> list[tuple[float, float, float]]:
     """The scored seats ranked by `woodland_tier` and kept only beyond the fields from the houses (lifted out of
     `open_ground_patches` by feature 370, the 100-statement cap; the same reads in the same order).
@@ -298,7 +305,10 @@ def _beyond_the_fields(
     _house_floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], _fall)
     # ...LOW GROUND BY A RIVER OR MARSH IS LEFT TO GRASS (0077): a seat below the houses and beside the water is refused, and
     # only there (feature 374 wave 120: it had been refused on any ground below the houses)
-    _reach = s.px(LOW_BY_WATER_FT)
+    # measured from the WOOD, not its seat: any part of the square within the reach (its circumscribed half-diagonal, as the
+    # keep-outs measure a turned parcel) - from the seat alone the keep-outs, which hold every seat a half off the water,
+    # left the 46 ft nothing to refuse (feature 374 wave 120, the plan review)
+    _reach = s.px(LOW_BY_WATER_FT) + half * math.sqrt(2.0)
     scored = [t for t in scored if not low_by_the_water((t[1], t[2]), _fall, _house_floor, rivers, marshes, _reach)]
     _tiers = [
         woodland_tier((t[1], t[2]), _fall, field_height_near((t[1], t[2]), _fall, crop_pts, s.px(FIELD_BESIDE_FT))) for t in scored
@@ -531,7 +541,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                         scored.append((-math.hypot(x - ccx, y - ccy), x, y))
                     x += step
                 y += step
-            scored = _beyond_the_fields(s, plan, scored, crop_pts, (ccx, ccy), [st for st, _ in streams], marshes)  # higher than the fields beside it, and across them
+            scored = _beyond_the_fields(s, plan, scored, crop_pts, (ccx, ccy), [st for st, _ in streams], marshes, half)  # higher than the fields beside it, and across them
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground
             # (a map with one parcel is common), and a ruled chain is the defect two reviews recorded (Inashiro's band lies
