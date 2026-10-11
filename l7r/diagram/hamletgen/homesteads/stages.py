@@ -325,7 +325,7 @@ def reserve_the_seating(s: Settlement) -> None:
     Research:
         a lane to every house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a laid way
         wood seats reserved - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a household's copse seats kept for its planting
-        a lane's buffer about a copse seat - UNRESEARCHED: the crown's reach at the drawn lift, at least 0.45 of the clump and 4 ft
+        a lane's buffer about a copse seat - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the crown's reach at the drawn lift, at least 0.45 of the clump and 4 ft; no page read gives how far a way kept off a farmhouse's grove
     """
     res = s.standing.reserved
     half = s.px(ACCESS_HALF_FT)

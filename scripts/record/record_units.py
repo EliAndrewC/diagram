@@ -115,6 +115,22 @@ def read_notes(notes: str, originals: str = "") -> dict[str, str]:
     return {k: words(body) for k, body in _NOTE.findall(restored)}
 
 
+_HREF = re.compile(r'<a href="([^"]+)"')
+_PASSAGE = re.compile(r'"([^"]+)"|“([^”]+)”')
+
+
+def reading(body: str, originals: Mapping[str, str]) -> str:
+    """What `source-reader` reads of a note: the pages it opens and the passages it looks for on them - each original-language
+    passage where the note quotes one in translation, else each passage the note quotes. Not the English of a translation,
+    nor what joins two passages, nor the note's own framing: a READ note whose English or separator alone changed was owed
+    source-reader again (352's 0036, 2026-10-11, the arbiter's tooling fix). '' where the note quotes nothing it can find."""
+    origs = [originals.get(i, "") for i in _ORIG_TOKEN.findall(body)]
+    passages = origs if origs else [a or b for a, b in _PASSAGE.findall(html.unescape(_TAG.sub("", _ORIG_TOKEN.sub("", body))))]
+    if not passages:
+        return ""
+    return digest([*_HREF.findall(body), "\x1e", *(words(p) for p in passages)])
+
+
 @dataclass
 class Record:
     """The record as the checks read it: pages by their stem (`0094`, `0094.drawing`), notes by stem, write-ups by key."""
@@ -125,6 +141,8 @@ class Record:
     sources: dict[str, str]
     #: stem -> note -> the registry keys the note links (`<code>key</code>`): which notes a source-reader read is for
     cites: dict[str, dict[str, tuple[str, ...]]] = field(default_factory=dict)
+    #: stem -> note -> its `reading` (what source-reader reads of it)
+    readings: dict[str, dict[str, str]] = field(default_factory=dict)
 
     @classmethod
     def of(cls, files: Mapping[str, str], sources: Mapping[str, str]) -> Record:
@@ -133,6 +151,7 @@ class Record:
         notes: dict[str, dict[str, str]] = {}
         slugs: dict[str, str] = {}
         cites: dict[str, dict[str, tuple[str, ...]]] = {}
+        readings: dict[str, dict[str, str]] = {}
         for name, text in files.items():
             if name.endswith(".notes.html"):
                 page = name[: -len(".notes.html")] + ".html"
@@ -140,12 +159,14 @@ class Record:
                 if m:
                     notes[_subject(m)] = read_notes(text, files.get(name[: -len(".notes.html")] + ".originals.html", ""))
                     cites[_subject(m)] = {k: tuple(dict.fromkeys(_CODE.findall(body))) for k, body in _NOTE.findall(text)}
+                    table = dict(_ORIG_STORED.findall(files.get(name[: -len(".notes.html")] + ".originals.html", "")))
+                    readings[_subject(m)] = {k: reading(body, table) for k, body in _NOTE.findall(text)}
                 continue
             m = _STEM.match(name)
             if m:
                 pages[_subject(m)] = read_page(text)
                 slugs[_subject(m)] = m.group(2)
-        return cls(pages, notes, slugs, {k: words(v) for k, v in sources.items()}, cites)
+        return cls(pages, notes, slugs, {k: words(v) for k, v in sources.items()}, cites, readings)
 
     def index(self) -> Index:
         ix = Index()
@@ -180,6 +201,8 @@ class Unit:
     slug: str
     occasion: str
     fingerprint: str = ""
+    #: source-reader only: the note's `reading` - an answer under another fingerprint with the same reading still answers it
+    reading: str = ""
 
     @property
     def check(self) -> str:
@@ -227,7 +250,14 @@ def owed(now: Record, base: Record) -> list[Unit]:
     for key, w in now.sources.items():
         if base.sources.get(key) != w:
             owe(f"source-applicability:{key}", "the write-up is new or its visible words changed")
-    return [Unit(slug, why, fingerprint(now, slug)) for slug, why in sorted(out.items())]
+    return [Unit(slug, why, fingerprint(now, slug), reading_of(now, slug)) for slug, why in sorted(out.items())]
+
+
+def reading_of(rec: Record, slug: str) -> str:
+    """A source-reader unit's `reading`; '' for every other check."""
+    check, subject = slug.split(":", 1)
+    stem, _, note = subject.partition("#")
+    return rec.readings.get(stem, {}).get(note, "") if check == "source-reader" else ""
 
 
 def fingerprint(rec: Record, slug: str) -> str:

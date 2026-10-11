@@ -68,6 +68,15 @@ if [ -n "$OWED" ]; then
 fi
 STAGED=$(git -C "$ROOT" diff --cached --name-only 2>/dev/null)
 case " $CMD " in *" -a "*|*" -am "*|*" --all "*) STAGED="$STAGED $(git -C "$ROOT" diff --name-only 2>/dev/null)" ;; esac
+# GUARD_EDIT_OK: feature 352 - `git add <ledger> && git commit` in ONE command stages the ledger after this hook has run, so
+# six rows whose `acted on` the lint refuses were committed and failed only at the landing (2026-10-11): what that command's
+# `git add` names - the ledger, a directory holding it, or everything - counts as staged
+case " $CMD " in
+  *" add "*)
+    case " $CMD " in
+      *"$LEDGER"*|*" -A "*|*" --all "*|*" -u "*|*" . "*|*" dev "*|*" dev/ "*) STAGED="$STAGED $(git -C "$ROOT" diff --name-only 2>/dev/null)" ;;
+    esac ;;
+esac
 case " $STAGED " in *"$LEDGER"*) ;; *) exit 0 ;; esac
 
 LINT="$ROOT/scripts/reviews/ledger_lint.py"

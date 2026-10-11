@@ -189,14 +189,16 @@ def _rounds(root: pathlib.Path, tmp_path: pathlib.Path, uids: tuple[str, ...], c
     """Two kept rounds of each of `checks` (modal-form unless named) on each pop-up in `uids`, as the hooks record them in
     checks-open.json. A round trigger fires only when a dispatch is refused, so every check a test trips has rounds here: a
     round trigger with none is refused by the bundle (343's M1c rulings, 2026-10-11)."""
-    disp = {}
+    disp, counted = {}, {}
     for i, uid in enumerate(uids):
         for c in checks:
+            counted[f"{c}|modal:{uid}"] = 2  # the dispatch counter, as the hooks keep it: a named round is checked against it
             for r in (1, 2):
                 reply = tmp_path / f"r-{i}-{c}-{r}.md"
                 reply.write_text(f"1. finding {r} on {uid}\n")
                 disp[f"t{i}{c}{r}"] = {"check": c, "subjects": [f"modal:{uid}"], "t": i * 10 + r, "state": "answered", "reply": str(reply)}
-    (root / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": disp}))
+    feature = json.loads((root / ".specify" / "feature.json").read_text())["feature_directory"].rsplit("/", 1)[-1]
+    (root / ".git" / "checks-open.json").write_text(json.dumps({"feature": feature, "rounds": counted, "dispatches": disp}))
 
 
 def test_a_batch_at_the_cap_gets_one_bundle_and_one_ruling(root: pathlib.Path, tmp_path: pathlib.Path) -> None:

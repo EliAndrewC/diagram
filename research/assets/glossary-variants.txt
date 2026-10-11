@@ -1512,6 +1512,7 @@ hizen	Hizen
 hizen province	Hizen
 hm2	hm2
 hm²	hm2
+ho:go	hogo
 hoarding	hoarding
 hoardings	hoarding
 hoei	Hoei

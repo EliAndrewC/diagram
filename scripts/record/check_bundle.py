@@ -114,6 +114,29 @@ _BLOCK = re.compile(r"<(p|li|blockquote|td|dd)\b[^>]*>.*?(?:</\1>|(?=<(?:p|li|bl
 _NOTE_LI = re.compile(r'<li data-note="([^"]+)">.*?</li>\n?', re.S)
 
 
+def _blocks(html: str) -> list[tuple[int, int, str, str]]:
+    """(start, end, whole, own) of each block. A list item holding a nested list is one block from its open tag to its
+    own `</li>`, judged by its OWN words - its lead and the tail after the nested list, not its inner items' - so a
+    mark in the tail is seen (feature 352: 0036's lane block carried its absence mark after its nested list, the
+    excerpt cut the item at the first inner `<li>`, and two quote-check rounds reported the mark missing)."""
+    out = []
+    for m in _BLOCK.finditer(html):
+        whole, end = m.group(0), m.end()
+        if m.group(1) == "li" and not whole.endswith("</li>") and re.search(r"<(?:ul|ol)\b[^>]*>\s*$", whole):
+            depth, pos = 1, end
+            for t in re.finditer(r"<(/?)li\b[^>]*>", html[end:]):
+                depth += -1 if t.group(1) else 1
+                if depth == 0:
+                    pos = end + t.end()
+                    break
+            if depth == 0:
+                whole = html[m.start():pos]
+                out.append((m.start(), pos, whole, re.sub(r"<(ul|ol)\b.*</\1>", "", whole, flags=re.S)))
+                continue
+        out.append((m.start(), end, whole, whole))
+    return out
+
+
 def notes_subset(notes_html: str, keys: set[str]) -> str:
     """Only the named notes of a question's notes file, in their order."""
     return "".join(m.group(0) for m in _NOTE_LI.finditer(notes_html) if m.group(1) in keys)
@@ -127,7 +150,13 @@ def excerpt(fragment_html: str, keys: set[str], bare: bool = False) -> str:
     `#unfootnoted` carried only its notes' blocks, and the block the unit was owed for was in none of them)."""
     head = re.search(r"<h[23][^>]*>.*?</h[23]>", fragment_html, re.S)
     marks = tuple(f'data-note="{k}"' for k in keys)
-    blocks = [m.group(0) for m in _BLOCK.finditer(fragment_html) if any(mk in m.group(0) for mk in marks) or (bare and "data-note=" not in m.group(0))]
+    blocks, inside = [], -1
+    for start, end, whole, own in _blocks(fragment_html):
+        if start < inside:
+            continue
+        if any(mk in own for mk in marks) or (bare and "data-note=" not in own):
+            blocks.append(whole)
+            inside = end
     kept = "\n".join(dict.fromkeys(blocks))
     what = "only the blocks carrying the named notes" + (", and every block carrying none" if bare else "")
     return (head.group(0) + "\n" if head else "") + f"<!-- an EXCERPT: {what} -->\n" + kept + "\n"

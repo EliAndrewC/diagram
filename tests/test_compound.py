@@ -274,7 +274,7 @@ def test_a_feature_with_no_clear_seat_is_left_out() -> None:
         _b("block", 60.0, 60.0, "inner", "W", order=8, rank=2),  # a rank-2 mass right behind the kitchen's face
     )
     result = c.place(boxed)
-    parts = c._point_features(boxed, result, lambda *a: f"R:{a[8] if len(a) > 8 else ''}", lambda *a: "L", 0.0, 0.0)
+    parts = c._point_features(boxed, result, lambda *a: f"R:{a[8] if len(a) > 8 else ''}", lambda *a, **k: "L", 0.0, 0.0)
     assert "R:well" not in parts  # no well squeezed into the block
 
 
@@ -284,7 +284,7 @@ def test_a_seat_that_would_leave_the_envelope_is_refused() -> None:
     face instead (pass 6), inside the envelope."""
     env = _env(200.0, 20.0, 10.0, 13.0)
     prog = c.CompoundProgram("t", env, (), (_b("stables", 30.0, 15.0, "outer", "S", order=5, feature="stables"),))
-    parts = "".join(c._point_features(prog, c.place(prog), lambda *a: "R", lambda *a: "L", 0.0, 0.0))
+    parts = "".join(c._point_features(prog, c.place(prog), lambda *a: "R", lambda *a, **k: "L", 0.0, 0.0))
     assert ">well<" not in parts and parts.count("<circle") == 1
     cy = float(parts.split('<circle cx="')[1].split('cy="')[1].split('"')[0])
     assert 0.0 < cy < 20.0
@@ -353,7 +353,7 @@ def test_a_room_is_a_floor_inside_its_building() -> None:
 
     ps = pieces(svg)
     assert any(k == "clerks' room" and "office hall" in within for _, k, within in ps)
-    assert ">clerks' room<" in svg and 'data-kind="office hall">' in svg  # both named (a narrow hall wraps its name)
+    assert 'data-kind="clerks\' room"' in svg and 'data-kind="office hall">' in svg  # both named (a narrow room wraps its name, feature 340's bold width)
     group = svg.split('<g data-kind="office hall">')[1].split("</g>")[0]
     assert group.rstrip().splitlines()[-1].startswith('<rect') and 'fill="none"' in group.rstrip().splitlines()[-1]  # the outline on top
 
@@ -572,7 +572,9 @@ def test_no_caption_but_its_own_stands_under_the_roofed_court() -> None:
     x0, y0 = 7.0 * c.FTPX + court.x_ft * c.FTPX, 15.0 * c.FTPX + court.y_ft * c.FTPX
     x1, y1 = x0 + court.w_ft * c.FTPX, y0 + court.h_ft * c.FTPX
     inside = [lb.text for lb in pa.parse_svg(svg).labels if x0 < lb.cx < x1 and y0 < lb.cy < y1]
-    assert sorted(inside) in (["court", "hearing", "straw mats"], ["hearing court", "straw mats"])  # its name and its mats
+    # no caption but its own: its name, and its mats' where the one view seats them under the roof (feature 340: the mats are
+    # named as the hand sheets name them, by the whole group, and may stand beside it)
+    assert set(" ".join(inside).split()) <= {"hearing", "court", "straw", "mats"} and "court" in " ".join(inside)
 
 
 # --- pass 4 (building-review round 3): privies by kind and zone, the dais, the lattice, the rear alley ---
@@ -769,7 +771,7 @@ def test_a_program_whose_caption_has_no_clean_seat_is_refused_naming_it() -> Non
     shed = Subject("point", tuple(rect(200.0, 200.0, 5.0, 5.0)))
     everything = [Obstacle(tuple(rect(200.0, 200.0, 400.0, 400.0)), 1000.0)]
     with pytest.raises(ValueError, match="'walled-in shed'"):
-        _seat_captions([("walled-in shed", shed, 8.0, False, "#333", "shed")], everything, (0.0, 0.0, 400.0, 400.0), None, "t")
+        _seat_captions([("walled-in shed", shed, 8.0, False, "#333", "shed")], everything, (0.0, 0.0, 400.0, 400.0), "t")
 
 
 def test_a_draft_caption_the_foot_holds_is_seated_on_the_grown_sheet() -> None:
@@ -780,7 +782,7 @@ def test_a_draft_caption_the_foot_holds_is_seated_on_the_grown_sheet() -> None:
 
     board = Subject("point", tuple(rect(200.0, 395.0, 6.0, 2.0)))
     above = [Obstacle(tuple(rect(200.0, 200.0, 400.0, 190.0)), 1000.0)]
-    out, foot = _seat_captions([("notice board", board, 7.0, True, "#333", "notice board")], above, (0.0, 0.0, 400.0, 400.0), None, "t")
+    out, foot = _seat_captions([("notice board", board, 7.0, True, "#333", "notice board")], above, (0.0, 0.0, 400.0, 400.0), "t")
     assert out and 400.0 < foot <= 400.0 + 3 * CAPTION_ROOM
 
 
@@ -818,7 +820,7 @@ def test_a_repair_skips_a_far_neighbor_and_one_whose_lifting_frees_nothing() -> 
         ("shed", shed, 8.0, False, "#333", "shed"),
     ]
     seats = [far, near]
-    assert _repair(2, requests, box, seats, {}, (0.0, 0.0, 400.0, 400.0)) is None and seats == [far, near]
+    assert _repair(2, requests, box, seats, (0.0, 0.0, 400.0, 400.0)) is None and seats == [far, near]
 
 
 # ---- feature 287 wave 6, homes H29b: a generated sheet's sitings held where the draft is composed ----------------------
@@ -896,10 +898,10 @@ def test_a_program_that_requires_a_well_and_has_no_seat_for_one_is_refused() -> 
     composition naming it - never a sheet drawn without its well. A program of no declared type is held to nothing."""
     prog = c.CompoundProgram("t", _env(), (), (_b("hall", 40.0, 20.0, "outer", "divider", order=10, feature="office hall"),))
     result = c.place(prog)
-    assert ">well<" not in "".join(c._point_features(prog, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0))
+    assert ">well<" not in "".join(c._point_features(prog, result, lambda *a: "R", lambda *a, **k: "L", 0.0, 0.0))
     typed = replace(prog, tier="magistracies")
     with pytest.raises(ValueError, match="no seat for a well"):
-        c._point_features(typed, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0)
+        c._point_features(typed, result, lambda *a: "R", lambda *a, **k: "L", 0.0, 0.0)
     assert cp.requires(typed, "well") and not cp.requires(prog, "well") and not cp.requires(typed, "unicorn stable")
 
 

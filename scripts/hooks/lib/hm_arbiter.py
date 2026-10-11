@@ -81,6 +81,17 @@ def owed(root: Path) -> dict[str, dict[str, Any]]:
     return _load(common_dir(root) / OWED)
 
 
+def mine(root: Path, v: Mapping[str, Any]) -> bool:
+    """Whether an owed trigger is the active feature's: fired in it, or recorded before triggers named their feature."""
+    d = feature_dir(root)
+    return not v.get("feature") or d is None or v.get("feature") == d.name
+
+
+def aside(root: Path) -> list[str]:
+    """The owed triggers another feature fired - left out of this feature's holds and batch, and named so none vanishes."""
+    return sorted(f"{t} (feature {v.get('feature')})" for t, v in owed(root).items() if not mine(root, v))
+
+
 def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float | None = None) -> bool:
     """Record a trigger once (a second firing of a trigger already owed or ruled changes nothing); True when it is new."""
     if trigger in rulings(root):
@@ -95,7 +106,13 @@ def trip(root: Path, trigger: str, kind: str, unit: str, detail: str, now: float
         state = _load(path)
         if trigger in state:
             return False
-        state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now}
+        d = feature_dir(root)
+        # the feature it fired in: the owed file is the clone's, one for every feature, and a trigger ruled in its own feature
+        # was swept into the next feature's batch (352's 0036 batch carried feature 368's three q:0047 triggers, 2026-10-11,
+        # the arbiter's tooling fix) - `mine` keeps each feature to its own. GUARD_EDIT_OK: feature 352, the round arbiter's
+        # tooling fix on round:quote-check|q:0036@3
+        state[trigger] = {"kind": kind, "unit": unit, "detail": detail, "t": time.time() if now is None else now,
+                          "feature": d.name if d else ""}
         m = re.match(r"(\d+) check dispatches", detail)
         if m:
             state[trigger]["dispatches"] = int(m.group(1))
@@ -143,6 +160,8 @@ def blocking(root: Path, unit: str = "", gate: bool = False) -> list[str]:
     with `gate`, the next `make done` (a red-gate trigger)."""
     out = []
     for t, v in owed(root).items():
+        if not mine(root, v):
+            continue
         kind = v.get("kind")
         if gate and kind == "red-gate":
             out.append(t)
@@ -257,7 +276,7 @@ def batch_triggers(root: Path, extra: Iterable[str] = ()) -> list[str]:
     """THE BATCH (feature 375 amendment 2, FR-017): every round trigger owed now - the units whose checks reached the cap
     together - but a spec review's own rounds (one spec, ruled alone), plus any round the session names (`TRIGGERS=`), asked
     about ahead of the cap. Unrelated units in it are the arbiter's exceptions."""
-    own = [t for t, v in owed(root).items() if v.get("kind") == "round" and not t.startswith("round:spec-fidelity|")]
+    own = [t for t, v in owed(root).items() if v.get("kind") == "round" and not t.startswith("round:spec-fidelity|") and mine(root, v)]
     return sorted(set(own) | {t for t in extra if t.startswith("round:") and not t.startswith("round:spec-fidelity|")})
 
 
