@@ -20,5 +20,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T04 Tests red on today's code (SC-002) and the replay (SC-001, plan D6); CLAUDE.md's guard row and the targets' `##` lines (plan D7)
       research: rendering
       verify: DONE. built and verified: tests/tooling/test_arbiter_fix.py 6 cases + test_hm_arbiter/gm_review/close_check/tick_task green (34 passed); hooks-test green; quick 499 passed
-- [ ] T05 Close: the tooling tests and `make hooks-test` green, the gate, `make feature-report F=379 WRITE=1`, landed
+- [x] T05 Close: the tooling tests and `make hooks-test` green, the gate, `make feature-report F=379 WRITE=1`, landed
       research: rendering
+      verify: DONE. make done green (gate log done379.log), hooks-test green, tooling tests 34 passed, feature-report written; landed by the push carrying this tick
