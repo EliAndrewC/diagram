@@ -68,3 +68,11 @@ Judged on Sawada's mouth at (4575, 3455) as main draws it today (observed 2026-1
 the brook's 7 px in `#9CB4C8`, and at that zoom the dug race reads as the principal watercourse - the saturated band - while
 the brook reads pale. That eye-read is context, not the judgment the sketch names (FR-000). 355 is built here at the GM's 2026-10-11 word,
 and 358's carried copy is marked done by 355.
+
+## SC-000: the judgment (glyph-check, 2026-10-11)
+
+The `glyph-check` of the head race's mouth on Sawada at 9x, on the map main draws: **reads as the river: YES**. The race outweighs
+the brook (the width step too small to show the rank, the saturated hue reversing it); the junction's geometry says "brook" and the
+mouth itself is clean (the race leaves the bank). The tool recorded the unit NOT-REVIEWABLE only because this clone's gate was red
+with the change the verdict gates; the verdict's text is the reviewer's. It also noted, pre-existing and not this entry's, that
+research page 0068's drawing note says the brook arrives narrower than the race, where Sawada draws it wider. So FR-001's taper is built.
