@@ -70,10 +70,12 @@ check finds no feature in a delta that touches no `specs/`; `sync-with-main.sh` 
 
 **D9 - FILES is required and named, never inferred.** A file lands whole, and mid-feature a `CLAUDE.md`, `docs/` or
 `Makefile` edit may describe engine work that has not landed; so with no FILES the command lists the tooling paths the
-delta changed and exits 2 (the guard producing the compliant command). A path outside FR-005's set is refused naming it;
-so is a FILE with uncommitted changes (only committed work lands). A `Makefile` among them regenerates
-`docs/make-targets.html` in the worktree. The checks before the push: `make hooks-test` and `make test-file
-FILE=tests/tooling` in the worktree (the stamps the DIRECT route's gate-stamp reads), logged, the tail shown on failure.
+delta changed and exits 2 (the guard producing the compliant command). A path outside FR-005's set - `scripts/`, `tests/`,
+`.claude/agents/`, `.claude/skills/`, any `CLAUDE.md`, the `Makefile`, `.claude/settings.json`, `docs/make-targets.html` -
+is refused naming it; so is a FILE with uncommitted changes (only committed work lands). A `Makefile` among them
+regenerates `docs/make-targets.html` in the worktree. The checks before the push: `make hooks-test`, `make test-file
+FILE=tests/tooling`, and `make test-file` on every test file among FILES (a test needing work not yet landed fails there,
+not on main), in the worktree, logged, the tail shown on failure.
 The commit is the GM's identity with the clone's commit subjects that touched the files, and the co-author line.
 
 **D10 - Done means landed (FR-006).** `settle_fix(..., "done", ...)` fetches main and refuses unless the TEST file's blob
