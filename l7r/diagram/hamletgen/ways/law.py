@@ -488,8 +488,9 @@ Research: needle of grass - CONVENTION: a web face under 20 ft mean width"""
 NODING_SPECK_FT = 1.0
 """A web face whose whole perimeter is under this is no ground at all: three lanes meeting at one point, noded a hair apart,
 polygonize into a speck (Kashikawa under feature 374 wave 119: two door paths ending on the skeleton at the point it bent,
-a face 0.09 ft round, and the last resort refused the map for a needle it could not cut). A real needle - the same way drawn
-twice, or forking round nothing - runs the length of the ways that bound it.
+a face 0.09 ft round, measured 2026-10-11 from the face the reroll's refusal named, and the last resort refused the map for a
+needle it could not cut). A real needle - the same way drawn twice, or forking round nothing - runs the length of the ways
+that bound it. The bound is the 1 ft below which `needle_loops` already drops a way itself.
 
 Research: noding speck - NONE"""
 

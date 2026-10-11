@@ -271,7 +271,7 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
 
     Research:
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, the slope higher than the fields first, then the level beside them
-        no wood below the houses - GUESS: a seat below the houses' median height (`house_floor`) is dropped on any ground; the page refuses one only past the fields beside a river or marsh
+        wood below the houses last - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a seat below the houses' median height (`house_floor`) ranks after the level beside the fields; the page refuses one only past the fields beside a river or marsh, ground the marsh and stream keep-outs already refuse
         the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
         beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
     """
@@ -284,7 +284,8 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
     # marsh. A cross-slope preference (the along/cross ratio, 2026-08-18) narrowed that and still admitted ground
     # below the houses. The record's rule is a ranking, so it is one here (`woodland_tier`): a seat higher than the
     # field ground beside it and not below the houses (their median, `house_floor`) first; then, where the map has no such ground, a seat on
-    # the level beside the fields - not below the houses; a seat below the houses' median height is never offered. Low wet
+    # the level beside the fields - not below the houses; a seat below the houses' median height last (feature 374 wave 120: 0077
+    # refuses only "a wood seated below the houses, past the fields and beside a river or marsh"; it had been refused on any ground). Low wet
     # ground by a marsh or a river is left to grass and reeds: the marsh and stream keep-outs above refuse it, and it
     # lies below the houses on a fan. Where the ground slopes the seat higher than the field next to it ranks first -
     # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).
@@ -297,7 +298,7 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
     # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
     # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
     # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground
-    scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True) if k < 2]
+    scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True)]
     # ...AND BEYOND THE FIELDS FROM THE HOUSES (feature 328; 0077's drawing page: "on the nearest slope beyond the fields
     # from the houses", the village running houses, then fields, then the wild land): feature 261 had preferred the
     # houses' side of the field. A RULE, not a preference: where no seat is reached across the field none is offered,

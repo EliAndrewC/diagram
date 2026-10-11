@@ -12,7 +12,7 @@ def test_the_tiers_follow_the_record_s_ranking():
     # the lowest house at height -500 (y = 500), the field beside the seat at height -300 (y = 300)
     assert woodland_tier((0.0, 200.0), DOWN_SOUTH, -500.0, -300.0) == 0  # above the field it adjoins, above the houses
     assert woodland_tier((0.0, 400.0), DOWN_SOUTH, -500.0, -300.0) == 1  # below that field but not below the houses: the level
-    assert woodland_tier((0.0, 600.0), DOWN_SOUTH, -500.0, -300.0) == 2  # downslope of every house: never the wood
+    assert woodland_tier((0.0, 600.0), DOWN_SOUTH, -500.0, -300.0) == 2  # downslope of every house: taken last (feature 374 wave 120)
     assert woodland_tier((0.0, 600.0), DOWN_SOUTH, -math.inf, -math.inf) == 0  # no houses, no fields: any ground
 
 
@@ -43,3 +43,21 @@ def test_the_windward_bamboo_strip_stands_clear_of_its_house():
         assert cx * wind[0] >= 0 and cy * wind[1] >= 0, "on the windward side"
     assert wind_seat(-0.7, -0.7, hw, hh, gap, sw, sh)[:2] == (-(hw / 2 + gap + sw / 2), -(hh / 2 + gap + sh / 2))
     assert wind_seat(1.0, 0.0, hw, hh, gap, sw, sh) == (hw / 2 + gap + sh / 2, 0.0, sh, sw)
+
+
+def test_a_seat_below_the_houses_is_kept_and_ranked_last(monkeypatch) -> None:  # noqa: ANN001
+    """Feature 374 wave 120 (0077's drawing page: "A wood seated below the houses, past the fields and beside a river or marsh"
+    is refused - not one below the houses on dry ground): every tier is offered, the ground below the houses after the rest."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.hinterland import parcels
+
+    tiers = {(1.0, 1.0): 0, (2.0, 2.0): 1, (3.0, 3.0): 2}
+    monkeypatch.setattr(parcels, "woodland_tier", lambda p, *a: tiers[p])
+    monkeypatch.setattr(parcels, "house_floor", lambda *a: 0.0)
+    monkeypatch.setattr(parcels, "field_height_near", lambda *a: 0.0)
+    monkeypatch.setattr(parcels, "crossed_through_many", lambda env, c, seats: [True] * len(seats))
+    s = SimpleNamespace(M={"houses": []}, px=lambda v: v)
+    plan = SimpleNamespace(fall=(0.0, 1.0), envelope=[])
+    out = parcels._beyond_the_fields(s, plan, [(5.0, 1.0, 1.0), (5.0, 2.0, 2.0), (5.0, 3.0, 3.0)], None, (0.0, 0.0))  # type: ignore[arg-type]
+    assert [(x, y) for _sc, x, y in sorted(out, reverse=True)] == [(1.0, 1.0), (2.0, 2.0), (3.0, 3.0)], "every tier, below the houses last"

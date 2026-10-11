@@ -83,10 +83,11 @@ def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
 def woodland_tier(p: Pt, fall: Pt, house_floor: float, field_height: float) -> int:
     """Where the record puts a village's fuel wood, as a rank (269 B27, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): 0 - higher than the field
     it adjoins and not below the houses (`house_floor`, their median) (the nearest hill ground beyond the fields); 1 - not below the houses but
-    not above that field (the level beside the fields, the record's fallback); 2 - below the houses' median height, where the
-    record puts the grass and riverbank commons, never the wood. Heights run up the fall: -p.fall.
+    not above that field (the level beside the fields, the record's fallback); 2 - below the houses' median height, taken last
+    (0077 refuses a wood there only beside a river or marsh, the grass and riverbank commons, which the keep-outs refuse before
+    any rank is asked - feature 374 wave 120). Heights run up the fall: -p.fall.
 
-    Research: where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: higher ground beyond the fields first, the level next, never below the houses
+    Research: where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: higher ground beyond the fields first, the level next, below the houses last
     """
     h = -(p[0] * fall[0] + p[1] * fall[1])
     if h < house_floor:

@@ -252,12 +252,18 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
 
 ### Wave 120 (T11) - the hamlet's ground
 
-- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page places the wood beyond the fields and refuses
-  ground below the houses only "beside a river or marsh"; the dry-ground refusal goes, and the claim cites the page.
+- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page refuses only "a wood seated below
+  the houses, past the fields and beside a river or marsh"; the dry-ground refusal goes, ground below the houses is offered
+  last (after the slope above the fields and the level beside them), the marsh and stream keep-outs still refusing the
+  ground beside water, and the claim cites the page.
 - `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
   qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).
   The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only
-  shrine is a dooryard hokora).
+  shrine is a dooryard hokora). The new form is anchored at the settlement's widest bridge, a brook's before a ditch's plank, and of two alike
+  the one nearest the houses (`bridgehead_anchor`): which of a village's bridges held its board no page says, so 0190's
+  drawing page records the choice as a GUESS. The form takes its title-card label ("at the foot of a bridge") and a pop-up
+  of its own (`choice/kosatsuba_seat--bridgehead`, written from 0190 as its three siblings are), which owe the record
+  checks a new pop-up and a drawing-page sentence owe.
 - Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are
   elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).
 

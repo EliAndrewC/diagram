@@ -5,7 +5,7 @@ Research:
     water_town form - CANON: houses fronting a canal, a form of Lion lands or a map that declares a canal (the GM's setting canon)
     field_archetype forms - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: valley_paddy, contour_terraces, polder_grid, ribbon_valley, mulberry_dike_fishpond
     land_use_overlay forms - DEVIATION research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: none, mulberry_fishpond, lotus, tea_fringe; bund tea, the second tea form, is never rolled
-    kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage
+    kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage, bridgehead
     cluster_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: high_margin, flank, mid_margin, valley_mouth, valley_head, on_rise
     cluster_shape forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: round, elongated, crescent, split; a village rolls split as one shape among four, so most villages draw a single cluster
     lane_web forms - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side alleys or a back lane, rolled evenly
@@ -289,7 +289,7 @@ register_knob(Knob("land_use_overlay", ["none", "mulberry_fishpond", "lotus", "t
 def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     """Which attested board placements THIS settlement can actually site.
 
-    THE RECORD ATTESTS FIVE; THESE TIERS AFFORD THREE, and the difference is a measurement rather than
+    THE RECORD ATTESTS FIVE; THESE TIERS AFFORD FOUR, and the difference is a measurement rather than
     a preference (feature 154, `specs/154-kosatsuba-placement-knob/spec.md` "Decisions Recorded"). The
     bakufu set kosatsuba *"at points of heavy passage: barriers and ports, the foot of large bridges,
     and the entrances and centers of towns and villages"*; in farming villages *"at the village center,
@@ -299,17 +299,15 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     the settlement's one lane carries everyone - by the headman's frontage or the lane junction /
     entrance"*.
 
-    WITHHELD, DELIBERATELY, and not by this rule - they are absent from the value space entirely, so
-    nothing can roll them:
-      - a BRIDGEHEAD. Every pool hamlet records 4-17 crossings, and they are 9.8-10.5 ft planks 2 ft
-        wide over field ditches. "The foot of large bridges" is not that, and relabeling one would be
-        an unlabeled guess wearing a finding's clothes - constitution XII's one named failure.
-      - the SHRINE PRECINCT. Only 3 of 13 hamlets carry a shrine at all and it is a `farm_fixtures`
-        household hokora in a dooryard, which is private ground; siting the state's notice there would
-        also break "every attested site is ON the way".
-    Both become real at the town and city tiers, where a bridgehead and a shrine compound exist.
+    A BRIDGEHEAD (feature 374 wave 120): 0190 puts village boards "before the gates of the village officials' houses, as
+    well as bridge ends", with no size given - it was withheld as "the foot of large bridges" until the impl-drift check read
+    the village passage. It is offered where the settlement records a bridge, anchored at its widest (`bridgehead_anchor`).
 
-    The three that remain are gated on EVIDENCE IN THE MANIFEST, read the way the validator reads it:
+    WITHHELD, DELIBERATELY, and not by this rule - absent from the value space, so nothing can roll it: the SHRINE PRECINCT.
+    No kept map draws a precinct - a hamlet's only shrine is a `farm_fixtures` household hokora in a dooryard, private
+    ground, and siting the state's notice there would also break "every attested site is ON the way".
+
+    The anchored three are gated on EVIDENCE IN THE MANIFEST, read the way the validator reads it:
     a settlement with no recorded approach cannot put its board at one, and a settlement recording no
     house for its official cannot put it at their gate. Note what that second one is NOT: the record
     puts the person in the hamlet - *"the headman (or in a hamlet the senior farmer answering to the
@@ -318,7 +316,8 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 
     Research:
         seats a settlement can site - research/questions/0190-notice-boards-kosatsuba.html: a board at the center, at an entrance with an approach, on a frontage by a headman's house
-        bridgehead and shrine withheld - research/questions/0190-notice-boards-kosatsuba.drawing.html: absent from the value space
+        a board at a bridgehead - research/questions/0190-notice-boards-kosatsuba.html: "as well as bridge ends", with no size given, where the settlement records a bridge
+        shrine precinct withheld - research/questions/0190-notice-boards-kosatsuba.drawing.html: absent from the value space; no kept map draws a precinct (the pool hamlets' only shrine is a dooryard hokora)
     """
     if v == "center":
         return True  # every settlement has dwellings, so the assembly ground always exists
@@ -326,10 +325,12 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
         return bool(ctx.get("has_approach"))
     if v == "frontage":
         return bool(ctx.get("has_headman_house"))
+    if v == "bridgehead":
+        return bool(ctx.get("has_bridge"))
     return False
 
 
-register_knob(Knob("kosatsuba_seat", ["center", "entrance", "frontage"], default="center", typing_rule=_kosatsuba_seat_ok))
+register_knob(Knob("kosatsuba_seat", ["center", "entrance", "frontage", "bridgehead"], default="center", typing_rule=_kosatsuba_seat_ok))
 register_knob(Knob("cluster_position", ["high_margin", "flank", "mid_margin", "valley_mouth", "valley_head", "on_rise"], default="high_margin"))
 register_knob(Knob("cluster_shape", ["round", "elongated", "crescent", "split"], default="round", typing_rule=_cluster_shape_ok))
 register_knob(Knob("lane_web", list(LANE_WEBS), default="alleys"))

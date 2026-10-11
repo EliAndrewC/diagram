@@ -62,6 +62,23 @@ let the traffic term drag the board off the anchor, which is the defect this fea
 Research: anchored siting band - UNRESEARCHED: 60 ft from the best seat, the board's siting distance reused"""
 
 
+def bridgehead_anchor(M: Any, houses: list[tuple[float, float]]) -> tuple[float, float] | None:
+    """Where a `bridgehead` board is measured to (feature 374 wave 120): the settlement's widest bridge - a brook's bridge
+    before a field ditch's plank - and of equal spans the one nearest the houses. 0190 puts village boards "before the gates
+    of the village officials' houses, as well as bridge ends", and the bakufu's "at the foot of bridges", where traffic was
+    heaviest; which bridge of a village's no page says.
+
+    Research:
+        a board at a bridge's foot - research/questions/0190-notice-boards-kosatsuba.html: the ground before the officials' gates, as well as bridge ends
+        which bridge - GUESS: the widest span, ties to the one nearest the houses"""
+    bridges = [b for b in (M.get("bridges") or []) if "x" in b and "y" in b]
+    if not bridges or not houses:
+        return None
+    cx, cy = sum(h[0] for h in houses) / len(houses), sum(h[1] for h in houses) / len(houses)
+    b = max(bridges, key=lambda b: (round(float(b.get("span") or 0.0), 1), -math.hypot(float(b["x"]) - cx, float(b["y"]) - cy)))
+    return (float(b["x"]), float(b["y"]))
+
+
 def kosatsuba_affordances(M: Any) -> dict[str, bool]:
     """Which board placements this map can SITE, read from the manifest the validator reads.
 
@@ -74,6 +91,7 @@ def kosatsuba_affordances(M: Any) -> dict[str, bool]:
     return {
         "has_approach": has_approach,
         "has_headman_house": any(h.get("role") == "headman" for h in (M.get("houses") or [])),
+        "has_bridge": bool(M.get("bridges")),  # feature 374 wave 120: a board at a bridge's foot (0190)
     }
 
 
@@ -224,6 +242,8 @@ def kosatsuba_anchor(M: Any, placement: str, ftpx: float = 1.0) -> tuple[float, 
     if placement == "frontage":
         gate = next((h for h in (M.get("houses") or []) if h.get("role") == "headman" and "x" in h), None)
         return (float(gate["x"]), float(gate["y"])) if gate else None
+    if placement == "bridgehead":
+        return bridgehead_anchor(M, houses)
 
     def _at_the_buildings(q: tuple[float, float]) -> bool:
         """Has the approach arrived? Measured to the nearest DWELLING, never to a centroid radius."""
