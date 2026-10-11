@@ -192,10 +192,7 @@ def test_a_form_edit_that_drops_research_fixed_wording_is_refused(tmp_path, caps
 # `round:record-format|q:0104@3` and `ask:f335-garden-modal-depiction`: applying a round's own EDIT blocks re-owed the unit
 # it answered, the next round read the check's own words back and found nothing, and the round cap fired on that loop.
 
-PAGE = (
-    '<h2 id="rooms">Rooms for a parley</h2>\n'
-    "<ul>\n<li><strong>At Kyakhta each side built a post.</strong><br>The Russians built theirs at the border.</li>\n</ul>\n"
-)
+PAGE = '<h2 id="rooms">Rooms for a parley</h2>\n<ul>\n<li><strong>At Kyakhta each side built a post.</strong><br>The Russians built theirs at the border.</li>\n</ul>\n'
 REPLY = "record-format: 3 of 3 words ruled on - 0 VOCABULARY, 0 SESSION NOTE, 1 HISTORY\n"
 
 
