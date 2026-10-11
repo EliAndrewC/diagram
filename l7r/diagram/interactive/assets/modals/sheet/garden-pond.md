@@ -1,13 +1,12 @@
 About: The garden of a samurai residence lay to the south of its formal rooms, before them, and was made to be looked at, from the room that
 faced it or from its veranda. Its water took one of two forms: a pond garden, built around real water, or a dry landscape
-(karesansui), which showed water without using any, white gravel and stones standing for it. Around the water a garden held set stones, made
+(karesansui), which showed water without using any. Around the water a garden held set stones, made
 hills and planting, with stepping stones, stone lanterns and fences.
 
 Both forms stood beside samurai rooms. Two government offices, the office of the
 shogunate's intendants at Takayama and the seat of a small domain at Okutono, both kept pond gardens; Okutono's lay on two
 levels, the lower one seen from the formal room. Of seven samurai-house gardens at Chiran, one was a pond
 garden and six were dry. At Matsushiro the samurai houses set their garden on the south side, generally with a pond, carp kept in it and a made hill planted with trees beyond it.
-
 
 How large a residence garden's pond was is not recorded. A temple's dry garden beside its formal room, at the Daisen-in,
 is a level plot of about 1,100 sq ft (100 sq m).

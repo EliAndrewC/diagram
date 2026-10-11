@@ -27,6 +27,6 @@ of a building.
 
 Name: guest quarters
 Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
-Sources: shirobito-1717-takayama, boso-no-mura-takei, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, morse-1886-homes, shiroishi-koseki, honjin-jawiki, matsue-bukeyashiki, shoinzukuri-jawiki, liq-takayasu-daidokoro, engawa-kotobank
+Sources: shirobito-1717-takayama, boso-no-mura-takei, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, morse-1886-homes, shiroishi-koseki, honjin-jawiki, matsue-bukeyashiki, shoinzukuri-jawiki, liq-takayasu-daidokoro, engawa-kotobank, oamishirasato-kaoku
 Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

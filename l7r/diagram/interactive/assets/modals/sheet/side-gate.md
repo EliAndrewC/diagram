@@ -5,7 +5,7 @@ kitchen had its own door from outside, the katteguchi.
 
 Night soil was a good with a price. Farmers bought a town household's night soil by the year and came with carts to
 collect it, and a merchant house on a back street kept a back gate for them. At Edo, farmers paid in firewood, charcoal and seedlings
-for the right to empty the privies of the daimyo estates; by which gate they came in is not recorded.
+for the right to empty the privies of the daimyo estates; by which gate they came in is not recorded. In Rokugan the night soil is handled by the owaiya, a trade of the burakumin, the setting's outcasts.
 
 In Rokugan wagons and carts travel the roads between towns, a charcoal merchant's cartload among them, so a compound's
 goods can come to its gate by cart. Edo Japan kept its carts to the towns and barred them from its highways to the
@@ -32,6 +32,6 @@ the household lives.
 
 Name: side gate
 Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
-Sources: jaanus-uchigenkan, kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, l7r-wagons, toyama-1988-road-undevelopment, kominkai-genkan, fuchu-joge-pamphlet, gangi-hiroshima-jawiki
-Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0101-privies-setchin.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0081-village-lanes.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html
+Sources: jaanus-uchigenkan, kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, l7r-wagons, toyama-1988-road-undevelopment, kominkai-genkan, fuchu-joge-pamphlet, gangi-hiroshima-jawiki, l7r-castes
+Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0101-privies-setchin.html, research/questions/0131-a-towns-privies-and-the-night-soil-trade-setchin-shimogoe.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0081-village-lanes.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html
 Drawing: research/questions/0101-privies-setchin.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0088-highways-and-what-lines-them-kaido.drawing.html

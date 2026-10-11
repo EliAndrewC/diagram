@@ -9,7 +9,6 @@ dynasty, the plaintiff's to the east.
 The mats lay on the court's floor, which in the oldest courts was bare earth and later white gravel; at Takayama, in a
 province with no sea and too little white sand, it was cobbles from the riverbed.
 
-
 How large the mats were is not recorded.
 
 Guesses:

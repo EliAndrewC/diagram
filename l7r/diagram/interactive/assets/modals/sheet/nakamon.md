@@ -17,6 +17,6 @@ Depiction: The plan draws the gate as a pair of posts in the wall between the ou
 
 Name: nakamon
 Covers: the posts of the household door in the court divider
-Sources: yamen-enwiki, neixiang-yamen-zhwiki, henan-neixiang, shiroishi-koseki, bjd-qing-yamen, takayama-jinya-city, takayama-jinya-jawiki
+Sources: yamen-enwiki, neixiang-yamen-zhwiki, henan-neixiang, shiroishi-koseki, bjd-qing-yamen, takayama-jinya-city, takayama-jinya-jawiki, tamba-kashiwara-jinya
 Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html
 Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
