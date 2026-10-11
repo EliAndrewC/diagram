@@ -14,7 +14,7 @@ Guesses:
   gate and a guest's formal entrance; the one drawing found shows that ground open.
 
 Depiction: The plan draws the border court as a swept garden of its own, set with a stone lantern, inside the guests' door
-and apart from the hearing court.
+and apart from the hearing court. It stands where a real border post had the ground between its gate and its inspection hall, which everyone crossing passed over. The garden and its lantern are not from the record: the ground there, as between a gate and a guest's formal entrance, was open ground a palanquin could cross.
 
 Name: border court
 Covers: the receiving court behind a border posting's parley door, and its label

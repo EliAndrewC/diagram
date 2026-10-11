@@ -20,11 +20,11 @@ Guesses:
   house: only a storehouse is recorded there, so the rest is reasoned from the garden's place in the sunny south.
 
 Depiction: The plan sets the residence in an inner court behind the office hall, with a gate between the two courts - the
-Chinese county office's order, kept for every plan, though at Takayama the residence stood beside the office. It draws the
+Chinese county office's order, kept for every plan as a simplification, though at Takayama the residence stood beside the office. The house has no formal entrance of its own: where a plan draws one, it is on the office hall, the way to the house running on through the office as at Takayama; other plans bring a guest through a middle gate and along a walled garden path to the formal room's veranda. It draws the
 house either as one block under one roof or as two or three halls stepped back one behind the next, each joined to the
-last by a corridor, as the great houses joined their halls. The reception stands at one end of the house, with
+last by a corridor, as the great houses joined their halls; a house drawn so shows one its holders have built onto, hall by hall, as the Katsura villa grew. The reception stands at one end of the house, with
 the garden before it on the sunny side where the buildings allow, and each labeled room - the master's, the family's, the
-inner rooms - stands for a suite of several rooms. The pale strip along the garden face is the veranda, always drawn open: the plan shows the house by day, its storm shutters stowed in their boxes, as they stood in daylight.
+inner rooms - stands for a suite of several rooms. The pale strip along the garden face, on some plans carried round one or two further faces, is the veranda, drawn open: the plan shows the house by day, its storm shutters stowed in their boxes, as they stood in daylight.
 
 Name: residence
 Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
