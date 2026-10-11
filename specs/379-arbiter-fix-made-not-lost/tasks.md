@@ -32,5 +32,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T07 Done means landed (plan D10): `settle_fix` compares the TEST's blob on origin/main; tests (SC-004)
       research: rendering
       verify: DONE. settle_fix refuses until the TEST blob on origin/main equals HEAD's (on_main, fetches first); test_arbiter_fix SC-004 refused then passes after update-ref; 14 passed
-- [ ] T08 Close: the text (CLAUDE.md's session-clones bullet and guard table, `docs/session-clones.md`), tooling tests and `make hooks-test` green, the gate, the report, landed
+- [x] T08 Close: the text (CLAUDE.md's session-clones bullet and guard table, `docs/session-clones.md`), tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
+      verify: DONE. CLAUDE.md session-clones bullet + docs/session-clones.md; make done green (short-circuit: no engine change), tests/tooling 1582 passed, make hooks-test green incl. land-tooling 17/17 and feature-approval 48/48; report written; landed by the push carrying this tick

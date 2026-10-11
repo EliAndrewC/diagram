@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - amendment 1 (a tooling fix lands alone, mid-feature); the original FR-001 to FR-004 landed 2026-10-10
+**Status**: Done 2026-10-10 - amendment 1 landed: spec FAITHFUL (amendment round 3), plan CLEAR, every task ticked; tests/hooks/test-land-tooling.sh 17/17, tooling tests 1582 passed
 
 **Amendment 1 approved**: the GM, 2026-10-10, "yes please"
 
