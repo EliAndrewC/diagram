@@ -33,3 +33,12 @@ state in the session clones (the GM had found the research features shown untouc
 accepted in the research clone). The GM:
 
 > yes to each of those possible changes, though for the in-progress features you can probably limit yourself to clones with active sessions, if it helps performance.
+
+## Amendment 2 (2026-10-11, the same later session)
+
+The hourly check found feature 343's page session asking the round arbiter once per pop-up per check as a batch of pop-ups
+reached the round cap together (45 pop-up rulings, 44 of them `accept`), and some bundles reaching the arbiter with no
+round history ("no Rounds section"). The session proposed one ruling for a batch reaching the cap together, with per-pop-up
+exceptions, and to look at the bundle defect. The GM:
+
+> Yes, it does seem like a whole batch of pop-ups reaching the round cap at once should get a single ruling. because they are likely to be related. And that does sound like it would be more efficient. And then yes, please also do look at that bundle defect.

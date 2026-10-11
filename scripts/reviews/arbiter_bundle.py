@@ -90,6 +90,9 @@ class MissingRecord(Exception):
     """What the loop's own record lacks for a ruling (each a line the refusal prints)."""
 
 
+unit_of = ha.unit_of  # the one parser (feature 375 amendment 2): the bundle and the ruling row read a unit alike
+
+
 def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path:
     """The MANIFEST for `trigger`; raises `MissingRecord` where a round kept no reply or a reversal has no record, unless
     `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh)."""
@@ -101,7 +104,7 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     parts = [f"# Round arbiter bundle (feature 375, FR-011)\n\ntrigger: {trigger}\n",
              f"Kind: {owed.get('kind', trigger.split(':', 1)[0])}. Fired: {owed.get('detail', '(not in arbiter-owed.json)')}.\n",
              f"Clone root (for `make arbiter-ruled`): {root}\n"]
-    unit = str(owed.get("unit") or "")
+    unit = str(owed.get("unit") or "") or unit_of(trigger)
     check, _, subject = unit.partition("|")
     files: list[str] = []
     if trigger.startswith("reversal:") and "|" not in unit:
@@ -183,9 +186,52 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     return out / "MANIFEST.md"
 
 
+batch_triggers = ha.batch_triggers  # THE BATCH, defined once (feature 375 amendment 2, FR-017)
+
+
+def batch(root: Path, out: Path, allow_missing: str = "", extra: tuple[str, ...] = ()) -> Path:
+    """ONE bundle for every owed round trigger (FR-017; the GM 2026-10-11: "a whole batch of pop-ups reaching the round cap at
+    once should get a single ruling. because they are likely to be related"): each trigger's own bundle in a subdirectory, and
+    a MANIFEST asking for ONE ruling with an exception per unit ruled differently. Raises MissingRecord with every gap at once."""
+    triggers = batch_triggers(root, extra)
+    if not triggers:
+        raise ValueError("no round trigger is owed a ruling - nothing to batch")
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    gaps: list[str] = []
+    rows: list[str] = []
+    for t in triggers:
+        sub = re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")[-60:]
+        try:
+            bundle(root, t, out / sub, allow_missing)
+        except MissingRecord as e:
+            gaps += [f"{t}: {g}" for g in e.args[0]]
+            continue
+        rows.append(f"- `{t}` - its bundle: `{sub}/MANIFEST.md`")
+    if gaps:
+        raise MissingRecord(gaps)
+    parts = [
+        f"# Round arbiter BATCH bundle (feature 375, FR-017)\n\n{len(triggers)} round triggers reached the cap together. Read each "
+        "unit's own bundle below; they are likely related (one round of the same checks on related pop-ups or pages).\n",
+        f"Clone root (for `make arbiter-ruled`): {root}\n",
+        "## The triggers\n",
+        *rows,
+        "\n## Reply\n\nONE JSON object: the batch's ruling, and an exception for each unit you rule differently:\n\n"
+        '    {"ruling": "continue|accept|process-fault", "why": "...", "what": "...", "tooling_fix": "<or omit>",\n'
+        '     "triggers": [<every trigger above>], "exceptions": {"<trigger>": {"ruling": "...", "why": "...", "what": "..."}}}\n\n'
+        "Record it with `make arbiter-ruled BATCH=1 FILE=<that file> AS=round-arbiter`: each trigger is recorded under the "
+        "batch's ruling or its exception, so each unit's hold, closure and GM-review row work as they do alone.\n",
+    ]
+    (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
+    return out / "MANIFEST.md"
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("trigger")
+    ap.add_argument("trigger", nargs="?", default="")
+    ap.add_argument("--batch", action="store_true", help="one bundle for every owed round trigger (FR-017)")
+    ap.add_argument("--triggers", default="", help="--batch: rounds asked about ahead of their cap, joined to the batch")
     ap.add_argument("--root", default=".")
     ap.add_argument("--out", default="")
     ap.add_argument("--missing-ok", default="", help="the reason to bundle with a reply or a reversal's record missing")
@@ -195,8 +241,17 @@ def main(argv: list[str] | None = None) -> int:
     if a.missing_ok.strip() and len(a.missing_ok.split()) < 2:  # every escape states a reason of two words or more
         print('arbiter-bundle: MISSING_OK needs a reason of two words or more - MISSING_OK="<why the reply is gone>"', file=sys.stderr)
         return 2
+    if not a.batch and not a.trigger:
+        print("arbiter-bundle: name the TRIGGER the refusal named, or BATCH=1 for every owed round trigger at once", file=sys.stderr)
+        return 2
     try:
-        print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}", a.missing_ok.strip()))
+        if a.batch:
+            print(batch(root, Path(a.out) if a.out else DEFAULT_OUT / "arbiter-batch", a.missing_ok.strip(), tuple(a.triggers.split())))
+        else:
+            print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}", a.missing_ok.strip()))
+    except ValueError as e:
+        print(f"arbiter-bundle: {e}", file=sys.stderr)
+        return 2
     except MissingRecord as e:
         print("arbiter-bundle: the record lacks what the arbiter rules on - " + "; ".join(e.args[0]) + " (neither the hook's kept "
               "reply nor the agent's transcript has it). Bundle anyway, so the arbiter weighs the gap: "

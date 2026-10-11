@@ -172,7 +172,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             cap = n0 + ROUND_CAP + hm_arbiter.continues(root, f"round:{unit}@", n0)
             if n >= cap:
                 hm_arbiter.trip(root, f"round:{unit}@{n + 1}", "round", unit, f"round {n + 1} of {check} on {s}", now)
-                return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"])
+                return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"], root)
     for s in subjects:
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
@@ -440,6 +440,26 @@ def _root(payload: Mapping[str, Any]) -> Path | None:
     return next((d for d in (p, *p.parents) if (d / ".git").exists()), None)
 
 
+def window_start(root: Path) -> float:
+    """When the cascade's window opened: the commit time of the clone's merge base with main, so a batch that LANDED - its
+    dispatches charged against its own delta - is not charged to the next batch, whose delta starts afresh at the landing
+    (feature 374, the round arbiter's cascade@1 tooling fix: batch 2's relabel dispatches were counted against batch 3's lines)."""
+    import subprocess  # noqa: PLC0415
+
+    def git(*a: str) -> str:
+        r = subprocess.run(["git", "-C", str(root), *a], capture_output=True, text=True, check=False)
+        return r.stdout.strip() if r.returncode == 0 else ""
+
+    base = git("merge-base", "HEAD", "origin/main")
+    stamp = git("show", "-s", "--format=%ct", base) if base else ""
+    return float(stamp) if stamp.isdigit() else 0.0
+
+
+def dispatches_since(state: Mapping[str, Any], since: float) -> int:
+    """The check dispatches made at or after `since` (a dispatch's `t`) - the cascade's count inside its window."""
+    return sum(1 for d in (state.get("dispatches") or {}).values() if float(d.get("t") or 0.0) >= since)
+
+
 def changed_lines(root: Path) -> int:
     """Hand-written lines the clone's delta changed against the merge base (feature_report's rule: generated files and specs/
     out) - the cascade ratio's base (FR-010)."""
@@ -572,8 +592,9 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
                         hm_arbiter.trip(root, f"reversal:{s}@{len(vs)}", "reversal", s, f"{s}: a block dropped earlier is back - \"{back}...\"", now)
         out = dispatch(state, str(payload.get("tool_use_id") or now), check, manifest, text, now, root, freeze_ok, arbiter_ok)
         if not out and root is not None:
-            n, lines = len(state.get("dispatches", {})), changed_lines(root)
-            trigger, last = hm_arbiter.cascade_state(root)
+            since = window_start(root)
+            n, lines = dispatches_since(state, since), changed_lines(root)
+            trigger, last = hm_arbiter.cascade_state(root, since)
             if hm_arbiter.cascade(n, lines, last):  # live after any ruling; counted from the dispatches at the last one
                 hm_arbiter.trip(root, trigger, "cascade", "", f"{n} check dispatches over {lines} changed lines", now)
     elif mode == "launched" and payload.get("tool_name") == "Agent":
