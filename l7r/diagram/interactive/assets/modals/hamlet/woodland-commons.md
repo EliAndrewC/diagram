@@ -22,7 +22,7 @@ Guesses:
   their boundaries says so.
 
 Depiction: The map draws the commons as a few patches of coppice, on the nearest rising ground above the fields where
-there is any, and never below the houses. Every crown is drawn at its real size, about 690 to the acre (1,700 a
+there is any, else on the level beyond the fields; below the houses it keeps off the low ground beside a river or marsh, which was the village's grass commons. Every crown is drawn at its real size, about 690 to the acre (1,700 a
 hectare), the count of a stand at the old end of the cutting cycle, so the wood may read a little more open than one at
 its cutting. No crown is drawn wholly under another's, a convention: the map draws the canopy, and neighboring crowns
 may overlap at their edges. No brush or pines stand inside. Each patch's edge wanders smoothly, a convention: a

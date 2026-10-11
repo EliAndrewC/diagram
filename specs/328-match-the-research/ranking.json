@@ -12923,17 +12923,16 @@
  },
  {
   "key": "l7r/diagram/settlement/_knobs.py::<module>#kosatsuba_seat forms",
+  "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "replace the center/entrance/frontage knob with 0190 drawing's search along the busiest main road (or where most buildings stand); retire the knob from board_seat/siting",
+  "fix": "the kosatsuba_seat knob rolls its seats evenly, but 0190 says boards were most often set at the village center or a crossroads of main highways; weight the center first (no source gives a share, so the weights are a GUESS the drawing page records)",
   "files": [
-   "l7r/diagram/settlement/_knobs.py",
-   "l7r/diagram/settlement/structures/fixtures/siting.py",
-   "l7r/diagram/settlement/structures/fixtures/board_seat.py"
+   "l7r/diagram/settlement/_knobs.py"
   ],
   "after": [],
   "flag": "",
+  "found": "feature 374 wave 120's modal-research round 2 (2026-10-11): a finding the ranking lacked",
   "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
   "wave": "115",
   "scope": "kept"
  },
