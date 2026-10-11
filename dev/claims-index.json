@@ -1230,14 +1230,15 @@
   "date": "2026-10-11",
   "note": "the drawing page records the bench's board at the office gate as a GUESS that joins the Japanese freestanding board to the Chinese gate walls",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923",
    "0190-notice-boards-kosatsuba.drawing.html:cf39d6663b05b586"
   ],
   "section": "cf960bbd80430094",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
@@ -1740,9 +1741,9 @@
   "date": "2026-10-10",
   "note": "a 16 x 6 ft roofed frame, long side parallel to the road, on a footing 2 ft wider all round with a fence, as the drawing page gives it; the size is fixed inside the measured 16-18 x 5-6 ft; the gate and bounty boards drawn the same way match the page's guess for a magistrate's-gate board",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:0d8ca713e70426df",
@@ -5778,11 +5779,11 @@
   "code": "82100c9d3ec0c2a8",
   "core": "da8b3ebe7fbaaf7c",
   "date": "2026-10-11",
-  "note": "one form, the busiest frontage (else the most buildings); the drawing-water siting is retired, and no page backs it",
+  "note": "one form, the busiest frontage: beside the busiest main way, else where most buildings stand; drawing-water siting has no page behind it",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
@@ -6686,9 +6687,9 @@
   "date": "2026-10-09",
   "note": "stage_notice comes after the frame, followed only by the labels",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
   ],
@@ -6937,15 +6938,14 @@
   "code": "0caef07019100fc9",
   "core": "b6e9ace8b4fdfa51",
   "date": "2026-10-11",
-  "note": "the board goes on a way's verge, placed last, and clears no ground",
+  "note": "hands off to place_kosatsuba; the board stands on a way's verge where passers-by meet it",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a",
-   "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998",
+   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
   "verdict": "IN-STEP"
@@ -6956,9 +6956,9 @@
   "date": "2026-10-09",
   "note": "placed after the crop",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
   ],
@@ -6971,9 +6971,9 @@
   "date": "2026-10-09",
   "note": "hamlets included",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:10ca8908cd449c17",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
@@ -37429,15 +37429,16 @@
   "code": "4d8057a42dc434cc",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
-  "note": "the four attested village sites (center, entrance, officials' gates, bridge ends) are rolled per settlement and gated on what the map affords; the shrine precinct and the assembly place are withheld as the page's own GUESS",
+  "note": "the four attested village sites are rolled per settlement; entrance, frontage and bridgehead are gated on an approach, a drawn headman's house and a bridge, as the page conditions them; shrine and assembly place (GUESS only) left out",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588",
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b",
    "0190-notice-boards-kosatsuba.html": "689da91bbb8319d6"
   },
-  "research": "b64975a88d8e033c",
+  "research": "23f082e78a3489bc",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998",
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca",
    "0190-notice-boards-kosatsuba.html:72aef0ef49d26ff1",
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
   ],
   "verdict": "IN-STEP"
@@ -58979,17 +58980,18 @@
   "code": "f1da03f6738e75a9",
   "core": "d028d8428cc4370e",
   "date": "2026-10-11",
-  "note": "every tier posts a board, through place_kosatsuba",
+  "note": "`self.place_kosatsuba()` runs before `hinterland()`, `crop_to_content` and `title`, so the board is sited with no view and before the scrub, but the page has \"the board is the last thing placed, after the map is cropped to its frame\"; move the call after the crop and title, or claim it as a DEVIATION the drawing page records. The claim's \"at the busiest node\" is also stale, since the seat is rolled",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:10ca8908cd449c17",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998",
+   "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a",
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#plank bridges over the field ditches": {
   "code": "8b13e38a0b019004",
@@ -59001,6 +59003,14 @@
   },
   "research": "43cf74757fcb48f3",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#where the canal offtakes sit along the field (defaults `offtakes_a` (0.22, 0.45, 0.68, 0.88), `offtakes_b` (0.45, 0.8))": {
+  "code": "d028d8428cc4370e",
+  "core": "d028d8428cc4370e",
+  "date": "2026-10-11",
+  "note": "where the canal offtakes sit along the field (defaults `offtakes_a` (0.22, 0.45, 0.68, 0.88), `offtakes_b` (0.45, 0.8))",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/rolling/roll.py::_MarginFrame#orchestration plumbing": {
   "code": "de7e1e03281ba9c4",
@@ -61415,14 +61425,14 @@
   "code": "1b7b7f5dfa8486d9",
   "core": "5efeb905b7d48b3f",
   "date": "2026-10-11",
-  "note": "6 ft at the hamlet and village tiers, the project's own figure, with the 60 ft fallback elsewhere",
+  "note": "6 ft from the road's edge at a hamlet or village, which the page records as the project's own figure",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998"
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -61542,13 +61552,13 @@
   "code": "faeebcce3bf82dc0",
   "core": "ca150595c6f59f04",
   "date": "2026-10-11",
-  "note": "offered only where a bridge is recorded and handed to bridgehead_anchor; which bridge (the widest, then the nearest the houses) is the page's GUESS, decided in that helper",
+  "note": "offered only where a way reaches a bridge, anchored at `bridgehead_anchor`'s choice, which the page records as a GUESS",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998"
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -61694,9 +61704,9 @@
   "date": "2026-10-09",
   "note": "30 degrees, the project's calibration",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5"
   ],
@@ -61717,9 +61727,9 @@
   "date": "2026-10-09",
   "note": "60 ft, recorded as the project's own figure",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62"
   ],
@@ -61772,9 +61782,9 @@
   "date": "2026-10-09",
   "note": "turned to the nearest way, refused where another as-near way is more than 30 degrees off",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5"
   ],
@@ -61811,9 +61821,9 @@
   "date": "2026-10-09",
   "note": "a shaded seat is allowed",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0"
   ],
@@ -61953,9 +61963,9 @@
   "date": "2026-10-09",
   "note": "16 x 6 ft true w/h; the footing scales with the marker per §21",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:2932684d882f47f9",
@@ -61971,9 +61981,9 @@
   "date": "2026-10-09",
   "note": "an oversized marker at village and city grain, aspect kept, a convention",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a"
   ],
@@ -61986,9 +61996,9 @@
   "date": "2026-10-09",
   "note": "vw and vh are the frame plus 2 ft on each side",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd"
   ],
@@ -62042,9 +62052,9 @@
   "date": "2026-10-09",
   "note": "rot is the road's bearing and the long axis runs along it",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
@@ -62058,9 +62068,9 @@
   "date": "2026-10-09",
   "note": "frame 16 x 6 ft from board_record, drawn on its footing",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:2932684d882f47f9",
@@ -62076,9 +62086,9 @@
   "date": "2026-10-09",
   "note": "floored on the long axis at village and city grain",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a"
   ],
@@ -62091,9 +62101,9 @@
   "date": "2026-10-09",
   "note": "block_polys is the footing box alone",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
   ],
@@ -62106,9 +62116,9 @@
   "date": "2026-10-09",
   "note": "a roofed 16 x 6 frame with its ridge along the face, on the footing",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
@@ -62122,9 +62132,9 @@
   "date": "2026-10-09",
   "note": "the footing 2 ft wider all round, the fence dashed at its edge",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd"
   ],
@@ -62137,9 +62147,9 @@
   "date": "2026-10-09",
   "note": "\"about 2 ft wider all round\", fence line at its edge",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
@@ -62197,9 +62207,9 @@
   "date": "2026-10-09",
   "note": "shaded seats admitted",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0",
    "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
@@ -62259,14 +62269,15 @@
   "code": "fec7f585564c60eb",
   "core": "367f9dea6d71f505",
   "date": "2026-10-11",
-  "note": "at the lane tiers only seats within 6 ft compete where any fit; `widen` lifts the filter, as the no-roadside-site fallback allows",
+  "note": "at the lane tiers only seats within 6 ft compete where any exist, and the 60 ft band is the fallback",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171",
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998"
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -62314,16 +62325,16 @@
   "code": "d251a1b6a76a2372",
   "core": "b24e7464d2552701",
   "date": "2026-10-11",
-  "note": "the early `if routes: return routes` also covers anchored placements, so on a hamlet or village map that has a road, a frontage board stands on the road near the headman's house rather than \"on the way before that house\", and an entrance board never gets the approach; §241 contradicts §239's \"only along those\" here, so either exempt the anchored seats from the main-way return or have the page state that main ways override the seat",
+  "note": "roads and `main` town streets only, where the map declares any",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998"
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#no main way, the whole network": {
   "code": "e49832b181bd33d2",
@@ -62331,9 +62342,9 @@
   "date": "2026-10-09",
   "note": "with no main way the code falls back to the lanes and every town street, matching \"nothing 'main' to stand on\"",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
   ],
@@ -62400,14 +62411,14 @@
   "code": "5ed524fd75f2e9e2",
   "core": "db09472c978363c0",
   "date": "2026-10-11",
-  "note": "the 6 ft verge is sampled first and the whole 60 ft band only when the verge holds no seat",
+  "note": "the 6 ft verge is sampled first, and the 60 ft band only when the verge holds no seat",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998"
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -62415,14 +62426,14 @@
   "code": "5541b9972ca1b698",
   "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-11",
-  "note": "an approach seat takes the approach segment's bearing, squared to the road it faces",
+  "note": "an approach seat takes its own segment's bearing, so it is squared to the way out that every household passes",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998"
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -62432,9 +62443,9 @@
   "date": "2026-10-11",
   "note": "up to 60 ft, which the page calls \"this project's own figure\"",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62"
   ],
@@ -62445,14 +62456,15 @@
   "code": "55611981ac4ea072",
   "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-11",
-  "note": "the offset is rw/2 + dh/2 + 6 ft, measured to the drawn footing's near edge",
+  "note": "the first offset puts the drawn footing's near edge 6 ft from the road's edge",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998"
+   "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1",
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -62462,9 +62474,9 @@
   "date": "2026-10-09",
   "note": "`rot` is the segment bearing, so the long side runs along the road (\"broadside to the traffic\", \"long side runs parallel to the road it faces\"); a seat that is not on the approach is turned to its nearest way and refused where it cannot face it",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
@@ -62487,14 +62499,14 @@
   "code": "06d794fa56abef8e",
   "core": "1ee9fffb5e43d3f9",
   "date": "2026-10-11",
-  "note": "seats stay off every way's bed and out of water, on the verge, inside the cropped view",
+  "note": "seats stay off every way's bed and on the verge, never set back past the band",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a",
-   "0190-notice-boards-kosatsuba.drawing.html:bc1866f5e295c998"
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
+   "0190-notice-boards-kosatsuba.drawing.html:90ee84eca3eec3ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -62514,15 +62526,16 @@
   "date": "2026-10-11",
   "note": "the score counts houses and buildings near each seat (the passers-by it would meet); the radii and weights are claimed separately as UNRESEARCHED",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
    "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#the nearer weighted": {
@@ -62561,9 +62574,9 @@
   "date": "2026-10-09",
   "note": "sited against meta.view after the crop",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
   ],
@@ -62576,9 +62589,9 @@
   "date": "2026-10-09",
   "note": "no tier is excluded",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:10ca8908cd449c17",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
@@ -62630,9 +62643,9 @@
   "date": "2026-10-09",
   "note": "px(7.0) x px(3.0)",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1"
   ],
@@ -62643,14 +62656,15 @@
   "code": "dd29d8e647be795f",
   "core": "74ebfe35e64f1cca",
   "date": "2026-10-11",
-  "note": "the default is `frontage`, the busiest built frontage, the one form left",
+  "note": "with no rolled siting the default is `frontage`, the busiest built ground, scored by buildings near each seat",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
   "verdict": "IN-STEP"
@@ -62661,9 +62675,9 @@
   "date": "2026-10-09",
   "note": "the caption is proved against the drawn footing (vw x vh passed as half-extents, rebuilt at full size); this matches the caption room search and the footing as drawn",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "40556010965d3588"
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
-  "research": "294d8c999187bb59",
+  "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171",
