@@ -71,7 +71,8 @@ than overrule.
   `accept` or `process-fault` ruling on the spec's review in place of a FAITHFUL verdict, the GM reviewing it after
   landing. The places that send a failing fifth round to the GM send it to the arbiter: `CLAUDE.md` ("then stop and
   escalate"), the constitution's XVI ("STOP and put it to the GM", and its two stale sentences counting three rounds),
-  and `.claude/agents/spec-fidelity.md`. The review checks' own two-round cap is not this cap and stays.
+  `.claude/agents/spec-fidelity.md` and `spec-fidelity-verify.md` ("state that the matter should go to the GM"), and
+  `docs/spec-kit-and-reviews.md` ("STOP and escalate"). The review checks' own two-round cap is not this cap and stays.
 - **FR-008 The regression exit goes to the arbiter.** A regression the session cannot fix or revert, which today waits on
   "an explicit GM waiver", goes to the round arbiter, whose ruling (`continue`: fix it; `accept`: it stands, waived) is
   recorded and reviewed by the GM after landing.
@@ -96,7 +97,7 @@ than overrule.
 - **SC-004** (FR-006) `make arbiter-fix-done` refuses while the fix's test is not on main, and passes once it is.
 - **SC-005** (FR-007) A spec review's sixth round on one feature is refused naming `make arbiter-bundle`, spending nothing;
   a `continue` ruling lets exactly one more round through; a round after an accepted spec counts from one again; an
-  `accept` ruling lets the review gate pass the spec. The tests fail on today's code. Every statement of the SPEC review's
+  `accept` or a `process-fault` ruling lets the review gate pass the spec, a `continue` does not. The tests fail on today's code. Every statement of the SPEC review's
   cap says five rounds, then the arbiter.
 - **SC-006** (FR-008, FR-009, FR-010) The question command records a trigger the arbiter can rule on, and its ruling lands
   on the GM's review; `REVIEW_ROUNDS_OK` is refused naming the arbiter; and these say the arbiter first: the regression exit
@@ -124,3 +125,5 @@ than overrule.
   - FR-007 names the true places that state the spec cap (the constitution says five already, with two stale "three"
     sentences; `review-gate.sh`'s "two" is the review checks' cap, which stays) and that the review gate honors the ruling.
   - FR-010 retires `REVIEW_ROUNDS_OK`; SC-006 names every file it changes, the wakeup hook included.
+- spec-fidelity-verify, amendment 2 round 2 (2026-10-10): CHANGES REQUIRED. Applied: FR-007 adds `spec-fidelity-verify.md`
+  and `docs/spec-kit-and-reviews.md`; SC-005 tests a `process-fault` ruling at the review gate too.

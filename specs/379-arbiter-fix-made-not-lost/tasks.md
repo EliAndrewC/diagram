@@ -42,5 +42,5 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
 - [ ] T10 `make arbiter-ask` and the contract and bundle for spec rounds and asks (plan D13); tests (SC-006)
       research: rendering
-- [ ] T11 The text (plan D14): CLAUDE.md, the constitution, `review-gate.sh`'s message, `docs/spec-kit-and-reviews.md`; tooling tests and `make hooks-test` green, the gate, the report, landed
+- [ ] T11 The text (plan D14) and the retired waiver (plan D15): CLAUDE.md, the constitution, both fidelity agents, `escalation-check.md`, `wakeup-hooks.sh`, `docs/spec-kit-and-reviews.md`, `docs/reviews.md`, `pair-hooks.sh`; tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering

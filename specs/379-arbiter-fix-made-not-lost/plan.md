@@ -82,7 +82,7 @@ The commit is the GM's identity with the clone's commit subjects that touched th
 on `origin/main` equals its blob at the clone's HEAD, naming `make land-tooling FILES="<the test> ..."`. The existing test
 fixture gains an `origin/main` holding the test, in the same edit (SC-004).
 
-## Amendment 2 - the arbiter before the GM (FR-007 to FR-009)
+## Amendment 2 - the arbiter before the GM (FR-007 to FR-010)
 
 **D11 - The spec review's sixth round trips the arbiter.** `scripts/hooks/lib/hm_review_round.py` already numbers a spec
 review's rounds (the counter back to one when a round returns FAITHFUL, and a new pass for an amendment). Where it computes
@@ -104,10 +104,19 @@ stands; process-fault: the review loop is the fault, its `tooling_fix`) and for 
 proposed; accept: it stands, waived; process-fault: the process is wrong, its `tooling_fix`). The bundle states, for a
 spec review, that its rounds are the spec's Review history (copied beside it), and for an `ask`, the question.
 
-**D14 - The cap and the exits written once, as five and the arbiter.** CLAUDE.md, the constitution's spec-review rule and
-`review-gate.sh`'s message all say five rounds, then the round arbiter; the regression exit's "explicit GM waiver" becomes
-the round arbiter's ruling (`make arbiter-ask`), reviewed by the GM after landing; `docs/spec-kit-and-reviews.md` states the
-rule in the GM's words.
+**D14 - The cap and the exits written once, as five and the arbiter.** The spec-review cap reads five rounds, then the
+round arbiter, in CLAUDE.md, the constitution's XVI (its "STOP and put it to the GM" and the two stale sentences counting
+three), `.claude/agents/spec-fidelity.md` and `spec-fidelity-verify.md`, and `docs/spec-kit-and-reviews.md`;
+`review-gate.sh`'s two-round message is the review checks' cap and stays. The regression exit's "explicit GM waiver"
+(CLAUDE.md, `docs/spec-kit-and-reviews.md`, the constitution's XIII) becomes the round arbiter's ruling through `make
+arbiter-ask`, reviewed by the GM after landing. The stop-and-ask rule (CLAUDE.md, `docs/spec-kit-and-reviews.md`) is split
+as FR-009 says - how the process goes to the arbiter first, what to build to the GM - and so are `wakeup-hooks.sh`'s two
+"a question for the GM" lines and `escalation-check.md`'s "a question or a decision" for the GM.
+
+**D15 - The GM's-words waiver of a review check's cap is retired (FR-010).** `pair-hooks.sh` drops its `REVIEW_ROUNDS_OK`
+branch, so a third round past the cap meets only the arbiter path (the refusal naming `make arbiter-bundle`); its census
+entry in `tests/tooling/test_guard_firing_log.py` goes, its suite's waiver cases become a refusal case, and
+`docs/reviews.md`'s sentence names the arbiter. The event log's `waiver` flag stays, reading old transcripts.
 
 ## Tasks
 
