@@ -1,5 +1,5 @@
 About: A walled compound could have lesser gates beside its main one: even a magistrate's
-branch office of three officials, at the end of the shogunate, had a small gate beside its main gate. Inside the wall, the house's own doors were divided by who used them: the formal entrance
+branch office of three officials, at the end of the shogunate, had a small gate beside its main gate. Inside the wall, a samurai house of standing divided its own doors by who used them: the formal entrance
 was kept for the head of the household and honored guests, the family came and went by an inner entrance, and the
 kitchen had its own door from outside, the katteguchi.
 
@@ -24,7 +24,7 @@ Guesses:
 
 Depiction: The plan draws each side gate as a pair of posts in the compound wall, narrower than the main gate: a kitchen
 postern, a service gate by the stables or the stores, a gate to a river landing (opening onto the bank street, with the
-landing's steps across it), a cart gate, or a guests' door. A cart gate has a cart yard inside it and a cart lane leading to it, and a guests' door opens inside onto open ground a palanquin can cross, never against the side of a building. Service
+landing's steps across it), a cart gate, or a guests' door. A cart gate has a cart yard inside it and a cart lane leading to it, and a guests' door opens inside onto open ground a palanquin can cross (or, where a plan draws one, a garden), never against the side of a building. Service
 gates are set where the night-soil collectors reach the outer privies from outside without crossing the inner court where
 the household lives.
 

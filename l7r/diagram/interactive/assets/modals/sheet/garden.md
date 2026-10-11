@@ -5,8 +5,8 @@ room, with stepping stones into it from each, so the private rooms shared it. A 
 gate and along a walled garden path, the roji, straight to the reception room's veranda.
 
 A Japanese garden was made of a pond and its water, set stones, made hills and planting, furnished with stepping stones,
-paving, stone lanterns and fences. Beside samurai rooms it took one of two forms: a pond garden built around real water, as
-at Takayama and at a small domain's seat at Okutono, or a dry garden of stones and gravel standing for water, as six of the
+paving, stone lanterns and fences. Beside samurai rooms stood gardens both with water and without: a pond garden built around real water, as
+at Takayama and at a small domain's seat at Okutono, or a dry garden that showed water without using any, as six of the
 seven protected samurai-house gardens at Chiran are. The stone lantern, first a votive light before shrines and temples,
 came into ordinary gardens from the Momoyama period.
 

@@ -4,27 +4,26 @@ entrance with a shikidai, the low board step where guests were bowed in and seen
 
 A guest of rank came by palanquin, and the palanquin was brought right alongside the step, so that its rider went into the
 building without setting foot on the ground. So an arrival was staged: the gate, then open ground a palanquin could cross, then
-the step. At the branch office at Jōge, the entrance and its step faced the open ground inside its main
+the step. At the office compound at Jōge, the entrance and its step faced the open ground inside its main
 gate. Where an intendant's office and residence shared a compound, at Takayama, the genkan was on the office, and a visitor today goes in by it and round
 the rooms of the office on to the residence; whether that way ran indoors in the Edo period is not recorded.
 
 Not every house had one, and it marked standing. The houses of senior retainers did; a village headman was allowed a
 shikidai where other farmers were not; and at Kakegawa's castle palace only the lord and senior retainers came in by the
 formal porch. A middle-rank house could do without, and bring its guest through a middle gate and along a walled garden
-path to the reception room's veranda. How large an ordinary house's genkan was is not recorded; a great lord's was far larger, and at Kawagoe's castle palace the great entrance and carriage porch ran 19 by 5 ken, about 113 by 30 ft.
+path to the reception room's veranda. How large an ordinary house's genkan was is not recorded; at Kawagoe's castle palace, a great lord's, the great entrance and carriage porch ran 19 by 5 ken, about 113 by 30 ft.
 
 Guesses:
 - Its size on the plans, about 10 to 11 ft across and 4 to 6 ft deep, with a step 4 to 5 ft wide: no account read gives the
   size of a samurai house's or an intendant's office's genkan or of its step; the only ones measured are castle palaces', far larger.
 
 Depiction: Where the office and the residence share a compound, the plan draws the genkan on the office hall, and the way to
-the residence runs on through the office; where the residence stands alone, the genkan is on the residence. A guest's door
-always opens onto open ground a palanquin can cross, never onto the street or against the side of a building. A plan whose
-house brings its guests in by a garden path draws no genkan. The step is drawn as a dark bar along the genkan's front so it
-reads; the shikidai itself was a low board step.
+the residence runs on through the office; where the residence stands alone, the genkan is on the residence. The genkan's door
+opens onto open ground a palanquin can cross, never onto the street or against the side of a building. A plan whose
+house brings its guests in by a garden path draws no genkan.
 
 Name: genkan
 Covers: the entry porch at the formal entrance
-Sources: jaanus-uchigenkan, kotobank-katteguchi, genkan-jawiki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, shirobito-1717-takayama, bukeyashiki-wiki, shiroishi-koseki, kotobank-nanushi, kakegawajo-goten
+Sources: jaanus-uchigenkan, kotobank-katteguchi, genkan-jawiki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, shirobito-1717-takayama, bukeyashiki-wiki, shiroishi-koseki, kotobank-nanushi, kakegawajo-goten, kawagoe-castle-jawiki
 Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html, research/questions/0143-inside-the-castle-the-lords-palace-the-council-and-the-baileys-goten-honmaru.html
 Drawing: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

@@ -4,7 +4,7 @@ the office in front, where the magistrate tried cases and held ceremonies, and t
 
 A Japanese samurai house could have one too. At a middle-rank retainer's house at Shiroishi, which had no formal entrance
 with a step for guests, a guest passed through a middle gate in the wall and along a walled garden path straight to the
-veranda of the principal room. The path from the outer gate led on to the kitchen entrance, which served as the house's front entrance. An intendant's office had one as well: a middle gate survives at Takayama, the one such office still standing, though where it stood among the office's buildings is not recorded.
+veranda of the principal room. The path from the outer gate led on to the kitchen entrance, which served as the house's front entrance. An intendant's office could have one as well: a middle gate survives at Takayama, the one such office still standing, though where it stood among the office's buildings is not recorded.
 
 How wide such a gate was and how it was built are not recorded.
 
@@ -17,6 +17,6 @@ Depiction: The plan draws the gate as a pair of posts in the wall between the ou
 
 Name: nakamon
 Covers: the posts of the household door in the court divider
-Sources: yamen-enwiki, neixiang-yamen-zhwiki, henan-neixiang, shiroishi-koseki, bjd-qing-yamen
+Sources: yamen-enwiki, neixiang-yamen-zhwiki, henan-neixiang, shiroishi-koseki, bjd-qing-yamen, takayama-jinya-city, takayama-jinya-jawiki
 Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.html
 Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

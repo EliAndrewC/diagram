@@ -5,7 +5,7 @@ Japan the household lived inside the compound too, though at the one intendant's
 residence stood beside the office rather than behind it.
 
 It was open ground: at Joge a small office's entrance faced the open ground inside its main gate, and a Chinese
-governor-general's office planted its front court with dozens of stout junipers. On it stood the office hall with its roofed
+governor-general's office planted its front court with dozens of stout junipers. At Edo's South Town Magistracy a stone path about 6 ft wide ran straight from the main gate to the entrance, with small black gravel spread over the ground beside it; how such ground was surfaced elsewhere is not recorded. On it stood the office hall with its roofed
 hearing court, and around a compound's courts its storehouses and service buildings. A Chinese county office ran its
 courts one after another; at Neixiang a visitor going north from the main gate crossed two rectangular courts in turn.
 
@@ -21,7 +21,7 @@ Guesses:
 Depiction: The plan draws the outer court as the compound's bare earth, stippled, labeled with its name and, in smaller type, "forecourt". It is
 always drawn in front of the inner court, with a gate between them; for a Japanese office that is a simplification, since
 at Takayama the residence stood beside the office. The plan keeps its buildings a little further apart than a real jin'ya,
-so that each reads as its own labeled footprint; like a real one, it gathers the rooms into a few connected buildings, the office hall among them, and leaves the rest of the ground open.
+so that each reads as its own labeled footprint; like a real one, it draws the office hall as one building, its offices and the magistrate's dais under one roof with the roofed hearing court against its front, and leaves the rest of the ground open.
 
 Name: outer court
 Covers: the outer court's ground and its labels, the forecourt among them

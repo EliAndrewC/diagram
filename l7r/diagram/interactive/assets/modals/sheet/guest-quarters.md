@@ -18,8 +18,8 @@ How large a guest room was is not recorded.
 Guesses:
 - A guest house drawn as a building of its own: none is known at a samurai house, and the nearest form, the honjin's suite
   of honor, belonged to a post town's lodging house, not to an office.
-- A garden between the gate and a guest's formal entrance, where a plan draws one: none is recorded there, and the two drawings of that
-  ground show it open; only a house without such an entrance led its guest along a walled garden path.
+- A garden between the gate and a guest's formal entrance, where a plan draws one: no account of a formal entrance puts one there, and the two drawings of that
+  ground show it open, though one loosely dated plate of an unnamed house runs a garden path on from a second gateway to the entrance; a house without such an entrance led its guest along a walled garden path instead.
 
 Depiction: The plan draws the guest quarters as one labeled room, though the real guest space was the zashiki and the rooms beside it. It stands for the guest room of the residence, by the reception, or on some plans for a guest house of
 its own. A guest's door opens onto the ground inside the gate - an open court a palanquin could cross, or on some plans a garden - never straight from the street or against the side
@@ -27,6 +27,6 @@ of a building.
 
 Name: guest quarters
 Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
-Sources: shirobito-1717-takayama, boso-no-mura-takei, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, shiroishi-koseki, honjin-jawiki, matsue-bukeyashiki, shoinzukuri-jawiki, liq-takayasu-daidokoro, engawa-kotobank
+Sources: shirobito-1717-takayama, boso-no-mura-takei, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, morse-1886-homes, shiroishi-koseki, honjin-jawiki, matsue-bukeyashiki, shoinzukuri-jawiki, liq-takayasu-daidokoro, engawa-kotobank
 Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
