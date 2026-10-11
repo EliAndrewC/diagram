@@ -72,7 +72,7 @@ def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
     of Kashikawa's woodland commons: against the lowest house alone, a wood below 19 of the 20 houses ranked as above them);
     -inf with no houses.
 
-    Research: never below the houses - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood below the houses stands where the record puts grass"""
+    Research: the houses' height - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood below the houses and by the water stands where the record puts grass"""
     hs = sorted(-(x * fall[0] + y * fall[1]) for x, y in houses)
     if not hs:
         return -math.inf
@@ -80,16 +80,35 @@ def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
     return hs[m] if len(hs) % 2 else (hs[m - 1] + hs[m]) / 2
 
 
-def woodland_tier(p: Pt, fall: Pt, house_floor: float, field_height: float) -> int:
+def woodland_tier(p: Pt, fall: Pt, field_height: float) -> int:
     """Where the record puts a village's fuel wood, as a rank (269 B27, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): 0 - higher than the field
-    it adjoins and not below the houses (`house_floor`, their median) (the nearest hill ground beyond the fields); 1 - not below the houses but
-    not above that field (the level beside the fields, the record's fallback); 2 - below the houses' median height, taken last
-    (0077 refuses a wood there only beside a river or marsh, the grass and riverbank commons, which the keep-outs refuse before
-    any rank is asked - feature 374 wave 120). Heights run up the fall: -p.fall.
+    it adjoins (the nearest slope beyond the fields); 1 - not above that field (the level beyond the fields, the record's
+    fallback). The page ranks by the field alone: the houses' height refuses a seat only by the water (`low_by_the_water`,
+    feature 374 wave 120 - a seat below the houses on dry ground had been refused, then ranked last). Heights run up the
+    fall: -p.fall.
 
-    Research: where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: higher ground beyond the fields first, the level next, below the houses last
+    Research: where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: on ground higher than the fields beside it first, on the level beyond the fields where there is no higher ground
     """
     h = -(p[0] * fall[0] + p[1] * fall[1])
-    if h < house_floor:
-        return 2
     return 0 if h > field_height else 1
+
+
+LOW_BY_WATER_FT = 46.0
+"""How near a river or a marsh "beside" is, for a wood seat below the houses (feature 374 wave 120): the width over which the
+maps draw reeds and grass interleaving at a marsh's edge (0077), taken for a river's bank too.
+
+Research: beside a river or marsh - GUESS research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within 46 ft of the water's edge, the reed and grass margin"""
+
+
+def low_by_the_water(p: Pt, fall: Pt, house_floor: float, rivers: Sequence[Sequence[Pt]], marshes: Sequence[Poly], reach: float) -> bool:
+    """Is a wood seat low ground by a river or marsh - below the houses' median height (`house_floor`) and within `reach` of
+    a river's course or a marsh? There 0077 puts the village's grass and riverbank commons, not its wood.
+
+    Research: low ground left to grass - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood seated below the houses, past the fields and beside a river or marsh refused"""
+    from l7r.diagram.settlement import point_in_poly, seg_dist  # local: the settlement's geometry, as parcels reads it
+
+    if -(p[0] * fall[0] + p[1] * fall[1]) >= house_floor:
+        return False
+    near_river = any(seg_dist(p[0], p[1], a, b) <= reach for r in rivers for a, b in zip(r, r[1:], strict=False))
+    near_marsh = any(point_in_poly(p[0], p[1], m) or any(seg_dist(p[0], p[1], a, b) <= reach for a, b in zip(m, [*m[1:], m[0]], strict=False)) for m in marshes if len(m) >= 3)
+    return near_river or near_marsh

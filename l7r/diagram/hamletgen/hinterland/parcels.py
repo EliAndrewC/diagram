@@ -19,9 +19,11 @@ from ..plan import SitePlan
 from .crossing import crossed_through, crossed_through_many, reached_across  # noqa: F401 - re-exported (tests)
 from .frame import content_box, frame_bounds, title_pocket
 from .wood_rank import FIELD_BESIDE_FT as FIELD_BESIDE_FT
+from .wood_rank import LOW_BY_WATER_FT as LOW_BY_WATER_FT
 from .wood_rank import crop_edge_points as crop_edge_points
 from .wood_rank import field_height_near as field_height_near
 from .wood_rank import house_floor as house_floor
+from .wood_rank import low_by_the_water as low_by_the_water
 from .wood_rank import woodland_tier as woodland_tier
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
@@ -265,13 +267,15 @@ def _patch_keepouts(
     return keep, keep_rects, lanes, streams, marshes, crops, crop_pts, (sum(_hx) / len(_hx), sum(_hy) / len(_hy))
 
 
-def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, float, float]], crop_pts: Any, cc: tuple[float, float]) -> list[tuple[float, float, float]]:
+def _beyond_the_fields(
+    s: Settlement, plan: SitePlan, scored: list[tuple[float, float, float]], crop_pts: Any, cc: tuple[float, float], rivers: Sequence[Sequence[Pt]] = (), marshes: Sequence[Poly] = ()
+) -> list[tuple[float, float, float]]:
     """The scored seats ranked by `woodland_tier` and kept only beyond the fields from the houses (lifted out of
     `open_ground_patches` by feature 370, the 100-statement cap; the same reads in the same order).
 
     Research:
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, the slope higher than the fields first, then the level beside them
-        wood below the houses last - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a seat below the houses' median height (`house_floor`) ranks after the level beside the fields; the page refuses one only past the fields beside a river or marsh, ground the marsh and stream keep-outs already refuse
+        low ground by the water - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a seat below the houses' median height (`house_floor`) and within `LOW_BY_WATER_FT` of a stream or marsh refused; below the houses on dry ground it ranks as any seat
         the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
         beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
     """
@@ -283,17 +287,21 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
     # the cluster was worth 257 px of height, so Kashikawa drew a stand 886 ft down the fan and 75 ft off the reed
     # marsh. A cross-slope preference (the along/cross ratio, 2026-08-18) narrowed that and still admitted ground
     # below the houses. The record's rule is a ranking, so it is one here (`woodland_tier`): a seat higher than the
-    # field ground beside it and not below the houses (their median, `house_floor`) first; then, where the map has no such ground, a seat on
-    # the level beside the fields - not below the houses; a seat below the houses' median height last (feature 374 wave 120: 0077
-    # refuses only "a wood seated below the houses, past the fields and beside a river or marsh"; it had been refused on any ground). Low wet
-    # ground by a marsh or a river is left to grass and reeds: the marsh and stream keep-outs above refuse it, and it
-    # lies below the houses on a fan. Where the ground slopes the seat higher than the field next to it ranks first -
+    # field ground beside it first; then, where the map has no such ground, a seat on the level beyond the fields. The houses'
+    # height refuses a seat only by the water (feature 374 wave 120: 0077 refuses "a wood seated below the houses, past the
+    # fields and beside a river or marsh"; any ground below the houses had been refused, then ranked last). Low wet
+    # ground by a marsh or a river is left to grass and reeds: `low_by_the_water` refuses it (the marsh and stream keep-outs
+    # hold a square only off the water itself, so a square flush against a marsh had passed them). Where the ground slopes the seat higher than the field next to it ranks first -
     # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).
     dx, dy = plan.fall
     _fall = (dx, dy)
     _house_floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], _fall)
+    # ...LOW GROUND BY A RIVER OR MARSH IS LEFT TO GRASS (0077): a seat below the houses and beside the water is refused, and
+    # only there (feature 374 wave 120: it had been refused on any ground below the houses)
+    _reach = s.px(LOW_BY_WATER_FT)
+    scored = [t for t in scored if not low_by_the_water((t[1], t[2]), _fall, _house_floor, rivers, marshes, _reach)]
     _tiers = [
-        woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts, s.px(FIELD_BESIDE_FT))) for t in scored
+        woodland_tier((t[1], t[2]), _fall, field_height_near((t[1], t[2]), _fall, crop_pts, s.px(FIELD_BESIDE_FT))) for t in scored
     ]  # beside in px: the edge samples are px (impl-drift, batch 3)
     # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
     # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
@@ -523,7 +531,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                         scored.append((-math.hypot(x - ccx, y - ccy), x, y))
                     x += step
                 y += step
-            scored = _beyond_the_fields(s, plan, scored, crop_pts, (ccx, ccy))  # higher than the fields beside it, and across them
+            scored = _beyond_the_fields(s, plan, scored, crop_pts, (ccx, ccy), [st for st, _ in streams], marshes)  # higher than the fields beside it, and across them
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground
             # (a map with one parcel is common), and a ruled chain is the defect two reviews recorded (Inashiro's band lies

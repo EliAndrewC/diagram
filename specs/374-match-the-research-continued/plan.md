@@ -253,9 +253,12 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
 ### Wave 120 (T11) - the hamlet's ground
 
 - `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page refuses only "a wood seated below
-  the houses, past the fields and beside a river or marsh"; the dry-ground refusal goes, ground below the houses is offered
-  last (after the slope above the fields and the level beside them), the marsh and stream keep-outs still refusing the
-  ground beside water, and the claim cites the page.
+  the houses, past the fields and beside a river or marsh". The wood follows the page's two tiers alone - the slope higher
+  than the field beside it, then the level beyond the fields (`woodland_tier` no longer ranks by the houses) - and a seat is
+  refused only where it is below the houses' median height and within `LOW_BY_WATER_FT` of a river's course or a marsh
+  (`low_by_the_water`; the marsh keep-out holds a square only off the marsh itself, so a square flush against it had passed).
+  "Beside" has no figure on the page: 46 ft, the width over which the maps draw reeds and grass interleaving at a marsh's
+  edge, recorded on 0077's drawing page as a GUESS (its record checks owed), and the claims label it so.
 - `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
   qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).
   The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only
