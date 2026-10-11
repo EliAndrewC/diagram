@@ -50,5 +50,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too")
 
-- [ ] T12 Band 3 to the arbiter (plan D16): `perf_review.py` (`arbiter_subject`, `arbiter_signed`, `check`, the refusal), `make perf-arbiter`, the arbiter's contract, the texts; tests red on today's code (SC-007); the gate, the report, landed
+- [x] T12 Band 3 to the arbiter (plan D16): `perf_review.py` (`arbiter_subject`, `arbiter_signed`, `check`, the refusal), `make perf-arbiter`, the arbiter's contract, the texts; tests red on today's code (SC-007); the gate, the report, landed
       research: rendering
+      verify: DONE. perf_review arbiter_subject/arbiter_signed/check + both refusals name the arbiter; make perf-arbiter; perf_bands band-3 text; contracts and texts; test_perf_review 2 new tests (red on old code) + updated band-3 test, test_perf_bands pins, 75 passed; landed by the push carrying this tick after the gate
