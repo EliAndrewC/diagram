@@ -85,6 +85,9 @@ def kosatsuba_affordances(M: Any) -> dict[str, bool]:
     The same-source doctrine: a guard against a placement asks the question the checks ask. An
     approach is a recorded road or a connector track; an official's gate is a house carrying
     `role == "headman"`, which every pool VILLAGE records exactly once and no hamlet records at all.
+
+    Research:
+        the board's offered sites - research/questions/0190-notice-boards-kosatsuba.html: an entrance where a road or connector is recorded, an official's gate where a headman's house is, a bridge end where any bridge is recorded, a field ditch's plank included
     """
     lanes = M.get("lanes") or []
     has_approach = bool(M.get("road") or (M.get("roads") or []) or any(ln.get("connector") for ln in lanes))
@@ -235,6 +238,7 @@ def kosatsuba_anchor(M: Any, placement: str, ftpx: float = 1.0) -> tuple[float, 
         entrance anchor - research/questions/0190-notice-boards-kosatsuba.html: the handover, else where the approach first reaches a dwelling
         reaching the houses - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way reaches a farmhouse within 60 ft of it; the code counts the approach within `KOSATSUBA_ENTRANCE_REACH_FT`, 60 ft
         an approach that never arrives - UNRESEARCHED: anchored at its point nearest the houses
+        a bridgehead anchored at its bridge - research/questions/0190-notice-boards-kosatsuba.drawing.html: at `bridgehead_anchor`'s bridge
     """
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
     if not houses or placement == "center":

@@ -3,6 +3,8 @@
 Research:
     settlement_form forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0033-row-villages-resson.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: nucleated, linear, dispersed, dike_top
     water_town form - CANON: houses fronting a canal, a form of Lion lands or a map that declares a canal (the GM's setting canon)
+    settlement_form weights - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: none given in the registry, so its forms roll evenly where a roll asks it; the page draws half clustered, three in ten scattered, two in ten as rows
+    other defaults - UNRESEARCHED: the value a map takes where no roll is asked - nucleated, valley_paddy, no land-use overlay, a board at the center, a courtyard byre, a wagon inn
     field_archetype forms - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: valley_paddy, contour_terraces, polder_grid, ribbon_valley, mulberry_dike_fishpond
     land_use_overlay forms - DEVIATION research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: none, mulberry_fishpond, lotus, tea_fringe; bund tea, the second tea form, is never rolled
     kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage, bridgehead
@@ -317,7 +319,7 @@ def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     Research:
         seats a settlement can site - research/questions/0190-notice-boards-kosatsuba.html: a board at the center, at an entrance with an approach, on a frontage by a headman's house
         a board at a bridgehead - research/questions/0190-notice-boards-kosatsuba.html: "as well as bridge ends", with no size given, where the settlement records a bridge
-        shrine precinct withheld - research/questions/0190-notice-boards-kosatsuba.drawing.html: absent from the value space; no kept map draws a precinct (the pool hamlets' only shrine is a dooryard hokora)
+        shrine precinct withheld - research/questions/0190-notice-boards-kosatsuba.html: absent from the value space; a board at a shrine precinct is only that page's GUESS, no page it read naming one
     """
     if v == "center":
         return True  # every settlement has dwellings, so the assembly ground always exists

@@ -1214,15 +1214,15 @@
   "date": "2026-10-10",
   "note": "the page records the board at the office's gate as a GUESS",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923",
    "0190-notice-boards-kosatsuba.drawing.html:cf39d6663b05b586"
   ],
   "section": "03a6c88a20bdb161",
-  "triaged": "2026-10-10",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
@@ -1718,9 +1718,9 @@
   "date": "2026-10-10",
   "note": "a 16 x 6 ft roofed frame, long side parallel to the road, on a footing 2 ft wider all round with a fence, as the drawing page gives it; the size is fixed inside the measured 16-18 x 5-6 ft; the gate and bounty boards drawn the same way match the page's guess for a magistrate's-gate board",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:0d8ca713e70426df",
@@ -1730,6 +1730,7 @@
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
   "section": "98c24242ed8d6f1b",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#road at the gate": {
@@ -5661,6 +5662,7 @@
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor": {
@@ -6558,12 +6560,13 @@
   "date": "2026-10-09",
   "note": "stage_notice comes after the frame, followed only by the labels",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#track before the wells": {
@@ -6807,16 +6810,18 @@
  "l7r/diagram/hamletgen/frame.py::stage_notice#board beside a way": {
   "code": "0caef07019100fc9",
   "core": "b6e9ace8b4fdfa51",
-  "date": "2026-10-09",
-  "note": "on the verge of a way",
+  "date": "2026-10-11",
+  "note": "hands siting to place_kosatsuba, on a way where passers-by meet it",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a",
+   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
    "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235",
-   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398",
+   "0190-notice-boards-kosatsuba.drawing.html:ffcebd538d75ed36"
   ],
   "verdict": "IN-STEP"
  },
@@ -6826,12 +6831,13 @@
   "date": "2026-10-09",
   "note": "placed after the crop",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/frame.py::stage_notice#every hamlet posts a board": {
@@ -6840,13 +6846,14 @@
   "date": "2026-10-09",
   "note": "hamlets included",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:10ca8908cd449c17",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/frame.py::strip_face#frame geometry": {
@@ -7474,13 +7481,14 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/crossing.py::crossed_through_many#walk through the field": {
-  "code": "3676a8a44df25d41",
-  "core": "fa6a9ad8bab5f64a",
-  "date": "2026-10-07",
-  "note": "vectorized geometry only",
+  "code": "dcdc23edd08017bb",
+  "core": "be7bd45712e1978a",
+  "date": "2026-10-11",
+  "note": "vectorized walk-in-field geometry; make_valid is plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -7667,6 +7675,7 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
   "research": "24afacf28c5d0294",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::STREAM_LOT_LINE#lot line along a brook": {
@@ -7680,14 +7689,14 @@
  "l7r/diagram/hamletgen/hinterland/parcels.py::WET_SHARE_CAP#woods mostly on dry ground": {
   "code": "bc8287b68bc0b84c",
   "core": "cebcf669e4894abd",
-  "date": "2026-10-07",
-  "note": "cap 0 means no wood on marsh ground, as in \"Low ground by a river or marsh is left to grass, not wood\"",
+  "date": "2026-10-11",
+  "note": "no part of a parcel in marsh; marsh ground is left to grass",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a"
   ],
   "verdict": "IN-STEP"
  },
@@ -7723,15 +7732,29 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#beyond the fields preferred": {
-  "code": "3f577edd3fee9d7c",
-  "core": "9eb1c2509648dae1",
-  "date": "2026-10-10",
-  "note": "the walk must cross a field on every tier and no seat is offered on the houses' side, which matches \"on the nearest slope beyond the fields from the houses\"; 0033 is not in the bundle, so the row-holding part rests on 0077's houses-fields-wild-land order alone",
+ "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#below the houses on dry ground": {
+  "code": "2f511b3673c0442a",
+  "core": "379cfc5fd44c00e2",
+  "date": "2026-10-11",
+  "note": "tier ignores house height; the water refusal is in _ok",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#beyond the fields preferred": {
+  "code": "a54349812a2d697f",
+  "core": "379cfc5fd44c00e2",
+  "date": "2026-10-11",
+  "note": "only seats whose walk from the house center crosses the paddy or a row holding are kept, on every tier",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
+  },
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
@@ -7740,24 +7763,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#the fields beside a seat": {
-  "code": "443268ec547358f7",
-  "core": "9eb1c2509648dae1",
-  "date": "2026-10-10",
-  "note": "the page asks for ground \"higher than the fields beside it\" but gives no reach for \"beside\", so the 300 ft is correctly UNRESEARCHED",
+  "code": "d9bd91b899a5ea05",
+  "core": "379cfc5fd44c00e2",
+  "date": "2026-10-11",
+  "note": "the page gives no reach for \"the fields beside it\"",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#where the fuel wood stands": {
-  "code": "97f758299dfca4d0",
-  "core": "9eb1c2509648dae1",
-  "date": "2026-10-10",
-  "note": "tier 0 (higher than the fields beside it) outranks tier 1 (on the level), as §2 then §3",
+  "code": "d75f16cbf0cd4242",
+  "core": "379cfc5fd44c00e2",
+  "date": "2026-10-11",
+  "note": "tier 0 (above the adjoining field) outranks tier 1 by 1e9; nearness ranks within a tier",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
@@ -7809,9 +7833,10 @@
   "date": "2026-10-03",
   "note": "a smooth wander, a convention per 0077 drawing",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_patch_keepouts#keep-outs": {
@@ -7827,14 +7852,14 @@
  "l7r/diagram/hamletgen/hinterland/parcels.py::_patch_keepouts#no wood on the marsh": {
   "code": "8b94b15d86e6cc35",
   "core": "1653d687525261a6",
-  "date": "2026-10-10",
-  "note": "the drawn marsh is a keep-out; low ground by a marsh is left to grass",
+  "date": "2026-10-11",
+  "note": "marsh_ground is a keep-out",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a"
   ],
   "verdict": "IN-STEP"
  },
@@ -7870,9 +7895,10 @@
   "date": "2026-10-03",
   "note": "pulled in to run alongside",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::in_a_ruled_line#woods not in a ruled line": {
@@ -7897,9 +7923,10 @@
   "date": "2026-10-03",
   "note": "on the line or clear of it, per 0077 drawing",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::off_the_row#woodland scan plumbing": {
@@ -7911,160 +7938,169 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for a wood": {
-  "code": "a5589ee156d18ce8",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the page is silent on a minimum crown count",
+  "code": "f42c1d6494c9ac66",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "WOODLAND_MIN_CROWNS 5; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#aspect and bearing": {
-  "code": "227481dac4e13711",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the aspect is 1 + 1.2*jit (up to 2.2:1) and the bearing is the fall + 90 deg +/- 20 deg; the page records the wandering non-rectangular edge but no aspect or bearing",
+  "code": "56f68af42ed1394c",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "excess 1.2 gives up to 2.2:1, bearing within ±20 deg across the fall; the page is silent on aspect",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor": {
-  "code": "c207b16b064e182a",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the page is silent on a minimum size",
+  "code": "9d3a6bcc35bbe302",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "_COMMONS_FLOOR_FT 120, rung skipped and ring dropped; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#crop set-back": {
-  "code": "38c07bc6d288a84d",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the 80/180 and 40/100 px values (plus the diagonal pad) are not covered by the page",
+  "code": "7c54104f48c3dc0c",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "80/180 then 40/100 matches the claim; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds": {
-  "code": "cc8b820608b092b5",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "follow_the_bounds runs along a lane, brook or field, matching \"within about 45 ft\", which the page records as a GUESS",
+  "code": "20813ffde97d9242",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "follow_the_bounds and lot_follows_its_bounds against lanes, brooks and fields; the page's \"about 45 ft\" is its GUESS",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:62655ffbea173c76"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#low ground by the water refused in _ok: a seat below the houses within LOW_BY_WATER_FT plus the square's circumscribed half (half*sqrt2) of a river or marsh": {
+  "code": "d774bd653e03d206",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "low ground by the water refused in _ok: a seat below the houses within LOW_BY_WATER_FT plus the square's circumscribed half (half*sqrt2) of a river or marsh",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": {
-  "code": "d7b67f3443fa5557",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "parcel_wet_share > 0 is refused, matching \"low ground by a river or marsh is left to grass\"",
+  "code": "d3b2a6bb1d86238b",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "parcel_wet_share > WET_SHARE_CAP (0) refuses the ring",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred": {
-  "code": "18ddf9c04786037e",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the score is the negative distance to the house cloud within the tier, matching \"the nearest slope beyond the fields\"",
+  "code": "03ec91f9a82ef7e4",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "scored by -distance to the house center within a tier",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#on the page": {
-  "code": "40e4c5b00d4de708",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "a share-in-view rule for the sheet",
+  "code": "942aad5478efb2b7",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "framing share WOODLAND_BBOX_FLOOR 0.72",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size": {
-  "code": "76ae199536ae90b0",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the ladder is 0.90 + 0.20*jit with rungs 0.8/0.64/0.5, as claimed; the page says only \"a few patches\"",
+  "code": "939037365749ef7c",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "250 ft, ladder 0.9-1.1, rungs 0.8/0.64/0.5 as claimed",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcels kept apart": {
-  "code": "608a1ddfa40f4556",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "size*(1.15 + 1.35*jit) gives 1.15-2.5, as claimed; the page is silent",
+  "code": "c6d1a12a5029164d",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "1.15+1.35*jit gives 1.15-2.5 of the size",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#per-parcel size bands": {
-  "code": "fbaa22be0d42ee5d",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the band factor is 0.82 + 0.36*(b+0.5)/n, then a 0.84 smaller try, as claimed; the page is silent",
+  "code": "925e769fae96b754",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "0.82+0.36*band gives 0.82-1.18, then 0.84",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan reach": {
-  "code": "c96a78012b37d078",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "content_box pad=210.0, as claimed; the page is silent",
+  "code": "8c2013ac043817c4",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "content_box pad 210 px",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window": {
-  "code": "f07454a48d2d9df2",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "a window predicting the frame, a matter of how the sheet is laid out",
+  "code": "822552550fde9da9",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "0.6*half outside the window, 0.8 area inside",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#title pocket kept clear": {
-  "code": "a8ffd3c8bd06e951",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the keep rectangle comes from _patch_keepouts, a layout rule",
+  "code": "658d078b8eee1fa1",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "title_pocket keep rectangle via _patch_keepouts",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line": {
-  "code": "3f76d9fab256e595",
-  "core": "033877906749fd61",
-  "date": "2026-10-10",
-  "note": "the page is silent on parcels lining up",
+  "code": "8d0cb42ffa452d42",
+  "core": "d774bd653e03d206",
+  "date": "2026-10-11",
+  "note": "seat_off_the_row and in_a_ruled_line; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
@@ -8242,9 +8278,10 @@
   "date": "2026-10-03",
   "note": "brush and pine stop at the wood's line",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#scrub past the fields": {
@@ -8364,9 +8401,10 @@
   "date": "2026-10-03",
   "note": "stocked as a worked wood",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_woodland#woodland forms": {
@@ -8375,14 +8413,15 @@
   "date": "2026-10-05",
   "note": "the page records why the strip woods (a whole-settlement form) and abandoned brushy coppice are not drawn",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:442b1963a64696d8",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:da8f9983e5c8dd25"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stock_woodland#under-stocked parcel regraded": {
@@ -8467,6 +8506,51 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::LOW_BY_WATER_FT#beside a river or marsh": {
+  "code": "1d761f0a8d783511",
+  "core": "b8b0afdb0916b22b",
+  "date": "2026-10-11",
+  "note": "46 ft is recorded as the page's GUESS for \"beside\"",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
+  },
+  "research": "ea0a2ae4eed84818",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::WaterZone#plumbing": {
+  "code": "5186e4909d0a3e94",
+  "core": "45d47d15b58c96af",
+  "date": "2026-10-11",
+  "note": "geometry container only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::WaterZone.__init__#plumbing": {
+  "code": "d21cab11dec83131",
+  "core": "dcc485ac291d0ae4",
+  "date": "2026-10-11",
+  "note": "union of river lines and marsh polygons",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::WaterZone.near#plumbing": {
+  "code": "e081e96d200ffd71",
+  "core": "6070ffce0710b618",
+  "date": "2026-10-11",
+  "note": "distance test against the given reach; the reach is decided by the caller",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::_EDGE_SAMPLE#plumbing": {
   "code": "2156b363a04b7a7e",
   "core": "f9869fee1052b437",
@@ -8497,34 +8581,47 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/wood_rank.py::house_floor#never below the houses": {
-  "code": "4fd46c3535351fb0",
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::house_floor#the houses' height": {
+  "code": "dff444585e19bd35",
   "core": "f170d018432fc621",
-  "date": "2026-10-08",
-  "note": "measuring against the houses' median height is a calibrated reading of \"below the houses\"",
+  "date": "2026-10-11",
+  "note": "the median house height gives \"below the houses\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::low_by_the_water#low ground left to grass": {
+  "code": "fe0e2b5fe424250e",
+  "core": "8218aa2d4a289db7",
+  "date": "2026-10-11",
+  "note": "refuses a seat only below the house floor and within reach of the water",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
+  },
+  "research": "ea0a2ae4eed84818",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::woodland_tier#where the fuel wood stands": {
-  "code": "2625fdcccc19995c",
-  "core": "60fe741003a7944d",
-  "date": "2026-10-08",
-  "note": "tier 0 is above the field, tier 1 the level, tier 2 below the houses (refused)",
+  "code": "6ed844b8a798bab7",
+  "core": "0e36d9faaf5eea8d",
+  "date": "2026-10-11",
+  "note": "0 above the adjoining field, else 1; no ranking by the houses",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:3bc0609712ad5d5a",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
   "verdict": "IN-STEP"
  },
@@ -13212,12 +13309,13 @@
   "date": "2026-10-07",
   "note": "(2,3,3,4) is \"a few patches\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::seat_room#spec and plan plumbing": {
@@ -37006,23 +37104,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#bamboo forms": {
-  "code": "38cb9a38a55e4a5a",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-03",
-  "note": "the four values match the 0075 drawing knob",
+  "code": "04aee895b5c135f4",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "the page attests all four values, rolled per settlement",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20",
    "0075-bamboo-groves-chikurin.html": "08cc34e0e3c96ed9"
   },
   "research": "1c015c69251829de",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd",
+   "0075-bamboo-groves-chikurin.html:c741662bfa12f450"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#byre_form forms": {
-  "code": "f2563953c44d6f8b",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-05",
-  "note": "inner, outer, shared at 0.6/0.3/0.1",
+  "code": "c44607ab2228d1b0",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "inner stable, outer stable and the rare commons shed, as the knob the page records",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.html": "bba86415b4203d3d"
@@ -37032,24 +37133,25 @@
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:36ac5a4365c0569f",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:4890be592fed3ca4",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:5d684f32a43c296a",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:8e9a1c027cabe064",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:9dd3e953a6b92d53"
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:9dd3e953a6b92d53",
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.html:dd5a2f0d071ed5ad"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#byre_form weights": {
-  "code": "4eef529354251b89",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-03",
-  "note": "0048 drawing: 6/3/1 is calibrated liberty, uncounted",
+  "code": "41db32292878b821",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "0.6/0.3/0.1 is the six/three/one the drawing page calls calibrated liberty; no page counts them",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#caravan_inn_form forms": {
-  "code": "c777ff25441d71ae",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-05",
-  "note": "wagon or hatago, unweighted, independent of house form",
+  "code": "6d300b320ec4ea22",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "wagon or hatago, with no weights (an even roll), as the page records",
   "pages": {
    "0184-inns-hatago-and-carters-inns.drawing.html": "b3735e4f3896a821",
    "0184-inns-hatago-and-carters-inns.html": "85511d58fc1dbb22",
@@ -37057,79 +37159,78 @@
   },
   "research": "3ee3238a37c45a01",
   "rests": [
-   "0184-inns-hatago-and-carters-inns.drawing.html:00779ba3916debd0"
+   "0184-inns-hatago-and-carters-inns.drawing.html:00779ba3916debd0",
+   "0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html:639fba9a7c3f0c9b",
+   "0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html:774755baeacc1810"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#cluster_position forms": {
-  "code": "75719581956fa560",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-03",
-  "note": "0031 drawing: high margin is one case among several, a GUESS",
+  "code": "482d9775e1f51f22",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "the high margin is \"one case among several\", and the other positions are calibrated cases of the dry ground beside the paddy",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#cluster_shape forms": {
-  "code": "5fafed7090a85925",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-05",
-  "note": "round, elongated, crescent, split; split refused for a hamlet",
+  "code": "adf2473090cbc735",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "lump, string, crescent and split are the shapes the page records; a hamlet never splits",
   "pages": {
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html": "8d5bae222470dc31",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "82ffe3acf176f08d",
   "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/_knobs.py::<module>#defaults outside the hamlet-defaults claim: nucleated, valley_paddy, land use none, kosatsuba center, byre courtyard, inn wagon": {
+  "code": "9a3103912a0619ab",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "defaults outside the hamlet-defaults claim: nucleated, valley_paddy, land use none, kosatsuba center, byre courtyard, inn wagon",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/_knobs.py::<module>#field_archetype forms": {
-  "code": "2b51615cee432dc4",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-03",
-  "note": "five forms attested across 0021/0019/0018, terrain-gated",
+  "code": "e6171711dc969ef1",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "every value is attested: valley paddy and yachida, terraces, polder, dike-pond",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html": "ff411e4bbbb6990f",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html": "23cf7fc9c9bae742",
    "0021-terraced-and-valley-paddies-tanada-yachida.html": "02b1c9d592a5d1cc"
   },
   "research": "5608ff3916f4c674",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/_knobs.py::<module>#grain_drift range": {
-  "code": "1e7704d5b3a9ebe9",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-05",
-  "note": "+/-12 deg in 4 deg steps, consumed by the dry-field hem only (the knob's \"paddy-grain\" comment is stale)",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html:7bda6aa13fb8572c",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html:afd41b5872c86f4c",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html:fcf3b50414070699",
+   "0021-terraced-and-valley-paddies-tanada-yachida.html:2447641388b81091",
+   "0021-terraced-and-valley-paddies-tanada-yachida.html:91bd0c5003d97ed8",
+   "0021-terraced-and-valley-paddies-tanada-yachida.html:e021ad640a130ea8"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/_knobs.py::<module>#hamlet default values": {
-  "code": "1197c1ea3655264b",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-03",
-  "note": "fixes alleys though 0081.drawing rolls lane form per map (\"a hamlet ... could plausibly be either\"), fixes homestead bamboo though the module's bamboo note says a hamlet may roll any; 'medium' plots is not one of 0031's three forms",
-  "research": "",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/_knobs.py::<module>#hamlet knobs unrolled": {
-  "code": "2e676f0a72304469",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-07",
-  "note": "hamlet rolls shape, lane pattern, plot size, dry drift from its own tables; village drift to 12 deg as the page gives",
+ "l7r/diagram/settlement/_knobs.py::<module>#grain_drift range": {
+  "code": "67b57c978669d4be",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "±12 degrees is the village ceiling; the hamlet's 8 comes from its own table",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -37140,28 +37241,52 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/_knobs.py::<module>#kosatsuba_seat forms": {
-  "code": "c32f838e963b77cd",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-09",
-  "note": "center, entrance and officials' frontage are attested forms, rolled per settlement",
+ "l7r/diagram/settlement/_knobs.py::<module>#hamlet default values": {
+  "code": "9abe80346b24aa8f",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "the cited material settles none of these fallbacks as a fixed choice",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/_knobs.py::<module>#hamlet knobs unrolled": {
+  "code": "24763de280967627",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "a hamlet rolls its shape, lanes, plot size and drift from its own tables",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/_knobs.py::<module>#kosatsuba_seat forms": {
+  "code": "4d8057a42dc434cc",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "center, entrance, officials' gate and bridge ends are the four attested village sites, rolled per settlement; the shrine precinct is only the page's GUESS",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba",
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
-  "research": "be3cd21ede6e6774",
+  "research": "2ad58d38b7e789a9",
   "rests": [
    "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
-   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#land_use_overlay forms": {
-  "code": "17098ff3e2cce084",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-05",
-  "note": "bund tea recorded on the page as not drawn yet, a known gap",
+  "code": "c6008fd3c6ac7126",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "the drawing page records the four values and records bund tea as a known gap",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
@@ -37173,39 +37298,44 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#lane_skeleton forms": {
-  "code": "6c39eba6576db585",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-03",
-  "note": "the five shapes 0031 drawing records as a GUESS",
+  "code": "4198aaa46a0c1db0",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "the five lane forms the drawing page records as a GUESS",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:08760ad7b1fd1e64",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#lane_web forms": {
-  "code": "2aa481cbfe3f5253",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-05",
-  "note": "alleys or back lane, unweighted",
+  "code": "6943f566b1ca090f",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "side lanes or back lanes, rolled evenly per map",
   "pages": {
    "0081-village-lanes.html": "ae63115215c57952",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "abd493fbe1b4f14d",
   "rests": [
+   "0081-village-lanes.html:265b0d860ce97c04",
+   "0081-village-lanes.html:7a53482e165741aa",
    "0081-village-lanes.html:96dca7c9e0b90cca",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#plot_regularity forms": {
-  "code": "9b4b4e7fdd286897",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-05",
-  "note": "organic or grid, grid only on planned fields",
+  "code": "ae0440e793066844",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "irregular plots and surveyed rows, the rows gated on a planned field",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.html": "a259db98b2978044",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
@@ -37220,28 +37350,27 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#plot_size forms": {
-  "code": "e8e00ad79ff92524",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-05",
-  "note": "sizes a degree within the attested parcel range, strip an attested form",
+  "code": "cb7f9a0bf0c6385b",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "small irregular plots and strips are attested forms; medium and large are degrees whose sizes are judged where they are resolved",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.html": "a259db98b2978044",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "d9ed42aaa794ed43",
   "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.html:816dacced1c6f5b2",
-   "0005-rice-paddies-and-their-plots-suiden.html:c46626798feff5b4",
+   "0005-rice-paddies-and-their-plots-suiden.html:8a40686bbb4a752c",
    "0005-rice-paddies-and-their-plots-suiden.html:d9640df1f0c659b9",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#settlement_form forms": {
-  "code": "9d81e8149420f593",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-10",
-  "note": "the clustered, row and scattered forms are attested, and so is housing in a line on a dike or a polder's raised margin (dike_top). The knob registers each of them",
+  "code": "96a99a835c00774f",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "clustered, row and scattered are attested; dike-top is the drawing page's form",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc",
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321",
@@ -37250,33 +37379,41 @@
   "research": "6e204e7b86fc1725",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
-   "0031-clustered-and-scattered-villages-shuson-sanson.html:08eb14588c11c0e3",
    "0031-clustered-and-scattered-villages-shuson-sanson.html:16ae76f064c850db",
-   "0031-clustered-and-scattered-villages-shuson-sanson.html:2afa77b5b6a4c810",
-   "0031-clustered-and-scattered-villages-shuson-sanson.html:b715f40392141212",
    "0033-row-villages-resson.html:61167d80a1335f3c",
-   "0033-row-villages-resson.html:a46cc0e9dbe13048",
-   "0033-row-villages-resson.html:df9dd5bb88c20304"
+   "0033-row-villages-resson.html:a46cc0e9dbe13048"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/_knobs.py::<module>#settlement_form roll weights: none are given here, so the forms roll evenly, where 0031's drawing page sets half clustered, three in ten scattered, two in ten rows": {
+  "code": "9a3103912a0619ab",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "settlement_form roll weights: none are given here, so the forms roll evenly, where 0031's drawing page sets half clustered, three in ten scattered, two in ten rows",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/_knobs.py::<module>#water_source_position forms": {
-  "code": "7263d2ba78b91175",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-03",
-  "note": "corners, mid-margin, chain, stream edges as 0031 drawing",
+  "code": "5a6b234e90c1f6bf",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "the corners, mid-margin, chain and stream edges the page records",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d12a5e6b4d47918f",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:e73f457f7f5367a3",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f0cff1f9b2900437"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#water_town form": {
-  "code": "e62e83f2c765a5ff",
-  "core": "62959f8ccbbbe70a",
-  "date": "2026-10-10",
-  "note": "the claim names the GM's setting canon (Lion lands, or a map that declares a canal), and no question in the bundle covers canal-fronting towns",
+  "code": "f7ccd76631480dbc",
+  "core": "9a3103912a0619ab",
+  "date": "2026-10-11",
+  "note": "CANON, and the claim names the ruling; no question in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -37556,23 +37693,46 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#seats a settlement can site": {
-  "code": "624ada929c868bfe",
-  "core": "2c26f933a0ec71c9",
-  "date": "2026-10-10",
-  "note": "the center, the entrance and an official's gate frontage are the attested village sites, gated only by whether the settlement has the seat",
+ "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#a board at a bridgehead": {
+  "code": "dff40b9cd5bcdff0",
+  "core": "607ab7a34ec3c548",
+  "date": "2026-10-11",
+  "note": "\"bridge ends\" is a village site with no size given, offered where a bridge is recorded",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:063a10e2c354d730",
-   "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
-   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
-   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#seats a settlement can site": {
+  "code": "8eb0fe0f0199df5f",
+  "core": "607ab7a34ec3c548",
+  "date": "2026-10-11",
+  "note": "center always, an entrance where there is an approach, the officials' gate where there is a headman's house",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
+  },
+  "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:d38abff934a15f0a",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#shrine precinct withheld": {
+  "code": "0e8e6cf0e185768f",
+  "core": "607ab7a34ec3c548",
+  "date": "2026-10-11",
+  "note": "the drawing page never mentions a precinct; the backing is 0190.html §208 (\"A shrine precinct ... is this page's GUESS ... no page we read names either\"). The reason the claim gives is also false for villages: 0001's drawing page has \"A village draws ... with a shrine\", and roll_village draws a civic shrine. Re-point to 0190.html and drop \"no kept map draws a precinct\"",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
+  },
+  "research": "f398405a25353320",
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/_knobs.py::_land_use_ok#overlays are permanent uses, tea on hills": {
   "code": "45bb0356044e2ebc",
@@ -52568,14 +52728,15 @@
   "date": "2026-10-10",
   "note": "woods are bare whole for the scrub tile and pines are hard-excluded; WOOD_FRINGE_FT=8.0 grass fringe in two halves, the inner one thinned",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d81577f543205810"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#woodland no-build": {
@@ -52647,9 +52808,10 @@
   "date": "2026-10-03",
   "note": "no woodland laid here",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.refill_the_view#plumbing": {
@@ -52703,9 +52865,10 @@
   "date": "2026-10-03",
   "note": "8 ft as 0077 says",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::_BARE_SKIP#plumbing": {
@@ -53729,12 +53892,13 @@
   "date": "2026-10-08",
   "note": "two steps of thinning, the 0.5 a calibration of 0077's thinning, which it marks as a guess",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::_SEED#tile seeds": {
@@ -53881,12 +54045,13 @@
   "date": "2026-10-08",
   "note": "the grass-only tile at the kept share of its tufts",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::wood_fringe_tile#grass under a wood's edge": {
@@ -53895,13 +54060,14 @@
   "date": "2026-10-08",
   "note": "grass_tile with brush=False: tufts only",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "4e5fce7c69da1fab"
   },
-  "research": "24afacf28c5d0294",
+  "research": "ea0a2ae4eed84818",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d81577f543205810"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::MARSH_FEATHER_BS#reed feather": {
@@ -58592,18 +58758,20 @@
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#notice board": {
   "code": "f1da03f6738e75a9",
   "core": "d028d8428cc4370e",
-  "date": "2026-10-09",
-  "note": "on a verge at the busiest ground, every tier",
+  "date": "2026-10-11",
+  "note": "`self.place_kosatsuba()` runs before `self.hinterland()` and `self.crop_to_content(margin=40)`, but the page says \"The board is the last thing placed, after the map is cropped to its frame\". \"At the busiest node\" is also stale: the seat is now a knob (entrance, frontage, bridgehead). Move the board after the crop, or record the order as a deviation",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:10ca8908cd449c17",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235",
+   "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a",
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#plank bridges over the field ditches": {
   "code": "8b13e38a0b019004",
@@ -58615,6 +58783,14 @@
   },
   "research": "43cf74757fcb48f3",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#where the irrigation ditches branch off along the channel by default: offtakes_a (0.22, 0.45, 0.68, 0.88) and offtakes_b (0.45, 0.8)": {
+  "code": "d028d8428cc4370e",
+  "core": "d028d8428cc4370e",
+  "date": "2026-10-11",
+  "note": "where the irrigation ditches branch off along the channel by default: offtakes_a (0.22, 0.45, 0.68, 0.88) and offtakes_b (0.45, 0.8)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/rolling/roll.py::_MarginFrame#orchestration plumbing": {
   "code": "de7e1e03281ba9c4",
@@ -61028,15 +61204,14 @@
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::KOSATSUBA_VERGE_FT#board at the roadside": {
   "code": "1b7b7f5dfa8486d9",
   "core": "5efeb905b7d48b3f",
-  "date": "2026-10-09",
-  "note": "6 ft from the road's edge at hamlet and village, the project's own figure",
+  "date": "2026-10-11",
+  "note": "6 ft from the road's edge at a hamlet or village, the project's own figure",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+   "0190-notice-boards-kosatsuba.drawing.html:ffcebd538d75ed36"
   ],
   "verdict": "IN-STEP"
  },
@@ -61061,6 +61236,30 @@
   "core": "c5e1e1579fb36336",
   "date": "2026-10-03",
   "note": "plumbing",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::bridgehead_anchor#a board at a bridge's foot": {
+  "code": "93feff82ee199311",
+  "core": "e4bcfac161970a30",
+  "date": "2026-10-11",
+  "note": "village boards at bridge ends, and boards \"at the foot of bridges\"",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
+  },
+  "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::bridgehead_anchor#which bridge": {
+  "code": "7f676f6d1293e47e",
+  "core": "e4bcfac161970a30",
+  "date": "2026-10-11",
+  "note": "the widest span, ties to the nearest; the drawing page records it as a GUESS",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -61090,64 +61289,76 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_affordances#board-siting plumbing": {
-  "code": "f61214b75c9ffb17",
-  "core": "54e1b5860292719f",
-  "date": "2026-10-03",
-  "note": "plumbing",
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_affordances#any recorded bridge, a field-ditch plank included, makes the map offer a bridgehead board": {
+  "code": "b683347f7ca7589c",
+  "core": "b683347f7ca7589c",
+  "date": "2026-10-11",
+  "note": "any recorded bridge, a field-ditch plank included, makes the map offer a bridgehead board",
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "UNCLAIMED"
  },
- "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#an approach that never arrives": {
-  "code": "3f221c751995aae1",
-  "core": "2c257913dea874dd",
-  "date": "2026-10-08",
-  "note": "the code falls back to the approach point nearest a dwelling when no sample comes within reach, and neither cited question says where the entrance is when an approach stops short of the houses (0190 names only \"entrances\" and \"center\"; 0246 is silent), so UNRESEARCHED is right",
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_affordances#board-siting plumbing": {
+  "code": "9812de6eaafbdd7d",
+  "core": "b683347f7ca7589c",
+  "date": "2026-10-11",
+  "note": "this is not plumbing: it decides which board sites a map is offered (an approach is a road or connector, an official's gate is a headman's house, any recorded bridge, field-ditch planks included, affords a bridgehead). Cite 0190.html",
   "pages": {},
   "research": "",
-  "rests": [
-   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
-   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
-   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
-  ],
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#a bridgehead board is anchored at bridgehead_anchor's bridge": {
+  "code": "bba5ad82e9711c3c",
+  "core": "bba5ad82e9711c3c",
+  "date": "2026-10-11",
+  "note": "a bridgehead board is anchored at bridgehead_anchor's bridge",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#an approach that never arrives": {
+  "code": "1ca474a5935da7c0",
+  "core": "bba5ad82e9711c3c",
+  "date": "2026-10-11",
+  "note": "nothing in the bundle answers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements": {
-  "code": "af349b08c2b57ffa",
-  "core": "2c257913dea874dd",
-  "date": "2026-10-08",
-  "note": "the three forms (center, entrance, headman's gate) are the attested sites, and the placement comes in as a knob",
+  "code": "af1f0210e796bed7",
+  "core": "bba5ad82e9711c3c",
+  "date": "2026-10-11",
+  "note": "the center is left unanchored, the entrance and the officials' gate are anchored",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
+   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#entrance anchor": {
-  "code": "195cc30641de9f8a",
-  "core": "2c257913dea874dd",
-  "date": "2026-10-08",
-  "note": "the entrance is the attested site; anchoring it at the handover, or else at the approach's first reach, is a calibrated choice within that finding",
+  "code": "3e55ef130be87a4f",
+  "core": "bba5ad82e9711c3c",
+  "date": "2026-10-11",
+  "note": "the village entrance, taken at the handover or where the approach first arrives",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses": {
-  "code": "045f9ecf90ca16fd",
-  "core": "2c257913dea874dd",
-  "date": "2026-10-08",
-  "note": "the drawing page records 60 ft to a farmhouse as part of the GUESS; the reach is now compared in px (reach / ftpx)",
+  "code": "fb22cd19027a0d5f",
+  "core": "bba5ad82e9711c3c",
+  "date": "2026-10-11",
+  "note": "within 60 ft of a farmhouse counts as reaching it, which 0246 records as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -61247,12 +61458,13 @@
   "date": "2026-10-09",
   "note": "30 degrees, the project's calibration",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/board_seat.py::FACING_TIE_PX#board-seat plumbing": {
@@ -61269,12 +61481,13 @@
   "date": "2026-10-09",
   "note": "60 ft, recorded as the project's own figure",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/board_seat.py::PLACARD_KEEP_FT#board off the title placard": {
@@ -61323,12 +61536,13 @@
   "date": "2026-10-09",
   "note": "turned to the nearest way, refused where another as-near way is more than 30 degrees off",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/board_seat.py::board_at#board-seat plumbing": {
@@ -61361,12 +61575,13 @@
   "date": "2026-10-09",
   "note": "a shaded seat is allowed",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/board_seat.py::choose_board#open seat preferred": {
@@ -61506,15 +61721,16 @@
   "date": "2026-10-09",
   "note": "16 x 6 ft true w/h; the footing scales with the marker per §21",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:2932684d882f47f9",
    "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor": {
@@ -61523,12 +61739,13 @@
   "date": "2026-10-09",
   "note": "an oversized marker at village and city grain, aspect kept, a convention",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#stone footing and fence": {
@@ -61537,12 +61754,13 @@
   "date": "2026-10-09",
   "note": "vw and vh are the frame plus 2 ft on each side",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.fire_tower#colors, cap and caption": {
@@ -61592,13 +61810,14 @@
   "date": "2026-10-09",
   "note": "rot is the road's bearing and the long axis runs along it",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#board size": {
@@ -61607,15 +61826,16 @@
   "date": "2026-10-09",
   "note": "frame 16 x 6 ft from board_record, drawn on its footing",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:2932684d882f47f9",
    "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#location marker at coarse tiers": {
@@ -61624,12 +61844,13 @@
   "date": "2026-10-09",
   "note": "floored on the long axis at village and city grain",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#no-build margin": {
@@ -61638,12 +61859,13 @@
   "date": "2026-10-09",
   "note": "block_polys is the footing box alone",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#roof and ridge glyph": {
@@ -61652,13 +61874,14 @@
   "date": "2026-10-09",
   "note": "a roofed 16 x 6 frame with its ridge along the face, on the footing",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#stone footing and fence": {
@@ -61667,12 +61890,13 @@
   "date": "2026-10-09",
   "note": "the footing 2 ft wider all round, the fence dashed at its edge",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::KOSATSUBA_FOOTING_FT#footing wider than the frame": {
@@ -61681,13 +61905,14 @@
   "date": "2026-10-09",
   "note": "\"about 2 ft wider all round\", fence line at its edge",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/boards.py::board_subject#board caption and glyph styling": {
@@ -61740,13 +61965,14 @@
   "date": "2026-10-09",
   "note": "shaded seats admitted",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0",
    "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#entrance board on the approach": {
@@ -61800,15 +62026,15 @@
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#roadside first": {
   "code": "fec7f585564c60eb",
   "core": "367f9dea6d71f505",
-  "date": "2026-10-09",
-  "note": "at the lane tiers only seats within 6 ft of the road's edge (footing gap), else the 60 ft band",
+  "date": "2026-10-11",
+  "note": "only verge seats compete where any fit, with the 60 ft band as the fallback",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+   "0190-notice-boards-kosatsuba.drawing.html:ffcebd538d75ed36"
   ],
   "verdict": "IN-STEP"
  },
@@ -61858,12 +62084,13 @@
   "date": "2026-10-09",
   "note": "only roads and main town streets are sampled when any exist, as the page says (\"the search looks only along those\")",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#no main way, the whole network": {
@@ -61872,12 +62099,13 @@
   "date": "2026-10-09",
   "note": "with no main way the code falls back to the lanes and every town street, matching \"nothing 'main' to stand on\"",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#recorded widths": {
@@ -61939,15 +62167,15 @@
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_seats#roadside first": {
   "code": "5ed524fd75f2e9e2",
   "core": "db09472c978363c0",
-  "date": "2026-10-09",
-  "note": "the 6 ft verge is sampled before the 60 ft band",
+  "date": "2026-10-11",
+  "note": "the verge is sampled before the 60 ft band",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+   "0190-notice-boards-kosatsuba.drawing.html:ffcebd538d75ed36"
   ],
   "verdict": "IN-STEP"
  },
@@ -61957,43 +62185,42 @@
   "date": "2026-10-09",
   "note": "an approach seat takes its own segment's bearing (`rot`), so it is 0 degrees off the road it stands for, well inside \"squared to the road it faces ... within 30 degrees\"; the board on the approach is the one the page sets \"on the approach to every main gate\"",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
    "0190-notice-boards-kosatsuba.drawing.html:2c118eb5b4942dc7"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat off the road": {
   "code": "882e018186562ab3",
   "core": "1ee9fffb5e43d3f9",
-  "date": "2026-10-09",
-  "note": "the 60 ft is measured from the road's edge to the footing; the page records it as \"this project's own figure, not a finding\", so it is a guess; the roadside-only cut keeps a hamlet or village at the verge",
+  "date": "2026-10-11",
+  "note": "up to 60 ft, which the page calls \"this project's own figure\"",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#least offset off the tread": {
   "code": "55611981ac4ea072",
   "core": "1ee9fffb5e43d3f9",
-  "date": "2026-10-09",
-  "note": "the offset starts at road half-width plus the drawn depth's half plus 6 ft, which is \"6 ft from the edge of the road\" to the drawn footing and not to the 7 by 3 ft face the search tests",
+  "date": "2026-10-11",
+  "note": "the drawn footing's near edge stands 6 ft from the road's edge",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
-   "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+   "0190-notice-boards-kosatsuba.drawing.html:ffcebd538d75ed36"
   ],
   "verdict": "IN-STEP"
  },
@@ -62003,14 +62230,15 @@
   "date": "2026-10-09",
   "note": "`rot` is the segment bearing, so the long side runs along the road (\"broadside to the traffic\", \"long side runs parallel to the road it faces\"); a seat that is not on the approach is turned to its nearest way and refused where it cannot face it",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#nearness tie-break": {
@@ -62026,14 +62254,14 @@
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#off the tread, out of water, in view": {
   "code": "06d794fa56abef8e",
   "core": "1ee9fffb5e43d3f9",
-  "date": "2026-10-09",
-  "note": "every seat stands off every way's tread, at a verge site \"on a road or street\" and never in it; the water, view and title-placard tests are rules any map needs, not findings",
+  "date": "2026-10-11",
+  "note": "never in the roadbed; every attested site is on the road",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+   "0190-notice-boards-kosatsuba.drawing.html:ffcebd538d75ed36"
   ],
   "verdict": "IN-STEP"
  },
@@ -62061,6 +62289,7 @@
    "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
    "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#traffic radii": {
@@ -62089,12 +62318,13 @@
   "date": "2026-10-09",
   "note": "sited against meta.view after the crop",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#every settlement carries a board": {
@@ -62103,13 +62333,14 @@
   "date": "2026-10-09",
   "note": "no tier is excluded",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:10ca8908cd449c17",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#facing search pad": {
@@ -62157,12 +62388,13 @@
   "date": "2026-10-09",
   "note": "px(7.0) x px(3.0)",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#siting default": {
@@ -62171,14 +62403,15 @@
   "date": "2026-10-09",
   "note": "when no knob was rolled, the default is the busiest frontage, which matches \"where traffic was heaviest\" and the passers-by weighing",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
    "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09",
    "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#the caption proved against the board": {
@@ -62187,14 +62420,15 @@
   "date": "2026-10-09",
   "note": "the caption is proved against the drawn footing (vw x vh passed as half-extents, rebuilt at full size); this matches the caption room search and the footing as drawn",
   "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "bbebed556e20a587"
+   "0190-notice-boards-kosatsuba.drawing.html": "fe596b0a4fb0bcba"
   },
-  "research": "f69092eeadc87044",
+  "research": "f398405a25353320",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171",
    "0190-notice-boards-kosatsuba.drawing.html:b913483630ccb97a"
   ],
+  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#caption seat": {
