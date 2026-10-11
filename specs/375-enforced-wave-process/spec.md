@@ -2,7 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-11 - amendment 1 landed: spec FAITHFUL (round 3), plan CLEAR (round 2), every task ticked; SC-007 and SC-008 tested, the clone measurement recorded; SC-003 and SC-004 carried to 374
+**Status**: In progress - amendment 2 (one ruling for a batch at the round cap; a bundle carries its rounds); amendment 1 landed 2026-10-11; SC-003 and SC-004 carried to 374
+
+**Amendment 2 approved**: the GM, 2026-10-11, "it does seem like a whole batch of pop-ups reaching the round cap at once should get a single ruling"
 
 **Amendment 1 approved**: the GM, 2026-10-10, "yes to each of those possible changes, though for the in-progress features you can probably limit yourself to clones with active sessions, if it helps performance."
 
@@ -136,6 +138,18 @@ work stands; the GM approved both in one answer.
   listing's time reading every clone against reading only the active ones is recorded, and the limit is kept only if it
   helps. Display only: what the push, `make tick` and the closing check read is unchanged.
 
+### Amendment 2 (`request.md`, Amendment 2)
+
+- **FR-017 A batch reaching the round cap together gets one ruling.** When several units are owed a round-cap ruling at the
+  same time - a batch of pop-ups (or pages) whose checks reached the cap together, as 343's 15 pop-ups did - one command
+  builds ONE arbiter bundle covering every owed round trigger, each with its own rounds and edits, and the round arbiter
+  returns ONE ruling for the batch with an exception for any unit it rules differently. Recording it records each trigger's
+  ruling (the batch's, or its exception), so every hold, closure and GM-review row works per unit as before. A unit can still
+  be ruled alone.
+- **FR-018 A round trigger's bundle carries its rounds.** An arbiter bundle for a round trigger shows that unit's rounds,
+  replies and edits whether or not the guard recorded the trigger as owed (the unit is read from the trigger itself) - 343's
+  session asked ahead for 13 form checks' third round, and each bundle reached the arbiter with no round history.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -161,6 +175,11 @@ work stands; the GM approved both in one answer.
   same files as main adds nothing; if the measurement keeps the active-only limit, an inactive clone's change is not shown.
   `--holding`, `--closed-by-status` and `CHECK=1` give what they gave before. The measurement is a key of
   `measurements.json`.
+- **SC-009** (FR-017) With several round triggers owed at once: one bundle carries them all, each with its rounds; one batch
+  ruling with one exception records every trigger - the exception's unit under its own ruling, the rest under the batch's -
+  each releasing its own hold and adding its GM-review row. The tests fail on today's code.
+- **SC-010** (FR-018) A bundle for a round trigger the guard never recorded as owed carries that unit's rounds (replaying the
+  shape of 343's form-check bundles). The test fails on today's code.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed.
