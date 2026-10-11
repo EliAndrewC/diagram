@@ -870,6 +870,7 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-11 | modal-form | feature 374 wave 120 r2, the frontage siting | 0 findings | clean | nothing | no | verified | 16 s | 24k in (11k cached) / 1.3k out |
 | 2026-10-11 | modal-depiction | feature 374 wave 120, the frontage siting after its research edits | 0 findings | clean | nothing | no | verified | 25 s | 33k in (11k cached) / 2.4k out |
 | 2026-10-11 | impl-drift | feature 374 wave 120, the seat word's claims (b23) | IN-STEP 12, DRIFTED 1; UNCLAIMED 1 | the village roller's order (recorded) and its offtakes, both deferred scope | judgment | no | accepted (the drift already on the report; the offtakes in deferred code) | 71 s | 120k in (79k cached) / 7.4k out |
+| 2026-10-11 | impl-drift | feature 374 wave 120, the magistracy board's claim (b24) | IN-STEP 1 | clean | nothing | no | verified | 16 s | 58k in (32k cached) / 1.1k out |
 | 2026-10-11 | modal-form | feature 374 wave 120 r2, the magistracy sheet's notice board | 0 findings | clean | nothing | no | verified | 19 s | 24k in (11k cached) / 1.8k out |
 | 2026-10-11 | modal-depiction | feature 374 wave 120 r2, the magistracy sheet's notice board | 0 findings | clean | nothing | no | verified | 22 s | 118k in (79k cached) / 1.8k out |
 | 2026-10-11 | modal-form | feature 374 wave 120, the frontage siting's rewritten guess | 0 FIX, 1 NOTE | a repeated sentence | judgment | no | accepted (it carries 0190's ranking) | 24 s | 24k in (11k cached) / 2.3k out |
