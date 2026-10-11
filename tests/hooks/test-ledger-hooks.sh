@@ -49,6 +49,13 @@ git -C "$FIX" reset -q
 run "git commit -am rows"
 [ "$RC" -eq 2 ] && ok "commit -am counts the modified ledger as staged" || no "-am missed" "(rc=$RC)"
 grep -rq "ledger-row-short" "$LOGROOT" && ok "...recorded under its rule" || no "not recorded"
+git -C "$FIX" reset -q
+run "git add dev/review-ledger.md && git commit -m rows"
+[ "$RC" -eq 2 ] && ok "an add of the ledger in the commit's own command counts it as staged (352)" || no "add-then-commit missed" "(rc=$RC)"
+run "git -C $FIX add dev/ && git -C $FIX commit -m rows"
+[ "$RC" -eq 2 ] && ok "...and an add of its directory" || no "add of dev/ missed" "(rc=$RC)"
+run "git add other.md && git commit -m other"
+[ "$RC" -eq 0 ] && ok "...but not an add of another file" || no "an add of another file blocked" "(rc=$RC)"
 
 echo "2. it stays quiet on correct work"
 printf '%s%s\n' "$HEAD_TXT" "$GOOD" > "$FIX/dev/review-ledger.md"; git -C "$FIX" add dev/review-ledger.md

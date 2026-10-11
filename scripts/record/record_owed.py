@@ -242,14 +242,25 @@ def fingerprints(root: pathlib.Path, checks: Sequence[str]) -> dict[str, str]:
     return {u.slug: u.fingerprint for u in units(root) if u.check in checks}
 
 
-def answered(store_dir: pathlib.Path, slug: str, fp: str) -> bool:
+def answered(store_dir: pathlib.Path, slug: str, fp: str, reading: str = "") -> bool:
+    """`fp` answered - or, for a source-reader note, its `reading` (the pages and passages it reads) answered under another
+    fingerprint: a note READ and then re-worded in English alone is not owed source-reader again (352, the arbiter's fix)."""
     rec = _read(store_dir, slug)
-    return fp == rec.get("fingerprint") or fp in rec.get("answered", [])
+    return fp == rec.get("fingerprint") or fp in rec.get("answered", []) or bool(reading and reading in rec.get("readings", []))
 
 
 def unanswered(root: pathlib.Path) -> list[ru.Unit]:
     s = store(root)
-    return [u for u in units(root) if not answered(s, u.slug, u.fingerprint) and not legacy_depiction_answered(root, s, u.slug)]
+    return [u for u in units(root) if not answered(s, u.slug, u.fingerprint, u.reading) and not legacy_depiction_answered(root, s, u.slug)]
+
+
+def keep_reading(store_dir: pathlib.Path, slug: str, reading: str) -> None:
+    """Add a source-reader answer's `reading` to its record (`answered` matches on it)."""
+    rec = _read(store_dir, slug)
+    if not reading or not rec or reading in rec.get("readings", []):
+        return
+    rec["readings"] = [*rec.get("readings", []), reading]
+    _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
 
 
 def legacy_depiction_answered(root: pathlib.Path, store_dir: pathlib.Path, slug: str) -> bool:
@@ -357,6 +368,10 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
     that check's dispatches on those subjects in the clone's check state (feature 375, FR-003: an answered check no longer
     freezes its page)."""
     done = _answer(root, check, result, bundle, q, notes, key, kind)
+    if check == "source-reader" and done:  # the reading is the tree's now - a bundle's MANIFEST carries no reading
+        s, now = store(root), {u.slug: u.reading for u in units(root) if u.check == check}
+        for slug in done:
+            keep_reading(s, slug, now.get(slug, ""))
     if done:
         import hm_checks  # noqa: PLC0415
 
