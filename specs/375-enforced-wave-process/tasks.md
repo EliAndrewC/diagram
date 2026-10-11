@@ -111,9 +111,11 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 2 (the GM 2026-10-11: one ruling for a batch at the round cap; the bundle defect)
 
-- [ ] T30 One bundle and one ruling for a batch (plan D23): `arbiter_bundle.batch`, `hm_arbiter.record_batch`, `make arbiter-bundle/arbiter-ruled BATCH=1`, the contract, the refusal; tests red on today's code (SC-009)
+- [x] T30 One bundle and one ruling for a batch (plan D23): `arbiter_bundle.batch`, `hm_arbiter.record_batch`, `make arbiter-bundle/arbiter-ruled BATCH=1`, the contract, the refusal; tests red on today's code (SC-009)
       research: rendering
-- [ ] T31 A round bundle reads its unit from the trigger (plan D24); its test (SC-010)
+      verify: DONE. arbiter_bundle.batch + hm_arbiter.batch_triggers/record_batch + make arbiter-bundle/arbiter-ruled BATCH=1 [TRIGGERS=]; refusal names the batch; a single ruling refused while its batch is owed; one fix held by one row; test_arbiter_fix batch tests (red on old code)
+- [x] T31 A round bundle reads its unit from the trigger (plan D24); its test (SC-010)
       research: rendering
+      verify: DONE. hm_arbiter.unit_of, used by the bundle and the ruling row; test_a_round_asked_ahead_of_the_guard_carries_its_rounds (red on old code)
 - [ ] T32 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
