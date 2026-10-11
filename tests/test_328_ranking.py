@@ -89,6 +89,12 @@ def test_a_key_filed_again_after_its_closing_wave_is_open() -> None:
         for line in path.read_text().splitlines():
             key = json.loads(line)["key"] if line.strip() else ""
             if key and waves.get(key) and n > wave_number(waves[key]) and key in ranking:
-                later = [p for p in (FEATURE / "audit").glob("found-wave*.jsonl") if key in p.read_text() and p != path]
+                # skip only a key a LATER found file files again (its own reopening is judged there); an earlier one is
+                # what the reopening is for - the north annex, filed at wave 9 and again at 121 (the plan review, round 2)
+                later = [
+                    p
+                    for p in (FEATURE / "audit").glob("found-wave*.jsonl")
+                    if key in p.read_text() and float(re.match(r"found-wave(\d+)", p.stem).group(1)) > n  # type: ignore[union-attr]
+                ]
                 if not later:
                     assert ranking[key]["wave"] == "", f"{key} filed at wave {n:.0f} reads closed at {waves[key]}"
