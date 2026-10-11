@@ -190,5 +190,26 @@
    "changed_line_coverage_s": 0,
    "reading": "seconds for every step but the record build (make record CHECK=1, the whole site built in memory), 43 s at load 7.4 - which the spec lists among the preflight's derived files. The whole phase costs about a tenth of a gate (384-488 s this feature) and a red it prevents costs a whole one"
   }
+ },
+ "375-a1-speckit-todo-clones": {
+  "quantity": "the clone-reading part of `make speckit-todo` (feature 375 amendment 1, FR-016): every session clone against only the active ones",
+  "observed": "2026-10-11",
+  "source": "/diagram's specs and its 50 clones (6 active: an event log written within 12 hours), the containers loaded by two other sessions",
+  "command": "speckit-todo.py's in_clones(root, features, active_only=False|True), three alternating runs each, wall time",
+  "method": "time.time() around each call; the features themselves read once (0.11 s, the listing without clones)",
+  "value": {
+   "all clones s": [
+    0.88,
+    0.85,
+    0.94
+   ],
+   "active clones s": [
+    0.14,
+    0.13,
+    0.14
+   ],
+   "same rows": true,
+   "reading": "reading only the active clones cuts the clone pass from ~0.9 s to ~0.14 s (about 85%) with the same rows; the GM's condition 'if it helps performance' holds, so the listing reads active clones"
+  }
  }
 }

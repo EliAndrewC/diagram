@@ -300,3 +300,43 @@ def test_every_later_tier_item_in_the_repository_is_in_its_placeholder() -> None
     v = st.vocabulary(REPO)
     assert st.placeholder_message(st.off_placeholder(REPO / "specs", v), v) == ""
     assert all((REPO / "specs" / name).is_dir() for name in v.placeholders.values())
+
+
+def _git(*args: str) -> None:
+    subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", *args], check=True, capture_output=True)
+
+
+def test_an_open_feature_is_shown_as_its_active_clone_holds_it(tmp_path: Path) -> None:
+    """Feature 375 amendment 1, SC-008: the GM found the research features shown untouched while their specs and plans were
+    accepted in the research clone. An active clone's unlanded work is shown, marked; an inactive clone's, a clone holding
+    what main holds, and the push's and the tick's readers are not affected."""
+    import os
+
+    main = tmp_path / "main"
+    _feature(main, "001-x", "Filed", None, "The thing")
+    _git("init", "-q", "-b", "main", str(main))
+    _git("-C", str(main), "add", "-A")
+    _git("-C", str(main), "commit", "-qm", "base")
+    for name in ("going", "same", "asleep"):
+        _git("clone", "-q", str(main), str(main / ".clones" / name))
+        (main / ".clones" / name / ".git" / "l7r-events").mkdir()
+        (main / ".clones" / name / ".git" / "l7r-events" / "001-x.jsonl").write_text("{}\n")
+    for name in ("going", "asleep"):
+        d = main / ".clones" / name / "specs" / "001-x"
+        (d / "tasks.md").write_text("- [x] T01 done\n- [ ] T02 next\n")
+        _git("-C", str(main / ".clones" / name), "add", "-A")
+        _git("-C", str(main / ".clones" / name), "commit", "-qm", "work")
+    old = time.time() - 2 * st.ACTIVE_HOURS * 3600
+    os.utime(main / ".clones" / "asleep" / ".git" / "l7r-events" / "001-x.jsonl", (old, old))
+    out = st.report(main / "specs")
+    assert "001-x  The thing  1/2  [in going, not landed]" in out and out.index("IN PROGRESS") < out.index("[in going")
+    assert "[in same" not in out and "[in asleep" not in out, "no unlanded work, or no active session"
+    assert "001-x  The thing\n" not in out, "the clone's row stands in for main's"
+    assert "FILED (0)" in out and "IN PROGRESS (1)" in out
+    assert "001-x  The thing" in st.report(main / "specs", clones=False) and "[in" not in st.report(main / "specs", clones=False)
+    assert st.feature(main / "specs" / "001-x").state == "filed" and st.holding(main / "specs" / "001-x") == [], "readers unchanged"
+    # a clone where it is done shows it IN PROGRESS, done there; from inside a clone the mirror's .clones is read
+    d = main / ".clones" / "going" / "specs" / "001-x"
+    (d / "tasks.md").write_text("- [x] T01 done\n- [x] T02 next\n")
+    assert "[in going (done there), not landed]" in st.report(main / "specs")
+    assert st.clones_dir(main / ".clones" / "same") == main / ".clones" and st.unlanded(tmp_path / "not-a-repo") == set()
