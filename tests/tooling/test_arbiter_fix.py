@@ -328,3 +328,22 @@ def test_a_batch_reply_is_refused_whole_and_never_drops_a_fix(root: pathlib.Path
     rows = ha.record_batch(root, {**both, "exceptions": {a: both["exceptions"][a], b: {"ruling": "continue", "why": "y"}}}, "round-arbiter")
     assert rows[0]["tooling_fix"] == "G" and rows[1]["tooling_fix"] == "F", "G kept; F on the first exception without a fix"
     assert sorted(ha.open_fixes(d)) == [(a, "G"), (b, "F")]
+
+
+def test_several_fixes_one_change_made_settle_together(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """2026-10-11: 343 carried 36 open tooling fixes, many naming the same few bundle defects (one ruling each before the
+    batch ruling). One command settles the ones a single change made; an unknown ID refuses the whole call, writing nothing."""
+    d = root / "specs" / "900-z"
+    a, b = "reversal:/a.md", "reversal:/b.md"
+    for t in (a, b):
+        ha.trip(root, t, "reversal", t, "A -> B -> A")
+        ha.record_ruling(root, t, {"ruling": "process-fault", "why": "the bundle hid its rounds", "tooling_fix": f"bundle fix for {t}"}, "round-arbiter")
+    git = ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t"]
+    subprocess.run([*git, "add", "tests"], check=True)
+    subprocess.run([*git, "commit", "-qm", "the test"], check=True)
+    subprocess.run([*git, "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
+    monkeypatch.chdir(root)
+    assert ha.main(["fix", "done", f"{a} reversal:/nope.md", "one bundle change", "tests/tooling/test_gate_lock.py"]) == 1
+    assert len(ha.open_fixes(d)) == 2, "an unknown ID writes nothing"
+    assert ha.main(["fix", "done", f"{a} {b}", "the bundle now carries every round", "tests/tooling/test_gate_lock.py"]) == 0
+    assert ha.open_fixes(d) == []
