@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - plan CLEAR, record write queued (M2)
+**Status**: Done 2026-10-11 - 0047's drawing page gives today's privy figures (34 of 72, 47.2%) with their method and the August set whole; wang-ochiai-2022's spelling and Type V1 settled; 0006 points to 0033's holdings and tells the dry plot's stroke; the nine pop-ups checked; the privy's search-bound claim relabeled (IN-STEP); make impl-check F=368 owes nothing; report.md. The GM's review of its round-arbiter rulings is open (make gm-review)
 
 **Affects**: research record
 
