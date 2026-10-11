@@ -302,7 +302,7 @@ def report(against: str | None) -> int:
     # the PUSH by perf_review --check, and printed here and at the gate (FR-009b) so nothing is
     # surprised. The two-band rule below (5% diagnose / 10% cap) is superseded: the diagnose line
     # still prints as advice, and the 10% exit is gone - "there is no ceiling ... so long as the
-    # subagent reviewer agrees", with the GM's own sign-off above 10% total / 20% per seed.
+    # subagent reviewer agrees", with a sign-off above 10% total / 20% per seed - the round arbiter's since feature 379.
     from l7r.diagram.tools import perf_bands
 
     print()

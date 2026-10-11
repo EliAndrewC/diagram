@@ -882,7 +882,7 @@ artifacts. Specifically:
   2026-08-25; feature 129 - this replaces the two-band rule of 2026-08-24,
   whose 10% "cap" is now band 3's total line rather than a merge-blocking
   ceiling: *"there is no ceiling for allowing it to go forward so long as the
-  subagent reviewer agrees"*, with the GM's own sign-off above it):
+  subagent reviewer agrees"*, with a sign-off above it - the round arbiter's since feature 379):
 
       band            on the TOTAL     on ANY SINGLE SEED   what it takes
       1  explain      over the line    over the line        a written explanation AND a perf-audit subagent confirming it matches the stage delta
