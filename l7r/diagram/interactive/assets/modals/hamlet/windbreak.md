@@ -1,6 +1,6 @@
 About: A wood on the side the wind came from sheltered a farming village. In southern China the fengshui wood
 behind the village probably served so; in Japan a grove stood on
-the north and west of many a farmhouse, and from 1682 one domain planted a belt to windward of its new fields; in the
+the north and west of many a farmhouse, and in the Edo period one domain planted a belt to windward of its new fields; in the
 Ryukyu islands a belt stood round a settlement on the west, the south and the east.
 
 In China's Huizhou a village's wood belonged to no household. Its lineage held it in common, closed it to cutting by rules
@@ -30,10 +30,10 @@ forms, darker conifers set in rows with broadleaf trees among them or an irregul
 between the crowns shown by paired strokes, since a real culm is too slim to see; the title card says which form this
 settlement has. Each crown is drawn at its real size, and only the crowns are drawn, though a real wood had a
 dense undergrowth of bamboo and shrubs beneath them. On a village's map the wood is drawn at or somewhat above the size of a typical surviving village wood, so it reads as a wood at that scale. The rows are spaced so a reader can make them out, and the belt is drawn as a ragged band deep enough to read
-as a wood rather than a row of trees, its uneven edge a drawing convention, since a real wood stood where the ground let it; the one village belt whose width is recorded, in the Ryukyu islands, is about 33 to 49 ft wide today, and how far apart
+as a wood rather than a row of trees, its uneven edge a drawing convention, since a real wood stood where the ground let it; the one village belt whose width is recorded, in the Ryukyu islands, is about 33 to 49 ft (10 to 15 m) wide today, and how far apart
 real rows stood is not recorded. The
-belt is planted unbroken along its side, since a gap would funnel the wind, runs on past the edge of the map, as a road or a field does, so the reader sees that the wood goes on beyond it, its
-planting resumes on both sides of a lane that crosses it, though how a lane passed through a real belt is not recorded, and its trees are kept
+belt is planted unbroken along its side, since a gap would funnel the wind. It runs on past the edge of the map, as a road or a field does, so the reader sees that the wood goes on beyond it. Its
+planting resumes on both sides of a lane that crosses it, though how a lane passed through a real belt is not recorded. Its trees are kept
 off the sun of the farmyards and kitchen beds.
 
 Name: windbreak forest

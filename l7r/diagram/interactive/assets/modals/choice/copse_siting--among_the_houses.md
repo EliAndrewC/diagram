@@ -1,13 +1,13 @@
-About: In the loosely clustered villages common in the Kanto and the Tohoku, each house stood on a wide lot with its own grove, so the households' own trees stood among the houses themselves: clumps of
-trees in the gaps between the farms, the dooryard copse. A Japanese homestead's wood was its own, grown on the lot where its
+About: In the loosely clustered villages common in the Kanto and the Tohoku, each house stood on a wide lot with its own grove, so the households' own trees stood among the houses themselves, the
+dooryard copse. A Japanese homestead's wood was its own, grown on the lot where its
 house stood, and it was a store as much as a shelter, giving firewood from its branches, timber from thinning and fallen
-leaves for the hearth and for manure. In southern China villagers planted fruit trees and bamboo for their use in their fengshui woods.
+leaves for the hearth and for manure.
 
-Early in the twentieth century, round a farm's main house and outbuildings on the Musashino upland stood woods of cedar, bamboo, evergreen oak and
+In southern China villagers planted fruit trees and bamboo for their use in their fengshui woods. Early in the twentieth century, round a farm's main house and outbuildings on the Musashino upland stood woods of cedar, bamboo, evergreen oak and
 zelkova. In the farm groves of the Tonami plain, as surveyed in modern times, persimmon was among the three commonest trees, and
 persimmon, fig and flowering trees stood at a house's front. A persimmon commonly stood in a farmhouse's dooryard, the yard before the house, for its fruit and its summer shade.
 
-In one Edo-period register, three households' woods covered about 6,000, 10,700 and 28,000 sq ft; homestead woods varied in form,
+In the Edo period, three households' woods covered about 6,000, 10,700 and 28,000 sq ft; homestead woods varied in form,
 size and kinds of tree. Whether a village kept a wood of its own among its houses, apart from each farm's, is not recorded.
 
 Guesses:
@@ -27,4 +27,4 @@ Name: Trees among the houses
 Covers: `meta.copse_siting = among_the_houses`
 Sources: yashikirin-jawiki, tonami-kainyoclub, fengshuilin-zhwiki, miura-2019-yashikiyama, takehara-2004-yashikirin, kashima-kainyo-1987, tonami-yashikirin-haichi, shakkanho-jawiki, kotobank-yashikirin-heibonsha, kotobank-shuson, toyoko-kaki
 Entry: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html
-Drawing: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html
+Drawing: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html

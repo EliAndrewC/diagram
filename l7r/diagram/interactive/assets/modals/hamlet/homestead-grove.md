@@ -5,7 +5,9 @@ hearth and manure. The groves are old: in the 1600s one domain already controlle
 
 Which sides it took differed by region: the north and west on the Sendai plain, often leaving the south or east open;
 every side but the house's front on the Tonami plain, where the thin east front held the entrance and garden; and all
-four on the Izumo plain before 1868, on an earth bank against floods. At Tonami tall cedar, oak and zelkova stood
+four on the Izumo plain before 1868, on an earth bank against floods.
+
+At Tonami tall cedar, oak and zelkova stood
 from the south round to the west, hackberry and alder with a little bamboo from the west round to the north, and
 persimmon and fig at the front. Nearly half its trees were cedar, among many other kinds, 36 to 92 ft
 (11 to 28 m) tall, with bamboo and an understory of saplings and shrubs beneath; its trees stood in rows thick enough to hide the house, and on the Sendai plain they were planted in many layers.
@@ -17,8 +19,8 @@ and 28,000 sq ft, and groves varied in form, size and kinds of tree.
 Guesses:
 - How many trees a grove holds, set from the late 20th-century count: no count from before 1868 was found, though
   groves then are recorded as kept thick.
-- How often each shape is taken - two sides half the time, three sides three times in ten, four sides twice in ten,
-  four sides four times in ten on flood-prone ground: no source counts how many farms took each shape.
+- How often each shape is taken - two sides half the time, three sides three times in ten, and four sides twice in
+  ten, or four times in ten on flood-prone ground: no source counts how many farms took each shape.
 - The windward stand's depth, about one and a half house depths: no source gives a grove's depth, so it is reckoned
   from the tree counts and crown sizes.
 - The thinner band's depth, one tree; where the opening in a ring stood and how wide it was: no source
@@ -32,11 +34,11 @@ two, three or four sides, since the shape went by region, and the title card say
 sides a thinner band of lesser trees; a three-sided grove leaves open the front away from the wind, and a ring is broken
 once at its front for the way in. No grove tree stands in a yard's or garden's sun, and neighbors' groves are kept far
 enough apart for a lane to reach each door. Where a farm keeps bamboo, its stems far too thin to see at this scale, it is
-drawn as a patch of jade culm marks that stand for the stand rather than count it, showing only between the crowns, as
+drawn as a patch of jade culm marks that stand for the bamboo rather than count it, showing only between the crowns, as
 real bamboo filled the grove beneath its trees.
 
 Name: homestead grove
 Covers: `groves`
 Sources: visit-toyama-sankyoson, tonami-kainyoclub, irie-2020-igune, miura-2014-kainyo, kashima-kainyo-1987, tonami-yashikirin-haichi, yashikirin-jawiki, miura-2019-yashikiyama, shakkanho-jawiki, kotobank-yashikirin-heibonsha, takehara-2004-yashikirin
-Entry: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html
+Entry: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html
 Drawing: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html

@@ -1,22 +1,22 @@
 About: The dooryard copse is the trees a clustered village's households kept among their houses. A Japanese
 homestead's wood was its own, grown on the lot where its house stood, and it was a store as much as a shelter: it broke
 the wind, and it gave firewood from its branches, timber from thinning, and fallen leaves for the hearth and for
-manure. In the loosely clustered villages of the Kanto and the Tohoku each house stood on a wide lot with its own grove, the houses well apart; around the old capital and the Inland Sea, farmhouses stood side by side behind walls. In southern China, too, villagers planted fruit trees and bamboo among the trees
+manure. In the loosely clustered villages of the Kanto and the Tohoku each house stood on a wide lot with its own grove, the houses well apart; around the old capital and the Inland Sea, villages were more often dense, their farmhouses side by side behind walls. In southern China, too, villagers planted fruit trees and bamboo among the trees
 of their village groves for their use.
 
 Round the main house and outbuildings of a farm on the Musashino upland in the early 1900s stood woods of cedar,
-bamboo, evergreen oak and zelkova. On the Tonami plain, a count of the 1980s found about 33 sizable trees round
+bamboo, evergreen oak and zelkova. On the Tonami plain in the 1980s, about 33 sizable trees stood round
 each farmhouse, over saplings and shrubs, about 50 ft tall on average and nearly half of them cedar. Persimmon was among
 the three commonest trees, and persimmon, fig and flowering trees stood at a house's front. Bamboo grew as thickets of its own, not as stems
 scattered among the trees.
 
-In one Edo-period register, three households' woods covered about 6,000, 10,700 and 28,000 sq ft; homestead woods varied
+In the Edo period, three households' woods covered about 6,000, 10,700 and 28,000 sq ft; homestead woods varied
 in form, size and kinds of tree. Whether a village kept a wood of its own among its houses, apart from each farm's, is
 not recorded.
 
 Guesses:
 - That the copse fills the gaps throughout the cluster: in a loosely clustered village each house stood in its own grove, but no account says how fully the trees filled the ground between the houses, or describes them in a densely packed village or among a southern Chinese village's
-  houses, in Japan or in southern China.
+  houses.
 - That each farm's wood, its share of the copse and any grove of its own counted together, runs between about 6,000 and
   28,000 sq ft, chosen for each farm: the range is that of the one register of three households, not a survey, and how
   the sizes spread across it is guessed.
