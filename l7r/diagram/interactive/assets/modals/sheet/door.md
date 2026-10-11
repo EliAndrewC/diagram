@@ -14,15 +14,15 @@ An ordinary door was probably no wider than about 3 ft, half a ken, and a farmho
 width of a kitchen door, a guest entrance or a storehouse's opening is not recorded.
 
 Guesses:
-- That a kitchen has one door to the outside, on its earth floor: the kitchen door is recorded, but not where it stood or
+- That a kitchen has one door to the outside, on its earth floor: the kitchen door is recorded, and at one middle-rank house the gate led to it, but not that it opened on the earth floor or
   whether a kitchen had two.
 - A way by which food reached the rooms, where a plan draws one: no account shows one.
 - A storehouse leaf about 3.5 ft wide: the one width found is a standard of today.
 
-Depiction: The plan draws a door as a small dark block set on the wall it opens through, and a storehouse's pair of leaves
+Depiction: The plan draws a door as a small dark block set on the wall it opens through, where the real one was a sliding or a lattice door, and a storehouse's pair of leaves
 as one block. Its width is a drawing convention: the working doors of kitchens, lodgings, barracks and servants' rows are
-drawn mostly two to three times the width of a real ordinary door, which was probably about 3 ft, so that they read at
-the plan's scale. A guest's door opens onto open ground a palanquin could cross, never straight from the street; a
+drawn wider than a real ordinary door, which was probably about 3 ft - a lodging's door 6 ft, twice as wide - so that they read at
+the plan's scale. A guest's door opens onto open ground a palanquin could cross, never straight from the street or against a building's side; a
 kitchen door opens into the work space.
 
 Name: door

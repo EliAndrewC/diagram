@@ -24,11 +24,10 @@ Guesses:
 
 Depiction: Where the farms stand on both sides of the street, the map draws a holding behind each farm across the street
 from the paddy, and none behind the farms between the street and the paddy; a row on one side of its street has none.
-Its plots are drawn in the four dry crops - barley, millet, buckwheat and soybean - furrowed down the strip, each in its ripest color, though those colors came months apart, barley's in May and millet's
-in autumn.
+Each holding is drawn in one of the four dry crops - barley, millet, buckwheat and soybean - furrowed, each crop in its ripest color, though those colors came months apart, barley's in May and millet's
+in autumn. Each holding is cut across its depth into plots about 150 ft deep, a size chosen for the map since the real plots' size is not recorded; all its plots take its one crop, and the cuts between them stand for nothing on the ground. Every plot is outlined in a thin tan-brown line, drawn that wide so the plots read, though a field's edge had no width of its own.
 
-[row_line=street] Behind a street laid out first the holding is a strip one lot wide, cut into plots about 150 ft deep, a
-size chosen for the map since the real plots' size is not recorded.
+[row_line=street] Behind a street laid out first the holding is a strip one lot wide, running back from the street.
 
 [row_line=edge] Behind a row that follows the field's dry edge, which stands for a dike, a levee or a fan's foot, the holding is
 compact and near the house, as a dike row's was.

@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec FAITHFUL (round 3), plan next
+**Status**: Done 2026-10-11 - 0104 states the Edo gravel and the silence elsewhere (swept, raked, sanded or bare earth) with its search; border-court.md and the Ubame sheet no longer call the court swept; make impl-check F=343 reports nothing missing; report.md. The GM's review of its round-arbiter rulings is open (make gm-review)
 
 **Affects**: magistracy, research record
 
@@ -26,18 +26,27 @@ earth. What there is:
   stone path through a second gateway to the genkan inside a garden with lanterns: a garden approach, only loosely dated,
   not a receiving court.
 
+**Amendment 1** (2026-10-10, from the record write): the write session, reading further, found the ground before an
+entrance GRAVELED at Edo - at the South Town Magistracy, a stone path from the main gate to the entrance with black Nachi
+gravel beside it (an Edo history blog, and a former officer's recollection), and small gravel from the street gate to the
+entrance at the houses granted to the town magistracies' officers - all three of Edo, on enthusiasts' pages. Swept,
+raked and sanded stay unattested before 1868, and so does any surface outside Edo. The requirements below follow the
+finding, not the silence the research pass first reported.
+
 ## Requirements
 
 - **FR-001 - The finding recorded.** `research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html`
-  states, with an absence note naming what was searched, that no source read attests the ground before a formal entrance
-  as swept, raked, graveled, sanded or bare earth before modern times. It names Morse's Sakai drawing (a stone path to
+  states that the ground before a formal entrance is attested GRAVELED at Edo (the South Town Magistracy and the town
+  magistracies' officers' houses, each source with its limits), and, with an absence note naming what was searched, that
+  no source read attests it swept, raked, sanded or bare earth before modern times, or gives its surface outside Edo. It names Morse's Sakai drawing (a stone path to
   the genkan through a garden, loosely dated) and why it is not counted as a court's surface. It says, as 0224 reads, that
   a precinct's swept surface is a guess there and that grave and shrine cleaning are recorded only as modern custom. The
   sentence that "the one drawing" of that ground (Joge's) shows it open is brought into line with the two drawings now
   known.
 - **FR-002 - The modal reworded.** `border-court.md` no longer calls the court "swept". Its Depiction says what the sheet
-  draws (a garden-stippled court with a stone lantern). Its Guesses keep the garden as a guess, and say that no source
-  attests the court's ground swept, raked, graveled, sanded or bare before modern times. Their "the one drawing found shows that
+  draws (a garden-stippled court with a stone lantern). Its Guesses keep the garden as a guess, and say what is known of
+  the ground: graveled at Edo's South Town Magistracy, unknown outside Edo, so the plan gives the court no surface of its
+  own. Their "the one drawing found shows that
   ground open" is brought into line with Morse's Sakai drawing (a garden approach, loosely dated).
 - **FR-003 - Its checks.** The record checks the change owes (`make record-owed`) and the modal checks (`modal-form`,
   `modal-research`, `modal-depiction`) are run and answered.
@@ -48,7 +57,7 @@ earth. What there is:
 
 ## Success Criteria
 
-- **SC-001** (FR-001, FR-002): the record states the silence with its search, and the modal no longer says "swept".
+- **SC-001** (FR-001, FR-002): the record states the Edo gravel and the silence elsewhere with its search, and the modal no longer says "swept".
 - **SC-002** (FR-003): `make record-owed` and the modal checks are answered.
 - **SC-003** (FR-004): `make impl-check F=343` reports nothing missing.
 - **SC-004** (FR-005): no drawn element of any sheet changes; no source comment of the ubame sheet says "swept".
@@ -77,3 +86,5 @@ before modern times, and the modal reworded if not.
   said "not dated" and named an owner no source gives. Applied, with FR-002's list matching FR-001's.
 
 - spec-fidelity-verify, round 3 (2026-10-10): **FAITHFUL**. Nothing to change.
+- Amendment 1 (2026-10-10): the record write found the Edo gravel; the Why, FR-001 and FR-002 follow the finding.
+- spec-fidelity-verify, amendment 1 round 1 (2026-10-10): **FAITHFUL**.

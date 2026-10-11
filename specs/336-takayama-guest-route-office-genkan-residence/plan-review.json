@@ -1,0 +1,53 @@
+{
+ "feature": "336-takayama-guest-route-office-genkan-residence",
+ "plan_sha256": "f8201cc7fb4bb2e63049ed6c34433f781dd7d46a60caa0ba3d9d1cde3217a450",
+ "plan_text": "# Implementation Plan: did Takayama's guest route run indoors? (feature 336)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The record write** (FR-001): 0104's findings page carries the three Takayama sources with their limits (the\nvisitors' route, the 渡廊下 in the facility table, and the official illustration of office and residence under joined\nroofs), each from research.md R1 and R2. Committed `336: ...` by the shared write session. The illustration is cited by\nits page, https://jinya.gifu.jp/en/architecture/, which shows it.\n\n**D2 - The download list**: the 1830 drawing the 1996 restoration followed goes to `research/to-download.md` through\n`make download-add`.\n\n**D3 - The claim on the route's code** (FR-002). `_roji_parts` in `l7r/diagram/compound_parts.py` is the code that sends a\nguest out of doors: \"from the middle gate a stepping-stone path, the roji, straight to a shoe stone at the reception room's\nveranda\". It gains a `Research:` claim citing 0104's findings page, in its docstring, and its `impl-drift` check is to\nrecord it DRIFTED. `STONE_STEP_FT` only spaces the stones and is not the decision (plan review, round 1). The\nstatement behind it at `compound_model.py` (the `DOOR_KINDS` comment: \"the guest's way is the middle gate and the roji ...\nso the residence carries no genkan\") is a comment the claims grammar cannot read; it is reworded to point at the claim.\nThe unit enters the index through feature 378's claimed-outside rule. The edit is a docstring and a comment, not code.\n\n**D3a - Ochiba's own route is drawn by no code, and its mismatch is recorded where a hand sheet's can be.** The Ochiba\nsheet is hand-authored SVG (`ochiba-magistracy.gen.py` only rasterizes it); `claims.py` reads no SVG. The feature's\n`implementation-check.md` line for Ochiba states:\n- that the sheet's outdoor route (the office's rear door, the nakamon, the garden path to the veranda stone, which its own\n  svg comment cites to research 0104 and Takayama) departs from 0104's finding that the way ran under roof - the mismatch\n  FR-002 names;\n- that `_roji_parts`'s DRIFTED claim is its checked counterpart for the generated route;\n- that the sheet stays untouched (FR-002, FR-091).\n\n**D4 - The implementation check** (FR-091): `make impl-check F=336` reports nothing missing.\n\n## Project Structure\n\n```text\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html\nresearch/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.notes.html\nl7r/diagram/compound_parts.py   the claim on _roji_parts (docstring)\nl7r/diagram/compound_model.py   the DOOR_KINDS comment points at it\nresearch/to-download.md   through make download-add\n```\n",
+ "reviewed": "2026-10-11",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "0104's findings page carries the three Takayama sources with their limits (visitors' route, the watari-roka in the facility table, the official illustration of office and residence under joined roofs), from R1/R2; the illustration cited by its page",
+   "class": "within",
+   "why": "FR-001 as written."
+  },
+  {
+   "id": "D2",
+   "summary": "the 1830 drawing the 1996 restoration followed goes to research/to-download.md via make download-add",
+   "class": "within",
+   "why": "FR-001's last sentence."
+  },
+  {
+   "id": "D3",
+   "summary": "a Research: claim citing 0104's findings page in the _roji_parts docstring (compound_parts.py), its impl-drift check to record it DRIFTED; STONE_STEP_FT not the decision; the DOOR_KINDS comment in compound_model.py reworded to point at the claim",
+   "class": "within",
+   "why": "Unchanged. Re-measured: _roji_parts (compound_parts.py:629) is the unit that sends the guest out of doors by the roji, FR-002's 'code that decides that route'. A docstring claim and a comment are not a code change, so FR-091's no-fix rule holds."
+  },
+  {
+   "id": "D3a",
+   "summary": "Ochiba's route is hand-authored SVG no code draws, so no claim reaches it; implementation-check.md records the sheet's outdoor route (rear door, nakamon, garden path to the veranda stone, its svg comment citing research 0104 and Takayama) as departing from 0104's under-roof finding, with _roji_parts's DRIFTED claim as its checked counterpart; the sheet untouched",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The narrowing is that FR-002's claim mechanism does not reach the Ochiba sheet, which is physically impossible rather than awkward. Re-measured this round: ochiba-magistracy.gen.py's docstring says 'the tracked svg is never touched' (it only rasterizes); the route comment is at ochiba-magistracy.svg lines 584-585, citing '(research 0104, Takayama)'; the claims tooling reads code, not SVG. FR-002's purpose (Ochiba's outdoor route recorded as a mismatch, not a guess, and the sheet not redrawn) is carried in full by the implementation-check.md line tied to the checked DRIFTED claim."
+  },
+  {
+   "id": "D4",
+   "summary": "make impl-check F=336 reports nothing missing",
+   "class": "within",
+   "why": "FR-091."
+  },
+  {
+   "id": "TC-shared",
+   "summary": "one shared write session and one check-and-apply session for 336/337/338/343, one commit per feature, its subject opening with the number",
+   "class": "within",
+   "why": "The record's process; no requirement is narrowed."
+  },
+  {
+   "id": "PS-pointers",
+   "summary": "Project Structure names 0104's .html and .notes.html in full on separate lines (commit 0389f93d8) instead of the brace form",
+   "class": "within",
+   "why": "The only change since the CLEAR record. Both files exist under research/questions/. It is the same two files D1 writes, written so the research-pointer check resolves them; it changes no scope."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-08 (filed); specified 2026-10-10
-**Status**: In progress - spec FAITHFUL (round 1), plan next
+**Status**: Done 2026-10-11 - 0099's absence note on the roofed court's size, with its search; the hearing-court claims IN-STEP; make impl-check F=337 reports nothing missing; report.md
 
 **Affects**: magistracy, research record
 
@@ -15,8 +15,8 @@ the office hall it fronts. No measured roofed court was found. The entry asks fo
 `make open-questions` can list it.
 
 **The research pass** (2026-10-10, an agent, read-only; `research.md` R1): no measured roofed court is recorded in anything readable. The only measured Edo figures are the South Town Magistracy's
-veranda (3 shaku) and stair (1 ken wide) in the 1810 plan; Takayama's pages size only the great hall (49 mats) and an alcove
-(4.5 m).
+veranda (3 shaku) and stair (1 ken wide) in the 1810 plan; Takayama's official page sizes only an alcove
+(4.5 m), not the court.
 
 ## Requirements
 

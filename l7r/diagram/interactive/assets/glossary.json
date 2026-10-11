@@ -698,7 +698,9 @@
   "def": "The unplowed strip of raised earth between two field plots, wide enough to walk on.",
   "variants": [
    "baulk",
-   "baulks"
+   "baulks",
+   "balk",
+   "balks"
   ]
  },
  "bed shear stress": {
@@ -14692,7 +14694,8 @@
   "variants": [
    "Sado-no-kami",
    "Sagami-no-kami",
-   "Iwami-no-kami"
+   "Iwami-no-kami",
+   "Echizen-no-kami"
   ]
  },
  "diluvial upland": {
@@ -16177,6 +16180,31 @@
   "def": "A county of the Pearl River delta, beside Shunde, where farmers under the Qing dynasty gave up rice to grow mulberry on the banks of their fish ponds.",
   "variants": [
    "Nanhai"
+  ]
+ },
+ "Nachi gravel": {
+  "def": "Small black stones, named for Nachi, spread over the ground of a formal approach. At Edo's South Town Magistracy it was laid outside the paved path from the main gate to the entrance.",
+  "variants": [
+   "Nachi gravel"
+  ]
+ },
+ "kabuki gate": {
+  "def": "A plain gate of two posts with a beam laid across their tops. The record meets it facing the road at the houses granted to the yoriki of Edo's town magistracies.",
+  "variants": [
+   "kabuki gate",
+   "kabukimon",
+   "kabuki-mon"
+  ]
+ },
+ "retainer": {
+  "def": "A samurai in the service of a lord and their domain. The record ranks them: a senior retainer's house had earthen walls, a gatehouse and a genkan with a shikidai, while a middle-rank retainer's house could do without the formal entrance.",
+  "variants": [
+   "retainer",
+   "retainers",
+   "senior retainer",
+   "senior retainers",
+   "middle-rank retainer",
+   "middle-rank retainers"
   ]
  }
 }

@@ -18,7 +18,7 @@ Guesses:
 - [winter_crop=none] That a hamlet's dry fields are cleared up into the wild middle from the plots nearest the toe first:
   no source says from which end the clearing of a fan went.
 
-Depiction: The map draws the dry fields along the fan's toe and leaves the rest of the middle above them as scrub.
+Depiction: The map draws the dry fields along the fan's toe and leaves the rest of the middle above them as scrub. Where a settlement's paddies carry barley over the winter, its coarse grain grows there, out of sight on a map drawn in high summer, and its dry fields keep to the toe.
 
 [winter_crop=none] Where a settlement's paddies lie bare over the winter, the map draws its dry fields climbing from the
 toe into the wild middle, plot by plot, until they hold the coarse grain the hamlet needs, and no further.
