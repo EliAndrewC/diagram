@@ -238,6 +238,11 @@ def test_the_report_end_to_end(tmp_path: Path, capsys) -> None:  # noqa: ANN001
     assert "tasks ticked: 1 of 2" in text and "spec rounds: FAITHFUL 1" in text
     assert fr.main(["375", "--root", str(repo), "--write", "--transcript", str(tmp_path / "t.jsonl")]) == 0
     assert (d / "report.md").is_file() and "written to specs/375-x/report.md" in capsys.readouterr().out
+    # the research clone's form, "343: ..." - its 24 commits were missed and its cascade read 69 dispatches over 1 line
+    (repo / "tool.py").write_text("a\n")
+    _git(repo, "commit", "-q", "-am", "375: the tool trimmed")
+    _git(repo, "commit", "-q", "--allow-empty", "-m", "3750: another feature")
+    assert [s for _sha, _t, s in fr.commits(repo, "375")] == ["375: the tool trimmed", "Feature 375 T01: the tool"]
     empty = fr.report(repo, "375", since="2030-01-01T00:00:00Z", clones=tmp_path / "no-clones")
     assert "no event log and no transcript" in empty
     try:
