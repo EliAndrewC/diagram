@@ -78,3 +78,4 @@ high-value kind: it sees a loop from outside, when a tooling gap is visible.
   - SC-003 also covers a change that does not apply cleanly onto main.
 - spec-fidelity-verify, amendment 1 round 2 (2026-10-10): CHANGES REQUIRED - FR-005's landed-test refusal had no success
   criterion. Applied: SC-003 adds a landed test failing without work held in the clone, refused with main unchanged.
+- spec-fidelity-verify, amendment 1 round 3 (2026-10-10): FAITHFUL - round 2's item resolved.

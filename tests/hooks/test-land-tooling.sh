@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# Tests for scripts/land-tooling.sh - a clone's tooling lands on main alone, mid-feature (feature 379 amendment 1, SC-003).
+# Run: tests/hooks/test-land-tooling.sh   (exit 0 = all green)
+#
+# Real git repos: an origin, a clone under .clones/ holding engine work AND a guard fix, and another session moving main
+# meanwhile. The checks and the push are replaced through the script's own seams (a push is `git push`, as sync-with-main's).
+set -uo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LAND="$HERE/../../scripts/land-tooling.sh"
+PASS=0; FAIL=0
+T=$(mktemp -d)
+trap 'rm -rf "$T"' EXIT
+export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t
+export LAND_TOOLING_CHECKS=true LAND_TOOLING_PUSH="git push -q origin HEAD:main"
+
+ok() { if eval "$2"; then echo "  ok      $1"; PASS=$((PASS+1)); else echo "  FAIL    $1"; FAIL=$((FAIL+1)); fi; }
+
+# origin with main; a clone at $T/m/.clones/c with an engine commit and a tooling commit; main moved by another session
+setup() {
+  rm -rf "$T/o.git" "$T/m" "$T/seed"
+  git init -q --bare "$T/o.git"; git -C "$T/o.git" symbolic-ref HEAD refs/heads/main
+  git init -q -b main "$T/seed"
+  mkdir -p "$T/seed/scripts" "$T/seed/l7r"
+  printf 'one\ntwo\n' > "$T/seed/scripts/a.sh"; printf 'x\n' > "$T/seed/scripts/b.sh"; printf 'e = 1\n' > "$T/seed/l7r/e.py"
+  git -C "$T/seed" add -A; git -C "$T/seed" commit -qm base; git -C "$T/seed" push -q "$T/o.git" main
+  mkdir -p "$T/m/.clones"; git clone -q "$T/o.git" "$T/m/.clones/c"
+  C="$T/m/.clones/c"
+  printf 'e = 2\n' > "$C/l7r/e.py"; git -C "$C" commit -qam "engine work"
+  printf 'one\nTWO\n' > "$C/scripts/a.sh"; git -C "$C" commit -qam "a guard fix"
+  printf 'other\n' > "$T/seed/other.txt"; git -C "$T/seed" add -A; git -C "$T/seed" commit -qm "another session"; git -C "$T/seed" push -q "$T/o.git" main
+}
+land() { ( cd "$C" && "$LAND" "$@" ) >"$T/out" 2>&1; }
+on_main() { git -C "$T/o.git" show "main:$1" 2>/dev/null; }
+
+echo "1. it asks for the files, naming the compliant command, and refuses what is not tooling"
+setup
+land; rc=$?
+ok "no FILES: exit 2" '[ "$rc" -eq 2 ]'
+ok "no FILES: the command lists the tooling changed, not the engine" 'grep -q "FILES=\"scripts/a.sh\"" "$T/out" && ! grep -q "l7r/e.py\"" "$T/out"'
+land scripts/a.sh l7r/e.py; rc=$?
+ok "an engine path is refused, named" '[ "$rc" -ne 0 ] && grep -q "l7r/e.py is not tooling" "$T/out" && [ "$(on_main l7r/e.py)" = "e = 1" ]'
+printf 'dirty\n' >> "$C/scripts/a.sh"; land scripts/a.sh; rc=$?
+ok "uncommitted changes in FILES are refused" '[ "$rc" -ne 0 ] && grep -q "uncommitted" "$T/out"'
+git -C "$C" checkout -q -- scripts/a.sh
+
+echo "2. the tooling lands alone, on top of main, and the clone merges main cleanly (SC-003)"
+land scripts/a.sh; rc=$?
+ok "landed" '[ "$rc" -eq 0 ] && grep -q "landed scripts/a.sh" "$T/out"'
+ok "main carries the guard fix" '[ "$(on_main scripts/a.sh | tail -1)" = "TWO" ]'
+ok "main carries none of the engine work" '[ "$(on_main l7r/e.py)" = "e = 1" ]'
+ok "main keeps the other session's work" '[ "$(on_main other.txt)" = "other" ]'
+ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep -q c-tooling'
+ok "the clone's history is untouched" '[ "$(git -C "$C" log --format=%s -1)" = "a guard fix" ]'
+git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
+ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
+
+echo "3. a change that does not apply cleanly onto main, and a failed check, land nothing"
+setup
+printf 'y\n' > "$C/scripts/b.sh"; git -C "$C" commit -qam "b here"
+printf 'z\n' > "$T/seed/scripts/b.sh"; git -C "$T/seed" commit -qam "b there"; git -C "$T/seed" push -q "$T/o.git" main
+land scripts/b.sh; rc=$?
+ok "a conflicting change is refused" '[ "$rc" -ne 0 ] && grep -q "do not apply cleanly" "$T/out" && [ "$(on_main scripts/b.sh)" = "z" ]'
+ok "and its worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ]'
+LAND_TOOLING_CHECKS=false land scripts/a.sh; rc=$?
+ok "a failed check lands nothing" '[ "$rc" -ne 0 ] && grep -q "checks failed" "$T/out" && [ "$(on_main scripts/a.sh | tail -1)" = "two" ]'
+
+echo "3b. a landed test is run, and one needing the clone's unlanded engine work is refused"
+setup
+mkdir -p "$C/tests"
+printf 'import pathlib, sys\nsys.exit(0 if pathlib.Path("l7r/e.py").read_text() == "e = 2\\n" else 1)\n' > "$C/tests/test_e.py"
+git -C "$C" add tests; git -C "$C" commit -qm "the engine work's test"
+LAND_TOOLING_TEST="python3 " land tests/test_e.py; rc=$?
+ok "a test failing without the held engine work is refused" '[ "$rc" -ne 0 ] && grep -q "checks failed" "$T/out" && [ -z "$(on_main tests/test_e.py)" ]'
+printf 'import sys\nsys.exit(0)\n' > "$C/tests/test_ok.py"; git -C "$C" add tests; git -C "$C" commit -qm "a test standing alone"
+LAND_TOOLING_TEST="python3 " land tests/test_ok.py; rc=$?
+ok "a test standing alone lands" '[ "$rc" -eq 0 ] && [ -n "$(on_main tests/test_ok.py)" ]'
+
+echo "4. outside a session clone it refuses"
+( cd "$T/seed" && "$LAND" scripts/a.sh ) >"$T/out" 2>&1; rc=$?
+ok "not under .clones/" '[ "$rc" -ne 0 ] && grep -q "not a session clone" "$T/out"'
+
+echo
+echo "land-tooling: $PASS passed, $FAIL failed"
+[ "$FAIL" -eq 0 ]
