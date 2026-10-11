@@ -401,6 +401,23 @@ def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: f
     return pts
 
 
+GROVE_WORKING_ROOM_FT = 9.5
+"""How far a door path's tread keeps off the trees of a grove band (feature 374 wave 119): 0036 lays a lane through a band
+"with a footpath's clearance and some working room kept off the trees on each side, about 22 ft of the opening" - a 3 ft
+tread and 9.5 ft each side. A band's rect bounds its trunks (crowns are thrown inside it less 2 px), so the room is off them.
+
+Research: working room off the trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: about 22 ft of the opening, a 3 ft tread and 9.5 ft each side"""
+
+DOOR_FINE_CELL_FT = 4.0
+"""The door router's finer lattice, taken only where its own `ROUTE_CELL` (10 ft) finds no way (feature 374 wave 119): a cell
+center is sure to fall in a gap G between two bands when G >= 2 x (the path's half-tread and working room, 11 ft) + 2.41
+cells (the derivation `dry_exit.GROVE_EXIT_CELL_FT` records), so 0036's 32 ft between neighbors' groves holds the page's
+22 ft lane on a cell of at most 4.1 ft. At the 10 ft cell cohort seed 22's row farms were walled in between their dooryards
+and a neighbor's band (the plan review ruled the grid, not the page's 32 ft, the thing to change). Paid where it is needed,
+as the dry exit's grid is.
+
+Research: door router's finer lattice - NONE"""
+
 DOOR_REACH_FT = 60.0
 """How far a grove farm's front door may stand from the lane network before a footpath is laid to it (feature 291; the
 settlement-review of Kashikawa: a farm whose only lane stopped against the outside of its east band, 89 ft from the door).
@@ -436,7 +453,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
         no path to a household reached across a yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it shows no lane of its own
         door path off the house and the fixtures - UNRESEARCHED: it starts 8 ft out from the house and keeps 5 ft clear of the fixtures
-        door path off a grove band - UNRESEARCHED: the tread kept 0.5 ft off a grove band (the band grown by 2 x (1.5 + 0.5))
+        door path off a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a footpath's clearance and some working room kept off the trees on each side, `GROVE_WORKING_ROOM_FT` 9.5 ft off the 3 ft tread (about 22 ft of the opening)
         a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
     from .law import fixture_quads  # local: the law sits above serve too
@@ -453,8 +470,9 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     quads = fixture_quads(s.M)
     # ...AND EVERY GROVE BAND, the farm's own too: a ring's door stands in the way in through its front band, and a straight
     # step to the street ran off through the band's other half (cohort seed 901, `grove_rules.groves_crossed_by_lanes`)
-    # - grown by a door path's half-tread and half a foot, since the rule strokes the tread, not the centerline
-    grow = 2.0 * (1.5 + 0.5)
+    # - grown by a door path's half-tread and the working room 0036 keeps off the trees each side, since the rule strokes the
+    # tread, not the centerline (feature 374 wave 119: the half foot it kept before was no figure the page gives)
+    grow = 2.0 * (1.5 + GROVE_WORKING_ROOM_FT)
     bands = [
         rot_rect(float(g["x"]), float(g["y"]), float(g["w"]) + grow, float(g["h"]) + grow, float(g.get("rot") or 0.0)) for g in s.M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))
     ]
@@ -572,7 +590,9 @@ def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], wa
             path = _route(st, q, hard, walls, water, gap=gap)
             if len(path) >= 2:
                 return [door, *path]
-    return []
+    # ...AND ON THE FINER LATTICE where the coarse one finds no way (`DOOR_FINE_CELL_FT`, feature 374 wave 119): the 10 ft cell
+    # cannot hold a path with 0036's working room in the 32 ft between neighbors' groves
+    return _route(door, q, hard, walls, water, gap=gap, cell=DOOR_FINE_CELL_FT)
 
 
 def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], quads: Sequence[Poly], lawful: Any) -> list[Pt] | None:

@@ -2406,11 +2406,12 @@
     "files": [
       "l7r/diagram/settlement/homestead_parts/stands.py"
     ],
-    "fix": "stands.py:~252: add a claim, CONVENTION, that a clump is kept only when part of its crown falls inside the page window",
+    "fix": "§122 keeps any clump whose crown reaches the page and drops only \"one with nothing on the page\", but L634 (and L448, L685, L742) drop at 0.9 clump past the edge, while the claim itself says a drawn crown runs to ~1.03 clump, so a seat 0.9-1.03 clump out with ink on the page is dropped; the margin should be the drawn crown reach",
     "flag": "",
-    "found": "wave 9 re-check (tiered by its work at T38a)",
+    "found": "feature 374 wave 121 (2026-10-11): the claim reads a code drift, so the row joins the DRIFTED work",
     "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-    "tier": "E0"
+    "tier": "E3",
+    "verdict": "DRIFTED"
   },
   "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump off buildings, wells and shrines": {
     "after": [],
@@ -2657,11 +2658,12 @@
     "files": [
       "l7r/diagram/settlement/rolling/bundle.py"
     ],
-    "fix": "bundle.py:277: add a claim for the non-sun-keeping case (yard_sun=YARD_SUN_STRIP, 22, unscaled, line 382), UNRESEARCHED",
+    "fix": "the unscaled 22 ft south band off an unkept yard departs from 0038's 50 ft with no canopy south of a yard; a code change (no DEVIATION the session records)",
     "flag": "",
-    "found": "wave 9 re-check (tiered by its work at T38a)",
+    "found": "feature 374 wave 121 (2026-10-11): the claim reads a code drift, so the row joins the DRIFTED work",
     "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-    "tier": "E0"
+    "tier": "E3",
+    "verdict": "DRIFTED"
   },
   "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall": {
     "after": [],
@@ -3114,13 +3116,15 @@
     "tier": "E1"
   },
   "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting": {
-    "tier": "E0",
-    "fix": "No engine change. The claim's wording only: belt_law.py:281-283 holes() docstring 'not where a way crosses the belt' -> 'not the way's own crossing, with no more than 30 ft bare either side of it (`_crossed`)', and the 'continuous planting' claim (:286-287) adds 'planting resumes on both sides of a lane, the 30 ft rule holding beside it'.",
+    "tier": "E3",
+    "fix": "`if self._crossed(a, b): continue` excuses every opening a way crosses. The page says of a lane crossing a belt that the hole rule \"holds there as written\": planting resumes on both sides, so an opening wider than 30 ft at a lane is still a hole. The 30 ft test itself is in step",
     "files": [],
     "after": [],
     "flag": "",
     "moved": "T122a (fresh reader): tiered by its work - Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) - a <= _BELT_GAP_FT and b - max(v for _u, v in cross) <= _BELT_GAP_FT` - and its docstring says 'an ",
-    "e0_basis": "Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) "
+    "e0_basis": "Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) ",
+    "verdict": "DRIFTED",
+    "found": "feature 374 wave 121 (2026-10-11): the claim reads a code drift, so the row joins the DRIFTED work"
   },
   "l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#storehouse": {
     "tier": "E3",

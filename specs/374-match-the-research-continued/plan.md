@@ -231,8 +231,17 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
 
 - `serve.py::lay_door_paths#door path off a grove band`: 0036 lays a lane through a grove band "with a footpath's
   clearance and some working room kept off the trees on each side" (about 22 ft of a 36 ft opening: about 9.5 ft each side
-  of a 3 ft tread); the code's 0.5 ft margin becomes that working room, and the claim cites 0036. Measured on the hamlet
-  cohort before it is kept: a farm the wider berth leaves unreached is a conflict put to `spec-fidelity` (rule 1).
+  of a 3 ft tread); the code's 0.5 ft margin becomes that working room (`GROVE_WORKING_ROOM_FT`, measured off the band's
+  rect, which bounds the trunks), and the claim cites 0036. Measured on the hamlet cohort before it is kept: a farm the wider
+  berth leaves unreached is a conflict put to `spec-fidelity` (rule 1).
+- Measured and ruled (2026-10-11): at 9.5 ft cohort seed 22's two row farms were walled in between their dooryards and a
+  neighbor's band. `spec-fidelity` ruled the 9.5 ft stands for every band (no per-farm fallback, no reading of the page as
+  "openings only"), and that widening 0036's 32 ft between groves to the 46.1 ft the router's grid wants would reword the page
+  to fit the code: the pinch is the door router's 10 ft lattice (2 x 11 ft + 2.41 cells must fit the gap). So the door router
+  asks again on a finer lattice, `DOOR_FINE_CELL_FT` (4 ft, at most 4.1 ft for the 32 ft gap), only where the coarse one finds
+  no way - the derivation `dry_exit.GROVE_EXIT_CELL_FT` records, paid where needed. The lane room stays 32 ft and 0036 is
+  unchanged. Measured: the 48-seed cohort and its six pinned rows pass but seeds 10 and 20, both refused at HEAD before the
+  change (the baseline 52/54).
 - Maps: every pool hamlet is rerolled; a hamlet whose paths change owes no glyph-check (no glyph is redrawn) - the lane
   law's acceptance sweep and the cohort hold the change.
 

@@ -674,5 +674,6 @@
   "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#a conifer-led clump throws only LESSER_ROLL_SHARE (10%) of its crowns as lesser broadleaf": "118",
   "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#a door path starts 8 ft out from the house (`FOOTPATH_FABRIC_GAP + 4.0`) and 5 ft clear of the fixtures (`FOOTPATH_FABRIC_GAP + 1.0`)": "118",
   "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each rice plot's green picked at random from RICE_GREENS": "118",
-  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row boundaries rolled independently per column, so row bunds stagger between columns": "118"
+  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row boundaries rolled independently per column, so row bunds stagger between columns": "118",
+  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm": "121"
 }

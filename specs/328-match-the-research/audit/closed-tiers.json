@@ -477,6 +477,7 @@
  "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": "E2",
  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex": "E3",
  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex": "E1",
+ "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm": "E0",
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": "E2",
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex larger than a kura": "E0",
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex seat": "E3",

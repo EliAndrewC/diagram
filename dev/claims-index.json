@@ -43453,7 +43453,7 @@
   "code": "4886c451516ed412",
   "core": "47b8c2f5d08a0457",
   "date": "2026-10-10",
-  "note": "north annex on the shaded back wall, recorded as the page's drawing convention; 0.46 x 0.45 gives 21.2 x 12.6 ft (1.68:1) on a 46 x 28 house, and kura_rect holds it within 18-27 ft and 1.5-1.8:1",
+  "note": "(0.0, -0.675, 0.46, 0.45) is 0.45h deep with 0.05h of that tucked under the back wall (-0.90 to -0.45). On a 46 x 28 ft house that is 21.2 ft long by 12.6 ft deep, deeper than the page's \"10 to 12 ft deep, no deeper than Kakimochi's\". The 11.2 ft that shows past the wall gives 1.89 to one, outside the page's \"1.5 to 1.8\". Either way one attested bound is broken. The footprint (or the overlap) should keep the drawn depth within 10 to 12 ft and the shape within 1.5 to 1.8 to one, or the page should record 0.45h as a deliberate departure. The back-wall placement does match the page's convention (\"shaded north wall in a clustered village\")",
   "pages": {
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
@@ -43462,13 +43462,13 @@
    "0040-farm-storehouses-kura.drawing.html:90057266aa2f2fa5",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex": {
   "code": "01c800a0d80e2392",
   "core": "47b8c2f5d08a0457",
-  "date": "2026-10-07",
-  "note": "12 x 21 ft at 1.75 to one on the west wall matches the page's band and its scattered-farm placement.",
+  "date": "2026-10-10",
+  "note": "west wall of a scattered farm; (-0.63, 0.0, 0.26, 0.75) sits flush on the wall (-0.76 to -0.50) with no overlap; on a 46 x 28 ft house that is about 12 ft deep by 21 ft long, 1.75 to one, inside \"18 to 27 ft long and 1.5 to 1.8 times as long as deep\" and at \"10 to 12 ft deep\"",
   "pages": {
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
@@ -43478,14 +43478,6 @@
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm": {
-  "code": "47b8c2f5d08a0457",
-  "core": "47b8c2f5d08a0457",
-  "date": "2026-10-10",
-  "note": "west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PERSIMMON_CROWN_FT#persimmon crown": {
   "code": "7287811a2622a75c",
