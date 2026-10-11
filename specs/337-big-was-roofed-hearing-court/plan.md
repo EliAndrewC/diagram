@@ -45,5 +45,6 @@ the procedure sections) are re-owed and checked.
 ## Project Structure
 
 ```text
-research/questions/0099-the-hearing-court-shirasu{.html,.notes.html}
+research/questions/0099-the-hearing-court-shirasu.html
+research/questions/0099-the-hearing-court-shirasu.notes.html
 ```

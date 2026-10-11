@@ -45,6 +45,8 @@ places. The spec's Why is reworded so the silence is not stated as a refutation 
 ## Project Structure
 
 ```text
-research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan{.html,.drawing.html,.notes.html}
+research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
+research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
+research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.notes.html
 research/to-download.md   through make download-add
 ```

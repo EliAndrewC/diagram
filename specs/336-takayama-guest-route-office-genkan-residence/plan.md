@@ -59,7 +59,8 @@ sheet is hand-authored SVG (`ochiba-magistracy.gen.py` only rasterizes it); `cla
 ## Project Structure
 
 ```text
-research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan{.html,.notes.html}
+research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
+research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.notes.html
 l7r/diagram/compound_parts.py   the claim on _roji_parts (docstring)
 l7r/diagram/compound_model.py   the DOOR_KINDS comment points at it
 research/to-download.md   through make download-add

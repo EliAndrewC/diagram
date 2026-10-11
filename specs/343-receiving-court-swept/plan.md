@@ -46,7 +46,8 @@ re-checked; a question no code decides is recorded per feature 378.
 ## Project Structure
 
 ```text
-research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan{.html,.notes.html}
+research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
+research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.notes.html
 l7r/diagram/interactive/assets/modals/sheet/border-court.md
 pool/magistracies/ubame-magistracy/ubame-magistracy.svg   comments only
 ```

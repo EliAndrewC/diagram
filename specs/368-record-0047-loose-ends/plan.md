@@ -57,7 +57,11 @@ triaged or re-checked with `impl-drift`; a claim the new figures contradict is r
 ## Project Structure
 
 ```text
-research/questions/0047-farm-privies-and-their-night-soil-benjo{.html,.notes.html,.drawing.html,.drawing.notes.html}
-research/questions/0006-dry-fields-and-their-crops-hatake{.html,.drawing.html}
+research/questions/0047-farm-privies-and-their-night-soil-benjo.html
+research/questions/0047-farm-privies-and-their-night-soil-benjo.notes.html
+research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html
+research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.notes.html
+research/questions/0006-dry-fields-and-their-crops-hatake.html
+research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html
 specs/368-record-0047-loose-ends/measure/   the script and its output
 ```
