@@ -67,8 +67,8 @@ five maps seat 72 privies (privies only, not manure pits):
 ## Decisions Recorded
 
 - **D1 - Today's maps, not a re-run of August's reaches.** The page draws what the maps draw today, read from their
-  recorded manifests. Re-rolling the five maps at the `58, 66 and 72 ft` reaches would change a generator constant for a measurement of
-  a reach no map uses. The August figures stay as dated history of why the reach is `48 ft`.
+  recorded manifests. Re-rolling the five maps at August's longer reaches would change a generator constant for a measurement
+  of a reach no map uses. The August figures stay as dated history of why the reach was chosen (FR-001 gives them).
 - **D2 - The sector is the engine's** (112.5 to 202.5 degrees in the house's frame, `fixture_seats.py`), so the share
   measures what the code seats.
 
