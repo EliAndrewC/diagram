@@ -195,7 +195,9 @@ def judge(cmd: str, cwd: str, transcript: str) -> list[tuple[str, str]]:
 
 #: `make speckit-todo`'s states that hold no unhandled work: closed, or done with only the GM's review left
 SETTLED = ("closed", "done - GM review pending")
-PUSH = re.compile(r"sync-with-main\.sh\s+(?:done|push)\b")
+# an INVOCATION, never a mention (2026-10-10: a command writing JSON that named it was refused): the script at the start of a
+# command segment, after any `VAR=value` prefixes, an optional `bash`, and any path
+PUSH = re.compile(r"(?:^|[;&|(]\s*)(?:[A-Za-z_]\w*=\S*\s+)*(?:bash\s+)?[\w./$-]*sync-with-main\.sh\s+(?:done|push)\b", re.M)
 
 
 def _todo():  # noqa: ANN202 - scripts/speckit-todo.py, imported by path (its name has a hyphen)

@@ -206,6 +206,11 @@ printf '%s' "$OUT" | grep -q "needs no approval: finish the work and close the f
 [ "$(printf '%s' "$OUT" | grep -n "finish the work and close" | cut -d: -f1)" -lt "$(printf '%s' "$OUT" | grep -n "A feature is filed only when" | cut -d: -f1)" ] && ok "...before the approval route" || no "the approval route comes first"
 run "cd $FIX && scripts/sync-with-main.sh push"
 [ "$RC" -eq 2 ] && ok "...also as cd <clone> && sync-with-main.sh push" || no "the cd form was not read" "(rc=$RC)"
+# GUARD_EDIT_OK: 2026-10-10 - a MENTION is no push: a plan reviewer's command writing JSON that named the command was refused
+run "printf '%s' '{\"why\": \"lands by scripts/sync-with-main.sh done from the worktree\"}' > /dev/null"
+[ "$RC" -eq 0 ] && ok "...but a command that only MENTIONS sync-with-main.sh done is no push" || no "a mention was read as a push" "(rc=$RC) $OUT"
+run "FOO=1 /abs/scripts/sync-with-main.sh done"
+[ "$RC" -eq 2 ] && ok "...while an env-prefixed absolute-path run still is" || no "the env/absolute form was not read" "(rc=$RC)"
 sed -i 's/^\*\*Status\*\*: Filed.*/**Status**: Done 2026-10-10 - the more work done/' "$FIX/specs/300-closed-by-status/spec.md"; commit reclose
 push
 [ "$RC" -eq 0 ] && ok "reopened, worked and closed again within the push: no approval needed" || no "a reopen closed again was refused" "(rc=$RC) $OUT"
