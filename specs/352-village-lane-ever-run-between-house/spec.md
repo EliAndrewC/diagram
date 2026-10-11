@@ -15,4 +15,11 @@ copse seats by reservation (woods W25), which settles the map, not the question;
 or an absence, so `make open-questions` cannot list it. When it is searched, record the answer (or the absence) on
 research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html and drop this entry.
 
+**Scope** (the GM, 2026-10-10: *"Can we make it just do the research and update the implementation's tagging so that it shows
+up on the claims report as either something with evidence or which is not implemented in accordance with our research?"*):
+this feature does the research and the tagging only - no map changes. The code that decides the question today is feature
+287's reservation (woods W25: a household's copse seats are kept free of lanes, `hinterland/stages.py` `reserved_seats`,
+`overlap/reserved.py`); its `Research:` claim cites what 0036 records, and `impl-drift` judges it, so `make claims-report`
+shows it IN-STEP with evidence or DRIFTED from the research. Changing the maps to match is a later feature's, if the GM asks.
+
 **Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=352` says what is owed. The code is fixed only where this spec asks.
