@@ -145,6 +145,21 @@ def test_the_bundle_holds_each_unit_its_claims_and_the_cited_pages(tmp_path: pat
     assert len(json.loads((tmp_path / "b" / "units.json").read_text())) == 1
 
 
+def test_a_bundle_carries_the_context_and_the_pages_a_re_check_asks_for(tmp_path: pathlib.Path) -> None:
+    """Feature 374: a CANNOT-TELL verdict asked for a helper's body or a page no claim cites; WITH= and PAGES= add them."""
+    skill = _tree(tmp_path)
+    (skill / "research" / "questions" / "0033-row-villages-resson.drawing.html").write_text("<h2>How our maps draw</h2>\n<p>Drawn so.</p>\n")
+    cur = cx.current(skill)
+    keys = sorted(cur)
+    ctx = ["l7r/diagram/hamletgen/rows.py::far_row", "l7r/diagram/hamletgen/rows.py::SHARE"]
+    manifest = cx.bundle(skill, cur, keys, tmp_path / "b", ctx, ["0033-row-villages-resson.drawing.html", "9999-none.html"]).read_text()
+    assert "## CONTEXT l7r/diagram/hamletgen/rows.py::far_row" in manifest and "SHARE = 0.5" in manifest
+    assert (tmp_path / "b" / "questions" / "0033-row-villages-resson.drawing.html.txt").exists(), "an added page"
+    assert not (tmp_path / "b" / "questions" / "9999-none.html.txt").exists(), "a page that is not a file is skipped"
+    with pytest.raises(ValueError):
+        cx.context_source(skill, "l7r/diagram/hamletgen/rows.py::nothing")
+
+
 def test_record_writes_verdicts_refuses_strangers_and_keeps_unclaimed_rows_until_rechecked() -> None:
     units = {"p::f#a": {"code": "c1", "core": "k1", "research": "r1", "uid": "p::f"}, "p::f#b": {"code": "c2", "core": "k1", "research": "", "uid": "p::f"}}
     reply = "claims: 2\nVERDICT p::f#a DRIFTED - the share is fixed\n`VERDICT p::f#zz IN-STEP - x`\nUNCLAIMED p::f - the row count\nUNCLAIMED p::g - stray\n"

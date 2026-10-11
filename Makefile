@@ -1271,8 +1271,9 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 claims-owed: ## [project] every research claim of the engine or the Mode A procedures owed an impl-drift check (no index row, or its code or cited research moved since), and why
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" owed
 
-claims-bundle: ## [project] the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed   MODULE=<file> | OWED=1 | UNITS="<key>,<key>"   [OUT=<dir>] [REASON="<why>" for claims not owed]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$(UNITS)",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$(REASON)",)
+# GUARD_EDIT_OK: feature 374 FR-007 - WITH= and PAGES= bring a CANNOT-TELL re-check the helper bodies and pages it asked for.
+claims-bundle: ## [project] the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed   MODULE=<file> | OWED=1 | UNITS="<key>,<key>"   [OUT=<dir>] [REASON="<why>" for claims not owed] [WITH="<path>::<qualname>,..." context] [PAGES="<question file>,..."]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$(UNITS)",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$(REASON)",) $(if $(WITH),--with "$(WITH)",) $(if $(PAGES),--pages "$(PAGES)",)
 
 claims-checked: ## [project] record an impl-drift reply into the claims index, at the fingerprints its bundle read   BUNDLE=<dir> REPLY=<file holding the agent's reply>
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-checked: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
