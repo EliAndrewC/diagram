@@ -1,0 +1,52 @@
+{
+ "feature": "379-arbiter-fix-made-not-lost",
+ "plan_sha256": "f888209c1712a37c4ef06483ef645419863fae7dac9a340e190c685aec4478b9",
+ "plan_text": "# Implementation Plan: an arbiter's tooling fix is made, not lost (feature 379)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Builds on**: feature 375's round arbiter (`scripts/hooks/lib/hm_arbiter.py`,\n`.claude/agents/round-arbiter.md`), the GM's review after landing (`scripts/gm_review.py`) and the closing check\n(`scripts/gates/close_check.py`).\n\n## Summary\n\nThe ruling gains a `tooling_fix` field; `make arbiter-ruled` records it as an OPEN item on the ruling's row in the feature's\n`arbiter.jsonl`, and the ruling's GM-review row carries it. Every `make tick` of that feature, and its closing check, refuse\nwhile one is open. Two commands close it - done (what was built and its test) or declined as an overhaul (why) - and each\nadds a row to the GM's review. Tooling only: every task `research: rendering`.\n\n## Constitution Check\n\nI-V N/A (no UI, no pool content, no SOURCE blocks). VI N/A (no generator change). XII N/A (no physical decision). XIII: the\ntooling tests and `make hooks-test` green before landing. XIV: none found yet. XVI: built as asked; decisions below.\n\n## Decisions\n\n**D1 - The field, and the contract.** The ruling JSON takes an optional `tooling_fix`: one sentence naming the tool and the\nchange. The arbiter's contract gives one whenever the loop it judged came from a tooling gap - a guard that let a known\nhazard through, a command that misled, a bundle that hid what it needed - and says it is MADE by the session, soon, never\nfiled. A `process-fault` ruling MUST carry one (its fault, named so a tool can be built against it): `record_ruling` refuses\na `process-fault` without it. The contract's \"the fault is filed as a tooling row\" becomes \"the fault is your\n`tooling_fix`\"; no ruling's text tells anyone to file a tooling row (FR-001).\n\n**D2 - Recorded open, and shown to the GM.** `record_ruling` keeps `tooling_fix` on the ruling's `arbiter.jsonl` row with\n`\"fix\": \"open\"`, and on its GM-review row. A later `arbiter.jsonl` row `{\"fix_of\": \"<trigger>\", \"status\": \"done\"|\"declined\",\n\"note\": ..., \"utc\": ...}` closes it; the latest wins. `hm_arbiter.open_fixes(feature dir) -> list[(trigger, tooling_fix)]` is\nthe one rule every hold reads. The `process-fault` row in `found.jsonl` is no longer written: the open item replaces it\n(the found row was what nothing enforced, spec review round 1).\n\n**D3 - The hold is the next tick, and the close.** `scripts/tick-task.py` refuses ANY tick of a feature with an open fix,\nnaming each and both commands. A tick is the session's next step forward, so the fix is made before the work goes on\n(\"before proceeding with the rest of your implementation\") without interrupting a step in flight. `close_check.reasons`\nrefuses too, so neither a closing status line nor the push closes the feature around it (FR-002, FR-004).\n\n**D4 - Done, with its test, on the GM's review.** `make arbiter-fix-done ID=<trigger> NOTE=\"<what was built>\" TEST=<test\nfile>`: the TEST must be an existing file under `tests/` (a fix without a test is not done - a guard proves it fires); the\nNOTE has the escape reason floor (two words, eight characters). It writes the closing row and a GM-review row (`kind:\narbiter-fix-done`, the fix, the note, the test) and ensures the GM-review box (FR-002).\n\n**D5 - Declined as an overhaul, to the GM.** `make arbiter-fix-declined ID=<trigger> REASON=\"<why it overhauls a process>\"`\n(the same floor) writes the closing row and a GM-review row (`kind: arbiter-fix-declined`) and ensures the box (feature 375\nFR-012). Nothing files a feature; nothing waits on the GM; the GM reviews it after landing and may overturn it into a\nfeature (FR-003).\n\n**D6 - The motivating case (SC-001).** 378's ruling in the research clone predates the field; its fix - one gate at a time in\na clone - landed separately today (`scripts/gates/gate_lock.py`). The replay test feeds that ruling, with its fix as the\nfield, through D2-D5: open; tick refused; close_check refuses; done with `tests/tooling/test_gate_lock.py` closes it and\nputs it on the GM's review; a second ruling declined puts the reason there.\n\n**D7 - Where it is written down.** CLAUDE.md's `checks-hooks.sh` guard row gains the hold (one clause); the two targets\ncarry `##` lines for `make docs`. The guard-file edits (Makefile) carry GUARD_EDIT_OK.\n\n## Tasks\n\nT01 the field, the record, `open_fixes`, the found row retired (D1, D2); T02 the holds (D3) and the two commands (D4, D5);\nT03 the contract; T04 tests red on today's code, the replay (D6), the docs (D7); T05 the gate, the report, landed.\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Optional `tooling_fix` field (one sentence); contract gives one whenever the judged loop came from a tooling gap and says it is made, never filed; record_ruling refuses a process-fault without one; 'filed as a tooling row' replaced by 'the fault is your tooling_fix'.",
+   "class": "within",
+   "why": "FR-001 verbatim: the field, when to give one, process-fault always carries its fault, no 'file a tooling row'. The refusal on a process-fault without the field only enforces FR-001. 'Whenever the loop came from a tooling gap' is a floor (must give one then), not a ceiling; the contract must keep FR-001's 'never only in its prose' for any tooling fix the arbiter recommends, or an incidental one is lost again. The accept line's 'filed as rows' concerns finding rows, not tooling rows, and FR-001 does not reach it."
+  },
+  {
+   "id": "D2",
+   "summary": "record_ruling keeps tooling_fix on the arbiter.jsonl row with fix:open and on the GM-review row; later fix_of rows close it, latest wins; open_fixes() is the one rule; the process-fault found.jsonl row is no longer written.",
+   "class": "within",
+   "why": "FR-002: recorded as an open item of the active feature, the GM-review row carries it. Retiring the found.jsonl row narrows nothing: grep finds no reader of found.jsonl in scripts/ (only writers: hm_arbiter.py:218, gm_review.py:116, record_owed.py:344), so the row was unenforced, and FR-001 puts the process-fault's fault into tooling_fix, held and shown to the GM like any other."
+  },
+  {
+   "id": "D3",
+   "summary": "tick-task.py refuses ANY tick of a feature with an open fix, naming each and both commands; close_check.reasons refuses too.",
+   "class": "within",
+   "why": "FR-002 'make tick refuses while the feature has an open item, naming it' and FR-004 'does not close with an open item'; the GM's 'before proceeding with the rest of your implementation' and 'tool enforcement'."
+  },
+  {
+   "id": "D4",
+   "summary": "make arbiter-fix-done ID= NOTE= TEST=<existing file under tests/>; NOTE has the two-word/eight-character floor; writes the closing row and a GM-review row (kind arbiter-fix-done) and ensures the box.",
+   "class": "within",
+   "why": "FR-002 'made, with its test' and 'adds what was built and its test to that review'. The TEST requirement only enforces 'with its test' and cannot exclude a legitimate fix: guard companions live under tests/hooks/ (Makefile hooks-test), so every test kind sits under tests/."
+  },
+  {
+   "id": "D5",
+   "summary": "make arbiter-fix-declined ID= REASON= (same floor) writes the closing row and a GM-review row (kind arbiter-fix-declined), ensures the box; files no feature, waits on nobody; the GM may overturn it into a feature.",
+   "class": "within",
+   "why": "FR-003 as written: an overhaul declined to the GM's review, never filed, never a stop-and-ask. Overturn into a feature is the GM's existing gm_review power, not a session filing."
+  },
+  {
+   "id": "D6",
+   "summary": "The research-session ruling predates the field and its fix (gate_lock.py) already landed; SC-001 is met by a replay test feeding that ruling with its fix as the field through open, tick refused, close_check refused, done with tests/tooling/test_gate_lock.py on the GM's review, and a second ruling declined.",
+   "class": "within",
+   "why": "SC-001 asks for a replay, and this is one, covering every clause of it. Not writing the historical ruling back as a live open item narrows nothing: the fix is made (scripts/gates/gate_lock.py and tests/tooling/test_gate_lock.py exist, commit 8bc9db0c1), and the GM knows of it ('the one that we are doing now for making sure that make done cannot be run twice')."
+  },
+  {
+   "id": "D7",
+   "summary": "CLAUDE.md's checks-hooks.sh row gains the hold; the two targets carry ## lines for make docs; Makefile edits carry GUARD_EDIT_OK.",
+   "class": "within",
+   "why": "Documentation of the requested hold under existing project rules; adds no behavior."
+  }
+ ],
+ "verdict": "CLEAR"
+}

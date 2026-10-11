@@ -1150,6 +1150,16 @@ arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the 
 	@if [ -z "$(TRIGGER)" ] || [ -z "$(FILE)" ]; then printf 'make arbiter-ruled: TRIGGER= and FILE= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py ruled "$(TRIGGER)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
+# GUARD_EDIT_OK: feature 379 (the GM 2026-10-10) - an arbiter's tooling fix is made, not lost: the two ways an open fix is
+# settled, each a row of the GM's review; `make tick` and the closing check refuse while one is open.
+arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID=<trigger> NOTE="<what was built>" TEST=tests/...
+	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
+
+arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, to the GM's review, never filed (feature 379)   ID=<trigger> REASON="<why>"
+	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
+
 # GUARD_EDIT_OK: feature 375 FR-003(a) adds three operations - decide first: name the active task, print its decision
 # preflight's dispatch, print its section's digest. Read-only but for task-start's `<git dir>/active-task`.
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict (feature 375)   F=375 T=T13

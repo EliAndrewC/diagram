@@ -20,7 +20,9 @@ A trigger owes a RULING before the next check dispatch on its unit (a reversal o
 gate). Nothing else stops. `make arbiter-bundle TRIGGER=` builds what `round-arbiter` reads; `make arbiter-ruled` records its
 ruling - one per trigger, binding - in `specs/<feature>/arbiter.jsonl` and as a row of the GM's review (`gm-review.jsonl`,
 FR-012). `continue` lifts a round cap by one round; `accept` and `process-fault` close the unit (its further dispatches are
-refused; a process fault is filed as a tooling row in `found.jsonl`).
+refused). A ruling's `tooling_fix` - a `process-fault` always has one - is an OPEN item of the feature until
+`make arbiter-fix-done` or `arbiter-fix-declined` settles it, and `make tick` and the closing check refuse while it is open
+(feature 379: the first such fix lived only in a ruling's prose and was lost).
 """
 
 from __future__ import annotations
@@ -99,7 +101,8 @@ def rulings(root: Path) -> dict[str, dict[str, Any]]:
             r = json.loads(line)
         except ValueError:
             continue
-        out[str(r.get("trigger"))] = r
+        if "trigger" in r:  # a `fix_of` row settles a ruling's tooling fix (feature 379); it is no ruling
+            out[str(r["trigger"])] = r
     return out
 
 
@@ -188,6 +191,9 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
         raise ValueError(f"{trigger} is already ruled - one ruling per trigger, binding; the session neither re-asks nor overrules")
     if ruling.get("ruling") not in RULINGS or not str(ruling.get("why") or "").strip():
         raise ValueError(f"a ruling is one of {RULINGS} with a `why`")
+    fix = str(ruling.get("tooling_fix") or "").strip()
+    if ruling["ruling"] == "process-fault" and not fix:  # feature 379 FR-001: the fault IS the fix, made and held, never filed
+        raise ValueError("a `process-fault` ruling names its fault as `tooling_fix` - one sentence: the tool and the change")
     d = feature_dir(root)
     if d is None:
         raise ValueError("no active feature (.specify/feature.json) to record the ruling in")
@@ -195,14 +201,27 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     trig = owed(root).get(trigger, {})
     row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit", ""),
            **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
-           "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when}
+           "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when,
+           **({"tooling_fix": fix, "fix": "open"} if fix else {})}
     d.mkdir(parents=True, exist_ok=True)
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
-    with (d / "gm-review.jsonl").open("a", encoding="utf-8") as fh:  # FR-012: every ruling is the GM's to review after landing
-        fh.write(json.dumps({"kind": "arbiter", "trigger": trigger, "ruling": row["ruling"], "why": row["why"], "utc": when},
-                            ensure_ascii=False) + "\n")
-    try:  # FR-012: a feature with a row for the GM carries its GM-review box
+    _gm_row(d, {"kind": "arbiter", "trigger": trigger, "ruling": row["ruling"], "why": row["why"],
+                **({"tooling_fix": fix} if fix else {}), "utc": when})
+    if row["ruling"] == "accept" and row["kind"] == "round":
+        accept_answers(root, row["unit"], f"accepted by the round arbiter ({trigger})")
+    path = common_dir(root) / OWED
+    state = _load(path)
+    if state.pop(trigger, None) is not None:
+        path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
+    return row
+
+
+def _gm_row(d: Path, row: Mapping[str, Any]) -> None:
+    """A row of the GM's review after landing, and the feature's GM-review box with it (feature 375 FR-012)."""
+    with (d / "gm-review.jsonl").open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+    try:
         import importlib.util  # noqa: PLC0415
 
         spec = importlib.util.spec_from_file_location("gm_review", Path(__file__).resolve().parents[2] / "gm_review.py")
@@ -212,16 +231,58 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
             gm.ensure_box(d)
     except (OSError, ImportError):  # pragma: no cover - a tree without the script records the row all the same
         pass
-    if row["ruling"] == "accept" and row["kind"] == "round":
-        accept_answers(root, row["unit"], f"accepted by the round arbiter ({trigger})")
-    if row["ruling"] == "process-fault":
-        with (d / "found.jsonl").open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps({"check": "round-arbiter", "file": "(tooling)", "block": trigger, "finding": row["why"],
-                                 "status": "open", "utc": when}, ensure_ascii=False) + "\n")
-    path = common_dir(root) / OWED
-    state = _load(path)
-    if state.pop(trigger, None) is not None:
-        path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
+
+
+def open_fixes(d: Path) -> list[tuple[str, str]]:
+    """(trigger, tooling_fix) of every arbiter tooling fix in feature `d` neither made nor declined (feature 379): the one
+    rule `make tick` and the closing check both read. A later `fix_of` row settles one; the latest wins."""
+    f = d / "arbiter.jsonl"
+    fixes: dict[str, str] = {}
+    for line in f.read_text(encoding="utf-8").splitlines() if f.is_file() else []:
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        if r.get("fix") == "open" and r.get("tooling_fix"):
+            fixes[str(r.get("trigger"))] = str(r["tooling_fix"])
+        elif r.get("fix_of") in fixes and r.get("status") in ("done", "declined"):
+            fixes.pop(str(r["fix_of"]))
+    return list(fixes.items())
+
+
+def fix_hold(d: Path) -> str:
+    """Why feature `d` may not move on while an arbiter tooling fix is open, naming each and both ways to settle it."""
+    fixes = open_fixes(d)
+    if not fixes:
+        return ""
+    return ("the round arbiter's tooling fix is open - make it, with its test, in this feature before going on (feature 379):\n"
+            + "\n".join(f"    {t}: {fix}" for t, fix in fixes)
+            + '\n  made:     make arbiter-fix-done ID="<trigger>" NOTE="<what was built>" TEST=<its test under tests/>'
+            + '\n  overhaul: make arbiter-fix-declined ID="<trigger>" REASON="<why it overhauls a process>" (the GM reviews it after landing)')
+
+
+def settle_fix(root: Path, trigger: str, status: str, note: str, test: str = "", now: str | None = None) -> dict[str, Any]:
+    """`make arbiter-fix-done` / `arbiter-fix-declined`: close an open tooling fix of the active feature, on the GM's review."""
+    d = feature_dir(root)
+    if d is None:
+        raise ValueError("no active feature (.specify/feature.json)")
+    fix = dict(open_fixes(d)).get(trigger)
+    if fix is None:
+        raise ValueError(f"{trigger} has no open tooling fix in {d.name} - `make tick` names the open ones")
+    if len(note.split()) < 2 or len(note) < 8:
+        raise ValueError("the NOTE (or REASON) needs two words and eight characters - it is what the GM reads")
+    if status == "done":
+        t = (root / test).resolve() if test else None
+        if t is None or not t.is_file() or (root / "tests").resolve() not in t.parents:
+            raise ValueError(f"TEST={test or '<none>'} is not a file under tests/ - a fix is done with the test that proves it")
+    elif status != "declined":
+        raise ValueError("status is done or declined")
+    when = now or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    row = {"fix_of": trigger, "status": status, "note": note, **({"test": test} if status == "done" else {}), "utc": when}
+    with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+    _gm_row(d, {"kind": f"arbiter-fix-{status}", "trigger": trigger, "tooling_fix": fix, "note": note,
+                **({"test": test} if status == "done" else {}), "utc": when})
     return row
 
 
@@ -245,7 +306,15 @@ def main(argv: list[str]) -> int:
             return 1
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
         return 0
-    print("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter", file=sys.stderr)
+    if argv[:1] == ["fix"] and len(argv) in (4, 5) and argv[1] in ("done", "declined"):
+        try:
+            settle_fix(Path(".").resolve(), argv[2], argv[1], argv[3], argv[4] if len(argv) == 5 else "")
+        except ValueError as e:
+            print(f"arbiter-fix-{argv[1]}: refused - {e}", file=sys.stderr)
+            return 1
+        print(f"arbiter-fix-{argv[1]}: {argv[2]} settled - on the GM's review (make gm-review)")
+        return 0
+    print("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter | fix done|declined <trigger> <note> [<test>]", file=sys.stderr)
     return 2
 
 
