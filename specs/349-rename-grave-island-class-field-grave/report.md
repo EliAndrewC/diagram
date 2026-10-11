@@ -1,6 +1,6 @@
 # Feature report - 349-rename-grave-island-class-field-grave
 
-Written by `make feature-report F=349` from 0 events (no event log and no transcript: the time table is empty), 0 commits, the run log and the spec.
+Written by `make feature-report F=349` from 0 events (no event log and no transcript: the time table is empty), 6 commits, the run log and the spec.
 
 ## Where the time went
 
@@ -21,11 +21,11 @@ Written by `make feature-report F=349` from 0 events (no event log and no transc
 ## Process signals
 
 - gates: none recorded
-- spec rounds: none recorded
+- spec rounds: CHANGES REQUIRED 1
 - plan reviews BLOCKED: 0 recorded in commits, 0 returned
 - reversals (A -> B -> A): 0
-- check dispatches 0 over 0 changed lines: cascade ratio 0.00
-- tasks ticked: 0 of 0
+- check dispatches 0 over 109 changed lines: cascade ratio 0.00
+- tasks ticked: 3 of 4
 
 ## Tripwires (FR-010) - what fired, or would have
 

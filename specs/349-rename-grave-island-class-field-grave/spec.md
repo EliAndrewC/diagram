@@ -1,6 +1,6 @@
 # Feature Specification: Rename the `grave island` class to `field grave`
 
-**Status**: In progress (2026-10-10) - the GM: "Yes, please."; spec-fidelity round 2 FAITHFUL
+**Status**: Done (2026-10-10): every task ticked - the GM: "Yes, please."; spec FAITHFUL (round 2), plan CLEAR; see report.md
 
 **Affects**: hamlet, interactive page
 
