@@ -1,12 +1,49 @@
-# Feature Specification: Rename the `grave island` class to `field grave` (settlement-review, Kashikawa 2026-09-28)
+# Feature Specification: Rename the `grave island` class to `field grave`
 
-**Status**: Done (2026-10-10, as a tweak - the GM: "Yes, please."): the class key is `field grave` (`FieldGrave`), carried in tests/interactive/test_classes_docstrings.py `SINCE_189` like bathhouse -> bath room; the ink tags, place.json, siblings.json, the modal (hamlet/field-grave.md, Name only), Kashikawa's notes key and manifest follow; the island form keeps its own name (`grave_form=island`, `_plot_grave_island`). Was: Filed - from future-work/farming-communities.md, "Rename the `grave island` class to `field grave` (settlement-review, Kashikawa 2026-09-28)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: In progress (2026-10-10) - the GM: "Yes, please."
 
 **Affects**: hamlet, interactive page
 
-**Input**: deferred work, filed by feature 330 when the GM retired it as a directory of its own listings (2026-10-08): *"Everything that is there should instead become an unimplemented spec kit feature."*
+**Input**: request.md - the entry as filed (settlement-review of Kashikawa, 2026-09-28) and the GM's go-ahead, 2026-10-10.
 
-Rewriting this into a full spec, a plan and tasks is the work of whoever picks it up (`/speckit-specify` on this directory); until then `make speckit-todo` lists it as filed.
+## Why
+
+Feature 267 made the field grave a knob with two forms - an island inside a plot (the Chinese form) or a grave in a plot's
+corner (the Japanese form) - but the page class kept the name of one of them. A corner-form hamlet's hover says "grave
+island" while its own note says the grave is "not an island" (Kashikawa's review raised it twice).
+
+## User Scenarios & Testing
+
+### US1 - the hover names what the map draws (P1)
+
+A reader hovers a field grave on any hamlet and the page names it a field grave, whichever form the hamlet rolled.
+
+**Acceptance**: 1. Given Kashikawa (corner form), when its field grave is hovered, the class shown is `field grave`, with
+the same modal text as before apart from its name. 2. Given an island-form hamlet, the same. 3. Given a map's notes keyed by
+the class, the sentence still reaches the modal.
+
+## Requirements
+
+- **FR-001**: The page class whose key is `grave island` is renamed `field grave` everywhere the key is used: the engine's
+  ink tags, the class registry, the title card's collision text, the sibling pairs, the modal file and its Name, the maps'
+  manifests and notes keys, and the tests.
+- **FR-002**: Nothing a reader sees changes but the name: the glyph, its placement, the About, Guesses and Depiction text,
+  and the PNG are unchanged.
+- **FR-003**: The island FORM keeps its name - the `grave_form=island` choice and its modal, `_plot_grave_island` - because
+  it names the form, not the class.
+- **FR-004**: The rename is carried by the class snapshot's renaming table, as `bathhouse -> bath room` was (the snapshot of
+  feature 189 is never edited).
+
+## Success Criteria
+
+- **SC-001**: No shipped hamlet's manifest or page names `grave island` as a class; Kashikawa's names `field grave`.
+- **SC-002**: The interactive tests pass, and Kashikawa's manifest differs from before only in `ink_classes` (its geometry unchanged).
+
+## Decisions Recorded
+
+- The modal's research checks are not re-run: only its Name line changed, and its About, Guesses and Depiction passed them
+  under the old name in feature 319; `modal-form`, the check that reads the name, ran on the renamed modal (map drawing
+  convention for the name; no physical claim moves).
 
 ## The entry, as filed
 
