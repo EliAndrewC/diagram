@@ -279,3 +279,18 @@ def test_the_section_backfill_rekeys_current_rows_and_leaves_owed_ones_owed(tmp_
 
 
 PRECINCT = "docs/building-programs.md::Country shrine (a village district's shrine)#precinct"
+
+
+def test_a_triage_of_a_section_and_a_page_together_shows_both(tmp_path: pathlib.Path) -> None:
+    """Feature 374: the sections' loop bound its removed blocks to `gone`, the pages' map, so a triage owing a section and a
+    page at once failed with `'list' object has no attribute 'get'`."""
+    root = _repo(tmp_path)
+    skill, index, store = _checked_doc(root)
+    _commit(root, "the section and the page as checked")
+    (skill / "docs" / "buildings.md").write_text(DOC.replace("| gate | 8 ft |", "| gate | 10 ft |"))
+    _tree(root, MOD, PAGE.replace("5 ft", "6 ft"))
+    cur = cx.current(skill)
+    owed = dict(cx.owed(cur, index, skill / QDIR, store))
+    assert owed[WALLS] == cx.SECTION_TRIAGE and SHARE in owed
+    manifest = cx.triage_bundle(cur, index, store, [WALLS, SHARE], skill / QDIR, tmp_path / "t").read_text()
+    assert "## docs/buildings.md::Walls (a procedure section" in manifest and "> Each lane is 6 ft." in manifest

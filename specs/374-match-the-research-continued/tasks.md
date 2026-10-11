@@ -46,6 +46,24 @@ in 328's ranking and this spec.
 - [x] T05 SC-005: key `sc004-375-dispatches-per-row` over T01-T03, from `make feature-report F=374`
       research: rendering
       verify: DONE. 375 SC-004: 15 dispatches per closed row (4 rows, 60 dispatches) against 372's ~10; m:sc004-375-dispatches-per-row
+## Phase 5 - batch 2: the claims labeled as the record has them
+
+- [x] T06 wave 115: the procedures' four relabels (FR-001)
+      research: rendering
+      verify: DONE. wave 115: the four procedure relabels and the two re-check answers recorded IN-STEP by impl-drift (b5-docs, b7-owed, b8-owed, b9-owed); 0090's GUESS sentence quote-checked and record-formatted; the pop-ups it moved checked (nakamon, court divider, inner and outer court, office hall, residence)
+
+- [x] T07 wave 116: the hamlet's ways and hinterland labeled and claimed (FR-001)
+      research: rendering
+      verify: DONE. wave 116: the hamlet's ways and hinterland claims labeled and claimed (b5-ways1, b5-ways2, b6/b8/b9 re-checks); claims needing a code change filed as DRIFTED rows (found-wave118)
+
+- [x] T08 wave 117: the settlement, waterfields, labels and interactive claims labeled and claimed (FR-001)
+      research: rendering
+      verify: DONE. wave 117: the settlement, waterfields and labels claims labeled and claimed (b5-rest, b6-owed, b11/b12/b13); drifts filed in found-wave118; ranking rebuilt
+
+- [x] T09 wave 118: the CANNOT-TELL re-checks (FR-001)
+      research: rendering
+      verify: DONE. wave 118: the CANNOT-TELL claims re-checked with their context (b7-ct1, b7-ct2, b8-ct1, b8-ct2): 0 CANNOT-TELL left; WITH= and PAGES= added to claims-bundle; the polder/dike-pond roll a known gap and an open DRIFTED row (plan review CLEAR)
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

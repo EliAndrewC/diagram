@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-11T01:13:25Z",
+  "target": "claims-gate",
+  "commit": "a9f1f1845",
+  "why": "CLAIMS_OK: feature 374 batch 2: the pond-layout claim was relabeled from DEVIATION to DRIFTED by the plan review's ruling (a known gap is a drift); the code is unchanged and the drift is an open E3 row in 328's ranking (found-wave118) for 374's code waves"
+}

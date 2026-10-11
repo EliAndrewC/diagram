@@ -492,6 +492,9 @@ class FixtureSitingMixin:
             lane fallback width - UNRESEARCHED: a lane with no recorded width at 8 px
             turned to its way - UNRESEARCHED: the ground's long side along the way's bearing
             out from under captions - CONVENTION: a preference, the busiest seat where none is clear
+            ground off the way - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: never in the roadbed, kept h/2 off every way's bed
+            margin off the bed - UNRESEARCHED: a further 3 px past the bed's edge
+            ground inside a lane's setback - UNRESEARCHED: the ground may stand inside a lane's house-setback corridor
             caption seat - CONVENTION"""
         if not self.M["meta"].get("punishment_spot", True):
             return None

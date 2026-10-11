@@ -197,12 +197,12 @@ def triage_bundle(
         "deviation that bears on what the claim says the code does. Reply one `TOUCHES <key> - <which block, a few words>` line per "
         "such claim, and nothing for the rest: a claim you do not name is cleared without a re-check. When unsure, name it.\n",
     ]
-    for where, (fresh, gone, ks) in sorted(sections.items()):
+    for where, (fresh, lost, ks) in sorted(sections.items()):  # `lost`, never `gone`: the pages' loop below reads `gone` (374)
         parts.append(f"## {where} (a procedure section; the claims' own lines did not change)\n\nNew or changed blocks:\n")
         parts += [f"> {w}\n" for w in fresh] or ["(none)\n"]
-        if gone:
+        if lost:
             parts.append("Removed blocks (no longer in the section):\n")
-            parts += [f"> {w}\n" for w in gone]
+            parts += [f"> {w}\n" for w in lost]
         parts.append("Claims in it:\n")
         for k in sorted(ks):
             parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")

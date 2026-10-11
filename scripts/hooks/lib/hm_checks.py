@@ -51,6 +51,7 @@ STALE_S = 90 * 60
 #: a dispatch recorded at PreToolUse and never launched (another guard refused the call) stops counting after this
 PENDING_S = 120
 _UNIT = re.compile(r"^unit: (\S+?):(\S.*?) \S+$", re.M)
+_UNIT_FP = re.compile(r"^unit: (\S+?:\S.*?) (\S+)$", re.M)
 _Q = re.compile(r"\b(\d{4})(?:[.#-]|$)")
 _EDIT = re.compile(
     r"^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n(?P=ind)<<<\n(?P<old>.*?)\n(?P=ind)===\n(?P<new>.*?)\n?(?P=ind)>>>[ \t]*$",
@@ -66,6 +67,19 @@ def subject_of_unit(slug_tail: str) -> str:
         return f"modal:{slug_tail}"
     m = _Q.match(slug_tail)
     return f"q:{m.group(1)}" if m else ""
+
+
+def moved_since_answer(root: Path, text: str, subject: str) -> str:
+    """The fingerprint of a unit on `subject` the bundle carries that no recorded answer covers, or ''. An arbiter's accept
+    closes a unit at the words it ruled on; once a later change (a page the pop-up links, its own file) re-owes it, the record
+    gate owes a check the closure refused - a deadlock (feature 374 FR-005, the residence pop-up after 0090 moved). So the
+    closure holds only while every unit the bundle carries on the subject is answered at its fingerprint."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "record"))
+    import record_owed  # noqa: PLC0415
+
+    store = record_owed.store(root)
+    return next((fp for slug, fp in _UNIT_FP.findall(text)
+                 if subject_of_unit(slug.partition(":")[2]) == subject and not record_owed.answered(store, slug, fp)), "")
 
 
 def subjects_of_manifest(text: str) -> list[str]:
@@ -132,9 +146,14 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         unit = f"{check}|{s}"
         if root is not None and not arbiter_ok:
             shut = hm_arbiter.closed(root, f"round:{unit}@")
-            if shut:
+            moved = moved_since_answer(root, text, s) if shut else ""
+            if shut and not moved:
                 return f"the round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)"
-            cap = ROUND_CAP + hm_arbiter.continues(root, f"round:{unit}@")
+            base = state.setdefault("rebased", {})
+            if moved and base.get(unit, {}).get("fp") != moved:
+                base[unit] = {"fp": moved, "n": n}  # a new change: its rounds count from here (feature 374 FR-005)
+            n0 = base.get(unit, {}).get("n", 0) if shut else 0
+            cap = n0 + ROUND_CAP + hm_arbiter.continues(root, f"round:{unit}@", n0)
             if n >= cap:
                 hm_arbiter.trip(root, f"round:{unit}@{n + 1}", "round", unit, f"round {n + 1} of {check} on {s}", now)
                 return f"round {n + 1} of `{check}` on {s} in this feature passes its cap of {cap} - " + hm_arbiter.refusal([f"round:{unit}@{n + 1}"])
@@ -142,7 +161,8 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
         state["rounds"][f"{check}|{s}"] = state["rounds"].get(f"{check}|{s}", 0) + 1  # every dispatch let through is a round
-    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending"}
+    state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending",
+                                                "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
     return ""
 
 
@@ -158,12 +178,14 @@ def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None
     """A check's return: its state, its EDIT blocks on its subjects, and (with `keep`, the clone's `check-replies/`) its reply,
     which the round arbiter's bundle compares round to round (FR-011)."""
     for tid, d in state.get("dispatches", {}).items():
+        # the reply is kept whatever the state: an answer recorded before SubagentStop fired had closed the dispatch, and the
+        # round arbiter's bundle then read "no reply kept" for that round (feature 374, the mulberry pop-up's round 2)
+        if d.get("aid") == agent_id and keep is not None and reply and not d.get("reply"):
+            keep.mkdir(parents=True, exist_ok=True)
+            (keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md").write_text(reply, encoding="utf-8")
+            d["reply"] = str(keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md")
         if d.get("aid") == agent_id and d.get("state") == "running":
             d["state"] = "returned"
-            if keep is not None and reply:
-                keep.mkdir(parents=True, exist_ok=True)
-                (keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md").write_text(reply, encoding="utf-8")
-                d["reply"] = str(keep / f"{re.sub(r'[^A-Za-z0-9_-]', '_', tid)}.md")
             for path, old, new in _blocks(reply):
                 for s in d["subjects"]:
                     state.setdefault("edits", {}).setdefault(s, []).append([path, old, new])
@@ -567,6 +589,12 @@ def close(root: Path, subject: str, reason: str, now: float) -> int:
     return 0
 
 
+def escape_for(msg: str) -> str:
+    """The escape that reaches the rule which refused: the arbiter's holds take ARBITER_OK, never FREEZE_OK (feature 374: the
+    tip named FREEZE_OK on a closed unit, and FREEZE_OK does not reach that rule)."""
+    return "ARBITER_OK" if "arbiter" in msg else "FREEZE_OK"
+
+
 def main(argv: list[str]) -> int:
     mode = argv[0] if argv else ""
     if mode == "close" and len(argv) == 3:  # make check-closed SUBJECT= REASON=
@@ -577,7 +605,7 @@ def main(argv: list[str]) -> int:
         return 0
     msg = handle(mode, payload)
     if msg:
-        print(f"BLOCKED: {msg}\n(scripts/hooks/lib/hm_checks.py; escape FREEZE_OK=\"<reason>\" in the prompt or the edit)", file=sys.stderr)
+        print(f"BLOCKED: {msg}\n(scripts/hooks/lib/hm_checks.py; escape {escape_for(msg)}=\"<reason>\" in the prompt or the edit)", file=sys.stderr)
         return 2
     return 0
 

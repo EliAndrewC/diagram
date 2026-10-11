@@ -447,7 +447,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
     stranding test above would clear it, because it would still see the dropped lane serving the house.
 
     Research:
-        doubled lane dropped - CONVENTION: a lane within 8 ft of another for half its length reads as one band
+        doubled lane dropped - UNRESEARCHED: a lane that returns to the way it left, or runs within 8 ft of another for half its length with both ends within 25 ft, is dropped
         no house stranded - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)
         web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
     """

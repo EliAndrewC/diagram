@@ -516,7 +516,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     seated any on `s._row_streets` (a list of point lists) and the line and sides on the manifest.
 
     Research:
-        row farm faces its street - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: never turned to its street - every frame keeps the settlement's one windward orientation (grove to windward, open front to lee, `grove_faces(plan.windward, ...)`) on either side of the street, so only the grove-to-windward form is drawn and the house turned to face its road never is
+        row farm faces its street - DEVIATION research/questions/0033-row-villages-resson.drawing.html: the page draws only the first of the two attested forms; never turned to its street - every frame keeps the settlement's one windward orientation (grove to windward, open front to lee, `grove_faces(plan.windward, ...)`) on either side of the street, so only the grove-to-windward form is drawn and the house turned to face its road never is
         far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: each far-row farm's holding one lot wide and `HOLDING_DEPTH_FRAMES` lots deep, all dry field; the near row and a one-sided row hold none
         far-row farm only with its holding - research/questions/0033-row-villages-resson.drawing.html: a far-row seat whose holding does not fit clear is passed over
         farms to a street - research/questions/0033-row-villages-resson.drawing.html: a full street gets a further street set out parallel beside it, never a second row behind

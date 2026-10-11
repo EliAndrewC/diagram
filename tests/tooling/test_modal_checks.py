@@ -320,6 +320,7 @@ def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing
     assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "DRIFTED | `settlement/houses.py::HousesMixin.house#ridge` | always hipped" in manifest
     assert "## Depiction" in manifest and "The map draws every house alike." in manifest and "no crop" in manifest, "no pool page in the fixture"
     assert "unit: modal-depiction:hamlet/farmhouse " in manifest and "owed-checks: modal-depiction" in manifest
+    assert "owed: modal-depiction:hamlet/farmhouse - a page its Drawing: names moved" in manifest, "why the unit is due (374)"
 
 
 def test_a_modal_with_no_drawing_list_is_still_handed_its_kinds_drawing_page_as_a_candidate(
@@ -414,3 +415,12 @@ def test_the_glyph_crop_shows_the_drawn_fill_never_the_highlight(tmp_path: pathl
     with Image.open(out) as im:
         r, g, b = im.convert("RGB").getpixel((im.width // 2, im.height // 2))
     assert (r, g, b) == (0xC9, 0xA5, 0x7A), f"the crop shows {r:02X}{g:02X}{b:02X}, not the drawn fill"
+
+
+def test_a_depiction_bundle_says_which_maps_draw_what_its_conditions_name() -> None:
+    """Feature 374 (the round arbiter's tooling fix): a conditional Drawing: link was ruled on without knowing which maps carry
+    the knob's form; the bundle now carries each named knob's forms, typing rule and engine lines."""
+    note = mb.knobs_note("Drawing: research/questions/0020-x.drawing.html [land_use_overlay=mulberry_fishpond]\n")
+    assert "## land_use_overlay" in note and "mulberry_fishpond" in note and "def _land_use_ok" in note
+    assert "rolling/roll.py" in note, "where the engine resolves it"
+    assert mb.knobs_note("no condition here") == ""

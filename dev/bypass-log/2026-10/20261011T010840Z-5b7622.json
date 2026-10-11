@@ -1,0 +1,6 @@
+{
+  "utc": "20261011T010840Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "batch 2 changes no pool sheet (git diff origin/main -- pool/ is empty); these units were reviewed in batch 1 and landed"
+}

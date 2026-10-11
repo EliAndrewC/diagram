@@ -281,7 +281,7 @@ class BundleGeomMixin:
             byre off the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `YARD_SHED_GAP_FT[0]`, 6 ft, off the house
             dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, `2 * _well_vr() + px(6.0)`
             south band off an unkept yard - UNRESEARCHED: `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
-            storehouse on the north wall - research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall
+            storehouse on the north wall - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall, a convention the page records against the record
             storehouse seam - CONVENTION: the north-wall kura annex reserved 1 ft off the house wall
             byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall on the flank away from the garden
             outer stable off the wall - GUESS research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the yard-shed byre set `YARD_SHED_GAP_FT[0]` (6 ft) off the house, the near end of the page's guessed 6 to 12 ft

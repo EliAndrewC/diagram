@@ -43,7 +43,8 @@ class CivicWorksMixin:
             program sizes - UNRESEARCHED: hand-set footprints
             precinct size - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: about 73,000 sq ft, 310 x 235 ft by default, or the caller's w x h
             parish burial plot in the precinct - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: a ruled plot; 24 x 16 px (about 0.08 acre at 3 ft/px)
-            parish plot's seat - UNRESEARCHED: at the precinct's rear, east of the axis (x+44, 14 px in from the rear edge)
+            parish plot at the rear - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: the graveyard outside the cloister at the back
+            parish plot east of the axis - GUESS: x+44, 14 px in from the rear edge
             glyph - CONVENTION: footprint boxes, no captions
         """
         w, h = (self.px(310) if w is None else w), (self.px(235) if h is None else h)  # a sovereign precinct about 73,000 sq ft (0227)

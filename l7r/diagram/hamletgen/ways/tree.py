@@ -419,6 +419,9 @@ def settle_tree(s: Any) -> int:
     once - and then the ordinary lanes that break a rule against
     them cut (`settle_defer`). Returns the lanes drawn or re-laid.
 
+
+    Research:
+        tree lane's room - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a no-build corridor of WEB_CLEARANCE, 18 ft
     Research: every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's way, laid in the gaps once the last house stands, drawn as a lane of its own"""
     M = s.M
     need = owed(M)

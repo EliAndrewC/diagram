@@ -21,10 +21,10 @@ Guesses:
 Depiction: The plan draws the outer court as the compound's bare earth, stippled, labeled with its name and, in smaller type, "forecourt". It is
 always drawn in front of the inner court, with a gate between them; for a Japanese office that is a simplification, since
 at Takayama the residence stood beside the office. The plan keeps its buildings a little further apart than a real jin'ya,
-which joined its rooms into a few long connected buildings, so that each reads as its own labeled footprint.
+so that each reads as its own labeled footprint; like a jin'ya, it still gathers a compound's rooms into a few connected buildings.
 
 Name: outer court
 Covers: the outer court's ground and its labels, the forecourt among them
 Sources: neixiang-yamen-zhwiki, yamen-enwiki, machi-bugyo-jawiki, takayama-jinya-city, takayama-jinya-official, neixiang-yamen, takayama-jinya-gifu, fuchu-joge-pamphlet, bjd-qing-yamen
 Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0099-the-hearing-court-shirasu.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
-Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html
+Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

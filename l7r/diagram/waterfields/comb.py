@@ -534,6 +534,7 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
         no channel crosses another - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: threads marched in lockstep, never crossing
         field depth - research/questions/0010-farmland-around-towns-and-cities.drawing.html: capped at `field_fall`, else grown downhill off the frame
         outfall margin - UNRESEARCHED: a capped field held inside the frame with a low-side margin for the outfall and brook
+        ditch thread spacing - UNRESEARCHED: GAP 26 px between threads, a child offset 0.55 GAP
     """
     for t in threads:
         t.pts = [F.to_xy(t.u0, t.f0)]

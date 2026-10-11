@@ -290,6 +290,37 @@ def drawing_candidates(root: pathlib.Path, m: mo.Modal) -> list[str]:
     return [f for f in dict.fromkeys(out) if f not in listed and (root / f).is_file()]
 
 
+ENGINE = HERE.parents[1] / "l7r" / "diagram"
+
+
+def knobs_note(doc: str) -> str:
+    """Where the kind is drawn, for each knob the modal's conditions name: its forms and default, the typing rule that says
+    which settlements may take each form, and the engine lines that set or read it. A LINKS finding on a conditional Drawing:
+    link was ruled without knowing whether a whole dike-pond hamlet carries `land_use_overlay=mulberry_fishpond` (feature 374,
+    the round arbiter's tooling fix). '' when the modal names no knob."""
+    names = list(dict.fromkeys(re.findall(r"\[([a-z_]+)=[a-z_0-9|-]+\]", doc)))
+    if not names:
+        return ""
+    import inspect  # noqa: PLC0415
+
+    sys.path.insert(0, str(HERE.parents[1]))
+    from l7r.diagram.interactive import conditions  # noqa: PLC0415
+    from l7r.diagram.settlement._knobs import KNOBS  # noqa: PLC0415
+
+    forms = conditions.knobs()  # populates the registry
+    parts = ["# The knobs this modal's conditions name - which maps draw what it conditions\n"]
+    for name in names:
+        k = KNOBS.get(name)
+        parts.append(f"## {name}\n\nforms: {', '.join(forms.get(name, ())) or '(not registered)'}" + (f"; default {k.default}" if k else "") + "\n")
+        if k is not None and getattr(k, "typing_rule", None) is not None:
+            parts.append("The typing rule (which settlements may take each form):\n\n```python\n" + inspect.getsource(k.typing_rule) + "```\n")
+        hits = [f"{f.relative_to(ENGINE.parents[1])}:{i}: {line.strip()}" for f in sorted(ENGINE.rglob("*.py"))
+                for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1)
+                if f'"{name}"' in line and " - " not in line][:15]
+        parts.append("Where the engine sets or reads it:\n\n" + ("\n".join(f"- `{h}`" for h in hits) or "- (no line names it)") + "\n")
+    return "\n".join(parts)
+
+
 def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, grep_targets: list[str]) -> None:  # noqa: ANN001
     """What `modal-depiction` reads beyond the modal and the rules: each drawing page its `Drawing:` lists and each CANDIDATE
     its kind has (`drawing_candidates`), whole; the claims citing any of them; and the glyph's crop (plan D13)."""
@@ -301,6 +332,8 @@ def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, gre
     for f in candidates:
         p = root / f
         put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), f, "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?")
+    if note := knobs_note(m.doc):
+        put("knobs.md", note, "l7r/diagram/settlement/_knobs.py", "which maps draw what the modal's conditions name: each knob's forms, typing rule and engine lines - read it before ruling on a conditional link")
     rows = claims_citing(root, [*m.drawing_files(), *candidates])
     put("claims.md", "# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n" + ("\n".join(rows) if rows else "(none)") + "\n",
         str(CLAIMS_INDEX), "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")
@@ -330,8 +363,11 @@ def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str) -> str:
 
     files = m.drawing_files() if for_ == mo.DEPICTION_CHECK else m.entry_files() if for_ == mo.RESEARCH_AGENT else []
     pages = [(f, b) for f in files if (b := mt.keep(root, f))]
+    import record_owed  # noqa: PLC0415 - what made each unit due, read back per round by the arbiter's bundle (374)
+
+    why = {u.slug: u.occasion for u in record_owed.units(root)}
     return ("## Owed (feature 311)\n\n" + f"owed-checks: {for_}\n" + "".join(f"unit: {s} {fp}\n" for s, fp in units)
-            + "".join(f"page: {f} {b}\n" for f, b in pages))
+            + "".join(f"page: {f} {b}\n" for f, b in pages) + "".join(f"owed: {s} - {why[s]}\n" for s, _fp in units if why.get(s)))
 
 
 def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str = "") -> int:

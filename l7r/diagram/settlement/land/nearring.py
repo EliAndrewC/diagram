@@ -62,6 +62,7 @@ class NearRingMixin:
             flat ground only - UNRESEARCHED: no plot within 1.35x the hill's radii
             garden share - UNRESEARCHED: 0.16 of the plots gardens
             crop runs - UNRESEARCHED: a plot keeps its neighbor's crop 58% of the time
+            near-ring plot off the ways - UNRESEARCHED: a plot stands off roads, streets and lanes by 3 x bscale
             row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot's furrows turned from its neighbors'"""
         from l7r.diagram.waterfields import DRY_CROPS
 

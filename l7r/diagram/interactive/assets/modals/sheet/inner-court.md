@@ -19,9 +19,9 @@ Guesses:
   them, so they are reasoned from the garden's place in the sunny south.
 - That the gate between the two courts was guarded: no record says so.
 
-Depiction: The plan always sets the inner court behind the office hall, reached through a gate between the courts; for a
-Japanese office that is a simplification, since at Takayama the residence stood beside the office. Its ground is kept
-open, its earth showing through unfilled, and the service ground behind the house is drawn as a service strip or a narrow alley, never a wide empty band.
+Depiction: The plan always sets the inner court behind the office hall; for a
+Japanese office that is a simplification, since at Takayama the residence stood beside the office. A gate in the wall between the two courts leads into it. Its ground is kept
+open, its earth showing through unfilled, and the service ground behind the house is drawn as a service strip or a narrow alley, never a wide empty band. Its buildings stand a little further apart than in a real compound, so each reads on its own.
 
 Name: inner court
 Covers: the inner court's ground and its label
