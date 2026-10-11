@@ -399,3 +399,28 @@ def test_a_quote_missing_from_the_archived_text_is_not_checked_never_not_readabl
 def test_a_pdf_link_is_asked_so_its_liveness_is_known() -> None:
     pages = qv.Pages(opener=lambda req, timeout: _Resp(b"%PDF-1.7", "application/pdf"))
     assert pages.get("https://ok.example/paper.pdf") == {"state": "NOT-CHECKED", "why": "a PDF - no text layer can be read here", "live": True}
+
+
+# THE ARCHIVE'S OWN LINE BREAK (feature 335's round arbiter, 2026-10-11, `round:quote-check|q:0104@3`). These three lines
+# are copied exactly from the archived text of adachi-matsue-bukeyashiki (SMC002-07.pdf, the archive's text.txt, lines
+# 90-92): the PDF breaks its lines mid-sentence, here right after 「あると」, and fn-12's second passage
+# (adachi-matsue-bukeyashiki#2) was NOT-CHECKED and redone by hand every round.
+MATSUE_ARCHIVED = (
+    " 主屋の東側に井戸が現存している。井側は来待石製であり、４本柱の屋根が架かっている。上屋の構\n"
+    "造は比較的新しい時代のものと思われる。台所、あるいは浴室との関係から有りうる配置関係にあると\n"
+    "思われるが、あったであろう側溝などは存在していない。\n"
+)
+MATSUE_2 = "台所、あるいは浴室との関係から有りうる配置関係にあると思われるが、あったであろう側溝などは存在していない。"
+
+
+def test_a_japanese_quote_across_the_archived_pdfs_line_break_is_verbatim() -> None:
+    assert qv.verdict(MATSUE_2, MATSUE_ARCHIVED) == {"quotation": "VERBATIM"}
+    got = qv.judge_note({**_note(""), "passages": [{"quote": "(translated)", "original": MATSUE_2}]}, _ArchivedPages(MATSUE_ARCHIVED, live=True))
+    assert got["passages"][0]["quotation"] == "VERBATIM" and got["readability"] == "READABLE"
+
+
+def test_joining_a_cjk_line_break_still_catches_a_changed_character_and_keeps_latin_word_gaps() -> None:
+    assert qv.verdict(MATSUE_2.replace("側溝", "溝"), MATSUE_ARCHIVED)["quotation"] != "VERBATIM"
+    assert qv.squeeze("上屋の構\n造は") == "上屋の構造は"
+    assert qv.squeeze("the main\nhouse") == "the main house"
+    assert qv.verdict("the mainhouse", "the main\nhouse")["quotation"] != "VERBATIM"
