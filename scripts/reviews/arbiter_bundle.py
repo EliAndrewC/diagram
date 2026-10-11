@@ -206,8 +206,10 @@ def rounds_section(root: Path, out: Path, check: str, subject: str, trigger: str
     n = trigger.rsplit("@", 1)[1] if trigger.startswith("round:") and "@" in trigger else ""
     parts = [f"## Rounds - {check or 'every check'} on {subject}\n"]
     if n:  # 343's 0104 quote-check ruling: the trigger read @3 and the bundle listed four rounds
-        parts.append(f"The owed round is the counter's round {n}: it counts the dispatches let through on this unit in this feature, a "
-                     "first reading of new notes not counted, so the list below - every dispatch kept - may run longer.\n")
+        parts.append(
+            f"The owed round is the counter's round {n}: it counts the dispatches let through on this unit in this feature, a "
+            "first reading of new notes not counted, so the list below - every dispatch kept - may run longer.\n"
+        )
     missing: list[str] = []
     for i, (v, marked) in enumerate(zip(rounds, mark_rounds(replies, others), strict=True), 1):
         c = str(v.get("check"))
@@ -220,8 +222,7 @@ def rounds_section(root: Path, out: Path, check: str, subject: str, trigger: str
             parts.append(f"The whole reply: `round-{i}-{c}.md` beside this file.")
         else:
             missing.append(f"round {i} ({c}, bundle {v.get('manifest') or '?'})")
-        parts += [f"- {m}: {f}" for m, f in marked] or ["- (no findings it numbers or bullets - read the whole reply)" if replies[i - 1]
-                                                         else "- (no reply kept for this round)"]
+        parts += [f"- {m}: {f}" for m, f in marked] or ["- (no findings it numbers or bullets - read the whole reply)" if replies[i - 1] else "- (no reply kept for this round)"]
         parts.append("")
     last = next((r for r in reversed(replies) if r), "")
     return parts, rounds, missing, last
@@ -234,17 +235,21 @@ def flow_sections(root: Path, out: Path, d: Path | None, files: list[str]) -> li
     log = el.log_path(root, d.name) if d else None
     events = list(el.read_jsonl(log)) if log and log.is_file() else []
     mine = (lambda p: any(str(p or "").endswith(f) for f in files)) if files else (lambda _p: True)
-    flow = [f"{e['t'][11:19]} {e.get('tool')} {e.get('path') or e.get('agent') or e.get('make') or ''}"
-            for e in events if e.get("ev") == "PreToolUse" and ((e.get("cat") == "edit" and mine(e.get("path"))) or (e.get("tool") == "Agent" and not files))]
+    flow = [
+        f"{e['t'][11:19]} {e.get('tool')} {e.get('path') or e.get('agent') or e.get('make') or ''}"
+        for e in events
+        if e.get("ev") == "PreToolUse" and ((e.get("cat") == "edit" and mine(e.get("path"))) or (e.get("tool") == "Agent" and not files))
+    ]
     (out / "cascade.txt").write_text("\n".join(flow[-200:]) + "\n", encoding="utf-8")
     scope = "the unit's files" if files else "the feature"
     sys.path.insert(0, str((HERE / "../measure").resolve()))
     import feature_report as fr  # noqa: PLC0415
 
     rev = [(p, t) for p, t in fr.reversals(events) if mine(p)]
-    return [f"## The cascade\n\n`cascade.txt`: the last {min(len(flow), 200)} edits{'' if files else ' and dispatches'} on {scope}, in order.\n",
-            "## Oscillation\n\n" + ("\n".join(f"- {p} at {t[11:19]}: an edit put back text an earlier edit replaced" for p, t in rev)
-                                   or f"- none on {scope} in the event log") + "\n"]
+    return [
+        f"## The cascade\n\n`cascade.txt`: the last {min(len(flow), 200)} edits{'' if files else ' and dispatches'} on {scope}, in order.\n",
+        "## Oscillation\n\n" + ("\n".join(f"- {p} at {t[11:19]}: an edit put back text an earlier edit replaced" for p, t in rev) or f"- none on {scope} in the event log") + "\n",
+    ]
 
 
 unit_of = ha.unit_of  # the one parser (feature 375 amendment 2): the bundle and the ruling row read a unit alike
@@ -258,19 +263,25 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    parts = [f"# Round arbiter bundle (feature 375, FR-011)\n\ntrigger: {trigger}\n",
-             f"Kind: {owed.get('kind', trigger.split(':', 1)[0])}. Fired: {owed.get('detail', '(not in arbiter-owed.json) - the unit read from the trigger')}.\n",
-             f"Clone root (for `make arbiter-ruled`): {root}\n"]
+    parts = [
+        f"# Round arbiter bundle (feature 375, FR-011)\n\ntrigger: {trigger}\n",
+        f"Kind: {owed.get('kind', trigger.split(':', 1)[0])}. Fired: {owed.get('detail', '(not in arbiter-owed.json) - the unit read from the trigger')}.\n",
+        f"Clone root (for `make arbiter-ruled`): {root}\n",
+    ]
     check, subject, files, unit = target(root, trigger, owed)
     # feature 379 amendment 2: the two kinds that used to go to the GM say where their record is
     if check == "spec-fidelity":
-        parts.append(f"## Rounds - the spec review of {subject}\n\nIts rounds are `spec.md`'s Review history (beside this file): each "
-                     "round's verdict and what was applied. Rule as for any round cap: `accept` lets the spec stand as the last round "
-                     "left it (the review gate takes the ruling as its verdict).\n")
+        parts.append(
+            f"## Rounds - the spec review of {subject}\n\nIts rounds are `spec.md`'s Review history (beside this file): each "
+            "round's verdict and what was applied. Rule as for any round cap: `accept` lets the spec stand as the last round "
+            "left it (the review gate takes the ruling as its verdict).\n"
+        )
     if trigger.startswith("ask:"):
-        parts.append(f"## The question\n\n{owed.get('detail', '')}\n\nA process question the session would have put to the GM. "
-                     "`continue`: go on as the question proposes; `accept`: it stands as it is (a waiver); `process-fault`: the "
-                     "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n")
+        parts.append(
+            f"## The question\n\n{owed.get('detail', '')}\n\nA process question the session would have put to the GM. "
+            "`continue`: go on as the question proposes; `accept`: it stands as it is (a waiver); `process-fault`: the "
+            "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n"
+        )
     rounds: list[dict] = []
     missing: list[str] = []
     if subject and check != "spec-fidelity":
@@ -372,9 +383,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"arbiter-bundle: {e}", file=sys.stderr)
         return 2
     except MissingRecord as e:
-        print("arbiter-bundle: the record lacks what the arbiter rules on - " + "; ".join(e.args[0]) + " (neither the hook's kept "
-              "reply nor the agent's transcript has it). Bundle anyway, so the arbiter weighs the gap: "
-              '`make arbiter-bundle TRIGGER=... MISSING_OK="<why it is gone>"`', file=sys.stderr)
+        print(
+            "arbiter-bundle: the record lacks what the arbiter rules on - " + "; ".join(e.args[0]) + " (neither the hook's kept "
+            "reply nor the agent's transcript has it). Bundle anyway, so the arbiter weighs the gap: "
+            '`make arbiter-bundle TRIGGER=... MISSING_OK="<why it is gone>"`',
+            file=sys.stderr,
+        )
         return 2
     print("arbiter-bundle: dispatch `round-arbiter` on that MANIFEST; it records its own ruling (make arbiter-ruled)")
     return 0
