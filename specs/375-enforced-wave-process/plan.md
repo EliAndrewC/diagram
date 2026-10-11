@@ -309,7 +309,11 @@ a subdirectory, under one MANIFEST asking for ONE
 ruling with an `exceptions` map; every missing record is reported at once. `make arbiter-ruled BATCH=1 FILE=`
 (`hm_arbiter.record_batch`) checks the whole reply first (its `triggers`, no stray exception, the declaration, none already
 ruled) and then records each trigger through `record_ruling` - the batch's ruling, or its exception - so holds, closures,
-continues and GM-review rows stay per unit; a batch `tooling_fix` is recorded once, on the first trigger. "Together" is
+continues and GM-review rows stay per unit. A batch `tooling_fix` is ONE fix: recorded (and opened) on the first trigger
+under the batch's ruling - else the first trigger - with every other row under the batch naming the trigger that holds it
+(`tooling_fix_on`, which satisfies a `process-fault` row only inside a batch); every row and exception is checked (a ruling,
+a `why`, a `process-fault`'s fix) before any is written (plan review round 1: a batch `process-fault` failed on its second
+trigger, and an exception on the first dropped the fix). "Together" is
 "owed now": the triggers a batch of dispatches tripped are owed at the same time, and nothing older lingers because each
 holds its unit until ruled. The tooling steers to it: `hm_arbiter.refusal(triggers, root)` - called by the record checks'
 cap (`hm_checks`) and the review checks' (`pair-hooks.sh`) with the clone root - names the batch command whenever more than

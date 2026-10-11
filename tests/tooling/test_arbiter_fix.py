@@ -276,3 +276,24 @@ def test_the_tooling_steers_a_batch_to_one_ruling(root: pathlib.Path, tmp_path: 
     rows = ha.record_batch(root, {"ruling": "accept", "why": "related and settled", "triggers": [*owed_now, ahead]}, "round-arbiter")
     assert {r["unit"] for r in rows} == {ha.unit_of(t) for t in [*owed_now, ahead]}, "the asked-ahead row keeps its unit"
     assert ha.owed(root) == {} and ha.closed(root, "round:modal-form|modal:sheet/a@") == "accept"
+
+
+def test_a_batch_tooling_fix_is_one_fix_held_by_one_row(root: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """The plan review of 375's amendment 2: a batch `process-fault` records every trigger with its fix opened once; an
+    exception on the first trigger does not drop the batch's fix; a reply with one bad exception writes nothing."""
+    d = root / "specs" / "900-z"
+    trig = [f"round:modal-form|modal:sheet/{u}@3" for u in "abc"]
+    for t in trig:
+        ha.trip(root, t, "round", ha.unit_of(t), "round 3")
+    bad = {"ruling": "accept", "why": "w", "triggers": trig, "exceptions": {trig[2]: {"ruling": "maybe", "why": "w"}}}
+    with pytest.raises(ValueError, match="one of"):
+        ha.record_batch(root, bad, "round-arbiter")
+    assert not (d / "arbiter.jsonl").exists(), "a bad row writes nothing"
+    fault = {"ruling": "process-fault", "why": "the form rounds reverse each other", "tooling_fix": "the form check reads the drawing",
+             "triggers": trig, "exceptions": {trig[0]: {"ruling": "accept", "why": "settled"}}}
+    rows = ha.record_batch(root, fault, "round-arbiter")
+    assert [r["ruling"] for r in rows] == ["accept", "process-fault", "process-fault"]
+    assert rows[1]["tooling_fix"] == fault["tooling_fix"] and rows[2]["tooling_fix_on"] == trig[1] and "tooling_fix" not in rows[0]
+    assert ha.open_fixes(d) == [(trig[1], fault["tooling_fix"])], "one fix, opened once, on the first trigger under the batch"
+    with pytest.raises(ValueError, match="tooling_fix"):
+        ha.record_ruling(root, "round:x|y@3", {"ruling": "process-fault", "why": "w", "tooling_fix_on": trig[1]}, "round-arbiter")

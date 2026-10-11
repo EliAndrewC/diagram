@@ -237,7 +237,8 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     if ruling.get("ruling") not in RULINGS or not str(ruling.get("why") or "").strip():
         raise ValueError(f"a ruling is one of {RULINGS} with a `why`")
     fix = str(ruling.get("tooling_fix") or "").strip()
-    if ruling["ruling"] == "process-fault" and not fix:  # feature 379 FR-001: the fault IS the fix, made and held, never filed
+    fix_on = str(ruling.get("tooling_fix_on") or "") if batch else ""  # a batch's one fix, held by another of its rows (375 a2)
+    if ruling["ruling"] == "process-fault" and not fix and not fix_on:  # feature 379 FR-001: the fault IS the fix, made and held
         raise ValueError("a `process-fault` ruling names its fault as `tooling_fix` - one sentence: the tool and the change")
     d = feature_dir(root)
     if d is None:
@@ -248,6 +249,7 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
            **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
            "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when,
            **({"tooling_fix": fix, "fix": "open"} if fix else {}),
+           **({"tooling_fix_on": fix_on} if fix_on and not fix else {}),
            # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
            **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {})}
     d.mkdir(parents=True, exist_ok=True)
@@ -267,8 +269,11 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
 def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str | None = None) -> list[dict[str, Any]]:
     """Record ONE ruling for a batch of round triggers (feature 375 amendment 2, FR-017; the GM 2026-10-11: "a whole batch of
     pop-ups reaching the round cap at once should get a single ruling"): each trigger under the batch's ruling or its own
-    exception, so each unit's hold, closure and GM-review row work as they do alone. A batch `tooling_fix` is one fix, recorded
-    on the first trigger only. Everything is checked before anything is written."""
+    exception, so each unit's hold, closure and GM-review row work as they do alone. A batch `tooling_fix` is ONE fix: recorded
+    on the first trigger under the batch's ruling (else the first trigger), every other row under the batch naming the trigger
+    that holds it (`tooling_fix_on`) - so a batch `process-fault` records whole and opens its fix once (the plan review of
+    amendment 2 found the second trigger refused and an exception on the first dropping the fix). Every row is checked before
+    any is written."""
     triggers = [str(t) for t in ruling.get("triggers") or []]
     exceptions = ruling.get("exceptions") or {}
     if not triggers:
@@ -282,13 +287,24 @@ def record_batch(root: Path, ruling: Mapping[str, Any], declared: str, now: str 
     done = sorted(set(triggers) & set(rulings(root)))
     if done:
         raise ValueError(f"already ruled: {', '.join(done)} - one ruling per trigger, binding")
-    base = {k: v for k, v in ruling.items() if k not in ("triggers", "exceptions")}
-    rows = []
-    for i, t in enumerate(triggers):
-        own = dict(exceptions.get(t) or {})
-        one = own if own else {k: v for k, v in base.items() if i == 0 or k != "tooling_fix"}
-        rows.append(record_ruling(root, t, one, declared, now, batch=True))
-    return rows
+    base = {k: v for k, v in ruling.items() if k not in ("triggers", "exceptions", "tooling_fix")}
+    fix = str(ruling.get("tooling_fix") or "").strip()
+    under = [t for t in triggers if t not in exceptions]
+    holder = (under or triggers)[0] if fix else ""
+    plan: list[tuple[str, dict[str, Any]]] = []
+    for t in triggers:
+        one = dict(exceptions[t]) if t in exceptions else dict(base)
+        if t == holder:
+            one["tooling_fix"] = fix
+        elif fix and t in under:
+            one["tooling_fix_on"] = holder
+        plan.append((t, one))
+    for t, one in plan:  # all checked first: a bad row writes nothing
+        if one.get("ruling") not in RULINGS or not str(one.get("why") or "").strip():
+            raise ValueError(f"{t}: a ruling is one of {RULINGS} with a `why`")
+        if one["ruling"] == "process-fault" and not (str(one.get("tooling_fix") or "").strip() or one.get("tooling_fix_on")):
+            raise ValueError(f"{t}: a `process-fault` ruling names its fault as `tooling_fix` (the batch's, or its own)")
+    return [record_ruling(root, t, one, declared, now, batch=True) for t, one in plan]
 
 
 def spec_body_sha(d: Path) -> str:
