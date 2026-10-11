@@ -105,5 +105,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T28 The clones' view in `make speckit-todo` (plan D22); its fixture test (SC-008)
       research: rendering
       verify: DONE. speckit-todo shows an open or reopened feature as an active clone holds it, marked not landed, by git (unlanded work only); measured active 0.14 s vs all 0.9 s, same rows (m:375-a1-speckit-todo-clones); test_speckit_todo 50 passed
-- [ ] T29 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
+- [x] T29 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
+      verify: DONE. make done green (reuse: scripts only); tests/tooling 1608 passed after the ledger row fix; make hooks-test green; report written; landed by the push carrying this tick

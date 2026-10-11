@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - amendment 1 (a pop-up check owed only by what it reads; the open features' state in the session clones); the original feature landed 2026-10-10 (SC-003 and SC-004 carried to 374)
+**Status**: Done 2026-10-11 - amendment 1 landed: spec FAITHFUL (round 3), plan CLEAR (round 2), every task ticked; SC-007 and SC-008 tested, the clone measurement recorded; SC-003 and SC-004 carried to 374
 
 **Amendment 1 approved**: the GM, 2026-10-10, "yes to each of those possible changes, though for the in-progress features you can probably limit yourself to clones with active sessions, if it helps performance."
 
