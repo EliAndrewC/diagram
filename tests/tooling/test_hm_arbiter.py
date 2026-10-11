@@ -395,6 +395,35 @@ def test_the_cascade_counts_only_the_dispatches_since_the_last_landing(tmp_path:
     assert ha._epoch("not a time") == 0.0
 
 
+def test_the_manifest_names_only_the_feature_files_it_copied(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 335's round arbiter, 2026-10-11, `ask:f335-garden-modal-depiction`: the MANIFEST said `request.md` and
+    `spec.md` were beside it, and the bundle had neither."""
+    import subprocess
+
+    root = tmp_path / "c"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/368-x"}')
+    (root / "specs" / "368-x").mkdir(parents=True)
+    monkeypatch.setenv("L7R_EVENTS_DIR", str(tmp_path / "no-events"))
+    manifest = ab.bundle(root, "red-gate", tmp_path / "out").read_text()
+    assert "beside this file: `request.md`" not in manifest.lower() and "`spec.md` beside this file" not in manifest
+    assert "NOT in this bundle: request.md, spec.md - found in none of: specs/368-x" in manifest
+    assert not (tmp_path / "out" / "request.md").exists() and not (tmp_path / "out" / "spec.md").exists()
+    # an ask naming its feature finds that feature's files where the active one has none; a half-present pair names its half
+    d = root / "specs" / "335-garden"
+    d.mkdir()
+    (d / "request.md").write_text("the GM's words")
+    manifest = ab.bundle(root, "ask:f335-garden-modal-depiction", tmp_path / "out2").read_text()
+    assert "Beside this file: `request.md` (the GM's words, from specs/335-garden)." in manifest
+    assert "NOT in this bundle: spec.md" in manifest and (tmp_path / "out2" / "request.md").read_text() == "the GM's words"
+    (d / "spec.md").write_text("the spec")
+    manifest = ab.bundle(root, "ask:f335-garden-modal-depiction", tmp_path / "out3").read_text()
+    assert "`spec.md` (the spec, from specs/335-garden)" in manifest and "NOT in this bundle" not in manifest
+    assert (tmp_path / "out3" / "spec.md").read_text() == "the spec"
+
+
 def test_the_nit_an_accept_asked_for_answers_its_unit_again(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 374 wave 120: the bridgehead pop-up's nit, made as the accept asked, re-owed the check the ruling had closed and
     a second ruling was spent on it. `make arbiter-nit` answers the unit again - only for the wording the ruling quotes."""

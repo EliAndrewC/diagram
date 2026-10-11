@@ -319,12 +319,41 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     if gaps:
         parts.append("## Missing from the record (bundled anyway: " + allow_missing + ")\n\n" + "\n".join(f"- {g}" for g in gaps) + "\n")
     parts += flow_sections(root, out, d, files if subject else [])
-    for name in ("request.md", "spec.md"):
-        if d and (d / name).is_file():
-            shutil.copyfile(d / name, out / name)
-    parts.append("## The feature\n\n`request.md` (the GM's words) and `spec.md` beside this file.\n")
+    parts.append(feature_section(root, out, d, trigger))
     (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
     return out / "MANIFEST.md"
+
+
+def feature_dirs(root: Path, d: Path | None, trigger: str) -> list[Path]:
+    """Where the feature's `request.md` and `spec.md` may be: the active feature, then the feature a trigger names by number
+    (`ask:f335-...`) - a page session's ask was bundled where the active feature resolved to none."""
+    out = [d] if d else []
+    m = re.search(r"(?:^|[^a-z0-9])f(\d{3})(?:[^0-9]|$)", trigger)
+    if m:
+        out += sorted((root / "specs").glob(f"{m.group(1)}-*/"))
+    return [p for p in dict.fromkeys(out) if p.is_dir()]
+
+
+def feature_section(root: Path, out: Path, d: Path | None, trigger: str) -> str:
+    """Copy the feature's `request.md` and `spec.md` beside the MANIFEST and name ONLY the ones copied (feature 335's round
+    arbiter, 2026-10-11, `ask:f335-garden-modal-depiction`: the MANIFEST said both were beside it, and that bundle had
+    neither). A file found nowhere is named as missing, with where it was looked for."""
+    dirs = feature_dirs(root, d, trigger)
+    copied, missing = [], []
+    for name, what in (("request.md", "the GM's words"), ("spec.md", "the spec")):
+        src = next((p / name for p in dirs if (p / name).is_file()), None)
+        if src is None:
+            missing.append(name)
+            continue
+        shutil.copyfile(src, out / name)
+        copied.append(f"`{name}` ({what}, from {src.parent.relative_to(root) if src.is_relative_to(root) else src.parent})")
+    text = "## The feature\n\n"
+    if copied:
+        text += "Beside this file: " + "; ".join(copied) + ".\n"
+    if missing:
+        looked = ", ".join(str(p.relative_to(root) if p.is_relative_to(root) else p) for p in dirs) or "no feature directory resolved"
+        text += f"NOT in this bundle: {', '.join(missing)} - found in none of: {looked}. Rule from the sections above.\n"
+    return text
 
 
 batch_triggers = ha.batch_triggers  # THE BATCH, defined once (feature 375 amendment 2, FR-017)
