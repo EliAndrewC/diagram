@@ -90,7 +90,8 @@ the round, before the snapshot moves (so a refused dispatch spends nothing), a r
 `continue` rulings on this PASS of the review, `round:spec-fidelity|<feature>#<pass>@` (the pass counted beside the
 round in `.git/review-round/<feature>/pass`, one more each time a dispatch follows an ACCEPTED pass - a FAITHFUL round, or
 the arbiter's `accept` or `process-fault` on that pass, which accept the spec as FAITHFUL does - so a ruling on one pass
-neither lifts nor closes a later pass's cap; plan review rounds 1 and 2), trips that trigger (`hm_arbiter.trip`, kind `round`) and refuses
+neither lifts nor closes a later pass's cap; plan review rounds 1 and 2; a `REVIEW_ROUND_OK` full re-read after an accepted
+pass starts the new pass too, found when amendment 3's first round counted as round 4), trips that trigger (`hm_arbiter.trip`, kind `round`) and refuses
 with `hm_arbiter.refusal`, as `pair-hooks.sh` does for a review check's third round; `ARBITER_OK="<reason>"` in the prompt
 is the escape (the hook's own census row). An `accept` or `process-fault` ruling closes the pass: it accepts the spec as FAITHFUL does, so the next dispatch is an
 amendment's new pass at round 1.

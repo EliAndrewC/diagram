@@ -91,7 +91,7 @@ The GM answered amendment 2's question: "yes it covers the band-3 perf signoff t
 longer holds.
 
 - **FR-011 The band-3 sign-off goes to the arbiter first.** A performance increase in band 3, which today waits for the GM's
-  sign-off at a terminal before the push, is put to the round arbiter with one command that records the question and
+  sign-off before the push, is put to the round arbiter with one command that records the question and
   builds its bundle, the perf report in it. An `accept` ruling bound to that bookend pair's exact numbers satisfies the
   push as the GM's sign-off does; `continue` (keep optimizing) and `process-fault` do not; a ruling on other numbers is
   stale. The GM reviews the ruling after landing, like every other. The session NEVER asks the GM for a band-3 sign-off:
@@ -154,3 +154,4 @@ longer holds.
   band-3 sign-off (the arbiter is its only route; a GM sign-off given unprompted still counts, recorded from their words), the
   push's refusal names the arbiter alone, and FR-011 lists every text that gave band 3 to the GM; amendment 2's preamble
   no longer leaves band 3 out; the session memory that said to ask the GM's go-ahead is rewritten.
+- spec-fidelity-verify, amendment 3 round 2 (2026-10-10): FAITHFUL - both round 1 items resolved (FR-011's opening no longer says "at a terminal", the aside applied).
