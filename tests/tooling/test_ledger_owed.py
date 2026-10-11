@@ -130,3 +130,45 @@ def test_a_pass_is_settled_from_the_finished_transcript_not_the_cells_logged_at_
     assert (a1["wall"], a1["tokens"]) == ("13 s", "2k in (0k cached) / 1.0k out")
     assert a2["wall"] == "20 s", "an agent that returned once has one return to settle by"
     assert (a9["wall"], a9["tokens"]) == ("7 s", "y"), "no transcript: the logged cells stand"
+    assert a1["logged"] == "4 s | 1k in (0k cached) / 0.1k out", "the cells logged at the stop are kept beside"
+    # a row written from those logged cells before the recompute still answers its pass (2026-10-11: 131 answered passes
+    # read as owed again the day the recompute landed); a row with the recomputed cells answers it too
+    assert lo.unanswered([a1], HEAD + _row(wall="4 s", tokens="1k in (0k cached) / 0.1k out")) == []
+    assert lo.unanswered([a1], HEAD + _row(wall="13 s", tokens="2k in (0k cached) / 1.0k out")) == []
+    assert lo.unanswered([a1], HEAD + _row(wall="5 s", tokens="1k in (0k cached) / 0.1k out")) == [a1]
+
+
+def test_a_page_session_s_passes_get_rows_written_from_their_replies(tmp_path: Path) -> None:
+    """2026-10-11: headless page sessions wrote no ledger rows, and 343's and 368's owed 124 at landing. `--write` fills each
+    owed pass's row from the agent's own reply; `--session` keeps it to the session that ended."""
+    for n, (sid, aid, reply) in enumerate((("s1", "a1", "COVERAGE 0 findings; TRUTH 0; LINKS 0"), ("s1", "a2", "1. the lantern is on no drawing page"), ("s2", "a3", "x"))):
+        sub = tmp_path / "proj" / sid / "subagents"
+        sub.mkdir(parents=True, exist_ok=True)
+        prompt = json.dumps({"timestamp": "2026-10-10T10:00:00Z", "message": {"role": "user", "content": "Check the bundle at /tmp/l7r-check/modal-sheet-garden/MANIFEST.md"}}) + "\n"
+        said = (
+            json.dumps(
+                {
+                    "timestamp": "2026-10-10T10:00:09Z",
+                    "requestId": "r2",
+                    "message": {
+                        "role": "assistant",
+                        "content": [{"type": "text", "text": reply}],
+                        "usage": {"input_tokens": 1000, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": 100 * (n + 1)},
+                    },
+                }
+            )
+            + "\n"
+        )
+        (sub / f"agent-{aid}.jsonl").write_text(prompt + said)
+    log = tmp_path / "passes.jsonl"
+    subject = "Check the bundle at /tmp/l7r-check/modal-sheet-garden/MANIFEST.md"
+    log.write_text("".join(json.dumps({**_pass(check="modal-depiction", subject=subject), "agent": a, "segment": "0"}) + "\n" for a in ("a1", "a2", "a3")))
+    ledger = tmp_path / "ledger.md"
+    ledger.write_text(HEAD)
+    args = ["--log", str(log), "--ledger", str(ledger), "--transcripts", str(tmp_path), "--write", "specs/343-x/briefs/'s checks file"]
+    assert lo.main([*args, "--session", "s1"]) == 0
+    rows = ledger.read_text().splitlines()[-2:]
+    assert "| modal-sheet-garden | clean | COVERAGE 0 findings; TRUTH 0; LINKS 0 | nothing |" in rows[0]
+    assert "| findings | 1. the lantern is on no drawing page | judgment | - | applied or filed as specs/343-x/briefs/'s checks file records |" in rows[1]
+    assert ll.problems(ledger.read_text()) == [], "the written rows pass the ledger's lint"
+    assert len(lo.unanswered(lo.distinct(lo.settled(lo.load_passes(log), tmp_path)), ledger.read_text())) == 1, "s2's pass is left for s2"
