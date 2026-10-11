@@ -866,6 +866,7 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-11 | modal-depiction | feature 374 wave 120, the hamlet notice board after the seats | TRUTH 1 | most often claimed a frequency | judgment | yes | fixed (by default) | 32 s | 34k in (11k cached) / 3.2k out |
 | 2026-10-11 | modal-depiction | feature 374 wave 120, the frontage siting after the seats | COVERAGE 1, TRUTH 1 | the divided-village standardization untold; the verge rule said for every tier | judgment | yes | fixed (applied) | 39 s | 32k in (11k cached) / 3.8k out |
 | 2026-10-11 | impl-drift | feature 374 wave 120, the seats' claims (b22) | IN-STEP 14, DRIFTED 1 | anchored seats kept to the road on a map with one | judgment | yes | filed DRIFTED (found-wave120, E3) | 80 s | 149k in (99k cached) / 7.9k out |
+| 2026-10-11 | record-format | feature 374 wave 120 r3 on 0190 (the arbiter's one-sentence round) | 1 VOCABULARY | seat read as a seat of government | judgment | yes | fixed (the sentence in plain words) | 26 s | 125k in (89k cached) / 2.3k out |
 | 2026-10-11 | quote-check | feature 374 wave 120 r3, 0190's bridge-end sentence | 0 findings | clean | nothing | no | verified | 23 s | 27k in (11k cached) / 2.3k out |
 | 2026-10-11 | impl-drift | feature 374 wave 120, the bridge change (b20-owed) | IN-STEP 17 | clean | nothing | no | verified | 60 s | 110k in (74k cached) / 6.3k out |
 | 2026-10-11 | modal-depiction | feature 374 wave 120 r2b, woodland commons | 0 findings | clean | judgment | no | verified | 34 s | 41k in (9k cached) / 2.7k out |
