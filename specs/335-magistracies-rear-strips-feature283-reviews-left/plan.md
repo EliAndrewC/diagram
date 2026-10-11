@@ -23,7 +23,8 @@ Ubame (14 doors, the torii, the rear yard, the servants' partitions) - re-audite
   crosses by exactly the depth that puts its outer edge on that edge; its size is kept. The host is the building whose tagged group
   holds the door (the harness's max-overlap/nearest host was checked against each group by eye on the list; where they differ the
   group wins). The check `doors_off_their_walls` reads every `data-kind="door"` rect (tag, not fill - the old `door_rects` sees only
-  dark fills) and reports one not wholly inside any built footprint (1 px tolerance for the stroke); red fixture a trimmed copy of
+  dark fills) and reports one not wholly inside any built footprint (1 px tolerance for the stroke), or wholly inside one but with no edge
+  on that footprint's wall (floating just inside it - spec-fidelity's note: the old `floating_doors` reads dark fills only); red fixture a trimmed copy of
   Hayakawa's servants' range and kitchen as drawn today. The rule is written in `docs/buildings.md` (operative), research 0117's
   drawing page (the finding: its "A door glyph sits flush" paragraph says inside, and its program paragraph's "as they set one"
   becomes true), at each sheet's door comment, and here. After the move every sheet is re-audited: a tub now outside
@@ -43,16 +44,22 @@ Ubame (14 doors, the torii, the rear yard, the servants' partitions) - re-audite
   the garden. Settled by declaring it part of the rear yard: the yard's polygon becomes an L reaching down the strip to the garden's
   top, so the strip is named ground, not leftover. (The finding "its cesspit has no approach that avoids a garden" no longer holds
   on today's sheet; the measurement is recorded.)
-- **D5 - Hayakawa's family way out of the inner garden (FR-010)**: decided on the sheet at full zoom during T07: a wicket is drawn
-  only as a labeled GUESS (the caption says so) where the garden is otherwise closed to the family's side; where the garden opens on
-  the house's veranda and the family's ground, none is drawn and the reason is recorded (0104's absence note).
-- **D6 - the well at the middle gate (FR-011; research: physical)**: the search pass is running; the well is kept, moved to the bed's
-  far corner, or labeled as the finding decides, and the finding is recorded on the record page that owns the question with its
-  citations and checks.
-- **D7 - Hayakawa's rear pocket (FR-012)**: judged at full zoom in T07 - the ~33 x 12 ft ground between the woodshed (x 490) and the
-  first storehouse. If it reaches no door and serves no way it is dead space and is closed up (the storehouses slide west to the
-  woodshed's fire gap, or the woodshed lengthens) and the alley re-measured; if it is the alley's turning ground to a door, it is
-  recorded as such.
+- **D5 - Hayakawa's family way out of the inner garden (FR-010)**: NONE drawn. Read at full zoom 2026-10-11: the garden is a
+  dashed edge, not a fence, and its west side (x 460, y 326-374) opens onto the court strip between the kitchen and the karo's
+  house, which the family's own rooms face; the family walks out there. A wicket is drawn nowhere (research 0104 holds an absence
+  note on a wicket; drawing none adds nothing the record does not hold). Recorded at the garden's comment on the sheet.
+- **D6 - the well at the middle gate (FR-011; research: physical; historically accurate)**: the search pass (2026-10-11, archive then
+  web) found no draw-well on a residence's guest roji: a roji carries stepping stones and a basin; working wells stood by the
+  kitchen or bath (Matsue's Shiomi-nawate house, Kaminoyama, Kitsuki, the Urasenke house) or in an official compound's front court
+  beside the formal entrance (Iwama jin'ya, 1827); the one tea-roji well curb (Jo-an, 1615) is an homage copy. So the garden well
+  at the middle gate's mouth is REMOVED; the kitchen's own well (x 422-444) stands about 13 ft from the bed it watered. The finding
+  is recorded on 0104's drawing page (cited, its checks run) by the page sessions in `briefs/r1-write.md` and `r1-check.md`, and the
+  sheet's comment points at it.
+- **D7 - Hayakawa's rear pocket (FR-012)**: judged 2026-10-11 at full zoom: the ground between the woodshed (x 400-490) and the first
+  storehouse (x 590), on the north wall, reaches no door and serves no way the alley below it does not - dead space. Sliding the
+  storehouses west only moves the void to the north-east corner, so the WOODSHED is lengthened east to a 6 ft fire gap from the
+  storehouse (x 400-572, about 57 x 10 ft), its cordwood stack run its length. The size stays a GUESS (a year's firewood for the
+  kamado and the bath of a house this size; no page gives one), recorded at its comment.
 - **D8 - Ubame's servants' partitions (FR-013; research buildings 910)**: the three bay lines are drawn as sliding partitions - the
   dashed thin line the residences' internal partitions use (`stroke-dasharray`) - instead of solid walls.
 - **D9 - aligned gaps (FR-014)**: `_blocked` compares a third building's y-extent with the gap's x-interval in the horizontal case

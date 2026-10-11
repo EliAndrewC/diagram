@@ -191,4 +191,6 @@ to work, the research ones first:
 
 ## Review history
 
-- (spec-fidelity rounds are recorded here)
+- 2026-10-11, first dispatch: NOT-REVIEWABLE (no round used) - three figures with no key; keyed to `measurements.json`.
+- 2026-10-11, round 1: FAITHFUL (ACCEPT). Notes acted on: the harness's command names a real path; the door check also reports a
+  door floating just inside its wall (plan D2); the landing message says plainly that "355" was read as 335.
