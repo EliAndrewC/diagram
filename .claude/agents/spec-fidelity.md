@@ -148,7 +148,8 @@ re-reviewed on a counter reset to zero. Going past five that way is not the pers
 misunderstanding the cap exists to end.
 
 If you are told this is the fifth round of an initial review and the spec is still wrong, say so
-plainly and state that the matter should go to the GM: five failures to express a request as a
+plainly and state that the matter goes to the round arbiter (feature 379: the arbiter stands where the GM was asked;
+the GM reviews its ruling after landing): five failures to express a request as a
 specification is a persistent misunderstanding rather than a drafting problem, and another round by
 the same session will not find it.
 

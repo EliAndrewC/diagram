@@ -312,11 +312,6 @@ _ESCAPES = {
         "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form",
     ),
     "LEDGER_LINT_OK": ("command", "feature 294: ledger-hooks.sh reaches it through escape_or_refuse, so hookmatch.py escape anchors it"),
-    "REVIEW_ROUNDS_OK": (
-        "command",
-        "feature 294: matched in an AGENT PROMPT by pair-hooks.sh's round cap - the PAIR_OK prompt exclusion's shape, a prompt "
-        "being prose with no command grammar; it must carry a quoted reason and is logged like an escape",
-    ),
     "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
     "CONFLICT_MARKERS_OK": (
         "command",
@@ -423,6 +418,10 @@ _ESCAPES = {
     ),
     "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
     "CLAIMS_FILE_OK": ("not-an-escape", "feature 376's claims-file guard has NO escape (its plan review); the token is named only to prove it changes nothing (test-claims-file-hooks.sh)"),
+    "REVIEW_ROUNDS_OK": (
+        "not-an-escape",
+        "RETIRED by feature 379 FR-010 (the GM 2026-10-10: the arbiter first) - pair-hooks.sh no longer reads it; named only by the event log's waiver flag for old transcripts and by the suite proving it changes nothing",
+    ),
     "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup-hooks.sh) and in the header saying why there is none"),
     "CRON_OK": ("command", "routes through hookmatch.py escape (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
     "X_OK": ("not-an-escape", "Python's os.X_OK in finished-run-hooks.sh's files_named (an executable is never a log; feature 295 item 1)"),

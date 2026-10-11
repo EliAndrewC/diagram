@@ -196,6 +196,9 @@ def test_an_edit_reversal_bundles_every_check_on_its_file_and_its_history(tmp_pa
     assert "### Round 3" not in manifest, "another subject's round is not this file's"
     diff = (tmp_path / "out" / "edits.diff").read_text()
     assert "research/questions/0047-privies.drawing.html" in manifest and diff.count("+<p>far corner</p>") == 2 and "+<p>center</p>" in diff
+    ha.trip(root, "reversal:q:0047@4", "reversal", "q:0047", "a block dropped earlier is back", 2)  # the block wire's form
+    sub = ab.bundle(root, "reversal:q:0047@4", tmp_path / "out1").read_text()
+    assert "## Rounds - every check on q:0047" in sub and "### Round 2: quote-check" in sub and (tmp_path / "out1" / "edits.diff").is_file()
     (root / ".git" / "checks-open.json").write_text("{}")
     other = root / "a.md"
     ha.trip(root, f"reversal:{other}", "reversal", str(other), "A -> B -> A", 2)

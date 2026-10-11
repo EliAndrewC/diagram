@@ -216,7 +216,9 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit", ""),
            **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
            "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when,
-           **({"tooling_fix": fix, "fix": "open"} if fix else {})}
+           **({"tooling_fix": fix, "fix": "open"} if fix else {}),
+           # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
+           **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {})}
     d.mkdir(parents=True, exist_ok=True)
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
@@ -229,6 +231,34 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     if state.pop(trigger, None) is not None:
         path.write_text(json.dumps(state, indent=1, sort_keys=True), encoding="utf-8")
     return row
+
+
+def spec_body_sha(d: Path) -> str:
+    """sha256 of what a review of feature `d`'s spec judged: spec.md above its Review history (the record of rounds and rulings
+    grows): its title and everything from the first `## ` heading, the header block between them dropped WHOLE - a Status line
+    rewritten at landing is no amendment, wrapped onto a second line or not (plan review rounds 3 and 4 found an accepted
+    feature refused at its own landing push, the second time by a two-line Status)."""
+    import hashlib  # noqa: PLC0415
+
+    text = (d / "spec.md").read_text(encoding="utf-8") if (d / "spec.md").is_file() else ""
+    body = text.split("\n## Review history", 1)[0]
+    head, sep, rest = body.partition("\n## ")
+    return hashlib.sha256((head.split("\n", 1)[0] + sep + rest).encode()).hexdigest()
+
+
+def spec_ruled(d: Path) -> str:
+    """The arbiter's `accept` or `process-fault` on feature `d`'s spec review that stands for its verdict - one ruled on the
+    spec as it reads now - or '' (feature 379 amendment 2; `review-gate.sh` asks this)."""
+    f, sha = d / "arbiter.jsonl", spec_body_sha(d)
+    for line in f.read_text(encoding="utf-8").splitlines() if f.is_file() else []:
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        if str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{d.name}#") and r.get("ruling") in ("accept", "process-fault") \
+                and r.get("spec_sha") == sha:
+            return str(r["trigger"])
+    return ""
 
 
 def _gm_row(d: Path, row: Mapping[str, Any]) -> None:
@@ -334,6 +364,21 @@ def main(argv: list[str]) -> int:
             print(f"arbiter-ruled: refused - {e}", file=sys.stderr)
             return 1
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl and for the GM's review)")
+        return 0
+    if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # review-gate.sh: does a ruling stand for this spec's verdict?
+        return 0 if spec_ruled(Path(argv[1])) else 1
+    if argv[:1] == ["ask"] and len(argv) == 3:  # `make arbiter-ask` (feature 379 amendment 2, FR-008/FR-009)
+        subject, why = argv[1].strip(), argv[2].strip()
+        if not re.fullmatch(r"[\w.-]+", subject) or len(why.split()) < 2 or len(why) < 8:
+            print("arbiter-ask: SUBJECT is one short id (letters, digits, . _ -) and WHY the question, two words or more", file=sys.stderr)
+            return 2
+        trigger = f"ask:{subject}"
+        if trigger in rulings(Path(".").resolve()):
+            print(f"arbiter-ask: {trigger} is already ruled - one ruling per trigger, binding; ask a new SUBJECT for a new question", file=sys.stderr)
+            return 1
+        trip(Path(".").resolve(), trigger, "ask", "", why)
+        print(f"arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM, who reviews the ruling after landing;"
+              " dispatch `round-arbiter` with the MANIFEST below")
         return 0
     if argv[:1] == ["fix"] and len(argv) in (4, 5) and argv[1] in ("done", "declined"):
         try:

@@ -9,7 +9,7 @@ omitClaudeMd: true
 
 ## When to dispatch this agent
 
-Judges a DRAFT writeup the session is about to send the GM, item by item, and says which items deserve their attention and which should be cut. Use after a review agent returns findings and before any of them reach the GM, and before any message that puts a question or a decision to them. The session that did the work is not a reliable judge of what is worth the GM's attention - it has just spent an hour inside the problem, so everything looks significant (Constitution Principle I, same rationale as settlement-review / frontend-review).
+Judges a DRAFT writeup the session is about to send the GM, item by item, and says which items deserve their attention and which should be cut. Use after a review agent returns findings and before any of them reach the GM, and before any message that puts a question or a decision to them. (A question about how the PROCESS goes - a cap, a waiver, a stuck choice of route - is not one of these: it goes to the round arbiter first, `make arbiter-ask`; feature 379.) The session that did the work is not a reliable judge of what is worth the GM's attention - it has just spent an hour inside the problem, so everything looks significant (Constitution Principle I, same rationale as settlement-review / frontend-review).
 
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 

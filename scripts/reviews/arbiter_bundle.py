@@ -107,9 +107,23 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     if trigger.startswith("reversal:") and "|" not in unit:
         # a reversal the EDIT wire caught names a FILE, not a check|subject: its rounds are every check's on that file's
         # subject, its A -> B -> A the file's own history (368's ruling on 0047, 2026-10-11: the bundle had neither)
-        path = Path(unit or trigger.split(":", 1)[1].split("@", 1)[0])
-        check, subject = "", hc.subject_of_path(str(path))  # no "|": partition put the whole path in `check`
-        files = [str(path.resolve().relative_to(root)) if path.is_absolute() and path.resolve().is_relative_to(root) else str(path)]
+        # (the block wire in hm_checks trips `reversal:<subject>@<n>` with the SUBJECT as its unit: every check, its files)
+        target = unit or trigger.split(":", 1)[1].rsplit("@", 1)[0]
+        if target.startswith(("q:", "modal:")):
+            check, subject = "", target
+        else:
+            path = Path(target)
+            check, subject = "", hc.subject_of_path(str(path))  # no "|": partition put the whole path in `check`
+            files = [str(path.resolve().relative_to(root)) if path.is_absolute() and path.resolve().is_relative_to(root) else str(path)]
+    # feature 379 amendment 2: the two kinds that used to go to the GM say where their record is
+    if check == "spec-fidelity":
+        parts.append(f"## Rounds - the spec review of {subject}\n\nIts rounds are `spec.md`'s Review history (beside this file): each "
+                     "round's verdict and what was applied. Rule as for any round cap: `accept` lets the spec stand as the last round "
+                     "left it (the review gate takes the ruling as its verdict).\n")
+    if trigger.startswith("ask:"):
+        parts.append(f"## The question\n\n{owed.get('detail', '')}\n\nA process question the session would have put to the GM. "
+                     "`continue`: go on as the question proposes; `accept`: it stands as it is (a waiver); `process-fault`: the "
+                     "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n")
     state = hc.load(hc.state_path(str(root)) or Path("/nonexistent"))
     missing: list[str] = []
     rounds: list[dict] = []

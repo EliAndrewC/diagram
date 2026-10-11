@@ -36,7 +36,8 @@
 #
 # NO ESCAPE (spec-fidelity round 1, 2026-09-26): no case needs a ScheduleWakeup outside a live loop, and an escape
 # on the Stop layer would let the incident itself through ("WAKEUP_OK guarding the agent"). A case that seems to
-# need one is a question for the GM.
+# need one is a process question for the round arbiter first (`make arbiter-ask`; GUARD_EDIT_OK: feature 379
+# amendment 2, the GM 2026-10-10: the arbiter stands where the GM was asked).
 #
 # UNREADABLE INPUT (plan review, 2026-09-26; GUARD_EDIT_OK: feature 263 - the header states the split rule): the
 # ScheduleWakeup layer fails CLOSED - a call that cannot be shown to belong to a live loop is refused - and the Stop
@@ -160,7 +161,8 @@ pretool() {
         printf '  - background work (a shell, an agent, a workflow) wakes this session by itself when it finishes;\n'
         printf '  - a stalled agent is reported by agent-stall-hooks.sh;\n'
         printf '  - a reminder the GM asked for ("remind me at 3pm") is CronCreate'"'"'s job, not this tool'"'"'s.\n'
-        printf 'There is no escape: a case that seems to need one is a question for the GM, not a token.\n'
+        printf 'There is no escape: a case that seems to need one is a process question for the round arbiter first\n'  # GUARD_EDIT_OK: feature 379 amendment 2
+        printf '(make arbiter-ask SUBJECT=<id> WHY="<the case>"), not a token.\n'
       } >&2
       guard_log wakeup blocked "ScheduleWakeup" outside-loop; exit 2 ;;
     PASS*) exit 0 ;;

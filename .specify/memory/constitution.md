@@ -1710,7 +1710,7 @@ has been misread as a licence to ledger anything that predates the diff.
   not drop AND every newly-failing check must be individually diagnosed.
 
 **FIXING IT IS THE EXIT** (GM 2026-08-23). There are three in principle -
-FIX it, REVERT the change, or obtain an explicit GM waiver - but they are
+FIX it, REVERT the change, or obtain the round arbiter's waiver - but they are
 not peers, and treating them as a menu is itself the error:
 
 - **FIX is the default and the expected outcome.** A session that has found
@@ -1721,8 +1721,10 @@ not peers, and treating them as a menu is itself the error:
   was tried, why each attempt failed, and why the remaining approaches are
   exhausted or unreasonable. Reverting because a fix looks like work is not
   an exit, it is an abandonment.
-- **WAIVER is the GM's to grant, never the session's to assume.** Asking for
-  one is only honest after the fix has been genuinely attempted.
+- **WAIVER is the round arbiter's to grant, never the session's to assume** (feature 379, GM 2026-10-10:
+  *"things should go to the arbiter at the point where they were previously coming to me"*): `make arbiter-ask`,
+  and the GM reviews the ruling after landing. Asking for one is only honest after the fix has been genuinely
+  attempted.
 
 A session that truly cannot fix a regression stops and says so - and "stops
 and says so" means the work stays in the clone, unpushed, with the
@@ -1868,7 +1870,9 @@ asked, and does it add anything that was not?
 **AT MOST five rounds, and stop at the first clean verdict.** A `FAITHFUL` verdict
 on round one ends the review - there is no quota to fill and re-reviewing a spec the
 reviewer has already passed buys nothing. A `CHANGES REQUIRED` verdict means: revise,
-re-review. If the FIFTH review still returns changes, STOP and put it to the GM.
+re-review. If the FIFTH review still returns changes, the round arbiter rules before a sixth (feature 379, GM
+2026-10-10: *"things should go to the arbiter at the point where they were previously coming to me"*); its `accept`
+stands as the spec's verdict, and the GM reviews the ruling after landing.
 
 **Raised from three on 2026-08-30 (GM), and the reason is what the cap is FOR.** It
 exists to catch a persistent misunderstanding that further attempts will not locate -
@@ -1898,7 +1902,7 @@ to record what implementation found is a different thing being reviewed.
 **A scope-expansion finding is an ordinary finding.** "This spec does more than was
 asked" goes through the same revise-and-re-review loop as anything else; it is not a
 special case and it does not short-circuit the rounds. It becomes a stop only the way
-every other finding does - by surviving three of them (GM 2026-08-24, declining the
+every other finding does - by surviving five of them (GM 2026-08-24, declining the
 tighter rule the implementing session proposed).
 
 **Why this exists** (GM 2026-08-24). Feature 126 was "put the farmhouses down before
@@ -1922,7 +1926,7 @@ artifact still being written and graded by the same session.
 
 **Interaction with XV (Keep Going).** This is not licence to stop. The reviews run
 inside the work, the session keeps building while it acts on them, and escalation
-happens only after the third round. Asking the GM to choose among options remains
+happens only after the fifth round - to the round arbiter, not the GM (feature 379). Asking the GM to choose among options remains
 the thing XV forbids.
 
 **Interaction with the stop-and-ask calculus.** An exception is not ambiguity. Where
