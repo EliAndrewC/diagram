@@ -611,7 +611,7 @@ def _draw_point_parts(
         caption("point", cx - 2.5, cy - 2.5, 5.0, 5.0, "latrine", 7, True, "#3A2E1C", "latrine")
     if tubs:
         parts.append('<g fill="#8FB0C6" stroke="#3A5060" stroke-width="1" data-kind="fire-water tubs">')
-        parts += [f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="3.8"/>' for cx, cy in tubs]
+        parts += [f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="3.8" data-id="tub-{k}"/>' for k, (cx, cy) in enumerate(tubs)]
         parts.append("</g>")
         for tx, ty in tubs:  # every tub is drawn - and so is an obstacle to every caption
             rect(tx - 1.27, ty - 1.27, 2.54, 2.54, "none", "none", 0)  # registers the tub; its drawn circle follows
@@ -619,7 +619,7 @@ def _draw_point_parts(
         # in (the residence's, between the wall and the kitchen), and a caption pushed off it is
         # drawn far from any tub it names - a group's name stands beside one of the glyphs it names
         tx, ty = _roomiest(tubs, taken)
-        caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs")
+        caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs", names=tuple(f"tub-{k}" for k in range(len(tubs))))  # declared: every tub
     gl, _gr = _gate_interval(env)
     assert board_by_the_gate(env, (gl - 14.0, env.h_ft + 3.0, gl - 8.0, env.h_ft + 4.5)), "the board stands 8 ft west of the gate, by construction"
     parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))

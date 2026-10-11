@@ -274,7 +274,7 @@ def test_a_feature_with_no_clear_seat_is_left_out() -> None:
         _b("block", 60.0, 60.0, "inner", "W", order=8, rank=2),  # a rank-2 mass right behind the kitchen's face
     )
     result = c.place(boxed)
-    parts = c._point_features(boxed, result, lambda *a: f"R:{a[8] if len(a) > 8 else ''}", lambda *a: "L", 0.0, 0.0)
+    parts = c._point_features(boxed, result, lambda *a: f"R:{a[8] if len(a) > 8 else ''}", lambda *a, **k: "L", 0.0, 0.0)
     assert "R:well" not in parts  # no well squeezed into the block
 
 
@@ -284,7 +284,7 @@ def test_a_seat_that_would_leave_the_envelope_is_refused() -> None:
     face instead (pass 6), inside the envelope."""
     env = _env(200.0, 20.0, 10.0, 13.0)
     prog = c.CompoundProgram("t", env, (), (_b("stables", 30.0, 15.0, "outer", "S", order=5, feature="stables"),))
-    parts = "".join(c._point_features(prog, c.place(prog), lambda *a: "R", lambda *a: "L", 0.0, 0.0))
+    parts = "".join(c._point_features(prog, c.place(prog), lambda *a: "R", lambda *a, **k: "L", 0.0, 0.0))
     assert ">well<" not in parts and parts.count("<circle") == 1
     cy = float(parts.split('<circle cx="')[1].split('cy="')[1].split('"')[0])
     assert 0.0 < cy < 20.0
@@ -896,10 +896,10 @@ def test_a_program_that_requires_a_well_and_has_no_seat_for_one_is_refused() -> 
     composition naming it - never a sheet drawn without its well. A program of no declared type is held to nothing."""
     prog = c.CompoundProgram("t", _env(), (), (_b("hall", 40.0, 20.0, "outer", "divider", order=10, feature="office hall"),))
     result = c.place(prog)
-    assert ">well<" not in "".join(c._point_features(prog, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0))
+    assert ">well<" not in "".join(c._point_features(prog, result, lambda *a: "R", lambda *a, **k: "L", 0.0, 0.0))
     typed = replace(prog, tier="magistracies")
     with pytest.raises(ValueError, match="no seat for a well"):
-        c._point_features(typed, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0)
+        c._point_features(typed, result, lambda *a: "R", lambda *a, **k: "L", 0.0, 0.0)
     assert cp.requires(typed, "well") and not cp.requires(prog, "well") and not cp.requires(typed, "unicorn stable")
 
 

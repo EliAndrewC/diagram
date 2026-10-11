@@ -339,7 +339,12 @@ Request = tuple[str, Subject, float, bool, str, str]
 
 
 def _seat_captions(
-    requests: list[Request], obstacles: list[Obstacle], frame: tuple[float, float, float, float], late: dict[int, list[Obstacle]] | None = None, title: str = ""
+    requests: list[Request],
+    obstacles: list[Obstacle],
+    frame: tuple[float, float, float, float],
+    late: dict[int, list[Obstacle]] | None = None,
+    title: str = "",
+    names: list[str] | None = None,
 ) -> tuple[list[str], float]:
     """Place every requested caption by the ONE placer (feature 266), in order, each an obstacle to the next, and write
     it - with its leader when the standard gives it one (FR-005). `late[i]` are obstacles that join the index once
@@ -361,8 +366,8 @@ def _seat_captions(
         raise ValueError(f"{title}: the caption {requests[stuck][0]!r} has no seat clear of every feature, even with a neighbor lifted and the sheet grown - change the program")
     out: list[str] = []
     foot = 0.0
-    for (_text, _subject, size, italic, fill, kind), p in zip(requests, seats, strict=True):
-        out.append(caption_svg(p, size, ' font-style="italic"' if italic else ' font-weight="bold"', fill, kind))
+    for i, ((_text, _subject, size, italic, fill, kind), p) in enumerate(zip(requests, seats, strict=True)):
+        out.append(caption_svg(p, size, ' font-style="italic"' if italic else ' font-weight="bold"', fill, kind, names[i] if names else ""))
         if p.leader is not None:
             out.append(leader_svg(p, size, fill, kind))
         foot = max(foot, *(q[1] for q in p.block))
@@ -468,6 +473,11 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
     obstacles: list[Obstacle] = []
     requests: list[tuple[str, Subject, float, bool, str, str]] = []
     late: dict[int, list[Obstacle]] = {}
+    # THE DECLARATIONS (feature 340, plan D1): every visible rect carries a `data-id`, and each caption's `data-names` lists
+    # the drawn shapes it names, the hand sheets' form - so `labels.hand_sheet` reads the draft as it reads a hand sheet.
+    # Additive: the composer still seats each caption by its own subject.
+    drawn: list[tuple[tuple[float, float, float, float], str]] = []
+    declared: list[str] = []
 
     def px(x: float, y: float) -> tuple[float, float]:
         return ox + x * FTPX, oy + y * FTPX
@@ -481,14 +491,23 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
         if kind not in _GROUND_KINDS:
             obstacles.append(Obstacle(box(x, y, w, h), WEIGHT_OBSTACLE))
         whole = f' data-part-of="{part_of}"' if part_of else ""
+        sid = ""
+        if fill != "none" or stroke != "none":  # a visible rect: a shape a caption may name (an invisible stand-in never is)
+            sid = f' data-id="d{len(drawn)}"'
+            drawn.append(((round(x, 3), round(y, 3), round(w, 3), round(h, 3)), f"d{len(drawn)}"))
         return (
-            f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}{whole}/>'
+            f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}{whole}{sid}/>'
         )
 
-    def caption(where: str, x: float, y: float, w: float, h: float, s: str, size: int, italic: bool, fill: str, kind: str = "") -> str:
+    def caption(
+        where: str, x: float, y: float, w: float, h: float, s: str, size: int, italic: bool, fill: str, kind: str = "", names: tuple[str, ...] | None = None, of: tuple[float, float, float, float] | None = None
+    ) -> str:
         """Ask the placer for a caption naming the feature at (x, y, w, h) in feet - `where` "area" (the name lies
-        inside it) or "point" (the name stands beside it). Drawn at the end; returns nothing to splice now."""
+        inside it) or "point" (the name stands beside it). Drawn at the end; returns nothing to splice now. Its declaration
+        (feature 340): `names` when given, else every drawn rect at `of` (the subject's own box when `of` is None)."""
         requests.append((s, Subject(where, box(x, y, w, h)), float(size), italic, fill, kind))
+        at = tuple(round(v, 3) for v in (of or (x, y, w, h)))
+        declared.append(" ".join(names if names is not None else [sid for b, sid in drawn if b == at]))
         return ""
 
     def plain(cx: float, cy: float, s: str, size: int, italic: bool, fill: str) -> str:
@@ -525,10 +544,12 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
             # caption under the roof; the court's floor joins the obstacles once both are seated
             parts.append(f'<g{_kind_attr("kneeling positions")}><g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">')
             mats = _mats(z)
+            first = len(drawn)
             parts += [rect(mx, my, mx2 - mx, my2 - my, "#C8B078", "#7A5430", 0.6) for mx, my, mx2, my2 in mats]
             parts.append("</g></g>")
             ax, ay, ax2, ay2 = mats[-1]
-            caption("point", ax, ay, ax2 - ax, ay2 - ay, "straw mats", 8, True, "#7A5C30", "kneeling positions")
+            # it names EVERY mat, as a hand sheet's caption names its group (plan review round 1); the composer seats it by the last
+            caption("point", ax, ay, ax2 - ax, ay2 - ay, "straw mats", 8, True, "#7A5C30", "kneeling positions", names=tuple(sid for _b, sid in drawn[first:]))
             late[len(requests) - 1] = [Obstacle(box(z.x_ft, z.y_ft, z.w_ft, z.h_ft), WEIGHT_OBSTACLE)]
             # the posts carrying the roof along the open (south) side, the court's own ink (ROOFED_ZONES)
             # its solid outline is a building's edge, so no caption crosses it (the ground inside stays free)
@@ -547,11 +568,11 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
             # as itself and with the ground.
             parts.append(f"<g{_kind_attr(zk)}>")
             parts.append(rect(z.x_ft + z.w_ft / 2 - 4, z.y2 - 2, 8, 2, "#8C6F3E", "#4A3318", 0.8, "", "weapon rack"))
-            caption("point", z.x_ft + z.w_ft / 2 - 5.7, z.y_ft + 13.3, 11.4, 14.4, "striking posts", 8, True, "#5C4830", "striking posts")
-            for dx_ft, dy_ft in ((-5.0, 14.0), (5.0, 27.0)):
+            caption("point", z.x_ft + z.w_ft / 2 - 5.7, z.y_ft + 13.3, 11.4, 14.4, "striking posts", 8, True, "#5C4830", "striking posts", names=("post-0", "post-1"))
+            for k, (dx_ft, dy_ft) in enumerate(((-5.0, 14.0), (5.0, 27.0))):
                 cx, cy = z.x_ft + z.w_ft / 2 + dx_ft, z.y_ft + dy_ft
                 obstacles.append(Obstacle(box(cx - 0.7, cy - 0.7, 1.4, 1.4), WEIGHT_OBSTACLE))
-                parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr("striking posts")}/>')
+                parts.append(f'<circle cx="{ox + cx * FTPX:.0f}" cy="{oy + cy * FTPX:.0f}" r="2" fill="#7A5430" stroke="#4A3318" stroke-width="0.8"{_kind_attr("striking posts")} data-id="post-{k}"/>')
             parts.append("</g>")
     _draw_buildings(result, rect, caption, px, parts)
     parts += _point_features(program, result, rect, caption, ox, oy)
@@ -568,7 +589,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
     # stands outside the gate, 21 px from the canvas's foot, where no caption fits beside it - the old draft's caption
     # hung past the edge and was clipped. So the placer is given room below, and the canvas then grows to hug what it
     # placed there.
-    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), late, program.title)
+    seated, foot = _seat_captions(requests, obstacles, (0.0, 0.0, cw, ch + CAPTION_ROOM), late, program.title, declared)
     parts += seated
     if foot + margin_ft * FTPX > ch:
         grown = foot + margin_ft * FTPX
@@ -632,7 +653,7 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
         full = sum(r[3] * r[4] for r in p.spec.rooms) >= 0.9 * p.spec.w_ft * (p.spec.h_ft - p.spec.engawa_ft)
         if full and p.spec.inset_ft >= 5.0:
             ax, ay, aw, ah = _rear_band(p)
-            caption("area", ax, ay, aw, ah, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+            caption("area", ax, ay, aw, ah, p.spec.name, size, False, "#3A2E1C", p.spec.feature, of=(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft))  # declared: the block
         else:
             caption("point" if full else "area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
 
