@@ -432,5 +432,12 @@ OUT=$(LEDGER_ROWS_OK="a fixture's escape with its reason" CI_ROUTE=DIRECT CI_MER
 ( cd "$D/main/.clones/c" && printf '| 2026-10-10 | glyph-check | copse | PASS | caught nothing | nothing | - | nothing | 80 s | 244k in (199k cached) / 7.8k out |\n' >> dev/review-ledger.md && echo more > note.md && git add -A && git commit -qm "the row" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the pass with its row lands" 0 $?
 
+echo "W. a push from a WORKTREE (land-tooling's route): its .git is a file, and the stamp once failed the step after the push"
+D=$(topology wt)
+git -C "$D/main/.clones/c" worktree add -q --detach "$D/main/.clones/c-tooling" 2>/dev/null
+( cd "$D/main/.clones/c-tooling" && echo tooling > tool.md && git add -A && git commit -qm "tooling alone" )
+OUT=$( cd "$D/main/.clones/c-tooling" && CI_ROUTE=DIRECT CI_MERGE="false" CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git" GITHUB_TOKEN=unused "$SYNC" push 2>&1 ); check "a worktree's push exits 0 once landed" 0 $?
+[ -f "$(git -C "$D/main/.clones/c-tooling" rev-parse --absolute-git-dir)/sync-with-main.stamp" ] && PASS=$((PASS+1)) || { echo "FAIL  no stamp in the worktree's git dir: $OUT"; FAIL=$((FAIL+1)); }
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

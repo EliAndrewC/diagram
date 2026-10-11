@@ -52,6 +52,43 @@ sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) f
 from hm_escape import escape_reason, reason_is_enough  # noqa: E402
 from stale_terms import read_dir, render as render_stale, stale_candidates  # noqa: E402
 
+import hm_arbiter  # noqa: E402
+
+#: a spec review's rounds before the round arbiter rules (feature 379 amendment 2, FR-007; the five is the GM's 2026-09-12 ruling):
+#: past it the review is held for the arbiter, never for the GM - "things should go to the arbiter at the point where they were
+#: previously coming to me" (the GM 2026-10-10)
+SPEC_ROUND_CAP = 5
+ARBITER_TOKEN = "ARBITER_OK"
+
+
+def accepted_pass(payload: dict, feature: str, spec_md: pathlib.Path, root: pathlib.Path | None, state: pathlib.Path) -> bool:
+    """Did the review's last pass end ACCEPTED - its last round FAITHFUL, or the round arbiter's accept or process-fault on it?"""
+    v_text, v_word = previous_verdict(str(payload.get("transcript_path") or ""), feature)
+    if not v_text:
+        v_text = review_history(spec_md)
+        v_word = verdict_of(v_text) if v_text else ""
+    return v_word == "FAITHFUL" or (root is not None and bool(hm_arbiter.closed(root, spec_cap_prefix(feature, read_pass(state)))))
+
+
+def spec_cap_prefix(feature: str, pass_no: int) -> str:
+    """The trigger prefix of one PASS of a feature's spec review - `review-gate.sh` builds the same string."""
+    return f"round:spec-fidelity|{feature}#{pass_no}@"
+
+
+def spec_cap_refusal(root: pathlib.Path, feature: str, round_no: int, prompt: str, pass_no: int = 1) -> str:
+    """Why a spec review's round `round_no` waits for the round arbiter, or ''. Each `continue` on this PASS of the review
+    lifts its cap by one round; an `accept` or `process-fault` closes it (the review gate takes that ruling as the verdict,
+    while the spec is the one ruled on)."""
+    if round_no <= SPEC_ROUND_CAP:
+        return ""
+    prefix = spec_cap_prefix(feature, pass_no)  # a pass the arbiter closed never reaches here: the next dispatch starts a new pass
+    if round_no - SPEC_ROUND_CAP <= hm_arbiter.continues(root, prefix):
+        return ""
+    trigger = f"{prefix}{round_no}"
+    hm_arbiter.trip(root, trigger, "round", f"spec-fidelity|{feature}", f"round {round_no} of specs/{feature}'s spec review")
+    return (f"BLOCKED: round {round_no} of specs/{feature}'s spec review - past the five-round cap the round arbiter rules, "
+            "not the GM (feature 379). Nothing was dispatched and no round was counted.\n" + hm_arbiter.refusal([trigger]))
+
 #: feature 253 (GM 2026-09-19): before a later round is SPENT, the feature directory is searched for the old
 #: value of whatever changed; candidates refuse the dispatch once, and this token (with a reason) says they
 #: were looked at and are not stale.
@@ -310,7 +347,13 @@ def judge(payload: dict, clone: str) -> dict:
             return {"event": "blocked", "rule": f"{TOKEN}-no-reason", "detail": prompt[:200], "exit": 2, "stdout": "", "stderr": _refusal(TOKEN)}
         if feature_dir and feature_dir.is_dir():
             take_snapshot(feature_dir, snap)
-            _write_state(state, _read_round(state) or 1)
+            # a full re-read after an ACCEPTED pass is an amendment's first round, as on the routed path (feature 379: the escape
+            # kept the old round, so amendment 3's first round counted as round 4 of a finished pass, toward the arbiter's cap)
+            if accepted_pass(payload, feature, feature_dir / "spec.md", root, state):
+                _write_state(state, 1)
+                (state / "pass").write_text(f"{read_pass(state) + 1}\n")
+            else:
+                _write_state(state, _read_round(state) or 1)
         return {"event": "escaped", "rule": "review-round-ok", "detail": reason, "exit": 0, "stdout": "", "stderr": ""}
     if not feature_dir or not feature_dir.is_dir():
         return {"event": "permitted", "rule": "no-feature", "detail": feature or "no specs/NNN-slug in the prompt", "exit": 0, "stdout": "", "stderr": ""}
@@ -358,11 +401,21 @@ def judge(payload: dict, clone: str) -> dict:
         if candidates:
             return {"event": "blocked", "rule": "stale-terms", "detail": f"{feature}: {len(candidates)} candidate(s)", "exit": 2, "stdout": "", "stderr": _stale_refusal(feature, candidates)}
     diff = diff_since(snap, feature_dir)
-    new_pass = v_word == "FAITHFUL"
+    # an ARBITER's accept or process-fault accepts the spec too (feature 379): a dispatch after it is an amendment's new pass,
+    # exactly as after FAITHFUL (plan review round 2: without this the amended spec could never be reviewed)
+    ruled_closed = bool(root) and bool(hm_arbiter.closed(root, spec_cap_prefix(feature, read_pass(state))))
+    new_pass = v_word == "FAITHFUL" or ruled_closed
     round_no = 1 if new_pass else (prev_round if v_word == "NOT-REVIEWABLE" else prev_round + 1)
+    pass_no = read_pass(state) + (1 if new_pass else 0)
+    held = spec_cap_refusal(root, feature, round_no, prompt, pass_no) if root else ""  # before the snapshot moves: nothing spent
+    if held and reason_is_enough(escape_reason(prompt, ARBITER_TOKEN)):  # the escape, recorded with its reason on the event
+        held, stale_note = "", f"{stale_note} {ARBITER_TOKEN}: {escape_reason(prompt, ARBITER_TOKEN)}"
+    if held:
+        return {"event": "blocked", "rule": "spec-round-cap", "detail": f"{feature} round {round_no}", "exit": 2, "stdout": "", "stderr": held}
     new_prompt = preamble(feature, round_no, new_pass, v_text, v_from, diff) + prompt
     take_snapshot(feature_dir, snap)
     _write_state(state, round_no)
+    (state / "pass").write_text(f"{pass_no}\n")  # feature 379: read by review-gate.sh to honor this pass's ruling alone
     updated = dict(ti)
     updated["prompt"] = new_prompt
     updated["subagent_type"] = TWIN
@@ -388,6 +441,16 @@ def _read_round(state: pathlib.Path) -> int:
         return int((state / "round").read_text().strip())
     except Exception:
         return 0
+
+
+def read_pass(state: pathlib.Path) -> int:
+    """The spec review's PASS: 1, then one more each time a round returns FAITHFUL and a later dispatch starts a new pass
+    (an amendment). The arbiter's rulings on the spec's cap are per pass (feature 379's plan review: a pass-1 ruling must
+    neither lift nor close a later pass's cap)."""
+    try:
+        return int((state / "pass").read_text().strip())
+    except Exception:
+        return 1
 
 
 def _write_state(state: pathlib.Path, round_no: int) -> None:

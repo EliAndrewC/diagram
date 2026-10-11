@@ -10,6 +10,9 @@ table copies its cost from `make review-cost`, never types it, so the cells iden
 check on one subject are two passes with two costs).
 
     ledger_owed.py [--log <jsonl>] [--ledger <md>]             list the unanswered passes, each with the row to add
+    ledger_owed.py --write "<where the session recorded what it did>" [--session <sid>]
+                                                             append each unanswered pass's row, filled from the agent's
+                                                             own reply (the page-session runner, at each session's end)
     ledger_owed.py ... --refuse                                 exit 1 while any is unanswered (the push)
 
 Escape at the push: LEDGER_ROWS_OK="<reason>" in sync-with-main's environment, recorded in the bypass log.
@@ -65,7 +68,9 @@ def settled(passes: Sequence[dict[str, str]], root: Path = review_cost.DEFAULT_R
         n = int(p["segment"]) if str(p.get("segment", "")).isdigit() else (0 if len(parts) == 1 else len(parts))
         if n < len(parts):
             wall, tokens = review_cost.cells(review_cost.cost(parts[n])).split(" | ", 1)
-            p = {**p, "wall": wall, "tokens": tokens}
+            # the logged cells are kept beside: a row written from them before this recompute (every row of 2026-10-10's
+            # sessions) still answers its pass - without them 131 answered passes read as owed again
+            p = {**p, "wall": wall, "tokens": tokens, "logged": f"{p.get('wall', '')} | {p.get('tokens', '')}"}
         out.append(p)
     return out
 
@@ -89,12 +94,43 @@ def unanswered(passes: Sequence[dict[str, str]], ledger_text: str) -> list[dict[
         if len(cells) == len(ledger_lint.COLUMNS):
             row = dict(zip(ledger_lint.COLUMNS, cells, strict=True))
             keys.add((_norm(row["check"]), _norm(row["wall"]), _norm(row["tokens"])))
-    return [p for p in passes if (_norm(p["check"]), _norm(p["wall"]), _norm(p["tokens"])) not in keys]
+    def answered(p: dict[str, str]) -> bool:
+        logged = p.get("logged", "").split(" | ", 1)
+        cells = [(p["wall"], p["tokens"])] + ([(logged[0], logged[1])] if len(logged) == 2 else [])
+        return any((_norm(p["check"]), _norm(w), _norm(k)) in keys for w, k in cells)
+
+    return [p for p in passes if not answered(p)]
 
 
 def row_for(p: dict[str, str]) -> str:
     """The row to add: what was measured filled in, the judgment cells left for the session (`?`)."""
     cells = [p.get("date", "?"), p["check"], p.get("subject") or "?", *("?" for _ in JUDGED), p["wall"], p["tokens"]]
+    return "| " + " | ".join(_norm(c).replace("|", "/") for c in cells) + " |"
+
+
+def _session_of(p: dict[str, str], root: Path) -> str:
+    path = review_cost.transcript(p["agent"], root) if p.get("agent") else None
+    return path.parts[-3] if path else ""
+
+
+def filled_row(p: dict[str, str], where: str, root: Path = review_cost.DEFAULT_ROOT) -> str:
+    """The row a headless page session's pass gets at the session's end, from the record alone: its verdict and first line
+    from the agent's own reply, `nothing` where the reply is clean, and the acted-on cell naming where the session recorded
+    what it applied or filed. Page sessions wrote no ledger rows - 124 passes of 343's and 368's sessions were owed at
+    landing (2026-10-11) - and their own record of each check is the brief's checks file."""
+    for d in ("../hooks/lib", "../measure"):
+        sys.path.insert(0, str((Path(__file__).resolve().parent / d).resolve()))
+    import event_log  # noqa: PLC0415
+    import hm_checks  # noqa: PLC0415
+
+    path = review_cost.transcript(p["agent"], root) if p.get("agent") else None
+    reply = hm_checks._reply_of(str(path), "") if path else ""
+    verdict = event_log.verdict_of(reply) or "see reply"
+    first = next((ln.strip(" -*#") for ln in reply.splitlines() if ln.strip() and not ln.lstrip().startswith(("#", "```"))), "") or "-"
+    bundle = re.search(r"/tmp/l7r-check/([^/\s]+)/", p.get("subject", ""))
+    clean = verdict in ("clean", "PASS", "IN-STEP", "FAITHFUL", "INTRO-OK", "NO-INTRO-NEEDED")
+    cells = [p.get("date", "?"), p["check"], bundle.group(1) if bundle else (p.get("subject") or "?")[:80], verdict, first[:110],
+             "nothing" if clean else "judgment", "-", f"applied or filed as {where} records", p["wall"], p["tokens"]]
     return "| " + " | ".join(_norm(c).replace("|", "/") for c in cells) + " |"
 
 
@@ -109,10 +145,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--ledger", default="dev/review-ledger.md")
     ap.add_argument("--refuse", action="store_true", help="exit 1 while a pass is unanswered")
     ap.add_argument("--transcripts", default=str(review_cost.DEFAULT_ROOT), help="the projects directory holding the agents' transcripts")
+    ap.add_argument("--write", default="", help="append each owed pass's row, its acted-on cell naming this record")
+    ap.add_argument("--session", default="", help="with --write: only the passes of this session's agents")
     args = ap.parse_args(argv)
     ledger = Path(args.ledger)
     passes = distinct(settled(load_passes(Path(args.log) if args.log else default_log()), Path(args.transcripts)))
     owed = unanswered(passes, ledger.read_text(encoding="utf-8") if ledger.is_file() else "")
+    if args.write:
+        mine = [p for p in owed if not args.session or _session_of(p, Path(args.transcripts)) == args.session]
+        with ledger.open("a", encoding="utf-8") as fh:
+            fh.writelines(filled_row(p, args.write, Path(args.transcripts)) + "\n" for p in mine)
+        print(f"ledger-owed: {len(mine)} row(s) written for {args.session or 'every session'}")
+        return 0
     if not owed:
         return 0
     stream = sys.stderr if args.refuse else sys.stdout

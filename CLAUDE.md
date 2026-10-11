@@ -161,14 +161,17 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Run the chain end to end, unattended. The GM starts work and leaves: answer each stage's own
   questions, record each decision in the artifact where it arose, and stop only when a wrong guess
   would cost an hour-plus to unwind or the thing genuinely cannot be done. Persistence means
-  PROGRESS, not changes: when stuck, the next step is a measurement.
+  PROGRESS, not changes: when stuck, the next step is a measurement. A PROCESS stop - a cap, a waiver,
+  a stuck choice of route - goes to the round arbiter first (`make arbiter-ask`), never straight to
+  the GM (feature 379, GM 2026-10-10: *"things should go to the arbiter at the point where they were
+  previously coming to me"*); what to build stays the GM's question.
 - Do the literal thing (constitution XVI). Asked for X, build X, never "X except where Y". An
   exception that still looks necessary is put to an independent `spec-fidelity` subagent with the
   GM's request verbatim; if it agrees, carry on and raise it with the GM once the implementation
   works.
 - A spec is reviewed against the GM's own words by `spec-fidelity` before implementation
   (`scripts/gates/review-gate.sh` refuses the push otherwise): up to five rounds on the initial acceptance,
-  then stop and escalate; an amendment after acceptance resets the counter. A plan's decisions are
+  then the round arbiter rules (a sixth round waits for it; feature 379); an amendment after acceptance resets the counter. A plan's decisions are
   reviewed by the same agent before a task is ticked (`make tick`, `scripts/gates/plan-gate.sh`). A later
   round is handed the previous verdict and the diff by `scripts/hooks/review-round-hooks.sh`.
 - No known regressions (constitution XIII). A regression is measured, never remembered: the baseline
@@ -176,8 +179,8 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   each failure is checked against the clone, because a worktree carries no gitignored artifacts.
   A pre-existing failure does not block a push, but one you find is fixed in the work at hand
   (XIV; GM 2026-10-01: "We should definitely fix the pre-existing failure"). Three exits: fix it,
-  revert it with a written impossibility investigation, or an explicit GM waiver; fixing is the
-  expected one. A regressed state stays in the clone, unpushed.
+  revert it with a written impossibility investigation, or the round arbiter's waiver (`make arbiter-ask`; the GM
+  reviews it after landing); fixing is the expected one. A regressed state stays in the clone, unpushed.
 - Fix defects where you find them (constitution XIV), in the same work with the same verification.
   The only deferrable fix is a complete overhaul, and deferring one delivers the measurement, the
   mechanism and a sketch. Record a fix that FAILED at the point of change.

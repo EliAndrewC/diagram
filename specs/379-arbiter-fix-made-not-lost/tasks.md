@@ -35,3 +35,21 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T08 Close: the text (CLAUDE.md's session-clones bullet and guard table, `docs/session-clones.md`), tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
       verify: DONE. CLAUDE.md session-clones bullet + docs/session-clones.md; make done green (short-circuit: no engine change), tests/tooling 1582 passed, make hooks-test green incl. land-tooling 17/17 and feature-approval 48/48; report written; landed by the push carrying this tick
+
+## Amendment 2 (the GM 2026-10-10: the arbiter before the GM)
+
+- [x] T09 The spec review's round cap (plan D11, D12): the trip and refusal in `hm_review_round.py`, an `accept` or `process-fault` ruling read by `review-gate.sh` (a `continue` not); tests red on today's code (SC-005)
+      research: rendering
+      verify: DONE. hm_review_round spec_cap_refusal per pass (round:spec-fidelity|<f>#<pass>@N), a closed pass starts a new one; review-gate takes accept/process-fault via hm_arbiter spec-ruled on the spec's hash; test-review-round-hooks 77/77, test-review-gate 38/38, test_arbiter_fix 9 - red on old code
+- [x] T10 `make arbiter-ask` and the contract and bundle for spec rounds and asks (plan D13); tests (SC-006)
+      research: rendering
+      verify: DONE. make arbiter-ask records ask:<subject> and builds its bundle in one command; the contract and bundle cover spec rounds and asks; test_arbiter_fix asks/bundle tests; exercised end to end in a scratch repo
+- [x] T11 The text (plan D14) and the retired waiver (plan D15): CLAUDE.md, the constitution, both fidelity agents, `escalation-check.md`, `wakeup-hooks.sh`, `docs/spec-kit-and-reviews.md`, `docs/reviews.md`, `pair-hooks.sh`; tooling tests and `make hooks-test` green, the gate, the report, landed
+      research: rendering
+      verify: DONE. the text (CLAUDE.md, constitution XIII/XVI, both fidelity agents, escalation-check, wakeup-hooks, spec-kit-and-reviews, reviews, guards) and the retired waiver; make done green (419 s), tooling tests 1591 passed, hooks-test green; report written; landed by the push carrying this tick
+
+## Amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too")
+
+- [x] T12 Band 3 to the arbiter (plan D16): `perf_review.py` (`arbiter_subject`, `arbiter_signed`, `check`, the refusal), `make perf-arbiter`, the arbiter's contract, the texts; tests red on today's code (SC-007); the gate, the report, landed
+      research: rendering
+      verify: DONE. perf_review arbiter_subject/arbiter_signed/check + both refusals name the arbiter; make perf-arbiter; perf_bands band-3 text; contracts and texts; test_perf_review 2 new tests (red on old code) + updated band-3 test, test_perf_bands pins, 75 passed; landed by the push carrying this tick after the gate

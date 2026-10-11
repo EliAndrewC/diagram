@@ -96,3 +96,15 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T99 The last batch (plan D18) [lands-open]
       research: rendering
       verify: DONE. DONE. batches 1-4 landed (plan D18): measurement and the fixes, the owing logic, the guards and the arbiter, the gates and the doctrine
+
+## Amendment 1 (the GM 2026-10-10: "yes to each of those possible changes")
+
+- [x] T27 The triage names the page (plan D20) and depiction owed by its own words (plan D21); the 343 replay fixture and tests red on today's code (SC-007)
+      research: rendering
+      verify: DONE. modal_triage names the page (TOUCHES uid @ page), owes only units reading it, an unknown page owes all; depiction owed and fingerprinted by what it reads; 343 replay clears exactly the 11 units (reply-paged.md names files, not the plan D20 wording); test_modal_triage + test_modal_checks 26 passed, red on old code
+- [x] T28 The clones' view in `make speckit-todo` (plan D22); its fixture test (SC-008)
+      research: rendering
+      verify: DONE. speckit-todo shows an open or reopened feature as an active clone holds it, marked not landed, by git (unlanded work only); measured active 0.14 s vs all 0.9 s, same rows (m:375-a1-speckit-todo-clones); test_speckit_todo 50 passed
+- [x] T29 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
+      research: rendering
+      verify: DONE. make done green (reuse: scripts only); tests/tooling 1608 passed after the ledger row fix; make hooks-test green; report written; landed by the push carrying this tick

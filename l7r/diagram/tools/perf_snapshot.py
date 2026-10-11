@@ -55,7 +55,7 @@ from typing import Any
 # the point where you start thinking and the point where you must stop, and until now it was doing
 # both jobs badly: too strict at the bottom (5% on one seed is inside the noise of a loaded machine)
 # and absent at the top (a seed could double and the rule was satisfied by writing that down).
-TOTAL_SLOWDOWN_CAP_PCT = 10.0  # since feature 129 this is band 3's TOTAL line (GM sign-off), no longer a merge-blocking cap; perf_bands.py holds the matrix
+TOTAL_SLOWDOWN_CAP_PCT = 10.0  # since feature 129 this is band 3's TOTAL line (its sign-off the round arbiter's, feature 379), no longer a merge-blocking cap; perf_bands.py holds the matrix
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
@@ -302,7 +302,7 @@ def report(against: str | None) -> int:
     # the PUSH by perf_review --check, and printed here and at the gate (FR-009b) so nothing is
     # surprised. The two-band rule below (5% diagnose / 10% cap) is superseded: the diagnose line
     # still prints as advice, and the 10% exit is gone - "there is no ceiling ... so long as the
-    # subagent reviewer agrees", with the GM's own sign-off above 10% total / 20% per seed.
+    # subagent reviewer agrees", with a sign-off above 10% total / 20% per seed - the round arbiter's since feature 379.
     from l7r.diagram.tools import perf_bands
 
     print()

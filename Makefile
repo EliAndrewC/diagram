@@ -28,8 +28,8 @@
 
 # ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
 # Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
-# subagent's confirmation; >5% total / >10% seed owes the escalated audit; >10% / >20% owes the GM's
-# personal sign-off before the push. `perf-report` and `perf-gate` PRINT the verdict (FR-009b);
+# subagent's confirmation; >5% total / >10% seed owes the escalated audit; >10% / >20% owes the round
+# arbiter's sign-off before the push (make perf-arbiter; GUARD_EDIT_OK: feature 379 amendment 3 - never asked of the GM). `perf-report` and `perf-gate` PRINT the verdict (FR-009b);
 # `perf-review` (run by sync-with-main.sh at the push) ENFORCES it. A subagent's shell is not
 # distinguishable from the session's (research R1), so confirm/audit PROMPT and decline without
 # AS=perf-audit - the declaration is recorded, and the record's content is what a self-grant fakes.
@@ -54,8 +54,15 @@ perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=jus
 ##  NO_WAY_AROUND=<text>                              was there no good way around it?
 ##  AS=perf-audit                                     who is recording - only the subagent may pass this
 	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-signoff:   ## [performance] band 3 - the GM, at a terminal   WHY="..."
-##  WHY=<text>  the GM's own reason, given at a terminal - band 3
+# GUARD_EDIT_OK: feature 379 amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too") - band 3 goes to the
+# round arbiter first; its accept, bound to the pair's numbers, stands for the sign-off and the GM reviews it after landing.
+perf-arbiter:   ## [performance] band 3 - put the increase to the round arbiter first (feature 379)   [ENV=local|codebuild]
+	@s="$$($(PERF_REVIEW) arbiter-subject --environment "$(or $(ENV),local)")" || exit 2; \
+	 $(MAKE) --no-print-directory arbiter-ask SUBJECT="$$s" WHY="band 3 on $(or $(ENV),local) for $(SPECIFY_FEATURE): accept this performance increase, or keep optimizing? The perf report is perf-report.txt beside this MANIFEST, the band-1 and band-2 records are in dev/perf-log/, and the band-3 standard is the GM's: necessary, commensurate, no way around it" && \
+	 $(PERF_REVIEW) show --environment "$(or $(ENV),local)" > "/tmp/l7r-check/arbiter-ask-$$s/perf-report.txt"
+perf-signoff:   ## [performance] band 3 - records a sign-off the GM gave UNPROMPTED, in their words (a session asks the arbiter: make perf-arbiter)   WHY="..."
+##  WHY=<text>  the GM's own words, given unprompted - band 3
+	@: "GUARD_EDIT_OK: feature 379 amendment 3 - the help line: a session never asks the GM for band 3"
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
 perf-review:    ## [performance] does every environment's newest bookend pair carry the records its band owes? (the push runs this)
 	@$(PERF_REVIEW) check
@@ -1145,7 +1152,9 @@ check-closed:   ## [project] close the checks in flight on a page or pop-up whos
 # (only the `round-arbiter` subagent passes AS=round-arbiter; a ruling is binding, one per trigger).
 arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
 	@if [ -z "$(TRIGGER)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" "$(TRIGGER)" --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",)
+	@: "GUARD_EDIT_OK: an arbiter tooling fix (368, 2026-10-11) - MISSING_OK bundles a trigger whose rounds kept no reply, with the reason shown to the arbiter"
+	$(if $(MISSING_OK),$(LOGESCAPE) MISSING_OK "$(MISSING_OK)",@:)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/arbiter_bundle.py" "$(TRIGGER)" --root "$$(git rev-parse --show-toplevel)" $(if $(OUT),--out "$(OUT)",) $(if $(MISSING_OK),--missing-ok "$(MISSING_OK)",)
 
 arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter
 	@if [ -z "$(TRIGGER)" ] || [ -z "$(FILE)" ]; then printf 'make arbiter-ruled: TRIGGER= and FILE= are required\n' >&2; exit 2; fi
@@ -1156,6 +1165,13 @@ arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the 
 arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379)   ID=<trigger> NOTE="<what was built>" TEST=tests/...
 	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
+
+# GUARD_EDIT_OK: feature 379 amendment 2 (the GM 2026-10-10: "things should go to the arbiter at the point where they were
+# previously coming to me") - a process stop the session would have put to the GM goes to the round arbiter first.
+arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choice of route) to the round arbiter before the GM (feature 379)   SUBJECT=<short id> WHY="<the question>"
+	@if [ -z "$(SUBJECT)" ] || [ -z "$(WHY)" ]; then printf 'make arbiter-ask: SUBJECT= and WHY= are required\n' >&2; exit 2; fi
+	@: "GUARD_EDIT_OK: feature 379 plan review - one command records the question AND builds its bundle (FR-009)"
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py ask "$(SUBJECT)" "$(WHY)" && python3 scripts/reviews/arbiter_bundle.py "ask:$(SUBJECT)" --root "$$(pwd)"
 
 # GUARD_EDIT_OK: feature 379 amendment 1 (the GM 2026-10-10, "yes please") - tooling lands alone, mid-feature, as a new commit
 # on main built in a detached worktree; the open-task refusal is untouched.
@@ -1585,6 +1601,9 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 # GUARD_EDIT_OK: feature 212 - `K=` carries the `-k` filter the GM named ("even a specific test case"),
 # so the make-only guard can rewrite a targeted bare pytest into this target instead of refusing it.
 # gate-hooks records a `K=` (or a `::` node id) run as the same SUBSET a bare `pytest -k` is.
+# GUARD_EDIT_OK: adding a refusal - with FILE unset (`F=` mistyped, 2026-10-10) pytest collected the WHOLE suite under
+# a low-memory warning; an empty FILE now refuses with the variable's name instead.
+	@if [ -z "$(strip $(FILE))" ]; then echo "test-file: no FILE given - run \`make test-file FILE=tests/<path>\` (the variable is FILE, not F); \`make test-full\` runs every test" >&2; exit 2; fi
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
 
 # GUARD_EDIT_OK: feature 216 - the audit that answered "are you really not able to combine?" is a command now, for any

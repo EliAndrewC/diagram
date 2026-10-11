@@ -237,7 +237,7 @@ CodeBuild against CodeBuild - a cross-environment pair is REFUSED, never display
      perf_bands.BAND1_PCT, where the 5-of-6 noise measurement that bought the floor is recorded)
     1  explain      over the line  over the line         `make perf-explain WHY=... CONTROL=<key>|UNVERIFIED="..."` (yours) + `make perf-confirm ... AS=perf-audit` (the subagent's)
     2  audit        > 5%           > 10%        `make perf-audit VERDICT=justified NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit`
-    3  GM sign-off  > 10%          > 20%        `make perf-signoff WHY=...` - the GM, at a terminal, before the push
+    3  sign-off     > 10%          > 20%        `make perf-arbiter` - the round arbiter first (feature 379; the GM reviews its ruling after landing); or `make perf-signoff WHY=...`, the GM at a terminal
 
 `make perf-report` / `make done` PRINT the band and the stages that grew (FR-009b); `make perf-review`
 - run by `sync-with-main.sh` at the push - ENFORCES it. Records are one file per event in

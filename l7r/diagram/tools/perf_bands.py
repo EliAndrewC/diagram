@@ -6,7 +6,7 @@ THE GM'S MATRIX (2026-08-24, superseding constitution VI's two-band rule):
     1  explain         over the line    over the line        a written explanation + a perf-audit subagent confirming it
        (the band-1 line is PER ENVIRONMENT: 0.0% local, 2.0% codebuild - see BAND1_PCT below)
     2  audit           > 5%             > 10%                the subagent adjudicates: necessary, commensurate, no way around it
-    3  GM sign-off     > 10%            > 20%                the GM personally, BEFORE the push
+    3  sign-off        > 10%            > 20%                the round arbiter's accept (feature 379), BEFORE the push
 
 A band fires when EITHER measurement crosses its line, each rung keeps everything below it, and the
 whole matrix applies to each ENVIRONMENT independently (GM 2026-08-25: *"these thresholds apply to
@@ -29,7 +29,8 @@ mute stays possible where an `-end` on the new box has only a local or old-box `
 `perf_review.check`'s `NO COMPARABLE BASELINE ... MUTE`, at push time, not here.
 
 THE CASE THE PER-SEED NUMBERS EXIST FOR: feature 128 finished at total -29.9% with seed 47 at +30.7%.
-Under a total-only rule it reached nobody; here it is band 3 and needs the GM (SC-002b).
+Under a total-only rule it reached nobody; here it is band 3 and needs its sign-off (SC-002b) - the round arbiter's, since
+feature 379.
 
 THIS MODULE DECIDES; IT NEVER ENFORCES. `perf_snapshot.report` prints the verdict, `perf-gate`
 prints what is owed at the gate (FR-009b), and `perf_review --check` enforces it at the PUSH - the
@@ -80,7 +81,7 @@ OWES = {
     0: "nothing - no increase above this environment's band-1 line",
     1: "a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
     2: "band 1, plus an escalated audit: necessary, commensurate, no way around it (make perf-audit ... AS=perf-audit)",
-    3: "bands 1 and 2, plus the GM's personal sign-off before the push (make perf-signoff, at a terminal)",
+    3: "bands 1 and 2, plus the round arbiter's sign-off before the push (make perf-arbiter; never a question to the GM - feature 379)",
 }
 
 

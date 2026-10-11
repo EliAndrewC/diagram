@@ -244,7 +244,7 @@ sync_in() { # [--mirror-only] [--background-render]
   # would flow back into main via render-sync's copy - but render-sync no longer copies anything,
   # it REGENERATES main in place, so nothing flows clone -> main and the clone never needs main's
   # renders. A clone regenerates whatever map it iterates on; the GM browses renders in main.
-  date > "$ROOT/.git/sync-with-main.stamp"
+  date > "$(git -C "$ROOT" rev-parse --absolute-git-dir)/sync-with-main.stamp"
   echo "sync-with-main: clone synced with GitHub main (git)"
 }
 
@@ -477,7 +477,8 @@ push_cmd() {
   # be ticked by hand, so the push is where it holds.
   "$(dirname "$0")/gates/plan-gate.sh" || exit 1
   # THE PERFORMANCE BANDS ARE ENFORCED HERE (feature 129, FR-001/FR-002/FR-009): the GM's words for
-  # band 3 are "before it is committed back to main", so the push - not the gate - is where a
+  # band 3 are "before it is committed back to main" (its sign-off the round arbiter's since feature 379 -
+  # GUARD_EDIT_OK: comment only), so the push - not the gate - is where a
   # missing explanation, confirmation, audit or sign-off stops the work. `make perf-review` names
   # exactly which record is owed. CI_PERF_REVIEW is the test seam (a fixture has no skill).
   # THE TEST SEAMS ARE HONORED ONLY IN A FIXTURE (feature 132, Principle XIV - the fidelity
@@ -522,7 +523,7 @@ push_cmd() {
   fi
   mirror_refresh
   theirs=$(git diff --name-only "$before"..HEAD | sort -u)
-  date > "$ROOT/.git/sync-with-main.stamp"  # post-push the clone is at main's tip = synced by definition
+  date > "$(git -C "$ROOT" rev-parse --absolute-git-dir)/sync-with-main.stamp"  # post-push the clone is at main's tip = synced by definition
   overlap=$(comm -12 <(printf '%s\n' "$ours") <(printf '%s\n' "$theirs"))
   if [ -n "$overlap" ]; then
     echo "sync-with-main: PUSHED, but the pull auto-merged other sessions' edits into files your commits touched:" >&2

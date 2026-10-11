@@ -21,3 +21,15 @@ those proposals (transcript `8d3395e5-fe32-4f85-9c89-80c344d2ac1a`):
 
 > I think I actually like this being all part of one feature because conceptually this is all under the same umbrella of process improvements and making sure that we are implementing things efficiently and not going in circles, et cetera, et cetera. So yes, please go ahead and fold all of this into the same new feature
 
+
+## Amendment 1 (2026-10-10, a later session)
+
+The hourly check measured feature 343's run: 141 check dispatches, 94 of them pop-up checks, and of the 35 second rounds
+18 ran on pop-ups whose checked words had not changed. The cause: a pop-up's checks are still owed by a whole page - the
+triage names a pop-up and every check of it is owed, so a findings edit re-owed its depiction and a drawing edit re-owed
+its research checks (the kept triage, 14 of 61 units); and any edit to a pop-up re-owes its depiction. The session proposed
+owing a pop-up check only where a changed block is one it reads, and, separately, `make speckit-todo` showing a feature's
+state in the session clones (the GM had found the research features shown untouched though their specs and plans were
+accepted in the research clone). The GM:
+
+> yes to each of those possible changes, though for the in-progress features you can probably limit yourself to clones with active sessions, if it helps performance.

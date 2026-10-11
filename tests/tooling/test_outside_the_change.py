@@ -56,7 +56,8 @@ not a row
 """
 
 
-def test_a_reply_s_outside_findings_are_filed_as_open_rows(tmp_path: pathlib.Path) -> None:
+def test_a_reply_s_outside_findings_are_filed_as_open_rows(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    monkeypatch.delenv("L7R_FEATURE_DIRECTORY", raising=False)
     assert ro.outside("no section here") == []
     rows = ro.outside(REPLY)
     assert rows == [("research/questions/0105-wells.html", "Its curb is stone", "no footnote for the stone curb"), ("research/questions/0105-wells.notes.html", "note a", "the page number is missing")]
@@ -69,3 +70,13 @@ def test_a_reply_s_outside_findings_are_filed_as_open_rows(tmp_path: pathlib.Pat
     (tmp_path / ".specify" / "feature.json").write_text("not json")
     ro.file_outside(tmp_path, "record-format", REPLY)
     assert (tmp_path / "specs/_unfiled/found.jsonl").is_file(), "no active feature: still filed, never dropped"
+
+
+def test_a_page_session_files_its_findings_under_its_brief_s_feature(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """2026-10-10: feature 343's check session filed its OUTSIDE THE CHANGE rows under 378, the feature `.specify/feature.json`
+    named for the clone's main session; the session's own feature (`L7R_FEATURE_DIRECTORY`) wins, as for its rulings."""
+    (tmp_path / ".specify").mkdir()
+    (tmp_path / ".specify" / "feature.json").write_text('{"feature_directory": "specs/378-x"}')
+    monkeypatch.setenv("L7R_FEATURE_DIRECTORY", "specs/343-y")
+    ro.file_outside(tmp_path, "quote-check", REPLY)
+    assert (tmp_path / "specs/343-y/found.jsonl").is_file() and not (tmp_path / "specs/378-x/found.jsonl").exists()

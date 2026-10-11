@@ -882,16 +882,16 @@ artifacts. Specifically:
   2026-08-25; feature 129 - this replaces the two-band rule of 2026-08-24,
   whose 10% "cap" is now band 3's total line rather than a merge-blocking
   ceiling: *"there is no ceiling for allowing it to go forward so long as the
-  subagent reviewer agrees"*, with the GM's own sign-off above it):
+  subagent reviewer agrees"*, with a sign-off above it - the round arbiter's since feature 379):
 
       band            on the TOTAL     on ANY SINGLE SEED   what it takes
       1  explain      over the line    over the line        a written explanation AND a perf-audit subagent confirming it matches the stage delta
       2  audit        > 5%             > 10%                the subagent independently finds the increase NECESSARY, COMMENSURATE with the functionality gained, and with NO GOOD WAY AROUND IT
-      3  GM sign-off  > 10%            > 20%                the GM personally, at a terminal, BEFORE the work is committed back to main
+      3  sign-off     > 10%            > 20%                the round arbiter first (`make perf-arbiter`; GM 2026-10-10: "yes it covers the band-3 perf signoff too"), its accept bound to the numbers, the GM reviewing it after landing - or the GM personally, at a terminal - BEFORE the work is committed back to main
 
   - A band fires when EITHER measurement crosses its line; each rung keeps
     everything below it. Feature 128's pair - total -29.9%, seed 47 +30.7% -
-    is band 3: faster overall, and still the GM's to sign off.
+    is band 3: faster overall, and still owes its sign-off (the round arbiter's first, since feature 379).
   - **BAND 1'S LINE IS PER ENVIRONMENT** (GM 2026-09-04, feature 179:
     *"let's make the band one threshold per environment. with a noise floor of
     about two percent"*): **0.0% local, 2.0% CodeBuild**, and an environment
@@ -1710,7 +1710,7 @@ has been misread as a licence to ledger anything that predates the diff.
   not drop AND every newly-failing check must be individually diagnosed.
 
 **FIXING IT IS THE EXIT** (GM 2026-08-23). There are three in principle -
-FIX it, REVERT the change, or obtain an explicit GM waiver - but they are
+FIX it, REVERT the change, or obtain the round arbiter's waiver - but they are
 not peers, and treating them as a menu is itself the error:
 
 - **FIX is the default and the expected outcome.** A session that has found
@@ -1721,8 +1721,10 @@ not peers, and treating them as a menu is itself the error:
   was tried, why each attempt failed, and why the remaining approaches are
   exhausted or unreasonable. Reverting because a fix looks like work is not
   an exit, it is an abandonment.
-- **WAIVER is the GM's to grant, never the session's to assume.** Asking for
-  one is only honest after the fix has been genuinely attempted.
+- **WAIVER is the round arbiter's to grant, never the session's to assume** (feature 379, GM 2026-10-10:
+  *"things should go to the arbiter at the point where they were previously coming to me"*): `make arbiter-ask`,
+  and the GM reviews the ruling after landing. Asking for one is only honest after the fix has been genuinely
+  attempted.
 
 A session that truly cannot fix a regression stops and says so - and "stops
 and says so" means the work stays in the clone, unpushed, with the
@@ -1868,7 +1870,9 @@ asked, and does it add anything that was not?
 **AT MOST five rounds, and stop at the first clean verdict.** A `FAITHFUL` verdict
 on round one ends the review - there is no quota to fill and re-reviewing a spec the
 reviewer has already passed buys nothing. A `CHANGES REQUIRED` verdict means: revise,
-re-review. If the FIFTH review still returns changes, STOP and put it to the GM.
+re-review. If the FIFTH review still returns changes, the round arbiter rules before a sixth (feature 379, GM
+2026-10-10: *"things should go to the arbiter at the point where they were previously coming to me"*); its `accept`
+stands as the spec's verdict, and the GM reviews the ruling after landing.
 
 **Raised from three on 2026-08-30 (GM), and the reason is what the cap is FOR.** It
 exists to catch a persistent misunderstanding that further attempts will not locate -
@@ -1898,7 +1902,7 @@ to record what implementation found is a different thing being reviewed.
 **A scope-expansion finding is an ordinary finding.** "This spec does more than was
 asked" goes through the same revise-and-re-review loop as anything else; it is not a
 special case and it does not short-circuit the rounds. It becomes a stop only the way
-every other finding does - by surviving three of them (GM 2026-08-24, declining the
+every other finding does - by surviving five of them (GM 2026-08-24, declining the
 tighter rule the implementing session proposed).
 
 **Why this exists** (GM 2026-08-24). Feature 126 was "put the farmhouses down before
@@ -1922,7 +1926,7 @@ artifact still being written and graded by the same session.
 
 **Interaction with XV (Keep Going).** This is not licence to stop. The reviews run
 inside the work, the session keeps building while it acts on them, and escalation
-happens only after the third round. Asking the GM to choose among options remains
+happens only after the fifth round - to the round arbiter, not the GM (feature 379). Asking the GM to choose among options remains
 the thing XV forbids.
 
 **Interaction with the stop-and-ask calculus.** An exception is not ambiguity. Where

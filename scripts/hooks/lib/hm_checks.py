@@ -58,6 +58,8 @@ _EDIT = re.compile(
     re.S | re.M,
 )
 _PAGE = re.compile(r"research/questions/(\d{4})-[^/]*\.html$")
+#: a bundle scoped to named notes (`check_bundle.py`: "ONLY the notes a, b and the blocks that carry them")
+_NOTES = re.compile(r"ONLY the notes (.+?) and the blocks that carry them")
 _MODAL = re.compile(r"interactive/assets/modals/((?:sheet|hamlet|choice)/[^/]+)\.md$")
 
 
@@ -127,10 +129,24 @@ def open_round(state: Mapping[str, Any], subject: str, now: float | None = None)
     return [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", []) and d.get("state") != "answered" and _live(d, now)]
 
 
+def notes_of_manifest(text: str) -> set[str]:
+    """The notes a note-scoped bundle reads; empty for a bundle of the whole page."""
+    return {n.strip() for m in _NOTES.findall(text) for n in m.split(",") if n.strip()}
+
+
+def fresh_reading(state: Mapping[str, Any], unit: str, notes: set[str]) -> bool:
+    """A dispatch reading only notes no earlier round of the unit read is a FIRST reading, not a repeat round: three features
+    adding their own notes to one page, one after another, are three first readings (the round arbiter on 0104, 2026-10-10:
+    "the cap fired because the round counter counts one page across features, not because a check repeated")."""
+    read = state.get("notes_read", {}).get(unit)
+    return bool(notes) and read is not None and "*" not in read and not notes & set(read)
+
+
 def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None, freeze_ok: bool = False, arbiter_ok: bool = False) -> str:
     """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap and the tripwires, which
     the round arbiter rules on - `hm_arbiter.py`)."""
     subjects = subjects_of_manifest(text) if check in PAGE_CHECKS else []
+    notes = notes_of_manifest(text)
     if root is not None and not arbiter_ok:
         held = hm_arbiter.blocking(root, "")
         if held:
@@ -144,7 +160,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             )
         n = state.setdefault("rounds", {}).get(f"{check}|{s}", 0)
         unit = f"{check}|{s}"
-        if root is not None and not arbiter_ok:
+        if root is not None and not arbiter_ok and not fresh_reading(state, unit, notes):
             shut = hm_arbiter.closed(root, f"round:{unit}@")
             moved = moved_since_answer(root, text, s) if shut else ""
             if shut and not moved:
@@ -160,18 +176,36 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
     for s in subjects:
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
-        state["rounds"][f"{check}|{s}"] = state["rounds"].get(f"{check}|{s}", 0) + 1  # every dispatch let through is a round
+        unit = f"{check}|{s}"
+        if not fresh_reading(state, unit, notes):  # a fresh reading of new notes is not a repeat round
+            state["rounds"][unit] = state["rounds"].get(unit, 0) + 1  # every other dispatch let through is a round
+        read = state.setdefault("notes_read", {}).setdefault(unit, [])
+        read.extend(sorted((notes or {"*"}) - set(read)))  # "*": a whole-page reading, every note read
     state.setdefault("dispatches", {})[tid] = {"check": check, "subjects": subjects, "manifest": manifest, "t": now, "state": "pending",
                                                 "owed": re.findall(r"^owed: (.+)$", text, re.M)}  # why each unit was due (374)
     return ""
 
 
-def launched(state: dict[str, Any], tid: str, agent_id: str, background: bool) -> None:
+def launched(state: dict[str, Any], tid: str, agent_id: str, background: bool, reply: str = "", keep: Path | None = None) -> None:
+    """A dispatch's launch. A FOREGROUND check has already returned by its PostToolUse, and its SubagentStop fired while the
+    dispatch was still pending with no agent id, so `returned` could not match it: its reply - the arbiter's round-to-round
+    record and its EDIT blocks - is taken here from the tool's response (the round arbiter on 0104's fifth source-reader
+    round, 2026-10-10, found "no reply kept" for every round)."""
     d = state.get("dispatches", {}).get(tid)
     if d is None:
         return
     d["aid"] = agent_id
-    d["state"] = "running" if background else "returned"
+    d["state"] = "running"
+    if not background:
+        returned(state, agent_id, reply, keep)
+
+
+def response_text(resp: Mapping[str, Any]) -> str:
+    """The text of an Agent tool's response: its `content` blocks, or a plain string."""
+    c = resp.get("content")
+    if isinstance(c, str):
+        return c
+    return "\n".join(str(b.get("text") or "") for b in c if isinstance(b, Mapping)) if isinstance(c, list) else ""
 
 
 def returned(state: dict[str, Any], agent_id: str, reply: str, keep: Path | None = None) -> None:
@@ -380,10 +414,8 @@ def subject_blocks(root: Path, subject: str) -> list[str]:
 
 
 def _feature(root: Path) -> str:
-    try:
-        return Path(str(json.loads((root / ".specify" / "feature.json").read_text(encoding="utf-8")).get("feature_directory", ""))).name
-    except OSError, ValueError:
-        return ""
+    d = hm_arbiter.feature_dir(root)  # one reader of the active feature: a page session's own first
+    return d.name if d else ""
 
 
 #: every check a dispatch is counted for: the page checks freeze their subject; impl-drift and the triages count to FR-010 only
@@ -567,7 +599,7 @@ def handle(mode: str, payload: Mapping[str, Any], now: float | None = None) -> s
                 hm_arbiter.trip(root, trigger, "cascade", "", f"{n} check dispatches over {lines} changed lines", now)
     elif mode == "launched" and payload.get("tool_name") == "Agent":
         resp = payload.get("tool_response") if isinstance(payload.get("tool_response"), Mapping) else {}
-        launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched")
+        launched(state, str(payload.get("tool_use_id") or ""), str(resp.get("agentId") or ""), resp.get("status") == "async_launched", response_text(resp), path.parent / "check-replies")
     elif mode == "returned":
         returned(state, str(payload.get("agent_id") or ""), _reply_of(str(payload.get("agent_transcript_path") or ""), str(payload.get("last_assistant_message") or "")), path.parent / "check-replies")
     elif mode == "edit" and payload.get("tool_name") == "Bash":

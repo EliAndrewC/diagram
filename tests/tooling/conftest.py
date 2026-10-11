@@ -14,3 +14,6 @@ def _sources_home(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.
     monkeypatch.setenv("L7R_ATTEMPTS_ROOT", str(tmp_path_factory.mktemp("attempts-root")))  # the attempts log (feature 312)
     monkeypatch.setenv("L7R_ARCHIVE_READS", "0")  # a page read in a test is never archived to the real archive (feature 309)
     monkeypatch.delenv("REFRESH", raising=False)
+    # a page session's own feature (set by its runner) overrides a fixture's `.specify/feature.json`: two arbiter tests
+    # failed only under a page session (368's check session, 2026-10-10)
+    monkeypatch.delenv("L7R_FEATURE_DIRECTORY", raising=False)
