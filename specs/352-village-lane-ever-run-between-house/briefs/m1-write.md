@@ -10,7 +10,7 @@ every lane off a household's reserved copse seats (feature 287, woods W25), but 
 lane or path ever ran between a farmhouse and its own homestead grove. Research features annotate the record; they change
 no map and no code.
 
-## Your item (one question)
+## Your items (one question; a new registry key only where a source is cited)
 
 - **0036** (`research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.*`):
   1. **The search.** The archive first (`make archive-find TERMS="..."`, one term per call, then each hit's archived text),
