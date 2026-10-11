@@ -18,3 +18,11 @@ bank, research/contents.json#water 310, `hamletgen/water/brook.py` `open_race_mo
 are the supply/brook pair every map uses; changing either for this junction trades a junction-scale misread for a
 map-scale one. **Sketch**: judge the new mouth at 9x in a settlement-review first; only if the race still reads as the
 river, taper its first ~30 ft from the brook's hue to its own.
+
+## The sketch's first step, measured (2026-10-11)
+
+Judged on Sawada's mouth at (4575, 3455) as main draws it today (observed 2026-10-11; method: the pool SVG rendered at about
+5 px per map unit around the tap, read by eye): the head race leaves the brook 6.0 px wide in the supply hue `#6C9CBE` against
+the brook's 7 px in `#9CB4C8`, and at that zoom the dug race reads as the principal watercourse - the saturated band - while
+the brook reads pale. So the sketch's condition ("only if the race still reads as the river") holds and its taper is owed.
+It stays in 358's one re-roll wave, as the GM bundled it on 2026-10-10; the session asked the GM whether to build it alone.
