@@ -4616,11 +4616,21 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/compound_parts.py::_roji_parts#gate seat": {
+  "code": "408bfc3b6c7c8e61",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-10",
+  "note": "the offsets only keep the drawn stones clear of the walls.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/compound_parts.py::_roji_parts#guest's way out of doors": {
   "code": "0b5595827b5d225d",
   "core": "fb6d2d7e4a639aaa",
   "date": "2026-10-10",
-  "note": "the code draws the Koseki roji form from the middle gate to the principal room's veranda, and the claim says plainly that using it at an office is a guess the record leaves open",
+  "note": "matches the page: the roji form is attested only at Koseki; an office's guest route is open and rightly marked a guess.",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "2d404788df2937ce"
   },
@@ -4631,6 +4641,24 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_roji_parts#shoe stone": {
+  "code": "f854e52a176effe1",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-10",
+  "note": "the page names no stone at the veranda's edge, so the stone is a true guess.",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_parts.py::_roji_parts#stepping stones": {
+  "code": "b4821a703b6da61d",
+  "core": "fb6d2d7e4a639aaa",
+  "date": "2026-10-10",
+  "note": "the page names the walled garden path but not what it was laid with; the stones and their size are a true guess.",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/dwellings.py::BUSINESS_KINDS#commercial frontages": {
