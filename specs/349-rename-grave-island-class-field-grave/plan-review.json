@@ -1,0 +1,47 @@
+{
+ "feature": "349-rename-grave-island-class-field-grave",
+ "plan_sha256": "f3eabc59414df574315378b891d8344d61b332924ba49698c6a163a8f8092326",
+ "plan_text": "# Implementation Plan: Rename the `grave island` class to `field grave`\n\n**Branch**: none (main, in the session clone) | **Date**: 2026-10-10 | **Spec**: [spec.md](spec.md)\n\n## Summary\n\nA key rename across the class's users, carried by the snapshot's renaming table; the two hamlets that draw a field grave\nregenerated; no drawing changes.\n\n## Decisions\n\n- **D1 - the key and the class.** `water_and_ways.py`: `class FieldGrave(Kind): key = 'field grave'`; the engine's two\n  drawers (`_plot_grave_island`, `_plot_corner_grave` in `settlement/fields/features.py`) tag their ink `field grave`.\n- **D2 - the reader-facing data.** `place.json`'s collision key; `siblings.json`'s two pairs (the key, and \"the grave island\"\n  in their text reworded to \"the field grave\", standing \"on an island in a plot or in its corner\"); the modal file moves\n  to `assets/modals/hamlet/field-grave.md` (its stem is the key's slug) with `Name: field grave`, nothing else changed.\n- **D3 - the snapshot.** `SINCE_189[\"grave island\"] = (\"field grave\",)` in `tests/interactive/test_classes_docstrings.py`, as\n  bathhouse -> bath room; the frozen snapshot is not edited (FR-004).\n- **D4 - the maps.** Kashikawa and Mizuguchi regenerated (`make map`); Kashikawa's `ink_classes` and its notes' Features key\n  (`- **field grave**:`) follow. Mizuguchi's notes mention \"a grave island\" only in its dated history, which stays.\n- **D5 - the island form keeps its name** (FR-003): `grave_form=island`, its choice modal, `_plot_grave_island` and the\n  glossary's term \"grave island\" (a word the prose uses for the form) are unchanged.\n- **D6 - checks.** The claims the renamed units carry are re-checked by `impl-drift`; `modal-form` checks the renamed modal;\n  the research and depiction checks are not re-run (spec, Decisions Recorded); the glyph-check `review_owed` names on\n  Kashikawa is a class key new to the map over an unchanged glyph, answered with `PAIR_OK` / `REVIEW_GATE_OK` and its reason.\n\n## Project Structure\n\n```text\nl7r/diagram/interactive/classes/water_and_ways.py, settlement/fields/features.py     D1\nl7r/diagram/interactive/assets/{place,siblings}.json, modals/hamlet/field-grave.md   D2\ntests/interactive/test_classes_docstrings.py, test_classes.py, test_place.py          D3\npool/hamlets/kashikawa/kashikawa.{json,notes.md}                                      D4\n```\n",
+ "reviewed": "2026-10-10",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "class FieldGrave, key 'field grave'; both drawers (island and corner) tag their ink 'field grave'",
+   "class": "within",
+   "why": "The request's core: the page class key and name no longer name one form; FR-001. Diff matches (water_and_ways.py, features.py four ink tags)."
+  },
+  {
+   "id": "D2",
+   "summary": "place.json key, siblings.json keys and two texts reworded, modal file moved to field-grave.md with Name: field grave",
+   "class": "within",
+   "why": "place.json and siblings.json are named in the request; the sibling reword makes the text true of both forms (the request's purpose) and is carried by FR-002; the modal's stem is the key's slug, so the move is the rename itself."
+  },
+  {
+   "id": "D3",
+   "summary": "SINCE_189['grave island'] = ('field grave',); frozen snapshot not edited",
+   "class": "within",
+   "why": "The request names the snapshot 'through SINCE_189, the renaming table'; FR-004."
+  },
+  {
+   "id": "D4",
+   "summary": "Kashikawa and Mizuguchi regenerated; Kashikawa's ink_classes and notes key follow; Mizuguchi's dated 2026-08-16 history mentioning 'a grave island' stays",
+   "class": "within",
+   "why": "Both manifests are named in the request; Mizuguchi's manifest names no grave class at HEAD (measured: its ink_classes carry no grave key). The kept history line is a dated run log describing an island-form grave, not a class key, hover or notes key, so the request (the hover and class naming) does not reach it."
+  },
+  {
+   "id": "D5",
+   "summary": "The island FORM keeps its name: grave_form=island, its choice modal, _plot_grave_island, and the glossary term 'grave island'",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The request lists 'the glossary term' among what the rename touches, so keeping it narrows the literal list. Purpose-level: the request exists because a corner-form hamlet is told its grave is an island; the glossary term's definition (read at HEAD) is 'a grave standing inside a field plot ... the Chinese form of the field grave' - it names the FORM. Renamed to 'field grave' it would define every field grave as a mid-plot mound, reintroducing on the corner-form map exactly the contradiction the request removes. Applying the list literally defeats the request's stated purpose; the class/form seam is checked item by item (choice modal, drawer name and glossary term all name the island form only). Carried by FR-003, accepted at spec round 2."
+  },
+  {
+   "id": "D6",
+   "summary": "impl-drift on renamed claims, modal-form on the renamed modal; research/depiction checks not re-run; the owed glyph-check over an unchanged glyph answered with an escape and reason",
+   "class": "within",
+   "why": "Process for verifying a rename, not a change to what the GM asked; nothing the request asks for is withheld by it (glyph, About, Guesses and Depiction are unchanged per FR-002). Whether the escape is sound is the gate's question, not fidelity."
+  }
+ ],
+ "verdict": "CLEAR"
+}

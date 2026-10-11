@@ -4,3 +4,6 @@ specs/250-close-the-record-checks/owed-verdicts.md merge=union
 # the attempts log and the not-kept list (feature 312): every clone appends, a session's hook writes on every fetch
 research/source-attempts.jsonl merge=union
 research/not-kept.jsonl merge=union
+# the review ledger (feature 371 owes a row per check pass, so every session appends at the table's end): union keeps both
+# sides' rows - its merges were unioned by hand at least four times (157, 159, and two in 2026-10-10's landings)
+dev/review-ledger.md merge=union

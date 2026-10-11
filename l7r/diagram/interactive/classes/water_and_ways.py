@@ -45,8 +45,10 @@ class FieldRock(Kind):
     key = 'field rock'
 
 
-class GraveIsland(Kind):
-    key = 'grave island'
+# Feature 349 (settlement-review, Kashikawa 2026-09-28): the class covers both forms of the field grave knob - the island
+# (Chinese) and the corner (Japanese) - so it is not named for one of them.
+class FieldGrave(Kind):
+    key = 'field grave'
 
 
 # WHY THE CLASS IS A *VILLAGE* LANE AND NOT A HAMLET LANE - the GM, 2026-08-29: "I have been

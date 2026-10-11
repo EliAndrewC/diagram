@@ -68,7 +68,7 @@ SPEC_CLASSES = [
     "pond",
     "field pond",
     "field rock",
-    "grave island",
+    "field grave",
     "village lane",
     "footbridge",
     "well",
