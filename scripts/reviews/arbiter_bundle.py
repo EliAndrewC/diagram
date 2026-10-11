@@ -236,6 +236,31 @@ def git_flow(root: Path, files: list[str]) -> list[str]:
     return [f"{ln[11:19]} commit {ln.split(' ', 1)[1]}" for ln in r.stdout.splitlines() if " " in ln] if r.returncode == 0 else []
 
 
+def capped_round_cause(root: Path, out: Path, check: str, subject: str, files: list[str], since: float) -> list[str]:
+    """What owes the CAPPED round itself (feature 374 wave 120, the arbiter on the seat pop-ups: the round-3 cause - one word
+    on 0190's drawing page, and for one unit its round 2's own fix - was named nowhere in the MANIFEST and had to be dug out
+    of edits.diff): the record's owed reason for the unit now, and the commits on the unit's files since the last round's
+    dispatch, their hunks in `owes-round.diff`."""
+    sys.path.insert(0, str((HERE / "../record").resolve()))
+    import record_owed  # noqa: PLC0415
+
+    name = subject.split(":", 1)[1] if ":" in subject else subject
+    checks = {"modal-research": ("modal-accuracy", "modal-references", "modal-gaps")}.get(check, (check,))
+    try:
+        owed = [f"- `{u.slug}`: {u.occasion}" for u in record_owed.unanswered(root) if u.check in checks and u.subject.split("#")[0] in (name, f"{name}.drawing")]
+    except Exception as e:  # noqa: BLE001 - a record that cannot be read leaves the cause to the diff, said so
+        owed = [f"- (the record's owed list could not be read: {e})"]
+    log = _git(root, "log", f"--since=@{int(since)}", "--format=%h %ad %s", "--date=iso", "--", *files) if since and files else ""
+    hunks = _git(root, "log", f"--since=@{int(since)}", "-p", "--format=--- %h %ad %s", "--date=iso", "--", *files) if log.strip() else ""
+    (out / "owes-round.diff").write_text((hunks + _git(root, "diff", "--", *files)) or "(no change since the last round)\n", encoding="utf-8")
+    return [
+        "## What owes the capped round\n",
+        "The record owes it now:\n" + ("\n".join(owed) or "- (nothing listed as owed)") + "\n",
+        "Commits on the unit's files since the last round's dispatch (`owes-round.diff` beside this file holds their hunks and the"
+        " working tree):\n" + ("\n".join(f"- {ln}" for ln in log.splitlines()) or "- none; the working tree only") + "\n",
+    ]
+
+
 def flow_sections(root: Path, out: Path, d: Path | None, files: list[str]) -> list[str]:
     """The cascade and the oscillation - for a unit, only the edits and reversals on its own files: a pop-up's bundle listed
     feature 368's 0047 reversal as its own loop (343's clerks--seats, office-hall, door and magistrate-s-dais rulings)."""
@@ -301,6 +326,8 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
         files = files or subject_files(root, subject)
         if last:
             parts.append("## The last answered round's EDITs, against the files now\n\n" + ("\n".join(last_edits(root, last, files)) or "- (it proposed none)") + "\n")
+        if trigger.startswith("round:") and rounds:
+            parts += capped_round_cause(root, out, check, subject, files, float(rounds[-1].get("t") or 0.0))
     diff = ""
     if files:
         diff = _git(root, "log", "-p", "--format=--- %h %ad %s", "--date=iso", "-20", "--", *files) + _git(root, "diff", "--", *files)
