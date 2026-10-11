@@ -251,3 +251,28 @@ def test_the_batch_command_line(root: pathlib.Path, tmp_path: pathlib.Path, monk
     assert ha.main(["ruled-batch", str(f), "--as", "round-arbiter"]) == 0
     assert ha.main(["ruled-batch", str(f), "--as", "round-arbiter"]) == 1, "already ruled"
     assert "BATCH=1" in ha.refusal(["round:x|y@3"])
+
+
+def test_the_tooling_steers_a_batch_to_one_ruling(root: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """Feature 375 amendment 2, SC-009 (spec review round 1): 343's shape - pop-ups at the cap on two checks, one form round
+    asked about ahead and named to join, a spec review's round apart. While the batch is owed the refusal names the batch and a
+    single ruling is refused; the asked-ahead round joins the bundle, the spec review's round does not."""
+    _rounds(root, tmp_path, ("sheet/a", "sheet/b"))
+    owed_now = ["round:modal-depiction|modal:sheet/a@3", "round:modal-research|modal:sheet/a@3", "round:modal-depiction|modal:sheet/b@3"]
+    for t in owed_now:
+        ha.trip(root, t, "round", ha.unit_of(t), "round 3")
+    ha.trip(root, "round:spec-fidelity|900-z#1@6", "round", "spec-fidelity|900-z", "round 6")
+    ahead = "round:modal-form|modal:sheet/a@3"
+    assert ha.batch_triggers(root) == sorted(owed_now), "a spec review's round is ruled alone"
+    assert ha.batch_triggers(root, [ahead]) == sorted([*owed_now, ahead])
+    text = ha.refusal([owed_now[0]], root)
+    assert "3 round triggers are owed together" in text and "make arbiter-bundle BATCH=1" in text and "TRIGGERS=" in text
+    assert "BATCH=1" not in ha.refusal(["round:spec-fidelity|900-z#1@6"], root).split("Several units")[0], "a spec round is named alone"
+    with pytest.raises(ValueError, match="rule them together"):
+        ha.record_ruling(root, owed_now[0], {"ruling": "accept", "why": "fine"}, "round-arbiter")
+    ha.record_ruling(root, "round:spec-fidelity|900-z#1@6", {"ruling": "continue", "why": "one more round"}, "round-arbiter")
+    manifest = ab.batch(root, tmp_path / "steer", "", (ahead,)).read_text()
+    assert f"`{ahead}`" in manifest and "spec-fidelity" not in manifest and len(list((tmp_path / "steer").glob("*/MANIFEST.md"))) == 4
+    rows = ha.record_batch(root, {"ruling": "accept", "why": "related and settled", "triggers": [*owed_now, ahead]}, "round-arbiter")
+    assert {r["unit"] for r in rows} == {ha.unit_of(t) for t in [*owed_now, ahead]}, "the asked-ahead row keeps its unit"
+    assert ha.owed(root) == {} and ha.closed(root, "round:modal-form|modal:sheet/a@") == "accept"

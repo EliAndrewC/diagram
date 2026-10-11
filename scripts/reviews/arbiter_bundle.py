@@ -90,14 +90,7 @@ class MissingRecord(Exception):
     """What the loop's own record lacks for a ruling (each a line the refusal prints)."""
 
 
-def unit_of(trigger: str) -> str:
-    """`round:<check>|<subject>@N` -> `<check>|<subject>`; '' for any other trigger. A bundle asked for a round the guard never
-    recorded as owed still carries that unit's rounds (feature 375 amendment 2, FR-018: 343's session asked ahead for 13 form
-    checks' third round, and each bundle reached the arbiter with no round history)."""
-    if not trigger.startswith("round:") or "|" not in trigger:
-        return ""
-    body = trigger[len("round:"):]
-    return body.rpartition("@")[0] if "@" in body else body
+unit_of = ha.unit_of  # the one parser (feature 375 amendment 2): the bundle and the ruling row read a unit alike
 
 
 def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path:
@@ -193,16 +186,14 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     return out / "MANIFEST.md"
 
 
-def batch_triggers(root: Path) -> list[str]:
-    """Every round trigger owed a ruling now - the batch that reached the cap together (feature 375 amendment 2, FR-017)."""
-    return sorted(t for t, v in ha.owed(root).items() if v.get("kind") == "round")
+batch_triggers = ha.batch_triggers  # THE BATCH, defined once (feature 375 amendment 2, FR-017)
 
 
-def batch(root: Path, out: Path, allow_missing: str = "") -> Path:
+def batch(root: Path, out: Path, allow_missing: str = "", extra: tuple[str, ...] = ()) -> Path:
     """ONE bundle for every owed round trigger (FR-017; the GM 2026-10-11: "a whole batch of pop-ups reaching the round cap at
     once should get a single ruling. because they are likely to be related"): each trigger's own bundle in a subdirectory, and
     a MANIFEST asking for ONE ruling with an exception per unit ruled differently. Raises MissingRecord with every gap at once."""
-    triggers = batch_triggers(root)
+    triggers = batch_triggers(root, extra)
     if not triggers:
         raise ValueError("no round trigger is owed a ruling - nothing to batch")
     if out.exists():
@@ -240,6 +231,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("trigger", nargs="?", default="")
     ap.add_argument("--batch", action="store_true", help="one bundle for every owed round trigger (FR-017)")
+    ap.add_argument("--triggers", default="", help="--batch: rounds asked about ahead of their cap, joined to the batch")
     ap.add_argument("--root", default=".")
     ap.add_argument("--out", default="")
     ap.add_argument("--missing-ok", default="", help="the reason to bundle with a reply or a reversal's record missing")
@@ -254,7 +246,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     try:
         if a.batch:
-            print(batch(root, Path(a.out) if a.out else DEFAULT_OUT / "arbiter-batch", a.missing_ok.strip()))
+            print(batch(root, Path(a.out) if a.out else DEFAULT_OUT / "arbiter-batch", a.missing_ok.strip(), tuple(a.triggers.split())))
         else:
             print(bundle(root, a.trigger, Path(a.out) if a.out else DEFAULT_OUT / f"arbiter-{slug}", a.missing_ok.strip()))
     except ValueError as e:

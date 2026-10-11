@@ -302,15 +302,21 @@ this: `--holding`, `--closed-by-status`, `CHECK=1` and `tick-task.py` read the d
 ### Amendment 2 (FR-017, FR-018)
 
 **D23 - One bundle and one ruling for the round triggers owed together (FR-017).** `make arbiter-bundle BATCH=1`
-(`arbiter_bundle.batch`) bundles every round trigger owed now (`arbiter-owed.json`, kind `round` - the red gate, a reversal,
-a cascade or an `ask:` stay their own), each trigger's own bundle in a subdirectory, under one MANIFEST asking for ONE
+(`arbiter_bundle.batch`) bundles THE BATCH, defined once in `hm_arbiter.batch_triggers`: every round trigger owed now
+(`arbiter-owed.json`, kind `round` - the red gate, a reversal, a cascade or an `ask:` stay their own), but a spec review's own
+rounds (one spec, ruled alone), plus the rounds the session names as asked ahead (`TRIGGERS=`); each trigger's own bundle in
+a subdirectory, under one MANIFEST asking for ONE
 ruling with an `exceptions` map; every missing record is reported at once. `make arbiter-ruled BATCH=1 FILE=`
 (`hm_arbiter.record_batch`) checks the whole reply first (its `triggers`, no stray exception, the declaration, none already
 ruled) and then records each trigger through `record_ruling` - the batch's ruling, or its exception - so holds, closures,
 continues and GM-review rows stay per unit; a batch `tooling_fix` is recorded once, on the first trigger. "Together" is
 "owed now": the triggers a batch of dispatches tripped are owed at the same time, and nothing older lingers because each
-holds its unit until ruled. The round arbiter's contract gains the batch reply; the guard's refusal names `BATCH=1`. A
-single trigger is still ruled alone.
+holds its unit until ruled. The tooling steers to it: `hm_arbiter.refusal(triggers, root)` - called by the record checks'
+cap (`hm_checks`) and the review checks' (`pair-hooks.sh`) with the clone root - names the batch command whenever more than
+one trigger of the batch is owed, and `record_ruling` refuses a single trigger's ruling while others of its batch are owed
+(`record_batch` passes `batch=True`); a unit is ruled alone only when it is the batch. The round arbiter's contract gains the
+batch reply. A ruling row reads its unit from the trigger when the guard never recorded it (`hm_arbiter.unit_of`, the one
+parser the bundle uses too - the spec review's aside: 15 of 343's rows had no unit).
 
 **D24 - A round bundle reads its unit from the trigger (FR-018).** `arbiter_bundle.unit_of` parses `round:<check>|<subject>@N`;
 `bundle()` uses the owed record's unit, else this, so a round asked about ahead of the cap still carries its rounds, replies
