@@ -1102,3 +1102,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-11 | modal-depiction | feature 335 after the 343 merge, sheet/door | findings | TRUTH 1: just inside reads as the gap the page rules out | judgment | - | fixed: just dropped | 215 s | 194k in (136k cached) / 6.0k out |
 | 2026-10-11 | impl-drift | feature 335, the door rule claim again (its index row lost in the 343 merge) | PASS | IN-STEP 1 | nothing | - | verified | 14 s | 39k in (25k cached) / 0.7k out |
 | 2026-10-11 | modal-depiction | feature 335 after the 343 merge, sheet/kitchen | PASS | clean; a well label pointing inside the kitchen (the generated example, not this tab) | nothing | - | verified | 75 s | 74k in (34k cached) / 6.8k out |
+| 2026-10-11 | impl-drift | feature 335, two arch claims again (index rows lost in the 343 merge) | PASS | IN-STEP 2 | nothing | - | verified | 16 s | 41k in (23k cached) / 1.1k out |

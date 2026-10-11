@@ -3584,32 +3584,31 @@
  },
  "docs/buildings.md::Sacred features#arch dimensions": {
   "code": "8944835bc8727848",
-  "core": "43c7197f86c0cc1c",
-  "date": "2026-10-08",
-  "note": "no bundle question sizes an arch's beam or posts",
+  "core": "794c7ddb8c6c9e98",
+  "date": "2026-10-11",
+  "note": "nothing in the cited material gives the beam length, post size or clear span, so UNRESEARCHED is the right label",
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "43c7197f86c0cc1c",
-  "triage": "touched",
+  "section": "794c7ddb8c6c9e98",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch in plan": {
   "code": "18de9b7f6648213e",
-  "core": "43c7197f86c0cc1c",
-  "date": "2026-10-08",
-  "note": "12 ft between arches, and 12 ft from the innermost arch to the hall",
+  "core": "794c7ddb8c6c9e98",
+  "date": "2026-10-11",
+  "note": "the bullet's arches stand at the 12 ft pitch, which matches the drawing page's 12 ft spacing on every map (recorded there as a guess inside the 10-13 ft band); the new pointer to pack_audit's arch_in_plan changes no figure",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9"
   ],
-  "section": "43c7197f86c0cc1c",
-  "triage": "touched",
+  "section": "794c7ddb8c6c9e98",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#bare precinct earth": {
