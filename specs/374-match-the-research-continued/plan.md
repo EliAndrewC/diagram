@@ -220,7 +220,11 @@ which waits on the E4 research row beside it (`law_water.py::oblique_at#a channe
 `after`); and `settle.py::_unkinked#a returning leg of 40 ft or more` with `settle_shapes#no hairpin or zigzag`, which cuts
 through it: 0081's drawing page forbids the hairpin a returning leg of 40 ft or more leaves and gives the cut only under
 40 ft, its folded spur and joining stub named exceptions to that threshold, so what a longer leg becomes is a research
-question (both rows re-tiered E4; meanwhile the code keeps its cut and the claim its GUESS label). The three waves take
+question (both rows re-tiered E4; meanwhile the code keeps its cut and the claim its GUESS label). And
+`comb.py::_comb_draw_source#feeder brook width`: its E1 fix (the brook in feet, `self.px(7.0)`) is in the code, and what
+reads DRIFTED today is the E4 question beside it, `#feeder brook width against the ladder` (0068's ladder against its
+question page's 7 ft GUESS and 0059's 7 ft, with the "narrower than the head race" bullet), named in its `after`; the code
+and both pages stay as they are meanwhile. The three waves take
 every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research.
 
 ### Wave 119 (T10) - the hamlet's lanes
@@ -236,17 +240,12 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
 
 - `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page places the wood beyond the fields and refuses
   ground below the houses only "beside a river or marsh"; the dry-ground refusal goes, and the claim cites the page.
-- `fields/comb.py::_comb_draw_source#feeder brook width`: the code already draws the brook at `self.px(7.0)`; the
-  finding today is that 0068's drawing page ladder puts "a village creek at roughly three and a half times" the 1.5 ft floor
-  (about 5.25 ft) while its own question page gives a village brook "about 2 m (~7 ft)", a GUESS, and 0059 draws 7 ft. The
-  drawing page's ratio is corrected to its own question page ("roughly four and a half times it"); the code is unchanged.
 - `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
   qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).
   The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only
   shrine is a dooryard hokora).
 - Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are
-  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them); the brook's page
-  edit owes the record checks a drawing-page change owes (record-format, quote-check, the pop-ups' triage).
+  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).
 
 ### Wave 121 (T12) - claims the rows name
 
