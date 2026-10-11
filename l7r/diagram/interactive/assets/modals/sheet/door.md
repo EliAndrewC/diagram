@@ -19,7 +19,7 @@ Guesses:
 - A way by which food reached the rooms, where a plan draws one: no account shows one.
 - A storehouse leaf about 3.5 ft wide: the one width found is a standard of today.
 
-Depiction: The plan draws a door as a small dark block set just inside its building, flush to the wall it opens through, where the real one was a sliding or a lattice door, and a storehouse's pair of leaves
+Depiction: The plan draws a door as a small dark block set inside its building, flush to the wall it opens through, where the real one was a sliding or a lattice door, and a storehouse's pair of leaves
 as one block. Its width is a drawing convention: the working doors of kitchens, lodgings, barracks and servants' rows are
 drawn wider than a real ordinary door, which was probably about 3 ft - a lodging's door 6 ft, twice as wide - so that they read at
 the plan's scale. A guest's door opens onto open ground a palanquin could cross, never straight from the street or against a building's side; a
