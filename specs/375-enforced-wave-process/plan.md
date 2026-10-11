@@ -285,7 +285,7 @@ The SC-007 replay's restated reply attributes each kept line by where its quoted
 listing's wall time reading every clone under `.clones/` against only the active ones - a clone whose event log
 (`.git/l7r-events/`, a line per tool call of its session) was written in the last 12 hours, no process scan - recorded as
 `m:375-a1-speckit-todo-clones` in `measurements.json`; the active-only limit is kept only if it saves a measurable share of
-the listing's time, else every clone is read. For each open feature whose `spec.md` or `tasks.md` in an active clone differs from main's, the listing shows
+the listing's time, else every clone is read. For each open feature whose `spec.md` or `tasks.md` in a clone it reads differs from main's, the listing shows
 the clone's state in that state's section, `[in <clone>, not landed]`, one row per differing clone. Only the listing does
 this: `--holding`, `--closed-by-status`, `CHECK=1` and `tick-task.py` read the directory they are given, as before.
 

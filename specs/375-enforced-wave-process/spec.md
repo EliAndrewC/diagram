@@ -129,8 +129,8 @@ work stands; the GM approved both in one answer.
   the check finds drawing statements that belong in Depiction; `Entry:` is where it finds the drawing pages a pop-up should
   link - feature 319's plan-review case, a missing drawing link landing with every check green). An edit to its Guesses alone
   owes `modal-form` and the research checks, not `modal-depiction`.
-- **FR-016 An open feature's state as its session clone holds it.** `make speckit-todo` shows each open feature as an active
-  session clone holds it when that differs from main - its spec accepted, its plan written, tasks ticked - in the section
+- **FR-016 An open feature's state as its session clone holds it.** `make speckit-todo` shows each open feature as a session
+  clone it reads (below) holds it when that differs from main - its spec accepted, its plan written, tasks ticked - in the section
   that state belongs to, marked with the clone it is in and that it has not landed. Which clones it reads is decided by a
   measurement (the GM: "you can probably limit yourself to clones with active sessions, if it helps performance"): the
   listing's time reading every clone against reading only the active ones is recorded, and the limit is kept only if it
@@ -200,3 +200,4 @@ until 375 has landed.
   by an About or `Entry:` edit (it reads both; feature 319's case), only a Guesses-only edit dropped; FR-016's active-only
   limit is decided by a recorded measurement, as the GM's "if it helps performance" made it; SC-007 names the cleared units by
   uid (the measured leak 11 of 61, each line attributed by where its block stands); this entry.
+- spec-fidelity-verify, amendment 1 round 2 (2026-10-11): CHANGES REQUIRED - FR-016's first sentence still said "active". Applied: "a session clone it reads"; plan D22 follows.
