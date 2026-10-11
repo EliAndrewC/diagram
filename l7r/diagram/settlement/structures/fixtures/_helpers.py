@@ -68,7 +68,9 @@ def bridges_on_a_way(M: Any, ftpx: float = 1.0) -> list[dict[str, Any]]:
     planks no lane comes within 136 ft of, and a board rolled to a bridge end stood 884 ft from its bridge, at the lane spot
     nearest it). 0190: every site the record names is ON a road or street, the foot of a bridge among them.
 
-    Research: a bridge end on a way - research/questions/0190-notice-boards-kosatsuba.html: every named site on a road or street, the foot of a bridge among them; a bridge counts within the board's 60 ft band of a way"""
+    Research:
+        a bridge end on a way - research/questions/0190-notice-boards-kosatsuba.html: every named site on a road or street, the foot of a bridge among them
+        within the board's band - UNRESEARCHED: a bridge counts within KOSATSUBA_ANCHOR_BAND_FT (60 ft) of a way"""
     ways = [[(float(x), float(y)) for x, y in w.get("pts") or []] for w in [*(M.get("lanes") or []), *(M.get("roads") or [])] if isinstance(w, dict)]
     road = M.get("road")
     if isinstance(road, dict) and road.get("pts"):

@@ -266,7 +266,7 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
 - `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
   qualifier; the bridgehead joins the seat's forms where a way reaches one of the settlement's bridges - within the board's
   60 ft band of a lane or road (`bridges_on_a_way`), since every site 0190 names is ON a road or street (the glyph-check of
-  Kuwabata: its bridges are pond-grid planks no lane comes within 136 ft of, and a board rolled to one stood 884 ft off it).
+  Kuwabata, 2026-10-11: its bridges are pond-grid planks no lane comes within 136 ft of, and a board rolled to one stood 884 ft off it).
   The shrine precinct stays withheld, its claim giving the reason: 0190 names a precinct only as its own GUESS, no
   page it read naming one. The new form is anchored at the widest of the bridges a way reaches, a brook's before a ditch's plank, and of two alike
   the one nearest the houses (`bridgehead_anchor`): which of a village's bridges held its board no page says, so 0190's

@@ -6,6 +6,9 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from reopen import reopened  # noqa: E402
+
 AUDIT = Path(sys.argv[1])
 FEATURE = Path(sys.argv[2])
 TIERS = ["E0", "E1", "E2", "E3", "E4"]
@@ -34,12 +37,14 @@ def found_order(path: Path) -> tuple[float, str]:
     return (BATCH_CLOSE[n] + 0.5 if m.group(1) == "batch" else float(n), m.group(3))
 
 
+filed: dict[str, float] = {}  # each found row's place in time, against the wave that closed its key
 for extra in sorted(AUDIT.glob("found-*.jsonl"), key=found_order):
     for line in extra.read_text().splitlines():
         if line.strip():
             r = json.loads(line)
             r["tier_as_ranked"] = r["tier"]
             rows[r["key"]] = r
+            filed[r["key"]] = found_order(extra)[0]
             verdict[r["key"]] = r["verdict"]
             note.setdefault(r["key"], "")
 missing = [k for k in verdict if k not in rows]
@@ -73,6 +78,11 @@ for k, r in rows.items():
 
 # The wave that closed each row (audit/waves.json: written from the claims index at a wave's close).
 waves = json.loads((AUDIT / "waves.json").read_text()) if (AUDIT / "waves.json").exists() else {}
+# ...EXCEPT A KEY FILED AGAIN AFTER ITS CLOSING WAVE: the gap is open again (`reopen.py`, feature 374 batch 3 W120-10)
+reopen = reopened(waves, filed)
+waves = {k: v for k, v in waves.items() if k not in reopen}
+for k, w in reopen.items():
+    rows[k]["reopened_from"] = w
 
 # A closed row keeps the tier it was closed at (audit/closed-tiers.json, written at each wave's close), so re-tiering an
 # open dependency or an override never rewrites a wave's history; only an open row waits for its dependencies.

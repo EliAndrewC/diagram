@@ -12933,7 +12933,8 @@
   "flag": "",
   "found": "feature 374 wave 120's modal-research round 2 (2026-10-11): a finding the ranking lacked",
   "tier_as_ranked": "E3",
-  "wave": "115",
+  "wave": "",
+  "reopened_from": "115",
   "scope": "kept"
  },
  {
@@ -13252,24 +13253,6 @@
   "tier_as_ranked": "E3",
   "moved": "T38a: tiered by its work - No shed element exists: KURA_PARTS only holds the N/W annex, so the fix is a new element with its own seat, size, roof knob and glyph across several modules.",
   "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex",
-  "verdict": "DRIFTED",
-  "tier": "E3",
-  "fix": "moves with the free-standing storehouse row (0040)",
-  "files": [
-   "l7r/diagram/settlement/farm_fixtures.py"
-  ],
-  "after": [
-   "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall"
-  ],
-  "flag": "",
-  "found": "feature 374 wave 121's re-check (2026-10-11): a finding the ranking lacked",
-  "tier_as_ranked": "E3",
-  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the annex rests on the same contradicted sentence",
-  "wave": "117",
   "scope": "kept"
  },
  {
@@ -14123,6 +14106,25 @@
   "tier_as_ranked": "E0",
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0040's page says the record contradicts the north-wall annex",
   "wave": "117",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "moves with the free-standing storehouse row (0040)",
+  "files": [
+   "l7r/diagram/settlement/farm_fixtures.py"
+  ],
+  "after": [
+   "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall"
+  ],
+  "flag": "",
+  "found": "feature 374 wave 121's re-check (2026-10-11): a finding the ranking lacked",
+  "tier_as_ranked": "E3",
+  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the annex rests on the same contradicted sentence",
+  "wave": "",
+  "reopened_from": "117",
   "scope": "kept"
  },
  {

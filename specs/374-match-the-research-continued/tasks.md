@@ -68,10 +68,10 @@ in 328's ranking and this spec.
 
 ## Phase 6 - batch 3: the hamlet's code brought to the research
 
-- [ ] T10 wave 119: the hamlet's lanes - the 40 ft returning leg in `_unkinked` and `settle_shapes`, a door path's working room through a grove band (FR-001, FR-004)
+- [ ] T10 wave 119: the hamlet's lanes - a door path's working room through a grove band, and the needle-loop speck (the `_unkinked` and `settle_shapes` returning-leg rows moved to E4, not this batch) (FR-001, FR-004)
       research: rendering
 
-- [ ] T11 wave 120: the hamlet's ground - no wood below the houses only beside water, the feeder brook in feet, the board at a bridgehead (FR-001, FR-004)
+- [ ] T11 wave 120: the hamlet's ground - no wood below the houses only beside water, the board at a bridgehead (the feeder brook's width waits on its ladder question, not this batch) (FR-001, FR-004)
       research: rendering
 
 - [ ] T12 wave 121: claims the rows name - the kura's west annex re-checked; the belt's holes, the clump window and the south band worded to the code and re-checked (FR-001)
