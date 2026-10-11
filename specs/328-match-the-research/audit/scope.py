@@ -291,8 +291,12 @@ def main(argv: list[str]) -> int:
     KIND_KEYS.update(kind_keys(skill))
     STRINGS_USED.update(strings_used(skill, ran, read))
 
+    was = json.loads(out_scope.read_text()) if out_scope.is_file() else {}
+
     def judge(key: str) -> str:
         uid, label = key.rsplit("#", 1)
+        if "::" not in uid:  # a row on no code unit (a note, a pop-up, a data file): no execution decides it (374 batch 3)
+            return str(was.get(key, "kept"))
         return scope_of(uid, ran, read, knobs, skill, label)
 
     rows = json.loads(ranking.read_text())

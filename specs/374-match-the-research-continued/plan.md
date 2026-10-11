@@ -197,35 +197,39 @@ stays open until the polder and the dike-pond pass their cohort and are rolled.
 
 **The work list** is 328's ranking brought current (2026-10-11): batch 2's re-checks closed 39 more rows (36 whose unit
 now carries no UNCLAIMED or MISLABELED finding, or whose claim reads IN-STEP; three UNCLAIMED rows whose decisions now
-carry claims), marked wave 118 in `audit/waves.json`, leaving **197 open rows** (133 E3 DRIFTED). The count is the
-ranking's: `make claims-report` counts only the units the claims gate covers (the hamlet's roll and the Mode A
-procedures), so rows on `overlap/taxonomy.py` or `settlement/fields/paddy.py` are in the ranking and not in the report.
+carry claims), marked wave 118 in `audit/waves.json`; then `audit/scope.py` was re-run on today's cache (328 FR-010, the execution
+record) and re-marked 18 more open rows `scope: deferred` (the paddy and ribbon builders, a town's kiln, a city's matrix
+permissions among them), leaving **179 open rows** in scope (124 E3 DRIFTED). `make claims-report` shows the deferred
+units' claims as DEFERRED (158).
 
 **Three rules for every wave of this batch:**
 - A row's fix text that says "label it a DEVIATION and have the drawing page record it" predates the plan review's
   ruling (batch 2, W118-2): the code is changed to match the page (328 FR-004). Where a change still looks wrong, the
-  exception goes to `spec-fidelity` with the GM's words and is recorded only if ruled LEGITIMATE; otherwise the row goes
-  to the GM's held list.
+  exception goes to `spec-fidelity` with the GM's words and is recorded only if ruled LEGITIMATE; otherwise the code
+  is changed to match the page.
 - Engine discipline: `make quick` per fix; reroll only the maps the change reaches and compare their manifests with
   `git diff HEAD`; one `impl-drift` per wave over the claims the wave's code edits re-owe; the review occasions a
   wave declares in `tasks.md ## Occasions` dispatched on a green gate, with no engine edit while one runs; one `make done`
   at the batch's close with the timing pair, `perf-audit` on a band of 1 or more.
-- A row on code that no live map executes (the paddy and ribbon builders the frozen legacy maps alone call, a town's
-  kiln, a city's matrix permissions) is not in this batch: it waits for a batch that rules on legacy-only code.
+- A row whose unit `audit/scope.py` derives DEFERRED (328 FR-010, re-run on today's cache) leaves the work list: its
+  ranking row is re-marked `scope: deferred` and no wave takes it.
 
 **Not in this batch:** the two held rows (the door band, `fixture_quota`: the GM's); `oblique_at`'s square crossing,
-whose own question is the E4 research row beside it; the paddy, ribbon and kiln rows and the two `taxonomy.py`
-CANNOT-TELL rows (legacy or other tiers, above).
+which waits on the E4 research row beside it (`law_water.py::oblique_at#a channel crossing at its way's angle`, named in its
+`after`). The three waves take every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research.
 
 ### Wave 119 (T10) - the hamlet's lanes
 
-- `settle.py::_unkinked#a returning leg of 40 ft or more`: 0081 §19 cuts only "a returning leg under 40 ft" (its one
-  exception a folded field spur); the code keeps the longer arm whatever the lengths, so the 40 ft does nothing. The cut
-  is made only below 40 ft, and the claim cites 0081's drawing page.
-- `settle.py::settle_shapes#no hairpin or zigzag`: the same rule in the settle's shape pass.
+- `settle.py::_unkinked#a returning leg of 40 ft or more`: 0081's drawing page says both "A lane never doubles back in a
+  hairpin" (a turn of more than 140 degrees) and "a returning leg under 40 ft is cut". A returning leg of 40 ft or more is
+  still a hairpin the first sentence forbids, so the page cuts it too; the code's shorter-arm cut at any length does what the
+  page says, and the claim cites both sentences of 0081's drawing page in place of its GUESS label. impl-drift rules on it;
+  if it reads DRIFTED, the code is changed to the reading it gives.
+- `settle.py::settle_shapes#no hairpin or zigzag`: the same reading in the settle's shape pass.
 - `serve.py::lay_door_paths#door path off a grove band`: 0036 lays a lane through a grove band "with a footpath's
-  clearance and some working room kept off the trees on each side" (about 22 ft of a 36 ft opening); the code's 0.5 ft
-  margin becomes that working room, and the claim cites 0036.
+  clearance and some working room kept off the trees on each side" (about 22 ft of a 36 ft opening: about 9.5 ft each side
+  of a 3 ft tread); the code's 0.5 ft margin becomes that working room, and the claim cites 0036. Measured on the hamlet
+  cohort before it is kept: a farm the wider berth leaves unreached is a conflict put to `spec-fidelity` (rule 1).
 - Maps: every pool hamlet is rerolled; a hamlet whose web changes owes no glyph-check (no glyph is redrawn) - the lane
   law's acceptance sweep and the cohort hold the change.
 
@@ -236,10 +240,12 @@ CANNOT-TELL rows (legacy or other tiers, above).
 - `fields/comb.py::_comb_draw_source#feeder brook width`: a brook about 7 ft wide (0059, 0068) drawn in feet,
   `self.px(7.0)`, not 7 px.
 - `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
-  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge, and the shrine precinct, only that
-  page's GUESS, stays withheld with its claim labeled GUESS.
-- Maps: the pool hamlets rerolled; the feeder brook is a glyph redrawn at its true width, so a glyph-check on one hamlet
-  that draws it is the wave's occasion.
+  qualifier; the bridgehead joins the seat's forms where the settlement has a bridge (every pool hamlet has four to ten).
+  The shrine precinct stays withheld, its claim giving the reason: no kept map draws a precinct (the pool hamlets' only
+  shrine is a dooryard hokora).
+- Maps: the pool hamlets rerolled. Occasions: the feeder brook is a glyph redrawn at its true width (a glyph-check on one
+  hamlet that draws it), and the board's new bridgehead seat and the wood's newly allowed ground are elements re-placed
+  (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).
 
 ### Wave 121 (T12) - claims the rows name
 

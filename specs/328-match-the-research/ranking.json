@@ -12,7 +12,7 @@
   "found": "wave 106's impl-drift of the country shrine's section, round 5 (feature 372, 2026-10-10)",
   "tier_as_ranked": "E0",
   "wave": "107",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#approach width about 10 ft",
@@ -120,7 +120,7 @@
   "found": "wave 106's impl-drift of the country shrine's section (feature 372, 2026-10-10)",
   "tier_as_ranked": "E0",
   "wave": "106",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob",
@@ -229,7 +229,7 @@
   "found": "wave 106's impl-drift of the magistrate's manor section, round 6 (feature 372, 2026-10-10)",
   "tier_as_ranked": "E0",
   "wave": "107",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern",
@@ -275,7 +275,7 @@
   "found": "wave 106's impl-drift of the magistrate's manor section, round 6 (feature 372, 2026-10-10)",
   "tier_as_ranked": "E0",
   "wave": "107",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role",
@@ -354,7 +354,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "115",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Composition: perimeter buildings + a named court-spine#office front, residence rear",
@@ -369,7 +369,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "115",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner",
@@ -414,7 +414,7 @@
   "found": "wave 108's impl-drift of the inner court section, round 2 (feature 372, 2026-10-10)",
   "tier_as_ranked": "E0",
   "wave": "109",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Inner court (private / sacred)#the residence along the north range",
@@ -429,7 +429,7 @@
   "found": "wave 108's impl-drift of the inner court section (feature 372, 2026-10-10)",
   "tier_as_ranked": "E0",
   "wave": "109",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men",
@@ -740,7 +740,7 @@
   "found": "wave 108's impl-drift of the wells claims resting on 0105 (feature 372, 2026-10-10)",
   "tier_as_ranked": "E0",
   "wave": "109",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt distance upwind",
@@ -2011,7 +2011,7 @@
   "after": [],
   "flag": "",
   "found": "wave 6 re-check (tiered by its work at T25a)",
-  "tier_as_ranked": "E3",
+  "tier_as_ranked": "E0",
   "e0_basis": "a claim written against the page that answers",
   "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
   "wave": "",
@@ -3546,7 +3546,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each rice plot's green picked at random from RICE_GREENS",
@@ -3561,7 +3561,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "118",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row boundaries rolled independently per column, so row bunds stagger between columns",
@@ -3576,7 +3576,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "118",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row bunds staggered",
@@ -3591,7 +3591,7 @@
   "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting",
@@ -4091,7 +4091,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "118",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/rolling/access.py::_standing_clear#no path corridor within its half-width of any placed footprint",
@@ -4445,7 +4445,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "118",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no crown seated under another's canopy (`_crowns_near` / `_canopy_seats`; 0080 drawing \u00a7343)",
@@ -4460,7 +4460,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "118",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling",
@@ -4556,7 +4556,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "118",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#the ground may stand inside a lane's house-setback corridor (`_fits(..., corridors=False)`)",
@@ -4571,7 +4571,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "118",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth",
@@ -4600,7 +4600,7 @@
   "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/waterfields/carve.py::_dry_fields#end plot split",
@@ -4666,7 +4666,7 @@
   "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/waterfields/polder.py::_apex#polder plumbing",
@@ -4950,7 +4950,7 @@
   "found": "wave 108's impl-drift of the wells claims resting on 0105 (feature 372, 2026-10-10)",
   "tier_as_ranked": "E1",
   "wave": "111",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas",
@@ -5690,7 +5690,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant estate court",
@@ -5705,7 +5705,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/_knobs.py::BOUNDARY_MARKER_FT#boundary stone size",
@@ -6598,7 +6598,7 @@
   "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
   "tier_as_ranked": "E1",
   "wave": "118",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#plot size",
@@ -6613,7 +6613,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#ripe share",
@@ -10807,7 +10807,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob",
@@ -10839,7 +10839,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "115",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun",
@@ -10903,7 +10903,7 @@
   "moved": "wave 1: E0 -> E3, the re-check found the implementation itself differs: Hayakawa's \"two modest shrines\" contradict the drawing page's rule \"a map draws one, a deliberate deviation\". Either the drawing page records Hayakawa as an exception or the sheet draws one",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure",
@@ -11134,7 +11134,7 @@
   "found": "wave 108's impl-drift of the inner court section (feature 372, 2026-10-10)",
   "tier_as_ranked": "E3",
   "wave": "114",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Inner court (private / sacred)#room order",
@@ -13079,7 +13079,7 @@
   "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#a town rampart with a gate",
@@ -13261,7 +13261,7 @@
   "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo size",
@@ -13276,7 +13276,7 @@
   "found": "feature 374 batch 2's re-checks (2026-10-10): a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#roofed bed the minority",
@@ -13475,7 +13475,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.paddy_field#crop mix",
@@ -13726,7 +13726,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band",
@@ -14078,7 +14078,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#watered basins only",
@@ -14543,7 +14543,7 @@
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/structures/servants.py::ServantRangesMixin.servant_ranges#beside the house, flush with its front",
@@ -14960,7 +14960,7 @@
   "tier_as_ranked": "E1",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed and unchanged since T56a tiered this key: the drawing page still says '20 to 35 ft on a side' (0222.drawing.html:8) while the procedure's claim (building-programs.md:179) reads 'worship hall from about 18 ft (Hie about 18 x 12, Rokusha 9 tsubo) to about 35 ft (the band about 18-35 by 12-35 ft)', which matches 0215's measured hall. Only the drawing page lags its own research section, so n",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
@@ -14976,7 +14976,7 @@
   "tier_as_ranked": "E3",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed: 0220.drawing.html:4 still lists 'convention (the innermost arch one pitch off the hall; ...)' and :29 'The innermost arch stands 12 ft off the hall's nearest face, the same as the spacing between arches.' The procedure already draws that distance and already labels it GUESS (building-programs.md:132), so the disagreement is only in the page's class; T56a tiered this same key E4 for that",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis",
@@ -14993,7 +14993,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "115",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "docs/buildings.md::Latrines and the rear service strip#privies away from water",
