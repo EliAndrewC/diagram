@@ -113,3 +113,4 @@ finding: IN-STEP with its evidence, or DRIFTED from it.
   and the pattern missed the code's own wording ("woodlots' seats", "seat off a lane"). Applied: the search reads the claim
   text too, with a widened pattern; `gap_ways.py` (`Layers`, `lane_layers`), `passage.py` `walk_clear` and `wood_share.py`
   (#seat off a lane) added; `growth.py` named by its claim; the exclusions stated with their reason.
+- Round 3 (spec-fidelity-verify, 2026-10-11): FAITHFUL - the search re-run returns exactly the ten listed claims and five stated exclusions. Aside for the plan review: plan.md's Technical Context and Project Structure predate round 2 (the claim-text search; gap_ways, passage, wood_share).
