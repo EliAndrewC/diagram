@@ -411,8 +411,14 @@ def test_the_nit_an_accept_asked_for_answers_its_unit_again(tmp_path: pathlib.Pa
     d = root / "specs" / "375-x"
     d.mkdir(parents=True)
     trig = "round:modal-depiction|modal:choice/b@3"
-    row = {"trigger": trig, "kind": "round", "unit": "modal-depiction|modal:choice/b", "ruling": "accept", "why": "converged",
-           "what": "About says 'where most people passed' where 0190 says 'where people passed'"}
+    row = {
+        "trigger": trig,
+        "kind": "round",
+        "unit": "modal-depiction|modal:choice/b",
+        "ruling": "accept",
+        "why": "converged",
+        "what": "About says 'where most people passed' where 0190 says 'where people passed'",
+    }
     (d / "arbiter.jsonl").write_text(json.dumps(row) + "\n")
     modal = root / "l7r/diagram/interactive/assets/modals/choice/b.md"
     modal.parent.mkdir(parents=True)
