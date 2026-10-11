@@ -147,6 +147,8 @@ bakumatsu	bakumatsu
 bakushu	bakushu
 bald hill	bald hill
 bald hills	bald hill
+balk	baulk
+balks	baulk
 bamboo grass	sasa
 bamboo-grass	sasa
 ban-hinin	banta

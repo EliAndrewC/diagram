@@ -18,7 +18,7 @@ Guesses:
 Depiction: The map draws dry fields along the whole of the supply canal at the paddy's high edge, not only at the fan's
 toe. A hamlet on a cleared fan is always taken to grow its coarse grain as winter barley on its paddy, since the cleared
 strip along the canal is too small to hold it all. The summer map shows no winter crop, so what shows is that its dry
-fields stay a strip along the canal.
+fields stay a strip along the canal, though a cleared middle was dry field across its breadth.
 
 Name: The middle of the fan below the hills: cleared for dry fields
 Covers: `meta.fan_middle = cleared`
