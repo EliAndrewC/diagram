@@ -23,24 +23,29 @@ magistracy sheet is reviewed once, after all its redraws.
 
 ## Phase 2 - the record
 
-- [ ] T03 a guest's roji carries no well (0104's drawing page) and the one door convention (0117's drawing page), from the page sessions (FR-011, FR-003; D6, D2)
+- [x] T03 a guest's roji carries no well (0104's drawing page) and the one door convention (0117's drawing page), from the page sessions (FR-011, FR-003; D6, D2)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 0104's drawing page: a guest's roji carries no well (four cited notes, one absence note; source-reader, quote-check, translation-check, record-format, source-applicability answered; record-owed owes nothing); 0117's drawing page: a door wholly inside its building, flush to its wall; research.md R2
 
 ## Phase 3 - the sheets, each redrawn once
 
-- [ ] T04 Hayakawa: the steps (FR-001), the doors (FR-004), the family's way (FR-010), the garden well (FR-011), the rear pocket (FR-012); its notes
+- [x] T04 Hayakawa: the steps (FR-001), the doors (FR-004), the family's way (FR-010), the garden well (FR-011), the rear pocket (FR-012); its notes
       research: rendering
-- [ ] T05 Ochiba: the doors (FR-004); its notes
+      verify: DONE. Hayakawa: steps notched into the revetment (0 px past its face, m:steps-past-revetment), 14 doors inside their walls, the family's way (none drawn, recorded), the garden well removed (D6), the rear pocket closed by sliding the storehouses (D7), tally office door; pack-audit clean; building-review PASS r2, glyph-checks door and landing PASS r2
+- [x] T05 Ochiba: the doors (FR-004); its notes
       research: rendering
-- [ ] T06 Ubame: the doors (FR-004), the torii (FR-006), the rear yard (FR-009), the servants' partitions (FR-013); its notes
+      verify: DONE. Ochiba: 7 doors inside their walls; review fixes - a door per dwelling in the servants' (knob rolled) and retainers' quarters, the barracks 24 x 33 ft, the cell abutted, tubs moved; pack-audit clean; building-review closed by the round arbiter's accept after r2
+- [x] T06 Ubame: the doors (FR-004), the torii (FR-006), the rear yard (FR-009), the servants' partitions (FR-013); its notes
       research: rendering
-- [ ] T07 `docs/buildings.md`: the door rule (FR-003) and the "Modest shrine" clause (FR-007)
+      verify: DONE. Ubame: 14 doors inside their walls, the torii in plan with an approach under it, the rear yard to the reception privy with a path to the storehouse doors, servants' and barracks' bays as sliding partitions, family privy at the corridor; pack-audit clean; glyph-check torii PASS r2; building-review closed by the arbiter's accept after r2
+- [x] T07 `docs/buildings.md`: the door rule (FR-003) and the "Modest shrine" clause (FR-007)
       research: rendering
+      verify: DONE. docs/buildings.md: the Doors rule (impl-drift IN-STEP) and the Modest shrine clause replaced by the arch_in_plan pointer (three arch claims IN-STEP)
 
 ## Phase 4 - verified
 

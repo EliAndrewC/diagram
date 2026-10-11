@@ -307,5 +307,39 @@
     "value": {
       "matches": 1
     }
+  },
+  "steps-past-revetment-after": {
+    "observed": "2026-10-11",
+    "command": "make spec-harness SPEC=specs/335-magistracies-rear-strips-feature283-reviews-left OUT=/tmp/h335.json",
+    "method": "harness.py after the redraws and the review fixes",
+    "quantity": "Hayakawa's landing steps past the revetment's river face, after the redraw",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "value": {
+      "past_river_face_px": 0
+    }
+  },
+  "doors-off-walls-after": {
+    "observed": "2026-10-11",
+    "command": "make spec-harness SPEC=specs/335-magistracies-rear-strips-feature283-reviews-left OUT=/tmp/h335.json",
+    "method": "harness.py after the redraws and the review fixes",
+    "quantity": "door rects not wholly inside their building over the four sheets, after the redraw",
+    "source": "the four hand sheets",
+    "value": {
+      "hayakawa": 21,
+      "ochiba": 20,
+      "ubame": 23,
+      "hoshigaoka": 2,
+      "not_inside": 0
+    }
+  },
+  "torii-not-in-plan-after": {
+    "observed": "2026-10-11",
+    "command": "make spec-harness SPEC=specs/335-magistracies-rear-strips-feature283-reviews-left OUT=/tmp/h335.json",
+    "method": "harness.py after the redraws and the review fixes",
+    "quantity": "torii groups not drawn in plan over the four sheets, after the redraw",
+    "source": "the four hand sheets",
+    "value": {
+      "silhouette_total": 0
+    }
   }
 }
