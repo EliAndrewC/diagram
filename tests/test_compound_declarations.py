@@ -49,7 +49,7 @@ def _sq(x: float, y: float, w: float, h: float) -> tuple[tuple[float, float], ..
 def test_one_view_reads_subjects_from_the_declaration_and_falls_back_to_the_composers_own() -> None:
     own_sub = Subject("point", _sq(300, 300, 4, 4))
     reqs = [("kitchen", Subject("area", _sq(100, 100, 60, 40)), 8.0, False, "#3A2E1C", "kitchen"), ("well", own_sub, 8.0, True, "#FFFAE6", "well")]
-    one = c._one_view(_SHEET, reqs, ["d0", ""])
+    one = c.one_view(_SHEET, reqs, ["d0", ""])
     assert one.subjects[0][0].kind == "area" and one.subjects[1] == [own_sub]  # a caption naming nothing keeps the composer's subject
     assert one.widths[0] > one.widths[1]  # the bold face measures wider than the italic
     index = one.view(0, one.subjects[0][0])

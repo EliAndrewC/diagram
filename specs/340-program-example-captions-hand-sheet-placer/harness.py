@@ -188,7 +188,7 @@ def test_time(monkeypatch) -> None:  # noqa: ANN001
         return min(out)
 
     one_view = best()
-    monkeypatch.setattr(c, "_one_view", lambda *a: None)
+    monkeypatch.setattr(c, "one_view", lambda *a: None)
     own_index = best()
     data = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
     data["timing_s"] = {"one_view": round(one_view, 3), "own_index": round(own_index, 3)}
