@@ -491,12 +491,23 @@ def main(argv: list[str]) -> int:
               " dispatch `round-arbiter` with the MANIFEST below")
         return 0
     if argv[:1] == ["fix"] and len(argv) in (4, 5) and argv[1] in ("done", "declined"):
+        # several fixes one change made settle together: ID="<trigger> <trigger> ..." (2026-10-11: 343 carried 36 open fixes,
+        # many naming the same few bundle defects, one ruling each before the batch ruling existed)
+        root, ids = Path(".").resolve(), argv[2].split()
+        d = feature_dir(root)
+        known = dict(open_fixes(d)) if d else {}
+        unknown = [i for i in ids if i not in known]
+        if unknown or not ids:
+            print(f"arbiter-fix-{argv[1]}: refused - no open tooling fix: {', '.join(unknown) or '(no ID)'}; `make tick` names the open ones",
+                  file=sys.stderr)
+            return 1
         try:
-            settle_fix(Path(".").resolve(), argv[2], argv[1], argv[3], argv[4] if len(argv) == 5 else "")
+            for i in ids:
+                settle_fix(root, i, argv[1], argv[3], argv[4] if len(argv) == 5 else "")
         except ValueError as e:
             print(f"arbiter-fix-{argv[1]}: refused - {e}", file=sys.stderr)
             return 1
-        print(f"arbiter-fix-{argv[1]}: {argv[2]} settled - on the GM's review (make gm-review)")
+        print(f"arbiter-fix-{argv[1]}: {len(ids)} fix(es) settled - {', '.join(ids)} - on the GM's review (make gm-review)")
         return 0
     print("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter | fix done|declined <trigger> <note> [<test>]", file=sys.stderr)
     return 2
