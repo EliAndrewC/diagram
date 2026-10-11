@@ -28,6 +28,7 @@ from pathlib import Path
 sys.dont_write_bytecode = True  # the push runs this in the tree it is about to push
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ledger_lint  # noqa: E402
+import review_cost  # noqa: E402
 
 LOG = "check-passes.jsonl"
 JUDGED = ("verdict", "finding", "class", "author missed?", "acted on")
@@ -52,12 +53,29 @@ def load_passes(path: Path) -> list[dict[str, str]]:
     return out
 
 
+def settled(passes: Sequence[dict[str, str]], root: Path = review_cost.DEFAULT_ROOT) -> list[dict[str, str]]:
+    """Each pass with its cells recomputed from its agent's FINISHED transcript, the segment it logged (its return) - the
+    cells `make review-cost` prints. The hook logs at SubagentStop, before the agent's last call reaches the disk (measured
+    2026-10-10: a 13 s check logged as 4 s), so its own cells are provisional; they stand only where the transcript is gone."""
+    out = []
+    for p in passes:
+        path = review_cost.transcript(p["agent"], root) if p.get("agent") else None
+        parts = review_cost.segments(path.read_text(encoding="utf-8", errors="replace").splitlines()) if path else []
+        # a line logged before the segment was (2026-10-10) is settled only where its agent returned once - it can be no other
+        n = int(p["segment"]) if str(p.get("segment", "")).isdigit() else (0 if len(parts) == 1 else len(parts))
+        if n < len(parts):
+            wall, tokens = review_cost.cells(review_cost.cost(parts[n])).split(" | ", 1)
+            p = {**p, "wall": wall, "tokens": tokens}
+        out.append(p)
+    return out
+
+
 def distinct(passes: Sequence[dict[str, str]]) -> list[dict[str, str]]:
     """Each logged line is a pass (plan review 2: a resumed agent's every return is one); an identical repeat of an agent's
     line - the same return seen by two events - is one."""
     seen, out = set(), []
     for p in passes:
-        key = (p.get("agent"), p.get("check"), _norm(p.get("wall", "")), _norm(p.get("tokens", "")))
+        key = (p.get("agent"), p.get("check"), p.get("segment")) if p.get("segment") is not None else (p.get("agent"), p.get("check"), _norm(p.get("wall", "")), _norm(p.get("tokens", "")))
         if key not in seen:
             seen.add(key)
             out.append(p)
@@ -90,9 +108,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--log", default="", help="the pass log (default: <git common dir>/check-passes.jsonl)")
     ap.add_argument("--ledger", default="dev/review-ledger.md")
     ap.add_argument("--refuse", action="store_true", help="exit 1 while a pass is unanswered")
+    ap.add_argument("--transcripts", default=str(review_cost.DEFAULT_ROOT), help="the projects directory holding the agents' transcripts")
     args = ap.parse_args(argv)
     ledger = Path(args.ledger)
-    passes = distinct(load_passes(Path(args.log) if args.log else default_log()))
+    passes = distinct(settled(load_passes(Path(args.log) if args.log else default_log()), Path(args.transcripts)))
     owed = unanswered(passes, ledger.read_text(encoding="utf-8") if ledger.is_file() else "")
     if not owed:
         return 0

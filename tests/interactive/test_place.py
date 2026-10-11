@@ -175,7 +175,7 @@ def test_a_collision_clause_appears_only_where_its_class_is_drawn() -> None:
     assert "hokora" not in bare["what"], "a map with no household shrine hears nothing about one"
     assert "hokora in a corner of a farmstead plot" in with_shrine["what"], "and it stands where its own class puts it"
     assert "hamlet" not in COLLISIONS["household shrine"], "the clause is appended at EVERY tier, so it must not talk about hamlets"
-    assert "field grave" not in with_shrine["what"], "this map draws no grave island"
+    assert "field grave" not in with_shrine["what"], "this map draws no field grave"
 
 
 def test_an_upper_tier_counts_buildings_and_a_lower_one_counts_houses() -> None:

@@ -1,6 +1,6 @@
 # Feature Specification: Rename the `grave island` class to `field grave` (settlement-review, Kashikawa 2026-09-28)
 
-**Status**: Filed - from future-work/farming-communities.md, "Rename the `grave island` class to `field grave` (settlement-review, Kashikawa 2026-09-28)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
+**Status**: Done (2026-10-10, as a tweak - the GM: "Yes, please."): the class key is `field grave` (`FieldGrave`), carried in tests/interactive/test_classes_docstrings.py `SINCE_189` like bathhouse -> bath room; the ink tags, place.json, siblings.json, the modal (hamlet/field-grave.md, Name only), Kashikawa's notes key and manifest follow; the island form keeps its own name (`grave_form=island`, `_plot_grave_island`). Was: Filed - from future-work/farming-communities.md, "Rename the `grave island` class to `field grave` (settlement-review, Kashikawa 2026-09-28)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: hamlet, interactive page
 

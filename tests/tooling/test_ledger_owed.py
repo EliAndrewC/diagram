@@ -99,3 +99,25 @@ def test_the_printed_row_keeps_its_ten_cells_whatever_its_subject() -> None:
     row = lo.row_for(_pass(subject="MODE 2 | review\nfeature 371"))
     filled = row.replace("| ? | ? | ? | ? | ? |", "| PASS | caught nothing | nothing | - | nothing |")
     assert ll.problems(HEAD + filled + "\n") == [], ll.problems(HEAD + filled + "\n")
+
+
+def _call(stamp: str, rid: str, out: int) -> str:
+    return json.dumps({"timestamp": stamp, "requestId": rid, "message": {"role": "assistant", "content": [], "usage": {"input_tokens": 1000, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0, "output_tokens": out}}}) + "\n"
+
+
+def test_a_pass_is_settled_from_the_finished_transcript_not_the_cells_logged_at_the_stop(tmp_path: Path) -> None:
+    """Measured 2026-10-10: at SubagentStop the agent's last call was not yet on disk, so a 13 s check was logged as 4 s and no
+    row copied from `make review-cost` could ever answer it. The finished transcript decides; the logged cells stand only
+    where it is gone."""
+    sub = tmp_path / "proj" / "sess" / "subagents"
+    sub.mkdir(parents=True)
+    prompt = json.dumps({"timestamp": "2026-10-10T10:00:00Z", "message": {"role": "user", "content": "check it"}}) + "\n"
+    (sub / "agent-a1.jsonl").write_text(prompt + _call("2026-10-10T10:00:04Z", "r1", 100) + _call("2026-10-10T10:00:13Z", "r2", 900))
+    (sub / "agent-a2.jsonl").write_text(prompt + _call("2026-10-10T10:00:20Z", "r1", 100))
+    early = {**_pass(wall="4 s", tokens="1k in (0k cached) / 0.1k out"), "segment": "0"}
+    old = {**_pass(wall="1 s", tokens="x"), "agent": "a2"}  # logged before the segment was
+    gone = {**_pass(wall="7 s", tokens="y"), "agent": "a9", "segment": "0"}
+    a1, a2, a9 = lo.settled([early, old, gone], tmp_path)
+    assert (a1["wall"], a1["tokens"]) == ("13 s", "2k in (0k cached) / 1.0k out")
+    assert a2["wall"] == "20 s", "an agent that returned once has one return to settle by"
+    assert (a9["wall"], a9["tokens"]) == ("7 s", "y"), "no transcript: the logged cells stand"
