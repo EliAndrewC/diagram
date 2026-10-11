@@ -104,7 +104,23 @@ def resolve(root: pathlib.Path, path: str) -> pathlib.Path | None:
     return p if any(p.is_relative_to(root / r) for r in ROOTS) else None
 
 
-def apply_edit(root: pathlib.Path, b: dict, dry: bool) -> str:
+def held_dropped(root: pathlib.Path, b: dict) -> str:
+    """For a modal-form reply's EDIT on a pop-up: the research-fixed wording (`modal_bundle.research_held`) its old text holds
+    and its new text drops, else ''. A form round only rewords; the facts are research's (343's border-court ruling)."""
+    m = re.search(r"modals/(\w+)/([^/]+)\.md$", b["path"])
+    target = resolve(root, b["path"])
+    if not m or target is None or not target.is_file():
+        return ""
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    import modal_bundle  # noqa: PLC0415
+
+    held = modal_bundle.research_held(root, f"{m.group(1)}/{m.group(2)}", target.read_text(encoding="utf-8"))
+    return next((h for h in held if h in b["old"] and h not in b["new"]), "")
+
+
+def apply_edit(root: pathlib.Path, b: dict, dry: bool, form: bool = False) -> str:
+    if form and (h := held_dropped(root, b)):
+        return f"REFUSED - a modal-form EDIT drops wording a research round fixed ({h[:80]!r}); reword around it, or put the fact to modal-research"
     target = resolve(root, b["path"])
     if target is None:
         return f"REFUSED - {b['path']} is not under {RECORD}, {MODAL_FILES}, {MODALS} or {SHEET_MODALS}"
@@ -166,7 +182,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root).resolve()
-    found = blocks(reply_of(pathlib.Path(args.report)))
+    report = reply_of(pathlib.Path(args.report))
+    found = blocks(report)
+    form = next((ln.strip() for ln in report.splitlines() if ln.strip()), "").startswith("modal-form:")  # its counts line
     if not found:
         print("apply-edits: the report carries no EDIT or GLOSSARY block - apply its findings by hand", file=sys.stderr)
         return 2
@@ -176,7 +194,7 @@ def main(argv: list[str] | None = None) -> int:
         if b["n"] in skip:
             print(f"  {b['n']}. skipped (--skip)")
             continue
-        said = apply_edit(root, b, args.dry_run) if b["kind"] == "edit" else apply_term(root, b, args.dry_run)
+        said = apply_edit(root, b, args.dry_run, form) if b["kind"] == "edit" else apply_term(root, b, args.dry_run)
         refused += said.startswith("REFUSED")
         terms += said.startswith("added")
         print(f"  {b['n']}. {said}   ({b.get('path') or 'GLOSSARY ' + b['term']})")

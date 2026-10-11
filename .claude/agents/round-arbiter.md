@@ -67,6 +67,15 @@ previously coming to me"*), so two more kinds of trigger reach you:
   (the band-2 standard, held to its strictest); `continue` means keep optimizing; `process-fault` means the measurement or the
   process is wrong, its `tooling_fix` named. Your accept is bound to these exact numbers: new numbers need a new ruling.
 
+## A batch: one ruling for units that reached the cap together
+
+A BATCH bundle (`make arbiter-bundle BATCH=1`, feature 375 amendment 2; the GM 2026-10-11: "a whole batch of pop-ups reaching
+the round cap at once should get a single ruling. because they are likely to be related") lists several round triggers, each
+with its own bundle in a subdirectory. Read each, then give ONE ruling for the batch and an `exceptions` entry for any unit
+you rule differently - do not rule each unit separately. Your reply carries `"triggers"` (every trigger the batch listed) and
+`"exceptions"` (`{"<trigger>": {"ruling": ..., "why": ..., "what": ...}}`, or `{}`); record it with `make arbiter-ruled
+BATCH=1 FILE=<that file> AS=round-arbiter`. A batch `tooling_fix` is one fix for the batch.
+
 ## A tooling fix is a field, never prose
 
 Any tooling change you recommend - under any ruling, whether or not it caused the loop you judged - goes in `tooling_fix`: one

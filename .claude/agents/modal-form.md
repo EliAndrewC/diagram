@@ -58,6 +58,12 @@ The FIRST line is the counts, e.g. `modal-form: Farmhouse - 3 findings (2 FIX, 1
     the text that should replace it
     >>>
 
+**A replacement only rewords.** It drops, re-tenses, reorders or moves words the modal already has, or says plainly that a thing
+is unrecorded; it never adds a fact the old text did not state - facts are `modal-research`'s, checked against the record (343's
+genkan: a form replacement added "the residence lay beyond the office's rooms", a layout the record disclaims). If the bundle
+has `research-held.md`, its lines are wording research rounds fixed: an EDIT never drops or widens them (`make apply-edits`
+refuses one that drops them).
+
 A FIX that needs research or a decision rather than a rewording ends `EDIT: none - <why>`. A NOTE is a judgment the session may
 take or leave. A rule the modal passes is not listed. If you think a RULE is wrong for this kind - it asks a building question
 of something that is not one - say so as `RULE M<n> - <why>`: the session changes the guidelines, not the modal.

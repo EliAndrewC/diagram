@@ -299,6 +299,35 @@ in a clone (an amendment in progress) is shown. For each such feature, the listi
 the clone's state in that state's section, `[in <clone>, not landed]`, one row per differing clone. Only the listing does
 this: `--holding`, `--closed-by-status`, `CHECK=1` and `tick-task.py` read the directory they are given, as before.
 
+### Amendment 2 (FR-017, FR-018)
+
+**D23 - One bundle and one ruling for the round triggers owed together (FR-017).** `make arbiter-bundle BATCH=1`
+(`arbiter_bundle.batch`) bundles THE BATCH, defined once in `hm_arbiter.batch_triggers`: every round trigger owed now
+(`arbiter-owed.json`, kind `round` - the red gate, a reversal, a cascade or an `ask:` stay their own), but a spec review's own
+rounds (one spec, ruled alone), plus the rounds the session names as asked ahead (`TRIGGERS=`); each trigger's own bundle in
+a subdirectory, under one MANIFEST asking for ONE
+ruling with an `exceptions` map; every missing record is reported at once. `make arbiter-ruled BATCH=1 FILE=`
+(`hm_arbiter.record_batch`) checks the whole reply first (its `triggers`, no stray exception, the declaration, none already
+ruled) and then records each trigger through `record_ruling` - the batch's ruling, or its exception - so holds, closures,
+continues and GM-review rows stay per unit. A batch `tooling_fix` is ONE fix: recorded (and opened) on the first trigger
+under the batch's ruling - else the first trigger - with every other row under the batch naming the trigger that holds it
+(`tooling_fix_on`, which satisfies a `process-fault` row only inside a batch); every row and exception is checked (a ruling,
+a `why`, a `process-fault`'s fix) before any is written (plan review round 1: a batch `process-fault` failed on its second
+trigger, and an exception on the first dropped the fix). A trigger named twice is refused before writing; the batch's fix
+never overwrites an exception's own - with no trigger under the batch's ruling it goes on the first exception without a fix,
+and a reply whose every exception carries its own fix while the batch carries one is refused as ambiguous (round 2). "Together" is
+"owed now": the triggers a batch of dispatches tripped are owed at the same time, and nothing older lingers because each
+holds its unit until ruled. The tooling steers to it: `hm_arbiter.refusal(triggers, root)` - called by the record checks'
+cap (`hm_checks`) and the review checks' (`pair-hooks.sh`) with the clone root - names the batch command whenever more than
+one trigger of the batch is owed, and `record_ruling` refuses a single trigger's ruling while others of its batch are owed
+(`record_batch` passes `batch=True`); a unit is ruled alone only when it is the batch. The round arbiter's contract gains the
+batch reply. A ruling row reads its unit from the trigger when the guard never recorded it (`hm_arbiter.unit_of`, the one
+parser the bundle uses too - the spec review's aside: 15 of 343's rows had no unit).
+
+**D24 - A round bundle reads its unit from the trigger (FR-018).** `arbiter_bundle.unit_of` parses `round:<check>|<subject>@N`;
+`bundle()` uses the owed record's unit, else this, so a round asked about ahead of the cap still carries its rounds, replies
+and edits (343's 13 form-check bundles had none).
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

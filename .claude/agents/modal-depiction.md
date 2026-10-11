@@ -59,6 +59,10 @@ shows. A finding that is a rewording ends with an EDIT block:
     the text that should replace it
     >>>
 
-A finding that needs a decision or new research ends `EDIT: none - <why>`. Never judge About's history (that is `modal-research`),
+A finding that needs a decision or new research ends `EDIT: none - <why>`. **An ask the record cannot answer is a research row,
+not a finding**: if the drawing pages, or an earlier round's reply in your bundle, say that no page holds what you would ask the
+tab to tell (a real color, a size no source gives), list it under a heading `OUTSIDE THE CHANGE`, one line each
+`- <the modal's file> | <the sentence> | needs research: <what is unrecorded>`. The session files it as an open row; it never
+drives another round (343's main gate: round 1's "supplying it needs new research" came back as round 2's finding). Never judge About's history (that is `modal-research`),
 the modal's form beyond this tab (`modal-form`), or the glyph's design (`glyph-check`); you judge only whether the Depiction tab
 tells the truth about the drawing.

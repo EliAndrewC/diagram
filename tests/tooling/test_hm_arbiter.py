@@ -222,7 +222,7 @@ def test_a_feature_with_no_event_log_bundles_an_empty_cascade(tmp_path: pathlib.
     (root / "specs" / "368-x").mkdir(parents=True)
     monkeypatch.setenv("L7R_EVENTS_DIR", str(tmp_path / "no-events"))
     manifest = ab.bundle(root, "red-gate", tmp_path / "out").read_text()
-    assert "the feature's last 0 edits and dispatches" in manifest
+    assert "the last 0 edits and dispatches on the feature" in manifest
     assert (tmp_path / "out" / "cascade.txt").read_text() == "\n"
 
 
@@ -253,6 +253,96 @@ def test_an_accept_on_a_round_cap_answers_its_units(monkeypatch: pytest.MonkeyPa
     assert ha.accept_answers(root, "quote-check|q:0091", "accepted") == ["quote-check:x"]
     assert calls[-1] == ("quote-check", {"q": "0091"}) and calls[0] == ("modal-accuracy", {"kind": "sheet/x"})
     assert ha.accept_answers(root, "impl-drift|", "accepted") == [], "no subject: nothing to answer"
+
+
+def test_a_finding_is_read_whole_and_a_re_raised_one_is_repeated() -> None:
+    """343's and 368's rulings, 2026-10-11: a summary cut at the colon leading into its bullets; re-raised findings marked NEW
+    when reworded; bundle paths and confirmations listed as findings; a fix that put back words another fix took out unseen."""
+    r1 = (
+        "1. the tract rule reads over the holdings: no tract is turned apart from the next:\n   - 0006 says each holding\n"
+        "   - claims.md agrees\n\n- /tmp/l7r-check/x/MANIFEST.md\n- the rest of the tab matches the pages\n"
+    )
+    (f,) = ab.findings_of(r1)
+    assert f.startswith("the tract rule") and "0006 says each holding" in f and "claims.md agrees" in f, f
+    assert ab.findings_of("- /tmp/l7r-check/x/MANIFEST.md\n- **VOCABULARY** 'genka' is not glossed\n- ok, nothing else\n") == ["**VOCABULARY** 'genka' is not glossed"]
+    assert ab._repeats('GAPS: 0076 says "pines lined the approach to the hall"', ['ACCURACY 2: the modal leaves out "pines lined the approach to the hall"'])
+    assert ab._repeats("D2: 0115 gives the gate's roof and lookout windows", ["D2 the roof of the gate and its lookout windows, from 0115"])
+    assert not ab._repeats("D2: 0115 gives the gate's roof", ["D3: 0090 names the clerks"])
+    (m1, m2) = ab.mark_rounds(["1. the posts are drawn too dark for a gate\n", "1. a gate's posts drawn too dark\n"])
+    assert m1[0][0] == "NEW"
+    edit = "EDIT modals/sheet/garden-pond.md\n<<<\na dry garden of raked sand\n===\na dry garden of stones and raked gravel\n>>>\n"
+    others = [("a dry garden of stones and gravel", "a dry garden")]  # another check's fix took 'stones' and 'gravel' out
+    marks = ab.mark_rounds([edit], others)[0]
+    assert any(k == "REVERSING" and "adds back" in f for k, f in marks), marks
+    assert not any(k == "REVERSING" for k, _f in ab.mark_rounds([edit], [("a dry garden of reeds", "a dry garden")])[0]), "no words back: no reversal"
+
+
+def test_a_round_trigger_lost_from_the_owed_record_still_bundles_its_rounds(tmp_path: pathlib.Path) -> None:
+    """343's M1c: a wave of 13 refused modal-form rounds kept few of their triggers (an unlocked write), and each bundle came
+    out with no Rounds and no edits. The unit is read from the trigger; a round trigger with no rounds at all is refused."""
+    import subprocess
+
+    root = tmp_path / "c"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    (root / ".specify").mkdir()
+    (root / ".specify" / "feature.json").write_text('{"feature_directory": "specs/343-x"}')
+    (root / "specs" / "343-x").mkdir(parents=True)
+    modal = root / "l7r" / "diagram" / "interactive" / "assets" / "modals" / "sheet"
+    modal.mkdir(parents=True)
+    (modal / "door.md").write_text("About: a door.\n\nName: door\nEntry: research/questions/0104-genkan.html\n")
+    (root / "research" / "questions").mkdir(parents=True)
+    (root / "research" / "questions" / "0104-genkan.html").write_text("<p>a page</p>")
+    reply = tmp_path / "r.md"
+    reply.write_text("1. the door's About repeats the Name\n\nEDIT l7r/diagram/interactive/assets/modals/sheet/door.md\n<<<\na door.\n===\na plank door.\n>>>\n")
+    (root / ".git" / "checks-open.json").write_text(json.dumps({"dispatches": {"t1": {"check": "modal-form", "subjects": ["modal:sheet/door"], "t": 1, "state": "answered", "reply": str(reply)}}}))
+    assert ha.unit_of("round:modal-form|modal:sheet/door@3") == "modal-form|modal:sheet/door" and ha.unit_of("red-gate") == ""
+    manifest = ab.bundle(root, "round:modal-form|modal:sheet/door@3", tmp_path / "out").read_text()
+    assert "### Round 1: modal-form" in manifest and "the owed round is the counter's round 3" in manifest.lower()
+    assert "- NOT APPLIED: l7r/diagram/interactive/assets/modals/sheet/door.md: 'a door.' -> 'a plank door.'" in manifest
+    assert "(not in arbiter-owed.json) - the unit read from the trigger" in manifest
+    # 368's privy ruling: the pages a pop-up's Entry: and Drawing: name are in edits.diff, since an edit there re-owes it
+    assert ab.subject_files(root, "modal:sheet/door") == ["l7r/diagram/interactive/assets/modals/sheet/door.md", "research/questions/0104-genkan.html"]
+    assert "research/questions/0104-genkan.html" in manifest
+    with pytest.raises(ab.MissingRecord, match="a round trigger with no rounds"):
+        ab.bundle(root, "round:modal-form|modal:sheet/gate@3", tmp_path / "out2")
+
+
+def test_a_unit_s_cascade_and_oscillation_are_its_own_files(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """343's clerks--seats and office-hall rulings: feature 368's 0047 reversal was listed under every pop-up's Oscillation."""
+    root = _clone(tmp_path)
+    (root / "specs" / "375-x").mkdir(parents=True)
+    monkeypatch.setenv("L7R_EVENTS_DIR", str(tmp_path / "ev"))
+    el = _load("event_log")
+    for path, old, new in (("/c/q/0047.drawing.html", "a", "b"), ("/c/q/0047.drawing.html", "b", "a"), ("/c/m/door.md", "x", "y")):
+        el.append({"hook_event_name": "PreToolUse", "cwd": str(root), "tool_name": "Edit", "tool_input": {"file_path": path, "old_string": old, "new_string": new}})
+    out = tmp_path / "o"
+    out.mkdir()
+    cascade, osc = ab.flow_sections(root, out, root / "specs" / "375-x", ["m/door.md"])
+    assert "none on the unit's files" in osc and "0047" not in (out / "cascade.txt").read_text() and "door.md" in (out / "cascade.txt").read_text()
+    _c, osc_all = ab.flow_sections(root, out, root / "specs" / "375-x", [])
+    assert "0047.drawing.html" in osc_all, "a feature-wide trigger keeps the feature's oscillation"
+
+
+def test_triggers_tripped_at_once_are_all_kept(tmp_path: pathlib.Path) -> None:
+    """The lost-write race behind 343's empty bundles: 20 processes tripping at once each keep their trigger."""
+    import subprocess
+    import sys
+
+    root = _clone(tmp_path)
+    lib = str(pathlib.Path(ha.__file__).parent)
+    code = "import sys, pathlib; sys.path.insert(0, sys.argv[1]); import hm_arbiter as h; i = sys.argv[3]; h.trip(pathlib.Path(sys.argv[2]), f'round:modal-form|modal:sheet/m{i}@3', 'round', f'modal-form|modal:sheet/m{i}', 'd', 1.0)"
+    procs = [subprocess.Popen([sys.executable, "-c", code, lib, str(root), str(i)]) for i in range(20)]
+    assert all(p.wait(timeout=60) == 0 for p in procs)
+    assert len(ha.owed(root)) == 20
+
+
+def test_an_ask_an_earlier_round_said_no_page_holds_is_repeated() -> None:
+    """343's main-gate ruling: round 1 said the posts' real color needs new research (D2); round 2 asked for it as NEW."""
+    r1 = "1. D3 the gate's roof is drawn flat\n\nThe posts' real color (D2): no page holds it - supplying it needs new research from 0093.\n"
+    r2 = "1. D2: 0093 - the tab should give the posts' real color, not the drawn dark\n"
+    m1, m2 = ab.mark_rounds([r1, r2])
+    assert [k for k, _f in m1] == ["NEW"] and m2[0][0] == "REPEATED", (m1, m2)
 
 
 def test_the_cascade_counts_only_the_dispatches_since_the_last_landing(tmp_path: pathlib.Path) -> None:
