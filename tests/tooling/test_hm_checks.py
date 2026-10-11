@@ -399,3 +399,27 @@ def test_a_dispatch_keeps_why_its_units_were_due_and_a_late_reply(tmp_path: path
     hc.answered(st, "modal-depiction", ["modal:sheet/bath"])
     hc.returned(st, "ag1", "1. a finding", tmp_path / "keep")
     assert pathlib.Path(st["dispatches"]["t1"]["reply"]).read_text() == "1. a finding"
+
+
+def test_checks_launched_at_once_each_keep_their_agent(tmp_path: pathlib.Path) -> None:
+    """Feature 374 wave 120: six checks launched in one message ran one hook process each, and an unlocked read-modify-write
+    kept only the last writer - three dispatches lost their agent id, so their replies were never kept and the round arbiter
+    read "no reply kept". Twenty launches at once must each keep theirs."""
+    import subprocess
+    import sys
+
+    (tmp_path / ".git").mkdir()
+    state = {"dispatches": {f"t{i}": {"check": "modal-form", "subjects": [f"modal:sheet/m{i}"], "state": "pending", "t": 1.0} for i in range(20)}}
+    path = hc.state_path(str(tmp_path))
+    hc.save(path, state)
+    lib = str(pathlib.Path(hc.__file__).parent)
+    code = (
+        "import sys; sys.path.insert(0, sys.argv[1]); import hm_checks as h; i = sys.argv[3]; "
+        "h.handle('launched', {'cwd': sys.argv[2], 'tool_name': 'Agent', 'tool_use_id': f't{i}', "
+        "'tool_response': {'agentId': f'a{i}', 'status': 'async_launched', 'content': []}})"
+    )
+    procs = [subprocess.Popen([sys.executable, "-c", code, lib, str(tmp_path), str(i)]) for i in range(20)]
+    assert all(p.wait(timeout=60) == 0 for p in procs)
+    kept = hc.load(path)["dispatches"]
+    assert sorted(d.get("aid") for d in kept.values()) == sorted(f"a{i}" for i in range(20)), kept
+    assert not list(tmp_path.glob(".git/*.tmp")), "each writer's temporary file is its own and is renamed into place"
