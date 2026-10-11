@@ -16,7 +16,8 @@ no map and no code.
   1. **The search.** The archive first (`make archive-find TERMS="..."`, one term per call, then each hit's archived text),
      then the web: in Chinese (the setting's first reference - a fengshui wood or a homestead grove behind a house, 屋后林,
      风水林, 宅旁林, and a lane or path, 巷, 路, 小道, running between them) and in Japanese (屋敷林, 居久根, 築地松, 散居,
-     and 道, 小道, 路地 between a 主屋 and its 屋敷林). What you want: does any account or plan show a lane or path running
+     and 道, 小道, 路地 between a 主屋 and its 屋敷林), and in English (the scholarship on yashikirin, dispersed settlement and
+     Chinese village fengshui woods) - the languages are where to look, not a limit. What you want: does any account or plan show a lane or path running
      between a farmhouse and its own grove (the grove on the far side of a way from its house), or say the grove stood
      against the house with no way between; and does any say a village way passed through a household's grove?
   2. **The record.** On the findings page (`.html`), under a heading a reader would ask (for example "Did a lane ever run
