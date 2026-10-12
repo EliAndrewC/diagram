@@ -357,17 +357,19 @@ amendment builds what puts each before him with the data.
 
 - **FR-039 A glyph check is due on the hour, not on each occasion.** Its occasions are found as today (`review_owed.py`: an
   element new to a map or sheet, a glyph redrawn, an element re-placed) and kept as owed, but an owed glyph unit is DUE - so
-  that the pair guard and the stop hook ask for its dispatch - only when an hour has passed in the clone since its last glyph
-  check was dispatched (or, before the first, since a glyph unit was first found owed), or when the work lands. Then every
+  that the pair guard and the stop hook ask for its dispatch - only when an hour of the FEATURE's time has passed: counted
+  from the feature's start in the clone (its first event there), and from each glyph dispatch made for it after that - a
+  dispatch from before the feature began never makes one of its units due - or when the work lands. A change made directly,
+  with no feature, owes its glyph units at landing. Then every
   glyph unit owed at that moment is due together and is dispatched together, one unit per agent as feature 248 has it, and
   their findings are fixed together; a fix that redraws or re-places an element owes that element again, which comes due on
   the next hour or at landing. So a feature that runs past an hour checks its glyphs once an hour, on what the map is by then,
   and a feature that lands inside its first hour checks them once, at landing. The landing still owes every glyph unit an
   answer (`review-gate.sh`, as today). Measured on the ledger since 2026-09-26 (R8): 158 glyph-check passes, 124 of them PASS,
   46 a second round or later - a check run after each wave and again after each fix.
-- **FR-040 The hour is visible.** `make verify` and the stop hook's message name the glyph units owed but not yet due and when
-  they come due, so a session knows what is waiting; and a session may dispatch them before the hour (the GM's sketch sets
-  when they are owed, not a floor).
+- **FR-040 The hour is visible, and kept.** `make verify` and the stop hook's message name the glyph units owed but not yet due
+  and when they come due, so a session knows what is waiting; and the pair guard refuses a glyph-check dispatch before its unit
+  is due (the escape, as every guard's, takes a reason), so a session does not slip back into checking after each wave.
 - **FR-041 Only `glyph-check`.** The other review checks (`settlement-review`, `building-review`, `size-audit`, `fix-check`) are
   owed on their occasions as today.
 
@@ -491,11 +493,12 @@ amendment builds what puts each before him with the data.
   the records span one feature's change; a test with records from three changes names the fewest first seeds that find every
   failure. `make cohort` with no `N=` rolls seeds 1 to 10 and the six pinned rows. The test fails on today's code.
 - **SC-032** (FR-039) In a fixture clone with a glyph unit owed: before the hour it is owed and not due (the pair guard and the
-  stop hook ask for nothing); at the hour, or at landing, every glyph unit then owed is due; after a glyph dispatch the clock
-  restarts, and a unit owed again by a fix waits for the next hour; the push refuses a glyph unit with no answer, as today.
-  Tests fail on today's code.
-- **SC-033** (FR-040) `make verify` prints each glyph unit waiting and the time it comes due; dispatching one early is not
-  refused. The test fails on today's code.
+  stop hook ask for nothing); at the feature's hour, or at landing, every glyph unit then owed is due; after a glyph dispatch
+  the clock restarts, and a unit owed again by a fix waits for the next hour; a clone whose last glyph dispatch was more than
+  an hour before the feature began does not make the feature's first unit due before the feature's first hour; a change with no
+  feature owes its units at landing; the push refuses a glyph unit with no answer, as today. Tests fail on today's code.
+- **SC-033** (FR-040) `make verify` prints each glyph unit waiting and the time it comes due; the pair guard refuses a glyph
+  dispatch before its unit is due, and passes it with the escape and a reason. Tests fail on today's code.
 - **SC-034** (FR-041) A settlement-review, building-review, size-audit or fix-check unit is due as soon as it is owed, as today.
   Measured after: glyph-check passes per hour of a long feature, from the ledger and the event log, against R8's figures.
 
