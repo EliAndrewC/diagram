@@ -90,3 +90,13 @@ def test_no_lodgers_privy_stands_by_the_main_gate() -> None:
     privies = [(float(m[1]) + 7.5, float(m[2]) + 7.5) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="15" height="15"[^>]*data-kind="latrine" data-id', svg)]
     assert len(privies) >= 3, "the lodgers' privies are drawn"
     assert all(abs(x - gate.x) > cp.GATE_PRIVY_FT * 3 or gate.y - y > cp.GATE_PRIVY_FT * 3 for x, y in privies), privies
+
+
+def test_the_servants_row_takes_the_entry_form_its_roll_gives() -> None:
+    """Feature 374 batch 4: 0097's two entry forms are a knob set per compound; the county draft rolls its own."""
+    from l7r.diagram import compound_example as ce
+
+    dwellings, common = ce.servants_row(ce.SERVANTS_FORMS[1]), ce.servants_row(ce.SERVANTS_FORMS[0])
+    assert len(dwellings.extra_doors) == 4 and len(dwellings.bays) == 4
+    assert common.extra_doors == () and common.bays == () and common.door_fracs == (0.5,)
+    assert ce.SERVANTS_FORM == "a door to each dwelling"  # this draft's roll, as its notes record

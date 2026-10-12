@@ -37,8 +37,8 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   west end it runs on behind the kitchen, which abuts the house as an ell (feature 374 wave 113). The maids and the
   kitchen hands sleep in the maids' room under the main roof at the kitchen end (feature 374 batch 4, plan R4-1: research
   0115's Aizu house kept "the rooms of the maids and servants" in the house; which servants slept there, and the room's
-  10 x 10 ft, are GUESSES); the menservants and the grooms lodge in the servants' row on the south (street) wall, their
-  work the gate, the stable and the outer court.
+  10 x 10 ft, are GUESSES); the menservants lodge in the servants' row on the south (street) wall, their
+  work the gate and the outer court, and the grooms in the stable's grooms' room (research 0108: a warrior's stable held its grooms' quarters).
 - **House size**: research 0091 is the ground. Its two measured main houses are the Yokota house of a
   150-koku district magistrate (gun-bugyo) at about 49 tsubo (~1,740 sq ft) and the Matsue house of 500-1,000 koku
   retainers at about 67 tsubo (~2,380 sq ft, as restored to its Meiji plan). Pass 6 takes the 49-tsubo house: the
@@ -74,9 +74,11 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   long-house, its north 14 ft with a door of its own - R11's attested form (captioned `karo's quarters` - a bay, not a house; its kind stays `karo's house`, the registry's) (research 0106: at an intendancy
   the staff lived inside the compound in small houses or long-houses; a chief retainer's house inside the lord's own
   compound was not found). Pass 5's karo's house of its own in the inner court, its door on the lord's private court,
-  is gone. The grooms lodge with the menservants in the servants' row beside the stables; the stable's grooms' room
-  (0108) is drawn as the stable's, and whether the grooms slept there or in the row is a GUESS. The barracks and the
-  long-house are divided into dwellings, a door each, and so is the servants' row (0097; feature 374 batch 4).
+  is gone. The grooms lodge in the stable's grooms' room (0108: a warrior's stable held its grooms' quarters), beside
+  the servants' row of the menservants. The barracks and the
+  long-house are divided into dwellings, a door each (0097; feature 374 batch 4). The servants' row's entry form is 0097's knob,
+  rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:servants' quarters form")).choice(["common room under one
+  door", "a door to each dwelling"])` = a door to each dwelling: five dwellings, a door each.
 - **Rear yard**: the open ground between the storehouses and the kitchen, 37 x 22 ft, the Higuchi house's rear (research 0091); its size a GUESS in the 18-45 by 10-30 ft band the size-audit of 2026-10-12 set from two storehouses of the common 2 x 3 ken and the open ground before them (no rear yard was found measured).
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
 - **Vegetable garden**: WEST of the house, filling the kitchen yard (research 0109: the one plot whose side

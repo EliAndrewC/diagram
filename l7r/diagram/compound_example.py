@@ -5,12 +5,41 @@ lays out - its envelope, the reserved court spine and the buildings, each with t
 
 from __future__ import annotations
 
+import random
+import zlib
+
 from .buildings.types import load_types
 from .compound_model import BuildingSpec, CompoundProgram, CourtZone, Envelope
 
 # The built-in example's pool tier: the type that declares the example as its generated exception
 # (feature 254) - the folder is the declaration's to name, not this module's.
 _EXAMPLE_TIER: str = next(t.tier for t in load_types() if "county-magistracy-example" in t.generated_exceptions)
+
+
+#: The two entry forms of a servants' range (research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, a knob
+#: set per compound), and this draft's roll of it, keyed as Ochiba's sheet keys its own (feature 374 batch 4).
+SERVANTS_FORMS: tuple[str, str] = ("common room under one door", "a door to each dwelling")
+SERVANTS_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:servants' quarters form")).choice(SERVANTS_FORMS)
+
+
+def servants_row(form: str) -> BuildingSpec:
+    """The county draft's servants' row on the street (south) wall, 76 x 15 ft (a GUESS), in the entry form rolled: five
+    dwellings of ~15.2 ft each with its door, or one common room behind one door (0097's two forms)."""
+    if form == SERVANTS_FORMS[1]:
+        return BuildingSpec(
+            "servants' row",
+            "service",
+            76.0,
+            15.0,
+            "outer",
+            "S",
+            6,
+            feature="servants' quarters",
+            extra_doors=("N", "N", "N", "N"),
+            door_fracs=(0.1, 0.3, 0.5, 0.7, 0.9),
+            bays=(15.2, 30.4, 45.6, 60.8),
+        )
+    return BuildingSpec("servants' row", "service", 76.0, 15.0, "outer", "S", 6, feature="servants' quarters", door_fracs=(0.5,))
 
 
 def county_magistracy_program() -> CompoundProgram:
@@ -35,7 +64,7 @@ def county_magistracy_program() -> CompoundProgram:
         outer yard - CONVENTION: named open ground between the hearing court and the practice ground, its bounds a drawing convention
         cart yard - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the loading ground before the service gate, carts, the stable's muck and the prisoners' way out, 37 x 20 ft, the apron's ~15-20 ft
         residence form and size - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: one block in two rows, the reception at the east end, a 4 ft veranda on the garden face, 10 ft off the north wall; 56 x 24 ft, with the kitchen and the bath ~50 tsubo, the Yokota house's 49
-        residence room sizes - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the inner rooms, the family's and the lord's quarters and the reception at 36 x 10, 18 x 10, 18 x 10 and 20 x 20 ft
+        residence room sizes - GUESS: the maids' room, the inner rooms, the family's and the lord's quarters and the reception at 10 x 10, 26 x 10, 18 x 10, 18 x 10 and 20 x 20 ft
         storehouses - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: two household storehouses, 12 x 18 ft, the common two by three ken, behind the house in the NW corner
         kitchen ell - research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a 20 x 18 ft kitchen joined to the house's west end as an ell, its door west; its size a GUESS
         shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one modest shrine, 18 x 14 ft, on the inner court's east wall; its size a GUESS
@@ -44,14 +73,17 @@ def county_magistracy_program() -> CompoundProgram:
         tax archive place - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the archive on the divider beside the granary, the court's stores together
         staff long-house - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: 24 x 82 ft on the west wall, the karo's 14 ft bay and four 17 ft bays side by side, a door to each on the long face
         granary - GUESS research/questions/0098-storehouses-for-the-tax-rice.drawing.html: a 60 x 30 ft granary on the east wall
-        cell place and size - research/questions/0096-holding-cells-agariya-and-roya.drawing.html: a 12 x 10 ft remand cell on the south wall just west of the service gate
+        cell place and size - research/questions/0096-holding-cells-agariya-and-roya.drawing.html: a 12 x 10 ft remand cell on the south wall just east of the service gate
         gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: a freestanding 18 x 12 ft gatehouse beside the gate, the Kita-in guardroom's 3 x 2 ken
         stables - research/questions/0108-stables-umaya.drawing.html: 18 x 24 ft, three bays long, the stalls, the passage and the grooms' room in its depth
         stable door - research/questions/0108-stables-umaya.html: its door at the east end into the passage, a gable-entered stable as the Shomei's three-bay stable
         residence inner entrance - UNRESEARCHED: the house's inner entrance on its rear (north) face at the kitchen end
         gatehouse door - UNRESEARCHED: the gatehouse's door on the gate passage, where the gatekeepers watch
         office hall doors - UNRESEARCHED: the office hall's doors on its east face by the middle gate and on its west face
-        servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: a 76 x 15 ft range on the south (street) wall, the menservants' and the grooms', five dwellings a door each (research/questions/0097-staff-rowhouses-and-barracks-nagaya.html); the 15 ft depth a GUESS
+        servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a range on the south (street) wall, the menservants'; its entry form the compound's knob, rolled (this draft's roll: a door to each dwelling, five of ~15.2 ft); its 76 x 15 ft and the five dwellings GUESSES, the 15 ft depth 0115's
+        postern places - GUESS: the kitchen postern 50 ft down the west wall on the kitchen yard, the service gate 221 ft along the south wall at the cart yard's south end; where a compound's lesser gates stood is not recorded
+        stables seat - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the stables on the street (south) wall beside the servants' row, as a long-house gate's passage had servants' quarters and a stable beside it
+        cell door - UNRESEARCHED: toward the cell's west end, so its approach leaves the barracks' south dwelling the ground for its own door
         maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the maids and kitchen hands under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of the maids and servants in the house; which servants slept there, and its 10 x 10 ft, GUESSES
         barracks dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: the barracks divided into four dwellings of ~16.75 ft, a door each on its court face; four a GUESS in the 12-18 ft bays
     """
@@ -302,24 +334,12 @@ def county_magistracy_program() -> CompoundProgram:
         # Feature 374 wave 124: the household's servants lodge here too - one servants' range on the street front, its
         # south face the wall, the grooms' and the household's (0115's drawing page, above): 76 x 15 ft (it was the grooms'
         # alone, 44 x 18 ft) - the 15 ft depth is 0115's GUESS for a retainer's range, its length a GUESS.
-        # A door to each of its five dwellings (~15.2 ft, inside 0097's 12-18 ft bays), one of 0097's two forms - a row of
-        # dwellings each with its own door (feature 374 batch 4, building-review Q1: 76 ft behind one door was neither); the
-        # form is this plan's pick until the filed `servants' row entry form` row rolls it. Its lodgers are the
-        # menservants and the grooms, whose work is the gate, the stable and the outer court; the maids and the kitchen
-        # hands sleep under the main roof at the kitchen end (the residence's maids' room; plan R4-1, research 0115's
-        # Aizu house, which servant slept where a GUESS).
-        b(
-            "servants' row",
-            "service",
-            76.0,
-            15.0,
-            "outer",
-            "S",
-            order=6,
-            feature="servants' quarters",
-            extra_doors=("N", "N", "N", "N"),
-            door_fracs=(0.1, 0.3, 0.5, 0.7, 0.9),
-            bays=(15.2, 30.4, 45.6, 60.8),
-        ),
+        # Its entry form is 0097's knob, rolled per compound as Ochiba's sheet rolls it (feature 374 batch 4: the filed
+        # `servants' row entry form` row; research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, "a knob set
+        # per compound"): this draft's roll is a door to each dwelling, five of ~15.2 ft (inside 0097's 12-18 ft bays). Its
+        # lodgers are the menservants, whose work is the gate and the outer court (the grooms keep the stable's grooms' room,
+        # research 0108); the maids and the kitchen hands sleep under the main roof at the kitchen end (the residence's maids'
+        # room; plan R4-1, research 0115's Aizu house, that the maids slept there a GUESS).
+        servants_row(SERVANTS_FORM),
     )
     return CompoundProgram("County Magistracy (example)", env, spine, buildings, tier=_EXAMPLE_TIER)

@@ -374,10 +374,11 @@ the program and the emitter, never in the svg.
 The occasions' ten reviews (2026-10-12) returned six PASS and four building reviews plus the storehouse glyph NEEDS-WORK; the
 round arbiter ruled the three sheets at their cap `continue`, each finding fixed once and verified without a further round.
 
-- **R4-1** (within W124-1): the servants' seat goes by the servant's kind. The street or gate range lodges the menservants (chugen),
-  the gatekeeper and the grooms, whose work is the gate, the stable and the outer court; the maids and kitchen hands sleep in rooms
-  under the main roof at the kitchen end, as the Aizu chief retainer's house kept "the rooms of the maids and servants" in the
-  house beside a gate range of retainers (0115). Which servant slept where is a GUESS (no page assigns them). Each sheet labels a
+- **R4-1** (within W124-1): the servants' seat goes by the servant's kind. The street or gate range lodges the menservants (chugen)
+  and the gatekeeper, whose work is the gate and the outer court (0115, 0097, 0118 record them in the gate range); the grooms keep
+  the stable's grooms' room (0108: a warrior's stable held its grooms' quarters; modal-research's gap, 2026-10-12); the maids and
+  kitchen hands sleep in rooms under the main roof at the kitchen end, as the Aizu chief retainer's house kept "the rooms of the
+  maids and servants" in the house beside a gate range of retainers (0115). That the maids slept there is a GUESS. Each sheet labels a
   maids' room in the residence at the kitchen end; no wicket is drawn in the divider (no page records one). This answers the four
   sheets' kitchen-route findings (Hayakawa E2, Ochiba E1/Q1, the county E6, Ubame Q1/Q2).
 - **R4-2** (within): a postern's opening keeps an unbuilt approach on both faces of its wall. The county draft's south postern was

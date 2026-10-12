@@ -530,9 +530,7 @@ def test_review_verdicts_reads_the_earlier_rounds_where_the_check_state_kept_non
     (tmp_path / ".git" / "review-verdicts").mkdir(parents=True)
     (tmp_path / ".git" / "review-verdicts" / "building-review--ubame-magistracy.json").write_text('{"verdict": "PASS"}')
     (tmp_path / "dev").mkdir()
-    (tmp_path / "dev" / "review-ledger.md").write_text(
-        "| 2026-10-10 | building-review | ubame-magistracy round 2 | clean |\n| 2026-10-10 | glyph-check | ubame-magistracy | clean |\n"
-    )
+    (tmp_path / "dev" / "review-ledger.md").write_text("| 2026-10-10 | building-review | ubame-magistracy round 2 | clean |\n| 2026-10-10 | glyph-check | ubame-magistracy | clean |\n")
     out = tmp_path / "out"
     out.mkdir()
     got = "\n".join(ab.review_verdicts(tmp_path, out, "building-review--ubame-magistracy"))

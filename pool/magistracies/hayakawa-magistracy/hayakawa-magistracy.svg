@@ -211,7 +211,7 @@
          The 12 ft passage (x 490..526, the nagaya-mon's two-ken opening, R26, 0093) runs through the range
          toward its east end, the gatekeepers' lodging and the guardroom west of it, the store east (pass 3). -->
     <!-- and along the servants' range west of it (x 172..334, feature 374 wave 124: 0115's drawing page - the street-facing
-         range is the house's wall, its menservants' and grooms' lodging; its 54 ft length a GUESS, 0115's ordinary range
+         range is the house's wall, its menservants' lodging (the grooms keep the stable's room, research 0108); its 54 ft length a GUESS, 0115's ordinary range
          ~70-80 ft being a GUESS too) -->
     <line x1="140" y1="750" x2="167.5" y2="750"/>
     <line x1="578.5" y1="750" x2="880" y2="750"/>
@@ -307,7 +307,7 @@
     <!-- the maids' room, 12 x 12 ft at the kitchen end, over the kitchen ell (feature 374 batch 4, building-review E2, plan
          R4-1): the maids and the kitchen hands sleep under the main roof, as the Aizu chief retainer's house kept "the rooms
          of the maids and servants" in the house (research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html);
-         which servants slept here, and its size, are GUESSES. The menservants and the grooms keep the street range. -->
+         which servants slept here, and its size, are GUESSES. The menservants keep the street range, the grooms the stable's room (0108). -->
     <rect data-id="maids-room-1" x="412" y="254" width="36" height="36" fill="#DDB87A" data-kind="servants' quarters"/>
     <rect x="412" y="254" width="36" height="36" fill="none" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3" data-kind="servants' quarters"/>
     <text font-size="8" fill="#3A2E1C" data-kind="servants' quarters" data-names="maids-room-1">maids' room</text>

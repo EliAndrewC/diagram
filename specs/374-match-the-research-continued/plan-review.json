@@ -931,58 +931,52 @@
    "verdict": "CLEAR"
   },
   "T18": {
-   "section_sha256": "11d5934f3bf21300c7688c7d33fe049f2f758b2e3d4faf2d4247cc968573b57a",
-   "section_text": "### Batch 4's review findings (T18) - fixed once, verified\n\nThe occasions' ten reviews (2026-10-12) returned six PASS and four building reviews plus the storehouse glyph NEEDS-WORK; the\nround arbiter ruled the three sheets at their cap `continue`, each finding fixed once and verified without a further round.\n\n- **R4-1** (within W124-1): the servants' seat goes by the servant's kind. The street or gate range lodges the menservants (chugen),\n  the gatekeeper and the grooms, whose work is the gate, the stable and the outer court; the maids and kitchen hands sleep in rooms\n  under the main roof at the kitchen end, as the Aizu chief retainer's house kept \"the rooms of the maids and servants\" in the\n  house beside a gate range of retainers (0115). Which servant slept where is a GUESS (no page assigns them). Each sheet labels a\n  maids' room in the residence at the kitchen end; no wicket is drawn in the divider (no page records one). This answers the four\n  sheets' kitchen-route findings (Hayakawa E2, Ochiba E1/Q1, the county E6, Ubame Q1/Q2).\n- **R4-2** (within): a postern's opening keeps an unbuilt approach on both faces of its wall. The county draft's south postern was\n  sealed by the cell and the barracks while `passage_blockers` and `gate_feeds_its_road` passed: a `pack_audit` check\n  (`postern_approach`) is written red on the draft first, then the placer keeps each postern's approach clear.\n- **R4-3** (within): the grooms share a seated servants' or garrison privy in their court within 55 ft (`GROOMS_PRIVY_FT`);\n  otherwise the stable's own privy stands on the stable's side away from the main gate, its pit toward a service edge.\n- **R4-4** (within W125-1, W124-1): every storehouse draws its door (`DOOR_KINDS`, 0117); the county barracks is divided into\n  dwellings, a door each (0097); the long-house's bays draw their partitions; the county servants' row draws a door per dwelling,\n  one of 0097's two forms (its roll is the filed `servants' row entry form` row, batch 5).\n- **R4-5** (within): the hand sheets' findings are fixed on the sheet: Hoshigaoka's sacred tree back to its clearance from the wood\n  and the arches, the clearing's back line to the eaves; Hayakawa's torii 5-12 ft before the shrine's west door (0220's drawing\n  page); Ubame's rear band west of the storehouses narrowed to an alley (0091: no wide empty band behind the house) and its stable\n  door clear of the kennel; every notes, map-note and SVG-comment line the reviews named stale brought to the drawing; Ochiba's\n  service passage through the range labeled a GUESS.\n- **R4-6** (within): the size audits' bands are recorded: the storehouse 12-20 by 9-16 ft (the Yokota pair, the national register)\n  in `buildings/types.json`; the rear yard's 18-45 by 10-30 ft a GUESS in its notes. Filed as rows, not fixed here: the stable's\n  depth against its length (its depths are GUESSES, no source), the Higuchi storehouse's position, 0091's Yokota figures 5-7% under\n  the register's.\n- **R4-7** (within): verification - the three capped sheets' fix-verification is put to the round arbiter ahead of its cap; the\n  other units take their second round on the fixed content.\n\n",
+   "section_sha256": "09a39629dfbd2bde4672f8be39aee0084671f08c6ffba2b01715110d9f34d4e3",
+   "section_text": "### Batch 4's review findings (T18) - fixed once, verified\n\nThe occasions' ten reviews (2026-10-12) returned six PASS and four building reviews plus the storehouse glyph NEEDS-WORK; the\nround arbiter ruled the three sheets at their cap `continue`, each finding fixed once and verified without a further round.\n\n- **R4-1** (within W124-1): the servants' seat goes by the servant's kind. The street or gate range lodges the menservants (chugen)\n  and the gatekeeper, whose work is the gate and the outer court (0115, 0097, 0118 record them in the gate range); the grooms keep\n  the stable's grooms' room (0108: a warrior's stable held its grooms' quarters; modal-research's gap, 2026-10-12); the maids and\n  kitchen hands sleep in rooms under the main roof at the kitchen end, as the Aizu chief retainer's house kept \"the rooms of the\n  maids and servants\" in the house beside a gate range of retainers (0115). That the maids slept there is a GUESS. Each sheet labels a\n  maids' room in the residence at the kitchen end; no wicket is drawn in the divider (no page records one). This answers the four\n  sheets' kitchen-route findings (Hayakawa E2, Ochiba E1/Q1, the county E6, Ubame Q1/Q2).\n- **R4-2** (within): a postern's opening keeps an unbuilt approach on both faces of its wall. The county draft's south postern was\n  sealed by the cell and the barracks while `passage_blockers` and `gate_feeds_its_road` passed: a `pack_audit` check\n  (`postern_approach`) is written red on the draft first, then the placer keeps each postern's approach clear.\n- **R4-3** (within): the grooms share a seated servants' or garrison privy in their court within 55 ft (`GROOMS_PRIVY_FT`);\n  otherwise the stable's own privy stands on the stable's side away from the main gate, its pit toward a service edge.\n- **R4-4** (within W125-1, W124-1): every storehouse draws its door (`DOOR_KINDS`, 0117); the county barracks is divided into\n  dwellings, a door each (0097); the long-house's bays draw their partitions; the county servants' row draws a door per dwelling,\n  one of 0097's two forms (its roll is the filed `servants' row entry form` row, batch 5).\n- **R4-5** (within): the hand sheets' findings are fixed on the sheet: Hoshigaoka's sacred tree back to its clearance from the wood\n  and the arches, the clearing's back line to the eaves; Hayakawa's torii 5-12 ft before the shrine's west door (0220's drawing\n  page); Ubame's rear band west of the storehouses narrowed to an alley (0091: no wide empty band behind the house) and its stable\n  door clear of the kennel; every notes, map-note and SVG-comment line the reviews named stale brought to the drawing; Ochiba's\n  service passage through the range labeled a GUESS.\n- **R4-6** (within): the size audits' bands are recorded: the storehouse 12-20 by 9-16 ft (the Yokota pair, the national register)\n  in `buildings/types.json`; the rear yard's 18-45 by 10-30 ft a GUESS in its notes. Filed as rows, not fixed here: the stable's\n  depth against its length (its depths are GUESSES, no source), the Higuchi storehouse's position, 0091's Yokota figures 5-7% under\n  the register's.\n- **R4-7** (within): verification - the three capped sheets' fix-verification is put to the round arbiter ahead of its cap; the\n  other units take their second round on the fixed content.\n\n",
    "reviewed": "2026-10-12",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "R4-0",
-     "summary": "The round arbiter's ruling that the three capped sheets continue, each finding fixed once and verified without a further review round",
-     "class": "within",
-     "why": "A review-process matter under 375/379 (the arbiter stands where the GM was asked); it drops no finding and narrows nothing in 328's request to fix the research mismatches."
-    },
-    {
      "id": "R4-1",
-     "summary": "Servants seated by kind: menservants (chugen), gatekeeper and grooms in the street/gate range; maids and kitchen hands under the main roof at the kitchen end; the assignment labeled GUESS; no wicket drawn in the divider",
+     "summary": "Servants seated by kind: menservants (chugen) and gatekeeper in the street/gate range; grooms in the stable's grooms' room; maids and kitchen hands under the main roof at the kitchen end, labeled a GUESS; no wicket drawn in the divider.",
      "class": "within",
-     "why": "Inside W124-1's three seats and drawn from 0115 itself: Matsue's gate range housed the gatekeeper and chugen, the gate passage had servants' quarters and a stable beside it, and Aizu kept 'the rooms of the maids and servants' under the house's roof beside a range of retainers. The unsourced part is labeled GUESS, and declining to draw a wicket no page records follows the research rather than narrowing it. Hand sheets carry no seed, so no knob is owed."
+     "why": "Each seat is the one the record gives: 0115/0097/0118 put the gatekeeper and menservants in the gate range (grep confirmed on all three pages); 0108 records grooms' quarters in a warrior's stable, which W126-1 already draws; 0115 quotes the Aizu house's 'rooms of the maids and servants' in the house, and the remaining inference is labeled GUESS. Moving the grooms out of W124-1's street range brings the drawing closer to the research, which is what 328's request asks; nothing is left unfixed, and the omitted wicket is omitted because no page records one."
     },
     {
      "id": "R4-2",
-     "summary": "A postern keeps an unbuilt approach on both faces of its wall: pack_audit check postern_approach written red on the county draft first, then the placer keeps it clear",
+     "summary": "Postern approach kept clear on both faces; pack_audit postern_approach check written red on the county draft first, then the placer fixed.",
      "class": "within",
-     "why": "Fixes a defect the review found, check before fix; adds no exception."
+     "why": "Fixes a review finding and adds a check that enforces it; nothing narrowed."
     },
     {
      "id": "R4-3",
-     "summary": "Grooms share a seated servants' or garrison privy within 55 ft (GROOMS_PRIVY_FT); otherwise the stable's own privy on the side away from the main gate, pit toward a service edge",
+     "summary": "Grooms share a seated servants' or garrison privy within 55 ft (GROOMS_PRIVY_FT), else the stable's own privy away from the main gate.",
      "class": "within",
-     "why": "Answers a review finding on the sheets in scope; no case is carved out of the request."
+     "why": "Answers a review finding on the new stable form; no case excluded from what was asked."
     },
     {
      "id": "R4-4",
-     "summary": "Every storehouse draws its door; the county barracks divided into dwellings with a door each; long-house bays draw partitions; servants' row a door per dwelling in one of 0097's two forms, its roll a filed batch-5 row",
+     "summary": "Every storehouse draws its door; barracks divided into dwellings with a door each; long-house partitions; servants' row a door per dwelling, its entry form roll left to the already filed batch-5 row.",
      "class": "within",
-     "why": "Brings drawings to 0117 and 0097; the roll deferred to a filed row stays in this feature's ranking (FR-001), so nothing leaves scope."
+     "why": "Brings drawings to 0117 and 0097; the deferred roll is an existing ranking row the feature still works, not a carve-out."
     },
     {
      "id": "R4-5",
-     "summary": "Hand-sheet findings fixed on the sheet (Hoshigaoka's sacred tree and clearing, Hayakawa's torii 5-12 ft before the west door per 0220, Ubame's rear band narrowed per 0091 and stable door clear of the kennel, stale notes brought to the drawing, Ochiba's service passage labeled GUESS)",
+     "summary": "Hand-sheet findings fixed on the sheets (Hoshigaoka tree and clearing, Hayakawa torii, Ubame rear band and stable door, stale notes, Ochiba passage labeled GUESS).",
      "class": "within",
-     "why": "Each is a fix toward the cited research on a magistracy or hamlet sheet in scope (328 amendment 8); the one unsourced element is labeled, not hidden."
+     "why": "Each fix brings a sheet to a named page; labeling an unsourced passage GUESS is the record's own rule."
     },
     {
      "id": "R4-6",
-     "summary": "Size bands recorded (storehouse 12-20 x 9-16 ft in types.json; rear yard 18-45 x 10-30 ft as GUESS); three findings filed as ranking rows rather than fixed here (stable depth vs length, Higuchi storehouse position, 0091's Yokota figures vs the register)",
+     "summary": "Storehouse and rear-yard bands recorded; three further findings filed as ranking rows rather than fixed in T18.",
      "class": "within",
-     "why": "Filing as rows puts them in 328's ranking, which FR-001 makes this feature's work list, ordered by effort as the GM asked ('go from easiest to hardest'); they are scheduled, not excused. The stable depth rests on no source, so it is not even a research mismatch yet."
+     "why": "Filed rows enter 328's ranking, which this feature works to zero in-scope findings (SC-003); one has no source to match (the stable depths are GUESSES). Sequencing within the one work list, not removal from it."
     },
     {
      "id": "R4-7",
-     "summary": "Verification: the three capped sheets' fix-verification goes to the round arbiter ahead of its cap; the other units take their second round on the fixed content",
+     "summary": "The three capped sheets' fix-verification goes to the round arbiter; the other units take their second round on the fixed content.",
      "class": "within",
-     "why": "A verification route under the enforced process; every finding is still verified, and the GM's request sets no review-round rule this departs from."
+     "why": "Process routing under feature 379 for a unit at its cap; no review owed is skipped."
     }
    ],
    "verdict": "CLEAR"

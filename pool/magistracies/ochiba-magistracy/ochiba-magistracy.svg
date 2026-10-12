@@ -402,7 +402,7 @@
        64 by 15 ft of building (two blocks, 48 and 144 px long, 45 px deep), 70.7 ft over all with the service gate's
        6.7 ft passage through it, as a long-house gate's passage runs through its range - that the cut is the service
        gate, where 0115 records the FRONT gate cut through a range, is a GUESS by that analogy: the 15 ft depth is 0115's GUESS for a retainer's range; its
-       lodgers are the menservants and the grooms (plan R4-1; the maids sleep under the main roof); four
+       lodgers are the menservants (plan R4-1; the maids sleep under the main roof, the grooms in the stable's room, research 0108); four
        dwellings, one west of the passage and three east, a door to each on the north face, the form the sheet's knob
        rolled (feature 335: `random.Random(zlib.crc32(b"ochiba-magistracy:servants' quarters form")).choice(["common room
        under one door", "a door to each dwelling"])` = a door to each dwelling). It stood on the north wall behind the
@@ -472,7 +472,7 @@
          building-review E1/Q1, plan R4-1): the maids and the kitchen hands sleep under the main roof, as the Aizu chief
          retainer's house kept "the rooms of the maids and servants" in the house
          (research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html);
-         which servants slept here, and its size, are GUESSES. The menservants and the grooms keep the street range. -->
+         which servants slept here, and its size, are GUESSES. The menservants keep the street range, the grooms the stable's room (0108). -->
     <rect data-id="maids-room-1" x="340" y="251" width="36" height="36" fill="#DDB87A" data-kind="servants' quarters"/>
     <rect x="340" y="251" width="36" height="36" fill="none" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3" data-kind="servants' quarters"/>
     <text font-size="8" fill="#3A2E1C" data-kind="servants' quarters" data-names="maids-room-1">maids' room</text>
