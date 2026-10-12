@@ -507,6 +507,16 @@ compound repacked) is a batch of its own, the next. The rules of batches 3-5 hol
   three in four a pulley frame); and, as the drawing page does, a roof on posts on some wells, about one in three, rolled per
   well from the seed. Each sheet's rolls are recorded in its notes and drawn on its wells as new glyphs (glyph-check owed);
   docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan reviews, rounds 1 and 2).
+- **W135-2** (within, from the batch 6 reviews): the drawing page's gear and roof are an OPEN-AIR well's. A sweep pivots on a
+  tall post and cannot work under a roof, and a well standing indoors (its curb inside a building, as the kitchen wells on
+  Hayakawa, Ochiba and Ubame stand in their doma) has its building's roof over it. So an indoor well takes neither: it is
+  drawn with a pulley hung from the building's beams - the beam across the curb, no posts of its own, a GUESS (no page names
+  an indoor kitchen well's gear: 0196, 0107 and 0091 searched, and the review's search of minka interiors and the daidokoro
+  found the indoor well but not its gear) recorded on 0196's drawing page; its gear and roof rolls are recorded in the notes
+  and not drawn. A roof is drawn OVER the curb, as an outline on four corner posts, not as a square under it: the square read
+  as the paved apron the same page draws (glyph-check, county draft). The pack audit's `well_gear` check holds both - an
+  indoor well drawing a sweep, posts or a roof, and a roof with no posts, each fail - and is proven red on the unfixed sheets
+  first; the drafts pass `indoor` where a curb stands inside a building.
 
 ## Landing by batch (375's D18)
 

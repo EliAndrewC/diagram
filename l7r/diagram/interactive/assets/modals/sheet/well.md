@@ -20,11 +20,13 @@ Guesses:
   either was found.
 - That a valley floor or river plain held shallow water and an upland or terrace deep: no source ties the depth to the ground
   this way.
+- That a well indoors on a kitchen's earth floor hung its pulley from the kitchen's beams: no account names the gear of a well
+  indoors.
 
 Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
 shows where the well stands; a real curb was some 3 to 4 ft across. Over each curb stands its lifting gear - a sweep, a
 pole crossing the curb from a post beside it, or a pulley frame, two posts and a beam - chosen for each well, most often the one suited to how deep the
-plan's water lies, and over about one well in three a light roof; a well inside a building has none of its own. Where the water stood so shallow that the bucket hung from a plain pole with no post, the map draws a sweep all the same, so that one mark stands for the shallow-water gear. At a shrine set apart from the houses, the map draws
+plan's water lies, and over about one well in three a roof, drawn as a dashed outline on four corner posts; a well inside a building, on a kitchen's earth floor, has neither a sweep nor a roof of its own, and its pulley is drawn hung from the building's beams, a beam and a wheel across the curb. Where the water stood so shallow that the bucket hung from a plain pole with no post, the map draws a sweep all the same, so that one mark stands for the shallow-water gear. At a shrine set apart from the houses, the map draws
 a well for its ablution water by convention: which waters a shrine used is not recorded.
 
 Name: well

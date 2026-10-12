@@ -1251,8 +1251,8 @@
    "verdict": "CLEAR"
   },
   "T27": {
-   "section_sha256": "ed7b7db655b83dd3ffc1cd665a1c07001ae172a6e2c285f68c5269c649f40abb",
-   "section_text": "### Wave 135 (T27) - a well's lifting gear, a knob\n\n- **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in two forms (a sweep or a\n  pulley frame) and its drawing page rolls them by the water's depth, which follows the ground: \"Our maps take a valley floor\n  or river plain to hold shallow water, an upland or terrace deep water\" (the page's GUESS, its rule all the same). Each\n  sheet's depth follows the landform its notes record - Ubame \"an upland forest county\" (deep), Hayakawa on its river with its\n  barge landing (a river plain: shallow), Hoshigaoka mid-slope on the hill's back-slope (upland: deep) - and only a sheet whose\n  notes record no landform rolls its depth from its seed (Ochiba, the county draft, the round-trip sheet); each well's gear is\n  rolled at the drawing page's weights for that depth (on shallow water about three wells in four a sweep, on deeper about\n  three in four a pulley frame); and, as the drawing page does, a roof on posts on some wells, about one in three, rolled per\n  well from the seed. Each sheet's rolls are recorded in its notes and drawn on its wells as new glyphs (glyph-check owed);\n  docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan reviews, rounds 1 and 2).\n\n",
+   "section_sha256": "773fca06615e9c7f03d875c33c6742b333b8a512c3a2a8ed3d50a2902624447b",
+   "section_text": "### Wave 135 (T27) - a well's lifting gear, a knob\n\n- **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in two forms (a sweep or a\n  pulley frame) and its drawing page rolls them by the water's depth, which follows the ground: \"Our maps take a valley floor\n  or river plain to hold shallow water, an upland or terrace deep water\" (the page's GUESS, its rule all the same). Each\n  sheet's depth follows the landform its notes record - Ubame \"an upland forest county\" (deep), Hayakawa on its river with its\n  barge landing (a river plain: shallow), Hoshigaoka mid-slope on the hill's back-slope (upland: deep) - and only a sheet whose\n  notes record no landform rolls its depth from its seed (Ochiba, the county draft, the round-trip sheet); each well's gear is\n  rolled at the drawing page's weights for that depth (on shallow water about three wells in four a sweep, on deeper about\n  three in four a pulley frame); and, as the drawing page does, a roof on posts on some wells, about one in three, rolled per\n  well from the seed. Each sheet's rolls are recorded in its notes and drawn on its wells as new glyphs (glyph-check owed);\n  docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan reviews, rounds 1 and 2).\n- **W135-2** (within, from the batch 6 reviews): the drawing page's gear and roof are an OPEN-AIR well's. A sweep pivots on a\n  tall post and cannot work under a roof, and a well standing indoors (its curb inside a building, as the kitchen wells on\n  Hayakawa, Ochiba and Ubame stand in their doma) has its building's roof over it. So an indoor well takes neither: it is\n  drawn with a pulley hung from the building's beams - the beam across the curb, no posts of its own, a GUESS (no page names\n  an indoor kitchen well's gear: 0196, 0107 and 0091 searched, and the review's search of minka interiors and the daidokoro\n  found the indoor well but not its gear) recorded on 0196's drawing page; its gear and roof rolls are recorded in the notes\n  and not drawn. A roof is drawn OVER the curb, as an outline on four corner posts, not as a square under it: the square read\n  as the paved apron the same page draws (glyph-check, county draft). The pack audit's `well_gear` check holds both - an\n  indoor well drawing a sweep, posts or a roof, and a roof with no posts, each fail - and is proven red on the unfixed sheets\n  first; the drafts pass `indoor` where a curb stands inside a building.\n\n",
    "reviewed": "2026-10-12",
    "declared": "spec-fidelity",
    "decisions": [
@@ -1280,6 +1280,45 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "the page's rule needs a landform and these sheets' notes record none (checked: Ochiba's notes say only 'Land county on the Imperial road', no terrain word; county-magistracy-example's and ochiba-roundtrip-test's notes carry no landform), so applying it is impossible without inventing a setting detail; rolling a researched choice from the seed is the project's knob doctrine, and round 2 named exactly this as the legitimate fallback"
+    },
+    {
+     "id": "W135-2 no sweep indoors",
+     "summary": "a well whose curb stands inside a building (the kitchen wells on Hayakawa, Ochiba and Ubame, on their doma) draws no sweep whatever its gear roll",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "physically impossible, not merely awkward: the drawing page's sweep is 'a pole about as long as the marker is wide crossing the curb from a post outside it', a counterweighted pole that swings upward on a tall post - it cannot be worked under a kitchen's roof and beams. The page's gear is an open-air communal well's (its subject is wells among the houses); the indoor kitchen well is a different class, which 0105's drawing page itself puts inside the hand-drawn kitchens and the sheets' notes put on the doma (Ubame notes line 39, Ochiba line 20). Adjudicated separately from the roof and the pulley below"
+    },
+    {
+     "id": "W135-2 no own roof indoors",
+     "summary": "an indoor well draws no roof of its own (its roof roll recorded, not drawn)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "the well already stands under its building's roof, so it IS a roofed well - the page's roof (a pavilion over a well) is met by the building, and a second roof drawn inside the building depicts a thing that cannot be there. The literal roll would draw a roof outline inside a kitchen, which defeats the page's purpose of showing which wells were roofed"
+    },
+    {
+     "id": "W135-2 indoor gear a beam-hung pulley",
+     "summary": "an indoor well is drawn with a pulley hung from the building's beam across the curb, no posts of its own; a GUESS recorded on 0196's drawing page, naming the pages searched (0196, 0107, 0091) and the review's search",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "with the sweep impossible indoors, the page's other attested gear, the pulley frame ('two posts and a beam across the curb'), is the only one left, so there is nothing to roll; the building's beam does the frame's beam's work and the posts are what it replaces. The record is silent on an indoor well's gear, and the plan labels the drawing a GUESS where the rule is written, with what was searched - the project's standing way for a silent record, not a carve-out from a finding"
+    },
+    {
+     "id": "W135-2 rolls recorded, not drawn",
+     "summary": "an indoor well's gear and roof rolls are still recorded in the sheet's notes but not drawn",
+     "class": "within",
+     "why": "keeps W135-1's per-well record; it adds no behavior beyond the two rulings above. The notes must say the roll is not drawn and why (indoors), or the sheet would state a sweep it draws as a pulley - an implementation point, not a fidelity one"
+    },
+    {
+     "id": "W135-2 roof over the curb on four posts",
+     "summary": "a roof is drawn OVER the curb as an outline on four corner posts, not as a square under it (glyph-check, county draft: the square read as the paved apron)",
+     "class": "within",
+     "why": "how the page's roof is drawn, not whether: W135-1 already said 'a roof on posts', and the change stops the roof reading as the apron the same page draws ('a square curb on a paved apron') - it makes the map show what the research says"
+    },
+    {
+     "id": "W135-2 well_gear audit check",
+     "summary": "pack_audit's well_gear fails an indoor well drawing a sweep, posts or a roof, and a roof with no posts; proven red on the unfixed sheets first; the drafts pass `indoor` where a curb stands inside a building",
+     "class": "within",
+     "why": "a check whose only effect is to hold the drawing to the rules above; delete those rules and it has nothing to check - enforcement of the request, not scope"
     }
    ],
    "verdict": "CLEAR"

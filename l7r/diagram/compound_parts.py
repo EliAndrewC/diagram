@@ -180,13 +180,13 @@ def _rear_band(p: Placed) -> tuple[float, float, float, float]:
 
 
 def _hatch(env: Envelope, box: Box) -> Box | None:
-    """The collection hatch through the compound wall behind a privy standing against it (within 2.5 ft of the wall's
+    """The collection hatch through the compound wall behind a privy standing against it (within 3 ft of the wall's
     inner face): a 2 ft opening across the wall's ink, level with the privy's middle, the night-soil carter's way
     in from outside (the kumitori-guchi form - research 0101 has the pits emptied by outside carters toward a
     service wall; the hatch itself is a GUESS). None where the privy stands off every wall."""
     x, y, x2, y2 = box
     cx, cy, half = (x + x2) / 2, (y + y2) / 2, WALL_INK_FT / 2
-    reach = half + 2.5
+    reach = half + 3.0  # a flush privy stands 1.5 ft off the face, one seated on a building's end a foot further (feature 374 batch 6)
     if y <= reach:
         return (cx - 1.0, -half, cx + 1.0, half)
     if env.h_ft - y2 <= reach:
@@ -703,10 +703,8 @@ def _draw_point_parts(
     same order, so the same ink and the same caption seats)."""
     depth = water_depth(seed)  # a generated draft records no landform: its water depth rolls from its name (0196's drawing page)
     for i, (cx, cy) in enumerate(wells, 1):
-        under, over = gear_svg(ox + cx * FTPX, oy + cy * FTPX, 3.65 * FTPX, well_gear(seed, i, depth), well_roofed(seed, i))
-        parts.append(under)
         parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
-        parts.append(over)
+        parts.append(gear_svg(ox + cx * FTPX, oy + cy * FTPX, 3.65 * FTPX, well_gear(seed, i, depth), well_roofed(seed, i)))
         caption("point", cx - 3.65, cy - 3.65, 7.3, 7.3, "well", 8, True, "#3A2E1C", "well")
     for cx, cy, whole in privies:
         parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine", whole))

@@ -649,6 +649,11 @@ def test_a_privy_against_a_wall_gets_a_collection_hatch_through_it() -> None:
     assert cp._hatch(env, (2.0, 50.0, 7.0, 55.0)) == (-1.5, 51.5, 1.5, 53.5)  # west
     assert cp._hatch(env, (193.0, 50.0, 198.0, 55.0)) == (198.5, 51.5, 201.5, 53.5)  # east
     assert cp._hatch(env, (50.0, 50.0, 55.0, 55.0)) is None  # off every wall
+    # feature 374 batch 6 (building-review E1): a privy seated on a building's end stands 2.5 ft off the face, a foot past
+    # a flush one, and keeps its hatch - it lost it at the old 2.5 ft reach, on its boundary
+    half = cp.WALL_INK_FT / 2
+    for off in (1.5, 2.5, 3.0):
+        assert cp._hatch(env, (50.0, 200.0 - half - off - 5.0, 55.0, 200.0 - half - off)) is not None, off
 
 
 def test_clerks_flank_the_dais_on_each_face() -> None:

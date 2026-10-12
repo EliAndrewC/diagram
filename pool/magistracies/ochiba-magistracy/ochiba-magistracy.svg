@@ -85,7 +85,7 @@
   <!-- ============================================================ -->
   <!-- THE COMPOUND WALL                                              -->
   <!-- Outer rectangle x=200..1000, y=150..750                        -->
-  <!-- South wall: the main gate 588..612 (8 ft), the service gate    -->
+  <!-- South wall: the main gate 588..610.5 (7.5 ft), the service gate-->
   <!-- 404..424; the west wall: the kitchen postern 374..394          -->
   <!-- ============================================================ -->
   <!-- compound interior fill (earth) -->
@@ -540,7 +540,7 @@
     <!-- Kitchen well (the primary, busiest well - inside the kitchen, on the doma since pass 3) -->
     <rect data-id="well-1" x="313" y="338" width="22" height="22" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" data-kind="well"/>
     <circle data-id="well-2" cx="324" cy="349" r="6" fill="#2D2A24" data-kind="well"/>
-    <g data-kind="well" data-gear="pulley frame" data-at="324,349"><circle cx="311" cy="349" r="1.6" fill="#5A3F1E"/><circle cx="337" cy="349" r="1.6" fill="#5A3F1E"/><line x1="311" y1="349" x2="337" y2="349" stroke="#5A3F1E" stroke-width="2"/></g>
+    <g data-kind="well" data-gear="beam pulley" data-at="324,349"><line x1="313" y1="349" x2="335" y2="349" stroke="#5A3F1E" stroke-width="2"/><circle cx="324" cy="349" r="2.2" fill="none" stroke="#5A3F1E" stroke-width="1.2"/></g>
     <text font-size="8" font-style="italic" fill="#3A2E1C" data-kind="well" data-names="well-1 well-2">well</text>
   </g>
   <!-- feature 267 pass 2: the ground south of the kitchen ell is named for what it is - the postern's yard, the
@@ -672,9 +672,9 @@
 
   <!-- Well (with stone curb) - east side of garden -->
   <g data-kind="well" data-part-of="garden">
-    <g data-kind="well" data-roof="1" data-at="700,416"><rect x="684" y="400" width="32" height="32" rx="1.5" fill="#C7B084" stroke="#6B5836" stroke-width="1.1" opacity="0.55"/></g>
     <rect x="688" y="404" width="24" height="24" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2"/>
     <circle cx="700" cy="416" r="7" fill="#2D2A24"/>
+    <g data-kind="well" data-roof="1" data-at="700,416"><path d="M 684 400 h 32 v 32 h -32 z" fill="none" stroke="#6B5836" stroke-width="1.1" stroke-dasharray="3 2"/><circle cx="684" cy="400" r="1.6" fill="#6B5836"/><circle cx="684" cy="432" r="1.6" fill="#6B5836"/><circle cx="716" cy="400" r="1.6" fill="#6B5836"/><circle cx="716" cy="432" r="1.6" fill="#6B5836"/></g>
     <g data-kind="well" data-gear="pulley frame" data-at="700,416"><circle cx="686" cy="416" r="1.6" fill="#5A3F1E"/><circle cx="714" cy="416" r="1.6" fill="#5A3F1E"/><line x1="686" y1="416" x2="714" y2="416" stroke="#5A3F1E" stroke-width="2"/></g>
     <text font-size="9" font-style="italic" fill="#3A2E1C">well</text>
   </g>

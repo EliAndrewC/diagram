@@ -509,3 +509,15 @@ def test_well_gear_asks_every_tagged_well_for_its_gear() -> None:
     assert s.well_gear(_svg(curb, gear)) == []
     far = '<g data-kind="well" data-gear="pulley frame" data-at="150,111"><circle cx="150" cy="111" r="1.6"/></g>'
     assert s.well_gear(_svg(curb, far)) != [], "a gear over another well"
+    # plan W135-2: an indoor well hangs a beam pulley and has no roof; a roof is an outline on four posts
+    kitchen = '<rect x="90" y="90" width="60" height="60" fill="#C9A57A" data-kind="kitchen"/>'
+    beam = '<g data-kind="well" data-gear="beam pulley" data-at="111,111"><line x1="100" y1="111" x2="122" y2="111"/></g>'
+    assert "stands indoors but draws a sweep" in s.well_gear(_svg(kitchen, curb, gear))[0]
+    assert s.well_gear(_svg(kitchen, curb, beam)) == []
+    assert "stands in the open but draws a beam pulley" in s.well_gear(_svg(curb, beam))[0]
+    posts = "".join(f'<circle cx="{x}" cy="{y}" r="1.6"/>' for x in (96, 126) for y in (96, 126))
+    roof = f'<g data-kind="well" data-roof="1" data-at="111,111"><rect x="96" y="96" width="30" height="30" fill="none"/>{posts}</g>'
+    square = '<g data-kind="well" data-roof="1" data-at="111,111"><rect x="96" y="96" width="30" height="30" fill="#C7B084"/></g>'
+    assert s.well_gear(_svg(curb, roof, gear)) == []
+    assert "not an outline on four posts" in s.well_gear(_svg(square, curb, gear))[0]
+    assert "draws a roof of its own" in s.well_gear(_svg(kitchen, curb, roof, beam))[0]

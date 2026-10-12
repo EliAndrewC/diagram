@@ -137,7 +137,7 @@ def county_magistracy_program() -> CompoundProgram:
         stable door - research/questions/0108-stables-umaya.html: its door at an end into the passage, a gable-entered stable as the Shomei's three-bay stable - the west end, the gatehouse standing a foot off the east
         residence inner entrance - GUESS research/questions/0107-kitchens-daidokoro.drawing.html: the house's inner entrance on its rear (north) face at the kitchen (west) end, clear of the family privy at the corner
         gatehouse door - UNRESEARCHED: the gatehouse's door on the gate passage, where the gatekeepers watch
-        office hall doors - UNRESEARCHED: the office hall's doors on its east face by the middle gate and on its west face
+        office hall doors - GUESS research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: the office takes the formal entrance where it shares a compound with the residence, facing open ground; its doors on its east face by the middle gate and on its west face, the faces a GUESS
         servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a range on the south (street) wall, the menservants'; its entry form the compound's knob, rolled (this draft's roll: a door to each dwelling, five of ~15.2 ft); its 76 x 15 ft and the five dwellings GUESSES, the 15 ft depth 0115's
         postern places - GUESS: the kitchen postern 50 ft down the west wall on the kitchen yard, the service gate 221 ft along the south wall at the cart yard's south end; where a compound's lesser gates stood is not recorded
         stables seat - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the stables on the street (south) wall beside the servants' row, as a long-house gate's passage had servants' quarters and a stable beside it
@@ -145,7 +145,7 @@ def county_magistracy_program() -> CompoundProgram:
         maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: the maids and kitchen hands under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of the maids and servants in the house; which servants slept there, and its 10 x 10 ft, GUESSES
         barracks dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: the barracks divided into four dwellings of 17.5 ft, a door each on its court face; four a GUESS in the 12-18 ft bays
     """
-    # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
+    # The main gate is a one-bay yakuimon with an 8 ft frontage and a 7 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,
     # centered 50 ft down it, opens on the kitchen yard between the bath and the karo's house (docs/building-programs.md:
     # the kitchen postern keeps deliveries and night-soil off the hearing court); its 6 ft passage is a GUESS. The
@@ -177,7 +177,7 @@ def county_magistracy_program() -> CompoundProgram:
         # The hearing court is centered on the office hall (x 33-146 as placed since feature 374 wave 125: the 24 ft staff
         # long-house and a fire-gap west of it) and no longer than it - R22, research 0099: under the office hall's roof or its
         # own, before the dais. 80 ft leaves each end of the hall's south face out from under the roof, where its tub
-        # stands; 26 ft deep (32 until feature 374 batch 5, 36 until pass 5) keeps a way of 8 ft past the stable well before
+        # stands; 26 ft deep (32 until feature 374 batch 5, 36 until pass 5) keeps a way of about 6.4 ft past the stable well before
         # the stables to the west of the outer court (building-review E1: at 32 ft the well left ~2.3 ft each side, the
         # only way west). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its size is a GUESS - no
         # roofed court's size was found.

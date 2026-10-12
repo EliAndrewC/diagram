@@ -20,7 +20,7 @@ GEAR_SHARE: float = 0.75  # the depth's own gear on about three wells in four: a
 ROOF_SHARE: float = 1.0 / 3.0  # a roof over about one well in three: a GUESS on the drawing page
 
 GEAR_INK = "#5A3F1E"
-ROOF_FILL, ROOF_STROKE = "#C7B084", "#6B5836"
+ROOF_STROKE = "#6B5836"
 
 
 def _draw(sheet: str, what: str) -> float:
@@ -53,36 +53,43 @@ def well_roofed(sheet: str, i: int) -> bool:
     return _draw(sheet, f"well roof {i}") < ROOF_SHARE
 
 
-def gear_svg(cx: float, cy: float, half: float, gear: str, roofed: bool) -> tuple[str, str]:
-    """The roof (drawn under the curb) and the gear (drawn over it) of a well whose curb is centered at (`cx`, `cy`) px,
-    `half` px from center to side, each a group tagged a part of the well (its posts small circles, never a door's small dark rect) with the well's center (`data-at`), which the
-    pack audit's `well_gear` reads.
+def gear_svg(cx: float, cy: float, half: float, gear: str, roofed: bool, indoor: bool = False) -> str:
+    """The roof and the gear of a well whose curb is centered at (`cx`, `cy`) px, `half` px from center to side, drawn
+    over the curb, each a group tagged a part of the well (its posts small circles, never a door's small dark rect) with
+    the well's center (`data-at`), which the pack audit's `well_gear` reads. An `indoor` well (its curb inside a
+    building) draws neither its rolled gear nor a roof: its pulley hangs from the building's beams (plan W135-2). The
+    generated drafts seat every well in the open, so they never pass it; the hand sheets draw the same glyph by hand.
 
     Research:
         sweep glyph - research/questions/0196-communal-wells-ido.drawing.html: a pole about as long as the marker is wide crossing the curb from a post outside it
         pulley frame glyph - research/questions/0196-communal-wells-ido.drawing.html: two posts and a beam across the curb; the drawn proportions a GUESS
-        roof glyph - CONVENTION: a light square 4 px outside the curb, drawn under it so the curb reads through, as the settlement maps draw it"""
+        beam pulley glyph - GUESS research/questions/0196-communal-wells-ido.drawing.html: an indoor well's pulley hung from its building's beams, drawn as the beam across the curb and the wheel at its middle, no posts and no roof; no page names an indoor well's gear
+        roof glyph - CONVENTION: an unfilled outline (a path, so it buries nothing) 4 px outside the curb on four corner posts, drawn over the curb, so it reads as a roof standing over the well and not as the paved apron the same page draws"""
     at = f'data-at="{cx:g},{cy:g}"'
-    under = ""
+    if indoor:
+        return (
+            f'<g data-kind="well" data-gear="beam pulley" {at}><line x1="{cx - half:g}" y1="{cy:g}" x2="{cx + half:g}" y2="{cy:g}" '
+            f'stroke="{GEAR_INK}" stroke-width="2"/><circle cx="{cx:g}" cy="{cy:g}" r="2.2" fill="none" stroke="{GEAR_INK}" stroke-width="1.2"/></g>'
+        )
+    roof = ""
     if roofed:
         r = half + 4.0
-        under = (
-            f'<g data-kind="well" data-roof="1" {at}><rect x="{cx - r:g}" y="{cy - r:g}" width="{2 * r:g}" height="{2 * r:g}" rx="1.5" '
-            f'fill="{ROOF_FILL}" stroke="{ROOF_STROKE}" stroke-width="1.1" opacity="0.55"/></g>'
+        posts = "".join(f'<circle cx="{cx + dx:g}" cy="{cy + dy:g}" r="1.6" fill="{ROOF_STROKE}"/>' for dx in (-r, r) for dy in (-r, r))
+        roof = (
+            f'<g data-kind="well" data-roof="1" {at}><path d="M {cx - r:g} {cy - r:g} h {2 * r:g} v {2 * r:g} h {-2 * r:g} z" '
+            f'fill="none" stroke="{ROOF_STROKE}" stroke-width="1.1" stroke-dasharray="3 2"/>{posts}</g>'
         )
     if gear == "sweep":
         # the pole as long as the marker is wide (2 * half), running from its post off the curb's corner in across it
         px, py = cx + half + 2.0, cy + half + 2.0
         ex, ey = round(px - half * math.sqrt(2.0), 2), round(py - half * math.sqrt(2.0), 2)
-        over = (
+        return roof + (
             f'<g data-kind="well" data-gear="sweep" {at}><circle cx="{px:g}" cy="{py:g}" r="1.6" fill="{GEAR_INK}"/>'
             f'<line x1="{px:g}" y1="{py:g}" x2="{ex:g}" y2="{ey:g}" stroke="{GEAR_INK}" stroke-width="1.6"/></g>'
         )
-    else:
-        lx, rx = cx - half - 3.5, cx + half + 0.5
-        over = (
-            f'<g data-kind="well" data-gear="pulley frame" {at}><circle cx="{lx + 1.5:g}" cy="{cy:g}" r="1.6" fill="{GEAR_INK}"/>'
-            f'<circle cx="{rx + 1.5:g}" cy="{cy:g}" r="1.6" fill="{GEAR_INK}"/>'
-            f'<line x1="{lx + 1.5:g}" y1="{cy:g}" x2="{rx + 1.5:g}" y2="{cy:g}" stroke="{GEAR_INK}" stroke-width="2"/></g>'
-        )
-    return under, over
+    lx, rx = cx - half - 3.5, cx + half + 0.5
+    return roof + (
+        f'<g data-kind="well" data-gear="pulley frame" {at}><circle cx="{lx + 1.5:g}" cy="{cy:g}" r="1.6" fill="{GEAR_INK}"/>'
+        f'<circle cx="{rx + 1.5:g}" cy="{cy:g}" r="1.6" fill="{GEAR_INK}"/>'
+        f'<line x1="{lx + 1.5:g}" y1="{cy:g}" x2="{rx + 1.5:g}" y2="{cy:g}" stroke="{GEAR_INK}" stroke-width="2"/></g>'
+    )

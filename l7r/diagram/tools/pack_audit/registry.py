@@ -297,7 +297,7 @@ CHECKS: tuple[Check, ...] = (
         lambda ctx: s.well_gear(ctx.text),
         True,
         "ochiba-well-without-gear-red.svg",
-        "draw the well's lifting gear - its rolled sweep or pulley frame, a <g data-kind=\"well\" data-gear=... data-at=\"cx,cy\"> over the curb (l7r/diagram/well_gear.py)",
+        "draw the well's lifting gear over the curb as l7r/diagram/well_gear.py's gear_svg does - an open-air well its rolled sweep or pulley frame and any roof as an unfilled outline on four posts, an indoor well the beam pulley and no roof (<g data-kind=\"well\" data-gear=... data-at=\"cx,cy\">)",
     ),
     Check("one_compound_shrine", lambda ctx: s.one_compound_shrine(ctx.text), False, "hayakawa-two-shrines-red.svg", "draw one compound shrine and enshrine the second god in its hall"),
     # --- the country shrine's own, each fixture cut from the Hoshigaoka exemplar ---

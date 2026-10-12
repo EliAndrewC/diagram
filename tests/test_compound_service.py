@@ -143,3 +143,7 @@ def test_the_stables_privy_stands_against_the_wall_with_its_hatch() -> None:
     _prog, _result, svg = _county()
     privies = [(float(m[1]), float(m[2])) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="15" height="15"[^>]*data-kind="latrine" data-id', svg)]
     assert any(y > 600 and 190 < x < 220 for x, y in privies), privies  # flush to the south wall, west of the stable
+    # ... and emptied through its hatch in that wall (batch 6 building-review E1: 2.5 ft off the face, it had none)
+    x, y = next((x, y) for x, y in privies if y > 600 and 190 < x < 220)
+    hatches = [(float(m[1]), float(m[2])) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="[\d.]+" height="[\d.]+" fill="#4A3318"[^>]*data-kind="latrine"', svg)]
+    assert any(abs(hx - (x + 6.0)) < 4 and hy > y for hx, hy in hatches), (x, y, hatches)

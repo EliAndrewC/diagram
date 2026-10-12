@@ -598,22 +598,47 @@ def shrine_tree(text: str) -> list[str]:
 
 # A WELL'S LIFTING GEAR (feature 374 wave 135): research/questions/0196-communal-wells-ido.drawing.html draws every well with
 # "a well-sweep or a pulley frame over it"; a sheet's well carries its gear as a group tagged a part of the well, its
-# `data-gear` the form rolled (`l7r/diagram/well_gear.py`) and its `data-at` the curb's center.
-_GEAR_RE = re.compile(r'<g data-kind="well" data-gear="(sweep|pulley frame)" data-at="([\d.]+),([\d.]+)"')
+# `data-gear` the form rolled (`l7r/diagram/well_gear.py`) and its `data-at` the curb's center. An open-air well's gear and
+# roof are the page's; an indoor well (its curb inside a building) takes a pulley hung from the building's beams and no roof
+# of its own (plan W135-2, the batch 6 reviews: a sweep cannot work under a roof).
+_GEAR_RE = re.compile(r'<g data-kind="well" data-gear="(sweep|pulley frame|beam pulley)" data-at="([\d.]+),([\d.]+)"')
+_ROOF_RE = re.compile(r'<g data-kind="well" data-roof="1" data-at="([\d.]+),([\d.]+)">(.*?)</g>', re.S)
+
+
+def _indoor(cx: float, cy: float, text: str) -> bool:
+    """The point stands inside a building: a rect of a structure's fill, not a part of a well, holding it."""
+    from .parse import STRUCTURE_FILLS
+
+    return any(m.tag == "rect" and m.kind != "well" and m.paint.get("fill") in STRUCTURE_FILLS and m.x < cx < m.x2 and m.y < cy < m.y2 for m in marks(text))
 
 
 def well_gear(text: str) -> list[str]:
     """Every well's curb - a rect of the curb's stone, tagged a `well`, a curb marker's size - carries its lifting gear: a
     `data-gear` group whose `data-at` is the curb's center (within 2 px). A basin or a lantern sharing the stone's color is
-    not a well."""
+    not a well. An indoor well's gear is the beam pulley and it has no roof; an open-air well's is never the beam pulley; a
+    roof is an unfilled outline standing on its four posts, drawn over the curb (a filled square under it reads as the
+    page's paved apron - glyph-check, batch 6)."""
     from .parse import WELL_FILL
 
-    gears = [(float(m[2]), float(m[3])) for m in _GEAR_RE.finditer(text)]
+    gears = [(m[1], float(m[2]), float(m[3])) for m in _GEAR_RE.finditer(text)]
+    roofs = [(float(m[1]), float(m[2]), m[3]) for m in _ROOF_RE.finditer(text)]
     out = []
     for m in marks(text):
         if m.tag != "rect" or m.kind != "well" or m.paint.get("fill") != WELL_FILL or min(m.w, m.h) < 15.0:
             continue
         cx, cy = m.x + m.w / 2, m.y + m.h / 2
-        if not any(abs(gx - cx) <= 2.0 and abs(gy - cy) <= 2.0 for gx, gy in gears):
-            out.append(f"the well at svg({cx:.0f},{cy:.0f}) carries no lifting gear")
+        at = f"svg({cx:.0f},{cy:.0f})"
+        gear = next((g for g, gx, gy in gears if abs(gx - cx) <= 2.0 and abs(gy - cy) <= 2.0), None)
+        roof = next((body for rx, ry, body in roofs if abs(rx - cx) <= 2.0 and abs(ry - cy) <= 2.0), None)
+        indoor = _indoor(cx, cy, text)
+        if gear is None:
+            out.append(f"the well at {at} carries no lifting gear")
+        elif indoor and gear != "beam pulley":
+            out.append(f"the well at {at} stands indoors but draws a {gear} - an indoor well hangs its pulley from the beams")
+        elif not indoor and gear == "beam pulley":
+            out.append(f"the well at {at} stands in the open but draws a beam pulley - its gear is a sweep or a pulley frame")
+        if roof is not None and indoor:
+            out.append(f"the well at {at} stands indoors under its building's roof but draws a roof of its own")
+        elif roof is not None and (roof.count("<circle") != 4 or not re.search(r'<(?:rect|path)[^>]*fill="none"', roof)):
+            out.append(f"the roof over the well at {at} is not an outline on four posts - a filled square reads as a paved apron")
     return out

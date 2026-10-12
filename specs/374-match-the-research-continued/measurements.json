@@ -1446,5 +1446,31 @@
     "source": "specs/328-match-the-research/ranking.json",
     "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
     "method": "rows 0-12 and 18 of batch 4's open list marked waves 127-131 in waves.json, the ranking rebuilt"
+  },
+  "b6-ub-n3": {
+    "quantity": "the shrine way start",
+    "observed": "2026-10-12",
+    "verifies": "N3",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the way path now starts at x 855, east of the reception privy (x 838-853), not inside it",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6-ub-n4": {
+    "quantity": "notes corridor line",
+    "observed": "2026-10-12",
+    "verifies": "N4",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep -n \"covered corridor joins\" <the notes>",
+    "method": "the stale sentence (a corridor joining the kitchen across the service alley) is gone from the notes",
+    "value": {
+      "fixed": true
+    }
   }
 }
