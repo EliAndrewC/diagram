@@ -143,6 +143,6 @@
 - **granary**: Hayakawa's granary stands on posts beside the tally office, its one door toward the bale yard and the landing gate.
 - **tax barge**: Bound for Nagahara city, carrying the county's grain under the office's seals.
 - **river watch**: The watch looks out for gate-runners: cargo meant for sale in Nagahara city, put ashore upstream to be carried in around the city's tariff gates.
-- **servants' quarters**: The menservants lodge in the range on the street front, the grooms in the stable's own room, west of the gate range, its doors on the outer court by the stable; the maids and the kitchen hands sleep in the maids' room under the main roof, at the kitchen end. The senior retainers keep their own houses in town, and the barracks holds only the duty watch.
+- **servants' quarters**: The menservants lodge in the range on the street front, west of the gate range, its doors on the outer court by the stable; the grooms keep the stable's own room; the maids and the kitchen hands sleep in the maids' room under the main roof, at the kitchen end. The senior retainers keep their own houses in town, and the barracks holds only the duty watch.
 - **vegetable garden**: The bed stands before Hajime's own rooms, with the guests' stepping-stone path between it and the pond and old pines before the reception.
 - **storehouse**: Hayakawa keeps two, across the service alley in the shady strip behind the house, ground too dark for the vegetable garden.

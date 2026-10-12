@@ -446,7 +446,7 @@
        drawn here it was buried under the vegetable-garden fill; pack_audit
        BURIED finding, 2026-07-24.) -->
 
-  <!-- Residence - family only: the karo has a separate house and the senior
+  <!-- Residence - the family's and its maids' (the maids' room, feature 374 batch 4): the karo has a separate house and the senior
        retainers a separate quarters - a chief retainer or senior retainer never
        lodged in the lord's own wing. Occupant labels kept as the GM's schematic
        convention; each label is a multi-room ZONE, not one room. -->
@@ -471,8 +471,9 @@
     <!-- the maids' room, 12 x 12 ft in the family row's south-west corner, at the kitchen end (feature 374 batch 4,
          building-review E1/Q1, plan R4-1): the maids and the kitchen hands sleep under the main roof, as the Aizu chief
          retainer's house kept "the rooms of the maids and servants" in the house
-         (research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html);
-         which servants slept here, and its size, are GUESSES. The menservants keep the street range, the grooms the stable's room (0108). -->
+         (research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html),
+         and Takayama's jin'ya had rooms "for the yonin and maids who looked after them"
+         (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html); the room's size and exact seat are GUESSES. The menservants keep the street range, the grooms the stable's room (0108). -->
     <rect data-id="maids-room-1" x="340" y="251" width="36" height="36" fill="#DDB87A" data-kind="servants' quarters"/>
     <rect x="340" y="251" width="36" height="36" fill="none" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3" data-kind="servants' quarters"/>
     <text font-size="8" fill="#3A2E1C" data-kind="servants' quarters" data-names="maids-room-1">maids' room</text>
@@ -708,8 +709,8 @@
 
   <!-- Rear service strip (north band behind the residence) - the shady rear was
        the household's service zone, not empty ground (building-review internal-
-       dead-space + sanitation sweeps, 2026-07). Servants' quarters run along the
-       north wall; the family privy ATTACHES to the residence's rear corner,
+       dead-space + sanitation sweeps, 2026-07). The storehouses and the rear yard hold it (the servants' range left
+       the north wall for the street front, feature 374 wave 124); the family privy ATTACHES to the residence's rear corner,
        cesspit toward the wall for night-soil collection (not a lone block adrift
        in open ground). -->
 

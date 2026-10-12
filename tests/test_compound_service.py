@@ -66,6 +66,8 @@ def test_the_county_rowhouses_draw_their_dwellings_and_a_door_each() -> None:
         assert group.count("<line ") >= walls, name
     doors = svg.count('data-kind="door" data-part-of="barracks"')
     assert doors == 4, doors
+    # every dwelling of the servants' row draws its door (building-review round 4: the west one had none)
+    assert svg.count("data-kind=\"door\" data-part-of=\"servants' quarters\"") == 5
     assert svg.count('data-kind="door" data-part-of="storehouse"') == 2
 
 

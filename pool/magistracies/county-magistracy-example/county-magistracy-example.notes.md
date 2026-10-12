@@ -79,7 +79,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   long-house are divided into dwellings, a door each (0097; feature 374 batch 4). The servants' row's entry form is 0097's knob,
   rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:servants' quarters form")).choice(["common room under one
   door", "a door to each dwelling"])` = a door to each dwelling: five dwellings, a door each.
-- **Rear yard**: the open ground between the storehouses and the kitchen, 37 x 22 ft, the Higuchi house's rear (research 0091); its size a GUESS in the 18-45 by 10-30 ft band the size-audit of 2026-10-12 set from two storehouses of the common 2 x 3 ken and the open ground before them (no rear yard was found measured).
+- **Rear yard**: the open ground between the storehouses and the kitchen, 37 x 22 ft, the Higuchi house's rear (research 0091); its size a GUESS in the 18-45 by 12-30 ft band the size-audits of 2026-10-12 set from two storehouses of the common 2 x 3 ken and the open ground before them (no rear yard was found measured); its 12 ft (2 ken) floor keeps it apart from the 6-10 ft service alley, the rear strip's other form.
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
 - **Vegetable garden**: WEST of the house, filling the kitchen yard (research 0109: the one plot whose side
   is given lay west; its size runs from the Takei house's ~1,070 sq ft plot to a field over about half the Yokota
@@ -110,7 +110,7 @@ Guesses the draft carries beyond those: a **detached guest house** (R10, researc
 in the main house; a guest house apart was not found). (The karo's house of its own, a GUESS through pass 5, is now
 a bay of the staff long-house - R11's attested form.) The kitchen postern's, the service gate's and the middle gate's 6 ft (narrower than the main
 gate), the door width (a map drawing convention, research 0117), the roji's stone spacing, the hearing
-court's 80 x 32 ft, the garden's 124 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 62 x 25 ft, the 5 ft privies and
+court's 80 x 32 ft, the garden's 124 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 37 x 20 ft, the 5 ft privies and
 their 15 ft from any well are guesses too. The forecourt, the `outer court` ground beside the hearing court and the
 cart yard are drawn as bare ground with no edge: an outlined forecourt read as a fenced one, a GUESS the record does
 not support (research 0104).

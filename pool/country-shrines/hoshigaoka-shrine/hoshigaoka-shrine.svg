@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="146 110 560 720" font-family="Georgia, 'Times New Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="146 110 560 738" font-family="Georgia, 'Times New Roman', serif">
   <!-- ============================================================ -->
   <!-- Hoshigaoka Country Shrine - top-down diagrammatic plan          -->
   <!-- North at top; the village lies north, the approach rises from the south. -->
@@ -56,7 +56,7 @@
        Feature 374 batch 4 (building-review E3): its back line runs at the eaves behind the kitchen and the monk's rooms, and
        rises only round the sanctuary - the lobe it kept behind them was the old sanctuary's ground, used by nothing -->
   <polygon data-kind="precinct clearing" points="409.5,431.0 437.2,433.4 466.8,430.9 484.0,428.5 487.5,402.0 510.1,393.3 528.0,401.4 541.7,431.6 547.9,439.9 565.6,502.5 558.9,561.7 569.4,607.3 533.2,644.0 512.3,672.5 492.5,685.3 461.4,669.9 442.7,677.4 416.1,667.2 390.1,675.4 367.7,676.7 351.4,637.7 322.1,602.6 277.5,578.9 264.5,549.6 278.9,516.1 263.7,493.8 267.3,465.2 280.6,454.2 321.1,441.4 355.6,433.9 406.4,431.5" fill="url(#keidai-earth)"/>
-  <!-- The household's footpath to the well through the wood behind the hall, from the clearing's north-west corner (the kitchen side),
+  <!-- The household's footpath to the well through the wood behind the kitchen and the monk's rooms, from the clearing's north-west corner (the kitchen side),
        never across the sanctuary's ground -->
   <path data-kind="footpath" d="M330,436 L434,183" fill="none" stroke="#E6DCC4" stroke-width="12" stroke-linecap="round"/>
 
@@ -254,7 +254,7 @@
     <rect x="521.4" y="582.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
 
-  <!-- The shrine's well - its one well - where the village map sites it, 108 ft behind the hall, at the wood's back edge -->
+  <!-- The shrine's well - its one well - where the village map sites it, 108 ft behind the building, at the wood's back edge; the frame runs 6 ft further south (feature 374 batch 4) to hold the sacred tree's crown -->
   <g data-kind="well">
     <rect x="433" y="169" width="15" height="15" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" id="well"/>
     <circle cx="440.5" cy="176.5" r="4" fill="#3A3A34"/>

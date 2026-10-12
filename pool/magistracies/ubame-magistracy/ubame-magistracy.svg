@@ -516,8 +516,9 @@
        reception (x 838-912, to the garden's top at y 326) - the reception privy's service way, so the carters come from the
        rear yard to the privy without crossing the garden - and a trodden path runs from the rear alley's service end across
        it to both storehouse doors (a GUESS: no page we read draws a way to a storehouse door; the building review asked for
-       one, 2026-09-28). Feature 374 wave 124: it reaches west along the north wall to the west strip, over the ground the
-       servants' range left when it moved to the street front (0115's drawing page). -->
+       one, 2026-09-28). Feature 374 batch 4: it is the ground before the storehouses alone (from x 536); west of it, behind the west
+       block, runs a ~9 ft service alley over the ground the servants' range left (0115's drawing page; 0091: no wide empty
+       band behind the house). -->
   <g data-kind="rear yard">
     <polygon points="536,158 912,158 912,326 838,326 838,232 536,232" fill="none"/>
     <path d="M 540 214 H 787 V 200 M 647 214 V 200" fill="none" stroke="#C8B080" stroke-width="7" stroke-linecap="butt" stroke-linejoin="round"/>

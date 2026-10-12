@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import json
 import re
 import shutil
 import subprocess
@@ -434,6 +435,21 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     return out / "MANIFEST.md"
 
 
+def batch_dir(trigger: str) -> str:
+    """A batch member's subdirectory: the tail of the trigger's slug, so two units of one check stay apart, never starting with
+    "-" (`-building-review-...` broke `cat` and every shell tool given the path; the round arbiter's tooling fix, 374 batch 4)."""
+    return re.sub(r"[^a-z0-9]+", "-", trigger.lower()).strip("-")[-60:].lstrip("-")
+
+
+def _json(path: Path) -> dict:
+    """A JSON file's object, or {} where it does not parse."""
+    try:
+        d = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return d if isinstance(d, dict) else {}
+
+
 def review_verdicts(root: Path, out: Path, subject: str) -> list[str]:
     """A review unit's earlier rounds from its verdict record and its ledger rows, where the check state holds none (the round
     arbiter on three building reviews, feature 374 batch 4: both rounds ran before the check state kept review dispatches, so
@@ -446,9 +462,29 @@ def review_verdicts(root: Path, out: Path, subject: str) -> list[str]:
     ledger = root / "dev" / "review-ledger.md"
     check = subject.split("--", 1)[0]
     rows = [ln for ln in ledger.read_text(encoding="utf-8").splitlines() if ln.startswith("| ") and f"| {check} |" in ln and name in ln] if ledger.is_file() else []
+    # ...and what was done about the last round (the round arbiter's tooling fix, feature 374 batch 4: a fix-verification trigger's
+    # bundle showed neither the sheet's edits nor each finding's disposition): the review-accept rows, the measurements that
+    # verify a finding, and the commits on the unit's sheet since the verdict was written
+    dispo = rec.parent.parent / "review-dispositions" / f"{subject}.json"
+    if dispo.is_file():
+        shutil.copy(dispo, out / "dispositions.json")
+    verifies = [
+        f"- `{k}` verifies {v.get('verifies')}: {v.get('method', '')}"
+        for m in sorted((root / "specs").glob("*/measurements.json"))
+        for k, v in _json(m).items()
+        if isinstance(v, dict) and v.get("subject") == subject and v.get("verifies")
+    ]
+    since = int(rec.stat().st_mtime)
+    sheet = [str(p.relative_to(root)) for p in root.glob(f"pool/*/{name}") if p.is_dir()]
+    edits = _git(root, "log", f"--since=@{since}", "-p", "--format=--- %h %ad %s", "--date=iso", "--", *sheet) if sheet else ""
+    (out / "edits-since-verdict.diff").write_text(edits or "(no commit on the sheet since the verdict)\n", encoding="utf-8")
     return [
         "## The earlier rounds (from the verdict record and the ledger; the check state kept none)\n",
         "`earlier-verdict.json` beside this file is the unit's last verdict record. Its ledger rows:\n\n" + ("\n".join(rows) or "- (no ledger row names it)") + "\n",
+        "## What was done about the last round\n",
+        "Each finding's disposition: `dispositions.json` (the review-accept rows, where there are any) and the measurements that"
+        " verify a finding:\n\n" + ("\n".join(verifies) or "- (no measurement verifies a finding)") + "\n\nThe sheet's edits since the"
+        " verdict: `edits-since-verdict.diff`.\n",
     ]
 
 
@@ -528,7 +564,9 @@ def batch(root: Path, out: Path, allow_missing: str = "", extra: tuple[str, ...]
     gaps: list[str] = []
     rows: list[str] = []
     for t in triggers:
-        sub = re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")[-60:]
+        # the TAIL of the slug, so two units of one check stay apart - but never a leading "-": `-building-review-...` broke `cat`
+        # and every shell tool given the path (the round arbiter's tooling fix, feature 374 batch 4)
+        sub = batch_dir(t)
         try:
             bundle(root, t, out / sub, allow_missing)
         except MissingRecord as e:

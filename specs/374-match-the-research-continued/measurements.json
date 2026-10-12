@@ -629,7 +629,7 @@
     "answers": "cf1bcdd03a7d",
     "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound_example.py",
     "command": "make pack-audit ARGS=<the sheet>",
-    "method": "five dwellings a door each, the form rolled per compound (SERVANTS_FORM)",
+    "method": "five dwellings a door each, the form rolled per compound (SERVANTS_FORM); CORRECTED by building-review round 4: the sheet drew four, the west dwelling's door unseated - see b4-cty-r4-e1",
     "value": {
       "doors": 5,
       "form": "a door to each dwelling"
@@ -987,6 +987,101 @@
           16
         ]
       }
+    }
+  },
+  "b4-hoshi-e1-frame": {
+    "quantity": "the sacred tree's crown inside the frame",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "fb17f9739a98",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+    "command": "make pack-audit ARGS=pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+    "method": "the crown's foot (cy 800 + r 45 = y 845) against the viewBox's foot (110 + 738 = 848)",
+    "value": {
+      "crown_foot_y": 845,
+      "frame_foot_y": 848
+    }
+  },
+  "b4-hoshi-n1-comments": {
+    "quantity": "the SVG comments on the footpath and the well",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "fb17f9739a98",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+    "command": "grep",
+    "method": "the footpath runs 'behind the kitchen and the monk's rooms'; the well '108 ft behind the building'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b4-och-r2-e1": {
+    "quantity": "Ochiba's notes and comments against the drawing (round 2)",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md; pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "grep",
+    "method": "knob 9's rear yard runs west of the storehouses; the residence 'the family's and its maids''; the residence comment; the rear-strip comment no longer puts servants on the north wall",
+    "value": {
+      "lines_rewritten": 4
+    }
+  },
+  "b4-och-r2-n2": {
+    "quantity": "the maids' room's grounds",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "grep",
+    "method": "the comment cites 0091's Takayama 'rooms for the yonin and maids'; size and seat GUESSES",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b4-och-r2-n3": {
+    "quantity": "the residence map note names the maids' room",
+    "observed": "2026-10-12",
+    "verifies": "N3",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "grep",
+    "method": "the residence map note names the maids' room at the kitchen end of the back row",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b4-cty-r4-e1": {
+    "quantity": "a door to every dwelling of the servants' row",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound_example.py servants_row",
+    "command": "make test-file FILE=tests/test_compound_service.py",
+    "method": "the west dwelling's door at frac 0.15 (its approach clear of the servants' privy); five door marks part-of servants' quarters, counted on the regenerated sheet and held by the test",
+    "value": {
+      "doors": 5
+    }
+  },
+  "b4-cty-r4-n1": {
+    "quantity": "the notes' cart yard size",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "grep",
+    "method": "the guess list says 37 x 20 ft, as the program and the sheet",
+    "value": {
+      "size_ft": [
+        37,
+        20
+      ]
     }
   }
 }

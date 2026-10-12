@@ -36,7 +36,7 @@ def servants_row(form: str) -> BuildingSpec:
             6,
             feature="servants' quarters",
             extra_doors=("N", "N", "N", "N"),
-            door_fracs=(0.1, 0.3, 0.5, 0.7, 0.9),
+            door_fracs=(0.15, 0.3, 0.5, 0.7, 0.9),  # the west door off its middle: there its approach met the servants' privy
             bays=(15.2, 30.4, 45.6, 60.8),
         )
     return BuildingSpec("servants' row", "service", 76.0, 15.0, "outer", "S", 6, feature="servants' quarters", door_fracs=(0.5,))
