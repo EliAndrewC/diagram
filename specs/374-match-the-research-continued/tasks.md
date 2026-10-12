@@ -119,20 +119,25 @@ in 328's ranking and this spec.
 
 ## Phase 8 - batch 5: the county draft's filed rows, its stores and gate as knobs, the shrine beside its tree
 
-- [ ] T19 wave 127: the county draft's small rows - the practice ground comment, the inner entrance at the kitchen end (0107), the middle gate's width, the servants' row form marked (FR-001)
+- [x] T19 wave 127: the county draft's small rows - the practice ground comment, the inner entrance at the kitchen end (0107), the middle gate's width, the servants' row form marked (FR-001)
       research: rendering
+      verify: DONE. wave 127 done: the practice ground comment, the inner entrance at the kitchen end (in the inner rooms since batch 5's review), the middle gate's 6 ft agreed, the servants' row form marked (m:batch5-open-rows)
 
-- [ ] T20 wave 128: the county granary (0098's form rolled, its size in the band) and gate (0093's form rolled, the gatehouse of its own) (FR-001)
+- [x] T20 wave 128: the county granary (0098's form rolled, its size in the band) and gate (0093's form rolled, the gatehouse of its own) (FR-001)
       research: rendering
+      verify: DONE. wave 128 done: the granary rolled earth-walled kura (50 x 27 ft, no posts - the plan's takakura prediction was wrong, the roll governs), the main gate one-bay (8 ft) with its 40 ft gatehouse, the takakura glyph for the other form; reviews passed
 
-- [ ] T21 wave 129: the county vegetable garden's form (0109's knob rolled, the room deciding) (FR-001)
+- [x] T21 wave 129: the county vegetable garden's form (0109's knob rolled, the room deciding) (FR-001)
       research: rendering
+      verify: DONE. wave 129 done: the soup-greens plot at ~1,076 sq ft, its site rolled among the sites the sun and the room leave (west), the service yard named; garden_sun OK
 
-- [ ] T22 wave 130: every compound shrine in a corner beside its tree (0218), on the county draft and the three magistracy sheets (FR-001)
+- [x] T22 wave 130: every compound shrine in a corner beside its tree (0218), on the county draft and the three magistracy sheets (FR-001)
       research: rendering
+      verify: DONE. wave 130 done: every compound shrine in a corner beside its tree - county placer (tree_ft, _shrine_tree), Hayakawa, Ochiba, Ubame; pack_audit shrine_tree red first; building-review, glyph-check and size-audit passed or accepted by the round arbiter
 
-- [ ] T23 wave 131: the shrine hall's ceiling (Ochiba), the second kami as a rolled knob (Ubame), the sanctuary's width rolled (Hoshigaoka) (FR-001)
+- [x] T23 wave 131: the shrine hall's ceiling (Ochiba), the second kami as a rolled knob (Ubame), the sanctuary's width rolled (Hoshigaoka) (FR-001)
       research: rendering
+      verify: DONE. wave 131 done: Ochiba's hall 30 x 26 ft, Ubame's wood kami in the one hall, Hoshigaoka's sanctuary three bays (its roll recorded); reviews passed or accepted
 
 ## Standing - the ranking's remaining rows
 

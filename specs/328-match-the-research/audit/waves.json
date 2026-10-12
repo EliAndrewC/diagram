@@ -691,5 +691,19 @@
   "docs/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters": "126",
   "docs/buildings.md::Outer court (administrative / public)#stables": "126",
   "l7r/diagram/compound.py::county_magistracy_program#barracks size": "125",
-  "l7r/diagram/compound.py::county_magistracy_program#senior retainers' quarters": "125"
+  "l7r/diagram/compound.py::county_magistracy_program#senior retainers' quarters": "125",
+  "l7r/diagram/compound_example.py::county_magistracy_program#practice ground comment": "127",
+  "l7r/diagram/compound_example.py::county_magistracy_program#residence inner entrance": "127",
+  "l7r/diagram/compound_example.py::county_magistracy_program#middle gate": "127",
+  "l7r/diagram/compound_example.py::county_magistracy_program#servants' row entry form": "127",
+  "l7r/diagram/compound_example.py::county_magistracy_program#granary form": "128",
+  "l7r/diagram/compound_example.py::county_magistracy_program#granary": "128",
+  "l7r/diagram/compound_example.py::county_magistracy_program#gatehouse": "128",
+  "l7r/diagram/compound_example.py::county_magistracy_program#vegetable garden west of the house": "129",
+  "l7r/diagram/compound_example.py::county_magistracy_program#shrine": "130",
+  "docs/buildings.md::Sacred features#compound shrine tree": "130",
+  "docs/buildings.md::Sacred features#grove inside a compound wall": "130",
+  "docs/buildings.md::Sacred features#hall shrine ceiling": "131",
+  "docs/buildings.md::Sacred features#more than one kami in a hall": "131",
+  "docs/buildings.md::Sacred features#sanctuary": "131"
 }

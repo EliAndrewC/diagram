@@ -1437,5 +1437,14 @@
     "value": {
       "fixed": true
     }
+  },
+  "batch5-open-rows": {
+    "quantity": "open rows of 328's ranking at batch 5's close (no wave, not deferred), and how many of them are E3 DRIFTED",
+    "value": "165 open, 117 E3 DRIFTED",
+    "unit": "rows",
+    "observed": "2026-10-12",
+    "source": "specs/328-match-the-research/ranking.json",
+    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+    "method": "rows 0-12 and 18 of batch 4's open list marked waves 127-131 in waves.json, the ranking rebuilt"
   }
 }
