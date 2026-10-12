@@ -530,12 +530,21 @@ def test_review_verdicts_reads_the_earlier_rounds_where_the_check_state_kept_non
     (tmp_path / ".git" / "review-verdicts").mkdir(parents=True)
     (tmp_path / ".git" / "review-verdicts" / "building-review--ubame-magistracy.json").write_text('{"verdict": "PASS"}')
     (tmp_path / "dev").mkdir()
-    (tmp_path / "dev" / "review-ledger.md").write_text(
-        "| 2026-10-10 | building-review | ubame-magistracy round 2 | clean |\n| 2026-10-10 | glyph-check | ubame-magistracy | clean |\n"
-    )
+    (tmp_path / "dev" / "review-ledger.md").write_text("| 2026-10-10 | building-review | ubame-magistracy round 2 | clean |\n| 2026-10-10 | glyph-check | ubame-magistracy | clean |\n")
     out = tmp_path / "out"
     out.mkdir()
     got = "\n".join(ab.review_verdicts(tmp_path, out, "building-review--ubame-magistracy"))
     assert "ubame-magistracy round 2" in got and "glyph-check" not in got
     assert (out / "earlier-verdict.json").read_text() == '{"verdict": "PASS"}'
     assert ab.review_verdicts(tmp_path, out, "building-review--hayakawa-magistracy") == [], "no record, so the gap stands"
+
+
+def test_a_modal_form_replys_fix_and_note_lines_are_findings_and_repeat_by_their_rule() -> None:
+    """The round arbiter on the servants' quarters form (feature 374 batch 4): its rounds showed no findings, which hid that
+    round 3's two research findings repeated round 1's."""
+    r1 = "modal-form: x - 2 findings\n\nFIX M5 - About never says what the quarters were built of, or their walls and roof.\nEDIT: none - this needs research.\n\nNOTE M18 - chugen appears unglossed in the Miwa sentence.\n"
+    r3 = "FIX M5 - About does not say what the quarters were built of: their walls, their roof and materials are skipped.\nEDIT: none\n"
+    assert ab.findings_of(r1) == ["FIX M5 - About never says what the quarters were built of, or their walls and roof.", "NOTE M18 - chugen appears unglossed in the Miwa sentence."]
+    marked = ab.mark_rounds([r1, r3])
+    assert marked[1][0][0] == "REPEATED", marked
+    assert not ab._repeats("FIX M3 - the second paragraph runs to six sentences", ab.findings_of(r1))

@@ -40,7 +40,10 @@ TRANSCRIPTS = Path.home() / ".claude" / "projects"
 
 #: a reply's top-level item: numbered ("1. x", "**1. x**"), else a bullet or a bold-headed entry ("**VOCABULARY** - ...")
 _NUMBERED_START = re.compile(r"^\s{0,3}(?:\*\*)?\d+[.)]\s+\S")
-_TOP_START = re.compile(r"^(?:[-*]\s+\S|\*\*[A-Z][^*]{2,}\*\*)")
+#: ...and a modal-form reply's "FIX M5 - ..." / "NOTE M11 - ..." (the round arbiter on the servants' quarters form, feature 374
+#: batch 4: its rounds showed "(no findings it numbers or bullets)", hiding a repeated research finding)
+_TOP_START = re.compile(r"^(?:[-*]\s+\S|\*\*[A-Z][^*]{2,}\*\*|(?:FIX|NOTE)\s+M\d+\b)")
+_MRULE = re.compile(r"\bM\d+(?:\.\d+)?\b")
 #: lines that are never a finding: a bundle path, a manifest name, a pass or a confirmation (368's record-format ruling: five
 #: rounds of "Ordinary English, dismissed" lists and bundle paths were all marked NEW)
 _NOT_FINDING = re.compile(r"^(?:`?/tmp/l7r-check\S*`?\s*$|`?\S*MANIFEST\.md`?\s*$|(?:\*\*)?(?:ok|pass|passes|clean|confirmed|dismissed|ordinary english)\b)", re.I)
@@ -95,6 +98,9 @@ def _repeats(f: str, earlier: list[str]) -> bool:
         ew = _content(e)
         overlap = len(words & ew) / max(1, len(words | ew))
         if pages & set(_PAGE_REF.findall(e)) and (codes & set(_CODE.findall(e)) or overlap >= 0.35):
+            return True
+        # a modal guideline cited by both, with a good share of the same content words: a pop-up's finding names no page
+        if set(_MRULE.findall(f)) & set(_MRULE.findall(e)) and overlap >= 0.25:
             return True
     return False
 
