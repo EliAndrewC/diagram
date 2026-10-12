@@ -384,7 +384,7 @@ time at which they come due before landing.
 - **FR-042 A reopened feature's hour counts from its reopening.** FR-039's hour starts at the feature's start in the clone, and
   for a feature reopened to be amended that start is now the most recent reopening: the time of the latest commit at which the
   feature's state, as speckit-todo derives it, went from closed (a status line opening with `Done`, `Superseded` or `Withdrawn`,
-  or every task ticked - 222 specs here close by ticks alone) to open. Before it, the feature's first event in the clone, as
+  or every task ticked - most specs here close by ticks alone, their status lines never saying Done) to open. Before it, the feature's first event in the clone, as
   amendment 9 has it. So a reopened feature's first glyph check comes due an hour after the reopening, not from the feature's
   first opening.
 
