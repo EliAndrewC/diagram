@@ -409,6 +409,30 @@ def round_counter(root: Path, unit: str) -> list[str]:
     return [f"## The round counter\n\nepoch: {when} (the feature's tasks.md last landed on origin/main). Rounds counted after it: {len(live)} of the {len(kept)} kept - {', '.join(live) or 'none'}.\n"]
 
 
+def red_gate_runs(root: Path, keep: int = 4) -> list[str]:
+    """A red-gate trigger's evidence (the round arbiter's tooling fix on red-gate@2026-10-12T13:55:48Z, feature 374 batch 10: its
+    bundle carried only the edit and dispatch cascade and hid what each gate failed on): the last `keep` red `make done` runs of
+    this tree's run log - when, at which commit, which phases failed and how many tests - and the tests pytest last saw fail
+    (`.pytest_cache/v/cache/lastfailed`, the latest run's names)."""
+    runs = []
+    for f in sorted((root / "dev" / "run-log").glob("*/*.json")):
+        try:
+            r = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if r.get("target") == "done" and str(r.get("result", "")).startswith("failed"):
+            runs.append(r)
+    lines = [f"- {r.get('utc', '?')} at {r.get('commit', '?')}: {r.get('result')}, {r.get('failed_tests', '?')} test(s) failed" for r in runs[-keep:]]
+    try:
+        last = sorted(json.loads((root / ".pytest_cache" / "v" / "cache" / "lastfailed").read_text(encoding="utf-8")))
+    except (OSError, ValueError):
+        last = []
+    return [
+        "## The red gates counted\n\n" + ("\n".join(lines) or "- (no red make done in the run log)") + "\n",
+        "## The tests pytest last saw fail\n\n" + ("\n".join(f"- {n}" for n in last[:20]) or "- (none recorded)") + "\n",
+    ]
+
+
 def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path:
     """The MANIFEST for `trigger`; raises `MissingRecord` where a round kept no reply or a reversal has no record, unless
     `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh)."""
@@ -448,6 +472,8 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
             parts += capped_round_cause(root, out, check, subject, files, float(rounds[-1].get("t") or 0.0))
     if trigger.startswith("round:") and unit:
         parts += round_counter(root, unit)
+    if trigger.startswith("red-gate@"):
+        parts += red_gate_runs(root)
     diff = ""
     if files:
         diff = _git(root, "log", "-p", "--format=--- %h %ad %s", "--date=iso", "-20", "--", *files) + _git(root, "diff", "--", *files)

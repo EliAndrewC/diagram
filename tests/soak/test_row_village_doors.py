@@ -12,6 +12,7 @@ import pytest
 from l7r.diagram import hamletgen as hg
 
 
+@pytest.mark.rolls_map
 @pytest.mark.parametrize(
     ("seed", "households", "archetype"),
     [
@@ -23,6 +24,7 @@ def test_a_row_farm_is_reached_at_its_door(seed: int, households: int, archetype
     hg.generate(hg.HamletSpec(name=f"Row-{archetype}-{seed}", seed=seed, households=households, field_archetype=archetype))
 
 
+@pytest.mark.rolls_map
 def test_the_ten_household_valley_seed_four_refuses_only_off_a_ford() -> None:
     """Still open (ranking row 774 waits on it): since wave 146 its farm is reached, and the roll refuses instead on a row street
     over the brook off a ford. Pinned to that refusal, so a return to a farm unreached turns this red - and so does its fix,
@@ -33,6 +35,7 @@ def test_the_ten_household_valley_seed_four_refuses_only_off_a_ford() -> None:
         hg.generate(hg.HamletSpec(name="Row-valley-4", seed=4, households=10))
 
 
+@pytest.mark.rolls_map
 def test_the_polder_seed_four_refuses_on_its_streets_needle() -> None:
     """A KNOWN REGRESSION, WAIVED (the round arbiter, ask:b10-w146-polder4-regression, accept): green at HEAD, refused since
     wave 146 - street 0's straight join ends on the road beside the junction street 1 passes through, a sliver no end-trim

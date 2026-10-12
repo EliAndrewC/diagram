@@ -1727,6 +1727,8 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@python3 scripts/gates/spec-lint.py --delta .
 	@: "(GUARD_EDIT_OK: feature 312 FR-020 - a footnote citing a source no one can wholly read stands only on a confirmed passage; ~0.3 s)"
 	@python3 scripts/gates/check-partial-citations.py .
+	@: "(GUARD_EDIT_OK: the round arbiter's tooling fix, red-gate@2026-10-12T16:26:46Z, feature 374 batch 10 - a test that rolls a map without the rolls_map marker failed the gate minutes in; the marker census runs here, ~2 s, whenever the delta touches tests/)"
+	@if [ -n "$$(git status --porcelain -- tests)" ] || ! git diff --quiet "$$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD)" -- tests; then L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov -p no:randomly tests/test_markers.py >/dev/null 2>&1 || { printf 'quick: a test that rolls a map lacks @pytest.mark.rolls_map (tests/test_markers.py):\n'; L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov tests/test_markers.py; exit 1; }; fi
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	: "(GUARD_EDIT_OK: the GM's ruling 2026-09-27 - and not tooling: the tooling tests that live OUTSIDE tests/tooling (five tests/tools modules) leave quick with the tree; see QUICK_TREE)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
