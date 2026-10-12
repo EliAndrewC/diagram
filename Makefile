@@ -672,7 +672,12 @@ fragment-move:  ## [docs] rename or renumber a question - every file of its stem
 # Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; procedure`
 # landed on main, because nothing at push time knew the guards had been edited.
 hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
-	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --absolute-git-dir); fail=""; n=0; skipped=0; \
+	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
+	: "(GUARD_EDIT_OK: 2026-10-12, the GM's hourly tooling review of the backlog session - THE FRESHNESS CACHES ARE THE CLONE'S, SHARED"; \
+	: " WITH ITS WORKTREES. They were kept in the worktree's own git dir, so make land-tooling's fresh worktree re-ran all 46 suites"; \
+	: " every time - 151 s at load 8.5, and 16.9 of the backlog session's 31 tool minutes in one hour went to 5 land-tooling runs."; \
+	: " Every entry is keyed by the CONTENT a suite or test file reads, so a worktree reuses only what passed on identical inputs;"; \
+	: " a suite the landed files or a moved main reach still runs.)"; \
 	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
 	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
