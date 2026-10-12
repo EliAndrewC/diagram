@@ -330,3 +330,5 @@ next wave is, so it is carried there.
   rename faithful; FR-021(b), running the longest guard suite in parallel parts, was not asked for (the GM asked that
   `hooks-test` skip what a change did not touch; this speeds up a suite that a change DID touch). Applied: FR-021 is the skip
   alone, SC-014 counts files only, plan D32 is removed; the parallel split goes to the GM as a proposal with R3's measurement.
+- spec-fidelity-verify, amendment 3 round 4 (2026-10-11): FAITHFUL - round 3's item resolved; plan D30's fuller account of
+  the derivation stays within FR-021.
