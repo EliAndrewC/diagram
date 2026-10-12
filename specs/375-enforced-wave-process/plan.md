@@ -330,23 +330,24 @@ and edits (343's 13 form-check bundles had none).
 
 ### Amendment 3 (FR-019, FR-020, FR-021)
 
-**D25 - `modal-form` first, held at the bundle (FR-019a).** `modal_bundle.bundle` refuses a `modal-research` or
-`modal-depiction` bundle (exit 3, before anything is copied) when the pop-up's `modal-form:<uid>` unit is owed now
-(`record_owed.units`) and not answered at its fingerprint (`record_owed.answered`). The refusal names
-`make modal-bundle KIND="<uid>" FOR=modal-form`. The escape is `FORM_FIRST_OK="<why>"` in the environment (make passes a
-command-line variable to its recipes); it needs two words or more, and the MANIFEST then carries a `form-first-escape: <why>`
-line. A pop-up owed no `modal-form` unit (only a page it names moved, or only its Depiction tab) is not held: the rule is
-read off the owed units, never off the check asked for. The hold sits at the bundle because every modal dispatch reads a
-bundle (`check-bundle-hooks.sh` refuses one without); no hook changes.
+**D25 - The order, held at the bundle (FR-019a).** `modal_owed.ORDER = ("modal-form", "modal-research",
+"modal-depiction")`, with the units each answers (`modal-research`: the three `modal-accuracy`/`-references`/`-gaps`).
+`modal_bundle.bundle` refuses a bundle (exit 3, before anything is copied) when a check EARLIER in the order has a unit on
+the pop-up that is owed now (`record_owed.units`) and not answered at its fingerprint (`record_owed.answered`); the refusal
+names the first such check's command, `make modal-bundle KIND="<uid>" FOR=<check>`. The escape is `FORM_FIRST_OK="<why>"`
+in the environment (make passes a command-line variable to its recipes); it needs two words or more, and the MANIFEST then
+carries a `form-first-escape: <why>` line. A check with nothing owed before it is not held (a pop-up owed only
+`modal-depiction`, a page its `Drawing:` names having moved): the rule is read off the owed units, never off the check asked
+for. The hold sits at the bundle because every modal dispatch reads a bundle (`check-bundle-hooks.sh` refuses one without);
+no hook changes.
 
-**D26 - Settling across checks (FR-019b, c).** `apply_edits.Round` fingerprints, before the blocks, the units of the reply's
-own checks (as today) AND the units it settles across: `modal-form`'s, when the reply's checks are `modal-research`'s three
-or `modal-depiction` (`record_owed.SETTLES_ACROSS`, a dict from a check to the checks it settles, read by `Round`). After
-the blocks, a unit of the reply's own checks settles as today (answered, or pending until `make record-checked`); a unit it
-settles across settles ONLY where its answer already stands at the words before the blocks (`record_owed.answered`) - never
-pending, because a `modal-form` answer recorded later would be an answer to words that check never read. Its result line
-says whose blocks settled it. A `modal-form` reply settles only its own unit (c): `SETTLES_ACROSS` has no `modal-form` key.
-Between `modal-research` and `modal-depiction` nothing settles (c).
+**D26 - Settling the checks before (FR-019b, c).** `apply_edits.Round` fingerprints, before the blocks, the units of the
+reply's own checks (as today) AND the units of every check EARLIER in `ORDER` than the replying one (`record_owed.earlier`,
+from `ORDER`; empty for a check outside it). After the blocks, a unit of the reply's own checks settles as today (answered,
+or pending until `make record-checked`); an earlier check's unit settles ONLY where its answer already stands at the words
+before the blocks (`record_owed.answered`) - never pending, because an answer recorded later would be an answer to words that
+check never read. Its result line says whose blocks settled it. A reply settles nothing of a check LATER in the order (c):
+`earlier("modal-form")` is empty, and `modal-research`'s blocks leave `modal-depiction` owed.
 
 **D27 - One parse per content (FR-020a, d).** `record_units.ParseCache`: a mapping from `sha256(file text [+ its
 originals])` to the parsed `Page`, notes triple (notes, cites, readings) or write-up words, held in memory for the run and on
