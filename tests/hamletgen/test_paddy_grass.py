@@ -54,3 +54,25 @@ def test_none_rolled_or_no_seat_is_recorded(monkeypatch) -> None:  # type: ignor
     monkeypatch.setattr(pg, "paddy_grass_hill", lambda plan: True)
     monkeypatch.setattr(s, "open_seat", lambda *a, **k: None)
     assert pg.lay_paddy_grass(s, _plan()) is None and s.M["meta"]["paddy_grass_hill"] == "no seat"
+
+
+def test_the_grass_hill_keeps_its_gap_off_the_plot_on_a_turned_fall(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """impl-drift on wave 148: on a diagonal fall an unturned square's corner reaches further along the fall than its half side,
+    and the seat search may slide it - the gap is held as seated, and a seat that falls short is passed over."""
+    s = Settlement(W=600, H=600, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["fields"] = [{"plot_rings": [_shifted(280, 300)]}]
+    k = 2 ** -0.5
+    plan = types.SimpleNamespace(flood_ground=False, spec=types.SimpleNamespace(seed=1), fall=(k, k))
+    square = pg.seat_paddy_grass(s, plan)
+    assert square is not None and pg.clear_of_plot(square, _shifted(280, 300), pg.GRASS_GAP_FT)
+    monkeypatch.setattr(s, "open_seat", lambda *a, **k: (300.0, 290.0))  # slid onto the plot
+    assert pg.seat_paddy_grass(s, plan) is None
+
+
+def test_a_square_slid_off_the_paddy_s_flank_is_not_above_it() -> None:
+    """impl-drift on wave 148: the gap is not enough - the square must stand upslope of its paddy, not beside it."""
+    square = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+    assert pg.above(square, 20.0, (0.0, 1.0), 6.0), "its lowest edge 10 above the plot's top"
+    assert not pg.above(square, 14.0, (0.0, 1.0), 6.0), "within the gap of the top"
+    assert not pg.above([(x + 0.0, y + 30.0) for x, y in square], 20.0, (0.0, 1.0), 6.0), "below the top - off the flank"

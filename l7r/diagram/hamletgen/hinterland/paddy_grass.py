@@ -67,7 +67,10 @@ def seat_paddy_grass(s: Settlement, plan: SitePlan) -> Poly | None:
 
     Research:
         about the paddy's own size - GUESS research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one plot's own area, the size a GUESS the page names
-        on the slope above it - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: upslope of the plot, against the fall"""
+        on the slope above it - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: upslope of the plot, against the fall
+        its shape - UNRESEARCHED: an axis-aligned square, not turned to the slope; no record gives a grass hill's shape
+        which paddy - UNRESEARCHED: the first of the field's top plots with room above it, not rolled; no record says which paddy kept one
+        off its paddy - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: at least `GRASS_GAP_FT` (6 ft) off the plot as seated (`clear_of_plot`), the bund and its cut strip kept bare"""
     fields = s.M.get("fields") or []
     plots = [p for f in fields for p in (f.get("plot_rings") or [])]  # each plot's ring (`plots` is its compact record)
     fx, fy = plan.fall
@@ -78,14 +81,36 @@ def seat_paddy_grass(s: Settlement, plan: SitePlan) -> Poly | None:
             continue
         top = min(float(p[0]) * fx + float(p[1]) * fy for p in plot)  # the plot's upslope edge, along the fall
         cx, cy = _centroid(plot)
-        lift = (cx * fx + cy * fy) - top + gap + side / 2.0  # from the plot's center to the square's, against the fall
+        h = side / 2.0
+        # ...to the square's center, its NEAREST CORNER along the fall `gap` above the plot's top: an unturned square's reach along
+        # a diagonal fall is h * (|fx| + |fy|), not h (impl-drift, feature 374 wave 148)
+        lift = (cx * fx + cy * fy) - top + gap + h * (abs(fx) + abs(fy))
         ax, ay = cx - fx * lift, cy - fy * lift
         seat = s.open_seat((ax - side, ay - side, ax + side, ay + side), side, side)
-        if seat is not None:
-            x, y = seat
-            h = side / 2.0
-            return [(x - h, y - h), (x + h, y - h), (x + h, y + h), (x - h, y + h)]
+        if seat is None:
+            continue
+        x, y = seat
+        square: Poly = [(x - h, y - h), (x + h, y - h), (x + h, y + h), (x - h, y + h)]
+        if clear_of_plot(square, plot, gap) and above(square, top, (fx, fy), gap):  # ...held as seated: the seat search may slide it
+            return square
     return None
+
+
+def above(square: Sequence[Pt], top: float, fall: Pt, gap: float) -> bool:
+    """Does all of `square` stand upslope of a plot whose top is `top` along `fall`, by at least `gap` - above its paddy, not off its
+    flank (the seat search may slide a square sideways as well as down)?
+
+    Research: on the slope above it - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: above its paddy"""
+    return max(x * fall[0] + y * fall[1] for x, y in square) <= top - gap + 1e-6
+
+
+def clear_of_plot(square: Sequence[Pt], plot: Sequence[Sequence[float]], gap: float) -> bool:
+    """Does `square` stand at least `gap` off `plot` (polygon distance)?
+
+    Research: off its paddy - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: the bund and its cut strip kept bare"""
+    from shapely.geometry import Polygon  # noqa: PLC0415
+
+    return bool(Polygon(square).distance(Polygon([(float(p[0]), float(p[1])) for p in plot])) >= gap - 1e-6)
 
 
 def lay_paddy_grass(s: Settlement, plan: SitePlan) -> Poly | None:

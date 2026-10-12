@@ -310,8 +310,7 @@ class GroundCoverMixin:
         # and these lists do not change while a region scatters
         # INDEXED (2026-08-04): boxing alone dropped the cost per keep-out but still VISITED every
         # one per scatter point - 948k boxed_hit calls iterating 25M items on Kikuta, whose gen was
-        # still 81% ground cover. The grids narrow each point to its own cell; the exact tests below
-        # are the same ones, run on what `near` returns.
+        # still 81% ground cover. The grids narrow each point to its own cell; the exact tests are the same, run on `near`'s.
         # CROP MARGIN (see _CROP_MARGIN_FT): the crop keep-out is every PADDY (field_polys) plus
         # every DRY PLOT (dry_polys - block_polys also carries them, but reading the crop registry
         # directly is what the grove/lane skips do, and it survives a gen that registers only one),
@@ -394,13 +393,14 @@ class GroundCoverMixin:
             scrub ground color - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass and brush drawn as one repeated block over the bare ground, no solid fill and no outline (`tiles.cover_path`: the pattern alone)
             grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the scrub past the grove or the floodplain meadow (`pasture`), from the land; the small grass hill above one paddy (`paddy_grass`) as open grass
             scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: a few scraggly pines - one throw to 6,000 sq ft, at least two throws (a throw the keep-outs refuse seats none), none on pasture
-            off the ponds' open water - UNRESEARCHED: no scrub, pine or coppice crown on a pond or a crescent pond (one water test, `_sparse`), the grass bare 2 ft past a crescent pond's rim
+            off the ponds' open water - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: a map drawing convention, nothing drawn on open water (one water test, `_sparse`); the grass bare 2 ft past a crescent pond's rim is UNRESEARCHED
             marsh edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass thins into the reeds, brush and pines stop at the marsh
             wood edge - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no brush or pine in a wood, grass only WOOD_FRINGE_FT under its edge, thinning inward (its inner half at `WOOD_FRINGE_THIN_KEEP`)
-            crowns and pines clear of the crops - UNRESEARCHED: a crown held its largest radius, a pine its 14 bs tip, off every field, so no canopy or pine overhangs one
+            crowns and pines clear of the crops - research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html: they stand back as far as their crowns spread, so nothing leans over a crop - a crown its largest radius, a pine its 14 bs tip
             a scrub pine's reach - UNRESEARCHED: `PINE_SPREAD_BS` (4.6 ft) as the pine's crown radius in the sun test
             edge feather - CONVENTION: the scatter thins over 42 bs at the parcel's edge
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
+            a scrub pine's height - UNRESEARCHED: 9 to 14 ft (`random.uniform(9, 14) * bs`); no page gives a scrub pine's height
             claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
             woodland no-build - UNRESEARCHED: a woodland parcel made no-build ground
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
