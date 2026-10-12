@@ -156,4 +156,10 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    code = main(sys.argv[1:])
+    # the claims are read through their cache (feature 375 amendment 3); the command's heap dies with it, and freezing it skips
+    # the final collection's walk of the engine parse - 2 s of a cold run, measured 2026-10-11, as in claims.py's command
+    import gc
+
+    gc.freeze()
+    sys.exit(code)
