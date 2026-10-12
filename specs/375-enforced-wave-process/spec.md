@@ -2,9 +2,11 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-12 - amendment 9 landed: spec FAITHFUL (round 3), plan CLEAR (round 3); glyph-check due on the feature's hour, all owed units together, or at landing (SC-032, SC-033 tested; SC-034 carried to 374); amendments 1-8 Done
+**Status**: Reopened 2026-10-12 for amendment 10 (a reopened feature's glyph hour counts from its reopening; amendments 1-9 Done 2026-10-11/12)
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
+
+**Amendment 10 approved**: the GM, 2026-10-12, "can we make it not fire for reopened features, or count from the point when they are most recently amended and re-opened?"
 
 **Amendment 9 approved**: the GM, 2026-10-12, "Here's what I think we should do for `glyph-check`: we make it something which is run periodically rather than every time a map changes."
 
@@ -374,6 +376,18 @@ amendment builds what puts each before him with the data.
   owed on their occasions as today.
 
 
+### Amendment 10 (`request.md`, Amendment 10)
+
+The second of the GM's two ways: it keeps a reopened feature on the hour, where "not fire" would leave its new glyph units no
+time at which they come due before landing.
+
+- **FR-042 A reopened feature's hour counts from its reopening.** FR-039's hour starts at the feature's start in the clone, and
+  for a feature reopened to be amended that start is now the most recent reopening: the time of the latest commit that turned
+  its `spec.md` status line from closed (`Done`, `Superseded`, `Withdrawn` - speckit-todo's closing words) to open. Before it,
+  the feature's first event in the clone, as amendment 9 has it. So a reopened feature's first glyph check comes due an hour
+  after the reopening, never at once.
+
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -502,10 +516,13 @@ amendment builds what puts each before him with the data.
 - **SC-034** (FR-041) A settlement-review, building-review, size-audit or fix-check unit is due as soon as it is owed, as today.
   Measured after: glyph-check passes per hour of a long feature, from the ledger and the event log, against R8's figures.
   `Carried: SC-034 -> 374 sc034-375-a9-glyph-per-hour` (374, the open long feature with map work, measures it).
+- **SC-035** (FR-042) In a fixture feature whose event log began days ago and whose spec was closed and then reopened ten minutes
+  ago, a glyph unit owed now is not due until an hour after the reopening; with no reopening in its history the first event
+  starts the hour, as before. The test fails on today's code.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027. Amendment 8 closes on SC-028 to SC-031. Amendment 9 closes on SC-032 to SC-034.
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027. Amendment 8 closes on SC-028 to SC-031. Amendment 9 closes on SC-032 to SC-034. Amendment 10 closes on SC-035.
 
 ## What it does not cover
 

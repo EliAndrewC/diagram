@@ -165,3 +165,10 @@ After amendment 8 landed, the session put the review checks' yield to the GM (`m
 >
 > Here's what I think we should do for `glyph-check`: we make it something which is run periodically rather than every time a map changes.  For example, we could make it so that every feature which takes longer than 1 hour to implement is "due" to run it once after every hour and the address findings all at once.
 
+## Amendment 10 (2026-10-12, the same later session)
+
+Amendment 9's landing note told the GM that a reopened feature's glyph clock starts from when the feature was first opened, so
+its first glyph check comes due at once. The GM:
+
+> I don't like this detail, can we make it not fire for reopened features, or count from the point when they are most recently amended and re-opened?
+
