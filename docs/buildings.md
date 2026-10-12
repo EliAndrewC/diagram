@@ -398,7 +398,7 @@ The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration
 <!-- Research: clear gateways - UNRESEARCHED: nothing stands in a passage -->
 <!-- Research: gate hierarchy - UNRESEARCHED: the ceremonial main gate widest -->
 <!-- Research: structures clear of wall ink - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html -->
-<!-- Research: maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the checklist's maids' room under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of its maids and servants in the house; that the maids slept there a GUESS -->
+<!-- Research: maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: the checklist's maids' room under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of its maids and servants in the house; that the maids slept there a GUESS -->
 <!-- Research: privies and rear strip - research/questions/0101-privies-setchin.drawing.html: the house's two privies built into it (the family's place a GUESS), ~3-4 a compound (a GUESS); the rear strip filled, a GUESS on research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html -->
 <!-- Research: fire-water tubs - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12, kitchen 2, none at the kura -->
 <!-- Research: practice ground sizing - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: ~90-135 sq ft per drilling samurai -->

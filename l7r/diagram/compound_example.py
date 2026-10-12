@@ -84,7 +84,7 @@ def county_magistracy_program() -> CompoundProgram:
         postern places - GUESS: the kitchen postern 50 ft down the west wall on the kitchen yard, the service gate 221 ft along the south wall at the cart yard's south end; where a compound's lesser gates stood is not recorded
         stables seat - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the stables on the street (south) wall beside the servants' row, as a long-house gate's passage had servants' quarters and a stable beside it
         cell door - UNRESEARCHED: toward the cell's west end, so its approach leaves the barracks' south dwelling the ground for its own door
-        maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the maids and kitchen hands under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of the maids and servants in the house; which servants slept there, and its 10 x 10 ft, GUESSES
+        maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: the maids and kitchen hands under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of the maids and servants in the house; which servants slept there, and its 10 x 10 ft, GUESSES
         barracks dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: the barracks divided into four dwellings of ~16.75 ft, a door each on its court face; four a GUESS in the 12-18 ft bays
     """
     # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
