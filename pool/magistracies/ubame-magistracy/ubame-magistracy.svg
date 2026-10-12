@@ -201,24 +201,25 @@
 
   <!-- Stables (SW) - a few-horse umaya: the magistrate's mount plus messenger horses -->
   <!-- Feature 374 wave 126: the stable as 0108's drawing page draws a warrior's (research/questions/0108-stables-umaya.drawing.html):
-       28 x 16 ft (84 x 48 px), three stalls one ken (~6 ft) wide on board floors, an earth-floored passage (kusa-no-ma)
-       6 ft deep before them, and the grooms' room (tozamurai), 10 ft, at the end - the stall's 10 ft depth and the two
-       or three horses are GUESSES; it drew three ~9.5 ft stalls with neither the passage nor the grooms' room. -->
+       three bays long, 18 x 24 ft (54 x 72 px) - three stalls one ken (~6 ft) wide on board floors, the earth-floored
+       passage (kusa-no-ma) before them running the building's length, and the grooms' matted room (tozamurai) across the
+       passage from them; the door at the east end into the passage (a gable-entered stable, 0108's Shomei). The stalls'
+       and the room's 9 ft depths and the two or three horses are GUESSES. It drew three ~9.5 ft stalls before. -->
   <g data-kind="stables">
-    <rect x="212" y="690" width="84" height="48" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <rect x="242.75" y="690.75" width="52.5" height="16.5" fill="#B8A07A"/>
-    <line x1="242" y1="690" x2="242" y2="738" stroke="#6B4F2A" stroke-width="1"/>
-    <line x1="260" y1="708" x2="260" y2="738" stroke="#6B4F2A" stroke-width="1"/>
-    <line x1="278" y1="708" x2="278" y2="738" stroke="#6B4F2A" stroke-width="1"/>
-    <line x1="242" y1="708" x2="296" y2="708" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
-    <rect x="250" y="690" width="16" height="4" fill="#4A3318" data-kind="door"/>
+    <rect x="212" y="666" width="54" height="72" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="212.75" y="693.75" width="52.5" height="16.5" fill="#B8A07A"/>
+    <line x1="230" y1="666" x2="230" y2="693" stroke="#6B4F2A" stroke-width="1"/>
+    <line x1="248" y1="666" x2="248" y2="693" stroke="#6B4F2A" stroke-width="1"/>
+    <line x1="212" y1="693" x2="266" y2="693" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <line x1="212" y1="711" x2="266" y2="711" stroke="#6B4F2A" stroke-width="1"/>
+    <rect x="262" y="696" width="4" height="12" fill="#4A3318" data-kind="door"/>
     <text font-size="11" font-weight="bold" fill="#3A2E1C">stables</text>
   </g>
 
   <!-- Kennel - Koharu's boar hounds, abutting the stables. The hunt that put him under
        Shoda's axe; the dogs have not been out since. -->
   <g data-kind="kennel">
-    <rect x="300" y="706" width="32" height="32" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="266" y="706" width="32" height="32" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <text font-size="8" font-weight="bold" fill="#3A2E1C">kennel</text>
   </g>
 
@@ -347,13 +348,15 @@
     <!-- feature 374 wave 125: 45 x 24 ft (it was 45 x 32) - 0097's drawing page draws a barracks 12 to 24 ft deep, never a
          square or squat block (research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html) -->
     <rect x="714" y="460" width="134" height="72" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <!-- the duty watch's three bays under one door are divided by SLIDING PARTITIONS, dashed (feature 335 building review
-         round 2: walled bays behind one shared door are never drawn - research 0097; the common-room form is 0097's for
-         servants living together, taken for the watch as a GUESS; a door per bay would re-mass the block, whose middle bay
-         has no free outer face) -->
-    <line x1="759" y1="460" x2="759" y2="532" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="804" y1="460" x2="804" y2="532" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <rect x="840" y="484" width="8" height="24" fill="#4A3318" data-kind="door"/>
+    <!-- the duty watch's three DWELLINGS, a few men each, walled apart with a door of its own on the south face, onto the
+         8 ft way before the family rowhouse (feature 374 wave 125: 0097's drawing page divides a barracks into dwellings
+         and gives the common room behind one door to the servants; the three bays sat behind one door, parted by sliding
+         partitions, while the block was 32 ft deep and its middle bay had no free face) -->
+    <line x1="759" y1="460" x2="759" y2="532" stroke="#6B4F2A" stroke-width="1"/>
+    <line x1="804" y1="460" x2="804" y2="532" stroke="#6B4F2A" stroke-width="1"/>
+    <rect x="728" y="528" width="16" height="4" fill="#4A3318" data-kind="door"/>
+    <rect x="773" y="528" width="16" height="4" fill="#4A3318" data-kind="door"/>
+    <rect x="818" y="528" width="16" height="4" fill="#4A3318" data-kind="door"/>
     <text font-size="11" font-weight="bold" fill="#3A2E1C">barracks</text>
   </g>
 
@@ -953,7 +956,7 @@
     <circle cx="966" cy="291.5" r="3.8"/>
     <circle cx="352.5" cy="532" r="3.8"/>
     <circle cx="852" cy="610" r="3.8"/>
-    <circle cx="855.5" cy="515" r="3.8"/>
+    <circle cx="806" cy="538" r="3.8"/>
     <circle cx="655.5" cy="714" r="3.8"/>
     <circle cx="276" cy="684" r="3.8"/>
     <circle cx="250" cy="662" r="3.8"/>

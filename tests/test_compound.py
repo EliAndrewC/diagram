@@ -984,11 +984,13 @@ def test_a_servants_privy_serves_the_stables_only_when_it_stands_near_them() -> 
 
 
 def test_a_stable_draws_its_passage_grooms_room_and_stalls_on_any_wall() -> None:
-    """Feature 374 wave 126: the stable's inner form, as 0108's drawing page draws a warrior's, on whichever wall it hugs."""
-    south = c.Placed(_b("stables", 28.0, 16.0, "outer", "S", feature="stables"), 10.0, 100.0)
+    """Feature 374 wave 126: the stable's inner form, as 0108's drawing page draws a warrior's - three bays along its court
+    face; in its depth the grooms' room, the passage running its length, the stalls at the back - on whichever wall."""
+    south = c.Placed(_b("stables", 18.0, 24.0, "outer", "S", feature="stables"), 10.0, 100.0)
     passage, walls = cp._stable_parts(south)
-    assert passage == (20.0, 100.0, 38.0, 106.0)  # 6 ft deep along its court (north) face, beside the 10 ft grooms' room
-    assert [w[0] for w in walls[:3]] == [20.0, 26.0, 32.0] and walls[-1][4] is True  # the room's wall, two stall walls, the passage's dashed edge
-    east = c.Placed(_b("stables", 16.0, 28.0, "outer", "E", feature="stables"), 100.0, 10.0)
+    assert passage == (10.0, 109.0, 28.0, 115.0)  # 6 ft deep, 9 ft in from the court (north) face, the room before it
+    assert [w[0] for w in walls[:2]] == [16.0, 22.0] and (walls[0][1], walls[0][3]) == (115.0, 124.0)  # the stalls' walls, passage to back
+    assert walls[-1][4] is True and walls[-2][4] is False  # the stall fronts dashed, the room's wall solid
+    east = c.Placed(_b("stables", 24.0, 18.0, "outer", "E", feature="stables"), 100.0, 10.0)
     passage, walls = cp._stable_parts(east)
-    assert passage == (100.0, 20.0, 106.0, 38.0) and [w[1] for w in walls[:3]] == [20.0, 26.0, 32.0]
+    assert passage == (109.0, 10.0, 115.0, 28.0) and [w[1] for w in walls[:2]] == [16.0, 22.0]

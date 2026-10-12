@@ -15,8 +15,8 @@ Its size went with the house it held: a district magistrate's house built in 179
 on grounds of about 0.8 acre.
 
 Guesses:
-- That the well, the family privy and any servants' range stood in the shady rear with the storehouses: no record places
-  them, so they are reasoned from the garden's place in the sunny south.
+- That the well and the family privy stood in the shady rear with the storehouses: no record places them, so they are
+  reasoned from the garden's place in the sunny south.
 - That the gate between the two courts was guarded: no record says so.
 
 Depiction: The plan always sets the inner court behind the office hall; for a

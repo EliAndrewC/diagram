@@ -10,10 +10,9 @@ How large the yard was is not recorded. It lay within the house's walled grounds
 of 1794 at Matsushiro ran to about a thousand tsubo (~0.8 acre), round a house of about 1,740 sq ft.
 
 Guesses:
-- That the household's service stood on the shady ground behind the house with the storehouses - its well, its family
-  privy and its servants' quarters: no account places a privy in a samurai house's grounds or a servants' range behind
-  the house (at Matsue the servants lived in the gate range, and at one Kakunodate house a well stood just inside the
-  gate), so this is reasoned from the garden's place in the sunny south.
+- That the household's service stood on the shady ground behind the house with the storehouses - its well and its
+  family privy: no account places a privy in a samurai house's grounds (at one Kakunodate house a well stood just inside
+  the gate), so this is reasoned from the garden's place in the sunny south.
 
 Depiction: The plan leaves the ground between the house and its storehouses open and names it, drawn as the court's own
 bare earth. It is never drawn as a wide empty band behind the house: like every open stretch of the compound, it is kept

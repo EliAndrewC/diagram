@@ -64,7 +64,7 @@ def ochiba_program() -> C.CompoundProgram:
         b("barracks", "service", 24.0, 33.0, "outer", "E", order=4, feature="barracks"),  # Ochiba's 24 x 33 ft (feature 335), 0097: never deeper than ~24 ft
         b("cell", "cell", 18.0, 15.0, "outer", "E", order=1, feature="cell"),
         b("gatehouse", "dark", 40.0, 14.0, "outer", "S", order=8, feature="gatehouse"),
-        b("stables", "service", 28.0, 16.0, "outer", "S", order=5, feature="stables", door_fracs=(0.75, 0.6, 0.9)),  # Ochiba's since feature 374 wave 126 (0108)
+        b("stables", "service", 18.0, 24.0, "outer", "S", order=5, feature="stables", door_face="E", door_fracs=(0.5,)),  # Ochiba's since feature 374 wave 126 (0108)
         # a room of the hall on the sheet; a mass here (feature 254). Plain wood, the palette's clerks' duty room (feature 294
         # B22 `palette_roles`: it was drawn in the service color)
         b("clerks' room", "plain", 28.0, 18.0, "outer", "W", order=3, feature="clerks' room"),

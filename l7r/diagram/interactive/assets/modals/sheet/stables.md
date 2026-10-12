@@ -16,12 +16,13 @@ Guesses:
 - How deep a stall is, and so its area: only a stall's width is recorded.
 - That the stable stays smaller than the barracks: no source says where a stable ranked among an office's buildings.
 
-Depiction: The plan draws the stable as a warrior's small stable: three stalls one ken (about 6 ft) wide on board floors,
-an earth-floored passage before them where the door opens, and the grooms' room at one end. It stands in a corner of the
+Depiction: The plan draws the stable as a warrior's small stable, three bays long: three stalls one ken (about 6 ft) wide
+at the back, the earth-floored passage before them running its length with the door at its end, and the grooms' room
+across the passage from them. It stands in a corner of the
 outer court, against the compound wall.
 
 Name: stables
 Covers: the stable building, its stall divisions and its label
 Sources: jaanus-umaya, kotobank-umaya, hikone-umaya-bunka, hikone-umaya-city
 Entry: research/questions/0108-stables-umaya.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0188-relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba.html
-Drawing: research/questions/0108-stables-umaya.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html
+Drawing: research/questions/0108-stables-umaya.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html

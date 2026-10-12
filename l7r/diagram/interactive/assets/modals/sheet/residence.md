@@ -15,10 +15,6 @@ A 150-koku district magistrate's house at Matsushiro had about 1,740 sq ft on gr
 thousand-koku samurai's house at Hagi ran somewhere between about 1,470 and 2,630 sq ft. Takayama's restored
 residence, for an intendant over a whole province, is about 6,400 sq ft. A samurai household's servants lived in, inside the master's grounds - at a large house in the ranges along the street, at the Takayama residence in rooms of its own. A household had to keep as many servants as its koku required; how many lived in a magistrate's house, family or servants, is not recorded.
 
-Guesses:
-- That any servants' range stood on the shady ground behind the
-  house, with the storehouse: one house's servants' hut stood outside its back door, and the rest is reasoned from the garden's place in the sunny south.
-
 Depiction: The plan sets the residence in an inner court behind the office hall, with a gate between the two courts - the
 Chinese county office's order, kept for every plan as a simplification, though at Takayama the residence stood beside the office. Where a plan draws a formal entrance, it is on the office hall, not on the house, the way to the house running on through the office as at Takayama; other plans draw none and bring a guest through a middle gate and along a walled garden path to the formal room's veranda. It draws the
 house either as one block under one roof or as two or three halls stepped back one behind the next, each joined to the

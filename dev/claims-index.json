@@ -1217,25 +1217,20 @@
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone": {
   "code": "a48d5ee3558a38c7",
-  "core": "cf960bbd80430094",
-  "date": "2026-10-11",
-  "note": "the prose gives the residence one privy (\"the residence privy attached to the house\"; the rear strip names only \"the attached family privy\"), but 0101's drawing page says \"Our maps give a residence two privies, the guests' and the family's\"; the prose and the claim should name both. Three or four by zone, by service walls near a gate, is in step",
+  "core": "71f6304f016600cd",
+  "date": "2026-10-12",
+  "note": "one privy to each part, 3-4, against service walls near a gate; 0101 records it as a guess",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
   "rests": [
-   "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
-   "0101-privies-setchin.drawing.html:721f2a29c982e0b4",
-   "0101-privies-setchin.drawing.html:8299420f832f4bd1",
-   "0101-privies-setchin.drawing.html:f2dbc20c5097bdd3"
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1"
   ],
-  "section": "807f47a1e17926f1",
-  "triage": "touched",
-  "triaged": "2026-10-12",
-  "verdict": "DRIFTED"
+  "section": "71f6304f016600cd",
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
   "code": "11bd32587fe08b18",
@@ -1264,9 +1259,9 @@
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
   "code": "810f386085867e6d",
-  "core": "0ab41672ec7df598",
-  "date": "2026-10-10",
-  "note": "the program's coverage band, its open court spine and its rule of closing up loose ground match the page.",
+  "core": "71f6304f016600cd",
+  "date": "2026-10-12",
+  "note": "jin'ya coverage band and an open court spine as the drawing page draws them",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
@@ -1274,14 +1269,11 @@
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:6b2deb010b88db75",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c63fb7818cf50fcb",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
-  "section": "807f47a1e17926f1",
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "section": "71f6304f016600cd",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
@@ -1424,35 +1416,25 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#rear service strip": {
-  "code": "c481f7c696b9a266",
-  "core": "cf960bbd80430094",
-  "date": "2026-10-11",
-  "note": "the procedure always puts \"the servants' nagaya\" in the shady north strip behind the residence. 0115 records several other places servants lived: \"long ranges along the street\", \"the front gate cut through one of them\" (the gate range) and \"under the main roof\" in a small house. A great house too kept \"the rooms of the maids and servants\" inside the house. Its summary puts servants \"in the range or row along its boundary ... or inside the house\". The only support for the rear is one chugen hut outside a back door (Miwa), and 0091's drawing page calls the rear placement a GUESS, not a deliberate departure. Fix one of two ways: make where the servants live a seeded knob among the forms 0115 records (gate or street range, under the main roof, rear range), or record the rear range as a DEVIATION on 0091's drawing page and label the claim DEVIATION. The storehouses, rear yard and attached privy are in step.",
+  "code": "2848951e6656adfb",
+  "core": "71f6304f016600cd",
+  "date": "2026-10-12",
+  "note": "the cited 0091 drawing page still has the rear band holding \"the servants' rowhouse\" (§149) and asks \"Why put the servants ... at the rear?\" (§150, §151), which contradicts \"never in the rear\"; the unit's own residence-kind \"why\" (table row `residence`) also still says \"any servants' range stood on the shady ground behind the house\"",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "e93dd5ad10bad432"
   },
-  "research": "fcb65d612223c620",
+  "research": "d876f9505625a3bc",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:3fbca2091d585e8c",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:6adb1f4ed30e77e9",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:0847d626d58b5561",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5960e566a4bd1d74",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5b10f481659ec3b8",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5d741be14a8de53e",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:75a2ed72bd40172c",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:90f6ef1941297876"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:37ef9d1324aefebc",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:64c368081f781507"
   ],
-  "section": "e61a337c47b72fb4",
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "section": "71f6304f016600cd",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#residence entrances": {
@@ -1539,14 +1521,12 @@
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court": {
   "code": "856d0d00e622b2eb",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "the page puts a jail in the walls but names no court",
+  "core": "71f6304f016600cd",
+  "date": "2026-10-12",
+  "note": "no cited block puts the stables, cell or granary in a court; 0090 puts only a jail inside the walls",
   "pages": {},
   "research": "",
-  "section": "807f47a1e17926f1",
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "section": "71f6304f016600cd",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#shrine smaller than the residence": {
@@ -1568,9 +1548,9 @@
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
   "code": "176f7f9f423e7dc0",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "on the grounds, households in rowhouses, or off-site, all attested",
+  "core": "71f6304f016600cd",
+  "date": "2026-10-12",
+  "note": "the forms attested: on the grounds (rural intendancy), family households in a row (Shibata), housed outside (Hatchobori)",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
   },
@@ -1578,27 +1558,22 @@
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.html:195b9029348abf0c",
    "0097-staff-rowhouses-and-barracks-nagaya.html:349de1c905cd3550",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:3c23e9e78fab7083",
    "0097-staff-rowhouses-and-barracks-nagaya.html:42fcb311ac220fa5",
    "0097-staff-rowhouses-and-barracks-nagaya.html:885233a681119793",
    "0097-staff-rowhouses-and-barracks-nagaya.html:a452c3a25fb046fd"
   ],
-  "section": "e61a337c47b72fb4",
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "section": "71f6304f016600cd",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staffing anchors": {
   "code": "019c542057a0657d",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "the claim names the GM's ruling",
+  "core": "71f6304f016600cd",
+  "date": "2026-10-12",
+  "note": "the GM's campaign-note figures, ruling named",
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "e61a337c47b72fb4",
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "section": "71f6304f016600cd",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tenure character knob": {
@@ -1694,22 +1669,20 @@
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wall display": {
   "code": "f4644604343673e3",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "the pages are silent",
+  "core": "71f6304f016600cd",
+  "date": "2026-10-12",
+  "note": "no cited page speaks to it",
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "807f47a1e17926f1",
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "section": "71f6304f016600cd",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
   "code": "bc6b6ca1718d27cd",
-  "core": "0564c190350b66a9",
-  "date": "2026-10-10",
-  "note": "wall and main gate; gate range as at Omori and Kaibara",
+  "core": "71f6304f016600cd",
+  "date": "2026-10-12",
+  "note": "the claim names the gate range form (Omori, Kaibara), but the unit's gatehouse kind is \"a gatehouse of its own, about 40 ft\", sized off Takayama's gatekeepers' house, and the example draws a freestanding 18 x 12 ft gatehouse beside the gate. Both forms are attested, so the sheet should roll between them or the claim should name the form it actually draws",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "bf4be4c22d11e91f",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
@@ -1719,12 +1692,11 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
    "0097-staff-rowhouses-and-barracks-nagaya.html:21b1183d8cab06e5",
    "0097-staff-rowhouses-and-barracks-nagaya.html:79b867ffa7ca309a",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:a29a90d662b98d5d"
+   "0097-staff-rowhouses-and-barracks-nagaya.html:a29a90d662b98d5d",
+   "0097-staff-rowhouses-and-barracks-nagaya.html:cc71c79235f31e3e"
   ],
-  "section": "e61a337c47b72fb4",
-  "triage": "touched",
-  "triaged": "2026-10-12",
-  "verdict": "IN-STEP"
+  "section": "71f6304f016600cd",
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wells by use": {
   "code": "75de2f763360d38f",
@@ -2202,34 +2174,34 @@
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#perimeter-first placement order": {
   "code": "67f4db51343a2615",
-  "core": "a9243672fea7539a",
-  "date": "2026-10-08",
-  "note": "placer ordering, no page bears on it",
+  "core": "0f0f8ec6ba088d70",
+  "date": "2026-10-12",
+  "note": "placer ordering, no page speaks to it",
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "2cb5aa094943faa7",
-  "triage": "touched",
-  "triaged": "2026-10-10",
+  "section": "0f0f8ec6ba088d70",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#second rank": {
-  "code": "c558db0a2e3eb310",
-  "core": "a9243672fea7539a",
-  "date": "2026-10-08",
-  "note": "0115 puts servants in street-front ranges or under the main roof, and finds no rank of servants' dwellings; placing them behind the residence is 0091's GUESS and should cite it as such",
+  "code": "7863381a46ebeba2",
+  "core": "0f0f8ec6ba088d70",
+  "date": "2026-10-12",
+  "note": "the rule matches 0091 §152, but the cited 0091 drawing §149-150 still puts \"the servants' rowhouse\" in the rear band, and the section's placer paragraph still praises the Ochiba round-trip for \"servants as a rear rank\"",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "e93dd5ad10bad432"
   },
-  "research": "56857267abb1042e",
+  "research": "2ffcc979aa1fa6f7",
   "rests": [
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5b10f481659ec3b8",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:3fbca2091d585e8c",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:37ef9d1324aefebc",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:64c368081f781507"
   ],
-  "section": "2cb5aa094943faa7",
-  "triaged": "2026-10-10",
+  "section": "0f0f8ec6ba088d70",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Compound programs#catalog pointer": {
@@ -2980,23 +2952,18 @@
  },
  "docs/buildings.md::Latrines and the rear service strip#rear strip the service zone": {
   "code": "f875cb85dcde7a2f",
-  "core": "70ccd133534c2b95",
-  "date": "2026-10-10",
-  "note": "the formal garden on the south is attested, and the drawing page records the shady north band as the service strip, a GUESS reasoned from where the garden stood",
+  "core": "16d2da828ea4ce6a",
+  "date": "2026-10-12",
+  "note": "garden on the sunny south, service on the shady rear, recorded as a guess",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "9bd3bd7d723bedfc"
   },
   "research": "599c1caf9eb1593b",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:30589ae873214073",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:5f6b53f63bb73ef0",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:9ad51c4d62413a83"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:5f6b53f63bb73ef0"
   ],
-  "section": "70ccd133534c2b95",
-  "triage": "touched",
-  "triaged": "2026-10-10",
+  "section": "16d2da828ea4ce6a",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#residence privy attached": {
@@ -3018,29 +2985,28 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip": {
-  "code": "e63b32b9c952aa96",
-  "core": "70ccd133534c2b95",
-  "date": "2026-10-10",
-  "note": "the section puts the servants' nagaya in the rear (north) service strip, \"behind the residence\", but 0115 finds the ranges stood along the street, with the front gate cut through one (\"the buildings along the street were long ranges (nagaya) in which the servants lived\"); a smaller house kept its few servants under the main roof. No page puts a servants' range behind the house. The \"~10 servants\" figure is not in 0115 either (§59 says no page gives the stipend below which a house had no range). Either move the servants' quarters to the street or gate range (or under the main roof), or relabel the rear placement and the count as DEVIATION or GUESS.",
+  "code": "a3121e68edabf3d4",
+  "core": "16d2da828ea4ce6a",
+  "date": "2026-10-12",
+  "note": "a large household's servants in a range on its street edge, a small household's under the main roof, the range ~15 ft a guess",
   "pages": {
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "e93dd5ad10bad432",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
   },
-  "research": "56857267abb1042e",
+  "research": "dea23d3ed538354a",
   "rests": [
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:0549a16a13e90b82",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:1a319307e30bcdc6",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:37ef9d1324aefebc",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:64c368081f781507",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:b87e6b2c818dfb1a",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:0847d626d58b5561",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5960e566a4bd1d74",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5b10f481659ec3b8",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5d741be14a8de53e",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:75a2ed72bd40172c",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:763cb30a671333a1",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8afa91cdfb3579ae",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:90f6ef1941297876"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1"
   ],
-  "section": "70ccd133534c2b95",
-  "verdict": "DRIFTED"
+  "section": "16d2da828ea4ce6a",
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#storehouses in the rear strip": {
   "code": "3135329515005d98",
@@ -3078,34 +3044,35 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks": {
-  "code": "343995effd864ede",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "the drawing page says the barracks is \"never a square or squat block\", \"drawn 12 to 24 ft deep\"; the claim's 45 x 34 ft (34 ft deep) and ~27-53 ft long make a squat block. Depth should be at most 24 ft and length set by bays of 12-18 ft",
+  "code": "e9553e4d736fff15",
+  "core": "34da504d027f847c",
+  "date": "2026-10-12",
+  "note": "the text lets the barracks be \"one large common room for servants\"; 0097's drawing page divides the barracks into dwellings and gives the common room to the servants' quarters",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "d4c70185f30440ae",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
   },
   "research": "e843cbfa61680fd4",
   "rests": [
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:5af10000ff095a2e",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213",
    "0097-staff-rowhouses-and-barracks-nagaya.html:38677c449de74f4d",
    "0097-staff-rowhouses-and-barracks-nagaya.html:b10862c89c3c5c24"
   ],
-  "section": "050f0bde3a602b79",
+  "section": "34da504d027f847c",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men": {
   "code": "26311cf9995d3162",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "recorded as this project's guess",
+  "core": "34da504d027f847c",
+  "date": "2026-10-12",
+  "note": "ten to twenty is the project's own figure, recorded as a guess",
   "pages": {},
   "research": "",
-  "section": "050f0bde3a602b79",
-  "triage": "touched",
+  "section": "34da504d027f847c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
@@ -3148,14 +3115,13 @@
  },
  "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks": {
   "code": "fc7d9e87620b8c68",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "no page ranks them",
+  "core": "34da504d027f847c",
+  "date": "2026-10-12",
+  "note": "no cited page ranks the cell",
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "050f0bde3a602b79",
-  "triage": "touched",
+  "section": "34da504d027f847c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": {
@@ -3522,9 +3488,9 @@
  },
  "docs/buildings.md::Outer court (administrative / public)#stable below barracks": {
   "code": "01629f632784cf2b",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "recorded guess",
+  "core": "34da504d027f847c",
+  "date": "2026-10-12",
+  "note": "the drawing page records it as a guess",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
@@ -3532,15 +3498,14 @@
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca"
   ],
-  "section": "050f0bde3a602b79",
-  "triage": "touched",
+  "section": "34da504d027f847c",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters": {
-  "code": "2c58d769370287c9",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "the drawing page says our maps draw the stable \"with quarters in it for the grooms and an earth-floored passage before the stalls\", and the research attests both. The sheets and the procedure leave both out; either draw them or record the omission as a DEVIATION on 0108.drawing",
+  "code": "6ab1dc7d5b295079",
+  "core": "34da504d027f847c",
+  "date": "2026-10-12",
+  "note": "an earth passage and a grooms' room in the stable",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
@@ -3548,14 +3513,14 @@
   "rests": [
    "0108-stables-umaya.drawing.html:bfffc30811fc7968"
   ],
-  "section": "050f0bde3a602b79",
-  "verdict": "DRIFTED"
+  "section": "34da504d027f847c",
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable stall width": {
-  "code": "4e3a6c3915a7af5b",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "the drawing page has stalls \"about one ken (~6 ft) wide\", but the sheets draw ~9.3-9.7 ft. Stalls should be ~6 ft, or the departure recorded as a DEVIATION",
+  "code": "00593a70b1207d81",
+  "core": "34da504d027f847c",
+  "date": "2026-10-12",
+  "note": "one ken (~6 ft), 18 px",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
@@ -3563,24 +3528,28 @@
   "rests": [
    "0108-stables-umaya.drawing.html:219e638987c06796"
   ],
-  "section": "050f0bde3a602b79",
-  "verdict": "DRIFTED"
+  "section": "34da504d027f847c",
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stables": {
-  "code": "d573f3e9129e8703",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-10",
-  "note": "a small stable was \"three bays long\" with stalls \"one bay wide\", so 28-32 ft for 3 stalls is beyond what the page finds. The 2-4 horse count is unattested (\"No page we read says\"), so the count should be a GUESS citing 0108.drawing",
+  "code": "d1bae918345b2268",
+  "core": "34da504d027f847c",
+  "date": "2026-10-12",
+  "note": "a small warrior's stable is \"three bays long\" of one-bay stalls (~18 ft), the kusa-no-ma \"running the length of the building, and the tozamurai across it from them\"; the doc puts the grooms' room at one end, taking the rest of a 28-32 ft length; no cited block gives 28-32 x 16-22 ft",
   "pages": {
+   "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95",
    "0108-stables-umaya.html": "e28bb721c804f4bf"
   },
-  "research": "f6f01652a6a060e2",
+  "research": "c31147aaa37b5dd2",
   "rests": [
+   "0108-stables-umaya.drawing.html:219e638987c06796",
+   "0108-stables-umaya.drawing.html:bfffc30811fc7968",
    "0108-stables-umaya.html:41dd4a78c52512c9",
    "0108-stables-umaya.html:593523e7ce195b4d",
-   "0108-stables-umaya.html:e24e1c344ed689f1"
+   "0108-stables-umaya.html:5aa268c4e9fc2d67",
+   "0108-stables-umaya.html:77be2a6a5f39b548"
   ],
-  "section": "050f0bde3a602b79",
+  "section": "34da504d027f847c",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark": {
@@ -4760,6 +4729,214 @@
   "note": "plumbing, no map decision",
   "research": "",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#barracks size": {
+  "code": "d7aa4fd16d631cb9",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "the claim is stale, not the code: the code draws 24 x 67 ft; the claim's \"45 x 34 ft, 34 ft deep\" is outside the 12-24 ft depth",
+  "pages": {
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "d4c70185f30440ae"
+  },
+  "research": "0d500ef8b8e78f01",
+  "rests": [
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:2e2752bf19177748",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#cell 12 x 10 ft on the south wall by the service gate": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "cell 12 x 10 ft on the south wall by the service gate",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#detached guest house 36 x 36 ft": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "detached guest house 36 x 36 ft",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#envelope 270 x 200 ft, divider at 90 ft": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "envelope 270 x 200 ft, divider at 90 ft",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#forecourt 55 x 31 ft inside the main gate": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "forecourt 55 x 31 ft inside the main gate",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#garden 124 x 46 ft before the house and the guest house": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "garden 124 x 46 ft before the house and the guest house",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#gatehouse 18 x 12 ft freestanding beside the gate": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "gatehouse 18 x 12 ft freestanding beside the gate",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#granary 60 x 30 ft on the east wall": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "granary 60 x 30 ft on the east wall",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#hearing court 80 x 32 ft centered on the office hall": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "hearing court 80 x 32 ft centered on the office hall",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#kitchen 20 x 18 ft as an ell on the house's west end, door west": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "kitchen 20 x 18 ft as an ell on the house's west end, door west",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#main gate passage 8 ft; west kitchen postern and south service gate 6 ft each, their places": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "main gate passage 8 ft; west kitchen postern and south service gate 6 ft each, their places",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#office hall 113 x 38 ft backing the divider, its rooms and a 30 x 10 ft dais on the south face": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "office hall 113 x 38 ft backing the divider, its rooms and a 30 x 10 ft dais on the south face",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#outer yard 58.5 x 33 ft and cart yard 37 x 25 ft before the service gate": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "outer yard 58.5 x 33 ft and cart yard 37 x 25 ft before the service gate",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#practice ground 33 x 42 ft beside the barracks": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "practice ground 33 x 42 ft beside the barracks",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#rear yard 37 x 22 ft on the north wall between the storehouses and the kitchen": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "rear yard 37 x 22 ft on the north wall between the storehouses and the kitchen",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#residence 56 x 24 ft, one block in two rows, reception at the east end, 4 ft veranda, 10 ft off the north wall": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "residence 56 x 24 ft, one block in two rows, reception at the east end, 4 ft veranda, 10 ft off the north wall",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#residence room sizes (inner rooms, family, lord's, reception)": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "residence room sizes (inner rooms, family, lord's, reception)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#senior retainers' long-house 24 x 82 ft on the west wall with the karo's 14 ft bay": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "senior retainers' long-house 24 x 82 ft on the west wall with the karo's 14 ft bay",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#servants' row 62 x 15 ft on the south (street) wall, shared by grooms and household": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "servants' row 62 x 15 ft on the south (street) wall, shared by grooms and household",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#shrine 18 x 14 ft on the inner court's east wall": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "shrine 18 x 14 ft on the inner court's east wall",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#tax archive on the divider beside the granary": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "tax archive on the divider beside the granary",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#tax archive size": {
+  "code": "b01b9d1e13a9b915",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "18 x 24 ft (432 sq ft), under the ~450 sq ft ceiling, shape a guess",
+  "pages": {
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
+  },
+  "research": "9fd73eb86394c59a",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:33510cb335904fa2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:aea6cd1ed8944b96",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fb5af5b7b0dcb397"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#two household storehouses 12 x 18 ft in the NW of the inner court": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "two household storehouses 12 x 18 ft in the NW of the inner court",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#vegetable garden 64 x 48 ft west of the house (site and size knobs)": {
+  "code": "91af548670586e02",
+  "core": "91af548670586e02",
+  "date": "2026-10-12",
+  "note": "vegetable garden 64 x 48 ft west of the house (site and size knobs)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/compound_model.py::NOTICE_BOARD_MAX_FT#board by the gate": {
   "code": "fcdc114704d6270b",
