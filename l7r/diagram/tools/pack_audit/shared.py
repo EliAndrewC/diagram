@@ -16,6 +16,7 @@ import xml.etree.ElementTree as ET
 from .checks import WALL_OVERLAP_MIN_PX, wall_openings
 from .grids import FTPX, coverage, perimeter_hugging_pct
 from .parse import COURT_FLOORS, WALL_STROKE, ParsedPlan, Rect
+from .tagged import marks
 
 # A structure may CONTAIN another (an engawa strip on a residence, a door, a room) and two blocks of
 # one building may join by a corridor that laps a few px into each - those are compositions, not
@@ -393,6 +394,53 @@ def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
             out.append(f"a compound wall stroke at svg({band.x:.0f},{band.y:.0f}) bounds the precinct - a village shrine is neither walled nor fenced")
             break
     return out
+
+
+HALL_MIN_SPAN_FT: float = 6.0  # an open stretch of the building shorter than this is a partition's gap, not the hall
+
+
+def _dwelling_spans(text: str, hall: Rect, along_x: bool) -> list[tuple[float, float]]:
+    """The spans, along the building's long axis, of every mark drawn as a part of its dwelling end (a group tagged
+    `data-part-of="hall and dwelling"`: the kitchen, the monk's rooms, their entry), clipped to the building."""
+    lo, hi = (hall.x, hall.x + hall.w) if along_x else (hall.y, hall.y + hall.h)
+    spans = []
+    for m in marks(text):
+        if len(m.lineage) < 2 or m.lineage[0] != "hall and dwelling" or m.kind == "hall and dwelling":
+            continue
+        a, b = (m.x, m.x2) if along_x else (m.y, m.y2)
+        if min(b, hi) > max(a, lo):
+            spans.append((max(a, lo), min(b, hi)))
+    return sorted(spans)
+
+
+def hall_at_an_end(text: str, plan: ParsedPlan) -> list[str]:
+    """Under one roof the villagers' hall is one END of the building and the monk's dwelling the other (0221's drawing page:
+    "the monk's dwelling is one end of the worship hall's own building"; research/questions/0221-the-country-monk-who-keeps-a-
+    village-shrine-and-their-dwelling-kuri.drawing.html). The hall is the longest stretch of the building no dwelling part
+    covers; the dwelling's parts on BOTH sides of it put the hall in the middle. A sheet drawing the two-buildings form
+    tags no part of the hall's building, and passes."""
+    hall = _one(plan, "hall")
+    if hall is None:
+        return []  # sanctuary_on_axis names a sheet that declares no hall
+    along_x = hall.w >= hall.h
+    spans = _dwelling_spans(text, hall, along_x)
+    if not spans:
+        return []
+    lo, hi = (hall.x, hall.x + hall.w) if along_x else (hall.y, hall.y + hall.h)
+    gaps, edge = [], lo
+    for a, b in spans:
+        if a > edge:
+            gaps.append((edge, a))
+        edge = max(edge, b)
+    if hi > edge:
+        gaps.append((edge, hi))
+    gaps = [g for g in gaps if g[1] - g[0] >= HALL_MIN_SPAN_FT * FTPX]
+    if not gaps:
+        return []
+    h0, h1 = max(gaps, key=lambda g: g[1] - g[0])
+    if any(b <= h0 for _, b in spans) and any(a >= h1 for a, _ in spans):
+        return [f"the hall stands between the dwelling's rooms (svg {h0:.0f}-{h1:.0f} of {lo:.0f}-{hi:.0f}) - under one roof it is one end of the building, the dwelling the other"]
+    return []
 
 
 # A TREE STANDS ON OPEN GROUND AND ON NOTHING ELSE (feature 257; the GM, 2026-09-20: "an automated check

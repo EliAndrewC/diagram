@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-12T06:28:45Z",
+  "target": "record-checked",
+  "commit": "4b4b95617",
+  "why": "record-format on record-format:0219: round-arbiter ruled accept on round 3 (triggers round:quote-check/record-format/translation-check q:0219@3): round 2's EDITs applied verbatim, nothing reversed; rows filed"
+}

@@ -9859,12 +9859,16 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#household shrine share": {
   "code": "7b6b8c3e939917e9",
   "core": "90598b6bce843199",
-  "date": "2026-10-03",
-  "note": "three to eight in 100",
+  "date": "2026-10-12",
+  "note": "the band (0.03, 0.08) is the page's \"three to eight in a hundred\", which the page records as the project's own choice above the one count of about one household in a hundred",
   "pages": {
-   "0219-household-shrines-yashikigami.drawing.html": "b8ac74762f0906b7"
+   "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
-  "research": "7c53a4a78744db0b",
+  "research": "bbd8ad39d56fdfde",
+  "rests": [
+   "0219-household-shrines-yashikigami.drawing.html:21c7e5d135c2fbb6",
+   "0219-household-shrines-yashikigami.drawing.html:6595021c1942d896"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#manure heap share": {
@@ -10259,15 +10263,19 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": {
   "code": "26da710472262d1e",
   "core": "77fb828f29aead20",
-  "date": "2026-10-03",
-  "note": "max(share, floor/n) lets a spec floor (and the half-up rounding) raise shrines past the cap 0219 drawing states: \"A map never has more shrines than three to eight homesteads in a hundred. The number drawn is capped at that share\"",
+  "date": "2026-10-12",
+  "note": "the code takes max(rolled share, floor/n), so the count is the share's count, raised to the spec's floor; this matches the per-hamlet rolled share and the rule that a hamlet whose description gives it a shrine draws one below the share",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
-   "0219-household-shrines-yashikigami.drawing.html": "b8ac74762f0906b7"
+   "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
-  "research": "8942a9bf1d0877db",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "research": "4b0518138b09a1f4",
+  "rests": [
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:ebc4e65aad857f7b",
+   "0219-household-shrines-yashikigami.drawing.html:6595021c1942d896"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_shares#shares rolled per hamlet": {
   "code": "12087c6141c73395",
@@ -47739,9 +47747,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or the label",
   "pages": {
-   "0219-household-shrines-yashikigami.drawing.html": "b8ac74762f0906b7"
+   "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
-  "research": "7c53a4a78744db0b",
+  "research": "bbd8ad39d56fdfde",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::SHRINE_CORNER_FT#shrine off the house corner": {
@@ -47952,13 +47961,14 @@
   "date": "2026-10-08",
   "note": "NW/NE/SW rolled at 45/35/20",
   "pages": {
-   "0219-household-shrines-yashikigami.drawing.html": "b8ac74762f0906b7"
+   "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
-  "research": "7c53a4a78744db0b",
+  "research": "bbd8ad39d56fdfde",
   "rests": [
    "0219-household-shrines-yashikigami.drawing.html:219399d6edd7b513",
    "0219-household-shrines-yashikigami.drawing.html:2f759729d0a736bd"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine off its corner": {
@@ -48306,9 +48316,10 @@
   "date": "2026-10-03",
   "note": "0219: 6 x 6 ft, larger than life",
   "pages": {
-   "0219-household-shrines-yashikigami.drawing.html": "b8ac74762f0906b7"
+   "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
-  "research": "7c53a4a78744db0b",
+  "research": "bbd8ad39d56fdfde",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_size#plumbing": {

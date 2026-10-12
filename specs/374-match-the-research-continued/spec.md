@@ -107,6 +107,8 @@ correct work is fixed, not escaped (an escape only for a genuinely exempt case, 
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
+| Doors keep their drawn sizes (the hand sheets' doors and the generated door, as 0117's drawing page records them); no door band in `types.json` | drawing convention | the GM, 2026-10-12: *"for the door band question, I am okay with what is currently implemented."* | `research/questions/0117-doorways-and-doors-to.drawing.html`; the ranking row `types.json#door band` (wave 122) |
+| A spec's household-shrine floor stands over 0219's share: the share is a countryside rate, so one shrine in a small hamlet is within it | historically accurate (the share read as a rate) | the GM, 2026-10-12: *"it is fine for a floor to take precedence over the cap. So if we say this hamlet has one shrine, then that is okay. And that's not even a deviation"* | `research/questions/0219-household-shrines-yashikigami.drawing.html`; `fixtures.py::fixture_quota` (wave 122) |
 
 (Each wave adds its rows, as 372's did.)
 

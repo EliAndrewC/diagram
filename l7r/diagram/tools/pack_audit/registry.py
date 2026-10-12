@@ -278,6 +278,13 @@ CHECKS: tuple[Check, ...] = (
         "hoshigaoka-fenced-precinct-red.svg",
         "take the fence or wall off the precinct: its arch and its wood mark it (a fence may ring the sanctuary alone)",
     ),
+    Check(
+        "hall_at_an_end",
+        lambda ctx: s.hall_at_an_end(ctx.text, ctx.plan),
+        False,
+        "hoshigaoka-hall-in-the-middle-red.svg",
+        "under one roof put the hall at one end of the building, on the approach, and the dwelling (kitchen and monk's rooms) at the other",
+    ),
 )
 
 

@@ -16,7 +16,7 @@ Guesses:
   recorded, but no count gives their shares, so they are ordered after the account that names the northwest first.
 
 Depiction: The map draws the pattern in which only certain old families kept a shrine, so that one is notable where it
-stands: a household shrine appears on three to eight homesteads in a hundred. It stands in the plot's northwest, northeast
+stands: a household shrine appears on three to eight homesteads in a hundred across the countryside, so a small hamlet may have one or none. It stands in the plot's northwest, northeast
 or southwest corner. It is drawn vermilion, with a ridge line and a torii before its door, at 6 by 6 ft, the size of a small
 shed, so that it can be seen and told apart from the sheds; a real one was a small box of stone or wood about 16 in on a
 side, seldom with a torii, too small to make out at the map's scale.

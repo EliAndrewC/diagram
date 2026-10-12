@@ -260,6 +260,18 @@ def git_flow(root: Path, files: list[str]) -> list[str]:
     return [f"{ln[11:19]} commit {ln.split(' ', 1)[1]}" for ln in r.stdout.splitlines() if " " in ln] if r.returncode == 0 else []
 
 
+def owe_evidence(slug: str, diff: str) -> str:
+    """Whether the round's diff shows what owes a unit (feature 374 wave 122, the round arbiter's tooling fix on 0219: the
+    bundle owed translation-check on `kameyama-yashikigami` while `owes-round.diff` held that note only as context, and the
+    arbiter had to find that by hand). A unit names its note after `#`, else its subject; a changed line (`+`/`-`, not the
+    file headers) carrying that name is the cause shown, and none is said plainly."""
+    name = slug.split("#", 1)[1] if "#" in slug else slug.split(":", 1)[-1]
+    changed = (ln for ln in diff.splitlines() if ln[:1] in "+-" and not ln.startswith(("+++", "---")))
+    if name in ("unfootnoted", "gloss") or any(name in ln for ln in changed):
+        return "a changed line in `owes-round.diff` names it"
+    return f"NO changed line in `owes-round.diff` names `{name}` - its cause is not in this round's change; say so in the ruling"
+
+
 def capped_round_cause(root: Path, out: Path, check: str, subject: str, files: list[str], since: float) -> list[str]:
     """What owes the CAPPED round itself (feature 374 wave 120, the arbiter on the seat pop-ups: the round-3 cause - one word
     on 0190's drawing page, and for one unit its round 2's own fix - was named nowhere in the MANIFEST and had to be dug out
@@ -270,13 +282,17 @@ def capped_round_cause(root: Path, out: Path, check: str, subject: str, files: l
 
     name = subject.split(":", 1)[1] if ":" in subject else subject
     checks = {"modal-research": ("modal-accuracy", "modal-references", "modal-gaps")}.get(check, (check,))
+    owed: list[str] = []
     try:
-        owed = [f"- `{u.slug}`: {u.occasion}" for u in record_owed.unanswered(root) if u.check in checks and u.subject.split("#")[0] in (name, f"{name}.drawing")]
+        owing = [u for u in record_owed.unanswered(root) if u.check in checks and u.subject.split("#")[0] in (name, f"{name}.drawing")]
     except Exception as e:  # noqa: BLE001 - a record that cannot be read leaves the cause to the diff, said so
-        owed = [f"- (the record's owed list could not be read: {e})"]
+        owing, owed = [], [f"- (the record's owed list could not be read: {e})"]
     log = _git(root, "log", f"--since=@{int(since)}", "--format=%h %ad %s", "--date=iso", "--", *files) if since and files else ""
     hunks = _git(root, "log", f"--since=@{int(since)}", "-p", "--format=--- %h %ad %s", "--date=iso", "--", *files) if log.strip() else ""
-    (out / "owes-round.diff").write_text((hunks + _git(root, "diff", "--", *files)) or "(no change since the last round)\n", encoding="utf-8")
+    diff = hunks + _git(root, "diff", "--", *files)
+    (out / "owes-round.diff").write_text(diff or "(no change since the last round)\n", encoding="utf-8")
+    if owing:
+        owed = [f"- `{u.slug}`: {u.occasion} - {owe_evidence(u.slug, diff)}" for u in owing]
     return [
         "## What owes the capped round\n",
         "The record owes it now:\n" + ("\n".join(owed) or "- (nothing listed as owed)") + "\n",

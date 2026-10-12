@@ -402,3 +402,41 @@ def test_a_stroke_is_ink_half_its_width_either_side() -> None:
     assert s.ink_bounds(text, plan, 400 * 400)[3] == 405.0
     text, plan = _plan('<path d="M 20 385 L 380 385" fill="#000" stroke="none" stroke-width="40"/>')
     assert s.ink_bounds(text, plan, 400 * 400)[3] == 385.0
+
+
+def _one_roof(kitchen: tuple[float, float], rooms: tuple[float, float], vertical: bool = False) -> tuple[str, pa.ParsedPlan]:
+    """A one-roof building 60 x 30 px (20 x 10 ft) with its kitchen and rooms as tagged parts at the given spans."""
+
+    def part(kind: str, a: float, b: float) -> str:
+        box = (100, 100 + a, 30, b - a) if vertical else (100 + a, 100, b - a, 30)
+        return f'<g data-kind="{kind}" data-part-of="hall and dwelling"><rect x="{box[0]}" y="{box[1]}" width="{box[2]}" height="{box[3]}" fill="none"/></g>'
+
+    hall = _rect(100, 100, 30, 60, BLDG, "hall") if vertical else _rect(100, 100, 60, 30, BLDG, "hall")
+    body = f'<g data-kind="hall and dwelling">{hall}</g>' + part("kitchen", *kitchen) + part("the monk's rooms", *rooms)
+    return _plan(body)
+
+
+def test_the_hall_stands_at_an_end_of_the_one_roof() -> None:
+    """0221's drawing page: the monk's dwelling is one end of the hall's own building - never the hall between its rooms."""
+    text, plan = _one_roof((0, 12), (40, 60))
+    assert any("between the dwelling's rooms" in f for f in s.hall_at_an_end(text, plan)), "rooms on both sides: the hall is in the middle"
+    assert s.hall_at_an_end(*_one_roof((0, 12), (12, 30))) == [], "both parts at the west end: the hall at the east end"
+    assert any("between" in f for f in s.hall_at_an_end(*_one_roof((0, 12), (40, 60), vertical=True))), "a building drawn north-south reads the same"
+    assert s.hall_at_an_end(*_one_roof((0, 28), (32, 60))) == [], "a gap under 6 ft is a partition, not a hall"
+    bare_text, bare = _plan(f'<g data-kind="hall and dwelling">{_rect(100, 100, 60, 30, BLDG, "hall")}</g>')
+    assert s.hall_at_an_end(bare_text, bare) == [], "the two-buildings form tags no part of the hall's building"
+    porch = '<g data-kind="genkan" data-part-of="hall and dwelling"><rect x="300" y="300" width="9" height="9" fill="none"/></g>'
+    green_text, _ = _one_roof((0, 12), (12, 30))
+    with_porch = green_text.replace("</svg>", porch + "</svg>")
+    assert s.hall_at_an_end(with_porch, pa.parse_svg(with_porch)) == [], "a tagged part off the building is not one of its spans"
+    no_hall = _plan(_rect(100, 100, 60, 30, BLDG))
+    assert s.hall_at_an_end(*no_hall) == [], "no declared hall: sanctuary_on_axis names that"
+
+
+def test_hoshigaoka_draws_its_hall_at_an_end_and_its_old_sheet_did_not() -> None:
+    with open(os.path.join(_FIX, "hoshigaoka-hall-in-the-middle-red.svg"), encoding="utf-8") as fh:
+        red = fh.read()
+    assert s.hall_at_an_end(red, pa.parse_svg(red)), "the fixture is the sheet before wave 123"
+    with open(os.path.join(os.path.dirname(_FIX), "..", "pool", "country-shrines", "hoshigaoka-shrine", "hoshigaoka-shrine.svg"), encoding="utf-8") as fh:
+        sheet = fh.read()
+    assert s.hall_at_an_end(sheet, pa.parse_svg(sheet)) == []

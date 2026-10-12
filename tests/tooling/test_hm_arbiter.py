@@ -492,3 +492,14 @@ def test_a_capped_round_names_what_owes_it(tmp_path: pathlib.Path, monkeypatch: 
     assert "## What owes the capped round" in lines and "`modal-depiction:choice/x`: a page its Drawing: names moved" in lines
     assert "one word on the page" in lines and "before the round" not in lines, lines
     assert "+About: the new word." in (out / "owes-round.diff").read_text()
+    assert "names moved - NO changed line in `owes-round.diff` names `choice/x`" in lines, "each owe says whether the diff shows its cause"
+
+
+def test_each_owe_says_whether_the_rounds_diff_shows_its_cause() -> None:
+    """The round arbiter's tooling fix on 0219 (feature 374 wave 122): translation-check was owed on a note the diff held only
+    as context, and the bundle did not say so - every owed unit now carries whether a changed line names it."""
+    diff = "--- a/x.notes.html\n+++ b/x.notes.html\n-<li data-note=\"jawiki-4\">Main-house</li>\n+<li data-note=\"jawiki-4\">Head</li>\n <li data-note=\"kameyama\">same</li>\n"
+    assert ab.owe_evidence("translation-check:0219#jawiki-4", diff) == "a changed line in `owes-round.diff` names it"
+    assert "NO changed line in `owes-round.diff` names `kameyama`" in ab.owe_evidence("translation-check:0219#kameyama", diff)
+    assert "NO changed line" in ab.owe_evidence("record-format:0219", "--- a/0219.html\n+++ b/0219.html\n")  # no note: its subject
+    assert ab.owe_evidence("quote-check:0219.drawing#unfootnoted", "") == "a changed line in `owes-round.diff` names it"

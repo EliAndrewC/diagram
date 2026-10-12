@@ -1914,6 +1914,7 @@ kan	kan
 kan'ei	Kan'ei
 kan'ei period	Kan'ei
 kan'en	Kan'en
+kana	kana
 kanagashi	kanagashi
 kanamori	Kanamori
 kanbun	Kanbun

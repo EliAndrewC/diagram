@@ -33,6 +33,11 @@ import quote_verbatim as qv  # noqa: E402
 import style_prepass as sp  # noqa: E402
 
 RECORD = "research"
+#: THE PARSE CACHE IS KEYED ON THE PARSER TOO (feature 374 wave 122, the round arbiter's tooling fix on 0219): a cached parse
+#: is keyed by its content, and the merge base's notes are read at every push - so a parse an older `pairs` or quote reader
+#: wrote was served for the base after the reader changed, and the base's kameyama pair (with a space the reader now drops)
+#: no longer matched the tree's, owing a translation-check on a note nothing had changed. The modules that parse are hashed in.
+PARSER_KEY: str = hashlib.sha1(b"".join(pathlib.Path(m.__file__).read_bytes() for m in (sys.modules[__name__], qv, sp))).hexdigest()[:12]
 _NOTE = re.compile(r'<li data-note="([^"]+)">(.*?)</li>', re.S)
 _TOKEN = re.compile(r'<span class="orig" data-orig="([^"]+)"></span>')
 _STORED = re.compile(r'<li data-orig="([^"]+)">(.*?)</li>', re.S)
@@ -70,7 +75,7 @@ def _cache_path(root: pathlib.Path) -> pathlib.Path:
 def _parsed(cache: dict[str, list], notes: str, originals: str, page: str) -> list:
     """[pairs, glosses] of one question's notes and page, from the cache when its content was parsed before: parsing every
     notes file at both revisions cost 3.3 s of every push's record gate, and almost none of them change (feature 311)."""
-    key = hashlib.sha1("\x00".join((notes, originals, page)).encode("utf-8")).hexdigest()
+    key = hashlib.sha1("\x00".join((PARSER_KEY, notes, originals, page)).encode("utf-8")).hexdigest()
     if key not in cache:
         cache[key] = [pairs(notes, originals), sp.glosses(page) + sp.glosses(notes)]
     return cache[key]
