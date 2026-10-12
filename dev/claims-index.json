@@ -27501,13 +27501,15 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#no skeleton lanes for a cluster of fewer than two houses (`len(arcs) < 2`)": {
-  "code": "64c275f80ee2c620",
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#no skeleton under two houses": {
+  "code": "ed79c57cdebfb555",
   "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "no skeleton lanes for a cluster of fewer than two houses (`len(arcs) < 2`)",
+  "note": "none of the cited pages, 0246's drawing page included, covers a cluster of fewer than two houses, so UNRESEARCHED holds",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
   "code": "874ad38629507aab",
@@ -27579,6 +27581,25 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton drawn worn": {
+  "code": "85089cf7f8410a08",
+  "core": "64c275f80ee2c620",
+  "date": "2026-10-12",
+  "note": "worn=True at 5 ft matches \"narrow single track of bare, packed earth ... no line down its middle\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
+   "0081-village-lanes.html": "ae63115215c57952"
+  },
+  "research": "2ef890e55529e181",
+  "rests": [
+   "0081-village-lanes.drawing.html:3bff0ae7110c4bb0",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
+   "0081-village-lanes.drawing.html:dca8eed834f55f38",
+   "0081-village-lanes.html:538ebcdd23ce5eac",
+   "0081-village-lanes.html:6779c143bf44c5ba"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
   "code": "f5e267cfbf20a9ac",
   "core": "64c275f80ee2c620",
@@ -27608,14 +27629,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton lanes drawn worn (`worn=True`), a drawing convention": {
-  "code": "64c275f80ee2c620",
-  "core": "64c275f80ee2c620",
-  "date": "2026-10-12",
-  "note": "skeleton lanes drawn worn (`worn=True`), a drawing convention",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the crop": {
   "code": "63f75c863ecf5ca2",
@@ -46303,18 +46316,28 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::corner_seat#corner seat": {
-  "code": "7f92f471dd02a83c",
+  "code": "4c468998ef4c6380",
   "core": "45f76ec101501ded",
   "date": "2026-10-12",
-  "note": "the code sets the grave a fixed 12-16 px in (dist/3, clamped to that range and capped at half the distance), but the page says \"about 12 to 16 ft ... on a hamlet map, twice that on a village map\"; to judge it I need the px-per-ft scale of hamlet and village maps, and whether a fixed px step gives twice the feet on a village map",
+  "note": "12-16 px clamp is 12-16 ft at the hamlet's 1 ft/px and 24-32 ft at the village's 2 ft/px, which is the page's \"about 12 to 16 ft ... twice that on a village map\"",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
   "research": "9fe254d3e1ab2d59",
   "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:89647304d9a0811c"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/features.py::corner_seat#corner seat on a tiny plot": {
+  "code": "b31bc4601daeb3da",
+  "core": "45f76ec101501ded",
+  "date": "2026-10-12",
+  "note": "the drawing page itself calls the step in from the corner \"a map drawing convention, sized so the mound reads as standing in the corner\", and the tiny-plot cap is part of that step, so CONVENTION is right; the text matches `dist / 2.0`, which drops below 12 px when the corner is under 24 px from the middle",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::grave_form#field grave form": {
   "code": "f4bd86b036c78c2a",
@@ -48987,6 +49010,31 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy sun-side radii": {
+  "code": "c2e2da44e71dc58c",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-12",
+  "note": "the radii run from 18 ft out to privy_sun_reach_ft, matching \"at distances stepping out from 18 ft\" and the 48 ft reach",
+  "pages": {
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
+  },
+  "research": "410a08bb56c17449",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:8568ae6c0f3bfcea",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy sun-side step": {
+  "code": "f420304552367eb3",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-12",
+  "note": "the page says the distances step out but gives no step size, so the 4 ft step stays UNRESEARCHED",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#retirement house": {
   "code": "af0248e17f16c63e",
   "core": "35c562e9417fd7f0",
@@ -49031,14 +49079,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#the privy's sun-side seats are tried from 18 ft (`PRIVY_SUN_MIN_FT`) outward in 4 ft steps": {
-  "code": "35c562e9417fd7f0",
-  "core": "35c562e9417fd7f0",
-  "date": "2026-10-12",
-  "note": "the privy's sun-side seats are tried from 18 ft (`PRIVY_SUN_MIN_FT`) outward in 4 ft steps",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
   "code": "f0869e5a7262f3c9",
