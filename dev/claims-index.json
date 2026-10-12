@@ -1424,10 +1424,11 @@
   "note": "north strip holds stores, a rear yard or an alley; menservants in the street range, maids under the main roof (a GUESS)",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "db0283b1bca5bf13",
+  "research": "455dd62c4661c4ad",
   "section": "4ce2dc0fcd9ee741",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#residence entrances": {
@@ -2202,10 +2203,11 @@
   "note": "the rear rank holds stores only; servants never in a rear rank",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "7d52985a8411fbc7",
+  "research": "c8c6e94925eb3220",
   "section": "2a84ef9835252815",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Compound programs#catalog pointer": {
@@ -3001,11 +3003,12 @@
   "date": "2026-10-12",
   "note": "menservants and gatekeeper in the street range, grooms in the stable's room, maids under the main roof (a GUESS)",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
   },
-  "research": "b376a1bf993a18f5",
+  "research": "5c5aa354e6ed15af",
   "section": "85ad9bd2565f0fa8",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#storehouses in the rear strip": {
@@ -4983,9 +4986,10 @@
   "note": "menservants' range on the street wall; entry form a seeded roll between 0097's two forms",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "746ec66395f459f8",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "e41531067150ed43",
+  "research": "93aaeb059590e3c7",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#shrine": {
@@ -63765,9 +63769,9 @@
   "date": "2026-10-07",
   "note": "15 ft, the page's GUESS",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "b56ff12f8b9c3596",
+  "research": "6348ca5486897f20",
   "rests": [
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:0549a16a13e90b82"
   ],
@@ -63826,9 +63830,9 @@
   "date": "2026-10-03",
   "note": "0115 drawing records no lateral deviation; it draws the range \"on that household's street edge\", \"along the street line\" as part of the enclosure; record the deviation there or move the range",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "b56ff12f8b9c3596",
+  "research": "6348ca5486897f20",
   "triaged": "2026-10-12",
   "verdict": "DRIFTED"
  },
@@ -63865,9 +63869,9 @@
   "date": "2026-10-03",
   "note": "15 ft guess, long thin range",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "b56ff12f8b9c3596",
+  "research": "6348ca5486897f20",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -63877,9 +63881,10 @@
   "date": "2026-10-12",
   "note": "0115's drawing page does not give two ranges per senior house and one per junior; the code's comment cites budgets.md, so the claim should be CANON; and every junior house gets a range where 0115 draws none for a small household",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "b56ff12f8b9c3596",
+  "research": "6348ca5486897f20",
+  "triaged": "2026-10-12",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/structures/servants.py::ServantRangesMixin.servant_ranges#rear row fallback": {
@@ -63888,9 +63893,9 @@
   "date": "2026-10-03",
   "note": "DEVIATION not recorded: 0115.drawing has no rear seat (it puts the range \"on its street edge ... along the street line\"); record the rear fallback there or relabel it UNRESEARCHED",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "b56ff12f8b9c3596",
+  "research": "6348ca5486897f20",
   "triaged": "2026-10-12",
   "verdict": "DRIFTED"
  },
@@ -63900,9 +63905,10 @@
   "date": "2026-10-12",
   "note": "a range only ever against its own host, never freestanding",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "b56ff12f8b9c3596",
+  "research": "6348ca5486897f20",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/servants.py::ServantRangesMixin.servant_ranges#shortened range": {
@@ -64062,9 +64068,9 @@
   "date": "2026-10-03",
   "note": "unbound servant refused",
   "pages": {
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "94e5fcf118df1c04"
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
   },
-  "research": "b56ff12f8b9c3596",
+  "research": "6348ca5486897f20",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
