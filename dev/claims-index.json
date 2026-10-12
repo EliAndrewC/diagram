@@ -21820,13 +21820,14 @@
   "date": "2026-10-11",
   "note": "9.5 ft each side of a 3 ft tread = 22 ft, the page's \"about 22 ft of the opening\"",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_arrives_at#a door path arrives at its farm": {
@@ -22159,14 +22160,14 @@
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off a grove band": {
   "code": "33d5154994271777",
   "core": "af106eb8b72ef58d",
-  "date": "2026-10-11",
-  "note": "grow = 2*(1.5+9.5) keeps the tread edge 9.5 ft off each band, the page's 22 ft lane",
+  "date": "2026-10-12",
+  "note": "the bands grow by 2*(1.5+9.5)=22 ft, which keeps a 3 ft tread 9.5 ft off the trees on each side: the page's \"footpath's clearance and some working room kept off the trees on each side, about 22 ft of the opening\", and no lane through a farm's own wood",
   "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
-  "research": "8e7d7569cc3f687f",
+  "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
   ],
   "verdict": "IN-STEP"
