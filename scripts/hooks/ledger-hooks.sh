@@ -58,11 +58,31 @@ for i, w in enumerate(words):
 ROOT=$(git -C "$ROOT" rev-parse --show-toplevel 2>/dev/null) || exit 0
 LEDGER="dev/review-ledger.md"
 [ -f "$ROOT/$LEDGER" ] || exit 0
+# GUARD_EDIT_OK: fixing a guard that judged the wrong text (374, 2026-10-12): this runs BEFORE the command, so a command that
+# appends rows (`make append FILE=dev/review-ledger.md LINE=...`) and then commits was told the rows it was adding were owed,
+# and its new rows were never linted. The ledger judged below is the one the command will commit: today's text plus every
+# row the command's own `make append` adds.
+JUDGED="$ROOT/$LEDGER"
+APPENDED=$(printf '%s' "$CMD" | python3 -c '
+import shlex, sys
+try:
+    words = shlex.split(sys.stdin.read(), comments=True)
+except ValueError:
+    words = []
+for i, w in enumerate(words):
+    if w == "make" and i + 1 < len(words) and words[i + 1] == "append":
+        args = dict(a.split("=", 1) for a in words[i + 2 : i + 6] if "=" in a)
+        if args.get("FILE", "").rstrip("/").endswith("dev/review-ledger.md") and args.get("LINE"):
+            print(args["LINE"])' 2>/dev/null)
+if [ -n "$APPENDED" ]; then
+  JUDGED=$(mktemp); trap 'rm -f "$JUDGED"' EXIT
+  { cat "$ROOT/$LEDGER"; printf '%s\n' "$APPENDED"; } > "$JUDGED"
+fi
 # GUARD_EDIT_OK: feature 371 - a NEW report, never a refusal: every check pass logged in this clone with no row in the measured
 # table is named at each commit, with the row to add (`ledger_owed.py`); the push is where it refuses (sync-with-main.sh).
 OWED_PY="$ROOT/scripts/reviews/ledger_owed.py"
 [ -f "$OWED_PY" ] || OWED_PY="$LH_HERE/../reviews/ledger_owed.py"
-OWED=$(cd "$ROOT" && python3 "$OWED_PY" --ledger "$ROOT/$LEDGER" 2>/dev/null)
+OWED=$(cd "$ROOT" && python3 "$OWED_PY" --ledger "$JUDGED" 2>/dev/null)
 if [ -n "$OWED" ]; then
   printf '%s' "$OWED" | python3 -c 'import json,sys; print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "additionalContext": sys.stdin.read()}}))'
 fi
@@ -74,14 +94,17 @@ case " $CMD " in *" -a "*|*" -am "*|*" --all "*) STAGED="$STAGED $(git -C "$ROOT
 case " $CMD " in
   *" add "*)
     case " $CMD " in
-      *"$LEDGER"*|*" -A "*|*" --all "*|*" -u "*|*" . "*|*" dev "*|*" dev/ "*) STAGED="$STAGED $(git -C "$ROOT" diff --name-only 2>/dev/null)" ;;
+      *"$LEDGER"*|*" -A "*|*" --all "*|*" -u "*|*" . "*|*" dev "*|*" dev/ "*) STAGED="$STAGED $(git -C "$ROOT" diff --name-only 2>/dev/null)"
+        # GUARD_EDIT_OK: 374 2026-10-12 - rows the command appends are not on disk yet, so its add will stage the ledger
+        [ -z "$APPENDED" ] || STAGED="$STAGED $LEDGER" ;;
     esac ;;
 esac
 case " $STAGED " in *"$LEDGER"*) ;; *) exit 0 ;; esac
 
 LINT="$ROOT/scripts/reviews/ledger_lint.py"
 [ -f "$LINT" ] || LINT="$LH_HERE/../reviews/ledger_lint.py"
-BAD=$(python3 "$LINT" "$ROOT/$LEDGER" 2>/dev/null) && exit 0
+# GUARD_EDIT_OK: 374 2026-10-12 - the lint reads the ledger as the command will commit it (JUDGED, above)
+BAD=$(python3 "$LINT" "$JUDGED" 2>/dev/null) && exit 0
 
 {
   printf '\n\033[1mBLOCKED: the review ledger'"'"'s measured table has a row short of a cell.\033[0m\n'
