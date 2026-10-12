@@ -255,7 +255,10 @@ def _explain_row(root: Path, f: int, i: int, r: dict, fixes: list[tuple[int, dic
     else:
         out += _wrap("What happened: ", _happened(root, r), width)
         out += _wrap("Where: ", _where(root, str(r.get("trigger", ""))), width)
-        out += _wrap("The arbiter ruled: ", VERDICTS.get(r.get("ruling", ""), str(r.get("ruling", ""))), width)
+        ruled = VERDICTS.get(r.get("ruling", ""), str(r.get("ruling", "")))
+        if r.get("ruling") == "continue" and not str(r.get("trigger", "")).startswith("round:"):  # no round to add: work goes on
+            ruled = "CONTINUE - nothing is stuck; the work carries on as it was"
+        out += _wrap("The arbiter ruled: ", ruled, width)
         out += _wrap("Why: ", str(r.get("why", "")), width)
         out += _wrap("It set the next step: ", str(r.get("what", "")), width)
         out += _wrap("It asked for a tooling fix: ", str(r.get("tooling_fix", "")), width)

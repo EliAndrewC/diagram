@@ -174,6 +174,7 @@ def test_explain_says_what_fired_what_was_ruled_and_what_the_gm_is_asked(root: p
     assert "YOUR DECISION: should this fix be made after all?" in e and "OVERTURN=2 TO=" in e
     assert "Where: docs/a.md" in e and "PROCESS FAULT" in e and "A -> B -> A" in e
     assert "A session accepted this finding without fixing it: the steam arcs off center" in e
+    assert "CONTINUE - nothing is stuck" in e and "CONTINUE - allow one more round" in e, "a continue says what it lets go on"
     assert "went red twice" in e and "faster than one per changed line" in e and "process question" in e and "Trigger odd." in e
     one = gm.explain(root, "375", "3", width=200)
     assert "[0] modal-form" in one and "quote-check" not in one, "ROW= a fix row shows the ruling it settles"
