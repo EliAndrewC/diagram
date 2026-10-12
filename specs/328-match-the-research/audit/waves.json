@@ -678,5 +678,7 @@
   "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm": "121",
   "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off a grove band": "119",
   "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#no wood below the houses": "120",
-  "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld": "120"
+  "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld": "120",
+  "l7r/diagram/buildings/types.json#door band": "122",
+  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": "122"
 }
