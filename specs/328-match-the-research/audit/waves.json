@@ -682,5 +682,14 @@
   "l7r/diagram/buildings/types.json#door band": "122",
   "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": "122",
   "docs/building-programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof": "123",
-  "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine": "123"
+  "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine": "123",
+  "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip": "124",
+  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#second rank": "124",
+  "docs/buildings.md::Outer court (administrative / public)#barracks": "125",
+  "docs/buildings.md::Outer court (administrative / public)#forecourt": "125",
+  "docs/buildings.md::Outer court (administrative / public)#stable stall width": "126",
+  "docs/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters": "126",
+  "docs/buildings.md::Outer court (administrative / public)#stables": "126",
+  "l7r/diagram/compound.py::county_magistracy_program#barracks size": "125",
+  "l7r/diagram/compound.py::county_magistracy_program#senior retainers' quarters": "125"
 }

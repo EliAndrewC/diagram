@@ -760,6 +760,37 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#practice ground comment",
+  "verdict": "DRIFTED",
+  "tier": "E0",
+  "fix": "the practice ground's comment says the barracks meets the swept patch at x 223; the 24 ft deep barracks stands at x 244 - restate the comment",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "needs_e0_review": true,
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#residence inner entrance",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "relabel the claim GUESS research/questions/0107-kitchens-daidokoro.drawing.html, which records the inner entrance on the residence's back at the kitchen end",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt distance upwind",
   "verdict": "NEEDS-RESEARCH",
   "tier": "E0",
@@ -4889,6 +4920,51 @@
   "scope": "mode-a"
  },
  {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#granary form",
+  "verdict": "UNCLAIMED",
+  "tier": "E1",
+  "fix": "claim the granary's form - an earth-walled kura, where 0098 attests a raised timber storehouse (takakura) as the other - and roll it or record this plan's pick",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#middle gate",
+  "verdict": "UNCLAIMED",
+  "tier": "E1",
+  "fix": "the middle gate is kept at the Envelope's 6 ft where docs/building-programs.md says ~8 ft: claim it, and make the two agree",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#servants' row entry form",
+  "verdict": "UNCLAIMED",
+  "tier": "E1",
+  "fix": "claim the servants' row's entry form - 0097's knob, a common room under one door or a door to each dwelling - and roll it or record this plan's pick",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas",
   "verdict": "CANNOT-TELL",
   "tier": "E1",
@@ -7850,6 +7926,51 @@
   "scope": "mode-a"
  },
  {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#granary",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the county example's granary 60 x 30 ft (1,800 sq ft) lies outside 0098's drawing page's ~43-50 x 25-27 ft (1,100-1,350 sq ft): take a size in the band (the coverage band then needs the floor back elsewhere) or have the page widen it",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#shrine",
+  "verdict": "CANNOT-TELL",
+  "tier": "E2",
+  "fix": "the shrine's seat: 0218 seats the compound shrine in a corner beside a tree; say where the placer puts the county example's (east wall, its order) and draw its tree (batch 5's compound-shrine-tree row)",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#vegetable garden west of the house",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the county example's 64 x 48 ft vegetable ground is neither of 0109's attested forms (a soup-greens plot of ~100 m2, or a field over about half the grounds): take one, or relabel its size a GUESS between them",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/cluster.py::below_drain#wet side of the drain",
   "tier": "E2",
   "fix": "below_drain tests only points whose projection falls within the drain's span (unclamped projection parameter in 0..1 over the polyline), so ground past either end is allowed",
@@ -10697,7 +10818,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "123",
   "scope": "mode-a"
  },
  {
@@ -10793,7 +10914,7 @@
   "tier_as_ranked": "E0",
   "moved": "wave 1: E0 -> E3, the re-check found the implementation itself differs: Hayakawa's \"two modest shrines\" contradict the drawing page's rule \"a map draws one, a deliberate deviation\". Either the drawing page records Hayakawa as an exception or the sheet draws one",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "123",
   "scope": "mode-a"
  },
  {
@@ -10896,6 +11017,25 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "102",
+  "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Composition: perimeter buildings + a named court-spine#second rank",
+  "tier": "E3",
+  "fix": "second rank holds stores (Higuchi) only; servants placed in street-side ranges, the gate range or under the main roof, in compound.py's rank-2 doctrine, the placer examples and the sheets",
+  "files": [
+   "docs/buildings.md",
+   "l7r/diagram/compound.py",
+   "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py",
+   "pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py"
+  ],
+  "after": [
+   "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": "124",
   "scope": "mode-a"
  },
  {
@@ -11113,26 +11253,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
-  "key": "docs/buildings.md::Composition: perimeter buildings + a named court-spine#second rank",
-  "tier": "E3",
-  "fix": "second rank holds stores (Higuchi) only; servants placed in street-side ranges, the gate range or under the main roof, in compound.py's rank-2 doctrine, the placer examples and the sheets",
-  "files": [
-   "docs/buildings.md",
-   "l7r/diagram/compound.py",
-   "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py",
-   "pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py"
-  ],
-  "after": [
-   "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "124",
   "scope": "mode-a"
  },
  {
@@ -11153,7 +11274,7 @@
   "tier_as_ranked": "E2",
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Barracks rects at 3 px = 1 ft: county example 135x102 px (45x34 ft), Ochiba 92x100 (31x33 ft), Ubame 134x96 (45x32 ft), roundtrip 93x99 - all deeper than the 24 ft cap; only Hayakawa's 105x47 (35x16 ft) already fits.",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "125",
   "scope": "mode-a"
  },
  {
@@ -11239,25 +11360,7 @@
   "tier_as_ranked": "E1",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
-  "key": "docs/buildings.md::Outer court (administrative / public)#stable stall width",
-  "tier": "E3",
-  "fix": "stalls drawn about one ken (~6 ft) wide, not 9.3-9.7 ft; stables re-proportioned on all three sheets",
-  "files": [
-   "docs/buildings.md",
-   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-   "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-   "l7r/diagram/buildings/types.json"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "125",
   "scope": "mode-a"
  },
  {
@@ -11276,7 +11379,25 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "126",
+  "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Outer court (administrative / public)#stable stall width",
+  "tier": "E3",
+  "fix": "stalls drawn about one ken (~6 ft) wide, not 9.3-9.7 ft; stables re-proportioned on all three sheets",
+  "files": [
+   "docs/buildings.md",
+   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   "l7r/diagram/buildings/types.json"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": "126",
   "scope": "mode-a"
  },
  {
@@ -11292,7 +11413,7 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - a procedure paragraph plus three hand-drawn sheets redrawn",
-  "wave": "",
+  "wave": "126",
   "scope": "mode-a"
  },
  {
@@ -11570,7 +11691,7 @@
   "flag": "",
   "found": "the claims report at feature 374 batch 2 (2026-10-10), a finding the ranking lacked",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "125",
   "scope": "kept"
  },
  {
@@ -11585,6 +11706,21 @@
   "after": [],
   "flag": "",
   "found": "wave 105's building-review of the county example, E3 (feature 372, 2026-10-10)",
+  "tier_as_ranked": "E3",
+  "wave": "125",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/compound_example.py::county_magistracy_program#gatehouse",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "draw the county example's gatehouse ~40 ft as 0093's drawing page draws a gatehouse of its own, or have the page record the 18 ft Kita-in guardroom form as the generated plan's choice (the south wall then needs room for it beside the stables and the servants' row)",
+  "files": [
+   "l7r/diagram/compound_example.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 126's re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"

@@ -3181,23 +3181,17 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#forecourt": {
-  "code": "68190d28978f3b51",
-  "core": "050f0bde3a602b79",
-  "date": "2026-10-11",
-  "note": "the claim puts the label \"forecourt\" on the strip behind the office hall (the hall backs the divider wall) and calls the open ground inside the main gate OUTER COURT. The record's forecourt is the open ground inside the main gate that the entrance faces (\"the entrance with its step faces the open ground inside the main gate\"; Takayama's \"plaza in front of the jin'ya\"). The forecourt label belongs on the ground inside the gate",
+  "code": "e2432f3e17ab93ad",
+  "core": "d9ce188ed9018cc7",
+  "date": "2026-10-12",
+  "note": "the forecourt as the open ground just inside the main gate, which the entrance faces, matches 0104 and 0116",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "8873ebd594ecc08f",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
   },
   "research": "0b8c2c5bed6f0207",
-  "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:ad71105579b890e5",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:294ade5001734dd1"
-  ],
   "section": "d9ce188ed9018cc7",
-  "triaged": "2026-10-12",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary forms": {
   "code": "7ee5d49dbb695fcd",

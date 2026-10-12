@@ -1326,3 +1326,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-12 | modal-depiction | sheet/storehouse round 2 | clean | COVERAGE 0, TRUTH 0, LINKS 0 | nothing | - | verified: record-checked | 46 s | 134k in (85k cached) / 3.8k out |
 | 2026-10-12 | modal-depiction | sheet/residence round 2 | clean | COVERAGE 0, TRUTH 0, LINKS 0 | nothing | - | verified: record-checked | 49 s | 86k in (32k cached) / 4.3k out |
 | 2026-10-12 | modal-depiction | sheet/well round 2 | clean | COVERAGE 0, TRUTH 0, LINKS 0 | nothing | - | verified: record-checked | 61 s | 340k in (266k cached) / 5.0k out |
+| 2026-10-12 | impl-drift | the forecourt claim reworded to the sheets as drawn (wave 125) | clean | IN-STEP 1 | nothing | yes | verified: claims-checked | 16 s | 48k in (25k cached) / 1.3k out |
