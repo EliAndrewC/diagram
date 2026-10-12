@@ -1719,11 +1719,20 @@
   },
   "w141-archetype-rolls": {
     "quantity": "the attested field forms rolled 12 seeds each at 16 households, before and after waves 140-141's fixes",
-    "value": "before: dike-pond 6/12, polder 10/12; after: dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 (a row village: one farm's front door has no route to any way, walled by its grove and the ground), polder seed 12 (a row village: the door path's first leg runs within 7 ft of a neighbor's yard and no route at the law's 7 ft gap exists), polder seed 5 (SiteRefused, 14 of 16 seated on ladder margin 1)",
+    "value": "before: dike-pond 6/12, polder 10/12; after: dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 (a row village: one farm's front door has no route to any way, walled by its grove and the ground), polder seed 12 (a row village: the door path's first leg runs within 7 ft of a neighbor's yard and no route at the law's 7 ft gap exists), polder seed 5 (SiteRefused, 14 of 16 seated on ladder margin 1); after wave 143 (the crop gap): dike-pond 12/12, polder 10/12 - open: polder seeds 5 (SiteRefused 14/16) and 12 (a row village's farm with no lawful door path). Four of the five pool hamlets pin no field form, so a changed roll would also re-deal their fields: a point for the batch that takes 771 up again",
     "unit": "rolls",
     "observed": "2026-10-12",
     "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond|polder_grid --households 16 --seed <s>\"",
     "command": "make hamlet ARGS=\"--name A<s> --seed <s> --households 16 --archetype <a> --out <dir> --no-render\"",
     "method": "exit status per roll; the open failures probed at refuse_unreached / door_path (fouled_segment = 0 via theirs on seed 12); the round arbiter (ask:b8-w141-archetype-failures) ruled route B: land the proven fixes, keep row 771 open"
+  },
+  "w143-cohort": {
+    "quantity": "make cohort (10 seeds plus the six pinned rows) across batch 8's waves",
+    "value": "waves 140-141: 15/16, wave 142: 15/16, wave 143: 16/16 - Audit-10 (14 households, nucleated; at HEAD too: 'the field is reached by no way') reached once a web lane may run on the bund",
+    "unit": "rolls",
+    "observed": "2026-10-12",
+    "source": "dev/cohort-log/20261012T171805Z, 20261012T171956Z, 20261012T172351Z",
+    "command": "make cohort",
+    "method": "the cohort's own verdict per seed, run after each wave's engine edit"
   }
 }

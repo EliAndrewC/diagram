@@ -7,7 +7,7 @@ from __future__ import annotations
 import math
 import random
 
-from l7r.diagram.hamletgen.clearance import FabricIndex, fouled_brute, pairs_within
+from l7r.diagram.hamletgen.clearance import FabricIndex, Gapped, fabric_index, fouled_brute, margin_of, pairs_within
 
 
 def _fabric(rng: random.Random, n: int) -> tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]], list[tuple[tuple[float, float], tuple[float, float]]]]:
@@ -110,3 +110,16 @@ def test_a_ring_is_indexed_once_by_its_points_and_a_changed_ring_anew(monkeypatc
         assert not C._RINGS
     finally:
         C.reset()
+
+
+def test_a_gapped_polygon_is_kept_at_its_own_margin() -> None:
+    """Feature 374 wave 143: the crop carries a web lane's half-tread (`Gapped`), the wet keeps the group's margin; the index
+    and its oracle agree point by point, and a plain copy falls back to the group's margin."""
+    crop = Gapped([(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)], 1.5)
+    wet = [(200.0, 0.0), (300.0, 0.0), (300.0, 100.0), (200.0, 100.0)]
+    assert margin_of(crop, 8.0) == 1.5 and margin_of(wet, 8.0) == 8.0 and margin_of(list(crop), 8.0) == 8.0
+    idx = FabricIndex([crop, wet], 8.0)
+    for q in [(102.0, 50.0), (105.0, 50.0), (195.0, 50.0), (150.0, 50.0), (101.0, 50.0)]:
+        assert idx.fouled(q) == fouled_brute(q, [crop, wet], 8.0), q
+    assert not idx.fouled((102.0, 50.0)) and idx.fouled((195.0, 50.0)), "on the bund beside the crop; off the wet by 8"
+    assert fabric_index([crop, wet], 8.0) is not fabric_index([Gapped(crop, 3.0), wet], 8.0), "the gap is part of the memo key"

@@ -33,7 +33,8 @@ from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_ch
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
-from ..consts import SEATING_GROUND_FT, WEB_HARD_GAP, WEB_REACH_FT
+from ..clearance import Gapped, margin_of
+from ..consts import SEATING_GROUND_FT, WEB_CROP_GAP, WEB_HARD_GAP, WEB_REACH_FT
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -472,9 +473,10 @@ class UnreachableGround:
 
         self._contains = shapely.contains_xy
         self.deep: Any = None
-        polys = [Polygon(p).buffer(0) for p in hard if len(p) >= 3]
+        # each part grown by its own gap (`clearance.margin_of`: the crop at a web lane's half-tread, feature 374 wave 143)
+        polys = [Polygon(p).buffer(0).buffer(margin_of(p, gap)) for p in hard if len(p) >= 3]
         if polys:
-            core = unary_union(polys).buffer(gap).buffer(-(reach + 1.0))
+            core = unary_union(polys).buffer(-(reach + 1.0))
             if not core.is_empty:
                 shapely.prepare(core)
                 self.deep = core
@@ -490,7 +492,7 @@ def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
     toe = [(float(a), float(b)) for a, b in (s.toe_band() or [])]
     wet = marsh_ground(s.M, but=("defense",))
     env = list(getattr(plan, "envelope", None) or [])  # a plan with no field envelope contributes none
-    return [*([env] if len(env) >= 3 else []), *crop_polys(s), *([toe] if len(toe) >= 3 else []), *wet]
+    return [*([Gapped(env, WEB_CROP_GAP)] if len(env) >= 3 else []), *(Gapped(c, WEB_CROP_GAP) for c in crop_polys(s)), *([toe] if len(toe) >= 3 else []), *wet]
 
 
 def seating_window(s: Settlement, seat: tuple[float, float], households: int) -> tuple[float, float, float, float]:

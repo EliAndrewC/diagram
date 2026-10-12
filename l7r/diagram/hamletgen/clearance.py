@@ -36,6 +36,25 @@ from .consts import Pt
 Line = tuple[Pt, Pt]
 
 
+class Gapped(list):  # type: ignore[type-arg]
+    """A hard-ground polygon that carries its OWN margin (`gap`), read by `FabricIndex` and `fouled_brute` in place of the
+    margin the caller passes for the group (feature 374 wave 143: the crop at a web lane's half-tread, the toe and the marsh at
+    `WEB_HARD_GAP`). A plain copy drops it and is kept at the caller's margin, the wider one.
+
+    Research: per-polygon margin - NONE: plumbing, each margin claimed where it is set"""
+
+    gap: float
+
+    def __init__(self, pts: Sequence[Pt], gap: float) -> None:
+        super().__init__(pts)
+        self.gap = gap
+
+
+def margin_of(o: Sequence[Pt], margin: float) -> float:
+    """The margin polygon `o` is kept off at: its own (`Gapped`) where it carries one, else the group's."""
+    return float(getattr(o, "gap", margin))
+
+
 def bounds(poly: Sequence[Pt]) -> tuple[float, float, float, float]:
     xs = [p[0] for p in poly]
     ys = [p[1] for p in poly]
@@ -94,7 +113,7 @@ _BIG_CELLS = 256
 
 def _key(obstacles: Sequence[Sequence[Pt]], margin: float, tight: Sequence[Sequence[Pt]], tight_margin: float, lines: Sequence[Line], line_margin: float, cell: float | None) -> tuple[object, ...]:
     def polys(group: Sequence[Sequence[Pt]]) -> tuple[object, ...]:
-        return tuple((id(o), len(o), o[0], o[-1]) if o else (0, 0, None, None) for o in group)
+        return tuple((id(o), len(o), o[0], o[-1], getattr(o, "gap", None)) if o else (0, 0, None, None, None) for o in group)
 
     return (polys(obstacles), margin, polys(tight), tight_margin, tuple((a, b) for a, b in lines), line_margin, cell)
 
@@ -137,10 +156,11 @@ class FabricIndex:
         # A RingIndex per polygon answers inside/margin from the edges near the point; verdicts are
         # unchanged (its docstring), `fouled_brute` remains the oracle.
         entries: list[tuple[int, Any, float, tuple[float, float, float, float]]] = []
-        for group, m in ((obstacles, margin), (tight, tight_margin)):
+        for group, gm in ((obstacles, margin), (tight, tight_margin)):
             for o in group:
                 if not o:
                     continue
+                m = margin_of(o, gm)
                 pts = list(o)
                 bx0, by0, bx1, by1 = bounds(pts)
                 entries.append((0, ring_index(pts), m, (bx0 - m, by0 - m, bx1 + m, by1 + m)))  # shared by content (FR-002)
@@ -204,7 +224,7 @@ def fouled_brute(q: Pt, obstacles: Sequence[Sequence[Pt]], margin: float, tight:
     def near(o: Sequence[Pt], m: float) -> bool:
         return point_in_poly(q[0], q[1], list(o)) or min(seg_dist(q[0], q[1], o[j], o[(j + 1) % len(o)]) for j in range(len(o))) < m
 
-    return any(near(o, margin) for o in obstacles if o) or any(near(o, tight_margin) for o in tight if o)
+    return any(near(o, margin_of(o, margin)) for o in obstacles if o) or any(near(o, margin_of(o, tight_margin)) for o in tight if o)
 
 
 def pairs_within(points: Sequence[Pt], reach: float) -> int:

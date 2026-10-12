@@ -6,7 +6,20 @@ import math
 import random
 
 from l7r.diagram.hamletgen.ways import street as street_mod
-from l7r.diagram.hamletgen.ways.street import _line_chunks, adds_a_needle, unneedled, _nearest_within, brook_bounds, drawn_span, join_to, lay_row_streets, row_reach, street_run_out, street_span, thread
+from l7r.diagram.hamletgen.ways.street import (
+    _line_chunks,
+    _nearest_within,
+    adds_a_needle,
+    brook_bounds,
+    drawn_span,
+    join_to,
+    lay_row_streets,
+    row_reach,
+    street_run_out,
+    street_span,
+    thread,
+    unneedled,
+)
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
 LINE = [(float(x), 500.0) for x in range(0, 1201, 8)]

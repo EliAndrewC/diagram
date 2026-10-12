@@ -181,7 +181,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: least cost through the
             steadings, then pulled taut like a string
         clear of the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line 7 ft off by default, a tread's edge 5.5 ft
-        clear of the crop - UNRESEARCHED: 8 ft off the crop
+        clear of the crop - research/questions/0081-village-lanes.drawing.html: a half-tread off the crop (`WEB_CROP_GAP`, carried by the crop polygons), 8 ft off the toe and marsh
         lattice off the water - UNRESEARCHED: 14 ft off the water lines"""
     cell = ROUTE_CELL if cell is None else cell  # the standard lattice unless a caller asks a finer one
     span = math.dist(start, goal)

@@ -13,6 +13,7 @@ from l7r.diagram.settlement import Settlement, seg_dist, skeleton_layout, web_cu
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
+from ..clearance import Gapped
 from ..cluster import _arm_crossing_accidental
 from ..consts import (
     BUNDLE_PITCH,
@@ -24,6 +25,7 @@ from ..consts import (
     STEADING_ARRIVAL_FT,
     WATER_ALONG_FT,
     WATER_ALONG_SHARE,
+    WEB_CROP_GAP,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -594,7 +596,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         door path reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: STEADING_ARRIVAL_FT 12 ft off the steading's built ground
         door path distance - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: DOOR_REACH_FT 60 ft, the page's reach at which a way counts as reaching a farmhouse
         web lanes off the hard ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: a stretch that would cross the field, a crop or wet ground is cut out
-        web lane margin off the hard ground - DEVIATION research/questions/0081-village-lanes.drawing.html: the page lets a lane touch a plot's boundary; WEB_HARD_GAP keeps a web lane 8 ft off the field, the crop and the marsh
+        web lane margin off the hard ground - research/questions/0081-village-lanes.drawing.html: the page lets a lane touch a plot's boundary - a web lane kept a half-tread off the field and the crop (`WEB_CROP_GAP`), 8 ft off the toe and marsh (`WEB_HARD_GAP`, UNRESEARCHED)
         a web lane's middle off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: WEB_FABRIC_GAP, 7 ft clear of a garden fence (`clear_runs`' tight margin)
         ground cover is not fabric - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane crosses a tree belt and the planting resumes on both sides
         scrub and commons crossed - UNRESEARCHED: a lane may cross grazing scrub and the commons
@@ -682,7 +684,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     crops = crop_polys(s)
     toe = s.toe_band() or None
     wet = marsh_ground(s.M, but=("defense",))
-    hard = [list(plan.envelope), *crops, *([toe] if toe else []), *wet]
+    # THE CROP AT A WEB LANE'S HALF-TREAD, THE TOE AND THE MARSH AT `WEB_HARD_GAP` (feature 374 wave 143, 0081): each crop polygon
+    # carries its own gap (`Gapped`), so every reader handed `hard` keeps a lane on the bund and off the wet
+    hard = [Gapped(plan.envelope, WEB_CROP_GAP), *(Gapped(c, WEB_CROP_GAP) for c in crops), *([toe] if toe else []), *wet]
     # ...AND THE HOUSEHOLDS' RESERVED WOOD SEATS ARE FABRIC TO THE WEB (feature 287 M8): the registry refuses a lane within
     # the copse's lane buffer of a seat, so every pass clips and routes round them - sized so the web's own fabric margin
     # (`WEB_FABRIC_GAP`) plus a footpath's half-tread lands on the buffer - rather than laying a cut the registry then

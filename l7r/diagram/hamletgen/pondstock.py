@@ -192,7 +192,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     # AT LEAST ONE WHERE ONE FITS (feature 287, water W50; feature 150 A3): the dike-pond loop fed its fish from the sties on
     # its dikes, so the share rounds up to one, however few households it rounds to - where a seat is in reach (wave 140).
     n_sty = max(1, round(len(houses) * (STY_SHARE[0] + rng.random() * (STY_SHARE[1] - STY_SHARE[0]))))
-    s.M["meta"]["pond_stock"] = {"sties": n_sty}
+    stock: dict[str, Any] = {"sties": n_sty}
+    s.M["meta"]["pond_stock"] = stock
     hc = (sum(float(h["x"]) for h in houses) / len(houses), sum(float(h["y"]) for h in houses) / len(houses))
     # grow-out ponds only, nearest the houses first; each pond takes at most one sty
     order = sorted((i for i, p in enumerate(ponds) if p.get("kind") != "fry"), key=lambda i: math.dist(_centroid(ponds[i]["parcel"]), hc))
@@ -235,7 +236,7 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     # hamlet keeps no sty, and its record says which of the three rules the reserved seat failed, or that none was reserved.
     if done == 0 and any(p.get("kind") != "fry" for p in ponds):
         why = "the reserved seat failed " + ", ".join(seat_faults(s, reserved, ponds, hc, houses)) if reserved is not None else "no grow-out pond had a seat within reach"
-        s.M["meta"]["pond_stock"]["none_why"] = why
+        stock["none_why"] = why
 
 
 def seat_faults(s: Settlement, reserved: tuple[Pt, float, int], ponds: list[Any], hc: Pt, houses: list[Any]) -> list[str]:

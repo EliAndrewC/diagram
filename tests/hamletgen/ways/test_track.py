@@ -357,10 +357,10 @@ def _the_choice_watched(monkeypatch, polder: bool):  # type: ignore[no-untyped-d
     return track.choose_track_out(s, plan), calls, s, plan
 
 
-def test_the_track_out_is_chosen_once_by_the_gateway_on_a_valley_and_the_sweep_on_a_polder(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 320 (FR-008): `choose_track_out` is the track's whole course in one choice - the gateway's track on a valley,
-    the connector's sweep from the gate on a polder - then threaded through the steadings (`connector_through`); the gate is
-    the cluster's gateway out of the field, and the grove bands are handed to the dry exit."""
+def test_the_track_out_is_chosen_once_by_the_gateway_on_every_field_form(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 320 (FR-008): `choose_track_out` is the track's whole course in one choice - the gateway's track, with its
+    walled-in fallback, on a valley and (feature 374 wave 141) a polder alike - then threaded through the steadings
+    (`connector_through`); the gate is the cluster's gateway out of the field, and the grove bands are handed to the dry exit."""
     from l7r.diagram.hamletgen.ways import track
 
     got, calls, s, plan = _the_choice_watched(monkeypatch, polder=False)
@@ -369,8 +369,8 @@ def test_the_track_out_is_chosen_once_by_the_gateway_on_a_valley_and_the_sweep_o
     assert gate == track.gate_out_of_the_field(plan.envelope, gate), "the gate stands out of the field"
     assert plan.grove_bands == [p for p, _o, k in track._homestead_polys(s) if k == "groves"]
     got, calls, s, plan = _the_choice_watched(monkeypatch, polder=True)
-    assert got == [(1.0, 2.0), (3.0, 4.0), (9.0, 9.0)] and set(calls) == {"connector_track"}, "a polder: the sweep from the gate"
-    assert calls["connector_track"][1]["avoid"][0] == list(plan.envelope)
+    assert got == [(1.0, 2.0), (3.0, 4.0), (9.0, 9.0)] and set(calls) == {"gateway_track"}, "a polder: the gateway's track too"
+    assert calls["gateway_track"][0][5][0] == list(plan.envelope)
 
 
 @pytest.mark.parametrize("polder", [False, True])

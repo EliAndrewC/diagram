@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.pondstock import _bank_seats, seat_faults, reserve_sty_seat, stage_pond_stock, sty_in_reach, sty_on_near_half
+from l7r.diagram.hamletgen.pondstock import _bank_seats, reserve_sty_seat, seat_faults, stage_pond_stock, sty_in_reach, sty_on_near_half
 from l7r.diagram.hamletgen.water.brook import course_corner, join_vertices, round_the_brooks
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.city.bridges import SUPPLY_ROLES

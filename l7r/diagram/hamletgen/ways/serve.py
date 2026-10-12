@@ -89,7 +89,7 @@ def joined_link(p: Pt, q: Pt, hard: list[Poly], walls: list[Poly], water: list[t
 
     Research:
         a near end joined - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another joined at a single point, or the lane not drawn
-        a detour link's margins - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`); the 8 ft off hard ground (`WEB_HARD_GAP`) UNRESEARCHED
+        a detour link's margins - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`); the hard ground at its own gap - the crop at a half-tread (`WEB_CROP_GAP`, 0081), the toe and marsh 8 ft (`WEB_HARD_GAP`, UNRESEARCHED)
         a detour link's reach - UNRESEARCHED: kept only where it comes within 12 ft of the point and of the network"""
     if math.dist(p, q) <= 1e-6:
         return [p]
@@ -163,7 +163,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         link reach - UNRESEARCHED: a link up to 200 ft to the network
         arrived at the network - research/questions/0081-village-lanes.drawing.html: a run within 25 ft of it (`_LANE_JOIN_FT`) is joined at a single point - its end carried onto the way, a whole run's arriving vertex snapped, or a link drawn - and not drawn where no link is walkable
         link off walls - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`), a garden fence's 7 ft to a lane's middle
-        link off hard ground - UNRESEARCHED: kept 8 ft off hard ground (`WEB_HARD_GAP`)
+        link off hard ground - UNRESEARCHED: kept 8 ft off the toe and marsh (`WEB_HARD_GAP`), the crop at its own half-tread gap (`WEB_CROP_GAP`)
         a healing link kept - UNRESEARCHED: its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined
         a link takes its way's width - CONVENTION
         the nearer end joined - UNRESEARCHED: of a run's two ends, the one nearer the network is the one joined to it
