@@ -535,3 +535,36 @@ def trees_overlap(plan: ParsedPlan, tol: float = WALL_OVERLAP_MIN_PX) -> list[st
             if gap < min(ar, br) * DUPLICATE_TREE_FRACTION:
                 out.append(f"a tree at svg({bx:.0f},{by:.0f}) is drawn on top of the tree at svg({ax:.0f},{ay:.0f}) - their trunks stand {gap / FTPX:.1f} ft apart")
     return out
+
+
+# A POSTERN'S APPROACH (feature 374 batch 4, plan R4-2): the county draft's south postern was sealed - the cell and the
+# barracks both ran to the wall across its whole opening - while `passage_blockers` (furniture only, by design) and
+# `gate_feeds_its_road` (the road outside) both passed. A gateway is a way through: on each face of its wall a strip as
+# wide as the opening and APPROACH_FT deep keeps a clear run of at least CLEAR_FT, room for a carrier and a handcart.
+# A building STRADDLING the wall's ink is not counted - that is the wall-broken-around-a-structure idiom (Ubame's parley
+# room), not a sealed gate. Both lengths are a GUESS: a person walks a 3 ft way, and 6 ft is one ken before the wall.
+APPROACH_FT: float = 6.0
+CLEAR_FT: float = 3.0
+
+
+def postern_approach(plan: ParsedPlan) -> list[str]:
+    """Each wall opening whose approach on one face has no clear run of CLEAR_FT within APPROACH_FT of the wall."""
+    out: list[str] = []
+    for o in wall_openings(plan):
+        depth = APPROACH_FT * FTPX
+        for a1, a2 in ((o.across1 - depth, o.across1), (o.across2, o.across2 + depth)):
+            spans: list[tuple[float, float]] = []
+            for r in plan.structures:
+                s1, s2, t1, t2 = (r.x, r.x2, r.y, r.y2) if o.horiz else (r.y, r.y2, r.x, r.x2)
+                if t1 <= o.across1 and t2 >= o.across2:  # straddles the wall's ink: the gap-fill idiom
+                    continue
+                if min(t2, a2) - max(t1, a1) > 0 and min(s2, o.span2) - max(s1, o.span1) > 0:
+                    spans.append((max(s1, o.span1), min(s2, o.span2)))
+            free, at = 0.0, o.span1
+            for s1, s2 in sorted(spans):
+                free, at = max(free, s1 - at), max(at, s2)
+            free = max(free, o.span2 - at)
+            if free < CLEAR_FT * FTPX:
+                out.append(f"the {o.ft:.1f} ft opening at svg({o.x:.0f},{o.y:.0f}) has {free / FTPX:.1f} ft clear on one face (under {CLEAR_FT:.0f} ft) - a building seals the way through")
+                break
+    return out

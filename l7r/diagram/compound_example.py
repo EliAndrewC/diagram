@@ -60,8 +60,10 @@ def county_magistracy_program() -> CompoundProgram:
     # middle gate keeps the Envelope's 6 ft (narrower than the main gate). The outer court's SERVICE GATE (pass 4,
     # building-review round 3; docs/building-programs.md "Walled enclosure": a busy outer court warrants a small service
     # gate so muck, night-soil and prisoner transfers skip the formal gate) stands in the south wall by the cell, at
-    # the head of the cart yard; its 6 ft passage is a GUESS, narrower than the main gate.
-    env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 244.0, 6.0)))
+    # the head of the cart yard; its 6 ft passage is a GUESS, narrower than the main gate. Centered 221 ft along the
+    # wall, where the cart yard reaches it and the cell stands just east (feature 374 batch 4, building-review E1: at
+    # 244 ft the cell and the re-proportioned barracks sealed it, and `postern_approach` holds it now).
+    env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 221.0, 6.0)))
     spine = (
         # THE GARDEN LIES BEFORE THE HOUSE (research 0091 'Samurai residences and their rooms (buke yashiki)' and
         # rendering 'How our maps lay out samurai residences and their rooms (buke yashiki)': the garden faces the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
@@ -113,7 +115,7 @@ def county_magistracy_program() -> CompoundProgram:
         # H and U, forms.md). Its size is a GUESS.
         CourtZone(
             "cart yard", 188.0, 177.0, 37.0, 20.0
-        ),  # 37 wide (feature 374 wave 125): the cell stands between it and the service gate  # its north edge 172 (pass 5) leaves the garrison privy its seat by the barracks
+        ),  # 37 wide (feature 374 wave 125): the service gate opens at its south end, the cell just east of it  # its north edge 172 (pass 5) leaves the garrison privy its seat by the barracks
     )
     b = BuildingSpec
     buildings = (
@@ -143,7 +145,11 @@ def county_magistracy_program() -> CompoundProgram:
             order=10,
             feature="residence",
             rooms=(
-                ("inner rooms", 0.0, 0.0, 36.0, 10.0),
+                # the maids' room at the kitchen (west) end, under the main roof (feature 374 batch 4, plan R4-1: research
+                # 0115, the Aizu chief retainer's house kept "the rooms of the maids and servants" in the house; which
+                # servants slept there, and its 10 x 10 ft, are GUESSES)
+                ("servants' quarters", 0.0, 0.0, 10.0, 10.0),
+                ("inner rooms", 10.0, 0.0, 26.0, 10.0),
                 ("family quarters", 0.0, 10.0, 18.0, 10.0),
                 ("lord's quarters", 18.0, 10.0, 18.0, 10.0),
                 ("reception room", 36.0, 0.0, 20.0, 20.0),
@@ -241,6 +247,7 @@ def county_magistracy_program() -> CompoundProgram:
             rooms=(("karo's house", 0.0, 0.0, 24.0, 14.0),),
             extra_doors=("E", "E", "E", "E"),
             door_fracs=(0.085, 0.274, 0.482, 0.689, 0.896),  # the karo's 14 ft bay and four 17 ft bays, a door at each bay's middle (0097: bays ~12-18 ft, each a dwelling with its door)
+            bays=(14.0, 31.0, 48.0, 65.0),  # the walls between them (feature 374 batch 4, building-review N1)
         ),
         # 60 x 30 ft (it was 52 x 28), the top of the granary band (30-60 x 14-36): pass 5 returned the ~2,000 sq ft the
         # house gave up (research 0091) to the compound's working stores and lodgings, holding coverage in the
@@ -250,14 +257,30 @@ def county_magistracy_program() -> CompoundProgram:
         # watch's range should out-foot the stable by a margin (docs/buildings.md "Barracks": ~27-53 ft); pass 5. A GUESS.
         # Feature 374 wave 125: 24 x 67 ft (it was 45 x 34), long and narrow along the east wall - 0097's drawing page: the
         # barracks is drawn 12 to 24 ft deep, never a square or squat block (above); about the same floor as before.
-        b("barracks", "service", 24.0, 67.0, "outer", "E", order=4, feature="barracks"),
+        # Divided into four dwellings of ~16.75 ft, a door to each on its court face (feature 374 batch 4, building-review
+        # E2: research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, "The barracks is divided into dwellings,
+        # each an earth-floored entry and a raised floor", bays ~12-18 ft); four of ~16.75 ft a GUESS in that band.
+        b(
+            "barracks",
+            "service",
+            24.0,
+            67.0,
+            "outer",
+            "E",
+            order=4,
+            feature="barracks",
+            extra_doors=("W", "W", "W"),
+            door_fracs=(0.125, 0.375, 0.625, 0.8),  # the last off its dwelling's middle: the cell stands at the face's south end
+            bays=(16.75, 33.5, 50.25),
+        ),
         # 12 x 10 ft: the small end of the single cells read (Osaka's 6 mats, ~12 x 9 ft, to Tenmacho's 18); a county
         # remand cell belongs there, its size a guess in the span (feature 267 R24, research 'How our maps draw holding cells (agariya and rōya)'). It was
         # 18 x 16 ft.
-        # Feature 374 wave 125: on the south wall just west of the service gate (it stood on the east wall, below the
+        # Feature 374 wave 125: on the south wall just east of the service gate (it stood on the east wall, below the
         # barracks the new depth lengthened), where docs/buildings.md sets it: beside the service gate, so prisoner
         # transfers never cross the hearing court.
-        b("cell", "cell", 12.0, 10.0, "outer", "S", order=1, feature="cell"),
+        # its door toward its west end, so its approach leaves the barracks' south dwelling its door (feature 374 batch 4)
+        b("cell", "cell", 12.0, 10.0, "outer", "S", order=1, feature="cell", door_fracs=(0.3, 0.5)),
         # The gatehouse stands BESIDE the gate, a building of its own (R19's Takayama form, research buildings 420),
         # 18 x 12 ft - the one measured freestanding guardroom (Kita-in's 3 x 2 ken). It was 42 x 15 ft in the SW
         # corner, 83 ft from the gate; ~40 ft is the gate range's scale. Left as found by feature 372 wave 105: 0093 now draws
@@ -277,6 +300,24 @@ def county_magistracy_program() -> CompoundProgram:
         # Feature 374 wave 124: the household's servants lodge here too - one servants' range on the street front, its
         # south face the wall, the grooms' and the household's (0115's drawing page, above): 76 x 15 ft (it was the grooms'
         # alone, 44 x 18 ft) - the 15 ft depth is 0115's GUESS for a retainer's range, its length a GUESS.
-        b("servants' row", "service", 76.0, 15.0, "outer", "S", order=6, feature="servants' quarters"),
+        # A door to each of its five dwellings (~15.2 ft, inside 0097's 12-18 ft bays), one of 0097's two forms - a row of
+        # dwellings each with its own door (feature 374 batch 4, building-review Q1: 76 ft behind one door was neither); the
+        # form is this plan's pick until the filed `servants' row entry form` row rolls it. Its lodgers are the
+        # menservants and the grooms, whose work is the gate, the stable and the outer court; the maids and the kitchen
+        # hands sleep under the main roof at the kitchen end (the residence's maids' room; plan R4-1, research 0115's
+        # Aizu house, which servant slept where a GUESS).
+        b(
+            "servants' row",
+            "service",
+            76.0,
+            15.0,
+            "outer",
+            "S",
+            order=6,
+            feature="servants' quarters",
+            extra_doors=("N", "N", "N", "N"),
+            door_fracs=(0.1, 0.3, 0.5, 0.7, 0.9),
+            bays=(15.2, 30.4, 45.6, 60.8),
+        ),
     )
     return CompoundProgram("County Magistracy (example)", env, spine, buildings, tier=_EXAMPLE_TIER)

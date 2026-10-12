@@ -369,6 +369,37 @@ the program and the emitter, never in the svg.
   the barracks; the procedure's ~84-96 px re-derived from that form; the stall depth and the 2-4 horses labeled GUESS (0108's
   drawing page). One glyph form is drawn on all four sheets; its first use is the batch's `glyph-check` occasion.
 
+### Batch 4's review findings (T18) - fixed once, verified
+
+The occasions' ten reviews (2026-10-12) returned six PASS and four building reviews plus the storehouse glyph NEEDS-WORK; the
+round arbiter ruled the three sheets at their cap `continue`, each finding fixed once and verified without a further round.
+
+- **R4-1** (within W124-1): the servants' seat goes by the servant's kind. The street or gate range lodges the menservants (chugen),
+  the gatekeeper and the grooms, whose work is the gate, the stable and the outer court; the maids and kitchen hands sleep in rooms
+  under the main roof at the kitchen end, as the Aizu chief retainer's house kept "the rooms of the maids and servants" in the
+  house beside a gate range of retainers (0115). Which servant slept where is a GUESS (no page assigns them). Each sheet labels a
+  maids' room in the residence at the kitchen end; no wicket is drawn in the divider (no page records one). This answers the four
+  sheets' kitchen-route findings (Hayakawa E2, Ochiba E1/Q1, the county E6, Ubame Q1/Q2).
+- **R4-2** (within): a postern's opening keeps an unbuilt approach on both faces of its wall. The county draft's south postern was
+  sealed by the cell and the barracks while `passage_blockers` and `gate_feeds_its_road` passed: a `pack_audit` check
+  (`postern_approach`) is written red on the draft first, then the placer keeps each postern's approach clear.
+- **R4-3** (within): the grooms share a seated servants' or garrison privy in their court within 55 ft (`GROOMS_PRIVY_FT`);
+  otherwise the stable's own privy stands on the stable's side away from the main gate, its pit toward a service edge.
+- **R4-4** (within W125-1, W124-1): every storehouse draws its door (`DOOR_KINDS`, 0117); the county barracks is divided into
+  dwellings, a door each (0097); the long-house's bays draw their partitions; the county servants' row draws a door per dwelling,
+  one of 0097's two forms (its roll is the filed `servants' row entry form` row, batch 5).
+- **R4-5** (within): the hand sheets' findings are fixed on the sheet: Hoshigaoka's sacred tree back to its clearance from the wood
+  and the arches, the clearing's back line to the eaves; Hayakawa's torii 5-12 ft before the shrine's west door (0220's drawing
+  page); Ubame's rear band west of the storehouses narrowed to an alley (0091: no wide empty band behind the house) and its stable
+  door clear of the kennel; every notes, map-note and SVG-comment line the reviews named stale brought to the drawing; Ochiba's
+  service passage through the range labeled a GUESS.
+- **R4-6** (within): the size audits' bands are recorded: the storehouse 12-20 by 9-16 ft (the Yokota pair, the national register)
+  in `buildings/types.json`; the rear yard's 18-45 by 10-30 ft a GUESS in its notes. Filed as rows, not fixed here: the stable's
+  depth against its length (its depths are GUESSES, no source), the Higuchi storehouse's position, 0091's Yokota figures 5-7% under
+  the register's.
+- **R4-7** (within): verification - the three capped sheets' fix-verification is put to the round arbiter ahead of its cap; the
+  other units take their second round on the fixed content.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

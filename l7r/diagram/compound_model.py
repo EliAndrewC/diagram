@@ -87,6 +87,9 @@ DOOR_KINDS: frozenset[str] = frozenset(
         "stables",
         "granary",
         "tax archive",
+        # the household's storehouses (feature 374 batch 4, glyph-check E1: drawn with none, they read as sealed boxes;
+        # research/questions/0117-doorways-and-doors-to.drawing.html: a storehouse's door is one block for its pair of leaves)
+        "storehouse",
         "compound shrine",
         "residence",
         "kitchen",
@@ -202,6 +205,11 @@ class BuildingSpec:
     # block, its kitchen projecting from one side, with almost no corridors - the draft drew a covered corridor across
     # the fire-gap until then).
     joins: str = ""
+    # THE DWELLINGS OF A ROWHOUSE (feature 374 batch 4, building-review E2/N1): the offsets along the building's LENGTH
+    # (its long side), in feet, of the walls between its dwellings, drawn solid across its depth - research/questions/
+    # 0097-staff-rowhouses-and-barracks-nagaya.html: "The barracks is divided into dwellings, each an earth-floored entry
+    # and a raised floor", bays of about 12-18 ft. () draws one undivided hall.
+    bays: tuple[float, ...] = ()
 
 
 @dataclass(frozen=True)

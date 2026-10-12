@@ -294,6 +294,8 @@ def _door(env: Envelope, p: Placed, boxes: list[Box], side: str = "") -> tuple[B
 GROOMS_PRIVY_FT: float = 55.0
 """How far a servants' privy may stand from the stables and still serve their grooms too (pass 6 merged the two at ~49 ft
 apart; feature 374 wave 124 kept the stables' own where the servants' range stood ~106 ft away). A drawing convention."""
+GATE_PRIVY_FT: float = 30.0
+"""How far a lodgers' privy keeps from the main gate's opening along the south wall (feature 374 batch 4, plan R4-3; a GUESS)."""
 
 
 def _gap(a: Box, b: Box) -> float:
@@ -555,6 +557,11 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # servants' privy found no seat, or stands farther than GROOMS_PRIVY_FT from them, keep their own (feature 374 wave
     # 124: the round-trip sheet's street range stands ~106 ft from its stables, and the stables lost their privy to it)
     grooms: list[tuple[str, float, float]] = []
+    # NO LODGERS' PRIVY BY THE MAIN GATE (feature 374 batch 4, plan R4-3, building-review E3): the stables' latrine seated
+    # flush beside them on the gatehouse side, 6 ft from it, the formal entrance - a privy's pit faces a service edge
+    # (docs/buildings.md, "Latrines"). GATE_PRIVY_FT along the south wall either side of the opening is held; its 30 ft a GUESS.
+    gl, gr = _gate_interval(env)
+    gate_hold = (gl - GATE_PRIVY_FT, env.h_ft - GATE_PRIVY_FT, gr + GATE_PRIVY_FT, env.h_ft)
     lodgers = sorted((p for p in result.placed if p.spec.feature in ("servants' quarters", "stables", "barracks")), key=lambda p: p.spec.feature != "servants' quarters")
     for p in lodgers:
         if p.spec.feature == "stables" and any(c == p.spec.court and _gap((x, y, x, y), (p.x_ft, p.y_ft, p.x2, p.y2)) <= GROOMS_PRIVY_FT for c, x, y in grooms):
@@ -562,7 +569,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         before = len(privies)
         # FLUSH AGAINST THE SIDE WALL beside the building first, the service wall its carter empties it through (pass 6:
         # the servants' stood ~20 ft out in the court), then an end face at its wall end, the court face last
-        if flush := _flush_privy(env, p, taken + zones, well_boxes):
+        if flush := _flush_privy(env, p, [*taken, *zones, gate_hold], well_boxes):
             taken.append(flush)
             privies.append(((flush[0] + flush[2]) / 2, (flush[1] + flush[3]) / 2, ""))
         else:
@@ -570,8 +577,10 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             wall = {"N": "S", "S": "N", "E": "W", "W": "E"}[court]
             ends = ("E", "W") if court in ("N", "S") else ("N", "S")
             toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
+            # 3.5 ft off (its face 1 ft out) last: into a narrow gap between two blocks on one wall (feature 374 batch 4, plan R4-3: the county
+            # stables' only seat clear of the gate and of their well is the 7 ft gap to the servants' row)
             for side, fracs in ((ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
-                if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0), side, well_boxes, tuple(zones)):
+                if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0, 3.5), side, well_boxes, (*zones, gate_hold)):
                     privies.append((*v, ""))
                     break
         if p.spec.feature == "servants' quarters" and len(privies) > before:

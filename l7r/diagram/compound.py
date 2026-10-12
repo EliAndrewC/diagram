@@ -300,8 +300,9 @@ UNFENCED_ZONES: frozenset[str] = frozenset({"forecourt", "yard", "cart yard", "i
 #: A zone's caption where its program name is not the reader's word: the hearing court is `oshirasu` in the program (and
 #: in its fill pattern) but the sheets caption it in English (the other drafts and the hand sheets say `hearing court`).
 #: A room's caption where its kind's name is not what the room is: the karo lodges in a BAY of the staff long-house
-#: (research 0106), which the kind `karo's house` finds, but a bay is not a house (building-review round 6).
-ROOM_CAPTIONS: dict[str, str] = {"karo's house": "karo's quarters"}
+#: (research 0106), which the kind `karo's house` finds, but a bay is not a house (building-review round 6); the maids lodge in
+#: a room of the house the kind `servants' quarters` finds (feature 374 batch 4, plan R4-1).
+ROOM_CAPTIONS: dict[str, str] = {"karo's house": "karo's quarters", "servants' quarters": "maids' room"}
 ZONE_CAPTIONS: dict[str, str] = {"oshirasu": "hearing court", "yard": "outer court", "inner yard": "inner court"}
 
 
@@ -682,7 +683,10 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
             caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
             continue
         if not (p.spec.rooms or p.spec.engawa_ft or p.spec.dais[0]):
+            walls = _bay_walls(p, px, stroke)  # inside a group of the building's kind, so the page tags its walls
+            parts += [f"<g{_kind_attr(p.spec.feature)}>"] if walls else []
             parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2, "", p.spec.feature))
+            parts += [*walls, "</g>"] if walls else []
             caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
             continue
         # a building with parts (rooms, a veranda, a dais): its fill, a same-color floor per room, partitions, the
@@ -701,6 +705,7 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
             dx, dy, dx2, dy2 = _dais(p)
             parts.append(rect(dx, dy, dx2 - dx, dy2 - dy, "#8C6F3E", "#4A3318", 1, "", "magistrate's dais"))
             caption("area", dx, dy, dx2 - dx, dy2 - dy, "magistrate's dais", 8, False, "#FFFAE6", "magistrate's dais")
+        parts += _bay_walls(p, px, stroke)
         parts.append(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, "none", stroke, 2))
         if p.spec.dais[0]:  # the clerks' positions flanking the dais, drawn over the outline so it buries neither
             dx, dy, dx2, dy2 = _dais(p)
@@ -719,6 +724,17 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
             caption("area", ax, ay, aw, ah, p.spec.name, size, False, "#3A2E1C", p.spec.feature, of=(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft))  # declared: the block
         else:
             caption("point" if full else "area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+
+
+def _bay_walls(p: Placed, px: Callable[[float, float], tuple[float, float]], stroke: str) -> list[str]:
+    """The walls between a rowhouse's dwellings (`BuildingSpec.bays`), solid across its depth at each offset along its
+    long side."""
+    out: list[str] = []
+    for off in p.spec.bays:
+        a, b = ((p.x_ft + off, p.y_ft), (p.x_ft + off, p.y2)) if p.spec.w_ft >= p.spec.h_ft else ((p.x_ft, p.y_ft + off), (p.x2, p.y_ft + off))
+        (x1, y1), (x2, y2) = px(*a), px(*b)
+        out.append(f'<line x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" stroke="{stroke}" stroke-width="1"/>')
+    return out
 
 
 def _draw_walls_and_gates(

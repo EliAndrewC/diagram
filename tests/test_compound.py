@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import re
 
 import pytest
 
@@ -994,3 +995,40 @@ def test_a_stable_draws_its_passage_grooms_room_and_stalls_on_any_wall() -> None
     east = c.Placed(_b("stables", 24.0, 18.0, "outer", "E", feature="stables"), 100.0, 10.0)
     passage, walls = cp._stable_parts(east)
     assert passage == (109.0, 10.0, 115.0, 28.0) and [w[1] for w in walls[:2]] == [16.0, 22.0]
+
+
+def test_the_county_rowhouses_draw_their_dwellings_and_a_door_each() -> None:
+    """Feature 374 batch 4 (plan R4-4): the barracks, the staff long-house and the servants' row are divided into
+    dwellings (0097), each with its door; the storehouses draw their doors (0117)."""
+    prog, result, svg = _county()
+    by = {p.spec.name: p for p in result.placed}
+    for name, walls in (("barracks", 3), ("senior retainers' quarters", 4), ("servants' row", 4)):
+        p = by[name]
+        group = svg.split(f'<g data-kind="{p.spec.feature}">', 1)[1].split("</g>", 1)[0]
+        assert group.count("<line ") >= walls, name
+    doors = svg.count('data-kind="door" data-part-of="barracks"')
+    assert doors == 4, doors
+    assert svg.count('data-kind="door" data-part-of="storehouse"') == 2
+
+
+def test_bay_walls_run_across_the_short_side() -> None:
+    def px(x: float, y: float) -> tuple[float, float]:
+        return (3 * x, 3 * y)
+
+    long_ew = c.Placed(replace(_b("row", 40.0, 10.0, "outer", "S"), bays=(20.0,)), 0.0, 0.0)
+    assert c._bay_walls(long_ew, px, "#000") == ['<line x1="60" y1="0" x2="60" y2="30" stroke="#000" stroke-width="1"/>']
+    long_ns = c.Placed(replace(_b("row", 10.0, 40.0, "outer", "E"), bays=(20.0,)), 0.0, 0.0)
+    assert c._bay_walls(long_ns, px, "#000") == ['<line x1="0" y1="60" x2="30" y2="60" stroke="#000" stroke-width="1"/>']
+
+
+def test_no_lodgers_privy_stands_by_the_main_gate() -> None:
+    """Feature 374 batch 4 (plan R4-3, building-review E3): the stables' latrine sat 6 ft from the gatehouse, ~24 ft from
+    the main gate's opening."""
+    from l7r.diagram.tools import pack_audit as pa
+    from l7r.diagram.tools.pack_audit.checks import wall_openings
+
+    _prog, _result, svg = _county()
+    gate = wall_openings(pa.parse_svg(svg))[0]  # the widest opening: the main gate
+    privies = [(float(m[1]) + 7.5, float(m[2]) + 7.5) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="15" height="15"[^>]*data-kind="latrine" data-id', svg)]
+    assert len(privies) >= 3, "the lodgers' privies are drawn"
+    assert all(abs(x - gate.x) > cp.GATE_PRIVY_FT * 3 or gate.y - y > cp.GATE_PRIVY_FT * 3 for x, y in privies), privies

@@ -467,3 +467,18 @@ def test_a_stable_parts_its_length_into_one_ken_stalls() -> None:
     assert "28.0 ft" in s.stall_width(stable(""))[0], "no partition: no stalls"
     tall = _svg('<g data-kind="stables"><rect x="0" y="0" width="48" height="84" fill="#C9A57A" stroke="#6B4F2A"/>' + cut(30, False) + cut(48, False) + cut(66, False) + "</g>")
     assert s.stall_width(tall) == [], "a stable drawn north-south reads the same"
+
+
+def test_postern_approach_keeps_a_way_through_each_opening() -> None:
+    """Feature 374 batch 4 (plan R4-2): the county draft's south postern was sealed by two buildings against the wall."""
+    _, plan = _plan(_wall((100, 140)))
+    assert s.postern_approach(plan) == []  # nothing near: clear
+    _, plan = _plan(_wall((100, 140)), _rect(80, 340, 34, 34, BLDG), _rect(116, 340, 40, 34, BLDG))  # two blocks seal it, 2 px apart
+    assert "seals the way through" in s.postern_approach(plan)[0]
+    _, plan = _plan(_wall((100, 140)), _rect(80, 340, 34, 34, BLDG))  # one block leaves 26 px (~8.7 ft) clear
+    assert s.postern_approach(plan) == []
+    _, plan = _plan(_wall((100, 170)), _rect(95, 360, 80, 40, BLDG))  # a block straddling the wall's ink: the gap-fill idiom
+    assert s.postern_approach(plan) == []
+    vertical = '<g stroke="#2D2A24" stroke-width="9"><line x1="380" y1="20" x2="380" y2="100"/><line x1="380" y1="140" x2="380" y2="380"/></g>'
+    _, plan = _plan(vertical, _rect(330, 95, 44, 50, BLDG))  # a vertical wall's opening, sealed on its inner face
+    assert "seals the way through" in s.postern_approach(plan)[0]

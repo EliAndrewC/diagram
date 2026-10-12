@@ -103,6 +103,9 @@ in 328's ranking and this spec.
 - [ ] T17 wave 126: the stable as 0108 draws it - one-ken stalls, the earth passage and the grooms' room - on every magistracy sheet (FR-001)
       research: rendering
 
+- [ ] T18 batch 4's review findings fixed once and verified: the servants by kind, the county postern open, the storehouse doors, the barracks divided, the hand sheets' findings, the size bands (plan R4-1 to R4-7) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

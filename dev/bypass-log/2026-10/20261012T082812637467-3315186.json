@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-12T08:28:12Z",
+  "target": "review-accept",
+  "commit": "ce2f5e92d",
+  "outcome": "permitted",
+  "why": "review-accept building-review--county-magistracy-example N4: batch 1 PASS round nitpick: the inner entrance's seat, a recorded GUESS (0107), batch 4 relabels its claim (found-wave126)"
+}
