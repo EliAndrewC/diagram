@@ -123,15 +123,20 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 3 (the GM 2026-10-11: pop-up checks in order; the record tooling made fast; hooks-test by what changed)
 
-- [ ] T33 The pop-up checks in order, form, research, depiction, and a round's edits settling the checks before it (plan D25, D26); tests red on today's code (SC-011)
+- [x] T33 The pop-up checks in order, form, research, depiction, and a round's edits settling the checks before it (plan D25, D26); tests red on today's code (SC-011)
       research: rendering
-- [ ] T34 One parse per content and one git batch per revision (plan D27, D28); outputs unchanged, a changed file, a changed parser and a changed module it imports each miss (SC-013)
+      verify: DONE. modal_owed.ORDER + modal_bundle.order_hold (CHECK_ORDER_OK) + apply_edits settling earlier checks; tests/tooling/test_popup_order.py 8 passed, 5 red on the old code (SC-011)
+- [x] T34 One parse per content and one git batch per revision (plan D27, D28); outputs unchanged, a changed file, a changed parser and a changed module it imports each miss (SC-013)
       research: rendering
-- [ ] T35 The claims kept by their sources (plan D29); a changed engine module, a changed reader and a changed module the reader imports each miss (SC-013)
+      verify: DONE. record_cache.py: ParseCache by text + transitive code sha (code_sha_of), RevReader/cat_blobs; units() scoped by family and uid for each bundle; outputs identical old/new/cache-off (m:375-a3-record-tooling-after); test_record_cache 7 passed
+- [x] T35 The claims kept by their sources (plan D29); a changed engine module, a changed reader and a changed module the reader imports each miss (SC-013)
       research: rendering
-- [ ] T36 The script tests run by what they touch (plan D30); fixture tests (SC-014)
+      verify: DONE. claims.units_of keyed by engine sources, PROCEDURES and the readers' transitive imports; gc.freeze at the command's exit; claims-owed 6.47 -> 0.48 s warm, cold 6.36 vs 6.62 (m:375-a3-record-tooling-after); miss tests in test_record_cache
+- [x] T36 The script tests run by what they touch (plan D30); fixture tests (SC-014)
       research: rendering
-- [ ] T37 The measurements (plan D31): SC-013's times and SC-014's count recorded; SC-012 carried to 374
+      verify: DONE. hookdeps.pydeps/--pystale/--pystamp with the whole-tree fallback; Makefile pytest step per file; 27.2 of 55 per commit, 16 whole-tree (m:375-a3-hooks-test-after); test_hook_deps 15 passed
+- [x] T37 The measurements (plan D31): SC-013's times and SC-014's count recorded; SC-012 carried to 374
       research: rendering
+      verify: DONE. SC-013 medians all at most half warm, cold below today (m:375-a3-record-tooling-after); SC-014 counted (m:375-a3-hooks-test-after); SC-012 carried to 374 (Carried line in spec.md)
 - [ ] T38 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
