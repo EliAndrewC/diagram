@@ -1446,5 +1446,16 @@
    },
    "SC-029 bar (half of 6.1) s": 3.05
   }
+ },
+ "375-a9-glyph-passes": {
+  "what": "FR-039: the glyph-check rows of dev/review-ledger.md dated 2026-09-26 on: how many, how many PASS, how many a second round or later (the subject naming round 2/3 or a re-check). One-shot, 2026-10-12.",
+  "date": "2026-10-12",
+  "command": "one-shot: the ledger's glyph-check rows since 2026-09-26, counted by verdict and by a later-round subject",
+  "value": {
+   "passes": 158,
+   "PASS": 124,
+   "NEEDS-WORK": 20,
+   "later rounds": 46
+  }
  }
 }

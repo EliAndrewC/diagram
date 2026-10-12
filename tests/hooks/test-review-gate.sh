@@ -55,6 +55,10 @@ check "a spec with no fidelity verdict" a blocked
 NEW='{"v":2,"ink_classes":{"farmhouse":1,"well":1}}'
 mkrepo b withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll
 check "a map gaining an element with no review recorded" b blocked
+# GUARD_EDIT_OK: feature 375 amendment 9, D55 - the push asks every owed unit (--landing), the glyph units' hour aside, and a glyph
+# unit with no answer marks the work LANDING, so the dispatch the refusal asks for is due and passes the pair guard
+if [ -f "$T/b/.git/glyph-landing" ]; then echo "  ok      ...and marks the work landing, so its glyph dispatch is due (375 amendment 9)"; PASS=$((PASS+1))
+else echo "  FAIL    the refused push did not mark the work landing"; FAIL=$((FAIL+1)); fi
 
 # GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - a render older than main's reads as a new element; the gate redraws
 # what an owed unit sits on (the stub `map` puts main's census back, as a real redraw did for 374's corridor) and asks again

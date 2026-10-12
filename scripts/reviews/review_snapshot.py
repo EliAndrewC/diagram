@@ -166,7 +166,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     mirror = Path(args.mirror) if args.mirror else None
     if mirror is None and ".clones" in root.parts:
         mirror = Path(*root.parts[: root.parts.index(".clones")])
-    _, units, _ = owed_module().owed(root)
+    _, units, _ = owed_module().owed(root, landing=True)  # every owed unit: the caller named the due ones (375 amendment 9)
     by_slug = {u.slug: u for u in units}
     unknown = [s for s in args.units if s not in by_slug]
     if unknown:

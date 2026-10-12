@@ -207,6 +207,19 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T55 375 closes again: the yield table to the GM, the `make accept` row for check-bundle's measured saving, tests, `make hooks-test`, the gate, the report, landed (D52)
       research: rendering
       verify: DONE. DONE. make accept row filed (check-bundle's measured saving, for make gm-review); the yield table goes in the landing message; tests/tooling 1712+, tests/tools 622, tests/pipeline 106 passed; hooks-test inside make done; make done green (162 s, its record committed by itself); report written; landed by the push carrying this tick
-- [ ] GM review (make gm-reviewed F=375) [lands-open]
+- [x] GM review (make gm-reviewed F=375) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
+
+## Amendment 9 (the GM 2026-10-12: glyph-check run on the feature's hour, findings addressed together)
+
+- [x] T56 The feature's glyph clock and batch, no feature, owed against due, `--landing` (D53, D54, D55); tests red on today's code (SC-032, SC-034's due-at-once)
+      research: rendering
+      verify: DONE. DONE. review_owed: the feature's clock and batch, no live feature (speckit-todo's state), owed vs due, --landing; tests/tooling/test_review_owed 60 passed, the schedule tests red on today's code (owed() had no landing argument)
+- [x] T57 The early glyph dispatch refused, `GLYPH_DUE_OK`, the batch opened by the guard; the landing marker written by review-gate and cleared by a clean push; `make verify` naming the waiting units (D55, D56; SC-033)
+      research: rendering
+      verify: DONE. DONE. the pair guard refuses an early glyph dispatch (GLYPH_DUE_OK), opens the batch; review-gate marks landing, a clean push clears it; --why names the waiting units; test-pair-hooks 111, test-review-gate 41, test-sync-with-main 124 passed
+- [x] T58 The texts (docs/reviews.md, CLAUDE.md, docs/guards.md); SC-034 carried to 374; 375 closes again: tests, `make hooks-test`, the gate, the report, landed (D57)
+      research: rendering
+      verify: DONE. DONE. docs/reviews.md, docs/guards.md, CLAUDE.md; SC-034 carried to 374 (sc034-375-a9-glyph-per-hour); tests/tooling 1725 passed; hooks-test green (pair 111, review-gate 41, sync 124); no engine code in the amendment, so the route is DIRECT; report written; landed by the push carrying this tick
+

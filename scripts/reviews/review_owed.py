@@ -37,6 +37,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -351,8 +352,129 @@ def declared(root: Path, base: str) -> tuple[list[Unit], list[str], bool]:
     return units, problems, any_section
 
 
-def owed(root: Path) -> tuple[str, list[Unit], list[str]]:
-    """(the base's description, the owed units - detected and declared, deduplicated, in dispatch order, problems)."""
+# ---- feature 375 amendment 9 (the GM 2026-10-12): a glyph check is DUE on the feature's hour, not on each occasion ----------
+#: "every feature which takes longer than 1 hour to implement is 'due' to run it once after every hour and the address findings
+#: all at once" (the GM): `glyph-check` cost the most of the review checks for the least acted on (5.0 an hour since 2026-09-26,
+#: specs/375-enforced-wave-process/research.md R8), run after every wave and again after every fix
+GLYPH_HOUR_S = 3600
+CLOCK = "glyph-clock.json"  # {<feature dir name>: {"batch_at": <epoch>, "batch": [<unit slugs>]}}, in the git dir
+LANDING = "glyph-landing"  # {"feature": <name or "">, "at": <epoch>}: review-gate.sh refused a push for an unanswered glyph unit
+PAIRING = "pairing-state.json"  # the pair guard's: `dispatched[<slug>].at`
+
+
+def _gitdir(root: Path) -> Path | None:
+    g = _git(root, "rev-parse", "--absolute-git-dir")
+    return Path(g) if g else None
+
+
+def _read_json(path: Path | None) -> dict:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8")) if path is not None else {}
+    except (OSError, ValueError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _todo():  # noqa: ANN202 - scripts/speckit-todo.py, imported by path (its name has a hyphen)
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("speckit_todo_for_review_owed", Path(__file__).resolve().parents[1] / "speckit-todo.py")
+    mod = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+    sys.modules["speckit_todo_for_review_owed"] = mod
+    spec.loader.exec_module(mod)  # type: ignore[union-attr]
+    return mod
+
+
+def active_feature(root: Path) -> str:
+    """The feature whose hour a glyph check keeps, or "" for a change with no feature (D54): `.specify/feature.json` names one
+    (`hm_arbiter.feature_dir`, the one reader), it exists, and `make speckit-todo` does not read it closed - nothing clears the
+    file when a feature closes, by a Done status line or by its last tick (370 and 372 closed so under "Draft")."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    import hm_arbiter  # noqa: PLC0415
+
+    d = hm_arbiter.feature_dir(root)
+    if d is None or not (d / "spec.md").is_file():
+        return ""
+    todo = _todo()
+    return "" if todo.feature(d, todo.vocabulary(root)).state in ("closed", "done - GM review pending") else d.name
+
+
+def feature_start(root: Path, feature: str) -> float | None:
+    """When the feature began in this clone: the first event of its log (`<git dir>/l7r-events/<feature>.jsonl`), or None."""
+    g = _gitdir(root)
+    try:
+        with (g / "l7r-events" / f"{feature}.jsonl").open(encoding="utf-8") as fh:  # type: ignore[operator]
+            first = json.loads(fh.readline())
+        from datetime import datetime  # noqa: PLC0415
+
+        return datetime.fromisoformat(str(first["t"]).replace("Z", "+00:00")).timestamp()
+    except (OSError, TypeError, ValueError, KeyError):
+        return None
+
+
+def landing(root: Path, feature: str) -> bool:
+    """Is the work landing - a push refused for an unanswered glyph unit, the marker naming this feature (or none)?"""
+    mark = _read_json((_gitdir(root) or Path("/nonexistent")) / LANDING)
+    return bool(mark) and mark.get("feature", "") == feature
+
+
+def glyph_due(root: Path, units: Sequence[Unit], now: float | None = None) -> tuple[list[Unit], list[tuple[Unit, str]]]:
+    """(the glyph units due, the glyph units owed and waiting with when each comes due) - plan D53-D55. Due: an hour of the
+    feature's time has passed since its start or its last batch - every owed glyph unit then; or the unit is in the open
+    batch and not yet dispatched since it opened; or the work is landing. With no feature, none is due until it lands."""
+    now = time.time() if now is None else now
+    glyph = [u for u in units if u.check == "glyph-check"]
+    if not glyph:
+        return [], []
+    feature = active_feature(root)
+    if landing(root, feature):
+        return glyph, []
+    start = feature_start(root, feature) if feature else None
+    if start is None:
+        return [], [(u, "at landing") for u in glyph]
+    g = _gitdir(root) or Path("/nonexistent")
+    mine = _read_json(g / CLOCK).get(feature) or {}
+    batch_at = float(mine.get("batch_at") or 0)
+    hour = max(start, batch_at)
+    if now - hour >= GLYPH_HOUR_S:
+        return glyph, []
+    disp = _read_json(g / PAIRING).get("dispatched") or {}
+    batch = set(mine.get("batch") or [])
+
+    def undispatched(slug: str) -> bool:
+        at = disp.get(slug, {}).get("at", 0) if isinstance(disp.get(slug), dict) else 0
+        return float(at or 0) < batch_at
+
+    due = [u for u in glyph if batch_at and u.slug in batch and undispatched(u.slug)]
+    when = time.strftime("%H:%M", time.localtime(hour + GLYPH_HOUR_S))
+    return due, [(u, f"at {when}") for u in glyph if u not in due]
+
+
+def open_batch(root: Path, units: Sequence[Unit], now: float | None = None) -> None:
+    """A glyph dispatch passed on the hour, or under GLYPH_DUE_OK, opens a batch (D53, D55): the clock restarts from it, and
+    every glyph unit owed at that moment stays due until it is dispatched."""
+    feature = active_feature(root)
+    g = _gitdir(root)
+    if not feature or g is None:
+        return
+    clock = _read_json(g / CLOCK)
+    clock[feature] = {"batch_at": int(time.time() if now is None else now), "batch": sorted(u.slug for u in units if u.check == "glyph-check")}
+    (g / CLOCK).write_text(json.dumps(clock, indent=1) + "\n", encoding="utf-8")
+
+
+def mark_landing(root: Path, on: bool) -> None:
+    """review-gate.sh's refusal for an unanswered glyph unit sets the marker; a clean push clears it (D55)."""
+    g = _gitdir(root)
+    if g is None:
+        return
+    if on:
+        (g / LANDING).write_text(json.dumps({"feature": active_feature(root), "at": time.time()}) + "\n", encoding="utf-8")
+    else:
+        (g / LANDING).unlink(missing_ok=True)
+
+
+def all_owed(root: Path) -> tuple[str, list[Unit], list[str]]:
+    """(the base's description, every owed unit - detected and declared, deduplicated, in dispatch order, problems)."""
     base, desc = base_of(root)
     units, problems, _ = declared(root, base)
     seen: dict[str, Unit] = {}
@@ -360,6 +482,16 @@ def owed(root: Path) -> tuple[str, list[Unit], list[str]]:
         seen.setdefault(u.slug, u)
     ordered = sorted(seen.values(), key=lambda u: (CHECKS.index(u.check), u.subject))
     return desc, ordered, problems
+
+
+def owed(root: Path, landing: bool = False) -> tuple[str, list[Unit], list[str]]:
+    """(the base's description, the units DUE, problems): every non-glyph unit (FR-041), and the glyph units the feature's hour
+    makes due (FR-039, `glyph_due`); `landing` - the push - every owed unit, as before amendment 9."""
+    desc, units, problems = all_owed(root)
+    if landing:
+        return desc, units, problems
+    due = set(glyph_due(root, units)[0])
+    return desc, [u for u in units if u.check != "glyph-check" or u in due], problems
 
 
 def touched_code(root: Path, base: str) -> list[str]:
@@ -392,6 +524,31 @@ def ruling(desc: str, units: Sequence[Unit], problems: Sequence[str] = ()) -> st
     return head + ("" if not problems else " | PROBLEMS: " + "; ".join(problems))
 
 
+def glyph_cli(root: Path, slug: str, gate: bool, escaped: bool) -> int:
+    """`--glyph-gate SLUG`: 0 when the unit may be dispatched now - due, escaped, or not a glyph unit owed - else 1 naming when
+    it comes due. `--glyph-dispatched SLUG`: a passed dispatch on the hour or under the escape opens a batch (D53, D55)."""
+    units = all_owed(root)[1]
+    unit = next((u for u in units if u.slug == slug), None)
+    if unit is None or unit.check != "glyph-check":
+        return 0
+    now = time.time()
+    due, waiting = glyph_due(root, units, now)
+    if gate:
+        if unit in due or escaped:
+            return 0
+        when = next((w for u, w in waiting if u == unit), "later")
+        print(f"{slug} is owed but not yet due - due {when} (a glyph check runs on the feature's hour, all owed units together, "
+              "or at landing; feature 375 amendment 9)")
+        return 1
+    feature = active_feature(root)
+    start = feature_start(root, feature) if feature else None
+    batch_at = float((_read_json((_gitdir(root) or Path("/nonexistent")) / CLOCK).get(feature) or {}).get("batch_at") or 0)
+    on_the_hour = start is not None and not landing(root, feature) and now - max(start, batch_at) >= GLYPH_HOUR_S
+    if on_the_hour or escaped:
+        open_batch(root, units, now)
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=".", help="the clone (default: the cwd's repository)")
@@ -399,6 +556,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     mode.add_argument("--why", action="store_true", help="print the one-line ruling instead of the slugs")
     mode.add_argument("--units", action="store_true", help="print slug, check, subject, map and occasion per unit")
     mode.add_argument("--check-declared", action="store_true", help="exit 1 when code moved and no feature declares its occasions")
+    mode.add_argument("--glyph-gate", metavar="SLUG", help="exit 0 when this glyph unit is due (or not a glyph unit), else 1 naming when (FR-040)")
+    mode.add_argument("--glyph-dispatched", metavar="SLUG", help="the pair guard passed this glyph dispatch: open a batch when it came on the hour or escaped")
+    mode.add_argument("--landing-mark", choices=("on", "off"), help="review-gate.sh refused for an unanswered glyph unit (on); a clean push (off)")
+    ap.add_argument("--landing", action="store_true", help="every owed unit, the glyph units' hour aside - the push's question (FR-039)")
+    ap.add_argument("--escaped", action="store_true", help="with --glyph-gate/--glyph-dispatched: GLYPH_DUE_OK was given")
     args = ap.parse_args(argv)
     top = _git(Path(args.root), "rev-parse", "--show-toplevel")
     if not top:
@@ -411,9 +573,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(refusal)
             return 1
         return 0
-    desc, units, problems = owed(root)
+    if args.landing_mark:
+        mark_landing(root, args.landing_mark == "on")
+        return 0
+    if args.glyph_gate or args.glyph_dispatched:
+        return glyph_cli(root, args.glyph_gate or args.glyph_dispatched, bool(args.glyph_gate), args.escaped)
+    desc, units, problems = owed(root, landing=args.landing)
     if args.why:
         print(ruling(desc, units, problems))
+        waiting = glyph_due(root, all_owed(root)[1])[1] if not args.landing else []
+        if waiting:
+            print("glyph checks owed and not yet due (feature 375 amendment 9 - on the feature's hour, or at landing): "
+                  + ", ".join(f"{u.slug} ({when})" for u, when in waiting))
     elif args.units:
         for u in units:
             print("\t".join((u.slug, u.check, u.subject, u.on, u.occasion)))

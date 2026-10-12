@@ -91,3 +91,12 @@ right after 0021, the two helpers swapped in place - took 3.7-3.8 s on today's c
 about 1 s saved, not the 3.7 s the profile predicted. cProfile slows pure-Python loops more than the rest, so it overstated
 `corpus_frequency`'s share; and the first 6.1 s was timed at load 6. The new bundle's time by phase: `record_prepass` 0.68 s,
 `quote_verbatim` 0.20, the other git reads 0.32, the owed check in-process 0.81.
+
+## R8 - What a glyph check costs and finds (feature 375 amendment 9)
+
+`make review-yield` over the ledger since 2026-09-26 (`m:375-a8-review-yield`): `glyph-check` is the costliest review check,
+9.29 hours, with 120 of its passes reporting a finding and 46 of those acted on - 5.0 acted on an hour, against 12 to 97 for the
+others. Counted from the same rows (`m:375-a9-glyph-passes`): 158 glyph-check passes, 124 of them PASS, 46 a second round or
+later. A glyph check is owed today on each occasion (feature 294) and dispatched once the gate is green, so a long feature
+checks its new elements after each wave and again after each fix; on the hour, an element changed several times in an hour
+is checked once, on what it is by then.

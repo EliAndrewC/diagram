@@ -101,7 +101,10 @@ case_05() {  # 4 s measured 2026-10-11
 echo "4. DIRECT route: a docs-only delta pushes straight to GitHub main, no build, mirror follows"
 D=$(topology d)
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
+# GUARD_EDIT_OK: feature 375 amendment 9, D55 - a clean push ends the landing: review-gate.sh's glyph-landing mark is removed
+echo '{"feature": "", "at": 1}' > "$D/main/.clones/c/.git/glyph-landing"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "direct push" 0 $?
+[ ! -f "$D/main/.clones/c/.git/glyph-landing" ] && PASS=$((PASS+1)) || { echo "FAIL  a clean push left the glyph-landing mark"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  GitHub main did not receive the direct push"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not follow"; FAIL=$((FAIL+1)); }
 expect_out "route DIRECT"
