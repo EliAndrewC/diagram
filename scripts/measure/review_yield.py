@@ -63,8 +63,9 @@ def outcome(acted: str) -> str:
 
 
 def table(rs: list[list[str]]) -> dict[str, dict[str, Any]]:
-    t: dict[str, dict[str, Any]] = defaultdict(lambda: {"passes": 0, "with a finding": 0, "acted on": 0, "dismissed": 0, "deferred": 0, "not acted on": 0, "author missed": 0,
-                                                        "hours": 0.0, "k tokens out": 0.0, "features": set()})
+    t: dict[str, dict[str, Any]] = defaultdict(
+        lambda: {"passes": 0, "with a finding": 0, "acted on": 0, "dismissed": 0, "deferred": 0, "not acted on": 0, "author missed": 0, "hours": 0.0, "k tokens out": 0.0, "features": set()}
+    )
     for c in rs:
         r = t[c[1]]
         r["passes"] += 1
@@ -77,8 +78,16 @@ def table(rs: list[list[str]]) -> dict[str, dict[str, Any]]:
         k = _OUT.search(c[9])
         r["k tokens out"] += float(k.group(1)) if k else 0.0
         r["features"].update(_FEATURE.findall(c[2]))
-    return {k: {**v, "hours": round(v["hours"], 2), "k tokens out": round(v["k tokens out"], 1), "features": len(v["features"]),
-                "acted on per hour": round(v["acted on"] / v["hours"], 1) if v["hours"] else 0.0} for k, v in t.items()}
+    return {
+        k: {
+            **v,
+            "hours": round(v["hours"], 2),
+            "k tokens out": round(v["k tokens out"], 1),
+            "features": len(v["features"]),
+            "acted on per hour": round(v["acted on"] / v["hours"], 1) if v["hours"] else 0.0,
+        }
+        for k, v in t.items()
+    }
 
 
 def render(t: dict[str, dict[str, Any]], since: str, n: int) -> str:

@@ -42,12 +42,12 @@ from __future__ import annotations
 import argparse
 import ast
 import datetime
+import hashlib
 import json
 import re
 import shutil
 import subprocess
 import sys
-import hashlib
 import tarfile
 import tempfile
 from collections import Counter
@@ -149,7 +149,17 @@ def units_of(skill: Path) -> list[Any]:
             h.update(doc.encode() + b"\0" + (skill / doc).read_bytes() + b"\0")
     common = rc.common_dir(skill)
     cache = rc.ParseCache(common / rc.CACHE_DIR / f"claims-{h.hexdigest()[:16]}.pickle" if common is not None else None)
-    units = cache.get("units", lambda: [u for u, _errors in cl.all_units(skill)])
+    # UNDER IT, EACH MODULE KEPT BY WHAT IT READS (feature 375 amendment 8, FR-035, plan D48): the key above moves with any
+    # engine edit, and a comment cost 11.9 s against 1.0 warm (specs/375-enforced-wave-process/research.md R7) - so on its
+    # miss each module's parse and units come from `claims-modules`, and only the edited modules are computed again
+    # Named by the readers' code - this file, what it imports, and the engine's reader - so a change to `module_units` reads
+    # nothing kept by the old one; and not `claims-...`: `save()` drops every other `<prefix>-*.pickle` as a stale version,
+    # and the two caches deleted each other (measured 2026-10-12: every module missed after a one-line edit)
+    reader = hashlib.sha256((rc.code_sha_of(Path(__file__).resolve().parents[2], Path(__file__)) + (skill / "l7r" / "diagram" / "tools" / "claims.py").read_text(encoding="utf-8")).encode())
+    memo = rc.ParseCache(common / rc.CACHE_DIR / f"claims_by_module-{reader.hexdigest()[:16]}.pickle" if common is not None else None)
+    memo.PRUNE_AT = 1  # holds only what this run used, so the file does not grow with every edit
+    units = cache.get("units", lambda: [u for u, _errors in cl.all_units(skill, memo=memo)])
+    memo.save()
     cache.save()
     return units
 
@@ -297,8 +307,12 @@ def context_source(root: Path, ref: str) -> str:
     node: ast.AST | None = None
     for name in qual.split("."):
         node = next(
-            (n for n in body if (isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and n.name == name)
-             or (isinstance(n, (ast.Assign, ast.AnnAssign)) and name in [t.id for t in (n.targets if isinstance(n, ast.Assign) else [n.target]) if isinstance(t, ast.Name)])),
+            (
+                n
+                for n in body
+                if (isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and n.name == name)
+                or (isinstance(n, (ast.Assign, ast.AnnAssign)) and name in [t.id for t in (n.targets if isinstance(n, ast.Assign) else [n.target]) if isinstance(t, ast.Name)])
+            ),
             None,
         )
         if node is None:
@@ -350,7 +364,7 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
         for ref in context:
             parts.append(f"## CONTEXT {ref}\n\n```python\n{context_source(root, ref)}\n```\n")
     for p in (p.rsplit("/", 1)[-1] for p in pages):  # a path or a bare name; a page named and not found is an error, never
-        if not (qdir / p).is_file():                   # dropped (feature 374: a pointer-form path was skipped in silence)
+        if not (qdir / p).is_file():  # dropped (feature 374: a pointer-form path was skipped in silence)
             raise ValueError(f"PAGES: no question file {p} under {qdir}")
         cited += [p] if p not in cited else []
     # THE QUESTIONS ARE FILES BESIDE THE MANIFEST, as their reader meets them (heading and blocks, intro marked, no markup),
@@ -476,7 +490,9 @@ def record(
         if rests and "pages" in fp:
             foreign = [r for r in rests if r.rsplit(":", 1)[0] not in fp["pages"]]
             if foreign:
-                msgs.append(f"`{key}`: rests on {', '.join(sorted({r.rsplit(':', 1)[0] for r in foreign}))}, a page it does not cite - dropped (was the reply judged against another bundle's numbering?)")
+                msgs.append(
+                    f"`{key}`: rests on {', '.join(sorted({r.rsplit(':', 1)[0] for r in foreign}))}, a page it does not cite - dropped (was the reply judged against another bundle's numbering?)"
+                )
                 rests = [r for r in rests if r not in foreign] or None
         row: dict[str, Any] = {
             "verdict": verdict,
@@ -753,7 +769,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         if full:
             print(f"claims-owed: {len(full)} claim(s) in {len(mods)} file(s) owe impl-drift; bundle per file with `make claims-bundle MODULE=<path>`, or OWED=1 for all")
         if len(due) > len(full):
-            print(f"claims-owed: {len(due) - len(full)} claim(s) owe only a TRIAGE of the blocks that changed on their pages - `make claims-triage` first; it sends on only the claims a change bears on")
+            print(
+                f"claims-owed: {len(due) - len(full)} claim(s) owe only a TRIAGE of the blocks that changed on their pages - `make claims-triage` first; it sends on only the claims a change bears on"
+            )
         return 0
     if args.cmd == "backfill-sections":
         n = backfill_sections(cur, index, store)
@@ -800,9 +818,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"claims-triaged: {m}")
         named = sum(1 for m in msgs if m.startswith("touched") and " - a removed block the history no longer shows" not in m)
         forced = sum(1 for m in msgs if m.startswith("touched")) - named
-        print(f"claims-triaged: {named + forced} of {len(data['units'])} sent on to impl-drift ({named} named by the reply"
-              + (f", {forced} owed in full: a removed block's words could not be shown" if forced else "")
-              + "); the rest cleared")
+        print(
+            f"claims-triaged: {named + forced} of {len(data['units'])} sent on to impl-drift ({named} named by the reply"
+            + (f", {forced} owed in full: a removed block's words could not be shown" if forced else "")
+            + "); the rest cleared"
+        )
         return 0
     if args.cmd == "report":
         print(report(cur, index, qdir, store, load_deferred(root / DEFERRED)))

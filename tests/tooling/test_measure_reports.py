@@ -56,13 +56,29 @@ def test_review_yield_counts_each_column_from_its_cells() -> None:
 @pytest.mark.parametrize(
     ("cell", "outcome"),
     [
-        ("applied", "acted on"), ("fixed (the EDIT applied)", "acted on"), ("index recorded; round 2", "acted on"),
-        ("filed as rows", "acted on"), ("to the follow-up", "acted on"), ("not applied: carried in specs/335/briefs", "acted on"),
-        ("nothing", "dismissed"), ("nothing for the GM", "dismissed"), ("answered in feature 328", "dismissed"),
-        ("left: the reason is the GM's allowance", "dismissed"), ("verified", "dismissed"), ("spec accepted", "dismissed"),
-        ("none", "dismissed"), ("accepted (the drift already on the report)", "dismissed"), ("plan accepted", "dismissed"),
-        ("declined: contradicts FR-015", "dismissed"), ("no change", "dismissed"), ("no-change", "dismissed"), ("put to the GM", "deferred"), ("left for the next session", "deferred"),
-        ("not applied: needs a new passage", "deferred"), ("-", "not acted on"), ("re-dispatched; engine frozen", "not acted on"),
+        ("applied", "acted on"),
+        ("fixed (the EDIT applied)", "acted on"),
+        ("index recorded; round 2", "acted on"),
+        ("filed as rows", "acted on"),
+        ("to the follow-up", "acted on"),
+        ("not applied: carried in specs/335/briefs", "acted on"),
+        ("nothing", "dismissed"),
+        ("nothing for the GM", "dismissed"),
+        ("answered in feature 328", "dismissed"),
+        ("left: the reason is the GM's allowance", "dismissed"),
+        ("verified", "dismissed"),
+        ("spec accepted", "dismissed"),
+        ("none", "dismissed"),
+        ("accepted (the drift already on the report)", "dismissed"),
+        ("plan accepted", "dismissed"),
+        ("declined: contradicts FR-015", "dismissed"),
+        ("no change", "dismissed"),
+        ("no-change", "dismissed"),
+        ("put to the GM", "deferred"),
+        ("left for the next session", "deferred"),
+        ("not applied: needs a new passage", "deferred"),
+        ("-", "not acted on"),
+        ("re-dispatched; engine frozen", "not acted on"),
     ],
 )
 def test_review_yield_reads_each_kind_of_acted_on_cell(cell: str, outcome: str) -> None:
@@ -120,8 +136,7 @@ def test_turn_time_measures_reply_after_a_tool_result_and_fits_it(tmp_path: path
     lines = []
     for i, (ctx, gap, out) in enumerate([(100_000, 6.0, 1000), (300_000, 8.0, 1000), (500_000, 11.0, 2000), (700_000, 14.0, 3000)]):
         lines.append(_line("user", f"2026-10-12T00:{i:02d}:00Z", **tool))
-        lines.append(_line("assistant", f"2026-10-12T00:{i:02d}:{int(gap):02d}Z", requestId=f"r{i}",
-                           message={"usage": {"cache_read_input_tokens": ctx, "output_tokens": out}}))
+        lines.append(_line("assistant", f"2026-10-12T00:{i:02d}:{int(gap):02d}Z", requestId=f"r{i}", message={"usage": {"cache_read_input_tokens": ctx, "output_tokens": out}}))
     lines.append(_line("assistant", "2026-10-12T00:09:00Z", requestId="r3", message={"usage": {}}))  # a repeat of r3, and no tool result before it
     lines.append("not json")
     pts = tt.turns(lines)

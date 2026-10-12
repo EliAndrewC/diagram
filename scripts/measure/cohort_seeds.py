@@ -62,8 +62,10 @@ def render(s: dict[str, Any]) -> str:
         lines.append(f"  {name}: seeds {', '.join(map(str, f['seeds']))} - on {', '.join(f['changes'])}")
     if not s["failures"]:
         lines.append("  no failures recorded")
-    lines.append(f"the fewest first seeds that find every failure: {s['fewest first seeds finding every failure']}"
-                 + (f" (and the pinned rows for {', '.join(s['failures only a pinned seed found'])})" if s["failures only a pinned seed found"] else ""))
+    lines.append(
+        f"the fewest first seeds that find every failure: {s['fewest first seeds finding every failure']}"
+        + (f" (and the pinned rows for {', '.join(s['failures only a pinned seed found'])})" if s["failures only a pinned seed found"] else "")
+    )
     return "\n".join(lines)
 
 
