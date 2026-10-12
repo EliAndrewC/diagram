@@ -401,6 +401,54 @@ round arbiter ruled the three sheets at their cap `continue`, each finding fixed
 - **R4-7** (within): verification - the three capped sheets' fix-verification is put to the round arbiter ahead of its cap; the
   other units take their second round on the fixed content.
 
+## Batch 5: the county draft's filed rows, its stores and gate as knobs, the shrine beside its tree
+
+**The work list** is 328's ranking rebuilt after batch 4 landed (179 open rows, 132 E3; `m:batch4-open-rows`): the open list's
+rows 0-7 (the county draft's findings batch 4's checks filed) and 18 (its gatehouse), with the gate-form row batch 4's last
+impl-drift filed (found.jsonl), then rows 8-12 (the sacred features). The rules of batches 3 and 4 hold.
+
+- **B5-1** (within): a knob the record attests with two forms is ROLLED for the county draft by its name, as Ochiba's sheet rolls
+  its own (`random.Random(zlib.crc32(b"county-magistracy-example:<knob>")).choice([...])`), in code beside its forms, the
+  roll recorded in the draft's notes - the county servants' row's entry form (batch 4) is the pattern.
+
+### Wave 127 (T19) - the county draft's small rows
+
+- **W127-1** (within): the practice ground's comment restated to the barracks as drawn; the inner entrance's claim cites
+  0107's drawing page (the residence's back at the kitchen end) and its door is seated there; the middle gate drawn ~8 ft as
+  docs/building-programs.md says (or the doc and the Envelope made to agree on what the record gives); the servants' row
+  entry form row marked done (batch 4 rolled it).
+
+### Wave 128 (T20) - the county granary and gate as the record's forms
+
+- **W128-1** (within): the granary's form is 0098's knob, rolled (this draft: the raised timber storehouse, takakura), drawn
+  with its posts, at 0098's ~43-50 x 25-27 ft (the coverage band kept by floor given back elsewhere, measured).
+- **W128-2** (within): the main gate's form is 0093's knob, rolled (this draft: the one-bay gate, ~6-8.5 ft); the
+  gatekeepers' place follows from it - a one-bay gate has no range to hold a guardroom, so its gatekeepers sit in a
+  gatehouse of their own (Takayama's form), drawn ~40 ft x 2 ken as 0093's drawing page draws one (its length a GUESS);
+  a gate range rolls the place between the two (follows from the definitions).
+
+### Wave 129 (T21) - the county vegetable garden's form
+
+- **W129-1** (within): the garden's size is 0109's knob, rolled (this draft: the field form); a field over half the grounds
+  does not fit a magistracy's inner court, so it is drawn as large as the court's free ground holds - the room deciding,
+  as 0109's drawing page records for Ubame's plot - the claim citing 0109 as research, its exact size a GUESS.
+
+### Wave 130 (T22) - every compound shrine in a corner beside its tree
+
+- **W130-1** (within): 0218's drawing page: the compound shrine stands in a corner of its grounds beside a tree. The
+  county draft's placer seats it in a corner with its tree; on the hand sheets the stippled grove rectangle gives way
+  to the one tree beside the shrine (Hayakawa, Ochiba, Ubame), Ochiba's surrounding garden removed. A pack_audit check
+  holds the tree beside the shrine, red on a sheet without one first.
+
+### Wave 131 (T23) - the shrine hall's ceiling, the second kami, the sanctuary's width
+
+- **W131-1** (within): the hall shrine's ceiling ~30 ft (a 3-5 ken haiden), "under half a residence" labeled a GUESS;
+  Ochiba's hall and its complex resized to it.
+- **W131-2** (within): a second kami's form (one hall or a shrine of its own) is a knob rolled per sheet; Hayakawa's river
+  kami (one hall, done in batch 4) and Ubame's wood kami (one hall) as their rolls give.
+- **W131-3** (within): a country shrine's sanctuary width is a knob rolled per sheet - 1, 2 (Hie, ~12 x 6 ft) or 3 bays;
+  Hoshigaoka's roll is 2 bays, drawn so and recorded.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

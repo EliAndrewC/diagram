@@ -112,6 +112,23 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. DONE. batch 4's review findings (R4-1 to R4-7): every finding fixed and recorded (measurements b4-*) or accepted or filed (found.jsonl); postern_approach red first; claims re-checked; the round arbiter closed the reviews (ask:batch4-review-close: accept)
 
+## Phase 8 - batch 5: the county draft's filed rows, its stores and gate as knobs, the shrine beside its tree
+
+- [ ] T19 wave 127: the county draft's small rows - the practice ground comment, the inner entrance at the kitchen end (0107), the middle gate's width, the servants' row form marked (FR-001)
+      research: rendering
+
+- [ ] T20 wave 128: the county granary (0098's form rolled, its size in the band) and gate (0093's form rolled, the gatehouse of its own) (FR-001)
+      research: rendering
+
+- [ ] T21 wave 129: the county vegetable garden's form (0109's knob rolled, the room deciding) (FR-001)
+      research: rendering
+
+- [ ] T22 wave 130: every compound shrine in a corner beside its tree (0218), on the county draft and the three magistracy sheets (FR-001)
+      research: rendering
+
+- [ ] T23 wave 131: the shrine hall's ceiling (Ochiba), the second kami as a rolled knob (Ubame), the sanctuary's width rolled (Hoshigaoka) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]
