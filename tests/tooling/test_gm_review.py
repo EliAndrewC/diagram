@@ -44,7 +44,8 @@ def test_a_row_for_the_gm_brings_its_box_and_the_feature_reads_pending(root: pat
     gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
     assert gm.box(d) in (d / "tasks.md").read_text()
     assert todo.feature(d).state == "done - GM review pending" and todo.holding(d) == []
-    assert "TO REVIEW - 375-x" in gm.listing(root) and "[0] accepted: the steam arcs off center" in gm.listing(root)
+    assert "375  x" in gm.listing(root) and "1 accepted" in gm.listing(root)
+    assert "[0] the steam arcs off center" in gm.listing(root, "375") and "a drawing nicety" in gm.listing(root, "375")
     assert not gm.ensure_box(d), "one box"
 
 
@@ -65,7 +66,7 @@ def test_a_discussed_row_is_reviewed_with_the_gms_words(root: pathlib.Path, monk
     d = root / "specs" / "375-x"
     (d / "report.md").write_text("# report\n")
     gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
-    assert 'make gm-reviewed F=375 WORDS="<his words>"' in gm.listing(root), "the row says how a discussion closes it"
+    assert 'make gm-reviewed F=NNN   (agreed in discussion with the GM: add WORDS="<his words>")' in gm.listing(root), "says how a discussion closes it"
     with pytest.raises(ValueError, match="two words"):
         gm.reviewed(root, d, words="fine")
     monkeypatch.chdir(root)
@@ -81,9 +82,16 @@ def test_an_overturned_row_becomes_an_open_row_of_another_feature(root: pathlib.
     gm.accept(d, "the bath at 18 by 12 ft", "the resident's particular allows it")
     with pytest.raises(ValueError, match="OVERTURN"):
         gm.reviewed(root, d, 5, other)
-    assert gm.reviewed(root, d, 0, other)[0] == "row 0 overturned - an open row of 376-y"
+    gm.accept(d, "the bath door on the yard", "the yard is the service side")
+    assert gm.reviewed(root, d, 0, other) == ["row 0 overturned - an open row of 376-y"]
+    assert "reviewed" in gm.rows(d)[0] and "reviewed" not in gm.rows(d)[1], "an overturn reviews its own row, not the feature's"
+    assert gm.rows(d)[0]["overturned_to"] == "376-y" and "the bath door" in gm.listing(root, "375")
     found = json.loads((other / "found.jsonl").read_text())
     assert found["status"] == "open" and "overturned by the GM" in found["finding"]
+    (d / gm.ROWS).open("a").write(json.dumps({"kind": "arbiter-fix-declined", "trigger": "t", "tooling_fix": "re-owe less", "note": "FR-015 says"}) + "\n")
+    gm.reviewed(root, d, 2, other)
+    last = json.loads((other / "found.jsonl").read_text().splitlines()[-1])
+    assert last["finding"] == "overturned by the GM: re-owe less - FR-015 says", "a declined fix carries the fix and why it was declined"
 
 
 def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
@@ -91,6 +99,7 @@ def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pyt
     held.parent.mkdir(parents=True)
     held.write_text(json.dumps({"a#door band": {"flag": "Held: question for the GM"}, "b#x": {"flag": "deviation-tempting"}}))
     assert gm.held(root) == ["a#door band: Held: question for the GM"] and "HELD - work cannot go on" in gm.listing(root)
+    assert "      question for the GM" in gm.listing(root), "the flag under its key, without the word the heading already says"
     monkeypatch.chdir(root)
     assert gm.main(["list"]) == 0 and "door band" in capsys.readouterr().out
     assert gm.main(["accept", "375", "a finding", "a reason here"]) == 0
@@ -104,3 +113,102 @@ def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pyt
     assert gm.rows(root / "specs" / "376-y") == []
     (root / "specs" / "376-y" / "gm-review.jsonl").write_text("not json\n")
     assert gm.rows(root / "specs" / "376-y") == []
+
+
+def test_the_summary_counts_and_one_feature_groups_its_rows(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    d = root / "specs" / "375-x"
+    for trigger in ("round:modal-form|modal:sheet/kitchen@3", "round:quote-check|q:0047@3"):
+        ha.trip(root, trigger, "round", trigger, "three rounds", 1)
+        ha.record_ruling(root, trigger, {"ruling": "accept", "why": "the rounds converged"}, "round-arbiter")
+    ha.trip(root, "red-gate@2026-10-10T22:25:54Z", "red-gate", "gate", "two reds", 1)
+    ha.record_ruling(root, "red-gate@2026-10-10T22:25:54Z", {"ruling": "continue", "why": "not a loop"}, "round-arbiter")
+    summary = gm.listing(root, width=200)
+    assert "3 rulings (1 continue)" in summary and "converged" not in summary, "the bare listing counts, never lists rows"
+    one = gm.listing(root, "375", width=200)
+    assert "[0-1] accept: modal-form sheet/kitchen; quote-check 0047\n        the rounds converged" in one, "one reason, one line"
+    assert "[2] continue: red-gate 2026-10-10T22:25:54Z" in one
+    assert gm.listing(root, "375", width=80).count("\n") == one.count("\n") and max(map(len, gm.listing(root, "375", width=80).splitlines())) <= 80
+    assert gm._ids([0, 1, 2, 5, 7, 8]) == "0-2,5,7-8" and gm._subject({"trigger": "reversal:/a/b/c.html"}) == ("reversal", "c.html")
+    assert gm._subject({"trigger": "odd"}) == ("", "odd")
+    gm.reviewed(root, d) if (d / "report.md").write_text("# r\n") else None
+    assert gm.listing(root, "375") == "gm-review: nothing of 375-x waits on the GM\n"
+    monkeypatch.chdir(root)
+    assert gm.main(["list", "375"]) == 0 and "nothing of 375-x" in capsys.readouterr().out
+
+
+def _rows(d: pathlib.Path, *rs: dict) -> None:
+    with (d / gm.ROWS).open("a", encoding="utf-8") as fh:
+        fh.writelines(json.dumps(r) + "\n" for r in rs)
+
+
+def test_explain_says_what_fired_what_was_ruled_and_what_the_gm_is_asked(root: pathlib.Path) -> None:
+    """The GM, 2026-10-12: the rows did not tell him what he was being asked to rule on."""
+    d = root / "specs" / "375-x"
+    (root / ".claude" / "agents").mkdir(parents=True)
+    (root / ".claude" / "agents" / "modal-form.md").write_text("---\ndescription: Judges a modal's FORM - run on the modals\n---\n")
+    (root / "research" / "questions").mkdir(parents=True)
+    for name in ("0047-farm-privies.html", "0047-farm-privies.drawing.html"):
+        (root / "research" / "questions" / name).write_text("")
+    ha.trip(root, "round:modal-form|modal:sheet/kitchen@3", "round", "modal-form|modal:sheet/kitchen", "three rounds on the kitchen", 1)
+    ha.record_ruling(
+        root, "round:modal-form|modal:sheet/kitchen@3", {"ruling": "accept", "why": "the rounds converged", "what": "nothing is left", "tooling_fix": "count only own rounds"}, "round-arbiter"
+    )
+    assert gm.rows(d)[0]["asked"] == "three rounds on the kitchen" and gm.rows(d)[0]["what"] == "nothing is left", "the question kept"
+    ha.trip(root, "round:quote-check|q:0047@3", "round", "quote-check|q:0047", "", 1)
+    ha.record_ruling(root, "round:quote-check|q:0047@3", {"ruling": "continue", "why": "one new note", "tooling_fix": "keep replies"}, "round-arbiter")
+    ha.settle_fix(root, "round:quote-check|q:0047@3", "declined", "it contradicts FR-015")
+    _rows(
+        d,
+        {
+            "kind": "arbiter-fix-done",
+            "trigger": "round:modal-form|modal:sheet/kitchen@3",
+            "tooling_fix": "count only own rounds",
+            "note": "counted per feature",
+            "test": "tests/tooling/test_hm_arbiter.py",
+        },
+        {"kind": "arbiter-fix-done", "trigger": "reversal:/x/.clones/c/docs/a.md", "tooling_fix": "bundle the reversal", "note": "bundled now"},
+        {"kind": "arbiter", "trigger": "reversal:/x/.clones/c/docs/a.md", "ruling": "process-fault", "why": "two checks pulled"},
+    )
+    gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
+    for t in ("red-gate@2026-10-10T22:25:54Z", "cascade:375", "ask:f375-x", "odd"):
+        _rows(d, {"kind": "arbiter", "trigger": t, "ruling": "continue", "why": "fine as it is"})
+    e = " ".join(gm.explain(root, "375", width=200).split())  # wrapped at 110 columns: compare the words
+    assert "[0] modal-form sheet/kitchen" in e and "check (judges a modal's FORM) was owed a round 3 on sheet/kitchen" in e
+    assert "As it fired: three rounds on the kitchen" in e and "Where: l7r/diagram/interactive/assets/modals/sheet/kitchen.md" in e
+    assert "The arbiter ruled: ACCEPT - stop checking" in e and "It set the next step: nothing is left" in e
+    assert "[3] the tooling fix: DONE" in e and "Test: tests/tooling/test_hm_arbiter.py" in e, "the fix shown under its ruling"
+    assert "Where: research/questions/0047-farm-privies.html" in e and "[2] the tooling fix: DECLINED" in e
+    assert "YOUR DECISION: should this fix be made after all?" in e and "OVERTURN=2 TO=" in e
+    assert "Where: docs/a.md" in e and "PROCESS FAULT" in e and "A -> B -> A" in e
+    assert "A session accepted this finding without fixing it: the steam arcs off center" in e
+    assert "CONTINUE - nothing is stuck" in e and "CONTINUE - allow one more round" in e, "a continue says what it lets go on"
+    assert "went red twice" in e and "faster than one per changed line" in e and "process question" in e and "Trigger odd." in e
+    one = gm.explain(root, "375", "3", width=200)
+    assert "[0] modal-form" in one and "quote-check" not in one, "ROW= a fix row shows the ruling it settles"
+    _rows(d, {"kind": "arbiter-fix-done", "trigger": "round:gone|q:0001@3", "tooling_fix": "an orphan fix", "note": "made it so"})
+    orphan = gm.explain(root, "375", "11", width=200)
+    assert "The fix asked for: an orphan fix" in orphan and "[0]" not in orphan
+    assert gm.explain(root, "375", "99") == "gm-review: no open row 99 in 375-x\n"
+    assert gm.explain(root, "376") == "gm-review: nothing of 376-y waits on the GM\n"
+    assert max(map(len, gm.explain(root, "375", width=60).splitlines())) <= 60
+
+
+def test_explain_with_no_feature_names_only_what_needs_the_gm(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    held = root / gm.HELD
+    held.parent.mkdir(parents=True)
+    held.write_text(json.dumps({"a#door band": {"flag": "Held: which door size stands?", "fix": "narrow the doors"}, "b#tubs": {"flag": "Held behind #retainers (row 21): after that lands"}}))
+    d = root / "specs" / "375-x"
+    _rows(
+        d,
+        {"kind": "arbiter-fix-declined", "trigger": "round:modal-depiction|modal:sheet/garden@3", "tooling_fix": "re-owe less", "note": "contradicts FR-015"},
+        {"kind": "arbiter", "trigger": "red-gate@t", "ruling": "continue", "why": "not a loop"},
+    )
+    e = gm.explain(root, width=200)
+    assert "1. HELD QUESTION: a#door band\n    which door size stands?. The fix it would make: narrow the doors." in e
+    assert "2. NOT YOURS YET - it waits on other work, no decision from you: b#tubs\n    Behind #retainers" in e
+    assert "3. A TOOLING FIX DECLINED TO YOU: feature 375 row [0], modal-depiction sheet/garden" in e
+    assert "The other 1 row(s) are decisions already made" in e
+    assert "needs a decision: 1 held question(s), 1 fix(es) declined" in gm.listing(root, width=200)
+    assert "  * b#tubs (waits on other work, not on the GM)" in gm.listing(root, width=200)
+    monkeypatch.chdir(root)
+    assert gm.main(["explain", "375", "1"]) == 0 and "went red twice" in capsys.readouterr().out

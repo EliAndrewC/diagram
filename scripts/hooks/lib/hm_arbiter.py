@@ -306,6 +306,10 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     trig = owed(root).get(trigger, {})
     row = {"trigger": trigger, "kind": trig.get("kind", trigger.split(":", 1)[0]), "unit": trig.get("unit") or unit_of(trigger),
            **({"dispatches": trig["dispatches"]} if "dispatches" in trig else {}),
+           # the question as it fired (a round's count, a reversal's text, an ask's WHY=), kept with its ruling: `make gm-review
+           # EXPLAIN=1` shows the GM what was asked, and the owed entry that held it is dropped below (GUARD_EDIT_OK: the GM
+           # 2026-10-12 could not tell what a row asked him to rule on; nothing loosened)
+           **({"asked": trig["detail"]} if trig.get("detail") else {}),
            "ruling": ruling["ruling"], "why": ruling["why"], "what": ruling.get("what", ""), "utc": when,
            **({"tooling_fix": fix, "fix": "open"} if fix else {}),
            **({"tooling_fix_on": fix_on} if fix_on and not fix else {}),
@@ -315,6 +319,7 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
     _gm_row(d, {"kind": "arbiter", "trigger": trigger, "ruling": row["ruling"], "why": row["why"],
+                **({"asked": row["asked"]} if "asked" in row else {}), **({"what": row["what"]} if row["what"] else {}),
                 **({"tooling_fix": fix} if fix else {}), "utc": when})
     if row["ruling"] == "accept" and row["kind"] == "round":
         accept_answers(root, row["unit"], f"accepted by the round arbiter ({trigger})")
