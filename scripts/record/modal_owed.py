@@ -324,6 +324,12 @@ def depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
     return digest([m.uid, m.tags.get("About", ""), m.entry, m.depiction, *_pages(root, m.drawing_files())])
 
 
+def depiction_owed_by(was: Modal | None, m: Modal) -> bool:
+    """Whether an edit from `was` to `m` owes `modal-depiction` (feature 375 amendment 6, FR-028): the pop-up new to the About
+    form, or its Depiction tab or `Drawing:` list (`Modal.depiction`), or its `Entry:` changed - not its About."""
+    return was is None or was.depiction != m.depiction or was.entry != m.entry
+
+
 def legacy_depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
     """The depiction fingerprint as it was computed before feature 375 amendment 1 (the modal's prose - Name, About, Guesses,
     Form - its Depiction and its Drawing: pages): what every depiction answer recorded before that change holds. Read by

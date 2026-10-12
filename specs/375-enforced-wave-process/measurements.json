@@ -965,5 +965,19 @@
     "reading": "half its cases are one chain over one page's edits, and the whole suite runs in 22 s alone - under the split pair (21-34 s) and batching (42 s) suites - so it stays serial"
    }
   }
+ },
+ "375-a6-about-only-replay": {
+  "what": "FR-028 / SC-021: every edit to an existing pop-up since 2026-10-05 (one file, one non-merge commit) replayed through the depiction re-owe rule, amendment 1's against amendment 6's, at the commit that reopened 375 for amendment 6. The reopening session's hand count put 44 About-only edits of 222; the kept replay finds 43 of 221 (one edit apart, not traced).",
+  "date": "2026-10-12",
+  "command": "python3 scripts/measure/depiction_replay.py --until 750cb557f --record specs/375-enforced-wave-process/measurements.json --key 375-a6-about-only-replay",
+  "value": {
+   "since": "2026-10-05",
+   "until": "750cb557f",
+   "edits to existing pop-ups": 221,
+   "owed modal-depiction, amendment 1": 213,
+   "owed modal-depiction, amendment 6": 170,
+   "About-only edits (owed before, not now)": 43,
+   "owed now among the About-only edits": 0
+  }
  }
 }

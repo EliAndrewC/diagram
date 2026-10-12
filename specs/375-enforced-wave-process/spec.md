@@ -138,7 +138,7 @@ work stands; the GM approved both in one answer.
   owes `modal-depiction`; a line whose block stands on both pages, or names no page, owes both (failing toward checking).
   And an edit to the pop-up itself owes `modal-depiction` only when it changes what that check reads of the pop-up: the
   pop-up new to the About form, or its Depiction tab, its `Drawing:` list, its About or its `Entry:` changed (About is where
-  the check finds drawing statements that belong in Depiction; `Entry:` is where it finds the drawing pages a pop-up should
+  the check finds drawing statements that belong in Depiction - SUPERSEDED by FR-028, amendment 6: About no longer owes it; `Entry:` is where it finds the drawing pages a pop-up should
   link - feature 319's plan-review case, a missing drawing link landing with every check green). An edit to its Guesses alone
   owes `modal-form` and the research checks, not `modal-depiction`.
 - **FR-016 An open feature's state as its session clone holds it.** `make speckit-todo` shows each open feature as a session
@@ -266,11 +266,15 @@ The GM approved dropping About from what owes `modal-depiction`: FR-015 put it t
 - **FR-028 About no longer owes `modal-depiction`.** An edit to a pop-up owes `modal-depiction` only when it changes what that
   check judges: the pop-up new to the About form, or its Depiction tab, its `Drawing:` list or its `Entry:`
   (FR-015's other triggers, unchanged). An edit to its About alone - or to About and Guesses - owes `modal-form` and the research
-  checks, not `modal-depiction`. The About side of M13 (a sentence about how the map draws the thing, found in About) is
-  `modal-form`'s finding, and the move of that sentence to the Depiction tab owes `modal-depiction` in its turn. The depiction
-  fingerprint (`scripts/record/modal_owed.py` `depiction_fingerprint`) drops About; `modal-depiction`'s contract drops its M13
-  About sentence, or keeps it as a note when About is in its bundle for context only. Feature 343's rows 83 and 84 (the two
-  declined fixes, overturned into this feature's `found.jsonl`) close with it.
+  checks, not `modal-depiction`, and so adds no round to `modal-depiction`'s count on that pop-up (a round is counted per
+  dispatch, and a check not owed is not dispatched). `modal-depiction` reports nothing from About: the About side of M13 (a
+  sentence about how the map draws the thing, found in About) is `modal-form`'s finding alone, and the move of that sentence
+  to the Depiction tab owes `modal-depiction` in its turn. The depiction fingerprint (`scripts/record/modal_owed.py`
+  `depiction_fingerprint`) drops About, and `modal-depiction`'s contract its M13 About sentence. The change re-owes nothing by
+  itself: a depiction answer recorded under FR-015's formula stands where what FR-028 still counts - the Depiction tab,
+  `Drawing:`, `Entry:` and the drawing pages - is unchanged since it was recorded. Feature 343's rows 83 and 84 (the two
+  declined fixes, overturned into this feature's `found.jsonl`) close with it on their About part; their Guesses, Name and
+  Form part was built under amendment 1 (c9999e64e), and row 83's `Covers` is not a line `modal-depiction` reads.
 
 ### Amendment 7 (`request.md`, Amendment 7)
 
@@ -329,7 +333,8 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
   units of `sheet/door`, `sheet/guest-quarters` and `sheet/side-gate` (named only for drawing-page blocks) are not owed; every
   other named unit, `sheet/nakamon`, `sheet/garden` and `sheet/genkan`'s depiction among them, is. An edit to a pop-up's
   Guesses alone owes `modal-form` and the research checks but not `modal-depiction`; an edit to its About, `Entry:`, Depiction
-  tab or `Drawing:` list, or a pop-up new to the About form, still owes it. The tests fail on today's code.
+  tab or `Drawing:` list, or a pop-up new to the About form, still owes it (its About clause SUPERSEDED by SC-021,
+  amendment 6). The tests fail on today's code.
 - **SC-008** (FR-016) With a fixture main and session clones, one holding a feature's accepted spec and ticked tasks: `make
   speckit-todo` lists that feature in the clone's section, marked with its clone and not landed, and a clone holding the
   same files as main adds nothing; if the measurement keeps the active-only limit, an inactive clone's change is not shown.
@@ -389,8 +394,12 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
   from before FR-024 prints dashes there. The test fails on today's code.
 
 - **SC-021** (FR-028) A pop-up whose About alone changed is owed `modal-form` and not `modal-depiction`; one whose Depiction,
-  `Drawing:` or `Entry:` changed is owed `modal-depiction` as today; a `modal-form` bundle carries M13's About rule.
-  Replaying the 44 About-only pop-up edits since 2026-10-05 owes no `modal-depiction`. Tests fail on today's code.
+  `Drawing:` or `Entry:` changed is owed `modal-depiction` as today; a depiction answer recorded under FR-015's formula still
+  answers its pop-up after an About edit, and not after an `Entry:` edit; an About-only edit between two depiction rounds adds
+  no round on that pop-up; a `modal-form` bundle carries M13's About rule. Replaying the About-only pop-up edits since
+  2026-10-05 - 43 of 221 by the kept replay at the reopening commit - owes no `modal-depiction` (`m:375-a6-about-only-replay`,
+  `research.md` R6). The owing tests (the About edit, the
+  recorded answer, the round count) fail on today's code; the `modal-form` bundle's already passes.
 - **SC-022** (FR-029) A cohort run writes its per-seed record (served or rolled, verdict, failures, commit); a cohort run twice
   on unchanged code rolls nothing the second time; after a change to one stage's
   code, only the seeds whose rolls executed it roll again; each seed's verdict served equals its verdict rolled fresh

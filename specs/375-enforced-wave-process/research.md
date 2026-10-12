@@ -59,3 +59,12 @@ on background gates, agents and the GM among them; this is the model's own time.
 cohort: 109 minutes of 374's tool time (`m:375-a7-cohort-cost`), each wave rolling a "before" leg of unchanged code and an
 "after" leg, six seeds at a time on one worker under the memory cap; no structured record says which seed found which
 failure, so whether fewer seeds would have found the same cannot be counted after the fact.
+
+## R6 - About-only edits to pop-ups (feature 375 amendment 6, FR-028)
+
+Every edit to an existing pop-up from 2026-10-05 to the commit that reopened 375 for amendment 6, replayed through the depiction
+re-owe rule (`scripts/measure/depiction_replay.py`, `m:375-a6-about-only-replay`): 221 edits, of which amendment 1's rule owed
+`modal-depiction` on 213 and amendment 6's on 170. The 43 between are edits whose About changed and nothing else
+`modal-depiction` reads - each an Opus depiction round under amendment 1, none now. (The reopening session's hand count put
+44 of 222; the one edit between the two counts was not traced.) Every About edit owes `modal-form`, whose contract holds M13,
+so the drawing statement the depiction check used to look for in About is still looked for there.
