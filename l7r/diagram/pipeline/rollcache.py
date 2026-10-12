@@ -114,8 +114,8 @@ def _entry(subject: str) -> str:
 #: `<entry>.v-<key>` (feature 375 amendment 7, FR-029). One version a subject made two trees sharing the store evict each
 #: other: a cohort's "before" leg (the merge base, in a detached worktree) and its "after" leg (the clone) roll the same
 #: subjects, each found the other's entry, missed and overwrote it - 0 of 54 seeds served on the second wave, measured
-#: 2026-10-12 (`specs/375-enforced-wave-process/measurements.json` `375-a7-cohort-after`). Four holds both legs and two
-#: earlier versions; an entry is ~1 MB and the store was 60 MB.
+#: 2026-10-12 (`specs/375-enforced-wave-process/plan.md` D38). Four holds both legs and two earlier versions; an entry is at
+#: most ~0.85 MB (median 0.6) and the store was 60 MB over 119 entries (`du`, 2026-10-12).
 KEPT_VERSIONS = 4
 
 
