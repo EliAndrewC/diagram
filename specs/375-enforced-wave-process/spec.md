@@ -263,13 +263,15 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
 
 - **FR-028 The cohort rolls only what changed.** `make cohort` rolled every seed through `generate` on every run, so a
   feature's "before" leg rolled unchanged code again each wave and its "after" leg re-rolled seeds the change never reached:
-  109 minutes of 374's tool time, six seeds at a time on one worker under the memory cap (`research.md` R1's transcript;
-  `m:375-a3-record-tooling-before`). Now each cohort seed is served from the roll cache (`pipeline/rollcache.py`, keyed by the
+  109 minutes of 374's tool time, six seeds at a time on one worker under the memory cap (`m:375-a6-cohort-cost`,
+  `research.md` R5). Now each cohort seed is served from the roll cache (`pipeline/rollcache.py`, keyed by the
   engine functions the roll executed and the files it read, path-independent since feature 167) when nothing it executes
   changed, and rolled otherwise; the cohort's own checks still run on every seed's report, served or rolled. The "before"
   leg, rolled in a detached worktree at the merge base, reads and writes the same store as the clone, so a second wave's
-  "before" leg rolls nothing. Rolling fewer seeds is not part of it: no structured record says which seeds found what, so
-  the count cannot be measured after the fact.
+  "before" leg rolls nothing. And each cohort run writes a structured record - per seed: served or rolled, its verdict, the
+  failures it found, the engine commit - under `dev/cohort-log/`, one file a run, so that whether fewer seeds would find the
+  same failures can be counted. No such record exists today (374's findings by seed are in its plan's prose), so the seed
+  count is decided in amendment 7, put to the GM with that record.
 - **FR-029 The overlap census runs when asked for.** `make perf` ran `make census` after every snapshot - 74 s of its 97 s,
   measured 2026-10-12 (`research.md` R5) - because feature 306 made it "a standing check run beside `make perf`" (its FR-006,
   from its review round 1). Nothing reads its output. `make census` runs it; `make perf` no longer does.
@@ -278,7 +280,7 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
   (`m:375-a3-hooks-test-before`, R3). Each is split into parallel parts as `test-sync-with-main.sh` was (FR-022): each part with
   its own temporary directory, `HOME` and guard log, every check still run and counted, today's pass count printed, a failed
   or unreported case failing the suite. Where a suite's cases depend on an earlier case's state, it splits only at the
-  boundaries a measured scan finds, or stays serial, and the plan says which.
+  boundaries a measured scan finds, or stays serial, and the plan says which, with the scan's result.
 - **FR-031 The gate's shortcut does not leave the push a gate short.** `make done`'s "already verified" shortcut checks only
   the engine content's record and re-stamps only the `diagram` area, so after a change under `scripts/` alone it answered
   green while the push's green-gate check refused on the `hooks` area (measured 2026-10-12, landing `impl_check.py`'s fix).
@@ -371,14 +373,17 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
 - **SC-020** (FR-027) `make perf-report` prints each snapshot's start and end load and free RAM beside its totals; a snapshot
   from before FR-024 prints dashes there. The test fails on today's code.
 
-- **SC-021** (FR-028) A cohort run twice on unchanged code rolls nothing the second time; after a change to one stage's
+- **SC-021** (FR-028) A cohort run writes its per-seed record (served or rolled, verdict, failures, commit); a cohort run twice
+  on unchanged code rolls nothing the second time; after a change to one stage's
   code, only the seeds whose rolls executed it roll again; each seed's verdict served equals its verdict rolled fresh
   (`GATE_NO_CACHE=1`); a "before" leg in a detached worktree after a clone's own run of the same base rolls nothing. The
   cohort's time before and after on 374's delta, two waves, is a key of `measurements.json` (R1, R5). Tests fail on today's
   code.
 - **SC-022** (FR-029) `make perf` runs no census; `make census` runs it as before. The test fails on today's code.
 - **SC-023** (FR-030) Each of the three suites, today's file against the new in parts, alternating, three runs each: every
-  run passes today's count of checks; a suite split has its median at most half today's, one left serial says why. A forced
+  run passes today's count of checks; a suite split has its median at most half today's. A suite split or left serial
+  carries its scan's result: each case run alone in a fresh process, and for each that fails alone the shortest run of its
+  predecessors that passes - a chain kept in order in one part; a suite left serial names the dependence that keeps it so. A forced
   failure and a case that exits early each fail a split suite, named. Keys of `measurements.json` beside
   `m:375-a3-hooks-test-before` (R3).
 - **SC-024** (FR-031) After a change under `scripts/` alone, with the engine's record green, `make done` runs `hooks-test`
@@ -403,6 +408,8 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   not fewer.
 - The cohort's cost (amendment 5): reusing its "before" leg per main commit, or rolling fewer seeds, was offered to the GM as
   a measurement and is not part of amendment 5, which settled the timing requirements.
+- The cohort's seed count (amendment 6): decided in amendment 7, with the per-seed record FR-028 starts keeping; the claims'
+  per-module cache, `check-bundle` in-process and the review checks' yield are amendment 7's too.
 
 ## Decisions Recorded
 
@@ -470,3 +477,7 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   SC-018 pins 5 and 5.1 percent.
 - spec-fidelity-verify, amendment 5 round 2 (2026-10-11): FAITHFUL - round 1's three items resolved; the wider grep finds no
   other text stating the gate as a rule.
+- spec-fidelity, amendment 6 round 1 (2026-10-12, the counter reset): CHANGES REQUIRED. Applied: the cohort's 109 minutes is
+  `m:375-a6-cohort-cost`; FR-028 has the cohort keep a per-seed record and carries the seed count to amendment 7 (and "What
+  it does not cover" says so); SC-023 asks for the scan's result for any suite split or left serial; turn_time's bands are
+  labeled 200k.

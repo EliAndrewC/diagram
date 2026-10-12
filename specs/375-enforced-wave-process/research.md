@@ -56,6 +56,6 @@ the four-seed total by about 2%; rolls are short now (about 4 s each), so a seed
 2 s slower than at none). The "6.5 hours of model time" first put to the GM summed every gap between tool calls, the waits
 on background gates, agents and the GM among them; this is the model's own time. `make perf` took 181 s with the old code
 (16 rolls) and 97 s with the new (4), and the overlap census it runs after every snapshot took 74 s of those 97 alone. The
-cohort: 109 minutes of 374's tool time (R1's transcript count), each wave rolling a "before" leg of unchanged code and an
+cohort: 109 minutes of 374's tool time (`m:375-a6-cohort-cost`), each wave rolling a "before" leg of unchanged code and an
 "after" leg, six seeds at a time on one worker under the memory cap; no structured record says which seed found which
 failure, so whether fewer seeds would have found the same cannot be counted after the fact.

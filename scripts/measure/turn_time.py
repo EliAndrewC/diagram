@@ -85,7 +85,7 @@ def summary(points: list[tuple[int, float, int]]) -> dict[str, Any]:
         "median turn s": round(statistics.median(p[1] for p in points), 1),
         "fit: s fixed, per 100k context, per 1k output": [a, b, c],
         "hours explained by context size": round(sum(b * p[0] / 1e5 for p in points) / 3600, 2),
-        "median turn s by context (100k bands)": {
+        "median turn s by context (200k bands)": {
             f"{lo}-{lo + 200}k": round(statistics.median(p[1] for p in points if lo * 1e3 <= p[0] < (lo + 200) * 1e3), 1)
             for lo in range(0, 1000, 200)
             if any(lo * 1e3 <= p[0] < (lo + 200) * 1e3 for p in points)

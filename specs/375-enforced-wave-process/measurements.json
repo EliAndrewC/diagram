@@ -877,7 +877,7 @@
     3.27
    ],
    "hours explained by context size": 0.5,
-   "median turn s by context (100k bands)": {
+   "median turn s by context (200k bands)": {
     "0-200k": 2.7,
     "200-400k": 3.0,
     "400-600k": 3.5,
@@ -900,6 +900,19 @@
    "rolls old": 16,
    "rolls new": 4,
    "census alone s": 73.9
+  }
+ },
+ "375-a6-cohort-cost": {
+  "quantity": "the time 374's session spent in make cohort (FR-028)",
+  "observed": "2026-10-12",
+  "unit": "min",
+  "source": "the diagram-backlog session's transcript (~/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl), its main-loop tool calls 2026-10-10 20:51 to 2026-10-11 08:31",
+  "command": "a one-off script over the transcript: each Bash tool call whose command runs `make cohort`, its time from the call to its result, summed",
+  "method": "one-shot observation (date and method above); per-seed findings were not recorded, so which seed found what cannot be counted from it",
+  "value": {
+   "calls": 26,
+   "minutes": 109.1,
+   "how it ran": "six seeds at a time on one worker (JOBS=1) after memguard killed larger runs; a 'before' leg on unchanged code and an 'after' leg per wave"
   }
  }
 }
