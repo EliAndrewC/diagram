@@ -51,9 +51,7 @@ GARDEN_SITE_RULED_OUT: dict[str, str | None] = {
     "in the rear service ground": "no room and no sun: a 9-12 ft band behind the house, the storehouses on it, in the house's shadow",
     "on a parcel of its own": None,  # outside the walls: the plan draws the field nowhere, its notes say where it is
 }
-GARDEN_SITE: str = random.Random(zlib.crc32(b"county-magistracy-example:vegetable garden site")).choice(
-    [site for site in GARDEN_SITES if GARDEN_SITE_RULED_OUT[site] is None]
-)
+GARDEN_SITE: str = random.Random(zlib.crc32(b"county-magistracy-example:vegetable garden site")).choice([site for site in GARDEN_SITES if GARDEN_SITE_RULED_OUT[site] is None])
 #: The plot's size: the low form of 0109's size knob, the Takei house's soup-greens plot of ~100 sq m (~1,076 sq ft), drawn
 #: 36 x 30 ft (1,080 sq ft). The field form, over about half the grounds (~27,000 of 54,000 sq ft), cannot stand in an
 #: inner court of 24,300 sq ft before anything is built in it, so the room rules it out (T21's plan review).
