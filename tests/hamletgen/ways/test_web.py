@@ -306,3 +306,26 @@ def test_a_skeleton_arm_crosses_the_brook_at_a_ford(monkeypatch: pytest.MonkeyPa
     _web._lay_skeleton(s, plan, lambda arc, standoff: (200.0 + arc, 200.0 - standoff), [0.0, 200.0], [0.0, 10.0])  # type: ignore[arg-type]
     assert seen and len(seen[0]) == 4, f"the arm runs to the ford's two landings: {seen[:1]}"
     assert abs(seen[0][1][0] - 320.0) < 1e-6 and abs(seen[0][2][0] - 320.0) < 1e-6, "square to the reach, at the ford"
+
+
+def test_a_brook_along_a_flank_offers_the_lane_along_the_water() -> None:
+    """Feature 374 wave 138 (plan W138-1, 0031's drawing page): the fifth lane shape needs water running along the
+    cluster - a brook within WATER_ALONG_FT of one flank of the houses' extent over WATER_ALONG_SHARE of it."""
+    from l7r.diagram.hamletgen.ways import web
+
+    def ident(p: tuple[float, float]) -> tuple[float, float]:
+        return p
+
+    along_east = [[(160.0, -300.0), (160.0, 300.0)]]  # 60 ft off the +x flank (lat 100), the whole depth
+    assert web.water_along_side(along_east, ident, 100.0, 150.0) == 1
+    along_west = [[(-150.0, -300.0), (-150.0, 300.0)]]
+    assert web.water_along_side(along_west, ident, 100.0, 150.0) == -1
+    below = [[(-400.0, 600.0), (400.0, 600.0)]]  # crossing the field below the houses, never along a flank
+    assert web.water_along_side(below, ident, 100.0, 150.0) is None
+    assert web.water_along_side([], ident, 100.0, 150.0) is None
+    clipped = [[(160.0, 100.0), (160.0, 300.0)]]  # beside the flank for under three fifths of its depth
+    assert web.water_along_side(clipped, ident, 100.0, 150.0) is None
+    # no water along: the plan's roll among four stands; water along: a roll among five, the lane along the water in it
+    assert web.lane_skeleton_for("T", 7, None) == "T"
+    by_water = {web.lane_skeleton_for("T", s, 1) for s in range(1, 80)}
+    assert by_water == set(hg.consts.LANE_SKELETONS_BY_WATER) and "waterside" in by_water

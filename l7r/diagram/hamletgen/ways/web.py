@@ -19,15 +19,18 @@ from ..consts import (
     CLUSTER_SPAN_FACTOR,
     FOOTPATH_FABRIC_GAP,
     LANE_CLEARANCE,
+    LANE_SKELETONS_BY_WATER,
     MIN_WEB_GAP,
     STEADING_ARRIVAL_FT,
+    WATER_ALONG_FT,
+    WATER_ALONG_SHARE,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
     Poly,
     Pt,
 )
-from ..plan import SitePlan
+from ..plan import SitePlan, _roll
 from . import law
 from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_the_bund, worked_ground_of
 from .checks import drawn_water_segs, ford_crossing
@@ -35,6 +38,7 @@ from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _TOUCH_GAP, _components, _trim_to_service, lane_houses, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
+from .law_water import _brooks
 from .route import _route
 from .serve import DOOR_REACH_FT, _lay_web_lane, front_door, lay_door_paths
 from .settle import settle_the_web
@@ -59,6 +63,37 @@ SKELETON_ARM_WIDTH = 5.0
 """The skeleton arm's drawn width, a web lane's.
 
 Research: skeleton arm width - research/questions/0081-village-lanes.drawing.html: a web arm 5 ft"""
+
+
+def water_along_side(brooks: Sequence[Poly], to_map: Any, lat: float, dep: float) -> int | None:
+    """The flank of the houses' extent a brook runs ALONG - -1 or +1 in the skeleton's local x - or None.
+
+    A brook runs along a flank when it passes within `WATER_ALONG_FT` of that flank's line (local x = side * lat, y from
+    -dep to dep, mapped by `to_map`) at `WATER_ALONG_SHARE` of nine points along it; of two such flanks, the nearer on
+    average. A pure function of its inputs, so the lane shape's offer is tested with plain polylines.
+
+    Research:
+        water along the cluster - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a brook within WATER_ALONG_FT of a flank over WATER_ALONG_SHARE of it"""
+    if not brooks:
+        return None
+    best: tuple[float, int] | None = None
+    for side in (-1, 1):
+        pts = [to_map((side * lat, -dep + 2.0 * dep * i / 8.0)) for i in range(9)]
+        d = [min(seg_dist(p[0], p[1], a, b) for brook in brooks for a, b in zip(brook, brook[1:], strict=False)) for p in pts]
+        if sum(1 for x in d if x <= WATER_ALONG_FT) >= WATER_ALONG_SHARE * len(d) and (best is None or sum(d) / len(d) < best[0]):
+            best = (sum(d) / len(d), side)
+    return None if best is None else best[1]
+
+
+def lane_skeleton_for(rolled: str, seed: int, side: int | None) -> str:
+    """The lane shape the skeleton is laid in: the plan's roll among the four shapes, unless a brook runs along the
+    cluster, where the roll is among five - the lane along the water among them (feature 374 wave 138, plan W138-1).
+
+    Research:
+        lane along the water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the fifth shape offered where water runs along the cluster, the five at even odds"""
+    if side is None:
+        return rolled
+    return str(_roll(seed, "lane_skeleton_by_water", LANE_SKELETONS_BY_WATER))
 
 
 def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Sequence[float], stands: Sequence[float]) -> list[tuple[Poly, Poly]]:
@@ -106,12 +141,19 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
     # gets a spine with somewhere to run.
     lat = max((max(arcs) - min(arcs)) / 2.0, BUNDLE_PITCH * 0.5)
     dep = max((max(stands) - min(stands)) / 2.0, BUNDLE_PITCH * 0.5)
-    layout = skeleton_layout(plan.lane_skeleton, 0.0, 0.0, lat, dep)
 
     def _on_margin(p: Pt) -> Pt:
         # local +x runs along the band, local +y toward the field (so OUT of the frame is -y).
         q = frame(arc0 + p[0], stand0 - p[1])
         return (float(q[0]), float(q[1]))
+
+    # the fifth shape, the lane along the water, is offered where a brook runs along a flank of the houses (W138-1); its
+    # lane is laid on that flank (`skeleton_layout` draws it at local -x, mirrored for the +x flank)
+    side = water_along_side(_brooks(s.M), _on_margin, lat, dep)
+    kind = lane_skeleton_for(plan.lane_skeleton, plan.spec.seed, side)
+    layout = skeleton_layout(kind, 0.0, 0.0, lat, dep)
+    if kind == "waterside" and side == 1:
+        layout["lanes"] = [[(-x, y) for x, y in lane] for lane in layout["lanes"]]
 
     raw_arms = [[_on_margin((float(p[0]), float(p[1]))) for p in lane_pts] for lane_pts in layout["lanes"]]
     crops = crop_polys(s)
@@ -237,7 +279,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             for piece in s.admitted_runs(arm, 5):
                 if polyline_len(piece) >= _WEB_MIN_FT:
                     s.lane(piece, width=SKELETON_ARM_WIDTH, clearance=LANE_CLEARANCE, worn=True)
-    s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
+    s.M["meta"]["lane_skeleton"] = kind
     return kept
 
 

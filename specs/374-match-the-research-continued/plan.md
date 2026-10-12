@@ -546,10 +546,12 @@ engine edit, `374-end` at its close) and states the band at landing.
 - **W137-1** (within): research/questions/0016-rice-drying-racks-hasa-hasagi.html attests Niigata's living alder rack posts on
   the bunds (hasagi) and Ehime's permanent tall racks, from modern encyclopedias and local histories that do not date the
   practice; the one dated row was planted in 1943-1945. Spec 280's D1 counts an undated custom as modern, and the GM's rule
-  draws no form attested only in modern times. So the wave is a search pass for a premodern date of either form (the archive
-  first, then the web, recorded with `make source-outcome`): a form the search dates before 1868 is added as a rolled form with
-  its own glyph; a form it does not date stays undrawn, the page saying so with what was searched, and the claim names that
-  reason (the row closes IN-STEP either way).
+  draws no form attested only in modern times. So the wave is a search pass for a premodern date of either form, covering
+  Chinese sources as well as Japanese (the geography doctrine searches China first), the archive first, then the web, every
+  page recorded with `make source-outcome`: a form the search places before modernity as 280's D1 dates it (Japan before 1868,
+  China before the end of the Qing, 1912) is added as a rolled form with its own glyph; a form it does not so place stays
+  undrawn, the page saying so with what was searched, and the claim names that reason (the row closes IN-STEP either way). The
+  outcome is a Decisions Recorded row of the spec (T29's plan review).
 
 ### Wave 138 (T30) - the lane along the water, the fifth lane shape
 

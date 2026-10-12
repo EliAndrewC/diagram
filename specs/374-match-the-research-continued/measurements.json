@@ -1689,5 +1689,14 @@
     "source": "specs/328-match-the-research/ranking.json",
     "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
     "method": "the four rows batch 6 took (main gate passage width, main gate posts, structures abut walls, well glyph) marked waves 132-135 in waves.json, the ranking rebuilt"
+  },
+  "w139-chessboard-rolls": {
+    "quantity": "16-household dike-pond hamlets rolled with the chessboard of ponds (pond_layout grid), seeds 3, 7, 11, 21, 30",
+    "value": "4 of 5 green; seed 3 refused (StyRefused: no near-half bank seat for the sty) - and refused the same under the mosaic, so the failure predates the chessboard",
+    "unit": "hamlets",
+    "observed": "2026-10-12",
+    "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond --pond-layout grid|mosaic --households 16 --seed <s>\"",
+    "command": "make hamlet ARGS=\"--name DP<s> --seed <s> --households 16 --archetype mulberry_dike_fishpond --pond-layout grid --out <dir> --no-render\"",
+    "method": "exit status per roll; seed 3 re-rolled with the mosaic to place the failure"
   }
 }

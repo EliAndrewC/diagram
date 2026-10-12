@@ -148,16 +148,15 @@ def test_the_dike_pond_is_a_declared_archetype_laid_to_a_cardinal_fall() -> None
 
 
 def test_a_dike_pond_is_the_mosaic_and_a_rice_polder_is_the_grid() -> None:
-    """Feature 280 M56 (research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html): the pond grid is a modern aerial view, so a dike-pond rolls the mosaic only
-    (`POND_LAYOUTS`); the rice polder never rolls. A spec may still name the grid - the engine's dial is kept. And the fry
+    """Feature 374 wave 139 (research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html): the chessboard of ponds is attested in 1678 (Qu Dajun), so a dike-pond
+    rolls the mosaic or the grid (`POND_LAYOUTS`, the mosaic two in three); the rice polder never rolls. And the fry
     form (feature 280 M60, `FRY_FORMS`) rolls both attested forms on a dike-pond and is none elsewhere."""
-    rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).pond_layout for s in range(1, 40)}
-    assert rolled == {"mosaic"}
+    rolled = [hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).pond_layout for s in range(1, 121)]
+    assert set(rolled) == {"mosaic", "grid"} and 0.5 < rolled.count("mosaic") / len(rolled) < 0.8
     fry = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).fry_form for s in range(1, 40)}
     assert fry == {"none", "fry_village"} and hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16)).fry_form == "none"
     assert all(hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="polder_grid")).pond_layout == "grid" for s in range(1, 12))
-    with pytest.raises(ValueError, match="pond_layout"):
-        hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", pond_layout="grid")
+    assert hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", pond_layout="grid").pond_layout == "grid"
 
 
 def test_the_manure_form_rolls_both_ways_and_pins() -> None:

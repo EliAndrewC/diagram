@@ -146,7 +146,7 @@ class HamletSpec:
 
         Research:
             hamlet household band - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: 10 to 20 households
-            pond layout values - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic only
+            pond layout values - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic or the chessboard (grid), both attested at pond scale
             water sink values - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot or off the map
             knob values - NONE: each table carries its own claim in consts
         """

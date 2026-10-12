@@ -440,8 +440,12 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # to before this knob existed). The uniform chessboard is also the MODERN consolidated look, which
 # is why the mosaic is the more common roll. `build_polder(mosaic=)` is the engine's dial: 0.0 is
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
-POND_LAYOUTS = ("mosaic",)
-"""Research: dike-pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html: the mosaic only; the chessboard grid is never rolled"""
+# Feature 374 wave 139 (plan W139-1): the chessboard of ponds IS attested before modern times - Qu Dajun's Guangdong
+# xinyu (1678), quoted in 0019's drawing notes: "The land of Jiujiang is like a chessboard ... its black lines are the
+# dikes, and the squares are the ponds". So both forms are attested at pond scale and a dike-pond block rolls between
+# them again; the mosaic stays the commoner (two in three), the delta's accreted form - the odds a GUESS.
+POND_LAYOUTS = ("mosaic", "mosaic", "grid")
+"""Research: dike-pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic or the chessboard (Qu Dajun 1678), the mosaic two in three (a GUESS)"""
 
 # THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes/200 and 172): the ordinary
 # delta hamlet raised grown fish and BOUGHT its fry, with no nursery ponds; the fry village of Jiujiang raised fry in seven
@@ -469,7 +473,7 @@ MANURE_FORMS = ("heap", "pit")
 # research/questions/0016-rice-drying-racks-hasa-hasagi.html; the rule at research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html.
 HARVEST_WEATHERS = ("settled", "changeable")
 """Research: harvest weather - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: declared, never rolled; racks by the house where changeable
-standing rack forms - research/questions/0016-rice-drying-racks-hasa-hasagi.html, research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: no map draws Niigata's living alder rack posts on the bunds or Ehime's permanent roofed racks"""
+standing rack forms - research/questions/0016-rice-drying-racks-hasa-hasagi.html, research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: neither Niigata's living alder rack posts nor Ehime's racks standing all year is drawn - both attested only by undated modern records, no premodern record found (feature 374 wave 137, 280's D1)"""
 DEFAULT_HARVEST_WEATHER = "settled"
 """Research: harvest weather when undeclared - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled"""
 # THE COPSE STANDS AMONG THE HOUSES (feature 328): 0071's drawing page draws the dooryard copse only in the gaps between
@@ -815,9 +819,23 @@ duplicated, and a duplicated table with no pin is a table that drifts.
 Research: drawn aspect a shape is declared at - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round up to 2.0"""
 LANE_SKELETONS = ("spine", "T", "Y", "cross")
 """Research:
-    lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y or cross
-    lane along the water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the fifth lane shape, a lane along the water, is never rolled; only spine, T, Y or cross
+    lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y or cross wherever no water runs along the cluster
+    lane along the water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the fifth lane shape, a lane along the water, joins the roll where a brook runs along the cluster's flank (LANE_SKELETONS_BY_WATER)
 """
+# THE LANE ALONG THE WATER (feature 374 wave 138, plan W138-1): 0031's drawing page gives a village's lanes five shapes,
+# the fifth "a lane along the water in a village by a stream", needing "water running along the cluster". The seat is
+# fixed before the brook's place against the houses is known, so the fifth shape is offered where the skeleton is laid,
+# after the houses (`ways/web.py`): a brook runs ALONG the cluster when it passes within WATER_ALONG_FT of one flank of
+# the houses' extent over WATER_ALONG_SHARE of its depth. Both numbers are a GUESS - the page names no band - set so a
+# brook skirting the houses' side qualifies and one crossing the field below them does not. The village tier asks the
+# same question of its declared site (`settlement/_knobs.py` `_lane_skeleton_ok`: a stream-fed or waterside site); the
+# hamlet measures its drawn brook instead, since a hamlet declares no such site.
+LANE_SKELETONS_BY_WATER = (*LANE_SKELETONS, "waterside")
+"""Research: lane along the water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: five shapes where water runs along the cluster, each even odds"""
+WATER_ALONG_FT = 120.0
+"""Research: water along the cluster - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a brook within 120 ft of a flank of the houses"""
+WATER_ALONG_SHARE = 0.6
+"""Research: water along the cluster's depth - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: over three fifths of the flank"""
 # The two attested forms of making every house reachable. NOT weighted: the research supports both
 # equally, so an even roll is the honest one, and the two read differently enough at a glance
 # (a laid-out double row vs. a grown spine-and-alleys) to be worth a full half of the cohort each.
