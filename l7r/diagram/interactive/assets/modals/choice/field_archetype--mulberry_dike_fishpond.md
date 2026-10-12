@@ -20,7 +20,7 @@ Guesses:
 - [dike_crop=mulberry] A mulberry bush about 4 to 7 ft across: no source gives a bush's crown width.
 
 Depiction: The map draws the block as a polder converted nearly or wholly wall to wall into ponds. The ponds
-are four-sided but uneven, their lattice of canals bent out of line so the block reads as a mosaic.
+are four-sided, set out for each settlement either as a mosaic, the lattice of canals bent out of line so the ponds skew to uneven shapes, or as a straight chessboard of ponds.
 Each pond is ringed by a bank of mottled earth planted with one crop for the whole
 settlement, mulberry, fruit trees or tea; the title card says which. A village's dikes could carry these crops side by side, but the map gives each settlement one, so it reads as one kind of dike-pond village. The sluices drawn are the polder's own, in its outer dike, not one in every pond,
 and that outer dike is drawn as any polder's is. It is kept broader than the pond banks so it reads as the greater bank, the one holding the water off the whole block; how broad a village's dike was before modern times is not recorded. Its rows of willow and mulberry are set on its faces, so they read as its own planting, where a Ming river manual set such rows on the ground off its foot. A single canal runs round the inside of its foot: canals ran inside a polder's dike, but the one ring at its foot is the map's convention.

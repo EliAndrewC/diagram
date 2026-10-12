@@ -17,10 +17,9 @@ Guesses:
 - How large the grave is on the map, and its few upright stones, a small patch about 8 by 6 ft: no household grave was found
   measured, and the one grave described was believed to have had no gravestones.
 
-Depiction: The map draws a household grave as a small cleared patch with a few upright stones, at a corner of the
-farmstead's plot, the southeast or the northwest first, a short step off the corner of the house. A hamlet keeps such
-graves or does not; where it does, about a third of its farmsteads draw one, and a farmstead whose corners are all taken
-draws none.
+Depiction: The map draws a household grave as a small cleared patch with a few upright stones; how such a grave was marked is little told, and the one grave described was believed to have had no gravestones. The map sets it at a corner of the
+farmstead's plot, the southeast or the northwest first, a short step off the corner of the house, and never in the grove round the house or in the household's own field or wood close by, where real household graves also stood. A hamlet keeps such
+graves or does not; where it does, about a third of its farmsteads draw one.
 
 Name: household grave
 Covers: `farm_fixtures[kind=grave]` - a grave of a few stones at a farmstead's plot corner

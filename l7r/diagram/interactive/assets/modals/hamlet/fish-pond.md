@@ -19,7 +19,7 @@ Guesses:
   times was found, so the share is read from the two Qu Dajun gave in 1678 for Jiujiang, its fish taking half the land and
   its ponds eight tenths.
 
-Depiction: The map draws a block of dike-ponds as a mosaic, every pond four-sided but skewed to an uneven shape.
+Depiction: The map draws a block of dike-ponds as a mosaic, every pond four-sided but skewed to an uneven shape, or on some hamlets as a chessboard of ponds in straight rows, both layouts being recorded.
 Each pond is set in from the
 edge of its plot, its planted bank filling the ring between.
 The gates drawn are the polder's own, in its outer dike; no pond has a sluice through its own bank, that being known only from

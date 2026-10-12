@@ -598,7 +598,7 @@ def _seats(
             the flanks
         shrine corner - research/questions/0219-household-shrines-yashikigami.drawing.html: NW, NE or SW of the house
         household grave corner - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: SE or NW of the house, then the other two corners
-        household grave off the house's corner - GUESS research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: 14 ft out each way (`SHRINE_CORNER_FT`) standing for the plot's corner; no plot's size is recorded with its grave
+        household grave off the house's corner - UNRESEARCHED: 14 ft out each way (`SHRINE_CORNER_FT`) standing for the plot's corner; no plot's size is recorded with its grave
         seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw, coop 0.34 hw spread and
             0.3 hh, wood shed 0.25 hw and 0.1 hh"""
     if kind == "privy":

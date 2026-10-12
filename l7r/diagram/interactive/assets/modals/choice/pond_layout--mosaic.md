@@ -14,8 +14,8 @@ acres each.
 Depiction: The map lays the block out on a lattice of ditches and bends it out of line with a smooth drift that fades to
 nothing at the block's edge, so the interior ditches meander like creeks and the parcels skew to trapezoids while every pond
 stays four-sided, as most real ones were. How strongly the lattice bends is set by eye, since no source measures how far a
-mosaic strayed from a grid. A uniform grid of ponds is never drawn: ponds set out in straight rows are known only from modern
-times. Each pond is drawn at about 0.7 acre of water, somewhat smaller than most ponds today.
+mosaic strayed from a grid. Not every dike-pond hamlet is drawn so: some lay their ponds out as a chessboard instead, and the title card says which
+this one has. Each pond is drawn at about 0.7 acre of water, somewhat smaller than most ponds today.
 
 Name: Ponds laid out as a mosaic
 Covers: `meta.pond_layout = mosaic`

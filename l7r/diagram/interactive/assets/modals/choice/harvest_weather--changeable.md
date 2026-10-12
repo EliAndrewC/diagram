@@ -21,8 +21,8 @@ Guesses:
 
 Depiction: The map draws a rack beside every farmhouse, along one side of its yard and never on the yard's sunny southern
 half, so it shades no drying floor. It is drawn thicker than its poles so that it can be seen. No racks are drawn out on
-the fields, where most stood only in the month after the harvest, and no row of trees planted as rack posts is drawn along
-a lane, since the one such row whose planting is known was laid out in the 1940s.
+the fields, where most stood only in the month after the harvest, and neither living trees planted along the field banks as rack posts nor tall racks that stood all year are drawn,
+since neither is known from before modern times.
 
 Name: The harvest weather: changeable; the rice dried on racks by the houses
 Covers: `meta.harvest_weather = changeable`

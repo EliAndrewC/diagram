@@ -18,7 +18,7 @@ Guesses:
   small block had.
 
 Depiction: The map draws these canals as the network the ponds lie among, not as a rice field's irrigation ditches. The
-block's lattice of canals is bent out of line by a smooth drift that fades toward its outer edge, so the canals between
+block's canals take one of the two layouts dike-pond blocks had, which differs by settlement: on about one hamlet in three the ponds lie in a chessboard and the canals between them run straight; on the rest, a mosaic, the lattice is bent out of line by a smooth drift that fades toward its outer edge, so the canals between
 the ponds become winding creeks while each pond stays four-sided; how strongly they bend is a degree chosen to read well. The main canal
 starts at a pond outside the dike and enters through the inlet gate. A canal is drawn round the inside foot of the dike:
 channels ran inside a polder's dike, but no single one ringing it at its foot is known, so that ring is a drawing

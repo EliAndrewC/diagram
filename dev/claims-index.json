@@ -21,9 +21,9 @@
   "date": "2026-10-10",
   "note": "the 0236 drawing page records that a village whose shrine stands on a hill always takes a ground apart, and labels it a GUESS (\"no source we read says so outright\"); the code and the cited page agree",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:e30f2a65a59ae8f3",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:f40525fdbd8e6707"
@@ -5616,33 +5616,31 @@
  "l7r/diagram/hamletgen/burial.py::BURIAL_FORMS#hamlet burial forms": {
   "code": "72bb615d6fd16568",
   "core": "94f30f8d36579e2b",
-  "date": "2026-10-05",
-  "note": "hamlet's own ground attested only in modern records; one value",
+  "date": "2026-10-12",
+  "note": "one form only, the village's ground; a hamlet's own ground is attested only in modern records",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "3d5e34940b9d67aa",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html": "25f3daa260e791cd"
   },
-  "research": "097098a35068b0cf",
+  "research": "5fcee50723e5083c",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:031d53823997269a",
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:11df2d9a630be745",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:978bbbfc7b880c2c"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/burial.py::stage_burial#farmstead graves": {
   "code": "dfd936cb1cdbd874",
   "core": "6db4cbe2c6e36a4a",
   "date": "2026-10-12",
-  "note": "a knob rolled per hamlet, about a third of farmsteads, at a plot corner",
+  "note": "knob rolled per hamlet and recorded; graves laid at a plot corner",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:3ae92dcaa4f0d698",
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:633aaf8fa6428d66"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:18c775d60498e622",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:7d008d761ba90094"
   ],
   "verdict": "IN-STEP"
  },
@@ -5665,13 +5663,12 @@
   "code": "b160bb38c17ffc8b",
   "core": "6db4cbe2c6e36a4a",
   "date": "2026-10-12",
-  "note": "the village's ground, off the hamlet's map",
+  "note": "the village's ground, nothing drawn on the hamlet's map",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:018864c814087c5e",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:031d53823997269a",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:11df2d9a630be745"
   ],
@@ -6361,9 +6358,9 @@
   "date": "2026-10-03",
   "note": "settled, as the page decides",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6"
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
-  "research": "0702c91e77234fc8",
+  "research": "f94cd7cea915d311",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -6440,18 +6437,16 @@
   "code": "c7afa5dae85661f2",
   "core": "5f10b1edca08dcfe",
   "date": "2026-10-12",
-  "note": "fan, polder and dike-pond are all attested; only the fan is dealt",
+  "note": "valley fan, polder and dike-pond block, the forms the pages attest",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
-  "research": "53e2af71b1d8c8c3",
+  "research": "2244e5ab860ccc7e",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:5fee94012929bfb6",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:594c8cc849af5697",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
   ],
   "verdict": "IN-STEP"
@@ -6538,9 +6533,9 @@
   "date": "2026-10-03",
   "note": "declared settled/changeable, never rolled",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6"
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
-  "research": "0702c91e77234fc8",
+  "research": "f94cd7cea915d311",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -6548,14 +6543,14 @@
   "code": "80524ec8eb46e600",
   "core": "b2ffdeb462b65fd4",
   "date": "2026-10-12",
-  "note": "neither hasagi nor year-round racks is drawn",
+  "note": "neither hasagi nor year-round racks is in the value space; both are undated modern records",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6",
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b",
    "0016-rice-drying-racks-hasa-hasagi.html": "db3cb43976dd0ddf"
   },
-  "research": "b949772f3b183cab",
+  "research": "70e6793ff23c1204",
   "rests": [
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html:11527d5ae1c08c62",
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:7a7c600c144947cf",
    "0016-rice-drying-racks-hasa-hasagi.html:5115b7fb88dff7e6",
    "0016-rice-drying-racks-hasa-hasagi.html:8b3c95684718cd16",
    "0016-rice-drying-racks-hasa-hasagi.html:b368e36098b20033"
@@ -6793,15 +6788,14 @@
   "code": "7055efd8b156b0be",
   "core": "893783f3cb5ce2be",
   "date": "2026-10-12",
-  "note": "one system at two scales, the dike-pond on the polder lattice",
+  "note": "the dike-pond is laid on the polder lattice, one system at two scales",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
-  "research": "5b6765b6a7da3265",
+  "research": "5ae0ab069188e330",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:594c8cc849af5697",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
   ],
@@ -6832,28 +6826,29 @@
   "code": "140ed1dd7030678f",
   "core": "bfbdbf4350cd9733",
   "date": "2026-10-12",
-  "note": "mosaic on two in three, chessboard (Qu Dajun 1678) on the rest, the odds a GUESS",
+  "note": "mosaic two in three, chessboard one in three, odds a GUESS as recorded",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:594c8cc849af5697",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::POND_LAYOUT_MOSAIC#mosaic strength": {
   "code": "0a8d92a598252aa4",
   "core": "8965d718adaaab2a",
-  "date": "2026-10-03",
-  "note": "the page calls it a calibrated liberty set on Kuwabata",
+  "date": "2026-10-12",
+  "note": "calibrated liberty set on Kuwabata",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "06800d53a01b6476",
-  "triage": "touched",
-  "triaged": "2026-10-10",
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::REF_CANAL_A#reference fan's canal A": {
@@ -6891,17 +6886,16 @@
  "l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled": {
   "code": "f1722848ace43757",
   "core": "04076665195f7fe6",
-  "date": "2026-10-10",
-  "note": "`ROLLED_ARCHETYPES = (\"valley_paddy\",)` deals only the fan, though the page has the polder and the dike-pond \"attested too ... both are a known gap\". A known gap is not a deliberate choice (plan review 2026-10-10), so the code should roll polder_grid and mulberry_dike_fishpond per settlement, and until then the claim stands as drift, never a DEVIATION",
+  "date": "2026-10-12",
+  "note": "only the valley fan is dealt; polder and dike-pond are the recorded known gap",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "06800d53a01b6476",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
   ],
-  "triage": "touched",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::ROW_LINES#row village's line": {
   "code": "0e895450ce19fddc",
@@ -7735,9 +7729,9 @@
   "date": "2026-10-03",
   "note": "0019: water crosses the dike only at gated sluices",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -10697,13 +10691,13 @@
   "code": "22603ddd70d21fa6",
   "core": "62a4e140002dd8ce",
   "date": "2026-10-12",
-  "note": "about a third, recorded as a GUESS",
+  "note": "0.30-0.36, about a third, recorded as a GUESS",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:3ae92dcaa4f0d698"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:7d008d761ba90094"
   ],
   "verdict": "IN-STEP"
  },
@@ -10799,13 +10793,13 @@
   "code": "f335dac3e44766de",
   "core": "8965d718adaaab2a",
   "date": "2026-10-12",
-  "note": "about half of hamlet maps, a GUESS",
+  "note": "0.5, about half of hamlet maps, recorded as a GUESS",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:3ae92dcaa4f0d698"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:7d008d761ba90094"
   ],
   "verdict": "IN-STEP"
  },
@@ -11165,13 +11159,13 @@
   "code": "1f1b0c446db07c36",
   "core": "92aad47d254453c9",
   "date": "2026-10-12",
-  "note": "about half of hamlet maps",
+  "note": "rolled once per hamlet from its seed against about half",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:3ae92dcaa4f0d698"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:7d008d761ba90094"
   ],
   "verdict": "IN-STEP"
  },
@@ -14024,13 +14018,13 @@
   "code": "8b2caf577764448c",
   "core": "d5487fa2d6457ae3",
   "date": "2026-10-12",
-  "note": "mosaic or chessboard",
+  "note": "accepts both attested layouts, mosaic and grid",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:594c8cc849af5697"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
   ],
   "verdict": "IN-STEP"
  },
@@ -14228,14 +14222,15 @@
   "code": "28b1e582e65e4a4e",
   "core": "7c05f60eca377a04",
   "date": "2026-10-12",
-  "note": "the rice polder keeps the grid",
+  "note": "a rice polder is pinned to the grid; the layout is rolled only on a dike-pond",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:594c8cc849af5697"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
   ],
   "verdict": "IN-STEP"
  },
@@ -14274,12 +14269,13 @@
   "date": "2026-10-12",
   "note": "settled unless declared",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6"
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
-  "research": "0702c91e77234fc8",
+  "research": "f94cd7cea915d311",
   "rests": [
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:cd323d78a44a7ec9"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#knob rolls": {
@@ -14334,12 +14330,13 @@
   "date": "2026-10-12",
   "note": "a surveyed grid",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#regional wind": {
@@ -14358,18 +14355,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind": {
-  "code": "971afc176097194d",
+  "code": "826d6c8103f79925",
   "core": "7c05f60eca377a04",
   "date": "2026-10-12",
-  "note": "0031 calls the windward high margin \"one case among several\", so it does not back limiting rolled falls to wind-backed ones; repoint to 0072's \"laid out with its back to it\"",
+  "note": "the rolled fall is narrowed to falls that leave the settlement its back to the wind",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "5892781a1ab23bcb",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#row on the edge on flood ground": {
   "code": "8b684452bacb53b7",
@@ -15188,9 +15185,9 @@
   "date": "2026-10-03",
   "note": "0019 sluices only",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -16793,9 +16790,9 @@
   "date": "2026-10-07",
   "note": "the rows run along the fall, so the inlet is at the head (high end) and the outfall at the tail (low end), matching \"an inlet at the polder's head and an outfall at its tail\"",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
@@ -16916,9 +16913,9 @@
   "date": "2026-10-03",
   "note": "the pond feeds the polder; joining it is geometry",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -16967,9 +16964,9 @@
   "date": "2026-10-03",
   "note": "wild water outside the dike, per 0019 drawing",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -17028,10 +17025,10 @@
   "date": "2026-10-07",
   "note": "the feeding water stands outside the dike at the polder's head, which is its high end, and a reservoir sits above what it waters; the code walks the pond uphill from the ring's head until it clears the crop",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
   },
-  "research": "3b58a1481d7e7bee",
+  "research": "6a71f86274f7ce76",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
@@ -17079,16 +17076,17 @@
   "code": "cafdcc4e075ae427",
   "core": "888d13aa4c38e315",
   "date": "2026-10-12",
-  "note": "the mosaic's bend is calibrated liberty set on Kuwabata; grid and chessboard at 0",
+  "note": "mosaic at 0.5, chessboard and rice polder at 0.0 (the grid)",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:594c8cc849af5697"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
   ],
   "verdict": "IN-STEP"
  },
@@ -17108,9 +17106,9 @@
   "date": "2026-10-03",
   "note": "0019 drawing",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -17128,10 +17126,10 @@
   "date": "2026-10-05",
   "note": "above the fields it waters, clear of the crop",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
   },
-  "research": "3b58a1481d7e7bee",
+  "research": "6a71f86274f7ce76",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:23d33365fc99a589",
@@ -17146,9 +17144,9 @@
   "date": "2026-10-03",
   "note": "matches the pool layout 0019 drawing describes",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -17217,9 +17215,9 @@
   "date": "2026-10-08",
   "note": "`_house_racks` is set from changeable harvest weather, never by chance",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6"
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
-  "research": "0702c91e77234fc8",
+  "research": "f94cd7cea915d311",
   "rests": [
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:329b76a32a9e4883",
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:6af92987eeb511b9",
@@ -30574,6 +30572,7 @@
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:031d53823997269a",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:11df2d9a630be745"
   ],
+  "triage": "touched",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -38602,11 +38601,11 @@
   "date": "2026-10-11",
   "note": "clustered, row and scattered are attested; dike-top is the drawing page's form",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321",
    "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
   },
-  "research": "4e1f3ac3a3e9e66a",
+  "research": "737a784edf93e4b8",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
    "0031-clustered-and-scattered-villages-shuson-sanson.html:16ae76f064c850db",
@@ -39037,9 +39036,9 @@
   "date": "2026-10-10",
   "note": "`return ctx.get(\"terrain\") == \"low\"` lets dike_top onto any low site, but §19 puts dike-top houses only on \"a polder with water on every flank and no shore to build on\", and §17 puts a shore polder's village on the dry ground off the dike; the gate should need a polder with no landward shore",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2"
@@ -44444,9 +44443,9 @@
   "date": "2026-10-03",
   "note": "0016: unstated weather -> settled, so no rack",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6"
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
-  "research": "0702c91e77234fc8",
+  "research": "f94cd7cea915d311",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -44772,13 +44771,13 @@
   "code": "16b1b32902686458",
   "core": "0cafe3da132710b3",
   "date": "2026-10-12",
-  "note": "8 x 6 ft, a GUESS",
+  "note": "8 x 6 ft, recorded as a GUESS",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:3ae92dcaa4f0d698"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:7d008d761ba90094"
   ],
   "verdict": "IN-STEP"
  },
@@ -45752,9 +45751,9 @@
   "date": "2026-10-05",
   "note": "16 px: 16 ft on a hamlet map, twice that on a village map",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e"
   ],
@@ -45767,9 +45766,9 @@
   "date": "2026-10-05",
   "note": "12 px, the low end of the 12-16 step",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e"
   ],
@@ -45823,9 +45822,9 @@
   "date": "2026-10-05",
   "note": "0.3 on valley, terrace and ribbon maps, recorded as calibrated liberty",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:c5af31f6633b6cb8"
   ],
@@ -45946,6 +45945,7 @@
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:89647304d9a0811c"
   ],
+  "triage": "touched",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -45979,9 +45979,9 @@
   "date": "2026-10-10",
   "note": "a mound at the middle of the plot; this is the Chinese form of the even-odds knob, and the page records drawing it in a paddy plot as a guess",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:89647304d9a0811c"
   ],
@@ -46275,6 +46275,7 @@
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e"
   ],
+  "triage": "touched",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -46284,9 +46285,9 @@
   "date": "2026-10-05",
   "note": "island or corner, even odds per map",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:89647304d9a0811c"
   ],
@@ -48879,13 +48880,20 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#household grave seated 14 ft (SHRINE_CORNER_FT) off the house's corner, standing for the house plot's corner": {
-  "code": "35c562e9417fd7f0",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#household grave off the house's corner": {
+  "code": "d4403764fe390f99",
   "core": "35c562e9417fd7f0",
   "date": "2026-10-12",
-  "note": "household grave seated 14 ft (SHRINE_CORNER_FT) off the house's corner, standing for the house plot's corner",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the page puts the grave \"at a corner of its plot\" and records only the shares, the stones and the 8x6 size as GUESS; the code seats it 14 ft (SHRINE_CORNER_FT) off the house's corner, a stand-in the drawing page does not record. Record it on the drawing page as a GUESS, or relabel the claim UNRESEARCHED without the pointer",
+  "pages": {
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
+  },
+  "research": "9fe254d3e1ab2d59",
+  "rests": [
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:18c775d60498e622",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:7d008d761ba90094"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": {
   "code": "dadc98480763ff90",
@@ -48916,14 +48924,6 @@
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy in the front yard 8 ft off the front wall (PRIVY_FRONT_STEP_FT)": {
-  "code": "35c562e9417fd7f0",
-  "core": "35c562e9417fd7f0",
-  "date": "2026-10-12",
-  "note": "privy in the front yard 8 ft off the front wall (PRIVY_FRONT_STEP_FT)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy in the yard off the back wall": {
   "code": "391f5a2f280c1786",
@@ -49262,13 +49262,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#manure pit size": {
-  "code": "5afb4effcf4301f8",
+  "code": "8541d070d22e7db9",
   "core": "cd594ed9b6fd9540",
   "date": "2026-10-12",
-  "note": "labeled UNRESEARCHED, but 0042.html gives the night-soil jar \"about 1 to 1.5 m (~3-5 ft) across the mouth\"; cite 0042.html (3.5 ft is inside that range)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "3.5 ft is inside the jar mouth's ~3-5 ft",
+  "pages": {
+   "0042-manure-heaps-and-compost-kyuhi.html": "41e1245eb64400c5"
+  },
+  "research": "259b5ec87e7c7845",
+  "rests": [
+   "0042-manure-heaps-and-compost-kyuhi.html:8f2fcd2c4da63bd5"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#one-ken default": {
   "code": "586d98213961c2d7",
@@ -52968,9 +52973,9 @@
   "date": "2026-10-03",
   "note": "convention recorded in 0016 drawing",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6"
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
-  "research": "0702c91e77234fc8",
+  "research": "f94cd7cea915d311",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -53052,9 +53057,9 @@
   "date": "2026-10-03",
   "note": "gated on harvest weather, per 0016 drawing",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6"
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
-  "research": "0702c91e77234fc8",
+  "research": "f94cd7cea915d311",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -53335,9 +53340,9 @@
   "date": "2026-10-03",
   "note": "one side, near half, never the southern half, per 0016 drawing",
   "pages": {
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "a616889ecebd63b6"
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
-  "research": "0702c91e77234fc8",
+  "research": "f94cd7cea915d311",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -54452,9 +54457,9 @@
   "date": "2026-10-08",
   "note": "seats the gate where water crosses the dike; the 20 ft snap reach only lines the gate up with the drawn stroke",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
@@ -54493,9 +54498,9 @@
   "date": "2026-10-08",
   "note": "a gate at every dike gap, turned along the crest so it lies across the water; water crosses only at gated sluices",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
@@ -54520,9 +54525,9 @@
   "date": "2026-10-05",
   "note": "single file on the crest, widened platform, recorded GUESS",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:38971cde89340d36",
@@ -54614,9 +54619,9 @@
   "date": "2026-10-03",
   "note": "per 0019 (dike-top form is its own knob)",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -54678,9 +54683,9 @@
   "date": "2026-10-03",
   "note": "per 0019",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -54690,9 +54695,9 @@
   "date": "2026-10-03",
   "note": "per 0019",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -55597,9 +55602,9 @@
   "date": "2026-10-03",
   "note": "0019: a reed fringe on every flank but the landward one",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -55751,9 +55756,9 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -70367,9 +70372,9 @@
   "date": "2026-10-09",
   "note": "the east toe is tagged as the settlement side, the village on the dry ground to the east",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2"
@@ -70383,9 +70388,9 @@
   "date": "2026-10-09",
   "note": "an inlet at the NW (pond) corner and an outfall south from the drain, the dike notched at each; two sluices for a village polder",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
@@ -70427,14 +70432,16 @@
  "l7r/diagram/waterfields/polder.py::_polder_lattice#dike-pond mosaic": {
   "code": "9ae0511a7800d9a4",
   "core": "70308a3b6706890c",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "date": "2026-10-12",
+  "note": "a smooth correlated drift that fades to nothing at the pinned edge, ponds kept four-sided, amplitude a calibrated liberty",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "f8b150fc977770cc"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "06800d53a01b6476",
-  "triage": "touched",
-  "triaged": "2026-10-10",
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_lattice#each line wanders": {
@@ -70457,9 +70464,9 @@
   "date": "2026-10-07",
   "note": "a gentle low-frequency wander that bends the whole surveyed grid as one piece, which the page calls a drawing convention",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
@@ -70487,9 +70494,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -70559,9 +70566,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -70571,9 +70578,9 @@
   "date": "2026-10-05",
   "note": "the inlet is at the head (the high corner), toward the feeding pond in the northwest",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
@@ -70587,9 +70594,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -70599,9 +70606,9 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
@@ -70679,13 +70686,14 @@
   "date": "2026-10-12",
   "note": "the rice polder keeps the grid; mosaic is 0 by default",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#low rows wet": {
@@ -70753,9 +70761,9 @@
   "date": "2026-10-09",
   "note": "diked block, ring canal inside the dike, water crosses only at an inlet and an outfall",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "15edd0e4a54806ed"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "research": "fe43093ffa52e257",
+  "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
