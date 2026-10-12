@@ -30,7 +30,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   the rear corner by the family's rooms, the guests' behind the reception room, each leaving a 5 ft way along the
   alley. (Pass 6 had stood the family's flush to the wall for a hatch, ~140 ft outdoors round the house from the inner
   entrance; the hatch was a guess and is dropped for it.) THE CARTER'S ROUTE to both (pass 8): in by the kitchen
-  postern in the west wall, north along the wall past the vegetable ground, through the rear yard between the
+  postern in the west wall, north across the service yard past the vegetable ground, through the rear yard between the
   storehouses and the kitchen, and east along the rear alley, which since pass 8 runs on behind the kitchen - the kitchen stands
   10 ft off the north wall as the house does, so the kitchen ell abutting the house leaves the alley's west end open.
   Never through the ceremonial middle gate or the lord's garden. The alley opens east onto the inner court; at its
@@ -48,9 +48,9 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   (Pass 5 wrote "~2,400 sq ft" for a house of 1,980 + 480 + 120 = 2,580 sq ft, ~72 tsubo; pass 4 drew ~4,700.) The
   residence kind entry's "about 180 to 200 ft" was corrected at its source (`interactive/compound_kinds/household.py`)
   and docs/buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
-  lodgings, stores and office (as drawn since feature 374 batch 4: the office hall 113 x 38, the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 60 x 30, the barracks
-  24 x 67, the staff long-house 24 x 82, the servants' row 76 x 15, the stables 18 x 24, two storehouses 12 x 18
-  and the guest house 38 x 38), which holds coverage in the jin'ya band without shrinking the envelope; each of those
+  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38, the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 27 (0098's band), the barracks
+  24 x 70, the staff long-house 24 x 82, the servants' row 60 x 15, the stables 18 x 24, two storehouses 16 x 19 and
+  12 x 18 (unequal, as the Yokota pair), the gatehouse 40 x 12 and the guest house 40 x 40), which holds coverage in the jin'ya band without shrinking the envelope; each of those
   sizes is a GUESS in its band.
 - **R07 approach**: no genkan; the middle gate in the divider and a stepping-stone roji across the garden to a shoe
   stone at the reception's veranda (the Koseki form, research 0104). The household's own doors: the kitchen's
@@ -59,10 +59,14 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   inner entrance on its rear (north) face in the kitchen half, east of the family privy, onto the alley (feature 374 wave 113: the kitchen ell takes its west face)
   (research buildings 370). Note 300 says of the Koseki house that the everyday door is the kitchen entrance, while
   370 gives the family an inner entrance apart from it; the draft draws both doors.
-- **R18 granary**: an earth-walled kura on the ground, no posts (the dozo form).
-- **R19 guardroom**: a freestanding gatehouse BESIDE the gate (Takayama's form, research buildings 420), 18 x 12 ft
-  (Kita-in's 3 x 2 ken), flush west of the gate's post.
-- **R26 main gate**: a one-bay yakuimon with an 8 ft passage between its posts (research 0093: 6-8.5 ft).
+- **R18 granary**: 0098's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:granary form")).choice(["raised
+  timber storehouse", "earth-walled kura"])` = earth-walled kura: on the ground, no posts (the dozo form), 50 x 27 ft in
+  0098's ~43-50 x 25-27 ft band (feature 374 wave 128; it was 60 x 30).
+- **R19 guardroom**: a freestanding gatehouse BESIDE the gate (Takayama's form), ~40 x 12 ft as 0093's drawing page draws a
+  gatehouse of its own (its length a GUESS; 2 ken deep, measured), flush west of the gate's post - the gatekeepers' place
+  follows from the one-bay gate, which has no range to hold a guardroom (feature 374 wave 128; it was 18 x 12 ft).
+- **R26 main gate**: 0093's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(["one-bay
+  gate", "gate range"])` = one-bay gate: a yakuimon with an 8 ft passage between its posts (research 0093: 6-8.5 ft).
 - **R30 garden**: no pond drawn - the draft's garden is ground only, which reads as the dry-garden form; its stones and
   sand are left to the hand refinement.
 - **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack
@@ -78,23 +82,34 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   the servants' row of the menservants. The barracks and the
   long-house are divided into dwellings, a door each (0097; feature 374 batch 4). The servants' row's entry form is 0097's knob,
   rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:servants' quarters form")).choice(["common room under one
-  door", "a door to each dwelling"])` = a door to each dwelling: five dwellings, a door each.
+  door", "a door to each dwelling"])` = a door to each dwelling: four dwellings of 15 ft, a door each (the row 60 ft since wave 128, the gatehouse taking
+  the wall's room).
 - **Rear yard**: the open ground between the storehouses and the kitchen, 37 x 22 ft, the Higuchi house's rear (research 0091); its size a GUESS in the 18-45 by 12-30 ft band the size-audits of 2026-10-12 set from two storehouses of the common 2 x 3 ken and the open ground before them (no rear yard was found measured); its 12 ft (2 ken) floor keeps it apart from the 6-10 ft service alley, the rear strip's other form.
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
-- **Vegetable garden**: WEST of the house, filling the kitchen yard (research 0109: the one plot whose side
-  is given lay west; its size runs from the Takei house's ~1,070 sq ft plot to a field over about half the Yokota
-  house's grounds). Pass 7 takes the field form, as large as the yard holds - 64 x 48 ft, 3,072 sq ft, its size a
-  GUESS - leaving a ~12 ft way from the postern along the west wall (pass 6's 36 x 30 plot left ~100 x 60 ft of the
-  yard bare). It is drawn in the garden stipple, as the hand sheets draw theirs.
+- **Vegetable garden**: 0109's two knobs. Its SITE is rolled among the four the record gives, in its order, those the
+  sun or the room rule out on this draft struck first: south beside the formal garden has no room (8 ft between the
+  garden and the divider) and the rear service ground neither room nor sun (a 9-12 ft band behind the house, in its
+  shadow), so the roll is exactly `random.Random(zlib.crc32(b"county-magistracy-example:vegetable garden site")).choice(["west
+  of the residence", "on a parcel of its own"])` = west of the residence. Its SIZE is the soup-greens plot, the Takei
+  house's ~100 sq m (~1,076 sq ft), drawn 36 x 30 ft: the field form, over about half the grounds (~27,000 of the
+  54,000 sq ft), cannot stand in an inner court of 24,300 sq ft before anything is built in it, so the room rules it out
+  (feature 374 wave 129; it was a 64 x 48 ft field squeezed into the kitchen yard, a size nobody attests). It gets 9.5
+  hours of sun (`garden_sun`). The kitchen yard's working ground beside the kitchen, 26 x 62 ft, is named the service
+  yard, as Ochiba's sheet names its own (pass 6's ~100 x 60 ft of bare yard, building-review round 6, answered by naming
+  it; its bounds a drawing convention). Both are drawn as the hand sheets draw theirs.
 - **Garden**: 124 x 46 ft, from the kitchen ell's east face to the guest house (pass 7; feature 374 wave 113: 2 ft longer, the house 7 ft west): the one garden faces the
   reception and the guest house both, guests being received in the garden-facing rooms (research buildings 330).
   Pass 5's 188 ft garden ran on beside the servants' row with a bare strip; pass 6 cut it to the house's 68 ft and
-  left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. A ~76 x 36 ft band of inner court north of
-  it, east of the house (the alley's east end and the shrine's corner), stays open ground.
+  left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. The band of inner court north of
+  it, east of the house to the shrine's tree (the alley's east end), stays open ground.
 - **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
-  ~36 x 30 ft is Ochiba's particular, not the generic post's (docs/building-programs.md: "The shrine is universal
-  equipment ... Scale and dedication are the per-manor particular"). Its arch: NONE - a compound shrine may have
-  none (docs/buildings.md, Sacred features; research 0220 drawing); one shrine, so the shared-or-own knob does not arise.
+  ~30 ft is Ochiba's particular, not the generic post's (docs/building-programs.md: "The shrine is universal
+  equipment ... Scale and dedication are the per-manor particular"). It stands in the inner court's north-east corner
+  beside its tree, as 0218's drawing page draws every compound's shrine (feature 374 wave 130): the placer holds 17 ft
+  past its south end for the tree (`tree_ft`), the guest house flowing below, and the tree's 20 ft crown (a GUESS: no
+  source sizes a household god's tree) stands 2 ft clear of both, its trunk 12 ft off the hall (`shrine_tree` in
+  pack_audit). Its arch: NONE - a compound shrine may have none (docs/buildings.md, Sacred features; research 0220
+  drawing); one shrine, so the shared-or-own knob does not arise.
 - **Hearing court floor**: `white gravel`, the floor knob's first form (river cobbles the other; docs/building-programs.md,
   research 0099 drawing) - the roofed court keeps its white-gravel fill.
 - **Middle gate**: beside the office hall's east end, not behind it (docs/building-programs.md puts it customarily on the
@@ -110,7 +125,7 @@ Guesses the draft carries beyond those: a **detached guest house** (R10, researc
 in the main house; a guest house apart was not found). (The karo's house of its own, a GUESS through pass 5, is now
 a bay of the staff long-house - R11's attested form.) The kitchen postern's, the service gate's and the middle gate's 6 ft (narrower than the main
 gate), the door width (a map drawing convention, research 0117), the roji's stone spacing, the hearing
-court's 80 x 32 ft, the garden's 124 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 37 x 20 ft, the 5 ft privies and
+court's 80 x 26 ft (32 until feature 374 batch 5, cut 6 ft to open the way west past the stable well), the garden's 124 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 37 x 20 ft, the 5 ft privies and
 their 15 ft from any well are guesses too. The forecourt, the `outer court` ground beside the hearing court and the
 cart yard are drawn as bare ground with no edge: an outlined forecourt read as a fenced one, a GUESS the record does
 not support (research 0104).
@@ -276,7 +291,9 @@ Coverage 33%, perimeter-hugging 71%, nothing overflows; every registered check p
 - **The hearing court re-centered on the office hall** (75.5-155.5 ft), as the hall's own court.
 - **The outer court's yard starts at 155.5 ft**, where the hearing court ends: drawn after the court, at 141 ft it
   painted out the court's east end (building-review E1; `tests/test_compound.py` now holds that no two zones share ground).
-- LEFT, with its reason: the gatehouse stays 18 x 12 ft - at 40 ft the stables find no seat.
+- LEFT, with its reason: the gatehouse stays 18 x 12 ft - at 40 ft the stables find no seat. (Answered by feature 374
+  wave 128: the servants' row shortened to 60 ft, the gatehouse is 40 ft, the stable keeps its seat with its door on its
+  west gable.)
 
 Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
 
@@ -295,6 +312,7 @@ Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check p
 
 ## Review log
 
+- **2026-10-12 (feature 374 waves 127-128)**: the inner entrance at the kitchen end of the rear face (0107); the granary and the main gate rolled from their records' forms (an earth-walled kura of 50 x 27 ft in 0098's band; a one-bay gate) and the gatekeepers in a gatehouse of their own, 40 x 12 ft (0093); the servants' row 60 ft in four dwellings, the barracks 70 ft, the guest house 40 ft square and the west storehouse at the larger Yokota storehouse's 16 x 19 ft, holding the jin'ya band; the stable's door on its west gable.
 - **2026-10-12 (feature 374 batch 4, building-review round 3 under the round arbiter's `continue`)**: the service gate opened off the cart yard's south end (the cell and the barracks had sealed it at 244 ft; `postern_approach` written red first); the storehouses draw their doors; the barracks (four dwellings), the staff long-house (the karo's bay and four) and the servants' row (five) are divided, a door each (0097); a maids' room under the main roof at the kitchen end (plan R4-1); no lodgers' privy within 30 ft of the main gate, the stables' in the gap west of them; the stale lines above brought to the drawing. The 62 x 15 ft row, 32 x 22 ft stable and 36 x 36 ft guest house of the entry below were the drafting sizes: the program draws 76 x 15, 18 x 24 and 38 x 38.
 - **2026-10-12 (feature 374 waves 124-126, the program in `compound_example.py`)**: the servants' range left the inner court's NW corner for the street front - one 62 x 15 ft servants' row in the SW corner, the household's and the grooms' (0115); the corner holds two storehouses and a rear yard, keeping the kitchen and the house where the garden is drawn. The staff long-house is 24 x 82 ft on the west wall, its bays side by side with a door each on the long face, and the barracks 24 x 67 ft on the east (0097: never deeper than ~24 ft); the tax archive stands on the divider beside the granary, the cell west of the service gate, and the hearing court is centered again on the hall. The stable is 0108's warrior's stable, 32 x 22 ft (three one-ken stalls, the earth passage, the grooms' room). The guest house is 36 x 36 ft, returning the mass the stable gave up, which holds the jin'ya coverage band.
 - **2026-10-10 (feature 374 wave 113, building-review round 1)**: the garden zone starts at the kitchen ell's east face (it started 5 ft west of it and held the kitchen well); the house's inner entrance moved east along its rear face, off the family privy at the rear west corner.

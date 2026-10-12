@@ -449,6 +449,38 @@ def board_by_the_gate(env: Envelope, board: Box) -> bool:
     return board_by_a_gate(board, [(env.w_ft / 2, env.h_ft)])
 
 
+SHRINE_TREE_CROWN_FT: float = 20.0  # the shrine's tree's crown across; a GUESS (no source sizes a household god's tree)
+SHRINE_TREE_CLEAR_FT: float = 2.0  # its crown clear of the hall, every mass and the wall's ink (half the 3 ft wall, and a little)
+
+
+def _shrine_tree(env: Envelope, result: PlaceResult, taken: list[Box]) -> tuple[float, float] | None:
+    """The trunk of the tree beside the compound shrine (feature 374 wave 130): off an end face of the shrine first - along
+    its wall, toward the corner it stands in - then its court face, its crown SHRINE_TREE_CLEAR_FT clear of the hall and
+    of everything seated; None where no seat is clear (the pack audit's `shrine_tree` then reports the shrine bare).
+
+    Research:
+        a tree beside the compound's shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: "Every compound our maps draw has one modest shrine, in a corner of its grounds beside a tree" - a household kept its god in a corner of its lot, at a small shrine or an old tree taken as its seat, and our maps give the compound's shrine the tree as well
+        the tree's seat - GUESS: off the shrine's end face toward its wall, then the court face, the crown 2 ft clear of the hall; no source says on which side of a household's shrine its tree stood, or how near (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html)
+        the crown's size - GUESS: 20 ft across; no source sizes a household god's tree (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html)"""
+    shrine = next((p for p in result.placed if p.spec.feature == "compound shrine"), None)
+    if shrine is None:
+        return None
+    r = SHRINE_TREE_CROWN_FT / 2
+    court = _court_side(shrine)
+    wall = {"N": "S", "S": "N", "E": "W", "W": "E"}[court]
+    ends = ("E", "W") if court in ("N", "S") else ("N", "S")
+    toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
+    off = r + SHRINE_TREE_CLEAR_FT
+    others = [t for t in taken if t != (shrine.x_ft, shrine.y_ft, shrine.x2, shrine.y2)]
+    for side in (*ends, court):
+        nx, ny, fx, fy, length = _face(shrine, side)
+        for frac in toward_wall:
+            cx, cy = (fx + length * frac, fy + ny * off) if ny else (fx + nx * off, fy + length * frac)
+            if _is_clear(env, others, cx - r, cy - r, 2 * r, 2 * r, SHRINE_TREE_CLEAR_FT):
+                return cx, cy
+    return None
+
+
 def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], ox: float, oy: float) -> list[str]:
     """The program's point features, seated by the composition (feature 254): fire-water tubs at every
     wooden building's court face (two at the kitchen), a well at the kitchen, the garden and the stables,
@@ -505,12 +537,24 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             taken.append((bx, by, bx + BATH_W_FT, by + BATH_H_FT))
             parts.append(rect(bx, by, BATH_W_FT, BATH_H_FT, KINDS["service"][0], KINDS["service"][1], 1.5, "", "bath"))
             caption("area", bx, by, BATH_W_FT, BATH_H_FT, "bath", 8, False, "#3A2E1C", "bath")
+    # the shrine's tree, before the wells and the privies, which then keep clear of its crown
+    if tree := _shrine_tree(env, result, taken):
+        tx, ty, r = *tree, SHRINE_TREE_CROWN_FT / 2
+        taken.append((tx - r, ty - r, tx + r, ty + r))
+        rect(tx - r, ty - r, 2 * r, 2 * r, "none", "none", 0)  # registers the crown with the captions; its circle follows
+        parts.append(
+            f'<g data-kind="sacred tree" data-part-of="compound shrine" fill="#7A8C5C" stroke="#3E5230" stroke-width="1.4"><circle cx="{ox + tx * FTPX:.0f}" cy="{oy + ty * FTPX:.0f}" r="{r * FTPX:.0f}" data-id="shrine-tree"/></g>'
+        )
+        caption("point", tx - r, ty - r, 2 * r, 2 * r, "shrine tree", 7, True, "#3A4A28", "sacred tree", names=("shrine-tree",))
     # wells next. A well stands BESIDE a door, never before it (pass 6, building-review round 5: the stables' well stood
     # 5 ft in front of the stable door and wider than it) - the fracs off the middle first, the middle last - and 9 ft
     # out before 6: a kitchen well may stand as far as 20 ft out, past the bath that abuts the kitchen, serving both,
     # as the Takayama residence's bath stood with its well and kitchen (research 0105)
     for p in result.placed:
-        if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), (9.0, 12.0, 15.0, 20.0, 6.0))):
+        # the stables' 6 ft out first: their well stands in the band before them that is the outer court's way west, and at
+        # 9 ft it left ~2.3 ft either side of it (feature 374 batch 5, building-review E1)
+        offs = (6.0, 9.0, 12.0, 15.0, 20.0) if p.spec.feature == "stables" else (9.0, 12.0, 15.0, 20.0, 6.0)
+        if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), offs)):
             wells.append(w)
     for z in program.spine:
         # the garden well stands at the garden's EAST end, where the bath stood before it joined the house: at the west
@@ -579,7 +623,9 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
             # 3.5 ft off (its face 1 ft out) last: into a narrow gap between two blocks on one wall (feature 374 batch 4, plan R4-3: the county
             # stables' only seat clear of the gate and of their well is the 7 ft gap to the servants' row)
-            for side, fracs in ((ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
+            # against the wall at either end before anywhere else (feature 374 batch 5, building-review E2: the stables'
+            # east end's court-ward seat won, a privy loose in the forecourt with no hatch)
+            for side, fracs in ((ends[0], toward_wall[:1]), (ends[1], toward_wall[:1]), (ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
                 if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0, 3.5), side, well_boxes, (*zones, gate_hold)):
                     privies.append((*v, ""))
                     break

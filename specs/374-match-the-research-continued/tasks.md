@@ -19,6 +19,11 @@ in 328's ranking and this spec.
 - layout-revised: ubame-magistracy - waves 124-126: the servants' common room at the gate range's west end; the barracks 24 ft deep; the stable as 0108 draws it
 - layout-revised: county-magistracy-example - waves 124-126: the servants' row on the street front, storehouses and rear yard behind the house; the long-house and barracks 24 ft deep; the tax archive, cell and hearing court re-seated; the stable as 0108 draws it
 - glyph-redrawn: stables on hayakawa-magistracy - wave 126: three one-ken stalls, the earth passage before them, the grooms' room (the glyph every sheet now draws; its first use)
+- layout-revised: county-magistracy-example - waves 127-130: the granary and the main gate rolled (a 50 x 27 ft kura, a one-bay gate and a 40 ft gatehouse), the servants' row of four dwellings, the barracks, guest house and storehouses re-sized; the vegetable garden at the soup-greens plot with the service yard named; the shrine in its corner beside its tree, the guest house flowing below
+- layout-revised: hayakawa-magistracy - wave 130: the shrine in the inner court's north-east corner beside its tree, the stippled grove gone, the torii before its south door
+- layout-revised: ochiba-magistracy - waves 130-131: the shrine hall at 30 x 26 ft in the inner court's north-east corner beside its tree, the workshop below the tree, the gardens round the shrine gone
+- layout-revised: ubame-magistracy - waves 130-131: the shrine in the inner court's north-east corner beside its tree, the grove and its crowns gone, the wood kami in the one hall
+- layout-revised: hoshigaoka-shrine - wave 131: the sanctuary three bays wide, as its width knob rolls
 
 ## Phase 1 - wave 112: the veranda at 0102's widths, its faces rolled
 
@@ -111,6 +116,28 @@ in 328's ranking and this spec.
 - [x] T18 batch 4's review findings fixed once and verified: the servants by kind, the county postern open, the storehouse doors, the barracks divided, the hand sheets' findings, the size bands (plan R4-1 to R4-7) (FR-001)
       research: rendering
       verify: DONE. DONE. batch 4's review findings (R4-1 to R4-7): every finding fixed and recorded (measurements b4-*) or accepted or filed (found.jsonl); postern_approach red first; claims re-checked; the round arbiter closed the reviews (ask:batch4-review-close: accept)
+
+## Phase 8 - batch 5: the county draft's filed rows, its stores and gate as knobs, the shrine beside its tree
+
+- [x] T19 wave 127: the county draft's small rows - the practice ground comment, the inner entrance at the kitchen end (0107), the middle gate's width, the servants' row form marked (FR-001)
+      research: rendering
+      verify: DONE. wave 127 done: the practice ground comment, the inner entrance at the kitchen end (in the inner rooms since batch 5's review), the middle gate's 6 ft agreed, the servants' row form marked (m:batch5-open-rows)
+
+- [x] T20 wave 128: the county granary (0098's form rolled, its size in the band) and gate (0093's form rolled, the gatehouse of its own) (FR-001)
+      research: rendering
+      verify: DONE. wave 128 done: the granary rolled earth-walled kura (50 x 27 ft, no posts - the plan's takakura prediction was wrong, the roll governs), the main gate one-bay (8 ft) with its 40 ft gatehouse, the takakura glyph for the other form; reviews passed
+
+- [x] T21 wave 129: the county vegetable garden's form (0109's knob rolled, the room deciding) (FR-001)
+      research: rendering
+      verify: DONE. wave 129 done: the soup-greens plot at ~1,076 sq ft, its site rolled among the sites the sun and the room leave (west), the service yard named; garden_sun OK
+
+- [x] T22 wave 130: every compound shrine in a corner beside its tree (0218), on the county draft and the three magistracy sheets (FR-001)
+      research: rendering
+      verify: DONE. wave 130 done: every compound shrine in a corner beside its tree - county placer (tree_ft, _shrine_tree), Hayakawa, Ochiba, Ubame; pack_audit shrine_tree red first; building-review, glyph-check and size-audit passed or accepted by the round arbiter
+
+- [x] T23 wave 131: the shrine hall's ceiling (Ochiba), the second kami as a rolled knob (Ubame), the sanctuary's width rolled (Hoshigaoka) (FR-001)
+      research: rendering
+      verify: DONE. wave 131 done: Ochiba's hall 30 x 26 ft, Ubame's wood kami in the one hall, Hoshigaoka's sanctuary three bays (its roll recorded); reviews passed or accepted
 
 ## Standing - the ranking's remaining rows
 

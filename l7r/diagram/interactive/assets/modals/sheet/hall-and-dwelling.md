@@ -19,7 +19,7 @@ Guesses:
   example is a city temple's, not a village's, and no second one was found.
 
 Depiction: The plan draws the hall and the monk's dwelling as one long building under a single roof, the hall facing down
-the approach with the small sanctuary behind it on the same line. The kitchen, the monk's rooms and the writing room are
+the approach with the small sanctuary behind it on the same line. A sanctuary did stand there, at the rear and on the hall's line; that the approach runs on that line too is the maps' own convention. The kitchen, the monk's rooms and the writing room are
 drawn as parts of it. The one roof is the maps' standing choice, because at a village shrine one building serves as both the
 monk's home and the place the villagers come to; in history a temple's dwelling usually stood apart, and the one-roof form
 is known only once. The building stands in a small cleared opening in the shrine's wood, drawn clear of the canopy rather

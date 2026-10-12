@@ -460,7 +460,7 @@
   },
   "batch4-open-rows": {
     "quantity": "open rows of 328's ranking at batch 4's close (no wave, not deferred), and how many of them are E3 DRIFTED",
-    "value": "179 open, 132 E3 DRIFTED",
+    "value": "179 open, 122 E3 DRIFTED",
     "unit": "rows",
     "observed": "2026-10-12",
     "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 122-126's rows were marked in audit/waves.json; the eight rows batch 4's checks filed (found-wave126) entered at the top",
@@ -1083,5 +1083,368 @@
         20
       ]
     }
+  },
+  "b5-hay-n1": {
+    "quantity": "the maids' room clear of the residence corridor's west mouth",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the room's rect x 376-412 against the corridor's mouth at x 448, y 244-278",
+    "value": {
+      "room_x2_px": 412,
+      "corridor_x_px": 448,
+      "clear_ft": 12.0
+    }
+  },
+  "b5-hay-n2": {
+    "quantity": "the servants' quarters map note's clause order",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the notes line reads 'the menservants lodge in the range on the street front, west of the gate range, its doors on the outer court by the stable; the grooms keep the stable's own room'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-ub-n1": {
+    "quantity": "the rear-yard comment's stale clause",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "grep 'reaches west' in the sheet finds nothing; the rear-yard comment describes the yard as drawn",
+    "value": {
+      "stale_lines": 0
+    }
+  },
+  "b5-cty-e1": {
+    "quantity": "the way west past the stable well",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the hearing court 26 ft deep, the stable well 6 ft out: the gap between them measured on the draft; tests/test_compound_service.py holds 6 ft or more",
+    "value": {
+      "way_ft": 8.3
+    }
+  },
+  "b5-cty-e2": {
+    "quantity": "the stables' privy against the south wall",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the privy at x 64-69, y 192-197 ft, west of the stable, its hatch drawn; tests/test_compound_service.py holds it",
+    "value": {
+      "flush": true,
+      "hatch": true
+    }
+  },
+  "b5-cty-e3": {
+    "quantity": "the inner entrance in one room",
+    "observed": "2026-10-12",
+    "verifies": "E3",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the door at x 115.7-121.7 ft, inside the inner rooms (x 112-138)",
+    "value": {
+      "one_room": true
+    }
+  },
+  "b5-hay-r6-e1": {
+    "quantity": "the grove's bare ground",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the pond garden runs east to x 875 and north before the reception's east veranda; pack-audit's largest vacancies are the named kitchen yard, forecourt strip and rear yard",
+    "value": {
+      "largest_vacancy_sqft": 3802
+    }
+  },
+  "b5-hay-r6-e2": {
+    "quantity": "the notes against the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "knob 9's arch, the torii line, the torii map note and a review-log entry rewritten to the corner shrine, its south door and its tree",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-hay-r6-n1": {
+    "quantity": "the shrine's tub outside the arch's span",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the tub at (877,186) east of the arch's east post (871.9-875.5)",
+    "value": {
+      "outside": true
+    }
+  },
+  "b5-hoshi-e1": {
+    "quantity": "the sanctuary inside its clearing",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "bed717b195bb",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the clearing's lobe at x 470-537.5 against the sanctuary's plinth at x 475-537",
+    "value": {
+      "inside": true
+    }
+  },
+  "b5-hoshi-q1": {
+    "quantity": "the three-bay sanctuary's depth labeled",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "bed717b195bb",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "notes item 9 labels the 6 ft depth a GUESS; the research pass filed as a row",
+    "value": {
+      "labeled": true
+    }
+  },
+  "b5-hoshi-n1": {
+    "quantity": "the privy's distance in the notes",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "bed717b195bb",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "notes line 18 reads about 44 ft",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-och-e1": {
+    "quantity": "the notes against the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "knob 7's workshop, the vegetable garden, rear yard and threshold-stone map notes, the inner-garden comment and a review-log entry rewritten",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-och-e2": {
+    "quantity": "the second kami's roll recorded",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "knob 9 records the roll ochiba-magistracy:second kami: myobu = one hall",
+    "value": {
+      "recorded": true
+    }
+  },
+  "b5-och-n1": {
+    "quantity": "the rear yard to the hall",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the rear-yard polygon carried to x 890 and its notes",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-ub-e1": {
+    "quantity": "the grove's bare ground",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the inner garden runs to the border wall (x 1060); the largest vacancy left is the named kitchen yard, then the shrine's own ground 77 x 37 ft with its way",
+    "value": {
+      "largest_vacancy_sqft": 3345
+    }
+  },
+  "b5-ub-e2": {
+    "quantity": "the roll's key",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the comment keys on ubame-magistracy, which rolls one hall as drawn; the notes record it",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-ub-e3": {
+    "quantity": "the notes against the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E3",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the altar, grove, way, vacancy, named-ground and map-note lines and a review-log entry rewritten",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-ub-q1": {
+    "quantity": "a way to the shrine",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "a trodden way from the open ground east of the reception along the garden's north edge and under the arch",
+    "value": {
+      "drawn": true
+    }
+  },
+  "b5r2-hay-e1": {
+    "quantity": "the shrine's tub off the wall",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the tub at (868,185), 2 ft below the hall's eaves at its south-east corner, clear of the wall's ink (to x 875.5) and the torii beam (y 200); fire_water_adrift and fire_water_distribution OK",
+    "value": {
+      "clear": true
+    }
+  },
+  "b5r2-hay-n1": {
+    "quantity": "the notes' north-east corner",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "line 38 now reads 'the east end of the strip they free'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-hay-n2": {
+    "quantity": "the tub's comment",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the comment reads 'at its south-east corner, inside the arch, beside its south door'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-ub-e1": {
+    "quantity": "the band east of the reception",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the garden's north edge raised to y 263 for x 860-1060, 8 ft below the arch; pack-audit's largest vacancies are the named kitchen yard, the rear-yard band and the west alley",
+    "value": {
+      "largest_vacancy_sqft": 3345
+    }
+  },
+  "b5r2-ub-e2": {
+    "quantity": "notes line 33",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "it reads 'a modest standalone hall in a corner beside its tree, the wood's kami at a second altar inside it'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-ub-n1": {
+    "quantity": "notes line 14's grove",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "'a mature grove' now 'a wide inner garden'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-ub-n2": {
+    "quantity": "the way painted over its caption",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the way drawn before the shrine group, so the caption paints over it; the render reads INARI SHRINE whole",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-cty-n1": {
+    "quantity": "the notes' hearing court size",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the guess list reads 80 x 26 ft with the 6 ft cut recorded",
+    "value": {
+      "fixed": true
+    }
+  },
+  "batch5-open-rows": {
+    "quantity": "open rows of 328's ranking at batch 5's close (no wave, not deferred), and how many of them are E3 DRIFTED",
+    "value": "165 open, 117 E3 DRIFTED",
+    "unit": "rows",
+    "observed": "2026-10-12",
+    "source": "specs/328-match-the-research/ranking.json",
+    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+    "method": "rows 0-12 and 18 of batch 4's open list marked waves 127-131 in waves.json, the ranking rebuilt"
   }
 }

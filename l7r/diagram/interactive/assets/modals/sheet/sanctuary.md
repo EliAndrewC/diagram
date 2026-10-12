@@ -13,11 +13,12 @@ sanctuary: before modern times one is known only where a lord or a great shrine 
 A village shrine's sanctuary was tiny. That measured one is about 6 ft square, a fifth of the width of its worship
 hall; another village shrine's, two bays by one, comes to about 12 by 6 ft.
 
-Depiction: The plan draws the sanctuary about 6 ft square, one bay wide, the size of the measured village sanctuary, behind
-the hall on the approach's line, in a small clearing of the shrine's wood, with no fence round it, and names the Fortune it
+Depiction: The plan draws the sanctuary one, two or three bays wide - about 6 ft square for one bay, the size of the measured
+village sanctuary, 12 by 6 ft for two, 18 by 6 ft for three - which of them picked at random for each plan, behind
+the hall on the approach's line, in a small clearing where the shrine's wood stands behind the hall (which sides of the hall the wood takes differs by settlement; the title card says which), with no fence round it, and names the Fortune it
 serves beside it. Two of these are drawing conventions. The approach runs on the same line as the hall and the sanctuary: a
 sanctuary stood behind its hall on the hall's line, but where a village shrine's approach ran is not recorded. And the
-clearing keeps the building clear of the trees so it shows, where a shrine's wood was kept around its sanctuary. The plan never draws a
+clearing keeps the building clear of the trees so it shows, where a real shrine's buildings stood under the trees of its wood. The plan never draws a
 sanctuary under a covering building with no worship hall before it, because the worship hall's roof also houses the country
 monk who keeps the shrine.
 

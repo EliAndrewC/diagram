@@ -16,6 +16,7 @@
       "perimeter_hugging",
       "two_court_zoning",
       "one_compound_shrine",
+      "shrine_tree",
       "stall_width",
       "postern_approach",
       "fire_water_adrift",
@@ -181,6 +182,20 @@
           "area": [
             40,
             1150
+          ]
+        }
+      },
+      {
+        "id": "shrine_tree",
+        "kind": "sacred tree",
+        "band_ft": {
+          "w": [
+            15,
+            50
+          ],
+          "h": [
+            15,
+            50
           ]
         }
       },

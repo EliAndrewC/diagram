@@ -530,7 +530,7 @@ def test_the_county_example_carries_the_program_the_outcomes_name() -> None:
     assert pa.two_court_zoning(plan) == [] and pa.divider_gates_ft(plan) == [6.0]
     assert 'data-kind="side gate"' in svg and 'data-kind="nakamon" data-part-of="court divider"' in svg
     gate = next(p for p in result.placed if p.spec.name == "gatehouse")
-    assert (gate.spec.w_ft, gate.spec.h_ft) == (18.0, 12.0) and c._gate_interval(prog.envelope)[0] - gate.x2 < 2.0
+    assert (gate.spec.w_ft, gate.spec.h_ft) == (40.0, 12.0) and c._gate_interval(prog.envelope)[0] - gate.x2 < 2.0
     doors = {k for _s, k, within in pieces(svg) if k == "door" for k in within}
     assert {"residence", "kitchen", "guest quarters", "retainers' quarters", "barracks", "servants' quarters"} <= doors
     for kind in ("family quarters", "lord's quarters", "reception room", "engawa"):
@@ -636,7 +636,7 @@ def test_the_county_example_seats_a_privy_per_zone_clear_of_wells_courts_and_the
             zx, zy = 7.0 * c.FTPX + z.x_ft * c.FTPX, 15.0 * c.FTPX + z.y_ft * c.FTPX
             assert not c._rect_overlap(lat.x, lat.y, lat.w, lat.h, zx, zy, z.w_ft * c.FTPX, z.h_ft * c.FTPX), z.name
     assert svg.count('data-kind="side gate"') == 2 and 'data-kind="magistrate\'s dais"' in svg and 'data-kind="cart yard"' in svg
-    assert ">residence<" in svg and "senior retainers'" in svg  # the retainers' name wraps over two lines
+    assert ">residence<" in svg and ">senior<" in svg and ">retainers'<" in svg  # the retainers' name wraps, a word a line
 
 
 # --- pass 5 (building-review round 4): the house at its researched size, privies against walls, the hall's band ---

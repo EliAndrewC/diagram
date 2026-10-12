@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-12T10:41:15Z",
+  "target": "claims-gate",
+  "commit": "abed6f08a",
+  "why": "CLAIMS_OK: the county program moved from compound.py to compound_example.py (the 1,000-line split), so its standing findings read as introduced; each is a filed row, batch 5's first: gatehouse, gates, granary, inner entrance, shrine, vegetable garden (found-wave126, found.jsonl) and the walled-enclosure gatehouse form with them"
+}

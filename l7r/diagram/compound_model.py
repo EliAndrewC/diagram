@@ -31,6 +31,8 @@ KINDS: dict[str, tuple[str, str]] = {
     "service": ("#C9A57A", "#6B4F2A"),
     "plain": ("#E8D2A8", "#6B4F2A"),
     "kura": ("#F2EFE4", "#4A3318"),
+    # 0098's raised timber storehouse (takakura): slatted walls on posts, the hand sheets' form (feature 374 wave 128)
+    "takakura": ("url(#granary-slats)", "#5A3F1E"),
     "shrine": ("#C9876C", "#6B2A18"),
     "cell": ("#B89868", "#5C4318"),
     "dark": ("#8C6F3E", "#4A3318"),
@@ -210,6 +212,10 @@ class BuildingSpec:
     # 0097-staff-rowhouses-and-barracks-nagaya.html: "The barracks is divided into dwellings, each an earth-floored entry
     # and a raised floor", bays of about 12-18 ft. () draws one undivided hall.
     bays: tuple[float, ...] = ()
+    # GROUND HELD FOR A TREE past the building's far end along its wall, in feet (feature 374 wave 130): the compound
+    # shrine stands in its corner beside a tree (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html),
+    # and the next building on its wall flows below the crown instead of standing a fire-gap off the shrine. 0: none.
+    tree_ft: float = 0.0
 
 
 @dataclass(frozen=True)

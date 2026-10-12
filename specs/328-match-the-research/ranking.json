@@ -771,7 +771,7 @@
   "flag": "",
   "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "127",
   "needs_e0_review": true,
   "scope": "kept"
  },
@@ -787,7 +787,7 @@
   "flag": "",
   "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "127",
   "scope": "kept"
  },
  {
@@ -4931,7 +4931,7 @@
   "flag": "",
   "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "wave": "128",
   "scope": "kept"
  },
  {
@@ -4946,7 +4946,7 @@
   "flag": "",
   "found": "feature 374 wave 126's re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "wave": "127",
   "scope": "kept"
  },
  {
@@ -4961,7 +4961,7 @@
   "flag": "",
   "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "wave": "127",
   "scope": "kept"
  },
  {
@@ -7937,7 +7937,7 @@
   "flag": "",
   "found": "feature 374 wave 126's re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "128",
   "scope": "kept"
  },
  {
@@ -7952,7 +7952,7 @@
   "flag": "",
   "found": "feature 374 wave 126's third re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "130",
   "scope": "kept"
  },
  {
@@ -7967,7 +7967,7 @@
   "flag": "",
   "found": "feature 374 wave 126's re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "129",
   "scope": "kept"
  },
  {
@@ -11446,7 +11446,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "130",
   "scope": "mode-a"
  },
  {
@@ -11462,7 +11462,7 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E0",
   "moved": "T25a (amendment 6): tiered by its work - the procedure line plus three hand-drawn sheets redrawn",
-  "wave": "",
+  "wave": "130",
   "scope": "mode-a"
  },
  {
@@ -11478,7 +11478,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "131",
   "scope": "mode-a"
  },
  {
@@ -11497,7 +11497,7 @@
   "tier_as_ranked": "E2",
   "moved": "amendment 12 round 1: the seeded rolls made; two land on a form the sheet does not draw - a redrawn hand sheet, E3 (FR-003)",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "131",
   "scope": "mode-a"
  },
  {
@@ -11513,7 +11513,7 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed: buildings.md:305 still fixes the drawing at 'one bay an 18-20 px rect' and states the range in prose, with no roll. 0222: 'the English Wikipedia gives 1 and 3 ken as its commonest sizes' and 'A hall built as two bays joined into one, with two doors, was a recognized form, the two-bay shrine'; 0215 gives Hie's two-bay sanctuary ~12 x 6 ft. CLAUDE.md: a choice between distinct attested fo",
-  "wave": "",
+  "wave": "131",
   "scope": "mode-a"
  },
  {
@@ -11722,7 +11722,7 @@
   "flag": "",
   "found": "feature 374 wave 126's re-check (2026-10-12): the county program's decisions claimed, a finding the ranking lacked",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "128",
   "scope": "kept"
  },
  {

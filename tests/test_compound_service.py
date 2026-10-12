@@ -60,14 +60,14 @@ def test_the_county_rowhouses_draw_their_dwellings_and_a_door_each() -> None:
     dwellings (0097), each with its door; the storehouses draw their doors (0117)."""
     prog, result, svg = _county()
     by = {p.spec.name: p for p in result.placed}
-    for name, walls in (("barracks", 3), ("senior retainers' quarters", 4), ("servants' row", 4)):
+    for name, walls in (("barracks", 3), ("senior retainers' quarters", 4), ("servants' row", 3)):
         p = by[name]
         group = svg.split(f'<g data-kind="{p.spec.feature}">', 1)[1].split("</g>", 1)[0]
         assert group.count("<line ") >= walls, name
     doors = svg.count('data-kind="door" data-part-of="barracks"')
     assert doors == 4, doors
     # every dwelling of the servants' row draws its door (building-review round 4: the west one had none)
-    assert svg.count("data-kind=\"door\" data-part-of=\"servants' quarters\"") == 5
+    assert svg.count("data-kind=\"door\" data-part-of=\"servants' quarters\"") == 4  # four dwellings since wave 128
     assert svg.count('data-kind="door" data-part-of="storehouse"') == 2
 
 
@@ -99,6 +99,47 @@ def test_the_servants_row_takes_the_entry_form_its_roll_gives() -> None:
     from l7r.diagram import compound_example as ce
 
     dwellings, common = ce.servants_row(ce.SERVANTS_FORMS[1]), ce.servants_row(ce.SERVANTS_FORMS[0])
-    assert len(dwellings.extra_doors) == 4 and len(dwellings.bays) == 4
+    assert len(dwellings.extra_doors) == 3 and len(dwellings.bays) == 3  # four dwellings since wave 128
     assert common.extra_doors == () and common.bays == () and common.door_fracs == (0.5,)
     assert ce.SERVANTS_FORM == "a door to each dwelling"  # this draft's roll, as its notes record
+
+
+def test_the_county_draft_rolls_its_granary_and_gate_by_the_records_order() -> None:
+    """Feature 374 wave 128 (T20's plan review: the key the knob's name, the forms in the record's order)."""
+    from l7r.diagram import compound_example as ce
+
+    assert ce.GRANARY_FORMS == ("raised timber storehouse", "earth-walled kura") and ce.GRANARY_FORM == "earth-walled kura"
+    assert ce.GATE_FORMS == ("one-bay gate", "gate range") and ce.GATE_FORM == "one-bay gate"
+    prog = c.county_magistracy_program()
+    by = {b.name: b for b in prog.buildings}
+    assert by["granary"].kind == "kura" and (by["granary"].w_ft, by["granary"].h_ft) == (50.0, 27.0)
+    assert prog.envelope.gate_w_ft == 8.0 and by["gatehouse"].w_ft == 40.0
+
+
+def test_a_takakura_draws_its_slats_and_four_posts() -> None:
+    """The granary roll's other form (0098's raised timber storehouse): the slatted body and a post at each corner."""
+    env = c.Envelope(200.0, 200.0, 100.0, 13.0)
+    prog = c.CompoundProgram("t", env, (), (c.BuildingSpec("granary", "takakura", 45.0, 25.0, "outer", "E", 6, feature="granary"),))
+    svg = c.emit_svg(prog, c.place(prog))
+    assert 'fill="url(#granary-slats)"' in svg and 'id="granary-slats"' in svg
+    stilts = svg.split('<g data-kind="granary stilts">', 1)[1].split("</g>", 1)[0]
+    assert stilts.count("<rect") == 4
+
+
+def test_the_county_outer_court_keeps_a_way_west_past_the_stable_well() -> None:
+    """Feature 374 batch 5 (building-review E1): the stable well stood in the 12 ft band between the hearing court and the
+    stables, ~2.3 ft either side - the only way to the west of the outer court. The court is 26 ft deep and the well 6 ft
+    out, a way of 6 ft or more beside it."""
+    prog = c.county_magistracy_program()
+    court = next(z for z in prog.spine if z.name == "oshirasu")
+    svg = c.emit_svg(prog, c.place(prog))
+    wells = [(float(m[1]), float(m[2])) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="22" height="22"[^>]*data-kind="well"', svg)]
+    stable_well = max(wells, key=lambda w: w[1])  # the southmost: the stables'
+    assert (stable_well[1] - 45) / 3 - court.y2 >= 6.0, stable_well
+
+
+def test_the_stables_privy_stands_against_the_wall_with_its_hatch() -> None:
+    """Feature 374 batch 5 (building-review E2): a lodgers' privy seats against the wall at a building's end first."""
+    _prog, _result, svg = _county()
+    privies = [(float(m[1]), float(m[2])) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="15" height="15"[^>]*data-kind="latrine" data-id', svg)]
+    assert any(y > 600 and 190 < x < 220 for x, y in privies), privies  # flush to the south wall, west of the stable

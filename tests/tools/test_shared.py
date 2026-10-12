@@ -482,3 +482,17 @@ def test_postern_approach_keeps_a_way_through_each_opening() -> None:
     vertical = '<g stroke="#2D2A24" stroke-width="9"><line x1="380" y1="20" x2="380" y2="100"/><line x1="380" y1="140" x2="380" y2="380"/></g>'
     _, plan = _plan(vertical, _rect(330, 95, 44, 50, BLDG))  # a vertical wall's opening, sealed on its inner face
     assert "seals the way through" in s.postern_approach(plan)[0]
+
+
+def test_shrine_tree_asks_for_a_crown_beside_the_compound_shrine() -> None:
+    """Feature 374 wave 130: 0218's drawing page sets the compound's shrine beside a tree."""
+    hall = '<g data-kind="compound shrine"><rect x="100" y="100" width="54" height="42" fill="#C9876C"/></g>'
+
+    def tree(cx: float, part_of: str = ' data-part-of="compound shrine"') -> str:
+        return f'<g data-kind="sacred tree"{part_of} fill="#7A8C5C"><circle cx="{cx}" cy="121" r="30"/></g>'
+
+    assert s.shrine_tree(_svg("")) == [], "no compound shrine: nothing asked"
+    assert "no tree beside it" in s.shrine_tree(_svg(hall))[0]
+    assert s.shrine_tree(_svg(hall, tree(190))) == [], "trunk 36 px (12 ft) east of the hall"
+    assert "no tree beside it" in s.shrine_tree(_svg(hall, tree(220)))[0], "trunk 66 px (22 ft) off: not beside it"
+    assert "no tree beside it" in s.shrine_tree(_svg(hall, tree(190, "")))[0], "a crown that is not the shrine's"
