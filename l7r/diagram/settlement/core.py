@@ -490,7 +490,7 @@ class Settlement(
         for key, cls in (
             (("grass", "scrub and rough grazing"), "scrub and rough grazing"),
             (("grass", "floodplain meadow"), "floodplain meadow"),
-            (("grass", "paddy's grass hill"), "paddy's grass hill"),
+            (("grass-cut", "paddy's grass hill"), "paddy's grass hill"),
             (("wood-fringe", "scrub and rough grazing"), "scrub and rough grazing"),
             (("wood-fringe", "floodplain meadow"), "floodplain meadow"),
             (("wood-fringe", "paddy's grass hill"), "paddy's grass hill"),

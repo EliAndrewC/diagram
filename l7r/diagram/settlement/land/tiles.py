@@ -129,6 +129,29 @@ def wood_fringe_thin_tile(bs: float) -> str:
     return grass_tile(bs, brush=False, keep=WOOD_FRINGE_THIN_KEEP, name="wood-fringe-thin")
 
 
+CUT_GRASS_KEEP = 0.5
+"""Research: a cut sward's density - CONVENTION: half the scrub's tufts, so the mown patch reads shorter than the scrub"""
+
+CUT_GRASS_TINT = ("#B8C67A", 0.45)
+"""The cut patch's fresh-green ground, color and opacity over the land.
+
+Research: cut sward tint - CONVENTION: a fresh green so the cut patch reads apart from the scrub around it (the glyph check of Inashiro's hill, feature 374 wave 148: on the scrub's own tile it read as the scrub)"""
+
+
+def cut_grass_tile(bs: float) -> str:
+    """The paddy's own grass hill (feature 374 wave 148): a sward cut for green manure - the scrub's tufts without its brush,
+    half of them kept, over a fresh-green ground (`CUT_GRASS_TINT`), and no clump overlay, so it reads as a mown patch on the
+    scrub rather than as more of it.
+
+    Research:
+        a cut sward - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one grass patch on the slope above its paddy, drawn as a cut patch
+        cut for green manure - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.html: the ground where the fields' green manure was cut"""
+    tile = grass_tile(bs, brush=False, keep=CUT_GRASS_KEEP, name="grass-cut")
+    head, rest = tile.split(">", 1)
+    side, (color, opacity) = COVER_TILE_FT * bs, CUT_GRASS_TINT
+    return f'{head}><rect width="{side:g}" height="{side:g}" fill="{color}" fill-opacity="{opacity}"/>{rest}'
+
+
 def reed_tile(bs: float) -> str:
     """The marsh's tile: the pale wet tint (`#9FBBAE` at 0.14, r 15-28), the standing-water glints (`#C2D6CE` ellipses) and the
     reed tufts - four near-vertical `#6E9377` blades 4-7 long within 0.2 rad of upright - at the marsh's densities (`marsh`).
@@ -342,6 +365,7 @@ TILES: dict[str, Callable[[float], str]] = {
     "grass": grass_tile,
     "wood-fringe": wood_fringe_tile,
     "wood-fringe-thin": wood_fringe_thin_tile,
+    "grass-cut": cut_grass_tile,
     "reed": reed_tile,
     "bamboo": bamboo_tile,
     "grass-clumps": grass_overlay_tile,

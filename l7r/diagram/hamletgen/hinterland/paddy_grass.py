@@ -127,7 +127,8 @@ def lay_paddy_grass(s: Settlement, plan: SitePlan) -> Poly | None:
 
 
 def draw_paddy_grass(s: Settlement, square: Any) -> None:
-    """Draw the grass hill as open grass - the meadow's grass and odd brush dot, no pine (`commons`, role `paddy_grass`) - then hold
+    """Draw the grass hill as a cut sward - short tufts, no brush, no pine, on a fresh-green ground (`commons`, role `paddy_grass`,
+    the `grass-cut` tile: on the scrub's own tile it read as the scrub, the glyph check of Inashiro's hill) - then hold
     it against what is placed after it (`block_polys`). Not before: the commons' keep-out reads `block_polys`, and a square
     already held there left its own grass bare, so the drawn hill drew no ink (Inashiro, wave 148's gate).
 

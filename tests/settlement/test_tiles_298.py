@@ -121,6 +121,11 @@ def test_the_grass_under_a_woods_edge_carries_no_brush() -> None:
     from l7r.diagram.settlement.land.tiles import wood_fringe_thin_tile
 
     assert 0 < wood_fringe_thin_tile(1.0).count("M") < wood_fringe_tile(1.0).count("M"), "the inner half thins (0077)"
+    from l7r.diagram.settlement.land.tiles import CUT_GRASS_TINT, cut_grass_tile
+
+    cut = cut_grass_tile(1.0)
+    assert cut.startswith(f'<pattern id="{tiles.pattern_id("grass-cut", 1.0)}"') and f'fill="{CUT_GRASS_TINT[0]}"' in cut
+    assert "<circle" not in cut and 0 < cut.count("M") < wood_fringe_tile(1.0).count("M"), "a cut sward: short tufts, no brush (0078)"
     s = Settlement(W=800, H=800, seed=4)
     s.meta(name="T", scale="hamlet", ftpx=1)
     wood = [(300.0, 100.0), (700.0, 100.0), (700.0, 600.0), (300.0, 600.0)]

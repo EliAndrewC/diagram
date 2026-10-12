@@ -676,8 +676,8 @@ fix was re-applied).
   and dike-pond seed 4 at 16 households roll with every farm reached; both red at HEAD, green at the final code (run 2026-10-12);
   the 10-household valley seed 4 is pinned there as a strict expected failure, its failure no longer a farm unreached but a row
   street over the brook off a ford, still open (774 keeps waiting). NO REGRESSION: every roll that passed at HEAD still passes,
-  on the cohort, the 24 archetype rolls and the 20 valley rolls at the final code; a roll that newly fails goes to the round
-  arbiter with its measurement rather than landing silently. T33 stays open: the polder's capacity refusal (seed 5) is the
+  on the cohort, the 24 archetype rolls and the 20 valley rolls at the final code, save polder seed 4 (W146-4); a roll that newly
+  fails goes to the round arbiter with its measurement rather than landing silently. T33 stays open: the polder's capacity refusal (seed 5) is the
   second guarantee.
 - **W146-4** (the round arbiter, ask:b10-w146-polder4-regression, 2026-10-12, accept): polder seed 4, green at HEAD, is refused
   at the final code (`m:w146-rolls`): street 0's straight join ends on the road beside the junction street 1 passes through, a
@@ -721,9 +721,17 @@ bookends.
   size") is seated on the open ground just upslope of a plot at the field's upslope edge, asked of the engine's own seat search
   (`open_seat`) so it stands off the crop, the houses and their ground, the lanes and the water; where no plot has such ground,
   none is drawn and the record says so.
-- **W148-3** (within): it is drawn as open grass - the meadow's grass and odd brush dot, no pine - with the hill's scrub kept out of
-  it, so it reads as a cut patch on the scrubby slope; a kind of its own on the page (`paddy's grass hill`), its pop-up written
+- **W148-3** (within): it is drawn as a cut patch on the scrubby slope, the hill's scrub kept out of it - see W148-5 for the mark; a kind of its own on the page (`paddy's grass hill`), its pop-up written
   from 0078, and the glyph check its new element owes on the map that draws it.
+- **W148-4** (within): built and measured (`m:w148-paddy-grass`): rolled on 3 of 20 valley rolls, all 3 seated, none unseated;
+  in the pool Inashiro draws one. The square is checked as seated - 6 ft clear of its plot and wholly upslope of the plot's top -
+  because the seat search may slide it; it is held against later placers only once drawn, because held before, the commons'
+  keep-out left its own grass bare (Inashiro's first gate drew no ink for it). Which top plot gets it is the first with room, an
+  UNRESEARCHED choice the page leaves open; the pop-up does not claim the hill's scrub is kept off it, which 0078 does not say.
+- **W148-5** (within; the glyph check of the hill on Inashiro, NEEDS-WORK): drawn first with the meadow's grass (the scrub's own
+  tile, less its pines), it could not be told from the scrub around it. It is now its own tile, `grass-cut`: the scrub's tufts
+  without the brush dot, half of them kept, no clump overlay, over a fresh-green ground - a cut sward (0078's grass cut for one
+  paddy), its tint and density a map drawing convention told on the pop-up's Depiction tab with its real counterpart.
 
 ## Landing by batch (375's D18)
 

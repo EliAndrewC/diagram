@@ -48,7 +48,7 @@ def test_the_grass_hill_is_seated_above_its_plot_and_recorded(monkeypatch) -> No
     from shapely.ops import unary_union
 
     left = Polygon(square).difference(unary_union(cover.bare)) if cover.bare else Polygon(square)
-    assert cover.cls == "paddy's grass hill" and left.area > 0.9 * Polygon(square).area, "its grass not left bare by its own keep-out"
+    assert cover.cls == "paddy's grass hill" and cover.kind == "grass-cut" and left.area > 0.9 * Polygon(square).area, "its grass not left bare by its own keep-out"
 
 
 def test_none_rolled_or_no_seat_is_recorded(monkeypatch) -> None:  # type: ignore[no-untyped-def]

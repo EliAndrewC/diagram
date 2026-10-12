@@ -623,7 +623,7 @@ class GroundCoverMixin:
                 }
             )
             if role != "woodland":
-                self._covers.append(Cover("grass", _ccls, [(float(a), float(b)) for a, b in poly], _cover_bare, self.M["commons"][-1]))
+                self._covers.append(Cover("grass-cut" if role == "paddy_grass" else "grass", _ccls, [(float(a), float(b)) for a, b in poly], _cover_bare, self.M["commons"][-1]))
                 if _fringe:  # the grass under each wood's edge: the zone bare but for the fringe bands, and their own bare ground
                     from shapely.geometry import Polygon as _Poly
                     from shapely.ops import unary_union
