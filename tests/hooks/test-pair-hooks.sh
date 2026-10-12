@@ -434,6 +434,9 @@ printf '# Tasks\n' > "$CLONE/specs/900-x/tasks.md"
 printf '{"specs/900-x":{"settlement-review--testmap":["k1@1000","k2@1000"]}}' > "$CLONE/.git/review-rounds.json"
 check "a batch landed since its two rounds runs the next batch's review" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
 check "...kept with its time" 'grep -q "@" "$CLONE/.git/review-rounds.json"'
+# GUARD_EDIT_OK: feature 374 batch 5, the round arbiter's tooling fix - bare keys kept before the epoch fix are a landed batch's too
+printf '{"specs/900-x":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
+check "two bare-key rounds before the batch landed leave the next batch its first round" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
 ( cd "$CLONE" && git rm -rq --cached specs/900-x/tasks.md >/dev/null 2>&1; git -c user.email=t@t -c user.name=t commit -qm unland >/dev/null 2>&1; git update-ref refs/remotes/origin/main HEAD )
 rm -rf "$CLONE/.specify" "$CLONE/specs/900-x" "$CLONE/.git/arbiter-owed.json"
 printf '{"none":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"

@@ -19,6 +19,7 @@ here is handed every CLAUDE.md above it - feature 250):
 from __future__ import annotations
 
 import argparse
+import datetime
 import difflib
 import json
 import re
@@ -371,6 +372,21 @@ def flow_sections(root: Path, out: Path, d: Path | None, files: list[str]) -> li
 unit_of = ha.unit_of  # the one parser (feature 375 amendment 2): the bundle and the ruling row read a unit alike
 
 
+def round_counter(root: Path, unit: str) -> list[str]:
+    """What the pair guard counted for `unit`'s round cap: the epoch it counts from (the commit that last landed the feature's
+    tasks.md on origin/main) and the rounds kept after it (feature 374 batch 5, the round arbiter's tooling fix: batch 4's
+    rounds, kept as bare keys, counted into batch 5 and its first round read as round 5). A bare key reads as epoch 0."""
+    try:
+        feature = json.loads((root / ".specify" / "feature.json").read_text()).get("feature_directory", "") or "none"
+        kept = json.loads((root / ".git" / "review-rounds.json").read_text()).get(feature, {}).get(unit, [])
+    except (OSError, ValueError):
+        return []
+    landed = int(_git(root, "log", "-1", "--format=%ct", "origin/main", "--", f"{feature}/tasks.md").strip() or 0)
+    live = [k for k in kept if (int(k.rsplit("@", 1)[1]) if "@" in k else 0) >= landed]
+    when = datetime.datetime.fromtimestamp(landed, datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ") if landed else "never (nothing landed)"
+    return [f"## The round counter\n\nepoch: {when} (the feature's tasks.md last landed on origin/main). Rounds counted after it: {len(live)} of the {len(kept)} kept - {', '.join(live) or 'none'}.\n"]
+
+
 def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path:
     """The MANIFEST for `trigger`; raises `MissingRecord` where a round kept no reply or a reversal has no record, unless
     `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh)."""
@@ -408,6 +424,8 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
             parts.append("## The last answered round's EDITs, against the files now\n\n" + ("\n".join(last_edits(root, last, files)) or "- (it proposed none)") + "\n")
         if trigger.startswith("round:") and rounds:
             parts += capped_round_cause(root, out, check, subject, files, float(rounds[-1].get("t") or 0.0))
+    if trigger.startswith("round:") and unit:
+        parts += round_counter(root, unit)
     diff = ""
     if files:
         diff = _git(root, "log", "-p", "--format=--- %h %ad %s", "--date=iso", "-20", "--", *files) + _git(root, "diff", "--", *files)

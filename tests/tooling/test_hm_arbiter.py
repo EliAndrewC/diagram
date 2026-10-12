@@ -564,3 +564,26 @@ def test_a_modal_form_replys_fix_and_note_lines_are_findings_and_repeat_by_their
     marked = ab.mark_rounds([r1, r3])
     assert marked[1][0][0] == "REPEATED", marked
     assert not ab._repeats("FIX M3 - the second paragraph runs to six sentences", ab.findings_of(r1))
+
+
+def test_the_bundle_prints_the_round_counters_epoch_and_what_it_counted(tmp_path: pathlib.Path) -> None:
+    """Feature 374 batch 5, the round arbiter's tooling fix: the counter reported round 5 for a batch's first round, and the
+    bundle could not show why. It now prints the epoch and the rounds counted after it; a bare key reads as epoch 0."""
+    import subprocess
+
+    def git(*a: str) -> None:
+        subprocess.run(["git", "-C", str(tmp_path), "-c", "user.email=t@t", "-c", "user.name=t", *a], check=True, capture_output=True)
+
+    git("init", "-q")
+    assert ab.round_counter(tmp_path, "u") == [], "no record: nothing printed"
+    (tmp_path / ".specify").mkdir()
+    (tmp_path / ".specify" / "feature.json").write_text('{"feature_directory": "specs/900-x"}')
+    (tmp_path / ".git" / "review-rounds.json").write_text('{"specs/900-x": {"u": ["k1", "k2@1000", "k3@4000000000"]}}')
+    assert "never (nothing landed)" in ab.round_counter(tmp_path, "u")[0] and "3 of the 3" in ab.round_counter(tmp_path, "u")[0]
+    (tmp_path / "specs" / "900-x").mkdir(parents=True)
+    (tmp_path / "specs" / "900-x" / "tasks.md").write_text("# Tasks\n")
+    git("add", "-A")
+    git("commit", "-qm", "landed")
+    git("update-ref", "refs/remotes/origin/main", "HEAD")
+    line = ab.round_counter(tmp_path, "u")[0]
+    assert "1 of the 3" in line and "k3@4000000000" in line and "k1," not in line, line
