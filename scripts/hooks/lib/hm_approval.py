@@ -270,7 +270,11 @@ def reopened(top: str, transcript: str) -> list[tuple[str, str]]:
             now, after, open_after, status_closed = _state_at(top, "HEAD", d, todo, vocab, tmp)
             reopen = was in SETTLED and bool(now) and now not in SETTLED
             # FR-012: an unticked task added under a status line that still says Done (speckit-todo reads it closed)
-            hidden = bool(now) and status_closed and bool(open_after - open_before)  # a task open now that was not
+            # GUARD_EDIT_OK: feature 375 amendment 8 - the box `make accept` writes for the GM (`GM review (make gm-reviewed
+            # F=NNN) [lands-open]`) is no hidden work: `make gm-review` holds it, and every feature with a row for the GM
+            # lands with it open (343, 352, 374, 378) - it refused 375's landing after its own accept row (2026-10-12)
+            added_open = {t for t in open_after - open_before if not t.startswith("GM review (make gm-reviewed F=")}
+            hidden = bool(now) and status_closed and bool(added_open)  # a task open now that was not
             if not (reopen or hidden):
                 continue
             added = [q for q in quotes(after) if q not in quotes(before) and len(norm(q).split()) >= MIN_WORDS]
