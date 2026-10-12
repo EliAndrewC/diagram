@@ -621,7 +621,8 @@
     ],
     "new cold median s": 6.36
    },
-   "reading": "warm, each at most half today's (record-owed 1.8 of 5.54, check-bundle 2.84 of 5.85, modal-bundle 0.48 of 6.59, claims-owed 0.48 of 6.47); cold, each below today's (claims-owed 6.36 against 6.62 over six alternating rounds; its three-round 6.50 against 6.47 was noise); every output identical"
+   "reading": "warm, each at most half today's (record-owed 1.8 of 5.54, check-bundle 2.84 of 5.85, modal-bundle 0.48 of 6.59, claims-owed 0.48 of 6.47); cold, each below today's (claims-owed 6.36 against 6.62 over six alternating rounds; its three-round 6.50 against 6.47 was noise); every output identical",
+   "claims-owed exit": "before gc.freeze() at the command's exit, the cold run spent 3.2 s after main returned (time in main 6.4 s, whole 9.8 s, measured with runpy around main; /usr/bin/time: user 9.4 s against the old 6.2 s); with it, the cold medians above"
   }
  }
 }

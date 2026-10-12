@@ -63,7 +63,7 @@ def owed_for_question(root: pathlib.Path, q: str, for_: str, not_owed_ok: str, e
             return [], "", "NOT_OWED_OK needs a REASON - two words and eight characters - so the audit says why"
         checks = GATED[:-1] if for_ == "all" else (for_,)
         return tree_units(root, qn, checks), " ".join(checks), ""
-    every = ro.units(root) if every is None else every
+    every = ro.units(root)  # the refusal's list of what IS owed: the one consumer that needs every family
     listing = "\n".join(f"    {u.slug}" for u in every) or "    (nothing: no record check is owed by this delta)"
     return [], "", (
         f"no {for_ if for_ != 'all' else 'record'} check is owed on question {qn} by this delta - a bundle for it would "
@@ -85,10 +85,12 @@ def tree_units(root: pathlib.Path, q: str, checks: tuple[str, ...]) -> list[ru.U
     return [ru.Unit(s, "not owed - a stated reason", ru.fingerprint(rec, s)) for s in slugs]
 
 
-def owed_for_key(root: pathlib.Path, key: str, whole: bool, not_owed_ok: str, new: str) -> tuple[list[ru.Unit], str, str]:
+def owed_for_key(root: pathlib.Path, key: str, whole: bool, not_owed_ok: str, new: str, every: list[ru.Unit] | None = None) -> tuple[list[ru.Unit], str, str]:
     """(units, owed-checks, refusal) for `make check-bundle KEY= [WHOLE=1]`: the write-up check is owed when the write-up's
-    words changed; a source-reader's whole read when a note citing the key changed, or when declared for a NEW claim."""
-    every = ro.units(root)
+    words changed; a source-reader's whole read when a note citing the key changed, or when declared for a NEW claim.
+    Both are record-family units, so only that family is computed (feature 375 amendment 3, FR-020(d)); `every` is it when
+    the caller already has it (a batch of keys asks once)."""
+    every = ro.units(root, families=("record",)) if every is None else every
     if whole:
         now = ro.read_at(root, None, set())
         units = [u for u in every if u.check == "source-reader" and key in now.cites.get(u.subject.partition("#")[0], {}).get(u.subject.partition("#")[2], ())]

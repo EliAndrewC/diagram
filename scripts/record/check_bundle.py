@@ -613,11 +613,12 @@ def keys_bundle(root: pathlib.Path, keys: list[str], out_arg: str, not_owed_ok: 
     batches as intro-check's backfill was): each key's entry and its page as `key_bundle` saves them, every owed unit in
     one MANIFEST - and refused for a key nothing owes, unless a reason is given."""
     units: list = []
+    every = bo.ro.units(root, families=("record",))  # once for the batch, its one family (feature 375 amendment 3)
     for key in keys:
         if registry_entry(root, key) is None:
             print(f"check-bundle: no registry entry for {key!r}", file=sys.stderr)
             return 2
-        got, _checks, refusal = bo.owed_for_key(root, key, False, not_owed_ok, "")
+        got, _checks, refusal = bo.owed_for_key(root, key, False, not_owed_ok, "", every)
         if refusal:
             print(f"check-bundle: REFUSED - {key}: {refusal}", file=sys.stderr)
             return 3
@@ -634,7 +635,7 @@ def intro_bundle(root: pathlib.Path, questions: list[str], out_arg: str, not_owe
     """An intro-check bundle over one question or a batch (plan D4, D10): each question's research page whole, its drawing
     page and the map elements written from it - and refused for a question nothing owes it on, unless a reason is given."""
     units: list = []
-    every = bo.ro.units(root)
+    every = bo.ro.units(root, families=("record",))  # intro-check's units are the record family's (feature 375 amendment 3)
     for q in questions:
         got, _checks, refusal = bo.owed_for_question(root, q, "intro-check", not_owed_ok, every)
         if refusal:

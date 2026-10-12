@@ -362,10 +362,11 @@ families=, uid=)` computes only the families asked for (`record`, `translation`,
 pop-ups, one uid (`modal_owed.owed(root, base, uid)`). `modal_bundle.bundle` asks once for its pop-up's modal units and
 hands them to the triage refusal, the D25 hold and `owed_lines` (today it computed the whole delta twice to print one
 pop-up's lines); `check-bundle Q=` (`bundle_owed.owed_for_question`) asks for the record and translation families (and
-entry-drift for `FOR=entry-drift|all`), and computes the whole delta only for a refusal's list of what IS owed - the one
-consumer that needs other subjects' units. `claims.py`'s command freezes its heap before exiting (`gc.freeze()`, in the
-`__main__` block only): measured, the interpreter's final collection spent 3.2 s of a cold run walking the engine parse's
-objects.
+entry-drift for `FOR=entry-drift|all`), `check-bundle KEY=` / `KEYS=` (`owed_for_key`, once per batch) and `FOR=intro-check`
+(`intro_bundle`, once per batch) for the record family alone, and each computes the whole delta only for a refusal's list of
+what IS owed - the one consumer that needs other subjects' units. `claims.py`'s command freezes its heap before exiting
+(`gc.freeze()`, in the `__main__` block only): measured 2026-10-11, the interpreter's final collection spent 3.2 s of a cold
+run walking the engine parse's objects (`m:375-a3-record-tooling-after`).
 
 **D28 - One `git` batch per revision (FR-020b).** `modal_owed._read_at(root, rev)` returns a reader backed by ONE `git
 ls-tree -r` of the directories it serves and ONE `git cat-file --batch` of their blobs (`record_owed._cat`, moved to
