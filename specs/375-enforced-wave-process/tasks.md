@@ -223,3 +223,10 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. DONE. docs/reviews.md, docs/guards.md, CLAUDE.md; SC-034 carried to 374 (sc034-375-a9-glyph-per-hour); tests/tooling 1725 passed; hooks-test green (pair 111, review-gate 41, sync 124); no engine code in the amendment, so the route is DIRECT; report written; landed by the push carrying this tick
 
+## Amendment 10 (the GM 2026-10-12: a reopened feature's glyph hour counts from its most recent reopening)
+
+- [ ] T59 The reopening read from history into the feature's start (D58); tests red on today's code (SC-035)
+      research: rendering
+- [ ] T60 The texts; 375 closes again: tests, `make hooks-test`, the report, landed (D59)
+      research: rendering
+

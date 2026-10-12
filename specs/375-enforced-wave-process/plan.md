@@ -688,6 +688,23 @@ from the ledger and the event log - is measured on feature 374, the open long fe
 `Carried: SC-034 -> 374 sc034-375-a9-glyph-per-hour` into SC-034, so 374 closes only with that key in its measurements.json
 (close_check.py, FR-014); `375-a9-glyph-passes` is the before-figure (R8).
 
+### Amendment 10 (FR-042)
+
+**D58 - The reopening read from history (FR-042; T59).** `review_owed.feature_start(root, feature)` returns the LATER of the
+feature's first event in the clone (as amendment 9) and its most recent reopening: walking `git log --format=%H %ct --
+specs/<feature>/spec.md specs/<feature>/tasks.md` newest first, the first commit whose parent's state is closed and whose own is
+open - each state read as `speckit-todo.feature()` derives it (a status line opening with a closing word, or every task
+ticked; `closed` and `done - GM review pending` count as closed, as D54's "no feature" does), from the two files at that commit
+written into a temporary directory, as `hm_approval._state_at` reads a past tree (one reader of the state, not a second copy of
+its rule). The walk stops at the first such commit and at 200 commits back (a feature's history here is far shorter: 375's own
+spec.md has 140-odd commits; past the bound the first event stands). Tests (red on today's code), fixture repos: a status-line
+close and reopen ten minutes ago - a unit owed now is due an hour after the reopening, not at once; a tick close (every task
+ticked, status "Draft") and a reopen by an added task ten minutes ago - likewise; no reopening in the history - the first event
+starts the hour; a reopening older than the first event leaves the first event as the start.
+
+**D59 - Closed again (T60).** The texts: `docs/reviews.md`'s glyph paragraph and `docs/guards.md`'s row say the hour starts at the
+feature's start or its latest reopening. Tests, `make hooks-test`, the report, landed (no engine code: the DIRECT route).
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

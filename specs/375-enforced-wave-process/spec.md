@@ -382,10 +382,11 @@ The second of the GM's two ways: it keeps a reopened feature on the hour, where 
 time at which they come due before landing.
 
 - **FR-042 A reopened feature's hour counts from its reopening.** FR-039's hour starts at the feature's start in the clone, and
-  for a feature reopened to be amended that start is now the most recent reopening: the time of the latest commit that turned
-  its `spec.md` status line from closed (`Done`, `Superseded`, `Withdrawn` - speckit-todo's closing words) to open. Before it,
-  the feature's first event in the clone, as amendment 9 has it. So a reopened feature's first glyph check comes due an hour
-  after the reopening, never at once.
+  for a feature reopened to be amended that start is now the most recent reopening: the time of the latest commit at which the
+  feature's state, as speckit-todo derives it, went from closed (a status line opening with `Done`, `Superseded` or `Withdrawn`,
+  or every task ticked - 222 specs here close by ticks alone) to open. Before it, the feature's first event in the clone, as
+  amendment 9 has it. So a reopened feature's first glyph check comes due an hour after the reopening, not from the feature's
+  first opening.
 
 
 ## Success criteria
@@ -516,9 +517,10 @@ time at which they come due before landing.
 - **SC-034** (FR-041) A settlement-review, building-review, size-audit or fix-check unit is due as soon as it is owed, as today.
   Measured after: glyph-check passes per hour of a long feature, from the ledger and the event log, against R8's figures.
   `Carried: SC-034 -> 374 sc034-375-a9-glyph-per-hour` (374, the open long feature with map work, measures it).
-- **SC-035** (FR-042) In a fixture feature whose event log began days ago and whose spec was closed and then reopened ten minutes
-  ago, a glyph unit owed now is not due until an hour after the reopening; with no reopening in its history the first event
-  starts the hour, as before. The test fails on today's code.
+- **SC-035** (FR-042) In a fixture feature whose event log began days ago and whose status line was closed and then reopened ten
+  minutes ago, a glyph unit owed now is not due until an hour after the reopening; likewise for one closed by every task ticked
+  (its status line never closed) and reopened ten minutes ago by adding a task; with no reopening in its history the first
+  event starts the hour, as before. The test fails on today's code.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
