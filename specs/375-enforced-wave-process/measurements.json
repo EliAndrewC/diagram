@@ -627,5 +627,50 @@
    "reading": "warm, each at most half today's (record-owed 1.8 of 5.54, check-bundle 2.84 of 5.85, modal-bundle 0.48 of 6.59, claims-owed 0.48 of 6.47); cold, each below today's (claims-owed 6.36 against 6.62 over six alternating rounds; its three-round 6.50 against 6.47 was noise); every output identical",
    "claims-owed exit": "before gc.freeze() at the command's exit, the cold run spent 3.2 s after main returned (time in main 6.4 s, whole 9.8 s, measured with runpy around main; /usr/bin/time: user 9.4 s against the old 6.2 s); with it, the cold medians above"
   }
+ },
+ "375-a4-sync-suite-parts": {
+  "quantity": "test-sync-with-main.sh: today's suite against the new one in parallel parts (feature 375 amendment 4, SC-015)",
+  "observed": "2026-10-11",
+  "unit": "s",
+  "varies": 0.3,
+  "source": "today's file at bfe25f2da in a detached worktree; the new file at 22acadb6e in the diagram-performance clone; the container shared with other sessions",
+  "command": "a scratch script (plan D32): today and parts alternately three times each, five more in parts, one with SYNC_PARTS=1; a scratch copy of the suite with one case made to fail and one made to exit",
+  "method": "date +%s.%N around each run; each run's pass line read for its count; the load average at both ends",
+  "value": {
+   "today s": [
+    150.2,
+    160.4,
+    149.9
+   ],
+   "today median s": 150.2,
+   "parts s": [
+    60.5,
+    61.1,
+    53.5
+   ],
+   "parts median s": 60.5,
+   "parts, five more s": [
+    58.8,
+    60.0,
+    60.9,
+    65.5,
+    62.1
+   ],
+   "serial (SYNC_PARTS=1) s": 166.2,
+   "checks every run": 123,
+   "load start": [
+    0.76,
+    2.06,
+    2.02
+   ],
+   "load end": [
+    2.26,
+    3.38,
+    3.18
+   ],
+   "a case made to fail": "rc=1, SOME TESTS FAILED (1), the check named",
+   "a case made to exit": "rc=1, case_05 and case_03 (after it in the same part) each named as never reported",
+   "reading": "the parts' median is 40% of today's; every run of either passed exactly today's 123 checks"
+  }
  }
 }
