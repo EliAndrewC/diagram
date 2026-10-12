@@ -266,9 +266,14 @@ def owe_evidence(slug: str, diff: str) -> str:
     arbiter had to find that by hand). A unit names its note after `#`, else its subject; a changed line (`+`/`-`, not the
     file headers) carrying that name is the cause shown, and none is said plainly."""
     name = slug.split("#", 1)[1] if "#" in slug else slug.split(":", 1)[-1]
-    changed = (ln for ln in diff.splitlines() if ln[:1] in "+-" and not ln.startswith(("+++", "---")))
+    lines = diff.splitlines()
+    changed = (ln for ln in lines if ln[:1] in "+-" and not ln.startswith(("+++", "---")))
     if name in ("unfootnoted", "gloss") or any(name in ln for ln in changed):
         return "a changed line in `owes-round.diff` names it"
+    # a page-scoped unit (`record-format:0091`) is named by its question's file in a file header (the round arbiter on
+    # 0091's third round: the bundle said no changed line named 0091 while the hunks were 0091's own drawing page)
+    if "#" not in slug and any(ln.startswith(("diff --git", "+++ ", "--- ")) and f"/{name}-" in ln for ln in lines):
+        return f"`owes-round.diff` changes a file of {name}"
     return f"NO changed line in `owes-round.diff` names `{name}` - its cause is not in this round's change; say so in the ruling"
 
 

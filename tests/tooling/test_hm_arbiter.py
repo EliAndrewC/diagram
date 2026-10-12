@@ -503,3 +503,5 @@ def test_each_owe_says_whether_the_rounds_diff_shows_its_cause() -> None:
     assert "NO changed line in `owes-round.diff` names `kameyama`" in ab.owe_evidence("translation-check:0219#kameyama", diff)
     assert "NO changed line" in ab.owe_evidence("record-format:0219", "--- a/0219.html\n+++ b/0219.html\n")  # no note: its subject
     assert ab.owe_evidence("quote-check:0219.drawing#unfootnoted", "") == "a changed line in `owes-round.diff` names it"
+    page = "diff --git a/research/questions/0091-x.drawing.html b/research/questions/0091-x.drawing.html\n--- a/research/questions/0091-x.drawing.html\n+++ b/research/questions/0091-x.drawing.html\n-<li>old</li>\n+<li>new</li>\n"
+    assert ab.owe_evidence("record-format:0091", page) == "`owes-round.diff` changes a file of 0091", "a page-scoped unit is named by its file"
