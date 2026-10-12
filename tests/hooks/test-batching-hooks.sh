@@ -64,7 +64,7 @@ bash_turn() {  # one Bash turn with the given command string (plain chars only)
   return 0
 }
 
-case_01() {  # 4 s measured 2026-10-12
+case_01() {  # 4 s measured alone 2026-10-12
 echo "1. a run of serial single-call turns blocks at the threshold"
 setup
 serial_turn; check "turn 1 allowed" ok $?
@@ -82,7 +82,7 @@ grep -q "pad with no-op" "$BT_ERR" && { echo "  ok    block message forbids padd
 teardown
 }
 
-case_02() {  # 3 s measured 2026-10-12
+case_02() {  # 3 s measured alone 2026-10-12
 echo "2. it never deadlocks: the call right after a block is allowed through"
 setup
 serial_turn; serial_turn; serial_turn
@@ -95,7 +95,7 @@ teardown
 # GUARD_EDIT_OK: feature 164 - THE WARNING ARRIVES ONE TURN BEFORE THE BLOCK. This is the loudest
 # guard in the repository (127 firings in six days, more than every other guard combined) and each
 # firing spends the round trip it exists to save; a notice on an ALLOWED call spends nothing.
-case_03() {  # 2 s measured 2026-10-12
+case_03() {  # 2 s measured alone 2026-10-12
 echo "2b. the notice arrives one turn early, and refuses nothing (feature 164)"
 setup
 serial_turn; serial_turn                       # window "11" - one turn below the bar of 3
@@ -123,7 +123,7 @@ teardown
 # bound), but the notice carried the block's shape test, so a session reconning in folded commands
 # reached the bar with no notice and was blocked cold. The block keeps its shape test (case 3 below
 # still proves a folded command is never refused); only the notice is widened.
-case_04() {  # 1 s measured 2026-10-12
+case_04() {  # 1 s measured alone 2026-10-12
 echo "2c. the notice arrives on a FOLDED single call one turn below the bar (feature 249)"
 setup
 serial_turn; serial_turn                       # window "11" - one below the bar of 3
@@ -133,7 +133,7 @@ check "the folded call is allowed" ok $RC
 printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a folded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
 teardown
 }
-case_05() {  # 1 s measured 2026-10-12
+case_05() {  # 1 s measured alone 2026-10-12
 echo "2d. ...and on a BACKGROUNDED single call (feature 249: the GM's 'any single call')"
 setup
 serial_turn; serial_turn
@@ -147,7 +147,7 @@ teardown
 # GUARD_EDIT_OK: 2026-09-26 - OPTION A (the GM's choice): A FOLDED COMMAND DOES NOT FILL THE WINDOW. It used to count (one
 # quick round trip) while only a bare read could be blocked, so a session folding as asked was refused on its first bare
 # read afterwards. The fixture sends the real PostToolUse shape, which carries the command, because that is what decides.
-case_06() {  # 4 s measured 2026-10-12
+case_06() {  # 4 s measured alone 2026-10-12
 echo "2e. folded commands never fill the window; bare reads still do, and the notice says which is which"
 setup
 FOLD='{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"grep a f; grep b g"}}'
@@ -164,7 +164,7 @@ grep -rhq 'history ' "$GUARD_LOG_ROOT" && { echo "  ok    the log records the wi
 teardown
 }
 
-case_07() {  # 1 s measured 2026-10-12
+case_07() {  # 1 s measured alone 2026-10-12
 echo "3. a batched turn is never interrupted below the threshold"
 # NOTE the semantics this pins down: PreToolUse must decide on the FIRST call of a turn, when it
 # cannot yet know whether a second call is coming in the same message. So a batch that begins
@@ -179,7 +179,7 @@ check "batch below the threshold is never interrupted (call 2)" ok "$r2"
 teardown
 }
 
-case_08() {  # 2 s measured 2026-10-12
+case_08() {  # 2 s measured alone 2026-10-12
 echo "4. THE REGRESSION: one batched turn no longer absolves the serial run around it"
 # The 2026-08-08 finding, and the reason the streak became a window. Under the old CONSECUTIVE
 # counter the batch below reset the count to zero, so the two serial turns after it sat at 2 and
@@ -196,7 +196,7 @@ grep -q "of your last" "$BT_ERR" && { echo "  ok    block message reports the wi
 teardown
 }
 
-case_09() {  # 32 s measured 2026-10-12
+case_09() {  # 4 s measured alone 2026-10-12
 echo "5. a SLOW call is real work, not a batchable turn"
 setup
 serial_turn; serial_turn                       # window "11"
@@ -206,7 +206,7 @@ serial_turn; check "BLOCKED at 3 serial turns inside the window" blocked $?
 teardown
 }
 
-case_10() {  # 1 s measured 2026-10-12
+case_10() {  # 20 s measured alone 2026-10-12
 echo "6. a window of nothing but real work never blocks"
 setup
 slow_turn; slow_turn; slow_turn; slow_turn; slow_turn; slow_turn; slow_turn
@@ -214,7 +214,7 @@ slow_turn; check "7 slow turns, no block" ok $?
 teardown
 }
 
-case_11() {  # 4 s measured 2026-10-12
+case_11() {  # 4 s measured alone 2026-10-12
 echo "8. a BACKGROUNDED call is never counted as recon, and is never blocked"
 # Found in use, minutes after the window shipped: `make done` launched with run_in_background
 # returns to the model in milliseconds, so the duration test reads the cheapest possible turn -
@@ -232,7 +232,7 @@ teardown
 # other. Five of them push a serial turn out of a window of six, which is correct - the window asks
 # "how much of my RECENT work was one-call recon", and work you did five turns ago is not recent.
 
-case_12() {  # 4 s measured 2026-10-12
+case_12() {  # 2 s measured alone 2026-10-12
 echo "7. sessions are independent"
 setup
 serial_turn; serial_turn; serial_turn
@@ -243,7 +243,7 @@ teardown
 }
 
 
-case_13() {  # 3 s measured 2026-10-12
+case_13() {  # 5 s measured alone 2026-10-12
 echo "9. only a recon-SHAPED call is ever blocked (GM 2026-08-10)"
 # The 021 profile: 49 of 52 blocks landed on heredoc patch scripts or already-folded commands.
 # The batching opportunity is BEHIND a substantive call - blocking it just re-sends it verbatim.
@@ -264,7 +264,7 @@ bash_turn "grep -n foo settlement.py"; check "a naked single grep IS blocked" bl
 teardown
 }
 
-case_14() {  # 5 s measured 2026-10-12
+case_14() {  # 5 s measured alone 2026-10-12
 echo "10. after a block the bar re-arms HIGHER (3 -> 6), so a grind session is not blocked forever"
 setup
 serial_turn; serial_turn; serial_turn
@@ -276,7 +276,7 @@ serial_turn; check "re-blocked only at the full window of 6" blocked $?
 teardown
 }
 
-case_15() {  # 4 s measured 2026-10-12
+case_15() {  # 11 s measured alone 2026-10-12
 echo "11. the raised bar DECAYS back to the threshold as turns batch"
 setup
 serial_turn; serial_turn; serial_turn
@@ -294,7 +294,7 @@ teardown
 # the measured seconds beside each case (10 s for a new one). Every check still runs and is counted; a part that ends before
 # a case reports fails the suite and names it. SUITE_PARTS=1 runs the cases one after another in this process, as before.
 ALL_CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_12 case_13 case_14 case_15)
-declare -A WEIGHT=([case_01]=4 [case_02]=3 [case_03]=2 [case_04]=1 [case_05]=1 [case_06]=4 [case_07]=1 [case_08]=2 [case_09]=32 [case_10]=1 [case_11]=4 [case_12]=4 [case_13]=3 [case_14]=5 [case_15]=4)
+declare -A WEIGHT=([case_01]=4 [case_02]=3 [case_03]=2 [case_04]=1 [case_05]=1 [case_06]=4 [case_07]=1 [case_08]=2 [case_09]=4 [case_10]=20 [case_11]=4 [case_12]=2 [case_13]=5 [case_14]=5 [case_15]=11)
 if [ -n "${CASES:-}" ]; then
   for c in $CASES; do "$c"; echo "@@reported $c"; done
   echo "@@counts $PASS $FAIL"; exit 0

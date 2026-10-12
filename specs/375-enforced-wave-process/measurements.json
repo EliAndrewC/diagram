@@ -1005,5 +1005,41 @@
    "verdicts": "every leg 52/54 passed, the same 2 refused; each served seed's verdict and failures identical to its rolled verdict on wave 1, seed by seed",
    "the measurement before the versioned store": "0 of 54 served on wave 2 (2026-10-12 00:56-01:31, records 20261012T051120Z..053124Z): the legs evicted each other's one entry per subject (plan D38)"
   }
+ },
+ "375-a7-suites-parts": {
+  "what": "SC-024 (FR-031): test-pair-hooks.sh and test-batching-hooks.sh, today's file (a detached worktree at aec6021f5) against the new in parallel parts (SUITE_PARTS=4), alternating, three runs each; one-shot, 2026-10-12 02:18-02:27, load 1.4-5.7. The parts are dealt by each case's seconds measured ALONE (a chain as one unit): the first split's weights, attributed from a trace of the whole suite, were wrong (batching case_09 weighted 32 s, 4.4 s alone; case_10 1 s, 20.3 s alone), and its first timing, 02:00-02:13 at load 5-10, had batching at 42.7 s against 74.5 s (0.57). Probes, same day: a forced FAIL in case_02 fails the split suite (105 passed, 1 failed, named); a case_03 that exits early fails it (\"case_03 never reported\").",
+  "date": "2026-10-12",
+  "command": "scratchpad sc024.sh (one-shot): bash tests/hooks/<suite>.sh in each tree, timed",
+  "value": {
+   "test-pair-hooks": {
+    "old s": [
+     70.6,
+     70.7,
+     70.2
+    ],
+    "new s": [
+     18.8,
+     18.7,
+     19.0
+    ],
+    "median ratio": 0.27,
+    "checks every run": 105
+   },
+   "test-batching-hooks": {
+    "old s": [
+     71.7,
+     71.8,
+     71.7
+    ],
+    "new s": [
+     20.4,
+     20.4,
+     20.4
+    ],
+    "median ratio": 0.28,
+    "checks every run": 56
+   },
+   "test-entry-gate": "serial (m:375-a7-suites-scan: chain case_03-06)"
+  }
  }
 }
