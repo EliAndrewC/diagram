@@ -1698,5 +1698,14 @@
     "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond --pond-layout grid|mosaic --households 16 --seed <s>\"",
     "command": "make hamlet ARGS=\"--name DP<s> --seed <s> --households 16 --archetype mulberry_dike_fishpond --pond-layout grid --out <dir> --no-render\"",
     "method": "exit status per roll; seed 3 re-rolled with the mosaic to place the failure"
+  },
+  "batch7-open-rows": {
+    "quantity": "open rows of 328s ranking at batch 7s close (no wave, scope kept or mode-a), and how many are E3 DRIFTED",
+    "value": "157 open (1 held at E2, the residence row), 108 E3 DRIFTED",
+    "unit": "rows",
+    "observed": "2026-10-12",
+    "source": "specs/328-match-the-research/ranking.json",
+    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+    "method": "the four rows batch 7 took marked waves 136-139 in waves.json, row 0 held E2 in overrides.json, the ranking rebuilt"
   }
 }

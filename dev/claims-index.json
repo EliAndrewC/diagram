@@ -27475,10 +27475,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water": {
-  "code": "a1937512b5344f51",
-  "core": "6984f5deb72d3596",
+  "code": "14525dec76d0a7a5",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "never across row crops, off wet ground",
+  "note": "arms are clipped off the crop, the toe band and the marsh, and the watercourses; the page says \"never crosses row crops\" and \"keeps off wet ground\"",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -27492,20 +27492,28 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#no accidental crossing": {
-  "code": "d87d936451dd894f",
-  "core": "6984f5deb72d3596",
+  "code": "589e2977a6a4f0ff",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "note": "none of the cited pages says whether a template arm crossing a kept arm is dropped",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
-  "code": "50976259956de652",
-  "core": "6984f5deb72d3596",
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#no skeleton lanes for a cluster of fewer than two houses (`len(arcs) < 2`)": {
+  "code": "64c275f80ee2c620",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "nothing is built on a lane",
+  "note": "no skeleton lanes for a cluster of fewer than two houses (`len(arcs) < 2`)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
+  "code": "874ad38629507aab",
+  "core": "64c275f80ee2c620",
+  "date": "2026-10-12",
+  "note": "`_route` goes round the fabric and the WEB_FABRIC_GAP clip follows; the page says \"Nothing is built on a lane\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -27516,10 +27524,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house": {
-  "code": "4b20b24e8baff6ef",
-  "core": "6984f5deb72d3596",
+  "code": "a1e9abc891121a47",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "7 ft to the lane's middle; dead ends pulled back",
+  "note": "the 7 ft clip measures from the centerline, and `served_arm` pulls the ends back to the last house served",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -27531,20 +27539,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the ditches": {
-  "code": "241d22bc80d5a673",
-  "core": "6984f5deb72d3596",
+  "code": "3ddf66343714b582",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "note": "no cited page says whether an inner lane may cross a ditch or a drawn channel",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm over the brook": {
-  "code": "0624efd25fae574e",
-  "core": "6984f5deb72d3596",
+  "code": "7c63d705236b5efd",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "square crossings at the crossing places",
+  "note": "`ford_crossing` takes a crossing place square to the reach; the arm's ends are fixed on both banks",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -27557,38 +27565,41 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's corridor": {
-  "code": "992c6dd6090a65b7",
-  "core": "6984f5deb72d3596",
+  "code": "913346b48012ab78",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "7 ft from the middle",
+  "note": "LANE_CLEARANCE=7 from the middle, footprint corners held off the tread",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
-  "code": "05198fe2786ae21e",
-  "core": "6984f5deb72d3596",
+  "code": "f5e267cfbf20a9ac",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "the rolled lane shape",
+  "note": "`lane_skeleton_for` rolls the shape per seed, and the waterside shape is offered only when `side` finds water along a flank",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
   "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton laid after the houses": {
-  "code": "814a8e2a5ef5e7f1",
-  "core": "6984f5deb72d3596",
+  "code": "015327a94a37217e",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "houses first",
+  "note": "sized from the arcs and stands of the houses already placed",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -27598,11 +27609,19 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the crop": {
-  "code": "9be6d091ccfc1025",
-  "core": "6984f5deb72d3596",
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton lanes drawn worn (`worn=True`), a drawing convention": {
+  "code": "64c275f80ee2c620",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "may touch a plot's boundary",
+  "note": "skeleton lanes drawn worn (`worn=True`), a drawing convention",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the crop": {
+  "code": "63f75c863ecf5ca2",
+  "core": "64c275f80ee2c620",
+  "date": "2026-10-12",
+  "note": "clip at SKELETON_ARM_WIDTH/2 = 2.5 ft, so the tread's edge touches the plot's boundary",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -27613,59 +27632,60 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the wet and the ditches": {
-  "code": "a8ed91f02b31dcc4",
-  "core": "6984f5deb72d3596",
+  "code": "5aea9b2a93cf9e93",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "the pages give no margin",
+  "note": "no cited page gives a margin off wet ground or water",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton span floor": {
-  "code": "e52bd0bc8a7cbcc6",
-  "core": "6984f5deb72d3596",
+  "code": "0eb6a7dc91b6fb17",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "the pages give no floor",
+  "note": "the half-extent is floored at BUNDLE_PITCH*0.5 and pieces under _WEB_MIN_FT=30 are dropped; no cited page answers either figure",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton width": {
-  "code": "9c7ceb27a9f636f8",
-  "core": "6984f5deb72d3596",
+  "code": "079910916b30a635",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "spine 5 ft",
+  "note": "SKELETON_ARM_WIDTH=5, matching \"the cluster's spine and its spur to the fields 5 ft\"",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
   "research": "f3435a8848f6237e",
   "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#spine along the houses": {
-  "code": "1a2d230b11f9c85c",
-  "core": "6984f5deb72d3596",
+  "code": "bc63a22d81dd28ac",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "runs only along the houses it serves",
+  "note": "the span is taken from the houses' own arc extent, and `served_arm` trims back to the last house served",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#spine centered on the houses": {
-  "code": "27b3a4877a768a6f",
-  "core": "6984f5deb72d3596",
+  "code": "fb465f848f4366fe",
+  "core": "64c275f80ee2c620",
   "date": "2026-10-12",
-  "note": "a GUESS no page answers",
+  "note": "the code centers on the arc midpoint and the mean stand; no page says where a spine is centered",
   "pages": {},
   "research": "",
   "rests": [],
@@ -27835,6 +27855,21 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::oriented_skeleton#lane along the water on its flank": {
+  "code": "96cce4caf809997c",
+  "core": "de0e8a39c72ca7ef",
+  "date": "2026-10-12",
+  "note": "the waterside template is mirrored onto the +x flank when the water runs there",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::resettle_straightened#joints read as one way": {
