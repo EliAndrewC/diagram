@@ -1124,5 +1124,214 @@
     "value": {
       "stale_lines": 0
     }
+  },
+  "b5-cty-e1": {
+    "quantity": "the way west past the stable well",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the hearing court 26 ft deep, the stable well 6 ft out: the gap between them measured on the draft; tests/test_compound_service.py holds 6 ft or more",
+    "value": {
+      "way_ft": 8.3
+    }
+  },
+  "b5-cty-e2": {
+    "quantity": "the stables' privy against the south wall",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the privy at x 64-69, y 192-197 ft, west of the stable, its hatch drawn; tests/test_compound_service.py holds it",
+    "value": {
+      "flush": true,
+      "hatch": true
+    }
+  },
+  "b5-cty-e3": {
+    "quantity": "the inner entrance in one room",
+    "observed": "2026-10-12",
+    "verifies": "E3",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the door at x 115.7-121.7 ft, inside the inner rooms (x 112-138)",
+    "value": {
+      "one_room": true
+    }
+  },
+  "b5-hay-r6-e1": {
+    "quantity": "the grove's bare ground",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the pond garden runs east to x 875 and north before the reception's east veranda; pack-audit's largest vacancies are the named kitchen yard, forecourt strip and rear yard",
+    "value": {
+      "largest_vacancy_sqft": 3802
+    }
+  },
+  "b5-hay-r6-e2": {
+    "quantity": "the notes against the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "knob 9's arch, the torii line, the torii map note and a review-log entry rewritten to the corner shrine, its south door and its tree",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-hay-r6-n1": {
+    "quantity": "the shrine's tub outside the arch's span",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the tub at (877,186) east of the arch's east post (871.9-875.5)",
+    "value": {
+      "outside": true
+    }
+  },
+  "b5-hoshi-e1": {
+    "quantity": "the sanctuary inside its clearing",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "bed717b195bb",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the clearing's lobe at x 470-537.5 against the sanctuary's plinth at x 475-537",
+    "value": {
+      "inside": true
+    }
+  },
+  "b5-hoshi-q1": {
+    "quantity": "the three-bay sanctuary's depth labeled",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "bed717b195bb",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "notes item 9 labels the 6 ft depth a GUESS; the research pass filed as a row",
+    "value": {
+      "labeled": true
+    }
+  },
+  "b5-hoshi-n1": {
+    "quantity": "the privy's distance in the notes",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "bed717b195bb",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "notes line 18 reads about 44 ft",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-och-e1": {
+    "quantity": "the notes against the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "knob 7's workshop, the vegetable garden, rear yard and threshold-stone map notes, the inner-garden comment and a review-log entry rewritten",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-och-e2": {
+    "quantity": "the second kami's roll recorded",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "knob 9 records the roll ochiba-magistracy:second kami: myobu = one hall",
+    "value": {
+      "recorded": true
+    }
+  },
+  "b5-och-n1": {
+    "quantity": "the rear yard to the hall",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the rear-yard polygon carried to x 890 and its notes",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-ub-e1": {
+    "quantity": "the grove's bare ground",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the inner garden runs to the border wall (x 1060); the largest vacancy left is the named kitchen yard, then the shrine's own ground 77 x 37 ft with its way",
+    "value": {
+      "largest_vacancy_sqft": 3345
+    }
+  },
+  "b5-ub-e2": {
+    "quantity": "the roll's key",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the comment keys on ubame-magistracy, which rolls one hall as drawn; the notes record it",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-ub-e3": {
+    "quantity": "the notes against the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E3",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the altar, grove, way, vacancy, named-ground and map-note lines and a review-log entry rewritten",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-ub-q1": {
+    "quantity": "a way to the shrine",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "bed717b195bb",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "a trodden way from the open ground east of the reception along the garden's north edge and under the arch",
+    "value": {
+      "drawn": true
+    }
   }
 }
