@@ -8769,10 +8769,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/paddy_grass.py::draw_paddy_grass#drawn as open grass": {
-  "code": "6e76fb3df5a305aa",
-  "core": "8e5e1c3c4cb3945a",
+  "code": "85cdb634ced099cc",
+  "core": "fc76d7a04aa405c1",
   "date": "2026-10-12",
-  "note": "a grass patch with no pine",
+  "note": "the plot is drawn as open grass with no pine, which matches the page's \"one grass patch\" for the paddy plot (a form the page attests); holding it in block_polys after the draw is plumbing",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
@@ -8785,10 +8785,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/paddy_grass.py::lay_paddy_grass#recorded either way": {
-  "code": "18afeb692291fd3c",
-  "core": "c6ceac2f92893c33",
+  "code": "d3562c4256bff52f",
+  "core": "efa9f0c3f2361a95",
   "date": "2026-10-12",
-  "note": "the record of the roll and a keep-out",
+  "note": "only records the outcome of the roll; the roll and the seating are decided in paddy_grass_hill and seat_paddy_grass, not here",
   "pages": {},
   "research": "",
   "rests": [],

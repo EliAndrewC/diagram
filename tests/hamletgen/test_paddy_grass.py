@@ -37,12 +37,18 @@ def test_the_grass_hill_is_seated_above_its_plot_and_recorded(monkeypatch) -> No
     s.M["fields"] = [{"plot_rings": [_shifted(280, 300), [[0.0, 0.0], [0.5, 0.0], [0.0, 0.5]]]}]
     monkeypatch.setattr(pg, "paddy_grass_hill", lambda plan: True)
     square = pg.lay_paddy_grass(s, _plan())
-    assert square is not None and s.M["meta"]["paddy_grass_hill"] == "drawn" and square in s.block_polys
+    assert square is not None and s.M["meta"]["paddy_grass_hill"] == "drawn" and square not in s.block_polys
     assert max(y for _x, y in square) <= 300.0 - pg.GRASS_GAP_FT + 1.0, "above the plot's top edge, its gap kept"
     side = square[1][0] - square[0][0]
     assert abs(side - 40.0) < 0.5, "about the plot's own size"
     pg.draw_paddy_grass(s, square)
-    assert s.M["commons"][-1]["role"] == "paddy_grass"
+    assert s.M["commons"][-1]["role"] == "paddy_grass" and square in s.block_polys, "held against what comes after, once drawn"
+    cover = s._covers[-1]
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+
+    left = Polygon(square).difference(unary_union(cover.bare)) if cover.bare else Polygon(square)
+    assert cover.cls == "paddy's grass hill" and left.area > 0.9 * Polygon(square).area, "its grass not left bare by its own keep-out"
 
 
 def test_none_rolled_or_no_seat_is_recorded(monkeypatch) -> None:  # type: ignore[no-untyped-def]

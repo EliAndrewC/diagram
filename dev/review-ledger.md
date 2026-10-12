@@ -1587,3 +1587,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-12 | modal-depiction | 374 batch 12: paddy grass hill pop-up | COVERAGE 0, TRUTH 1, LINKS 1 | the scrub keep-out not on 0078; 0073 not linked; 0078 Grounds comment stale | paperwork | yes | fixed (two EDITs applied: the clause cut, 0073 linked; the comment updated) | 37 s | 34k in (9k cached) / 3.2k out |
 | 2026-10-12 | impl-drift | 374 batch 12 round 5: 5 claims | 5 IN-STEP, 1 UNCLAIMED | which paddy gets the plot was unclaimed | paperwork | yes | fixed (the which-paddy claim, UNRESEARCHED) | 31 s | 36k in (26k cached) / 2.5k out |
 | 2026-10-12 | impl-drift | 374 batch 12 round 6: 1 claim | 1 IN-STEP | none | nothing | yes | verified (nothing to act on) | 13 s | 33k in (25k cached) / 0.9k out |
+| 2026-10-12 | impl-drift | 374 batch 12 round 7: 2 claims | 2 IN-STEP | none | nothing | yes | verified (nothing to act on) | 13 s | 31k in (19k cached) / 1.0k out |

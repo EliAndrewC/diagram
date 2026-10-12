@@ -114,8 +114,8 @@ def clear_of_plot(square: Sequence[Pt], plot: Sequence[Sequence[float]], gap: fl
 
 
 def lay_paddy_grass(s: Settlement, plan: SitePlan) -> Poly | None:
-    """Roll and seat the hamlet's paddy grass hill, recording the outcome (`meta.paddy_grass_hill`: none, drawn, or no seat);
-    the square is held against what is placed after it (`block_polys`). Returns the square, or None.
+    """Roll and seat the hamlet's paddy grass hill, recording the outcome (`meta.paddy_grass_hill`: none, drawn, or no seat).
+    Returns the square, or None; the scrub and the hole fill are handed it, and `draw_paddy_grass` holds it after.
 
     Research: recorded either way - NONE: the record of a roll"""
     if not paddy_grass_hill(plan):
@@ -123,13 +123,14 @@ def lay_paddy_grass(s: Settlement, plan: SitePlan) -> Poly | None:
         return None
     square = seat_paddy_grass(s, plan)
     s.M["meta"]["paddy_grass_hill"] = "drawn" if square else "no seat"
-    if square:
-        s.block_polys.append(square)
     return square
 
 
 def draw_paddy_grass(s: Settlement, square: Any) -> None:
-    """Draw the grass hill as open grass - the meadow's grass and odd brush dot, no pine (`commons`, role `paddy_grass`).
+    """Draw the grass hill as open grass - the meadow's grass and odd brush dot, no pine (`commons`, role `paddy_grass`) - then hold
+    it against what is placed after it (`block_polys`). Not before: the commons' keep-out reads `block_polys`, and a square
+    already held there left its own grass bare, so the drawn hill drew no ink (Inashiro, wave 148's gate).
 
     Research: drawn as open grass - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open grass on the hill ground, a cut patch on the scrub"""
     s.commons(square, role="paddy_grass")
+    s.block_polys.append(square)
