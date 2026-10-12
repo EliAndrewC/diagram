@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Reopened 2026-10-11 for amendment 4 (amendment 3 landed: spec FAITHFUL round 4, plan CLEAR round 3, every task ticked; SC-011, SC-013, SC-014 tested and measured; SC-012 carried to 374)
+**Status**: Done 2026-10-11 - amendment 4 landed: spec FAITHFUL (round 2), plan CLEAR, every task ticked; SC-015 measured (the sync suite in parts: 60.5 s against 150.2 s, 123 checks every run); SC-012 carried to 374 (as SC-003 and SC-004 are)
 
 **Amendment 4 approved**: the GM, 2026-10-11, "yes please add that as amendment 4"
 

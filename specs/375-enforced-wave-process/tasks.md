@@ -147,5 +147,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T39 The sync suite's cases as functions in parallel parts (plan D32); today's 123 checks in every mode, a failed and an unreported case each fail it (SC-015)
       research: rendering
       verify: DONE. 26 cases as functions in 4 parts, helpers hoisted; today 150.2 s vs parts 60.5 s median, 123 checks on all 12 runs; an injected failure and an injected exit each fail it, named (m:375-a4-sync-suite-parts)
-- [ ] T40 375 closes again: SC-015 measured, `make hooks-test` green, the gate, the report, landed
+- [x] T40 375 closes again: SC-015 measured, `make hooks-test` green, the gate, the report, landed
       research: rendering
+      verify: DONE. make hooks-test green in 81 s (the sync suite in parts); make done verified; tooling tests unchanged by a tests/hooks-only delta; spec FAITHFUL round 2, plan CLEAR; report written; landed by the push carrying this tick
