@@ -516,6 +516,42 @@ alternating; key `375-a7-cohort-after`. SC-024: the two split suites, today's fi
 the new, alternating, three runs each, the check counts compared; key `375-a7-suites-parts`. SC-027 is
 `m:375-a7-turn-time`, re-derived by `scripts/measure/turn_time.py`.
 
+### Amendment 6 (FR-028)
+
+Handed to this session by the Diagram tooling session after amendment 7's decisions were reviewed, so its decisions follow them.
+
+**D45 - About leaves the depiction rule (FR-028; T44).** `modal_owed.depiction_owed_by(was, m)` - the pop-up new to the About
+form, or its `depiction` (the Depiction tab and the `Drawing:` list) or its `Entry:` changed - is the one predicate: `owed()`
+emits a `modal-depiction` row on it (with "its Depiction, Drawing: or Entry: changed" as the occasion), or on a page its
+`Drawing:` names moving, as before; and the replay (`scripts/measure/depiction_replay.py`, SC-021) counts with it, so the rule
+and its measurement cannot drift apart. `depiction_fingerprint` drops About: `[uid, Entry:, Depiction + Drawing:, the drawing
+pages]`. The ORDER comment (depiction last "because it reads About") says instead that depiction reads the `Entry:` a research
+round may move. No round counter changes: `hm_checks.dispatch` counts a round per dispatch let through, the bundle hook refuses a
+dispatch whose MANIFEST owes the check nothing (`CHECK_NOT_OWED_OK`, feature 311), and the MANIFEST's owed lines are
+`record_owed.units`, which `owed()` now leaves without the depiction unit after an About-only edit - so that edit adds no round.
+Tests (in `tests/tooling/test_modal_triage.py`, red on today's code): an About edit alone owes `modal-form` and the research
+checks and not `modal-depiction`; an `Entry:`, Depiction or `Drawing:` edit still owes it; after a depiction answer, an About
+edit leaves `record_owed.unanswered` with no depiction unit for the pop-up (the round count's input). SC-007's About case in
+`test_depiction_is_owed_by_the_words_it_reads` is turned around with it (FR-015's About clause is superseded).
+
+**D46 - Answers recorded under amendment 1's formula stand (FR-028; T44).** `modal_owed.amendment1_depiction_fingerprint` keeps
+amendment 1's formula (About in it). `record_owed.amendment1_depiction_answered(root, store, slug)`: the pop-up as its file stood
+when the answer was recorded (the last commit before the answer's `utc`, as `legacy_depiction_answered` finds it - the helper
+`_modal_then` is lifted out of that function and shared) has an answer under amendment 1's formula, and its fingerprint under
+the new formula equals today's. So an About edit since keeps the answer and an `Entry:`, Depiction, `Drawing:` or drawing-page
+change since does not. `unanswered` accepts it beside `legacy_depiction_answered`. Without it the formula change would owe every
+About-form pop-up's depiction once, in every clone (amendment 1's change did exactly that on 2026-10-11: 31 units). Test in
+`tests/tooling/test_record_owed.py`, beside the legacy one.
+
+**D47 - The contract, the closing rows (FR-028; T44, T45).** `.claude/agents/modal-depiction.md`: the sentence "Anything about
+how the map draws the thing that sits in About instead belongs here (M13): report it" becomes "About is in your bundle for
+context: a drawing statement there is `modal-form`'s finding (M13), not yours - report nothing from About." The bundle keeps
+rendering About (`modal_bundle.render`, every check's `modal.md`); `modal-form`'s M13 line is already the amended rule (landed
+2026-10-12). SC-021's "a `modal-form` bundle carries M13's About rule": a test that `make modal-bundle FOR=modal-form`'s
+`guidelines.md` holds M13 and its contract the About sentence (passes today). 343's rows 83 and 84 close in `found.jsonl` on
+their About part: each row's `status` becomes `closed`, with the date and T44's commit beside it. No found row has been closed
+before (all 80 on main are open) and nothing reads the field, so there is no tool to build for two rows: an edit in place.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005
