@@ -193,7 +193,8 @@ def test_the_real_tree() -> None:
     assert "map features: threshing yard" in rack
     assert "GUESS: A rack by the house runs from the yard's edge to its middle." in rack
     outside = out[out.index("GUESSES MARKED OUTSIDE THE RECORD") :]
-    compound = outside[outside.index("\nl7r/diagram/compound.py\n") :].split("\n\n")[0]
+    # the county program, its postern among it, moved to compound_example.py (feature 374 wave 125: compound.py past 1,000 lines)
+    compound = outside[outside.index("\nl7r/diagram/compound_example.py\n") :].split("\n\n")[0]
     assert any("postern" in line and "GUESS" in line for line in compound.splitlines()), "the postern's GUESS, marked only in code (SC-004)"
     # every visible label in the record falls in a listed sentence (SC-001)
     labels = 0
