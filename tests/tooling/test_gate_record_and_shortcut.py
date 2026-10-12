@@ -98,7 +98,10 @@ def test_the_shortcut_runs_hooks_test_when_its_stamp_is_stale_and_every_outcome_
     shortcut = done[done.index("verified-done") : done.index("already verified - nothing the gate exercises")]
     assert "--fresh hooks" in shortcut and "hooks-test" in shortcut, "FR-032: a stale hooks stamp is earned, not skipped"
     assert shortcut.index("--fresh hooks") < shortcut.index("already-verified;"), "...before the shortcut answers green"
-    assert done.count("$(COMMIT_RUN_RECORD)") == 6, "already-verified, its hooks failure, the reference failure, both red sites and green"
+    # EVERY record the recipe writes is committed, however many exits it has: the count was pinned at six, and a seventh exit
+    # (the tree moved during the run) arrived from main and left its record untracked (2026-10-12)
+    lines = [ln for ln in done.split("\n") if "$(LOGRUN)" in ln]
+    assert lines and all(ln.count("$(LOGRUN)") == ln.count("$(COMMIT_RUN_RECORD)") for ln in lines), [ln[:120] for ln in lines if ln.count("$(LOGRUN)") != ln.count("$(COMMIT_RUN_RECORD)")]
 
 
 def test_make_perf_runs_no_census() -> None:
