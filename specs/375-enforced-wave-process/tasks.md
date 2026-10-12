@@ -225,8 +225,9 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 10 (the GM 2026-10-12: a reopened feature's glyph hour counts from its most recent reopening)
 
-- [ ] T59 The reopening read from history into the feature's start (D58); tests red on today's code (SC-035)
+- [x] T59 The reopening read from history into the feature's start (D58); tests red on today's code (SC-035)
       research: rendering
+      verify: DONE. DONE. feature_start = later of first event and last reopening (speckit-todo state via hm_approval._state_at over the whole directory), cached by the directory's newest commit; tests/tooling/test_review_owed 64 passed, the reopening tests red on today's code
 - [ ] T60 The texts; 375 closes again: tests, `make hooks-test`, the report, landed (D59)
       research: rendering
 
