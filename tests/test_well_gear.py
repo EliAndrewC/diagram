@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import re
 
 from l7r.diagram import well_gear as wg
@@ -24,5 +25,8 @@ def test_the_glyph_tags_each_part_with_the_well_it_stands_on() -> None:
     under, over = wg.gear_svg(100.0, 50.0, 11.0, "sweep", True)
     assert 'data-roof="1" data-at="100,50"' in under and 'opacity="0.55"' in under
     assert 'data-gear="sweep" data-at="100,50"' in over and "<circle" in over and "<rect" not in over  # a post is never a door's rect
+    # the sweep's pole is about as long as the marker is wide (0196's drawing page): 22 px on a 22 px marker
+    pole = re.search(r'<line x1="([\d.]+)" y1="([\d.]+)" x2="([\d.]+)" y2="([\d.]+)"', over)
+    assert pole and abs(math.dist(tuple(map(float, pole.groups()[:2])), tuple(map(float, pole.groups()[2:]))) - 22.0) < 0.05
     under, over = wg.gear_svg(100.0, 50.0, 11.0, "pulley frame", False)
     assert under == "" and over.count("<circle") == 2 and re.search(r'<line x1="87" y1="50" x2="113" y2="50"', over)

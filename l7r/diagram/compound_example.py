@@ -252,7 +252,7 @@ def county_magistracy_program() -> CompoundProgram:
             # at the kitchen (west) end of the rear face, as 0107's drawing page seats the inner entrance, just east of the
             # family privy at the corner (feature 374 wave 127; it stood mid-face at 0.4); the kitchen ell takes the west face
             door_fracs=(0.3, 0.35, 0.4),
-            inset_ft=9.0,  # the house 12 ft off the north wall's centerline as before wave 134 moved the clearance: a 10.5 ft alley behind it
+            inset_ft=8.5,  # the house 10 ft off the north wall's face (11.5 ft off its centerline): the alley at the top of 0091's ~6-10 ft
         ),
         # THE SERVANTS LODGE ON THE STREET FRONT (feature 374 wave 124): a large household's servants are drawn in a range
         # on its street edge, never a rowhouse behind the house (0115's drawing page,
@@ -278,7 +278,7 @@ def county_magistracy_program() -> CompoundProgram:
         # then runs on behind the kitchen to the rear yard, and down it to the kitchen yard
         # and the postern - the night-soil carter's service route to the house's privies. Flush to the wall, the
         # kitchen closed the alley's west end, and the privies were ~400 ft round from any service edge.
-        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=9.0, joins="residence"),
+        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=8.5, joins="residence"),
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
         # is Ochiba's particular - docs/building-programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; docs/buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).

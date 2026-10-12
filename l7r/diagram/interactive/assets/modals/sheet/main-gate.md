@@ -18,10 +18,10 @@ Guesses:
   gate generally faced (the one branch office whose plan was found had its gate in its east wall); south, where nothing else decides it, is the Chinese office's facing.
 - A gatehouse of its own drawn about 40 ft long: the one measured end to end, beside a temple gate, is about 18 ft, and Takayama's has about 400 sq ft of floor.
 
-Depiction: The plan draws a Japanese office's gate in one of its two forms, a one-bay gate about 6 to 8.5 ft wide or a
+Depiction: The plan draws a Japanese office's gate in one of its two forms, a one-bay gate whose pillar centers stand about 6 to 8.5 ft apart or a
 nagaya-mon opening about 12 ft, each plan taking one, and a Chinese office's as a roofed building of three bays. Its
 gatekeepers sit in a gatehouse beside it or a guardroom in the range, about 12 ft deep either way, each plan taking one.
-Its posts are drawn as dark blocks in the wall's near-black ink, so the opening reads on the plan; the dark is the drawing's, not the posts' color.
+Its posts are drawn as dark blocks in the wall's near-black ink, set outside the opening rather than on its edges, so the opening reads on the plan; a one-bay gate is therefore drawn wider than the real one, whose 6 to 8.5 ft ran between its pillars' centers, and the dark is the drawing's, not the posts' color.
 
 Name: main gate
 Covers: the posts flanking the main opening

@@ -10,6 +10,7 @@ The generated drafts call these; a hand sheet records the same recipes in its no
 
 from __future__ import annotations
 
+import math
 import random
 import zlib
 
@@ -70,10 +71,12 @@ def gear_svg(cx: float, cy: float, half: float, gear: str, roofed: bool) -> tupl
             f'fill="{ROOF_FILL}" stroke="{ROOF_STROKE}" stroke-width="1.1" opacity="0.55"/></g>'
         )
     if gear == "sweep":
+        # the pole as long as the marker is wide (2 * half), running from its post off the curb's corner in across it
         px, py = cx + half + 2.0, cy + half + 2.0
+        ex, ey = round(px - half * math.sqrt(2.0), 2), round(py - half * math.sqrt(2.0), 2)
         over = (
             f'<g data-kind="well" data-gear="sweep" {at}><circle cx="{px:g}" cy="{py:g}" r="1.6" fill="{GEAR_INK}"/>'
-            f'<line x1="{px:g}" y1="{py:g}" x2="{cx - half:g}" y2="{cy - half:g}" stroke="{GEAR_INK}" stroke-width="1.6"/></g>'
+            f'<line x1="{px:g}" y1="{py:g}" x2="{ex:g}" y2="{ey:g}" stroke="{GEAR_INK}" stroke-width="1.6"/></g>'
         )
     else:
         lx, rx = cx - half - 3.5, cx + half + 0.5
