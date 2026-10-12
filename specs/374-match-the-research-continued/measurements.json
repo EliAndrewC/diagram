@@ -1472,5 +1472,83 @@
     "value": {
       "fixed": true
     }
+  },
+  "b6r2-cme-e1": {
+    "quantity": "the stables latrine hatch",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "dca6ffdfd7c0",
+    "source": "l7r/diagram/compound_parts.py",
+    "command": "make test-file FILE=tests/test_compound_service.py",
+    "method": "the hatch reach 3 ft from the wall face; the stables latrine draws its hatch; red at the old 2.5 ft reach",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r2-cme-n1": {
+    "quantity": "hearing court comment",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "dca6ffdfd7c0",
+    "source": "l7r/diagram/compound_example.py",
+    "command": "grep -n \"6.4 ft past the stable well\"",
+    "method": "the comment says about 6.4 ft",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r2-hay-e1": {
+    "quantity": "the indoor kitchen well gear",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "dca6ffdfd7c0",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the kitchen well draws a beam pulley, no sweep (W135-2); well_gear fails an indoor sweep",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r2-och-e1": {
+    "quantity": "south wall comment",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "dca6ffdfd7c0",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "grep -n \"588..610.5\"",
+    "method": "the wall comment says the main gate 588..610.5 (7.5 ft)",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r2-ub-q1": {
+    "quantity": "kitchen yard label",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "dca6ffdfd7c0",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep -n \"kitchen yard\"",
+    "method": "the yard comment labels its existence and extent a GUESS",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r2-ub-n1": {
+    "quantity": "notes coverage figure",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "dca6ffdfd7c0",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "notes line 76 says 34% (measured 2026-10-12)",
+    "value": {
+      "fixed": true
+    }
   }
 }

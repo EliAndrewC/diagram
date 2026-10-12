@@ -391,7 +391,8 @@
 
   <!-- the kitchen yard: the ground between the west wall, the west block's veranda, the bath and the karo's house, where
        the kitchen postern opens (0107's drawing page: the kitchen door opens onto the way to the kitchen's yard; feature 374
-       wave 113, building-review round 1 E1 - it stood bare once the old kitchen left it) -->
+       wave 113, building-review round 1 E1 - it stood bare once the old kitchen left it). That a samurai house kept a kitchen
+       yard, and its extent here, are a GUESS: no source names a kitchen yard (0118; docs/building-programs.md) -->
   <g data-kind="inner court">
     <polygon points="146,306 320,306 320,450 146,450" fill="none"/>
     <text font-size="9" font-style="italic" fill="#7A6A4A">kitchen yard</text>

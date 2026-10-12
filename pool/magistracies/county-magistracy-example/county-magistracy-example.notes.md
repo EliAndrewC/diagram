@@ -66,7 +66,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   gatehouse of its own (its length a GUESS; 2 ken deep, measured), flush west of the gate's post - the gatekeepers' place
   follows from the one-bay gate, which has no range to hold a guardroom (feature 374 wave 128; it was 18 x 12 ft).
 - **R26 main gate**: 0093's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(["one-bay
-  gate", "gate range"])` = one-bay gate: a yakuimon with an 8 ft frontage (research 0093: 6-8.5 ft, its 間口 read as the pillar-center span), its passage 7 ft between its posts - the frontage less one ~1 ft pillar, a GUESS (feature 374 wave 132; it was an 8 ft passage).
+  gate", "gate range"])` = one-bay gate: a yakuimon with an 8 ft frontage (research 0093: 6-8.5 ft, its 間口 read as the pillar-center span), its passage 7 ft between its posts - the frontage less one ~1 ft pillar, a GUESS (feature 374 wave 132; it was an 8 ft passage). Its posts are drawn about 2 ft square OUTSIDE that passage, a map drawing convention (wave 133), so the drawn posts' centers stand about 9 ft apart, wider than the real frontage.
 - **R30 garden**: no pond drawn - the draft's garden is ground only, which reads as the dry-garden form; its stones and
   sand are left to the hand refinement.
 - **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack
@@ -225,7 +225,7 @@ Coverage 33%, perimeter-hugging 73%, nothing overflows; every registered check p
 - **Privies against walls**: the servants' and outer privies take an end face at its wall end first, and one against a
   compound wall has a 2 ft collection hatch drawn through it (the kumitori-guchi form - research 0101 has the
   pits emptied by outside carters toward a service wall; the hatch is a GUESS): the servants' at the servants' row's
-  east end on the north wall, the stables' on the south wall. The family privy moved to the house's rear (it stood 5.7
+  east end on the north wall, the stables' on the south wall. A flush privy stands 1.5 ft off the wall's face; the stables' and the garrison's, seated on a building's end, stand 2.5 ft off it, the hatch reaching across that gap (it reaches 3 ft from the face - feature 374 batch 6). The family privy moved to the house's rear (it stood 5.7
   ft from the kitchen well on the west face). Five privies: family, servants, grooms, stables, garrison.
 - **Office hall**: the rear day rooms - clerks' room, day office, official study - across its back; two clerks'
   positions flank the dais; the hearing court carries its straw mats (the accused's at the center, the plaintiff's and

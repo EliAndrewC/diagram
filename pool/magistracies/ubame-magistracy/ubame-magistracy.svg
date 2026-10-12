@@ -817,8 +817,9 @@
 
   <!-- Kitchen garden: the middle of the inner garden, between the writing pavilion and the roji's west wall, below
        Koharu's veranda (feature 283, research buildings 405: the seat is a knob and the sun decides it). The rear
-       strip it stood in had no hour of sun in the shoulder month, in the shadow of the house; the west and the rear
-       are all shaded here, and this is the only open ground inside the walls with its six hours, so the bed takes
+       strip it stood in had no hour of sun in the shoulder month, in the shadow of the house; since wave 113 the kitchen
+       yard west of the house has its sun too, so the seat is 0109's site knob rolled among the open sites (the notes'
+       roll: south, beside the formal garden - feature 374 batch 6), and the bed takes
        the size knob's low end, a soup-greens plot of about 1,065 sq ft (research 0109), where the rear
        strip held about 2,100. -->
   <g data-kind="vegetable garden">
