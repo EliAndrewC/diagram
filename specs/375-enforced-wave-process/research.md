@@ -84,3 +84,10 @@ spends 2.96 of its 3.6 s in `corpus_frequency`, counting every word of the whole
 does it again for every bundle; the owed check's translation pairs (`translation_owed.record_pairs`) take 0.92 s. Both read
 only the record's content, so both can be kept while it is unchanged - about 3.7 s - where folding the helpers into one process
 would save their start, about 0.2 s.
+
+Measured after (`m:375-a8-claims-after`, `m:375-a8-check-bundle-after`): `make claims-owed` after a one-line engine edit took
+6.3-7.0 s on today's code and 0.7 s on the new, alternating, three runs each; warm, 0.5-0.7 s. The check bundle - question 0022
+right after 0021, the two helpers swapped in place - took 3.7-3.8 s on today's code and 2.8-2.9 s on the new, at load about 2:
+about 1 s saved, not the 3.7 s the profile predicted. cProfile slows pure-Python loops more than the rest, so it overstated
+`corpus_frequency`'s share; and the first 6.1 s was timed at load 6. The new bundle's time by phase: `record_prepass` 0.68 s,
+`quote_verbatim` 0.20, the other git reads 0.32, the owed check in-process 0.81.

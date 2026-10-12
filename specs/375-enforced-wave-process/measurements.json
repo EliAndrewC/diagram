@@ -1090,5 +1090,361 @@
     "total": 6.14
    }
   }
+ },
+ "375-a8-review-yield": {
+  "value": {
+   "since": "2026-09-26",
+   "rows": 1022,
+   "by check": {
+    "spec-fidelity": {
+     "passes": 137,
+     "with a finding": 113,
+     "acted on": 96,
+     "dismissed": 17,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 94,
+     "hours": 7.7,
+     "k tokens out": 1558.5,
+     "features": 28,
+     "acted on per hour": 12.5
+    },
+    "spec-fidelity-verify": {
+     "passes": 44,
+     "with a finding": 31,
+     "acted on": 19,
+     "dismissed": 12,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 19,
+     "hours": 0.89,
+     "k tokens out": 189.9,
+     "features": 16,
+     "acted on per hour": 21.4
+    },
+    "record-format": {
+     "passes": 58,
+     "with a finding": 40,
+     "acted on": 38,
+     "dismissed": 2,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 18,
+     "hours": 0.65,
+     "k tokens out": 204.2,
+     "features": 14,
+     "acted on per hour": 58.8
+    },
+    "escalation-check": {
+     "passes": 16,
+     "with a finding": 16,
+     "acted on": 12,
+     "dismissed": 4,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 12,
+     "hours": 0.26,
+     "k tokens out": 73.9,
+     "features": 8,
+     "acted on per hour": 45.8
+    },
+    "perf-audit": {
+     "passes": 5,
+     "with a finding": 4,
+     "acted on": 4,
+     "dismissed": 0,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 4,
+     "hours": 0.58,
+     "k tokens out": 85.4,
+     "features": 3,
+     "acted on per hour": 6.9
+    },
+    "glyph-check": {
+     "passes": 152,
+     "with a finding": 120,
+     "acted on": 46,
+     "dismissed": 68,
+     "deferred": 5,
+     "not acted on": 1,
+     "author missed": 44,
+     "hours": 9.29,
+     "k tokens out": 2347.3,
+     "features": 23,
+     "acted on per hour": 5.0
+    },
+    "fix-check": {
+     "passes": 5,
+     "with a finding": 3,
+     "acted on": 2,
+     "dismissed": 0,
+     "deferred": 0,
+     "not acted on": 1,
+     "author missed": 1,
+     "hours": 0.29,
+     "k tokens out": 78.7,
+     "features": 1,
+     "acted on per hour": 6.9
+    },
+    "intro-check": {
+     "passes": 16,
+     "with a finding": 12,
+     "acted on": 8,
+     "dismissed": 0,
+     "deferred": 1,
+     "not acted on": 3,
+     "author missed": 1,
+     "hours": 0.18,
+     "k tokens out": 41.6,
+     "features": 1,
+     "acted on per hour": 43.3
+    },
+    "quote-check": {
+     "passes": 49,
+     "with a finding": 33,
+     "acted on": 32,
+     "dismissed": 0,
+     "deferred": 1,
+     "not acted on": 0,
+     "author missed": 14,
+     "hours": 0.73,
+     "k tokens out": 201.3,
+     "features": 12,
+     "acted on per hour": 44.1
+    },
+    "entry-drift": {
+     "passes": 10,
+     "with a finding": 6,
+     "acted on": 6,
+     "dismissed": 0,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 6,
+     "hours": 0.06,
+     "k tokens out": 20.3,
+     "features": 1,
+     "acted on per hour": 96.9
+    },
+    "translation-check": {
+     "passes": 13,
+     "with a finding": 4,
+     "acted on": 4,
+     "dismissed": 0,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 3,
+     "hours": 0.07,
+     "k tokens out": 23.3,
+     "features": 7,
+     "acted on per hour": 54.3
+    },
+    "source-reader": {
+     "passes": 23,
+     "with a finding": 16,
+     "acted on": 16,
+     "dismissed": 0,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 6,
+     "hours": 0.31,
+     "k tokens out": 96.8,
+     "features": 8,
+     "acted on per hour": 51.1
+    },
+    "impl-drift": {
+     "passes": 165,
+     "with a finding": 142,
+     "acted on": 129,
+     "dismissed": 10,
+     "deferred": 3,
+     "not acted on": 0,
+     "author missed": 123,
+     "hours": 7.98,
+     "k tokens out": 2467.8,
+     "features": 38,
+     "acted on per hour": 16.2
+    },
+    "building-review": {
+     "passes": 22,
+     "with a finding": 22,
+     "acted on": 19,
+     "dismissed": 3,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 19,
+     "hours": 2.34,
+     "k tokens out": 389.5,
+     "features": 11,
+     "acted on per hour": 8.1
+    },
+    "size-audit": {
+     "passes": 2,
+     "with a finding": 2,
+     "acted on": 1,
+     "dismissed": 1,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 1,
+     "hours": 0.11,
+     "k tokens out": 16.7,
+     "features": 2,
+     "acted on per hour": 9.5
+    },
+    "modal-depiction": {
+     "passes": 169,
+     "with a finding": 111,
+     "acted on": 108,
+     "dismissed": 2,
+     "deferred": 1,
+     "not acted on": 0,
+     "author missed": 60,
+     "hours": 2.83,
+     "k tokens out": 769.3,
+     "features": 11,
+     "acted on per hour": 38.2
+    },
+    "modal-research": {
+     "passes": 63,
+     "with a finding": 57,
+     "acted on": 57,
+     "dismissed": 0,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 25,
+     "hours": 1.65,
+     "k tokens out": 482.2,
+     "features": 5,
+     "acted on per hour": 34.5
+    },
+    "source-applicability": {
+     "passes": 25,
+     "with a finding": 21,
+     "acted on": 21,
+     "dismissed": 0,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 12,
+     "hours": 0.57,
+     "k tokens out": 106.6,
+     "features": 3,
+     "acted on per hour": 37.0
+    },
+    "modal-form": {
+     "passes": 48,
+     "with a finding": 44,
+     "acted on": 43,
+     "dismissed": 1,
+     "deferred": 0,
+     "not acted on": 0,
+     "author missed": 12,
+     "hours": 0.49,
+     "k tokens out": 158.5,
+     "features": 6,
+     "acted on per hour": 87.4
+    }
+   }
+  },
+  "what": "FR-037 / SC-030: `make review-yield` over dev/review-ledger.md's measured rows since 2026-09-26 (the first full day the rows carry their cost): per check, passes, findings acted on (changed or filed), dismissed, deferred, not acted on, author missed, hours, tokens out, features named, acted on per hour. Re-derived by its command.",
+  "date": "2026-10-12",
+  "command": "python3 scripts/measure/review_yield.py --record specs/375-enforced-wave-process/measurements.json --key 375-a8-review-yield"
+ },
+ "375-a8-cohort-seeds": {
+  "value": {
+   "records": 9,
+   "changes": [
+    "feature 374"
+   ],
+   "failures": {
+    "refused:WebRefused": {
+     "seeds": [
+      10,
+      20
+     ],
+     "changes": [
+      "feature 374"
+     ]
+    }
+   },
+   "fewest first seeds finding every failure": 10,
+   "failures only a pinned seed found": []
+  },
+  "what": "FR-038 / SC-031: `make cohort-seeds` over dev/cohort-log/ - the failures, their seeds, the changes the records span, and the fewest first seeds finding every failure. Put to the GM 2026-10-12, who chose ten.",
+  "date": "2026-10-12",
+  "command": "python3 scripts/measure/cohort_seeds.py --record specs/375-enforced-wave-process/measurements.json --key 375-a8-cohort-seeds"
+ },
+ "375-a8-claims-after": {
+  "what": "SC-028 (FR-035): `make claims-owed` after a one-line comment appended to l7r/diagram/hamletgen/homesteads/fixtures.py (a warm run first, the comment, the timed run, the comment removed), today's code (a detached worktree at c6c53f038) against the new (the clone at d0deeb54d), alternating, three runs each; then the new code warm three times. One-shot, 2026-10-12, load 1.7-2.1.",
+  "date": "2026-10-12",
+  "command": "one-shot: make claims-owed, timed around a one-line engine edit in each tree",
+  "value": {
+   "old after a one-line edit s": [
+    7.0,
+    6.4,
+    6.3
+   ],
+   "new after a one-line edit s": [
+    0.7,
+    0.7,
+    0.7
+   ],
+   "new warm s": [
+    0.7,
+    0.5,
+    0.6
+   ],
+   "bar (twice warm) s": 1.2
+  }
+ },
+ "375-a8-check-bundle-after": {
+  "what": "SC-029 (FR-036): `make check-bundle Q=0022` timed right after a bundle of 0021, with NOT_OWED_OK; today's helpers (record_prepass.py and translation_owed.py at c6c53f038) against the new, swapped in place, alternating, three runs each - in the clone, and in a detached worktree; 0021 again after 0022 too. One-shot, 2026-10-12, load 1.7-3.1. The 6.1 s baseline (m:375-a8-check-bundle) was taken at load ~6; at this load today's code takes 3.7 s, so the cache saves about 1 s (25%), not the ~3.7 s the profile predicted (cProfile inflated corpus_frequency's share). The bundles the old and new helpers write in one tree are identical but for their OUT path. By phase, new, one run: record_prepass 0.68 s, quote_verbatim 0.20, other git 0.32, in-process 0.81, of 2.01.",
+  "date": "2026-10-12",
+  "command": "one-shot: make check-bundle, timed, the two helpers swapped between legs",
+  "value": {
+   "clone, 0022 after 0021 s": {
+    "old": [
+     3.8,
+     3.7,
+     3.7
+    ],
+    "new": [
+     2.8,
+     2.9,
+     2.8
+    ]
+   },
+   "clone, 0021 again s": {
+    "old": [
+     3.2,
+     3.1,
+     3.0
+    ],
+    "new": [
+     2.1,
+     2.2,
+     2.1
+    ]
+   },
+   "worktree, 0022 after 0021 s": {
+    "old": [
+     3.8,
+     3.9,
+     3.9
+    ],
+    "new": [
+     2.9,
+     2.9,
+     2.8
+    ]
+   },
+   "by phase new s": {
+    "record_prepass": 0.68,
+    "quote_verbatim": 0.2,
+    "other git": 0.32,
+    "in-process": 0.81,
+    "total": 2.01
+   },
+   "SC-029 bar (half of 6.1) s": 3.05
+  }
  }
 }
