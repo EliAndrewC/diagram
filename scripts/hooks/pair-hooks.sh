@@ -293,7 +293,17 @@ try:
     d = json.loads(rec.read_text())
 except Exception:
     d = {}
-keys = d.get(feature, {}).get(unit, [])
+# GUARD_EDIT_OK: feature 374 batch 4, the round arbiter's tooling fix - A LANDED BATCH'S ROUNDS ARE SPENT, NOT COUNTED: a feature
+# that lands batch by batch keeps its rounds per unit, so a sheet reviewed twice in batch 1 and revised again in batch 4 met the
+# cap on its first review of the new layout. A round is kept as `key@epoch`; one dispatched before the feature's tasks.md last
+# landed on origin/main belonged to a landed batch. A bare key (before this fix) still counts.
+import subprocess
+try:
+    landed = int(subprocess.run(["git", "-C", str(rec.parent.parent), "log", "-1", "--format=%ct", "origin/main", "--", f"{feature}/tasks.md"], capture_output=True, text=True).stdout.strip() or 0)
+except Exception:
+    landed = 0
+live = [k for k in d.get(feature, {}).get(unit, []) if "@" not in k or int(k.rsplit("@", 1)[1]) >= landed]
+keys = [k.split("@", 1)[0] for k in live]
 print(len(keys) + (0 if key in keys else 1))
 PY
 }
@@ -309,9 +319,10 @@ try:
     d = json.loads(rec.read_text())
 except Exception:
     d = {}
+import time
 keys = d.setdefault(feature, {}).setdefault(unit, [])
-if key not in keys:
-    keys.append(key)
+if key not in [k.split("@", 1)[0] for k in keys]:
+    keys.append(f"{key}@{int(time.time())}")
 rec.write_text(json.dumps(d, indent=1))
 PY
 }

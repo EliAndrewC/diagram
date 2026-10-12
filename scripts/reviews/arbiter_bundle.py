@@ -412,7 +412,11 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     if trigger.startswith("reversal:") and not rounds and not diff.strip():
         gaps.append(f"a reversal with no check rounds on {subject or unit or '?'} and no history of {', '.join(files) or '?'}")
     if trigger.startswith("round:") and check != "spec-fidelity" and not rounds:
-        gaps.append(f"no dispatch of {check or '?'} on {subject or '?'} in the check state - a round trigger with no rounds to rule on")
+        earlier = review_verdicts(root, out, subject)
+        if earlier:
+            parts += earlier
+        else:
+            gaps.append(f"no dispatch of {check or '?'} on {subject or '?'} in the check state - a round trigger with no rounds to rule on")
     if gaps and not allow_missing:
         shutil.rmtree(out)
         raise MissingRecord(gaps)
@@ -422,6 +426,24 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "") -> Path
     parts.append(feature_section(root, out, d, trigger))
     (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
     return out / "MANIFEST.md"
+
+
+def review_verdicts(root: Path, out: Path, subject: str) -> list[str]:
+    """A review unit's earlier rounds from its verdict record and its ledger rows, where the check state holds none (the round
+    arbiter on three building reviews, feature 374 batch 4: both rounds ran before the check state kept review dispatches, so
+    the bundle said there were no rounds to rule on while `.git/review-verdicts` and the ledger had both)."""
+    rec = Path(_git(root, "rev-parse", "--absolute-git-dir").strip() or root / ".git") / "review-verdicts" / f"{subject}.json"
+    if not subject or not rec.is_file():
+        return []
+    shutil.copy(rec, out / "earlier-verdict.json")
+    name = subject.split("--", 1)[-1]
+    ledger = root / "dev" / "review-ledger.md"
+    check = subject.split("--", 1)[0]
+    rows = [ln for ln in ledger.read_text(encoding="utf-8").splitlines() if ln.startswith("| ") and f"| {check} |" in ln and name in ln] if ledger.is_file() else []
+    return [
+        "## The earlier rounds (from the verdict record and the ledger; the check state kept none)\n",
+        "`earlier-verdict.json` beside this file is the unit's last verdict record. Its ledger rows:\n\n" + ("\n".join(rows) or "- (no ledger row names it)") + "\n",
+    ]
 
 
 def feature_dirs(root: Path, d: Path | None, trigger: str) -> list[Path]:

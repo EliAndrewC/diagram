@@ -86,6 +86,11 @@ setup
 LAND_TOOLING_PUSH='echo "backup=${SYNC_BACKUP:-on}" >&2; exit 1' land scripts/a.sh; rc=$?
 ok "the push saw SYNC_BACKUP=off, and a refusal's reason is shown" '[ "$rc" -ne 0 ] && grep -q "backup=off" "$T/out"'
 
+echo "7. the checks run without the caller's escapes, the push with them (a LEDGER_ROWS_OK waived the suites' refusals, 2026-10-12)"
+setup
+LEDGER_ROWS_OK="for the push" LAND_TOOLING_CHECKS='[ -z "${LEDGER_ROWS_OK:-}" ]' LAND_TOOLING_PUSH='echo "push=${LEDGER_ROWS_OK:-none}" >&2; exit 1' land scripts/a.sh; rc=$?
+ok "the checks saw no escape, the push saw it" '[ "$rc" -ne 0 ] && grep -q "push=for the push" "$T/out"'
+
 echo "5. outside a session clone it refuses"
 ( cd "$T/seed" && "$LAND" scripts/a.sh ) >"$T/out" 2>&1; rc=$?
 ok "not under .clones/" '[ "$rc" -ne 0 ] && grep -q "not a session clone" "$T/out"'

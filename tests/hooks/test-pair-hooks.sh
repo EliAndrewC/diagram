@@ -427,6 +427,14 @@ printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": 
 check "a continue ruling runs the third round" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
 printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "accept", "why": "fine as it stands"}\n' > "$CLONE/specs/900-x/arbiter.jsonl"
 refused_for "...an accept closes the unit" "$GLYPH" "the round arbiter closed"
+# GUARD_EDIT_OK: feature 374 batch 4, the round arbiter's tooling fix - a landed batch's rounds are spent: two rounds kept before
+# the feature's tasks.md landed on origin/main leave the next batch's review its first round
+printf '# Tasks\n' > "$CLONE/specs/900-x/tasks.md"
+( cd "$CLONE" && git add specs/900-x/tasks.md >/dev/null 2>&1 && git -c user.email=t@t -c user.name=t commit -qm landed >/dev/null 2>&1 && git update-ref refs/remotes/origin/main HEAD )
+printf '{"specs/900-x":{"settlement-review--testmap":["k1@1000","k2@1000"]}}' > "$CLONE/.git/review-rounds.json"
+check "a batch landed since its two rounds runs the next batch's review" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
+check "...kept with its time" 'grep -q "@" "$CLONE/.git/review-rounds.json"'
+( cd "$CLONE" && git rm -rq --cached specs/900-x/tasks.md >/dev/null 2>&1; git -c user.email=t@t -c user.name=t commit -qm unland >/dev/null 2>&1; git update-ref refs/remotes/origin/main HEAD )
 rm -rf "$CLONE/.specify" "$CLONE/specs/900-x" "$CLONE/.git/arbiter-owed.json"
 printf '{"none":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
 # GUARD_EDIT_OK: feature 379 FR-010 (the GM 2026-10-10) - the GM's-words waiver is retired: past the cap only the arbiter rules

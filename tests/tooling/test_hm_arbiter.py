@@ -522,3 +522,20 @@ def test_owe_evidence_names_a_modal_units_keyed_lines() -> None:
     assert got == "`owes-round.diff` changes its Entry, a continuation, the page 0091-x.drawing.html line(s)", got
     own = diff.split("diff --git a/research")[0]
     assert "NO changed line" in ab.owe_evidence("modal-depiction:sheet/well", own), "another pop-up's file is not its cause"
+
+
+def test_review_verdicts_reads_the_earlier_rounds_where_the_check_state_kept_none(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on three building reviews (feature 374 batch 4): both rounds ran before the check state kept review
+    dispatches, and the bundle said there were none to rule on while the verdict record and the ledger had both."""
+    (tmp_path / ".git" / "review-verdicts").mkdir(parents=True)
+    (tmp_path / ".git" / "review-verdicts" / "building-review--ubame-magistracy.json").write_text('{"verdict": "PASS"}')
+    (tmp_path / "dev").mkdir()
+    (tmp_path / "dev" / "review-ledger.md").write_text(
+        "| 2026-10-10 | building-review | ubame-magistracy round 2 | clean |\n| 2026-10-10 | glyph-check | ubame-magistracy | clean |\n"
+    )
+    out = tmp_path / "out"
+    out.mkdir()
+    got = "\n".join(ab.review_verdicts(tmp_path, out, "building-review--ubame-magistracy"))
+    assert "ubame-magistracy round 2" in got and "glyph-check" not in got
+    assert (out / "earlier-verdict.json").read_text() == '{"verdict": "PASS"}'
+    assert ab.review_verdicts(tmp_path, out, "building-review--hayakawa-magistracy") == [], "no record, so the gap stands"
