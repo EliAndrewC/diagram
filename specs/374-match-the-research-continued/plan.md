@@ -302,9 +302,10 @@ sheet re-cut in the same commit. The county example and the round-trip sheet are
 the program and the emitter, never in the svg.
 
 - **B4-1** (within): ranking order, rows 0-10 then 21-22; 21-22 ride with row 6 because they are its rule on the generated sheet.
-- **B4-2** (within): `**Waits on**: 375` - 375 was reopened on 2026-10-12 (amendment 6, in the Diagram performance session),
-  so `make tick` refuses this batch's tasks until it closes; the waves are worked meanwhile and ticked when it does. Nothing is
-  escaped.
+- **B4-2** (narrowing, an exception to FR-005's "no wave is taken until 375 has landed"): 375 was reopened on 2026-10-12
+  (amendment 6, in the Diagram performance session), and the waves are worked meanwhile. Amendments 1-5 and their tooling are
+  on main; amendment 6 (FR-028) only stops the About form owing `modal-depiction`, so a wave taken now owes more checks, never
+  fewer; `make tick` still refuses this batch's tasks until 375 closes, and nothing is escaped.
 - **B4-3** (within): the batch's occasions (tasks.md `## Occasions`): `building-review` on each magistracy sheet and on
   Hoshigaoka once redrawn, and `glyph-check` on the stable's new form on one sheet (the passage and the grooms' room are new
   to the stable glyph), dispatched at the batch's close on a green gate after the last merge of main, never mid-batch.
@@ -324,6 +325,8 @@ the program and the emitter, never in the svg.
   capped at that share" is reworded to the ruling: the share is a rate across the countryside, so a hamlet a spec gives one
   shrine stands within it, and that is not a deviation. Then `impl-drift` on the claim, and the record checks the edit owes
   (`make record-owed`), the pop-ups whose `Drawing:` names 0219 among them.
+- **W122-3** (within): both rulings become rows of the spec's Decisions Recorded table (SC-003: a row the GM rules should stay
+  as it is becomes a Decisions Recorded row), with the GM's words and where each is recorded.
 
 ### Wave 123 (T14) - the country shrine's one roof, and the second office shrine cited
 
@@ -331,7 +334,10 @@ the program and the emitter, never in the svg.
   `#universal shrine` (Magistrate's manor).
 - **W123-1** (within): Hoshigaoka's one roof is redrawn with the villagers' hall at the arch (approach) end and the dwelling
   (the kitchen and the monk's rooms) at the far end, never the hall between them; the procedure's sentence says the same.
-- **W123-2** (within): Hayakawa's two shrines stand, cited to 0218's Joge post (an office kept more than one); no sheet change.
+- **W123-2** (within): Hayakawa is redrawn to ONE compound shrine, as 0218's drawing page says ("Our maps draw one modest
+  shrine, however many a real office kept ... a deliberate deviation"): its second shrine removed, and the river kami it held
+  enshrined in the one hall beside the first - the form row 14's roll gives Hayakawa (`one hall`), so batch 5's row 14 finds
+  Hayakawa already drawn to its roll and does not undo this. The procedure's universal-shrine sentence says one shrine.
 
 ### Wave 124 (T15) - servants on the street front, the second rank for stores
 
