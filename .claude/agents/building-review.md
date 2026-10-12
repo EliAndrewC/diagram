@@ -85,6 +85,8 @@ VERDICT: pass | needs-work
 ERRORS / QUESTIONABLE / NITPICKS / CONFIRMATIONS: numbered, each naming its norm
 ```
 
+**Judge the change, file the rest** (feature 374 batch 6, the round arbiter): the dispatch's OCCASION names what the declared waves changed. A finding on a part of the sheet those waves did not change is a row for the feature to file - give it severity `outside` - and it does not decide the verdict; the verdict is the change's alone.
+
 **Every finding names its norm or says there is none.** QUESTIONABLE means it needs a RESEARCH PASS, never "a GM ruling": you
 have WebSearch, so say what the record would have to show; where it supports two forms the finding is "this should vary
 between instances" (a knob). **Your last act**: findings to a JSON list of `{"id", "severity", "what"}`, then

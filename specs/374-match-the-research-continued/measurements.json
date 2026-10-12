@@ -1550,5 +1550,135 @@
     "value": {
       "fixed": true
     }
+  },
+  "b6r3-cme-n1": {
+    "quantity": "gate posts clause",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "e2a5fc085f1b",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "grep -n OUTSIDE that passage",
+    "method": "the R26 line says the 2 ft posts are a convention drawn outside the passage, their centers ~9 ft apart",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r3-cme-n2": {
+    "quantity": "privies off the face",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "e2a5fc085f1b",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "grep -n 2.5 ft off it",
+    "method": "the privies line says the stables and garrison privies stand 2.5 ft off the face, the hatch reaching 3 ft",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r3-hay-e1": {
+    "quantity": "kitchen well floor wording",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "e2a5fc085f1b",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "grep -n this kitchen has no doma",
+    "method": "the wells line says inside the kitchen, on its board-floored ell, no doma",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r3-hay-q1": {
+    "quantity": "kitchen yard label",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "e2a5fc085f1b",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "grep -n no source names a kitchen yard",
+    "method": "the yard comment and the notes label the yard a GUESS",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r3-hay-n1": {
+    "quantity": "roof roll said",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "e2a5fc085f1b",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "grep -n roof roll does not apply",
+    "method": "the wells line says the indoor well roof roll does not apply",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r3-ub-e1": {
+    "quantity": "garden site reason",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "e2a5fc085f1b",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep -n vegetable garden site",
+    "method": "the site is the knob rolled among the open sites (south, beside the formal garden), the false only-sun reason gone from the notes, the map note and the svg comment",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r3-ub-q1": {
+    "quantity": "garden site choice recorded",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "e2a5fc085f1b",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep -n vegetable garden site",
+    "method": "the roll records why the garden takes its site over the western one",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6r3-ub-n1": {
+    "quantity": "kitchen yard label in the notes",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "e2a5fc085f1b",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep -n kitchen yard",
+    "method": "notes line 77 and the named-ground list label the kitchen yard a GUESS",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6g-cme-f1": {
+    "quantity": "the roof glyph",
+    "observed": "2026-10-12",
+    "verifies": "F1",
+    "subject": "glyph-check--well--county-magistracy-example",
+    "answers": "dca6ffdfd7c0",
+    "source": "l7r/diagram/well_gear.py",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the roof drawn over the curb as an unfilled dashed outline on four corner posts; well_gear fails a filled square (proven red on the unfixed sheets)",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b6g-ub-f1": {
+    "quantity": "the indoor well posts",
+    "observed": "2026-10-12",
+    "verifies": "F1",
+    "subject": "glyph-check--well--ubame-magistracy",
+    "answers": "dca6ffdfd7c0",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the indoor kitchen well draws a beam pulley within the curb, no posts on the wall line (W135-2)",
+    "value": {
+      "fixed": true
+    }
   }
 }

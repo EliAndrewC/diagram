@@ -328,6 +328,11 @@ def declared(root: Path, base: str) -> tuple[list[Unit], list[str], bool]:
                 problems.append(f"{feature}: unknown occasion {kind!r} (one of {', '.join(DECLARED)})")
                 continue
             subject = arg.split(" - ")[0].strip()
+            # GUARD_EDIT_OK: feature 374 batch 6, the round arbiter's tooling fix (ask:b6-ochiba-r3) - the dispatch
+            # names WHAT the declared waves changed, so a reviewer can tell a finding on the change from one on a part
+            # the batch never touched (round 3 judged Ochiba's garden, which waves 132-135 did not move)
+            what = arg.partition(" - ")[2].strip()
+            said = f": {what}" if what else ""
             for check in checks:
                 if check == "glyph-check":
                     # GUARD_EDIT_OK: feature 328 wave 5 - `<element> on <map>` names the map the change moved: the
@@ -343,12 +348,12 @@ def declared(root: Path, base: str) -> tuple[list[Unit], list[str], bool]:
                         on = first_drawing(root, element)
                         if not on:
                             problems.append(f"{feature}: {kind}: {element!r} is drawn on no pool map or sheet")
-                    units.append(Unit(check, element, on, f"declared {kind} ({feature})"))
+                    units.append(Unit(check, element, on, f"declared {kind} ({feature}){said}"))
                 elif kind == "new-program":
                     program, _, sheet = subject.partition(" ")
-                    units.append(Unit(check, sheet.strip() if check == "building-review" else program, sheet.strip(), f"declared {kind} {program} ({feature})"))
+                    units.append(Unit(check, sheet.strip() if check == "building-review" else program, sheet.strip(), f"declared {kind} {program} ({feature}){said}"))
                 else:
-                    units.append(Unit(check, subject, subject, f"declared {kind} ({feature})"))
+                    units.append(Unit(check, subject, subject, f"declared {kind} ({feature}){said}"))
     return units, problems, any_section
 
 
@@ -537,7 +542,10 @@ def all_owed(root: Path) -> tuple[str, list[Unit], list[str]]:
     units, problems, _ = declared(root, base)
     seen: dict[str, Unit] = {}
     for u in detected(root, base) + units:
-        seen.setdefault(u.slug, u)
+        prev = seen.setdefault(u.slug, u)
+        _, _, more = u.occasion.partition("): ")
+        if prev is not u and more and more not in prev.occasion:  # every declared wave's text, in the one unit it collapses into
+            seen[u.slug] = Unit(prev.check, prev.subject, prev.on, f"{prev.occasion}; {more}" if "): " in prev.occasion else f"{prev.occasion}: {more}")
     ordered = sorted(seen.values(), key=lambda u: (CHECKS.index(u.check), u.subject))
     return desc, ordered, problems
 
