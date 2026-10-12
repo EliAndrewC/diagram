@@ -13,8 +13,8 @@ from __future__ import annotations
 import importlib.util
 import json
 import subprocess
-import time
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -183,6 +183,18 @@ def test_an_unknown_occasion_is_a_problem(clone: Path) -> None:
 def test_each_declared_occasion_owes_its_check(clone: Path, line: str, expected: list[tuple[str, str, str]]) -> None:
     _tasks(clone, [line])
     assert units(clone) == expected
+
+
+def test_a_review_is_told_what_each_declared_wave_changed_and_files_the_rest(clone: Path) -> None:
+    """Feature 374 batch 6, the round arbiter's tooling fix (ask:b6-ochiba-r3): a third building-review round judged a
+    garden no wave had moved. The occasion carries every declared wave's text, merged into the one unit the lines
+    collapse into, and the building-review prompt files a finding outside it as a row, never as the unit's verdict."""
+    _tasks(clone, ["layout-revised: hayakawa - wave 1: the gate posts 2 ft", "layout-revised: hayakawa - wave 2: the wells' gear"])
+    _, got, _ = owed.owed(clone, landing=True)
+    (unit,) = [u for u in got if u.check == "building-review"]
+    assert unit.occasion.endswith(": wave 1: the gate posts 2 ft; wave 2: the wells' gear"), unit.occasion
+    text = snap.dispatch_text({"unit": unit.slug, "check": unit.check, "subject": unit.subject, "on": unit.on, "occasion": unit.occasion, "clone": None, "main": None, "missing": []}, clone, "k")
+    assert "wave 2: the wells' gear" in text and "severity `outside`" in text and "judge the verdict on the change alone" in text
 
 
 def test_a_map_new_to_the_pool_owes_the_whole_map_review_and_only_elements_new_to_the_legend(clone: Path) -> None:
@@ -622,8 +634,11 @@ def _commit_feature(root: Path, when: float, *, status: str, tasks: str, gm_row:
 _REOPENS = [
     ("by its status line", dict(status="Done 2026-10-01", tasks="- [x] T01 a task\n"), dict(status="Reopened for an amendment", tasks="- [x] T01 a task\n- [ ] T02 more\n")),
     ("by every task ticked", dict(status="Draft", tasks="- [x] T01 a task\n"), dict(status="Draft", tasks="- [x] T01 a task\n- [ ] T02 more\n")),
-    ("GM review pending", dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n", gm_row=True),
-     dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n- [ ] T02 more\n", gm_row=True)),
+    (
+        "GM review pending",
+        dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n", gm_row=True),
+        dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n- [ ] T02 more\n", gm_row=True),
+    ),
 ]
 
 

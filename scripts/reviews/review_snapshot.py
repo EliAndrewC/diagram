@@ -73,7 +73,9 @@ def owed_module() -> Any:
 #: what each check is asked, per its contract (`.claude/agents/<check>.md`)
 ASK = {
     "settlement-review": "the WHOLE-MAP review of {on}: {occasion}. Run your contract's whole-map sweeps on it.",
-    "building-review": "the review of the sheet {on}: {occasion}. Run the sections of your contract this occasion owes.",
+    "building-review": "the review of the sheet {on}: {occasion}. Run the sections of your contract this occasion owes. "
+    "A finding on a part of the sheet this occasion did not change is a row to file, not this unit's verdict: give it "
+    "severity `outside` and judge the verdict on the change alone.",  # GUARD_EDIT_OK: feature 374 batch 6 - the round arbiter's tooling fix (ask:b6-ochiba-r3)
     "glyph-check": "the glyph check of the element {subject!r}, on {on}: {occasion}. Judge that element where it stands on this map - nothing else on the map is under review.",
     "size-audit": "the size audit of {subject!r} on {on}: {occasion}. Anchor that kind's size; nothing else is under review.",
     "fix-check": "the fix check on {on}: {occasion}. Answer the GM's complaint at fit zoom first, then whether the fix fired and whether its record can bear it.",
