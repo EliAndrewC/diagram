@@ -212,6 +212,13 @@ echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"NEEDS-WORK","fin
 check "...a NEEDS-WORK record at this key too (the findings are fixed under the same key)" r1 ok
 echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$T/r1/$V"
 check "a PASS record at ANOTHER key, no notes touch: refused" r1 blocked
+# GUARD_EDIT_OK: feature 374 batch 4, the round arbiter's tooling fix - a verdict stales on ITS sheet, not on the engine's key:
+# a record at another engine key whose content key matches the sheet now ships; the sheet's notes changed, it is refused again
+CK="$(cd "$T/r1" && python3 "$HERE/../../scripts/reviews/review_prereq.py" content-key --clone "$T/r1" --map glyph-check--well--m)"
+echo "{\"map\":\"glyph-check--well--m\",\"engine_key\":\"stale\",\"content_key\":\"$CK\",\"verdict\":\"PASS\",\"findings\":[]}" > "$T/r1/$V"
+check "a PASS record at another engine key whose sheet is unchanged ships" r1 ok
+( cd "$T/r1" && echo "a later line" >> "$POOL/m.notes.md" && git add -A && git commit -qm notes )
+check "...and once the sheet's notes change, it is refused" r1 blocked
 mkrepo r2 withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-14" >> "$POOL/m.notes.md"; git add -A; git commit -qm reroll
 mkdir -p .git/review-verdicts; echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
 check "...and a stale-key record with the notes touched is refused too (D5: no substitute on a map with a record)" r2 blocked

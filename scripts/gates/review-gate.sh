@@ -169,7 +169,11 @@ for unit in $owed_units; do
     fail="$fail $unit"; rules="$rules unit-no-review"
     continue
   fi
-  read -r verdict rec_key < <(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d.get("verdict","") or "-", d.get("engine_key","") or "-")' "$verdict_rec" 2>/dev/null || echo "- -")
+  read -r verdict rec_key rec_content < <(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d.get("verdict","") or "-", d.get("engine_key","") or "-", d.get("content_key","") or "-")' "$verdict_rec" 2>/dev/null || echo "- - -")
+  # GUARD_EDIT_OK: feature 374 batch 4, the round arbiter's tooling fix - A VERDICT STALES ON ITS OWN SHEET: one value in one
+  # generated program moved the whole-engine key and staled ten verdicts across sheets it never touched. A verdict whose sheet
+  # (drawing and notes) hashes as it did when the review read it still answers for that sheet.
+  now_content="$(python3 "$RG_HERE/../reviews/review_prereq.py" content-key --clone "$ROOT" --map "$unit" 2>/dev/null)"
   if [ "$verdict" = "NOT-REVIEWABLE" ]; then
     printf '\n\033[1mREVIEW GATE: %s was last returned NOT-REVIEWABLE.\033[0m\n' "$unit"
     printf 'Its reviewer stopped at the first stage - a prerequisite was missing, so no judgment was made.\n'
@@ -177,6 +181,8 @@ for unit in $owed_units; do
     fail="$fail $unit"; rules="$rules map-not-reviewable"
   elif [ -n "${tree_key:-}" ] && [ "$rec_key" = "$tree_key" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
     :   # the reviewer's record, at this content
+  elif [ "$rec_content" != "-" ] && [ "$rec_content" = "$now_content" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
+    :   # the engine moved, but this unit's sheet is what the reviewer read
   else
     printf '\n\033[1mREVIEW GATE: %s has a %s verdict at engine key %s, but the tree being pushed is %s.\033[0m\n' "$unit" "$verdict" "${rec_key:0:12}" "${tree_key:0:12}"
     printf 'The content moved again after that review: dispatch it again (`make verify`), within the two-round cap.\n'
