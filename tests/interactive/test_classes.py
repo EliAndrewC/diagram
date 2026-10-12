@@ -37,6 +37,7 @@ SPEC_CLASSES = [
     "household shrine",
     "household grave",  # feature 374 wave 136: a farmstead's own grave at its plot corner, on the household-graves knob
     "floodplain meadow",  # feature 374 wave 147: a river-flat map's open meadow past its fields (0078)
+    "paddy's grass hill",  # feature 374 wave 148: a small grass hill set aside for one paddy, the tazuke kusayama (0078)
     "persimmon",
     "burial ground",  # feature 273: a hamlet's own burial ground, on its knob
     "homestead bamboo",

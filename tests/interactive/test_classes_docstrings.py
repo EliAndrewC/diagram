@@ -41,6 +41,7 @@ SINCE_189: dict[str, tuple[str, ...]] = {
 ADDED_SINCE_189: tuple[str, ...] = (
     "household grave",  # feature 374 wave 136: a farmstead's own grave, on the household-graves knob
     "floodplain meadow",  # feature 374 wave 147: a river-flat map's open meadow past its fields (0078)
+    "paddy's grass hill",  # feature 374 wave 148: a small grass hill set aside for one paddy, the tazuke kusayama (0078)
     "weir",
     "pond canal",
     "alder",  # feature 261: the belt's trees where it runs into the marsh

@@ -392,7 +392,7 @@ class GroundCoverMixin:
         Research:
             commons beyond the grove - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub and rough grazing, not forest
             scrub ground color - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass and brush drawn as one repeated block over the bare ground, no solid fill and no outline (`tiles.cover_path`: the pattern alone)
-            grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the scrub past the grove or the floodplain meadow (`pasture`), from the land; the small grass plot beside one paddy never drawn
+            grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the scrub past the grove or the floodplain meadow (`pasture`), from the land; the small grass hill above one paddy (`paddy_grass`) as open grass
             scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: a few scraggly pines - one throw to 6,000 sq ft, at least two throws (a throw the keep-outs refuse seats none), none on pasture
             off the ponds' open water - UNRESEARCHED: no scrub, pine or coppice crown on a pond or a crescent pond (one water test, `_sparse`), the grass bare 2 ft past a crescent pond's rim
             marsh edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass thins into the reeds, brush and pines stop at the marsh
@@ -548,7 +548,7 @@ class GroundCoverMixin:
                 _cover_bare += [Point(cp["cx"], cp["cy"]).buffer(cp["r"] + 2.0 * bs) for cp in crescents]  # 2 ft at the map's grain
                 if pond:
                     _cover_bare.append(shapely.affinity.scale(Point(pond[0], pond[1]).buffer(1.0), pond[2], pond[3]))
-                if role != "pasture":  # the SCRAGGLY pines belong to cut-over scrub, NOT to open pasture
+                if role not in ("pasture", "paddy_grass"):  # the SCRAGGLY pines belong to cut-over scrub, NOT to open grass
                     # the plots' sun ground near this throw, gathered ONCE: nothing seats a yard or bed during the scatter, and a
                     # box beyond a pine's reach never meets its crown (the perf-audit, feature 310: it was re-read per pine)
                     _pr = PINE_SPREAD_BS * bs
@@ -589,10 +589,15 @@ class GroundCoverMixin:
                                     f'<line x1="{px:.1f}" y1="{ly:.1f}" x2="{px + sp:.1f}" y2="{ly + 2 * bs:.1f}" stroke="#6E8452" stroke-width="{1.0 * bs:.1f}"/>',
                                 )
                             )
-            # feature 134: the commons' highlight class follows its ROLE; a role the vocabulary does not
-            # name yet stays unclassed so the census reports it rather than misfiling it (a pasture is the floodplain meadow,
-            # feature 374 wave 147)
-            _ccls = {"woodland": "woodland commons", "grazing": "scrub and rough grazing", "commons": "scrub and rough grazing", "pasture": "floodplain meadow"}.get(role)
+            # feature 134: the commons' highlight class follows its ROLE; a role the vocabulary does not name yet stays
+            # unclassed so the census reports it rather than misfiling it (pasture and paddy_grass named by feature 374)
+            _ccls = {
+                "woodland": "woodland commons",
+                "grazing": "scrub and rough grazing",
+                "commons": "scrub and rough grazing",
+                "pasture": "floodplain meadow",
+                "paddy_grass": "paddy's grass hill",
+            }.get(role)
             self._mark_groups.append((self.add(''.join(g), cls=_ccls), marks))  # the crowns now, the dots and pines at finish, into one slot
             random.setstate(st)
             self._cover_n += 1

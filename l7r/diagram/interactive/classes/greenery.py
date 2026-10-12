@@ -50,5 +50,9 @@ class FloodplainMeadow(Kind):
     key = 'floodplain meadow'
 
 
+class PaddysGrassHill(Kind):
+    key = "paddy's grass hill"
+
+
 class Marsh(Kind):
     key = 'marsh'

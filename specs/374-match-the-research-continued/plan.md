@@ -704,6 +704,27 @@ of its own, is the row's second wave in a later batch. The engine changes, so th
 - **W147-2** (within): the meadow is a kind of its own on the page (`floodplain meadow`), with a pop-up written from 0078 and
   the glyph check its new element owes on Kuwabata.
 
+## Batch 12: the paddy's own grass hill (row 775's second wave)
+
+**The work list**: row 775 (and its twin, row 911) stays open after batch 11 for the third attested form of the grass ground
+(research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.html: "Sometimes a small grass hill was set aside for a
+particular paddy's sole use, and called a tazuke kusayama"; its drawing page: "now and then, added at random, a small grass plot
+beside one paddy ... one grass patch of about the paddy's own size on the slope above it. The plot's size and how often it is
+rolled are a GUESS"). Batch 12 draws it, and with it rows 775 and 911 close. The engine changes, so the batch takes its timing
+bookends.
+
+### Wave 148 (T40) - a small grass hill set aside for one paddy
+- **W148-1** (within): a per-settlement roll, `paddy_grass_hill`, on a grass-hill map only (a floodplain map has no hill above its
+  paddies): about one hamlet in three keeps one (a GUESS - the page says "now and then" and gives no rate). Recorded in
+  `meta.paddy_grass_hill` and listed among the rolled choices.
+- **W148-2** (within): where it is rolled, one patch of about one paddy plot's own area (a GUESS, the page's "about the paddy's own
+  size") is seated on the open ground just upslope of a plot at the field's upslope edge, asked of the engine's own seat search
+  (`open_seat`) so it stands off the crop, the houses and their ground, the lanes and the water; where no plot has such ground,
+  none is drawn and the record says so.
+- **W148-3** (within): it is drawn as open grass - the meadow's grass and odd brush dot, no pine - with the hill's scrub kept out of
+  it, so it reads as a cut patch on the scrubby slope; a kind of its own on the page (`paddy's grass hill`), its pop-up written
+  from 0078, and the glyph check its new element owes on the map that draws it.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

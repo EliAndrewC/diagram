@@ -20,6 +20,7 @@ from ..plan import SitePlan
 from .bamboo import bamboo_seats
 from .belt import belt_polygon
 from .frame import belt_page, frame_bounds, frame_for, scatter_frame, title_pocket
+from .paddy_grass import draw_paddy_grass, lay_paddy_grass
 from .parcels import CROP_MARGIN, open_ground_patches
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
@@ -110,7 +111,7 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         bare ground as rough grazing - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: rough grazing on dry marginal ground
         share clothed as grazing - UNRESEARCHED: holes in the view filled
         grass ground form - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass hill (open scrub) or the
-            floodplain (open meadow, `grass_ground`) from the land; the small grass plot beside one paddy is never drawn
+            floodplain (open meadow, `grass_ground`) from the land; on a grass-hill map, now and then, a small grass hill above one paddy (`paddy_grass`)
         stage order - NONE
     """
     # THE PLANTED DIKES' TREES GIVE WAY TO THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): the
@@ -151,11 +152,18 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     # a river flat's margins are open meadow - grass and the odd brush dot, no scraggly pine - and a hill map's the open scrub
     meadow = grass_ground(plan) == "floodplain"
     s.M["meta"]["grass_ground"] = grass_ground(plan)
-    s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys], scrub_role="pasture" if meadow else "grazing")
+    # ...AND NOW AND THEN A SMALL GRASS HILL SET ASIDE FOR ONE PADDY (feature 374 wave 148, `paddy_grass`): seated before the scrub,
+    # which keeps out of it as it keeps out of a wood, and drawn after it as open grass
+    paddy_grass = lay_paddy_grass(s, plan)
+    s.hinterland(
+        marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys, *([paddy_grass] if paddy_grass else [])], scrub_role="pasture" if meadow else "grazing"
+    )
     # ...AND NO HOLES IN THE COUNTRYSIDE (feature 287, woods W11): over the decided view, the ground nothing covers - the
     # parcels and the bamboo still to be drawn counted as cover - is clothed as rough grazing until it is at most the rule's
     # share (`fill_the_holes`, asking `bare_cells`, the rule's one predicate). The stages after this only add cover.
-    s.fill_the_holes(plan.view, [*plan.woodland_polys, *plan.bamboo_polys], role="pasture" if meadow else "grazing")
+    s.fill_the_holes(plan.view, [*plan.woodland_polys, *plan.bamboo_polys, *([paddy_grass] if paddy_grass else [])], role="pasture" if meadow else "grazing")
+    if paddy_grass:
+        draw_paddy_grass(s, paddy_grass)
     s._scatter_frame = None  # the later scatters (a stand's understory, a hand call) throw whole
 
 

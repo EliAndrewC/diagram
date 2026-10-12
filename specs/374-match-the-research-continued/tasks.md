@@ -217,6 +217,11 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. a flood-ground map's margins drawn as floodplain meadow (pasture, no pine) from the land (grass_ground), recorded as meta.grass_ground; Kuwabata's meadow glyph-check PASS; the pop-up through form, research and depiction; 29 claims checked, the paddy-plot gap left DRIFTED (rows 775, 911 open by the plan review); gate green; bookends band 0
 
+## Batch 12 - the paddy's own grass hill
+
+- [ ] T40 wave 148: a small grass hill set aside for one paddy (tazuke kusayama), rolled now and then (0078) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

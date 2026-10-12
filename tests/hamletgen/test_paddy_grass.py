@@ -1,0 +1,56 @@
+"""The paddy's own grass hill (feature 374 wave 148, `hamletgen/hinterland/paddy_grass.py`): rolled now and then on a grass-hill
+map, seated on the open ground just upslope of a plot at the field's top, drawn as open grass."""
+
+from __future__ import annotations
+
+import types
+
+from l7r.diagram.hamletgen.hinterland import paddy_grass as pg
+from l7r.diagram.settlement import Settlement
+
+SQUARE = [[0.0, 0.0], [40.0, 0.0], [40.0, 40.0], [0.0, 40.0]]
+
+
+def _shifted(dx: float, dy: float) -> list[list[float]]:
+    return [[x + dx, y + dy] for x, y in SQUARE]
+
+
+def _plan(flood: bool = False, seed: int = 1) -> types.SimpleNamespace:
+    return types.SimpleNamespace(flood_ground=flood, spec=types.SimpleNamespace(seed=seed), fall=(0.0, 1.0))
+
+
+def test_the_upslope_plots_are_the_field_s_top_nearest_first() -> None:
+    plots = [_shifted(0, 200), _shifted(0, 100), [[1.0, 1.0]], _shifted(0, 300)]
+    got = pg.upslope_plots(plots, (0.0, 1.0), n=2)
+    assert got == [_shifted(0, 100), _shifted(0, 200)], "against the fall first; a ring of under three points is no plot"
+
+
+def test_a_floodplain_map_rolls_none_and_a_grass_hill_map_one_in_three() -> None:
+    assert not any(pg.paddy_grass_hill(_plan(flood=True, seed=s)) for s in range(30)), "no slope above a river flat's paddies"
+    rolled = sum(pg.paddy_grass_hill(_plan(seed=s)) for s in range(300))
+    assert 60 < rolled < 140, "about one hamlet in three"
+
+
+def test_the_grass_hill_is_seated_above_its_plot_and_recorded(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    s = Settlement(W=600, H=600, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["fields"] = [{"plot_rings": [_shifted(280, 300), [[0.0, 0.0], [0.5, 0.0], [0.0, 0.5]]]}]
+    monkeypatch.setattr(pg, "paddy_grass_hill", lambda plan: True)
+    square = pg.lay_paddy_grass(s, _plan())
+    assert square is not None and s.M["meta"]["paddy_grass_hill"] == "drawn" and square in s.block_polys
+    assert max(y for _x, y in square) <= 300.0 - pg.GRASS_GAP_FT + 1.0, "above the plot's top edge, its gap kept"
+    side = square[1][0] - square[0][0]
+    assert abs(side - 40.0) < 0.5, "about the plot's own size"
+    pg.draw_paddy_grass(s, square)
+    assert s.M["commons"][-1]["role"] == "paddy_grass"
+
+
+def test_none_rolled_or_no_seat_is_recorded(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    s = Settlement(W=600, H=600, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["fields"] = [{"plot_rings": [_shifted(280, 300)]}]
+    monkeypatch.setattr(pg, "paddy_grass_hill", lambda plan: False)
+    assert pg.lay_paddy_grass(s, _plan()) is None and s.M["meta"]["paddy_grass_hill"] == "none"
+    monkeypatch.setattr(pg, "paddy_grass_hill", lambda plan: True)
+    monkeypatch.setattr(s, "open_seat", lambda *a, **k: None)
+    assert pg.lay_paddy_grass(s, _plan()) is None and s.M["meta"]["paddy_grass_hill"] == "no seat"
