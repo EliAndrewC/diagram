@@ -42,7 +42,9 @@ leave them. In particular:
 - **Guesses (M11, M12).** Is every guess a bullet on the Guesses tab and nothing guessed stated as fact in About? Does any
   bullet hold something that is NOT a guess (a reading, a deviation, a convention, a fact)? Does each bullet say what was
   guessed and, in a clause, why?
-- **Deviations and conventions (M13).** Told in About, where they apply; a convention with the real size or color.
+- **Deviations and conventions (M13).** A deviation is told in About, in the paragraph it changes. A map drawing convention, or
+  any sentence about how the map draws the thing, does NOT belong in About: it goes on the Depiction tab (M13 as amended
+  2026-10-04) - report each one found in About.
 - **One account for every map (M9), placement (M10).** Nothing true of one settlement only; no placement rules.
 - **Voice (M16-M19).** Rule on each barred phrase the prepass lists; find record talk it missed.
 
