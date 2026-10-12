@@ -23,8 +23,6 @@ import argparse
 import collections
 import concurrent.futures
 import contextlib
-import dataclasses
-import importlib
 import io
 import os
 import sys
@@ -43,6 +41,7 @@ from l7r.diagram.hamletgen.ways.knots import lane_knots  # noqa: E402
 from l7r.diagram.overlap import matrix_violations  # noqa: E402
 from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves, gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
 from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT, CANOPY_SHADE_FT, bamboo_shading_plots, trees_shading_plots  # noqa: E402
+from l7r.diagram.tools.cohort_roll import ROLL_TARGET, Refusal, roll_or_refusal  # noqa: E402 - imported by NAME, so one class in every process (cohort_roll's docstring)
 
 _PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons", "bamboo_stands")
 
@@ -84,38 +83,6 @@ def refused_verdict(hspec: Any, refused: BaseException) -> tuple[str, list[str],
     return (f"{hspec.name} households={hspec.households} form={form} REFUSED", [f"refused:{name}"], [f"FAIL refused:{name} -> {str(refused)[:300]}"])
 
 
-@dataclasses.dataclass(frozen=True)
-class Refusal:
-    """A roll the engine REFUSED by name - its class and message - as a payload: it crosses the roll child (which turns a
-    raised failure into one generic error) and is stored like a report, since the same spec on the same code refuses the
-    same way. A crash (the child dies, memory, a timeout) is no refusal: it still raises, and is never stored."""
-
-    module: str
-    name: str
-    message: str
-
-    def exception(self) -> Exception:
-        """The refusal as its own class where it can be imported, so `refused_verdict` names it as before."""
-        try:
-            cls = getattr(importlib.import_module(self.module), self.name)
-            if isinstance(cls, type) and issubclass(cls, Exception):
-                return cls(self.message)
-        except Exception:  # noqa: BLE001, S110 - an unimportable class is named below all the same
-            pass
-        return type(self.name, (RuntimeError,), {})(self.message)
-
-
-def _roll_or_refusal(hspec: Any) -> Any:
-    """THE COHORT'S ROLL, run in the roll child by name: `rollcache._roll_payload` (generate, as the gate rolls it), or the
-    engine's refusal - a ValueError or RuntimeError, the classes every `...Refused` derives from - as a `Refusal`."""
-    from l7r.diagram.pipeline import rollcache  # noqa: PLC0415
-
-    try:
-        return rollcache._roll_payload(hspec)  # noqa: SLF001 - the gate's own roll, called by name as its child does
-    except (ValueError, RuntimeError) as e:
-        return Refusal(type(e).__module__, type(e).__name__, str(e))
-
-
 def _report_of(hspec: Any) -> tuple[Any, str]:
     """`generate(hspec)` through the roll cache (feature 375 amendment 6, FR-028): served when nothing the roll executes
     changed, rolled in a child otherwise, under the cohort's own subject - a refusal stored too (the plan review: 374's cohort
@@ -124,8 +91,7 @@ def _report_of(hspec: Any) -> tuple[Any, str]:
     feature 374's tool time). Returns (the report or a `Refusal`, how); a crash raises."""
     from l7r.diagram.pipeline import rollcache  # noqa: PLC0415 - the engine's serving layer, imported where it is used
 
-    target = f"{__name__ if __name__ != '__main__' else 'l7r.diagram.tools.cohort_audit'}:_roll_or_refusal"
-    payload, how = rollcache.obtain(f"cohort:{hspec!r}", lambda: _roll_or_refusal(hspec), recorded=lambda: rollcache._in_child(target, hspec))  # noqa: SLF001
+    payload, how = rollcache.obtain(f"cohort:{hspec!r}", lambda: roll_or_refusal(hspec), recorded=lambda: rollcache._in_child(ROLL_TARGET, hspec))  # noqa: SLF001
     return (payload if isinstance(payload, Refusal) else payload[2]), how
 
 

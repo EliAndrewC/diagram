@@ -457,13 +457,19 @@ load and free RAM at start and end (`_ends`, dashes for a snapshot from before),
 ### Amendment 6 (FR-028 to FR-033)
 
 **D38 - The cohort through the roll cache (FR-028).** `cohort_audit._report_of` obtains each seed's roll by
-`rollcache.obtain("cohort:<spec>", ..., recorded=rollcache._in_child("...cohort_audit:_roll_or_refusal", spec))` - the gate's own
+`rollcache.obtain("cohort:<spec>", ..., recorded=rollcache._in_child(cohort_roll.ROLL_TARGET, spec))` - the gate's own
 roll (`rollcache._roll_payload`, `generate` in a child), keyed by the engine functions it executed and the files it read, served
 when that key is unchanged - in place of calling `generate` itself; its own checks (households seated, farmstead across the
 brook, the matrix, ...) run on every report as before. A REFUSAL is stored like a report (the plan review: 374's cohort had
-two refused seeds, which rolled again each run): `_roll_or_refusal` returns the engine's refusal - a ValueError or
+two refused seeds, which rolled again each run): `cohort_roll.roll_or_refusal` returns the engine's refusal - a ValueError or
 RuntimeError, the classes every `...Refused` derives from - as a `Refusal(module, name, message)` payload, which also carries
 its NAME across the child (whose own failure is one generic RuntimeError); `roll_how` names it as before, served or rolled.
+`Refusal`, `roll_or_refusal` and the child's target `ROLL_TARGET` live in their own module, `l7r/diagram/tools/cohort_roll.py`,
+which every process imports by its real name (plan review round 2): `make cohort` runs `cohort_audit` as `__main__` and its
+pool workers as `__mp_main__`, so a class defined in `cohort_audit` was not the class the child unpickled, and a target named
+from `__name__` could not be imported by the child (the first measurement's legs refused 54 of 54 seeds). Tests: a refusal
+crosses a REAL roll child as `cohort_roll.Refusal` (`tests/tools/_cohort_child.py`); `cohort_audit` run under `__mp_main__`
+in a fresh interpreter holds that one class and a target the child imports.
 A crash - the child dies, memory, a timeout - is no refusal: it raises, is reported by its name, and is never stored. The
 gate's own `roll:` subjects and `rollcache.report` are unchanged. The store: `rollcache`'s directory is the clone's `.gencache/rolls`; in a LINKED worktree
 (`git rev-parse --git-common-dir` is not the worktree's own `.git`) it is the main worktree's, so a "before" leg rolled in a

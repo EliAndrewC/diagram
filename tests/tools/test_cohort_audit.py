@@ -310,7 +310,7 @@ def test_the_audit_writes_one_record_a_run(monkeypatch: pytest.MonkeyPatch, tmp_
     assert len(files) == 1
 
 
-def test_the_cohort_gets_its_roll_from_the_roll_cache_and_a_refusal_crosses_the_child_by_name(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_cohort_gets_its_roll_from_the_roll_cache_and_a_refusal_is_stored_by_name(monkeypatch: pytest.MonkeyPatch) -> None:
     from l7r.diagram.pipeline import rollcache
 
     seen: list[Any] = []
@@ -337,3 +337,35 @@ def test_the_cohort_gets_its_roll_from_the_roll_cache_and_a_refusal_crosses_the_
     monkeypatch.setattr(rollcache, "_roll_payload", crash)
     with pytest.raises(MemoryError):
         ca._report_of(spec)
+
+
+def test_a_refusal_crosses_a_real_roll_child_as_the_class_the_audit_knows() -> None:
+    """The plan review (round 2): a `Refusal` unpickled from the child was not the class `cohort_audit` held when it ran as
+    `__main__`. One class now lives in `cohort_roll`, and the child's payload is that class."""
+    from l7r.diagram.pipeline import rollcache
+    from l7r.diagram.tools import cohort_roll
+
+    payload, _deps = rollcache._in_child("tests.tools._cohort_child:refuse", "seed 7")
+    assert type(payload) is cohort_roll.Refusal and ca.Refusal is cohort_roll.Refusal
+    assert (payload.module, payload.name) == ("tests.tools._cohort_child", "WebRefused") and "seed 7" in payload.message
+    assert type(payload.exception()).__name__ == "WebRefused", "the parent re-imports the class by name"
+
+
+def test_run_under_another_module_name_the_audit_shares_the_one_refusal_and_an_importable_target() -> None:
+    """`make cohort` runs `python3 -m ...cohort_audit` (`__main__`) and fans out to a process pool (`__mp_main__`): in both
+    the module's `Refusal` is `cohort_roll.Refusal` and its child target imports by name (the plan review measured
+    `__mp_main__:_roll_or_refusal`, which no child can import). Run in a fresh interpreter as a pool worker runs it; as
+    `__main__` the body is the same and only its guard differs."""
+    import subprocess
+
+    probe = (
+        "import importlib, runpy;"
+        f"g = runpy.run_module('l7r.diagram.tools.cohort_audit', run_name={'__mp_main__'!r});"
+        "from l7r.diagram.tools import cohort_roll;"
+        "mod, fn = g['ROLL_TARGET'].rsplit(':', 1);"
+        "assert g['Refusal'] is cohort_roll.Refusal, 'one class';"
+        "assert getattr(importlib.import_module(mod), fn) is cohort_roll.roll_or_refusal, 'an importable target';"
+        "print('ok')"
+    )
+    p = subprocess.run([sys.executable, "-c", probe], cwd=str(Path(__file__).resolve().parents[2]), capture_output=True, text=True, check=False)
+    assert p.returncode == 0 and p.stdout.startswith("ok"), p.stderr[-800:]
