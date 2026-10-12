@@ -129,7 +129,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
 - [ ] T35 The claims kept by their sources (plan D29); a changed engine module, a changed reader and a changed module the reader imports each miss (SC-013)
       research: rendering
-- [ ] T36 The script tests run by what they touch (plan D30), and the sync suite in parallel parts (plan D32); fixture tests (SC-014)
+- [ ] T36 The script tests run by what they touch (plan D30); fixture tests (SC-014)
       research: rendering
 - [ ] T37 The measurements (plan D31): SC-013's times and SC-014's count recorded; SC-012 carried to 374
       research: rendering

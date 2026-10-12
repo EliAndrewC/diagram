@@ -197,19 +197,14 @@ that after you make the other changes").
   where its result is the same).
   A cache never changes an answer: any change to a file or to the code that reads it misses, and each command's output is
   the same with and without it.
-- **FR-021 `hooks-test` runs only what a change touched, and its longest suite no longer runs one case at a time.**
-  Measured (`m:375-a3-hooks-test-before`, `research.md` R3): the guard suites already run only when a file they depend on
-  changed (feature 172), but two parts re-run on any script change.
-  (a) The Python test files that test `scripts/` run all together (74 s) whenever anything under `scripts/` or
-  `tests/hooks/` changed, so a merge from main touching one script reran every one of them. Each now runs only when it, a
-  `conftest.py` above it, or a file it depends on changed: the scripts it names and what those use, derived transitively as
-  the guard suites' dependencies are (`tests/hooks/hookdeps.py`), and all of `scripts/` for a file whose script paths cannot
-  be derived (it builds them at run time). Failing toward running, as feature 172's derivation does.
-  (b) `test-sync-with-main.sh` stays held to the whole tree - its push path reaches scripts at run time, which feature 172
-  found no static reading can see - and it is the longest suite (202 to 230 s; one case 66 s), so every script change waits
-  on it. Its 25 cases each build their own fixture and share nothing, so they run in parallel parts and the suite takes its
-  longest part's time; every check still runs and is counted, and a failure in any part fails the suite.
-  `HOOKS_ALL=1` and the gate (which runs the test files anyway) are unchanged.
+- **FR-021 `hooks-test` runs only what a change touched.** Measured (`m:375-a3-hooks-test-before`, `research.md` R3): the
+  guard suites already run only when a file they depend on changed (feature 172), but the Python test files that test
+  `scripts/` run all together (74 s) whenever anything under `scripts/` or `tests/hooks/` changed, so a merge from main
+  touching one script reran every one of them. Each now runs only when it, a `conftest.py` above it, or a file it depends on
+  changed: the scripts it names and what those use, derived transitively as the guard suites' dependencies are
+  (`tests/hooks/hookdeps.py`), and all of `scripts/` for a file whose script paths cannot be derived (it builds them at run
+  time). Failing toward running, as feature 172's derivation does. `HOOKS_ALL=1` and the gate (which runs these files
+  anyway) are unchanged.
 
 ## Success criteria
 
@@ -265,9 +260,8 @@ that after you make the other changes").
   miss. The times are a key of `measurements.json`.
 - **SC-014** (FR-021) With a fixture: a change to one script runs only the test files that depend on it, a file that builds
   its script paths runs on any change under `scripts/`, an unchanged tree runs none, and `HOOKS_ALL=1` runs them all. Measured
-  over main's last ten commits touching `scripts/`: the test files each would have run, against all of them today; and
-  `test-sync-with-main.sh` timed before and after on the same tree, three runs each, with the same count of checks passed -
-  its median at most half today's (`m:375-a3-hooks-test-before`, R3). Both are keys of `measurements.json`.
+  over main's last ten commits touching `scripts/`: the test files each would have run, against all of them today - a key of
+  `measurements.json` beside `m:375-a3-hooks-test-before` (R3).
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
@@ -332,3 +326,7 @@ next wave is, so it is carried there.
   snapshots kept in `popup-rounds/` by a command `make figures` re-runs; plan D27, D29 and D31 follow FR-020 and SC-013. Also:
   the escape is `CHECK_ORDER_OK` (it lets any check run ahead of the order, not only form); FR-021(b) and SC-014 take on the
   longest guard suite, measured while answering this round (`m:375-a3-hooks-test-before`, R3).
+- spec-fidelity-verify, amendment 3 round 3 (2026-10-11): CHANGES REQUIRED - round 2's four items resolved and the escape's
+  rename faithful; FR-021(b), running the longest guard suite in parallel parts, was not asked for (the GM asked that
+  `hooks-test` skip what a change did not touch; this speeds up a suite that a change DID touch). Applied: FR-021 is the skip
+  alone, SC-014 counts files only, plan D32 is removed; the parallel split goes to the GM as a proposal with R3's measurement.

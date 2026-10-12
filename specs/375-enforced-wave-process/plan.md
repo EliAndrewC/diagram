@@ -375,29 +375,21 @@ recomputes only `research_fp` (it reads question pages, which change independent
 at `scripts/record/claims.py` keeps the engine untouched and the landing DIRECT.
 
 **D30 - The script tests by what they touch (FR-021).** `tests/hooks/hookdeps.py --pydeps <test file>` prints the test's
-freshness set: the file; each `conftest.py` from its directory up to `tests/`; every file of `scripts/` and `tests/hooks/`
-its code names (a file name, or an imported stem) and their closure through helpers (`closure`, the guard suites' own
-derivation); and all of `scripts/` and `tests/hooks/` when the test builds a script path at run time (`"scripts"` joined to
+freshness set: the file; each `conftest.py` from its directory up to `tests/`; the `tests/` modules it imports; every file
+of `scripts/` and `tests/hooks/` it reaches, transitively through any file (`py_closure`): a Python file reaches what it
+imports and what a string literal of its code names (a literal equal to a file's stem, `_sibling("record_owed")`, or
+ending in its file name), a shell or text file every file whose name stands in its code, as the guard suites' scan does; and all of `scripts/` and `tests/hooks/` when the test builds a script path at run time (`"scripts"` joined to
 a non-literal, or `scripts/` inside an f-string's braces) or globs the tree (`_globs_tree`). The Makefile's pytest step
 hashes each selected file's set, runs only the files whose hash differs from their stamp
 (`<git dir>/hooks-test/py/<test path with / as __>`), and stamps every file it ran when the run is green; a red run stamps
 none. `HOOKS_ALL=1` runs all; under `make done` the step is skipped as today.
-
-**D32 - The sync suite in parallel parts (FR-021b).** `tests/hooks/test-sync-with-main.sh` keeps its fixture and helpers
-and puts each numbered case in a function (`case_1`, `case_2b`, ...); a case counts its own passes and failures. Run with no
-argument it starts the cases as parallel parts (`SYNC_PARTS`, default 4, each part a background subshell running its share
-of the cases in order, the shares balanced by the measured case times so 7d runs alone), waits for all, sums the counts and
-fails if any part failed or any case did not report; `SYNC_PARTS=1` runs them one after another as today. The suite prints
-the same `all sync-with-main tests passed (N checks)` line, and its test of itself asserts N is today's count. Each part has
-its own `$T` (the fixtures were already per case); the guard log and `HOME` stay per part.
 
 **D31 - Measured, not assumed (SC-012, SC-013, SC-014).** SC-013 is run by a scratch script on two detached worktrees at
 61a52f3c8, one with today's code and one with the new, the backlog's answer store copied: each command alternately on each,
 three runs apiece, cold (the cache directory removed) and warm, the load average recorded at the start and end; the medians
 go into `375-a3-record-tooling-after`, and each command's output is compared byte for byte between the two (and with
 `L7R_CACHE_OFF=1` on the new). SC-014's count runs `hookdeps.py --pydeps` against main's last ten commits touching `scripts/`
-and counts the files each would run, and `test-sync-with-main.sh` is timed three times with `SYNC_PARTS=1` and three with
-the default, alternating, its check count compared; key `375-a3-hooks-test-after`. SC-012 is carried to 374: 374's next
+and counts the files each would run; key `375-a3-hooks-test-after`. SC-012 is carried to 374: 374's next
 pop-up wave counts its dispatches per unit with `scripts/measure/popup_rounds.py <clone> --since <the wave's start>`, as
 `m:375-a3-popup-rounds-before` did.
 
