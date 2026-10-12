@@ -48,6 +48,7 @@ from __future__ import annotations
 
 import contextlib
 import fcntl
+import functools
 import glob
 import hashlib
 import inspect
@@ -78,8 +79,24 @@ def bypassed() -> bool:
     return os.environ.get(gencache.GATE_BYPASS) == "1" or os.environ.get(FULL_ENV) == "1"
 
 
+@functools.cache
+def roll_store_dir() -> str:
+    """Where the rolls are kept: this tree's `.gencache/rolls` - or, in a LINKED worktree, the main worktree's (feature 375
+    amendment 6, FR-028). A cohort's "before" leg is rolled in a detached worktree at the merge base; with its own store it
+    rolled every seed again each wave (109 minutes of feature 374's tool time). The keys are the engine functions a roll
+    executed and the files it read, path-independent since feature 167, so a worktree and its clone share one store safely."""
+    def git(*a: str) -> str:
+        p = subprocess.run(["git", "-C", gencache.HERE, *a], capture_output=True, text=True, check=False)
+        return p.stdout.strip() if p.returncode == 0 else ""
+
+    common, own = git("rev-parse", "--path-format=absolute", "--git-common-dir"), git("rev-parse", "--path-format=absolute", "--git-dir")
+    if common and own and os.path.realpath(common) != os.path.realpath(own) and os.path.basename(common) == ".git":
+        return os.path.join(os.path.dirname(common), os.path.basename(gencache.CACHE_DIR), "rolls")
+    return os.path.join(gencache.CACHE_DIR, "rolls")
+
+
 def _entry(subject: str) -> str:
-    return os.path.join(gencache.CACHE_DIR, "rolls", hashlib.sha256(subject.encode()).hexdigest()[:24])
+    return os.path.join(roll_store_dir(), hashlib.sha256(subject.encode()).hexdigest()[:24])
 
 
 def _place(data: bytes, dest: str) -> None:

@@ -587,3 +587,36 @@ def test_the_childs_stderr_is_forwarded_under_the_stage_profile_flag(monkeypatch
     monkeypatch.setenv(rollcache.STAGE_PROFILE_ENV, "1")
     assert rollcache._in_child("x:y", None)[0] == "payload"
     assert "stage profile Toy seed 1" in capsys.readouterr().err
+
+
+def test_a_linked_worktree_keeps_its_rolls_in_the_main_worktrees_store(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 375 amendment 6, FR-028: a cohort's "before" leg is rolled in a detached worktree at the merge base; with its
+    own store it re-rolled every seed each wave. The keys are path-independent (feature 167), so it shares the clone's."""
+    import subprocess
+
+    from l7r.diagram.pipeline import gencache
+    from l7r.diagram.pipeline import rollcache as rc
+
+    def git(d, *a):  # type: ignore[no-untyped-def]
+        subprocess.run(["git", "-C", str(d), *a], check=True, capture_output=True)
+
+    main = tmp_path / "clone"
+    main.mkdir()
+    git(main, "init", "-q", "-b", "main")
+    git(main, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "c")
+    wt = tmp_path / "base"
+    git(main, "worktree", "add", "-q", "--detach", str(wt))
+    try:
+        for here, want in ((main, main), (wt, main)):
+            monkeypatch.setattr(gencache, "HERE", str(here))
+            monkeypatch.setattr(gencache, "CACHE_DIR", str(here / ".gencache"))
+            rc.roll_store_dir.cache_clear()
+            assert rc.roll_store_dir() == str(want / ".gencache" / "rolls"), here
+        outside = tmp_path / "plain"
+        outside.mkdir()
+        monkeypatch.setattr(gencache, "HERE", str(outside))
+        monkeypatch.setattr(gencache, "CACHE_DIR", str(outside / ".gencache"))
+        rc.roll_store_dir.cache_clear()
+        assert rc.roll_store_dir() == str(outside / ".gencache" / "rolls"), "outside a repository: its own"
+    finally:
+        rc.roll_store_dir.cache_clear()

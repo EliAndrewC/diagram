@@ -23,6 +23,8 @@ import argparse
 import collections
 import concurrent.futures
 import contextlib
+import dataclasses
+import importlib
 import io
 import os
 import sys
@@ -82,8 +84,59 @@ def refused_verdict(hspec: Any, refused: BaseException) -> tuple[str, list[str],
     return (f"{hspec.name} households={hspec.households} form={form} REFUSED", [f"refused:{name}"], [f"FAIL refused:{name} -> {str(refused)[:300]}"])
 
 
+@dataclasses.dataclass(frozen=True)
+class Refusal:
+    """A roll the engine REFUSED by name - its class and message - as a payload: it crosses the roll child (which turns a
+    raised failure into one generic error) and is stored like a report, since the same spec on the same code refuses the
+    same way. A crash (the child dies, memory, a timeout) is no refusal: it still raises, and is never stored."""
+
+    module: str
+    name: str
+    message: str
+
+    def exception(self) -> Exception:
+        """The refusal as its own class where it can be imported, so `refused_verdict` names it as before."""
+        try:
+            cls = getattr(importlib.import_module(self.module), self.name)
+            if isinstance(cls, type) and issubclass(cls, Exception):
+                return cls(self.message)
+        except Exception:  # noqa: BLE001, S110 - an unimportable class is named below all the same
+            pass
+        return type(self.name, (RuntimeError,), {})(self.message)
+
+
+def _roll_or_refusal(hspec: Any) -> Any:
+    """THE COHORT'S ROLL, run in the roll child by name: `rollcache._roll_payload` (generate, as the gate rolls it), or the
+    engine's refusal - a ValueError or RuntimeError, the classes every `...Refused` derives from - as a `Refusal`."""
+    from l7r.diagram.pipeline import rollcache  # noqa: PLC0415
+
+    try:
+        return rollcache._roll_payload(hspec)  # noqa: SLF001 - the gate's own roll, called by name as its child does
+    except (ValueError, RuntimeError) as e:
+        return Refusal(type(e).__module__, type(e).__name__, str(e))
+
+
+def _report_of(hspec: Any) -> tuple[Any, str]:
+    """`generate(hspec)` through the roll cache (feature 375 amendment 6, FR-028): served when nothing the roll executes
+    changed, rolled in a child otherwise, under the cohort's own subject - a refusal stored too (the plan review: 374's cohort
+    had two refused seeds, which rolled again on every run). A cohort re-rolled every seed on every run: a feature's "before"
+    leg rolled unchanged code again each wave, its "after" leg re-rolled seeds the change never reached (109 minutes of
+    feature 374's tool time). Returns (the report or a `Refusal`, how); a crash raises."""
+    from l7r.diagram.pipeline import rollcache  # noqa: PLC0415 - the engine's serving layer, imported where it is used
+
+    target = f"{__name__ if __name__ != '__main__' else 'l7r.diagram.tools.cohort_audit'}:_roll_or_refusal"
+    payload, how = rollcache.obtain(f"cohort:{hspec!r}", lambda: _roll_or_refusal(hspec), recorded=lambda: rollcache._in_child(target, hspec))  # noqa: SLF001
+    return (payload if isinstance(payload, Refusal) else payload[2]), how
+
+
 def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[str, list[str], list[str]]:
-    """Roll and gate ONE audit hamlet: (header line, sorted failures, the gate's own FAIL lines).
+    """`roll_how`'s verdict alone."""
+    return roll_how(spec)[0]
+
+
+def roll_how(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[tuple[str, list[str], list[str]], str]:
+    """Roll and gate ONE audit hamlet: ((header line, sorted failures, the gate's own FAIL lines), how) - `how` is `served`
+    (the roll cache had it, a stored refusal too) or `rolled`.
 
     Runs in a worker process. Safe to fan out because a map is a pure function of its spec - the
     seed fixes every draw (see "RANDOMNESS IS POSITIONAL OR SCOPED" in this skill's CLAUDE.md), so
@@ -105,9 +158,11 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
     # raised through the process pool ended the whole cohort with no report of the other 29 seeds
     try:
         with contextlib.redirect_stdout(io.StringIO()):
-            report = hg.generate(hspec, out_base=None, render=False)
-    except Exception as refused:  # noqa: BLE001 - every refusal is reported by its own name
-        return refused_verdict(hspec, refused)
+            report, how = _report_of(hspec)
+    except Exception as refused:  # noqa: BLE001 - a roll that could not finish (a crash) is reported by its own name
+        return refused_verdict(hspec, refused), "rolled"
+    if isinstance(report, Refusal):  # the engine's refusal by name, served or rolled (feature 375 amendment 6)
+        return refused_verdict(hspec, report.exception()), ("served" if how == "HIT" else "rolled")
     _breach = ((getattr(report, "manifest", None) or {}).get("meta") or {}).get("scatter_frame_breach")  # a test's stub report carries no manifest
     if _breach:  # feature 224: the scatter's predicted frame was too small - a strip inside the view may hold no scatter
         report.fail_lines.append(f"FAIL scatter_frame_breach -> the view reaches {_breach} px past the predicted scatter frame (left, top, right, bottom)")
@@ -166,7 +221,7 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
         header += f" water={getattr(plan, 'farm_water', '?')}"
     if _meta.get("seat_offwind"):
         header += " seat=OFFWIND"
-    return header, report.failures, report.fail_lines
+    return (header, report.failures, report.fail_lines), ("served" if how == "HIT" else "rolled")
 
 
 def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None = None, households: int | None = None) -> int:
@@ -182,10 +237,12 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
     specs += [(PINNED_FIRST_SEED + i, 10 + ((PINNED_FIRST_SEED + i) * 7) % 11, pins) for i, pins in enumerate(PINNED_ROWS)] if not (only or households) else []
     count = len(specs)
     if jobs == 1:
-        results = [roll_one(s) for s in specs]
+        rolled = [roll_how(s) for s in specs]
     else:
         with concurrent.futures.ProcessPoolExecutor(max_workers=jobs) as ex:
-            results = list(ex.map(roll_one, specs))
+            rolled = list(ex.map(roll_how, specs))
+    results = [r for r, _how in rolled]
+    write_record(specs, rolled, first_seed, households)
 
     tally: collections.Counter[str] = collections.Counter()
     failing = 0
@@ -224,6 +281,48 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
         for name, n in tally.most_common():
             print(f"  {n:3d}  {name}")
     return 0 if failing == 0 else 1
+
+
+#: where the per-seed records go: None means the clone's own `dev/cohort-log/` (`log_dir`)
+LOG_DIR: str | None = None
+
+
+def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[str], list[str]], str]], first_seed: int, households: int | None) -> str:
+    """The cohort's PER-SEED RECORD (feature 375 amendment 6, FR-028): one file a run under `dev/cohort-log/` - per seed,
+    served or rolled, its verdict and the failures it found - so whether fewer seeds would find the same failures can be
+    counted (feature 374's findings by seed lived only in its plan's prose). `make cohort` commits it, as `make done` does
+    its run record. Returns the path."""
+    import json  # noqa: PLC0415
+    import subprocess  # noqa: PLC0415
+    import time  # noqa: PLC0415
+
+    def git(*a: str) -> str:
+        p = subprocess.run(["git", "-C", HERE, *a], capture_output=True, text=True, check=False)
+        return p.stdout.strip() if p.returncode == 0 else ""
+
+    seeds = []
+    common = git("rev-parse", "--path-format=absolute", "--git-common-dir")
+    # A "before" leg rolled in a detached worktree keeps its record in the CLONE (the plan review): the worktree is removed
+    clone_root = os.path.dirname(common) if os.path.basename(common) == ".git" else HERE
+    log_dir = LOG_DIR or os.path.join(clone_root, "dev", "cohort-log")
+    for spec, ((header, failures, _lines), how) in zip(specs, rolled, strict=True):
+        verdict = "refused" if any(f.startswith("refused:") for f in failures) else ("fail" if failures else "pass")
+        seeds.append({"seed": spec[0], "households": spec[1], "pins": dict(spec[2]) if len(spec) > 2 else {}, "how": how, "verdict": verdict,
+                      "failures": list(failures), "form": header.split(" form=")[1].split()[0] if " form=" in header else ""})
+    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    top = git("rev-parse", "--show-toplevel")
+    where = top.split("/.clones/")[1].split("/")[0] if "/.clones/" in top else os.path.basename(top or HERE)
+    os.makedirs(log_dir, exist_ok=True)
+    path = os.path.join(log_dir, f"{stamp}-{where}-{os.getpid()}.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump({"utc": stamp, "clone": where, "commit": git("rev-parse", "--short", "HEAD"), "first_seed": first_seed, "households": households,
+                   "count": len(seeds), "served": sum(s["how"] == "served" for s in seeds), "seeds": seeds}, fh, indent=1)
+        fh.write("\n")
+    gitdir = git("rev-parse", "--absolute-git-dir") if LOG_DIR is None else ""  # a test's own directory names nothing
+    if gitdir:  # named for `make cohort`'s commit of this one file (scripts/gates/commit-run-record.sh)
+        with open(os.path.join(gitdir, "last-cohort-record"), "w", encoding="utf-8") as fh:
+            fh.write(os.path.abspath(path))
+    return path
 
 
 def _reference_ok() -> list[str]:

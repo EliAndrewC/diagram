@@ -146,7 +146,10 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	  : "record alive: each later gate refreshed its timestamp so it never aged out. No duration floor" ; \
 	  : "applies here (0 s is correct for a reuse) but the dry-run refusal does." ; \
 	  python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
-	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; \
+	  : "GUARD_EDIT_OK: feature 375 amendment 6, FR-031 - the shortcut re-stamped only the diagram area, so after a scripts-only" ; \
+	  : "change it answered green while the push refused on a stale hooks stamp; now it runs hooks-test first when that stamp is stale" ; \
+	  if ! python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks >/dev/null 2>&1; then $(MAKE) --no-print-directory hooks-test FROM_DONE= || { $(LOGRUN) $(DONE_NAME) reference 0 failed:hooks-test; $(COMMIT_RUN_RECORD) failed; exit 1; }; fi; \
+	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; $(COMMIT_RUN_RECORD) already-verified; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
 	$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" || exit 1;,) \
@@ -165,10 +168,10 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	  $(MAKE) --no-print-directory $$phase || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
 	done; \
 	: "GUARD_EDIT_OK: GM 2026-10-03 - a failed phase marks its end, and the entry carries the run's stats (RUNSTATS above)"; \
-	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
+	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
 	: "(GUARD_EDIT_OK: feature 170 - REF_OK reaches the firing log as well as the bypass log)"; \
 	: "GUARD_EDIT_OK: internal name only - the gate's reference-first step is unchanged (GM 2026-09-06)"; \
-	$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(STATE) failed-gate $(DONE_NAME); exit 1; };) \
+	$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };) \
 	: "GUARD_EDIT_OK: GM 2026-10-03 - a red reference map is a failed gate and is logged as one; it exited unrecorded, so no"; \
 	: " run-log history counted the gates it stopped."; \
 	: "GUARD_EDIT_OK: feature 174 makes the merge gate STRICTER, not looser - the GM's own request (2026-08-31)" ; \
@@ -185,7 +188,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	  $(MAKE) --no-print-directory $$phase FROM_DONE=1 || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
 	done; \
 	: "GUARD_EDIT_OK: GM 2026-10-03 - as the static loop: the failed phase marks its end, the entry carries the stats"; \
-	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
+	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
 	: "GUARD_EDIT_OK: A RUN TOO FAST TO HAVE WORKED DOES NOT GET TO SAY IT PASSED (found 2026-09-05)." ; \
 	: "make runs \$$(MAKE) sub-invocations even under -n, so a dry run reached these very lines having" ; \
 	: "done nothing and wrote a correctly-hashed GREEN record - which is the whole of what a push" ; \
@@ -213,7 +216,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	: " they have no class to record and must not invent one - an absent field is excluded from a"; \
 	: " class median rather than defaulted, which is what keeps the two populations honest.)"; \
 	: "GUARD_EDIT_OK: GM 2026-10-03 - the green entry carries the run's host stats too"; \
-	RUN_MODE="$$mode" RUN_SELECTED="$$sel" RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green "$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true)"; \
+	RUN_MODE="$$mode" RUN_SELECTED="$$sel" RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green "$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true)"; $(COMMIT_RUN_RECORD) green; \
 	: "(GUARD_EDIT_OK: feature 171 - THE RATCHET RUNS AFTER THE RECORD, deliberately: this run is part"; \
 	: " of the median it is judged against, and a gate that fails without having logged what it did"; \
 	: " would hide the very number the next session needs. It judges the MEDIAN in today's regime, so"; \
@@ -466,7 +469,8 @@ cohort:         ## [maps] roll N seeds and report every failure      N=48 [SEED=
 # containers' shared cap while other sessions run (the memwatch warned at 9.6 GB). JOBS hands cohort_audit its own --jobs.
 	$(REF_FIRST)
 	@: "GUARD_EDIT_OK: feature 328 - HOUSEHOLDS rolls the cohort at one size, the scaling question (does a change refuse a 20- or 40-household hamlet?) asked without the perf snapshot's timing - five make perf runs were spent as refusal checks on 2026-10-08"
-	$(RUN).tools.cohort_audit --count $(or $(N),48) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),)
+	@: "GUARD_EDIT_OK: feature 375 amendment 6, FR-028 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is"
+	$(RUN).tools.cohort_audit --count $(or $(N),48) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; exit $$rc
 
 # GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
 # `mapcheck` with the same auto scope, so with no SCOPE set it was `maps` minus the index refresh -
@@ -1044,12 +1048,17 @@ LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
   ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
   d='dev/run-log/'+time.strftime('%Y-%m',time.gmtime()); os.makedirs(d,exist_ok=True); \
-  open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {}),**json.loads(os.environ.get('RUN_STATS') or '{}')},indent=2)+chr(10))"
+  open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {}),**json.loads(os.environ.get('RUN_STATS') or '{}')},indent=2)+chr(10)); \
+  g=subprocess.run(['git','rev-parse','--absolute-git-dir'],capture_output=True,text=True).stdout.strip(); \
+  g and open(os.path.join(g,'last-run-record'),'w').write(os.path.abspath(f'{d}/{ts}-{os.getpid()}.json'))"
 
 # GUARD_EDIT_OK: GM 2026-10-03 - the gate's first and last failure times and the host's load, memory, pressure stalls,
 # CPU temperature and throttle time reach its run-log entry (scripts/measure/runstats.py says why and what each field is).
 # RUN_STATS carries them into LOGRUN; every call is best-effort, so a host without a figure loses that field, never the run.
 RUNSTATS = python3 "$$(git rev-parse --show-toplevel)/scripts/measure/runstats.py"
+# GUARD_EDIT_OK: feature 375 amendment 6, FR-032 - `make done` commits its own run record, that path alone (the script says why);
+# LOGRUN names the record it wrote in <git dir>/last-run-record, so no other run's file is swept into the commit (the plan review)
+COMMIT_RUN_RECORD = bash "$$(git rev-parse --show-toplevel)/scripts/gates/commit-run-record.sh"
 
 # THE TARGET RECORDS THE SCOPE (feature 130 - GUARD_EDIT_OK: the build-side door keys on it). `done`
 # with FULL=1 logs as `done FULL`, `ci-merge FULL=1` as `ci-merge FULL`: the entry is what the build
@@ -1857,8 +1866,9 @@ perf:            ## [performance] take a performance snapshot of the reference h
 ##  SCALING=1                    add the 10-, 20- and 40-household legs - for investigating the algorithm, not routine work
 	@: "GUARD_EDIT_OK: feature 375 amendment 5 - the scaling leg only when asked for (the GM: not during normal operations)"
 	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)" $(if $(SCALING),--scaling,)
-	@$(MAKE) --no-print-directory census
-# GUARD_EDIT_OK: feature 306 FR-006 - the overlap census runs after every perf snapshot (the standing check) and on its own.
+# GUARD_EDIT_OK: feature 375 amendment 6, FR-029 - the overlap census no longer runs after every perf snapshot (74 s of make
+# perf's 97, measured 2026-10-12; nothing reads its output): `make census` runs it when asked. It superseded feature 306
+# FR-006's "a standing check run beside make perf", at the GM's 2026-10-12 word ("I think I want all of those things").
 
 census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
 	@python3 -m l7r.diagram.tools.overlap_census

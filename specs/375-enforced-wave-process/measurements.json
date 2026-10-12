@@ -914,5 +914,56 @@
    "minutes": 109.1,
    "how it ran": "six seeds at a time on one worker (JOBS=1) after memguard killed larger runs; a 'before' leg on unchanged code and an 'after' leg per wave"
   }
+ },
+ "375-a6-suites-scan": {
+  "quantity": "the dependence scan of the three guard suites FR-030 splits or leaves serial (SC-023)",
+  "observed": "2026-10-12",
+  "source": "tests/hooks/test-pair-hooks.sh, test-batching-hooks.sh and test-entry-gate.sh in the diagram-performance clone, each case made a function (the entry-gate one in a scratch copy)",
+  "command": "CASES=case_NN bash <suite> for each case in a fresh process; for each that fails alone, CASES=\"case_j .. case_k\" with j stepping back until it passes",
+  "method": "a one-off scan; the entry-gate suite's time alone by date +%s.%N, one run",
+  "value": {
+   "batching": {
+    "cases": 15,
+    "fail alone": [],
+    "chains": []
+   },
+   "pair": {
+    "cases": 15,
+    "fail alone": [
+     "case_07",
+     "case_08",
+     "case_13"
+    ],
+    "chains": [
+     [
+      "case_06",
+      "case_07",
+      "case_08"
+     ],
+     [
+      "case_12",
+      "case_13"
+     ]
+    ]
+   },
+   "entry-gate": {
+    "cases": 8,
+    "fail alone": [
+     "case_04",
+     "case_06"
+    ],
+    "chains": [
+     [
+      "case_03",
+      "case_04",
+      "case_05",
+      "case_06"
+     ]
+    ],
+    "whole suite alone s": 22.0,
+    "load": 3.53,
+    "reading": "half its cases are one chain over one page's edits, and the whole suite runs in 22 s alone - under the split pair (21-34 s) and batching (42 s) suites - so it stays serial"
+   }
+  }
  }
 }

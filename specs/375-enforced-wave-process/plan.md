@@ -456,19 +456,25 @@ load and free RAM at start and end (`_ends`, dashes for a snapshot from before),
 
 ### Amendment 6 (FR-028 to FR-033)
 
-**D38 - The cohort through the roll cache (FR-028).** `cohort_audit.roll_one` obtains each seed's report by
-`rollcache.report(spec)` - the roll a gate makes, `generate` in a child, keyed by the engine functions it executed and the files
-it read, served when that key is unchanged - in place of calling `generate` itself; its own checks (households seated,
-farmstead across the brook, the matrix, ...) run on every report as before. Every refusal the roll raises is still the seed's
-verdict and is never stored. The store: `rollcache`'s directory is the clone's `.gencache/rolls`; in a LINKED worktree
+**D38 - The cohort through the roll cache (FR-028).** `cohort_audit._report_of` obtains each seed's roll by
+`rollcache.obtain("cohort:<spec>", ..., recorded=rollcache._in_child("...cohort_audit:_roll_or_refusal", spec))` - the gate's own
+roll (`rollcache._roll_payload`, `generate` in a child), keyed by the engine functions it executed and the files it read, served
+when that key is unchanged - in place of calling `generate` itself; its own checks (households seated, farmstead across the
+brook, the matrix, ...) run on every report as before. A REFUSAL is stored like a report (the plan review: 374's cohort had
+two refused seeds, which rolled again each run): `_roll_or_refusal` returns the engine's refusal - a ValueError or
+RuntimeError, the classes every `...Refused` derives from - as a `Refusal(module, name, message)` payload, which also carries
+its NAME across the child (whose own failure is one generic RuntimeError); `roll_how` names it as before, served or rolled.
+A crash - the child dies, memory, a timeout - is no refusal: it raises, is reported by its name, and is never stored. The
+gate's own `roll:` subjects and `rollcache.report` are unchanged. The store: `rollcache`'s directory is the clone's `.gencache/rolls`; in a LINKED worktree
 (`git rev-parse --git-common-dir` is not the worktree's own `.git`) it is the main worktree's, so a "before" leg rolled in a
 detached worktree at the merge base reads and writes the clone's store (`rollcache.roll_store_dir()`; keys are
 path-independent since feature 167). `GATE_NO_CACHE=1` and the FULL test run bypass serving as they do for the gate.
 
-**D39 - The cohort's per-seed record (FR-028).** `cohort_audit.audit` writes `dev/cohort-log/<UTC stamp>-<clone>.json`: the
-run's count, first seed, households, commit and, per seed, `served` or `rolled`, `pass`/`fail`/`refused`, its failures and the
-refusal's name. `make cohort` then commits it alone, as `make done` commits its run record (`scripts/gates/commit-run-record.sh
-<result> dev/cohort-log`, the helper gaining an optional directory; the spec review's aside, round 2).
+**D39 - The cohort's per-seed record (FR-028).** `cohort_audit.audit` writes `dev/cohort-log/<UTC stamp>-<clone>-<pid>.json` in
+the CLONE (from a linked worktree, the main worktree's - a "before" leg's worktree is removed, the plan review's note): the
+run's count, first seed, households, commit and, per seed, `served` or `rolled`, `pass`/`fail`/`refused`, its failures (a
+refusal's by name) and its form. It names the file in `<git dir>/last-cohort-record`, and `make cohort` commits that one file
+(`scripts/gates/commit-run-record.sh <result> last-cohort-record`; the spec review's aside, round 2).
 
 **D40 - The census on request (FR-029).** `make perf` no longer runs `make census`; `make census` is unchanged.
 
@@ -481,20 +487,26 @@ sums the counts, fails a part that ended before a case reported, naming it, and 
 (each case alone in a fresh process; for each that fails alone, the shortest run of its predecessors that passes):
 batching, all 15 pass alone; pair, 12 of 15 pass alone, `case_07` needs `case_06`, `case_08` needs `06` and `07`, `case_13`
 needs `case_12` - dealt as chains, one unit each, in order. `test-entry-gate.sh` stays serial: it is one sequence of edits to
-one page in one throwaway clone, with no headed cases, and took 23 s alone (its 67 s was measured with the other suites
-running beside it, R3).
+one page in one throwaway clone: of its eight cases, `case_04` needs `case_03` and `case_06` needs `case_03` to `case_05`, one
+chain over half the suite, and the whole suite took 22 s alone (`m:375-a6-suites-scan`, 2026-10-12; its 67 s in R3 was taken
+with the other suites running beside it) - under the split pair and batching suites' times.
 
 **D42 - The shortcut earns the hooks stamp (FR-031).** In `make done`'s "already verified" branch: when `gate-stamp.py --fresh
 hooks` fails, `make hooks-test` runs first; red, the gate logs `failed:hooks-test`, commits its record and fails.
 
-**D43 - The gate commits its own record (FR-032).** `scripts/gates/commit-run-record.sh <result> [dir]`: the uncommitted
-files under `dir` (default `dev/run-log`), `git add` and `git commit --only -- <them>` with `the gate's run record (<result>)`,
-nothing else staged or committed; skipped inside a CodeBuild build and outside a work tree; never fails the caller. Called
-after each of `make done`'s five record writes (already verified, its hooks failure, the two red sites, green).
+**D43 - The gate commits its own record (FR-032).** `LOGRUN` names the record it wrote in `<git dir>/last-run-record`;
+`scripts/gates/commit-run-record.sh <result> [pointer]` commits exactly the file its pointer names (default `last-run-record`;
+`last-cohort-record` for D39), in the work tree holding it, with `git add` and `git commit --only -- <it>` as `the gate's run
+record (<result>)` - no other file under `dev/run-log/` (`ci/runlog.py` writes there too; the plan review), nothing the session
+staged; the pointer is spent; skipped inside a CodeBuild build and outside a work tree; never fails the caller. Called after
+each of `make done`'s SIX record writes: already verified, its hooks failure, the reference step's failure, the two red
+sites, green.
 
-**D44 - Measured (SC-021, SC-023, SC-026).** SC-021: the cohort on 374's delta (a detached worktree at 61a52f3c8, the
-backlog's store not copied) with today's code and the new, `N=48 JOBS=4`, a "before" leg and an "after" leg each, twice;
-key `375-a6-cohort-after`. SC-023: the two split suites, today's file (a detached worktree at the commit before) against
+**D44 - Measured (SC-021, SC-023, SC-026).** SC-021: the cohort on 374's delta - four detached worktrees: the merge base
+a41ab2e0f and 374's 61a52f3c8, each once with today's code and once with the new `cohort_audit.py` and `rollcache.py` copied in
+(the store is shared only where the new `rollcache.py` runs), the backlog's own store not copied - `make cohort N=48 JOBS=4`
+(4 = `L7R_ROLL_SLOTS`' default, the child rolls allowed at once), a "before" and an "after" leg each, twice, old and new
+alternating; key `375-a6-cohort-after`. SC-023: the two split suites, today's file (a detached worktree at the commit before) against
 the new, alternating, three runs each, the check counts compared; key `375-a6-suites-parts`. SC-026 is
 `m:375-a6-turn-time`, re-derived by `scripts/measure/turn_time.py`.
 
