@@ -3,13 +3,13 @@ Many Japanese households once kept a graveyard of their own; a branch house migh
 so that the kin shared one, and some set the grave within their own house land, a house-plot grave. Until the Second
 World War many graves were still built on a corner of a household's own land.
 
-One family's history from the former Hatara district puts its graveyard, before 1688-1704, at the southeast corner of its
+In the former Hatara district, before 1688-1704, one family kept its graveyard at the southeast corner of its
 house plot, and another family's at the northwest corner, ground now counted as woodland; the dead there were buried
 without gravestones in the woods behind the plot's shrine. In that district many houses kept a graveyard beside the plot
 or close by it. Elsewhere a household's grave stood in its own field, in a front garden, or in a corner of a field.
 
 Such a grave stood beside the shared ground a settlement or a temple kept, not in place of it: the same households also
-went to temple graves and common burial grounds, and no page says how common each form was, village by village.
+went to temple graves and common burial grounds, and how common each form was, village by village, is not recorded.
 
 Guesses:
 - That about half of hamlets keep household graves, and where they do, about a third of the farmsteads: the record says
