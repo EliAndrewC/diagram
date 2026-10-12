@@ -183,8 +183,9 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T48 The batching and pair suites in parallel processes, entry-gate serial with its reason (D41); the scan recorded (SC-024)
       research: rendering
       verify: DONE. DONE. batching and pair suites in parallel parts (pair with chains 06-08 and 12-13), entry-gate serial on its scan (chain 03-06, 22 s); scan recorded as m:375-a7-suites-scan
-- [ ] T49 The measurements (D44): the cohort two waves before and after, the suites, the turn time (SC-022, SC-024, SC-027)
+- [x] T49 The measurements (D44): the cohort two waves before and after, the suites, the turn time (SC-022, SC-024, SC-027)
       research: rendering
+      verify: DONE. DONE. SC-022 m:375-a7-cohort-after (wave 2 both legs 323 s -> 19 s, 54 of 54 served, verdicts identical seed by seed); SC-024 m:375-a7-suites-parts (pair 70.6 -> 18.8 s, batching 71.7 -> 20.4 s, probes fail named); SC-027 m:375-a7-turn-time; SC-021 m:375-a6-about-only-replay
 - [ ] T50 375 closes again: tests, `make hooks-test`, the gate, the report, landed
       research: rendering
 

@@ -83,6 +83,7 @@ def bypassed() -> bool:
 def _main_worktree(here: str) -> str:
     """The main worktree of the linked worktree `here`, or "" - `here` itself is a main worktree, or in no repository. Asked
     of git once per tree, not per roll."""
+
     def git(*a: str) -> str:
         p = subprocess.run(["git", "-C", here, *a], capture_output=True, text=True, check=False)
         return p.stdout.strip() if p.returncode == 0 else ""

@@ -205,8 +205,9 @@ def test_explain_with_no_feature_names_only_what_needs_the_gm(root: pathlib.Path
     )
     e = gm.explain(root, width=200)
     assert "1. HELD QUESTION: a#door band\n    which door size stands?. The fix it would make: narrow the doors." in e
-    assert "WAITING ON OTHER WORK - held in the ranking until another row is done; nothing for you to decide\n\n  * b#tubs\n"\
-        "    Waits on #retainers" in e, "a row held behind other work is not a decision of the GM's"
+    assert "WAITING ON OTHER WORK - held in the ranking until another row is done; nothing for you to decide\n\n  * b#tubs\n    Waits on #retainers" in e, (
+        "a row held behind other work is not a decision of the GM's"
+    )
     assert "2. A TOOLING FIX DECLINED TO YOU: feature 375 row [0], modal-depiction sheet/garden" in e
     assert "The other 1 row(s) are decisions already made" in e
     assert "needs a decision: 1 held question(s), 1 fix(es) declined" in gm.listing(root, width=200)

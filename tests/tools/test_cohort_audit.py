@@ -125,9 +125,7 @@ def test_audit_tallies_the_residue_by_CHECK_and_its_rc_is_the_verdict(monkeypatc
     assert f"{2 + len(ca.PINNED_ROWS)}/{2 + len(ca.PINNED_ROWS)} passed" in capsys.readouterr().out
 
     seen: list[tuple] = []
-    _patch_roll(
-        monkeypatch, lambda spec: seen.append(spec) or (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], [])
-    )
+    _patch_roll(monkeypatch, lambda spec: seen.append(spec) or (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
     ca.audit(2, 39, jobs=1, households=40)
     assert seen == [(39, 40), (40, 40)], "feature 328: every seed at the size asked, the pinned rows left out"
 
@@ -276,7 +274,6 @@ def test_roll_one_reports_lane_ends_knotted_short_of_a_join(monkeypatch: pytest.
     assert "lane_knots" in failures and any("FAIL lane_knots" in ln for ln in lines)
 
 
-
 # ---- feature 375 amendment 7, FR-029: the cohort through the roll cache, and its per-seed record --------------------------------
 
 
@@ -297,7 +294,7 @@ def test_a_served_roll_says_so_and_the_audit_writes_its_per_seed_record(monkeypa
     assert how == "served" and failures == ["refused:ValueError"] and header.endswith("REFUSED"), "a stored refusal, served, by name"
     rolled = [(("--- a form=linear", [], []), "served"), (("--- b", ["wells_are_shared[1]"], ["x"]), "rolled"), (("--- c REFUSED", ["refused:ValueError"], ["y"]), "served")]
     path = ca.write_record([(1, 12), (2, 12), (3, 12, {"row_line": "street"})], rolled, 1, None)
-    rec = json.loads(open(path, encoding="utf-8").read())
+    rec = json.loads(Path(path).read_text(encoding="utf-8"))
     assert path.startswith(str(tmp_path)) and rec["count"] == 3 and rec["served"] == 2 and rec["first_seed"] == 1
     assert [(s["seed"], s["how"], s["verdict"]) for s in rec["seeds"]] == [(1, "served", "pass"), (2, "rolled", "fail"), (3, "served", "refused")]
     assert rec["seeds"][0]["form"] == "linear" and rec["seeds"][1]["failures"] == ["wells_are_shared[1]"] and rec["seeds"][2]["pins"] == {"row_line": "street"}

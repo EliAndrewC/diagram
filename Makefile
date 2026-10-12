@@ -148,7 +148,8 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	  python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
 	  : "GUARD_EDIT_OK: feature 375 amendment 7, FR-032 - the shortcut re-stamped only the diagram area, so after a scripts-only" ; \
 	  : "change it answered green while the push refused on a stale hooks stamp; now it runs hooks-test first when that stamp is stale" ; \
-	  if ! python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks >/dev/null 2>&1; then $(MAKE) --no-print-directory hooks-test FROM_DONE= || { $(LOGRUN) $(DONE_NAME) reference 0 failed:hooks-test; $(COMMIT_RUN_RECORD) failed; exit 1; }; fi; \
+	  : "GUARD_EDIT_OK: feature 375 amendment 7, FR-032 - says why a verified engine still runs hooks-test, so a red run does not read as verified" ; \
+	  if ! python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks >/dev/null 2>&1; then echo "make done: ...but the hooks stamp is stale (a scripts/ or tests/hooks/ change) - running make hooks-test first"; $(MAKE) --no-print-directory hooks-test FROM_DONE= ||{ $(LOGRUN) $(DONE_NAME) reference 0 failed:hooks-test; $(COMMIT_RUN_RECORD) failed; exit 1; }; fi; \
 	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; $(COMMIT_RUN_RECORD) already-verified; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \

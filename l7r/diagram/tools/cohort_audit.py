@@ -273,16 +273,37 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
     log_dir = LOG_DIR or os.path.join(clone_root, "dev", "cohort-log")
     for spec, ((header, failures, _lines), how) in zip(specs, rolled, strict=True):
         verdict = "refused" if any(f.startswith("refused:") for f in failures) else ("fail" if failures else "pass")
-        seeds.append({"seed": spec[0], "households": spec[1], "pins": dict(spec[2]) if len(spec) > 2 else {}, "how": how, "verdict": verdict,
-                      "failures": list(failures), "form": header.split(" form=")[1].split()[0] if " form=" in header else ""})
+        seeds.append(
+            {
+                "seed": spec[0],
+                "households": spec[1],
+                "pins": dict(spec[2]) if len(spec) > 2 else {},
+                "how": how,
+                "verdict": verdict,
+                "failures": list(failures),
+                "form": header.split(" form=")[1].split()[0] if " form=" in header else "",
+            }
+        )
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     top = git("rev-parse", "--show-toplevel")
     where = top.split("/.clones/")[1].split("/")[0] if "/.clones/" in top else os.path.basename(top or HERE)
     os.makedirs(log_dir, exist_ok=True)
     path = os.path.join(log_dir, f"{stamp}-{where}-{os.getpid()}.json")
     with open(path, "w", encoding="utf-8") as fh:
-        json.dump({"utc": stamp, "clone": where, "commit": git("rev-parse", "--short", "HEAD"), "first_seed": first_seed, "households": households,
-                   "count": len(seeds), "served": sum(s["how"] == "served" for s in seeds), "seeds": seeds}, fh, indent=1)
+        json.dump(
+            {
+                "utc": stamp,
+                "clone": where,
+                "commit": git("rev-parse", "--short", "HEAD"),
+                "first_seed": first_seed,
+                "households": households,
+                "count": len(seeds),
+                "served": sum(s["how"] == "served" for s in seeds),
+                "seeds": seeds,
+            },
+            fh,
+            indent=1,
+        )
         fh.write("\n")
     gitdir = git("rev-parse", "--absolute-git-dir") if LOG_DIR is None else ""  # a test's own directory names nothing
     if gitdir:  # named for `make cohort`'s commit of this one file (scripts/gates/commit-run-record.sh)

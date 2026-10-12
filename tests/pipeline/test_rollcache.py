@@ -4,9 +4,9 @@ toy engine, and the bypasses and the doubt rule are pinned so a served roll is n
 
 from __future__ import annotations
 
+import glob
 import hashlib
 import importlib
-import glob
 import json
 import os
 import sys

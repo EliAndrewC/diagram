@@ -156,6 +156,7 @@ def test_depiction_is_owed_by_the_words_it_reads(drawn: pathlib.Path) -> None:
 
 def test_depiction_owed_by_is_the_one_rule() -> None:
     """FR-028: the predicate `owed()` and the replay (`scripts/measure/depiction_replay.py`) share."""
+
     def modal(**tags: str) -> object:
         return mo.Modal("K", "k", "l7r/diagram/interactive/assets/modals/hamlet/k.md:1", {"About": "a", "Entry": "e", "Depiction": "d", **tags})
 
