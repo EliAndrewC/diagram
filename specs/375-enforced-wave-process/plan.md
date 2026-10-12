@@ -696,8 +696,8 @@ specs/<feature>/spec.md specs/<feature>/tasks.md` newest first, the first commit
 open - each state read as `speckit-todo.feature()` derives it (a status line opening with a closing word, or every task
 ticked; `closed` and `done - GM review pending` count as closed, as D54's "no feature" does), from the two files at that commit
 written into a temporary directory, as `hm_approval._state_at` reads a past tree (one reader of the state, not a second copy of
-its rule). The walk stops at the first such commit and at 200 commits back (a feature's history here is far shorter: 375's own
-spec.md has 140-odd commits; past the bound the first event stands). Tests (red on today's code), fixture repos: a status-line
+its rule). The walk stops at the first such commit and at 200 commits back (375's two files, the longest-worked feature here, have
+82 commits between them, counted 2026-10-12; past the bound the first event stands). Tests (red on today's code), fixture repos: a status-line
 close and reopen ten minutes ago - a unit owed now is due an hour after the reopening, not at once; a tick close (every task
 ticked, status "Draft") and a reopen by an added task ten minutes ago - likewise; no reopening in the history - the first event
 starts the hour; a reopening older than the first event leaves the first event as the start.
