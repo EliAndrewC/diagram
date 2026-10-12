@@ -307,7 +307,14 @@ def declared(root: Path, base: str) -> tuple[list[Unit], list[str], bool]:
     sources: list[tuple[str, list[tuple[str, str]] | None]] = []
     for feature in active_features(root, base):
         tasks = root / feature / "tasks.md"
-        sources.append((feature, occasions_section(tasks.read_text()) if tasks.is_file() else None))
+        lines = occasions_section(tasks.read_text()) if tasks.is_file() else None
+        # GUARD_EDIT_OK: feature 374 batch 4 (2026-10-12) - A LINE THAT LANDED WAS JUDGED. A feature that lands batch by batch
+        # keeps every batch's occasion lines, and a verdict is bound to the engine key, so each later batch's engine change
+        # owed batches 1-3's glyph checks again (engawa, kitchen, notice board, woodland commons: judged, passed and landed).
+        # A line on main at the base had its review at that push (this gate); a later batch that changes the element again
+        # declares a line of its own.
+        landed = set(occasions_section(_git(root, "show", f"{base}:{feature}/tasks.md") or "") or []) if base else set()
+        sources.append((feature, None if lines is None else [o for o in lines if o not in landed]))
     if tweak := commit_occasions(root, base):
         sources.append(("the delta's commit messages", tweak))
     for feature, lines in sources:

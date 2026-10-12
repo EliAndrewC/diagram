@@ -269,7 +269,12 @@ def test_a_feature_landed_part_way_declares_again_when_its_tasks_grow(clone: Pat
     git(clone, "add", "-A")
     git(clone, "commit", "-qm", "a later wave")
     assert owed.check_declared(clone) is None
-    assert units(clone) == [("glyph-check", "privy", "inashiro")]
+    # feature 374 batch 4: the line that landed with the first waves was judged at that push and is not owed again...
+    assert units(clone) == []
+    # ...and a later wave that changes an element declares a line of its own, which is owed
+    tasks.write_text(tasks.read_text().replace("- glyph-redrawn: privy\n", "- glyph-redrawn: privy\n- glyph-redrawn: farmhouse\n"))
+    git(clone, "commit", "-qam", "a later wave's occasion")
+    assert units(clone) == [("glyph-check", "farmhouse", "inashiro")]
 
 
 def test_a_committed_change_beyond_the_merge_base_counts(clone: Path) -> None:
