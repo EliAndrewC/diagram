@@ -139,6 +139,18 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. wave 131 done: Ochiba's hall 30 x 26 ft, Ubame's wood kami in the one hall, Hoshigaoka's sanctuary three bays (its roll recorded); reviews passed or accepted
 
+- [ ] T24 wave 132: the one-bay gate's ~6-8.5 ft its frontage, the passage less the posts (0093), the county draft and the hand sheets (FR-001)
+      research: rendering
+
+- [ ] T25 wave 133: the main gate's posts ~2 ft square on the three magistracy sheets (FR-001)
+      research: rendering
+
+- [ ] T26 wave 134: a structure a foot or two clear of the wall's face (0092), structures_on_walls, the sheets and the emitter (FR-001)
+      research: rendering
+
+- [ ] T27 wave 135: a well's lifting gear a rolled knob (0196), its glyph on every sheet's wells (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

@@ -455,6 +455,41 @@ impl-drift filed (found.jsonl), then rows 8-12 (the sacred features). The rules 
   `random.Random(zlib.crc32(b"hoshigaoka:sanctuary width")).choice(["1 bay", "2 bays", "3 bays"])`, written into the notes
   beside the grove's, and the sheet draws what it gives (T23's plan review: the recipe named, never the result).
 
+## Batch 6: the compound's gate, posts, wall clearance and wells, as the record draws them
+
+**The work list** is 328's ranking rebuilt after batch 5 landed (165 open rows, 117 E3 DRIFTED; `m:batch5-open-rows`): the open
+list's rows 0 and 2-4, the Mode A rows at its head. Row 1 (the residences redrawn to the record's 49-67 tsubo house, every
+compound repacked) is a batch of its own, the next. The rules of batches 3-5 hold (B5-1's knob roll included).
+
+### Wave 132 (T24) - the one-bay gate's ~6-8.5 ft is its frontage, not its passage
+
+- **W132-1** (within): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html measures the yakuimon across its
+  frontage (1.8-2.6 m) and gives no passage; its drawing page draws the gate 6-8.5 ft wide as that frontage. So the one-bay gate's
+  6-8.5 ft runs post outside to post outside, its passage that frontage less its two posts; the gate range's ~12 ft (two ken) stays
+  a passage. docs/buildings.md's Scale claim and Main gate paragraph say so; the county draft's one-bay gate is drawn as an 8 ft
+  frontage (`GATE_W_FT` the frontage, the passage less the posts); every hand sheet drawing a one-bay main gate is redrawn to it,
+  and `main_gate_passage_ft`'s readers rechecked.
+
+### Wave 133 (T25) - the main gate's posts about 2 ft square
+
+- **W133-1** (within): the gate posts drawn ~2 ft square (they are 2.7-5.3 x 4.7 ft on the hand sheets), each passage's inner
+  face kept, on Ochiba, Hayakawa and Ubame; docs/buildings.md's gate-post line says so (the post size a measurement the row's
+  research gives; its exact figure recorded with its source in the docs claim).
+
+### Wave 134 (T26) - a structure stands a foot or two clear of the wall's face
+
+- **W134-1** (within): research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html sets a building "a foot or two"
+  off the wall, its eaves nearly touching. docs/buildings.md's "Structures ABUT a wall" bullet and its claim measure from the FACE:
+  ~2.5-3.5 ft from a compound wall's centerline, ~2-3 ft from a divider's; pack_audit `structures_on_walls` holds that clearance
+  (red first on a sheet that breaks it); the structures 0.5 ft off the face are moved - Ochiba's two, Ubame's one, Hayakawa's one -
+  and the compound draft's emitter keeps the clearance (its WALL_MARGIN measured from the face).
+
+### Wave 135 (T27) - a well's lifting gear, a knob
+
+- **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in more than one form (a sweep
+  or a pulley frame); a knob rolled per plan from its seed, in the record's order, each sheet's roll recorded in its notes and
+  drawn on its wells as a new glyph (glyph-check owed); docs/buildings.md's well-glyph claim says so.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:
