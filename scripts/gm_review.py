@@ -169,19 +169,21 @@ def listing(root: Path, feature: str = "", width: int = 0) -> str:
     if not hs and not features:
         return "gm-review: nothing waits on the GM\n"
     n = sum(len(o) for _, o in features)
-    out = [f"GM REVIEW - {len(hs)} held, {n} landed row(s) to review in {len(features)} feature(s)", ""]
-    if hs:
-        out.append("HELD - work cannot go on until the GM decides (feature 328's ranking, carried by 374)")
-        for h in hs:
-            key, _, flag = h.partition(": ")
-            behind = " (waits on other work, not on the GM)" if flag.startswith("Held behind") else ""
-            out += [_fit(f"  * {key}{behind}", width), _fit(f"      {re.sub(r'^Held[:,]?\s*', '', flag)}", width)]
-        out.append("")
+    out = [f"GM REVIEW - {sum(not _behind(h) for h in hs)} held question(s), {sum(map(_behind, hs))} waiting on other work, "
+           f"{n} landed row(s) to review in {len(features)} feature(s)", ""]
+    for title, group in (("HELD - work cannot go on until the GM decides (feature 328's ranking, carried by 374)", [h for h in hs if not _behind(h)]),
+                         ("WAITING ON OTHER WORK - held in the ranking behind another row, not on the GM", [h for h in hs if _behind(h)])):
+        if group:
+            out.append(title)
+            for h in group:
+                key, _, flag = h.partition(": ")
+                out += [_fit(f"  * {key}", width), _fit(f"      {re.sub(r'^Held( behind)?[:,]?\s*', 'waits on ' if _behind(h) else '', flag)}", width)]
+            out.append("")
     if features:
         out.append("TO REVIEW - landed; the GM may overturn any row")
         out += [_fit(f"  {_num(d):>3}  {_fit(d.name.split('-', 1)[1], 40):<40} {len(o):>3}  {_counts(o)}", width) for d, o in features]
         declined = sum(r.get("kind") == "arbiter-fix-declined" for _, o in features for _, r in o)
-        asks = sum(not h.partition(": ")[2].startswith("Held behind") for h in hs)
+        asks = sum(not _behind(h) for h in hs)
         out += ["", f"  needs a decision: {asks} held question(s), {declined} fix(es) declined to the GM - in full: make gm-review EXPLAIN=1",
                 "  a feature's rows:  make gm-review F=NNN   (each in full: add EXPLAIN=1, one row: ROW=n)",
                 "  reviewed:          make gm-reviewed F=NNN   (agreed in discussion with the GM: add WORDS=\"<his words>\")"]
@@ -312,20 +314,29 @@ def explain(root: Path, feature: str = "", row: str = "", width: int = 0) -> str
     return "\n".join(out) + "\n" if len(out) > head else f"gm-review: no open row {row} in {d.name}\n"
 
 
+def _behind(h: str) -> bool:
+    """A held row that waits on another row of the ranking (`Held behind #...`), not on a decision of the GM's."""
+    return h.partition(": ")[2].startswith("Held behind")
+
+
 def _needs_you(root: Path, width: int) -> str:
-    out = ["WHAT NEEDS YOUR DECISION", ""]
     hs = held(root, full=True)
-    for n, h in enumerate(hs, 1):
-        key, _, flag = h.partition(": ")
-        behind = flag.startswith("Held behind")
-        out += [_fit(f"{n}. {'NOT YOURS YET - it waits on other work, no decision from you' if behind else 'HELD QUESTION'}: {key}", width),
-                *_wrap("", re.sub(r"^Held( behind)?[:,]?\s*", "Behind " if behind else "", flag), width), ""]
+    asks, waits = [h for h in hs if not _behind(h)], [h for h in hs if _behind(h)]
     declined = [(d, i, r) for d, o in open_rows(root) for i, r in o if r.get("kind") == "arbiter-fix-declined"]
-    for n, (d, i, r) in enumerate(declined, len(hs) + 1):
+    out = ["WHAT NEEDS YOUR DECISION" + ("" if asks or declined else ": nothing - no held question and no fix declined to you"), ""]
+    for n, h in enumerate(asks, 1):
+        key, _, flag = h.partition(": ")
+        out += [_fit(f"{n}. HELD QUESTION: {key}", width), *_wrap("", re.sub(r"^Held[:,]?\s*", "", flag), width), ""]
+    for n, (d, i, r) in enumerate(declined, len(asks) + 1):
         out += [_fit(f"{n}. A TOOLING FIX DECLINED TO YOU: feature {_num(d)} row [{i}], {' '.join(x for x in _subject(r) if x)}", width),
                 *_wrap("The arbiter asked: ", r.get("tooling_fix", ""), width), *_wrap("Declined because: ", r.get("note", ""), width),
                 *_wrap("Decide: ", f"leave it declined (make gm-reviewed F={_num(d)}) or have it built (make gm-reviewed F={_num(d)} "
                        f"OVERTURN={i} TO=<an open feature>).", width), ""]
+    if waits:
+        out += ["WAITING ON OTHER WORK - held in the ranking until another row is done; nothing for you to decide", ""]
+        for h in waits:
+            key, _, flag = h.partition(": ")
+            out += [_fit(f"  * {key}", width), *_wrap("", re.sub(r"^Held behind\s*", "Waits on ", flag), width), ""]
     rest = sum(len(o) for _, o in open_rows(root)) - len(declined)
     out += textwrap.wrap(f"The other {rest} row(s) are decisions already made that you may overturn; nothing waits on them. "
                          "Each in full: make gm-review F=NNN EXPLAIN=1 [ROW=n].", width=width)
