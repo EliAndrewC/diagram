@@ -4905,6 +4905,23 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Scale#main gate passage width",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the RULE is wrong, not only the claim: make the yakuimon's ~6-8.5 ft the gate's FRONTAGE (post outside to post outside, as 0093's drawing page draws it: 'about 6 to 8.5 ft wide, the frontage the three registered examples measure'), the passage that frontage less the two posts; the nagaya-mon's ~12 ft stays a passage ('opens in its central two ken'). Change the docs/buildings.md Scale claim (line 15) and Main gate paragraph (line 126), compound.py's 8 ft yakuimon passage (line 670) and every hand sheet whose yakuimon posts stand outside a 6-8.5 ft opening; recheck main_gate_passage_ft's readers",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 37 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 2",
+  "tier_as_ranked": "E2",
+  "moved": "T101a (fresh reader): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:12 measures the yakuimon 'across their frontage' (1.8-2.6 m) and gives no passage; 0093 drawing.html:8 draws the gate 6-8.5 ft wide as that frontage; docs/buildings.md:126 instead sets the passage BETWEEN the posts to 6-8.5 ft, posts drawn on the wall's cut ends outsi",
+  "wave": "132",
+  "scope": "mode-a"
+ },
+ {
   "key": "docs/buildings.md::Wells#kitchen well",
   "verdict": "DRIFTED",
   "tier": "E1",
@@ -11517,23 +11534,6 @@
   "scope": "mode-a"
  },
  {
-  "key": "docs/buildings.md::Scale#main gate passage width",
-  "verdict": "DRIFTED",
-  "tier": "E3",
-  "fix": "the RULE is wrong, not only the claim: make the yakuimon's ~6-8.5 ft the gate's FRONTAGE (post outside to post outside, as 0093's drawing page draws it: 'about 6 to 8.5 ft wide, the frontage the three registered examples measure'), the passage that frontage less the two posts; the nagaya-mon's ~12 ft stays a passage ('opens in its central two ken'). Change the docs/buildings.md Scale claim (line 15) and Main gate paragraph (line 126), compound.py's 8 ft yakuimon passage (line 670) and every hand sheet whose yakuimon posts stand outside a 6-8.5 ft opening; recheck main_gate_passage_ft's readers",
-  "files": [
-   "docs/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 37 re-check (tier provisional, by verdict)",
-  "reopened": "closed in wave 2",
-  "tier_as_ranked": "E2",
-  "moved": "T101a (fresh reader): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:12 measures the yakuimon 'across their frontage' (1.8-2.6 m) and gives no passage; 0093 drawing.html:8 draws the gate 6-8.5 ft wide as that frontage; docs/buildings.md:126 instead sets the passage BETWEEN the posts to 6-8.5 ft, posts drawn on the wall's cut ends outsi",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
   "key": "docs/buildings.md::Scale#residence wing length",
   "tier": "E3",
   "fix": "residences redrawn to the record's 49-67 tsubo house (Hayakawa's ~180 ft blocks, Ochiba's 90 x 50 ft), compounds repacked",
@@ -11615,7 +11615,7 @@
   "tier_as_ranked": "E1",
   "moved": "FR-003: the fix redraws three hand-drawn sheets (ochiba, hayakawa, ubame) - amendment 1 review",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "133",
   "scope": "mode-a"
  },
  {
@@ -11631,7 +11631,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
   "moved": "T51a: tiered by its work by a fresh reader - Measured with an SVG scan: structures stand 0.5 ft off the compound wall's face on Ochiba (2), Ubame (1) and both generated examples (~10 each), and Hayakawa has one at 1.17 ft, so 'a foot or two' moves hand-drawn sheets and the emitter, not just a paragraph.",
-  "wave": "",
+  "wave": "134",
   "scope": "mode-a"
  },
  {
@@ -11676,7 +11676,7 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "135",
   "scope": "mode-a"
  },
  {

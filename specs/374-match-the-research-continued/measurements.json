@@ -1680,5 +1680,14 @@
     "value": {
       "fixed": true
     }
+  },
+  "batch6-open-rows": {
+    "quantity": "open rows of 328s ranking at batch 6s close (no wave, not deferred, scope kept or mode-a), and how many of them are E3 DRIFTED",
+    "value": "161 open, 113 E3 DRIFTED",
+    "unit": "rows",
+    "observed": "2026-10-12",
+    "source": "specs/328-match-the-research/ranking.json",
+    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+    "method": "the four rows batch 6 took (main gate passage width, main gate posts, structures abut walls, well glyph) marked waves 132-135 in waves.json, the ranking rebuilt"
   }
 }

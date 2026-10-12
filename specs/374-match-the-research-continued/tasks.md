@@ -145,17 +145,21 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. wave 131 done: Ochiba's hall 30 x 26 ft, Ubame's wood kami in the one hall, Hoshigaoka's sanctuary three bays (its roll recorded); reviews passed or accepted
 
-- [ ] T24 wave 132: the one-bay gate's ~6-8.5 ft its frontage, the passage less the posts (0093), the county draft and the hand sheets (FR-001)
+- [x] T24 wave 132: the one-bay gate's ~6-8.5 ft its frontage, the passage less the posts (0093), the county draft and the hand sheets (FR-001)
       research: rendering
+      verify: DONE. county 8 ft frontage / 7 ft passage and Ochiba 8.5 / 7.5 ft drawn and audited (gate_widths, passage_blockers OK); claims IN-STEP; building-reviews PASS (county, Ochiba round 3 accepted by the arbiter); record checks on 0093 answered
 
-- [ ] T25 wave 133: the main gate's posts ~2 ft square on the three magistracy sheets (FR-001)
+- [x] T25 wave 133: the main gate's posts ~2 ft square on the three magistracy sheets (FR-001)
       research: rendering
+      verify: DONE. main gate posts 2 ft square on the three hand sheets and every gate on the drafts; claim relabeled CONVENTION and IN-STEP; building-reviews PASS; the lesser hand-sheet posts filed as a row
 
-- [ ] T26 wave 134: a structure a foot or two clear of the wall's face (0092), structures_on_walls, the sheets and the emitter (FR-001)
+- [x] T26 wave 134: a structure a foot or two clear of the wall's face (0092), structures_on_walls, the sheets and the emitter (FR-001)
       research: rendering
+      verify: DONE. every wall-hugging structure 1.5 ft off the face (structures_on_walls with the clearance), the hatch reach 3 ft with a test red at the old reach; county claims IN-STEP; building-reviews PASS
 
-- [ ] T27 wave 135: a well's lifting gear a rolled knob (0196), its glyph on every sheet's wells (FR-001)
+- [x] T27 wave 135: a well's lifting gear a rolled knob (0196), its glyph on every sheet's wells (FR-001)
       research: rendering
+      verify: DONE. every well draws its rolled gear and roof (well_gear check, proven red first), indoor wells a beam pulley (W135-2), the roof an outline on posts; glyph-checks PASS on county and Ubame round 2; 0196 record checks and the well pop-up answered; claims IN-STEP
 
 ## Standing - the ranking's remaining rows
 
