@@ -77,6 +77,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   is gone. The grooms lodge with the menservants in the servants' row beside the stables; the stable's grooms' room
   (0108) is drawn as the stable's, and whether the grooms slept there or in the row is a GUESS. The barracks and the
   long-house are divided into dwellings, a door each, and so is the servants' row (0097; feature 374 batch 4).
+- **Rear yard**: the open ground between the storehouses and the kitchen, 37 x 22 ft, the Higuchi house's rear (research 0091); its size a GUESS in the 18-45 by 10-30 ft band the size-audit of 2026-10-12 set from two storehouses of the common 2 x 3 ken and the open ground before them (no rear yard was found measured).
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
 - **Vegetable garden**: WEST of the house, filling the kitchen yard (research 0109: the one plot whose side
   is given lay west; its size runs from the Takei house's ~1,070 sq ft plot to a field over about half the Yokota

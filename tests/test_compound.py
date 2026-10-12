@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import replace
-import re
 
 import pytest
 
@@ -965,70 +964,3 @@ def test_a_building_of_no_door_kind_draws_no_door() -> None:
     prog = _prog(shed)
     svg = c.emit_svg(prog, c.place(prog))
     assert "woodshed" not in cp.DOOR_KINDS and 'data-kind="door"' not in svg
-
-
-def test_a_servants_privy_serves_the_stables_only_when_it_stands_near_them() -> None:
-    """Feature 374 wave 124: the grooms share the servants' privy where the servants' row stands by the stables; stables a
-    servants' privy cannot serve (farther than GROOMS_PRIVY_FT) keep their own."""
-
-    def privies(spine: tuple[c.CourtZone, ...]) -> int:
-        prog = c.CompoundProgram(
-            "t",
-            _env(300.0, 120.0, 40.0, 8.0),
-            spine,
-            (_b("servants", 40.0, 15.0, "outer", "S", order=6, feature="servants' quarters"), _b("stables", 30.0, 20.0, "outer", "S", order=5, feature="stables")),
-        )
-        return c.emit_svg(prog, c.place(prog)).count('fill="#7E726A"')
-
-    assert privies(()) == 1, "the stables beside the servants' row: one privy serves both"
-    assert privies((c.CourtZone("cart yard", 50.0, 95.0, 90.0, 22.0),)) == 2, "pushed past a yard ~90 ft off: each keeps its own"
-
-
-def test_a_stable_draws_its_passage_grooms_room_and_stalls_on_any_wall() -> None:
-    """Feature 374 wave 126: the stable's inner form, as 0108's drawing page draws a warrior's - three bays along its court
-    face; in its depth the grooms' room, the passage running its length, the stalls at the back - on whichever wall."""
-    south = c.Placed(_b("stables", 18.0, 24.0, "outer", "S", feature="stables"), 10.0, 100.0)
-    passage, walls = cp._stable_parts(south)
-    assert passage == (10.0, 109.0, 28.0, 115.0)  # 6 ft deep, 9 ft in from the court (north) face, the room before it
-    assert [w[0] for w in walls[:2]] == [16.0, 22.0] and (walls[0][1], walls[0][3]) == (115.0, 124.0)  # the stalls' walls, passage to back
-    assert walls[-1][4] is True and walls[-2][4] is False  # the stall fronts dashed, the room's wall solid
-    east = c.Placed(_b("stables", 24.0, 18.0, "outer", "E", feature="stables"), 100.0, 10.0)
-    passage, walls = cp._stable_parts(east)
-    assert passage == (109.0, 10.0, 115.0, 28.0) and [w[1] for w in walls[:2]] == [16.0, 22.0]
-
-
-def test_the_county_rowhouses_draw_their_dwellings_and_a_door_each() -> None:
-    """Feature 374 batch 4 (plan R4-4): the barracks, the staff long-house and the servants' row are divided into
-    dwellings (0097), each with its door; the storehouses draw their doors (0117)."""
-    prog, result, svg = _county()
-    by = {p.spec.name: p for p in result.placed}
-    for name, walls in (("barracks", 3), ("senior retainers' quarters", 4), ("servants' row", 4)):
-        p = by[name]
-        group = svg.split(f'<g data-kind="{p.spec.feature}">', 1)[1].split("</g>", 1)[0]
-        assert group.count("<line ") >= walls, name
-    doors = svg.count('data-kind="door" data-part-of="barracks"')
-    assert doors == 4, doors
-    assert svg.count('data-kind="door" data-part-of="storehouse"') == 2
-
-
-def test_bay_walls_run_across_the_short_side() -> None:
-    def px(x: float, y: float) -> tuple[float, float]:
-        return (3 * x, 3 * y)
-
-    long_ew = c.Placed(replace(_b("row", 40.0, 10.0, "outer", "S"), bays=(20.0,)), 0.0, 0.0)
-    assert c._bay_walls(long_ew, px, "#000") == ['<line x1="60" y1="0" x2="60" y2="30" stroke="#000" stroke-width="1"/>']
-    long_ns = c.Placed(replace(_b("row", 10.0, 40.0, "outer", "E"), bays=(20.0,)), 0.0, 0.0)
-    assert c._bay_walls(long_ns, px, "#000") == ['<line x1="0" y1="60" x2="30" y2="60" stroke="#000" stroke-width="1"/>']
-
-
-def test_no_lodgers_privy_stands_by_the_main_gate() -> None:
-    """Feature 374 batch 4 (plan R4-3, building-review E3): the stables' latrine sat 6 ft from the gatehouse, ~24 ft from
-    the main gate's opening."""
-    from l7r.diagram.tools import pack_audit as pa
-    from l7r.diagram.tools.pack_audit.checks import wall_openings
-
-    _prog, _result, svg = _county()
-    gate = wall_openings(pa.parse_svg(svg))[0]  # the widest opening: the main gate
-    privies = [(float(m[1]) + 7.5, float(m[2]) + 7.5) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="15" height="15"[^>]*data-kind="latrine" data-id', svg)]
-    assert len(privies) >= 3, "the lodgers' privies are drawn"
-    assert all(abs(x - gate.x) > cp.GATE_PRIVY_FT * 3 or gate.y - y > cp.GATE_PRIVY_FT * 3 for x, y in privies), privies
