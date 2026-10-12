@@ -36,8 +36,9 @@ from __future__ import annotations
 import hashlib
 import html
 import re
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass, field
+from typing import Any, Protocol
 
 RECORD = "research"
 QUESTIONS = f"{RECORD}/questions"
@@ -145,8 +146,11 @@ class Record:
     readings: dict[str, dict[str, str]] = field(default_factory=dict)
 
     @classmethod
-    def of(cls, files: Mapping[str, str], sources: Mapping[str, str]) -> Record:
-        """`files`: a question file's name -> its text (pages, notes, originals); `sources`: a key -> its write-up's text."""
+    def of(cls, files: Mapping[str, str], sources: Mapping[str, str], cache: Cache | None = None) -> Record:
+        """`files`: a question file's name -> its text (pages, notes, originals); `sources`: a key -> its write-up's text.
+        `cache` keeps each file's parse by its text (`record_cache.ParseCache`, feature 375 amendment 3): the merge base and the
+        working tree share nearly every file, and so does one call with the next."""
+        get = cache.get if cache is not None else (lambda _key, make: make())
         pages: dict[str, Page] = {}
         notes: dict[str, dict[str, str]] = {}
         slugs: dict[str, str] = {}
@@ -157,16 +161,14 @@ class Record:
                 page = name[: -len(".notes.html")] + ".html"
                 m = _STEM.match(page)
                 if m:
-                    notes[_subject(m)] = read_notes(text, files.get(name[: -len(".notes.html")] + ".originals.html", ""))
-                    cites[_subject(m)] = {k: tuple(dict.fromkeys(_CODE.findall(body))) for k, body in _NOTE.findall(text)}
-                    table = dict(_ORIG_STORED.findall(files.get(name[: -len(".notes.html")] + ".originals.html", "")))
-                    readings[_subject(m)] = {k: reading(body, table) for k, body in _NOTE.findall(text)}
+                    originals = files.get(name[: -len(".notes.html")] + ".originals.html", "")
+                    notes[_subject(m)], cites[_subject(m)], readings[_subject(m)] = get(_key("notes", text, originals), lambda t=text, o=originals: _notes_parse(t, o))
                 continue
             m = _STEM.match(name)
             if m:
-                pages[_subject(m)] = read_page(text)
+                pages[_subject(m)] = _page_of(get(_key("page", text), lambda t=text: _page_data(read_page(t))))
                 slugs[_subject(m)] = m.group(2)
-        return cls(pages, notes, slugs, {k: words(v) for k, v in sources.items()}, cites, readings)
+        return cls(pages, notes, slugs, {k: get(_key("source", v), lambda t=v: words(t)) for k, v in sources.items()}, cites, readings)
 
     def index(self) -> Index:
         ix = Index()
@@ -176,6 +178,32 @@ class Record:
         for notes in self.notes.values():
             ix.notes.update(notes.values())
         return ix
+
+
+class Cache(Protocol):
+    """What `Record.of` asks of a cache: the value kept under `key`, else `make()`'s, kept."""
+
+    def get(self, key: str, make: Callable[[], Any]) -> Any: ...  # noqa: ANN401
+
+
+def _key(kind: str, *texts: str) -> str:
+    return kind + ":" + hashlib.sha256("\x1f".join(texts).encode("utf-8")).hexdigest()
+
+
+def _page_data(page: Page) -> tuple[str, list[tuple[str, tuple[str, ...], bool]]]:
+    """A page as plain data, what a cache keeps: a pickle of the classes breaks where this module is loaded under another name."""
+    return page.heading, [(b.words, b.marks, b.intro) for b in page.blocks]
+
+
+def _page_of(data: tuple[str, list[tuple[str, tuple[str, ...], bool]]]) -> Page:
+    return Page(data[0], [Block(w, tuple(m), i) for w, m, i in data[1]])
+
+
+def _notes_parse(text: str, originals: str) -> tuple[dict[str, str], dict[str, tuple[str, ...]], dict[str, str]]:
+    """A notes file's (notes, the keys each cites, what source-reader reads of each), with its originals."""
+    table = dict(_ORIG_STORED.findall(originals))
+    return (read_notes(text, originals), {k: tuple(dict.fromkeys(_CODE.findall(body))) for k, body in _NOTE.findall(text)},
+            {k: reading(body, table) for k, body in _NOTE.findall(text)})
 
 
 @dataclass

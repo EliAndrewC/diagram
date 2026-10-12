@@ -47,6 +47,7 @@ import re
 import shutil
 import subprocess
 import sys
+import hashlib
 import tarfile
 import tempfile
 from collections import Counter
@@ -58,6 +59,7 @@ from typing import Any
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
+import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
 from claims_triage import (  # noqa: E402,F401 - the triage half, split out (feature 375 T09); re-exported
     BLOBS,
@@ -131,13 +133,33 @@ class Row:
         return f"{self.unit.path}::{self.unit.qualname}"
 
 
+def units_of(skill: Path) -> list[Any]:
+    """Every unit in scope at the tree under `skill`, kept by what it is read from (feature 375 amendment 3, plan D29): every
+    engine module and procedure document under `skill`, and the readers' own code - `scripts/record/claims.py` and every
+    project module it imports, transitively (the engine's reader among them). Re-parsing the engine was 7.29 s a call on 374's
+    delta (specs/375-enforced-wave-process/research.md R1); a key over the sources is read in a fraction of that. Only the
+    newest key's file is kept."""
+    cl = engine(Path(__file__).resolve().parents[2])
+    h = hashlib.sha256(rc.code_sha_of(Path(__file__).resolve().parents[2], Path(__file__)).encode())
+    for p in sorted((skill / "l7r" / "diagram").rglob("*.py")):
+        if "__pycache__" not in p.parts:
+            h.update(p.relative_to(skill).as_posix().encode() + b"\0" + p.read_bytes() + b"\0")
+    for doc in cl.PROCEDURES:
+        if (skill / doc).is_file():
+            h.update(doc.encode() + b"\0" + (skill / doc).read_bytes() + b"\0")
+    common = rc.common_dir(skill)
+    cache = rc.ParseCache(common / rc.CACHE_DIR / f"claims-{h.hexdigest()[:16]}.pickle" if common is not None else None)
+    units = cache.get("units", lambda: [u for u, _errors in cl.all_units(skill)])
+    cache.save()
+    return units
+
+
 def current(skill: Path, qdir: Path | None = None) -> dict[str, Row]:
     """key -> Row for every claim of every unit in scope, at the tree under `skill` (its questions under `qdir`)."""
-    cl = engine(Path(__file__).resolve().parents[2])
     qdir = qdir if qdir is not None else skill / "research" / "questions"
     memo: dict[str, str] = {}
     out: dict[str, Row] = {}
-    for unit, _errors in cl.all_units(skill):
+    for unit in units_of(skill):
         for claim in unit.claims:
             key = unit.key(claim)
             out[key] = Row(

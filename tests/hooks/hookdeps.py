@@ -227,6 +227,118 @@ def key_for(guard: str) -> str:
     return h.hexdigest()[:16]
 
 
+# THE PYTHON TEST FILES THAT TEST scripts/ (feature 375 amendment 3, FR-021a; plan D30). They ran all together whenever
+# anything under scripts/ or tests/hooks/ changed (74 s at 4 workers), so a merge touching one script re-ran every one.
+# Each now carries its own freshness set. The reference scan above was built for the guards and follows `import X` and
+# file names; a Python script also loads a sibling by a STRING (`_sibling("record_owed")`, `script("_modal_owed")`), so
+# here a file's stem standing anywhere in another's code as a whole word is a reference too - over-running where a stem is
+# an ordinary word (`claims`, `sources`), which is the safe direction. A test that BUILDS a script path at run time (a
+# non-literal joined to "scripts", or "scripts" inside an f-string's braces) or globs the tree depends on all of it.
+_BUILDS = re.compile(r'"scripts"\s*/\s*[A-Za-z_(]|join\([^)]*"scripts"\s*,\s*[A-Za-z_]|f"[^"]*scripts/\{|\{[^}]*\}/scripts|"scripts"\s*,\s*\(\s*"\*')
+_TESTS_IMPORT = re.compile(r"^\s*(?:from|import)\s+(tests(?:\.\w+)+)", re.M)
+
+
+@functools.lru_cache(maxsize=None)
+def _word_refs(name: str, body: str) -> frozenset[str]:
+    """The indexed files `body` reaches (itself excluded). A Python file reaches what it IMPORTS and what a string literal of
+    its code names - a literal equal to a file's stem (`_sibling("record_owed")`, `script("_modal_owed")`) or ending in its
+    file name (`"scripts/gates/x.py"`, an f-string's `.../x.py`); a prose string that merely mentions a file reaches nothing,
+    which is what kept the closure from running through every message into the whole tree. Any other file (a shell script,
+    a text file) reaches every file whose name stands in it, as the guard suites' scan does."""
+    stems: dict[str, str] = {}
+    for n in _INDEX:
+        if n != name:
+            stems.setdefault(n.rsplit(".", 1)[0], n)
+    if not name.endswith(".py"):
+        return frozenset(n for n in _INDEX if n != name and n in body)
+    try:
+        tree = ast.parse(body)
+    except SyntaxError:
+        return frozenset(n for n in _INDEX if n != name and n in body)
+    out: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            out |= {stems[a.name.rsplit(".", 1)[-1]] for a in node.names if a.name.rsplit(".", 1)[-1] in stems}
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            last = node.module.rsplit(".", 1)[-1]
+            out |= {stems[x] for x in (last, *(a.name for a in node.names)) if x in stems}
+        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
+            s = node.value.strip()
+            for key in (s, s.lstrip("_"), s.rsplit("/", 1)[-1], s.rsplit("/", 1)[-1].lstrip("_")):
+                if key in _INDEX and key != name:
+                    out.add(key)
+                elif key in stems:
+                    out.add(stems[key])
+    return frozenset(out)
+
+
+def py_closure(seeds: set[str]) -> set[str]:
+    """Every indexed file reachable from `seeds` by `_word_refs`, through any file - helper or not."""
+    seen: set[str] = set()
+    stack = list(seeds)
+    while stack:
+        name = stack.pop()
+        if name in seen or name not in _INDEX:
+            continue
+        seen.add(name)
+        stack.extend(r for r in _word_refs(name, _text(name) if name.endswith(".py") else _code(name)) if r not in seen)
+    return seen
+
+
+def pydeps(test: pathlib.Path) -> list[pathlib.Path]:
+    """The files whose contents are a Python test file's freshness key: itself, each conftest.py from its directory up to
+    tests/, the tests/ modules it imports, and the scripts it reaches (`py_closure`) - or all of scripts/ and tests/hooks/
+    when it builds a script path at run time or globs the tree."""
+    test = test.resolve()
+    raw = test.read_text(encoding="utf-8")
+    code = _strip(test.name, raw)  # the BUILDS test reads code, not comments
+    files: set[pathlib.Path] = {test}
+    d = test.parent
+    while ROOT / "tests" in (d, *d.parents):
+        if (d / "conftest.py").is_file():
+            files.add(d / "conftest.py")
+        if d == ROOT / "tests":
+            break
+        d = d.parent
+    for mod in _TESTS_IMPORT.findall(raw):
+        p = ROOT.joinpath(*mod.split(".")).with_suffix(".py")
+        if p.is_file():
+            files.add(p)
+    if _BUILDS.search(code) or "scripts/*.sh" in code or "scripts/*.py" in code:
+        files |= set(_INDEX.values())
+    else:
+        files |= {_INDEX[n] for n in py_closure(set(_word_refs(test.name, raw)))}
+    return sorted(files)
+
+
+def py_key(test: pathlib.Path) -> str:
+    h = hashlib.sha256()
+    for p in pydeps(test):
+        h.update(str(p.relative_to(ROOT)).encode() + b"\0" + p.read_bytes() + b"\0")
+    return h.hexdigest()[:16]
+
+
+def _stamp(gitdir: pathlib.Path, test: str) -> pathlib.Path:
+    return gitdir / "hooks-test" / "py" / test.replace("/", "__")
+
+
+def py_stale(gitdir: pathlib.Path, tests: list[str]) -> list[str]:
+    """The test files whose key differs from their last green stamp."""
+    stale = []
+    for t in tests:
+        f = _stamp(gitdir, t)
+        if not f.is_file() or f.read_text().strip() != py_key(ROOT / t):
+            stale.append(t)
+    return stale
+
+
+def py_stamp(gitdir: pathlib.Path, tests: list[str]) -> None:
+    for t in tests:
+        f = _stamp(gitdir, t)
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(py_key(ROOT / t) + "\n")
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--all":
         # `<guard> <sha>` per line for THE MAKEFILE'S ROSTER - `scripts/*-hooks.sh` plus the three it
@@ -238,6 +350,14 @@ if __name__ == "__main__":
         roster += ["review-gate.sh", "gate-stamp.py", "sync-with-main.sh"]
         for g in roster:
             print(g, key_for(g))
+    elif len(sys.argv) > 2 and sys.argv[1] == "--pydeps":
+        print(" ".join(str(p.relative_to(ROOT)) for p in pydeps(ROOT / sys.argv[2])))
+    elif len(sys.argv) > 2 and sys.argv[1] in ("--pystale", "--pystamp"):
+        # <gitdir> <test file> ...: the stale ones, one per line; or stamp each green
+        if sys.argv[1] == "--pystale":
+            print("\n".join(py_stale(pathlib.Path(sys.argv[2]), sys.argv[3:])))
+        else:
+            py_stamp(pathlib.Path(sys.argv[2]), sys.argv[3:])
     elif len(sys.argv) > 2 and sys.argv[1] == "--deps":
         print(" ".join(str(_INDEX[n].relative_to(ROOT)) for n in deps_for(sys.argv[2]) if n in _INDEX))
     elif len(sys.argv) > 1:

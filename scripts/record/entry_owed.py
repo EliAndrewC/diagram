@@ -140,6 +140,10 @@ def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001, 
     bodies changed only in their links and tags marker (its SC-003), so the move owes no modal a re-check."""
     moved: set[str] = set()
     names = (_git(root, "diff", "--name-only", base, "--", f"{RESEARCH}/") or "").split()
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import record_cache as rc  # noqa: PLC0415
+
+    olds = dict(zip(names, rc.cat_blobs(root, [f"{base}:{n}" for n in names]), strict=True))  # one batch (plan D28)
     for rel in names:
         inside = os.path.relpath(rel, RESEARCH).replace(os.sep, "/")
         m = _QUESTION.match(inside)
@@ -148,7 +152,7 @@ def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001, 
         new = root / rel
         if not new.is_file():
             continue
-        old_text = _git(root, "show", f"{base}:{rel}") or _renamed_from(root, base, rel, m.group(2), m.group(3) or "")
+        old_text = olds.get(rel) or _renamed_from(root, base, rel, m.group(2), m.group(3) or "")
         if old_text is None:
             continue  # a new question: no older body for a modal to have been written from
         if findings(old_text) != findings(new.read_text(encoding="utf-8")):
@@ -211,6 +215,12 @@ def owed(root: Path) -> tuple[str, list[str]]:
     from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 
     pairs: list[str] = []
+    # one listing and one `git cat-file --batch` for the base's classes and modal files (feature 375 amendment 3, plan D28: a
+    # `git show` per file was 177 processes on 374's delta)
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import record_cache as rc  # noqa: PLC0415
+
+    then = rc.RevReader(root, base, (CLASSES, COMPOUND_KINDS, "l7r/diagram/interactive/assets/modals"))
     # Each registry against its own directory: a compound's `well` and a hamlet's `well` are separate modals under
     # one key, so the two are never merged into one dict (feature 268: the compound kinds had never been scanned).
     for directory, registry in ((CLASSES, REGISTRY), (COMPOUND_KINDS, COMPOUND_CLASSES)):
@@ -223,9 +233,9 @@ def owed(root: Path) -> tuple[str, list[str]]:
             files: dict[str, str] = {}
             now |= classes_in(path.read_text(encoding="utf-8"), _base, here, read=lambda f: (root / f).read_text(encoding="utf-8") if (root / f).is_file() else None, py=rel, at=files)
             at |= {k: files.get(k, f"{rel}:{n}") for k, n in here.items()}
-            old_text = _git(root, "show", f"{base}:{rel}")
+            old_text = then(rel)
             if old_text is not None:
-                was |= classes_in(old_text, _base, read=lambda f: _git(root, "show", f"{base}:{f}"), py=rel)
+                was |= classes_in(old_text, _base, read=then, py=rel)
         anchors = {key: set(sources.entry_fragments(fc.entry)) for key, fc in registry.items()}
         pairs += named_pairs(moved, anchors, now, was, at)
     return desc, pairs

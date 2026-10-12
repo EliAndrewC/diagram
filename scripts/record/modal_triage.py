@@ -55,12 +55,13 @@ def touched(store: pathlib.Path) -> dict[str, str]:
     return json.loads(f.read_text(encoding="utf-8")) if f.is_file() else {}
 
 
-def pending(root: pathlib.Path, base: str, store: pathlib.Path) -> list[tuple[str, str, str]]:
-    """(slug, why, fingerprint) of every unit owed only a triage: unanswered at its fingerprint and not named by a triage."""
+def pending(root: pathlib.Path, base: str, store: pathlib.Path, owed: Sequence[tuple[str, str, str]] | None = None) -> list[tuple[str, str, str]]:
+    """(slug, why, fingerprint) of every unit owed only a triage: unanswered at its fingerprint and not named by a triage.
+    `owed` is the pop-ups' owed rows when the caller has them already (`modal_bundle`, feature 375 amendment 3 plan D27)."""
     named = touched(store)
     return [
         (slug, why, fp)
-        for slug, why, fp in mo.owed(root, base)
+        for slug, why, fp in (owed if owed is not None else mo.owed(root, base))
         if triage_only(why) and not ro.answered(store, slug, fp) and named.get(slug) != fp
     ]
 
@@ -191,12 +192,12 @@ def record(store: pathlib.Path, units: Mapping[str, str], reply: str, pages: Map
     return msgs
 
 
-def refusal(root: pathlib.Path, m: mo.Modal, check: str) -> str:
+def refusal(root: pathlib.Path, m: mo.Modal, check: str, owed: Sequence[tuple[str, str, str]] | None = None) -> str:
     """Why `make modal-bundle` may not bundle `check` on `m` yet: a unit of it owed only a triage that has not named it."""
     base = ro.merge_base(root)
     store = ro.store(root)
     slugs = {f"{c}:{m.uid}" for c in ((check,) if check != mo.RESEARCH_AGENT else mo.RESEARCH_CHECKS)}
-    waiting = [s for s, _w, _fp in pending(root, base, store) if s in slugs]
+    waiting = [s for s, _w, _fp in pending(root, base, store, owed) if s in slugs]
     return (f"{', '.join(sorted(waiting))} owe(s) only a TRIAGE (a page it names moved, its own words did not) - "
             "`make modal-triage` first; it sends on only the pop-ups a change bears on") if waiting else ""
 

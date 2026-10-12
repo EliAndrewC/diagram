@@ -224,8 +224,9 @@ def test_the_prepass_rules_on_the_band_the_barred_phrases_and_the_entry(
 
 
 def test_the_bundle_carries_the_modal_the_rules_and_its_owed_units(
-    tmp_path: pathlib.Path,
+    tmp_path: pathlib.Path, monkeypatch
 ) -> None:
+    monkeypatch.setenv("CHECK_ORDER_OK", "the check order is tests/tooling/test_popup_order.py's subject")
     root = _tree(tmp_path)
     out = tmp_path / "b"
     assert mb.bundle(root, "Farmhouse", "modal-research", str(out)) == 0

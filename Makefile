@@ -723,17 +723,21 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	: " demands means they passed. A scripts-only push ran only the suites above, and a shell-check change that its own"; \
 	: " suite passed broke tests/tooling/test_guard_firing_log.py in every other session gate. The GM: the tooling must"; \
 	: " do the correct thing, never a session remembering to. The files are DERIVED - every tests/**/test_*.py naming"; \
-	: " scripts/ as code - and skipped while scripts/ and they hash to their last green run (58 files, 74 s at 4 workers); under"; \
+	: " scripts/ as code - each skipped while it and what it reaches hash to its last green run (feature 375 amendment 3); under"; \
 	: " make done (FROM_DONE) test-full runs them anyway.)"; \
 	if [ -z "$(FROM_DONE)" ]; then \
 	  : "(GUARD_EDIT_OK: the same new step - a file that BUILDS a path into scripts/, not one whose docstring mentions a"; \
 	  : " script: the mention form took in the browser tests, and on a full container the OOM killer took their Chrome)"; \
 	  pyt=$$(grep -rlE '/ *"scripts[/"]|"scripts" */|join\([^)]*"scripts"' tests --include='test_*.py' --exclude-dir=hooks | sort | tr '\n' ' '); \
-	  psha=$$( { find "$$root/scripts" "$$root/tests/hooks" -type f -not -path "*/__pycache__/*" | sort | xargs cat; cat $$pyt; } 2>/dev/null | sha256sum | cut -c1-16); \
-	  if [ -n "$$pyt" ] && { [ -n "$(HOOKS_ALL)" ] || [ "$$(cat "$$gitdir/hooks-test/pytest-scripts" 2>/dev/null)" != "$$psha" ]; }; then \
+	  : "(GUARD_EDIT_OK: feature 375 amendment 3, FR-021 - EACH FILE BY WHAT IT TOUCHES. One hash over all of scripts/ re-ran every"; \
+	  : " one of these files after any merge that touched a script (74 s). hookdeps.py --pystale names the files whose own"; \
+	  : " freshness set changed - the scripts each reaches, derived transitively, or the whole tree for one that builds its"; \
+	  : " paths - and --pystamp records each green. HOOKS_ALL=1 runs them all; nothing is loosened: a red run stamps none.)"; \
+	  stale=$$(if [ -n "$(HOOKS_ALL)" ]; then echo $$pyt; else python3 "$$root/tests/hooks/hookdeps.py" --pystale "$$gitdir" $$pyt; fi | tr '\n' ' '); \
+	  if [ -n "$$(echo $$stale)" ]; then \
 	    : "(GUARD_EDIT_OK: four workers, not the gate count - the hook suites above run beside it on a shared 10 GB container)"; \
-	    if python3 -m pytest -n 4 --dist worksteal -q --no-cov $$pyt > "$$work/pytest-scripts.log" 2>&1; then \
-	      mkdir -p "$$gitdir/hooks-test"; echo "$$psha" > "$$gitdir/hooks-test/pytest-scripts"; n=$$((n+1)); \
+	    if python3 -m pytest -n 4 --dist worksteal -q --no-cov $$stale > "$$work/pytest-scripts.log" 2>&1; then \
+	      python3 "$$root/tests/hooks/hookdeps.py" --pystamp "$$gitdir" $$stale; n=$$((n+1)); \
 	    else printf '\n\033[1mHOOK TESTS FAILED: the pytest files that test scripts/\033[0m\n'; tail -40 "$$work/pytest-scripts.log" | sed 's/^/  /'; fail="$$fail pytest-scripts"; fi; \
 	  else skipped=$$((skipped+1)); fi; \
 	fi; \
@@ -1435,7 +1439,8 @@ page-session: ## [project] start ONE page's work in a FRESH headless session, de
 
 # GUARD_EDIT_OK: feature 319 - two new operations (a modal check's bundle and its prepass); no guard changes.
 # GUARD_EDIT_OK: feature 319 D13 - the help line names the third check, modal-depiction; an operation's text, no guard changes.
-modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>]
+modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319; refused while a check before it in the order (form, research, depiction) is owed - feature 375 amendment 3   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>] [CHECK_ORDER_OK="<why>"]
+	@: "GUARD_EDIT_OK: feature 375 amendment 3 - the help line names the check order and its escape; the recipe is unchanged"
 	@if [ -z "$(KIND)" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
 	@: "GUARD_EDIT_OK: feature 375 FR-001 - REASON= bundles a unit owed only a triage anyway (refused without one)"
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$(REASON)",)

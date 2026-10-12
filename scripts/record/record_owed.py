@@ -43,6 +43,7 @@ sys.path.insert(0, str(HERE))
 sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
 # no __pycache__ beside the scripts: the push runs this in fixture trees whose `git status` must stay clean
 sys.dont_write_bytecode = True
+import record_cache as rc  # noqa: E402
 import record_units as ru  # noqa: E402
 
 _SOURCE_FILE = re.compile(r"^\d+-([a-z0-9-]+)\.html$")  # a write-up number runs past four digits (20500-...)
@@ -84,26 +85,24 @@ def read_at(root: pathlib.Path, rev: str | None, sources: set[str] | None = None
         files = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if n.startswith(ru.QUESTIONS + "/")}
         src = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if is_src(n)}
     sources = {m.group(1): text for name, text in src.items() if (m := _SOURCE_FILE.match(name))}
-    return ru.Record.of(files, sources)
+    cache = parse_cache(root)
+    record = ru.Record.of(files, sources, cache)
+    cache.save()
+    return record
 
 
-def _cat(root: pathlib.Path, objects: list[str]) -> list[str]:
-    """Each object's text, by one `git cat-file --batch` (a missing one is empty)."""
-    if not objects:
-        return []
-    p = subprocess.run(["git", "-C", str(root), "cat-file", "--batch"], input=("\n".join(objects) + "\n").encode("utf-8"), capture_output=True, check=False)
-    out, data, i = [], p.stdout, 0
-    for _ in objects:
-        nl = data.index(b"\n", i)
-        head = data[i:nl].split()
-        if len(head) < 3 or head[1] == b"missing":
-            out.append("")
-            i = nl + 1
-            continue
-        size = int(head[2])
-        out.append(data[nl + 1 : nl + 1 + size].decode("utf-8"))
-        i = nl + 1 + size + 1
-    return out
+_CACHES: dict[pathlib.Path, rc.ParseCache] = {}
+
+
+def parse_cache(root: pathlib.Path) -> rc.ParseCache:
+    """The clone's record-parse cache, one per run (feature 375 amendment 3, plan D27): keyed by each file's text, and its
+    file named by `record_units.py`'s own source, so a change to the parser never reads an older parse."""
+    if root not in _CACHES:
+        _CACHES[root] = rc.ParseCache.at(root, "record-parse", HERE / "record_units.py")
+    return _CACHES[root]
+
+
+_cat = rc.cat_blobs  # translation_owed imports it by this name
 
 
 def _translation_units(root: pathlib.Path, now: ru.Record) -> list[ru.Unit]:
