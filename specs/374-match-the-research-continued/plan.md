@@ -465,10 +465,18 @@ compound repacked) is a batch of its own, the next. The rules of batches 3-5 hol
 
 - **W132-1** (within): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html measures the yakuimon across its
   frontage (1.8-2.6 m) and gives no passage; its drawing page draws the gate 6-8.5 ft wide as that frontage. So the one-bay gate's
-  6-8.5 ft runs post outside to post outside, its passage that frontage less its two posts; the gate range's ~12 ft (two ken) stays
-  a passage. docs/buildings.md's Scale claim and Main gate paragraph say so; the county draft's one-bay gate is drawn as an 8 ft
-  frontage (`GATE_W_FT` the frontage, the passage less the posts); every hand sheet drawing a one-bay main gate is redrawn to it,
-  and `main_gate_passage_ft`'s readers rechecked.
+  6-8.5 ft is its frontage. What the passage subtracts is settled here (T24's plan review): the registered measure is 間口, the
+  frontage of a one-bay gate, read as the span between its pillar centers (a reading, the usual measure of a bay), so the real
+  passage is the frontage less ONE pillar's width; no measured yakuimon pillar was found (searched 2026-10-12: the three
+  registered entries, a web search for 薬医門 本柱 寸法 - Imafuku's gate gives 9 x 5 shaku overall, no pillar), so the pillar is
+  ~1 ft, a GUESS. The drawn ~2 ft post (W133) is a convention and never enters the real passage: the posts are drawn outside
+  the real passage, their inner faces on it, the drawn outer-to-outer wider than the frontage, which the docs note says, ending
+  with the real size. The county draft's one-bay gate takes an 8 ft frontage (its passage 7 ft; `GATE_W_FT` the frontage, the
+  passage less the pillar), Ochiba's 8.5 ft, the largest registered (2.6 m) (its passage 7.5 ft) - each a degree within the
+  attested band; the lesser gates (6 ft, a GUESS) stay narrower than either. 0093's drawing page says so; the gate range's ~12
+  ft (two ken) stays a passage; docs/buildings.md's Scale claim and Main gate paragraph say so; `main_gate_passage_ft`'s readers,
+  `gate_feeds_its_road`, the `beside_gate` gatehouse and `postern_approach` rechecked. The round-trip sheet's 13.3 ft gate
+  (neither form) is filed as a row, not this wave's.
 
 ### Wave 133 (T25) - the main gate's posts about 2 ft square
 
