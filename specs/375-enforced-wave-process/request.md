@@ -100,7 +100,7 @@ So amendment 5 is: performance recorded and flagged, never a gate; the machine's
 each snapshot's start and end; CPU time recorded beside wall time; the 5% line as the flag's threshold; the scaling leg only
 when asked for.
 
-## Amendment 6 (2026-10-12, the same later session)
+## Amendment 7 (2026-10-12, the same later session)
 
 After amendment 5 landed, the session timed every command it had sped up, old code against new on 374's delta, and named
 what is left by measured cost: (1) model time per turn, to be measured against context size before anything is proposed;
@@ -113,5 +113,5 @@ while the push wanted `make hooks-test`, and the gate's own run record left unco
 
 > Yeah, I think I want all of those things. But I agree with you that two, three, six, and eight are a good place to start. and measuring the first one does seem like a good idea to see whether there's an actual issue there. But then I do think I probably want the others as well.
 
-Amendment 6 is 2, 3, 6 and 8, and the measurement of 1; 4, 5 and 7 follow as amendment 7 (7 to be put to the GM with its
+Amendment 7 is 2, 3, 6 and 8, and the measurement of 1; 4, 5 and 7 follow as amendment 8 (7 to be put to the GM with its
 yield across more than one feature, since what to change there is his to choose).

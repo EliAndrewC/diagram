@@ -37,7 +37,7 @@ def _report(failures: list[str], lines: list[str] | None = None) -> Any:
 
 @pytest.fixture(autouse=True)
 def _record_dir(tmp_path: Any, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Every audit writes its per-seed record (feature 375 amendment 6): here, never into the repository's dev/cohort-log/."""
+    """Every audit writes its per-seed record (feature 375 amendment 7): here, never into the repository's dev/cohort-log/."""
     monkeypatch.setattr(ca, "LOG_DIR", str(tmp_path / "cohort-log"))
 
 
@@ -277,7 +277,7 @@ def test_roll_one_reports_lane_ends_knotted_short_of_a_join(monkeypatch: pytest.
 
 
 
-# ---- feature 375 amendment 6, FR-028: the cohort through the roll cache, and its per-seed record --------------------------------
+# ---- feature 375 amendment 7, FR-029: the cohort through the roll cache, and its per-seed record --------------------------------
 
 
 def test_a_served_roll_says_so_and_the_audit_writes_its_per_seed_record(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:

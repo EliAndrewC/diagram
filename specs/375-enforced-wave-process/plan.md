@@ -454,9 +454,9 @@ load and free RAM at start and end (`_ends`, dashes for a snapshot from before),
 `docs/efficiency-tooling.md`; `scripts/container/append-system-prompt.md`'s standing order; `perf-audit.md` and
 `round-arbiter.md`; `docs/make-targets.html` regenerated from the Makefile.
 
-### Amendment 6 (FR-028 to FR-033)
+### Amendment 7 (FR-029 to FR-034)
 
-**D38 - The cohort through the roll cache (FR-028).** `cohort_audit._report_of` obtains each seed's roll by
+**D38 - The cohort through the roll cache (FR-029).** `cohort_audit._report_of` obtains each seed's roll by
 `rollcache.obtain("cohort:<spec>", ..., recorded=rollcache._in_child(cohort_roll.ROLL_TARGET, spec))` - the gate's own
 roll (`rollcache._roll_payload`, `generate` in a child), keyed by the engine functions it executed and the files it read, served
 when that key is unchanged - in place of calling `generate` itself; its own checks (households seated, farmstead across the
@@ -476,15 +476,15 @@ gate's own `roll:` subjects and `rollcache.report` are unchanged. The store: `ro
 detached worktree at the merge base reads and writes the clone's store (`rollcache.roll_store_dir()`; keys are
 path-independent since feature 167). `GATE_NO_CACHE=1` and the FULL test run bypass serving as they do for the gate.
 
-**D39 - The cohort's per-seed record (FR-028).** `cohort_audit.audit` writes `dev/cohort-log/<UTC stamp>-<clone>-<pid>.json` in
+**D39 - The cohort's per-seed record (FR-029).** `cohort_audit.audit` writes `dev/cohort-log/<UTC stamp>-<clone>-<pid>.json` in
 the CLONE (from a linked worktree, the main worktree's - a "before" leg's worktree is removed, the plan review's note): the
 run's count, first seed, households, commit and, per seed, `served` or `rolled`, `pass`/`fail`/`refused`, its failures (a
 refusal's by name) and its form. It names the file in `<git dir>/last-cohort-record`, and `make cohort` commits that one file
 (`scripts/gates/commit-run-record.sh <result> last-cohort-record`; the spec review's aside, round 2).
 
-**D40 - The census on request (FR-029).** `make perf` no longer runs `make census`; `make census` is unchanged.
+**D40 - The census on request (FR-030).** `make perf` no longer runs `make census`; `make census` is unchanged.
 
-**D41 - The suites in parallel processes (FR-030).** `test-batching-hooks.sh` and `test-pair-hooks.sh`: the helpers and the
+**D41 - The suites in parallel processes (FR-031).** `test-batching-hooks.sh` and `test-pair-hooks.sh`: the helpers and the
 constants several cases share are defined once before the cases; each case is a function `case_NN`, its measured seconds
 beside it (traced 2026-10-12); with no `CASES` the suite deals the cases into `SUITE_PARTS` (default 4) processes of itself,
 each re-running the setup (its own fixture, temporary files and guard log) and then only its `CASES`, longest first onto the
@@ -494,13 +494,13 @@ sums the counts, fails a part that ended before a case reported, naming it, and 
 batching, all 15 pass alone; pair, 12 of 15 pass alone, `case_07` needs `case_06`, `case_08` needs `06` and `07`, `case_13`
 needs `case_12` - dealt as chains, one unit each, in order. `test-entry-gate.sh` stays serial: it is one sequence of edits to
 one page in one throwaway clone: of its eight cases, `case_04` needs `case_03` and `case_06` needs `case_03` to `case_05`, one
-chain over half the suite, and the whole suite took 22 s alone (`m:375-a6-suites-scan`, 2026-10-12; its 67 s in R3 was taken
+chain over half the suite, and the whole suite took 22 s alone (`m:375-a7-suites-scan`, 2026-10-12; its 67 s in R3 was taken
 with the other suites running beside it) - under the split pair and batching suites' times.
 
-**D42 - The shortcut earns the hooks stamp (FR-031).** In `make done`'s "already verified" branch: when `gate-stamp.py --fresh
+**D42 - The shortcut earns the hooks stamp (FR-032).** In `make done`'s "already verified" branch: when `gate-stamp.py --fresh
 hooks` fails, `make hooks-test` runs first; red, the gate logs `failed:hooks-test`, commits its record and fails.
 
-**D43 - The gate commits its own record (FR-032).** `LOGRUN` names the record it wrote in `<git dir>/last-run-record`;
+**D43 - The gate commits its own record (FR-033).** `LOGRUN` names the record it wrote in `<git dir>/last-run-record`;
 `scripts/gates/commit-run-record.sh <result> [pointer]` commits exactly the file its pointer names (default `last-run-record`;
 `last-cohort-record` for D39), in the work tree holding it, with `git add` and `git commit --only -- <it>` as `the gate's run
 record (<result>)` - no other file under `dev/run-log/` (`ci/runlog.py` writes there too; the plan review), nothing the session
@@ -508,13 +508,13 @@ staged; the pointer is spent; skipped inside a CodeBuild build and outside a wor
 each of `make done`'s SIX record writes: already verified, its hooks failure, the reference step's failure, the two red
 sites, green.
 
-**D44 - Measured (SC-021, SC-023, SC-026).** SC-021: the cohort on 374's delta - four detached worktrees: the merge base
+**D44 - Measured (SC-022, SC-024, SC-027).** SC-022: the cohort on 374's delta - four detached worktrees: the merge base
 a41ab2e0f and 374's 61a52f3c8, each once with today's code and once with the new `cohort_audit.py` and `rollcache.py` copied in
 (the store is shared only where the new `rollcache.py` runs), the backlog's own store not copied - `make cohort N=48 JOBS=4`
 (4 = `L7R_ROLL_SLOTS`' default, the child rolls allowed at once), a "before" and an "after" leg each, twice, old and new
-alternating; key `375-a6-cohort-after`. SC-023: the two split suites, today's file (a detached worktree at the commit before) against
-the new, alternating, three runs each, the check counts compared; key `375-a6-suites-parts`. SC-026 is
-`m:375-a6-turn-time`, re-derived by `scripts/measure/turn_time.py`.
+alternating; key `375-a7-cohort-after`. SC-024: the two split suites, today's file (a detached worktree at the commit before) against
+the new, alternating, three runs each, the check counts compared; key `375-a7-suites-parts`. SC-027 is
+`m:375-a7-turn-time`, re-derived by `scripts/measure/turn_time.py`.
 
 ## Batches
 

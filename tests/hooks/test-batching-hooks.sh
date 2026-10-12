@@ -39,7 +39,7 @@ check() { # label, expected(ok|blocked), actual_rc
   fi
 }
 
-# GUARD_EDIT_OK: feature 375 amendment 6, FR-030 - helpers some cases share, defined once before the cases
+# GUARD_EDIT_OK: feature 375 amendment 7, FR-031 - helpers some cases share, defined once before the cases
 fold() { sleep 0.35; "$HOOK" pretool <<<"$FOLD" 2>/dev/null; RC=$?; "$HOOK" posttool <<<"$FOLD" >/dev/null 2>&1; return $RC; }
 batched_turn() {  # two calls in one turn; echoes the rc of each
   # GUARD_EDIT_OK: feature 164 - the hook's own STDOUT is discarded here. It carries a JSON notice one
@@ -288,7 +288,7 @@ teardown
 }
 
 
-# GUARD_EDIT_OK: feature 375 amendment 6 (FR-030) - THE CASES RUN IN PARALLEL PARTS, EACH ITS OWN PROCESS. After a script
+# GUARD_EDIT_OK: feature 375 amendment 7 (FR-031) - THE CASES RUN IN PARALLEL PARTS, EACH ITS OWN PROCESS. After a script
 # change hooks-test waited on this suite (specs/375-enforced-wave-process/research.md R3). Each part re-runs the setup above in
 # its own process - its own fixture, temporary files and guard log - and then only its cases (CASES), dealt longest first by
 # the measured seconds beside each case (10 s for a new one). Every check still runs and is counted; a part that ends before

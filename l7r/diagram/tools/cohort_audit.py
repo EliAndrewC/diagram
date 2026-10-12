@@ -84,7 +84,7 @@ def refused_verdict(hspec: Any, refused: BaseException) -> tuple[str, list[str],
 
 
 def _report_of(hspec: Any) -> tuple[Any, str]:
-    """`generate(hspec)` through the roll cache (feature 375 amendment 6, FR-028): served when nothing the roll executes
+    """`generate(hspec)` through the roll cache (feature 375 amendment 7, FR-029): served when nothing the roll executes
     changed, rolled in a child otherwise, under the cohort's own subject - a refusal stored too (the plan review: 374's cohort
     had two refused seeds, which rolled again on every run). A cohort re-rolled every seed on every run: a feature's "before"
     leg rolled unchanged code again each wave, its "after" leg re-rolled seeds the change never reached (109 minutes of
@@ -127,7 +127,7 @@ def roll_how(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[t
             report, how = _report_of(hspec)
     except Exception as refused:  # noqa: BLE001 - a roll that could not finish (a crash) is reported by its own name
         return refused_verdict(hspec, refused), "rolled"
-    if isinstance(report, Refusal):  # the engine's refusal by name, served or rolled (feature 375 amendment 6)
+    if isinstance(report, Refusal):  # the engine's refusal by name, served or rolled (feature 375 amendment 7)
         return refused_verdict(hspec, report.exception()), ("served" if how == "HIT" else "rolled")
     _breach = ((getattr(report, "manifest", None) or {}).get("meta") or {}).get("scatter_frame_breach")  # a test's stub report carries no manifest
     if _breach:  # feature 224: the scatter's predicted frame was too small - a strip inside the view may hold no scatter
@@ -254,7 +254,7 @@ LOG_DIR: str | None = None
 
 
 def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[str], list[str]], str]], first_seed: int, households: int | None) -> str:
-    """The cohort's PER-SEED RECORD (feature 375 amendment 6, FR-028): one file a run under `dev/cohort-log/` - per seed,
+    """The cohort's PER-SEED RECORD (feature 375 amendment 7, FR-029): one file a run under `dev/cohort-log/` - per seed,
     served or rolled, its verdict and the failures it found - so whether fewer seeds would find the same failures can be
     counted (feature 374's findings by seed lived only in its plan's prose). `make cohort` commits it, as `make done` does
     its run record. Returns the path."""

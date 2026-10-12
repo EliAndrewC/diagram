@@ -53,7 +53,7 @@ rc_pretool() { ( cd "$CLONE" && printf '%s' "$1" | "$HOOK" pretool >/dev/null 2>
 GATE=$(stdin_for Bash '{"command":"make done"}')
 REVIEW=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review the map"}')
 
-# GUARD_EDIT_OK: feature 375 amendment 6, FR-030 - helpers some cases share, defined once before the cases
+# GUARD_EDIT_OK: feature 375 amendment 7, FR-031 - helpers some cases share, defined once before the cases
 # ...and the constants several cases read, set once here (each was set by the first case that used it)
 VERDICTS="$CLONE/.git/review-verdicts"
 GATE_FULL=$(stdin_for Bash '{"command":"make done FULL=1"}')
@@ -466,7 +466,7 @@ check "the disclosure is ONE string, not five copies" '[ "$(grep -c "could not b
 }
 
 
-# GUARD_EDIT_OK: feature 375 amendment 6 (FR-030) - THE CASES RUN IN PARALLEL PARTS, EACH ITS OWN PROCESS. After a script
+# GUARD_EDIT_OK: feature 375 amendment 7 (FR-031) - THE CASES RUN IN PARALLEL PARTS, EACH ITS OWN PROCESS. After a script
 # change hooks-test waited on this suite (specs/375-enforced-wave-process/research.md R3). Each part re-runs the setup above in
 # its own process - its own fixture, temporary files and guard log - and then only its cases (CASES), dealt longest first by
 # the measured seconds beside each case (10 s for a new one). Every check still runs and is counted; a part that ends before

@@ -1,4 +1,4 @@
-"""The cohort's roll as the roll child runs it, and the engine's refusal as a payload (feature 375 amendment 6, FR-028).
+"""The cohort's roll as the roll child runs it, and the engine's refusal as a payload (feature 375 amendment 7, FR-029).
 
 WHY ITS OWN MODULE. `make cohort` runs `cohort_audit` with `python3 -m`, so there it is `__main__`, and in a process pool's
 worker it is `__mp_main__`; a `Refusal` class defined there is a different class object from the one the roll child

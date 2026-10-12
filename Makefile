@@ -146,7 +146,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	  : "record alive: each later gate refreshed its timestamp so it never aged out. No duration floor" ; \
 	  : "applies here (0 s is correct for a reuse) but the dry-run refusal does." ; \
 	  python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
-	  : "GUARD_EDIT_OK: feature 375 amendment 6, FR-031 - the shortcut re-stamped only the diagram area, so after a scripts-only" ; \
+	  : "GUARD_EDIT_OK: feature 375 amendment 7, FR-032 - the shortcut re-stamped only the diagram area, so after a scripts-only" ; \
 	  : "change it answered green while the push refused on a stale hooks stamp; now it runs hooks-test first when that stamp is stale" ; \
 	  if ! python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks >/dev/null 2>&1; then $(MAKE) --no-print-directory hooks-test FROM_DONE= || { $(LOGRUN) $(DONE_NAME) reference 0 failed:hooks-test; $(COMMIT_RUN_RECORD) failed; exit 1; }; fi; \
 	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; $(COMMIT_RUN_RECORD) already-verified; \
@@ -469,7 +469,7 @@ cohort:         ## [maps] roll N seeds and report every failure      N=48 [SEED=
 # containers' shared cap while other sessions run (the memwatch warned at 9.6 GB). JOBS hands cohort_audit its own --jobs.
 	$(REF_FIRST)
 	@: "GUARD_EDIT_OK: feature 328 - HOUSEHOLDS rolls the cohort at one size, the scaling question (does a change refuse a 20- or 40-household hamlet?) asked without the perf snapshot's timing - five make perf runs were spent as refusal checks on 2026-10-08"
-	@: "GUARD_EDIT_OK: feature 375 amendment 6, FR-028 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is"
+	@: "GUARD_EDIT_OK: feature 375 amendment 7, FR-029 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is"
 	$(RUN).tools.cohort_audit --count $(or $(N),48) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; exit $$rc
 
 # GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
@@ -1056,7 +1056,7 @@ LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
 # CPU temperature and throttle time reach its run-log entry (scripts/measure/runstats.py says why and what each field is).
 # RUN_STATS carries them into LOGRUN; every call is best-effort, so a host without a figure loses that field, never the run.
 RUNSTATS = python3 "$$(git rev-parse --show-toplevel)/scripts/measure/runstats.py"
-# GUARD_EDIT_OK: feature 375 amendment 6, FR-032 - `make done` commits its own run record, that path alone (the script says why);
+# GUARD_EDIT_OK: feature 375 amendment 7, FR-033 - `make done` commits its own run record, that path alone (the script says why);
 # LOGRUN names the record it wrote in <git dir>/last-run-record, so no other run's file is swept into the commit (the plan review)
 COMMIT_RUN_RECORD = bash "$$(git rev-parse --show-toplevel)/scripts/gates/commit-run-record.sh"
 
@@ -1866,7 +1866,7 @@ perf:            ## [performance] take a performance snapshot of the reference h
 ##  SCALING=1                    add the 10-, 20- and 40-household legs - for investigating the algorithm, not routine work
 	@: "GUARD_EDIT_OK: feature 375 amendment 5 - the scaling leg only when asked for (the GM: not during normal operations)"
 	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)" $(if $(SCALING),--scaling,)
-# GUARD_EDIT_OK: feature 375 amendment 6, FR-029 - the overlap census no longer runs after every perf snapshot (74 s of make
+# GUARD_EDIT_OK: feature 375 amendment 7, FR-030 - the overlap census no longer runs after every perf snapshot (74 s of make
 # perf's 97, measured 2026-10-12; nothing reads its output): `make census` runs it when asked. It superseded feature 306
 # FR-006's "a standing check run beside make perf", at the GM's 2026-10-12 word ("I think I want all of those things").
 

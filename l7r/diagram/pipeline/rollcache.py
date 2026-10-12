@@ -82,7 +82,7 @@ def bypassed() -> bool:
 @functools.cache
 def roll_store_dir() -> str:
     """Where the rolls are kept: this tree's `.gencache/rolls` - or, in a LINKED worktree, the main worktree's (feature 375
-    amendment 6, FR-028). A cohort's "before" leg is rolled in a detached worktree at the merge base; with its own store it
+    amendment 7, FR-029). A cohort's "before" leg is rolled in a detached worktree at the merge base; with its own store it
     rolled every seed again each wave (109 minutes of feature 374's tool time). The keys are the engine functions a roll
     executed and the files it read, path-independent since feature 167, so a worktree and its clone share one store safely."""
     def git(*a: str) -> str:

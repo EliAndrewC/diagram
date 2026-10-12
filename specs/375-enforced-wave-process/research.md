@@ -48,14 +48,14 @@ work per CPU second when it is contended. So CPU time does not separate a slower
 why the GM's answer was to record and flag rather than gate. Quiet, a 3.7 s roll varied by 7.4% across rounds (seed 39) and
 the four-seed total by about 2%; rolls are short now (about 4 s each), so a seed's percentage is noisy on its own.
 
-## R5 - what is left after amendment 5 (amendment 6, FR-028 to FR-033)
+## R5 - what is left after amendment 5 (amendment 7, FR-029 to FR-034)
 
-`m:375-a6-turn-time`, `m:375-a6-perf-and-census`. Model time: 374's session had 1,385 turns (a reply after a tool result),
+`m:375-a7-turn-time`, `m:375-a7-perf-and-census`. Model time: 374's session had 1,385 turns (a reply after a tool result),
 1.91 hours in all, a median of 3.7 s; a fit gives about 1.6 s a turn, 0.25 s for every 100,000 tokens of context read and
 3.3 s for every 1,000 tokens written, so context size explains about 0.5 hours of the 1.91 (a turn at 800,000 tokens about
 2 s slower than at none). The "6.5 hours of model time" first put to the GM summed every gap between tool calls, the waits
 on background gates, agents and the GM among them; this is the model's own time. `make perf` took 181 s with the old code
 (16 rolls) and 97 s with the new (4), and the overlap census it runs after every snapshot took 74 s of those 97 alone. The
-cohort: 109 minutes of 374's tool time (`m:375-a6-cohort-cost`), each wave rolling a "before" leg of unchanged code and an
+cohort: 109 minutes of 374's tool time (`m:375-a7-cohort-cost`), each wave rolling a "before" leg of unchanged code and an
 "after" leg, six seeds at a time on one worker under the memory cap; no structured record says which seed found which
 failure, so whether fewer seeds would have found the same cannot be counted after the fact.

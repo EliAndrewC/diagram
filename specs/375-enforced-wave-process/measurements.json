@@ -860,12 +860,12 @@
    "reading": "quiet, CPU and wall agree; under load CPU time rises with wall time (about 2.2x with six cores busy, 4-6x with all): on this hybrid-core laptop, whose clock drops under load, CPU time does not escape contention. Quiet, a seed's spread across rounds reached 7.4% (seed 39, a 3.7 s roll), the four-seed total about 2%"
   }
  },
- "375-a6-turn-time": {
-  "quantity": "model time per turn against context size, feature 374's session (feature 375 amendment 6, FR-033, R5)",
+ "375-a7-turn-time": {
+  "quantity": "model time per turn against context size, feature 374's session (feature 375 amendment 7, FR-034, R5)",
   "observed": "2026-10-12",
   "unit": "s",
   "source": "the diagram-backlog session's transcript (~/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl), 2026-10-10 20:51 to 2026-10-11 08:35",
-  "command": "python3 scripts/measure/turn_time.py /home/agent/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl --record specs/375-enforced-wave-process/measurements.json --key 375-a6-turn-time",
+  "command": "python3 scripts/measure/turn_time.py /home/agent/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl --record specs/375-enforced-wave-process/measurements.json --key 375-a7-turn-time",
   "method": "a turn is a reply after a tool result, timed from the result to the reply; least squares of its seconds on context and output tokens",
   "value": {
    "turns": 1385,
@@ -886,8 +886,8 @@
    }
   }
  },
- "375-a6-perf-and-census": {
-  "quantity": "make perf's time with the overlap census inside it, and the census alone (FR-029)",
+ "375-a7-perf-and-census": {
+  "quantity": "make perf's time with the overlap census inside it, and the census alone (FR-030)",
   "observed": "2026-10-12",
   "unit": "s",
   "varies": 0.3,
@@ -902,8 +902,8 @@
    "census alone s": 73.9
   }
  },
- "375-a6-cohort-cost": {
-  "quantity": "the time 374's session spent in make cohort (FR-028)",
+ "375-a7-cohort-cost": {
+  "quantity": "the time 374's session spent in make cohort (FR-029)",
   "observed": "2026-10-12",
   "unit": "min",
   "source": "the diagram-backlog session's transcript (~/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl), its main-loop tool calls 2026-10-10 20:51 to 2026-10-11 08:31",
@@ -915,8 +915,8 @@
    "how it ran": "six seeds at a time on one worker (JOBS=1) after memguard killed larger runs; a 'before' leg on unchanged code and an 'after' leg per wave"
   }
  },
- "375-a6-suites-scan": {
-  "quantity": "the dependence scan of the three guard suites FR-030 splits or leaves serial (SC-023)",
+ "375-a7-suites-scan": {
+  "quantity": "the dependence scan of the three guard suites FR-031 splits or leaves serial (SC-024)",
   "observed": "2026-10-12",
   "source": "tests/hooks/test-pair-hooks.sh, test-batching-hooks.sh and test-entry-gate.sh in the diagram-performance clone, each case made a function (the entry-gate one in a scratch copy)",
   "command": "CASES=case_NN bash <suite> for each case in a fresh process; for each that fails alone, CASES=\"case_j .. case_k\" with j stepping back until it passes",

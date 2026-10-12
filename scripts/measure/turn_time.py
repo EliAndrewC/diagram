@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""How long the model takes per turn, against the context it reads - feature 375 amendment 6, FR-033 (`research.md` R5).
+"""How long the model takes per turn, against the context it reads - feature 375 amendment 7, FR-034 (`research.md` R5).
 
     python3 scripts/measure/turn_time.py <session transcript .jsonl> [--record <measurements.json> --key <key>]
 

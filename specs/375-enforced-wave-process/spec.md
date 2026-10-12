@@ -2,9 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Reopened 2026-10-12 for amendment 6 (amendment 5 landed: spec FAITHFUL round 2, plan CLEAR, every task ticked; SC-016 to SC-020 tested; SC-012 carried to 374)
+**Status**: Reopened 2026-10-12 for amendment 7 (amendment 5 landed: spec FAITHFUL round 2, plan CLEAR, every task ticked; SC-016 to SC-020 tested; SC-012 carried to 374)
 
-**Amendment 6 approved**: the GM, 2026-10-12, "Yeah, I think I want all of those things. But I agree with you that two, three, six, and eight are a good place to start."
+**Amendment 7 approved**: the GM, 2026-10-12, "Yeah, I think I want all of those things. But I agree with you that two, three, six, and eight are a good place to start."
 
 **Amendment 5 approved**: the GM, 2026-10-11, "if it looks like the performance is slowing down to a meaningful degree, that's something you can mention when you say that the work has landed on main, but it doesn't need to be a gate anymore."
 
@@ -257,13 +257,13 @@ recorded and flagged, never a gate. The cohort is not part of it.
   `docs/guards.md`, `docs/efficiency-tooling.md`, `scripts/container/append-system-prompt.md` (its standing order to run
   `perf-audit` on every band of 1 or more), `.claude/agents/perf-audit.md` and `.claude/agents/round-arbiter.md`.
 
-### Amendment 6 (`request.md`, Amendment 6)
+### Amendment 7 (`request.md`, Amendment 7)
 
-The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment 7 takes the rest.
+The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment 8 takes the rest.
 
-- **FR-028 The cohort rolls only what changed.** `make cohort` rolled every seed through `generate` on every run, so a
+- **FR-029 The cohort rolls only what changed.** `make cohort` rolled every seed through `generate` on every run, so a
   feature's "before" leg rolled unchanged code again each wave and its "after" leg re-rolled seeds the change never reached:
-  109 minutes of 374's tool time, six seeds at a time on one worker under the memory cap (`m:375-a6-cohort-cost`,
+  109 minutes of 374's tool time, six seeds at a time on one worker under the memory cap (`m:375-a7-cohort-cost`,
   `research.md` R5). Now each cohort seed is served from the roll cache (`pipeline/rollcache.py`, keyed by the
   engine functions the roll executed and the files it read, path-independent since feature 167) when nothing it executes
   changed, and rolled otherwise; the cohort's own checks still run on every seed's report, served or rolled. The "before"
@@ -271,26 +271,26 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
   "before" leg rolls nothing. And each cohort run writes a structured record - per seed: served or rolled, its verdict, the
   failures it found, the engine commit - under `dev/cohort-log/`, one file a run, so that whether fewer seeds would find the
   same failures can be counted. No such record exists today (374's findings by seed are in its plan's prose), so the seed
-  count is decided in amendment 7, put to the GM with that record.
-- **FR-029 The overlap census runs when asked for.** `make perf` ran `make census` after every snapshot - 74 s of its 97 s,
+  count is decided in amendment 8, put to the GM with that record.
+- **FR-030 The overlap census runs when asked for.** `make perf` ran `make census` after every snapshot - 74 s of its 97 s,
   measured 2026-10-12 (`research.md` R5) - because feature 306 made it "a standing check run beside `make perf`" (its FR-006,
   from its review round 1). Nothing reads its output. `make census` runs it; `make perf` no longer does.
-- **FR-030 The next three guard suites run in parallel parts where their cases are independent.** After a script change
+- **FR-031 The next three guard suites run in parallel parts where their cases are independent.** After a script change
   `hooks-test` now waits on `test-pair-hooks.sh` (82 s), `test-batching-hooks.sh` (72 s) and `test-entry-gate.sh` (67 s)
   (`m:375-a3-hooks-test-before`, R3). Each is split into parallel parts as `test-sync-with-main.sh` was (FR-022): each part with
   its own temporary directory, `HOME` and guard log, every check still run and counted, today's pass count printed, a failed
   or unreported case failing the suite. Where a suite's cases depend on an earlier case's state, it splits only at the
   boundaries a measured scan finds, or stays serial, and the plan says which, with the scan's result.
-- **FR-031 The gate's shortcut does not leave the push a gate short.** `make done`'s "already verified" shortcut checks only
+- **FR-032 The gate's shortcut does not leave the push a gate short.** `make done`'s "already verified" shortcut checks only
   the engine content's record and re-stamps only the `diagram` area, so after a change under `scripts/` alone it answered
   green while the push's green-gate check refused on the `hooks` area (measured 2026-10-12, landing `impl_check.py`'s fix).
   Now the shortcut runs `make hooks-test` when the `hooks` stamp is stale and is green only if that is.
-- **FR-032 The gate's run record does not refuse the landing.** Every `make done` writes a record under `dev/run-log/`, a
+- **FR-033 The gate's run record does not refuse the landing.** Every `make done` writes a record under `dev/run-log/`, a
   tracked file, and `sync-with-main.sh done` refuses an uncommitted tree - so each landing after a gate cost a commit by hand
   and a second try. `sync-with-main.sh` itself says "the procedure never writes your commit for you". The record is the
   gate's, not the session's work: `make done` commits its own record, that one path alone, as `the gate's run record
   (<result>)`, and stages nothing else.
-- **FR-033 Model time against context size, measured.** From 374's transcript (`research.md` R5): 1,385 turns, 1.9 hours of
+- **FR-034 Model time against context size, measured.** From 374's transcript (`research.md` R5): 1,385 turns, 1.9 hours of
   model time from each tool result to the next reply; per turn about 1.6 s fixed, 0.25 s per 100,000 tokens of context and
   3.3 s per 1,000 tokens written - context size accounted for about half an hour in all. (The 6.5 hours the session first
   put to the GM counted the waits on background runs and on the GM as model time.) Recorded; nothing is built for it.
@@ -373,29 +373,29 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
 - **SC-020** (FR-027) `make perf-report` prints each snapshot's start and end load and free RAM beside its totals; a snapshot
   from before FR-024 prints dashes there. The test fails on today's code.
 
-- **SC-021** (FR-028) A cohort run writes its per-seed record (served or rolled, verdict, failures, commit); a cohort run twice
+- **SC-022** (FR-029) A cohort run writes its per-seed record (served or rolled, verdict, failures, commit); a cohort run twice
   on unchanged code rolls nothing the second time; after a change to one stage's
   code, only the seeds whose rolls executed it roll again; each seed's verdict served equals its verdict rolled fresh
   (`GATE_NO_CACHE=1`); a "before" leg in a detached worktree after a clone's own run of the same base rolls nothing. The
   cohort's time before and after on 374's delta, two waves, is a key of `measurements.json` (R1, R5). Tests fail on today's
   code.
-- **SC-022** (FR-029) `make perf` runs no census; `make census` runs it as before. The test fails on today's code.
-- **SC-023** (FR-030) Each of the three suites, today's file against the new in parts, alternating, three runs each: every
+- **SC-023** (FR-030) `make perf` runs no census; `make census` runs it as before. The test fails on today's code.
+- **SC-024** (FR-031) Each of the three suites, today's file against the new in parts, alternating, three runs each: every
   run passes today's count of checks; a suite split has its median at most half today's. A suite split or left serial
   carries its scan's result: each case run alone in a fresh process, and for each that fails alone the shortest run of its
   predecessors that passes - a chain kept in order in one part; a suite left serial names the dependence that keeps it so. A forced
   failure and a case that exits early each fail a split suite, named. Keys of `measurements.json` beside
   `m:375-a3-hooks-test-before` (R3).
-- **SC-024** (FR-031) After a change under `scripts/` alone, with the engine's record green, `make done` runs `hooks-test`
+- **SC-025** (FR-032) After a change under `scripts/` alone, with the engine's record green, `make done` runs `hooks-test`
   and stamps `hooks`, and the push's green-gate check passes; with nothing changed it runs nothing. The test fails on today's
   code.
-- **SC-025** (FR-032) After `make done`, the tree is clean except for what the session left, and the record is committed
+- **SC-026** (FR-033) After `make done`, the tree is clean except for what the session left, and the record is committed
   alone with its message; a staged change of the session's is left staged and uncommitted. The test fails on today's code.
-- **SC-026** (FR-033) R5's figures are a key of `measurements.json`, re-derivable by a kept script from the transcript.
+- **SC-027** (FR-034) R5's figures are a key of `measurements.json`, re-derivable by a kept script from the transcript.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021 to SC-026.
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 7 closes on SC-022 to SC-027.
 
 ## What it does not cover
 
@@ -408,8 +408,8 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   not fewer.
 - The cohort's cost (amendment 5): reusing its "before" leg per main commit, or rolling fewer seeds, was offered to the GM as
   a measurement and is not part of amendment 5, which settled the timing requirements.
-- The cohort's seed count (amendment 6): decided in amendment 7, with the per-seed record FR-028 starts keeping; the claims'
-  per-module cache, `check-bundle` in-process and the review checks' yield are amendment 7's too.
+- The cohort's seed count (amendment 7): decided in amendment 8, with the per-seed record FR-029 starts keeping; the claims'
+  per-module cache, `check-bundle` in-process and the review checks' yield are amendment 8's too.
 
 ## Decisions Recorded
 
@@ -477,9 +477,9 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   SC-018 pins 5 and 5.1 percent.
 - spec-fidelity-verify, amendment 5 round 2 (2026-10-11): FAITHFUL - round 1's three items resolved; the wider grep finds no
   other text stating the gate as a rule.
-- spec-fidelity, amendment 6 round 1 (2026-10-12, the counter reset): CHANGES REQUIRED. Applied: the cohort's 109 minutes is
-  `m:375-a6-cohort-cost`; FR-028 has the cohort keep a per-seed record and carries the seed count to amendment 7 (and "What
-  it does not cover" says so); SC-023 asks for the scan's result for any suite split or left serial; turn_time's bands are
+- spec-fidelity, amendment 7 round 1 (2026-10-12, the counter reset): CHANGES REQUIRED. Applied: the cohort's 109 minutes is
+  `m:375-a7-cohort-cost`; FR-029 has the cohort keep a per-seed record and carries the seed count to amendment 8 (and "What
+  it does not cover" says so); SC-024 asks for the scan's result for any suite split or left serial; turn_time's bands are
   labeled 200k.
-- spec-fidelity-verify, amendment 6 round 2 (2026-10-12): FAITHFUL - round 1's items resolved. Aside taken into the plan: the
+- spec-fidelity-verify, amendment 7 round 2 (2026-10-12): FAITHFUL - round 1's items resolved. Aside taken into the plan: the
   cohort's record commits itself as the gate's does, or it brings the uncommitted-tree refusal back.

@@ -1,4 +1,4 @@
-"""A roll child's target for `test_cohort_audit.py` (feature 375 amendment 6): the engine's refusal raised inside a REAL
+"""A roll child's target for `test_cohort_audit.py` (feature 375 amendment 7): the engine's refusal raised inside a REAL
 child process, through `cohort_roll.guarded` as the cohort's own target runs it - no hamlet rolled."""
 
 from __future__ import annotations

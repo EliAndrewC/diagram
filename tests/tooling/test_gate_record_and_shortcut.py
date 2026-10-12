@@ -1,5 +1,5 @@
-"""Feature 375 amendment 6: the gate commits its own run record (FR-032, SC-025), its shortcut runs `hooks-test` when that
-stamp is stale (FR-031, SC-024), and `make perf` runs no census (FR-029, SC-022)."""
+"""Feature 375 amendment 7: the gate commits its own run record (FR-033, SC-026), its shortcut runs `hooks-test` when that
+stamp is stale (FR-032, SC-025), and `make perf` runs no census (FR-030, SC-023)."""
 
 from __future__ import annotations
 
@@ -96,12 +96,12 @@ def _recipe(target: str) -> str:
 def test_the_shortcut_runs_hooks_test_when_its_stamp_is_stale_and_every_outcome_commits_its_record() -> None:
     done = _recipe("done")
     shortcut = done[done.index("verified-done") : done.index("already verified - nothing the gate exercises")]
-    assert "--fresh hooks" in shortcut and "hooks-test" in shortcut, "FR-031: a stale hooks stamp is earned, not skipped"
+    assert "--fresh hooks" in shortcut and "hooks-test" in shortcut, "FR-032: a stale hooks stamp is earned, not skipped"
     assert shortcut.index("--fresh hooks") < shortcut.index("already-verified;"), "...before the shortcut answers green"
     assert done.count("$(COMMIT_RUN_RECORD)") == 6, "already-verified, its hooks failure, the reference failure, both red sites and green"
 
 
 def test_make_perf_runs_no_census() -> None:
     perf = _recipe("perf")
-    assert "census" not in "\n".join(ln for ln in perf.split("\n") if ln.startswith("\t")), "FR-029: the census only when asked"
+    assert "census" not in "\n".join(ln for ln in perf.split("\n") if ln.startswith("\t")), "FR-030: the census only when asked"
     assert "overlap_census" in _recipe("census")

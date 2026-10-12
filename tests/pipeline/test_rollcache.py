@@ -590,7 +590,7 @@ def test_the_childs_stderr_is_forwarded_under_the_stage_profile_flag(monkeypatch
 
 
 def test_a_linked_worktree_keeps_its_rolls_in_the_main_worktrees_store(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 375 amendment 6, FR-028: a cohort's "before" leg is rolled in a detached worktree at the merge base; with its
+    """Feature 375 amendment 7, FR-029: a cohort's "before" leg is rolled in a detached worktree at the merge base; with its
     own store it re-rolled every seed each wave. The keys are path-independent (feature 167), so it shares the clone's."""
     import subprocess
 

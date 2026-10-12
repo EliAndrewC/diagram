@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# commit-run-record.sh <result> [pointer] - a run commits its OWN record (feature 375 amendment 6, FR-032; FR-028 for the cohort).
+# commit-run-record.sh <result> [pointer] - a run commits its OWN record (feature 375 amendment 7, FR-033; FR-029 for the cohort).
 #
 # WHY. Every `make done` writes a record under dev/run-log/, a tracked file, and `sync-with-main.sh done` refuses an
 # uncommitted tree - so every landing after a gate cost a commit by hand and a second try (twice on 2026-10-12 alone).
