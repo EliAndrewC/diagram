@@ -201,8 +201,9 @@ in 328's ranking and this spec.
 
 ## Batch 9 - the rolled wood on its sheet
 
-- [ ] T37 wave 145: a hamlet's rolled wood drawn on its sheet (0077) (FR-001)
+- [x] T37 wave 145: a hamlet's rolled wood drawn on its sheet (0077) (FR-001)
       research: rendering
+      verify: DONE. every open seat inside the frame stands on the houses' side on all 7 off-sheet rolls (m:w145-offsheet-why); D11's convention recorded on 0077's drawing page with its grounds note; quote-check, record-format, the woodland-commons depiction (arbiter round 3, its EDIT applied) answered; 6 claims IN-STEP; page-check green; bookends band 0
 
 ## Standing - the ranking's remaining rows
 

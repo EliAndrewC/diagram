@@ -715,5 +715,6 @@
   "l7r/diagram/hamletgen/consts.py::LANE_SKELETONS#lane along the water": "138",
   "l7r/diagram/hamletgen/consts.py::POND_LAYOUTS#dike-pond layout": "139",
   "l7r/diagram/hamletgen/consts.py::WEB_CLEARANCE#web lane's no-build corridor": "142",
-  "l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh": "143"
+  "l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh": "143",
+  "l7r/diagram/hamletgen/hinterland/stages.py::woodland_on_the_sheet#wood beyond the sheet": "145"
 }

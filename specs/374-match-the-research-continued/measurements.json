@@ -1779,5 +1779,14 @@
     "source": "a throwaway probe test wrapping hinterland/parcels.py _beyond_the_fields (removed after the measurement)",
     "command": "make test-file FILE=<the probe>",
     "method": "the scored seats handed to _beyond_the_fields and the seats it returns, per call"
+  },
+  "batch9-bookends": {
+    "quantity": "make perf 374-start vs 374-end over batch 9",
+    "value": "16.8 s -> 16.6 s, band 0 (the batch's only engine edit is a claim docstring)",
+    "unit": "s",
+    "observed": "2026-10-12",
+    "source": "dev/perf-log/20261012T181723Z-374-start, 20261012T184556Z-374-end",
+    "command": "make perf LABEL=374-start|374-end; make perf-review",
+    "method": "the two bookends' totals"
   }
 }
