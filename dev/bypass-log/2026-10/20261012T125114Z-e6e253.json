@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-12T12:51:14Z",
+  "target": "claims-gate",
+  "commit": "4250d27cd",
+  "why": "CLAIMS_OK: the two DRIFTED claims (residence form knobs, the west storehouse's register size) are impl-drift's new reading of code batch 5 did not change in kind; both are filed rows in 374's found.jsonl for a later wave"
+}
