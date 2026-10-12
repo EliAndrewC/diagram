@@ -206,4 +206,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       verify: DONE. DONE. make cohort-seeds, the records' feature field, features.json for the nine earlier records; make cohort defaults to ten seeds (the GM's choice); SC-031 m:375-a8-cohort-seeds: one change (374), seeds 10 and 20 refused:WebRefused, fewest first seeds 10
 - [ ] T55 375 closes again: the yield table to the GM, the `make accept` row for check-bundle's measured saving, tests, `make hooks-test`, the gate, the report, landed (D52)
       research: rendering
-
+- [ ] GM review (make gm-reviewed F=375) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)
