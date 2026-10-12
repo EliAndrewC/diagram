@@ -622,6 +622,28 @@ at landing.
   the crop's outline (padded half a cell instead, cohort seed Audit-10's field way could not reach the bund). The five readers (`ways/serve.py`, `ways/route.py`, `ways/clearance.py`, `ways/web.py`,
   `homesteads/boundary.py`) take the two lists apart.
 
+## Batch 9: the rolled wood drawn on the sheet
+
+**The work list** is 328's ranking rebuilt after batch 8 landed (155 open rows, 1 held at E2, 106 E3 DRIFTED;
+`m:batch8-open-rows`). Rows 0 and 771 stay as ruled. The next row, 774 (`BROOK_FLANKS`, the hamlet never astride its brook),
+WAITS (the spec's Assumptions: a row whose `after` is open waits for it): its fix makes the brook a tiebreak in `seat_cluster`,
+which ranking row `cluster.py::seat_cluster#brook penalty weight` holds at 3.0 until the open row `ways/web.py::stage_web#a
+cluster the brook crosses reached` lands. Measured at the tiebreak (0.05, 2026-10-12, `m:b9-before`): 10-household seed 4
+still seats astride its brook and leaves one farmhouse unreached (ten when the hold was recorded) - a row-village farm whose
+front faces the field and whose grove closes every other side, the same failure as row 771's dike-pond seed 4 and polder
+seed 12. So batch 9 takes row 776 (`woodland_on_the_sheet`, a rolled wood left off the sheet) alone; rows 774 and 771 return
+together once a row farm's way to its street is a placer guarantee. Measured before any edit (20 valley hamlets at 16
+households, seeds 1-20, `m:b9-before`): 7 of 20 roll a wood and draw none of it. The rules of batches 3-8 hold; the engine
+changes, so the batch takes its timing bookends and states the band at landing.
+
+### Wave 145 (T37) - a hamlet's rolled wood drawn on its sheet
+- **W145-1** (within): research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html places a village's
+  coppice on the nearest slope beyond the fields, or on the far side of the fields on the level. The code records a rolled wood
+  with no parcel on the sheet as a bearing (`meta.woodland_offsheet`), which no page records. The scan or the canvas grows so
+  at least one rolled parcel is seated on the sheet beyond the fields; the off-sheet bearing retires, or stays only as the
+  record of a roll whose ground the sheet cannot hold, measured. The bar: the cohort green, and the off-sheet count on the same
+  20 seeds re-measured.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

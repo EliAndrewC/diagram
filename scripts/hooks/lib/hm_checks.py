@@ -87,6 +87,20 @@ def moved_since_answer(root: Path, text: str, subject: str) -> str:
                  if subject_of_unit(slug.partition(":")[2]) == subject and not record_owed.answered(store, slug, fp)), "")
 
 
+def unit_fps(text: str, subject: str) -> list[str]:
+    """The fingerprints a bundle's units on `subject` are owed at (its `unit: <slug> <fp>` lines), in order."""
+    return [fp for slug, fp in _UNIT_FP.findall(text) if subject_of_unit(slug.partition(":")[2]) == subject]
+
+
+def new_cause(state: Mapping[str, Any], unit: str, fps: list[str]) -> bool:
+    """Is a dispatch owed for a cause no earlier counted round of `unit` saw - a later batch's page change, every fingerprint it
+    carries new to the unit's rounds? Its rounds then count from here, so one new bullet does not trip a cap that rounds for
+    earlier batches' changes used up (the round arbiter on round:modal-depiction|modal:hamlet/woodland-commons@3, feature 374
+    batch 9). A unit with no counted round, or a bundle with no fingerprint on the subject, is no new cause."""
+    seen = state.get("round_fps", {}).get(unit) or []
+    return bool(seen) and bool(fps) and not set(fps) & set(seen)
+
+
 def subjects_of_manifest(text: str) -> list[str]:
     return sorted({s for _c, tail in _UNIT.findall(text) if (s := subject_of_unit(tail))})
 
@@ -205,7 +219,9 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
             base = state.setdefault("rebased", {})
             if moved and base.get(unit, {}).get("fp") != moved:
                 base[unit] = {"fp": moved, "n": n}  # a new change: its rounds count from here (feature 374 FR-005)
-            n0 = base.get(unit, {}).get("n", 0) if shut else 0
+            if new_cause(state, unit, unit_fps(text, s)) and not open_round(state, s, now):
+                base[unit] = {"fp": unit_fps(text, s)[0], "n": n, "cause": True}  # a cause no counted round saw (below)
+            n0 = base.get(unit, {}).get("n", 0) if shut or base.get(unit, {}).get("cause") else 0
             cap = n0 + ROUND_CAP + hm_arbiter.continues(root, f"round:{unit}@", n0)
             if n >= cap:
                 hm_arbiter.trip(root, f"round:{unit}@{n + 1}", "round", unit, f"round {n + 1} of {check} on {s}", now)
@@ -216,6 +232,8 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         unit = f"{check}|{s}"
         if not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):  # a fresh reading is no repeat
             state.setdefault("rounds", {})[unit] = state.get("rounds", {}).get(unit, 0) + 1  # every other dispatch let through is a round
+        caused = state.setdefault("round_fps", {}).setdefault(unit, [])
+        caused.extend(fp for fp in unit_fps(text, s) if fp not in caused)  # what this round was owed at (`new_cause`)
         if s in current:  # what this check has now read of the subject, for the next dispatch's first-look test
             seen = state.setdefault("seen", {}).setdefault(unit, [])
             seen.extend(sorted({_sentence_key(x) for x in current[s]} - set(seen)))

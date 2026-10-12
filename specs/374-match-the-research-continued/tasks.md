@@ -199,6 +199,11 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. the crop at half the widest tread (3 ft, Gapped), the toe and marsh at 8 ft (UNRESEARCHED), every kept lattice step asked of the crop (crosses_the_crop, tested); cohort 16/16 (Audit-10 reached); impl-drift rounds 1-4 IN-STEP; gate green
 
+## Batch 9 - the rolled wood on its sheet
+
+- [ ] T37 wave 145: a hamlet's rolled wood drawn on its sheet (0077) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

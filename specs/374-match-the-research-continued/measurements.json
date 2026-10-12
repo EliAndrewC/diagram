@@ -1761,5 +1761,23 @@
     "source": "the StyRefused diagnostic (pondstock.seat_faults) on 16-household dike-pond rolls",
     "command": "make hamlet ARGS=\"--name A<s> --seed <s> --households 16 --archetype mulberry_dike_fishpond --out <dir> --no-render\"",
     "method": "the refusal names the reserved seat's failed rules and its nearest farmhouse's distance"
+  },
+  "b9-before": {
+    "quantity": "20 valley hamlets at 16 households (seeds 1-20): how many stand on both banks of their brook, and how many roll a wood and draw none on the sheet",
+    "value": "astride 2/20 (both dispersed; nucleated 0/8, linear 0/4); wood off the sheet 7/20; at the brook tiebreak (0.05, a trial reverted): 10-household seed 4 seats astride its brook and leaves one farmhouse unreached at (687, 2403) - a row-village farm with no route from its door",
+    "unit": "hamlets",
+    "observed": "2026-10-12",
+    "source": "make hamlet ARGS=\"--name V<s> --seed <s> --households 16 --out <dir> --no-render\"",
+    "command": "the houses' side of the first stream polyline (cross product), and meta.woodland_offsheet",
+    "method": "a hamlet is astride when houses stand on both sides of its brook"
+  },
+  "w145-offsheet-why": {
+    "quantity": "on each valley roll that records its wood off the sheet (16 households, seeds 2, 6, 7, 13, 15, 16, 17), the scan's open seats inside the frame and those beyond the fields from the houses",
+    "value": "seed 2: 126-177 open, 0 beyond; 6: 98-127, 0; 7: 122-172, 0; 13: 31-81, 0; 15: 47-71, 0; 16: 6-26, 0; 17: 135-194, 0 (per rung and set-back pass) - every open seat in the frame stands on the houses' side of the fields, so 0077's far side of the fields lies past the frame's edge on all seven (feature 287 D11); seed 1, which draws its wood, has 3-7 beyond",
+    "unit": "seats",
+    "observed": "2026-10-12",
+    "source": "a throwaway probe test wrapping hinterland/parcels.py _beyond_the_fields (removed after the measurement)",
+    "command": "make test-file FILE=<the probe>",
+    "method": "the scored seats handed to _beyond_the_fields and the seats it returns, per call"
   }
 }

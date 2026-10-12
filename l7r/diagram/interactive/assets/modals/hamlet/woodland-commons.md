@@ -21,7 +21,7 @@ Guesses:
 - That a wood's edge followed what bounded it on the ground, a brook, a lane or a field: no source on village commons or
   their boundaries says so.
 
-Depiction: The map draws the commons as a few patches of coppice, on the nearest rising ground above the fields where
+Depiction: Where the far side of the fields lies past the edge of the map, no wood is drawn, a convention: the wood lay off the sheet, beyond the fields, and any open ground left inside the frame is on the houses' side, where no village's wood stood. Otherwise the map draws the commons as a few patches of coppice, on the nearest rising ground above the fields where
 there is any, else on the level beyond the fields; below the houses it keeps off the low ground beside a river or marsh, which was the village's grass commons. Every crown is drawn at its real size, about 690 to the acre (1,700 a
 hectare), the count of a stand at the old end of the cutting cycle, so the wood may read a little more open than one at
 its cutting. No crown is drawn wholly under another's, a convention: the map draws the canopy, and neighboring crowns
