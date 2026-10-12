@@ -263,7 +263,9 @@ class GroundCoverMixin:
         covers every one of its points, so the share falls by exactly the block and the fill ends. Returns the commons laid.
         Rough grazing is what the record puts on ground nothing else claims (research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html).
 
-        Research: unclaimed ground grazed - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the largest bare blocks laid as grazing until the cap holds"""
+        Research:
+            unclaimed ground grazed - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the largest bare blocks laid as grazing (a floodplain's as meadow) until the cap holds
+            bare-share cap - UNRESEARCHED: `BARE_SHARE_CAP` (0.35) of the view may stay bare"""
         vars(self)["_fills_holes"] = True  # ...and the view the finish grows for the title is clothed the same way (`refill_the_view`)
         probe = {**self.M, "_planned_cover": [[(float(q[0]), float(q[1])) for q in p] for p in planned]}
         bare, total = bare_cells(probe, view)
@@ -390,7 +392,7 @@ class GroundCoverMixin:
         Research:
             commons beyond the grove - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub and rough grazing, not forest
             scrub ground color - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass and brush drawn as one repeated block over the bare ground, no solid fill and no outline (`tiles.cover_path`: the pattern alone)
-            grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one form only, the scrub past the grove; the floodplain and the small grass plot beside one paddy are never drawn or rolled
+            grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the scrub past the grove or the floodplain meadow (`pasture`), from the land; the small grass plot beside one paddy never drawn
             scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: a few scraggly pines - one throw to 6,000 sq ft, at least two throws (a throw the keep-outs refuse seats none), none on pasture
             off the ponds' open water - UNRESEARCHED: no scrub, pine or coppice crown on a pond or a crescent pond (one water test, `_sparse`), the grass bare 2 ft past a crescent pond's rim
             marsh edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: grass thins into the reeds, brush and pines stop at the marsh

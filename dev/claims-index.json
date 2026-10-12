@@ -9221,6 +9221,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/hinterland/stages.py::grass_ground#grass ground from the land": {
+  "code": "4bbc6454e2231532",
+  "core": "714b7fbf8de7e5c8",
+  "date": "2026-10-12",
+  "note": "the form follows the land: floodplain on flood ground, grass hill elsewhere",
+  "pages": {
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
+  },
+  "research": "448b6fd5149183a1",
+  "rests": [
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:50eedbbd058c7219",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b491c355bd1b4903"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/hinterland/stages.py::homestead_wood_drawn#homestead wood floor": {
   "code": "6b33b5327cfcd7dc",
   "core": "655456c890274c04",
@@ -9290,21 +9305,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#bare ground as rough grazing": {
-  "code": "f228525d60bccd23",
-  "core": "3d462d91d216ff66",
-  "date": "2026-10-03",
-  "note": "0078: rough grazing on any dry marginal ground",
+  "code": "d32ae28c8df2c990",
+  "core": "9f43a0d006ccefe2",
+  "date": "2026-10-12",
+  "note": "the leftover dry margins are clothed as rough grazing (pasture on a floodplain)",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
   "research": "448b6fd5149183a1",
+  "rests": [
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:102c966b25f451df",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:818744ef7d6acb48"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#grass ground form": {
-  "code": "95fb6190d938e33f",
-  "core": "3d462d91d216ff66",
-  "date": "2026-10-05",
-  "note": "the drawing page has three attested grass forms rolled as a knob (grass hill, floodplain, small plot beside a paddy); the code draws only rough grazing on leftover ground",
+  "code": "c3bdaf23c7492758",
+  "core": "9f43a0d006ccefe2",
+  "date": "2026-10-12",
+  "note": "this is the known gap and the claim names it correctly: §3 attests a third form, \"now and then, added at random, a small grass plot beside one paddy\", and the code never rolls it; the verdict stands until wave 2 draws the plot, and the claim text needs no change",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
@@ -9316,42 +9335,54 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#no scrub under a worked wood": {
-  "code": "00ddfe6d02d08913",
-  "core": "3d462d91d216ff66",
-  "date": "2026-10-03",
-  "note": "brush and pine stop at the wood's line",
+  "code": "a9cfb031ea4d1029",
+  "core": "9f43a0d006ccefe2",
+  "date": "2026-10-12",
+  "note": "the shelter belt, the coppice and the bamboo are all soft keep-outs, so brush and pine stop at each wood's line",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
   "research": "a763e17a58c10593",
-  "triaged": "2026-10-12",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d81577f543205810",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:f72018e9cbef75d6"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#scrub past the fields": {
-  "code": "0fa8dff0ebaab87c",
-  "core": "3d462d91d216ff66",
-  "date": "2026-10-03",
-  "note": "open scrub past the fields, per 0078 drawing",
+  "code": "77d73964c44609fd",
+  "core": "9f43a0d006ccefe2",
+  "date": "2026-10-12",
+  "note": "open scrub is the dominant cover past the crops and woods, laid as one band",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
   "research": "448b6fd5149183a1",
+  "rests": [
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:62a92d7e69836347",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b99bf3bf216fee9d",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:eb9b7a22b230877f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#share clothed as grazing": {
-  "code": "477466b04e274f8b",
-  "core": "3d462d91d216ff66",
-  "date": "2026-10-03",
-  "note": "no share in 0078",
+  "code": "c013999f2cd3439c",
+  "core": "9f43a0d006ccefe2",
+  "date": "2026-10-12",
+  "note": "the questions are silent on what share of the view may stay bare",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#stage order": {
-  "code": "233994f5995d5f27",
-  "core": "3d462d91d216ff66",
-  "date": "2026-10-03",
-  "note": "ordering",
+  "code": "6f4722ab904e3d51",
+  "core": "9f43a0d006ccefe2",
+  "date": "2026-10-12",
+  "note": "the order of the calls only sequences keep-outs and the drawing stack; the unit's own claims cover what it decides about the ground",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#among-the-houses copse box": {
@@ -29327,6 +29358,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/interactive/classes/greenery.py::FloodplainMeadow#modal explanation": {
+  "code": "d8023a80d4ad0e7e",
+  "core": "1ff09bf217933b9e",
+  "date": "2026-10-12",
+  "note": "a class key only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/interactive/classes/greenery.py::HomesteadBamboo#modal explanation": {
   "code": "a3ad446db3369202",
   "core": "f75c508fc90a9423",
@@ -44874,23 +44915,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement._header#the covers right above the land": {
-  "code": "816732b10629c45a",
-  "core": "9ea3b062cd364f1c",
-  "date": "2026-10-08",
-  "note": "the order the slots are drawn in, a drawing convention",
+  "code": "6d8ca3c6729c3d39",
+  "core": "41d6c11ad1cc740a",
+  "date": "2026-10-12",
+  "note": "draw-order slots, including the new floodplain meadow ones, are a drawing convention",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement._header#the dry-crop and fallow tiles": {
-  "code": "bc0478e9ef515196",
-  "core": "9ea3b062cd364f1c",
-  "date": "2026-10-08",
-  "note": "pattern fills and marks shown as a legend shows ground",
+  "code": "2f8fddccd039addd",
+  "core": "41d6c11ad1cc740a",
+  "date": "2026-10-12",
+  "note": "the pattern fills are a legend convention",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement._partition_grove_clumps#a clump wholly off the view is off the page": {
@@ -54502,73 +54541,73 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#a scrub pine's reach": {
-  "code": "3c291784568e392c",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "no cited page gives a scrub pine's crown radius; 0038 holds the scrub pine to the rule but gives no size",
+  "code": "1ec55cd21650d910",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "the questions give no crown radius for a scrub pine",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#claimed but undrawn": {
-  "code": "b5db67ac003f1ef3",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "the bare render records the ground and draws nothing",
+  "code": "fb5940f9c29a7b7b",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "a rendering choice",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#commons beyond the grove": {
-  "code": "ae91aa294ca5cd0f",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "open grass and brush tile, a few pines, no closed canopy",
+  "code": "07f0e1dfb762cb8a",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "open scrub and grazing, not forest",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
   "research": "448b6fd5149183a1",
   "rests": [
-   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b99bf3bf216fee9d",
-   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:eb9b7a22b230877f"
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:091ceb4a72f6e6ad",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:818744ef7d6acb48",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b99bf3bf216fee9d"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#crown and pine ink": {
-  "code": "75cfaf19876f78eb",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "three-branch line pine and flat discs",
+  "code": "27eed3add2a1e315",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "drawing convention",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#crowns and pines clear of the crops": {
-  "code": "2561da670d59f9b1",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "the pine lean is 14*bs, the tallest th it rolls",
+  "code": "958ad8c7f724296d",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "the questions are silent on keeping crowns off the fields",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#edge feather": {
-  "code": "f88b308d563cedf7",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "feather = 42*bs on the throws; the soft edge is a drawing convention",
+  "code": "27ba9eecaa5ebe93",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "the edge thinning is a drawing convention",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#grass ground forms": {
-  "code": "ffbc79bc2cb6caf9",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "the claim and the code fix one form (the scrub past the grove), but the page says \"Three forms are attested, so the form is a knob\" (the floodplain on a river flat, a small grass plot beside one paddy rolled at random) and gives a rule for each; the code should roll or select among the forms, or the page should record the single form as a deviation",
+  "code": "fc8147f44f2f630e",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "choosing the grass hill or the floodplain meadow from the land matches the page (\"depends on the land the map shows\"), but the page attests a third form (\"now and then, added at random, a small grass plot beside one paddy\") and the code never rolls it, so one attested form of the knob is missing; either draw the plot (the second wave) or have 0078's drawing page record leaving it out as a DEVIATION and relabel the claim to match",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
@@ -54580,17 +54619,15 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#marsh edge": {
-  "code": "e6c4d42a30000294",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "pines are hard-excluded (_in_soft), the grass and brush tile is bare over every marsh, and the grass-reed grading is the page's mixed band at the seam",
+  "code": "6be1c69069b12b85",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "grass grades into the reeds; brush and pine stop dead at the marsh",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
   "research": "a44790630d28af23",
   "rests": [
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d",
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c48d5966ddfc61fd",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:cffc80f9329f1f37",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc"
@@ -54598,10 +54635,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#no crown in a yard's sun": {
-  "code": "e8935becca978740",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "each pine is tested with _crown_covers against _pine_sun; 0038 names the scrub pine",
+  "code": "bd6250616d16c2da",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "scrub pines are held to the plots' sun test",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -54612,20 +54649,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#off the ponds' open water": {
-  "code": "91ec6448fddd2ac0",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "no cited page answers it",
+  "code": "edebce982e1c2acd",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "the questions are silent on cover at a pond's edge",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color": {
-  "code": "7dcedf0b20856499",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "one Cover tile over the zone with its bare ground, no fill, no outline",
+  "code": "87e3d3d936f63c0b",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "the cover is the pattern alone, with no fill and no outline",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
@@ -54636,57 +54673,71 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub pines": {
-  "code": "2f1a78a29d690a58",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "max(2, area/6000 sq ft) throws, none on pasture; a calibrated \"few\"",
+  "code": "278fde2f76bd57b2",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "a few scraggly pines on the scrub, none on the open floodplain meadow",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
   "research": "448b6fd5149183a1",
   "rests": [
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:398659af373db58f",
-   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b99bf3bf216fee9d",
-   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:eb9b7a22b230877f"
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:6b58d2945bf79d57",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b491c355bd1b4903",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b99bf3bf216fee9d"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge": {
-  "code": "66a6e64923219442",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "woods are bare whole for the scrub tile and pines are hard-excluded; WOOD_FRINGE_FT=8.0 grass fringe in two halves, the inner one thinned",
+  "code": "df773efb415e772f",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "`WOOD_FRINGE_FT` = 8 ft of grass under a wood's edge, thinning inward; no brush in the wood",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
   "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d81577f543205810"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#woodland no-build": {
-  "code": "ae4a6b73f40e6846",
-  "core": "b68317c00a131b7b",
-  "date": "2026-10-10",
-  "note": "block_polys.append; no cited page answers it",
+  "code": "e5130832ba025662",
+  "core": "d810966be8903d3a",
+  "date": "2026-10-12",
+  "note": "the questions are silent on it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.fill_the_holes#bare-share cap": {
+  "code": "aef9c177ade88e65",
+  "core": "5f18861bd364952b",
+  "date": "2026-10-12",
+  "note": "the page says the dry margins are one continuous band but gives no share that may stay bare, so 0.35 is correctly UNRESEARCHED",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.fill_the_holes#unclaimed ground grazed": {
-  "code": "e90f2095ef8868f3",
-  "core": "81a1f8851b3cc801",
-  "date": "2026-10-03",
-  "note": "rough grazing on any dry margin, as 0078 says",
+  "code": "1cdc066e76ec09a5",
+  "core": "5f18861bd364952b",
+  "date": "2026-10-12",
+  "note": "rough grazing on unclaimed dry margins, with the fields counted as cover so none goes on the rice, and a floodplain's ground laid as meadow, all match the page",
   "pages": {
    "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html": "54194b7d7f491e41"
   },
   "research": "448b6fd5149183a1",
+  "rests": [
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:102c966b25f451df",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:50eedbbd058c7219",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:818744ef7d6acb48",
+   "0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html:b491c355bd1b4903"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.hinterland#interior voids grazed": {
