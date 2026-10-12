@@ -636,39 +636,54 @@ asked. Tests, `make hooks-test`, the gate, the report.
 
 ### Amendment 9 (FR-039 to FR-041)
 
-**D53 - The feature's hour (FR-039; T56).** `review_owed.glyph_clock(root)` returns when the active feature's current hour
-began, or None for a change with no feature: the LATEST of (a) the feature's first event in the clone (the first line of
-`<git dir>/l7r-events/<feature>.jsonl`, the event log feature 375 keeps), (b) the clone's last landing (`<git dir>/l7r-landed`,
-an epoch `sync-with-main.sh` writes after a clean push - a reopened feature's log starts at its first opening, days before an
-amendment's work; the work since its last landing is the work being implemented), and (c) the latest glyph-check dispatch the
-pair guard recorded (`pairing-state.json`'s `dispatched[<unit slug>].at`) at or after (a) and (b) - an earlier feature's or an
-earlier stretch's dispatch never counts. The active feature is `hm_arbiter.feature_dir`'s (the one reader). A glyph unit is
-DUE when `now - clock >= 3600` (`GLYPH_HOUR_S`), and every owed glyph unit is due together.
+**D53 - The feature's hour, and its batch (FR-039; T56).** The clock is kept PER FEATURE in `<git dir>/glyph-clock.json`:
+`{<feature dir name>: {"batch_at": <epoch>, "batch": [<unit slugs>]}}`. The feature's hour starts at its first event in the
+clone (the first line of `<git dir>/l7r-events/<feature>.jsonl`, the event log feature 375 keeps) and again at each batch it
+opens - nothing of another feature's, nor the clone-wide `pairing-state.json`'s `dispatched` (which holds glyph units from
+October 1-3, never cleared), starts it. A reopened feature's log began at its first opening, so the first glyph unit of a
+reopening is due at once and the hourly rhythm runs from that batch on: one early check a reopening (the plan review measured
+it; the spec's start is the feature's first event, and a landing is a moment units come due, not a start). A glyph unit is
+DUE when: (a) `now - start >= 3600` (`GLYPH_HOUR_S`) - every owed glyph unit then; or (b) it is in the open batch and has no
+dispatch since `batch_at` (`dispatched[slug].at < batch_at`) - so the batch's second, third ... units stay due after the first
+is dispatched (FR-039: "due together and dispatched together"); or (c) the work is landing (D55). A BATCH OPENS at the first
+glyph dispatch the guard passes under (a): `batch_at = now`, `batch` = every glyph unit owed at that moment. A unit owed after
+`batch_at` - new, or owed again by a fix - is in no open batch and waits for the next hour.
 
-**D54 - Owed, due and landing (FR-039, FR-041; T56).** `review_owed.owed(root, landing=False)` returns the units DUE: every
-non-glyph unit as today, and the glyph units only when D53 makes them due (none, for a change with no feature, until landing);
-`waiting(root)` returns the glyph units owed and not due, each with the epoch it comes due. `landing=True` returns every owed
-unit, as `owed()` does today. CLI: `--landing`, which `review-gate.sh` passes on its three calls (the push still owes every
-glyph unit an answer); the pair guard, the stop hook and `make verify` call without it. `--why` adds one line naming the
-waiting glyph units and the time they come due (FR-040). Tests (red on today's code): before the hour a glyph unit is owed
-and not due, a settlement-review unit due at once; at the hour all glyph units due; after a dispatch the clock restarts; a
-dispatch before the feature's first event or before the last landing does not make a unit due; no feature means none due
-until `--landing`; `--landing` lists them all.
+**D54 - No feature (FR-039; T56).** The active feature is `hm_arbiter.feature_dir`'s, read from `.specify/feature.json`, which
+nothing clears when a feature closes (this clone's still names 375). So "a change with no feature" is: no feature dir, or no
+event log for it, or a feature CLOSED by its status line (`speckit-todo.closed_by_status`, the one reader). Then no glyph unit is
+due until the work lands (D55) - a tweak in a clone whose last feature is Done checks its glyphs once, at landing, not at
+once on the strength of a days-old event log.
 
-**D55 - The early dispatch refused (FR-040; T57).** `pair-hooks.sh`'s Agent branch: a `glyph-check` dispatch whose unit is
-owed (`--landing`) but not due (`waiting`) is refused, naming when it comes due, unless `GLYPH_DUE_OK="<reason>"` (two words
-or more, recorded in the guard census, as every escape). A suite case each: refused before the hour, passed with the escape,
-passed when due. `sync-with-main.sh` writes `<git dir>/l7r-landed` on a clean push (the gated and the direct route), with a
-suite case.
+**D55 - Owed, due, waiting and landing (FR-039, FR-040, FR-041; T56, T57).** `review_owed.owed(root, landing=False)`: every
+non-glyph unit as today (FR-041), and the glyph units D53 makes due. `landing=True`: every owed unit, as `owed()` today; CLI
+`--landing`, passed on all four of `review-gate.sh`'s unit-listing calls (lines 148, 154, 158, 167; `--check-declared` is
+unchanged). `waiting(root)`: the owed glyph units not due, each with when it comes due (start + 3600 under a feature; "at
+landing" with none). LANDING is known by a marker: when `review-gate.sh` refuses a push for an unanswered glyph unit it writes
+`<git dir>/glyph-landing` (`{"feature": <name or "">, "at": <epoch>}`), and while it names the active feature (or "" with none)
+every owed glyph unit is due - so the dispatch the refused push asks for passes the guard without its escape; a clean push
+(`sync-with-main.sh`, both routes) removes it. The pair guard's Agent branch refuses a glyph-check dispatch whose unit is owed
+but not due, naming when it comes due, unless `GLYPH_DUE_OK="<reason>"` (two words or more, in the guard census); on a passed
+dispatch under (a) it opens the batch (D53). The stop hook and `make verify` ask only for due units (they read the default).
+Tests (red on today's code), a fixture clone each: before the hour a glyph unit is owed, not due, `waiting` names its time, and a
+building-review, a size-audit, a fix-check and a settlement-review unit are each due at once; units owed at minute 5 and
+minute 59 are both due at the hour; a dispatch opens the batch and the batch's second unit is still due after the first is
+dispatched; the same unit owed again by a fix ten minutes after its dispatch is not due until the next hour; a dispatch
+recorded before the feature's first event (a clone's October dispatch) does not move its clock; no feature, and a Done
+feature, owe nothing due until the landing marker, and then all; the landing marker makes every owed glyph unit due and a clean
+push removes it; `--landing` lists them all. Suite cases (`tests/hooks/test-pair-hooks.sh`, `test-review-gate.sh`): an early
+glyph dispatch refused, passed with `GLYPH_DUE_OK`, passed when due, passed after a refused push without the escape; the push
+refuses an unanswered glyph unit through `--landing` and writes the marker.
 
-**D56 - What `make verify` shows (FR-040; T57).** `review_owed.py --why` (which `make verify` and the stop hook print) names
-the waiting glyph units and when they come due, so a session knows what the hour will bring; `make verify` hands no prompt
-for a waiting unit.
+**D56 - What `make verify` shows (FR-040; T57).** `review_owed.py --why` (which `make verify` and the stop hook print) adds a
+line naming the waiting glyph units and when each comes due; `make verify` hands no dispatch prompt for a waiting unit.
 
-**D57 - The texts, measured after (FR-039-041; T58).** `docs/reviews.md`'s table and its paragraph on dispatch say a glyph
-check is due on the feature's hour and at landing; the root `CLAUDE.md`'s pair-guard row names `GLYPH_DUE_OK`; `docs/guards.md`
-the guard. SC-034's measurement: glyph-check passes per hour of the next long feature, from the ledger and the event log,
-against R8 (`m:375-a9-glyph-passes`) - carried to that feature's report if it lands after 375 (`Carried:`).
+**D57 - The texts, and SC-034 carried to 374 (FR-039-041; T58).** `docs/reviews.md`'s table and dispatch paragraph say a
+glyph check is due on the feature's hour, in batches, and at landing; the root `CLAUDE.md`'s pair-guard row names
+`GLYPH_DUE_OK`; `docs/guards.md` the guard and the marker. SC-034's after-figure - glyph-check passes per hour of feature work,
+from the ledger and the event log - is measured on feature 374, the open long feature with map work: T58 writes
+`Carried: SC-034 -> 374 sc034-375-a9-glyph-per-hour` into SC-034, so 374 closes only with that key in its measurements.json
+(close_check.py, FR-014); `375-a9-glyph-passes` is the before-figure (R8).
 
 ## Batches
 
