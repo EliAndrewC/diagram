@@ -328,7 +328,63 @@ parser the bundle uses too - the spec review's aside: 15 of 343's rows had no un
 `bundle()` uses the owed record's unit, else this, so a round asked about ahead of the cap still carries its rounds, replies
 and edits (343's 13 form-check bundles had none).
 
-## Batches
+### Amendment 3 (FR-019, FR-020, FR-021)
+
+**D25 - `modal-form` first, held at the bundle (FR-019a).** `modal_bundle.bundle` refuses a `modal-research` or
+`modal-depiction` bundle (exit 3, before anything is copied) when the pop-up's `modal-form:<uid>` unit is owed now
+(`record_owed.units`) and not answered at its fingerprint (`record_owed.answered`). The refusal names
+`make modal-bundle KIND="<uid>" FOR=modal-form`. The escape is `FORM_FIRST_OK="<why>"` in the environment (make passes a
+command-line variable to its recipes); it needs two words or more, and the MANIFEST then carries a `form-first-escape: <why>`
+line. A pop-up owed no `modal-form` unit (only a page it names moved, or only its Depiction tab) is not held: the rule is
+read off the owed units, never off the check asked for. The hold sits at the bundle because every modal dispatch reads a
+bundle (`check-bundle-hooks.sh` refuses one without); no hook changes.
+
+**D26 - Settling across checks (FR-019b, c).** `apply_edits.Round` fingerprints, before the blocks, the units of the reply's
+own checks (as today) AND the units it settles across: `modal-form`'s, when the reply's checks are `modal-research`'s three
+or `modal-depiction` (`record_owed.SETTLES_ACROSS`, a dict from a check to the checks it settles, read by `Round`). After
+the blocks, a unit of the reply's own checks settles as today (answered, or pending until `make record-checked`); a unit it
+settles across settles ONLY where its answer already stands at the words before the blocks (`record_owed.answered`) - never
+pending, because a `modal-form` answer recorded later would be an answer to words that check never read. Its result line
+says whose blocks settled it. A `modal-form` reply settles only its own unit (c): `SETTLES_ACROSS` has no `modal-form` key.
+Between `modal-research` and `modal-depiction` nothing settles (c).
+
+**D27 - One parse per content (FR-020a, d).** `record_units.ParseCache`: a mapping from `sha256(file text [+ its
+originals])` to the parsed `Page`, notes triple (notes, cites, readings) or write-up words, held in memory for the run and on
+disk as one pickle per parsing-code version (`<git common dir>/l7r-cache/record-parse-<sha of record_units.py>.pickle`,
+written atomically, only when the run added entries). `Record.of(files, sources, cache=None)` reads through it;
+`record_owed.read_at` passes the clone's. A changed file is a new key; a change to `record_units.py` is a new file name, so
+no answer outlives the code that made it. A corrupt or unreadable cache is an empty one. `modal_bundle.bundle` computes
+`record_owed.units` once and hands the result to the triage refusal, the D25 hold and `owed_lines` (today it computed the
+whole delta twice to print one pop-up's lines).
+
+**D28 - One `git` batch per revision (FR-020b).** `modal_owed._read_at(root, rev)` returns a reader backed by ONE `git
+ls-tree -r` of the directories it serves and ONE `git cat-file --batch` of their blobs (`record_owed._cat`, moved to
+`record_units.cat_blobs` so both import it), filled on the first read; a path outside them falls back to `git show`.
+`modals_at` and `owed` use it in place of their per-file `git show` calls (299 at the base on 374's delta), and
+`entry_owed` its own per-file calls the same way (177).
+
+**D29 - The claims kept by their sources (FR-020c).** `scripts/record/claims.current(skill, qdir)` keys the rows it builds
+from `all_units` on `sha256` over every `l7r/diagram/**/*.py` under `skill` (path and content), the `PROCEDURES` documents
+and the source of both claim readers (`l7r/diagram/tools/claims.py`, `scripts/record/claims.py`); a hit loads the units and
+claims from `<git common dir>/l7r-cache/claims-<key>.pickle` and recomputes only `research_fp` (it reads question pages,
+which change independently). Only the newest key is kept. Wrapping at `scripts/record/claims.py` keeps the engine untouched
+and the landing DIRECT.
+
+**D30 - The script tests by what they touch (FR-021).** `tests/hooks/hookdeps.py --pydeps <test file>` prints the test's
+freshness set: the file; each `conftest.py` from its directory up to `tests/`; every file of `scripts/` and `tests/hooks/`
+its code names (a file name, or an imported stem) and their closure through helpers (`closure`, the guard suites' own
+derivation); and all of `scripts/` and `tests/hooks/` when the test builds a script path at run time (`"scripts"` joined to
+a non-literal, or `scripts/` inside an f-string's braces) or globs the tree (`_globs_tree`). The Makefile's pytest step
+hashes each selected file's set, runs only the files whose hash differs from their stamp
+(`<git dir>/hooks-test/py/<test path with / as __>`), and stamps every file it ran when the run is green; a red run stamps
+none. `HOOKS_ALL=1` runs all; under `make done` the step is skipped as today.
+
+**D31 - Measured, not assumed (SC-012, SC-013, SC-014).** SC-013 is run by a scratch script on a detached worktree at
+61a52f3c8 with the backlog's answer store copied: each command three times cold (cache directory removed) and three times
+warm, output compared byte for byte against the same command with the caches disabled (`L7R_CACHE_OFF=1`, read by both
+cache helpers); key `375-a3-record-tooling-after`. SC-014's count runs `hookdeps.py --pydeps` against main's last ten commits
+touching `scripts/` and counts the files each would run; key `375-a3-hooks-test-selection`. SC-012 is carried to 374:
+374's next pop-up wave counts its dispatches per unit from its `checks-open.json`, as `m:375-a3-popup-rounds-before` did.
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005
    on 372 and a one-task feature; 375's report so far), D5, D6, D18's `[lands-open]` mark and `**Waits on**:`.

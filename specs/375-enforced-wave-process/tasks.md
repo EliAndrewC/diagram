@@ -120,3 +120,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T32 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
       verify: DONE. make done green (reuse: scripts only); tests/tooling 1614 passed; make hooks-test green; report written; landed by the push carrying this tick
+
+## Amendment 3 (the GM 2026-10-11: pop-up checks in order; the record tooling made fast; hooks-test by what changed)
+
+- [ ] T33 `modal-form` first and settling across checks (plan D25, D26); tests red on today's code (SC-011)
+      research: rendering
+- [ ] T34 One parse per content and one git batch per revision (plan D27, D28); outputs unchanged, a changed file and a changed parser each miss (SC-013)
+      research: rendering
+- [ ] T35 The claims kept by their sources (plan D29); a changed module and a changed reader each miss (SC-013)
+      research: rendering
+- [ ] T36 The script tests run by what they touch (plan D30); fixture tests (SC-014)
+      research: rendering
+- [ ] T37 The measurements (plan D31): SC-013's times and SC-014's count recorded; SC-012 carried to 374
+      research: rendering
+- [ ] T38 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
+      research: rendering
