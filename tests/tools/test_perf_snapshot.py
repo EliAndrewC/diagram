@@ -159,7 +159,9 @@ def test_record_writes_a_snapshot_keyed_by_stamp_label_and_TREE(tmp_path, monkey
     monkeypatch.setattr(
         ps,
         "measure",
-        lambda seeds, households=None, warm=False: [{"seed": s, "seconds": float(s), "cpu_seconds": float(s), "form": "nucleated", "shape": "crescent", "houses": 15, "asked": 15, "stages": {"web": float(s)}} for s in seeds],
+        lambda seeds, households=None, warm=False: [
+            {"seed": s, "seconds": float(s), "cpu_seconds": float(s), "form": "nucleated", "shape": "crescent", "houses": 15, "asked": 15, "stages": {"web": float(s)}} for s in seeds
+        ],
     )
     monkeypatch.setattr(ps, "machine_state", lambda path=ps.SKILL: {"load": [1.0, 1.0, 1.0], "ram_available_mb": 4096})
 

@@ -239,8 +239,11 @@ def check(log_dir: Path, feature: str, specs_dir: Path | None = None) -> tuple[b
     for env, v in sorted(vs.items()):
         b = binding(v)
         made = sorted({f"{r['kind']}={r.get('verdict')}" for r in recs if r.get("binding") == b})
-        lines.append(f"[{env}] {v.cur['label']} vs {v.base['label']} at {v.cur['commit']}: band {v.band}" + (f" ({'; '.join(v.crossed)})" if v.crossed else "")
-                     + (f" - records made: {', '.join(made)}" if made else ""))
+        lines.append(
+            f"[{env}] {v.cur['label']} vs {v.base['label']} at {v.cur['commit']}: band {v.band}"
+            + (f" ({'; '.join(v.crossed)})" if v.crossed else "")
+            + (f" - records made: {', '.join(made)}" if made else "")
+        )
         if v.band >= 1:
             lines.append(perf_bands.flag(v))
     return True, "\n".join(lines) + mute_note

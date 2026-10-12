@@ -159,5 +159,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T42 The machine's state, CPU time and the warm-up roll (D34); the scaling leg on request and the trend (D36); tests (SC-017, SC-019, SC-020)
       research: rendering
       verify: DONE. machine_state at both ends, CPU beside wall per stage after an untimed warm-up roll, metric_of CPU-else-wall; scaling only with SCALING=1; perf-report with CPU, load and free RAM per snapshot; test_perf_snapshot 27 and test_perf_scaling 14 passed; a real snapshot taken end to end (SC-017, SC-019, SC-020)
-- [ ] T43 The texts (D37); 375 closes again: tests, `make hooks-test`, the gate, the report, landed
+- [x] T43 The texts (D37); 375 closes again: tests, `make hooks-test`, the gate, the report, landed
       research: rendering
+      verify: DONE. the texts (constitution 2.30.0, CLAUDE.md, l7r/diagram/CLAUDE.md, dev/performance.md, docs/guards.md, docs/efficiency-tooling.md, the system prompt, perf-audit and round-arbiter, the Makefile); tests/tooling 1665 and tests/tools 607 passed; hooks-test green; make done green (254 s); report written; landed by the push carrying this tick

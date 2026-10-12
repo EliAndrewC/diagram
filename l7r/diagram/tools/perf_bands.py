@@ -178,8 +178,19 @@ def evaluate(base: dict[str, Any], cur: dict[str, Any]) -> Verdict:
         crossed += [f"{h} households: {c}" for c in leg.crossed]
         band = max(band, leg.band)
     machines = {f"{side} {end}": dict(s.get(f"machine_{end}") or {}) for side, s in (("base", base), ("cur", cur)) for end in ("before", "after")}
-    return Verdict(environment=e_cur, base=_ident(base), cur=_ident(cur), total_pct=ref.total_pct, seeds=ref.seeds, stage_delta=ref.stage_delta, band=band,
-                   crossed=tuple(crossed), legs=legs, metric=metric, machines=machines)
+    return Verdict(
+        environment=e_cur,
+        base=_ident(base),
+        cur=_ident(cur),
+        total_pct=ref.total_pct,
+        seeds=ref.seeds,
+        stage_delta=ref.stage_delta,
+        band=band,
+        crossed=tuple(crossed),
+        legs=legs,
+        metric=metric,
+        machines=machines,
+    )
 
 
 def metric_of(base_rows: list[dict[str, Any]], cur_rows: list[dict[str, Any]]) -> str:
@@ -277,8 +288,10 @@ def flag(v: Verdict) -> str:
     """What a pair over the band-1 line says at landing (feature 375 amendment 5, FR-023) - never a refusal. The GM, 2026-10-11:
     "We flag it if it looks like it is getting slower with the usual caveats about maybe it's just under load"."""
     slower = [f"seed {s} {p:+.1f}%" for s, p in sorted(v.seeds.items()) if p > BAND1_PCT.get(v.environment, BAND1_DEFAULT_PCT)]
-    lines = [f"  FLAG: this looks slower - total {v.total_pct:+.1f}%" + (f", {', '.join(slower)}" if slower else "") + f" (band {v.band}, in "
-             f"{'CPU' if v.metric == 'cpu_seconds' else 'wall'} seconds). It may be the machine's load: compare the two snapshots' state -"]
+    lines = [
+        f"  FLAG: this looks slower - total {v.total_pct:+.1f}%" + (f", {', '.join(slower)}" if slower else "") + f" (band {v.band}, in "
+        f"{'CPU' if v.metric == 'cpu_seconds' else 'wall'} seconds). It may be the machine's load: compare the two snapshots' state -"
+    ]
     for side, label in (("base", v.base["label"]), ("cur", v.cur["label"])):
         lines.append(f"    {label}: at its start {_state(v.machines.get(side + ' before', {}))}; at its end {_state(v.machines.get(side + ' after', {}))}")
     lines.append("    Mention it when you report the landing; nothing waits on it. `make perf-report` shows the trend and the stages that grew.")
