@@ -249,9 +249,11 @@ recorded and flagged, never a gate. The cohort is not part of it.
 - **FR-027 The trend says when.** `make perf-report` lists every snapshot - its time, label, commit, totals - with the load
   and free RAM at its start and end beside it, so a run taken under load reads as one, and a real slowdown can be placed
   between two snapshots and so between two commits.
-- Constitution principle VI's performance clause and every doc and agent contract that states the gate
-  (`l7r/diagram/CLAUDE.md`, `dev/performance.md`, `docs/guards.md`, `.claude/agents/perf-audit.md`,
-  `.claude/agents/round-arbiter.md`) say what FR-023 says.
+- Every text that states the gate says what FR-023 says - the set a grep over the always-loaded and on-demand docs finds
+  (`perf-audit|perf bands|band-1|perf_review.py --check|blocks as a regression|perf-arbiter`): constitution principle VI,
+  the root `CLAUDE.md` (the push row and the gate row of the guards table), `l7r/diagram/CLAUDE.md`, `dev/performance.md`,
+  `docs/guards.md`, `docs/efficiency-tooling.md`, `scripts/container/append-system-prompt.md` (its standing order to run
+  `perf-audit` on every band of 1 or more), `.claude/agents/perf-audit.md` and `.claude/agents/round-arbiter.md`.
 
 ## Success criteria
 
@@ -324,8 +326,8 @@ recorded and flagged, never a gate. The cohort is not part of it.
   free and total disk) and each stage's CPU seconds beside its wall seconds, after an untimed warm-up roll; a pair is banded on
   CPU seconds where both have them, on wall seconds otherwise, the report naming which. The wall-against-CPU measurement
   that led here is `research.md` R4, a key of `measurements.json`. Tests fail on today's code.
-- **SC-018** (FR-025) A test pair whose total and every seed rose by exactly the band-1 line is unflagged, in both
-  environments; one seed a tenth of a point over it is flagged band 1. The test fails on today's code.
+- **SC-018** (FR-025) A test pair whose total and every seed rose 5 percent is unflagged, in both environments; one seed at 5.1
+  percent is flagged band 1. The test fails on today's code (0 and 2 percent lines).
 - **SC-019** (FR-026) `make perf` without `SCALING=1` records no scaling rows (four rolls and the warm-up, not sixteen); with
   it, the legs as today. Tests fail on today's code.
 - **SC-020** (FR-027) `make perf-report` prints each snapshot's start and end load and free RAM beside its totals; a snapshot
@@ -344,8 +346,8 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   `make audit`, so a slide back is visible, not prevented.
 - The size of the remaining rows: 153 E3 and 43 E4 rows are real redraws and research passes; this feature makes each cheaper,
   not fewer.
-- The timing requirements (amendment 3): the timing runs were the largest single cost of 374's tool time (2.5 h of 6.25), and
-  the GM will discuss relaxing them once this amendment has landed.
+- The cohort's cost (amendment 5): reusing its "before" leg per main commit, or rolling fewer seeds, was offered to the GM as
+  a measurement and is not part of amendment 5, which settled the timing requirements.
 
 ## Decisions Recorded
 
@@ -407,3 +409,7 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   worktree passed its 123 checks (150 s).
 - spec-fidelity-verify, amendment 4 round 2 (2026-10-11): FAITHFUL - round 1's two items resolved; today's suite re-run at
   bfe25f2da in its own worktree passed its 123 checks.
+- spec-fidelity, amendment 5 round 1 (2026-10-11, the counter reset): CHANGES REQUIRED. Applied: the closing bullet names
+  every text that states the gate, found by its grep (the system prompt's standing order to run perf-audit, the root
+  CLAUDE.md's rows, docs/efficiency-tooling.md added); "What it does not cover" says the cohort stays out, not the timing;
+  SC-018 pins 5 and 5.1 percent.
