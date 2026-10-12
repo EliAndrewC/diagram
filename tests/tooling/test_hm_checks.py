@@ -452,3 +452,23 @@ def test_a_first_look_at_sentences_other_checks_added_is_no_round(tmp_path: path
     modal.write_text("About: Old sentence. Added for depiction.\n")
     assert hc.dispatch(st, "t1", "modal-form", "m", text, 1.0, root) == ""
     assert st["rounds"]["modal-form|modal:sheet/x"] == hc.ROUND_CAP, "a first look is not counted"
+
+
+def test_a_later_cause_no_counted_round_saw_counts_its_rounds_afresh(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix (round:modal-depiction|modal:hamlet/woodland-commons@3, feature 374 batch 9): a unit's
+    rounds count per owing cause - a dispatch whose every fingerprint on the subject is new to the unit's counted rounds, with
+    no round open, starts a fresh count; the same cause asked again keeps counting toward the cap."""
+    root = _clone(tmp_path)
+    st: dict = {}
+    for i in range(2):
+        assert hc.dispatch(st, f"t{i}", "quote-check", "/m", MANIFEST, i, root) == ""
+        hc.answered(st, "quote-check", ["q:0105"])
+    assert "passes its cap of 2" in hc.dispatch(st, "t2", "quote-check", "/m", MANIFEST, 2, root), "the same cause: round 3 trips"
+    later = "owed-checks: quote-check\nunit: quote-check:0105.drawing#new-bullet fff111\n"  # a later batch's change, a cause no round saw
+    for i in range(2):
+        assert hc.dispatch(st, f"n{i}", "quote-check", "/m", later, 3 + i, root) == "", "a new cause's rounds count afresh"
+        hc.answered(st, "quote-check", ["q:0105"])
+    assert "passes its cap of 4" in hc.dispatch(st, "n2", "quote-check", "/m", later, 5, root), "and are capped like any other"
+    assert hc.unit_fps(later, "q:0105") == ["fff111"] and hc.unit_fps(later, "q:0999") == []
+    assert not hc.new_cause({}, "u", ["a"]) and not hc.new_cause({"round_fps": {"u": ["a"]}}, "u", []), "no counted round, no fingerprint: no new cause"
+    assert hc.new_cause({"round_fps": {"u": ["a"]}}, "u", ["b"]) and not hc.new_cause({"round_fps": {"u": ["a"]}}, "u", ["a", "b"])
