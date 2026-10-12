@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Reopened 2026-10-12 for amendment 8 (amendments 6 and 7 landed 2026-10-12: every task ticked, SC-021 to SC-027 tested; amendments 1-5 Done 2026-10-11)
+**Status**: Done 2026-10-12 - amendment 8 landed: spec FAITHFUL (round 5), plan CLEAR (round 3); claims after an engine edit 6.3-7.0 s -> 0.7 s (SC-028); a check bundle 3.7 -> 2.8 s, measured, the half bar not met (SC-029); make review-yield and make cohort-seeds (SC-030, SC-031); the cohort rolls ten seeds (the GM); the GM's review row for check-bundle's measured saving open; amendments 1-7 Done
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
 

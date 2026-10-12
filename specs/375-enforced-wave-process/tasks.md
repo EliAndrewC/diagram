@@ -204,8 +204,9 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T54 `make cohort-seeds`, the records' feature field, and the cohort's ten seeds (D51; the GM's ruling); today's output (SC-031)
       research: rendering
       verify: DONE. DONE. make cohort-seeds, the records' feature field, features.json for the nine earlier records; make cohort defaults to ten seeds (the GM's choice); SC-031 m:375-a8-cohort-seeds: one change (374), seeds 10 and 20 refused:WebRefused, fewest first seeds 10
-- [ ] T55 375 closes again: the yield table to the GM, the `make accept` row for check-bundle's measured saving, tests, `make hooks-test`, the gate, the report, landed (D52)
+- [x] T55 375 closes again: the yield table to the GM, the `make accept` row for check-bundle's measured saving, tests, `make hooks-test`, the gate, the report, landed (D52)
       research: rendering
+      verify: DONE. DONE. make accept row filed (check-bundle's measured saving, for make gm-review); the yield table goes in the landing message; tests/tooling 1712+, tests/tools 622, tests/pipeline 106 passed; hooks-test inside make done; make done green (162 s, its record committed by itself); report written; landed by the push carrying this tick
 - [ ] GM review (make gm-reviewed F=375) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
