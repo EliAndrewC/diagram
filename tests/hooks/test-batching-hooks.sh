@@ -39,6 +39,32 @@ check() { # label, expected(ok|blocked), actual_rc
   fi
 }
 
+# GUARD_EDIT_OK: feature 375 amendment 7, FR-031 - helpers some cases share, defined once before the cases
+fold() { sleep 0.35; "$HOOK" pretool <<<"$FOLD" 2>/dev/null; RC=$?; "$HOOK" posttool <<<"$FOLD" >/dev/null 2>&1; return $RC; }
+batched_turn() {  # two calls in one turn; echoes the rc of each
+  # GUARD_EDIT_OK: feature 164 - the hook's own STDOUT is discarded here. It carries a JSON notice one
+  # turn before a block now, and this helper claims to echo the two exit codes and nothing else - so
+  # without the redirect the notice landed in the caller's `read` and three vectors failed on text
+  # where an integer belonged. The hook's behavior was correct; the harness was conflating the two.
+  sleep 0.35
+  "$HOOK" pretool <<<"$(ev Read)" >/dev/null 2>"$BT_ERR"; local r1=$?
+  "$HOOK" pretool <<<"$(ev Grep)" >/dev/null 2>/dev/null;   local r2=$?
+  "$HOOK" posttool <<<"$(ev Read)" >/dev/null 2>&1
+  "$HOOK" posttool <<<"$(ev Grep)" >/dev/null 2>&1
+  echo "$r1 $r2"
+}
+slow_turn() { sleep 0.35; "$HOOK" pretool <<<"$(ev Bash)" 2>"$BT_ERR" || return $?; sleep 2.1; "$HOOK" posttool <<<"$(ev Bash)" >/dev/null 2>&1; }
+bg_turn() { sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' 2>"$BT_ERR"; local rc=$?; [ $rc -ne 0 ] && return $rc; "$HOOK" posttool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' >/dev/null 2>&1; return 0; }
+bash_turn() {  # one Bash turn with the given command string (plain chars only)
+  sleep 0.35
+  printf '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1" | "$HOOK" pretool 2>"$BT_ERR"
+  local rc=$?
+  [ $rc -ne 0 ] && return $rc
+  printf '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1" | "$HOOK" posttool >/dev/null 2>&1
+  return 0
+}
+
+case_01() {  # 4 s measured alone 2026-10-12
 echo "1. a run of serial single-call turns blocks at the threshold"
 setup
 serial_turn; check "turn 1 allowed" ok $?
@@ -54,7 +80,9 @@ grep -q "you need TOGETHER" "$BT_ERR" && { echo "  ok    block message says what
 grep -q "patch MISS" "$BT_ERR" && { echo "  ok    block message carries the retry-patch fold tip"; PASS=$((PASS+1)); } || { echo "  FAIL  no retry-patch tip in the message"; FAIL=$((FAIL+1)); }
 grep -q "pad with no-op" "$BT_ERR" && { echo "  ok    block message forbids padding the window"; PASS=$((PASS+1)); } || { echo "  FAIL  no anti-padding tip in the message"; FAIL=$((FAIL+1)); }
 teardown
+}
 
+case_02() {  # 3 s measured alone 2026-10-12
 echo "2. it never deadlocks: the call right after a block is allowed through"
 setup
 serial_turn; serial_turn; serial_turn
@@ -62,10 +90,12 @@ serial_turn; check "blocked once" blocked $?
 serial_turn; check "next call allowed (no deadlock)" ok $?
 serial_turn; check "and the one after that" ok $?
 teardown
+}
 
 # GUARD_EDIT_OK: feature 164 - THE WARNING ARRIVES ONE TURN BEFORE THE BLOCK. This is the loudest
 # guard in the repository (127 firings in six days, more than every other guard combined) and each
 # firing spends the round trip it exists to save; a notice on an ALLOWED call spends nothing.
+case_03() {  # 2 s measured alone 2026-10-12
 echo "2b. the notice arrives one turn early, and refuses nothing (feature 164)"
 setup
 serial_turn; serial_turn                       # window "11" - one turn below the bar of 3
@@ -86,12 +116,14 @@ setup
 QUIET=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null)
 printf '%s' "$QUIET" | grep -q "BATCHING NOTICE" && { echo "  FAIL  a notice on the first turn of all"; FAIL=$((FAIL+1)); } || { echo "  ok    a quiet session gets no notice"; PASS=$((PASS+1)); }
 teardown
+}
 
 # GUARD_EDIT_OK: feature 249 (GM 2026-09-14) - THE NOTICE SPEAKS ON ANY SINGLE CALL, not only a bare
 # read. The history counts a folded single command as a serial turn (one round trip under the cheap
 # bound), but the notice carried the block's shape test, so a session reconning in folded commands
 # reached the bar with no notice and was blocked cold. The block keeps its shape test (case 3 below
 # still proves a folded command is never refused); only the notice is widened.
+case_04() {  # 1 s measured alone 2026-10-12
 echo "2c. the notice arrives on a FOLDED single call one turn below the bar (feature 249)"
 setup
 serial_turn; serial_turn                       # window "11" - one below the bar of 3
@@ -100,6 +132,8 @@ NOTICE=$("$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":
 check "the folded call is allowed" ok $RC
 printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a folded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
 teardown
+}
+case_05() {  # 1 s measured alone 2026-10-12
 echo "2d. ...and on a BACKGROUNDED single call (feature 249: the GM's 'any single call')"
 setup
 serial_turn; serial_turn
@@ -108,14 +142,15 @@ NOTICE=$("$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":
 check "the backgrounded call is allowed" ok $RC
 printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  a backgrounded call one below the bar got no notice"; FAIL=$((FAIL+1)); }
 teardown
+}
 
 # GUARD_EDIT_OK: 2026-09-26 - OPTION A (the GM's choice): A FOLDED COMMAND DOES NOT FILL THE WINDOW. It used to count (one
 # quick round trip) while only a bare read could be blocked, so a session folding as asked was refused on its first bare
 # read afterwards. The fixture sends the real PostToolUse shape, which carries the command, because that is what decides.
+case_06() {  # 4 s measured alone 2026-10-12
 echo "2e. folded commands never fill the window; bare reads still do, and the notice says which is which"
 setup
 FOLD='{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"grep a f; grep b g"}}'
-fold() { sleep 0.35; "$HOOK" pretool <<<"$FOLD" 2>/dev/null; RC=$?; "$HOOK" posttool <<<"$FOLD" >/dev/null 2>&1; return $RC; }
 fold >/dev/null; fold >/dev/null; fold >/dev/null; fold >/dev/null
 serial_turn; check "four folded turns then a bare read: allowed" ok $?
 serial_turn; check "...and a second bare read (window holds two)" ok $?
@@ -127,7 +162,9 @@ sleep 0.35; OUT=$("$HOOK" pretool <<<"$(ev Read)" 2>"$BT_ERR"); check "a fourth 
 [ -z "$OUT" ] && { echo "  ok    ...with no notice printed alongside the refusal"; PASS=$((PASS+1)); } || { echo "  FAIL  a refused call also printed the notice"; FAIL=$((FAIL+1)); }
 grep -rhq 'history ' "$GUARD_LOG_ROOT" && { echo "  ok    the log records the window state"; PASS=$((PASS+1)); } || { echo "  FAIL  the log carries no window state"; FAIL=$((FAIL+1)); }
 teardown
+}
 
+case_07() {  # 1 s measured alone 2026-10-12
 echo "3. a batched turn is never interrupted below the threshold"
 # NOTE the semantics this pins down: PreToolUse must decide on the FIRST call of a turn, when it
 # cannot yet know whether a second call is coming in the same message. So a batch that begins
@@ -135,24 +172,14 @@ echo "3. a batched turn is never interrupted below the threshold"
 # straight through (test 2 proves no deadlock). That is the intended flow, not a bug: the block is
 # what prompts the batch. Below the threshold a batch is never interrupted, which is the common case.
 setup
-batched_turn() {  # two calls in one turn; echoes the rc of each
-  # GUARD_EDIT_OK: feature 164 - the hook's own STDOUT is discarded here. It carries a JSON notice one
-  # turn before a block now, and this helper claims to echo the two exit codes and nothing else - so
-  # without the redirect the notice landed in the caller's `read` and three vectors failed on text
-  # where an integer belonged. The hook's behavior was correct; the harness was conflating the two.
-  sleep 0.35
-  "$HOOK" pretool <<<"$(ev Read)" >/dev/null 2>"$BT_ERR"; local r1=$?
-  "$HOOK" pretool <<<"$(ev Grep)" >/dev/null 2>/dev/null;   local r2=$?
-  "$HOOK" posttool <<<"$(ev Read)" >/dev/null 2>&1
-  "$HOOK" posttool <<<"$(ev Grep)" >/dev/null 2>&1
-  echo "$r1 $r2"
-}
 serial_turn; serial_turn                       # window "11", under the threshold of 3
 read -r r1 r2 <<<"$(batched_turn)"
 check "batch below the threshold is never interrupted (call 1)" ok "$r1"
 check "batch below the threshold is never interrupted (call 2)" ok "$r2"
 teardown
+}
 
+case_08() {  # 2 s measured alone 2026-10-12
 echo "4. THE REGRESSION: one batched turn no longer absolves the serial run around it"
 # The 2026-08-08 finding, and the reason the streak became a window. Under the old CONSECUTIVE
 # counter the batch below reset the count to zero, so the two serial turns after it sat at 2 and
@@ -167,28 +194,32 @@ serial_turn; check "serial turn after the batch allowed (window '1101')" ok $?
 serial_turn; check "BLOCKED - the batch did not erase the serial turns around it" blocked $?
 grep -q "of your last" "$BT_ERR" && { echo "  ok    block message reports the window"; PASS=$((PASS+1)); } || { echo "  FAIL  block message does not report the window"; FAIL=$((FAIL+1)); }
 teardown
+}
 
+case_09() {  # 4 s measured alone 2026-10-12
 echo "5. a SLOW call is real work, not a batchable turn"
 setup
 serial_turn; serial_turn                       # window "11"
-slow_turn() { sleep 0.35; "$HOOK" pretool <<<"$(ev Bash)" 2>"$BT_ERR" || return $?; sleep 2.1; "$HOOK" posttool <<<"$(ev Bash)" >/dev/null 2>&1; }
 slow_turn; check "the slow turn itself is allowed" ok $?   # window "110"
 serial_turn; check "serial turn after it allowed" ok $?
 serial_turn; check "BLOCKED at 3 serial turns inside the window" blocked $?
 teardown
+}
 
+case_10() {  # 20 s measured alone 2026-10-12
 echo "6. a window of nothing but real work never blocks"
 setup
 slow_turn; slow_turn; slow_turn; slow_turn; slow_turn; slow_turn; slow_turn
 slow_turn; check "7 slow turns, no block" ok $?
 teardown
+}
 
+case_11() {  # 4 s measured alone 2026-10-12
 echo "8. a BACKGROUNDED call is never counted as recon, and is never blocked"
 # Found in use, minutes after the window shipped: `make done` launched with run_in_background
 # returns to the model in milliseconds, so the duration test reads the cheapest possible turn -
 # and the hook blocked the one thing the loop rules most want you to do.
 setup
-bg_turn() { sleep 0.35; "$HOOK" pretool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' 2>"$BT_ERR"; local rc=$?; [ $rc -ne 0 ] && return $rc; "$HOOK" posttool <<<'{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done","run_in_background":true}}' >/dev/null 2>&1; return 0; }
 serial_turn; serial_turn; serial_turn          # window "111" - the very next serial call blocks
 bg_turn; check "the backgrounded launch is NOT blocked, even standing at the threshold" ok $?
 serial_turn; check "a real serial call right after it still blocks" blocked $?
@@ -196,10 +227,12 @@ teardown
 setup
 bg_turn; bg_turn; bg_turn; bg_turn; bg_turn; check "a run of backgrounded launches never blocks" ok $?
 teardown
+}
 # NOTE what this does NOT claim: a backgrounded turn is still a TURN, so it ages the window like any
 # other. Five of them push a serial turn out of a window of six, which is correct - the window asks
 # "how much of my RECENT work was one-call recon", and work you did five turns ago is not recent.
 
+case_12() {  # 2 s measured alone 2026-10-12
 echo "7. sessions are independent"
 setup
 serial_turn; serial_turn; serial_turn
@@ -207,16 +240,10 @@ sleep 0.35
 "$HOOK" pretool <<<'{"session_id":"other","tool_name":"Read"}' 2>/dev/null
 check "a different session is unaffected" ok $?
 teardown
-
-bash_turn() {  # one Bash turn with the given command string (plain chars only)
-  sleep 0.35
-  printf '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1" | "$HOOK" pretool 2>"$BT_ERR"
-  local rc=$?
-  [ $rc -ne 0 ] && return $rc
-  printf '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"%s"}}' "$1" | "$HOOK" posttool >/dev/null 2>&1
-  return 0
 }
 
+
+case_13() {  # 5 s measured alone 2026-10-12
 echo "9. only a recon-SHAPED call is ever blocked (GM 2026-08-10)"
 # The 021 profile: 49 of 52 blocks landed on heredoc patch scripts or already-folded commands.
 # The batching opportunity is BEHIND a substantive call - blocking it just re-sends it verbatim.
@@ -235,7 +262,9 @@ H=$("$HOOK" status <<<"$(ev Read)" | sed 's/.*history=\([01]*\).*/\1/')
 serial_turn; serial_turn; serial_turn         # three bare reads re-arm it: "000111"
 bash_turn "grep -n foo settlement.py"; check "a naked single grep IS blocked" blocked $?
 teardown
+}
 
+case_14() {  # 5 s measured alone 2026-10-12
 echo "10. after a block the bar re-arms HIGHER (3 -> 6), so a grind session is not blocked forever"
 setup
 serial_turn; serial_turn; serial_turn
@@ -245,7 +274,9 @@ serial_turn; check "NOT re-blocked at 3 - the bar doubled (would have re-fired p
 serial_turn; serial_turn                       # window "111111": the whole window is serial
 serial_turn; check "re-blocked only at the full window of 6" blocked $?
 teardown
+}
 
+case_15() {  # 11 s measured alone 2026-10-12
 echo "11. the raised bar DECAYS back to the threshold as turns batch"
 setup
 serial_turn; serial_turn; serial_turn
@@ -254,6 +285,45 @@ slow_turn; slow_turn; slow_turn                # three real-work turns: bar deca
 serial_turn; serial_turn; serial_turn          # window "000111"
 serial_turn; check "blocked at 3 again - the bar decayed home" blocked $?
 teardown
+}
+
+
+# GUARD_EDIT_OK: feature 375 amendment 7 (FR-031) - THE CASES RUN IN PARALLEL PARTS, EACH ITS OWN PROCESS. After a script
+# change hooks-test waited on this suite (specs/375-enforced-wave-process/research.md R3). Each part re-runs the setup above in
+# its own process - its own fixture, temporary files and guard log - and then only its cases (CASES), dealt longest first by
+# the measured seconds beside each case (10 s for a new one). Every check still runs and is counted; a part that ends before
+# a case reports fails the suite and names it. SUITE_PARTS=1 runs the cases one after another in this process, as before.
+ALL_CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_12 case_13 case_14 case_15)
+declare -A WEIGHT=([case_01]=4 [case_02]=3 [case_03]=2 [case_04]=1 [case_05]=1 [case_06]=4 [case_07]=1 [case_08]=2 [case_09]=4 [case_10]=20 [case_11]=4 [case_12]=2 [case_13]=5 [case_14]=5 [case_15]=11)
+if [ -n "${CASES:-}" ]; then
+  for c in $CASES; do "$c"; echo "@@reported $c"; done
+  echo "@@counts $PASS $FAIL"; exit 0
+fi
+SUITE_PARTS=${SUITE_PARTS:-4}
+if [ "$SUITE_PARTS" -le 1 ]; then
+  for c in "${ALL_CASES[@]}"; do "$c"; done
+else
+  W=$(mktemp -d); declare -a LOAD PART
+  for ((k = 0; k < SUITE_PARTS; k++)); do LOAD[k]=0; PART[k]=""; done
+  while read -r w c; do
+    best=0; for ((k = 1; k < SUITE_PARTS; k++)); do [ "${LOAD[k]}" -lt "${LOAD[best]}" ] && best=$k; done
+    LOAD[best]=$((LOAD[best] + w)); PART[best]="${PART[best]} $c"
+  done < <(for c in "${ALL_CASES[@]}"; do echo "${WEIGHT[$c]:-10} $c"; done | sort -rn)
+  for ((k = 0; k < SUITE_PARTS; k++)); do
+    [ -n "${PART[k]}" ] && { CASES="${PART[k]}" bash "${BASH_SOURCE[0]}" > "$W/$k.log" 2>&1 & }
+  done
+  wait
+  for ((k = 0; k < SUITE_PARTS; k++)); do
+    [ -n "${PART[k]}" ] || continue
+    grep -v '^@@' "$W/$k.log"
+    counts=$(grep "^@@counts " "$W/$k.log" | tail -1)
+    if [ -n "$counts" ]; then set -- $counts; PASS=$((PASS + $2)); FAIL=$((FAIL + $3))
+    else
+      for c in ${PART[k]}; do grep -qx "@@reported $c" "$W/$k.log" || { echo "FAIL  $c never reported - its part ended before it finished"; FAIL=$((FAIL + 1)); }; done
+    fi
+  done
+  rm -rf "$W"
+fi
 
 echo
 if [ "$FAIL" -eq 0 ]; then echo "test-batching-hooks: all $PASS checks passed"; exit 0; fi

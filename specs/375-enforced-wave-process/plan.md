@@ -454,6 +454,117 @@ load and free RAM at start and end (`_ends`, dashes for a snapshot from before),
 `docs/efficiency-tooling.md`; `scripts/container/append-system-prompt.md`'s standing order; `perf-audit.md` and
 `round-arbiter.md`; `docs/make-targets.html` regenerated from the Makefile.
 
+### Amendment 7 (FR-029 to FR-034)
+
+**D38 - The cohort through the roll cache (FR-029).** `cohort_audit._report_of` obtains each seed's roll by
+`rollcache.obtain("cohort:<spec>", ..., recorded=rollcache._in_child(cohort_roll.ROLL_TARGET, spec))` - the gate's own
+roll (`rollcache._roll_payload`, `generate` in a child), keyed by the engine functions it executed and the files it read, served
+when that key is unchanged - in place of calling `generate` itself; its own checks (households seated, farmstead across the
+brook, the matrix, ...) run on every report as before. A REFUSAL is stored like a report (the plan review: 374's cohort had
+two refused seeds, which rolled again each run): `cohort_roll.roll_or_refusal` returns the engine's refusal - a ValueError or
+RuntimeError, the classes every `...Refused` derives from - as a `Refusal(module, name, message)` payload, which also carries
+its NAME across the child (whose own failure is one generic RuntimeError); `roll_how` names it as before, served or rolled.
+`Refusal`, `roll_or_refusal` and the child's target `ROLL_TARGET` live in their own module, `l7r/diagram/tools/cohort_roll.py`,
+which every process imports by its real name (plan review round 2): `make cohort` runs `cohort_audit` as `__main__` and its
+pool workers as `__mp_main__`, so a class defined in `cohort_audit` was not the class the child unpickled, and a target named
+from `__name__` could not be imported by the child (the first measurement's legs, 2026-10-12, refused 54 of 54 seeds - their
+cohort-log records, discarded). Tests: a refusal
+crosses a REAL roll child as `cohort_roll.Refusal` (`tests/tools/_cohort_child.py`); `cohort_audit` run under `__mp_main__`
+in a fresh interpreter holds that one class and a target the child imports.
+A crash - the child dies, memory, a timeout - is no refusal: it raises, is reported by its name, and is never stored. The
+gate's own `roll:` subjects and `rollcache.report` roll and are served exactly as before, sharing the store and its kept
+versions (below). The store: `rollcache`'s directory is the clone's `.gencache/rolls`; in a LINKED worktree
+(`git rev-parse --git-common-dir` is not the worktree's own `.git`) it is the main worktree's, so a "before" leg rolled in a
+detached worktree at the merge base reads and writes the clone's store (`rollcache.roll_store_dir()`, asked of git once per
+tree by `_main_worktree` and read from `gencache.CACHE_DIR` on every call, redirected only while that is the tree's own
+`.gencache`; keys are path-independent since feature 167).
+`GATE_NO_CACHE=1` and the FULL test run bypass serving as they do for the gate. THE STORE KEEPS SEVERAL VERSIONS OF A SUBJECT
+(measured 2026-10-12, the second measurement): with one entry per subject, the two legs - the merge base's code and the
+clone's, rolling the same subjects - evicted each other, and the second wave served 0 of 54 in either new-code leg while the
+leg that wrote last was served 8 of 8 when asked again. So `_produce_and_store` moves a different version already in
+`_entry(subject)` beside it as `<entry>.v-<key>` before writing the new one (`_shelve`), keeping `KEPT_VERSIONS` = 4 (both
+legs and two earlier; an entry is at most ~0.85 MB, median 0.6 MB, the store 60 MB over 119 entries - `du`, 2026-10-12); `obtain` and `report_deps` serve the newest entry whose key matches
+the code as it stands (`_current`), else an older kept one, newest first. This holds for the gate's `roll:` subjects too: a
+clone switching between two engine states (a reverted edit) is served its earlier roll. A reader racing a move finds no entry,
+which is doubt, and doubt produces. Tests: two code versions alternating are each served; the oldest beyond the cap is
+dropped; an unreadable newest entry is overwritten, never moved; red on today's code.
+
+**D39 - The cohort's per-seed record (FR-029).** `cohort_audit.audit` writes `dev/cohort-log/<UTC stamp>-<clone>-<pid>.json` in
+the CLONE (from a linked worktree, the main worktree's - a "before" leg's worktree is removed, the plan review's note): the
+run's count, first seed, households, commit and, per seed, `served` or `rolled`, `pass`/`fail`/`refused`, its failures (a
+refusal's by name) and its form. It names the file in `<git dir>/last-cohort-record`, and `make cohort` commits that one file
+(`scripts/gates/commit-run-record.sh <result> last-cohort-record`; the spec review's aside, round 2).
+
+**D40 - The census on request (FR-030).** `make perf` no longer runs `make census`; `make census` is unchanged.
+
+**D41 - The suites in parallel processes (FR-031).** `test-batching-hooks.sh` and `test-pair-hooks.sh`: the helpers and the
+constants several cases share are defined once before the cases; each case is a function `case_NN`, its measured seconds
+beside it (traced 2026-10-12); with no `CASES` the suite deals the cases into `SUITE_PARTS` (default 4) processes of itself,
+each re-running the setup (its own fixture, temporary files and guard log) and then only its `CASES`, longest first onto the
+lightest part; each part prints `@@reported <case>` and `@@counts <pass> <fail>`; the parent prints every part's output,
+sums the counts, fails a part that ended before a case reported, naming it, and prints the suite's own pass line. The scan
+(each case alone in a fresh process; for each that fails alone, the shortest run of its predecessors that passes):
+batching, all 15 pass alone; pair, 12 of 15 pass alone, `case_07` needs `case_06`, `case_08` needs `06` and `07`, `case_13`
+needs `case_12` - dealt as chains, one unit each, in order. `test-entry-gate.sh` stays serial: it is one sequence of edits to
+one page in one throwaway clone: of its eight cases, `case_04` needs `case_03` and `case_06` needs `case_03` to `case_05`, one
+chain over half the suite, and the whole suite took 22 s alone (`m:375-a7-suites-scan`, 2026-10-12; its 67 s in R3 was taken
+with the other suites running beside it) - under the split pair and batching suites' times.
+
+**D42 - The shortcut earns the hooks stamp (FR-032).** In `make done`'s "already verified" branch: when `gate-stamp.py --fresh
+hooks` fails, `make hooks-test` runs first; red, the gate logs `failed:hooks-test`, commits its record and fails.
+
+**D43 - The gate commits its own record (FR-033).** `LOGRUN` names the record it wrote in `<git dir>/last-run-record`;
+`scripts/gates/commit-run-record.sh <result> [pointer]` commits exactly the file its pointer names (default `last-run-record`;
+`last-cohort-record` for D39), in the work tree holding it, with `git add` and `git commit --only -- <it>` as `the gate's run
+record (<result>)` - no other file under `dev/run-log/` (`ci/runlog.py` writes there too; the plan review), nothing the session
+staged; the pointer is spent; skipped inside a CodeBuild build and outside a work tree; never fails the caller. Called after
+each of `make done`'s SIX record writes: already verified, its hooks failure, the reference step's failure, the two red
+sites, green.
+
+**D44 - Measured (SC-022, SC-024, SC-027).** SC-022: the cohort on 374's delta - four detached worktrees: the merge base
+a41ab2e0f and 374's 61a52f3c8, each once with today's code and once with the new `cohort_audit.py`, `cohort_roll.py` and `rollcache.py` copied in
+(the store is shared only where the new `rollcache.py` runs), the backlog's own store not copied - `make cohort N=48 JOBS=4`
+(4 = `L7R_ROLL_SLOTS`' default, the child rolls allowed at once), a "before" and an "after" leg each, twice, old and new
+alternating; key `375-a7-cohort-after`. SC-024: the two split suites, today's file (a detached worktree at the commit before) against
+the new, alternating, three runs each, the check counts compared; key `375-a7-suites-parts`. SC-027 is
+`m:375-a7-turn-time`, re-derived by `scripts/measure/turn_time.py`.
+
+### Amendment 6 (FR-028)
+
+Handed to this session by the Diagram tooling session after amendment 7's decisions were reviewed, so its decisions follow them.
+
+**D45 - About leaves the depiction rule (FR-028; T44).** `modal_owed.depiction_owed_by(was, m)` - the pop-up new to the About
+form, or its `depiction` (the Depiction tab and the `Drawing:` list) or its `Entry:` changed - is the one predicate: `owed()`
+emits a `modal-depiction` row on it (with "its Depiction, Drawing: or Entry: changed" as the occasion), or on a page its
+`Drawing:` names moving, as before; and the replay (`scripts/measure/depiction_replay.py`, SC-021) counts with it, so the rule
+and its measurement cannot drift apart. `depiction_fingerprint` drops About: `[uid, Entry:, Depiction + Drawing:, the drawing
+pages]`. The ORDER comment (depiction last "because it reads About") says instead that depiction reads the `Entry:` a research
+round may move. No round counter changes: `hm_checks.dispatch` counts a round per dispatch let through, the bundle hook refuses a
+dispatch whose MANIFEST owes the check nothing (`CHECK_NOT_OWED_OK`, feature 311), and the MANIFEST's owed lines are
+`record_owed.units`, which `owed()` now leaves without the depiction unit after an About-only edit - so that edit adds no round.
+Tests (in `tests/tooling/test_modal_triage.py`, red on today's code): an About edit alone owes `modal-form` and the research
+checks and not `modal-depiction`; an `Entry:`, Depiction or `Drawing:` edit still owes it; after a depiction answer, an About
+edit leaves `record_owed.unanswered` with no depiction unit for the pop-up (the round count's input). SC-007's About case in
+`test_depiction_is_owed_by_the_words_it_reads` is turned around with it (FR-015's About clause is superseded).
+
+**D46 - Answers recorded under amendment 1's formula stand (FR-028; T44).** `modal_owed.amendment1_depiction_fingerprint` keeps
+amendment 1's formula (About in it). `record_owed.amendment1_depiction_answered(root, store, slug)`: the pop-up as its file stood
+when the answer was recorded (the last commit before the answer's `utc`, as `legacy_depiction_answered` finds it - the helper
+`_modal_then` is lifted out of that function and shared) has an answer under amendment 1's formula, and its fingerprint under
+the new formula equals today's. So an About edit since keeps the answer and an `Entry:`, Depiction, `Drawing:` or drawing-page
+change since does not. `unanswered` accepts it beside `legacy_depiction_answered`. Without it the formula change would owe every
+About-form pop-up's depiction once, in every clone (amendment 1's change did exactly that on 2026-10-11: 31 units). Test in
+`tests/tooling/test_record_owed.py`, beside the legacy one.
+
+**D47 - The contract, the closing rows (FR-028; T44, T45).** `.claude/agents/modal-depiction.md`: the sentence "Anything about
+how the map draws the thing that sits in About instead belongs here (M13): report it" becomes "About is in your bundle for
+context: a drawing statement there is `modal-form`'s finding (M13), not yours - report nothing from About." The bundle keeps
+rendering About (`modal_bundle.render`, every check's `modal.md`); `modal-form`'s M13 line is already the amended rule (landed
+2026-10-12). SC-021's "a `modal-form` bundle carries M13's About rule": a test that `make modal-bundle FOR=modal-form`'s
+`guidelines.md` holds M13 and its contract the About sentence (passes today). 343's rows 83 and 84 close in `found.jsonl` on
+their About part: each row's `status` becomes `closed`, with the date and T44's commit beside it. No found row has been closed
+before (all 80 on main are open) and nothing reads the field, so there is no tool to build for two rows: an edit in place.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

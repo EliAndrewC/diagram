@@ -2,9 +2,11 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - amendment 6 (the GM 2026-10-12), reopened by the Diagram tooling session and handed to the Diagram performance session to implement; amendments 1-5 Done 2026-10-11
+**Status**: Done 2026-10-12 - amendments 6 and 7 landed: 6 (spec FAITHFUL round 2, plan CLEAR; SC-021 tested, replay 43 About-only edits of 221 owe no depiction; 343 rows 83-84 closed) and 7 (spec FAITHFUL, plan CLEAR after the versioned store; SC-022 cohort wave 2 323 s -> 19 s, SC-024 suites 70.6 -> 18.8 s and 71.7 -> 20.4 s, SC-023/025/026/027 tested); every task ticked; amendment 8 (claims cache, check-bundle in-process, review yield, cohort seed count) not yet opened
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
+
+**Amendment 7 approved**: the GM, 2026-10-12, "Yeah, I think I want all of those things. But I agree with you that two, three, six, and eight are a good place to start."
 
 **Amendment 5 approved**: the GM, 2026-10-11, "if it looks like the performance is slowing down to a meaningful degree, that's something you can mention when you say that the work has landed on main, but it doesn't need to be a gate anymore."
 
@@ -136,7 +138,7 @@ work stands; the GM approved both in one answer.
   owes `modal-depiction`; a line whose block stands on both pages, or names no page, owes both (failing toward checking).
   And an edit to the pop-up itself owes `modal-depiction` only when it changes what that check reads of the pop-up: the
   pop-up new to the About form, or its Depiction tab, its `Drawing:` list, its About or its `Entry:` changed (About is where
-  the check finds drawing statements that belong in Depiction; `Entry:` is where it finds the drawing pages a pop-up should
+  the check finds drawing statements that belong in Depiction - SUPERSEDED by FR-028, amendment 6: About no longer owes it; `Entry:` is where it finds the drawing pages a pop-up should
   link - feature 319's plan-review case, a missing drawing link landing with every check green). An edit to its Guesses alone
   owes `modal-form` and the research checks, not `modal-depiction`.
 - **FR-016 An open feature's state as its session clone holds it.** `make speckit-todo` shows each open feature as a session
@@ -264,11 +266,53 @@ The GM approved dropping About from what owes `modal-depiction`: FR-015 put it t
 - **FR-028 About no longer owes `modal-depiction`.** An edit to a pop-up owes `modal-depiction` only when it changes what that
   check judges: the pop-up new to the About form, or its Depiction tab, its `Drawing:` list or its `Entry:`
   (FR-015's other triggers, unchanged). An edit to its About alone - or to About and Guesses - owes `modal-form` and the research
-  checks, not `modal-depiction`. The About side of M13 (a sentence about how the map draws the thing, found in About) is
-  `modal-form`'s finding, and the move of that sentence to the Depiction tab owes `modal-depiction` in its turn. The depiction
-  fingerprint (`scripts/record/modal_owed.py` `depiction_fingerprint`) drops About; `modal-depiction`'s contract drops its M13
-  About sentence, or keeps it as a note when About is in its bundle for context only. Feature 343's rows 83 and 84 (the two
-  declined fixes, overturned into this feature's `found.jsonl`) close with it.
+  checks, not `modal-depiction`, and so adds no round to `modal-depiction`'s count on that pop-up (a round is counted per
+  dispatch, and a check not owed is not dispatched). `modal-depiction` reports nothing from About: the About side of M13 (a
+  sentence about how the map draws the thing, found in About) is `modal-form`'s finding alone, and the move of that sentence
+  to the Depiction tab owes `modal-depiction` in its turn. The depiction fingerprint (`scripts/record/modal_owed.py`
+  `depiction_fingerprint`) drops About, and `modal-depiction`'s contract its M13 About sentence. The change re-owes nothing by
+  itself: a depiction answer recorded under FR-015's formula stands where what FR-028 still counts - the Depiction tab,
+  `Drawing:`, `Entry:` and the drawing pages - is unchanged since it was recorded. Feature 343's rows 83 and 84 (the two
+  declined fixes, overturned into this feature's `found.jsonl`) close with it on their About part; their Guesses, Name and
+  Form part was built under amendment 1 (c9999e64e), and row 83's `Covers` is not a line `modal-depiction` reads.
+
+### Amendment 7 (`request.md`, Amendment 7)
+
+The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment 8 takes the rest.
+
+- **FR-029 The cohort rolls only what changed.** `make cohort` rolled every seed through `generate` on every run, so a
+  feature's "before" leg rolled unchanged code again each wave and its "after" leg re-rolled seeds the change never reached:
+  109 minutes of 374's tool time, six seeds at a time on one worker under the memory cap (`m:375-a7-cohort-cost`,
+  `research.md` R5). Now each cohort seed is served from the roll cache (`pipeline/rollcache.py`, keyed by the
+  engine functions the roll executed and the files it read, path-independent since feature 167) when nothing it executes
+  changed, and rolled otherwise; the cohort's own checks still run on every seed's report, served or rolled. The "before"
+  leg, rolled in a detached worktree at the merge base, reads and writes the same store as the clone, so a second wave's
+  "before" leg rolls nothing. And each cohort run writes a structured record - per seed: served or rolled, its verdict, the
+  failures it found, the engine commit - under `dev/cohort-log/`, one file a run, so that whether fewer seeds would find the
+  same failures can be counted. No such record exists today (374's findings by seed are in its plan's prose), so the seed
+  count is decided in amendment 8, put to the GM with that record.
+- **FR-030 The overlap census runs when asked for.** `make perf` ran `make census` after every snapshot - 74 s of its 97 s,
+  measured 2026-10-12 (`research.md` R5) - because feature 306 made it "a standing check run beside `make perf`" (its FR-006,
+  from its review round 1). Nothing reads its output. `make census` runs it; `make perf` no longer does.
+- **FR-031 The next three guard suites run in parallel parts where their cases are independent.** After a script change
+  `hooks-test` now waits on `test-pair-hooks.sh` (82 s), `test-batching-hooks.sh` (72 s) and `test-entry-gate.sh` (67 s)
+  (`m:375-a3-hooks-test-before`, R3). Each is split into parallel parts as `test-sync-with-main.sh` was (FR-022): each part with
+  its own temporary directory, `HOME` and guard log, every check still run and counted, today's pass count printed, a failed
+  or unreported case failing the suite. Where a suite's cases depend on an earlier case's state, it splits only at the
+  boundaries a measured scan finds, or stays serial, and the plan says which, with the scan's result.
+- **FR-032 The gate's shortcut does not leave the push a gate short.** `make done`'s "already verified" shortcut checks only
+  the engine content's record and re-stamps only the `diagram` area, so after a change under `scripts/` alone it answered
+  green while the push's green-gate check refused on the `hooks` area (measured 2026-10-12, landing `impl_check.py`'s fix).
+  Now the shortcut runs `make hooks-test` when the `hooks` stamp is stale and is green only if that is.
+- **FR-033 The gate's run record does not refuse the landing.** Every `make done` writes a record under `dev/run-log/`, a
+  tracked file, and `sync-with-main.sh done` refuses an uncommitted tree - so each landing after a gate cost a commit by hand
+  and a second try. `sync-with-main.sh` itself says "the procedure never writes your commit for you". The record is the
+  gate's, not the session's work: `make done` commits its own record, that one path alone, as `the gate's run record
+  (<result>)`, and stages nothing else.
+- **FR-034 Model time against context size, measured.** From 374's transcript (`research.md` R5): 1,385 turns, 1.9 hours of
+  model time from each tool result to the next reply; per turn about 1.6 s fixed, 0.25 s per 100,000 tokens of context and
+  3.3 s per 1,000 tokens written - context size accounted for about half an hour in all. (The 6.5 hours the session first
+  put to the GM counted the waits on background runs and on the GM as model time.) Recorded; nothing is built for it.
 
 ## Success criteria
 
@@ -289,7 +333,8 @@ The GM approved dropping About from what owes `modal-depiction`: FR-015 put it t
   units of `sheet/door`, `sheet/guest-quarters` and `sheet/side-gate` (named only for drawing-page blocks) are not owed; every
   other named unit, `sheet/nakamon`, `sheet/garden` and `sheet/genkan`'s depiction among them, is. An edit to a pop-up's
   Guesses alone owes `modal-form` and the research checks but not `modal-depiction`; an edit to its About, `Entry:`, Depiction
-  tab or `Drawing:` list, or a pop-up new to the About form, still owes it. The tests fail on today's code.
+  tab or `Drawing:` list, or a pop-up new to the About form, still owes it (its About clause SUPERSEDED by SC-021,
+  amendment 6). The tests fail on today's code.
 - **SC-008** (FR-016) With a fixture main and session clones, one holding a feature's accepted spec and ticked tasks: `make
   speckit-todo` lists that feature in the clone's section, marked with its clone and not landed, and a clone holding the
   same files as main adds nothing; if the measurement keeps the active-only limit, an inactive clone's change is not shown.
@@ -349,12 +394,35 @@ The GM approved dropping About from what owes `modal-depiction`: FR-015 put it t
   from before FR-024 prints dashes there. The test fails on today's code.
 
 - **SC-021** (FR-028) A pop-up whose About alone changed is owed `modal-form` and not `modal-depiction`; one whose Depiction,
-  `Drawing:` or `Entry:` changed is owed `modal-depiction` as today; a `modal-form` bundle carries M13's About rule.
-  Replaying the 44 About-only pop-up edits since 2026-10-05 owes no `modal-depiction`. Tests fail on today's code.
+  `Drawing:` or `Entry:` changed is owed `modal-depiction` as today; a depiction answer recorded under FR-015's formula still
+  answers its pop-up after an About edit, and not after an `Entry:` edit; an About-only edit between two depiction rounds adds
+  no round on that pop-up; a `modal-form` bundle carries M13's About rule. Replaying the About-only pop-up edits since
+  2026-10-05 - 43 of 221 by the kept replay at the reopening commit - owes no `modal-depiction` (`m:375-a6-about-only-replay`,
+  `research.md` R6). The owing tests (the About edit, the
+  recorded answer, the round count) fail on today's code; the `modal-form` bundle's already passes.
+- **SC-022** (FR-029) A cohort run writes its per-seed record (served or rolled, verdict, failures, commit); a cohort run twice
+  on unchanged code rolls nothing the second time; after a change to one stage's
+  code, only the seeds whose rolls executed it roll again; each seed's verdict served equals its verdict rolled fresh
+  (`GATE_NO_CACHE=1`); a "before" leg in a detached worktree after a clone's own run of the same base rolls nothing. The
+  cohort's time before and after on 374's delta, two waves, is a key of `measurements.json` (R1, R5). Tests fail on today's
+  code.
+- **SC-023** (FR-030) `make perf` runs no census; `make census` runs it as before. The test fails on today's code.
+- **SC-024** (FR-031) Each of the three suites, today's file against the new in parts, alternating, three runs each: every
+  run passes today's count of checks; a suite split has its median at most half today's. A suite split or left serial
+  carries its scan's result: each case run alone in a fresh process, and for each that fails alone the shortest run of its
+  predecessors that passes - a chain kept in order in one part; a suite left serial names the dependence that keeps it so. A forced
+  failure and a case that exits early each fail a split suite, named. Keys of `measurements.json` beside
+  `m:375-a3-hooks-test-before` (R3).
+- **SC-025** (FR-032) After a change under `scripts/` alone, with the engine's record green, `make done` runs `hooks-test`
+  and stamps `hooks`, and the push's green-gate check passes; with nothing changed it runs nothing. The test fails on today's
+  code.
+- **SC-026** (FR-033) After `make done`, the tree is clean except for what the session left, and the record is committed
+  alone with its message; a staged change of the session's is left staged and uncommitted. The test fails on today's code.
+- **SC-027** (FR-034) R5's figures are a key of `measurements.json`, re-derivable by a kept script from the transcript.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021.
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027.
 
 ## What it does not cover
 
@@ -367,6 +435,8 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   not fewer.
 - The cohort's cost (amendment 5): reusing its "before" leg per main commit, or rolling fewer seeds, was offered to the GM as
   a measurement and is not part of amendment 5, which settled the timing requirements.
+- The cohort's seed count (amendment 7): decided in amendment 8, with the per-seed record FR-029 starts keeping; the claims'
+  per-module cache, `check-bundle` in-process and the review checks' yield are amendment 8's too.
 
 ## Decisions Recorded
 
@@ -434,3 +504,9 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   SC-018 pins 5 and 5.1 percent.
 - spec-fidelity-verify, amendment 5 round 2 (2026-10-11): FAITHFUL - round 1's three items resolved; the wider grep finds no
   other text stating the gate as a rule.
+- spec-fidelity, amendment 7 round 1 (2026-10-12, the counter reset): CHANGES REQUIRED. Applied: the cohort's 109 minutes is
+  `m:375-a7-cohort-cost`; FR-029 has the cohort keep a per-seed record and carries the seed count to amendment 8 (and "What
+  it does not cover" says so); SC-024 asks for the scan's result for any suite split or left serial; turn_time's bands are
+  labeled 200k.
+- spec-fidelity-verify, amendment 7 round 2 (2026-10-12): FAITHFUL - round 1's items resolved. Aside taken into the plan: the
+  cohort's record commits itself as the gate's does, or it brings the uncommitted-tree refusal back.

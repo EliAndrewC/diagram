@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -72,7 +73,7 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     # `check-run-plausible.py` joined that set on 2026-09-05 and the fixture went red immediately -
     # which is the suite doing its job: a guard the fixture cannot find exits non-zero and the
     # short-circuit path fails, so a missing script reads as a broken gate rather than a silent pass.
-    for script in ("gates/gate-stamp.py", "gates/check-run-plausible.py", "measure/ratchet.py"):
+    for script in ("gates/gate-stamp.py", "gates/check-run-plausible.py", "measure/ratchet.py", "gates/commit-run-record.sh"):
         (root / "scripts" / script).parent.mkdir(parents=True, exist_ok=True)
         (root / "scripts" / script).write_bytes((SKILL / "scripts" / script).read_bytes())
     subprocess.run(["git", "-C", str(root), "config", "user.email", "t@t"], check=True)
@@ -80,6 +81,9 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
     subprocess.run(["git", "-C", str(root), "commit", "-qm", "base"], check=True)
     state.write(root, state.GREEN, "done")
+    # the hooks stamp fresh too, as a green gate leaves it: with it stale the shortcut runs `hooks-test` first (feature 375
+    # amendment 7, FR-032), which this fixture's few guards cannot pass
+    subprocess.run([sys.executable, "scripts/gates/gate-stamp.py", "--write", "hooks"], cwd=root, check=True, capture_output=True)
     p = make(fixture_skill, "done")
     assert p.returncode == 0 and "already verified" in p.stdout and "reference settlement" not in p.stdout, p.stdout + p.stderr
     (root / "docs").mkdir()
@@ -90,9 +94,14 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     # the GM's second amendment: a Makefile / pyproject / scripts edit does NOT owe the gate (there is no flag in either direction - FR-022)
     (fixture_skill / "pyproject.toml").write_text((fixture_skill / "pyproject.toml").read_text() + "\n# edited\n")
     (fixture_skill / "Makefile").write_text((fixture_skill / "Makefile").read_text() + "\n# edited\n")
-    (root / "scripts" / "x-hooks.sh").write_text("echo guard\n")
     p = make(fixture_skill, "done")
     assert p.returncode == 0 and "already verified" in p.stdout, p.stdout + p.stderr
+    # ...but a scripts/ edit leaves the `hooks` stamp stale, and the shortcut runs `hooks-test` before it answers (feature 375
+    # amendment 7, FR-032: it answered green while the push refused on that stamp) - here red, this fixture's guards untested
+    (root / "scripts" / "x-hooks.sh").write_text("echo guard\n")
+    p = make(fixture_skill, "done")
+    assert p.returncode != 0 and "the hooks stamp is stale" in p.stdout and "GUARD WITHOUT A TEST" in p.stdout + p.stderr, p.stdout + p.stderr
+    assert "gate green" not in p.stdout, "a red hooks-test is no green gate"
     assert "$(FORCE)" not in (SKILL / "Makefile").read_text()
     # a .py under the skill (even outside l7r/) DOES: the decision says so
     (fixture_skill / ".explain.py").write_text("x = 1\n")

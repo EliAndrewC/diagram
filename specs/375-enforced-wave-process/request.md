@@ -119,3 +119,18 @@ Then, on the session's recommendation:
 
 > Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work.
 
+## Amendment 7 (2026-10-12, the same later session)
+
+After amendment 5 landed, the session timed every command it had sped up, old code against new on 374's delta, and named
+what is left by measured cost: (1) model time per turn, to be measured against context size before anything is proposed;
+(2) the cohort sweep (109 minutes of 374's tool time), whose "before" leg rolls unchanged code again, and perhaps fewer seeds;
+(3) the overlap census that every `make perf` runs (74 of its 97 s); (4) the claims going cold on every engine edit; (5)
+`check-bundle`'s subprocesses; (6) the next-longest guard suites (`test-pair-hooks.sh` 82 s, `test-batching-hooks.sh` 72 s,
+`test-entry-gate.sh` 67 s); (7) low-yield review checks; (8) two landing frictions - `make done` answering "already verified"
+while the push wanted `make hooks-test`, and the gate's own run record left uncommitted, refusing the landing. It proposed 2,
+3, 6 and 8 as one amendment with 1 measured first. The GM:
+
+> Yeah, I think I want all of those things. But I agree with you that two, three, six, and eight are a good place to start. and measuring the first one does seem like a good idea to see whether there's an actual issue there. But then I do think I probably want the others as well.
+
+Amendment 7 is 2, 3, 6 and 8, and the measurement of 1; 4, 5 and 7 follow as amendment 8 (7 to be put to the GM with its
+yield across more than one feature, since what to change there is his to choose).

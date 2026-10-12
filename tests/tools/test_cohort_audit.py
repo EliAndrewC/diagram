@@ -35,6 +35,17 @@ def _report(failures: list[str], lines: list[str] | None = None) -> Any:
     return type("R", (), {"failures": failures, "fail_lines": lines if lines is not None else [f"{f}: it failed" for f in failures], "plan": plan})()
 
 
+@pytest.fixture(autouse=True)
+def _record_dir(tmp_path: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every audit writes its per-seed record (feature 375 amendment 7): here, never into the repository's dev/cohort-log/."""
+    monkeypatch.setattr(ca, "LOG_DIR", str(tmp_path / "cohort-log"))
+
+
+def _patch_roll(monkeypatch: pytest.MonkeyPatch, fn: Any, how: str = "rolled") -> None:
+    """Stand in for one seed's roll: `fn(spec)` gives the verdict, `how` whether the roll cache served it."""
+    monkeypatch.setattr(ca, "roll_how", lambda spec: (fn(spec), how))
+
+
 @pytest.fixture
 def _clean(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: _report([]))
@@ -76,13 +87,17 @@ def test_roll_one_goes_through_GENERATE_which_is_the_path_that_ships(monkeypatch
     plan's own rolled knobs, which is what makes a failing line reproducible."""
     seen: dict[str, Any] = {}
 
-    def generate(spec: Any, out_base: Any, render: bool) -> Any:
-        seen.update(name=spec.name, seed=spec.seed, out_base=out_base, render=render)
-        return _report(["a_check[1]"])
+    def roll(spec: Any) -> Any:
+        seen.update(name=spec.name, seed=spec.seed)
+        return "plan", {}, _report(["a_check[1]"])
 
-    monkeypatch.setattr(hg, "generate", generate)
+    from l7r.diagram.pipeline import rollcache
+
+    # rollcache._roll_payload IS generate(spec, out_base=None, render=False), the gate's roll; the cohort's obtain produces it
+    monkeypatch.setattr(rollcache, "_roll_payload", roll)
+    monkeypatch.setattr(rollcache, "obtain", lambda subject, produce, recorded=None: (produce(), "MISS"))
     header, failures, lines = ca.roll_one((7, 13))
-    assert seen["seed"] == 7 and seen["render"] is False and seen["out_base"] is None
+    assert seen["seed"] == 7
     assert "seed=7 households=13" in header and "sink=pond" in header and "shape=crescent" in header
     assert failures == ["a_check[1]"] and lines
 
@@ -92,9 +107,8 @@ def test_audit_tallies_the_residue_by_CHECK_and_its_rc_is_the_verdict(monkeypatc
     cohort. The seed index is stripped so the same check on four maps tallies as four, not one each."""
     answers = {1: [], 2: ["wells_are_shared[3]"], 3: ["wells_are_shared[9]"], 4: ["lanes_reach_something[1]"]}
     # every row knob value rolled somewhere, so the "never rolled" line adds no failure of its own
-    monkeypatch.setattr(
-        ca,
-        "roll_one",
+    _patch_roll(
+        monkeypatch,
         lambda spec: (
             f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}",
             answers.get(spec[0], []),
@@ -106,14 +120,12 @@ def test_audit_tallies_the_residue_by_CHECK_and_its_rc_is_the_verdict(monkeypatc
     assert f"{1 + len(ca.PINNED_ROWS)}/{4 + len(ca.PINNED_ROWS)} passed the whole gate" in out
     assert "2  wells_are_shared" in out and "1  lanes_reach_something" in out
 
-    monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
+    _patch_roll(monkeypatch, lambda spec: (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
     assert ca.audit(2, 1, jobs=1) == 0
     assert f"{2 + len(ca.PINNED_ROWS)}/{2 + len(ca.PINNED_ROWS)} passed" in capsys.readouterr().out
 
     seen: list[tuple] = []
-    monkeypatch.setattr(
-        ca, "roll_one", lambda spec: seen.append(spec) or (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], [])
-    )
+    _patch_roll(monkeypatch, lambda spec: seen.append(spec) or (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
     ca.audit(2, 39, jobs=1, households=40)
     assert seen == [(39, 40), (40, 40)], "feature 328: every seed at the size asked, the pinned rows left out"
 
@@ -121,12 +133,12 @@ def test_audit_tallies_the_residue_by_CHECK_and_its_rc_is_the_verdict(monkeypatc
 def test_only_narrows_both_the_tally_and_the_printed_lines(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     """`--only` is for chasing one check across the cohort; a map whose only failures are other
     checks must drop out of the count entirely, not appear with an empty body."""
-    monkeypatch.setattr(ca, "roll_one", lambda spec: ("--- h", ["wells_are_shared[1]", "lanes_reach_something[2]"], ["wells_are_shared detail", "lanes_reach_something detail"]))
+    _patch_roll(monkeypatch, lambda spec: ("--- h", ["wells_are_shared[1]", "lanes_reach_something[2]"], ["wells_are_shared detail", "lanes_reach_something detail"]))
     assert ca.audit(1, 1, only="wells", jobs=1) == 1
     out = capsys.readouterr().out
     assert "wells_are_shared detail" in out and "lanes_reach_something detail" not in out
 
-    monkeypatch.setattr(ca, "roll_one", lambda spec: ("--- h", ["lanes_reach_something[2]"], ["lanes detail"]))
+    _patch_roll(monkeypatch, lambda spec: ("--- h", ["lanes_reach_something[2]"], ["lanes detail"]))
     assert ca.audit(1, 1, only="wells", jobs=1) == 0, "no map failed the check being chased"
 
 
@@ -150,7 +162,7 @@ def test_the_rolls_FAN_OUT_across_processes_and_the_report_stays_in_seed_order(m
 
     seen: dict[str, Any] = {}
     monkeypatch.setattr(concurrent.futures, "ProcessPoolExecutor", _Pool)
-    monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]}", ["c[1]"], [f"seed {spec[0]} detail"]))
+    _patch_roll(monkeypatch, lambda spec: (f"--- seed {spec[0]}", ["c[1]"], [f"seed {spec[0]} detail"]))
     assert ca.audit(3, 5, jobs=3) == 1
     out = capsys.readouterr().out
     assert seen["jobs"] == 3
@@ -170,7 +182,7 @@ def test_roll_one_reports_a_scatter_frame_breach_the_manifest_records(monkeypatc
     `meta.scatter_frame_breach`, and the cohort reports it as a failure so the pad is revisited."""
     rep = _report([])
     rep.manifest = {"meta": {"scatter_frame_breach": [-261.3, 5.6, -120.2, -307.7]}}
-    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (rep, "MISS"))
     _header, failures, lines = ca.roll_one((13, 13))
     assert failures == ["scatter_frame_breach"] and "5.6" in lines[-1]
 
@@ -180,12 +192,12 @@ def test_roll_one_reports_a_household_shortfall_the_manifest_records(monkeypatch
     verdict counts stranded houses only, and a seed that seated 13 of 20 read as a pass."""
     rep = _report([])
     rep.manifest = {"meta": {"roll_placed": 13}}
-    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (rep, "MISS"))
     _header, failures, lines = ca.roll_one((25, 20))
     assert failures == ["households_seated"] and "13 of 20" in lines[-1]
     rep2 = _report([])
     rep2.manifest = {"meta": {"roll_placed": 20}}
-    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep2)
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (rep2, "MISS"))
     assert ca.roll_one((25, 20))[1] == []
 
 
@@ -200,7 +212,7 @@ def test_roll_one_reports_farmstead_parts_across_the_brook_and_an_offwind_seat(m
         "gardens": [{"x": 10.0, "y": 80.0, "of": [10.0, 20.0]}, {"x": 30.0, "y": 25.0, "of": [10.0, 20.0]}],
         "persimmons": [{"x": 5.0, "y": 5.0}],
     }
-    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (rep, "MISS"))
     header, failures, lines = ca.roll_one((9, 12))
     assert failures == ["farmstead_across_brook"] and "1 farmstead part" in lines[-1] and header.endswith("seat=OFFWIND")
     assert ca.parts_across_brook({}) == 0
@@ -211,7 +223,7 @@ def test_roll_one_reports_the_matrix_and_the_grove_rules(monkeypatch: pytest.Mon
     battery had been the only thing that saw 126's grove defects."""
     rep = _report([])
     rep.manifest = {"meta": {}}
-    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (rep, "MISS"))
     monkeypatch.setattr(ca, "matrix_violations", lambda M: [("groves", "lanes", 1, 2)])
     monkeypatch.setattr(ca, "gardens_east_shaded", lambda M: [((0.0, 0.0), {})])
     _header, failures, lines = ca.roll_one((9, 12))
@@ -224,13 +236,13 @@ def test_roll_one_s_header_names_the_row_or_the_farm_water_knob(monkeypatch: pyt
     """Feature 291: a linear roll's header carries its row knobs, a dispersed roll's its farm water - what the "knob values
     never rolled" line reads."""
 
-    def generate(spec: Any, out_base: Any, render: bool) -> Any:
+    def report_of(spec: Any) -> Any:
         r = _report([])
         for k, v in {"settlement_form": form, "grove_sides": 2, "row_line": "street", "row_sides": "both", "row_water": "shared", "farm_water": "channel"}.items():
             setattr(r.plan, k, v)
-        return r
+        return r, "MISS"
 
-    monkeypatch.setattr(hg, "generate", generate)
+    monkeypatch.setattr(ca, "_report_of", report_of)
     header, _f, _l = ca.roll_one((7, 13))
     assert f"form={form}" in header and want in header
 
@@ -246,7 +258,7 @@ def test_a_refused_roll_is_reported_by_name_not_raised(monkeypatch) -> None:  # 
     def refuse(*a, **k):  # type: ignore[no-untyped-def]
         raise Refused("no margin seats all 12")
 
-    monkeypatch.setattr(ca.hg, "generate", refuse)
+    monkeypatch.setattr(ca, "_report_of", refuse)
     header, failures, lines = ca.roll_one((901, 12, {"row_line": "street"}))
     assert header.startswith("Audit-901 households=12 form=linear") and header.endswith("REFUSED")
     assert failures == ["refused:Refused"] and lines == ["FAIL refused:Refused -> no margin seats all 12"]
@@ -257,6 +269,115 @@ def test_roll_one_reports_lane_ends_knotted_short_of_a_join(monkeypatch: pytest.
     joined at a single point) is a cohort failure too - without it a change that knotted three pool maps read 54/54."""
     rep = _report([])
     rep.manifest = {"lanes": [{"pts": [[0.0, 0.0], [100.0, 0.0]]}, {"pts": [[110.0, 10.0], [200.0, 10.0]]}]}  # two ends 14 ft apart
-    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (rep, "MISS"))
     _header, failures, lines = ca.roll_one((13, 13))
     assert "lane_knots" in failures and any("FAIL lane_knots" in ln for ln in lines)
+
+
+# ---- feature 375 amendment 7, FR-029: the cohort through the roll cache, and its per-seed record --------------------------------
+
+
+def test_a_served_roll_says_so_and_the_audit_writes_its_per_seed_record(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:
+    import json
+
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (_report(["wells_are_shared[1]"] if spec.seed == 2 else []), "HIT" if spec.seed == 1 else "MISS"))
+    assert ca.roll_how((1, 12))[1] == "served" and ca.roll_how((2, 12))[1] == "rolled"
+
+    def refuse(spec: Any) -> Any:
+        raise ValueError("no seat")
+
+    monkeypatch.setattr(ca, "_report_of", lambda spec: refuse(spec) if spec.seed == 3 else (_report([]), "HIT"))
+    assert ca.roll_how((3, 12, {"row_line": "street"}))[1] == "rolled", "a crash is rolled, never served"
+    stored = ca.Refusal("builtins", "ValueError", "no seat")
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (stored, "HIT"))
+    (header, failures, _l), how = ca.roll_how((3, 12, {"row_line": "street"}))
+    assert how == "served" and failures == ["refused:ValueError"] and header.endswith("REFUSED"), "a stored refusal, served, by name"
+    rolled = [(("--- a form=linear", [], []), "served"), (("--- b", ["wells_are_shared[1]"], ["x"]), "rolled"), (("--- c REFUSED", ["refused:ValueError"], ["y"]), "served")]
+    path = ca.write_record([(1, 12), (2, 12), (3, 12, {"row_line": "street"})], rolled, 1, None)
+    rec = json.loads(Path(path).read_text(encoding="utf-8"))
+    assert path.startswith(str(tmp_path)) and rec["count"] == 3 and rec["served"] == 2 and rec["first_seed"] == 1
+    assert [(s["seed"], s["how"], s["verdict"]) for s in rec["seeds"]] == [(1, "served", "pass"), (2, "rolled", "fail"), (3, "served", "refused")]
+    assert rec["seeds"][0]["form"] == "linear" and rec["seeds"][1]["failures"] == ["wells_are_shared[1]"] and rec["seeds"][2]["pins"] == {"row_line": "street"}
+
+
+def test_the_audit_writes_one_record_a_run(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:
+    _patch_roll(monkeypatch, lambda spec: (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []), how="served")
+    ca.audit(2, 1, jobs=1)
+    files = list((tmp_path / "cohort-log").glob("*.json"))
+    assert len(files) == 1
+
+
+def test_the_cohort_gets_its_roll_from_the_roll_cache_and_a_refusal_is_stored_by_name(monkeypatch: pytest.MonkeyPatch) -> None:
+    from l7r.diagram.pipeline import rollcache
+
+    seen: list[Any] = []
+    monkeypatch.setattr(rollcache, "obtain", lambda subject, produce, recorded=None: seen.append(subject) or (("plan", "manifest", "rep"), "HIT"))
+    spec = hg.HamletSpec(name="Audit-01", seed=1, households=12)
+    assert ca._report_of(spec) == ("rep", "HIT") and seen == [f"cohort:{spec!r}"]
+    monkeypatch.setattr(rollcache, "obtain", lambda subject, produce, recorded=None: (produce(), "MISS"))
+
+    class WebRefused(ValueError):
+        pass
+
+    def refuse(spec: Any) -> Any:
+        raise WebRefused("no lane reaches the well")
+
+    monkeypatch.setattr(rollcache, "_roll_payload", refuse)
+    payload, how = ca._report_of(spec)
+    assert isinstance(payload, ca.Refusal) and payload.name == "WebRefused" and how == "MISS", "stored as a payload, by name"
+    assert type(payload.exception()).__name__ == "WebRefused" and str(payload.exception()) == "no lane reaches the well"
+    assert type(ca.Refusal("builtins", "ValueError", "x").exception()) is ValueError, "an importable class is itself"
+
+    def crash(spec: Any) -> Any:
+        raise MemoryError("out of memory")
+
+    monkeypatch.setattr(rollcache, "_roll_payload", crash)
+    with pytest.raises(MemoryError):
+        ca._report_of(spec)
+
+
+def test_a_refusal_crosses_a_real_roll_child_as_the_class_the_audit_knows() -> None:
+    """The plan review (round 2): a `Refusal` unpickled from the child was not the class `cohort_audit` held when it ran as
+    `__main__`. One class now lives in `cohort_roll`, and the child's payload is that class."""
+    from l7r.diagram.pipeline import rollcache
+    from l7r.diagram.tools import cohort_roll
+
+    payload, _deps = rollcache._in_child("tests.tools._cohort_child:refuse", "seed 7")
+    assert type(payload) is cohort_roll.Refusal and ca.Refusal is cohort_roll.Refusal
+    assert (payload.module, payload.name) == ("tests.tools._cohort_child", "WebRefused") and "seed 7" in payload.message
+    assert type(payload.exception()).__name__ == "WebRefused", "the parent re-imports the class by name"
+
+
+def test_run_under_another_module_name_the_audit_shares_the_one_refusal_and_an_importable_target() -> None:
+    """`make cohort` runs `python3 -m ...cohort_audit` (`__main__`) and fans out to a process pool (`__mp_main__`): in both
+    the module's `Refusal` is `cohort_roll.Refusal` and its child target imports by name (the plan review measured
+    `__mp_main__:_roll_or_refusal`, which no child can import). Run in a fresh interpreter as a pool worker runs it; as
+    `__main__` the body is the same and only its guard differs."""
+    import subprocess
+
+    probe = (
+        "import importlib, runpy;"
+        f"g = runpy.run_module('l7r.diagram.tools.cohort_audit', run_name={'__mp_main__'!r});"
+        "from l7r.diagram.tools import cohort_roll;"
+        "mod, fn = g['ROLL_TARGET'].rsplit(':', 1);"
+        "assert g['Refusal'] is cohort_roll.Refusal, 'one class';"
+        "assert getattr(importlib.import_module(mod), fn) is cohort_roll.roll_or_refusal, 'an importable target';"
+        "print('ok')"
+    )
+    p = subprocess.run([sys.executable, "-c", probe], cwd=str(Path(__file__).resolve().parents[2]), capture_output=True, text=True, check=False)
+    assert p.returncode == 0 and p.stdout.startswith("ok"), p.stderr[-800:]
+
+
+def test_make_cohorts_record_lands_in_the_clone_and_names_itself_for_the_commit(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:
+    """FR-029: with no test directory, the record goes under the clone's `dev/cohort-log/` and its path into the git dir's
+    `last-cohort-record`, which `make cohort`'s `commit-run-record.sh` reads to commit that one file."""
+    import subprocess
+
+    repo = tmp_path / "clone"
+    repo.mkdir()
+    subprocess.run(["git", "-C", str(repo), "init", "-q"], check=True)
+    monkeypatch.setattr(ca, "HERE", str(repo))
+    monkeypatch.setattr(ca, "LOG_DIR", None)
+    path = ca.write_record([(1, 12)], [(("--- a form=nucleated", [], []), "rolled")], 1, None)
+    assert path.startswith(str(repo / "dev" / "cohort-log"))
+    assert (repo / ".git" / "last-cohort-record").read_text(encoding="utf-8") == path

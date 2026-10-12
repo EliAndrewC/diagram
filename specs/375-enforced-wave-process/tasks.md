@@ -165,10 +165,28 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 6 (the GM 2026-10-12: About no longer owes modal-depiction; handed to the Diagram performance session)
 
-- [ ] T44 About drops out of what owes `modal-depiction` (FR-028): the depiction fingerprint and the re-owe rule, `modal-depiction`'s contract, the replay of the 44 About-only edits; tests red on today's code (SC-021)
+- [x] T44 About drops out of what owes `modal-depiction` (FR-028): the depiction fingerprint and the re-owe rule, `modal-depiction`'s contract, the replay of the 44 About-only edits; tests red on today's code (SC-021)
       research: rendering
-      verify: SC-021's tests green; `make record-owed` on an About-only pop-up edit names modal-form, not modal-depiction
-- [ ] T45 375 closes again: 343's rows 83 and 84 closed in `found.jsonl`, tests, `make hooks-test`, the gate, the report, landed
+      verify: DONE. DONE. depiction_owed_by the one rule, fingerprint without About, amendment-1 answers kept, contract reports nothing from About; test_modal_triage 11 and test_record_owed 27 passed, the owing tests red on the old code (worktree at HEAD d7988deb9^); replay 43 About-only of 221, none owed now (m:375-a6-about-only-replay)
+- [x] T45 375 closes again: 343's rows 83 and 84 closed in `found.jsonl`, tests, `make hooks-test`, the gate, the report, landed
       research: rendering
-      verify: spec-fidelity on amendment 6, plan reviewed; make done green; make feature-report F=375 WRITE=1
+      verify: DONE. DONE. 343's rows 83 and 84 closed in found.jsonl (1f89ca49d); spec FAITHFUL round 2, plan CLEAR; tests/tooling 1677, tests/tools 613+3, tests/pipeline 106 passed; make done green (335 s, 6124efacb); report written
+
+## Amendment 7 (the GM 2026-10-12: "two, three, six, and eight are a good place to start", 1 measured)
+
+- [x] T46 The cohort through the roll cache and its per-seed record (plan D38, D39); tests red on today's code (SC-022)
+      research: rendering
+      verify: DONE. DONE. cohort through the roll cache (cohort:<spec>, Refusal stored by name via cohort_roll), store shared with a linked worktree, KEPT_VERSIONS=4 per subject, per-seed record dev/cohort-log/; test_cohort_audit 22 and test_rollcache 31 passed, the new ones red on the old code
+- [x] T47 The census on request (D40); the gate's shortcut earns the hooks stamp (D42); the gate commits its own record (D43); tests (SC-023, SC-025, SC-026)
+      research: rendering
+      verify: DONE. DONE. make perf runs no census; done's shortcut runs hooks-test when the hooks stamp is stale; done commits its own run record at all six sites (commit-run-record.sh); test_gate_record_and_shortcut 5 passed
+- [x] T48 The batching and pair suites in parallel processes, entry-gate serial with its reason (D41); the scan recorded (SC-024)
+      research: rendering
+      verify: DONE. DONE. batching and pair suites in parallel parts (pair with chains 06-08 and 12-13), entry-gate serial on its scan (chain 03-06, 22 s); scan recorded as m:375-a7-suites-scan
+- [x] T49 The measurements (D44): the cohort two waves before and after, the suites, the turn time (SC-022, SC-024, SC-027)
+      research: rendering
+      verify: DONE. DONE. SC-022 m:375-a7-cohort-after (wave 2 both legs 323 s -> 19 s, 54 of 54 served, verdicts identical seed by seed); SC-024 m:375-a7-suites-parts (pair 70.6 -> 18.8 s, batching 71.7 -> 20.4 s, probes fail named); SC-027 m:375-a7-turn-time; SC-021 m:375-a6-about-only-replay
+- [x] T50 375 closes again: tests, `make hooks-test`, the gate, the report, landed
+      research: rendering
+      verify: DONE. DONE. tests/tooling 1677, tests/tools 616, tests/pipeline 106 passed; hooks-test green inside make done; make done green (335 s; its own record committed by FR-033); report written; landed by the push carrying this tick
 

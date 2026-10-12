@@ -37,6 +37,7 @@ import sys
 import time
 import urllib.parse
 from collections.abc import Sequence
+from typing import Any
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -266,7 +267,8 @@ def answered(store_dir: pathlib.Path, slug: str, fp: str, reading: str = "") -> 
 
 def unanswered(root: pathlib.Path) -> list[ru.Unit]:
     s = store(root)
-    return [u for u in units(root) if not answered(s, u.slug, u.fingerprint, u.reading) and not legacy_depiction_answered(root, s, u.slug)]
+    return [u for u in units(root) if not answered(s, u.slug, u.fingerprint, u.reading) and not legacy_depiction_answered(root, s, u.slug)
+            and not amendment1_depiction_answered(root, s, u.slug)]
 
 
 def keep_reading(store_dir: pathlib.Path, slug: str, reading: str) -> None:
@@ -276,6 +278,17 @@ def keep_reading(store_dir: pathlib.Path, slug: str, reading: str) -> None:
         return
     rec["readings"] = [*rec.get("readings", []), reading]
     _file(store_dir, slug).write_text(json.dumps(rec, indent=1) + "\n", encoding="utf-8")
+
+
+def _modal_then(root: pathlib.Path, m: Any, utc: str) -> Any:
+    """The pop-up `m` as its file stood when an answer was recorded at `utc` (the last commit before it), or None - a pop-up
+    in a `.py` docstring, or none committed by then."""
+    import modal_owed as mo  # noqa: PLC0415
+
+    path = m.origin.rsplit(":", 1)[0] if re.search(r":\d+$", m.origin) else m.origin
+    rel = str(pathlib.Path(path).resolve().relative_to(root)) if pathlib.Path(path).is_absolute() else path
+    then = _git(root, "rev-list", "-1", f"--before={utc}", "HEAD", "--", rel).strip()
+    return mo.choice_modal(rel, _git(root, "show", f"{then}:{rel}")) if then and rel.endswith(".md") else None
 
 
 def legacy_depiction_answered(root: pathlib.Path, store_dir: pathlib.Path, slug: str) -> bool:
@@ -293,11 +306,27 @@ def legacy_depiction_answered(root: pathlib.Path, store_dir: pathlib.Path, slug:
     m = mo.find(root, slug.split(":", 1)[1])
     if m is None or not rec.get("utc") or not answered(store_dir, slug, mo.legacy_depiction_fingerprint(root, m)):
         return False
-    path = m.origin.rsplit(":", 1)[0] if re.search(r":\d+$", m.origin) else m.origin
-    rel = str(pathlib.Path(path).resolve().relative_to(root)) if pathlib.Path(path).is_absolute() else path
-    then = _git(root, "rev-list", "-1", f"--before={rec['utc']}", "HEAD", "--", rel).strip()
-    old = mo.choice_modal(rel, _git(root, "show", f"{then}:{rel}")) if then and rel.endswith(".md") else None
+    old = _modal_then(root, m, rec["utc"])
     return old is not None and old.entry == m.entry
+
+
+def amendment1_depiction_answered(root: pathlib.Path, store_dir: pathlib.Path, slug: str) -> bool:
+    """A modal-depiction answer recorded under amendment 1's formula (About in it) still answers its pop-up where what the check
+    judges since amendment 6 (FR-028) - the Entry:, the Depiction tab, Drawing: and its pages - is unchanged since the answer:
+    the pop-up as it stood then has the answer under amendment 1's formula, and the same fingerprint under today's as today.
+    Without this, dropping About from the fingerprint owed every About-form pop-up's depiction once, in every clone."""
+    if not slug.startswith("modal-depiction:"):
+        return False
+    import modal_owed as mo  # noqa: PLC0415
+
+    rec = _read(store_dir, slug)
+    m = mo.find(root, slug.split(":", 1)[1])
+    old = _modal_then(root, m, rec["utc"]) if m is not None and rec.get("utc") else None
+    return (
+        old is not None
+        and answered(store_dir, slug, mo.amendment1_depiction_fingerprint(root, old))
+        and mo.depiction_fingerprint(root, old) == mo.depiction_fingerprint(root, m)
+    )
 
 
 def command(u: ru.Unit, now: ru.Record | None = None) -> str:
