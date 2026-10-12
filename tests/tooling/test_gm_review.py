@@ -44,7 +44,8 @@ def test_a_row_for_the_gm_brings_its_box_and_the_feature_reads_pending(root: pat
     gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
     assert gm.box(d) in (d / "tasks.md").read_text()
     assert todo.feature(d).state == "done - GM review pending" and todo.holding(d) == []
-    assert "TO REVIEW - 375-x" in gm.listing(root) and "[0] accepted: the steam arcs off center" in gm.listing(root)
+    assert "375  x" in gm.listing(root) and "1 accepted" in gm.listing(root)
+    assert "[0] the steam arcs off center" in gm.listing(root, "375") and "a drawing nicety" in gm.listing(root, "375")
     assert not gm.ensure_box(d), "one box"
 
 
@@ -65,7 +66,7 @@ def test_a_discussed_row_is_reviewed_with_the_gms_words(root: pathlib.Path, monk
     d = root / "specs" / "375-x"
     (d / "report.md").write_text("# report\n")
     gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
-    assert 'make gm-reviewed F=375 WORDS="<his words>"' in gm.listing(root), "the row says how a discussion closes it"
+    assert 'make gm-reviewed F=NNN   (agreed in discussion with the GM: add WORDS="<his words>")' in gm.listing(root), "says how a discussion closes it"
     with pytest.raises(ValueError, match="two words"):
         gm.reviewed(root, d, words="fine")
     monkeypatch.chdir(root)
@@ -91,6 +92,7 @@ def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pyt
     held.parent.mkdir(parents=True)
     held.write_text(json.dumps({"a#door band": {"flag": "Held: question for the GM"}, "b#x": {"flag": "deviation-tempting"}}))
     assert gm.held(root) == ["a#door band: Held: question for the GM"] and "HELD - work cannot go on" in gm.listing(root)
+    assert "      question for the GM" in gm.listing(root), "the flag under its key, without the word the heading already says"
     monkeypatch.chdir(root)
     assert gm.main(["list"]) == 0 and "door band" in capsys.readouterr().out
     assert gm.main(["accept", "375", "a finding", "a reason here"]) == 0
@@ -104,3 +106,24 @@ def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pyt
     assert gm.rows(root / "specs" / "376-y") == []
     (root / "specs" / "376-y" / "gm-review.jsonl").write_text("not json\n")
     assert gm.rows(root / "specs" / "376-y") == []
+
+
+def test_the_summary_counts_and_one_feature_groups_its_rows(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
+    d = root / "specs" / "375-x"
+    for trigger in ("round:modal-form|modal:sheet/kitchen@3", "round:quote-check|q:0047@3"):
+        ha.trip(root, trigger, "round", trigger, "three rounds", 1)
+        ha.record_ruling(root, trigger, {"ruling": "accept", "why": "the rounds converged"}, "round-arbiter")
+    ha.trip(root, "red-gate@2026-10-10T22:25:54Z", "red-gate", "gate", "two reds", 1)
+    ha.record_ruling(root, "red-gate@2026-10-10T22:25:54Z", {"ruling": "continue", "why": "not a loop"}, "round-arbiter")
+    summary = gm.listing(root, width=200)
+    assert "3 rulings (1 continue)" in summary and "converged" not in summary, "the bare listing counts, never lists rows"
+    one = gm.listing(root, "375", width=200)
+    assert "[0-1] accept: modal-form sheet/kitchen; quote-check 0047\n        the rounds converged" in one, "one reason, one line"
+    assert "[2] continue: red-gate 2026-10-10T22:25:54Z" in one
+    assert gm.listing(root, "375", width=80).count("\n") == one.count("\n") and max(map(len, gm.listing(root, "375", width=80).splitlines())) <= 80
+    assert gm._ids([0, 1, 2, 5, 7, 8]) == "0-2,5,7-8" and gm._subject({"trigger": "reversal:/a/b/c.html"}) == ("reversal", "c.html")
+    assert gm._subject({"trigger": "odd"}) == ("", "odd")
+    gm.reviewed(root, d) if (d / "report.md").write_text("# r\n") else None
+    assert gm.listing(root, "375") == "gm-review: nothing of 375-x waits on the GM\n"
+    monkeypatch.chdir(root)
+    assert gm.main(["list", "375"]) == 0 and "nothing of 375-x" in capsys.readouterr().out

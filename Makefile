@@ -1267,8 +1267,9 @@ preflight:      ## [tests] the gate's first phase, in seconds: the derived files
 
 # GUARD_EDIT_OK: feature 375 FR-012 adds three operations - the GM's review after landing: what waits on him, a finding accepted
 # with a reason (a row he may overturn), and his review recorded (which may close the feature, through its closing check).
-gm-review:      ## [project] what waits on the GM, by feature: HELD rows (work cannot go on) and TO REVIEW rows (landed; he may overturn) - feature 375
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py list
+# GUARD_EDIT_OK: F= shows one feature's rows; the bare listing became a summary (the GM found 154 rows overwhelming, 2026-10-11) - nothing loosened.
+gm-review:      ## [project] what waits on the GM: HELD rows (work cannot go on) and, per feature, the TO REVIEW rows counted (landed; he may overturn) - feature 375   [F=<NNN> that feature's rows]
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py list $(F)
 
 accept:         ## [project] accept a finding with a reason - the work goes on, and the GM may overturn it after landing (feature 375)   F=375 FINDING="<what>" REASON="<why it can stand>"
 	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi

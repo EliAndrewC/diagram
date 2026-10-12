@@ -19,7 +19,8 @@ WORDS="<his words, verbatim>"` in that turn, and the words are kept on each row 
 discussion like the one we had and then we agree that it doesn't need any more action, then shouldn't that count as me
 reviewing it"* - 370's one row sat pending after exactly that discussion).
 
-    gm_review.py list                                   every feature's held and to-review rows
+    gm_review.py list                                   the held rows, and each feature's to-review rows counted
+    gm_review.py list F                                 feature F's to-review rows, one line per reason
     gm_review.py accept F FINDING REASON                a finding accepted with a reason: a to-review row
     gm_review.py reviewed F [ROW G]                     the GM has reviewed F's rows (GM_WORDS= in the environment: his words)
 """
@@ -29,6 +30,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import sys
 import time
 from pathlib import Path
@@ -74,21 +76,109 @@ def held(root: Path) -> list[str]:
     return [f"{k}: {v.get('flag', '')[:160]}" for k, v in sorted(data.items()) if str(v.get("flag", "")).startswith("Held")]
 
 
-def listing(root: Path) -> str:
-    out = []
+KINDS = {"arbiter": "arbiter rulings", "accepted": "findings accepted with a reason",
+         "arbiter-fix-done": "tooling fixes the arbiter asked for, made",
+         "arbiter-fix-declined": "tooling fixes the arbiter asked for, declined to the GM"}
+SHORT = {"arbiter": "rulings", "accepted": "accepted", "arbiter-fix-done": "fixes made", "arbiter-fix-declined": "fixes DECLINED"}
+
+
+def _num(d: Path) -> int:
+    return int(d.name.split("-", 1)[0])
+
+
+def _fit(line: str, width: int) -> str:
+    return line if len(line) <= width else line[: width - 3].rstrip() + "..."
+
+
+def _subject(r: dict) -> tuple[str, str]:
+    """A row's trigger as (check, subject): `round:modal-form|modal:sheet/kitchen@3` -> (`modal-form`, `sheet/kitchen`),
+    `red-gate@<utc>` -> (`red-gate`, `<utc>`), a reversal -> its file's name; an accepted finding is its own subject."""
+    t = str(r.get("trigger") or "")
+    if not t:
+        return "", str(r.get("finding", ""))
+    m = re.fullmatch(r"round:([^|]+)\|[a-z]+:(.+?)(?:@\d+)?", t)
+    if m:
+        return m.group(1), m.group(2)
+    m = re.fullmatch(r"([a-z-]+)[:@](.+?)", t)
+    if m:
+        return m.group(1), m.group(2).rsplit("/", 1)[-1] if m.group(1) == "reversal" else m.group(2)
+    return "", t
+
+
+def _ids(ids: list[int]) -> str:
+    """Row numbers as runs: [0, 1, 2, 5] -> `0-2,5`."""
+    runs: list[list[int]] = []
+    for i in ids:
+        if runs and i == runs[-1][1] + 1:
+            runs[-1][1] = i
+        else:
+            runs.append([i, i])
+    return ",".join(str(a) if a == b else f"{a}-{b}" for a, b in runs)
+
+
+def open_rows(root: Path) -> list[tuple[Path, list[tuple[int, dict]]]]:
+    """Each feature with rows the GM has not reviewed, and those rows with their numbers (OVERTURN= takes the number)."""
+    out = [(d, [(i, r) for i, r in enumerate(rows(d)) if "reviewed" not in r]) for d in sorted((root / "specs").glob("*/"))]
+    return [(d, o) for d, o in out if o]
+
+
+def _counts(o: list[tuple[int, dict]]) -> str:
+    """`49 rulings (2 continue), 34 fixes made` - the feature's rows by kind; a ruling other than accept is counted by verdict."""
+    parts = []
+    for kind in sorted({r.get("kind", "") for _, r in o}, key=lambda k: list(KINDS).index(k) if k in KINDS else 99):
+        of = [r for _, r in o if r.get("kind", "") == kind]
+        verdicts = {}
+        for r in of:
+            verdicts[r.get("ruling", "")] = verdicts.get(r.get("ruling", ""), 0) + 1
+        by = ", ".join(f"{n} {v}" for v, n in sorted(verdicts.items(), key=lambda x: -x[1]) if v != "accept") if kind == "arbiter" else ""
+        parts.append(f"{len(of)} {SHORT.get(kind, kind)}" + (f" ({by})" if by else ""))
+    return ", ".join(parts)
+
+
+def _detail(d: Path, o: list[tuple[int, dict]], width: int) -> list[str]:
+    """One feature's rows by kind; rows sharing one reason are one line naming every subject."""
+    out = [f"{d.name}: {len(o)} row(s) - {_counts(o)}"]
+    for kind in sorted({r.get("kind", "") for _, r in o}, key=lambda k: list(KINDS).index(k) if k in KINDS else 99):
+        out += ["", f"  {KINDS.get(kind, kind)}"]
+        groups: dict[tuple[str, str], list[tuple[int, dict]]] = {}
+        for i, r in o:
+            if r.get("kind", "") == kind:
+                groups.setdefault((r.get("ruling", ""), r.get("why") or r.get("tooling_fix") or ""), []).append((i, r))
+        for (verdict, why), g in groups.items():
+            subjects = sorted({" ".join(x for x in _subject(r) if x) for _, r in g})
+            head = f"    [{_ids([i for i, _ in g])}] " + (f"{verdict}: " if verdict else "")
+            out.append(_fit(head + "; ".join(subjects), width))
+            out += [_fit(f"        {why}", width)] if why else []
+    return out
+
+
+def listing(root: Path, feature: str = "", width: int = 0) -> str:
+    width = width or max(80, shutil.get_terminal_size((140, 24)).columns)
+    features = open_rows(root)
+    if feature:
+        d = _feature(root, feature)
+        o = next((o for f, o in features if f == d), [])
+        if not o:
+            return f"gm-review: nothing of {d.name} waits on the GM\n"
+        return "\n".join(_detail(d, o, width) + ["", f"  reviewed:     make gm-reviewed F={_num(d)}",
+                                                 f"  overturn one: make gm-reviewed F={_num(d)} OVERTURN=<row> TO=<feature>"]) + "\n"
     hs = held(root)
+    if not hs and not features:
+        return "gm-review: nothing waits on the GM\n"
+    n = sum(len(o) for _, o in features)
+    out = [f"GM REVIEW - {len(hs)} held, {n} landed row(s) to review in {len(features)} feature(s)", ""]
     if hs:
-        out.append(f"HELD - work cannot go on until the GM decides ({len(hs)}, feature 328's ranking, carried by 374)")
-        out += [f"  {h}" for h in hs]
-    for d in sorted((root / "specs").glob("*/")):
-        open_rows = [(i, r) for i, r in enumerate(rows(d)) if "reviewed" not in r]
-        if open_rows:
-            out.append(f"TO REVIEW - {d.name} (landed; the GM may overturn): make gm-reviewed F={int(d.name.split('-', 1)[0])}")
-            out.append('  (discussed with the GM and agreed no more action? that is his review: make gm-reviewed F=NNN WORDS="<his words>")'.replace(
-                "NNN", str(int(d.name.split("-", 1)[0]))))
-            out += [f"  [{i}] {r.get('kind')}: {r.get('trigger') or r.get('finding', '')} - {r.get('ruling', 'accepted')}: {r.get('why', '')[:140]}"
-                    for i, r in open_rows]
-    return "\n".join(out) + "\n" if out else "gm-review: nothing waits on the GM\n"
+        out.append("HELD - work cannot go on until the GM decides (feature 328's ranking, carried by 374)")
+        for h in hs:
+            key, _, flag = h.partition(": ")
+            out += [_fit(f"  * {key}", width), _fit(f"      {re.sub(r'^Held[:,]?\s*', '', flag)}", width)]
+        out.append("")
+    if features:
+        out.append("TO REVIEW - landed; the GM may overturn any row")
+        out += [_fit(f"  {_num(d):>3}  {_fit(d.name.split('-', 1)[1], 40):<40} {len(o):>3}  {_counts(o)}", width) for d, o in features]
+        out += ["", "  a feature's rows:  make gm-review F=NNN",
+                "  reviewed:          make gm-reviewed F=NNN   (agreed in discussion with the GM: add WORDS=\"<his words>\")"]
+    return "\n".join(out) + "\n"
 
 
 def accept(d: Path, finding: str, reason: str) -> dict:
@@ -145,8 +235,8 @@ def _feature(root: Path, f: str) -> Path:
 def main(argv: list[str]) -> int:
     root = Path(".").resolve()
     try:
-        if argv[:1] == ["list"]:
-            sys.stdout.write(listing(root))
+        if argv[:1] == ["list"] and len(argv) <= 2:
+            sys.stdout.write(listing(root, *argv[1:]))
         elif argv[:1] == ["accept"] and len(argv) == 4:
             accept(_feature(root, argv[1]), argv[2], argv[3])
             print("accept: recorded for the GM's review after landing")
