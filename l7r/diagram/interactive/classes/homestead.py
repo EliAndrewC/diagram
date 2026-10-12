@@ -62,6 +62,11 @@ class HouseholdShrine(Kind):
     key = 'household shrine'
 
 
+# Feature 374 wave 136: a farmstead's own grave at its plot's corner, on the hamlets whose roll keeps household graves.
+class HouseholdGrave(Kind):
+    key = 'household grave'
+
+
 class Persimmon(Kind):
     key = 'persimmon'
 

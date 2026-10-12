@@ -111,6 +111,7 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
     "coop": (0.72, 0.92),  # centered on Buck's 82% (research/questions/0045-chickens-and-chicken-coops.html); +/-0.10 is calibrated liberty, a GUESS
     "shrine": (0.03, 0.08),
     "persimmon": (0.80, 0.95),
+    "grave": (0.30, 0.36),  # where the hamlet keeps household graves (HOUSEHOLD_GRAVE_SHARE of hamlets): about a third of farmsteads
 }
 """Each fixture kind's per-hamlet share band.
 
@@ -122,7 +123,7 @@ Research:
     coop share - research/questions/0045-chickens-and-chicken-coops.drawing.html: 0.72-0.92
     household shrine share - research/questions/0219-household-shrines-yashikigami.drawing.html: 0.03-0.08
     persimmon share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: 0.80-0.95
-    household grave - DEVIATION research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: no household-grave kind; no farmstead draws a grave of its own on any hamlet
+    household grave share - GUESS research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: about a third of farmsteads, where the hamlet keeps household graves at all
     pig sty against the house - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: no sty kind; no farmstead on a plain paddy hamlet draws a sty against its house
 """
 # THE FOUR ATTESTED PRIVY SEATS (269 B10, research/questions/0047-farm-privies-and-their-night-soil-benjo.html "Farm privies and their night soil (benjo)"): under the eaves by the
@@ -182,13 +183,32 @@ def privy_seat_weights(seed: int) -> tuple[tuple[str, float], ...]:
     return tuple((k, round(v / tot, 3)) for k, v in raw)
 
 
+#: THE HOUSEHOLD GRAVE, A KNOB (feature 374 wave 136, plan W136-1): research/questions/0236's drawing page has each hamlet's
+#: seed decide whether its farmsteads keep graves of their own, on about half of hamlet maps; where they do, about a third
+#: of the farmsteads draw one (`FIXTURE_BANDS["grave"]`). Both shares a GUESS. The household grave is attested before modern
+#: times (a house-plot graveyard before the Genroku era, 1688-1704), so the GM's rule against modern-only forms admits it.
+HOUSEHOLD_GRAVE_SHARE = 0.5
+"""Research: hamlets with household graves - GUESS research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: about half"""
+
+
+def household_graves(seed: int) -> bool:
+    """Whether this hamlet's farmsteads keep graves of their own - rolled once from its seed (`HOUSEHOLD_GRAVE_SHARE`).
+
+    Research: household graves rolled per hamlet - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: about half of hamlet maps"""
+    return knob_rng(seed, "household_graves").random() < HOUSEHOLD_GRAVE_SHARE
+
+
 def fixture_shares(seed: int) -> dict[str, float]:
-    """This hamlet's share of households keeping each fixture kind, rolled once inside its band (`FIXTURE_BANDS`).
+    """This hamlet's share of households keeping each fixture kind, rolled once inside its band (`FIXTURE_BANDS`); the
+    household grave's share is nil on a hamlet whose roll keeps no household graves (`household_graves`).
 
     Research: shares rolled per hamlet - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: once per map inside each kind's band
     """
     rng = knob_rng(seed, "farm_fixtures")
-    return {k: round(lo + rng.random() * (hi - lo), 3) for k, (lo, hi) in FIXTURE_BANDS.items()}
+    shares = {k: round(lo + rng.random() * (hi - lo), 3) for k, (lo, hi) in FIXTURE_BANDS.items()}
+    if not household_graves(seed):
+        shares["grave"] = 0.0
+    return shares
 
 
 def fixture_quota(seed: int, households: int, mins: Mapping[str, int]) -> dict[str, float]:
@@ -329,7 +349,7 @@ def _draw_laid(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]
     for h in houses:
         laid = {f["kind"]: f for f in h.get("fixtures") or ()}
         hx, hy = float(h["x"]), float(h["y"])
-        for kind in ("privy", "manure", "bath", "coop", "woodpile", "shrine", "persimmon"):
+        for kind in ("privy", "manure", "bath", "coop", "woodpile", "shrine", "grave", "persimmon"):
             f = laid.get(kind)
             if f is None:
                 continue

@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 # glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in research/contents.json#homesteads).
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is the `interactive/classes/` package; a kind missing here is a KeyError at draw time, never silent ink.
-FIXTURE_CLASS = {"privy": "privy", "woodpile": "wood shed", "manure": "manure heap", "bath": "bath room", "coop": "hen coop", "shrine": "household shrine"}
+FIXTURE_CLASS = {"privy": "privy", "woodpile": "wood shed", "manure": "manure heap", "bath": "bath room", "coop": "hen coop", "shrine": "household shrine", "grave": "household grave"}
 # THE MANURE FIXTURE HAS TWO ATTESTED FORMS (feature 150, GM 2026-08-28 choosing audit A2): the HEAP by the
 # privy or stable (Tohoku, Sugiura 1973) and the PIT - "pits made of earthenware, half buried in the ground at
 # the back of the building" and lined along the road (Fei 1939, Lake Tai). Two forms -> a knob, rolled per
@@ -48,6 +48,7 @@ FIXTURE_FT: dict[str, tuple[float, float]] = {
     "bath": (6.0, 6.0),
     "coop": (5.0, 5.0),
     "shrine": (6.0, 6.0),  # DRAWN at the small-shed module, not the ~1.3 ft stone: a glyph convention (GM 2026-08-27, T62)
+    "grave": (8.0, 6.0),  # the household grave (feature 374 wave 136): a few stones on a small cleared patch, at the plot's scale
 }
 """Each fixture's drawn size.
 
@@ -58,6 +59,7 @@ Research:
     bath room size - research/questions/0044-baths-on-the-farm-furo.html: 6 x 6 ft, the placer passes its length
     hen coop size - GUESS: 5 x 5 ft
     household shrine size - CONVENTION: drawn at the 6 x 6 ft small-shed module, not the stone's 1.3 ft
+    household grave size - GUESS research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: an 8 x 6 ft patch with a few stones, at the plot's scale; no household grave was found measured
 """
 # radius: "a persimmon grows to about 12 m tall and 7 m across, a crown of about 23 ft" (research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html, pfaf-kaki;
 # 269 B14) - the full-grown size, which fits the "old giant persimmon in the dooryard" the record remembers. It was 9.0.
@@ -142,7 +144,8 @@ class FarmFixturesMixin:
         Research:
             the farmstead's fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html: privy, wood shed, manure, bath room, hen coop, household shrine
             manure heap or pit - research/questions/0042-manure-heaps-and-compost-kyuhi.html: the pit form drawn as a jar mouth
-            fixture glyphs - CONVENTION: the privy's jar, the shed's log ends, the cauldron, the coop's slats, the shrine's torii
+            fixture glyphs - CONVENTION: the privy's jar, the shed's log ends, the cauldron, the coop's slats, the shrine's torii, the grave's stones
+            household grave - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: a household's grave on its own land, at the plot's corner
         """
         if kind not in FIXTURE_FT:
             raise ValueError(f"unknown farm fixture kind {kind!r}")
@@ -183,6 +186,13 @@ class FarmFixturesMixin:
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" fill="#B9A070" stroke="{edge}" stroke-width="0.8"/>')
             for k in (-0.25, 0.0, 0.25):  # the slats/niches of the enclosure
                 g.append(f'<line x1="{k * w:.1f}" y1="{y0 + 0.8:.1f}" x2="{k * w:.1f}" y2="{-y0 - 0.8:.1f}" stroke="{edge}" stroke-width="0.6"/>')
+        elif kind == "grave":
+            # the household grave (feature 374 wave 136): a small cleared patch with a few upright stones, the idiom of the
+            # field grave's stones (`fields/features.py`) on a squared patch, never a mound in a field - the stones staggered,
+            # one before the other, so no two stand abreast and read as a pair of eyes (the field grave's rule)
+            g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1.2" fill="#CFC6B4" stroke="#8C8470" stroke-width="0.9"/>')
+            for sx, base, sh in ((-0.28, -0.05, 0.62), (0.05, 0.12, 0.5), (0.3, 0.3, 0.36)):
+                g.append(f'<rect x="{sx * w - 1.1:.1f}" y="{base * h - sh * h + h * 0.18:.1f}" width="2.2" height="{sh * h:.1f}" rx="0.8" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>')
         else:  # shrine - the household hokora, in the religious red so a rare thing is seen (T58/T62)
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="0.8" fill="{SHRINE_RED}" stroke="#5A1A10" stroke-width="1.2"/>')
             g.append(f'<line x1="{x0 + 1:.1f}" y1="{y0 + h * 0.35:.1f}" x2="{-x0 - 1:.1f}" y2="{y0 + h * 0.35:.1f}" stroke="#F2C9B0" stroke-width="1"/>')  # the ridge

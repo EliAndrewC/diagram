@@ -44,7 +44,7 @@ Rect = tuple[float, float, float, float]  # (center x, center y, width, height),
 #: (269 B42), the largest part after the kura; then the two whose rule IS the seat - the bath room on a wall of the house,
 #: the wood shed a ken off a wall of the steading - so the walls are theirs before the free-standing kinds take the ground
 #: by them; then the late placer's order; the persimmon last - its crown over no roof and out of the yard's and beds' sun.
-FIXTURE_ORDER = ("retirement", "bath", "woodpile", "privy", "manure", "coop", "shrine", "persimmon")
+FIXTURE_ORDER = ("retirement", "bath", "woodpile", "privy", "manure", "coop", "shrine", "grave", "persimmon")
 """Research: laying order - UNRESEARCHED: the retirement house, the bath room and the wood shed take the walls first"""
 
 WALL_GAP_FT = 3.5  # a fixture's edge off the wall or part it stands by: the review measured -0.3 ft at 3.0 against the drawn wall
@@ -114,8 +114,13 @@ SHADE_MARGIN_FT = 2.0  # the seat stricter than the map's check by a hair, as th
 
 SHRINE_CORNERS = (("NW", 0.45), ("NE", 0.35), ("SW", 0.20))
 """Research: shrine corner weights - research/questions/0219-household-shrines-yashikigami.drawing.html: NW 45, NE 35, SW 20"""
-CORNER_SIGNS = {"NW": (-1.0, -1.0), "NE": (1.0, -1.0), "SW": (-1.0, 1.0)}
-SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0, "retirement": 131.7}
+CORNER_SIGNS = {"NW": (-1.0, -1.0), "NE": (1.0, -1.0), "SW": (-1.0, 1.0), "SE": (1.0, 1.0)}
+#: THE HOUSEHOLD GRAVE'S CORNERS (feature 374 wave 136): research/questions/0236's house-plot graves stood at the plot's
+#: southeast corner and, in another family's record, its northwest corner (the Hatara district, before 1688-1704) - so
+#: those two at even odds, then the other two corners, as the shrine takes its corner off the house's corner
+GRAVE_CORNERS = (("SE", 0.5), ("NW", 0.5))
+"""Research: household grave corner - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: the plot's southeast or northwest corner, even odds (a GUESS)"""
+SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0, "retirement": 131.7, "grave": 108.0}
 
 
 class FixtureUnlaid(ValueError):
@@ -368,7 +373,7 @@ def lay_fixtures(
 
     Research:
         fixture gap 3.5 ft off every other part and bath room slide 4 ft - UNRESEARCHED: WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall
-        seating order - UNRESEARCHED: FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, persimmon) is the order the fixtures take seats
+        seating order - UNRESEARCHED: FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, grave, persimmon) is the order the fixtures take seats
         stepped outward - UNRESEARCHED: a fixture with no recorded seat free is offered the same seats a pace further out
         the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: never stepped past 48 ft from its house; a farmstead with no seat within it refuses its privy by name
         wood shed's walls - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house's walls, a short
@@ -592,6 +597,7 @@ def _seats(
         wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: off the back wall and
             the flanks
         shrine corner - research/questions/0219-household-shrines-yashikigami.drawing.html: NW, NE or SW of the house
+        household grave corner - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: SE or NW of the house, then the other two corners
         seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw, coop 0.34 hw spread and
             0.3 hh, wood shed 0.25 hw and 0.1 hh"""
     if kind == "privy":
@@ -645,11 +651,14 @@ def _seats(
     if kind == "woodpile":  # THE WOOD SHED (feature 280 M21): the old stack's walls, a ken further out - a building of its own
         st, back = px(WOODSHED_STEP_FT), -(hh / 2 + g + d / 2)
         return [(-hw * 0.25, back - st, w, d), (hw * 0.25, back - st, w, d), (hw / 2 + g + st + d / 2, hh * 0.1, d, w), (-(hw / 2 + g + st + d / 2), hh * 0.1, d, w)]
-    # the household shrine: a plot corner, rolled by compass name (NW the likeliest, 17 of 37; NE the kimon; SW Tokushima)
+    # the household shrine: a plot corner, rolled by compass name (NW the likeliest, 17 of 37; NE the kimon; SW Tokushima);
+    # the household grave the same distance off the house's corner, at the SE or NW (0236), then the other two
     off = px(SHRINE_CORNER_FT)
     corner = {k: (sx * (hw / 2 + off), sy * (hh / 2 + off), w, d) for k, (sx, sy) in CORNER_SIGNS.items()}
-    first = weighted(SHRINE_CORNERS, u)
-    return [corner[first]] + [corner[k] for k, _ in SHRINE_CORNERS if k != first]
+    table = GRAVE_CORNERS if kind == "grave" else SHRINE_CORNERS
+    first = weighted(table, u)
+    rest = [k for k, _ in table if k != first] + ([k for k in ("NE", "SW") if k not in dict(table)] if kind == "grave" else [])
+    return [corner[first]] + [corner[k] for k in rest]
 
 
 #: The rakes a persimmon's seat is tested at, every `SUN_TURN_STEP_DEG` across the map's range: the sun ground is the

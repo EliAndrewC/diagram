@@ -1,4 +1,6 @@
-"""STAGE 6c (feature 273, the GM 2026-09-27; feature 280 M68): where a hamlet's dead lie - in the village's ground.
+"""STAGE 6c (feature 273, the GM 2026-09-27; feature 280 M68): where a hamlet's dead lie - in the village's ground, and
+whether its farmsteads keep graves of their own (feature 374 wave 136: the knob is recorded here, the graves are laid with
+the fixtures).
 
 The GM ruled that a village district's main village alone keeps the shrine, the headman's house and the cremation
 ground, and asked where a hamlet's dead then lie - its own ground, the village's, or bones brought home - to follow
@@ -18,6 +20,7 @@ from __future__ import annotations
 
 from l7r.diagram.settlement import Settlement
 
+from .homesteads.fixtures import household_graves
 from .plan import SitePlan
 
 BURIAL_FORMS = ("village_ground",)  # the one attested form (feature 280 M68): the hamlet's dead lie in the village's ground
@@ -38,7 +41,8 @@ def stage_burial(s: Settlement, plan: SitePlan) -> None:
         where the dead lie - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: the village's ground, off the map
         no hamlet ground drawn - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: own ground attested only in modern records
         farmstead graves - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:
-            no farmstead draws a grave of its own on any hamlet map; the household-grave knob is never rolled
+            the household-grave knob rolled per hamlet (`homesteads/fixtures.py` `household_graves`), recorded here; the graves themselves
+            are laid with the farmstead's fixtures, at a plot corner (feature 374 wave 136)
     """
     if not s.M.get("houses") or s.M["meta"].get("scale") != "hamlet":
         return
@@ -46,3 +50,4 @@ def stage_burial(s: Settlement, plan: SitePlan) -> None:
     if form not in BURIAL_FORMS:
         raise ValueError(f"hamlet_burial: {form!r} is not one of {BURIAL_FORMS} (feature 280 M68: a hamlet's own ground is attested only in modern records)")
     s.M["meta"]["hamlet_burial"] = form
+    s.M["meta"]["household_graves"] = household_graves(plan.spec.seed)

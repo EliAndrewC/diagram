@@ -278,3 +278,15 @@ def test_a_slide_along_the_wall_stops_at_the_walls_end() -> None:
     assert got == [(15.0, 20.0, 4.0, 4.0)], "x 15 reaches 17; x 20 would reach 22, past the wall's end at 20"
     assert all(abs(q[0]) + q[2] / 2 <= 20.0 for q in got)
     assert len(list(fs.along_its_wall(seat, 5.0, 6))) == 6, "unbounded by default"
+
+
+def test_the_household_grave_takes_the_plots_southeast_or_northwest_corner() -> None:
+    """Feature 374 wave 136 (research/questions/0236's house-plot graves: the plot's southeast corner, another's northwest):
+    the grave stands off the house's corner as the shrine does, SE or NW first at even odds, then the other two."""
+    for roll in (0.1, 0.9):
+        grave = _lay(("grave",), roll=roll)["grave"]
+        se = grave[0] > HW / 2 and grave[1] > HH / 2
+        nw = grave[0] < -HW / 2 and grave[1] < -HH / 2
+        assert se or nw, (roll, grave)
+    both = _lay(("shrine", "grave"), roll=0.1)
+    assert fs.clears(both["grave"], [both["shrine"]], fs.WALL_GAP_FT - 1e-6), "the grave never takes the shrine's corner"

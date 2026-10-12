@@ -118,3 +118,13 @@ def test_a_spec_floor_is_declared_and_a_field_pit_across_the_brook_is_not_taken(
     fx.farmstead_fixtures(s, plan, [_house([pit])])
     (laid,) = s.M["farm_fixtures"]
     assert s.M["meta"]["farm_fixtures_min"] == {"shrine": 1} and "seat" not in laid and laid["x"] == pytest.approx(410.0)
+
+
+def test_about_half_of_hamlets_keep_household_graves_and_the_rest_draw_none() -> None:
+    """Feature 374 wave 136 (research/questions/0236's drawing page): the hamlet's seed decides whether its farmsteads keep
+    graves of their own, on about half of maps; where they do, about a third of its farmsteads draw one."""
+    kept = [fx.household_graves(s) for s in range(1, 201)]
+    assert 0.4 < sum(kept) / len(kept) < 0.6
+    for s in range(1, 40):
+        share = fx.fixture_shares(s)["grave"]
+        assert (share == 0.0) if not fx.household_graves(s) else (0.30 <= share <= 0.36), (s, share)

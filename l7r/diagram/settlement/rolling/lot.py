@@ -277,7 +277,7 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
 #: The laid fixtures drawn as a record of their own, and so held until drawn (`hamletgen/homesteads/holds.py`): the farmstead
 #: fixtures and the retirement house. A persimmon is recorded by its crown's radius alone, which the matrix reads no extent
 #: from; a bath's corridor is drawn with its bath.
-HELD_KINDS = frozenset({"privy", "manure", "bath", "coop", "woodpile", "shrine", "retirement"})
+HELD_KINDS = frozenset({"privy", "manure", "bath", "coop", "woodpile", "shrine", "grave", "retirement"})
 
 
 def held_part_records(hx: float, hy: float, well: Any, fixtures: Any, vr: float) -> list[tuple[str, dict[str, Any]]]:
