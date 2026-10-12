@@ -892,7 +892,7 @@
   "unit": "s",
   "varies": 0.3,
   "source": "374's pushed HEAD in two detached worktrees, old code (before amendment 3) and new (2100933da), one after the other",
-  "command": "make perf LABEL=timing-<tree> in each worktree; make census in the new one",
+  "command": "one-shot: make perf LABEL=timing-<tree> in each worktree; make census in the new one",
   "method": "date +%s.%N around each; one run each, a one-off observation",
   "value": {
    "make perf old s": 181.2,

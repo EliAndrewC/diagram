@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import shlex
 import subprocess
 import sys
@@ -64,6 +65,11 @@ def rerun(spec_dir: pathlib.Path) -> tuple[list[str], list[str], list[str]]:
     try:
         for command in sorted({e["command"] for e in recorded.values() if e.get("command")}):
             path.write_text(original)
+            if re.search(r"<[A-Za-z][^<>]*>", command):  # a <placeholder>: a description of a run, never itself run
+                # (2026-10-12: "make perf LABEL=timing-<tree> in each worktree; ..." ran `make perf` - a whole snapshot,
+                # a perf-log record labeled with the placeholder - before make refused the words after it)
+                skipped.append(f"  NOT RE-MEASURED: {command[:120]}\n      names a <placeholder> - a one-shot's description, not run")
+                continue
             try:
                 run = subprocess.run(shlex.split(command), cwd=ROOT, capture_output=True, text=True)
             except (OSError, ValueError) as e:  # a command written as prose: not runnable, so listed, never fatal (feature 375)

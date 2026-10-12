@@ -406,3 +406,13 @@ def test_a_figure_appears_in_a_table_valued_record() -> None:
     assert _f5mod.appears(value, "the frame 20 x 10 ft on its footing")
     assert not _f5mod.appears(value, "a 2 ft margin")
     assert _f5mod.appears(3.26, "about 3.3 acres") and not _f5mod.appears("n/a", "3 ft")
+
+
+def test_figures_never_runs_a_command_that_names_a_placeholder(tmp_path: pathlib.Path) -> None:
+    """2026-10-12: a one-shot's command, "make perf LABEL=timing-<tree> in each worktree; ...", was split and run - a whole
+    perf snapshot, its record labeled with the placeholder - before make refused the words after it."""
+    marker = tmp_path / "ran"
+    d = _measured(tmp_path, "spec\n", {"k": {"value": 1, "unit": "s", "command": f"touch {marker} <tree> in each worktree"}})
+    _failures, _reports, skipped = figures_cli.rerun(d)
+    assert not marker.exists(), "the command was run"
+    assert any("names a <placeholder>" in s for s in skipped)
