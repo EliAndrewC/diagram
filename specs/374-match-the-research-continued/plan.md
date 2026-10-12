@@ -643,6 +643,13 @@ changes, so the batch takes its timing bookends and states the band at landing.
   at least one rolled parcel is seated on the sheet beyond the fields; the off-sheet bearing retires, or stays only as the
   record of a roll whose ground the sheet cannot hold, measured. The bar: the cohort green, and the off-sheet count on the same
   20 seeds re-measured.
+- **W145-2** (measured, then decided): the ground the sheet cannot hold is feature 287's D11 case, which the GM approved
+  (2026-09-30, *"I approve those 5 decisions"*, specs/287-placer-guarantees/research.md): the frame stays tight to the working
+  settlement and no wood sets it. On every one of the 7 off-sheet rolls the scan found open seats inside the frame (6 to 194
+  per rung) and every one of them stood on the houses' side of the fields - `_beyond_the_fields` returned none
+  (`m:w145-offsheet-why`, each map with its counts). So no in-sheet seat keeps 0077's order of houses, fields, then wood, and
+  growing the scan or the canvas would only push the frame out: the off-sheet bearing stays, and 0077's drawing page now
+  records it as a map drawing convention with its reason, the claim citing that page. The woodland-commons pop-up says so.
 
 ## Landing by batch (375's D18)
 

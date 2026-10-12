@@ -58,7 +58,7 @@ def woodland_on_the_sheet(s: Settlement, plan: SitePlan, polys: list[Any]) -> li
     beyond the sheet with its bearing (`meta.woodland_offsheet`, plan D11), so a roll either draws a wood or says where
     it stands.
 
-    Research: wood beyond the sheet - CONVENTION research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: when the far side of the fields lies past the map's edge the wood is not drawn and its bearing is recorded (feature 287 D11)
+    Research: wood beyond the sheet - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a map drawing convention - when the far side of the fields lies past the map's edge the wood is not drawn and its bearing is recorded (feature 287 D11)
     """
     if plan.woodland_patches and not polys:
         s.M["meta"]["woodland_offsheet"] = woodland_offsheet(plan)

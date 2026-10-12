@@ -8494,27 +8494,20 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/crossing.py::crossed_through#a walk counts as crossing a field once half the field's depth lies on it (REAL_CROSSING_SHARE 0.5)": {
-  "code": "4a1f9ce0341c41fb",
-  "core": "4a1f9ce0341c41fb",
-  "date": "2026-10-11",
-  "note": "a walk counts as crossing a field once half the field's depth lies on it (REAL_CROSSING_SHARE 0.5)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/hinterland/crossing.py::crossed_through#beyond the fields on the level": {
   "code": "29df0d624d237683",
   "core": "4a1f9ce0341c41fb",
-  "date": "2026-10-11",
-  "note": "the test asks whether the walk from the houses runs through the fields, and the page has the wood \"keeps to the far side of the fields from the houses\"",
+  "date": "2026-10-12",
+  "note": "the walk must run through at least half the field's depth along its direction, which is the test for \"the far side of the fields from the houses\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:a52ae57972163d6a"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/crossing.py::crossed_through_many#walk through the field": {
@@ -8705,13 +8698,13 @@
   "date": "2026-10-11",
   "note": "45 ft matches \"Within about 45 ft of one of those, the patch's line keeps off the feature and follows it\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:62655ffbea173c76"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::STREAM_LOT_LINE#lot line along a brook": {
@@ -8728,12 +8721,13 @@
   "date": "2026-10-11",
   "note": "no part of a wood in marsh; the page leaves marsh and its edge to grass",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::WOODLAND_BBOX_FLOOR#woods on the page": {
@@ -8774,31 +8768,31 @@
   "date": "2026-10-11",
   "note": "ranked by field height alone; the houses' height counts only by the water, as the page says",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#beyond the fields preferred": {
   "code": "a54349812a2d697f",
   "core": "379cfc5fd44c00e2",
-  "date": "2026-10-11",
-  "note": "only seats whose walk from the house center crosses the paddy or a row holding are kept, on every tier",
+  "date": "2026-10-12",
+  "note": "keeps only seats whose walk from the houses runs through the envelope or a row holding; with none it returns nothing, so no wood is drawn, as the new block says (\"the map draws no wood: it lies off the sheet, past the fields\"); height is a rank, which matches \"first\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:a52ae57972163d6a"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#the fields beside a seat": {
@@ -8813,16 +8807,15 @@
  "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#where the fuel wood stands": {
   "code": "d75f16cbf0cd4242",
   "core": "379cfc5fd44c00e2",
-  "date": "2026-10-11",
-  "note": "seats higher than the fields always rank first, then the far side of the fields; the wood is offered only through the field",
+  "date": "2026-10-12",
+  "note": "every tier-0 seat (higher than the field beside it) outranks every tier-1 seat (the level), so the level is used only once higher ground runs out",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
   "verdict": "IN-STEP"
  },
@@ -8872,10 +8865,10 @@
   "date": "2026-10-03",
   "note": "a smooth wander, a convention per 0077 drawing",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
-  "triaged": "2026-10-11",
+  "research": "a763e17a58c10593",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_patch_keepouts#keep-outs": {
@@ -8894,12 +8887,13 @@
   "date": "2026-10-11",
   "note": "the drawn marsh is kept out, as low marsh ground is left to grass",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_patch_keepouts#title pocket kept clear": {
@@ -8934,10 +8928,10 @@
   "date": "2026-10-03",
   "note": "pulled in to run alongside",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
-  "triaged": "2026-10-11",
+  "research": "a763e17a58c10593",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::in_a_ruled_line#woods not in a ruled line": {
@@ -8962,10 +8956,10 @@
   "date": "2026-10-03",
   "note": "on the line or clear of it, per 0077 drawing",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
-  "triaged": "2026-10-11",
+  "research": "a763e17a58c10593",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::off_the_row#woodland scan plumbing": {
@@ -9021,13 +9015,13 @@
   "date": "2026-10-11",
   "note": "follow_the_bounds and lot_follows_its_bounds against lanes, brooks and fields; the page's \"about 45 ft\" is its GUESS",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:62655ffbea173c76"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#low ground by the water": {
@@ -9036,12 +9030,13 @@
   "date": "2026-10-11",
   "note": "the code refuses a seat below the houses whose square comes within 46 ft of a river or marsh; the drawing page gives that rule and that width, and records \"about 46 ft\" as a GUESS.",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": {
@@ -9050,27 +9045,28 @@
   "date": "2026-10-11",
   "note": "a ring is refused when parcel_wet_share is above 0",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred": {
   "code": "03ec91f9a82ef7e4",
   "core": "d774bd653e03d206",
-  "date": "2026-10-11",
-  "note": "scored by -distance to the house center within a tier",
+  "date": "2026-10-12",
+  "note": "seats are scored by minus their distance from the cluster center and taken nearest first within a tier, after the beyond-the-fields filter: \"the nearest slope beyond the fields\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#on the page": {
@@ -9325,10 +9321,10 @@
   "date": "2026-10-03",
   "note": "brush and pine stop at the wood's line",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
-  "triaged": "2026-10-11",
+  "research": "a763e17a58c10593",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#scrub past the fields": {
@@ -9449,10 +9445,10 @@
   "date": "2026-10-03",
   "note": "stocked as a worked wood",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
-  "triaged": "2026-10-11",
+  "research": "a763e17a58c10593",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_woodland#woodland forms": {
@@ -9461,15 +9457,15 @@
   "date": "2026-10-05",
   "note": "the page records why the strip woods (a whole-settlement form) and abandoned brushy coppice are not drawn",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:442b1963a64696d8",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:da8f9983e5c8dd25"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stock_woodland#under-stocked parcel regraded": {
@@ -9501,16 +9497,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::woodland_on_the_sheet#wood beyond the sheet": {
-  "code": "541f17d4221aea1f",
+  "code": "b2a1f61e4079f8d4",
   "core": "e090eb0482cccada",
-  "date": "2026-10-03",
-  "note": "neither 0077 page records this departure (a rolled wood with no parcel on the sheet is recorded as a bearing, not drawn); record it on the 0077 drawing page, or the DEVIATION stands unbacked",
+  "date": "2026-10-12",
+  "note": "§4 says the same thing: where the far side of the fields lies past the map's edge, no wood is drawn (\"it lies off the sheet, past the fields\"), and it calls this a map drawing convention. The code draws no wood when the scan found no parcels and records the wood's bearing as metadata. That is bookkeeping, not a physical choice.",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.html": "56ee60cc8e6df912"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "4dbbaaf344044dd0",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "research": "a763e17a58c10593",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:a52ae57972163d6a"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::FIELD_BESIDE_FT#the fields beside a wood": {
   "code": "efdc525b3b759ae6",
@@ -9560,13 +9559,14 @@
   "date": "2026-10-11",
   "note": "46 ft is the page's own GUESS, the reed and grass margin",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::WaterZone#plumbing": {
@@ -9635,12 +9635,13 @@
   "date": "2026-10-11",
   "note": "gives the height the \"below the houses\" test reads; taking the median is not claimed (see UNCLAIMED)",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::house_floor#the houses' median height, not their lowest, is what \"below the houses\" means": {
@@ -9657,23 +9658,24 @@
   "date": "2026-10-11",
   "note": "refused only when the seat is below the houses AND within reach of a river or marsh",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::woodland_tier#where the fuel wood stands": {
   "code": "6ed844b8a798bab7",
   "core": "0e36d9faaf5eea8d",
-  "date": "2026-10-11",
-  "note": "rank 0 is above the adjacent field, rank 1 otherwise; ground below the field beyond the fields is admitted by §27",
+  "date": "2026-10-12",
+  "note": "tier 0 when the seat stands higher than the field beside it, else tier 1 (the level beyond the fields); the houses' height plays no part, as the page asks",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:1c8bf409e3901b51",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
@@ -14462,12 +14464,13 @@
   "date": "2026-10-12",
   "note": "2 to 4 as a calibration of \"a few patches\"",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
   ],
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::seat_room#spec and plan plumbing": {
@@ -54500,15 +54503,15 @@
   "date": "2026-10-10",
   "note": "woods are bare whole for the scrub tile and pines are hard-excluded; WOOD_FRINGE_FT=8.0 grass fringe in two halves, the inner one thinned",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d81577f543205810"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#woodland no-build": {
@@ -54580,10 +54583,10 @@
   "date": "2026-10-03",
   "note": "no woodland laid here",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
-  "triaged": "2026-10-11",
+  "research": "a763e17a58c10593",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.refill_the_view#plumbing": {
@@ -54637,10 +54640,10 @@
   "date": "2026-10-03",
   "note": "8 ft as 0077 says",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
-  "triaged": "2026-10-11",
+  "research": "a763e17a58c10593",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/cover.py::_BARE_SKIP#plumbing": {
@@ -55665,13 +55668,13 @@
   "date": "2026-10-08",
   "note": "two steps of thinning, the 0.5 a calibration of 0077's thinning, which it marks as a guess",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::_SEED#tile seeds": {
@@ -55818,13 +55821,13 @@
   "date": "2026-10-08",
   "note": "the grass-only tile at the kept share of its tufts",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::wood_fringe_tile#grass under a wood's edge": {
@@ -55833,14 +55836,14 @@
   "date": "2026-10-08",
   "note": "grass_tile with brush=False: tufts only",
   "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "7058f2fed80575a5"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
-  "research": "f6d46e12d32321f7",
+  "research": "a763e17a58c10593",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:942772fc8f636ef6",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d81577f543205810"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::MARSH_FEATHER_BS#reed feather": {
