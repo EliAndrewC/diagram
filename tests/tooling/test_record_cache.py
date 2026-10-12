@@ -150,3 +150,28 @@ def test_the_claims_are_kept_until_an_engine_module_or_a_procedure_changes(tmp_p
     assert eng.reads == 3, "a procedure document changed"
     assert len(list((skill / ".git" / rc.CACHE_DIR).glob("claims-*.pickle"))) == 1, "only the newest key is kept"
     assert all(m is not None for m in eng.memos), "every miss is handed the per-module memo (amendment 8, FR-035)"
+
+
+def test_claims_owed_reads_the_gates_form_problems_from_the_kept_parse(tmp_path: pathlib.Path, monkeypatch) -> None:
+    """Feature 374 batch 4: a GUESS claim naming the findings page failed the gate's coverage test, which `make quick` never
+    runs; `claims-owed` now prints the same problems, from the parse it already keeps."""
+    monkeypatch.delenv("L7R_CACHE_OFF", raising=False)
+    skill = tmp_path / "s"
+    (skill / "l7r" / "diagram").mkdir(parents=True)
+    (skill / "research" / "questions").mkdir(parents=True)
+    (skill / "research" / "questions" / "0001-x.html").write_text("x", encoding="utf-8")
+    (skill / "l7r" / "diagram" / "m.py").write_text("A = 1\n", encoding="utf-8")
+    _git(tmp_path, "init", "-q", str(skill))
+
+    class _Coverage(_Engine):
+        def coverage(self, pairs, questions):  # noqa: ANN001, ANN201
+            return [f"{u}: {e}" for u, errors in pairs for e in errors] + sorted(questions)
+
+        def all_units(self, skill: pathlib.Path, memo: object = None):  # noqa: ANN201
+            self.reads += 1
+            return iter([("unit", ["GUESS names the drawing page"])])
+
+    eng = _Coverage()
+    monkeypatch.setattr(claims, "engine", lambda _root: eng)
+    assert claims.form_problems(skill) == ["unit: GUESS names the drawing page", "0001-x.html"]
+    assert claims.units_of(skill) == ["unit"] and eng.reads == 1, "the form check and the claims share one parse"

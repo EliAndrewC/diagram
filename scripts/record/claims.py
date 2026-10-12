@@ -134,6 +134,18 @@ class Row:
 
 
 def units_of(skill: Path) -> list[Any]:
+    """Every unit in scope at the tree under `skill`: `pairs_of` without the module errors."""
+    return [u for u, _errors in pairs_of(skill)]
+
+
+def form_problems(skill: Path, cl: Any = None) -> list[str]:
+    """The gate's claim-form problems (`test_claims_coverage`) from the kept parse: a claim of the wrong form failed that
+    tooling test at the gate, which `make quick` never runs (feature 374 batch 4), so `claims-owed` prints these first."""
+    cl = cl or engine(skill)
+    return cl.coverage(pairs_of(skill), {q.name for q in (skill / QUESTIONS).glob("*.html")})
+
+
+def pairs_of(skill: Path) -> list[Any]:
     """Every unit in scope at the tree under `skill`, kept by what it is read from (feature 375 amendment 3, plan D29): every
     engine module and procedure document under `skill`, and the readers' own code - `scripts/record/claims.py` and every
     project module it imports, transitively (the engine's reader among them). Re-parsing the engine was 7.29 s a call on 374's
@@ -158,10 +170,11 @@ def units_of(skill: Path) -> list[Any]:
     reader = hashlib.sha256((rc.code_sha_of(Path(__file__).resolve().parents[2], Path(__file__)) + Path(cl.__file__).read_text(encoding="utf-8")).encode())
     memo = rc.ParseCache(common / rc.CACHE_DIR / f"claims_by_module-{reader.hexdigest()[:16]}.pickle" if common is not None else None)
     memo.PRUNE_AT = 1  # holds only what this run used, so the file does not grow with every edit
-    units = cache.get("units", lambda: [u for u, _errors in cl.all_units(skill, memo=memo)])
+    # the units WITH their modules' errors, so the form check reads the same parse (feature 374 batch 4, `form_problems`)
+    pairs = cache.get("pairs", lambda: list(cl.all_units(skill, memo=memo)))
     memo.save()
     cache.save()
-    return units
+    return pairs
 
 
 def current(skill: Path, qdir: Path | None = None) -> dict[str, Row]:
@@ -758,6 +771,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     index = load_index(root / INDEX)
     qdir, store = root / QUESTIONS, load_store(root / STORE)
     if args.cmd == "owed":
+        # THE GATE'S FORM CHECK, HERE TOO (feature 374 batch 4): a claim whose form is wrong (a GUESS naming the findings page,
+        # not its drawing page) failed `test_claims_coverage` at the gate, a tooling test `make quick` never runs - a whole gate
+        # for one word. Every session asks `claims-owed` after an edit, so it says so first.
+        for x in form_problems(root):
+            print(f"claims-form: {x} - the gate's test_claims_coverage fails on it")
         due = owed(cur, index, qdir, store)
         if not due:
             print("claims-owed: no claim is owed")

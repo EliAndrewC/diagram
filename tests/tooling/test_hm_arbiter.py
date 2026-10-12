@@ -537,6 +537,22 @@ def test_review_verdicts_reads_the_earlier_rounds_where_the_check_state_kept_non
     assert "ubame-magistracy round 2" in got and "glyph-check" not in got
     assert (out / "earlier-verdict.json").read_text() == '{"verdict": "PASS"}'
     assert ab.review_verdicts(tmp_path, out, "building-review--hayakawa-magistracy") == [], "no record, so the gap stands"
+    # ...and what was done about that round: the dispositions, the measurements verifying a finding, the sheet's edits since
+    (tmp_path / ".git" / "review-dispositions").mkdir()
+    (tmp_path / ".git" / "review-dispositions" / "building-review--ubame-magistracy.json").write_text('{"C1": "a confirmation"}')
+    (tmp_path / "specs" / "999-x").mkdir(parents=True)
+    (tmp_path / "specs" / "999-x" / "measurements.json").write_text(
+        json.dumps({"b4-ub-e1": {"verifies": "E1", "subject": "building-review--ubame-magistracy", "method": "the band 140 x 11 ft"}, "other": 3})
+    )
+    got = "\n".join(ab.review_verdicts(tmp_path, out, "building-review--ubame-magistracy"))
+    assert "`b4-ub-e1` verifies E1: the band 140 x 11 ft" in got
+    assert (out / "dispositions.json").is_file() and (out / "edits-since-verdict.diff").is_file()
+
+
+def test_a_batch_members_directory_never_starts_with_a_dash() -> None:
+    """The round arbiter's tooling fix (feature 374 batch 4): the tail of a long trigger's slug began with '-'."""
+    long = "round:building-review|building-review--county-magistracy-example@4"
+    assert not ab.batch_dir(long).startswith("-") and ab.batch_dir(long).endswith("county-magistracy-example-4")
 
 
 def test_a_modal_form_replys_fix_and_note_lines_are_findings_and_repeat_by_their_rule() -> None:
