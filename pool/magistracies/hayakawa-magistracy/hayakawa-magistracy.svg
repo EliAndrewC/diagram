@@ -544,7 +544,7 @@
     <text font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
   </g>
 
-  <!-- Shrine grove (chinju no mori): the two standalone shrines + their approach torii
+  <!-- Shrine grove (chinju no mori): the compound's one shrine + its approach torii
        stand in a green precinct, not bare court-earth. It gathers the open ground ABOVE,
        BELOW, and BETWEEN the shrines into ONE named feature - a shrine reads as set in a
        grove (GM backing-void follow-up, 2026-07). Drawn before the shrines/torii so those
@@ -557,17 +557,20 @@
     <text font-size="9" font-style="italic" fill="#3A4E38">shrine grove</text>
   </g>
 
-  <!-- The two shrines (east range of the inner court) -->
-  <!-- Fire Dragon shrine (modest standalone; retrofitted from an Ebisu
-       shrine - a small Ebisu altar keeps the corner) -->
+  <!-- THE ONE SHRINE (east range of the inner court): the Fire Dragon shrine, a modest standalone retrofitted from an
+       Ebisu shrine - a small Ebisu altar keeps the corner - and the river's kami enshrined in the same hall beside the
+       Fire Dragon (feature 374 wave 123: a river-kami shrine of its own stood 37 ft south; 0218's drawing page draws one
+       modest shrine however many a real office kept, a deliberate deviation, and the second-kami form rolled for Hayakawa
+       is ONE HALL - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html) -->
   <g data-kind="compound shrine">
     <text font-size="11" font-weight="bold" letter-spacing="1" fill="#5C1A0A"><tspan>Fire</tspan><tspan>Dragon</tspan><tspan>shrine</tspan></text>
     <rect x="773.5" y="210.5" width="33" height="21" fill="#C9876C" stroke="#6B2A18" stroke-width="2"/>
     <rect x="773.5" y="215.5" width="4" height="11" fill="#E8D2A8" stroke="#6B2A18" stroke-width="0.6" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100) -->
     <rect x="773.5" y="210.5" width="33" height="3" fill="#A03020"/>
     <rect x="773.5" y="228.5" width="33" height="3" fill="#A03020"/>
-    <!-- flame glyph inside -->
-    <path d="M 790 226 L 792 218 L 794.5 223 L 797 216 L 799.5 222 L 801 226" stroke="#FFFAE6" stroke-width="1.4" fill="none" data-kind="shrine altar"/>
+    <!-- flame glyph inside, the Fire Dragon's altar; the river kami's wave below it, the second altar of the one hall -->
+    <path d="M 790 222 L 792 215.5 L 794.5 219 L 797 214.5 L 799.5 218.5 L 801 222" stroke="#FFFAE6" stroke-width="1.4" fill="none" data-kind="shrine altar"/>
+    <path d="M 789 226.5 q 2 -2.5 4 0 q 2 2.5 4 0 q 2 -2.5 4 0" stroke="#FFFAE6" stroke-width="1.2" fill="none" data-kind="shrine altar"/>
     <!-- the surviving Ebisu altar in the corner -->
     <g data-kind="shrine altar">
       <rect x="779" y="219" width="8" height="8" fill="none" stroke="#FFFAE6" stroke-width="1.2"/>
@@ -576,20 +579,8 @@
     </g>
   </g>
 
-  <!-- River-kami shrine -->
-  <g data-kind="compound shrine">
-    <text font-size="11" font-weight="bold" letter-spacing="1" fill="#5C1A0A"><tspan>river-kami</tspan><tspan>shrine</tspan></text>
-    <rect x="773.5" y="322.5" width="33" height="21" fill="#C9876C" stroke="#6B2A18" stroke-width="2"/>
-    <rect x="773.5" y="322.5" width="33" height="3" fill="#A03020"/>
-    <rect x="773.5" y="340.5" width="33" height="3" fill="#A03020"/>
-    <!-- wave glyph inside -->
-    <path d="M 781 334 q 3 -5 6 0 q 3 5 6 0 q 3 -5 6 0" stroke="#FFFAE6" stroke-width="1.4" fill="none" data-kind="shrine altar"/>
-    <!-- its note (offerings against flood and drowning, Hajime attends daily) is the compound-shrine modal's, not a
-         label: as three lines it had no seat beside the shrine (feature 267 round 3) -->
-  </g>
-
-  <!-- The ONE torii of the two shrines' ground, at the grove's west edge where the way in from the court enters, so
-       both shrines lie beyond it (feature 267 pass 2, research religion-and-death 230: one torii at a precinct's
+  <!-- The ONE torii of the shrine's ground, at the grove's west edge where the way in from the court enters, so
+       the shrine lies beyond it (feature 267 pass 2, research religion-and-death 230: one torii at a precinct's
        boundary covers the shrines inside it; it stood mid-grove before the Fire Dragon shrine only). Drawn IN PLAN
        (docs/buildings.md, feature 268): the 15 x 1.5 ft top beam across the approach, here running north-south because
        the approach runs east, and its two 1.2 ft posts marked darker, 10.3 ft clear between them. -->
@@ -854,7 +845,7 @@
     <circle cx="315" cy="309.5" r="3.8"/>
     <!-- residence east block (reception and the lord's suite) - beside the shoe stone its guests step up from -->
     <circle cx="613" cy="326.5" r="3.8"/>
-    <!-- the two shrines - beside the Fire Dragon shrine's west door, toward its torii -->
+    <!-- the shrine - beside the Fire Dragon shrine's west door, toward its torii -->
     <circle cx="766" cy="207.5" r="3.8"/>
     <!-- guest house - beside its south door -->
     <circle cx="918" cy="307.5" r="3.8"/>

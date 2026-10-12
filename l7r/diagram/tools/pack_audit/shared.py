@@ -396,6 +396,15 @@ def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
     return out
 
 
+def one_compound_shrine(text: str) -> list[str]:
+    """A compound draws ONE modest shrine, however many a real office kept (0218's drawing page, a deliberate deviation:
+    research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html); a second god is enshrined in that hall or,
+    where the sheet's roll says so, recorded as the second kami's form - never a second shrine building (feature 374 wave 123,
+    Hayakawa's river-kami shrine). A shrine is a group tagged `compound shrine`; its arch, tagged a part of it, is not one."""
+    groups = len(re.findall(r'<g data-kind="compound shrine"[\s>]', text))
+    return [f"{groups} compound shrines drawn - a compound draws one modest shrine; enshrine a second god in its hall"] if groups > 1 else []
+
+
 HALL_MIN_SPAN_FT: float = 6.0  # an open stretch of the building shorter than this is a partition's gap, not the hall
 
 

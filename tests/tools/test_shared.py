@@ -440,3 +440,12 @@ def test_hoshigaoka_draws_its_hall_at_an_end_and_its_old_sheet_did_not() -> None
     with open(os.path.join(os.path.dirname(_FIX), "..", "pool", "country-shrines", "hoshigaoka-shrine", "hoshigaoka-shrine.svg"), encoding="utf-8") as fh:
         sheet = fh.read()
     assert s.hall_at_an_end(sheet, pa.parse_svg(sheet)) == []
+
+
+def test_a_compound_draws_one_shrine() -> None:
+    """0218's drawing page: one modest shrine, however many a real office kept (feature 374 wave 123, Hayakawa)."""
+    with open(os.path.join(_FIX, "hayakawa-two-shrines-red.svg"), encoding="utf-8") as fh:
+        red = fh.read()
+    assert s.one_compound_shrine(red) == ["2 compound shrines drawn - a compound draws one modest shrine; enshrine a second god in its hall"]
+    with open(os.path.join(os.path.dirname(_FIX), "..", "pool", "magistracies", "hayakawa-magistracy", "hayakawa-magistracy.svg"), encoding="utf-8") as fh:
+        assert s.one_compound_shrine(fh.read()) == [], "its arch, tagged a part of the shrine, is not a second shrine"
