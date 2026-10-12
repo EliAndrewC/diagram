@@ -123,13 +123,13 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 3 (the GM 2026-10-11: pop-up checks in order; the record tooling made fast; hooks-test by what changed)
 
-- [ ] T33 `modal-form` first and settling across checks (plan D25, D26); tests red on today's code (SC-011)
+- [ ] T33 The pop-up checks in order, form, research, depiction, and a round's edits settling the checks before it (plan D25, D26); tests red on today's code (SC-011)
       research: rendering
-- [ ] T34 One parse per content and one git batch per revision (plan D27, D28); outputs unchanged, a changed file and a changed parser each miss (SC-013)
+- [ ] T34 One parse per content and one git batch per revision (plan D27, D28); outputs unchanged, a changed file, a changed parser and a changed module it imports each miss (SC-013)
       research: rendering
-- [ ] T35 The claims kept by their sources (plan D29); a changed module and a changed reader each miss (SC-013)
+- [ ] T35 The claims kept by their sources (plan D29); a changed engine module, a changed reader and a changed module the reader imports each miss (SC-013)
       research: rendering
-- [ ] T36 The script tests run by what they touch (plan D30); fixture tests (SC-014)
+- [ ] T36 The script tests run by what they touch (plan D30), and the sync suite in parallel parts (plan D32); fixture tests (SC-014)
       research: rendering
 - [ ] T37 The measurements (plan D31): SC-013's times and SC-014's count recorded; SC-012 carried to 374
       research: rendering

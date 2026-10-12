@@ -1,0 +1,630 @@
+{
+"dispatches": {
+"toolu_011MeZXKVMfHaKf4f9LnxDjP": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/outer-court"
+],
+"t": 1791677900.2302105
+},
+"toolu_011teK6TopqNEMkMM3yHbsQN": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--frontage - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--frontage"
+],
+"t": 1791708520.5313659
+},
+"toolu_012Ej97nwC4oR6wDuRjuFqSv": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/door"
+],
+"t": 1791668286.3118913
+},
+"toolu_012WRhuF1weHUS2W37RadVXV": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_siting--frontage - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791700144.361301
+},
+"toolu_012e3m8Hx3d2gx8yFriMYSo9": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--bridgehead - new to the About form"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--bridgehead"
+],
+"t": 1791709086.5677407
+},
+"toolu_012fhKes36QoD3vnHf6CR1gY": {
+"check": "modal-form",
+"owed": [
+"modal-form:choice/kosatsuba_seat--bridgehead - new to the About form"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--bridgehead"
+],
+"t": 1791698886.9069972
+},
+"toolu_012gVRYgSHL2pgRBwUAoE5LR": {
+"check": "modal-form",
+"owed": [
+"modal-form:choice/kosatsuba_seat--bridgehead - new to the About form"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--bridgehead"
+],
+"t": 1791699685.4795213
+},
+"toolu_013nnbw8WVEhn8yxKzFEQ9PC": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/residence-corridor"
+],
+"t": 1791668690.915091
+},
+"toolu_01485vAJ1KuNKdmEoBpbrHfx": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--bridgehead - new to the About form"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--bridgehead"
+],
+"t": 1791698890.2703736
+},
+"toolu_014FHEEDHa7Rai3jDveZPggj": {
+"check": "modal-form",
+"owed": [
+"modal-form:sheet/notice-board - its About, Guesses or Entry changed"
+],
+"subjects": [
+"modal:sheet/notice-board"
+],
+"t": 1791709251.7393658
+},
+"toolu_014Ugtw5XhrMXJqqj2rr82dw": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/court-divider"
+],
+"t": 1791677612.0030322
+},
+"toolu_015CLZkdUpQivfUWUQRZBi7A": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:sheet/notice-board - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:sheet/notice-board"
+],
+"t": 1791709256.3978183
+},
+"toolu_015rZtSmFjugh5H74xNyHD9M": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:hamlet/scrub-and-rough-grazing - a page its Drawing: names moved (0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html)"
+],
+"subjects": [
+"modal:hamlet/scrub-and-rough-grazing"
+],
+"t": 1791699693.9717834
+},
+"toolu_016cBpH3p8Kkm9y9CShCJMJh": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--entrance - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--entrance"
+],
+"t": 1791708518.3372734
+},
+"toolu_017RdzTGKwaM4KrpLN5wXdt8": {
+"check": "modal-research",
+"owed": [
+"modal-accuracy:sheet/notice-board - its About, Guesses or Entry changed",
+"modal-references:sheet/notice-board - its About, Guesses or Entry changed",
+"modal-gaps:sheet/notice-board - its About, Guesses or Entry changed"
+],
+"subjects": [
+"modal:sheet/notice-board"
+],
+"t": 1791709094.7292843
+},
+"toolu_018LZj9vkJWHLaqewaBZd3qx": {
+"check": "modal-form",
+"owed": [
+"modal-form:choice/kosatsuba_siting--frontage - its About, Guesses or Entry changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791709258.5080373
+},
+"toolu_019KKm8pKZNcPTqpMY4DHjCh": {
+"check": "modal-depiction",
+"subjects": [
+"modal:hamlet/perimeter-dike"
+],
+"t": 1791680207.5089052
+},
+"toolu_01AcyZP7VsPrSctadqbXQ92e": {
+"check": "modal-depiction",
+"subjects": [
+"modal:choice/field_archetype--polder_grid"
+],
+"t": 1791678819.2393548
+},
+"toolu_01BdTf5ygGy4acwMbBm8Ej65": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--bridgehead - new to the About form"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--bridgehead"
+],
+"t": 1791699689.9350924
+},
+"toolu_01BgZLWrViihWPKg69wan9Vc": {
+"check": "modal-form",
+"subjects": [
+"modal:sheet/residence-corridor"
+],
+"t": 1791668688.2362726
+},
+"toolu_01Bv6SJJwXUGRb8F8nXFMwBC": {
+"check": "modal-research",
+"subjects": [
+"modal:sheet/residence-corridor"
+],
+"t": 1791668983.84244
+},
+"toolu_01CaWpuc738UtwBmEwgEsFom": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/kitchen"
+],
+"t": 1791668288.2530034
+},
+"toolu_01D5NSJoqsMtA1j6A3K6Tc6S": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:hamlet/notice-board - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:hamlet/notice-board"
+],
+"t": 1791709090.301711
+},
+"toolu_01D8TgJEt3LvQEYbAsuuzxUu": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/residence-corridor"
+],
+"t": 1791668284.7226107
+},
+"toolu_01D8WG3BESeGFh3bCoTn6syP": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--entrance - a page its Drawing: names moved (0190-notice-boards-kosatsuba.drawing.html)"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--entrance"
+],
+"t": 1791708202.9073806
+},
+"toolu_01D9viYL3FiXgbS6ZpEvxpQW": {
+"check": "modal-form",
+"subjects": [
+"modal:sheet/nakamon"
+],
+"t": 1791678041.2201092
+},
+"toolu_01DeFXfiSGG6mrLBtZT6wXxS": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_siting--frontage - a page its Drawing: names moved (0190-notice-boards-kosatsuba.drawing.html)"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791699697.811508
+},
+"toolu_01DuHtLanUxhtPPPd7yJLz9D": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--frontage - a page its Drawing: names moved (0190-notice-boards-kosatsuba.drawing.html)"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--frontage"
+],
+"t": 1791708204.5078495
+},
+"toolu_01E6q96CSfsednnxTL8MdcL9": {
+"check": "modal-depiction",
+"subjects": [
+"modal:hamlet/fish-pond"
+],
+"t": 1791680209.343818
+},
+"toolu_01EKnTfeyEoCmcNFrvh7Yp1A": {
+"check": "modal-research",
+"owed": [
+"modal-accuracy:choice/kosatsuba_seat--bridgehead - new to the About form",
+"modal-references:choice/kosatsuba_seat--bridgehead - new to the About form",
+"modal-gaps:choice/kosatsuba_seat--bridgehead - new to the About form"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--bridgehead"
+],
+"t": 1791699687.5951734
+},
+"toolu_01ELaGoedpFV9EVW9bnWqYTS": {
+"check": "modal-depiction",
+"subjects": [
+"modal:hamlet/fish-pond"
+],
+"t": 1791680280.0200577
+},
+"toolu_01GHLWSCJCavgNnDCdrYi3eg": {
+"check": "modal-depiction",
+"subjects": [
+"modal:choice/field_archetype--polder_grid"
+],
+"t": 1791679976.8387516
+},
+"toolu_01GKCLmDxxTDLZzrRNoiptMJ": {
+"check": "modal-depiction",
+"subjects": [
+"modal:choice/settlement_form--dike_top"
+],
+"t": 1791678823.518512
+},
+"toolu_01GMFvn9oMZuh5Uyx54y67Mx": {
+"check": "modal-depiction",
+"subjects": [
+"modal:hamlet/perimeter-dike"
+],
+"t": 1791680275.6148062
+},
+"toolu_01H587oMjMziYkUAiS7GcDoA": {
+"check": "modal-research",
+"subjects": [
+"modal:sheet/nakamon"
+],
+"t": 1791678043.2400155
+},
+"toolu_01HBsVNRVabC7S7GC89nMZWr": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/kitchen"
+],
+"t": 1791668952.233807
+},
+"toolu_01HDadf2SL3SkYzbjoiJ6jGi": {
+"check": "modal-research",
+"subjects": [
+"modal:sheet/nakamon"
+],
+"t": 1791677906.7730827
+},
+"toolu_01HHexUYKrfGUt3vTfZ5JG1b": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/nakamon"
+],
+"t": 1791677896.0637004
+},
+"toolu_01HcyehunVmFVmP5Gq6yVfXR": {
+"check": "modal-form",
+"subjects": [
+"modal:sheet/residence-corridor"
+],
+"t": 1791668281.5902567
+},
+"toolu_01J8BNoMpu9FTnDTuCQoiK6b": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/inner-court"
+],
+"t": 1791677898.1236503
+},
+"toolu_01JFEPRm7EydpHwbYRGhKgdZ": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/nakamon"
+],
+"t": 1791677610.6672223
+},
+"toolu_01JGcPSmGRqtLmVA9BXfzr4Z": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--center - a page its Drawing: names moved (0190-notice-boards-kosatsuba.drawing.html)"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--center"
+],
+"t": 1791708201.2196639
+},
+"toolu_01JQ5byF6joB19e8hMiZU48q": {
+"check": "modal-form",
+"owed": [
+"modal-form:sheet/notice-board - its About, Guesses or Entry changed"
+],
+"subjects": [
+"modal:sheet/notice-board"
+],
+"t": 1791709092.689013
+},
+"toolu_01JVMbZdqs2BcjSv7CiN5Why": {
+"check": "modal-research",
+"owed": [
+"modal-accuracy:choice/kosatsuba_seat--bridgehead - new to the About form",
+"modal-references:choice/kosatsuba_seat--bridgehead - new to the About form",
+"modal-gaps:choice/kosatsuba_seat--bridgehead - new to the About form"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--bridgehead"
+],
+"t": 1791698888.480194
+},
+"toolu_01JZ1gQkyaRqDbTTmNCn7L5Y": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/outer-court"
+],
+"t": 1791677614.8233216
+},
+"toolu_01JtWzq1KFFLbYXFMyQF6jc3": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--bridgehead - new to the About form"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--bridgehead"
+],
+"t": 1791708524.2431898
+},
+"toolu_01KpWmhc1mUovvGXf1YNaZM2": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/inner-court"
+],
+"t": 1791677613.3619518
+},
+"toolu_01M4oFd3vWCZYKeyaPEWZzwG": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:hamlet/scrub-and-rough-grazing - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:hamlet/scrub-and-rough-grazing"
+],
+"t": 1791700140.80101
+},
+"toolu_01MX8UKj8mwVwTaZU2oFZRgf": {
+"check": "modal-research",
+"owed": [
+"modal-accuracy:choice/kosatsuba_siting--frontage - its About, Guesses or Entry changed",
+"modal-references:choice/kosatsuba_siting--frontage - its About, Guesses or Entry changed",
+"modal-gaps:choice/kosatsuba_siting--frontage - its About, Guesses or Entry changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791709260.4237878
+},
+"toolu_01Marmyyh6o7x3JZmV6jFJwj": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_siting--frontage - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791708529.1056917
+},
+"toolu_01Mi3yPdJoeV8ztX8fL5ZKwJ": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_seat--center - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_seat--center"
+],
+"t": 1791708516.3375447
+},
+"toolu_01NCBzgTGezumB3xfCj5ZLaL": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:hamlet/woodland-commons - a page its Drawing: names moved (0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html)"
+],
+"subjects": [
+"modal:hamlet/woodland-commons"
+],
+"t": 1791699691.982404
+},
+"toolu_01NuHq64BWuuvyhzAoRtcUEG": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/office-hall"
+],
+"t": 1791677617.437739
+},
+"toolu_01P3QrRsQMk64a8n15VGEBJx": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/residence"
+],
+"t": 1791669298.6066895
+},
+"toolu_01P93DpayBENJ1GQ8zwJw1eZ": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_siting--frontage - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791709088.5530286
+},
+"toolu_01PAJixsDVEzVU6MffjJuod1": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:choice/kosatsuba_siting--frontage - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791709556.657975
+},
+"toolu_01PTy6ZKM3XBSFjpdNCW2x8Y": {
+"check": "modal-research",
+"owed": [
+"modal-accuracy:sheet/notice-board - its About, Guesses or Entry changed",
+"modal-references:sheet/notice-board - its About, Guesses or Entry changed",
+"modal-gaps:sheet/notice-board - its About, Guesses or Entry changed"
+],
+"subjects": [
+"modal:sheet/notice-board"
+],
+"t": 1791709254.0792944
+},
+"toolu_01Q5zdcjxgUNqcrJsbuJ7of5": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:hamlet/woodland-commons - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:hamlet/woodland-commons"
+],
+"t": 1791700138.29377
+},
+"toolu_01RzvmRDPiZx5Rzwxx6hCHoz": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:sheet/notice-board - a page its Drawing: names moved (0190-notice-boards-kosatsuba.drawing.html)"
+],
+"subjects": [
+"modal:sheet/notice-board"
+],
+"t": 1791708522.3398368
+},
+"toolu_01SCioUv9fztsJ8ewUEuV5Rr": {
+"check": "modal-research",
+"owed": [
+"modal-accuracy:hamlet/notice-board - a page its Entry names moved (0190-notice-boards-kosatsuba.html)",
+"modal-references:hamlet/notice-board - a page its Entry names moved (0190-notice-boards-kosatsuba.html)",
+"modal-gaps:hamlet/notice-board - a page its Entry names moved (0190-notice-boards-kosatsuba.html)"
+],
+"subjects": [
+"modal:hamlet/notice-board"
+],
+"t": 1791699699.4979498
+},
+"toolu_01STq4MkwvKMNWcKonNih5EJ": {
+"check": "modal-form",
+"owed": [
+"modal-form:choice/kosatsuba_siting--frontage - its About, Guesses or Entry changed"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791709554.528979
+},
+"toolu_01TB21KhyafdGNTiTysJZELG": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:hamlet/notice-board - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:hamlet/notice-board"
+],
+"t": 1791700143.108202
+},
+"toolu_01TPm3HoBsNbj9tfZGgieZ2A": {
+"check": "modal-depiction",
+"subjects": [
+"modal:choice/field_archetype--mulberry_dike_fishpond"
+],
+"t": 1791678821.4902737
+},
+"toolu_01Tai1uji77UsA2ZeiW1WUKc": {
+"check": "modal-research",
+"owed": [
+"modal-accuracy:choice/kosatsuba_siting--frontage - a page its Entry names moved (0190-notice-boards-kosatsuba.html)",
+"modal-references:choice/kosatsuba_siting--frontage - a page its Entry names moved (0190-notice-boards-kosatsuba.html)",
+"modal-gaps:choice/kosatsuba_siting--frontage - a page its Entry names moved (0190-notice-boards-kosatsuba.html)"
+],
+"subjects": [
+"modal:choice/kosatsuba_siting--frontage"
+],
+"t": 1791699701.1742415
+},
+"toolu_01Tcx1ZEA5kZvDuR7HcoKqF6": {
+"check": "modal-research",
+"subjects": [
+"modal:sheet/residence-corridor"
+],
+"t": 1791668283.5754223
+},
+"toolu_01VciHuWwQJxNcxeb6u36diA": {
+"check": "modal-form",
+"subjects": [
+"modal:sheet/nakamon"
+],
+"t": 1791677904.9735487
+},
+"toolu_01WS18iowpdab7hhed7xYtGu": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:hamlet/notice-board - the modal or its Depiction tab changed"
+],
+"subjects": [
+"modal:hamlet/notice-board"
+],
+"t": 1791708530.6253812
+},
+"toolu_01WsF3gdimSrt1p8tWmyC7rR": {
+"check": "modal-depiction",
+"subjects": [
+"modal:choice/field_archetype--mulberry_dike_fishpond"
+],
+"t": 1791679979.9811075
+},
+"toolu_01XCbf5MmWAWxyzeB8mmqBzz": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/residence"
+],
+"t": 1791677916.2547371
+},
+"toolu_01Xu7X7aDAvUohVEqitTwFJn": {
+"check": "modal-depiction",
+"subjects": [
+"modal:sheet/residence"
+],
+"t": 1791668953.693364
+},
+"toolu_01YDX6weWHC5B2nbjJFe1nWk": {
+"check": "modal-depiction",
+"owed": [
+"modal-depiction:hamlet/notice-board - a page its Drawing: names moved (0190-notice-boards-kosatsuba.drawing.html)"
+],
+"subjects": [
+"modal:hamlet/notice-board"
+],
+"t": 1791699696.025102
+}
+},
+"feature": "374-match-the-research-continued"
+}

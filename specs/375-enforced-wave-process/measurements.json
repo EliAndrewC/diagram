@@ -238,36 +238,177 @@
     "entry-drift classes (entry_owed)": 177
    },
    "374 transcript, record and claims tooling": "59 min over 209 calls (modal-bundle 33, claims-owed 39, claims-bundle 32, record-owed 37, check-bundle 13 among them)",
-   "reading": "every command pays record_owed.units: the whole record parsed twice and one git process per pop-up and class file; claims-owed re-parses every engine module"
-  }
+   "reading": "every command pays record_owed.units: the whole record parsed twice and one git process per pop-up and class file; claims-owed re-parses every engine module",
+   "claims all_units stage s": 7.29,
+   "claims current() in-process s": 9.84,
+   "note on the claims stage": "timed in-process (time.perf_counter around l7r.diagram.tools.claims.all_units, then scripts/record/claims.current) in a separate run on the same worktree while the guard suites were being timed serially beside it: the container was loaded, which is why the stage (7.29 s) exceeds claims-owed's whole earlier wall time (6.9 s)"
+  },
+  "unit": "s"
  },
  "375-a3-popup-rounds-before": {
   "quantity": "pop-up check dispatches per checked unit before amendment 3 (FR-019, SC-012's baseline)",
   "observed": "2026-10-11",
-  "source": "the kept dispatch records (.git/checks-open.json) of the diagram-backlog clone (374) and the diagram-research clone (343, 368, 335 and 352's rounds), and their kept replies (.git/check-replies)",
-  "command": "python3 scripts/measure/popup_rounds.py /diagram/.clones/<clone> (each clone's .git/checks-open.json); EDIT blocks per reply counted over .git/check-replies by round, read-only",
-  "method": "scripts/measure/popup_rounds.py's counts (each dispatch counted once per pop-up it names; a unit is a (pop-up, check) pair), kept so the after (SC-012) is counted the same way",
+  "source": "snapshots of the pop-up dispatches in the diagram-backlog clone's (374) and the diagram-research clone's .git/checks-open.json, kept beside the spec in popup-rounds/ (2026-10-11); their kept replies (.git/check-replies) for the EDIT counts",
+  "command": "python3 scripts/measure/popup_rounds.py --record specs/375-enforced-wave-process/measurements.json --key 375-a3-popup-rounds-before 374=specs/375-enforced-wave-process/popup-rounds/374-2026-10-11.json research-clone=specs/375-enforced-wave-process/popup-rounds/research-clone-2026-10-11.json",
+  "method": "scripts/measure/popup_rounds.py's counts over the snapshots (each dispatch counted once per pop-up it names; a unit is a (pop-up, check) pair). Not re-run by the command: the EDIT blocks per reply by round, counted once by a one-off script over the kept replies (the `notes` below), and the join of 374's second depiction rounds with the pop-ups' other checks",
   "value": {
    "374": {
     "units": 34,
     "dispatches": 71,
     "per unit": 2.09,
     "units with a 2nd round": 29,
-    "units with a 3rd": 4
+    "units with a 3rd": 4,
+    "pop-ups": 23,
+    "by check": {
+     "modal-form": {
+      "units": 5,
+      "dispatches": 10,
+      "per unit": 2.0,
+      "units with a 2nd round": 5,
+      "units with a 3rd": 0
+     },
+     "modal-research": {
+      "units": 6,
+      "dispatches": 11,
+      "per unit": 1.83,
+      "units with a 2nd round": 5,
+      "units with a 3rd": 0
+     },
+     "modal-depiction": {
+      "units": 23,
+      "dispatches": 50,
+      "per unit": 2.17,
+      "units with a 2nd round": 19,
+      "units with a 3rd": 4
+     }
+    }
    },
-   "research clone": {
+   "research-clone": {
     "units": 82,
     "dispatches": 169,
     "per unit": 2.06,
     "units with a 2nd round": 70,
-    "units with a 3rd": 11
-   },
+    "units with a 3rd": 11,
+    "pop-ups": 37,
+    "by check": {
+     "modal-form": {
+      "units": 22,
+      "dispatches": 37,
+      "per unit": 1.68,
+      "units with a 2nd round": 13,
+      "units with a 3rd": 1
+     },
+     "modal-research": {
+      "units": 23,
+      "dispatches": 48,
+      "per unit": 2.09,
+      "units with a 2nd round": 22,
+      "units with a 3rd": 2
+     },
+     "modal-depiction": {
+      "units": 37,
+      "dispatches": 84,
+      "per unit": 2.27,
+      "units with a 2nd round": 35,
+      "units with a 3rd": 8
+     }
+    }
+   }
+  },
+  "notes": {
    "why rounds 2 and later were owed": "every one recorded `the modal or its Depiction tab changed` or `its About, Guesses or Entry changed`: the pop-up's own words, moved by the last round's applied edits",
    "modal-form replies proposing edits in round 2": {
     "research clone": "12 of 12 kept",
     "374": "2 of 5"
    },
-   "round-arbiter accepts at the cap": "374 wave 120: 5 units in one batch; 352: 21 triggers in one batch"
+   "round-arbiter accepts at the cap": "374 wave 120: 5 units in one batch; 352: 21 triggers in one batch",
+   "374's second depiction rounds": "of the 19 pop-ups with a second modal-depiction round, 13 had no modal-form or modal-research unit at all (spec review, amendment 3 round 2): those rounds were owed by the pop-up's own words changing, not by another check's edits"
   }
+ },
+ "375-a3-hooks-test-before": {
+  "quantity": "what make hooks-test spends: each guard suite's time, and the sync-with-main suite's cases (feature 375 amendment 3, FR-021)",
+  "observed": "2026-10-11",
+  "source": "the diagram-performance clone at eb64e2ba3; the container shared with other sessions",
+  "command": "each tests/hooks/test-*.sh run alone, one after another (date +%s.%N around each); then test-sync-with-main.sh with a timestamp on each line it printed, a case's time being from its heading line to the next",
+  "method": "a one-off observation, wall time, one run",
+  "varies": 0.3,
+  "value": {
+   "guard suites serial s": {
+    "test-agent-model-hooks.sh": 2.3,
+    "test-agent-stall-hooks.sh": 1.9,
+    "test-archive-first-hooks.sh": 0.9,
+    "test-batching-hooks.sh": 72.2,
+    "test-blocked-fetch-hooks.sh": 3.5,
+    "test-canon-read-hooks.sh": 4.1,
+    "test-check-bundle-hooks.sh": 8.1,
+    "test-checks-hooks.sh": 3.9,
+    "test-claims-file-hooks.sh": 3.3,
+    "test-claims-gate.sh": 1.6,
+    "test-clone-sync-hooks.sh": 13.7,
+    "test-conflict-marker-hooks.sh": 7.0,
+    "test-discard-hooks.sh": 5.3,
+    "test-download-copy-hooks.sh": 4.0,
+    "test-entry-gate.sh": 67.2,
+    "test-escalation-hooks.sh": 7.6,
+    "test-event-log-hooks.sh": 2.1,
+    "test-feature-approval-hooks.sh": 10.2,
+    "test-finished-run-hooks.sh": 39.8,
+    "test-gate-hooks.sh": 15.2,
+    "test-gate-stamp.sh": 4.7,
+    "test-guard-file-hooks.sh": 10.4,
+    "test-house-style-hooks.sh": 5.9,
+    "test-idle-tests-hooks.sh": 45.6,
+    "test-land-tooling.sh": 1.8,
+    "test-ledger-hooks.sh": 4.0,
+    "test-main-tree-hooks.sh": 57.9,
+    "test-make-only-hooks.sh": 21.4,
+    "test-measure-hooks.sh": 20.4,
+    "test-new-file-hooks.sh": 3.4,
+    "test-no-branch-hooks.sh": 2.6,
+    "test-no-poll-hooks.sh": 52.9,
+    "test-pair-hooks.sh": 81.8,
+    "test-plan-gate.sh": 1.5,
+    "test-readme-hooks.sh": 6.2,
+    "test-record-edit-hooks.sh": 3.7,
+    "test-repo-safety-hooks.sh": 4.5,
+    "test-review-gate.sh": 16.7,
+    "test-review-round-hooks.sh": 20.9,
+    "test-shell-check-hooks.sh": 8.8,
+    "test-source-block-hooks.sh": 1.0,
+    "test-stall-watchdog-hooks.sh": 10.0,
+    "test-sync-with-main.sh": 230.5,
+    "test-wakeup-hooks.sh": 4.0
+   },
+   "serial total s": 894.5,
+   "sync-with-main cases s": {
+    "1": 1.2,
+    "2": 1.1,
+    "2b": 1.3,
+    "3": 1.1,
+    "4": 4.4,
+    "5": 7.3,
+    "6": 6.8,
+    "7": 6.4,
+    "7b": 10.5,
+    "7c": 7.9,
+    "7d": 65.9,
+    "8": 1.1,
+    "8b": 1.2,
+    "9": 1.1,
+    "10": 9.1,
+    "11": 9.7,
+    "12": 3.7,
+    "11b": 3.7,
+    "13": 10.4,
+    "14": 11.3,
+    "15": 1.8,
+    "16": 9.4,
+    "17": 12.0
+   },
+   "sync-with-main run with case stamps s": 202.5,
+   "the pytest step": "58 files at 4 workers, 74 s (the Makefile's own note, 2026-10-02)",
+   "reading": "test-sync-with-main.sh is held to the whole scripts tree (feature 172), so any script change re-runs it, and at 202-230 s it is the long pole of a parallel hooks-test; its 25 cases each build their own fixture, and one (7d) takes 66 s"
+  },
+  "unit": "s"
  }
 }

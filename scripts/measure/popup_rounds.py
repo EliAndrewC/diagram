@@ -6,10 +6,13 @@ earlier ones, as a speculative fix measured afterwards (the GM, 2026-10-11). The
 records of two clones; this script is that count, kept, so the after is counted by the same method.
 
     python3 scripts/measure/popup_rounds.py <clone> [--since <ISO time>] [--json]
+    python3 scripts/measure/popup_rounds.py --record <measurements.json> --key <key> <label>=<snapshot.json> ...
 
-It reads `<clone's git dir>/checks-open.json` (the record checks' state, `scripts/hooks/lib/hm_checks.py`): every dispatch of
-`modal-form`, `modal-research` or `modal-depiction`, each counted once per pop-up it names. A UNIT is a (pop-up, check) pair;
-its rounds are its dispatches. `--since` counts only dispatches at or after a time (the next wave's start).
+It reads `<clone's git dir>/checks-open.json` (the record checks' state, `scripts/hooks/lib/hm_checks.py`), or a snapshot of
+it: every dispatch of `modal-form`, `modal-research` or `modal-depiction`, each counted once per pop-up it names. A UNIT is a
+(pop-up, check) pair; its rounds are its dispatches. `--since` counts only dispatches at or after a time (the next wave's
+start). `--record` writes each snapshot's counts under its label into `<key>`'s `value` in a measurements file - the form
+`make figures` re-runs (a live clone's state moves on; a snapshot kept beside the spec does not).
 """
 
 from __future__ import annotations
@@ -55,14 +58,36 @@ def state_of(clone: pathlib.Path) -> dict[str, Any]:
         return {}
 
 
+def record(path: pathlib.Path, key: str, snapshots: list[str], since: float = 0.0) -> None:
+    """Write each `<label>=<snapshot>`'s counts into `key`'s value in the measurements file `path`."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    entry = data.setdefault(key, {})
+    value = entry.setdefault("value", {})
+    for item in snapshots:
+        label, _, snap = item.partition("=")
+        value[label] = counts(json.loads(pathlib.Path(snap).read_text(encoding="utf-8")).get("dispatches", {}).values(), since)
+    path.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("clone")
+    ap.add_argument("clone", nargs="*", help="a clone, or with --record each <label>=<snapshot.json>")
     ap.add_argument("--since", default="", help="count only dispatches at or after this ISO time")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--record", default="", help="a measurements.json to write the counts into")
+    ap.add_argument("--key", default="")
     args = ap.parse_args(argv)
     since = datetime.datetime.fromisoformat(args.since).timestamp() if args.since else 0.0
-    state = state_of(pathlib.Path(args.clone))
+    if args.record:
+        if not args.key or not args.clone or not all("=" in c for c in args.clone):
+            print("popup_rounds: --record needs --key and one or more <label>=<snapshot.json>", file=sys.stderr)
+            return 2
+        record(pathlib.Path(args.record), args.key, args.clone, since)
+        return 0
+    if len(args.clone) != 1:
+        print("popup_rounds: name one clone", file=sys.stderr)
+        return 2
+    state = state_of(pathlib.Path(args.clone[0]))
     c = counts(state.get("dispatches", {}).values(), since)
     if args.json:
         print(json.dumps(c, indent=1))

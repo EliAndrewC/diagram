@@ -166,13 +166,14 @@ that after you make the other changes").
 - **FR-019 A pop-up's checks run in order, and a round's applied edits settle the checks before it.** The structural cause,
   measured on 374's and 352's clones (`research.md` R2): a pop-up's three checks run together, each proposes edits, and the edits
   applied re-owe the other two - every second and third round there was owed because the pop-up itself had changed, and
-  `modal-form` proposed edits in nearly every second round there; in 374 most second rounds were `modal-depiction`'s (19 of
-  29 units), on pop-ups where `modal-form` ran on only 5, owed by the other checks' edits. A check is already not re-owed by its OWN applied edits (feature 335: `make apply-edits` settles the reply's
+  `modal-form` proposed edits in nearly every second round in the research clone, re-owing the other two. (In 374 most
+  second rounds were `modal-depiction`'s, 19 of 29 units, and 13 of those 19 pop-ups had no other check at all: owed by the
+  pop-up's own words changing, which ordering does not reach and feature 335's settling of a check's own edits may.) A check is already not re-owed by its OWN applied edits (feature 335: `make apply-edits` settles the reply's
   own units). Now:
   (a) A pop-up's checks run in one order: `modal-form` (its words and their order), then `modal-research` (whether those
   words are supported), then `modal-depiction` (whether the Depiction tab tells the drawing, read last because the research
   round may move a drawing statement). A check's bundle for a pop-up is refused while a check before it in the order is owed
-  on that pop-up and unanswered, the refusal naming that check's bundle command. An escape, `FORM_FIRST_OK="<why>"`, builds
+  on that pop-up and unanswered, the refusal naming that check's bundle command. An escape, `CHECK_ORDER_OK="<why>"`, builds
   it anyway and is recorded in the bundle's MANIFEST. A check owed nothing before it (a page only its `Drawing:` names
   moved, say) is not held: the order is read off what is owed, never off the check asked for.
   (b) When a round's own EDIT blocks are applied, each check BEFORE the replying check in the order settles with its answer
@@ -184,8 +185,8 @@ that after you make the other changes").
   same work, measured on 374's delta (`request.md`): re-reading the whole record at the merge base and at the working tree
   on every call (about 1.7 s of parsing), one `git` process per file for the pop-ups and the entry-drift classes at the base
   (299 and 177 processes; the two stages took 1.25 s and 0.76 s), and re-parsing every engine module for the research
-  claims (`all_units`, 7.3 s timed in-process with other runs on the container; `m:375-a3-record-tooling-before`,
-  `research.md` R1). Now:
+  claims (the `all_units` stage, 7.29 s timed in-process on a loaded container - more than `claims-owed`'s whole 6.9 s
+  run earlier; `m:375-a3-record-tooling-before`, `research.md` R1). Now:
   (a) a question page's, notes file's or write-up's parse is kept by its content and by the source of the code that parses
   it - the parsing module and every project module it imports, transitively - so an unchanged file is parsed once, not
   once per call and per revision;
@@ -196,13 +197,19 @@ that after you make the other changes").
   where its result is the same).
   A cache never changes an answer: any change to a file or to the code that reads it misses, and each command's output is
   the same with and without it.
-- **FR-021 `hooks-test` runs only what a change touched.** The guard suites already run only when a file they depend on
-  changed (feature 172); the Python test files that test `scripts/` run all together whenever anything under `scripts/` or
+- **FR-021 `hooks-test` runs only what a change touched, and its longest suite no longer runs one case at a time.**
+  Measured (`m:375-a3-hooks-test-before`, `research.md` R3): the guard suites already run only when a file they depend on
+  changed (feature 172), but two parts re-run on any script change.
+  (a) The Python test files that test `scripts/` run all together (74 s) whenever anything under `scripts/` or
   `tests/hooks/` changed, so a merge from main touching one script reran every one of them. Each now runs only when it, a
-  `conftest.py` above it, or a file it depends on changed: the scripts it names and what those use, derived transitively
-  as the guard suites' dependencies are (`tests/hooks/hookdeps.py`), and all of `scripts/` for a file whose script paths
-  cannot be derived (it builds them at run time). Failing toward running, as feature 172's derivation does. `HOOKS_ALL=1` and
-  the gate (which runs these files anyway) are unchanged.
+  `conftest.py` above it, or a file it depends on changed: the scripts it names and what those use, derived transitively as
+  the guard suites' dependencies are (`tests/hooks/hookdeps.py`), and all of `scripts/` for a file whose script paths cannot
+  be derived (it builds them at run time). Failing toward running, as feature 172's derivation does.
+  (b) `test-sync-with-main.sh` stays held to the whole tree - its push path reaches scripts at run time, which feature 172
+  found no static reading can see - and it is the longest suite (202 to 230 s; one case 66 s), so every script change waits
+  on it. Its 25 cases each build their own fixture and share nothing, so they run in parallel parts and the suite takes its
+  longest part's time; every check still runs and is counted, and a failure in any part fails the suite.
+  `HOOKS_ALL=1` and the gate (which runs the test files anyway) are unchanged.
 
 ## Success criteria
 
@@ -238,7 +245,7 @@ that after you make the other changes").
   shape of 343's form-check bundles). The test fails on today's code.
 - **SC-011** (FR-019) On a fixture pop-up owed all three checks: a `modal-research` bundle is refused while `modal-form` is
   unanswered, and a `modal-depiction` bundle while either is, each refusal naming the bundle command of the check owed first;
-  with `FORM_FIRST_OK` each is built and its MANIFEST says why; a pop-up owed only `modal-depiction` (a page its `Drawing:`
+  with `CHECK_ORDER_OK` each is built and its MANIFEST says why; a pop-up owed only `modal-depiction` (a page its `Drawing:`
   names moved) is not held. Applying a `modal-research` reply's EDIT blocks leaves `modal-form` answered, and a
   `modal-depiction` reply's leaves both answered; a hand edit after either re-owes them; a `modal-form` reply's blocks
   applied after `modal-research` answered leave `modal-research` owed. The tests fail on today's code.
@@ -258,8 +265,9 @@ that after you make the other changes").
   miss. The times are a key of `measurements.json`.
 - **SC-014** (FR-021) With a fixture: a change to one script runs only the test files that depend on it, a file that builds
   its script paths runs on any change under `scripts/`, an unchanged tree runs none, and `HOOKS_ALL=1` runs them all. Measured
-  over main's last ten commits touching `scripts/`: the test files each would have run, against all of them today - a key of
-  `measurements.json`.
+  over main's last ten commits touching `scripts/`: the test files each would have run, against all of them today; and
+  `test-sync-with-main.sh` timed before and after on the same tree, three runs each, with the same count of checks passed -
+  its median at most half today's (`m:375-a3-hooks-test-before`, R3). Both are keys of `measurements.json`.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
@@ -287,7 +295,7 @@ next wave is, so it is carried there.
 | The unit of work a check belongs to is a task, never a wave | spec-fidelity round 1, 2026-10-10 | a feature without waves has tasks; 372's waves were each one task |
 | SC-003 and SC-004 carried to 374 and held there by FR-014 | spec-fidelity round 1, 2026-10-10 | 374 takes no task until 375 lands, and a feature with an open task lands nothing: keeping 375 open for them would stall both |
 | Tripwires on events, not an hourly timer | this project's decision | a pattern is caught when it happens; a timer fires mid-action and asks the looping session to judge itself |
-| The order form, research, depiction (amendment 3) | spec-fidelity, amendment 3 round 1 | form first: a form edit can carry a fact (374's residence-corridor round 2 had `modal-research` catch a comparison modal-form's rewording introduced), so the substance checks read form's words. Depiction last: it reads About for drawing statements, which a research round may move. Ordering only form left research and depiction re-owing each other, the same cause on two checks (the review's item 1) |
+| The order form, research, depiction (amendment 3) | this project's decision, on the GM's "order the checks" (review round 1 offered it and the session took it) | form first: a form edit can carry a fact (374's residence-corridor round 2 had `modal-research` catch a comparison modal-form's rewording introduced), so the substance checks read form's words. Depiction last: it reads About for drawing statements, which a research round may move. Ordering only form left research and depiction re-owing each other, the same cause on two checks (the review's item 1) |
 | Ordering on the pop-ups, not a fourth round's cap or a merged check (amendment 3) | the GM, 2026-10-11 | the GM asked for the speculative fix and a measurement after it ("perhaps it's worth trying to make the speculative fix and measuring it afterwards"); the three checks keep their own contracts |
 | Caches keyed by content and by the reading code's own source, never by time (amendment 3) | this project's decision | a cache that outlives a change to its reader serves the old answer; keyed so, a fix to the parser is a miss, and an unchanged file is never read twice |
 
@@ -318,3 +326,9 @@ next wave is, so it is carried there.
   says what counts as the fix working and is counted by a kept script; SC-013 times today's code and the new back to back,
   three runs each, with the load; FR-020's claims figure is the timed `all_units` stage; a cache's key covers the reading
   code's imports transitively; R2 reconciles the "about 20" put to the GM.
+- spec-fidelity-verify, amendment 3 round 2 (2026-10-11): CHANGES REQUIRED. Applied: FR-019's 374 sentence says what the
+  records show (13 of the 19 pop-ups with a second depiction round had no other check: owed by their own words); the
+  `all_units` stage is recorded in `m:375-a3-record-tooling-before` and R1 with its load; the pop-up baseline is counted from
+  snapshots kept in `popup-rounds/` by a command `make figures` re-runs; plan D27, D29 and D31 follow FR-020 and SC-013. Also:
+  the escape is `CHECK_ORDER_OK` (it lets any check run ahead of the order, not only form); FR-021(b) and SC-014 take on the
+  longest guard suite, measured while answering this round (`m:375-a3-hooks-test-before`, R3).

@@ -334,9 +334,9 @@ and edits (343's 13 form-check bundles had none).
 "modal-depiction")`, with the units each answers (`modal-research`: the three `modal-accuracy`/`-references`/`-gaps`).
 `modal_bundle.bundle` refuses a bundle (exit 3, before anything is copied) when a check EARLIER in the order has a unit on
 the pop-up that is owed now (`record_owed.units`) and not answered at its fingerprint (`record_owed.answered`); the refusal
-names the first such check's command, `make modal-bundle KIND="<uid>" FOR=<check>`. The escape is `FORM_FIRST_OK="<why>"`
+names the first such check's command, `make modal-bundle KIND="<uid>" FOR=<check>`. The escape is `CHECK_ORDER_OK="<why>"`
 in the environment (make passes a command-line variable to its recipes); it needs two words or more, and the MANIFEST then
-carries a `form-first-escape: <why>` line. A check with nothing owed before it is not held (a pop-up owed only
+carries a `check-order-escape: <why>` line. A check with nothing owed before it is not held (a pop-up owed only
 `modal-depiction`, a page its `Drawing:` names having moved): the rule is read off the owed units, never off the check asked
 for. The hold sits at the bundle because every modal dispatch reads a bundle (`check-bundle-hooks.sh` refuses one without);
 no hook changes.
@@ -349,14 +349,16 @@ before the blocks (`record_owed.answered`) - never pending, because an answer re
 check never read. Its result line says whose blocks settled it. A reply settles nothing of a check LATER in the order (c):
 `earlier("modal-form")` is empty, and `modal-research`'s blocks leave `modal-depiction` owed.
 
-**D27 - One parse per content (FR-020a, d).** `record_units.ParseCache`: a mapping from `sha256(file text [+ its
+**D27 - One parse per content (FR-020a, d).** `record_cache.ParseCache`: a mapping from `sha256(file text [+ its
 originals])` to the parsed `Page`, notes triple (notes, cites, readings) or write-up words, held in memory for the run and on
-disk as one pickle per parsing-code version (`<git common dir>/l7r-cache/record-parse-<sha of record_units.py>.pickle`,
-written atomically, only when the run added entries). `Record.of(files, sources, cache=None)` reads through it;
-`record_owed.read_at` passes the clone's. A changed file is a new key; a change to `record_units.py` is a new file name, so
-no answer outlives the code that made it. A corrupt or unreadable cache is an empty one. `modal_bundle.bundle` computes
-`record_owed.units` once and hands the result to the triage refusal, the D25 hold and `owed_lines` (today it computed the
-whole delta twice to print one pop-up's lines).
+disk as one pickle per version of the parsing code (`<git common dir>/l7r-cache/record-parse-<code sha>.pickle`, written
+atomically, only when the run added entries; an older version's file is deleted when a newer one is written). The code sha is
+over `record_units.py` and every project module it imports, transitively (`record_cache.code_sha_of`: an `ast` walk of
+`import`/`from` statements resolved to files beside it or under the repository; `record_units.py` imports only the standard
+library today, so its set is itself, and a test adds an import to prove the walk follows it). `Record.of(files, sources,
+cache=None)` reads through it; `record_owed.read_at` passes the clone's. A corrupt or unreadable cache is an empty one;
+`L7R_CACHE_OFF=1` disables the disk cache. `modal_bundle.bundle` computes `record_owed.units` once and hands it to the triage
+refusal, the D25 hold and `owed_lines` (today it computed the whole delta twice to print one pop-up's lines).
 
 **D28 - One `git` batch per revision (FR-020b).** `modal_owed._read_at(root, rev)` returns a reader backed by ONE `git
 ls-tree -r` of the directories it serves and ONE `git cat-file --batch` of their blobs (`record_owed._cat`, moved to
@@ -364,12 +366,13 @@ ls-tree -r` of the directories it serves and ONE `git cat-file --batch` of their
 `modals_at` and `owed` use it in place of their per-file `git show` calls (299 at the base on 374's delta), and
 `entry_owed` its own per-file calls the same way (177).
 
-**D29 - The claims kept by their sources (FR-020c).** `scripts/record/claims.current(skill, qdir)` keys the rows it builds
-from `all_units` on `sha256` over every `l7r/diagram/**/*.py` under `skill` (path and content), the `PROCEDURES` documents
-and the source of both claim readers (`l7r/diagram/tools/claims.py`, `scripts/record/claims.py`); a hit loads the units and
-claims from `<git common dir>/l7r-cache/claims-<key>.pickle` and recomputes only `research_fp` (it reads question pages,
-which change independently). Only the newest key is kept. Wrapping at `scripts/record/claims.py` keeps the engine untouched
-and the landing DIRECT.
+**D29 - The claims kept by their sources (FR-020c).** `scripts/record/claims.current(skill, qdir)` keys the units and
+claims it builds from `all_units` on `sha256` over every `l7r/diagram/**/*.py` under `skill` (path and content) and the
+`PROCEDURES` documents, and on the code sha (`record_cache.code_sha_of`) of `scripts/record/claims.py` and every project
+module it imports, transitively (`record_units`, `claims_triage`, `record_cache` and what they import; the engine's claim
+reader is under `l7r/diagram/` already). A hit loads them from `<git common dir>/l7r-cache/claims-<key>.pickle` and
+recomputes only `research_fp` (it reads question pages, which change independently). Only the newest key is kept. Wrapping
+at `scripts/record/claims.py` keeps the engine untouched and the landing DIRECT.
 
 **D30 - The script tests by what they touch (FR-021).** `tests/hooks/hookdeps.py --pydeps <test file>` prints the test's
 freshness set: the file; each `conftest.py` from its directory up to `tests/`; every file of `scripts/` and `tests/hooks/`
@@ -380,12 +383,25 @@ hashes each selected file's set, runs only the files whose hash differs from the
 (`<git dir>/hooks-test/py/<test path with / as __>`), and stamps every file it ran when the run is green; a red run stamps
 none. `HOOKS_ALL=1` runs all; under `make done` the step is skipped as today.
 
-**D31 - Measured, not assumed (SC-012, SC-013, SC-014).** SC-013 is run by a scratch script on a detached worktree at
-61a52f3c8 with the backlog's answer store copied: each command three times cold (cache directory removed) and three times
-warm, output compared byte for byte against the same command with the caches disabled (`L7R_CACHE_OFF=1`, read by both
-cache helpers); key `375-a3-record-tooling-after`. SC-014's count runs `hookdeps.py --pydeps` against main's last ten commits
-touching `scripts/` and counts the files each would run; key `375-a3-hooks-test-selection`. SC-012 is carried to 374:
-374's next pop-up wave counts its dispatches per unit from its `checks-open.json`, as `m:375-a3-popup-rounds-before` did.
+**D32 - The sync suite in parallel parts (FR-021b).** `tests/hooks/test-sync-with-main.sh` keeps its fixture and helpers
+and puts each numbered case in a function (`case_1`, `case_2b`, ...); a case counts its own passes and failures. Run with no
+argument it starts the cases as parallel parts (`SYNC_PARTS`, default 4, each part a background subshell running its share
+of the cases in order, the shares balanced by the measured case times so 7d runs alone), waits for all, sums the counts and
+fails if any part failed or any case did not report; `SYNC_PARTS=1` runs them one after another as today. The suite prints
+the same `all sync-with-main tests passed (N checks)` line, and its test of itself asserts N is today's count. Each part has
+its own `$T` (the fixtures were already per case); the guard log and `HOME` stay per part.
+
+**D31 - Measured, not assumed (SC-012, SC-013, SC-014).** SC-013 is run by a scratch script on two detached worktrees at
+61a52f3c8, one with today's code and one with the new, the backlog's answer store copied: each command alternately on each,
+three runs apiece, cold (the cache directory removed) and warm, the load average recorded at the start and end; the medians
+go into `375-a3-record-tooling-after`, and each command's output is compared byte for byte between the two (and with
+`L7R_CACHE_OFF=1` on the new). SC-014's count runs `hookdeps.py --pydeps` against main's last ten commits touching `scripts/`
+and counts the files each would run, and `test-sync-with-main.sh` is timed three times with `SYNC_PARTS=1` and three with
+the default, alternating, its check count compared; key `375-a3-hooks-test-after`. SC-012 is carried to 374: 374's next
+pop-up wave counts its dispatches per unit with `scripts/measure/popup_rounds.py <clone> --since <the wave's start>`, as
+`m:375-a3-popup-rounds-before` did.
+
+## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005
    on 372 and a one-task feature; 375's report so far), D5, D6, D18's `[lands-open]` mark and `**Waits on**:`.

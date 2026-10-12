@@ -8,7 +8,8 @@ Load this file when: checking where amendment 3's figures came from.
 `record-owed`, `check-bundle`, `modal-bundle` and `claims-owed` took 6.0 to 6.9 s of wall time. The first three spend most of
 it in `record_owed.units`: the whole record parsed at the merge base and at the working tree (0.92 s and 0.8 s), the pop-ups
 read at the base by one `git show` each (299 processes, 1.25 s for the stage), the entry-drift classes likewise (177, 0.76 s).
-`claims-owed` re-parses every engine module for its claims. `check-bundle`'s quote pass (`quote-verbatim`) took 0.3 s with
+`claims-owed` re-parses every engine module for its claims: its `all_units` stage took 7.29 s timed in-process, in a separate run
+while the guard suites were being timed beside it, which is why it exceeds the command's whole 6.9 s run earlier. `check-bundle`'s quote pass (`quote-verbatim`) took 0.3 s with
 the page cache warm; its 20.7 s first run was the cache filling. In 374's transcript the record and claims tooling took
 59 min over 209 calls.
 
@@ -25,3 +26,13 @@ comparison that modal-form's rewording had introduced.
 The context put to the GM said "about 20 of 374's units" reached the round cap: that was 374's 20 `accept` rulings over all
 its tripwires (building reviews, claims checks and pop-ups together). The pop-up units alone: 4 with a third dispatch in
 374's kept records, and 5 ruled in wave 120's one batch; 352's 21 triggers are pop-up units.
+
+## R3 - what `hooks-test` spends (amendment 3, FR-021)
+
+`m:375-a3-hooks-test-before`. Each guard suite run alone: 894 s in all, of which `test-sync-with-main.sh` 230 s, the next
+82 s (`test-pair-hooks.sh`) and 72 s (`test-batching-hooks.sh`). `hooks-test` runs the stale suites in parallel (8 jobs),
+so its time is its longest stale suite's, and then the Python test files that test `scripts/` (74 s, all of them on any
+script change). `test-sync-with-main.sh` is held to the whole `scripts/` tree (feature 172: its push path reaches scripts
+at run time), so it is stale after every merge that touches a script: a post-merge `hooks-test` waited on it and then on
+the Python files - 374's 19 runs took 39 min. Its 25 cases each build their own fixture; case 7d (a feature in progress
+lands nothing) takes 66 s, the rest 3 to 12 s each.
