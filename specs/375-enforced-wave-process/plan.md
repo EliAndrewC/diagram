@@ -404,6 +404,24 @@ and counts the files each would run; key `375-a3-hooks-test-after`. SC-012 is ca
 pop-up wave counts its dispatches per unit with `scripts/measure/popup_rounds.py <clone> --since <the wave's start>`, as
 `m:375-a3-popup-rounds-before` did.
 
+### Amendment 4 (FR-022)
+
+**D32 - The sync suite in parallel parts (FR-022).** `tests/hooks/test-sync-with-main.sh` keeps its fixture (`topology`,
+`syncmain`, `stamp_hooks`, `check`, `expect_out`) and moves the helpers several cases share (`yes_`, `no_`, `rref`,
+`in_progress`, defined mid-file until now) above the cases, so a case finds them whichever part runs it. Each of the 26
+headed cases becomes a function (`case_01` ... `case_26`, in file order, its measured seconds beside it), its body
+unchanged; no case reads a variable another sets (checked by a scan of each body against its own assignments and the
+header's). The runner deals the cases into `SYNC_PARTS` parts (default 4), longest first onto the lightest part by the
+measured times (`WEIGHT`; a case without one counts 10 s); each part is a background subshell with its own `$T`, `HOME`
+and `GUARD_LOG_DIR`, prints `@@reported <case>` after each case and writes its PASS and FAIL counts to a file; the runner
+waits for all, prints each part's output in order without the markers, sums the counts, and for a part with no counts
+file fails once for each case that never reported, naming it. The suite's last line is unchanged (`all sync-with-main tests
+passed (N checks)`), so `hookrun.sh` and the stamps are untouched. `SYNC_PARTS=1` runs the cases in order in the suite's
+own shell. SC-015 is measured by a scratch script: today's file at bfe25f2da in a detached worktree and the new one,
+alternately, three runs each, the load at both ends, every run's check count against 123; then five runs in parts and one
+with `SYNC_PARTS=1`; the two failure cases by a scratch copy with one case's body made to fail and one made to `exit`. Key
+`375-a4-sync-suite-parts`.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

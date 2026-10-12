@@ -34,5 +34,5 @@ its tripwires (building reviews, claims checks and pop-ups together). The pop-up
 so its time is its longest stale suite's, and then the Python test files that test `scripts/` (74 s, all of them on any
 script change). `test-sync-with-main.sh` is held to the whole `scripts/` tree (feature 172: its push path reaches scripts
 at run time), so it is stale after every merge that touches a script: a post-merge `hooks-test` waited on it and then on
-the Python files - 374's 19 runs took 39 min. Its 25 cases each build their own fixture; case 7d (a feature in progress
-lands nothing) takes 66 s, the rest 3 to 12 s each.
+the Python files - 374's 19 runs took 39 min. Its 26 headed cases (25 numbered, 11 and 12 each used twice, and `W`)
+each build their own fixture; case 7d (a feature in progress lands nothing) takes 66 s, the rest 1 to 12 s each.

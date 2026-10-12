@@ -42,6 +42,18 @@ syncmain() { # $1 = topology dir, then args
 }
 stamp_hooks() { ( cd "$1/main/.clones/c" && python3 scripts/gates/gate-stamp.py --write hooks >/dev/null && python3 scripts/gates/gate-stamp.py --write diagram >/dev/null ); }
 
+# GUARD_EDIT_OK: feature 321 - new cases for the backup step at the stop; nothing existing loosened. (Feature 375 amendment 4: the
+# helpers they share are defined here, before the cases, so a case finds them whichever part runs it.)
+yes_() { PASS=$((PASS+1)); }
+no_() { echo "FAIL  $1"; FAIL=$((FAIL+1)); }
+rref() { git -C "$1/github.git" rev-parse -q --verify "refs/heads/$2"; }
+in_progress() { # $1 = topology dir: a feature with an open task plus an unrelated file, so a stop is refused
+  ( cd "$1/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md \
+    && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md \
+    && echo "${2:-docs}" > note.md && git add -A && git commit -qm "feature plus docs ${2:-}" )
+}
+
+case_01() {  # 1 s measured 2026-10-11
 echo "1. sync-in refreshes the mirror from GitHub main, then the clone"
 D=$(topology a)
 ( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
@@ -49,7 +61,9 @@ OUT=$(syncmain "$D" sync-in); check "sync-in from a clean clone" 0 $?
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not fast-forward to GitHub main"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone did not merge GitHub main"; FAIL=$((FAIL+1)); }
 expect_out "synced with GitHub main"
+}
 
+case_02() {  # 1 s measured 2026-10-11
 echo "2. sync-in --mirror-only advances the mirror and leaves the clone alone (a dirty clone's turn)"
 D=$(topology b)
 ( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
@@ -57,7 +71,9 @@ before=$(git -C "$D/main/.clones/c" rev-parse HEAD)
 OUT=$(syncmain "$D" sync-in --mirror-only); check "sync-in --mirror-only" 0 $?
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror not advanced"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$before" ] && PASS=$((PASS+1)) || { echo "FAIL  clone was touched"; FAIL=$((FAIL+1)); }
+}
 
+case_03() {  # 1 s measured 2026-10-11
 echo "2b. sync-in refreshes the CLONE's pool index on both branches, only when it is stale"
 D=$(topology b2)
 mkdir -p "$D/main/.clones/c/pool/hamlets/x"
@@ -70,14 +86,18 @@ OUT=$(syncmain "$D" sync-in); check "sync-in with a fresh index" 0 $?
 touch -d '-10 seconds' "$IDX"; echo '{}' > "$D/main/.clones/c/pool/hamlets/x/x.json"
 OUT=$(syncmain "$D" sync-in); check "sync-in after a manifest changed" 0 $?
 [ "$(cat "$IDX")" = "$(printf 'built\nbuilt')" ] && PASS=$((PASS+1)) || { echo "FAIL  stale index was not rebuilt: $(cat "$IDX")"; FAIL=$((FAIL+1)); }
+}
 
+case_04() {  # 1 s measured 2026-10-11
 echo "3. IT FIRES: a hand commit in the mirror stops sync-in with the fast-forward message"
 D=$(topology c)
 ( cd "$D/main" && echo rogue > rogue && git add -A && git commit -qm "committed in main by hand" )
 ( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
 OUT=$(syncmain "$D" sync-in); check "mirror cannot fast-forward -> refused" 1 $?
 expect_out "cannot fast-forward"
+}
 
+case_05() {  # 4 s measured 2026-10-11
 echo "4. DIRECT route: a docs-only delta pushes straight to GitHub main, no build, mirror follows"
 D=$(topology d)
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
@@ -85,7 +105,9 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "direct push" 
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  GitHub main did not receive the direct push"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not follow"; FAIL=$((FAIL+1)); }
 expect_out "route DIRECT"
+}
 
+case_06() {  # 7 s measured 2026-10-11
 echo "5. GATED route, refused: nothing lands, the work stays in the clone"
 D=$(topology e)
 ( cd "$D/main/.clones/c" && echo 'def a(): return 2' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
@@ -93,7 +115,9 @@ gh_before=$(git -C "$D/github.git" rev-parse main)
 OUT=$(CI_ROUTE=GATED CI_MERGE="false" syncmain "$D" push); check "gated route refused by ci-merge -> push fails" 1 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  something landed on GitHub main"; FAIL=$((FAIL+1)); }
 expect_out "nothing landed"
+}
 
+case_07() {  # 7 s measured 2026-10-11
 echo "6. GATED route, dispatched: the build lands the merge on GitHub main; the clone fast-forwards; mirror follows"
 D=$(topology f)
 ( cd "$D/main/.clones/c" && echo 'def a(): return 3' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
@@ -102,13 +126,17 @@ BUILD="git -C $D/main/.clones/c push -q $D/github.git HEAD:main && echo DISPATCH
 OUT=$(CI_ROUTE=GATED CI_MERGE="$BUILD" syncmain "$D" push); check "gated route dispatched" 0 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone and GitHub main differ after the gated push"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not follow the gated landing"; FAIL=$((FAIL+1)); }
+}
 
+case_08() {  # 6 s measured 2026-10-11
 echo "7. GATED route, SKIP-VERIFIED: the clone pushes directly (a build already verified this tree)"
 D=$(topology g)
 ( cd "$D/main/.clones/c" && echo 'def a(): return 4' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "skip-verified pushes directly" 0 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  skip-verified did not land"; FAIL=$((FAIL+1)); }
+}
 
+case_09() {  # 11 s measured 2026-10-11
 echo "7b. GATED-LOCAL route (remote off, feature 132): SKIP-VERIFIED pushes directly; a refusal keeps the work in the clone"
 D=$(topology gl)
 ( cd "$D/main/.clones/c" && echo 'def a(): return 5' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
@@ -117,14 +145,18 @@ expect_out "route GATED (local - remote off)"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a refused gated-local push landed"; FAIL=$((FAIL+1)); }
 OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "gated-local skip-verified pushes directly" 0 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  gated-local skip-verified did not land"; FAIL=$((FAIL+1)); }
+}
 
+case_10() {  # 8 s measured 2026-10-11
 echo "7c. THE SEAMS ARE IGNORED IN A REAL-SHAPED TREE (feature 132): CI_ROUTE=DIRECT cannot skip the gated route"
 D=$(topology gs)
 ( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="true" syncmain "$D" push); check "a real-shaped tree with CI_ROUTE=DIRECT does not push" 1 $?
 expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
+}
 
+case_11() {  # 66 s measured 2026-10-11
 echo "7d. A FEATURE IN PROGRESS LANDS NOTHING (feature 133): open tasks refuse both routes; the spec directory alone is the one exception"
 D=$(topology fp)
 ( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
@@ -189,14 +221,18 @@ expect_out "honored only on the GM-review box"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the GM-review box on a feature with no row for the GM -> refused" 1 $?
 ( cd "$D/main/.clones/c" && printf '{"kind": "arbiter", "row": "r1"}\n' > specs/140-x/gm-review.jsonl && echo m9 > note.md && git add -A && git commit -qm "a row for the GM" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the GM-review box in its fixed form, a row open -> lands" 0 $?
+}
 
+case_12() {  # 1 s measured 2026-10-11
 echo "8. origins are re-pointed at GitHub once, and said so"
 D=$(topology h)
 git -C "$D/main/.clones/c" remote set-url origin "$D/main"
 OUT=$(syncmain "$D" sync-in); check "sync-in with a stale origin" 0 $?
 expect_out "origin of"
 [ "$(git -C "$D/main/.clones/c" remote get-url origin)" = "$D/github.git" ] && PASS=$((PASS+1)) || { echo "FAIL  origin not re-pointed"; FAIL=$((FAIL+1)); }
+}
 
+case_13() {  # 1 s measured 2026-10-11
 echo "8b. the MIRROR's origin is the GM's: never re-pointed, and the mirror still refreshes by URL (2026-10-03)"
 D=$(topology h2)
 git -C "$D/main" remote set-url origin "ssh://git@example.invalid/gm-own-remote.git"
@@ -205,7 +241,9 @@ OUT=$(syncmain "$D" sync-in); check "sync-in with the GM's SSH origin on the mir
 [ "$(git -C "$D/main" remote get-url origin)" = "ssh://git@example.invalid/gm-own-remote.git" ] && PASS=$((PASS+1)) || { echo "FAIL  the mirror's origin was re-pointed"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not fast-forward by URL"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main" rev-parse origin/main)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  the mirror's origin/main was not refreshed"; FAIL=$((FAIL+1)); }
+}
 
+case_14() {  # 1 s measured 2026-10-11
 echo "9. the build's push line is a compare-and-swap: main moved between fetch and push -> rejected, nothing lands (R3, T036)"
 D=$(topology i)
 git clone -q "$D/github.git" "$D/build"; git clone -q "$D/github.git" "$D/other"
@@ -214,7 +252,9 @@ git clone -q "$D/github.git" "$D/build"; git clone -q "$D/github.git" "$D/other"
 OUT=$(cd "$D/build" && { git push origin HEAD:main 2>&1 || echo "main moved; re-run (the push was not a fast-forward - nothing landed)"; }); check "non-fast-forward push refused" 0 $?
 expect_out "main moved; re-run"
 [ "$(git -C "$D/github.git" log -1 --format=%s main)" = "landed in between" ] && PASS=$((PASS+1)) || { echo "FAIL  something landed over the in-between commit"; FAIL=$((FAIL+1)); }
+}
 
+case_15() {  # 9 s measured 2026-10-11
 echo "10. the performance bands are enforced at the push (feature 129): a refused review stops it, a passing one does not"
 D=$(topology j)
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
@@ -256,7 +296,9 @@ OUT=$(syncmain "$D2" sync-in)
 [ -d "$D2/main/.clones/c/.gencache" ] \
   && { echo "FAIL  seeded from a sibling at a different commit"; FAIL=$((FAIL+1)); } \
   || { echo "  ok    a sibling at another commit is refused - the clone starts cold"; PASS=$((PASS+1)); }
+}
 
+case_16() {  # 2 s measured 2026-10-11
 echo "11. a clone whose history shares no commit with main's is refused, never merged (feature 301 FR-019)"
 D=$(topology unrelated301)
 git init -q -b main "$D/rewritten"
@@ -266,7 +308,9 @@ before=$(git -C "$D/main/.clones/c" rev-parse HEAD)
 OUT=$(syncmain "$D" sync-in); check "sync-in on an unrelated history" 1 $?
 expect_out "shares no commit with main"
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$before" ] && PASS=$((PASS+1)) || { echo "FAIL  the clone merged the unrelated history"; FAIL=$((FAIL+1)); }
+}
 
+case_17() {  # 12 s measured 2026-10-11
 echo "12. the prompt hook's path: render-sync detached, one runner at a time, a bounded lock wait (2026-10-02)"
 # GUARD_EDIT_OK: new test cases for the hook's --background-render path; nothing existing loosened
 D=$(topology bg)
@@ -306,22 +350,17 @@ kill "$HOLDER" 2>/dev/null; wait "$HOLDER" 2>/dev/null
 OUT=$(syncmain "$D" sync-in --background-render); check "a mirror commit -> refused on the hook's path" 1 $?
 expect_out "cannot fast-forward"
 
-# GUARD_EDIT_OK: feature 321 - new cases for the backup step at the stop; nothing existing loosened.
-yes_() { PASS=$((PASS+1)); }
-no_() { echo "FAIL  $1"; FAIL=$((FAIL+1)); }
-rref() { git -C "$1/github.git" rev-parse -q --verify "refs/heads/$2"; }
-in_progress() { # $1 = topology dir: a feature with an open task plus an unrelated file, so a stop is refused
-  ( cd "$1/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md \
-    && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md \
-    && echo "${2:-docs}" > note.md && git add -A && git commit -qm "feature plus docs ${2:-}" )
 }
 
+case_18() {  # 4 s measured 2026-10-11
 echo "11b. SYNC_BACKUP=off (land-tooling's worktree) backs nothing up, even on a refused stop"
 D=$(topology bkoff)
 in_progress "$D"
 OUT=$(CI_ROUTE=DIRECT SYNC_BACKUP=off syncmain "$D" done); check "a refused done keeps its exit code with the backup off" 1 $?
 [ -z "$(git -C "$D/github.git" for-each-ref --format='%(refname)' refs/heads/backup/)" ] && yes_ || no_ "a backup branch was pushed with SYNC_BACKUP=off"
+}
 
+case_19() {  # 10 s measured 2026-10-11
 echo "11. a REFUSED stop backs the clone's HEAD up to backup/<clone-name>, and nothing else (feature 321, SC-001, SC-002)"
 D=$(topology bk)
 git -C "$D/github.git" config core.logAllRefUpdates always
@@ -341,7 +380,9 @@ OUT=$(syncmain "$D" sync-in); check "sync-in after more work" 0 $?
 [ "$(rref "$D" backup/c)" = "$bk_before" ] && yes_ || no_ "sync-in moved the backup"
 OUT=$(syncmain "$D" push); check "push (the stop without the render) is refused too" 1 $?
 [ "$(rref "$D" backup/c)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "push did not back up the new HEAD"
+}
 
+case_20() {  # 4 s measured 2026-10-11
 echo "12. a DIVERGED backup is never forced; the message says HEAD is NOT backed up and prints the GM's merge (SC-003)"
 D=$(topology bd)
 ( cd "$D/seed" && echo old > lost && git add -A && git commit -qm "a dead clone's work" && git push -q "$D/github.git" HEAD:refs/heads/backup/c )
@@ -357,7 +398,9 @@ head=$(git -C "$D/main/.clones/c" rev-parse HEAD)
 ( export CLONE_GITHUB=; eval "$FIX" ) >/dev/null 2>&1 && yes_ || no_ "the printed command failed"
 new=$(rref "$D" backup/c)
 git -C "$D/github.git" merge-base --is-ancestor "$old" "$new" && git -C "$D/github.git" merge-base --is-ancestor "$head" "$new" && yes_ || no_ "the resolved backup does not hold both the old tip and HEAD"
+}
 
+case_21() {  # 10 s measured 2026-10-11
 echo "13. a remote that refuses or cannot be reached changes nothing about the stop (SC-004)"
 D=$(topology bu)
 printf '#!/bin/sh\nwhile read o n r; do case "$r" in refs/heads/backup/*) echo "backups refused here"; exit 1 ;; esac; done\n' > "$D/github.git/hooks/pre-receive"; chmod +x "$D/github.git/hooks/pre-receive"
@@ -376,7 +419,9 @@ printf '#!/bin/sh\nwhile read o n r; do case "$r" in refs/heads/backup/*) echo "
 OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "a landing whose backup delete is rejected still lands" 0 $?
 expect_out "backup/c NOT deleted"
 [ "$(rref "$D" main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "the work did not land"
+}
 
+case_22() {  # 11 s measured 2026-10-11
 echo "14. landing deletes the clone's backup; the sweep deletes exactly the backups main contains (SC-006)"
 D=$(topology bl)
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
@@ -391,7 +436,9 @@ expect_out "deleted backup/c on GitHub"
 ( cd "$D/main/.clones/c" && echo more > note.md && git add -A && git commit -qm more && git push -q origin HEAD:refs/heads/backup/c )
 OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=false syncmain "$D" done); check "a stop with the backup already at HEAD" 1 $?
 case "$OUT" in *"backed up HEAD"*) no_ "pushed a backup that was already at HEAD" ;; *) yes_ ;; esac
+}
 
+case_23() {  # 2 s measured 2026-10-11
 echo "15. a clone with work in flight syncs in a move of the project to the root (feature 329, FR-008, FR-009)"
 # GUARD_EDIT_OK: feature 329 - a NEW case. The old path is built by concatenation so the old-layout check (which reads
 # this file) does not count it; the global git config is switched off so the case proves the SCRIPT passes
@@ -411,7 +458,9 @@ grep -qx B "$C/dev/x.md" 2>/dev/null && yes_ || no_ "the clone's edit did not la
 [ "$(cat "$C/.gencache/k" 2>/dev/null)" = warm ] && yes_ || no_ "the clone's ignored cache was not carried to the root"
 [ ! -e "$C/$OLDP" ] && yes_ || no_ "the old directory was left behind"
 [ -z "$(git -C "$C" status --porcelain)" ] && yes_ || no_ "the merge left the clone dirty: $(git -C "$C" status --porcelain | head -3)"
+}
 
+case_24() {  # 9 s measured 2026-10-11
 echo "16. an open feature with no **Affects** tag, or an unknown one, is refused at the push, a specs/-only DIRECT one included (the GM, 2026-10-10)"
 D=$(topology ow)
 ( cd "$D/main/.clones/c" && mkdir -p specs/400-x .specify && cp "$HERE/../../.specify/affects.json" .specify/ \
@@ -426,7 +475,9 @@ expect_out "unknown: towns"
 # outside the town placeholder, so the known-tags case is owed now; nothing loosened.
 ( cd "$D/main/.clones/c" && sed -i 's/^\*\*Affects\*\*: towns$/**Affects**: hamlet, town/' specs/400-x/spec.md && git add -A && git commit -qm "tagged" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the same spec with known tags -> lands" 0 $?
+}
 
+case_25() {  # 8 s measured 2026-10-11
 echo "17. a check's pass with no row in the review ledger is refused at the push, with the row to add (feature 371)"
 D=$(topology lo)
 ( cd "$D/main/.clones/c" && mkdir -p dev && printf '# ledger\n\n## Review checks, measured (feature 294 on)\n\n| date | check | subject | verdict | finding | class | author missed? | acted on | wall | tokens |\n|---|---|---|---|---|---|---|---|---|---|\n' > dev/review-ledger.md \
@@ -437,13 +488,54 @@ expect_out "| 2026-10-10 | glyph-check | copse | ? |"
 OUT=$(LEDGER_ROWS_OK="a fixture's escape with its reason" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "the escape with a reason lands" 0 $?
 ( cd "$D/main/.clones/c" && printf '| 2026-10-10 | glyph-check | copse | PASS | caught nothing | nothing | - | nothing | 80 s | 244k in (199k cached) / 7.8k out |\n' >> dev/review-ledger.md && echo more > note.md && git add -A && git commit -qm "the row" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: the pass with its row lands" 0 $?
+}
 
+case_26() {  # 4 s measured 2026-10-11
 echo "W. a push from a WORKTREE (land-tooling's route): its .git is a file, and the stamp once failed the step after the push"
 D=$(topology wt)
 git -C "$D/main/.clones/c" worktree add -q --detach "$D/main/.clones/c-tooling" 2>/dev/null
 ( cd "$D/main/.clones/c-tooling" && echo tooling > tool.md && git add -A && git commit -qm "tooling alone" )
 OUT=$( cd "$D/main/.clones/c-tooling" && CI_ROUTE=DIRECT CI_MERGE="false" CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git" GITHUB_TOKEN=unused "$SYNC" push 2>&1 ); check "a worktree's push exits 0 once landed" 0 $?
 [ -f "$(git -C "$D/main/.clones/c-tooling" rev-parse --absolute-git-dir)/sync-with-main.stamp" ] && PASS=$((PASS+1)) || { echo "FAIL  no stamp in the worktree's git dir: $OUT"; FAIL=$((FAIL+1)); }
+}
+
+
+# GUARD_EDIT_OK: feature 375 amendment 4 (FR-022) - THE CASES RUN IN PARALLEL PARTS. This suite is held to the whole scripts
+# tree (feature 172: its push path reaches scripts at run time), so every script change re-runs it, and at 202-230 s it was
+# the long pole of a parallel hooks-test (specs/375-enforced-wave-process/research.md R3). Each case builds its own fixture
+# (checked when the cases became functions: no case reads a variable another sets), so they are dealt into SYNC_PARTS parts,
+# longest first onto the lightest part (the times are the measured ones beside each case; a new case without one counts
+# 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
+# before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
+CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=4 [case_06]=7 [case_07]=7 [case_08]=6 [case_09]=11 [case_10]=8 [case_11]=66 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=9 [case_16]=2 [case_17]=12 [case_18]=4 [case_19]=10 [case_20]=4 [case_21]=10 [case_22]=11 [case_23]=2 [case_24]=9 [case_25]=8 [case_26]=4)
+SYNC_PARTS=${SYNC_PARTS:-4}
+if [ "$SYNC_PARTS" -le 1 ]; then
+  for c in "${CASES[@]}"; do "$c"; done
+else
+  W=$(mktemp -d); trap 'rm -rf "$T" "$W"' EXIT
+  declare -a LOAD PART
+  for ((k = 0; k < SYNC_PARTS; k++)); do LOAD[k]=0; PART[k]=""; done
+  while read -r w c; do
+    best=0; for ((k = 1; k < SYNC_PARTS; k++)); do [ "${LOAD[k]}" -lt "${LOAD[best]}" ] && best=$k; done
+    LOAD[best]=$((LOAD[best] + w)); PART[best]="${PART[best]} $c"
+  done < <(for c in "${CASES[@]}"; do echo "${WEIGHT[$c]:-10} $c"; done | sort -rn)
+  for ((k = 0; k < SYNC_PARTS; k++)); do
+    [ -n "${PART[k]}" ] || continue
+    ( T=$(mktemp -d); export GUARD_LOG_DIR="$T/guard-log" HOME=$T; PASS=0; FAIL=0
+      for c in ${PART[k]}; do "$c"; echo "@@reported $c"; done
+      echo "$PASS $FAIL" > "$W/$k.counts"; rm -rf "$T" ) > "$W/$k.log" 2>&1 &
+  done
+  wait
+  for ((k = 0; k < SYNC_PARTS; k++)); do
+    [ -n "${PART[k]}" ] || continue
+    grep -v '^@@reported ' "$W/$k.log"
+    if [ -f "$W/$k.counts" ]; then read -r p f < "$W/$k.counts"; PASS=$((PASS + p)); FAIL=$((FAIL + f))
+    else
+      for c in ${PART[k]}; do grep -qx "@@reported $c" "$W/$k.log" || { echo "FAIL  $c never reported - its part ended before it finished"; FAIL=$((FAIL + 1)); }; done
+    fi
+  done
+fi
 
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

@@ -141,3 +141,10 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T38 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
       verify: DONE. make done green (306 s); tests/tooling 1664 passed with the make-targets page regenerated; make hooks-test green (233 s); spec FAITHFUL round 4, plan CLEAR round 3; report written; landed by the push carrying this tick
+
+## Amendment 4 (the GM 2026-10-11: "yes please add that as amendment 4")
+
+- [ ] T39 The sync suite's cases as functions in parallel parts (plan D32); today's 123 checks in every mode, a failed and an unreported case each fail it (SC-015)
+      research: rendering
+- [ ] T40 375 closes again: SC-015 measured, `make hooks-test` green, the gate, the report, landed
+      research: rendering
