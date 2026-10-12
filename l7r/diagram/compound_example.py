@@ -24,6 +24,29 @@ def county_magistracy_program() -> CompoundProgram:
     Research:
         tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a 24 x 18 ft kura (432 sq ft), under the ~450 sq ft records-store ceiling, its shape a GUESS
         barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 24 x 67 ft range along the east wall, 24 ft deep, long and narrow, never squat
+        envelope - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: a 270 x 200 ft walled compound, the divider at 90 ft, its buildings in the ~30-42% coverage band; the size a GUESS
+        gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: an 8 ft one-bay main gate passage, the yakuimon's ~6-8.5 ft; the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
+        garden before the house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the garden on the sunny south before the reception and the guest house; its 124 x 46 ft a GUESS
+        vegetable garden west of the house - GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the west site among the four and the field form, 64 x 48 ft in the kitchen yard
+        rear yard - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: open working ground behind the house with the storehouses beyond it, as the Higuchi house kept; its bounds a drawing convention
+        hearing court - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: before the dais, centered on the office hall and no longer than it, 80 x 32 ft; no roofed court's size was found
+        forecourt - GUESS research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: open ground just inside the main gate, east of the gatehouse; its 55 x 31 ft a GUESS
+        practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a swept patch beside the barracks, 33 x 42 ft
+        outer yard and cart yard - CONVENTION: named open ground - the yard between the hearing court and the practice ground, the cart yard before the service gate - their bounds a drawing convention
+        residence form and size - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: one block in two rows, the reception at the east end, a 4 ft veranda on the garden face, 10 ft off the north wall; 56 x 24 ft, with the kitchen and the bath ~50 tsubo, the Yokota house's 49
+        residence room sizes - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the inner rooms, the family's and the lord's quarters and the reception at 36 x 10, 18 x 10, 18 x 10 and 20 x 20 ft
+        storehouses - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: two household storehouses, 12 x 18 ft, the common two by three ken, behind the house in the NW corner
+        kitchen ell - research/questions/0107-kitchens-daidokoro.drawing.html: a 20 x 18 ft kitchen joined to the house's west end as an ell, its door west; its size a GUESS
+        shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one modest shrine, 18 x 14 ft, on the inner court's east wall; its size a GUESS
+        guest house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a detached 38 x 38 ft guest house; a guest house apart was not found at a samurai house
+        office hall - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html, research/questions/0099-the-hearing-court-shirasu.drawing.html: a 113 x 38 ft hall backing the divider, its rooms behind a 30 x 10 ft dais on the south face over the hearing court; the room sizes GUESSES
+        tax archive place - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the archive on the divider beside the granary, the court's stores together
+        staff long-house - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: 24 x 82 ft on the west wall, the karo's 14 ft bay with its own door, the bays side by side with a door each on the long face
+        granary - GUESS research/questions/0098-storehouses-for-the-tax-rice.drawing.html: a 60 x 30 ft granary on the east wall
+        cell place and size - research/questions/0096-holding-cells-agariya-and-roya.drawing.html: a 12 x 10 ft remand cell on the south wall just west of the service gate
+        gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: a freestanding 18 x 12 ft gatehouse beside the gate, the Kita-in guardroom's 3 x 2 ken
+        stables - research/questions/0108-stables-umaya.drawing.html: 18 x 24 ft, three bays long, the stalls, the passage and the grooms' room in its depth
+        servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: a 76 x 15 ft range on the south (street) wall, the household's and the grooms'; the 15 ft depth a GUESS
     """
     # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,
