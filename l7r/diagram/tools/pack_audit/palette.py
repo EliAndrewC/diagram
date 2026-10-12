@@ -51,7 +51,7 @@ ROLES: dict[str, frozenset[str]] = {
     "compound shrine": frozenset({SHRINE}),
     "sanctuary": frozenset({SHRINE}),
     "latrine": frozenset({PRIVY}),
-    "well": frozenset({WELL}),
+    "well": frozenset({WELL, "#C7B084"}),  # the curb, and a roof on posts over it (feature 374 wave 135, 0196: about one well in three)
 }
 
 

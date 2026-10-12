@@ -496,3 +496,16 @@ def test_shrine_tree_asks_for_a_crown_beside_the_compound_shrine() -> None:
     assert s.shrine_tree(_svg(hall, tree(190))) == [], "trunk 36 px (12 ft) east of the hall"
     assert "no tree beside it" in s.shrine_tree(_svg(hall, tree(220)))[0], "trunk 66 px (22 ft) off: not beside it"
     assert "no tree beside it" in s.shrine_tree(_svg(hall, tree(190, "")))[0], "a crown that is not the shrine's"
+
+
+def test_well_gear_asks_every_tagged_well_for_its_gear() -> None:
+    """Feature 374 wave 135: 0196's drawing page draws every well with a sweep or a pulley frame."""
+    curb = '<rect x="100" y="100" width="22" height="22" fill="#9C8C70" data-kind="well"/>'
+    lantern = '<rect x="10" y="10" width="10" height="8" fill="#9C8C70" data-kind="well"/>'  # under a curb's size
+    basin = '<rect x="200" y="200" width="22" height="22" fill="#9C8C70" data-kind="basin"/>'
+    assert s.well_gear(_svg(lantern, basin)) == [], "neither a lantern nor a basin is a well"
+    assert "carries no lifting gear" in s.well_gear(_svg(curb))[0]
+    gear = '<g data-kind="well" data-gear="sweep" data-at="111,111"><circle cx="124" cy="124" r="1.6"/></g>'
+    assert s.well_gear(_svg(curb, gear)) == []
+    far = '<g data-kind="well" data-gear="pulley frame" data-at="150,111"><circle cx="150" cy="111" r="1.6"/></g>'
+    assert s.well_gear(_svg(curb, far)) != [], "a gear over another well"

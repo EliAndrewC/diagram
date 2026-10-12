@@ -16,14 +16,20 @@ Guesses:
 - Where in the grounds a residence's wells stood - one by the kitchen, one by the stables, one in the garden: a well is
   known just inside one house's gate, but no account places a kitchen's or a stable's well.
 - The curb's exact size, 3 to 4 ft: the one measured curb is undated, so the figure is fitted round a premodern shaft.
+- That about three wells in four took the gear their water's depth favored, and about one in three had a roof: no count of
+  either was found.
+- That a valley floor or river plain held shallow water and an upland or terrace deep: no source ties the depth to the ground
+  this way.
 
 Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
-shows where the well stands; a real curb was some 3 to 4 ft across. At a shrine set apart from the houses, the map draws
+shows where the well stands; a real curb was some 3 to 4 ft across. Over each curb stands its lifting gear - a sweep, a
+pole crossing the curb from a post beside it, or a pulley frame, two posts and a beam - picked for each well by how deep the
+plan's water lies, and over about one well in three a light roof; a well inside a building has none of its own. At a shrine set apart from the houses, the map draws
 a well for its ablution water by convention: which waters a shrine used is not recorded. Where a plan has a kitchen and stables, the kitchen's
 well stands inside the kitchen or past the bath, and the well by the stables serves the horses and the kennel in the service yard.
 
 Name: well
-Covers: every well curb glyph and its label
+Covers: every well curb glyph, its lifting gear and roof, and its label
 Sources: ido-jawiki, fujiclean-ido, jta-aoyagi-kakunodate, semboku-bukeyashiki, shirobito-1717-takayama, kanda-josui-jawiki, saijo-mizu-rekishikan, ndl-crd-tsurube-ido, yamaguchi-ouchi-ido, kotobank-tsurube-ido, kotobank-kurumaido, kotobank-idoyakata
 Entry: research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html, research/questions/0196-communal-wells-ido.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html
 Drawing: research/questions/0196-communal-wells-ido.drawing.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html, research/questions/0105-baths-furo.drawing.html, research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

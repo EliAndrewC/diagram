@@ -225,11 +225,14 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: stables well - UNRESEARCHED: just outside the stables for watering -->
 <!-- Research: bath-area well - GUESS research/questions/0105-baths-furo.drawing.html: optional, the kitchen well usually serves the bath (0105's own reading) -->
 <!-- Research: a fourth well only for very large compounds - UNRESEARCHED: no page says how many wells a compound kept by its size -->
-<!-- Research: well glyph - research/questions/0196-communal-wells-ido.drawing.html: Hoshigaoka's sheet draws a plain square curb and mouth, with no sweep or pulley frame and no roof -->
+<!-- Research: well glyph - research/questions/0196-communal-wells-ido.drawing.html: a square curb and mouth with its lifting gear over it - a sweep or a pulley frame, weighted by the water's depth - and a roof on about one well in three, each rolled per sheet (l7r/diagram/well_gear.py; `well_gear` in pack_audit) -->
+<!-- Research: water depth from the landform - GUESS research/questions/0196-communal-wells-ido.drawing.html: a valley floor or river plain shallow, an upland or terrace deep; a sheet whose notes record no landform rolls it -->
+<!-- Research: no roof on a well indoors - GUESS: a well inside a building (a kitchen's doma) is under its building's roof, so a rolled roof is not drawn -->
 <!-- Research: well curb size - CONVENTION: the curb drawn ~22x22 px (~7.3 ft), a marker larger than the ~4 ft curb it stands for, as 0196's drawing page draws its wells -->
 
 A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 
+- **Every well's lifting gear** (feature 374 wave 135; research/questions/0196-communal-wells-ido.drawing.html): a **sweep** (a pole crossing the curb from a post outside it) or a **pulley frame** (two posts and a beam across the curb), drawn over the curb, the sweep on about three wells in four over shallow water and the pulley frame on about three in four over deep; the depth follows the landform the sheet's notes record (a valley floor or river plain shallow, an upland or terrace deep), or is rolled where they record none; a **roof** on posts, a light square under the curb, over about one well in three - never one indoors, which its building roofs. Each sheet's rolls (`<sheet>:water depth`, `<sheet>:well gear <i>`, `<sheet>:well roof <i>`, the wells numbered in drawing order) are recorded in its notes; the generated drafts roll them in `well_gear.py`. Each part is a group tagged a part of the well, its `data-at` the curb's center, which `well_gear` reads.
 - **Kitchen well** (busiest) - small stone-curb rect (~22×22) with dark well-mouth circle, inside the kitchen on the hand-drawn sheets (on its doma at Ochiba); the generated plans set it past the bath, within 20 ft of the kitchen (both a GUESS, 0105's drawing page).
 - **Garden well** - same form, in the inner garden for family / ornamental use.
 - **Stables well** - same form, just outside the stables for horse-watering.

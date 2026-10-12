@@ -259,6 +259,7 @@
   <g data-kind="well">
     <rect x="433" y="169" width="15" height="15" fill="#9C8C70" stroke="#5C4830" stroke-width="1.2" id="well"/>
     <circle cx="440.5" cy="176.5" r="4" fill="#3A3A34"/>
+    <g data-kind="well" data-gear="pulley frame" data-at="440.5,176.5"><circle cx="431" cy="176.5" r="1.6" fill="#5A3F1E"/><circle cx="450" cy="176.5" r="1.6" fill="#5A3F1E"/><line x1="431" y1="176.5" x2="450" y2="176.5" stroke="#5A3F1E" stroke-width="2"/></g>
   </g>
 
   <!-- The stone basin beside the approach at the innermost arch, in the forecourt (research 126: a plain basin, not a

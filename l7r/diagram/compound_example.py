@@ -413,4 +413,4 @@ def county_magistracy_program() -> CompoundProgram:
         # room; plan R4-1, research 0115's Aizu house, that the maids slept there a GUESS).
         servants_row(SERVANTS_FORM),
     )
-    return CompoundProgram("County Magistracy (example)", env, spine, buildings, tier=_EXAMPLE_TIER)
+    return CompoundProgram("County Magistracy (example)", env, spine, buildings, tier=_EXAMPLE_TIER, seed_name="county-magistracy-example")

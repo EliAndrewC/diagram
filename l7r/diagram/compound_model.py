@@ -236,6 +236,9 @@ class CompoundProgram:
     max_w_ft: float | None = None
     max_h_ft: float | None = None
     tier: str | None = None
+    # The sheet's name, the seed of its rolls a program carries into the emitter (feature 374 wave 135: the wells' gear and
+    # roofs, research/questions/0196-communal-wells-ido.drawing.html); '' rolls from the title.
+    seed_name: str = ""
     """The Mode A type the program draws (`buildings/types.json`): its declared composition checks - the coverage band
     and perimeter hugging - are asked of the placement (feature 287 wave 6, homes H29b). None: a program of no declared
     type (a unit test's), held to no type's bands."""

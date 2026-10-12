@@ -40,6 +40,7 @@ from .compound_model import (
     PlaceResult,
     _gate_interval,
 )
+from .well_gear import gear_svg, water_depth, well_gear, well_roofed
 
 
 def _face(p: Placed, side: str) -> tuple[float, float, float, float, float]:
@@ -680,7 +681,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             if tub:
                 tubs.append(tub)
     _roji_parts(program, result, taken, rect, parts, ox, oy)
-    _draw_point_parts(env, wells, privies, tubs, taken, rect, caption, parts, ox, oy)
+    _draw_point_parts(env, wells, privies, tubs, taken, rect, caption, parts, ox, oy, program.seed_name or program.title)
     return parts
 
 
@@ -695,12 +696,17 @@ def _draw_point_parts(
     parts: list[str],
     ox: float,
     oy: float,
+    seed: str = "",
 ) -> None:
     """Draw the point features `_point_features` seated - the wells, the privies with their hatches, the fire-water
     tubs under one caption, and the notice board by the gate (lifted out of it by feature 370, the 100-statement cap;
     same order, so the same ink and the same caption seats)."""
-    for cx, cy in wells:
+    depth = water_depth(seed)  # a generated draft records no landform: its water depth rolls from its name (0196's drawing page)
+    for i, (cx, cy) in enumerate(wells, 1):
+        under, over = gear_svg(ox + cx * FTPX, oy + cy * FTPX, 3.65 * FTPX, well_gear(seed, i, depth), well_roofed(seed, i))
+        parts.append(under)
         parts.append(rect(cx - 3.65, cy - 3.65, 7.3, 7.3, "#9C8C70", "#5C4830", 1.2, "", "well"))
+        parts.append(over)
         caption("point", cx - 3.65, cy - 3.65, 7.3, 7.3, "well", 8, True, "#3A2E1C", "well")
     for cx, cy, whole in privies:
         parts.append(rect(cx - 2.5, cy - 2.5, 5.0, 5.0, "#7E726A", "#4A3318", 0.8, "", "latrine", whole))

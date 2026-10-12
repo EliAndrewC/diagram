@@ -292,6 +292,13 @@ CHECKS: tuple[Check, ...] = (
         "county-shrine-without-tree-red.svg",
         "stand a tree beside the compound shrine: a crown tagged sacred tree, data-part-of the compound shrine, its trunk within 15 ft of the hall",
     ),
+    Check(
+        "well_gear",
+        lambda ctx: s.well_gear(ctx.text),
+        True,
+        "ochiba-well-without-gear-red.svg",
+        "draw the well's lifting gear - its rolled sweep or pulley frame, a <g data-kind=\"well\" data-gear=... data-at=\"cx,cy\"> over the curb (l7r/diagram/well_gear.py)",
+    ),
     Check("one_compound_shrine", lambda ctx: s.one_compound_shrine(ctx.text), False, "hayakawa-two-shrines-red.svg", "draw one compound shrine and enshrine the second god in its hall"),
     # --- the country shrine's own, each fixture cut from the Hoshigaoka exemplar ---
     Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "hoshigaoka-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),

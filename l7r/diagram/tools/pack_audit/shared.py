@@ -594,3 +594,26 @@ def shrine_tree(text: str) -> list[str]:
             return []
     where = f"svg({hall.x:.0f},{hall.y:.0f})"
     return [f"the compound shrine at {where} has no tree beside it"]
+
+
+# A WELL'S LIFTING GEAR (feature 374 wave 135): research/questions/0196-communal-wells-ido.drawing.html draws every well with
+# "a well-sweep or a pulley frame over it"; a sheet's well carries its gear as a group tagged a part of the well, its
+# `data-gear` the form rolled (`l7r/diagram/well_gear.py`) and its `data-at` the curb's center.
+_GEAR_RE = re.compile(r'<g data-kind="well" data-gear="(sweep|pulley frame)" data-at="([\d.]+),([\d.]+)"')
+
+
+def well_gear(text: str) -> list[str]:
+    """Every well's curb - a rect of the curb's stone, tagged a `well`, a curb marker's size - carries its lifting gear: a
+    `data-gear` group whose `data-at` is the curb's center (within 2 px). A basin or a lantern sharing the stone's color is
+    not a well."""
+    from .parse import WELL_FILL
+
+    gears = [(float(m[2]), float(m[3])) for m in _GEAR_RE.finditer(text)]
+    out = []
+    for m in marks(text):
+        if m.tag != "rect" or m.kind != "well" or m.paint.get("fill") != WELL_FILL or min(m.w, m.h) < 15.0:
+            continue
+        cx, cy = m.x + m.w / 2, m.y + m.h / 2
+        if not any(abs(gx - cx) <= 2.0 and abs(gy - cy) <= 2.0 for gx, gy in gears):
+            out.append(f"the well at svg({cx:.0f},{cy:.0f}) carries no lifting gear")
+    return out

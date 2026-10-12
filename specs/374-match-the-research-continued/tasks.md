@@ -24,6 +24,12 @@ in 328's ranking and this spec.
 - layout-revised: ochiba-magistracy - waves 130-131: the shrine hall at 30 x 26 ft in the inner court's north-east corner beside its tree, the workshop below the tree, the gardens round the shrine gone
 - layout-revised: ubame-magistracy - waves 130-131: the shrine in the inner court's north-east corner beside its tree, the grove and its crowns gone, the wood kami in the one hall
 - layout-revised: hoshigaoka-shrine - wave 131: the sanctuary three bays wide, as its width knob rolls
+- layout-revised: county-magistracy-example - waves 132-135: the one-bay gate's 8 ft frontage (a 7 ft passage), the gate posts 2 ft square, every building and flush privy a foot and a half clear of the wall's face (the barracks 23 ft deep, the guest house 40 x 42, the hearing court shifted), each well's gear and roof
+- layout-revised: ochiba-magistracy - waves 132-135: the main gate's 8.5 ft frontage (a 7.5 ft passage), its posts 2 ft square, each well's gear and roof
+- layout-revised: hayakawa-magistracy - waves 133-135: the gate posts 2 ft square, the tally office a foot clear of the divider, each well's gear
+- layout-revised: ubame-magistracy - waves 133 and 135: the gate posts 2 ft square, each well's gear
+- glyph-redrawn: well on ubame-magistracy - wave 135: a well's lifting gear over its curb, a sweep or a pulley frame (0196), its first use on a sheet
+- glyph-redrawn: well on county-magistracy-example - wave 135: the gear and a roof over the drafts' wells (0196)
 
 ## Phase 1 - wave 112: the veranda at 0102's widths, its faces rolled
 
