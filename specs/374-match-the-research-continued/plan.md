@@ -615,9 +615,11 @@ at landing.
 
 ### Wave 143 (T35) - the web lane off the crop by its half-tread, off the toe and marsh by its own gap
 - **W143-1** (within): research/questions/0081-village-lanes.drawing.html lets a lane touch a plot's boundary (it runs on the
-  bund); `WEB_HARD_GAP` holds it 8 ft off crop, toe and marsh alike. The hard ground splits: against crop the gap is the lane's
-  half-tread (the lane's edge on the plot's boundary), against the toe band and marsh a separate gap, kept at 8 ft and claimed
-  UNRESEARCHED. The five readers (`ways/serve.py`, `ways/route.py`, `ways/clearance.py`, `ways/web.py`,
+  bund); `WEB_HARD_GAP` holds it 8 ft off crop, toe and marsh alike. The hard ground splits: against crop the gap is half the
+  widest tread laid on that ground (a row street's or a join's 6 ft, so 3 ft: at a 3 ft lane's half-tread those wider ways stood on
+  the crop, impl-drift), so no tread's edge passes the plot's boundary; against the toe band and marsh a separate gap, kept at
+  8 ft and claimed UNRESEARCHED. The router's lattice judges cell centers at the crop's own gap and asks every step it keeps of
+  the crop's outline (padded half a cell instead, cohort seed Audit-10's field way could not reach the bund). The five readers (`ways/serve.py`, `ways/route.py`, `ways/clearance.py`, `ways/web.py`,
   `homesteads/boundary.py`) take the two lists apart.
 
 ## Landing by batch (375's D18)

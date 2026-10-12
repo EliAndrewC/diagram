@@ -167,6 +167,8 @@
  "l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled": "E3",
  "l7r/diagram/hamletgen/consts.py::SPUR_SETBACK#field spur's tip": "E0",
  "l7r/diagram/hamletgen/consts.py::SPUR_SETBACK#path joins the outer bund": "E0",
+ "l7r/diagram/hamletgen/consts.py::WEB_CLEARANCE#web lane's no-build corridor": "E3",
+ "l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh": "E3",
  "l7r/diagram/hamletgen/consts_water.py::OFFTAKE_LADDER#canal B's single delivery ditch at 0.55-0.6 (0053 drawing: the second canal feeds at least one)": "E0",
  "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#12 ft pad round the notice board, and the byre and retiremen": "E0",
  "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#how far \"just beyond the back row\" reaches: the stand's near edge within THICKET_ROW_DEPTH_FT 30 ft of the back row's back edge": "E0",

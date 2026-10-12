@@ -1719,7 +1719,7 @@
   },
   "w141-archetype-rolls": {
     "quantity": "the attested field forms rolled 12 seeds each at 16 households, before and after waves 140-141's fixes",
-    "value": "before: dike-pond 6/12, polder 10/12; after: dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 (a row village: one farm's front door has no route to any way, walled by its grove and the ground), polder seed 12 (a row village: the door path's first leg runs within 7 ft of a neighbor's yard and no route at the law's 7 ft gap exists), polder seed 5 (SiteRefused, 14 of 16 seated on ladder margin 1); after wave 143 (the crop gap): dike-pond 12/12, polder 10/12 - open: polder seeds 5 (SiteRefused 14/16) and 12 (a row village's farm with no lawful door path). Four of the five pool hamlets pin no field form, so a changed roll would also re-deal their fields: a point for the batch that takes 771 up again",
+    "value": "before: dike-pond 6/12, polder 10/12; after: dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 (a row village: one farm's front door has no route to any way, walled by its grove and the ground), polder seed 12 (a row village: the door path's first leg runs within 7 ft of a neighbor's yard and no route at the law's 7 ft gap exists), polder seed 5 (SiteRefused, 14 of 16 seated on ladder margin 1); at the batch's final code (wave 143 with the 3 ft crop gap and the crop-step check, re-measured 2026-10-12 after the plan review caught a stale count): dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 and polder seed 12 (row villages, a farm with no lawful door path), polder seed 5 (SiteRefused 14/16); at the 1.5 ft gap dike-pond seed 4 had passed. Four of the five pool hamlets pin no field form, so a changed roll would also re-deal their fields: a point for the batch that takes 771 up again",
     "unit": "rolls",
     "observed": "2026-10-12",
     "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond|polder_grid --households 16 --seed <s>\"",
@@ -1734,5 +1734,32 @@
     "source": "dev/cohort-log/20261012T171805Z, 20261012T171956Z, 20261012T172351Z",
     "command": "make cohort",
     "method": "the cohort's own verdict per seed, run after each wave's engine edit"
+  },
+  "batch8-open-rows": {
+    "quantity": "open rows of 328s ranking at batch 8s close (no wave, scope kept or mode-a), and how many are E3 DRIFTED",
+    "value": "155 open (1 held at E2, the residence row; row 771 open by the arbiter's route B), 106 E3 DRIFTED",
+    "unit": "rows",
+    "observed": "2026-10-12",
+    "source": "specs/328-match-the-research/ranking.json",
+    "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
+    "method": "rows 772-773 marked waves 142-143 in waves.json, the ranking rebuilt"
+  },
+  "batch8-bookends": {
+    "quantity": "make perf 374-start vs 374-end over batch 8",
+    "value": "16.6 s -> 16.4 s, band 0",
+    "unit": "s",
+    "observed": "2026-10-12",
+    "source": "dev/perf-log/20261012T170422Z-374-start, 20261012T175448Z-374-end",
+    "command": "make perf LABEL=374-start|374-end; make perf-review",
+    "method": "the two bookends' totals"
+  },
+  "w140-sty-reach": {
+    "quantity": "the nearest farmhouse to a refused dike-pond hamlet's reserved sty seat, before wave 140",
+    "value": "seed 3: 452 ft, seed 4: 862 ft (reach 320 ft); the fry ponds are the smallest ponds up to FRY_VILLAGE_SHARE = 0.7 of the block's pond area (settlement/fields/landuse.py)",
+    "unit": "ft",
+    "observed": "2026-10-12",
+    "source": "the StyRefused diagnostic (pondstock.seat_faults) on 16-household dike-pond rolls",
+    "command": "make hamlet ARGS=\"--name A<s> --seed <s> --households 16 --archetype mulberry_dike_fishpond --out <dir> --no-render\"",
+    "method": "the refusal names the reserved seat's failed rules and its nearest farmhouse's distance"
   }
 }

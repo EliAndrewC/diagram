@@ -184,17 +184,20 @@ in 328's ranking and this spec.
 
 ## Batch 8 - the attested field forms rolled, the web lane's room and its gap off the crop
 
-- [ ] T32 wave 140: a dike-pond hamlet with no grow-out pond in a household's reach keeps no sty (0025) (FR-001)
+- [x] T32 wave 140: a dike-pond hamlet with no grow-out pond in a household's reach keeps no sty (0025) (FR-001)
       research: rendering
+      verify: DONE. the floor-of-one refusal dropped per 0025; refused seeds 3, 6, 7 green; seat_faults records why none drawn; tests pass; impl-drift IN-STEP; gate green
 
 - [ ] T33 wave 141: the polder and the dike-pond rolled beside the valley fan once their rolls are green (0019, 0020) (FR-001) [lands-open]
       research: rendering
 
-- [ ] T34 wave 142: the web lane's no-build room, 9 ft from its middle (0246) (FR-001)
+- [x] T34 wave 142: the web lane's no-build room, 9 ft from its middle (0246) (FR-001)
       research: rendering
+      verify: DONE. WEB_CLEARANCE 9 ft half-width (0246's 18 ft room); cohort 15/16 as at HEAD, then 16/16 with wave 143; pool hamlets byte-identical; impl-drift IN-STEP; gate green
 
-- [ ] T35 wave 143: the web lane off the crop by its half-tread, off the toe and marsh by its own gap (0081) (FR-001)
+- [x] T35 wave 143: the web lane off the crop by its half-tread, off the toe and marsh by its own gap (0081) (FR-001)
       research: rendering
+      verify: DONE. the crop at half the widest tread (3 ft, Gapped), the toe and marsh at 8 ft (UNRESEARCHED), every kept lattice step asked of the crop (crosses_the_crop, tested); cohort 16/16 (Audit-10 reached); impl-drift rounds 1-4 IN-STEP; gate green
 
 ## Standing - the ranking's remaining rows
 

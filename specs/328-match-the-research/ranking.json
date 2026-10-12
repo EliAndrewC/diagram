@@ -11896,7 +11896,7 @@
   "flag": "",
   "found": "feature 374 batch 2's re-checks (2026-10-10): the verdict moved from CANNOT-TELL",
   "tier_as_ranked": "E3",
-  "wave": "",
+  "wave": "142",
   "scope": "kept"
  },
  {
@@ -11916,7 +11916,7 @@
   "tier_as_ranked": "E2",
   "moved": "wave 17 (measured): splitting the gap is a change across five modules, E3 by FR-003",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "143",
   "scope": "kept"
  },
  {
