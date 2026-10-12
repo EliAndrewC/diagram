@@ -1041,5 +1041,46 @@
    },
    "test-entry-gate": "serial (m:375-a7-suites-scan: chain case_03-06)"
   }
+ },
+ "375-a8-claims-cold": {
+  "what": "FR-035: `make claims-owed` in a detached worktree at 73ac5212e, twice warm, then after appending one comment line to l7r/diagram/hamletgen/homesteads/fixtures.py, twice; one-shot 2026-10-12, load ~6.8. Profiled cold (cProfile, all_units, 4,050 units): 24.9 s under the profiler, of which the per-module unit work (module_units, 370 calls) is 17.5 s.",
+  "date": "2026-10-12",
+  "command": "one-shot: make claims-owed, timed, before and after a one-line engine edit",
+  "value": {
+   "warm s": [
+    1.0,
+    1.1
+   ],
+   "after a one-line edit s": 11.9,
+   "warm again s": 0.9,
+   "profiled all_units s": 24.9,
+   "profiled module_units s": 17.5
+  }
+ },
+ "375-a8-check-bundle": {
+  "what": "FR-036: `make check-bundle Q=0021` with NOT_OWED_OK (nothing was owed), twice, in a detached worktree at 73ac5212e; then each helper run alone, its imports alone, and record_prepass and translation_owed under cProfile; one-shot 2026-10-12.",
+  "date": "2026-10-12",
+  "command": "one-shot: make check-bundle Q=0021, timed; the helpers timed alone",
+  "value": {
+   "bundle s": {
+    "first (page cache filling)": 15.2,
+    "second": 6.1
+   },
+   "helpers alone s": {
+    "record_prepass": 2.86,
+    "quote_verbatim": 0.6,
+    "style_prepass": 0.16,
+    "translation_owed": 1.38
+   },
+   "the four helpers' imports s": 0.22,
+   "record_prepass profiled s": {
+    "prepass": 3.61,
+    "corpus_frequency": 2.96
+   },
+   "translation_owed profiled s": {
+    "owed": 0.94,
+    "record_pairs": 0.92
+   }
+  }
  }
 }

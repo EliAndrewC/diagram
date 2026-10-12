@@ -134,3 +134,19 @@ while the push wanted `make hooks-test`, and the gate's own run record left unco
 
 Amendment 7 is 2, 3, 6 and 8, and the measurement of 1; 4, 5 and 7 follow as amendment 8 (7 to be put to the GM with its
 yield across more than one feature, since what to change there is his to choose).
+
+## Amendment 8 (2026-10-12, the same later session)
+
+After amendments 6 and 7 landed, the session's report named what was left of amendment 7's list: the research claims' per-module
+cache (4), `check-bundle` in-process (5), the review checks' yield put to the GM so he picks what changes (7), and the
+cohort's seed count, to be decided with the per-seed record amendment 7 started keeping. Its closing line: "Still to do:
+amendment 8. It isn't opened yet." The GM:
+
+> yes please
+
+Then, while the session measured: "remind me what decisions you want from me?" - answered with the review checks' first yield
+table and the cohort records so far (one feature's change, seeds 10 and 20 the only failures), both held until the data is
+enough to choose from. Measured before the spec (research.md R7): `check-bundle`'s helper processes cost 0.22 s to start, but
+`record_prepass` recounts the whole record's word frequencies on every bundle (2.96 of its 3.6 s), so item 5 is built as that
+work cached, the goal the GM approved, rather than as the subprocesses folded in.
+

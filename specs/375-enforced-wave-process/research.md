@@ -68,3 +68,16 @@ re-owe rule (`scripts/measure/depiction_replay.py`, `m:375-a6-about-only-replay`
 `modal-depiction` reads - each an Opus depiction round under amendment 1, none now. (The reopening session's hand count put
 44 of 222; the one edit between the two counts was not traced.) Every About edit owes `modal-form`, whose contract holds M13,
 so the drawing statement the depiction check used to look for in About is still looked for there.
+
+## R7 - What is left of the record and claims tooling (feature 375 amendment 8)
+
+The claims (`m:375-a8-claims-cold`): `make claims-owed` takes 1.0 s while its cache holds, and 11.9 s after a one-line comment
+in one engine module, because the cache is keyed by every engine source together. Profiled cold, the per-module unit work is
+17.5 of 24.9 s; parsing and the cross-module constants are the rest. So a cache kept per module - by its source and the
+constants it reads - recomputes one module's units after an edit to it.
+
+The check bundle (`m:375-a8-check-bundle`): `make check-bundle Q=0021` took 15.2 s the first time (the page cache filling) and
+6.1 s the second. Its four helper processes start in 0.22 s between them; the time is in what they compute. `record_prepass`
+spends 2.96 of its 3.6 s in `corpus_frequency`, counting every word of the whole record to judge which terms are rare, and
+does it again for every bundle; `translation_owed` spends 0.92 s reading every page's translation pairs. Both read only the
+record's content, so both can be kept while it is unchanged. Folding the helpers into one process would save the 0.22 s.

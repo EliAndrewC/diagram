@@ -2,9 +2,11 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-12 - amendments 6 and 7 landed: 6 (spec FAITHFUL round 2, plan CLEAR; SC-021 tested, replay 43 About-only edits of 221 owe no depiction; 343 rows 83-84 closed) and 7 (spec FAITHFUL, plan CLEAR after the versioned store; SC-022 cohort wave 2 323 s -> 19 s, SC-024 suites 70.6 -> 18.8 s and 71.7 -> 20.4 s, SC-023/025/026/027 tested); every task ticked; amendment 8 (claims cache, check-bundle in-process, review yield, cohort seed count) not yet opened
+**Status**: Reopened 2026-10-12 for amendment 8 (amendments 6 and 7 landed 2026-10-12: every task ticked, SC-021 to SC-027 tested; amendments 1-5 Done 2026-10-11)
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
+
+**Amendment 8 approved**: the GM, 2026-10-12, "yes please"
 
 **Amendment 7 approved**: the GM, 2026-10-12, "Yeah, I think I want all of those things. But I agree with you that two, three, six, and eight are a good place to start."
 
@@ -314,6 +316,31 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
   3.3 s per 1,000 tokens written - context size accounted for about half an hour in all. (The 6.5 hours the session first
   put to the GM counted the waits on background runs and on the GM as model time.) Recorded; nothing is built for it.
 
+### Amendment 8 (`request.md`, Amendment 8)
+
+Amendment 7's items 4, 5 and 7, and the cohort's seed count it carried. Items 7 and the seed count are the GM's to choose; this
+amendment builds what puts each before him with the data.
+
+- **FR-035 The claims are cached per module.** `make claims-owed`, `claims-report` and every reader of `scripts/record/claims.py`'s
+  units read them from one cache keyed by every engine source together (amendment 3, plan D29), so one engine edit - a comment
+  - recomputed all of them: 11.9 s against 1.0 s warm, measured 2026-10-12 (`m:375-a8-claims-cold`, `research.md` R7). Each
+  module's units are now kept by what they are computed from - the module's own source and what it reads of the others'
+  constants - so an edit recomputes only the units it can change, and the result is the one an uncached run gives.
+- **FR-036 A check bundle does not redo the record's work.** `make check-bundle Q=` took 6.1 s warm (15.2 s cold, the page
+  cache filling; `m:375-a8-check-bundle`, R7). Its four helper processes cost 0.22 s to start; its time is `record_prepass`
+  recounting the whole record's word frequencies on every bundle (2.96 of its 3.6 s) and `translation_owed` re-reading every
+  page's translation pairs (0.9 s). Each is kept by the content it reads - the record's pages, and their git blobs - and reused
+  while that is unchanged; the bundle's files are the ones an uncached run writes.
+- **FR-037 The review checks' yield, put to the GM.** A kept command prints, per review check from `dev/review-ledger.md`: its
+  passes, the findings acted on (fixed, filed) and those dismissed (verified as fine, accepted, declined), the findings its
+  author had missed, its hours and tokens - over a period and across the features in it. The session puts that table to the GM
+  with the checks whose yield is lowest for their cost; no check is changed, dropped or moved to another tier here: that is
+  the GM's choice, and a change he makes is its own amendment or feature in his words.
+- **FR-038 The cohort's seed count, put to the GM with its record.** A kept command reads `dev/cohort-log/` and prints, per
+  failure the cohort found, the seeds that found it and the features' changes they were rolled on, and the fewest first seeds
+  that would have found every one. The session puts it to the GM once the records span three features' changes or more; until
+  then the command says how many they span. The seed count (48 and the six pinned) is not changed here.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -419,10 +446,21 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
 - **SC-026** (FR-033) After `make done`, the tree is clean except for what the session left, and the record is committed
   alone with its message; a staged change of the session's is left staged and uncommitted. The test fails on today's code.
 - **SC-027** (FR-034) R5's figures are a key of `measurements.json`, re-derivable by a kept script from the transcript.
+- **SC-028** (FR-035) After a one-line edit to one engine module, `make claims-owed` takes at most twice its warm time, and the
+  units it reads equal an uncached run's; an edit to a module-level constant another module reads recomputes that module too.
+  The time before and after is a key of `measurements.json` (R7). Tests fail on today's code.
+- **SC-029** (FR-036) `make check-bundle Q=` on a second question after a first takes at most half of today's 6.1 s, alternating
+  today's code and the new, three runs each; the bundle's files equal an uncached run's; an edit to a record page makes the next
+  bundle recount. Tests fail on today's code.
+- **SC-030** (FR-037) The yield command prints the table FR-037 names over the ledger since 2026-09-26, its rows re-derivable
+  from the ledger; the table is a key of `measurements.json`, and the GM is given it.
+- **SC-031** (FR-038) The seed command prints, over today's records, the failures found (seeds 10 and 20, `WebRefused`) and that
+  the records span one feature's change; a test with records from three changes names the fewest first seeds that find every
+  failure.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027.
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027. Amendment 8 closes on SC-028 to SC-031.
 
 ## What it does not cover
 
@@ -437,6 +475,8 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   a measurement and is not part of amendment 5, which settled the timing requirements.
 - The cohort's seed count (amendment 7): decided in amendment 8, with the per-seed record FR-029 starts keeping; the claims'
   per-module cache, `check-bundle` in-process and the review checks' yield are amendment 8's too.
+- Amendment 8 changes no review check and no seed count: FR-037 and FR-038 put the data to the GM, whose choice is its own
+  amendment or feature. `check-bundle`'s helpers stay separate processes: their start is 0.22 s of 6.1 (R7).
 
 ## Decisions Recorded
 
