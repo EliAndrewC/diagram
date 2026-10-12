@@ -59,6 +59,10 @@ correct work is fixed, not escaped (an escape only for a genuinely exempt case, 
   refusal clears at each close. A batch is never stacked unpushed behind another (the GM's reason for the split). The GM's
   pre-approval of band 3 covered 328's landing only: a batch whose pair reads band 3 is put to the GM for sign-off at once, as
   its own question outside FR-005's hold, and the work goes on to the next wave meanwhile; that batch lands on the sign-off."*
+  Amended (2026-10-12) by 375's amendment 5, whose approval reads: *"if it looks like the performance is slowing down to a
+  meaningful degree, that's something you can mention when you say that the work has landed on main, but it doesn't need to
+  be a gate anymore."* From then on a batch's pair band is a flag stated in its landing message: no `perf-audit` is owed and
+  no band-3 sign-off holds the landing (375 FR-023).
   A batch whose pair would time unchanged code records that in its plan section, reviewed as a plan decision, as 372's batches did.
 - **FR-003 (the usage cap)**: 328's FR-007 at the cap the GM last set for this work, `90%` of the weekly window (`request.md`:
   *"Let's raise the cap on this work from `85%` to `90%`."*, 2026-10-09), armed with `~/.claude/hooks/usage_cap.py`.
@@ -81,7 +85,7 @@ correct work is fixed, not escaped (an escape only for a genuinely exempt case, 
 
 - **SC-001** (FR-001, FR-002): after each wave, every row it took re-checks IN-STEP under `impl-drift`, and `make claims-report`'s
   count of in-scope findings falls by at least that many with no new one.
-- **SC-002** (FR-002): every closed batch is on main, its gate green, its pair band recorded and audited (or its plan section's
+- **SC-002** (FR-002): every closed batch is on main, its gate green, its pair band recorded (audited before 375 amendment 5; after it, stated at landing) (or its plan section's
   reviewed record that the pair would time unchanged code).
 - **SC-003** (FR-001, FR-003, FR-004): at the end, `make claims-report` shows 0 in-scope findings outside the DEFERRED units; the held
   list goes to the GM once every row the session can fix is done, the feature closes after the answers are applied, and a row the
@@ -169,5 +173,8 @@ current figure before the first wave.
 - Amendment 1 (2026-10-10, at the plan): spec-lint found FR-003 and FR-005 named by no success criterion - SC-003 now cites
   FR-003 (its at-the-cap clause), and SC-007 is FR-005's (a guard fixed with its test, an escape's reason naming its exemption).
   Put to the plan review with the plan.
+- Amendment 2 (2026-10-12, at batch 3's close): the plan review of that date found FR-002 still quoting 372's band-3 sign-off,
+  which 375's amendment 5 replaced - FR-002 now records the replacement with the GM's words, and SC-002 says a band is stated
+  at landing after it.
 
 **Implementation check** (feature 378): owed at its close - each question whose findings this feature changes is cited by a checked `Research:` claim of the code that decides it, or recorded in `implementation-check.md` as implemented nowhere; `make impl-check F=374` says what is owed. The code is fixed only where this spec asks.

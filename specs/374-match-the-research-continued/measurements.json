@@ -420,6 +420,15 @@
     "source": "scratchpad cpu-pair.txt / cpu-pair20.txt: make hamlet --no-render in a detached worktree at the merge base and in the clone, alternating, timed with bash `times` (children's user CPU)",
     "method": "three wall-clock bookend pairs of the same code read 24.1 s, 24.0 s and 42.5 s for the identical end leg at a host load of 5-8 on 22 cores; CPU time interleaved removes the drift. Single runs scatter about 30%; the head is faster or level on every seed's mean except 47 at 20 households (+11%)"
   },
+  "batch3-open-rows": {
+    "quantity": "open rows of 328's ranking at batch 3's close (no wave, not deferred), and how many of them are E3 DRIFTED",
+    "value": "183 open, 132 E3 DRIFTED",
+    "unit": "rows",
+    "observed": "2026-10-12",
+    "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 119-121's three E0 rows were marked in audit/waves.json",
+    "command": "python3 -c \"import json; r=json.load(open('specs/328-match-the-research/ranking.json')); o=[x for x in r if not x.get('wave') and x.get('scope')!='deferred']; print(len(o), 'open,', sum(1 for x in o if x.get('tier')=='E3' and x.get('verdict')=='DRIFTED'), 'E3 DRIFTED')\"",
+    "method": "the count the plan review of 2026-10-11 used, re-run on the rebuilt ranking"
+  },
   "batch3-perf-audit-legs": {
     "quantity": "perf-audit's seven alternated make-perf legs, base (merge base ab378e08) against head (e9491c2a8), in fresh detached worktrees: the reference totals, and (hinterland+woodland) and web as shares of the rest",
     "value": {

@@ -201,8 +201,8 @@ carry claims), marked wave 118 in `audit/waves.json`; then `audit/scope.py` was 
 record) and re-marked 14 more open rows `scope: deferred` (the paddy and ribbon builders, a town's kiln, a city's matrix
 permissions among them; `scope.py` now counts `docs/building-programs.md` among the Mode A procedures, which it had sent to
 deferred), leaving **183 open rows** in scope (126 E3 DRIFTED) at the batch's start; by its close, with the rows its checks filed
-(`audit/found-wave120.jsonl`, `found-wave121.jsonl`) and the two a reopened key brought back (`audit/reopen.py`), 185 open,
-131 of them E3 DRIFTED (2026-10-11, the plan review's count). `make claims-report` shows the deferred
+(`audit/found-wave120.jsonl`, `found-wave121.jsonl`) and the two a reopened key brought back (`audit/reopen.py`), with waves 119-121's three
+E0 rows marked in `audit/waves.json` and the ranking rebuilt, 183 open, 132 of them E3 DRIFTED (`m:batch3-open-rows`). `make claims-report` shows the deferred
 units' claims as DEFERRED (158).
 
 **Three rules for every wave of this batch:**

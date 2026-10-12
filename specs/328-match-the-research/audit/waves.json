@@ -675,5 +675,8 @@
   "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#a door path starts 8 ft out from the house (`FOOTPATH_FABRIC_GAP + 4.0`) and 5 ft clear of the fixtures (`FOOTPATH_FABRIC_GAP + 1.0`)": "118",
   "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#each rice plot's green picked at random from RICE_GREENS": "118",
   "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#row boundaries rolled independently per column, so row bunds stagger between columns": "118",
-  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm": "121"
+  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex footprint (-0.63, 0.0, 0.26, 0.75): a tall block on the west wall of a dispersed farm": "121",
+  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#door path off a grove band": "119",
+  "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#no wood below the houses": "120",
+  "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld": "120"
 }
