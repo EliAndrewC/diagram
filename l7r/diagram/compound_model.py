@@ -24,6 +24,10 @@ OUTLINE_CLEAR_FT: float = 0.5  # a hair beyond the ink, so the wall does not swa
 # own outline stroke (a rect drawn exactly flush loses its edge under the wall and reads as merging
 # into it). 0.5 ft matches the gap the hand-authored Ochiba leaves between its servants' quarters
 # and the north wall - the house style this rule was reverse-engineered from.
+WALL_FACE_CLEAR_FT: float = 1.5  # a building backing a wall stands a foot or two clear of its FACE, its eaves nearly touching
+# (feature 374 wave 134, research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html; the spacing a GUESS there):
+# 1.5 ft, the middle of it - 3 ft from a compound wall's centerline, 2.5 ft from a divider's. pack_audit's structures_on_walls
+# holds the least of it, a foot.
 
 # palette keys -> (fill, stroke) reused from the Mode A vocabulary (SKILL.md)
 KINDS: dict[str, tuple[str, str]] = {

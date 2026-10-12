@@ -13,8 +13,8 @@ from __future__ import annotations
 import importlib.util
 import json
 import subprocess
-import time
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -622,8 +622,11 @@ def _commit_feature(root: Path, when: float, *, status: str, tasks: str, gm_row:
 _REOPENS = [
     ("by its status line", dict(status="Done 2026-10-01", tasks="- [x] T01 a task\n"), dict(status="Reopened for an amendment", tasks="- [x] T01 a task\n- [ ] T02 more\n")),
     ("by every task ticked", dict(status="Draft", tasks="- [x] T01 a task\n"), dict(status="Draft", tasks="- [x] T01 a task\n- [ ] T02 more\n")),
-    ("GM review pending", dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n", gm_row=True),
-     dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n- [ ] T02 more\n", gm_row=True)),
+    (
+        "GM review pending",
+        dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n", gm_row=True),
+        dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n- [ ] T02 more\n", gm_row=True),
+    ),
 ]
 
 

@@ -735,10 +735,18 @@ def test_structure_crossing_a_wall_is_flagged_and_a_flush_one_passes() -> None:
     hit = pa.structures_on_walls(across)
     assert len(hit) == 1
     assert hit[0].wall == "compound wall"
-    assert hit[0].into_ft == pytest.approx(6.5 / pa.FTPX)
+    assert hit[0].into_ft == pytest.approx((6.5 + 3.0) / pa.FTPX)  # into the ink, and the foot clear of its face
     assert (hit[0].w_ft, hit[0].h_ft) == (20.0, 14.0)
-    flush = pa.parse_svg(_svg(_rect(0, 0, 300, 300, COURT), wall, _rect(20, 60, 60, 35, "#DDB87A")))  # y2=95, abuts
-    assert pa.structures_on_walls(flush) == []
+    # feature 374 wave 134: a foot or two clear of the wall's FACE (0092) - flush with the ink no longer passes
+    flush = pa.parse_svg(_svg(_rect(0, 0, 300, 300, COURT), wall, _rect(20, 60, 60, 35, "#DDB87A")))  # y2=95, abuts the ink
+    assert len(pa.structures_on_walls(flush)) == 1
+    clear = pa.parse_svg(_svg(_rect(0, 0, 300, 300, COURT), wall, _rect(20, 60, 60, 32, "#DDB87A")))  # y2=92, a foot clear
+    assert pa.structures_on_walls(clear) == []
+    # the clearance runs across the wall's thickness, never past a segment's end: a gate range standing where the wall is
+    # broken around it, flush with the cut ends, is no structure off the wall
+    broken = _wallgroup((0, 100, 100, 100), (200, 100, 300, 100))
+    gate_range = pa.parse_svg(_svg(_rect(0, 0, 300, 300, COURT), broken, _rect(105, 90, 90, 20, "#DDB87A")))
+    assert pa.structures_on_walls(gate_range) == []
 
 
 def test_small_structures_are_checked_even_below_the_building_area_floor() -> None:
@@ -880,7 +888,7 @@ def test_format_report_structure_wall_section_states_each_case() -> None:
     ok = pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 200, 200, COURT), _wallgroup((0, 190, 200, 190)), _rect(0, 0, 60, 60, "#DDB87A"))))
     assert "structures_on_walls: OK" in ok
     bad = pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 200, 200, COURT), _wallgroup((0, 100, 200, 100)), _rect(0, 60, 60, 45, "#DDB87A"))))
-    assert "STRUCTURES_ON_WALLS:" in bad and "set the structure against the wall's inner face" in bad
+    assert "STRUCTURES_ON_WALLS:" in bad and "set the structure a foot or two clear of the wall's inner face" in bad
 
 
 def test_structure_on_wall_fires_on_the_frozen_ochiba_fixture() -> None:
@@ -888,7 +896,10 @@ def test_structure_on_wall_fires_on_the_frozen_ochiba_fixture() -> None:
     # divider - the defect the GM caught (2026-07-24) and the reason this check exists.
     with open(os.path.join(_FIX, "ochiba-layout-red.svg")) as fh:
         hit = pa.structures_on_walls(pa.parse_svg(fh.read()))
-    assert [(h.wall, round(h.into_ft, 1)) for h in hit] == [("court divider", 1.0)]
+    # the porch reaches 1.0 ft into the divider's ink and the foot clear of its face (feature 374 wave 134), worst first; the
+    # frozen sheet's buildings set a hair off the compound wall's ink follow it
+    assert (hit[0].wall, round(hit[0].into_ft, 1)) == ("court divider", 2.0)
+    assert all(h.wall == "compound wall" and round(h.into_ft, 1) == 0.5 for h in hit[1:])
 
 
 def test_perimeter_band_equals_the_ray_walk_it_replaced() -> None:

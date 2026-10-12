@@ -1227,32 +1227,38 @@
    "verdict": "CLEAR"
   },
   "T27": {
-   "section_sha256": "19bfd17aa3ed54b9d42c453392f39946cb2c1ad62ee871d2056d31340a796c45",
-   "section_text": "### Wave 135 (T27) - a well's lifting gear, a knob\n\n- **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in two forms (a sweep or a\n  pulley frame) and its drawing page rolls them by the water's depth: each plan rolls its water depth from its seed, and each\n  well's gear at the drawing page's weights for that depth (on shallow water about three wells in four a sweep, on deeper about\n  three in four a pulley frame); and, as the drawing page does, a roof on posts on some wells, about one in three, rolled per\n  well from the seed. Each sheet's rolls are recorded in its notes and drawn on its wells as new glyphs (glyph-check owed);\n  docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan review).\n\n",
+   "section_sha256": "ed7b7db655b83dd3ffc1cd665a1c07001ae172a6e2c285f68c5269c649f40abb",
+   "section_text": "### Wave 135 (T27) - a well's lifting gear, a knob\n\n- **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in two forms (a sweep or a\n  pulley frame) and its drawing page rolls them by the water's depth, which follows the ground: \"Our maps take a valley floor\n  or river plain to hold shallow water, an upland or terrace deep water\" (the page's GUESS, its rule all the same). Each\n  sheet's depth follows the landform its notes record - Ubame \"an upland forest county\" (deep), Hayakawa on its river with its\n  barge landing (a river plain: shallow), Hoshigaoka mid-slope on the hill's back-slope (upland: deep) - and only a sheet whose\n  notes record no landform rolls its depth from its seed (Ochiba, the county draft, the round-trip sheet); each well's gear is\n  rolled at the drawing page's weights for that depth (on shallow water about three wells in four a sweep, on deeper about\n  three in four a pulley frame); and, as the drawing page does, a roof on posts on some wells, about one in three, rolled per\n  well from the seed. Each sheet's rolls are recorded in its notes and drawn on its wells as new glyphs (glyph-check owed);\n  docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan reviews, rounds 1 and 2).\n\n",
    "reviewed": "2026-10-12",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "W135-1 gear",
-     "summary": "each well's lifting gear rolled per well from the seed at 0196's drawing-page weights for the plan's water depth (shallow ~3 in 4 a sweep, deep ~3 in 4 a pulley frame), drawn as new glyphs, recorded in the notes, buildings.md's well-glyph claim citing the drawing page",
+     "summary": "each well's lifting gear rolled per well from the seed at 0196's drawing-page weights for the sheet's water depth (shallow ~3 in 4 a sweep, deep ~3 in 4 a pulley frame), drawn as new glyphs (glyph-check owed), recorded in the notes, buildings.md's well-glyph claim citing the drawing page",
      "class": "within",
-     "why": "the drawing page's own rule ('The lifting gear is a knob, weighted by how deep the water lies'); the ranking row asks for the gear knob; this is the request's 'make the implementation match the research'"
+     "why": "the drawing page's own rule: 'The lifting gear is a knob, weighted by how deep the water lies'; unchanged since round 2, which found it within"
     },
     {
      "id": "W135-1 roof",
      "summary": "a roof on posts over about one well in three, rolled per well from the seed",
      "class": "within",
-     "why": "the drawing page: 'A roof is drawn over about one well in three'; round 1's omission is closed"
+     "why": "the drawing page: 'A roof is drawn over about one well in three'; unchanged since round 2"
     },
     {
-     "id": "W135-1 depth",
-     "summary": "each plan's water depth rolled from its seed",
+     "id": "W135-1 depth from landform",
+     "summary": "each sheet's water depth follows the landform its notes record: Ubame deep, Hayakawa shallow, Hoshigaoka deep",
+     "class": "within",
+     "why": "the drawing page's rule 'Our maps take a valley floor or river plain to hold shallow water, an upland or terrace deep water', applied to what the notes record, checked against them: Ubame's notes say 'an upland forest county' (line 15) and 'an upland county' (line 159) - deep; Hayakawa's say 'river-adjacent', its landing steps cut in the revetment of a 'swift river with a flood history' across a bank street from the gate (lines 3, 34, 45) - a riverside site on the bank, valley floor or river plain - shallow; Hoshigaoka's shrine sheet says the hall stands 'mid-slope', the ground rising behind it, the well further up at the wood's back edge (lines 17, 33, 71), and the village notes set the shrine at 'the back-slope graveyard' above 'a broad gentle valley' whose floor holds the paddy - off the valley floor, on its slope, so the page's upland/terrace class - deep. Round 2's finding is resolved"
+    },
+    {
+     "id": "W135-1 depth rolled where no landform is recorded",
+     "summary": "Ochiba, the county draft (county-magistracy-example) and the round-trip sheet roll their depth from the seed",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "the drawing page does not roll depth: 'Our maps take a valley floor or river plain to hold shallow water, an upland or terrace deep water' (a GUESS, but the page's rule), and the plan attributes a seed roll to it. Applying that rule is not impossible where a sheet records its landform: Ubame's notes say 'an upland county' (lines 15 and 159), so the page gives Ubame deep water and a seed roll could draw it shallow - the implementation not matching the research, which is what the request asks to end. A seed roll is legitimate only for a sheet whose notes record no landform. Fix: depth follows the landform each sheet's notes record; seed only where none is recorded; the plan names which sheets are which (Hayakawa 'river-adjacent', Ochiba 'a land county on the Imperial road' are for the plan to read and state, not for this review to supply)"
+     "ruling": "LEGITIMATE",
+     "why": "the page's rule needs a landform and these sheets' notes record none (checked: Ochiba's notes say only 'Land county on the Imperial road', no terrain word; county-magistracy-example's and ochiba-roundtrip-test's notes carry no landform), so applying it is impossible without inventing a setting detail; rolling a researched choice from the seed is the project's knob doctrine, and round 2 named exactly this as the legitimate fallback"
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T25": {
    "section_sha256": "a9f4ae9f8d38935fa3a702d92126c26d2b39df707528e04897e187e0403bb4bd",

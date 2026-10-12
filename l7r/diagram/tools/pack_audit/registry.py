@@ -117,7 +117,9 @@ def _arches(ctx: Context) -> list[str]:
 
 
 def _on_wall(ctx: Context) -> list[str]:
-    return [f"a {w.w_ft:.0f} x {w.h_ft:.0f} ft structure at svg({w.x:.0f},{w.y:.0f}) reaches {w.into_ft:.1f} ft into the {w.wall}" for w in c.structures_on_walls(ctx.plan)]
+    return [
+        f"a {w.w_ft:.0f} x {w.h_ft:.0f} ft structure at svg({w.x:.0f},{w.y:.0f}) reaches {w.into_ft:.1f} ft into the {w.wall} or the foot clear of its face" for w in c.structures_on_walls(ctx.plan)
+    ]
 
 
 CHECKS: tuple[Check, ...] = (
@@ -129,7 +131,9 @@ CHECKS: tuple[Check, ...] = (
         "ochiba-overlap-red.svg",
         "move one footprint clear of the other, or draw a contained part (an engawa, a porch) fully inside its building",
     ),
-    Check("structures_on_walls", _on_wall, True, "ubame-privy-in-wall-red.svg", "set the structure against the wall's inner face, or break the wall around it if it IS part of the wall"),
+    Check(
+        "structures_on_walls", _on_wall, True, "ubame-privy-in-wall-red.svg", "set the structure a foot or two clear of the wall's inner face, or break the wall around it if it IS part of the wall"
+    ),
     # NO CHECK OF WHERE A CAPTION STANDS (feature 286): captions are placed by the one placer in the render pipeline,
     # and its unit tests hold it correct - the GM: "There is no point in having an automated check run against an
     # automated process." The label checks (overlap, dark ink, group labels adrift, a buried label) went with that.

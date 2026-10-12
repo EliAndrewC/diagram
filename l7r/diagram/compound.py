@@ -22,6 +22,7 @@ CLI:  python3 compound.py            # place the built-in county magistracy, wri
 
 from __future__ import annotations
 
+import math
 import os
 import sys
 from collections.abc import Callable
@@ -41,6 +42,7 @@ from .compound_model import (
     OUTLINE_CLEAR_FT,
     ROOF_POST_FT,
     ROOFED_ZONES,
+    WALL_FACE_CLEAR_FT,
     WALL_INK_FT,
     WALL_MARGIN_FT,
     BuildingSpec,
@@ -94,10 +96,13 @@ def _rank_depth(env: Envelope, already: list[Placed], spec: BuildingSpec) -> flo
 
 
 def _wall_clearance_ft(wall: str) -> float:
-    """Ground a hugging building must leave for the wall's own INK: half the wall's thickness,
-    because the wall is drawn centered on the boundary, plus a hair for its own outline (see
-    WALL_INK_FT / OUTLINE_CLEAR_FT). 2 ft off a compound wall, 1.5 ft off a court divider."""
-    return (DIVIDER_INK_FT if wall == "divider" else WALL_INK_FT) / 2 + OUTLINE_CLEAR_FT
+    """Ground a hugging building must leave for the wall: half the wall's thickness, because the wall is drawn centered on
+    the boundary, then a foot or two clear of its face (WALL_FACE_CLEAR_FT, feature 374 wave 134; it was a hair, 0.5 ft).
+    3 ft off a compound wall's centerline, 2.5 ft off a court divider's.
+
+    Research:
+        clear of the wall's face - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: a building set a foot or two off the wall, its eaves nearly touching; the spacing the page's GUESS, 1.5 ft its middle"""
+    return (DIVIDER_INK_FT if wall == "divider" else WALL_INK_FT) / 2 + WALL_FACE_CLEAR_FT
 
 
 def _cross_coord(env: Envelope, spec: BuildingSpec, already: list[Placed]) -> float:
@@ -247,11 +252,23 @@ def composition_plan(result: PlaceResult, margin_ft: float = DRAFT_MARGIN_FT) ->
     ox, oy = margin_ft * FTPX, (margin_ft + 8.0) * FTPX
 
     def rect(x: float, y: float, w: float, h: float) -> Rect:
-        return Rect(round(ox + x * FTPX), round(oy + y * FTPX), round(w * FTPX), round(h * FTPX))
+        px0, py0, px1, py1 = _px_edges(ox, oy, x, y, w, h)
+        return Rect(px0, py0, px1 - px0, py1 - py0)
 
     interior = (rect(0.0, 0.0, env.w_ft, env.divider_ft), rect(0.0, env.divider_ft, env.w_ft, env.h_ft - env.divider_ft))
     divider = Rect(round(ox), round(oy + env.divider_ft * FTPX), round(env.w_ft * FTPX), 2.0)  # the audit's thin rect of a divider line
     return ParsedPlan(interior, tuple(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft) for p in result.placed), (), (), (divider,))
+
+
+def _px_edges(ox: float, oy: float, x: float, y: float, w: float, h: float) -> tuple[int, int, int, int]:
+    """A box in feet as whole-pixel EDGES (x0, y0, x1, y1), each rounded half up on its own (feature 374 wave 134): rounding the
+    origin and the size apart let two boxes flush in feet part by a pixel at a half-pixel origin - the clerks' seats, flush
+    with the office hall's court face, stood a pixel past it once the hall stood 2.5 ft off the divider."""
+
+    def r(v: float) -> int:
+        return math.floor(v + 0.5)
+
+    return r(ox + x * FTPX), r(oy + y * FTPX), r(ox + (x + w) * FTPX), r(oy + (y + h) * FTPX)
 
 
 def _declared_checks(tier: str) -> tuple[str, ...]:
@@ -548,7 +565,8 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
         if fill != "none" or stroke != "none":  # a visible rect: a shape a caption may name (an invisible stand-in never is)
             sid = f' data-id="d{len(drawn)}"'
             drawn.append(((round(x, 3), round(y, 3), round(w, 3), round(h, 3)), f"d{len(drawn)}"))
-        return f'<rect x="{ox + x * FTPX:.0f}" y="{oy + y * FTPX:.0f}" width="{w * FTPX:.0f}" height="{h * FTPX:.0f}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}{whole}{sid}/>'
+        px0, py0, px1, py1 = _px_edges(ox, oy, x, y, w, h)
+        return f'<rect x="{px0}" y="{py0}" width="{px1 - px0}" height="{py1 - py0}" fill="{fill}"{tag} stroke="{stroke}" stroke-width="{sw}"{_kind_attr(kind)}{whole}{sid}/>'
 
     def caption(
         where: str,

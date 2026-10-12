@@ -69,3 +69,11 @@ def test_the_county_vegetable_garden_takes_its_rolled_site_at_the_plots_size() -
     assert [z.name for z in west] == ["vegetable garden", "service yard"] and west[0].w_ft * west[0].h_ft == 1080.0
     assert [z.name for z in ce.garden_zones("on a parcel of its own")] == ["service yard"], "the field outside the walls"
     assert "service yard" in c.UNFENCED_ZONES and c.ZONE_KINDS["service yard"] == "inner court"
+
+
+def test_flush_boxes_share_their_pixel_edge_at_a_half_pixel_origin() -> None:
+    """Feature 374 wave 134: rounding a box's origin and size apart parted two boxes flush in feet by a pixel."""
+    hall = c._px_edges(0.0, 0.0, 0.0, 92.5, 10.0, 38.0)
+    seat = c._px_edges(0.0, 0.0, 0.0, 125.5, 10.0, 5.0)
+    assert hall[3] == seat[3] == 392  # 130.5 ft -> 391.5 px, half up
+    assert c._px_edges(0.0, 0.0, 3.5, 0.0, 5.0, 5.0) == (11, 0, 26, 15)  # 10.5 -> 11, 25.5 -> 26: still 15 px wide

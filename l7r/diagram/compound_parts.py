@@ -30,6 +30,7 @@ from .compound_model import (
     STONE_STEP_FT,
     TUB_DOOR_MAX_FT,
     TUB_MAX_GAP_FT,
+    WALL_FACE_CLEAR_FT,
     WALL_INK_FT,
     BuildingSpec,
     CompoundProgram,
@@ -247,22 +248,28 @@ def _guest_privy(env: Envelope, home: Placed, boxes: list[Box]) -> Box | None:
     return (x, y, x + PRIVY_FT, y + PRIVY_FT) if _is_clear(env, others, x, y, PRIVY_FT, PRIVY_FT) else None
 
 
+#: A privy flush to a side wall stands this far beyond its building's court face: 1.5 ft since feature 374 wave 134, when the
+#: wall's face clearance grew a foot and the servants' privy, set 2 ft out, no longer fit the 7 ft between the long-house's end
+#: and the servants' row. The gap is a drawing convention (a privy's own eaves).
+FLUSH_PRIVY_GAP_FT: float = 1.5
+
+
 def _flush_privy(env: Envelope, p: Placed, boxes: list[Box], avoid: tuple[Box, ...]) -> Box | None:
     """A privy flush against the compound side wall a building's end stands by, just beyond the building on its court
     side - the service wall its pit is emptied through; None where the building stands by no side wall or the ground
     is taken."""
     court = _court_side(p)
-    face = WALL_INK_FT / 2 + 0.5
+    face = WALL_INK_FT / 2 + WALL_FACE_CLEAR_FT  # a foot or two clear of the wall's face (feature 374 wave 134)
     reach = 5.0  # a building this near a side wall stands by it
     cands: list[Box] = []
     if court in ("N", "S"):
-        y = p.y2 + 2.0 if court == "S" else p.y_ft - 2.0 - PRIVY_FT
+        y = p.y2 + FLUSH_PRIVY_GAP_FT if court == "S" else p.y_ft - FLUSH_PRIVY_GAP_FT - PRIVY_FT
         if p.x_ft <= reach:
             cands.append((face, y, face + PRIVY_FT, y + PRIVY_FT))
         if env.w_ft - p.x2 <= reach:
             cands.append((env.w_ft - face - PRIVY_FT, y, env.w_ft - face, y + PRIVY_FT))
     else:
-        x = p.x2 + 2.0 if court == "E" else p.x_ft - 2.0 - PRIVY_FT
+        x = p.x2 + FLUSH_PRIVY_GAP_FT if court == "E" else p.x_ft - FLUSH_PRIVY_GAP_FT - PRIVY_FT
         if p.y_ft <= reach:
             cands.append((x, face, x + PRIVY_FT, face + PRIVY_FT))
         if env.h_ft - p.y2 <= reach:

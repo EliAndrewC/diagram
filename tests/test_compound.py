@@ -711,15 +711,16 @@ def test_the_guests_privy_stands_behind_the_reception() -> None:
 
 def test_a_privy_flush_to_the_side_wall_by_a_building() -> None:
     env = _env(200.0, 200.0, 100.0)
-    face = c.WALL_INK_FT / 2 + 0.5
+    face = c.WALL_INK_FT / 2 + c.WALL_FACE_CLEAR_FT  # a foot or two clear of the face (feature 374 wave 134)
+    g = cp.FLUSH_PRIVY_GAP_FT
     west = c.Placed(_b("row", 40.0, 16.0, "outer", "S"), 3.0, 182.0)  # court north: the privy north of it, on the west wall
-    assert cp._flush_privy(env, west, [], ()) == (face, 175.0, face + 5.0, 180.0)
+    assert cp._flush_privy(env, west, [], ()) == (face, 182.0 - g - 5.0, face + 5.0, 182.0 - g)
     east = c.Placed(_b("row", 40.0, 16.0, "inner", "N"), 157.0, 2.0)  # court south, by the east wall
-    assert cp._flush_privy(env, east, [], ()) == (200.0 - face - 5.0, 20.0, 200.0 - face, 25.0)
+    assert cp._flush_privy(env, east, [], ()) == (200.0 - face - 5.0, 18.0 + g, 200.0 - face, 23.0 + g)
     north = c.Placed(_b("col", 16.0, 40.0, "inner", "W"), 2.0, 3.0)  # court east, by the north wall
-    assert cp._flush_privy(env, north, [], ()) == (20.0, face, 25.0, face + 5.0)
+    assert cp._flush_privy(env, north, [], ()) == (18.0 + g, face, 23.0 + g, face + 5.0)
     south = c.Placed(_b("col", 16.0, 40.0, "outer", "E"), 182.0, 157.0)  # court west, by the south wall
-    assert cp._flush_privy(env, south, [], ()) == (175.0, 200.0 - face - 5.0, 180.0, 200.0 - face)
+    assert cp._flush_privy(env, south, [], ()) == (182.0 - g - 5.0, 200.0 - face - 5.0, 182.0 - g, 200.0 - face)
     assert cp._flush_privy(env, c.Placed(_b("mid", 40.0, 16.0, "outer", "S"), 80.0, 182.0), [], ()) is None  # by no side wall
     assert cp._flush_privy(env, west, [], ((0.0, 160.0, 10.0, 170.0),)) is None  # a well too near
 

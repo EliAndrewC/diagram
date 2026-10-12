@@ -53,6 +53,6 @@ hand-refined, and the residential-court composition will already be right.
 buildings on the wall CENTERLINE. The wall is drawn at true thickness centered on the
 boundary, so half of it lies inside - every rank-1 building here had been standing 1.5 ft
 inside the masonry, with its own outline swallowed by the wall stroke. The placer now leaves
-the ink plus a hair (2 ft off a compound wall, 1.5 ft off the divider), and the inner-court
+the ink plus a foot and a half clear of its face (3 ft off a compound wall's centerline, 2.5 ft off the divider's; feature 374 wave 134, research 0092's "a foot or two"), and the inner-court
 garden zone moved 36 -> 38 ft so the shifted N-wall row still clears it. Checked by
 `tools/pack_audit.py` `structures_on_walls`; see docs/buildings.md "Walls and gates".

@@ -97,7 +97,7 @@ def county_magistracy_program() -> CompoundProgram:
 
     Research:
         tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a 24 x 18 ft kura (432 sq ft), under the ~450 sq ft records-store ceiling, its shape a GUESS
-        barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 24 x 70 ft range along the east wall, 24 ft deep, long and narrow, never squat; its length a GUESS within ~145 ft
+        barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 23 x 70 ft range along the east wall, 23 ft deep, long and narrow, never squat; its length a GUESS within ~145 ft
         envelope - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: a 270 x 200 ft walled compound, the divider at 90 ft, its buildings in the ~30-42% coverage band; the size a GUESS
         gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the main gate's form rolled from the record's two (GATE_FORM: a one-bay gate, its passage 8 ft in the yakuimon's ~6-8.5 ft); the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
         garden before the house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the garden on the sunny south before the reception and the guest house; its 124 x 46 ft a GUESS
@@ -115,7 +115,7 @@ def county_magistracy_program() -> CompoundProgram:
         storehouses - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: two household storehouses behind the house, unequal as the Yokota pair - 16 x 19 ft and the common 12 x 18 ft (two by three ken); the count and the sizes GUESSES
         kitchen ell - research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a 20 x 18 ft kitchen joined to the house's west end as an ell, its door west; its size a GUESS
         shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one modest shrine, 18 x 14 ft, on the inner court's east wall; its size a GUESS
-        guest house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a detached 40 x 40 ft guest house; a guest house apart was not found at a samurai house
+        guest house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a detached 40 x 42 ft guest house (42 since feature 374 wave 134 holds the coverage band); a guest house apart was not found at a samurai house
         shrine tree ground - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: the shrine's corner holds the ground for the tree beside it, the next building on its wall flowing below the crown
         shrine tree ground's size - GUESS: the 20 ft crown and 2 ft clear either side, less the fire-gap the next building keeps (tree_ft); no source sizes a household god's tree
         kitchen off the north wall - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the kitchen ell stands 10 ft off the north wall as the house does, the rear alley of ~6-10 ft running on behind it
@@ -175,8 +175,8 @@ def county_magistracy_program() -> CompoundProgram:
         # only way west). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its size is a GUESS - no
         # roofed court's size was found.
         CourtZone(
-            "oshirasu", 49.5, 130.0, 80.0, 26.0
-        ),  # y 130 since pass 6: the office hall is 38 ft deep; x 49.5 since feature 374 wave 125, centered again on the hall the 24 ft staff long-house let slide west
+            "oshirasu", 50.5, 131.0, 80.0, 26.0
+        ),  # y 131 and x 50.5 since feature 374 wave 134 (the hall 2.5 ft off the divider's centerline, it was 1.5, and 1 ft east, centered on it again); y 130 since pass 6: the office hall is 38 ft deep; x 49.5 since feature 374 wave 125, centered again on the hall the 24 ft staff long-house let slide west
         # just inside the main gate (131-139), east of the gatehouse that stands beside it, and 55 ft wide (it was 36)
         # to take the ground east of the gate the hearing court gave up when it shrank to the hall's length; a
         # marshalling apron's width is a GUESS
@@ -195,7 +195,7 @@ def county_magistracy_program() -> CompoundProgram:
         # fenced (UNFENCED_ZONES). Its bounds are a drawing convention.
         # It starts where the hearing court, centered on the hall, ends - a yard drawn over the court painted out its east
         # end (building-review E1, feature 372 wave 105).
-        CourtZone("yard", 129.5, 131.0, 58.5, 33.0),  # y 131 since pass 6: the office hall is 38 ft deep; x 129.5 since feature 374 wave 125, from the re-centered hearing court's east end
+        CourtZone("yard", 130.5, 131.0, 57.5, 33.0),  # y 131 since pass 6: the office hall is 38 ft deep; x 130.5 since feature 374 wave 134, from the re-centered hearing court's east end
         # The cart yard before the service gate (pass 4: the ~71 x 30 ft of bare ground in the SE outer court) - the
         # carts, the stable muck and the prisoners' way out; the kind the hand sheets draw (a DEVIATION from canon on
         # H and U, forms.md). Its size is a GUESS.
@@ -245,7 +245,7 @@ def county_magistracy_program() -> CompoundProgram:
             # at the kitchen (west) end of the rear face, as 0107's drawing page seats the inner entrance, just east of the
             # family privy at the corner (feature 374 wave 127; it stood mid-face at 0.4); the kitchen ell takes the west face
             door_fracs=(0.3, 0.35, 0.4),
-            inset_ft=10.0,
+            inset_ft=9.0,  # the house 12 ft off the north wall's centerline as before wave 134 moved the clearance: a 10.5 ft alley behind it
         ),
         # THE SERVANTS LODGE ON THE STREET FRONT (feature 374 wave 124): a large household's servants are drawn in a range
         # on its street edge, never a rowhouse behind the house (0115's drawing page,
@@ -271,7 +271,7 @@ def county_magistracy_program() -> CompoundProgram:
         # then runs on behind the kitchen to the rear yard, and down it to the kitchen yard
         # and the postern - the night-soil carter's service route to the house's privies. Flush to the wall, the
         # kitchen closed the alley's west end, and the privies were ~400 ft round from any service edge.
-        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=10.0, joins="residence"),
+        b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=9.0, joins="residence"),
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
         # is Ochiba's particular - docs/building-programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; docs/buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).
@@ -282,7 +282,7 @@ def county_magistracy_program() -> CompoundProgram:
         # A detached guest house is a GUESS (R10, research 0091: guests were received in the main house, and a
         # guest house apart at a samurai house was not found); kept as the example's draft of the item.
         b(
-            "guest house", "lord", 40.0, 40.0, "inner", "E", order=3, feature="guest quarters"
+            "guest house", "lord", 40.0, 42.0, "inner", "E", order=3, feature="guest quarters"
         ),  # 40 x 40 since feature 374 wave 128, holding the jin'ya band when the granary came down to 0098's (38 x 38 until then; 33 x 32 until feature 374 wave 126; 33 x 30 before pass 6)
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
         # The clerks' room is a ROOM of the office hall, at its west end on the rear (divider) side, 30 x 20 ft - the
@@ -357,7 +357,7 @@ def county_magistracy_program() -> CompoundProgram:
         b(
             "barracks",
             "service",
-            24.0,
+            23.0,  # 23 ft deep since feature 374 wave 134: a foot more clear of the east wall's face, and the cell at the south-east corner
             70.0,
             "outer",
             "E",

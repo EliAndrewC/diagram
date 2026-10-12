@@ -446,8 +446,22 @@ class StructureOnWall:
     y: float
     w_ft: float  # the structure's size, to identify it in the source
     h_ft: float
-    into_ft: float  # how far it reaches into the wall's ink
+    into_ft: float  # how far it reaches into the wall's ink and the foot clear of its face
     wall: str  # "compound wall" | "court divider"
+
+
+# A STRUCTURE STANDS A FOOT OR TWO CLEAR OF THE WALL'S FACE (feature 374 wave 134): research/questions/0092-compound-walls-neribei-
+# and-tsuijibei.drawing.html sets a building "a foot or two" off the wall, its eaves nearly touching - the least of it, a foot,
+# is held here across the wall's thickness, never past a segment's ends (a gate range standing in a wall broken around it, flush
+# with the segments' cut ends, is no structure off the wall). The spacing is the record's GUESS.
+WALL_FACE_CLEAR_FT: float = 1.0
+
+
+def _with_clearance(band: Rect, clear: float) -> Rect:
+    """`band` grown by `clear` px on both of its long faces (across the wall's thickness), not at its ends."""
+    if band.w >= band.h:
+        return Rect(band.x, band.y - clear, band.w, band.h + 2 * clear, band.fill)
+    return Rect(band.x - clear, band.y, band.w + 2 * clear, band.h, band.fill)
 
 
 def structures_on_walls(plan: ParsedPlan, min_px: float = WALL_OVERLAP_MIN_PX) -> list[StructureOnWall]:
@@ -466,10 +480,11 @@ def structures_on_walls(plan: ParsedPlan, min_px: float = WALL_OVERLAP_MIN_PX) -
     explicitly and leaves no ink to overlap.
     """
     out: list[StructureOnWall] = []
+    clear = WALL_FACE_CLEAR_FT * FTPX
     for s in plan.structures:
         worst: tuple[float, str] | None = None
         for band in plan.wall_bands:
-            ov = _overlap_px(s.x, s.y, s.x2, s.y2, band)
+            ov = _overlap_px(s.x, s.y, s.x2, s.y2, _with_clearance(band, clear))
             if ov > min_px and (worst is None or ov > worst[0]):
                 worst = (ov, WALL_KIND[band.fill])
         if worst is not None:
