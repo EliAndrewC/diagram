@@ -2,7 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-11 - amendment 5 landed: spec FAITHFUL (round 2), plan CLEAR, every task ticked; SC-016 to SC-020 tested, a snapshot taken end to end; SC-012 carried to 374 (as SC-003 and SC-004 are)
+**Status**: In progress - amendment 6 (the GM 2026-10-12), reopened by the Diagram tooling session and handed to the Diagram performance session to implement; amendments 1-5 Done 2026-10-11
+
+**Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
 
 **Amendment 5 approved**: the GM, 2026-10-11, "if it looks like the performance is slowing down to a meaningful degree, that's something you can mention when you say that the work has landed on main, but it doesn't need to be a gate anymore."
 
@@ -255,6 +257,19 @@ recorded and flagged, never a gate. The cohort is not part of it.
   `docs/guards.md`, `docs/efficiency-tooling.md`, `scripts/container/append-system-prompt.md` (its standing order to run
   `perf-audit` on every band of 1 or more), `.claude/agents/perf-audit.md` and `.claude/agents/round-arbiter.md`.
 
+### Amendment 6 (`request.md`, Amendment 6)
+
+The GM approved dropping About from what owes `modal-depiction`: FR-015 put it there in the session's words, not the GM's.
+
+- **FR-028 About no longer owes `modal-depiction`.** An edit to a pop-up owes `modal-depiction` only when it changes what that
+  check judges: the pop-up new to the About form, or its Depiction tab, its `Drawing:` list or its `Entry:`
+  (FR-015's other triggers, unchanged). An edit to its About alone - or to About and Guesses - owes `modal-form` and the research
+  checks, not `modal-depiction`. The About side of M13 (a sentence about how the map draws the thing, found in About) is
+  `modal-form`'s finding, and the move of that sentence to the Depiction tab owes `modal-depiction` in its turn. The depiction
+  fingerprint (`scripts/record/modal_owed.py` `depiction_fingerprint`) drops About; `modal-depiction`'s contract drops its M13
+  About sentence, or keeps it as a note when About is in its bundle for context only. Feature 343's rows 83 and 84 (the two
+  declined fixes, overturned into this feature's `found.jsonl`) close with it.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -333,9 +348,13 @@ recorded and flagged, never a gate. The cohort is not part of it.
 - **SC-020** (FR-027) `make perf-report` prints each snapshot's start and end load and free RAM beside its totals; a snapshot
   from before FR-024 prints dashes there. The test fails on today's code.
 
+- **SC-021** (FR-028) A pop-up whose About alone changed is owed `modal-form` and not `modal-depiction`; one whose Depiction,
+  `Drawing:` or `Entry:` changed is owed `modal-depiction` as today; a `modal-form` bundle carries M13's About rule.
+  Replaying the 44 About-only pop-up edits since 2026-10-05 owes no `modal-depiction`. Tests fail on today's code.
+
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020.
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021.
 
 ## What it does not cover
 

@@ -82,9 +82,16 @@ def test_an_overturned_row_becomes_an_open_row_of_another_feature(root: pathlib.
     gm.accept(d, "the bath at 18 by 12 ft", "the resident's particular allows it")
     with pytest.raises(ValueError, match="OVERTURN"):
         gm.reviewed(root, d, 5, other)
-    assert gm.reviewed(root, d, 0, other)[0] == "row 0 overturned - an open row of 376-y"
+    gm.accept(d, "the bath door on the yard", "the yard is the service side")
+    assert gm.reviewed(root, d, 0, other) == ["row 0 overturned - an open row of 376-y"]
+    assert "reviewed" in gm.rows(d)[0] and "reviewed" not in gm.rows(d)[1], "an overturn reviews its own row, not the feature's"
+    assert gm.rows(d)[0]["overturned_to"] == "376-y" and "the bath door" in gm.listing(root, "375")
     found = json.loads((other / "found.jsonl").read_text())
     assert found["status"] == "open" and "overturned by the GM" in found["finding"]
+    (d / gm.ROWS).open("a").write(json.dumps({"kind": "arbiter-fix-declined", "trigger": "t", "tooling_fix": "re-owe less", "note": "FR-015 says"}) + "\n")
+    gm.reviewed(root, d, 2, other)
+    last = json.loads((other / "found.jsonl").read_text().splitlines()[-1])
+    assert last["finding"] == "overturned by the GM: re-owe less - FR-015 says", "a declined fix carries the fix and why it was declined"
 
 
 def test_the_held_rows_and_the_command_line(root: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys) -> None:  # noqa: ANN001
