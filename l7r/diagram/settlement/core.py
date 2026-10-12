@@ -483,17 +483,17 @@ class Settlement(
         self.add('</defs>')
         self.add(f'<rect width="{self.W}" height="{self.H}" fill="{LAND}"/>', cls="-")  # the sheet: ruled NOT highlighted (feature 134 FR-002)
         # THE COVERS' SLOTS, RIGHT ABOVE THE LAND (feature 298, the GM 2026-10-01: "as long as we are using Z indexing ... to
-        # make sure that that thing appears on top"): the tiles' <defs>, then the scrub, a pasture's (unclassed, as its blades
-        # were) and the marsh - filled by `flush_covers` at finish, so every feature drawn after the header draws over them
+        # make sure that that thing appears on top"): the tiles' <defs>, then the scrub, a pasture's (the floodplain meadow since
+        # feature 374 wave 147) and the marsh - filled by `flush_covers` at finish, so every feature drawn after the header draws over them
         self._cover_slots = {"defs": self.add("", cls="-")}
         # (...and the grass-only band under a wood's edge in either class, right after the scrub's: feature 328 wave 57)
         for key, cls in (
             (("grass", "scrub and rough grazing"), "scrub and rough grazing"),
-            (("grass", None), None),
+            (("grass", "floodplain meadow"), "floodplain meadow"),
             (("wood-fringe", "scrub and rough grazing"), "scrub and rough grazing"),
-            (("wood-fringe", None), None),
+            (("wood-fringe", "floodplain meadow"), "floodplain meadow"),
             (("wood-fringe-thin", "scrub and rough grazing"), "scrub and rough grazing"),
-            (("wood-fringe-thin", None), None),
+            (("wood-fringe-thin", "floodplain meadow"), "floodplain meadow"),
             (("reed", "marsh"), "marsh"),
         ):
             self._cover_slots[key] = self.add("", cls=cls)

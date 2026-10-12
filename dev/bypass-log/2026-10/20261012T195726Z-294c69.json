@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-12T19:57:26Z",
+  "target": "claims-gate",
+  "commit": "aa9adf6b4",
+  "why": "CLAIMS_OK: pre-existing findings in units wave 146 touched (the sun rule binding only on opt-in maps, filed as an open row in 374 found.jsonl); every claim the wave added is IN-STEP"
+}

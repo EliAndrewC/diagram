@@ -46,5 +46,9 @@ class ScrubAndRoughGrazing(Kind):
     key = 'scrub and rough grazing'
 
 
+class FloodplainMeadow(Kind):
+    key = 'floodplain meadow'
+
+
 class Marsh(Kind):
     key = 'marsh'

@@ -254,7 +254,7 @@ def block_ring(block: list[tuple[float, float]], step: float = BARE_STEP) -> lis
 
 
 class GroundCoverMixin:
-    def fill_the_holes(self: Settlement, view: Any, planned: Any = ()) -> int:  # type: ignore[misc]
+    def fill_the_holes(self: Settlement, view: Any, planned: Any = (), role: str = "grazing") -> int:  # type: ignore[misc]
         """Lay rough grazing over the bare ground of `view` (x, y, w, h) until no more than `BARE_SHARE_CAP` of it is ground
         nothing covers (feature 287, woods W11 - `margins_form_continuous_ring`: between the fields and the settlement
         there is always something). `planned` is cover a later stage will record (the woodland parcels, the bamboo
@@ -271,7 +271,7 @@ class GroundCoverMixin:
         for block in bare_blocks(bare):
             if not total or len(bare) <= BARE_SHARE_CAP * total:
                 break
-            self.commons(block_ring(block), role="grazing")
+            self.commons(block_ring(block), role=role)  # `role`: a floodplain map's meadow is `pasture` (feature 374 wave 147)
             gone = set(block)
             bare = [p for p in bare if p not in gone]
             laid += 1
@@ -588,8 +588,9 @@ class GroundCoverMixin:
                                 )
                             )
             # feature 134: the commons' highlight class follows its ROLE; a role the vocabulary does not
-            # name yet (pasture) stays unclassed so the census reports it rather than misfiling it
-            _ccls = {"woodland": "woodland commons", "grazing": "scrub and rough grazing", "commons": "scrub and rough grazing"}.get(role)
+            # name yet stays unclassed so the census reports it rather than misfiling it (a pasture is the floodplain meadow,
+            # feature 374 wave 147)
+            _ccls = {"woodland": "woodland commons", "grazing": "scrub and rough grazing", "commons": "scrub and rough grazing", "pasture": "floodplain meadow"}.get(role)
             self._mark_groups.append((self.add(''.join(g), cls=_ccls), marks))  # the crowns now, the dots and pines at finish, into one slot
             random.setstate(st)
             self._cover_n += 1

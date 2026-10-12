@@ -65,6 +65,14 @@ def woodland_on_the_sheet(s: Settlement, plan: SitePlan, polys: list[Any]) -> li
     return polys
 
 
+def grass_ground(plan: SitePlan) -> str:
+    """The form a hamlet's grass ground takes, from the land its map shows: the floodplain on flood ground (`plan.flood_ground` -
+    the polder and dike-pond forms, a dike-top village), the grass hill elsewhere.
+
+    Research: grass ground from the land - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass hill where the map has hills, the floodplain where it has a river flat"""
+    return "floodplain" if getattr(plan, "flood_ground", False) else "grass_hill"
+
+
 def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     """The marsh, then scrub and rough grazing.
 
@@ -101,8 +109,8 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         no scrub under a worked wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: brush and pine stop at every wood's line
         bare ground as rough grazing - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: rough grazing on dry marginal ground
         share clothed as grazing - UNRESEARCHED: holes in the view filled
-        grass ground form - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one form, rough
-            grazing on the leftover ground; the grass hill, the floodplain and the small plot beside a paddy are never rolled
+        grass ground form - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the grass hill (open scrub) or the
+            floodplain (open meadow, `grass_ground`) from the land; the small grass plot beside one paddy is never drawn
         stage order - NONE
     """
     # THE PLANTED DIKES' TREES GIVE WAY TO THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): the
@@ -139,11 +147,15 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     plan.view = frame_for(s, plan)
     s._scatter_frame = scatter_frame(s, plan)
 
-    s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])
+    # THE GRASS GROUND'S FORM FROM THE LAND (feature 374 wave 147, 0078's drawing page: "depends on the land the map shows"):
+    # a river flat's margins are open meadow - grass and the odd brush dot, no scraggly pine - and a hill map's the open scrub
+    meadow = grass_ground(plan) == "floodplain"
+    s.M["meta"]["grass_ground"] = grass_ground(plan)
+    s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys], scrub_role="pasture" if meadow else "grazing")
     # ...AND NO HOLES IN THE COUNTRYSIDE (feature 287, woods W11): over the decided view, the ground nothing covers - the
     # parcels and the bamboo still to be drawn counted as cover - is clothed as rough grazing until it is at most the rule's
     # share (`fill_the_holes`, asking `bare_cells`, the rule's one predicate). The stages after this only add cover.
-    s.fill_the_holes(plan.view, [*plan.woodland_polys, *plan.bamboo_polys])
+    s.fill_the_holes(plan.view, [*plan.woodland_polys, *plan.bamboo_polys], role="pasture" if meadow else "grazing")
     s._scatter_frame = None  # the later scatters (a stand's understory, a hand call) throw whole
 
 

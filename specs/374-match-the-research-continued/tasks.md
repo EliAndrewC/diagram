@@ -211,6 +211,11 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. grove farms' fixtures keep off the way in and the door's room; door paths and street joins close no sliver; seed-pinned soak tests red at HEAD (2 failed), green now (polder 12, dike-pond 4); polder 4 waived by the arbiter and pinned; cohort 16/16, valley 20/20, dike-pond 12/12 (m:w146-rolls); 60 claims IN-STEP; gate green
 
+## Batch 11 - the floodplain meadow
+
+- [ ] T39 wave 147: the grass ground's form from the land; the floodplain meadow on a river-flat map (0078) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

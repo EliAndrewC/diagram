@@ -945,3 +945,15 @@ def test_a_walk_through_a_row_holding_is_beyond_the_fields(monkeypatch: pytest.M
 
     assert _scan([]) == [], "through the paddy alone, nothing is beyond the fields"
     assert _scan([{"poly": [[0, 0], [10, 0], [10, 10], [0, 10]]}, {"poly": [[0, 0], [1, 1]]}]), "through a row holding, the seats are"
+
+
+def test_the_grass_ground_takes_its_form_from_the_land() -> None:
+    """Feature 374 wave 147 (0078's drawing page: the form "depends on the land the map shows"): a map on flood ground - the polder
+    and dike-pond forms - takes the floodplain meadow, every other map the grass hill's open scrub."""
+    import types
+
+    from l7r.diagram.hamletgen.hinterland.stages import grass_ground
+
+    assert grass_ground(types.SimpleNamespace(flood_ground=True)) == "floodplain"
+    assert grass_ground(types.SimpleNamespace(flood_ground=False)) == "grass_hill"
+    assert grass_ground(types.SimpleNamespace()) == "grass_hill", "a plan with no flood ground recorded"

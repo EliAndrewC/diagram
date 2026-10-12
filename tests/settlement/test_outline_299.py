@@ -178,7 +178,7 @@ def test_the_reeds_reach_a_streams_edge_and_a_bank_band_lines_it() -> None:
     t.M["streams"] = [{"poly": [[600.0, 0.0], [600.0, 1200.0]], "w": 8}]
     t.commons([(300.0, 100.0), (900.0, 100.0), (900.0, 500.0), (300.0, 500.0)], role="pasture")
     t.flush_covers()
-    assert "reed-bank" not in _slot(t, ("grass", None)), "no bank band in the scrub"
+    assert "reed-bank" not in _slot(t, ("grass", "floodplain meadow")), "no bank band in the scrub"
 
 
 def test_no_stretch_of_a_shaped_outline_runs_straight_for_the_share_a_visible_edge_may_not_pass() -> None:

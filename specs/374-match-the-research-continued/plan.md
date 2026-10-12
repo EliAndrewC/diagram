@@ -686,6 +686,24 @@ fix was re-applied).
   its current refusal, and taken up with the polder's capacity (the second guarantee): a later street threaded past an existing
   junction, or the settle welding a near-miss junction.
 
+## Batch 11: the grass ground's form from the land - the floodplain meadow
+
+**The work list**: rows 0, 771 and 774 stay as ruled (771 on the polder's capacity and seed 4's waived regression, 774 on the
+10-household valley seed's off-ford street). The next free row is 775 (`stage_hinterland#grass ground form`): research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html
+gives three attested forms - the grass hill where the map has hills, the floodplain where it has a river flat, and now and then
+a small grass plot beside one paddy (the tazuke kusayama) - and the code draws one, hill scrub with scattered pines on every
+map, Kuwabata's dike-pond river flat included. Batch 11 takes the floodplain; the paddy's own grass plot, a new drawn element
+of its own, is the row's second wave in a later batch. The engine changes, so the batch takes its timing bookends.
+
+### Wave 147 (T39) - the floodplain meadow on a river-flat map
+- **W147-1** (within): the grass ground's form follows the land the map shows (0078's drawing page: "depends on the land the map
+  shows"): a map on flood ground (`plan.flood_ground` - the polder and dike-pond forms, the dike-top village) takes the
+  floodplain, every other map the grass hill. On the floodplain the hinterland's margins are open meadow - grass and the odd
+  brush dot, no scraggly pine (the commons' `pasture` role); on the grass hill they stay the open scrub drawn now. The form is
+  recorded per map (`meta.grass_ground`) and listed among the derived, unrolled values (`choices.json` `not_choices`).
+- **W147-2** (within): the meadow is a kind of its own on the page (`floodplain meadow`), with a pop-up written from 0078 and
+  the glyph check its new element owes on Kuwabata.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

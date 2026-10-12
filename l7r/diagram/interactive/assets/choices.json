@@ -410,6 +410,7 @@
   "pond_stock": "which ponds nearest the houses take a sty - placement; the sty is the pig-sty modal's",
   "cremation_seat": "where a village's cremation ground stands - a village's roll; no hamlet draws one, the hamlet_burial choice says where its dead go",
   "household_graves": "whether a hamlet's farmsteads keep graves of their own - told by the household graves on the map and their modal",
-  "lane_skeleton_by_water": "the lane shape's roll among five where water runs along the cluster - its outcome is the lane_skeleton choice"
+  "lane_skeleton_by_water": "the lane shape's roll among five where water runs along the cluster - its outcome is the lane_skeleton choice",
+  "grass_ground": "the grass ground's form follows the land the map shows (0078): the floodplain on flood ground, the grass hill elsewhere - derived, not rolled (feature 374 wave 147)"
  }
 }
