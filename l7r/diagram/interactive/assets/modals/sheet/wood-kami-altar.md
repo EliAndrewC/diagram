@@ -11,12 +11,12 @@ Guesses:
   picked one at random.
 
 Depiction: The plan draws the altar as a small square inside the shrine hall, about 5 ft across, larger than life so that it can
-be seen, in plain wood color rather than a shrine's vermilion, beside Inari's torii mark. It is drawn sharing
+be seen, in plain wood color rather than a shrine's vermilion. It is drawn sharing
 Inari's hall, which is a guess.
 
 Name: wood-kami altar
 Covers: the altar and its label with the "personally maintained" sublabel
 Sources: hokora-jawiki, jawiki-yashikigami, tokushima-yashikigami, kotobank-aidono, jawiki-goshi
 Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/questions/0219-household-shrines-yashikigami.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
-Drawing: research/questions/0219-household-shrines-yashikigami.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html
+Drawing: research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
 Form: particular

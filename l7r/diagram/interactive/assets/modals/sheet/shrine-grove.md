@@ -24,7 +24,7 @@ Depiction: The map draws the grove as a wood of crowns on the sides of the hall 
 where the hall stands - drawn clear of the canopy so the hall shows, though a real shrine's wood grew close behind and
 around its buildings; which sides is picked from the forms the ground allows. Where it meets scrub or slope its edge
 follows the crowns, never a ruled line; where it meets paddy its foot runs either straight along the fields or ragged along
-its crowns. No fence is drawn round the precinct or the sanctuary, and no swept collar round the hall.
+its crowns. No fence is drawn round the precinct or the sanctuary.
 
 Name: shrine grove (chinju no mori)
 Covers: the grove's ground and its tree canopies
