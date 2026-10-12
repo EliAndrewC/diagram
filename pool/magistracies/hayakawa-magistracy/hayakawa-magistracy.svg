@@ -307,9 +307,10 @@
     <!-- the maids' room, 12 x 12 ft at the kitchen end, over the kitchen ell (feature 374 batch 4, building-review E2, plan
          R4-1): the maids and the kitchen hands sleep under the main roof, as the Aizu chief retainer's house kept "the rooms
          of the maids and servants" in the house (research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html);
-         which servants slept here, and its size, are GUESSES. The menservants keep the street range, the grooms the stable's room (0108). -->
-    <rect data-id="maids-room-1" x="412" y="254" width="36" height="36" fill="#DDB87A" data-kind="servants' quarters"/>
-    <rect x="412" y="254" width="36" height="36" fill="none" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3" data-kind="servants' quarters"/>
+         which servants slept here, and its size, are GUESSES. The menservants keep the street range, the grooms the stable's room (0108).
+         It stands 12 ft west of the corridor's mouth, which opens whole into the family quarters (feature 374 batch 5, building-review N1). -->
+    <rect data-id="maids-room-1" x="376" y="254" width="36" height="36" fill="#DDB87A" data-kind="servants' quarters"/>
+    <rect x="376" y="254" width="36" height="36" fill="none" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3" data-kind="servants' quarters"/>
     <text font-size="8" fill="#3A2E1C" data-kind="servants' quarters" data-names="maids-room-1">maids' room</text>
     <rect x="160" y="214" width="288" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <!-- the veranda (feature 374 wave 112, 0102's drawing page: 3-6 ft, the faces a knob): this hall keeps its south face

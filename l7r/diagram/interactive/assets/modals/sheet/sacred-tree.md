@@ -9,8 +9,7 @@ before. What kind of tree the sacred one was is not recorded.
 How many village shrines kept a sacred tree, and how big one grew, are not recorded.
 
 A household kept its own god in a corner of its lot, in a small shrine or at an old tree or a stone taken as the god's
-seat, and a government office kept a shrine inside its walls as a household did; the plans give an office's shrine its
-tree as well.
+seat, and a government office seems to have kept a shrine inside its walls as a household did.
 
 Guesses:
 - That a village shrine has a sacred tree: no count of the village shrines that kept one was found.

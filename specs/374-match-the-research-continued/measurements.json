@@ -1083,5 +1083,46 @@
         20
       ]
     }
+  },
+  "b5-hay-n1": {
+    "quantity": "the maids' room clear of the residence corridor's west mouth",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the room's rect x 376-412 against the corridor's mouth at x 448, y 244-278",
+    "value": {
+      "room_x2_px": 412,
+      "corridor_x_px": 448,
+      "clear_ft": 12.0
+    }
+  },
+  "b5-hay-n2": {
+    "quantity": "the servants' quarters map note's clause order",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the notes line reads 'the menservants lodge in the range on the street front, west of the gate range, its doors on the outer court by the stable; the grooms keep the stable's own room'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5-ub-n1": {
+    "quantity": "the rear-yard comment's stale clause",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "fb17f9739a98",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "grep 'reaches west' in the sheet finds nothing; the rear-yard comment describes the yard as drawn",
+    "value": {
+      "stale_lines": 0
+    }
   }
 }
