@@ -61,7 +61,7 @@ def test_a_FAILING_reference_settlement_stops_the_cohort_and_says_what_to_do(mon
     assert ca.main(["--count", "48"]) == 2
     out = capsys.readouterr().out
     assert "REFERENCE SETTLEMENT IS FAILING" in out
-    assert "cohort_audit --count 48" in out and "--anyway overrides" in out
+    assert "Then: make cohort" in out and "--anyway overrides" in out
     assert started == [], "25 minutes not spent"
 
 
@@ -381,3 +381,16 @@ def test_make_cohorts_record_lands_in_the_clone_and_names_itself_for_the_commit(
     path = ca.write_record([(1, 12)], [(("--- a form=nucleated", [], []), "rolled")], 1, None)
     assert path.startswith(str(repo / "dev" / "cohort-log"))
     assert (repo / ".git" / "last-cohort-record").read_text(encoding="utf-8") == path
+
+
+def test_a_cohort_record_names_the_feature_it_was_rolled_for(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:
+    """Feature 375 amendment 8 (FR-038): `make cohort-seeds` counts the changes the records span by this field - the
+    number of SPECIFY_FEATURE; empty where a session exported none."""
+    import json
+
+    monkeypatch.setenv("SPECIFY_FEATURE", "375-enforced-wave-process")
+    path = ca.write_record([(1, 12)], [(("--- a form=nucleated", [], []), "rolled")], 1, None)
+    assert json.loads(Path(path).read_text(encoding="utf-8"))["feature"] == "375"
+    monkeypatch.delenv("SPECIFY_FEATURE")
+    path = ca.write_record([(1, 12)], [(("--- a form=nucleated", [], []), "rolled")], 1, None)
+    assert json.loads(Path(path).read_text(encoding="utf-8"))["feature"] == ""

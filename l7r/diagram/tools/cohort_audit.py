@@ -259,6 +259,7 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
     counted (feature 374's findings by seed lived only in its plan's prose). `make cohort` commits it, as `make done` does
     its run record. Returns the path."""
     import json  # noqa: PLC0415
+    import re  # noqa: PLC0415
     import subprocess  # noqa: PLC0415
     import time  # noqa: PLC0415
 
@@ -294,6 +295,9 @@ def write_record(specs: Sequence[Any], rolled: Sequence[tuple[tuple[str, list[st
             {
                 "utc": stamp,
                 "clone": where,
+                # the feature whose change it was rolled on (feature 375 amendment 8, FR-038): `make cohort-seeds` counts the
+                # changes the records span by it - the number of SPECIFY_FEATURE, which every spec-kit session exports
+                "feature": (re.match(r"\d+", os.environ.get("SPECIFY_FEATURE", "")) or [""])[0],
                 "commit": git("rev-parse", "--short", "HEAD"),
                 "first_seed": first_seed,
                 "households": households,
