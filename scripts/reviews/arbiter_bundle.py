@@ -274,7 +274,35 @@ def owe_evidence(slug: str, diff: str) -> str:
     # 0091's third round: the bundle said no changed line named 0091 while the hunks were 0091's own drawing page)
     if "#" not in slug and any(ln.startswith(("diff --git", "+++ ", "--- ")) and f"/{name}-" in ln for ln in lines):
         return f"`owes-round.diff` changes a file of {name}"
+    # a pop-up unit (`modal-depiction:sheet/inner-court`) is named by its modal file's header, never by its own lines, and
+    # its cause is the keyed line that changed (the round arbiter on inner-court's third depiction round: the bundle said no
+    # line named it while the hunks were its Entry: line and a drawing page it links)
+    if "/" in name:
+        keys = modal_changed_keys(name, lines)
+        if keys:
+            return f"`owes-round.diff` changes its {', '.join(keys)} line(s)"
     return f"NO changed line in `owes-round.diff` names `{name}` - its cause is not in this round's change; say so in the ruling"
+
+
+def modal_changed_keys(name: str, lines: list[str]) -> list[str]:
+    """The keyed lines (`Depiction`, `Drawing`, `Entry`, ...) a diff changes in the modal file of `name` (`sheet/well`),
+    and each research page the diff touches, by file name: what owes a pop-up's capped round."""
+    keys: list[str] = []
+    in_modal = False
+    for ln in lines:
+        if ln.startswith(("diff --git", "+++ ", "--- ")):
+            if ln.startswith("+++ ") or ln.startswith("diff --git"):
+                in_modal = f"modals/{name}.md" in ln
+                page = re.search(r"research/questions/([^ ]+?\.html)", ln)
+                if page and f"the page {page.group(1)}" not in keys:
+                    keys.append(f"the page {page.group(1)}")
+            continue
+        if in_modal and ln[:1] in "+-":
+            key = re.match(r"[+-]([A-Z][A-Za-z]*):", ln)
+            label = key.group(1) if key else "a continuation"
+            if label not in keys:
+                keys.append(label)
+    return keys
 
 
 def capped_round_cause(root: Path, out: Path, check: str, subject: str, files: list[str], since: float) -> list[str]:

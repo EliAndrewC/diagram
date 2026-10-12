@@ -868,7 +868,7 @@
     <circle cx="334" cy="442" r="3.8"/>
     <!-- gate range (west end) -->
     <circle cx="366" cy="711" r="3.8"/>
-    <!-- stables - beside its south door, onto the stable yard -->
+    <!-- stables - beside its east door (wave 126: the door on the stable yard), onto the stable yard -->
     <circle cx="219" cy="627" r="3.8"/>
     <!-- servants' quarters - beside the middle door of the street range (feature 374 wave 124) -->
     <circle cx="268" cy="702" r="3.8"/>

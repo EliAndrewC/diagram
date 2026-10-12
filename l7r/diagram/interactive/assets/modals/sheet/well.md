@@ -18,7 +18,8 @@ Guesses:
 - The curb's exact size, 3 to 4 ft: the one measured curb is undated, so the figure is fitted round a premodern shaft.
 
 Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
-shows where the well stands; a real curb was some 3 to 4 ft across. Where a plan has a kitchen and stables, the kitchen's
+shows where the well stands; a real curb was some 3 to 4 ft across. At a shrine set apart from the houses, the map draws
+a well for its ablution water by convention: which waters a shrine used is not recorded. Where a plan has a kitchen and stables, the kitchen's
 well stands inside the kitchen or past the bath, and the well by the stables serves the horses and the kennel in the service yard.
 
 Name: well

@@ -23,7 +23,7 @@ Guesses:
   the Miwa house, kept its chugen in a hut by the kitchen, and whether that house had a range is not said.
 
 Depiction: The plan draws the servants' quarters as a range on the compound's street edge, its outer face the wall,
-beside the gate or with a gate cut through it, never as a row behind the house. It takes one of the two forms servants
+beside the gate or with a gate cut through it. It takes one of the two forms servants
 lived in - a common room behind one door, its bays open to one another or parted by sliding partitions, or a row of
 dwellings each with its own door - and never shows dwellings walled off from one another behind one shared door.
 
@@ -31,4 +31,4 @@ Name: servants' quarters
 Covers: the servants' nagaya and its label
 Sources: buke-hokonin-wiki, kotobank-degawari, kotobank-hitoyado, fukui-bushi-jutaku, kotobank-nagayamon, jta-nagayamon, matsue-bukeyashiki, kotobank-bukeyashiki, kotobank-chugen, shinke-nagayamon-kanazawa, mitamura-nagaya-tcpip, hoppou-shibata-ashigaru, nando-jawiki, shoinzukuri-jawiki, shibata-ashigaru-nagaya, kaminoyama-miwa-ke, bunka-akasaka-bukeyashikimon, nagayamon-jawiki
 Entry: research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html
-Drawing: research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
+Drawing: research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html

@@ -505,3 +505,20 @@ def test_each_owe_says_whether_the_rounds_diff_shows_its_cause() -> None:
     assert ab.owe_evidence("quote-check:0219.drawing#unfootnoted", "") == "a changed line in `owes-round.diff` names it"
     page = "diff --git a/research/questions/0091-x.drawing.html b/research/questions/0091-x.drawing.html\n--- a/research/questions/0091-x.drawing.html\n+++ b/research/questions/0091-x.drawing.html\n-<li>old</li>\n+<li>new</li>\n"
     assert ab.owe_evidence("record-format:0091", page) == "`owes-round.diff` changes a file of 0091", "a page-scoped unit is named by its file"
+
+
+def test_owe_evidence_names_a_modal_units_keyed_lines() -> None:
+    """The round arbiter on inner-court's third depiction round (feature 374 wave 126): a pop-up's own lines never carry
+    its path, so the bundle said no line named it while the hunks were its Entry: line and 0091's drawing page."""
+    diff = (
+        "diff --git a/l7r/diagram/interactive/assets/modals/sheet/inner-court.md b/l7r/diagram/interactive/assets/modals/sheet/inner-court.md\n"
+        "--- a/l7r/diagram/interactive/assets/modals/sheet/inner-court.md\n+++ b/l7r/diagram/interactive/assets/modals/sheet/inner-court.md\n"
+        "-Entry: research/questions/0091-x.html\n+Entry: research/questions/0116-y.html, research/questions/0091-x.html\n"
+        "+a second line of prose\n"
+        "diff --git a/research/questions/0091-x.drawing.html b/research/questions/0091-x.drawing.html\n"
+        "--- a/research/questions/0091-x.drawing.html\n+++ b/research/questions/0091-x.drawing.html\n-<li>old</li>\n+<li>new</li>\n"
+    )
+    got = ab.owe_evidence("modal-depiction:sheet/inner-court", diff)
+    assert got == "`owes-round.diff` changes its Entry, a continuation, the page 0091-x.drawing.html line(s)", got
+    own = diff.split("diff --git a/research")[0]
+    assert "NO changed line" in ab.owe_evidence("modal-depiction:sheet/well", own), "another pop-up's file is not its cause"

@@ -4741,25 +4741,41 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#barracks size": {
-  "code": "bd03269a85fc4a1a",
-  "core": "b68bc582a091165b",
+  "code": "f98104713ddbd09d",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "24 x 67 ft, inside 12-24 ft deep and up to ~145 ft long",
+  "note": "24 x 67 ft within the page's 12-24 ft depth and 145 ft length",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "d4c70185f30440ae"
   },
   "research": "0d500ef8b8e78f01",
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:2e2752bf19177748",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/compound_example.py::county_magistracy_program#cell place and size": {
-  "code": "eaf7b611786dc5fa",
-  "core": "b68bc582a091165b",
+ "l7r/diagram/compound_example.py::county_magistracy_program#cart yard": {
+  "code": "970f810324d50bbb",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "12 x 10 ft in the outer court; the cell's side is free by deliberate deviation",
+  "note": "the 20 ft depth is inside the page's guessed 15-20 ft loading apron",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
+  },
+  "research": "8bb634ee7fbc398f",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#cell place and size": {
+  "code": "198ae9bcf36843f5",
+  "core": "aaba0e697d950657",
+  "date": "2026-10-12",
+  "note": "12 x 10 ft, and a cell may stand on any side",
   "pages": {
    "0096-holding-cells-agariya-and-roya.drawing.html": "48d75105060e6e05"
   },
@@ -4767,47 +4783,48 @@
   "rests": [
    "0096-holding-cells-agariya-and-roya.drawing.html:1643252d0458ca34",
    "0096-holding-cells-agariya-and-roya.drawing.html:31f3781eac9733f7",
-   "0096-holding-cells-agariya-and-roya.drawing.html:d1e418fa54fc611c",
-   "0096-holding-cells-agariya-and-roya.drawing.html:e85d3cbb549e9935"
+   "0096-holding-cells-agariya-and-roya.drawing.html:d1e418fa54fc611c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#envelope": {
-  "code": "9b93a812b0c913b8",
-  "core": "b68bc582a091165b",
+  "code": "80b6fcc184dea5dc",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "the declared footprints add up to ~15,840 sq ft, ~29% of 270 x 200 ft, just under the 30-42% band; need pack_audit's coverage figure for the placed draft",
+  "note": "the declared buildings come to ~29.3% of 270 x 200 ft; need the placer's measured coverage",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:6b2deb010b88db75",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c63fb7818cf50fcb"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c63fb7818cf50fcb",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
   ],
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#forecourt": {
-  "code": "8c77cd5cfa46166a",
-  "core": "b68bc582a091165b",
+  "code": "92935315af619926",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "open ground inside the gate is attested; its 55 x 31 ft size is unanswered, so a guess",
+  "note": "open ground just inside the gate is attested; the 55 x 31 ft is a guess",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "135f046dfe4c1c73"
   },
   "research": "20c3b70fa4a4761c",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:ad36b13336976f6e"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#garden before the house": {
-  "code": "2faccf589409c2ea",
-  "core": "b68bc582a091165b",
+  "code": "1eb1542cfe3c572b",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "garden on the sunny south before the reception; the guest house facing it is the page's guess",
+  "note": "the garden on the sunny south before the reception; the guest house facing it a guess",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac"
   },
@@ -4819,10 +4836,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#gatehouse": {
-  "code": "2626c28841fddeeb",
-  "core": "b68bc582a091165b",
+  "code": "138bdd961383483f",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "b(\"gatehouse\", ..., 18.0, 12.0) where the drawing page says \"a gatehouse of its own drawn? About 40 ft\"; draw ~40 ft or have the page record the 18 ft Kita-in form as the generated plan's choice",
+  "note": "18 x 12 ft where the page draws a gatehouse of its own at about 40 ft and records no deviation",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "c88808926ebd4116"
   },
@@ -4834,26 +4851,37 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/compound_example.py::county_magistracy_program#gates": {
-  "code": "00a1aa3fc908c25a",
-  "core": "b68bc582a091165b",
+ "l7r/diagram/compound_example.py::county_magistracy_program#gatehouse door": {
+  "code": "04019f77be08d4a6",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "8 ft main gate within the yakuimon's 6-9 ft; the narrower 6 ft posterns are a guess",
+  "note": "nothing in the bundle places a gatehouse's door",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#gates": {
+  "code": "4388c73981009602",
+  "core": "aaba0e697d950657",
+  "date": "2026-10-12",
+  "note": "the 8 ft one-bay gate inside ~6-9 ft; the posterns' 6 ft a guess",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
   },
   "research": "3bf7bc936cb62419",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:74c4edddb44a6e24"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#granary": {
-  "code": "58dd6d45f7f793b3",
-  "core": "b68bc582a091165b",
+  "code": "0d0b090c6a61ff78",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "b(\"granary\", \"kura\", 60.0, 30.0) (1,800 sq ft) is outside the page's \"about 43 to 50 by 25 to 27 ft, some 1,100 to 1,350 sq ft\"; take a size in that band or have the page widen it",
+  "note": "60 x 30 ft (1,800 sq ft) outside the page's 43-50 by 25-27 ft, 1,100-1,350 sq ft",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
@@ -4864,9 +4892,17 @@
   ],
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/compound_example.py::county_magistracy_program#granary form fixed as an earth-walled kura, where 0098 attests a raised timber storehouse (takakura) as the other form": {
+  "code": "aaba0e697d950657",
+  "core": "aaba0e697d950657",
+  "date": "2026-10-12",
+  "note": "granary form fixed as an earth-walled kura, where 0098 attests a raised timber storehouse (takakura) as the other form",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/compound_example.py::county_magistracy_program#guest house": {
-  "code": "702cdafec6afc642",
-  "core": "b68bc582a091165b",
+  "code": "b07da63005058bab",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
   "note": "the page records this plan's detached guest house as a guess",
   "pages": {
@@ -4874,16 +4910,15 @@
   },
   "research": "806a92da854216b8",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:14a6adb4a8440bc9",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:be635f0990c5e3da"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#hearing court": {
-  "code": "2e22fab5eef1d2b9",
-  "core": "b68bc582a091165b",
+  "code": "d16d8a44bbc9628b",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "roofed court against the hall's front below the dais; its size unanswered",
+  "note": "before the dais on the office hall's front; no size given",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -4896,25 +4931,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#kitchen ell": {
-  "code": "e1da98ba6cd46082",
-  "core": "b68bc582a091165b",
+  "code": "4f649f0abeafe4a0",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "0107's drawing page answers only the one west door (§695) and sends the size to 0091 (§691); add 0091.html and 0091.drawing.html to the pointer",
+  "note": "the ell, the west door and the size agree; door_fracs=(0.5, 0.3, 0.7) are the door placer's fallback positions for its one door",
   "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
    "0107-kitchens-daidokoro.drawing.html": "d54c467d58fc3cae"
   },
-  "research": "c93b08baae68d0fe",
+  "research": "f5247c4da8db03e3",
   "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:4e5371e6e55b47e9",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
    "0107-kitchens-daidokoro.drawing.html:ac2a4793c0213f77",
    "0107-kitchens-daidokoro.drawing.html:b9c022b8e45ef642"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#office hall": {
-  "code": "bda3d041b9265ff4",
-  "core": "b68bc582a091165b",
+  "code": "fe91f50748f334ae",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "113 x 38 ft inside 80-150 by 20-45 ft and the floor band; day office and study behind the dais",
+  "note": "113 x 38 ft within the bands; the rooms behind the dais",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6",
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "44879b9fd51f7154"
@@ -4922,6 +4961,7 @@
   "research": "a952dae830beea13",
   "rests": [
    "0099-the-hearing-court-shirasu.drawing.html:36f49b610deb6fb9",
+   "0099-the-hearing-court-shirasu.drawing.html:6f3e1d8136359675",
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:45e428be060a17da",
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:976444e94e95943d",
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:bedd579ac94bfd98",
@@ -4930,74 +4970,108 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/compound_example.py::county_magistracy_program#practice ground": {
-  "code": "9240c8aa2d47ffc8",
-  "core": "b68bc582a091165b",
+ "l7r/diagram/compound_example.py::county_magistracy_program#office hall doors": {
+  "code": "9f07cfa99d9baa58",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "beside the barracks; 1,386 sq ft at 90-135 sq ft per samurai for ~15",
+  "note": "the faces unresearched, as labeled",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#outer yard": {
+  "code": "1228acf754041934",
+  "core": "aaba0e697d950657",
+  "date": "2026-10-12",
+  "note": "named open ground, its bounds a convention",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#practice ground": {
+  "code": "e97732d5cc8ce6ac",
+  "core": "aaba0e697d950657",
+  "date": "2026-10-12",
+  "note": "beside the guards' quarters, 1,386 sq ft",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
   "rests": [
+   "0165-martial-training-grounds-and-dojo.drawing.html:83f6d143094f365e",
    "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
    "0165-martial-training-grounds-and-dojo.drawing.html:e5d173fb8d7dcb4a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#rear yard": {
-  "code": "e3b2e85973fb0410",
-  "core": "b68bc582a091165b",
+  "code": "72982e9e5b8172ca",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "open ground between the storehouses and the house, labeled",
+  "note": "open ground between the house and its storehouses",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac"
   },
   "research": "806a92da854216b8",
   "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:20e2f5e87070706a",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:3fbca2091d585e8c",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#residence form and size": {
-  "code": "b2715c84390f4dbd",
-  "core": "b68bc582a091165b",
+  "code": "79aa9cedaeab34f0",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "the 4 ft garden-face veranda is a 0102 decision 0091 is silent on; add research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html to the pointer",
+  "note": "one block in two rows, the reception at the east end, ~1,780 sq ft, a 4 ft garden-face veranda",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html": "9a588e588b7fc9fa"
   },
-  "research": "806a92da854216b8",
+  "research": "718662fc4ca5e935",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:160fd1f812c708cc",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:20e2f5e87070706a",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d39a6c083ed2ffa",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:a1aa9579204f19f0",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:f7b4c512f3d44a49"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:f7b4c512f3d44a49",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:002eb43fd8e0dbdc",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:1ab70933149d3f3b",
+   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:e679dd9ba7fb6cc9"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#residence inner entrance": {
+  "code": "b1c1df26e2dc0bf6",
+  "core": "aaba0e697d950657",
+  "date": "2026-10-12",
+  "note": "0107's drawing page records this door and attests the inner entrance; relabel it GUESS research/questions/0107-kitchens-daidokoro.drawing.html",
+  "pages": {},
+  "research": "",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#residence room sizes": {
-  "code": "d008d1f57506834d",
-  "core": "b68bc582a091165b",
+  "code": "63e9861c89e91689",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "suites compressed to labels; sizes unanswered",
+  "note": "the palace order; the sizes guesses",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac"
   },
   "research": "806a92da854216b8",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:4b0fba8ccc7f42e2",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d39a6c083ed2ffa"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:67be3b248bb083d3",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d39a6c083ed2ffa",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:c46fa707abad1ec6"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#servants' row": {
-  "code": "4369b36dde3c1ae8",
-  "core": "b68bc582a091165b",
+  "code": "0021713ebfbca8d1",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "a range on the street edge, its back the wall; 15 ft deep a guess",
+  "note": "a long range on the street edge; the 15 ft depth a guess",
   "pages": {
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "e93dd5ad10bad432"
   },
@@ -5005,16 +5079,23 @@
   "rests": [
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:0549a16a13e90b82",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:1a319307e30bcdc6",
-   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:37ef9d1324aefebc",
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html:64c368081f781507"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/compound_example.py::county_magistracy_program#shrine": {
-  "code": "e36340ccf3edd044",
-  "core": "b68bc582a091165b",
+ "l7r/diagram/compound_example.py::county_magistracy_program#servants' row entry form, one common-room door or a door to each dwelling (0097's knob), left to the default": {
+  "code": "aaba0e697d950657",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "one modest shrine; size a guess",
+  "note": "servants' row entry form, one common-room door or a door to each dwelling (0097's knob), left to the default",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#shrine": {
+  "code": "492ae089bf33bdaf",
+  "core": "aaba0e697d950657",
+  "date": "2026-10-12",
+  "note": "the page seats the shrine in a corner beside a tree; need to know whether the placer puts it in the NE corner and whether a tree is drawn",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
   },
@@ -5024,13 +5105,28 @@
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798"
   ],
+  "verdict": "CANNOT-TELL"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#stable door": {
+  "code": "8e5c83a99e0aa4ea",
+  "core": "aaba0e697d950657",
+  "date": "2026-10-12",
+  "note": "a gable-entered three-bay stable, its door into the passage",
+  "pages": {
+   "0108-stables-umaya.html": "e28bb721c804f4bf"
+  },
+  "research": "f6f01652a6a060e2",
+  "rests": [
+   "0108-stables-umaya.html:77be2a6a5f39b548",
+   "0108-stables-umaya.html:d73c9c4b1277ae17"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#stables": {
-  "code": "a1dcda834b567c3f",
-  "core": "b68bc582a091165b",
+  "code": "02b836c3e2f371eb",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "18 x 24 ft, three one-ken bays, passage and grooms' room in its depth",
+  "note": "three one-ken bays, the passage and the grooms' room; the depth a guess",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
@@ -5038,32 +5134,34 @@
   "rests": [
    "0108-stables-umaya.drawing.html:219e638987c06796",
    "0108-stables-umaya.drawing.html:af3e2dedf1edb040",
-   "0108-stables-umaya.drawing.html:bfffc30811fc7968"
+   "0108-stables-umaya.drawing.html:bfffc30811fc7968",
+   "0108-stables-umaya.drawing.html:d4268b7e5b7275c7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#staff long-house": {
-  "code": "40f0d69fdd4712d0",
-  "core": "b68bc582a091165b",
+  "code": "a4c24d2c256be4b9",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "b(\"senior retainers' quarters\", ..., 24.0, 82.0) where 0106's drawing page still says \"The long-house, 50 by 36 ft\"; also three doors over 82 ft leave ~34 ft dwellings against 0097's \"bays about 12 to 18 ft wide\", each with a door",
+  "note": "24 x 82 ft and the karo's north 14 ft; bays of 14 and 17 ft inside 12-18 ft; the doors at each bay's middle",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "d4c70185f30440ae",
-   "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "e6b3918520f5a2bb"
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "b1c24d21e65521fd"
   },
-  "research": "25288e65bf2fab3c",
+  "research": "b4da3536d1ccec6d",
   "rests": [
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213",
-   "0106-the-chief-retainers-house-karo-yashiki.drawing.html:e9082f28d17b1f48"
+   "0106-the-chief-retainers-house-karo-yashiki.drawing.html:db206e8fe2334ef2"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#storehouses": {
-  "code": "37a566e70ce79a43",
-  "core": "b68bc582a091165b",
+  "code": "ed1d2a328b5d0500",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "two of 12 x 18 ft behind the house",
+  "note": "two, 12 x 18 ft, behind the house",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "e887cc0c501be4ac",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
@@ -5071,15 +5169,16 @@
   "research": "65387ec4a6484f82",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:b44abcd9e95d5f5e"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:b44abcd9e95d5f5e",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#tax archive place": {
-  "code": "ce1873c268e2bf00",
-  "core": "b68bc582a091165b",
+  "code": "065aa3c26b346df3",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "the page is silent on where it stands",
+  "note": "the page is silent on where a records store stands",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
   },
@@ -5088,66 +5187,27 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#tax archive size": {
-  "code": "b17caab79be89956",
-  "core": "b68bc582a091165b",
+  "code": "9047c056ffd16a95",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "18 x 24 ft = 432 sq ft, under the ~450 ceiling",
+  "note": "432 sq ft under the ~450 ceiling",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc"
   },
   "research": "9fd73eb86394c59a",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:33510cb335904fa2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:9ba0f5fcb5d7014a",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:aea6cd1ed8944b96",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fb5af5b7b0dcb397"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/compound_example.py::county_magistracy_program#the gatehouse door opening onto the gate passage": {
-  "code": "b68bc582a091165b",
-  "core": "b68bc582a091165b",
-  "date": "2026-10-12",
-  "note": "the gatehouse door opening onto the gate passage",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound_example.py::county_magistracy_program#the middle gate kept at the Envelope's 6 ft, where docs/building-programs.md says ~8 ft": {
-  "code": "b68bc582a091165b",
-  "core": "b68bc582a091165b",
-  "date": "2026-10-12",
-  "note": "the middle gate kept at the Envelope's 6 ft, where docs/building-programs.md says ~8 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound_example.py::county_magistracy_program#the office hall's doors on its east face by the middle gate and its west face": {
-  "code": "b68bc582a091165b",
-  "core": "b68bc582a091165b",
-  "date": "2026-10-12",
-  "note": "the office hall's doors on its east face by the middle gate and its west face",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound_example.py::county_magistracy_program#the residence's inner entrance on its north (rear) face at the kitchen end": {
-  "code": "b68bc582a091165b",
-  "core": "b68bc582a091165b",
-  "date": "2026-10-12",
-  "note": "the residence's inner entrance on its north (rear) face at the kitchen end",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/compound_example.py::county_magistracy_program#the stable's door at its east end into the passage (gable-entered)": {
-  "code": "b68bc582a091165b",
-  "core": "b68bc582a091165b",
-  "date": "2026-10-12",
-  "note": "the stable's door at its east end into the passage (gable-entered)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/compound_example.py::county_magistracy_program#vegetable garden west of the house": {
-  "code": "9ce10ce0d3915894",
-  "core": "b68bc582a091165b",
+  "code": "1cfff033a9345952",
+  "core": "aaba0e697d950657",
   "date": "2026-10-12",
-  "note": "at 3,072 sq ft it is neither attested form, \"a soup-greens plot of about 100 m²\" or \"a field over about half the grounds\"; take one of the two or relabel the size",
+  "note": "64 x 48 ft is neither attested form, and a generated plan picks the site at random where the code fixes west",
   "pages": {
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
   },
