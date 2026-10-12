@@ -35,6 +35,7 @@ one by one). UNDER THE 100% RULE all the same (GM 2026-09-02).
 from __future__ import annotations
 
 import argparse
+import contextlib
 import io
 import json
 import os
@@ -117,17 +118,13 @@ def machine_state(path: str = SKILL) -> dict[str, Any]:
             mem = {k.strip(): v for k, _, v in (ln.partition(":") for ln in fh)}
         out["ram_available_mb"] = int(mem["MemAvailable"].split()[0]) // 1024
         out["ram_total_mb"] = int(mem["MemTotal"].split()[0]) // 1024
-    except (OSError, KeyError, ValueError, IndexError):
+    except OSError, KeyError, ValueError, IndexError:
         pass
-    try:
+    with contextlib.suppress(OSError):
         out["load"] = [round(x, 2) for x in os.getloadavg()]
-    except OSError:
-        pass
-    try:
+    with contextlib.suppress(OSError):
         du = shutil.disk_usage(path)
         out["disk_free_gb"], out["disk_total_gb"] = round(du.free / 2**30, 1), round(du.total / 2**30, 1)
-    except OSError:
-        pass
     return out
 
 
