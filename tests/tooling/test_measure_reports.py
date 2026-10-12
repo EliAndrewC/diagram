@@ -53,6 +53,23 @@ def test_review_yield_counts_each_column_from_its_cells() -> None:
     assert out.index("| glyph-check |") < out.index("| spec-fidelity |"), "sorted by hours"
 
 
+@pytest.mark.parametrize(
+    ("cell", "outcome"),
+    [
+        ("applied", "acted on"), ("fixed (the EDIT applied)", "acted on"), ("index recorded; round 2", "acted on"),
+        ("filed as rows", "acted on"), ("to the follow-up", "acted on"), ("not applied: carried in specs/335/briefs", "acted on"),
+        ("nothing", "dismissed"), ("nothing for the GM", "dismissed"), ("answered in feature 328", "dismissed"),
+        ("left: the reason is the GM's allowance", "dismissed"), ("verified", "dismissed"), ("spec accepted", "dismissed"),
+        ("none", "dismissed"), ("put to the GM", "deferred"), ("left for the next session", "deferred"),
+        ("not applied: needs a new passage", "deferred"), ("-", "not acted on"), ("re-dispatched; engine frozen", "not acted on"),
+    ],
+)
+def test_review_yield_reads_each_kind_of_acted_on_cell(cell: str, outcome: str) -> None:
+    """The plan review (amendment 8): "nothing" in 64 cells, "answered" and a bare "left" were counted as acted on; a
+    finding filed elsewhere is acted on (FR-037: fixed, filed) whatever its cell opens with."""
+    assert ry.outcome(cell) == outcome
+
+
 def test_review_yield_records_its_table(tmp_path: pathlib.Path) -> None:
     ledger, m = tmp_path / "ledger.md", tmp_path / "m.json"
     ledger.write_text(LEDGER, encoding="utf-8")

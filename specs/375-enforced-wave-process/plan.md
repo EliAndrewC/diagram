@@ -573,14 +573,17 @@ before (all 80 on main are open) and nothing reads the field, so there is no too
 constants need of a module - its in-scope imports (`_imports_of`), `module_constants`, `import_table`, and the modules its
 `import`/`from` statements name - so an unchanged module is not parsed; `units:<sha of the source, its path, name,
 is-package, every_module_unit, the known-module set, and the constants of every module it names>` holds `module_units`'
-(claims, errors, units). A module's units read only its own constants and those of modules its imports name (`module_units`'
+(claims, errors, units). Those constants are taken from the map `module_units` is handed - `reexported()`'s output in
+`all_units`, so a constant of B re-exported through A that M reads by A's name is in M's key (the plan review: 22 such reads),
+and the module's own map alone in `claimed_outside`. A module's units read only its own constants and those of modules its imports name (`module_units`'
 `values`, through `import_table` and `module_aliases`), so keying on exactly those recomputes a module when a constant it reads
 changes, and not otherwise; a module whose source changed is parsed once. `scripts/record/claims.units_of` keeps today's
 whole-scope cache as the first layer (1.0 s warm) and, on its miss, passes a memo loaded from one file
 (`<common dir>/l7r-cache/claims-modules.pickle`, through `record_cache.ParseCache`), saved after, holding only the entries this
 run used, so the file does not grow. The procedure documents (`doc_units`, a few files) are recomputed as today. Tests (red on
 today's code): an edit to one module recomputes that module's units alone (the memo's misses counted); an edit to a constant
-another module imports recomputes that module too; the memoized units equal an uncached `all_units`; a second run is all hits.
+another module imports recomputes that module too, and so does one re-exported through a package; a module moving between the
+scope and `claimed_outside` is recomputed; the memoized units equal an uncached `all_units`; a second run is all hits.
 SC-028's time is `make claims-owed` after a one-line comment, today's code against the new, three runs each, key
 `375-a8-claims-after`.
 
@@ -599,9 +602,11 @@ two bundles' files compared with an uncached run's (`L7R_CACHE_OFF=1`).
 **D50 - The review checks' yield (FR-037; T53).** `scripts/measure/review_yield.py`, run by `make review-yield [SINCE=<date>]`
 (default 2026-09-26, the ledger's cost columns' first full day), reads `dev/review-ledger.md`'s measured rows and prints per
 check: passes; passes with a finding; of those, DISMISSED (the free-text "acted on" cell opens with verified, accepted,
-declined, no change or none), DEFERRED (put to the GM, left for, to the follow-up, not applied) and ACTED ON (any other non-empty
-cell but "-" or "re-dispatched": something changed - measured on the ledger since 2026-09-26, "applied" opens 248 cells and
-"recorded" 66, so a list of acted-on words would miss most); the author had missed it (the "missed" cell yes); hours (wall) and
+spec/plan accepted, declined, no change, none, nothing, answered, or a bare "left"), DEFERRED (put to the GM, left for, not
+applied - unless the cell says filed, carried or follow-up), and ACTED ON (any other cell but empty, "-" or "re-dispatched":
+something changed, or the finding was filed, which FR-037 counts - measured on the ledger since 2026-09-26, "applied" opens 248
+cells and "recorded" 66, so a list of acted-on words would miss most, and the plan review found "nothing" opening 64, "answered"
+6 and a bare "left" 3, all dismissals); each opening word has a fixture test; the author had missed it (the "missed" cell yes); hours (wall) and
 tokens out;
 and the features the rows name (a three-digit number in the subject). Sorted by hours; a check's yield is acted-on findings per
 hour. `--record <file> --key <k>` writes it to `measurements.json` (`375-a8-review-yield`), as `turn_time.py` does. The GM is

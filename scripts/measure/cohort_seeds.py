@@ -8,7 +8,7 @@ Reads every cohort run's per-seed record (`cohort_audit.write_record`, amendment
 FEWEST FIRST SEEDS that find every failure: the largest, over failures, of the smallest seed that found it. The pinned seeds
 (901 on) are rolled every time and left out of that count. A record's change is its `feature`; a record written before that
 field is attributed by `features.json` beside the records (commit -> feature), else counted as unattributed, by its commit.
-The seed count itself (48, and the six pinned) is the GM's to choose with this; nothing here changes it.
+The seed count is the GM's choice with this: ten, and the six pinned (2026-10-12, feature 375 amendment 8); nothing here changes it.
 """
 
 from __future__ import annotations

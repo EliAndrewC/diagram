@@ -6,9 +6,10 @@
 Reads the review ledger's measured rows (`| date | check | subject | verdict | finding | class | author missed? | acted on |
 wall | tokens |`) from `--since` on - 2026-09-26 is the first full day the rows carry their cost - and prints, per check: its
 passes; the passes with a finding, and of those the DISMISSED (the free-text "acted on" cell opens with verified, accepted,
-declined, no change or none), the DEFERRED (put to the GM, left for, to the follow-up, not applied) and the ACTED ON (any other
-cell but empty, "-" or "re-dispatched": something changed - "applied" opens 248 cells and "recorded" 66 since 2026-09-26, so a
-list of acted-on words would miss most); those the author had MISSED (that cell opens yes); its hours (wall) and tokens
+spec/plan accepted, declined, no change, none, nothing, answered, or a bare left), the DEFERRED (put to the GM, left for, not
+applied - unless the cell says it was filed, carried or sent to a follow-up, which FR-037 counts as acted on) and the ACTED ON
+(any other cell but empty, "-" or "re-dispatched": something changed or was filed - "applied" opens 248 cells and "recorded" 66
+since 2026-09-26, so a list of acted-on words would miss most; the plan review found "nothing" in 64); those the author had MISSED (that cell opens yes); its hours (wall) and tokens
 written; the features its rows name (a three-digit number in the subject); and its yield - findings acted on per hour. A row
 with no wall time is skipped. Sorted by hours. Nothing about a check changes here: the table is put to the GM, whose choice it is.
 """
@@ -24,8 +25,9 @@ from collections import defaultdict
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-DISMISSED = ("verified", "accepted", "declined", "no change", "no-change", "none")
-DEFERRED = ("put to the gm", "left for", "to the follow-up", "not applied")
+DISMISSED = ("verified", "accepted", "spec accepted", "plan accepted", "declined", "no change", "no-change", "none", "nothing", "answered", "left")
+DEFERRED = ("put to the gm", "left for", "not applied")
+FILED = ("filed", "carried", "follow-up")  # FR-037 counts a finding filed as acted on, whatever the cell opens with
 NOT_AN_ACT = ("", "-", "re-dispatched")
 _WALL = re.compile(r"(\d+(?:\.\d+)?)\s*s\b")
 _OUT = re.compile(r"/\s*([\d.]+)\s*k\s+out")
@@ -51,11 +53,13 @@ def has_finding(cells: list[str]) -> bool:
 def outcome(acted: str) -> str:
     """What became of a finding, from its free-text "acted on" cell: dismissed, deferred, or acted on (something changed)."""
     a = acted.strip().lower()
+    if a.split(";")[0].strip() in NOT_AN_ACT:
+        return "not acted on"
+    if a.startswith(DEFERRED):  # before DISMISSED: "left for the GM" defers, a bare "left" dismisses
+        return "deferred" if not any(w in a for w in FILED) else "acted on"
     if a.startswith(DISMISSED):
         return "dismissed"
-    if a.startswith(DEFERRED):
-        return "deferred"
-    return "not acted on" if a.split(";")[0].strip() in NOT_AN_ACT else "acted on"
+    return "acted on"
 
 
 def table(rs: list[list[str]]) -> dict[str, dict[str, Any]]:
