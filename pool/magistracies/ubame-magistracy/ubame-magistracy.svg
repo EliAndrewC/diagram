@@ -513,14 +513,14 @@
        research buildings 230: the Higuchi house's storehouse stands beyond the ground behind the main house, the source's
        niwa a yard as much as a garden - the GM, 2026-09-28: draw what the sources most safely support). Unfilled, the
        court's earth; a polygon the audit does not read as a fill. Feature 335 D4: it reaches down the strip east of the
-       reception (x 838-912, to the garden's top at y 326) - the reception privy's service way, so the carters come from the
+       reception (x 838-860 to the garden's top at y 326, and x 838-912 to the garden's lobe at y 263 since feature 374 batch 5) - the reception privy's service way, so the carters come from the
        rear yard to the privy without crossing the garden - and a trodden path runs from the rear alley's service end across
        it to both storehouse doors (a GUESS: no page we read draws a way to a storehouse door; the building review asked for
        one, 2026-09-28). Feature 374 batch 4: it is the ground before the storehouses alone (from x 536); west of it, behind the west
        block, runs a ~9 ft service alley over the ground the servants' range left (0115's drawing page; 0091: no wide empty
        band behind the house). -->
   <g data-kind="rear yard">
-    <polygon points="536,158 912,158 912,326 838,326 838,232 536,232" fill="none"/>
+    <polygon points="536,158 912,158 912,263 860,263 860,326 838,326 838,232 536,232" fill="none"/>
     <path d="M 540 214 H 787 V 200 M 647 214 V 200" fill="none" stroke="#C8B080" stroke-width="7" stroke-linecap="butt" stroke-linejoin="round"/>
     <text font-size="9" font-style="italic" fill="#7A6A4A">rear yard</text>
   </g>
@@ -541,7 +541,7 @@
   <!-- the shrine's way: from the open ground east of the reception, along the garden's north edge, drawn before the shrine so its caption paints over it, then north under the arch
        to the hall's south door (the arch is the one built thing a way runs under, docs/buildings.md; feature 335's glyph
        check of the torii). Its line is a GUESS. -->
-  <path d="M 845 256 H 1023 V 214" fill="none" stroke="#C8B080" stroke-width="7" stroke-linejoin="round" data-kind="inner court"/>
+  <path d="M 855 256 H 1023 V 214" fill="none" stroke="#C8B080" stroke-width="7" stroke-linejoin="round" data-kind="inner court"/>
   <!-- THE SHRINE IN ITS CORNER, BESIDE ITS TREE (feature 374 wave 130): the inner court's north-east corner, as a household
        kept its god in a corner of its lot at a small shrine or an old tree (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html:
        "Every compound our maps draw has one modest shrine, in a corner of its grounds beside a tree"). It stood 28 ft off
