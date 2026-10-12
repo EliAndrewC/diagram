@@ -98,3 +98,18 @@ def test_the_command_scopes_to_one_question(capsys) -> None:  # noqa: ANN001
     assert to.main(["--root", str(REPO), "--q", "0041"]) == 0
     out = capsys.readouterr().out
     assert out.startswith("translation-owed: ") and all(line.startswith(("translation-owed", "==", "  ")) for line in out.splitlines())
+
+
+def test_a_parse_cached_by_another_parser_is_not_served(monkeypatch) -> None:  # noqa: ANN001
+    """The round arbiter's tooling fix on 0219 (feature 374 wave 122): the cache was keyed by content alone, so a parse an
+    older reader wrote was served after the reader changed, and the base's pair stopped matching the tree's."""
+    cache: dict[str, list] = {}
+    notes, originals = '<li data-note="k">「Shrine」 (translated; original: 「社」)</li>', ""
+    first = to._parsed(cache, notes, originals, "")
+    stale = [[["k", "", "Shrine", "OLD READER"]], []]
+    for key in cache:
+        cache[key] = stale  # what an older parser left under this content's key
+    assert to._parsed(cache, notes, originals, "") == stale, "the same parser is served its own cached parse"
+    monkeypatch.setattr(to, "PARSER_KEY", "another-parser")
+    assert to._parsed(cache, notes, originals, "") == first, "a changed parser parses afresh"
+    assert len(to.PARSER_KEY) and to.PARSER_KEY == "another-parser"

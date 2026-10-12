@@ -201,3 +201,22 @@ def test_a_bundle_computes_only_its_own_pop_ups_units(tmp_path: pathlib.Path) ->
     assert scoped and all(u.check.startswith("modal-") and u.subject == "hamlet/farmhouse" for u in scoped)
     assert ro.units(root, families=("modal",), uid="hamlet/nothing") == []
     assert {u.slug for u in scoped} == {u.slug for u in ro.units(root) if u.check.startswith("modal-")}
+
+
+def test_a_crop_from_a_page_older_than_its_drawing_is_refused(tmp_path) -> None:  # noqa: ANN001
+    """Feature 374 wave 126: a stables crop came from a page rendered before the sheet's redraw."""
+    import os
+
+    page, svg = tmp_path / "pool" / "m" / "m.html", tmp_path / "pool" / "m" / "m.svg"
+    page.parent.mkdir(parents=True)
+    page.write_text("<html/>")
+    svg.write_text("<svg/>")
+    os.utime(page, (1000.0, 1000.0))
+    os.utime(svg, (2000.0, 2000.0))
+    assert mb.stale_page(page, tmp_path) == "m.html is older than m.svg - its crop would show the drawing before the edit; regenerate it first: make map GEN=pool/m/m.gen.py"
+    os.utime(page, (3000.0, 3000.0))
+    assert mb.stale_page(page, tmp_path) == ""
+    (tmp_path / "pool" / "n").mkdir()
+    lone = tmp_path / "pool" / "n" / "n.html"
+    lone.write_text("<html/>")
+    assert mb.stale_page(lone, tmp_path) == "", "a page with no svg beside it is not judged"
