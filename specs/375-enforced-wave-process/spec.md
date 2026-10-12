@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Reopened 2026-10-11 for amendment 5 (amendment 4 landed: spec FAITHFUL round 2, plan CLEAR, every task ticked; SC-015 measured; SC-012 carried to 374)
+**Status**: Done 2026-10-11 - amendment 5 landed: spec FAITHFUL (round 2), plan CLEAR, every task ticked; SC-016 to SC-020 tested, a snapshot taken end to end; SC-012 carried to 374 (as SC-003 and SC-004 are)
 
 **Amendment 5 approved**: the GM, 2026-10-11, "if it looks like the performance is slowing down to a meaningful degree, that's something you can mention when you say that the work has landed on main, but it doesn't need to be a gate anymore."
 
