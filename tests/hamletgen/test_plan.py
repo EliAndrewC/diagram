@@ -301,9 +301,9 @@ def test_a_byre_form_is_declarable_and_a_nonsense_one_refused() -> None:
 
 def test_a_sty_stands_within_a_household_s_reach_or_not_at_all() -> None:
     """Feature 280 (settlement-review of Kuwabata): the grow-out ponds a fry village leaves lay far out, and sties followed.
-    No sty is drawn past every household's reach (`sty_in_reach`), and a hamlet left with none it owes is refused
-    (feature 287, water W50) rather than shipped without one."""
-    from l7r.diagram.hamletgen.pondstock import STY_HOUSE_REACH_FT, StyRefused, stage_pond_stock, sty_in_reach
+    No sty is drawn past every household's reach (`sty_in_reach`): a hamlet with no grow-out pond in reach keeps none and
+    says why (feature 374 wave 140, 0025)."""
+    from l7r.diagram.hamletgen.pondstock import STY_HOUSE_REACH_FT, stage_pond_stock, sty_in_reach
     from l7r.diagram.settlement import Settlement
 
     plan = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond"))
@@ -312,8 +312,8 @@ def test_a_sty_stands_within_a_household_s_reach_or_not_at_all() -> None:
     s.meta(name="X", scale="hamlet")
     s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(8)]
     s.M["dikeponds"] = [{"parcel": parcel, "water": parcel, "kind": "growout"}]
-    with pytest.raises(StyRefused, match="within a household's reach"):
-        stage_pond_stock(s, plan)
+    stage_pond_stock(s, plan)
+    assert s.M["meta"]["pond_stock"]["none_why"] == "no grow-out pond had a seat within reach"
     assert STY_HOUSE_REACH_FT < 1560.0 - 450.0 and not s.M.get("pig_sties") and s.M["meta"]["pond_stock"]["drawn"] == 0
     assert sty_in_reach(s, (450.0, 450.0 + STY_HOUSE_REACH_FT), s.M["houses"]) and not sty_in_reach(s, (450.0, 451.0 + STY_HOUSE_REACH_FT), s.M["houses"])
 

@@ -570,6 +570,49 @@ engine edit, `374-end` at its close) and states the band at landing.
   as the delta's accreted form); 0019's drawing page and the constant's note say so, and the cohort's dike-pond seeds are rolled
   green before the wave closes.
 
+## Batch 8: the attested field forms rolled, and the web lane's room and its gap off the crop
+
+**The work list** is 328's ranking rebuilt after batch 7 landed (157 open rows, 1 held at E2, 108 E3 DRIFTED;
+`m:batch7-open-rows`). Row 0 stays held for the GM. Batch 8 takes the next three rows, all of the hamlet generator: 771
+(`ROLLED_ARCHETYPES`), 772 (`WEB_CLEARANCE`) and 773 (`WEB_HARD_GAP`). Row 771's own fix sets its bar: the two attested forms
+join the roll only once their cohort is green. Measured before any edit (2026-10-12, 12 seeds of each at 16 households): the
+dike-pond form passes 6 of 12, the polder form 10 of 12, so the row is waves 140-141, and 772 and 773 are waves 142-143. The rules
+of batches 3-7 hold (B5-1's knob roll included); the engine changes, so the batch takes its timing bookends and states the band
+at landing.
+
+### Wave 140 (T32) - a dike-pond hamlet with no grow-out pond in a household's reach keeps no sty
+- **W140-1** (within): 5 of the 6 dike-pond failures are `StyRefused`: the code's own floor of one sty per dike-pond hamlet
+  (claimed UNRESEARCHED; feature 287 wave 5's design, no GM ruling) refuses a hamlet whose farmhouses stand 450-860 ft from
+  every grow-out pond (a fry village keeps the smallest ponds, 70% of the pond area, for fry). The record says the opposite:
+  research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html, "No sty stands more than 320 ft
+  from a farmhouse ... A household with no pond within that reach keeps none." So the floor goes: the reservation keeps the
+  seat where one qualifies and returns none where none does; the stage draws every sty that fits up to the rolled share, none
+  where none fits, and records how many it drew. The refusal's three-rule diagnostic is kept as the record of why a hamlet drew
+  none (`meta.pond_stock`).
+
+### Wave 141 (T33) - the polder and the dike-pond rolled beside the valley fan
+- **W141-1** (within): every remaining failure of the two forms' rolls is fixed at its placer (measured: dike-pond seed 1
+  `NoDryExit`; polder seed 5 `SiteRefused`, 14 of 16 seated; polder seed 12 `WebRefused`, a farmhouse off the network), each
+  re-rolled to green, and then both forms join `ROLLED_ARCHETYPES`. The bar is the constant's own: 12 seeds of each form green
+  at 16 households, and `make cohort` green with the forms in the mix. Their odds are a GUESS: the valley fan twice, the polder
+  once and the dike-pond once, the fan the commonest hamlet setting (no page counts the forms). 0019's drawing page loses its
+  "known gap" sentence and says the forms are rolled.
+- **W141-2** (within): a failure that cannot be fixed at its placer within the batch goes to the round arbiter with its
+  measurement, never into the roll: rolling a form with open failures is what the constant forbids.
+
+### Wave 142 (T34) - the web lane's room, 9 ft from its middle
+- **W142-1** (within): `WEB_CLEARANCE` is a corridor HALF-width (`lane()`'s `clearance`), so 18.0 holds 36 ft clear where
+  research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html gives "a lane's room of 18 ft - 7 ft at
+  each garden fence and a 4 ft tread between": 9 ft from the middle. The constant becomes 9.0; the pool hamlets are
+  regenerated and what moves is reported.
+
+### Wave 143 (T35) - the web lane off the crop by its half-tread, off the toe and marsh by its own gap
+- **W143-1** (within): research/questions/0081-village-lanes.drawing.html lets a lane touch a plot's boundary (it runs on the
+  bund); `WEB_HARD_GAP` holds it 8 ft off crop, toe and marsh alike. The hard ground splits: against crop the gap is the lane's
+  half-tread (the lane's edge on the plot's boundary), against the toe band and marsh a separate gap, kept at 8 ft and claimed
+  UNRESEARCHED. The five readers (`ways/serve.py`, `ways/route.py`, `ways/clearance.py`, `ways/web.py`,
+  `homesteads/boundary.py`) take the two lists apart.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

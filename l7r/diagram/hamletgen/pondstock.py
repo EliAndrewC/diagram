@@ -85,13 +85,13 @@ def sty_on_near_half(seat: Pt, parcel: list[Any], hc: Pt, margin: float = 0.0) -
     return math.dist(seat, hc) + margin <= math.dist(_centroid(parcel), hc)
 
 
-def sty_in_reach(s: Settlement, seat: Pt, houses: list[Any]) -> bool:
+def sty_in_reach(s: Settlement, seat: Pt, houses: list[Any], reach_ft: float = 0.0) -> bool:
     """THE RULE (feature 280, settlement-review of Kuwabata; carried into feature 287's placer): a sty stands within
     `STY_HOUSE_REACH_FT` of a farmhouse - it is a household's. The placer and its test read this one predicate; the
     reservation asks it of the seat's center, before the houses stand.
 
     Research: sty within a household's reach - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: 320 ft of a farmhouse"""
-    return any(math.dist(seat, (float(h["x"]), float(h["y"]))) <= s.px(STY_HOUSE_REACH_FT) for h in houses)
+    return any(math.dist(seat, (float(h["x"]), float(h["y"]))) <= s.px(reach_ft or STY_HOUSE_REACH_FT) for h in houses)
 
 
 STY_RESERVE_REACH_FT = (
@@ -101,18 +101,18 @@ STY_RESERVE_REACH_FT = (
 
 
 def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | None:
-    """THE STY'S SEAT, RESERVED BEFORE THE HOUSES (feature 287, water W50): a dike-pond hamlet keeps at least one sty, and the
+    """THE STY'S SEAT, RESERVED BEFORE THE HOUSES (feature 287, water W50): the
     homesteads seated before `stage_pond_stock` could take every near bank seat. Once `stage_seat` has decided the flank,
     the grow-out ponds are walked nearest the seat's center first, and the first with a bank seat on its near half
     (`sty_on_near_half`) that clears the sluices (`pond_fixture_fits`) and stands within reach of the seat (`sty_in_reach`)
     gives it; a disc about it - the sty's own reach plus the largest footprint's
     half-diagonal (`STY_RESERVE_REACH_FT`) - goes into `block_polys`, which every homestead placer refuses. Recorded on
     the settlement for `stage_pond_stock`; returns (seat, rotation, pond), or None where the hamlet keeps no grow-out pond
-    (no sty is owed). A hamlet with grow-out ponds and no seat on any of them is refused, naming it (`StyRefused`, feature
-    287 wave 5): the sty it owes could never be seated, and nothing after this may emit a dike-pond hamlet without one.
+    (no sty is owed) or where no grow-out pond has a seat within reach of it: a household with no pond within reach keeps
+    none (feature 374 wave 140; until then such a hamlet was refused, a floor of one sty that no page gives).
 
     Research:
-        at least one sty - UNRESEARCHED: a dike-pond hamlet with a grow-out pond keeps one, refused without it; 0025 gives only the band
+        no seat in reach, no sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a household with no pond within that reach keeps none
         nearest pond first - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: grow-out ponds walked nearest the seat
         seat reserved before the houses - NONE: placement order, the sty's rules unchanged"""
     ponds = s.M.get("dikeponds") or []
@@ -139,15 +139,7 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
         s.block_polys.append([(x + reach * math.cos(math.tau * k / 16), y + reach * math.sin(math.tau * k / 16)) for k in range(16)])
         s.__dict__["_sty_seat"] = ((x, y), rot, i)
         return (x, y), rot, i
-    raise StyRefused(f"{plan.spec.name}: no bank seat on the near half of any of {len(order)} grow-out pond(s), within reach of the seat, clears the sluices for the sty the hamlet owes")
-
-
-class StyRefused(ValueError):
-    """A dike-pond hamlet whose sty cannot be seated within its rules (feature 287 wave 5, water W50/W51): it owes at least
-    one (feature 150 A3) on the near half of a grow-out pond (`sty_on_near_half`), and no seat fits. Refused, naming it,
-    as `SeatRefused` and `SiteRefused` refuse theirs - never a hamlet drawn with none.
-
-    Research: refusal - NONE"""
+    return None
 
 
 STY_HOUSE_REACH_FT = 320.0
@@ -181,7 +173,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
             with a privy built over it
         no duck pen - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: ducks herded in the rice, the pen modern
         sty count - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a quarter to a half of households
-        at least one sty - UNRESEARCHED: the floor of one is not on the page
+        at least one sty where one fits - UNRESEARCHED: the share rounded up to one, the floor of one not on the page
+        no seat in reach, no sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a household with no pond within that reach keeps none; the hamlet is drawn with none and says why (`meta.pond_stock.none_why`)
         one sty per pond, nursery ponds none - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: nearest the houses first
         sty on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html
         sty within reach - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: 320 ft of a farmhouse
@@ -196,8 +189,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not houses:
         return
     rng = knob_rng(s.seed, "pond_stock")
-    # AT LEAST ONE (feature 287, water W50; feature 150 A3): the dike-pond loop fed its fish from the sties on its dikes, so a
-    # dike-pond hamlet with any grow-out pond keeps one, however few households the share rounds to.
+    # AT LEAST ONE WHERE ONE FITS (feature 287, water W50; feature 150 A3): the dike-pond loop fed its fish from the sties on
+    # its dikes, so the share rounds up to one, however few households it rounds to - where a seat is in reach (wave 140).
     n_sty = max(1, round(len(houses) * (STY_SHARE[0] + rng.random() * (STY_SHARE[1] - STY_SHARE[0]))))
     s.M["meta"]["pond_stock"] = {"sties": n_sty}
     hc = (sum(float(h["x"]) for h in houses) / len(houses), sum(float(h["y"]) for h in houses) / len(houses))
@@ -238,8 +231,25 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         s.pig_sty(x, y, rot=rot, pond=i)
         done += 1
     s.M["meta"]["pond_stock"]["drawn"] = done
-    # AT LEAST ONE, OR THE SITE IS REFUSED (feature 287 wave 5, water W50): the reserved seat is off the near half or out of
-    # every household's reach for the houses as seated and every other such seat is built on - no seat within the rules,
-    # so none is drawn and the hamlet is refused by name rather than shipped without the sty its archetype owes.
+    # NONE IN REACH, NONE DRAWN (feature 374 wave 140; 0025: "a household with no pond within that reach keeps none"): the
+    # hamlet keeps no sty, and its record says which of the three rules the reserved seat failed, or that none was reserved.
     if done == 0 and any(p.get("kind") != "fry" for p in ponds):
-        raise StyRefused(f"{plan.spec.name}: no near-half bank seat of any grow-out pond within a household's reach is free for the sty the hamlet owes")
+        why = "the reserved seat failed " + ", ".join(seat_faults(s, reserved, ponds, hc, houses)) if reserved is not None else "no grow-out pond had a seat within reach"
+        s.M["meta"]["pond_stock"]["none_why"] = why
+
+
+def seat_faults(s: Settlement, reserved: tuple[Pt, float, int], ponds: list[Any], hc: Pt, houses: list[Any]) -> list[str]:
+    """Which of the sty's three rules the seat reserved before the houses fails for the houses as seated - named in the
+    hamlet's record, so a hamlet drawn with no sty says why without a probe (feature 374 wave 140)."""
+    (rx, ry), rrot, ri = reserved
+    nearest_ft = min(math.dist((rx, ry), (float(h["x"]), float(h["y"]))) for h in houses) * s.ftpx
+    faults = [
+        name
+        for name, ok in (
+            ("the near half (the houses' middle moved)", sty_on_near_half((rx, ry), ponds[ri]["parcel"], hc, 0.5)),
+            (f"a household's reach (nearest farmhouse {nearest_ft:.0f} ft, reach {STY_HOUSE_REACH_FT:.0f})", sty_in_reach(s, (rx, ry), houses)),
+            ("the fit (a sluice or a shed took it)", s.pond_fixture_fits(rx, ry, rrot)),
+        )
+        if not ok
+    ]
+    return faults or ["none (the seat qualifies; the pond loop found no other)"]

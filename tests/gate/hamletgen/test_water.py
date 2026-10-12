@@ -20,9 +20,9 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
 
     KEPT through feature 287 (specs/287-placer-guarantees/research.md R8): no placer unit test holds the archetype's own
     record (the overlay count, the fry ponds, no duck pen, a wet strip per waterward face, forecourt yards). Its household
-    clause was retired: every household is seated or the site refused. Its sty clause was retired in wave 5: a dike-pond
-    hamlet with a grow-out pond seats its sty or is refused (`pondstock.py`, `StyRefused` - at the reservation where no
-    seat fits, at `stage_pond_stock` where none is left on the near half), `tests/hamletgen/test_water_287.py`."""
+    clause was retired: every household is seated or the site refused. Its sty clause was retired in wave 5; since feature
+    374 wave 140 a dike-pond hamlet with no grow-out pond in a household's reach keeps no sty and records why (0025),
+    `tests/hamletgen/test_water_287.py`."""
     # THE KUWABATA SPEC, SHARED WITH THE THREE GATE FILES THAT ALREADY ROLL IT (2026-08-31). This test
     # was a spec of its own differing only in leaving `dike_crop` to roll (seed 21 once gave sugarcane, a planting 269 B34 retired), and
     # it asserts nothing about the crop. Measured: Kuwabata's map carries every assertion below.

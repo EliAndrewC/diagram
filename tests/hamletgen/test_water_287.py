@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.pondstock import StyRefused, _bank_seats, reserve_sty_seat, stage_pond_stock, sty_in_reach, sty_on_near_half
+from l7r.diagram.hamletgen.pondstock import _bank_seats, seat_faults, reserve_sty_seat, stage_pond_stock, sty_in_reach, sty_on_near_half
 from l7r.diagram.hamletgen.water.brook import course_corner, join_vertices, round_the_brooks
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.city.bridges import SUPPLY_ROLES
@@ -210,17 +210,17 @@ def test_no_reservation_where_the_hamlet_keeps_no_ponds_or_no_seat() -> None:
     assert reserve_sty_seat(s, plan) is None, "fry ponds alone owe no sty"
     s, plan = _dikepond()
     plan.seat = {"cx": 450.0, "cy": -600.0, "out": (0.0, -1.0)}  # the seat stands past a household's reach of every bank seat
-    with pytest.raises(StyRefused, match="grow-out pond"):
-        reserve_sty_seat(s, plan)  # no seat within the rules: the sty the hamlet owes cannot be seated - refused, not skipped
+    assert reserve_sty_seat(s, plan) is None, "no seat within reach: nothing reserved (0025: a household with no pond in reach keeps none)"
     s, plan = _dikepond()
     got = reserve_sty_seat(s, plan)
     assert got is not None and sty_in_reach(s, got[0], [{"x": 450.0, "y": 150.0}]), "the reserved seat is within reach of the seat's center (feature 280)"
 
 
-def test_a_dike_pond_hamlet_whose_every_near_half_seat_is_built_on_is_refused_never_drawn_without_its_sty() -> None:
+def test_a_dike_pond_hamlet_whose_every_near_half_seat_is_built_on_draws_no_sty_and_says_why() -> None:
     """W50 on the violating case: the reservation stands off the near half for the houses as seated (the village turned out
-    below the ponds) and every near-half bank seat of both ponds carries a house - the stage used to draw no sty and
-    refuse nothing; it now refuses the site by name."""
+    below the ponds) and every near-half bank seat of both ponds carries a house. Feature 374 wave 140: the hamlet is drawn
+    with no sty (0025: a household with no pond within reach keeps none) and its record names the rule the reserved seat
+    failed."""
     s, plan = _dikepond()
     reserve_sty_seat(s, plan)
     hc = (450.0, 850.0)
@@ -228,9 +228,22 @@ def test_a_dike_pond_hamlet_whose_every_near_half_seat_is_built_on_is_refused_ne
     for pond in s.M["dikeponds"]:
         houses += [{"x": q[0], "y": q[1], "w": 20.0, "h": 14.0} for q, _r in _bank_seats(pond["parcel"], hc) if sty_on_near_half(q, pond["parcel"], hc)]
     s.M["houses"] = houses
-    with pytest.raises(StyRefused, match="near-half"):
-        stage_pond_stock(s, plan)
-    assert not s.M.get("pig_sties")
+    stage_pond_stock(s, plan)
+    assert not s.M.get("pig_sties") and "the near half" in s.M["meta"]["pond_stock"]["none_why"]
+
+
+def test_seat_faults_names_each_rule_the_reserved_seat_fails() -> None:
+    """Feature 374 wave 140: a hamlet drawn with no sty records why - each of the three rules the reserved seat fails for the
+    houses as seated, or that it fails none."""
+    s, plan = _dikepond()
+    got = reserve_sty_seat(s, plan)
+    assert got is not None
+    ponds, near = s.M["dikeponds"], [{"x": 450.0, "y": 100.0}]
+    assert seat_faults(s, got, ponds, (450.0, 150.0), near) == ["none (the seat qualifies; the pond loop found no other)"]
+    far = [{"x": 450.0, "y": -2000.0}]
+    assert seat_faults(s, got, ponds, (450.0, 150.0), far) == ["a household's reach (nearest farmhouse 2369 ft, reach 320)"]
+    s.pond_fixture_fits = lambda x, y, rot: False  # type: ignore[method-assign]
+    assert seat_faults(s, got, ponds, (450.0, 150.0), near) == ["the fit (a sluice or a shed took it)"]
 
 
 # ---- the polder's crossings ask no plank the law refuses; a same-flank re-seat keeps the fringe ----------------------

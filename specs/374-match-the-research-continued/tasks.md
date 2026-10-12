@@ -182,6 +182,20 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. POND_LAYOUTS rolls mosaic two in three, grid one in three (measured on the chessboard rolls, measurements.json w139-chessboard-rolls); pop-ups for both layouts checked; gate green
 
+## Batch 8 - the attested field forms rolled, the web lane's room and its gap off the crop
+
+- [ ] T32 wave 140: a dike-pond hamlet with no grow-out pond in a household's reach keeps no sty (0025) (FR-001)
+      research: rendering
+
+- [ ] T33 wave 141: the polder and the dike-pond rolled beside the valley fan once their rolls are green (0019, 0020) (FR-001)
+      research: rendering
+
+- [ ] T34 wave 142: the web lane's no-build room, 9 ft from its middle (0246) (FR-001)
+      research: rendering
+
+- [ ] T35 wave 143: the web lane off the crop by its half-tread, off the toe and marsh by its own gap (0081) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]
