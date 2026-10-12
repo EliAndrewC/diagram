@@ -219,8 +219,9 @@ in 328's ranking and this spec.
 
 ## Batch 12 - the paddy's own grass hill
 
-- [ ] T40 wave 148: a small grass hill set aside for one paddy (tazuke kusayama), rolled now and then (0078) (FR-001)
+- [x] T40 wave 148: a small grass hill set aside for one paddy (tazuke kusayama), rolled now and then (0078) (FR-001)
       research: rendering
+      verify: DONE. DONE. a grass-hill map rolls the paddy's own grass hill one in three (GUESS), seated upslope of a top plot and 6 ft clear as seated, drawn as a cut sward (grass-cut tile, the tint a convention); 3 of 20 valley rolls draw one, every roll seated, Inashiro draws one; the pop-up through form, research and depiction; claims IN-STEP; Inashiro glyph-check NEEDS-WORK then PASS (F6 seam filed); rows 775 and 911 closed (wave 148); gate green; bookends +2.4% band 0
 
 ## Standing - the ranking's remaining rows
 

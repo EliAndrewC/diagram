@@ -1824,5 +1824,39 @@
     "source": "make hamlet ARGS=\"--name V<s> --seed <s> --households 16 --out <dir> --no-render\"; make maps SCOPE=all",
     "command": "meta.paddy_grass_hill per manifest",
     "method": "none / drawn / no seat counted"
+  },
+  "b12-glyph-f1": {
+    "quantity": "the paddy's grass hill on Inashiro told from the scrub around it: the mean color inside its square against same-sized squares of the scrub beside it",
+    "observed": "2026-10-12",
+    "verifies": "F1",
+    "subject": "glyph-check--paddy-s-grass-hill--inashiro",
+    "answers": "a7bccc68e831",
+    "source": "pool/hamlets/inashiro/inashiro.png after make map at engine key 9906d82f0e55; the square from the manifest's commons record, role paddy_grass",
+    "command": "the PNG read with PIL, each square's pixels inset 3 px, mean RGB",
+    "method": "the hill against the squares 120 ft left, right and up, 120 ft up-right and 200 ft right (one more square, up-left, holds a scrub pine)",
+    "value": {
+      "hill_rgb": [
+        212.6,
+        212.5,
+        160.0
+      ],
+      "scrub_rgb_range": [
+        [
+          231.0,
+          220.5,
+          183.8
+        ],
+        [
+          232.6,
+          221.9,
+          185.9
+        ]
+      ],
+      "hill_green_over_red": -0.1,
+      "scrub_green_over_red": [
+        -10.7,
+        -10.5
+      ]
+    }
   }
 }
