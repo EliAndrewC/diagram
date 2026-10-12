@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-12T16:52:57Z",
+  "target": "entry-gate",
+  "commit": "66282721e",
+  "why": "RECORD_CHECKS_OK: 0016's last edit moved only the colon inside the absence note's HTML comment (commit 540237ec7); no visible word, quotation or note text the three checks read changed since quote-check round 3, source-reader and record-format answered"
+}
