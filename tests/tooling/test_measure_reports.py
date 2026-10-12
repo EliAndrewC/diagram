@@ -60,7 +60,8 @@ def test_review_yield_counts_each_column_from_its_cells() -> None:
         ("filed as rows", "acted on"), ("to the follow-up", "acted on"), ("not applied: carried in specs/335/briefs", "acted on"),
         ("nothing", "dismissed"), ("nothing for the GM", "dismissed"), ("answered in feature 328", "dismissed"),
         ("left: the reason is the GM's allowance", "dismissed"), ("verified", "dismissed"), ("spec accepted", "dismissed"),
-        ("none", "dismissed"), ("put to the GM", "deferred"), ("left for the next session", "deferred"),
+        ("none", "dismissed"), ("accepted (the drift already on the report)", "dismissed"), ("plan accepted", "dismissed"),
+        ("declined: contradicts FR-015", "dismissed"), ("no change", "dismissed"), ("no-change", "dismissed"), ("put to the GM", "deferred"), ("left for the next session", "deferred"),
         ("not applied: needs a new passage", "deferred"), ("-", "not acted on"), ("re-dispatched; engine frozen", "not acted on"),
     ],
 )
