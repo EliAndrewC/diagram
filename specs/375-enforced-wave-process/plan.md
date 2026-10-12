@@ -598,8 +598,11 @@ two bundles' files compared with an uncached run's (`L7R_CACHE_OFF=1`).
 
 **D50 - The review checks' yield (FR-037; T53).** `scripts/measure/review_yield.py`, run by `make review-yield [SINCE=<date>]`
 (default 2026-09-26, the ledger's cost columns' first full day), reads `dev/review-ledger.md`'s measured rows and prints per
-check: passes; passes with a finding; findings acted on (the "acted on" cell opens with fixed or filed) and dismissed (verified,
-accepted, declined, left for the GM, no change); the author had missed it (the "missed" cell yes); hours (wall) and tokens out;
+check: passes; passes with a finding; of those, DISMISSED (the free-text "acted on" cell opens with verified, accepted,
+declined, no change or none), DEFERRED (put to the GM, left for, to the follow-up, not applied) and ACTED ON (any other non-empty
+cell but "-" or "re-dispatched": something changed - measured on the ledger since 2026-09-26, "applied" opens 248 cells and
+"recorded" 66, so a list of acted-on words would miss most); the author had missed it (the "missed" cell yes); hours (wall) and
+tokens out;
 and the features the rows name (a three-digit number in the subject). Sorted by hours; a check's yield is acted-on findings per
 hour. `--record <file> --key <k>` writes it to `measurements.json` (`375-a8-review-yield`), as `turn_time.py` does. The GM is
 given the table and the lowest-yield checks for their cost at landing; nothing about a check changes. Tests on a small ledger

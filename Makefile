@@ -1880,6 +1880,14 @@ perf:            ## [performance] take a performance snapshot of the reference h
 census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
 	@python3 -m l7r.diagram.tools.overlap_census
 
+# GUARD_EDIT_OK: feature 375 amendment 8 (FR-037, FR-038) - two new read-only reports put to the GM; nothing loosened.
+.PHONY: review-yield cohort-seeds
+review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
+
+cohort-seeds:     ## [performance] which cohort seeds found which failure, over how many changes, and the fewest first seeds that find them all (dev/cohort-log/)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/cohort_seeds.py"
+
 perf-report:    ## [performance] the trend, and which BAND the newest bookend pair reaches   AGAINST=<NNN>-start ENV=local|codebuild
 ##  AGAINST=<NNN>-start  compare the newest snapshot against this bookend
 ##  ENV=local|codebuild  which environment's band-1 line to judge against (default: local)
