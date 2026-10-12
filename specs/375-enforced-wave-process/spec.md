@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: In progress - amendments 6 and 7 (the GM 2026-10-12): 6 reopened by the Diagram tooling session and handed to the Diagram performance session, 7 opened by the Diagram performance session, both built there; amendments 1-5 Done 2026-10-11
+**Status**: Done 2026-10-12 - amendments 6 and 7 landed: 6 (spec FAITHFUL round 2, plan CLEAR; SC-021 tested, replay 43 About-only edits of 221 owe no depiction; 343 rows 83-84 closed) and 7 (spec FAITHFUL, plan CLEAR after the versioned store; SC-022 cohort wave 2 323 s -> 19 s, SC-024 suites 70.6 -> 18.8 s and 71.7 -> 20.4 s, SC-023/025/026/027 tested); every task ticked; amendment 8 (claims cache, check-bundle in-process, review yield, cohort seed count) not yet opened
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
 
