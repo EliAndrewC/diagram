@@ -473,8 +473,11 @@ compound repacked) is a batch of its own, the next. The rules of batches 3-5 hol
 ### Wave 133 (T25) - the main gate's posts about 2 ft square
 
 - **W133-1** (within): the gate posts drawn ~2 ft square (they are 2.7-5.3 x 4.7 ft on the hand sheets), each passage's inner
-  face kept, on Ochiba, Hayakawa and Ubame; docs/buildings.md's gate-post line says so (the post size a measurement the row's
-  research gives; its exact figure recorded with its source in the docs claim).
+  face kept, on Ochiba, Hayakawa and Ubame, AND in the compound draft's emitter (`GATE_POST_W_FT` / `GATE_POST_D_FT`, which draw
+  the main gate's and the side gates' posts on the county draft and the round-trip sheet - both regenerated); docs/buildings.md's
+  gate-post line says so, the ~2 ft recorded as a map drawing convention, as
+  research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html records it ("this project's own"), not a
+  measurement (T25's plan review).
 
 ### Wave 134 (T26) - a structure stands a foot or two clear of the wall's face
 
@@ -486,9 +489,12 @@ compound repacked) is a batch of its own, the next. The rules of batches 3-5 hol
 
 ### Wave 135 (T27) - a well's lifting gear, a knob
 
-- **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in more than one form (a sweep
-  or a pulley frame); a knob rolled per plan from its seed, in the record's order, each sheet's roll recorded in its notes and
-  drawn on its wells as a new glyph (glyph-check owed); docs/buildings.md's well-glyph claim says so.
+- **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in two forms (a sweep or a
+  pulley frame) and its drawing page rolls them by the water's depth: each plan rolls its water depth from its seed, and each
+  well's gear at the drawing page's weights for that depth (on shallow water about three wells in four a sweep, on deeper about
+  three in four a pulley frame); and, as the drawing page does, a roof on posts on some wells, about one in three, rolled per
+  well from the seed. Each sheet's rolls are recorded in its notes and drawn on its wells as new glyphs (glyph-check owed);
+  docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan review).
 
 ## Landing by batch (375's D18)
 
