@@ -48,8 +48,9 @@ def owed_for_question(root: pathlib.Path, q: str, for_: str, not_owed_ok: str, e
     if for_ == "record-style":
         return [], "record-style", ""
     qn = question_of(q)
-    every = ro.units(root) if every is None else every
-    units = [u for u in every if ru.question(u.subject) == qn or (u.check == "entry-drift" and for_ in ("entry-drift", "all"))]
+    # only the families this bundle carries (feature 375 amendment 3, FR-020(d)); the whole delta only for a refusal's listing
+    scoped = every if every is not None else ro.units(root, families=("record", "translation", *(("entry-drift",) if for_ in ("entry-drift", "all") else ())))
+    units = [u for u in scoped if ru.question(u.subject) == qn or (u.check == "entry-drift" and for_ in ("entry-drift", "all"))]
     if q.endswith(".html"):  # ONE page (feature 303): its units only - feature 319 recorded a research page's bundle as
         drawing = ".drawing." in q  # answering the drawing page's units, which that bundle never carried
         units = [u for u in units if "#" not in u.subject or (".drawing" in u.subject.partition("#")[0]) == drawing]
@@ -62,6 +63,7 @@ def owed_for_question(root: pathlib.Path, q: str, for_: str, not_owed_ok: str, e
             return [], "", "NOT_OWED_OK needs a REASON - two words and eight characters - so the audit says why"
         checks = GATED[:-1] if for_ == "all" else (for_,)
         return tree_units(root, qn, checks), " ".join(checks), ""
+    every = ro.units(root) if every is None else every
     listing = "\n".join(f"    {u.slug}" for u in every) or "    (nothing: no record check is owed by this delta)"
     return [], "", (
         f"no {for_ if for_ != 'all' else 'record'} check is owed on question {qn} by this delta - a bundle for it would "

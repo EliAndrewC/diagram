@@ -856,4 +856,12 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    code = main()
+    # THE EXIT, NOT THE WORK (feature 375 amendment 3, measured 2026-10-11 on 374's delta): with the units read through the
+    # cache, the interpreter's final collection spent 3.2 s of a cold run walking the engine parse's objects before the
+    # process ended. A command's heap dies with it; freezing it skips that walk. Only the command does this, never `main()`
+    # called in-process (the gate's tests), where the objects must stay collectable.
+    import gc
+
+    gc.freeze()
+    sys.exit(code)

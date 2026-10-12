@@ -192,3 +192,12 @@ def test_an_earlier_check_unanswered_before_the_blocks_stays_owed(tmp_path: path
 def _no_triage_store(tmp_path: pathlib.Path, monkeypatch) -> None:
     monkeypatch.delenv("RECORD_CHECKS_DIR", raising=False)
     monkeypatch.setenv("L7R_CACHE_OFF", "1")
+
+
+def test_a_bundle_computes_only_its_own_pop_ups_units(tmp_path: pathlib.Path) -> None:
+    """FR-020(d): a pop-up's bundle reads its own units, not the whole delta's."""
+    root, _f = _tree(tmp_path)
+    scoped = ro.units(root, families=("modal",), uid="hamlet/farmhouse")
+    assert scoped and all(u.check.startswith("modal-") and u.subject == "hamlet/farmhouse" for u in scoped)
+    assert ro.units(root, families=("modal",), uid="hamlet/nothing") == []
+    assert {u.slug for u in scoped} == {u.slug for u in ro.units(root) if u.check.startswith("modal-")}

@@ -139,21 +139,37 @@ def _entry_units(root: pathlib.Path, now: ru.Record) -> list[ru.Unit]:
     return units
 
 
-def _modal_units(root: pathlib.Path, base: str) -> list[ru.Unit]:
-    """The About-form modals' units (feature 319, plan D6): `modal-form`, and the three `modal-research` answers."""
+def _modal_units(root: pathlib.Path, base: str, uid: str = "") -> list[ru.Unit]:
+    """The About-form modals' units (feature 319, plan D6): `modal-form`, and the three `modal-research` answers; `uid`
+    scopes them to one pop-up."""
     import modal_owed as mo  # noqa: PLC0415
 
-    return [ru.Unit(slug, why, fp) for slug, why, fp in mo.owed(root, base)]
+    return [ru.Unit(slug, why, fp) for slug, why, fp in mo.owed(root, base, uid)]
 
 
-def units(root: pathlib.Path, base: str | None = None, head: str | None = None) -> list[ru.Unit]:
-    """Every owed unit, against the merge base and the working tree, or between two revisions."""
+#: the families of owed units, each computed by its own reader: a bundle asks only for the ones it carries (feature 375
+#: amendment 3, FR-020(d): a pop-up's bundle computed the whole delta to print one pop-up's lines)
+FAMILIES = ("record", "translation", "entry-drift", "modal")
+
+
+def units(root: pathlib.Path, base: str | None = None, head: str | None = None, families: Sequence[str] = FAMILIES, uid: str = "") -> list[ru.Unit]:
+    """Every owed unit, against the merge base and the working tree, or between two revisions; `families` and, for the
+    pop-ups, `uid` scope it to what a caller carries (the whole delta by default)."""
     base = base or merge_base(root)
-    touched = changed_sources(root, base, head) if base else None
-    now = read_at(root, head, touched)
-    out = ru.owed(now, read_at(root, base, touched) if base else ru.Record({}, {}, {}, {}))
+    out: list[ru.Unit] = []
+    now = None
+    if "record" in families or "translation" in families or "entry-drift" in families:
+        touched = changed_sources(root, base, head) if base else None
+        now = read_at(root, head, touched)
+        if "record" in families:
+            out = ru.owed(now, read_at(root, base, touched) if base else ru.Record({}, {}, {}, {}))
     if head is None:
-        out += _translation_units(root, now) + _entry_units(root, now) + _modal_units(root, base)
+        if "translation" in families and now is not None:
+            out += _translation_units(root, now)
+        if "entry-drift" in families and now is not None:
+            out += _entry_units(root, now)
+        if "modal" in families:
+            out += _modal_units(root, base, uid)
     return sorted(out, key=lambda u: u.slug)
 
 

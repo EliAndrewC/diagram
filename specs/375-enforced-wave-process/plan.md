@@ -357,12 +357,19 @@ over `record_units.py` and every project module it imports, transitively (`recor
 `import`/`from` statements resolved to files beside it or under the repository; `record_units.py` imports only the standard
 library today, so its set is itself, and a test adds an import to prove the walk follows it). `Record.of(files, sources,
 cache=None)` reads through it; `record_owed.read_at` passes the clone's. A corrupt or unreadable cache is an empty one;
-`L7R_CACHE_OFF=1` disables the disk cache. `modal_bundle.bundle` computes `record_owed.units` once and hands it to the triage
-refusal, the D25 hold and `owed_lines` (today it computed the whole delta twice to print one pop-up's lines).
+`L7R_CACHE_OFF=1` disables the disk cache. A command builds only what it prints (FR-020(d)): `record_owed.units(root,
+families=, uid=)` computes only the families asked for (`record`, `translation`, `entry-drift`, `modal`) and, for the
+pop-ups, one uid (`modal_owed.owed(root, base, uid)`). `modal_bundle.bundle` asks once for its pop-up's modal units and
+hands them to the triage refusal, the D25 hold and `owed_lines` (today it computed the whole delta twice to print one
+pop-up's lines); `check-bundle Q=` (`bundle_owed.owed_for_question`) asks for the record and translation families (and
+entry-drift for `FOR=entry-drift|all`), and computes the whole delta only for a refusal's list of what IS owed - the one
+consumer that needs other subjects' units. `claims.py`'s command freezes its heap before exiting (`gc.freeze()`, in the
+`__main__` block only): measured, the interpreter's final collection spent 3.2 s of a cold run walking the engine parse's
+objects.
 
 **D28 - One `git` batch per revision (FR-020b).** `modal_owed._read_at(root, rev)` returns a reader backed by ONE `git
 ls-tree -r` of the directories it serves and ONE `git cat-file --batch` of their blobs (`record_owed._cat`, moved to
-`record_units.cat_blobs` so both import it), filled on the first read; a path outside them falls back to `git show`.
+`record_cache.cat_blobs` so all three import it), filled on the first read; a path outside them falls back to `git show`.
 `modals_at` and `owed` use it in place of their per-file `git show` calls (299 at the base on 374's delta), and
 `entry_owed` its own per-file calls the same way (177).
 
@@ -378,8 +385,11 @@ at `scripts/record/claims.py` keeps the engine untouched and the landing DIRECT.
 freshness set: the file; each `conftest.py` from its directory up to `tests/`; the `tests/` modules it imports; every file
 of `scripts/` and `tests/hooks/` it reaches, transitively through any file (`py_closure`): a Python file reaches what it
 imports and what a string literal of its code names (a literal equal to a file's stem, `_sibling("record_owed")`, or
-ending in its file name), a shell or text file every file whose name stands in its code, as the guard suites' scan does; and all of `scripts/` and `tests/hooks/` when the test builds a script path at run time (`"scripts"` joined to
-a non-literal, or `scripts/` inside an f-string's braces) or globs the tree (`_globs_tree`). The Makefile's pytest step
+ending in its file name), a shell or text file every file whose name stands in its code, as the guard suites' scan does;
+and all of `scripts/` and `tests/hooks/` - failing toward running - when the test builds a script path at run time
+(`"scripts"` joined to a non-literal, or `scripts/` inside an f-string's braces), names the `scripts` directory itself as a
+path's end (`(REPO / "scripts").rglob`, `os.path.join(REPO, "scripts")`, `SCRIPTS = REPO / "scripts"`), globs the tree, or
+reaches no file under `scripts/` or `tests/hooks/` at all (a selected file is selected because it reads `scripts/`). The Makefile's pytest step
 hashes each selected file's set, runs only the files whose hash differs from their stamp
 (`<git dir>/hooks-test/py/<test path with / as __>`), and stamps every file it ran when the run is green; a red run stamps
 none. `HOOKS_ALL=1` runs all; under `make done` the step is skipped as today.

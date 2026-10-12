@@ -331,8 +331,8 @@ def legacy_depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
     return digest([m.uid, m.prose, m.depiction, *_pages(root, m.drawing_files())])
 
 
-def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
-    """(slug, occasion, fingerprint) for every unit an About-form modal owes against `base`."""
+def owed(root: pathlib.Path, base: str, uid: str = "") -> list[tuple[str, str, str]]:
+    """(slug, occasion, fingerprint) for every unit an About-form modal owes against `base`; `uid` scopes it to one pop-up."""
     before = modals_at(root, base) if base else {}
     changed_pages = (
         set(
@@ -370,6 +370,8 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
         }
     rows = []
     for m in modals_now(root):
+        if uid and m.uid != uid:
+            continue
         was = before.get(m.uid)
         fp_form, fp_research = fingerprints(root, m)
         moved_text = was is None or was.prose != m.prose or was.entry != m.entry

@@ -410,5 +410,35 @@
    "reading": "test-sync-with-main.sh is held to the whole scripts tree (feature 172), so any script change re-runs it, and at 202-230 s it is the long pole of a parallel hooks-test; its 25 cases each build their own fixture, and one (7d) takes 66 s"
   },
   "unit": "s"
+ },
+ "375-a3-hooks-test-after": {
+  "quantity": "the script test files a commit touching scripts/ re-runs, before and after FR-021 (feature 375 amendment 3, SC-014)",
+  "observed": "2026-10-11",
+  "source": "main's last ten first-parent commits touching scripts/ or tests/hooks/ before amendment 3's code (from eb64e2ba3), and the test files the hooks-test step selects (the Makefile's grep: test files that build a path into scripts/)",
+  "command": "tests/hooks/hookdeps.py's pydeps per test file, intersected with each commit's changed files (git diff-tree -m --first-parent)",
+  "method": "a one-off script over the derivation as built (hookdeps.pydeps); before, any change re-ran every file",
+  "value": {
+   "test files": 55,
+   "before: files run per commit": 55,
+   "after: files run per commit": {
+    "eb64e2ba3": 3,
+    "6857b279e": 21,
+    "9cc6ab8c4": 21,
+    "91182c8c1": 21,
+    "926799f0d": 21,
+    "8d4daf178": 21,
+    "144e59c0f": 3,
+    "5a32ebfb9": 21,
+    "194dfd051": 21,
+    "922fb653d": 21
+   },
+   "after: mean": 17.4,
+   "files depending on the whole tree": [
+    "tests/tooling/ci/test_cache.py",
+    "tests/tooling/test_hooks_resolve.py",
+    "tests/tooling/test_switches.py"
+   ],
+   "median freshness set": 5
+  }
  }
 }

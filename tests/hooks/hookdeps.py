@@ -236,6 +236,10 @@ def key_for(guard: str) -> str:
 # non-literal joined to "scripts", or "scripts" inside an f-string's braces) or globs the tree depends on all of it.
 _BUILDS = re.compile(r'"scripts"\s*/\s*[A-Za-z_(]|join\([^)]*"scripts"\s*,\s*[A-Za-z_]|f"[^"]*scripts/\{|\{[^}]*\}/scripts|"scripts"\s*,\s*\(\s*"\*')
 _TESTS_IMPORT = re.compile(r"^\s*(?:from|import)\s+(tests(?:\.\w+)+)", re.M)
+#: the scripts DIRECTORY itself named as a path's end - `(REPO / "scripts").rglob`, `os.path.join(REPO, "scripts")`,
+#: `SCRIPTS = REPO / "scripts"` - a test that scans the tree (the plan review of amendment 3: three such files reached
+#: nothing by the scan and would never have re-run)
+_NAMES_DIR = re.compile(r'"scripts"\s*(?:\)|,|\]|$)', re.M)
 
 
 @functools.lru_cache(maxsize=None)
@@ -304,10 +308,14 @@ def pydeps(test: pathlib.Path) -> list[pathlib.Path]:
         p = ROOT.joinpath(*mod.split(".")).with_suffix(".py")
         if p.is_file():
             files.add(p)
-    if _BUILDS.search(code) or "scripts/*.sh" in code or "scripts/*.py" in code:
+    reached = {_INDEX[n] for n in py_closure(set(_word_refs(test.name, raw)))}
+    scripts = [p for p in reached if SCRIPTS in p.parents or HERE in p.parents]
+    # FAILING TOWARD RUNNING (FR-021): a path built at run time, the directory itself, a glob over it, or a selected file
+    # whose scan reaches no script at all - each depends on the whole tree, never on nothing
+    if _BUILDS.search(code) or _NAMES_DIR.search(code) or "scripts/*.sh" in code or "scripts/*.py" in code or not scripts:
         files |= set(_INDEX.values())
     else:
-        files |= {_INDEX[n] for n in py_closure(set(_word_refs(test.name, raw)))}
+        files |= reached
     return sorted(files)
 
 

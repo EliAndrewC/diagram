@@ -466,7 +466,7 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
     import modal_triage as mt  # noqa: PLC0415 - feature 375 FR-001: a unit owed only a triage is triaged first
     import record_owed  # noqa: PLC0415
 
-    units = record_owed.units(root)  # once: the triage, the order and the owed lines all read it (amendment 3, plan D27)
+    units = record_owed.units(root, families=("modal",), uid=m.uid)  # this pop-up's, once: the triage, the order and the owed lines all read it (amendment 3, plan D27)
     modal_rows = [(u.slug, u.occasion, u.fingerprint) for u in units if u.check in (mo.FORM_CHECK, mo.DEPICTION_CHECK, *mo.RESEARCH_CHECKS)]
     refused = mt.refusal(root, m, for_, modal_rows)
     if refused and len(reason.split()) < 2:

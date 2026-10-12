@@ -34,7 +34,7 @@ U = bo.ru.Unit
 @pytest.fixture
 def owing(monkeypatch: pytest.MonkeyPatch):  # noqa: ANN201
     def owe(*slugs: str) -> None:
-        monkeypatch.setattr(bo.ro, "units", lambda root, *a: [U(s, "test", "fp-" + s) for s in slugs])
+        monkeypatch.setattr(bo.ro, "units", lambda root, *a, **kw: [U(s, "test", "fp-" + s) for s in slugs])
 
     return owe
 

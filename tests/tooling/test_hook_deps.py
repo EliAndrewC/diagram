@@ -202,3 +202,9 @@ def test_an_unchanged_tree_runs_none_and_a_changed_dependency_runs_its_tests(tmp
     assert hookdeps.py_stale(gitdir, tests) == [], "an unchanged tree runs none"
     dep.write_text("A = 2\n", encoding="utf-8")
     assert hookdeps.py_stale(gitdir, tests) == ["test_a.py"], "only the test that reaches the changed file"
+
+
+def test_a_test_that_scans_the_scripts_directory_depends_on_the_whole_tree() -> None:
+    """The plan review of amendment 3: `(REPO / "scripts").rglob("*")` reached nothing by the scan, and would never re-run."""
+    for f in ("tests/test_citation_rule_inventory.py", "tests/test_building_types.py", "tests/tooling/test_guard_message_durations.py"):
+        assert _rel(list(hookdeps._INDEX.values())) <= _rel(hookdeps.pydeps(REPO / f)), f
