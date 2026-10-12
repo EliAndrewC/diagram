@@ -161,9 +161,9 @@ def county_magistracy_program() -> CompoundProgram:
         # rendering 'How our maps lay out samurai residences and their rooms (buke yashiki)': the garden faces the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
         # the house alone) runs it on to the guest house, x 104-226, so the one garden faces the reception and the guest
         # house both - guests were received in the garden-facing rooms (research 0091); the servants' row it once
-        # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk
+        # faced is on the kitchen yard since pass 6. From the house's veranda (y 35.5) 46.5 ft deep to y 82, an 8 ft walk
         # along the divider. Its size is a GUESS.
-        CourtZone("garden", 102.0, 36.0, 124.0, 46.0),  # feature 374 wave 113: from the kitchen ell's east face (the house's west end), the house 7 ft west
+        CourtZone("garden", 102.0, 35.5, 124.0, 46.5),  # feature 374 wave 113: from the kitchen ell's east face (the house's west end), the house 7 ft west
         # The vegetable ground at the site rolled among those the sun and the room leave (GARDEN_SITE, research 0109), at
         # the soup-greens plot's attested size (feature 374 wave 129: it was a 64 x 48 ft field squeezed into the kitchen
         # yard, a size nobody attests); the kitchen yard's working ground beside the kitchen named the service yard, as
