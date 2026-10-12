@@ -1707,5 +1707,14 @@
     "source": "specs/328-match-the-research/ranking.json",
     "command": "python3 audit/merge.py audit . (from specs/328-match-the-research), then counted",
     "method": "the four rows batch 7 took marked waves 136-139 in waves.json, row 0 held E2 in overrides.json, the ranking rebuilt"
+  },
+  "row0-coverage-at-49-tsubo": {
+    "quantity": "building coverage of the three hand magistracy sheets if each ~145-tsubo house (~5,150 sq ft) were drawn at 0091's 49-tsubo Yokota house (~1,743 sq ft), nothing else moved",
+    "value": "Hayakawa 33% -> ~26%, Ochiba 33% -> ~27%, Ubame 34% -> ~28%; all under 0116's ~30-42% band",
+    "unit": "percent of the compound's area",
+    "observed": "2026-10-12",
+    "source": "make pack-audit on each sheet (33/33/34%); the compound sizes in each notes file (247x200, 267x200, 290x200 ft); 1 tsubo = 35.58 sq ft",
+    "command": "make pack-audit ARGS=pool/magistracies/<m>-magistracy/<m>-magistracy.svg",
+    "method": "built area = coverage x compound area; minus the ~3,407 sq ft a 49-tsubo house frees; divided by the compound area again. The escalation-check on batch 7's report found the earlier 67-tsubo target is one 0091's drawing page declines (a later restoration's size)"
   }
 }

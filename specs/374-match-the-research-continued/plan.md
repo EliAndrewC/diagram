@@ -558,7 +558,7 @@ engine edit, `374-end` at its close) and states the band at landing.
 - **W138-1** (within): research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html gives a village's
   lanes five shapes (a GUESS, no page describing them): spine, T, Y, cross and a lane along the water "in a village by a
   stream", the last needing water along the cluster. The generator rolls only four. The fifth joins `LANE_SKELETONS`, offered
-  only where a brook or channel runs along the cluster's flank (within the band the drawing page names), with its own skeleton
+  only where a brook or channel runs along the cluster's flank (no page names a distance, so the band is a GUESS: within 120 ft of a flank over more than three fifths of it, pointed at from the drawing page's rule), with its own skeleton
   builder laying the spine parallel to the water; where no water runs along it, the roll is among the other four, as now.
 
 ### Wave 139 (T31) - the chessboard of ponds, beside the mosaic

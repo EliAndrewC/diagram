@@ -161,22 +161,26 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. every well draws its rolled gear and roof (well_gear check, proven red first), indoor wells a beam pulley (W135-2), the roof an outline on posts; glyph-checks PASS on county and Ubame round 2; 0196 record checks and the well pop-up answered; claims IN-STEP
 
-- [ ] T28 wave 136: a farmstead's own grave, a knob (0236), drawn at the plot's scale on the hamlets that roll it (FR-001)
+- [x] T28 wave 136: a farmstead's own grave, a knob (0236), drawn at the plot's scale on the hamlets that roll it (FR-001)
       research: rendering
+      verify: DONE. household grave drawn on Kuwabata (5 graves), glyph-check PASS, gate green, claims none owed, household-grave pop-up through form/research/depiction
 
-- [ ] T29 wave 137: the standing rack forms by their period (0016) - a search for a premodern date; drawn if dated, recorded undrawn if not (FR-001)
+- [x] T29 wave 137: the standing rack forms by their period (0016) - a search for a premodern date; drawn if dated, recorded undrawn if not (FR-001)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. two search passes (archive first, Japanese and Chinese) found no premodern date for Niigata's living-tree posts or Ehime's year-round racks; recorded undrawn on 0016's drawing page with an absence note; source-reader 2 READ, quote-check round 3 clean, translation-check FAITHFUL 2; no new source and no number reaches a map, so the registry's existing write-ups stand for applicability
 
-- [ ] T30 wave 138: the lane along the water, the fifth lane shape (0031), where water runs along the cluster (FR-001)
+- [x] T30 wave 138: the lane along the water, the fifth lane shape (0031), where water runs along the cluster (FR-001)
       research: rendering
+      verify: DONE. lane_skeleton_by_water rolls the waterside lane among five where a brook runs along a flank; web tests cover water_along_side and oriented_skeleton; gate green
 
-- [ ] T31 wave 139: the chessboard of ponds rolled beside the mosaic (0019, Qu Dajun 1678) (FR-001)
+- [x] T31 wave 139: the chessboard of ponds rolled beside the mosaic (0019, Qu Dajun 1678) (FR-001)
       research: rendering
+      verify: DONE. POND_LAYOUTS rolls mosaic two in three, grid one in three (measured on the chessboard rolls, measurements.json w139-chessboard-rolls); pop-ups for both layouts checked; gate green
 
 ## Standing - the ranking's remaining rows
 

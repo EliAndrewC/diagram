@@ -46,7 +46,7 @@
 </ul>
 <p class="spec"><strong>The rule the map follows (village):</strong> a village chooses by chance its cluster's position and shape, its lane pattern, where its water comes in, its plot size and regularity, and the drift of its dry fields' rows, each from its own seed, and a map may fix any one of them by hand. A hamlet chooses its cluster's shape, its lane pattern, its plot size and the drift of its dry rows by chance too, each from a table of its own; its plots are never laid out in even rows.<!-- hamletgen/plan.py plan_site: cluster_shape, lane_skeleton, plot_size, grain_drift rolled; hamletgen/water/comb.py passes plot_regularity "organic" --> A chance value its own rule forbids is never drawn:</p>
 <ul>
-<li>a lane along the water needs water running along the cluster;</li>
+<li>a lane along the water needs water running along the cluster;<!-- "along the cluster", a GUESS of this project's (no page names a distance): a brook within 120 ft of a flank of the houses over more than three fifths of that flank - hamletgen/consts.py WATER_ALONG_FT, WATER_ALONG_SHARE --></li>
 <li>a split village needs room for two hamlets to read apart, so a hamlet never splits;</li>
 <li>plots in even rows need a field laid out by plan;</li>
 <li>water entering where a stream crosses the valley's edge needs a stream, and water drawn from a pond - in a corner, midway along a margin, or a chain of ponds - needs a pond;</li>
