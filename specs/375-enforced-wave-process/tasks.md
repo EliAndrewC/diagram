@@ -207,6 +207,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T55 375 closes again: the yield table to the GM, the `make accept` row for check-bundle's measured saving, tests, `make hooks-test`, the gate, the report, landed (D52)
       research: rendering
       verify: DONE. DONE. make accept row filed (check-bundle's measured saving, for make gm-review); the yield table goes in the landing message; tests/tooling 1712+, tests/tools 622, tests/pipeline 106 passed; hooks-test inside make done; make done green (162 s, its record committed by itself); report written; landed by the push carrying this tick
-- [ ] GM review (make gm-reviewed F=375) [lands-open]
+- [x] GM review (make gm-reviewed F=375) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
