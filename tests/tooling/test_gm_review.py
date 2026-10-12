@@ -216,4 +216,7 @@ def test_explain_with_no_feature_names_only_what_needs_the_gm(root: pathlib.Path
     assert gm.main(["explain", "375", "1"]) == 0 and "went red twice" in capsys.readouterr().out
     held.write_text(json.dumps({"b#tubs": {"flag": "Held behind #retainers (row 21): after that lands"}}))
     (d / gm.ROWS).write_text("")
+    (held.parent / "waves.json").write_text(json.dumps({"a#door band": "115"}))
     assert gm.explain(root, width=200).startswith("WHAT NEEDS YOUR DECISION: nothing - no held question and no fix declined to you")
+    (held.parent / "waves.json").write_text(json.dumps({"b#tubs": "115"}))
+    assert gm.held(root) == [] and "WAITING ON OTHER WORK" not in gm.explain(root), "a row its wave closed is held no more"
