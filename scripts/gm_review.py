@@ -75,6 +75,11 @@ def held(root: Path, full: bool = False) -> list[str]:
     """The rows held for the GM today: 328's ranking rows flagged `Held` (`full`: the whole flag, and the fix it would make)."""
     f = root / HELD
     data = json.loads(f.read_text(encoding="utf-8")) if f.is_file() else {}
+    # a row the ranking closed (`audit/waves.json`, the wave that closed it) waits on nothing, whatever its flag still says:
+    # the tubs row stayed "Held behind" after 374's wave 115 closed it and the row it waited on (the GM, 2026-10-12)
+    w = f.parent / "waves.json"
+    closed = json.loads(w.read_text(encoding="utf-8")) if w.is_file() else {}
+    data = {k: v for k, v in data.items() if k not in closed}
     return [f"{k}: {v.get('flag', '') if full else v.get('flag', '')[:160]}" + (f". The fix it would make: {v['fix']}." if full and v.get("fix") else "")
             for k, v in sorted(data.items()) if str(v.get("flag", "")).startswith("Held")]
 
