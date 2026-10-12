@@ -419,5 +419,22 @@
     "observed": "2026-10-11",
     "source": "scratchpad cpu-pair.txt / cpu-pair20.txt: make hamlet --no-render in a detached worktree at the merge base and in the clone, alternating, timed with bash `times` (children's user CPU)",
     "method": "three wall-clock bookend pairs of the same code read 24.1 s, 24.0 s and 42.5 s for the identical end leg at a host load of 5-8 on 22 cores; CPU time interleaved removes the drift. Single runs scatter about 30%; the head is faster or level on every seed's mean except 47 at 20 households (+11%)"
+  },
+  "batch3-perf-audit-legs": {
+    "quantity": "perf-audit's seven alternated make-perf legs, base (merge base ab378e08) against head (e9491c2a8), in fresh detached worktrees: the reference totals, and (hinterland+woodland) and web as shares of the rest",
+    "value": {
+      "base_reference_s": [37.6, 17.3, 18.6],
+      "head_reference_s": [19.7, 21.5, 18.0, 25.6],
+      "hinterland_woodland_over_rest_base": "0.223-0.236",
+      "hinterland_woodland_over_rest_head": "0.241-0.252",
+      "web_over_rest_mean": {"base": 0.231, "head": 0.231},
+      "wood_rule_cost": "about +8% of hinterland+woodland, about +1.2% of the total"
+    },
+    "unit": "s",
+    "varies": "timing; host load 5-8 on 22 shared cores at the time",
+    "observed": "2026-10-11",
+    "source": "specs/374-match-the-research-continued/perf-audit-legs/*aud374*.json (3 base legs, 4 head legs); perf-audit's record dev/perf-log/20261011T105045Z-review-374-confirmation-local-diagram-backlog.json",
+    "command": "ls specs/374-match-the-research-continued/perf-audit-legs/ | grep -c aud374.*json",
+    "method": "perf-audit ran make perf alternately in two detached worktrees; the stage shares are each leg's stage seconds over the leg's untouched stages, which move with the load. The command re-counts the legs (7); the timings are not re-runnable as recorded"
   }
 }
