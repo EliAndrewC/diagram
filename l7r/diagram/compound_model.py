@@ -44,6 +44,7 @@ COURT_FILL: dict[str, str] = {
     "vegetable garden": "url(#vegetable-rows)",  # a worked bed in rows, apart from the ornamental garden (feature 283); open ground to the audit
     "inner yard": "url(#court-earth)",
     "practice ground": "url(#keiko-earth)",  # swept keiko earth (docs/buildings.md "Practice ground")
+    "rear yard": "url(#court-earth)",
 }
 # A court that is ROOFED is drawn with a building's solid outline (stroke, width) and posts along its open side
 # (feature 267 R22, research/questions/0099-the-hearing-court-shirasu.html 'The hearing court (shirasu)': a magistracy's court

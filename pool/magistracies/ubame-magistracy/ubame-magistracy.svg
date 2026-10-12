@@ -129,7 +129,8 @@
          480) running through it (feature 267 pass 2, buildings 420: the wall drawn broken around a structure that is
          part of it; the range stood inside the wall until then) -->
     <line x1="200" y1="750" x2="375.5" y2="750"/>
-    <line x1="416.5" y1="750" x2="570.5" y2="750"/>
+    <!-- and broken along the servants' common room at the range's west end (x 489..575, feature 374 wave 124) -->
+    <line x1="416.5" y1="750" x2="484.5" y2="750"/>
     <line x1="794.5" y1="750" x2="1070" y2="750"/>
   </g>
 
@@ -293,6 +294,19 @@
     <text font-size="9" font-weight="bold" fill="#3A2E1C">cell</text>
   </g>
 
+  <!-- THE SERVANTS' COMMON ROOM, the gate range's west end (feature 374 wave 124): the household's servants lodge on its
+       street edge, in the range the gate runs through - 0115's drawing page draws a large household's servants "in a
+       range - a long, narrow building under one roof - on its street edge", "in the proportion of a long-house gate",
+       and 0097's common room "entered by one door", the chugen's form, is this sheet's (it was the north-wall range's)
+       (research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html).
+       29 by 12 ft (86 x 36 px), the range's own measured depth (0093); its one door on the north face, onto the outer
+       court. It stood on the north wall behind the house, 85 by 14 ft. -->
+  <g data-kind="servants' quarters">
+    <rect x="489" y="718" width="86" height="36" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="522" y="718" width="20" height="4" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <text font-size="8" font-weight="bold" fill="#3A2E1C">servants'</text>
+    <text font-size="8" font-weight="bold" fill="#3A2E1C" data-cont="1">quarters</text>
+  </g>
   <!-- Gatehouse: the GATE RANGE is a nagaya-mon - its south face IS the wall line (the wall is broken along it) and
        the 12 ft main-gate passage runs THROUGH it, a room on each side: the guardroom east (46 x 12 ft), opening
        onto the passage by its door, and a gate-keepers' room west (13 x 12 ft) (feature 267 pass 2, R19/R26,
@@ -323,14 +337,16 @@
   <!-- Barracks (the duty watch) - backs the divider, forming the garrison range with
        the family rowhouse below it -->
   <g data-kind="barracks">
-    <rect x="714" y="460" width="134" height="96" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <!-- feature 374 wave 125: 45 x 24 ft (it was 45 x 32) - 0097's drawing page draws a barracks 12 to 24 ft deep, never a
+         square or squat block (research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html) -->
+    <rect x="714" y="460" width="134" height="72" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <!-- the duty watch's three bays under one door are divided by SLIDING PARTITIONS, dashed (feature 335 building review
          round 2: walled bays behind one shared door are never drawn - research 0097; the common-room form is 0097's for
          servants living together, taken for the watch as a GUESS; a door per bay would re-mass the block, whose middle bay
          has no free outer face) -->
-    <line x1="759" y1="460" x2="759" y2="556" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="804" y1="460" x2="804" y2="556" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <rect x="840" y="496" width="8" height="24" fill="#4A3318" data-kind="door"/>
+    <line x1="759" y1="460" x2="759" y2="532" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="804" y1="460" x2="804" y2="532" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <rect x="840" y="484" width="8" height="24" fill="#4A3318" data-kind="door"/>
     <text font-size="11" font-weight="bold" fill="#3A2E1C">barracks</text>
   </g>
 
@@ -481,20 +497,6 @@
   <!-- INNER COURT (north half) - residence, garden, shrine          -->
   <!-- ============================================================ -->
 
-  <!-- Servants' quarters (nagaya) along the north wall - the rear service strip -->
-  <g data-kind="servants' quarters">
-    <rect x="214" y="162" width="254" height="42" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
-    <!-- the bays' divisions are SLIDING PARTITIONS, dashed as the residences' are: four bays under one door is the common-room
-         form (research buildings 910, feature 293), accurate only if the divisions read as partitions, not walls (feature
-         335 D8 - they were solid) -->
-    <line x1="277" y1="162" x2="277" y2="204" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="340" y1="162" x2="340" y2="204" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="403" y1="162" x2="403" y2="204" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <!-- the one door, on the range's EAST END face (feature 335, building review: on the south face its tub stood mid-way in
-         the 4.7 ft alley that is the rear yard's only service way in; feature 267 pass 2 had moved it off the partition) -->
-    <rect x="462" y="170" width="6" height="26" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
-    <text font-size="9" font-weight="bold" fill="#3A2E1C">servants' quarters</text>
-  </g>
 
 
   <!-- The rear yard: open working ground behind the house, the storehouses beyond it on the north wall (feature 283,
@@ -504,9 +506,10 @@
        reception (x 838-912, to the garden's top at y 326) - the reception privy's service way, so the carters come from the
        rear yard to the privy without crossing the garden - and a trodden path runs from the rear alley's service end across
        it to both storehouse doors (a GUESS: no page we read draws a way to a storehouse door; the building review asked for
-       one, 2026-09-28). -->
+       one, 2026-09-28). Feature 374 wave 124: it reaches west along the north wall to the west strip, over the ground the
+       servants' range left when it moved to the street front (0115's drawing page). -->
   <g data-kind="rear yard">
-    <polygon points="536,158 912,158 912,326 838,326 838,232 536,232" fill="none"/>
+    <polygon points="214,158 912,158 912,326 838,326 838,232 536,232 536,210 214,210" fill="none"/>
     <path d="M 540 214 H 787 V 200 M 647 214 V 200" fill="none" stroke="#C8B080" stroke-width="7" stroke-linecap="butt" stroke-linejoin="round"/>
     <text font-size="9" font-style="italic" fill="#7A6A4A">rear yard</text>
   </g>
@@ -932,7 +935,7 @@
     <!-- feature 374 wave 113: the kitchen pair either side of its west door (this one and the label's), the bath's on its
          south face, each moved with the smaller kitchen -->
     <circle cx="337.5" cy="312" r="3.8"/>
-    <circle cx="474" cy="166" r="3.8"/>
+    <circle cx="514" cy="711" r="3.8"/>
     <circle cx="425" cy="310" r="3.8"/>
     <circle cx="461" cy="310" r="3.8"/>
     <circle cx="772" cy="330" r="3.8"/>
@@ -943,7 +946,7 @@
     <circle cx="966" cy="291.5" r="3.8"/>
     <circle cx="352.5" cy="532" r="3.8"/>
     <circle cx="852" cy="610" r="3.8"/>
-    <circle cx="855.5" cy="527" r="3.8"/>
+    <circle cx="855.5" cy="515" r="3.8"/>
     <circle cx="655.5" cy="714" r="3.8"/>
     <circle cx="306" cy="697.7" r="3.8"/>
     <circle cx="250" cy="662" r="3.8"/>

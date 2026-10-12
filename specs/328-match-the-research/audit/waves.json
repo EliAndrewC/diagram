@@ -680,5 +680,7 @@
   "l7r/diagram/hamletgen/hinterland/parcels.py::_beyond_the_fields#no wood below the houses": "120",
   "l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld": "120",
   "l7r/diagram/buildings/types.json#door band": "122",
-  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": "122"
+  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": "122",
+  "docs/building-programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof": "123",
+  "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine": "123"
 }

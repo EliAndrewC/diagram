@@ -184,7 +184,7 @@ def test_county_magistracy_places_without_overflow() -> None:
     assert res.overflow == []
     # the clerks' room is a room of the office hall (feature 267); the grooms' row joined in pass 5; the karo lodges in a
     # bay of the retainers' long-house since pass 6
-    assert len(res.placed) == 14
+    assert len(res.placed) == 15  # feature 374 wave 124: the inner servants' range gone, two storehouses added
 
 
 def test_county_magistracy_buildings_clear_the_spine() -> None:
@@ -535,7 +535,7 @@ def test_the_county_example_carries_the_program_the_outcomes_name() -> None:
     assert {"residence", "kitchen", "guest quarters", "retainers' quarters", "barracks", "servants' quarters"} <= doors
     for kind in ("family quarters", "lord's quarters", "reception room", "engawa"):
         assert f'data-kind="{kind}"' in svg
-    assert svg.count("<ellipse") >= 5 and ">hearing" in svg and ">servants' quarters<" in svg
+    assert svg.count("<ellipse") >= 5 and ">hearing" in svg and ">servants' row<" in svg
     cell = next(p for p in result.placed if p.spec.kind == "cell")
     assert svg.split('<g data-kind="cell">')[1].split("</g>")[0].count("<line") == len(cp._lattice(cell)) >= 3
     assert pa.tubs_in_buildings(plan) == [] and pa.floating_doors(plan) == []
@@ -668,7 +668,9 @@ def test_the_hearing_court_carries_its_mats_and_the_hall_its_band() -> None:
     _prog_, _result, svg = _county()
     for kind in ("day office", "official study", "clerks' seats", "kneeling positions"):
         assert f'data-kind="{kind}"' in svg
-    assert svg.count('fill="#4A3318" stroke="none" stroke-width="0" data-kind="latrine"') >= 2  # the wall hatches
+    # the wall hatch of a privy flush against its wall: since feature 374 wave 124 the servants' row by the stables serves the
+    # grooms too, so the one privy on the south wall stands for the two that stood on the north and south walls before
+    assert svg.count('fill="#4A3318" stroke="none" stroke-width="0" data-kind="latrine"') >= 1
 
 
 # --- pass 6 (building-review round 5): the privies by the walls, the guests' privy, the karo's bay ---
@@ -727,9 +729,20 @@ def test_the_county_example_keeps_the_karo_in_a_bay_of_the_staff_long_house() ->
     names = {p.spec.name for p in result.placed}
     assert "karo's house" not in names
     assert 'data-kind="karo\'s house"' in svg  # the bay, a room of the retainers' quarters
+    staff = next(p for p in result.placed if p.spec.feature == "retainers' quarters")
+    assert staff.spec.w_ft <= 24.0 < staff.spec.h_ft  # feature 374 wave 125 (0097): a rowhouse no more than ~24 ft deep, long on its wall
+
+
+def test_the_county_servants_lodge_on_the_street_front_and_the_stores_behind_the_house() -> None:
+    """Feature 374 wave 124 (0115's drawing page): a large household's servants lodge in a range on its street edge, never a
+    rowhouse behind the house; the ground behind the house keeps its stores."""
+    _prog_, result, _svg = _county()
+    lodgings = [p for p in result.placed if p.spec.feature == "servants' quarters"]
+    assert lodgings and all(p.spec.court == "outer" and p.spec.wall == "S" and p.spec.rank == 1 for p in lodgings)
     kitchen = next(p for p in result.placed if p.spec.name == "kitchen")
-    servants = next(p for p in result.placed if p.spec.feature == "servants' quarters" and p.spec.court == "inner")
-    assert servants.x2 < kitchen.x_ft  # the servants' row beside the kitchen yard (pass 6)
+    stores = [p for p in result.placed if p.spec.feature == "storehouse"]
+    assert len(stores) == 2 and all(p.spec.wall == "N" and p.x2 < kitchen.x_ft for p in stores)
+    assert next(p for p in result.placed if p.spec.feature == "barracks").spec.w_ft <= 24.0  # 0097: never squat
 
 
 def test_the_rear_alley_runs_on_behind_the_kitchen_to_the_yard() -> None:
@@ -737,9 +750,10 @@ def test_the_rear_alley_runs_on_behind_the_kitchen_to_the_yard() -> None:
     serves the house's privies runs on behind it to the way by the servants' row - the carter's route from the postern."""
     _prog_, result, _svg = _county()
     by = {p.spec.name: p for p in result.placed}
-    kitchen, home, servants = by["kitchen"], by["residence"], by["servants' quarters"]
+    kitchen, home = by["kitchen"], by["residence"]
+    yard = next(z for z in _prog_.spine if z.name == "rear yard")
     assert kitchen.y_ft == home.y_ft >= 10.0  # the alley's full depth behind both
-    assert kitchen.x_ft - servants.x2 >= c.FIRE_GAP_FT  # and the way down to the yard
+    assert kitchen.x_ft - yard.x2 >= c.FIRE_GAP_FT  # and the way down to the yard, past the rear yard (feature 374 wave 124)
 
 
 # --- feature 287: every caption and fixture on a generated sheet seated by its rule, or the program refused ---
@@ -950,3 +964,20 @@ def test_a_building_of_no_door_kind_draws_no_door() -> None:
     prog = _prog(shed)
     svg = c.emit_svg(prog, c.place(prog))
     assert "woodshed" not in cp.DOOR_KINDS and 'data-kind="door"' not in svg
+
+
+def test_a_servants_privy_serves_the_stables_only_when_it_stands_near_them() -> None:
+    """Feature 374 wave 124: the grooms share the servants' privy where the servants' row stands by the stables; stables a
+    servants' privy cannot serve (farther than GROOMS_PRIVY_FT) keep their own."""
+
+    def privies(spine: tuple[c.CourtZone, ...]) -> int:
+        prog = c.CompoundProgram(
+            "t",
+            _env(300.0, 120.0, 40.0, 8.0),
+            spine,
+            (_b("servants", 40.0, 15.0, "outer", "S", order=6, feature="servants' quarters"), _b("stables", 30.0, 20.0, "outer", "S", order=5, feature="stables")),
+        )
+        return c.emit_svg(prog, c.place(prog)).count('fill="#7E726A"')
+
+    assert privies(()) == 1, "the stables beside the servants' row: one privy serves both"
+    assert privies((c.CourtZone("cart yard", 50.0, 95.0, 90.0, 22.0),)) == 2, "pushed past a yard ~90 ft off: each keeps its own"

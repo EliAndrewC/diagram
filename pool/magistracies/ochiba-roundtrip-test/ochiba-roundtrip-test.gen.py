@@ -51,7 +51,7 @@ def ochiba_program() -> C.CompoundProgram:
         # inner (residence) court
         b("residence (W)", "lord", 90.0, 25.0, "inner", "N", order=10, feature="residence"),
         b("residence (E)", "lord", 93.0, 25.0, "inner", "N", order=9, feature="residence"),
-        b("servants", "service", 73.0, 13.0, "inner", "N", order=2, rank=2, feature="servants' quarters"),  # rear service strip
+        b("servants", "service", 65.0, 15.0, "outer", "S", order=7, feature="servants' quarters"),  # the street range, as Ochiba's since feature 374 wave 124 (0115)
         b("kitchen", "service", 18.0, 24.0, "inner", "W", order=5, feature="kitchen"),  # feature 374 wave 113: 0091 measured kitchen, 24 ft along the wall (it was 40 x 33)
         b("Inari shrine", "shrine", 37.0, 31.0, "inner", "E", order=5, feature="compound shrine"),
         b("cinnabar workshop", "shrine", 37.0, 24.0, "inner", "E", order=4, feature="cinnabar workshop"),

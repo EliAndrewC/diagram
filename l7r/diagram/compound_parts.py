@@ -266,6 +266,11 @@ def _door(env: Envelope, p: Placed, boxes: list[Box], side: str = "") -> tuple[B
     return None
 
 
+GROOMS_PRIVY_FT: float = 55.0
+"""How far a servants' privy may stand from the stables and still serve their grooms too (pass 6 merged the two at ~49 ft
+apart; feature 374 wave 124 kept the stables' own where the servants' range stood ~106 ft away). A drawing convention."""
+
+
 def _gap(a: Box, b: Box) -> float:
     """The clear distance between two boxes (0 where they touch or overlap)."""
     dx = max(b[0] - a[2], a[0] - b[2], 0.0)
@@ -521,24 +526,31 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             privies.append(((guest[0] + guest[2]) / 2, (guest[1] + guest[3]) / 2, "residence"))
     # the grooms lodge by the stables where a servants' row stands in the stables' court: their one privy serves both
     # (pass 6: the stables' and the grooms' stood ~49 ft apart, the stables' hatch by the main gate)
-    grooms = {p.spec.court for p in result.placed if p.spec.feature == "servants' quarters"}
-    for p in result.placed:
-        if p.spec.feature not in ("servants' quarters", "stables", "barracks") or (p.spec.feature == "stables" and p.spec.court in grooms):
+    # - where the servants' privy SEATED, and near the stables: the servants are seated first, and stables whose court's
+    # servants' privy found no seat, or stands farther than GROOMS_PRIVY_FT from them, keep their own (feature 374 wave
+    # 124: the round-trip sheet's street range stands ~106 ft from its stables, and the stables lost their privy to it)
+    grooms: list[tuple[str, float, float]] = []
+    lodgers = sorted((p for p in result.placed if p.spec.feature in ("servants' quarters", "stables", "barracks")), key=lambda p: p.spec.feature != "servants' quarters")
+    for p in lodgers:
+        if p.spec.feature == "stables" and any(c == p.spec.court and _gap((x, y, x, y), (p.x_ft, p.y_ft, p.x2, p.y2)) <= GROOMS_PRIVY_FT for c, x, y in grooms):
             continue
+        before = len(privies)
         # FLUSH AGAINST THE SIDE WALL beside the building first, the service wall its carter empties it through (pass 6:
         # the servants' stood ~20 ft out in the court), then an end face at its wall end, the court face last
         if flush := _flush_privy(env, p, taken + zones, well_boxes):
             taken.append(flush)
             privies.append(((flush[0] + flush[2]) / 2, (flush[1] + flush[3]) / 2, ""))
-            continue
-        court = _court_side(p)
-        wall = {"N": "S", "S": "N", "E": "W", "W": "E"}[court]
-        ends = ("E", "W") if court in ("N", "S") else ("N", "S")
-        toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
-        for side, fracs in ((ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
-            if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0), side, well_boxes, tuple(zones)):
-                privies.append((*v, ""))
-                break
+        else:
+            court = _court_side(p)
+            wall = {"N": "S", "S": "N", "E": "W", "W": "E"}[court]
+            ends = ("E", "W") if court in ("N", "S") else ("N", "S")
+            toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
+            for side, fracs in ((ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
+                if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0), side, well_boxes, tuple(zones)):
+                    privies.append((*v, ""))
+                    break
+        if p.spec.feature == "servants' quarters" and len(privies) > before:
+            grooms.append((p.spec.court, privies[-1][0], privies[-1][1]))
     # a door on each lodging block's face (DOOR_KINDS, `_door`), a part of its building: seated after the bath, the
     # wells and the privies and BEFORE the tubs, which have seats to spare. The door and the ground before it are held
     # clear of what follows. A building may carry more than one (`BuildingSpec.extra_doors`).

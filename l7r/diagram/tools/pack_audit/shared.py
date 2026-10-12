@@ -398,11 +398,17 @@ def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
 
 def one_compound_shrine(text: str) -> list[str]:
     """A compound draws ONE modest shrine, however many a real office kept (0218's drawing page, a deliberate deviation:
-    research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html); a second god is enshrined in that hall or,
-    where the sheet's roll says so, recorded as the second kami's form - never a second shrine building (feature 374 wave 123,
-    Hayakawa's river-kami shrine). A shrine is a group tagged `compound shrine`; its arch, tagged a part of it, is not one."""
-    groups = len(re.findall(r'<g data-kind="compound shrine"[\s>]', text))
-    return [f"{groups} compound shrines drawn - a compound draws one modest shrine; enshrine a second god in its hall"] if groups > 1 else []
+    research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html). A second kami is enshrined in that hall, or
+    keeps a shrine of its own inside the precinct where the sheet's roll of its form says so - that shrine's group declares
+    `data-form="own shrine"` and is not counted (feature 374 wave 123: Hayakawa's river kami, which rolls one hall, had a
+    shrine of its own). A shrine is a group tagged `compound shrine`; its arch, tagged a part of it, is not one."""
+    groups = re.findall(r'<g data-kind="compound shrine"([^>]*)>', text)
+    main = [g for g in groups if 'data-form="own shrine"' not in g]
+    return (
+        [f"{len(main)} compound shrines drawn - a compound draws one modest shrine; enshrine a second god in its hall, or declare its rolled own shrine data-form=\"own shrine\""]
+        if len(main) > 1
+        else []
+    )
 
 
 HALL_MIN_SPAN_FT: float = 6.0  # an open stretch of the building shorter than this is a partition's gap, not the hall
