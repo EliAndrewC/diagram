@@ -7,12 +7,13 @@ What the yard's surface was like, and what work was done on it, are not recorded
 about 12 by 18 ft being the common size, and a middle-rank house at Matsushiro kept two.
 
 How large the yard was is not recorded. It lay within the house's walled grounds, which at a district magistrate's house
-of 1794 at Matsushiro ran to about a thousand tsubo (~0.8 acre), round a house of about 1,740 sq ft.
+at Matsushiro in the Edo period ran to about a thousand tsubo (about 0.8 acre), round a house of about 1,740 sq ft.
 
 Guesses:
 - That the household's service stood on the shady ground behind the house with the storehouses - its well and its
   family privy: no account places a privy in a samurai house's grounds (at one Kakunodate house a well stood just inside
   the gate), so this is reasoned from the garden's place in the sunny south.
+- The yard's size on the map: how large the yard was is not recorded, so the plan keeps it no wider than its use.
 
 Depiction: The plan leaves the ground between the house and its storehouses open and names it, drawn as the court's own
 bare earth. It is never drawn as a wide empty band behind the house: like every open stretch of the compound, it is kept

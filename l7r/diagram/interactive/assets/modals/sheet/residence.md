@@ -3,7 +3,7 @@ they ran. In a Chinese county office the home stood behind the office by regulat
 at Takayama, the one Japanese intendant's office that survives, the residence stood beside it.
 
 Such a house was usually one block under one roof; halls joined by corridors belonged to the mansions of shoguns and
-daimyo, and at the Katsura villa halls were added in three phases over about half a century, each stepped back from the last. In a lord's palace the
+daimyo. In a lord's palace the
 rooms ran from the reception at the front, through the master's own rooms, to the family's beyond; a smaller house could
 set its formal room deepest in.
 

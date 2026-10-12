@@ -6,12 +6,14 @@ at the intendant's office at Takayama the residence stood beside the office rath
 
 Its ground was divided by the sun. The formal garden lay on the south side, before the reception rooms; at Takayama the
 great hall of the office and the intendant's own room looked onto one garden. The house itself was one block under one
-roof, with its guest rooms inside it. Behind it, on the shady side, lay the household's working ground: at one samurai
+roof, with its guest rooms inside it.
+
+Behind it, on the shady side, lay the household's working ground: at one samurai
 house at Matsushiro the storehouse stood beyond open ground behind the main house. At one samurai house at Matsue the
 servants lived in the range the front gate was built into; where a house kept its well and its family privy is not
 recorded.
 
-Its size went with the house it held: a district magistrate's house built in 1794 at Matsushiro covered about 1,700 sq ft,
+Its size went with the house it held: a district magistrate's house at Matsushiro, built in the Edo period, covered about 1,700 sq ft,
 on grounds of about 0.8 acre.
 
 Guesses:
