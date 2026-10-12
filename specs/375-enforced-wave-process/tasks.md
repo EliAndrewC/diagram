@@ -162,3 +162,13 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T43 The texts (D37); 375 closes again: tests, `make hooks-test`, the gate, the report, landed
       research: rendering
       verify: DONE. the texts (constitution 2.30.0, CLAUDE.md, l7r/diagram/CLAUDE.md, dev/performance.md, docs/guards.md, docs/efficiency-tooling.md, the system prompt, perf-audit and round-arbiter, the Makefile); tests/tooling 1665 and tests/tools 607 passed; hooks-test green; make done green (254 s); report written; landed by the push carrying this tick
+
+## Amendment 6 (the GM 2026-10-12: About no longer owes modal-depiction; handed to the Diagram performance session)
+
+- [ ] T44 About drops out of what owes `modal-depiction` (FR-028): the depiction fingerprint and the re-owe rule, `modal-depiction`'s contract, the replay of the 44 About-only edits; tests red on today's code (SC-021)
+      research: rendering
+      verify: SC-021's tests green; `make record-owed` on an About-only pop-up edit names modal-form, not modal-depiction
+- [ ] T45 375 closes again: 343's rows 83 and 84 closed in `found.jsonl`, tests, `make hooks-test`, the gate, the report, landed
+      research: rendering
+      verify: spec-fidelity on amendment 6, plan reviewed; make done green; make feature-report F=375 WRITE=1
+
