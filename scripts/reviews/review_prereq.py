@@ -21,6 +21,7 @@ costs 0.18 s.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import pathlib
@@ -398,6 +399,31 @@ def gate_state(clone: pathlib.Path, fresh: Callable[[pathlib.Path], bool] = _fre
     return "running" if any(t in GATE_TARGETS for t in live(clone)) else "red"
 
 
+def unit_sheet(clone: pathlib.Path, unit: str) -> str:
+    """The map or sheet an owed review unit is judged on (`review_owed`'s `on`), or "" where the unit is not owed now."""
+    try:
+        _desc, units, _problems = _owed_module().owed(clone)
+    except Exception:  # noqa: BLE001 - an unreadable delta leaves the unit unnamed, and its verdict keyed by the engine alone
+        return ""
+    return next((u.on for u in units if u.slug == unit), "")
+
+
+def content_key(clone: pathlib.Path, sheet: str) -> str:
+    """A hash of what a review of `sheet` read: its drawing and its notes, wherever its folder is in the pool trees. A verdict
+    stales on THIS, not only on the whole engine's key (the round arbiter's tooling fix, feature 374 batch 4: one value in one
+    generated program staled ten verdicts across sheets it never touched). "" where the sheet has no folder."""
+    if not sheet:
+        return ""
+    folders = [d for tree in ("pool", "legacy-hand-authored-pool") for d in (clone / tree).glob(f"*/{sheet}") if d.is_dir()]
+    if not folders:
+        return ""
+    h = hashlib.sha256()
+    for name in (f"{sheet}.svg", f"{sheet}.notes.md"):
+        f = folders[0] / name
+        h.update(name.encode() + b"\0" + (f.read_bytes() if f.is_file() else b"") + b"\0")
+    return h.hexdigest()[:16]
+
+
 def write_verdict(clone: pathlib.Path, name: str, verdict: str, findings: list[dict], state: str) -> tuple[str, dict]:
     """Write the map's verdict record, the review's last act (FR-001). Returns (what was recorded, the record).
 
@@ -411,6 +437,8 @@ def write_verdict(clone: pathlib.Path, name: str, verdict: str, findings: list[d
     pairing = _read_json(clone / ".git" / "pairing-state.json")
     key = str(pairing.get("review_dispatch_key", "")) if isinstance(pairing, dict) else ""
     rec: dict = {"map": name, "unit": name, "engine_key": key, "verdict": verdict, "gate": state, "findings": findings, "strict": True}
+    if ck := content_key(clone, unit_sheet(clone, name)):
+        rec["content_key"] = ck
     if verdict != "NOT-REVIEWABLE" and state == "red":
         rec.update(verdict="NOT-REVIEWABLE", concluded=verdict, why="the paired gate was red when the verdict was written")
     for i, f in enumerate(findings, 1):
@@ -430,7 +458,7 @@ def write_verdict(clone: pathlib.Path, name: str, verdict: str, findings: list[d
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["check", "accept", "recorded", "gate-state", "verdict", "named"])
+    ap.add_argument("command", choices=["check", "accept", "recorded", "gate-state", "verdict", "named", "content-key"])
     ap.add_argument("--verdict", default="")
     ap.add_argument("--findings-file", default="")
     ap.add_argument("--key", default="")
@@ -442,6 +470,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--finding", default="")
     ap.add_argument("--reason", default="")
     args = ap.parse_args(argv)
+    if args.command == "content-key":
+        # the review gate's question: is this unit's sheet what its verdict read? (prints "" where it cannot tell)
+        print(content_key(pathlib.Path(args.clone), unit_sheet(pathlib.Path(args.clone), args.map)))
+        return 0
     if args.command == "gate-state":
         state = gate_state(pathlib.Path(args.clone))
         print(state)
