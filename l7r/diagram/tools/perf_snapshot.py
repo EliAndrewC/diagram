@@ -39,6 +39,7 @@ import io
 import json
 import os
 import platform
+import shutil
 import statistics
 import subprocess
 import sys
@@ -105,7 +106,32 @@ def _where() -> str:
 SCALING_SIZES = (10, 20, 40)
 
 
-def measure(seeds: tuple[int, ...], households: int | None = None) -> list[dict[str, Any]]:
+def machine_state(path: str = SKILL) -> dict[str, Any]:
+    """The machine as a snapshot starts or ends (feature 375 amendment 5, FR-024): available and total RAM, the load averages,
+    free and total disk under `path`. The GM, 2026-10-11: "capture not only the before and after times, but also the
+    available RAM and the CPU load and ... the disk usage" - read once at each end, never during the run. A field this
+    machine cannot report is left out, never guessed."""
+    out: dict[str, Any] = {}
+    try:
+        with open("/proc/meminfo") as fh:
+            mem = {k.strip(): v for k, _, v in (ln.partition(":") for ln in fh)}
+        out["ram_available_mb"] = int(mem["MemAvailable"].split()[0]) // 1024
+        out["ram_total_mb"] = int(mem["MemTotal"].split()[0]) // 1024
+    except (OSError, KeyError, ValueError, IndexError):
+        pass
+    try:
+        out["load"] = [round(x, 2) for x in os.getloadavg()]
+    except OSError:
+        pass
+    try:
+        du = shutil.disk_usage(path)
+        out["disk_free_gb"], out["disk_total_gb"] = round(du.free / 2**30, 1), round(du.total / 2**30, 1)
+    except OSError:
+        pass
+    return out
+
+
+def measure(seeds: tuple[int, ...], households: int | None = None, warm: bool = False) -> list[dict[str, Any]]:
     """Roll the reference hamlet on each seed, timing every stage - at `households` when given (the scaling leg), the band lifted
     for this roll alone (`beyond_the_band`). A roll the generator refuses is recorded as `refused`, never swapped for another
     seed: a seed that refuses at a size is that size's finding (spec Edge Cases)."""
@@ -116,15 +142,26 @@ def measure(seeds: tuple[int, ...], households: int | None = None) -> list[dict[
 
     rows: list[dict[str, Any]] = []
     spec = dict(REFERENCE, **({} if households is None else {"households": households}))
+    if warm and seeds:
+        # THE FIRST ROLL IN A PROCESS IS WARMED, UNTIMED (feature 375 amendment 5, FR-024): measured, it counted another
+        # thread's start-up work as its own CPU time - 6.26 s of CPU in 4.47 s of wall on seed 4, later rolls equal to 0.01 s
+        # (specs/375-enforced-wave-process/research.md R4)
+        with beyond_the_band():
+            warm_plan = plan_site(HamletSpec(seed=seeds[0], **spec))
+        warm_s = Settlement(W=warm_plan.W, H=warm_plan.H, seed=warm_plan.spec.seed)
+        with roll_scope(warm_plan.spec), redirect_stdout(io.StringIO()):
+            for st in STAGES:
+                st(warm_s, warm_plan)
     for seed in seeds:
         with beyond_the_band():
             plan = plan_site(HamletSpec(seed=seed, **spec))
         s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
         stages: dict[str, float] = {}
+        cpu: dict[str, float] = {}  # each stage's CPU seconds beside its wall seconds (FR-024)
         refused: str | None = None
         with roll_scope(plan.spec):  # a roll like any other: the memo cleared and the heap trimmed when it ends (feature 210), the census written (213)
             for st in STAGES:
-                t0 = time.time()
+                t0, c0 = time.time(), time.process_time()
                 try:
                     with redirect_stdout(io.StringIO()):
                         st(s, plan)
@@ -135,6 +172,7 @@ def measure(seeds: tuple[int, ...], households: int | None = None) -> list[dict[
                     break
                 finally:
                     stages[st.__name__.replace("stage_", "")] = round(time.time() - t0, 2)
+                    cpu[st.__name__.replace("stage_", "")] = round(time.process_time() - c0, 2)
         row: dict[str, Any] = {
             "seed": seed,
             "form": getattr(plan, "settlement_form", "n/a"),
@@ -142,12 +180,14 @@ def measure(seeds: tuple[int, ...], households: int | None = None) -> list[dict[
             "houses": len(s.M.get("houses", [])),
             "asked": plan.spec.households,
             "stages": stages,
+            "cpu_stages": cpu,
         }
         if households is not None:
             # how many seats the placer was offered: the counter that shows a pruning lever's effect without a profile (plan D1)
             row.update(households=households, placer_calls=int((getattr(s, "_seat_search", None) or {}).get("placer_calls", 0)))
         if refused is None:
             row["seconds"] = round(sum(stages.values()), 1)
+            row["cpu_seconds"] = round(sum(cpu.values()), 1)
         else:
             row["refused"] = refused
         rows.append(row)
@@ -178,14 +218,19 @@ def identity_of(snap: dict[str, Any]) -> tuple[str, str, str]:
     return (str(snap.get("environment") or "local"), str(snap.get("host", "laptop")), str(snap.get("image", "laptop")))
 
 
-def record(label: str, seeds: tuple[int, ...]) -> str:
+def record(label: str, seeds: tuple[int, ...], scaling_leg: bool = False) -> str:
+    """Write a snapshot. THE SCALING LEG ONLY WHEN ASKED (feature 375 amendment 5, FR-026; the GM 2026-10-11: "Having those
+    scaling legs available when investigating our algorithm is useful, but I don't think we need them at all during normal
+    operations") - `make perf SCALING=1`."""
     os.makedirs(LOG_DIR, exist_ok=True)
+    before = machine_state()
     print(f"reference hamlet ({REFERENCE['name']} spec) across seeds {list(seeds)}:", flush=True)
-    rows = measure(seeds)
+    rows = measure(seeds, warm=True)
     scaling: list[dict[str, Any]] = []
-    for size in SCALING_SIZES:
+    for size in SCALING_SIZES if scaling_leg else ():
         print(f"...at {size} households (the scaling leg):", flush=True)
         scaling += measure(seeds, households=size)
+    after = machine_state()
     totals = [float(r["seconds"]) for r in rows]
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     clone = _where()
@@ -203,6 +248,9 @@ def record(label: str, seeds: tuple[int, ...]) -> str:
         "total_seconds": round(sum(totals), 1),
         "median_seconds": round(statistics.median(totals), 1),
         "worst_seconds": round(max(totals), 1),
+        "total_cpu_seconds": round(sum(float(r.get("cpu_seconds", 0.0)) for r in rows), 1),
+        "machine_before": before,
+        "machine_after": after,
         "rows": rows,
         "scaling": scaling,
     }
@@ -236,10 +284,13 @@ def report(against: str | None) -> int:
     if not snaps:
         print("no snapshots yet - run: make perf")
         return 0
-    print(f"{'utc':<18}{'label':<18}{'commit':<10}{'total':>8}{'median':>8}{'worst':>8}  machine")
+    # THE TREND SAYS WHEN (feature 375 amendment 5, FR-027): each snapshot's load and free RAM at its two ends beside its totals,
+    # so a run taken under load reads as one and a real slowdown can be placed between two snapshots, two commits
+    print(f"{'utc':<18}{'label':<18}{'commit':<10}{'total':>8}{'cpu':>8}{'median':>8}{'worst':>8}  {'load start>end':<16}{'free RAM GB':<14}machine")
     for s in snaps:
         print(
-            f"{str(s['utc']):<18}{str(s['label'])[:17]:<18}{str(s['commit']):<10}{float(s['total_seconds']):>7.1f}s{float(s['median_seconds']):>7.1f}s{float(s['worst_seconds']):>7.1f}s  {identity_of(s)[0]}/{identity_of(s)[1]}"
+            f"{str(s['utc']):<18}{str(s['label'])[:17]:<18}{str(s['commit']):<10}{float(s['total_seconds']):>7.1f}s{_cpu_total(s):>8}"
+            f"{float(s['median_seconds']):>7.1f}s{float(s['worst_seconds']):>7.1f}s  {_ends(s, 'load'):<16}{_ends(s, 'ram'):<14}{identity_of(s)[0]}/{identity_of(s)[1]}"
         )
 
     base = None
@@ -280,55 +331,27 @@ def report(against: str | None) -> int:
         )
         print("A FULL build takes BOTH bookends itself (the -start on the pre-merge main); a local pair needs a local -start.")
         return 1
-    print(f"\n{cur['label']} vs {base['label']}:")
-    bad = 0
-    was_total = now_total = 0.0
-    by_seed: dict[int, dict[str, Any]] = {int(r["seed"]): r for r in base["rows"]}
-    for r in cur["rows"]:
-        b = by_seed.get(int(r["seed"]))
-        if not b:
-            continue
-        was, now = float(b["seconds"]), float(r["seconds"])
-        was_total, now_total = was_total + was, now_total + now
-        pct = (now - was) / was * 100.0 if was else 0.0
-        # 5% IS THE PROJECT'S OWN THRESHOLD for a whole-process speedup mattering; the same figure is
-        # used here in the other direction, so a slowdown is called out at the size a speedup counts.
-        flag = "  <-- SLOWER" if pct > 5.0 else ("  faster" if pct < -5.0 else "")
-        bad += 1 if pct > 5.0 else 0
-        print(f"  seed {int(r['seed']):>3}  {was:>6.1f}s -> {now:>6.1f}s  {pct:+6.1f}%{flag}")
-    total_pct = (now_total - was_total) / was_total * 100.0 if was_total else 0.0
-    print(f"\n  TOTAL     {was_total:>6.1f}s -> {now_total:>6.1f}s  {total_pct:+6.1f}%")
-    # THE GM'S THREE BANDS (feature 129, 2026-08-24) decide what this pair OWES; they are enforced at
-    # the PUSH by perf_review --check, and printed here and at the gate (FR-009b) so nothing is
-    # surprised. The two-band rule below (5% diagnose / 10% cap) is superseded: the diagnose line
-    # still prints as advice, and the 10% exit is gone - "there is no ceiling ... so long as the
-    # subagent reviewer agrees", with a sign-off above 10% total / 20% per seed - the round arbiter's since feature 379.
+    # THE COMPARISON IS THE BANDS' OWN (feature 375 amendment 5): one reading of a pair, in CPU seconds where both snapshots
+    # have them and wall seconds otherwise, and since that amendment a FLAG to mention, never a gate - this exits 0 on any band
     from l7r.diagram.tools import perf_bands
 
     print()
     print(perf_bands.render(perf_bands.evaluate(base, cur)))
-    if bad:
-        print(f"\n{bad} seed(s) more than 5% slower - DIAGNOSE each in writing (constitution VI).")
-        print("Diagnosed means explained and either fixed or accepted with the number, not noticed.")
-    # TWO BANDS, AND ONLY THE AGGREGATE BLOCKS (GM 2026-08-24: "it is okay if things can get a few
-    # percentage points slower, though we probably need some kind of maximum threshold").
-    #
-    # Per-seed 5% is the DIAGNOSE trigger and never blocks by itself. The TOTAL across the seed set
-    # is the cap, and over it this is a Principle XIII regression with the usual three exits.
-    #
-    # WHY THE AGGREGATE IS THE RIGHT THING TO CAP IN THIS ENGINE. A feature that reorders stages
-    # changes what every seed is DOING - the maps are genuinely different afterwards - so one seed's
-    # before-and-after is not the same work measured twice, while the total still answers the
-    # question the bookends exist for: did the generator get slower.
-    #
-    # Calibration: feature 126, the incident that created these bookends, was +51% total (261.5s ->
-    # 394.3s) and +146% on its worst seed. It fails this cap five times over.
-    #
-    # THE KNOWN COST, accepted rather than overlooked: one pathological seed can hide inside a good
-    # average. The per-seed line still prints and still owes a written diagnosis, so a seed that
-    # doubles is visible - it just does not stop the merge alone. A 50% per-seed ceiling was priced
-    # alongside this and declined, as the second axis to tune rather than the first.
     return 0
+
+
+def _cpu_total(s: dict[str, Any]) -> str:
+    return f"{float(s['total_cpu_seconds']):.1f}s" if "total_cpu_seconds" in s else "-"
+
+
+def _ends(s: dict[str, Any], what: str) -> str:
+    """`load` -> the 1-minute load at the start and end; `ram` -> the free RAM in GB at each; '-' for a snapshot from before."""
+    b, e = s.get("machine_before") or {}, s.get("machine_after") or {}
+    if what == "load":
+        vals = [m["load"][0] if m.get("load") else None for m in (b, e)]
+        return ">".join("-" if v is None else f"{v:.1f}" for v in vals) if any(v is not None for v in vals) else "-"
+    vals = [m.get("ram_available_mb") for m in (b, e)]
+    return ">".join("-" if v is None else f"{v / 1024:.1f}" for v in vals) if any(v is not None for v in vals) else "-"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -338,10 +361,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--label", default="adhoc", help="what this snapshot is, e.g. 126-start / 126-end")
     ap.add_argument("--against", default=None, help="label of the snapshot to compare the latest against")
     ap.add_argument("--seeds", default=None, help="comma-separated seeds (default: the reference set)")
+    ap.add_argument("--scaling", action="store_true", help="add the 10-, 20- and 40-household legs (for an investigation)")
     a = ap.parse_args(argv)
     seeds = tuple(int(x) for x in a.seeds.split(",")) if a.seeds else DEFAULT_SEEDS
     if a.record:
-        record(a.label, seeds)
+        record(a.label, seeds, a.scaling)
     if a.report or not a.record:
         return report(a.against)
     return 0

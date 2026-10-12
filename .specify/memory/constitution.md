@@ -1,7 +1,14 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.28.0 → 2.29.0
+Version change: 2.29.0 → 2.30.0
+
+Version 2.30.0 (amended 2026-10-11, feature 375 amendment 5): Principle VI's performance bands become a FLAG, never a gate -
+the GM: "it doesn't need to be a gate anymore". The bookends stay and record each stage's CPU seconds beside its wall seconds
+and the machine's state (RAM, load, disk) at each snapshot's start and end; the band-1 line is 5% in every environment; the
+scaling leg runs only when asked for; a pair over the line is flagged at the push and mentioned at landing, and no record is
+owed. Measured: CPU time stretches with load on this laptop as wall time does (specs/375-enforced-wave-process/research.md
+R4). MINOR (a principle's requirement changes: three bands owing records become a printed flag).
 
 Version 2.29.0 (amended 2026-10-10, feature 370): Principle X clause 12's cap is HELD - ruff's statement count (PLR0915), 100
 statements a function, by `scripts/gates/check-function-cap.py` first in `make static` and `make quick` and before every push,
@@ -878,65 +885,40 @@ artifacts. Specifically:
       make perf LABEL=<NNN>-end       # last thing, before the push
       make perf-report AGAINST=<NNN>-start
 
-  **THREE BANDS, on BOTH measurements, PER ENVIRONMENT** (GM 2026-08-24 and
-  2026-08-25; feature 129 - this replaces the two-band rule of 2026-08-24,
-  whose 10% "cap" is now band 3's total line rather than a merge-blocking
-  ceiling: *"there is no ceiling for allowing it to go forward so long as the
-  subagent reviewer agrees"*, with a sign-off above it - the round arbiter's since feature 379):
+  **RECORDED AND FLAGGED, NEVER A GATE** (GM 2026-10-11, feature 375 amendment
+  5: *"we don't actually do the perf review as part of our normal process for
+  landing on main. We flag it if it looks like it is getting slower with the
+  usual caveats about maybe it's just under load ... it doesn't need to be a
+  gate anymore"*). The bookends are taken and kept; nothing waits on them.
 
-      band            on the TOTAL     on ANY SINGLE SEED   what it takes
-      1  explain      over the line    over the line        a written explanation AND a perf-audit subagent confirming it matches the stage delta
-      2  audit        > 5%             > 10%                the subagent independently finds the increase NECESSARY, COMMENSURATE with the functionality gained, and with NO GOOD WAY AROUND IT
-      3  sign-off     > 10%            > 20%                the round arbiter first (`make perf-arbiter`; GM 2026-10-10: "yes it covers the band-3 perf signoff too"), its accept bound to the numbers, the GM reviewing it after landing - or the GM personally, at a terminal - BEFORE the work is committed back to main
-
-  - A band fires when EITHER measurement crosses its line; each rung keeps
-    everything below it. Feature 128's pair - total -29.9%, seed 47 +30.7% -
-    is band 3: faster overall, and still owes its sign-off (the round arbiter's first, since feature 379).
-  - **BAND 1'S LINE IS PER ENVIRONMENT** (GM 2026-09-04, feature 179:
-    *"let's make the band one threshold per environment. with a noise floor of
-    about two percent"*): **0.0% local, 2.0% CodeBuild**, and an environment
-    with no entry gets 0.0%, the strict original. The reason is measured, not
-    assumed - feature 129 took three snapshots of IDENTICAL code on one
-    CodeBuild box, and of the six pairwise comparisons BAND 1 FIRED ON FIVE.
-    The machine's noise is about +-1% and the line was `> 0`, so noise cleared
-    it nearly every time; a rung that fires on code that did not change teaches
-    a reader to ignore it. Bands 2 and 3 are UNCHANGED, so a real regression
-    escalates exactly as before, and the muted increase is still printed - what
-    is dropped is the mandatory explanation, not the number. The measurement,
-    and the labeled guess in it (the noise was measured on the 36-vCPU box that
-    feature 179 retires; the 8-vCPU box's noise is unmeasured), are recorded at
-    the point of change in `perf_bands.BAND1_PCT`.
-  - **Each ENVIRONMENT is judged against its own history** - local against
-    local, CodeBuild against CodeBuild - and a feature satisfies every
-    environment it runs in. This is a DIFFERENT per-environment property from
-    the band-1 line above: this one is about which snapshots may be COMPARED,
-    that one about how big an increase must be to be worth explaining. A cross-environment comparison is REFUSED, never
-    displayed: on machines of different sizes the percentage is
-    indistinguishable from a regression. Every snapshot records its
-    environment explicitly; nothing infers it from a CPU count.
-  - Explained means what CAUSED the change, in the session's words; the
-    tooling pre-populates the delta and the per-stage breakdown so nothing is
-    retyped, and a machine-written line is noticed, not explained. The
-    measured per-seed noise floor (1.7% on this laptop) may be CITED in an
-    explanation; it is never a bar below which nothing is owed.
-  - The records - explanation, confirmation, audit, sign-off - are one file
-    per event in `dev/perf-log/`, bound to the end snapshot's commit and exact
-    percentages (a stale one is refused by name), carrying who granted them. A
-    negative or inconclusive verdict never lets the work proceed.
-  - Nothing distinguishes a subagent's shell from the session's (measured,
-    feature 129 research R1), so the confirm/audit commands PROMPT and decline
-    unless the caller declares `AS=perf-audit`; the `perf-audit` agent is the
-    only one that does, and the main session launches it rather than writing
-    the record itself. The gate PRINTS what a delta owes (`make done`); the
-    PUSH enforces it (`make perf-review` in `sync-with-main.sh`).
-  - Evidence is tiered: the per-stage delta every snapshot already carries
-    (free, always) answers which stage grew; `make perf-profile` (cProfile of
-    one stage of one seed, +225% on that stage - measured) answers which
-    function, only when the stage delta cannot. Raw profiles stay out of this
-    repository; the derived table (kilobytes) is committed and stands alone.
+  - Each snapshot records each stage's wall and CPU seconds, after an untimed
+    warm-up roll, and the machine's state at its START and END - available and
+    total RAM, the load averages, free and total disk (never during the run).
+    The scaling leg (10, 20, 40 households) runs only when asked for, for an
+    investigation (`make perf SCALING=1`).
+  - A pair is compared in CPU seconds where both snapshots have them, wall
+    seconds otherwise, local against local and CodeBuild against CodeBuild (a
+    cross-environment pair is refused, never displayed). Over the band-1 line -
+    5% in every environment, the GM's *"from 2% to 5% for the jitter"* - on the
+    total or any seed, the push prints a FLAG with both snapshots' machine
+    state, and the session mentions it, with the load caveat, when it reports
+    the landing. Bands 2 (>5% total, >10% a seed) and 3 (>10%, >20%) label how
+    much slower a pair looks; they owe nothing.
+  - WHY NOT A GATE (measured 2026-10-11, specs/375-enforced-wave-process/
+    research.md R4): on this laptop CPU time stretches with load as wall time
+    does - about 2.2 times with six cores busy, four to six times with all -
+    and the sessions share it, so a gate on either clock refused ordinary work
+    and cost feature 374 about 40 minutes of re-measurement. The trend
+    (`make perf-report`, each snapshot's load and free RAM beside its totals)
+    places a real slowdown between two snapshots, two commits, after the fact.
+  - The records of feature 129 - explanation, the `perf-audit` agent's
+    confirmation and audit, the round arbiter's band-3 ruling, a sign-off the
+    GM gives unprompted - stay available for an investigation of a flagged
+    slowdown; none is owed.
 
   Calibration: feature 126, the incident that created these bookends, was +51%
-  total and +146% on its worst seed - band 3 five times over.
+  total and +146% on its worst seed - the flag says so at landing, and the
+  trend says when.
 
   - **Seeds, not one map.** The reference hamlet is rolled across a fixed seed
     set, because a single seed can be pathologically good as easily as bad.
@@ -2297,4 +2279,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.29.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-10
+**Version**: 2.30.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-11

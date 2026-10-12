@@ -64,7 +64,7 @@ perf-signoff:   ## [performance] band 3 - records a sign-off the GM gave UNPROMP
 ##  WHY=<text>  the GM's own words, given unprompted - band 3
 	@: "GUARD_EDIT_OK: feature 379 amendment 3 - the help line: a session never asks the GM for band 3"
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
-perf-review:    ## [performance] does every environment's newest bookend pair carry the records its band owes? (the push runs this)
+perf-review:    ## [performance] each environment's newest bookend pair: its band, and a FLAG to mention at landing when it looks slower - never a refusal (the push runs this)
 	@$(PERF_REVIEW) check
 perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web [HOUSEHOLDS=10]
 ##  SEED=<n>      which seed to profile - e.g. `25`
@@ -752,7 +752,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 # every suite is green, exactly as before.
 # (GUARD_EDIT_OK: adds gate-stamp.py to the guard roster with a .sh companion, and stamps the hooks area on green)
 
-perf-gate:      ## [performance] require the feature's -start bookend, take -end, and FAIL on a regression
+perf-gate:      ## [performance] require the feature's -start bookend, take -end, and print the comparison - a slower pair is a FLAG, never a failure (feature 375 amendment 5)
+	@: "GUARD_EDIT_OK: feature 375 amendment 5 - the help line says what the gate does since the GM retired the performance gate; the recipe already exits 0 on any band"
 	@: "(GUARD_EDIT_OK: feature 132 - a perf snapshot rolls several seeds, a sweep under the scope lock)"; \
 	f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
 	if [ -z "$$f" ] && [ -f .specify/feature.json ]; then \
@@ -1851,9 +1852,11 @@ maps:            ## [maps] regenerate and check the pool, picking its own scope 
 	@$(MAKE) --no-print-directory pool-index-if-stale
 # (GUARD_EDIT_OK: feature 132 - `maps SCOPE=all` is refused under the lock; mapcheck itself never widens while locked)
 
-perf:            ## [performance] take a performance snapshot of the reference hamlet across its seeds   LABEL=<NNN>-start|-end
+perf:            ## [performance] take a performance snapshot of the reference hamlet across its seeds, with the machine's state at both ends   LABEL=<NNN>-start|-end [SCALING=1]
 ##  LABEL=<NNN>-start|<NNN>-end  which bookend this snapshot is (default: `adhoc`, which counts as neither)
-	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)"
+##  SCALING=1                    add the 10-, 20- and 40-household legs - for investigating the algorithm, not routine work
+	@: "GUARD_EDIT_OK: feature 375 amendment 5 - the scaling leg only when asked for (the GM: not during normal operations)"
+	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)" $(if $(SCALING),--scaling,)
 	@$(MAKE) --no-print-directory census
 # GUARD_EDIT_OK: feature 306 FR-006 - the overlap census runs after every perf snapshot (the standing check) and on its own.
 

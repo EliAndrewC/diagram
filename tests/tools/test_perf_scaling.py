@@ -104,15 +104,22 @@ def test_record_writes_the_reference_rows_and_a_scaling_row_per_size_and_seed(tm
     monkeypatch.setattr(ps, "_where", lambda: "diagram-performance")
     monkeypatch.setattr(ps, "_git", lambda *a: "abc1234")
 
-    def fake(seeds: tuple[int, ...], households: int | None = None) -> list[dict[str, Any]]:
+    calls: list[int | None] = []
+
+    def fake(seeds: tuple[int, ...], households: int | None = None, warm: bool = False) -> list[dict[str, Any]]:
+        calls.append(households)
         extra = {} if households is None else {"households": households}
         return [{"seed": s, "seconds": float(households or 15), "stages": {"homesteads": 1.0}, "houses": households or 15, "asked": households or 15, "placer_calls": 9, **extra} for s in seeds]
 
     monkeypatch.setattr(ps, "measure", fake)
-    path = ps.record("304-x", (4, 25))
+    monkeypatch.setattr(ps, "machine_state", lambda path=ps.SKILL: {})
+    path = ps.record("304-x", (4, 25), scaling_leg=True)
     snap = json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
     assert [r["seed"] for r in snap["rows"]] == [4, 25] and snap["total_seconds"] == 30.0, "the reference rows exactly as before"
     assert sorted((r["households"], r["seed"]) for r in snap["scaling"]) == [(h, s) for h in (10, 20, 40) for s in (4, 25)]
+    calls.clear()
+    plain = json.loads(pathlib.Path(ps.record("304-y", (4, 25))).read_text(encoding="utf-8"))
+    assert plain["scaling"] == [] and calls == [None], "feature 375 amendment 5: without SCALING=1, only the reference rolls"
 
 
 # ---- D3, D4: each size banded against its own history (FR-002) ---------------------------------------

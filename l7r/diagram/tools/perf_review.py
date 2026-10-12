@@ -201,22 +201,6 @@ def arbiter_subject(v: perf_bands.Verdict) -> str:
     return f"perf-band3-{v.environment}-{binding(v)[:12]}"
 
 
-def arbiter_signed(specs_dir: Path, feature: str, v: perf_bands.Verdict) -> bool:
-    """Has the round arbiter ACCEPTED this pair's band-3 increase (feature 379 amendment 3, the GM 2026-10-10: "yes it covers
-    the band-3 perf signoff too")? Its `accept` on `ask:<arbiter_subject>` in the feature's arbiter.jsonl stands for the GM's
-    sign-off, who reviews it after landing; `continue` (keep optimizing), `process-fault` and a ruling on other numbers do not."""
-    trigger = "ask:" + arbiter_subject(v)
-    for f in sorted(specs_dir.glob(f"{feature_number(feature)}-*/arbiter.jsonl")):
-        for line in f.read_text(encoding="utf-8").splitlines():
-            try:
-                r = json.loads(line)
-            except ValueError:
-                continue
-            if r.get("trigger") == trigger and r.get("ruling") == "accept":
-                return True
-    return False
-
-
 def write(log_dir: Path, feature: str, v: perf_bands.Verdict, kind: str, verdict: str, declared: str, **fields: Any) -> Path:
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     clone = log_dir.resolve().parts[log_dir.resolve().parts.index(".clones") + 1] if ".clones" in log_dir.resolve().parts else "main"
@@ -238,48 +222,28 @@ def write(log_dir: Path, feature: str, v: perf_bands.Verdict, kind: str, verdict
     return path
 
 
-def check(log_dir: Path, feature: str, specs_dir: Path | None = None) -> tuple[bool, str]:
-    """Does every environment's newest pair carry the records its band owes? (the push's question)"""
+def check(log_dir: Path, feature: str, specs_dir: Path | None = None) -> tuple[bool, str]:  # noqa: ARG001 - kept for its callers
+    """What the push prints about each environment's newest pair: its band and, over the band-1 line, the FLAG. NEVER A REFUSAL
+    since feature 375 amendment 5 (the GM, 2026-10-11): "we don't actually do the perf review as part of our normal process
+    for landing on main. We flag it if it looks like it is getting slower with the usual caveats about maybe it's just under
+    load ... it doesn't need to be a gate anymore." The first element is always True; the records the bands once owed
+    (`perf-explain`, `-confirm`, `-audit`, `-arbiter`, `-signoff`) stay available for an investigation and are listed when made."""
     vs = pairs(log_dir, feature)
-    # FR-009: an `-end` with no `-start` on the SAME machine has nothing to regress against - a first
-    # run on a new instance type, or every codebuild baseline at once after a `make ci-image` rebuild
-    # changes the image. That must not fail the gate, and it must not pass in silence either: a gate
-    # that has gone mute is exactly the state this project calls worse than a red one, because it
-    # looks identical to a green.
+    # FR-009 (feature 178): an `-end` with no `-start` on the SAME machine has nothing to compare against - said, never silent
     mute = unpaired(log_dir, feature)
-    mute_note = ("\nperf-review: NO COMPARABLE BASELINE for " + ", ".join(mute) + " - the perf gate is MUTE for these, not green (feature 178, FR-009)") if mute else ""
+    mute_note = ("\nperf-review: NO COMPARABLE BASELINE for " + ", ".join(mute) + " - nothing to compare these against (feature 178, FR-009)") if mute else ""
     if not vs:
-        return True, f"perf-review: no {feature_number(feature)}-start/-end pair in any environment - nothing to review (perf-gate refuses a missing bookend on its own){mute_note}"
+        return True, f"perf-review: no {feature_number(feature)}-start/-end pair in any environment - nothing to compare (perf-gate refuses a missing bookend on its own){mute_note}"
     recs = _records(log_dir)
     lines: list[str] = []
-    ok = True
     for env, v in sorted(vs.items()):
         b = binding(v)
-        have = {r["kind"]: r for r in recs if r.get("binding") == b and r.get("verdict") in PASSING[str(r["kind"])] and r.get("kind") != "explanation"}
-        expl = [r for r in recs if r.get("binding") == b and r.get("kind") == "explanation" and str(r.get("explanation", "")).strip()]
-        stale = [r["_file"] for r in recs if r.get("environment") == env and r.get("binding") != b]
-        negative = [f"{r['kind']}={r['verdict']}" for r in recs if r.get("binding") == b and r.get("verdict") not in PASSING[str(r["kind"])]]
-        need: list[str] = []
-        if v.band >= 1 and not expl:
-            need.append("a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>)")
-        if v.band >= 1 and "confirmation" not in have:
-            need.append("a perf-audit confirmation (make perf-confirm VERDICT=consistent AS=perf-audit, by the subagent)")
-        if v.band >= 2 and "audit" not in have:
-            need.append("the escalated audit (make perf-audit VERDICT=justified NECESSARY=... COMMENSURATE=... NO_WAY_AROUND=... AS=perf-audit)")
-        if v.band >= 3 and "signoff" not in have and not (specs_dir and arbiter_signed(specs_dir, feature, v)):
-            # the session's ONE route (feature 379 amendment 3): it never asks the GM; a GM sign-off given unprompted still counts
-            need.append(f"the round arbiter's ruling (make perf-arbiter ENV={env}) - never a question to the GM")
-        head = f"[{env}] {v.cur['label']} vs {v.base['label']} at {v.cur['commit']}: band {v.band}" + (f" ({'; '.join(v.crossed)})" if v.crossed else "")
-        if need:
-            ok = False
-            lines.append(head + " - MISSING: " + " | ".join(need))
-            if negative:
-                lines.append(f"    negative or inconclusive records do not count: {', '.join(negative)}")
-            if stale:
-                lines.append(f"    stale records (bound to other numbers or another commit): {', '.join(stale[-3:])}")
-        else:
-            lines.append(head + " - " + ("nothing owed" if v.band == 0 else "every owed record present and bound to these numbers"))
-    return ok, "\n".join(lines) + mute_note
+        made = sorted({f"{r['kind']}={r.get('verdict')}" for r in recs if r.get("binding") == b})
+        lines.append(f"[{env}] {v.cur['label']} vs {v.base['label']} at {v.cur['commit']}: band {v.band}" + (f" ({'; '.join(v.crossed)})" if v.crossed else "")
+                     + (f" - records made: {', '.join(made)}" if made else ""))
+        if v.band >= 1:
+            lines.append(perf_bands.flag(v))
+    return True, "\n".join(lines) + mute_note
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -314,14 +278,9 @@ def main(argv: list[str] | None = None) -> int:
         # FR-017: the in-build bookend guard, asking the SNAPSHOT rather than the filename.
         return 0 if has_start_for_this_machine(log_dir, a.feature) else 1
     if a.command == "check":
-        ok, text = check(log_dir, a.feature, Path(a.specs_dir))
-        print(text)
-        if not ok:
-            print(
-                "\nperf-review: REFUSED - the bands above are the GM's (2026-08-24); the push waits for the records named. `make perf-report` shows the delta and the stages that grew.",
-                file=sys.stderr,
-            )
-        return 0 if ok else 1
+        _ok, text = check(log_dir, a.feature, Path(a.specs_dir))
+        print(text)  # a flag, never a refusal (feature 375 amendment 5)
+        return 0
     vs = pairs(log_dir, a.feature)
     if a.environment not in vs:
         print(

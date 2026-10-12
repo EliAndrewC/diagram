@@ -227,22 +227,24 @@ Two rules, and the second is the one that is easy to half-do:
 than structural on purpose: the failure mode is unbounded work, and the correct-vs-broken margin is
 a fraction of a second against effectively forever.
 
-## The three bands, and who answers for an increase (feature 129, 2026-08-25)
+## The three bands: a flag, never a gate (feature 129, 2026-08-25; feature 375 amendment 5, 2026-10-11)
 
-The GM's matrix, evaluated on BOTH measurements and PER ENVIRONMENT (local against local history,
-CodeBuild against CodeBuild - a cross-environment pair is REFUSED, never displayed):
+Since feature 375 amendment 5 (the GM: "it doesn't need to be a gate anymore") the bands LABEL how much slower a pair looks
+and owe nothing. Each snapshot (`make perf LABEL=<NNN>-start|-end`, `SCALING=1` for the 10/20/40-household legs) records
+each stage's wall and CPU seconds after an untimed warm-up roll, and the machine's load, free RAM and disk at its start and
+end. A pair is compared in CPU seconds where both have them, wall seconds otherwise, PER ENVIRONMENT (a cross-environment
+pair is refused, never displayed):
 
-    band            TOTAL          ANY SEED     what it takes
-    (band 1's line is PER ENVIRONMENT since feature 179: 0.0% local, 2.0% codebuild - see
-     perf_bands.BAND1_PCT, where the 5-of-6 noise measurement that bought the floor is recorded)
-    1  explain      over the line  over the line         `make perf-explain WHY=... CONTROL=<key>|UNVERIFIED="..."` (yours) + `make perf-confirm ... AS=perf-audit` (the subagent's)
-    2  audit        > 5%           > 10%        `make perf-audit VERDICT=justified NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit`
-    3  sign-off     > 10%          > 20%        `make perf-arbiter` - the round arbiter first (feature 379; the GM reviews its ruling after landing); or `make perf-signoff WHY=...`, the GM at a terminal
+    band            TOTAL          ANY SEED     what it means
+    1               > 5%           > 5%         the push prints a FLAG with both snapshots' machine state; mention it at landing
+    2               > 5%           > 10%        the same flag, a bigger increase
+    3               > 10%          > 20%        the same flag, a bigger increase
 
-`make perf-report` / `make done` PRINT the band and the stages that grew (FR-009b); `make perf-review`
-- run by `sync-with-main.sh` at the push - ENFORCES it. Records are one file per event in
-`dev/perf-log/`, bound to the end snapshot's commit and exact percentages: a stale one is refused by
-name, a negative or inconclusive verdict never counts.
+Measured 2026-10-11 (specs/375-enforced-wave-process/research.md R4): CPU time stretches with load on this laptop as wall
+time does, so a gate on either refused ordinary work; the trend in `make perf-report` - each snapshot's load and free RAM
+beside its totals - is how a real slowdown is placed between two commits afterwards. The records below
+(`perf-explain`, the subagent's `perf-confirm` / `perf-audit`, `perf-arbiter`, `perf-signoff`) are one file per event in
+`dev/perf-log/`, bound to the end snapshot's commit and percentages, and stay available for an investigation.
 
 **Why the subagent's commands prompt instead of checking.** Measured 2026-08-25: a subagent's shell
 carries the SAME `CLAUDE_CODE_SESSION_ID`, `CLAUDE_PID` and parent as the main session's - nothing

@@ -1,6 +1,6 @@
 ---
 name: perf-audit
-description: Reviews a measured performance increase in the generator and writes its review record (the only agent that passes AS=perf-audit) - run whenever make perf-report, perf-gate or perf-review reports band 1 or more.
+description: Reviews a measured performance increase in the generator and writes its review record (the only agent that passes AS=perf-audit) - run when an investigation of a flagged slowdown asks for it; since feature 375 amendment 5 no band owes it.
 model: opus
 effort: high
 omitClaudeMd: true
@@ -9,7 +9,7 @@ tools: Read, Grep, Bash
 
 ## When to dispatch this agent
 
-Independent review of a measured PERFORMANCE INCREASE in the diagram generator (feature 129). Band 1 (an increase over that environment's band-1 line - 0.0% local, 2.0% codebuild - on the total or on any seed) - confirms whether the session's written explanation is CONSISTENT with the recorded per-stage delta. Band 2 (>5% total or >10% on a seed) - independently adjudicates the GM's three criteria - necessary, commensurate with the functionality gained, no good way around it - on before/after data, and may take a function-level profile of the stage that grew. The session that caused the slowdown is not a reliable judge of it (constitution VI, same rationale as settlement-review); this agent is the one that writes the review record, and the ONLY one that passes AS=perf-audit. Use whenever `make perf-report`, `make perf-gate` or `make perf-review` reports a band of 1 or more.
+Independent review of a measured PERFORMANCE INCREASE in the diagram generator (feature 129). SINCE FEATURE 375 AMENDMENT 5 (the GM, 2026-10-11: "it doesn't need to be a gate anymore") no band owes this review: a pair over the 5% band-1 line is a FLAG mentioned at landing, and this agent runs when the GM or a session investigating a flagged slowdown asks for it. When it does: band 1 (over the 5% line on the total or on any seed) - confirms whether the session's written explanation is CONSISTENT with the recorded per-stage delta. Band 2 (>5% total or >10% on a seed) - independently adjudicates the GM's three criteria - necessary, commensurate with the functionality gained, no good way around it - on before/after data, and may take a function-level profile of the stage that grew. The session that caused the slowdown is not a reliable judge of it (constitution VI, same rationale as settlement-review); this agent is the one that writes the review record, and the ONLY one that passes AS=perf-audit. Use when an investigation asks for it - a band reported by `make perf-report`, `make perf-gate` or `make perf-review` owes nothing on its own.
 
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 

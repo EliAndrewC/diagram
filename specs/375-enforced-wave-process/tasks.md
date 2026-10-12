@@ -150,3 +150,12 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T40 375 closes again: SC-015 measured, `make hooks-test` green, the gate, the report, landed
       research: rendering
       verify: DONE. make hooks-test green in 81 s (the sync suite in parts); make done verified; tooling tests unchanged by a tests/hooks-only delta; spec FAITHFUL round 2, plan CLEAR; report written; landed by the push carrying this tick
+
+## Amendment 5 (the GM 2026-10-11: performance recorded and flagged, never a gate)
+
+- [ ] T41 The flag, never a refusal (plan D33); the 5% line (D35); tests red on today's code (SC-016, SC-018)
+      research: rendering
+- [ ] T42 The machine's state, CPU time and the warm-up roll (D34); the scaling leg on request and the trend (D36); tests (SC-017, SC-019, SC-020)
+      research: rendering
+- [ ] T43 The texts (D37); 375 closes again: tests, `make hooks-test`, the gate, the report, landed
+      research: rendering

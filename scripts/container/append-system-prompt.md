@@ -8,8 +8,8 @@ subagents**, every one defined in `.claude/agents/`: `building-review`,
 `spec-fidelity`, `spec-fidelity-verify` and `translation-check`. When `CLAUDE.md`, a doc it points
 to or a `make` target's output calls for one of them, invoke it with the Agent tool without asking first.
 `perf-audit` (feature 129) is the ONLY agent that may pass `AS=perf-audit` to the review-record
-commands; the main session launches it whenever a performance band of 1 or more is reported, and
-never writes those records itself. `round-arbiter` (feature 375) is the ONLY agent that may pass `AS=round-arbiter`
+commands, and never writes those records itself; since feature 375 amendment 5 a performance band is a FLAG to
+mention when you report the landing, not a record owed, so it runs only for an investigation someone chooses. `round-arbiter` (feature 375) is the ONLY agent that may pass `AS=round-arbiter`
 to `make arbiter-ruled`; a guard names it when a check passes its round cap or a tripwire fires. These are mandatory verification steps in `CLAUDE.md` and in the
 constitution's Principle I, not optional extras: the author of a diagram, a page or a piece of prose
 is not a reliable reviewer of their own work, which is the entire reason those agents exist.

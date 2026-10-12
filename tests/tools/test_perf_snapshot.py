@@ -52,7 +52,7 @@ def test_a_20_percent_total_is_band_3_and_the_report_says_who_it_needs(logdir: A
     assert ps.report("900-start") == 0
     out = capsys.readouterr().out
     assert "REGRESSION" not in out and "+20.0%" in out
-    assert "band 3" in out and "total +20.0% > 10%" in out and "GM" in out
+    assert "band 3" in out and "total +20.0% > 10%" in out and "FLAG: this looks slower" in out, "a flag since feature 375 amendment 5"
 
 
 def test_the_cap_STAYS_QUIET_when_the_aggregate_improves_even_with_a_slower_seed(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
@@ -64,10 +64,10 @@ def test_the_cap_STAYS_QUIET_when_the_aggregate_improves_even_with_a_slower_seed
     _snap(logdir, "901-end", {4: 26.8, 25: 80.6, 39: 71.5, 47: 89.3}, "20260824T010000Z")
     assert ps.report("901-start") == 0
     out = capsys.readouterr().out
-    assert "DIAGNOSE" in out, "a seed over 5% must still be called out"
+    assert "FLAG" in out and "seed 47 +30.7%" in out, "a seed over the line is still called out"
     assert "REGRESSION" not in out
     assert "-29.9%" in out
-    assert "band 3" in out and "seed 47 +30.7% > 20%" in out, "SC-002b: faster overall, but seed 47 needs the GM"
+    assert "band 3" in out and "seed 47 +30.7% > 20%" in out, "SC-002b: faster overall, but seed 47 is flagged"
 
 
 def test_a_seed_inside_the_noise_band_is_not_even_mentioned(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
@@ -76,7 +76,7 @@ def test_a_seed_inside_the_noise_band_is_not_even_mentioned(logdir: Any, capsys:
     _snap(logdir, "902-end", {1: 103.0}, "20260824T010000Z")
     assert ps.report("902-start") == 0
     out = capsys.readouterr().out
-    assert "DIAGNOSE" not in out
+    assert "FLAG" not in out and "band 0" in out
     assert "REGRESSION" not in out
 
 
@@ -88,10 +88,10 @@ def test_the_cap_is_the_number_the_GM_set() -> None:
 def test_a_review_record_in_the_log_dir_does_not_break_the_trend(logdir: Any, capsys: pytest.CaptureFixture[str]) -> None:
     """Feature 129 keeps its review records beside the snapshots; the report must read past them (found by the perf-audit subagent)."""
     _snap(logdir, "903-start", {1: 100.0}, "20260825T000000Z")
-    _snap(logdir, "903-end", {1: 101.0}, "20260825T010000Z")
+    _snap(logdir, "903-end", {1: 106.0}, "20260825T010000Z")
     (logdir / "20260825T020000Z-review-903-explanation-local-c.json").write_text(json.dumps({"kind": "explanation", "feature": "903-x", "explanation": "noise"}), encoding="utf-8")
     assert ps.report("903-start") == 0
-    assert "band 1" in capsys.readouterr().out
+    assert "band 2" in capsys.readouterr().out, "one seed of one, +6%: the total is over band 2's 5% too"
 
 
 # ---- feature 174: the recorder and the CLI ------------------------------------------------------
@@ -159,8 +159,9 @@ def test_record_writes_a_snapshot_keyed_by_stamp_label_and_TREE(tmp_path, monkey
     monkeypatch.setattr(
         ps,
         "measure",
-        lambda seeds, households=None: [{"seed": s, "seconds": float(s), "form": "nucleated", "shape": "crescent", "houses": 15, "asked": 15, "stages": {"web": float(s)}} for s in seeds],
+        lambda seeds, households=None, warm=False: [{"seed": s, "seconds": float(s), "cpu_seconds": float(s), "form": "nucleated", "shape": "crescent", "houses": 15, "asked": 15, "stages": {"web": float(s)}} for s in seeds],
     )
+    monkeypatch.setattr(ps, "machine_state", lambda path=ps.SKILL: {"load": [1.0, 1.0, 1.0], "ram_available_mb": 4096})
 
     path = ps.record("174-end", (2, 4, 6))
     assert path.endswith("-174-end-diagram-tooling.json")
@@ -168,6 +169,8 @@ def test_record_writes_a_snapshot_keyed_by_stamp_label_and_TREE(tmp_path, monkey
     assert snap["total_seconds"] == 12.0 and snap["median_seconds"] == 4.0 and snap["worst_seconds"] == 6.0
     assert snap["seeds"] == [2, 4, 6] and snap["commit"] == "abc1234"
     assert snap["environment"] in ("local", "codebuild")
+    assert snap["total_cpu_seconds"] == 12.0 and snap["machine_before"] == snap["machine_after"] == {"load": [1.0, 1.0, 1.0], "ram_available_mb": 4096}
+    assert snap["scaling"] == [], "the scaling leg only when asked for (feature 375 amendment 5)"
     assert "total 12.0s" in capsys.readouterr().out
 
 
@@ -198,12 +201,13 @@ def test_main_records_then_reports_and_takes_its_seeds_from_the_flag(tmp_path, m
 
     monkeypatch.setattr(ps, "LOG_DIR", str(tmp_path))
     seen: dict[str, _Any] = {}
-    monkeypatch.setattr(ps, "record", lambda label, seeds: seen.update(label=label, seeds=seeds) or "")
+    monkeypatch.setattr(ps, "record", lambda label, seeds, scaling=False: seen.update(label=label, seeds=seeds, scaling=scaling) or "")
     monkeypatch.setattr(ps, "report", lambda against: seen.update(against=against) or 0)
 
     assert ps.main(["--record", "--label", "174-end", "--seeds", "2,4"]) == 0
-    assert seen["seeds"] == (2, 4) and seen["label"] == "174-end"
+    assert seen["seeds"] == (2, 4) and seen["label"] == "174-end" and seen["scaling"] is False
     assert "against" not in seen, "--record alone does not also report"
+    assert ps.main(["--record", "--label", "x", "--scaling"]) == 0 and seen["scaling"] is True
 
     assert ps.main(["--record", "--report", "--against", "174-start"]) == 0
     assert seen["against"] == "174-start"
@@ -254,7 +258,7 @@ def test_a_RETROACTIVE_baseline_is_compared_against_the_newest_that_is_NOT_itsel
     ps.report("127-start")
     out = capsys.readouterr().out
     assert "127-end vs 127-start" in out, "the older end IS compared, against the newer start"
-    assert "SLOWER" in out, "12.0 against 10.0 is +20%"
+    assert "+20.0%" in out and "FLAG" in out, "12.0 against 10.0 is +20%"
 
 
 def test_a_baseline_taken_again_is_the_NEWEST_with_its_label(tmp_path, monkeypatch, capsys) -> None:
@@ -266,7 +270,7 @@ def test_a_baseline_taken_again_is_the_NEWEST_with_its_label(tmp_path, monkeypat
     _log(tmp_path, monkeypatch, old, new, end)
     ps.report("317-start")
     out = capsys.readouterr().out
-    assert "10.0s ->   12.0s" in out and "SLOWER" in out, "against the newer start: +20%, not -40%"
+    assert "seed   1   +20.0%" in out and "FLAG" in out, "against the newer start: +20%, not -40%"
 
 
 def test_only_ONE_snapshot_with_that_label_says_there_is_nothing_to_compare(tmp_path, monkeypatch, capsys) -> None:
@@ -346,3 +350,58 @@ def test_with_no_baseline_named_the_comparison_is_against_the_PREVIOUS_snapshot(
     _log(tmp_path, monkeypatch, older, newer)
     assert ps.report(None) == 0
     assert "174-end vs 174-start" in capsys.readouterr().out
+
+
+# ---- feature 375 amendment 5: the machine's state at both ends, and the trend that says when ----------------------------------
+
+
+def test_machine_state_reads_ram_load_and_disk_and_leaves_out_what_it_cannot(monkeypatch, tmp_path) -> None:
+    state = ps.machine_state(str(tmp_path))
+    assert set(state) >= {"load", "disk_free_gb", "disk_total_gb"} and len(state["load"]) == 3
+    if _platform.system() == "Linux":
+        assert state["ram_available_mb"] > 0 and state["ram_total_mb"] >= state["ram_available_mb"]
+
+    def no(*_a: _Any, **_k: _Any) -> _Any:
+        raise OSError("not here")
+
+    monkeypatch.setattr("builtins.open", no)
+    monkeypatch.setattr(ps.os, "getloadavg", no)
+    monkeypatch.setattr(ps.shutil, "disk_usage", no)
+    assert ps.machine_state(str(tmp_path)) == {}, "a field the machine cannot report is left out, never guessed"
+
+
+def test_the_trend_prints_each_snapshots_load_and_free_ram_and_dashes_for_older_ones(tmp_path, monkeypatch, capsys) -> None:
+    old = _snap174("500-start", "20260101T000000Z", [{"seed": 1, "seconds": 10.0}])
+    new = _snap174("500-end", "20260102T000000Z", [{"seed": 1, "seconds": 10.0, "cpu_seconds": 9.0}])
+    new.update(total_cpu_seconds=9.0, machine_before={"load": [3.25, 2.0, 1.0], "ram_available_mb": 6144}, machine_after={"load": [7.5, 3.0, 2.0]})
+    _log(tmp_path, monkeypatch, old, new)
+    ps.report(None)
+    out = capsys.readouterr().out
+    line_old = next(ln for ln in out.splitlines() if "500-start" in ln and "vs" not in ln)
+    line_new = next(ln for ln in out.splitlines() if "500-end" in ln and "vs" not in ln)
+    assert "     -  " in line_old and line_old.count(" - ") >= 2, "a snapshot from before amendment 5 prints dashes"
+    assert "9.0s" in line_new and "3.2>7.5" in line_new and "6.0>-" in line_new
+
+
+def test_measure_warms_an_untimed_roll_first_and_times_cpu_beside_wall(monkeypatch) -> None:
+    """The first roll in a process counted another thread's start-up as its own CPU time (R4): a warm-up roll comes first."""
+    import l7r.diagram.hamletgen as hg
+    import l7r.diagram.hamletgen.driver as drv
+
+    rolled: list[int] = []
+
+    class Plan:
+        def __init__(self, seed: int) -> None:
+            self.W = self.H = 10
+            self.spec = type("S", (), {"seed": seed, "households": 15})()
+            self.cluster_shape = "crescent"
+
+    def stage_web(s: _Any, plan: _Any) -> None:
+        rolled.append(plan.spec.seed)
+
+    monkeypatch.setattr(hg, "plan_site", lambda spec: Plan(spec.seed))
+    monkeypatch.setattr(hg, "HamletSpec", lambda seed, **kw: type("H", (), {"seed": seed})())
+    monkeypatch.setattr(drv, "STAGES", (stage_web,))
+    rows = ps.measure((7, 8), warm=True)
+    assert rolled == [7, 7, 8], "the warm-up rolls the first seed once, untimed"
+    assert [r["seed"] for r in rows] == [7, 8] and all("cpu_seconds" in r and set(r["cpu_stages"]) == {"web"} for r in rows)

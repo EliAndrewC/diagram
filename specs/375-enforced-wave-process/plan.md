@@ -422,6 +422,38 @@ alternately, three runs each, the load at both ends, every run's check count aga
 with `SYNC_PARTS=1`; the two failure cases by a scratch copy with one case's body made to fail and one made to `exit`. Key
 `375-a4-sync-suite-parts`.
 
+### Amendment 5 (FR-023 to FR-027)
+
+**D33 - A flag, never a refusal (FR-023).** `perf_review.check` returns True always and prints, per environment, the pair's
+band, the records made (if any) and, at band 1 or more, `perf_bands.flag(v)`: the seeds over the line, the metric, both
+snapshots' machine state at their two ends, the load caveat and "mention it when you report the landing; nothing waits on
+it". `perf_review main check` exits 0; `sync-with-main.sh`'s step keeps calling `make perf-review` (so the flag prints at the
+push) and dies only if the command itself fails to run. `arbiter_signed` loses its one caller and is removed; the record
+commands (`explain`, `confirm`, `audit`, `signoff`, `arbiter-subject`) are unchanged, for an investigation. `perf-gate` already
+exits 0 on any band (it requires the `-start` bookend, a measurement, not a verdict) - its help line says so. `perf_bands.OWES`
+says what each band means, not what it owes.
+
+**D34 - The machine's state and CPU time (FR-024).** `perf_snapshot.machine_state()` reads `/proc/meminfo` (MemAvailable,
+MemTotal, in MB), `os.getloadavg()` and `shutil.disk_usage(SKILL)`, each field left out where the machine cannot give it.
+`record` takes it before the first roll and after the last (`machine_before`, `machine_after`) and writes `total_cpu_seconds`.
+`measure` times each stage with `time.process_time()` beside `time.time()` (`cpu_stages`, `cpu_seconds` on a row) and, with
+`warm=True` (the reference leg), rolls the first seed once untimed first. `perf_bands.metric_of` picks `cpu_seconds` when every
+compared row on both sides carries it, else `seconds`; `_judge` reads that key and its stage map; the Verdict carries `metric`
+and `machines`; `render` names the metric.
+
+**D35 - 5% (FR-025).** `BAND1_PCT = {"local": 5.0, "codebuild": 5.0}`, `BAND1_DEFAULT_PCT = 5.0`, with the GM's words and
+R4 beside them; bands 2 and 3 unchanged.
+
+**D36 - The scaling leg on request, and the trend (FR-026, FR-027).** `record(label, seeds, scaling_leg=False)` rolls the legs
+only when asked; `--scaling` on the CLI; `make perf SCALING=1`. `report` prints, per snapshot, the CPU total and the 1-minute
+load and free RAM at start and end (`_ends`, dashes for a snapshot from before), and the pair's comparison is
+`perf_bands.render` alone (the old wall-only table and its "DIAGNOSE in writing" line go: one reading of a pair, the bands').
+
+**D37 - The texts (FR-023's closing bullet).** Constitution VI's performance clause rewritten (2.30.0, MINOR); root
+`CLAUDE.md`'s push and gate rows; `l7r/diagram/CLAUDE.md`; `dev/performance.md`; `docs/guards.md`'s two rows;
+`docs/efficiency-tooling.md`; `scripts/container/append-system-prompt.md`'s standing order; `perf-audit.md` and
+`round-arbiter.md`; `docs/make-targets.html` regenerated from the Makefile.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

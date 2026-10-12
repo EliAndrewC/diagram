@@ -413,3 +413,5 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   every text that states the gate, found by its grep (the system prompt's standing order to run perf-audit, the root
   CLAUDE.md's rows, docs/efficiency-tooling.md added); "What it does not cover" says the cohort stays out, not the timing;
   SC-018 pins 5 and 5.1 percent.
+- spec-fidelity-verify, amendment 5 round 2 (2026-10-11): FAITHFUL - round 1's three items resolved; the wider grep finds no
+  other text stating the gate as a rule.
