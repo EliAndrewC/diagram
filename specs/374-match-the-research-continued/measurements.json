@@ -466,5 +466,527 @@
     "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 122-126's rows were marked in audit/waves.json; the eight rows batch 4's checks filed (found-wave126) entered at the top",
     "command": "python3 -c \"import json; r=json.load(open('specs/328-match-the-research/ranking.json')); o=[x for x in r if not x.get('wave') and x.get('scope')!='deferred']; print(len(o), 'open,', sum(1 for x in o if x.get('tier')=='E3' and x.get('verdict')=='DRIFTED'), 'E3 DRIFTED')\"",
     "method": "the count the plan review of 2026-10-11 used, re-run on the rebuilt ranking"
+  },
+  "b4-hay-e1": {
+    "quantity": "the torii's beam before the shrine's west door",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "beam x 749 against the door face x 773.5, after make map",
+    "value": {
+      "gap_ft": 8.2,
+      "band_ft": [
+        5,
+        12
+      ]
+    }
+  },
+  "b4-hay-e2": {
+    "quantity": "a maids' room under the main roof at the kitchen end",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the room rect maids-room-1 (36 x 36 px) in the west block over the kitchen ell, tagged servants' quarters",
+    "value": {
+      "maids_room": true,
+      "size_ft": [
+        12,
+        12
+      ]
+    }
+  },
+  "b4-hay-e3": {
+    "quantity": "the notes, map notes and comments brought to the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E3",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md; pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "each line the review named rewritten: knob 5, knob 9 woodshed, the torii line, the privy line, the review log, the map notes, the north-wall comment",
+    "value": {
+      "lines_rewritten": 8
+    }
+  },
+  "b4-hay-n1": {
+    "quantity": "the rear-yard privy's users labeled a GUESS",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the comment reads 'who uses it a GUESS'",
+    "value": {
+      "labeled": true
+    }
+  },
+  "b4-hay-n2": {
+    "quantity": "the servants' range's 54 ft length labeled a GUESS",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the range comment labels its length a GUESS",
+    "value": {
+      "labeled": true
+    }
+  },
+  "b4-cty-e1": {
+    "quantity": "the service gate's approach",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "pack_audit postern_approach (written red on the old draft) OK; the gate at 221 ft opens off the cart yard",
+    "value": {
+      "postern_approach": "OK",
+      "gate_ft": 221
+    }
+  },
+  "b4-cty-e2": {
+    "quantity": "the barracks divided into dwellings",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "four door marks part-of barracks, three bay walls",
+    "value": {
+      "doors": 4,
+      "bay_walls": 3
+    }
+  },
+  "b4-cty-e3": {
+    "quantity": "no lodgers' privy by the main gate",
+    "observed": "2026-10-12",
+    "verifies": "E3",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "every lodgers' latrine more than 30 ft along the wall from the main gate's opening (tests/test_compound_service.py)",
+    "value": {
+      "gate_privy_ft": 30,
+      "stable_privy": "in the gap west of the stables"
+    }
+  },
+  "b4-cty-e4": {
+    "quantity": "the storehouses' doors",
+    "observed": "2026-10-12",
+    "verifies": "E4",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "two door marks part-of storehouse (DOOR_KINDS)",
+    "value": {
+      "doors": 2
+    }
+  },
+  "b4-cty-e5": {
+    "quantity": "the notes and code comments brought to the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E5",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md; l7r/diagram/compound_example.py",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the house-size list, the carter's route, R07, staff housing, the vegetable garden, the middle gate and the lesser gates rewritten; the kitchen comments",
+    "value": {
+      "lines_rewritten": 9
+    }
+  },
+  "b4-cty-e6": {
+    "quantity": "the servants' route to the kitchen",
+    "observed": "2026-10-12",
+    "verifies": "E6",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the maids' room (servants' quarters, captioned maids' room) at the residence's kitchen end; the street row the menservants'",
+    "value": {
+      "maids_room": true
+    }
+  },
+  "b4-cty-q1": {
+    "quantity": "the servants' row's entry form",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; l7r/diagram/compound_example.py",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "five dwellings a door each, the form rolled per compound (SERVANTS_FORM)",
+    "value": {
+      "doors": 5,
+      "form": "a door to each dwelling"
+    }
+  },
+  "b4-cty-q2": {
+    "quantity": "where the grooms sleep",
+    "observed": "2026-10-12",
+    "verifies": "Q2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the grooms in the stable's grooms' room (research 0108), not the row",
+    "value": {
+      "grooms": "stable"
+    }
+  },
+  "b4-cty-n1": {
+    "quantity": "the long-house's bay walls",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "four solid bay walls in the retainers' quarters group",
+    "value": {
+      "bay_walls": 4
+    }
+  },
+  "b4-ub-e1": {
+    "quantity": "the band behind the west block",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the block, kitchen, bath and tubs 36 px north; pack-audit's band 140 x 11 ft from the wall's centerline, ~9 ft from its inner face",
+    "value": {
+      "band_ft": [
+        140,
+        11
+      ]
+    }
+  },
+  "b4-ub-e2": {
+    "quantity": "the notes brought to the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the stable log, the servants' and barracks lines, the abutting rowhouse, the barracks' court, the coverage figures rewritten",
+    "value": {
+      "lines_rewritten": 7
+    }
+  },
+  "b4-ub-e3": {
+    "quantity": "the stable door clear of the kennel",
+    "observed": "2026-10-12",
+    "verifies": "E3",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the door y 694-706 against the kennel's top at 706",
+    "value": {
+      "door_y": [
+        694,
+        706
+      ],
+      "kennel_y": 706
+    }
+  },
+  "b4-ub-q1": {
+    "quantity": "the servants' way to the kitchen",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "a maids' room at the kitchen end of the family quarters, the gate range's room the menservants'",
+    "value": {
+      "maids_room": true
+    }
+  },
+  "b4-ub-q2": {
+    "quantity": "where the maids sleep",
+    "observed": "2026-10-12",
+    "verifies": "Q2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the maids' room under the main roof (research 0115's Aizu house; a GUESS)",
+    "value": {
+      "maids_room": true
+    }
+  },
+  "b4-hoshi-e1": {
+    "quantity": "the sacred tree's clearance",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the tree at (586,800) r45: 13.9 ft from the nearest crown of the wood, 4.1 ft off the arch beams' east ends",
+    "value": {
+      "wood_gap_ft": 13.9,
+      "beam_gap_ft": 4.1
+    }
+  },
+  "b4-hoshi-e2": {
+    "quantity": "the dwelling's door in the notes",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the genkan and tub map notes name the south door",
+    "value": {
+      "door": "south"
+    }
+  },
+  "b4-hoshi-e3": {
+    "quantity": "the clearing pocket behind the dwelling",
+    "observed": "2026-10-12",
+    "verifies": "E3",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the clearing's back line at the eaves (y ~431-433) west of the sanctuary's lobe",
+    "value": {
+      "back_line_y": [
+        431,
+        433
+      ]
+    }
+  },
+  "b4-hoshi-n1": {
+    "quantity": "the notes' figures after the move",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hoshigaoka-shrine",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the privy ~50 ft from the sanctuary, the service way 18 ft from the basin, the well behind the kitchen and the monk's rooms",
+    "value": {
+      "lines_rewritten": 4
+    }
+  },
+  "b4-och-e1": {
+    "quantity": "the servants' route to the kitchen",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "a maids' room at the kitchen end of the family row; the street range the menservants', the grooms in the stable's room",
+    "value": {
+      "maids_room": true
+    }
+  },
+  "b4-och-e2": {
+    "quantity": "the notes brought to the drawing",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "knob 5, knob 9's privies and night-soil route, the rear yard map note rewritten",
+    "value": {
+      "lines_rewritten": 4
+    }
+  },
+  "b4-och-q1": {
+    "quantity": "where the maids sleep",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the maids' room under the main roof (a GUESS on the Aizu house)",
+    "value": {
+      "maids_room": true
+    }
+  },
+  "b4-och-q2": {
+    "quantity": "the service passage through the range labeled",
+    "observed": "2026-10-12",
+    "verifies": "Q2",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the range comment labels the service-gate cut a GUESS by analogy",
+    "value": {
+      "labeled": true
+    }
+  },
+  "b4-och-n1": {
+    "quantity": "the range's length one way",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg; pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "64 ft of building, 70.7 ft over all, in both",
+    "value": {
+      "building_ft": 64,
+      "over_all_ft": 70.7
+    }
+  },
+  "b4-och-n3": {
+    "quantity": "the stable's log line",
+    "observed": "2026-10-12",
+    "verifies": "N3",
+    "subject": "building-review--ochiba-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "18 x 24 ft, the grooms' room across the passage",
+    "value": {
+      "size_ft": [
+        18,
+        24
+      ]
+    }
+  },
+  "b4-gstore-f1": {
+    "quantity": "the storehouses' doors",
+    "observed": "2026-10-12",
+    "verifies": "F1",
+    "subject": "glyph-check--storehouse--county-magistracy-example",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "two door blocks part-of storehouse",
+    "value": {
+      "doors": 2
+    }
+  },
+  "b4-gstab-f4": {
+    "quantity": "the notes' grooms' room",
+    "observed": "2026-10-12",
+    "verifies": "F4",
+    "subject": "glyph-check--stables--hayakawa-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the log says across the passage",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b4-gstab-f5": {
+    "quantity": "the tub comment's door wording",
+    "observed": "2026-10-12",
+    "verifies": "F5",
+    "subject": "glyph-check--stables--hayakawa-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the comment reads 'onto the outer court by the stable well'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b4-gstab-f6": {
+    "quantity": "the stale 28 x 16 ft comment",
+    "observed": "2026-10-12",
+    "verifies": "F6",
+    "subject": "glyph-check--stables--hayakawa-magistracy",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the comment reads 18 x 24 ft since wave 126",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b4-sry-q1": {
+    "quantity": "the rear yard's size labeled a GUESS",
+    "observed": "2026-10-12",
+    "verifies": "Q1",
+    "subject": "size-audit--rear-yard",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the notes record the 18-45 by 10-30 ft band as a GUESS",
+    "value": {
+      "band_ft": {
+        "w": [
+          18,
+          45
+        ],
+        "h": [
+          10,
+          30
+        ]
+      }
+    }
+  },
+  "b4-sry-b1": {
+    "quantity": "the band recorded",
+    "observed": "2026-10-12",
+    "verifies": "B1",
+    "subject": "size-audit--rear-yard",
+    "answers": "cf1bcdd03a7d",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the band in the rear-yard knob of the notes",
+    "value": {
+      "band_ft": {
+        "w": [
+          18,
+          45
+        ],
+        "h": [
+          10,
+          30
+        ]
+      }
+    }
+  },
+  "b4-sst-b1": {
+    "quantity": "the storehouse band recorded",
+    "observed": "2026-10-12",
+    "verifies": "B1",
+    "subject": "size-audit--storehouse",
+    "answers": "cf1bcdd03a7d",
+    "source": "l7r/diagram/buildings/types.json",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the storehouse item's band_ft w 12-20, h 9-16; size_bands OK on every sheet",
+    "value": {
+      "band_ft": {
+        "w": [
+          12,
+          20
+        ],
+        "h": [
+          9,
+          16
+        ]
+      }
+    }
   }
 }

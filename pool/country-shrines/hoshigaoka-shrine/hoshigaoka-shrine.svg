@@ -199,9 +199,9 @@
   </g>
 
   <!-- The sacred tree beside the approach, ringed by its rope (shimenawa) - research 126. Feature 374 batch 4 (building-review
-       E1): at (586,790), 13 ft clear of the wood and 4 ft off the arches' beams, after wave 123's move left it 4 ft from both -->
+       E1): at (586,800), 13.9 ft clear of the nearest crown of the wood and 4.1 ft off the arches' beams, measured, after wave 123's move left it 4 ft from both -->
   <g data-kind="sacred tree" fill="#7A8C5C" stroke="#3E5230" stroke-width="1.4">
-    <circle cx="586.0" cy="790.0" r="45.0"/>
+    <circle cx="586.0" cy="800.0" r="45.0"/>
   </g>
   <!-- The approach (sando): a 10 ft gravel way from the precinct's edge to the hall's front step, 87 ft, through the seven arches -->
   <g data-kind="approach">
@@ -342,7 +342,7 @@
   </g>
 
   <g data-kind="sacred tree">
-    <path d="M581.0,790.0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" fill="none" stroke="#EDE3B8" stroke-width="2" stroke-dasharray="2 1.5"/>
+    <path d="M581.0,800.0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" fill="none" stroke="#EDE3B8" stroke-width="2" stroke-dasharray="2 1.5"/>
     <text font-size="7" font-style="italic" fill="#3A4A28">sacred tree</text>
   </g>
 
