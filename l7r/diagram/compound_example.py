@@ -22,24 +22,43 @@ SERVANTS_FORMS: tuple[str, str] = ("common room under one door", "a door to each
 SERVANTS_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:servants' quarters form")).choice(SERVANTS_FORMS)
 
 
+#: The granary's two forms (research/questions/0098-storehouses-for-the-tax-rice.drawing.html: "A granary takes one of two forms, a knob"), the kind
+#: each draws as, and this draft's roll.
+#: The forms in the record's order ("Either a timber storehouse raised on posts, the takakura, or an earth-walled kura"), the
+#: key the knob's name: the roll is fixed by the record's wording, never chosen after the result (T20's plan review).
+GRANARY_FORMS: tuple[str, str] = ("raised timber storehouse", "earth-walled kura")
+GRANARY_KIND: dict[str, str] = {"earth-walled kura": "kura", "raised timber storehouse": "takakura"}
+GRANARY_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:granary form")).choice(GRANARY_FORMS)
+
+
+#: The main gate's two forms in the record's order ("a one-bay gate or a gate range (nagaya-mon), a knob chosen for each
+#: plan", research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html), each form's drawn opening (a
+#: one-bay gate ~6-8.5 ft, a nagaya-mon's two ken), and this draft's roll. The gatekeepers' place follows from the form: a
+#: one-bay gate has no range to hold a guardroom, so they sit in a gatehouse of their own (T20's plan review).
+GATE_FORMS: tuple[str, str] = ("one-bay gate", "gate range")
+GATE_W_FT: dict[str, float] = {"one-bay gate": 8.0, "gate range": 12.0}
+GATE_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(GATE_FORMS)
+
+
 def servants_row(form: str) -> BuildingSpec:
-    """The county draft's servants' row on the street (south) wall, 76 x 15 ft (a GUESS), in the entry form rolled: five
-    dwellings of ~15.2 ft each with its door, or one common room behind one door (0097's two forms)."""
+    """The county draft's servants' row on the street (south) wall, 60 x 15 ft (a GUESS), in the entry form rolled: four
+    dwellings of 15 ft each with its door, or one common room behind one door (0097's two forms). 60 ft since feature 374
+    wave 128 (it was 76): the 40 ft gatehouse beside the gate takes the wall's room, and the stable keeps its seat west of it."""
     if form == SERVANTS_FORMS[1]:
         return BuildingSpec(
             "servants' row",
             "service",
-            76.0,
+            60.0,
             15.0,
             "outer",
             "S",
             6,
             feature="servants' quarters",
-            extra_doors=("N", "N", "N", "N"),
-            door_fracs=(0.15, 0.3, 0.5, 0.7, 0.9),  # the west door off its middle: there its approach met the servants' privy
-            bays=(15.2, 30.4, 45.6, 60.8),
+            extra_doors=("N", "N", "N"),
+            door_fracs=(0.17, 0.375, 0.625, 0.875),  # the west door off its middle: there its approach met the servants' privy
+            bays=(15.0, 30.0, 45.0),
         )
-    return BuildingSpec("servants' row", "service", 76.0, 15.0, "outer", "S", 6, feature="servants' quarters", door_fracs=(0.5,))
+    return BuildingSpec("servants' row", "service", 60.0, 15.0, "outer", "S", 6, feature="servants' quarters", door_fracs=(0.5,))
 
 
 def county_magistracy_program() -> CompoundProgram:
@@ -52,9 +71,9 @@ def county_magistracy_program() -> CompoundProgram:
 
     Research:
         tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a 24 x 18 ft kura (432 sq ft), under the ~450 sq ft records-store ceiling, its shape a GUESS
-        barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 24 x 67 ft range along the east wall, 24 ft deep, long and narrow, never squat
+        barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 24 x 70 ft range along the east wall, 24 ft deep, long and narrow, never squat; its length a GUESS within ~145 ft
         envelope - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: a 270 x 200 ft walled compound, the divider at 90 ft, its buildings in the ~30-42% coverage band; the size a GUESS
-        gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: an 8 ft one-bay main gate passage, the yakuimon's ~6-8.5 ft; the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
+        gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the main gate's form rolled from the record's two (GATE_FORM: a one-bay gate, its passage 8 ft in the yakuimon's ~6-8.5 ft); the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
         garden before the house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the garden on the sunny south before the reception and the guest house; its 124 x 46 ft a GUESS
         vegetable garden west of the house - GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the west site among the four and the field form, 64 x 48 ft in the kitchen yard
         rear yard - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: open working ground behind the house with the storehouses beyond it, as the Higuchi house kept; its bounds a drawing convention
@@ -65,19 +84,19 @@ def county_magistracy_program() -> CompoundProgram:
         cart yard - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the loading ground before the service gate, carts, the stable's muck and the prisoners' way out, 37 x 20 ft, the apron's ~15-20 ft
         residence form and size - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: one block in two rows, the reception at the east end, a 4 ft veranda on the garden face, 10 ft off the north wall; 56 x 24 ft, with the kitchen and the bath ~50 tsubo, the Yokota house's 49
         residence room sizes - GUESS: the maids' room, the inner rooms, the family's and the lord's quarters and the reception at 10 x 10, 26 x 10, 18 x 10, 18 x 10 and 20 x 20 ft
-        storehouses - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: two household storehouses, 12 x 18 ft, the common two by three ken, behind the house in the NW corner
+        storehouses - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: two household storehouses behind the house, unequal as the Yokota pair - 16 x 19 ft and the common 12 x 18 ft (two by three ken); the count and the sizes GUESSES
         kitchen ell - research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a 20 x 18 ft kitchen joined to the house's west end as an ell, its door west; its size a GUESS
         shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one modest shrine, 18 x 14 ft, on the inner court's east wall; its size a GUESS
-        guest house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a detached 38 x 38 ft guest house; a guest house apart was not found at a samurai house
+        guest house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a detached 40 x 40 ft guest house; a guest house apart was not found at a samurai house
         office hall - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html, research/questions/0099-the-hearing-court-shirasu.drawing.html: a 113 x 38 ft hall backing the divider, its rooms behind a 30 x 10 ft dais on the south face over the hearing court; the room sizes GUESSES
         tax archive place - GUESS research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: the archive on the divider beside the granary, the court's stores together
         staff long-house - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: 24 x 82 ft on the west wall, the karo's 14 ft bay and four 17 ft bays side by side, a door to each on the long face
-        granary - GUESS research/questions/0098-storehouses-for-the-tax-rice.drawing.html: a 60 x 30 ft granary on the east wall
+        granary - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the granary's form rolled from the record's two (GRANARY_FORM: the earth-walled kura, drawn without posts), 50 x 27 ft in the ~43-50 x 25-27 ft band (its size a GUESS there), on the east wall
         cell place and size - research/questions/0096-holding-cells-agariya-and-roya.drawing.html: a 12 x 10 ft remand cell on the south wall just east of the service gate
-        gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: a freestanding 18 x 12 ft gatehouse beside the gate, the Kita-in guardroom's 3 x 2 ken
+        gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the gatekeepers in a gatehouse of their own beside the one-bay gate (a one-bay gate holds no guardroom), 40 x 12 ft as the page draws one - its length a GUESS, 2 ken deep measured
         stables - research/questions/0108-stables-umaya.drawing.html: 18 x 24 ft, three bays long, the stalls, the passage and the grooms' room in its depth
-        stable door - research/questions/0108-stables-umaya.html: its door at the east end into the passage, a gable-entered stable as the Shomei's three-bay stable
-        residence inner entrance - UNRESEARCHED: the house's inner entrance on its rear (north) face at the kitchen end
+        stable door - research/questions/0108-stables-umaya.html: its door at an end into the passage, a gable-entered stable as the Shomei's three-bay stable - the west end, the gatehouse standing a foot off the east
+        residence inner entrance - GUESS research/questions/0107-kitchens-daidokoro.drawing.html: the house's inner entrance on its rear (north) face at the kitchen (west) end, clear of the family privy at the corner
         gatehouse door - UNRESEARCHED: the gatehouse's door on the gate passage, where the gatekeepers watch
         office hall doors - UNRESEARCHED: the office hall's doors on its east face by the middle gate and on its west face
         servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a range on the south (street) wall, the menservants'; its entry form the compound's knob, rolled (this draft's roll: a door to each dwelling, five of ~15.2 ft); its 76 x 15 ft and the five dwellings GUESSES, the 15 ft depth 0115's
@@ -97,7 +116,7 @@ def county_magistracy_program() -> CompoundProgram:
     # the head of the cart yard; its 6 ft passage is a GUESS, narrower than the main gate. Centered 221 ft along the
     # wall, where the cart yard reaches it and the cell stands just east (feature 374 batch 4, building-review E1: at
     # 244 ft the cell and the re-proportioned barracks sealed it, and `postern_approach` holds it now).
-    env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 221.0, 6.0)))
+    env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=GATE_W_FT[GATE_FORM], posterns=(("W", 50.0, 6.0), ("S", 221.0, 6.0)))
     spine = (
         # THE GARDEN LIES BEFORE THE HOUSE (research 0091 'Samurai residences and their rooms (buke yashiki)' and
         # rendering 'How our maps lay out samurai residences and their rooms (buke yashiki)': the garden faces the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
@@ -134,8 +153,9 @@ def county_magistracy_program() -> CompoundProgram:
         # lands at x 244, y 130 under the current masses): 33 x 42 ft = 1,386 sqft, inside the 1,200-2,000
         # sqft full-platoon band at ~90-135 sqft per drilling samurai (docs/buildings.md
         # "Practice ground" + the dojo-is-a-city-institution grounding), west of the E column,
-        # whose barracks abuts the swept patch at x 223 - which is what "beside the watch's
-        # lodging" means - so the wall rows still flow past it without overflow. Pass 4 widened it to 45 ft; pass 5
+        # the barracks 21 ft east of the patch's edge at x 223 (it stands at x 244 since feature 374 wave 125), its doors
+        # opening on the way between - which is what "beside the watch's lodging" means - so the wall rows still flow past
+        # it without overflow. Pass 4 widened it to 45 ft; pass 5
         # gave the 12 ft back to the barracks.
         CourtZone("practice ground", 190.0, 126.0, 33.0, 42.0),
         # The outer court's open ground between the hearing court and the practice ground (pass 4, building-review round
@@ -190,10 +210,9 @@ def county_magistracy_program() -> CompoundProgram:
             ),
             engawa_ft=4.0,
             door_face="N",
-            door_fracs=(
-                0.4,
-                0.5,
-            ),  # feature 374 wave 113: the kitchen ell takes the west face, its free 6 ft too short for a door's approach; off the family privy at the rear west corner (building-review round 8)
+            # at the kitchen (west) end of the rear face, as 0107's drawing page seats the inner entrance, just east of the
+            # family privy at the corner (feature 374 wave 127; it stood mid-face at 0.4); the kitchen ell takes the west face
+            door_fracs=(0.2, 0.25, 0.3),
             inset_ft=10.0,
         ),
         # THE SERVANTS LODGE ON THE STREET FRONT (feature 374 wave 124): a large household's servants are drawn in a range
@@ -205,7 +224,9 @@ def county_magistracy_program() -> CompoundProgram:
         # house's storehouse beyond the ground behind the main house; the hand sheets' two since feature 283) - the rear
         # strip keeps its stores (docs/buildings.md). Their number and size are GUESSES; they carry the coverage the
         # servants' range took to the street, keeping the jin'ya band (0116) without shrinking the envelope.
-        b("storehouse (W)", "kura", 12.0, 18.0, "inner", "N", order=13, feature="storehouse"),
+        # the pair unequal, as the Yokota house's two (feature 374 wave 128: ~15.7 x 18.7 and ~9.5 x 12.5 ft, the national
+        # register; glyph-check F4/F5): the west one at the larger's 16 x 19 ft, the east at the common 12 x 18 ft
+        b("storehouse (W)", "kura", 16.0, 19.0, "inner", "N", order=13, feature="storehouse"),
         b("storehouse (E)", "kura", 12.0, 18.0, "inner", "N", order=12, feature="storehouse"),
         # The kitchen stands between the rear yard and the house, an ELL abutting the residence's west end (feature 374
         # wave 113, `joins`: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, a kitchen projecting
@@ -226,8 +247,8 @@ def county_magistracy_program() -> CompoundProgram:
         # A detached guest house is a GUESS (R10, research 0091: guests were received in the main house, and a
         # guest house apart at a samurai house was not found); kept as the example's draft of the item.
         b(
-            "guest house", "lord", 38.0, 38.0, "inner", "E", order=3, feature="guest quarters"
-        ),  # 38 x 38 (33 x 32 until feature 374 wave 126, which returned the mass the stable gave up, holding the jin'ya band; 33 x 30 before pass 6)
+            "guest house", "lord", 40.0, 40.0, "inner", "E", order=3, feature="guest quarters"
+        ),  # 40 x 40 since feature 374 wave 128, holding the jin'ya band when the granary came down to 0098's (38 x 38 until then; 33 x 32 until feature 374 wave 126; 33 x 30 before pass 6)
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
         # The clerks' room is a ROOM of the office hall, at its west end on the rear (divider) side, 30 x 20 ft - the
         # footprint the freestanding clerks' building had (feature 267 R20, research buildings "The office hall and its
@@ -286,26 +307,30 @@ def county_magistracy_program() -> CompoundProgram:
         # 60 x 30 ft (it was 52 x 28), the top of the granary band (30-60 x 14-36): pass 5 returned the ~2,000 sq ft the
         # house gave up (research 0091) to the compound's working stores and lodgings, holding coverage in the
         # jin'ya band (30-42%, 0116's drawing page) without shrinking the envelope (docs/buildings.md). A GUESS in the band.
-        b("granary", "kura", 60.0, 30.0, "outer", "E", order=6, feature="granary"),
+        # Feature 374 wave 128: the granary's form is 0098's knob, rolled (GRANARY_FORM: this draft's roll is the earth-walled
+        # kura, drawn without posts as 0098 draws one), at 0098's ~43-50 x 25-27 ft (a GUESS in that band; it was 60 x 30 ft).
+        b("granary", GRANARY_KIND[GRANARY_FORM], 50.0, 27.0, "outer", "E", order=6, feature="granary"),
         # 45 ft long (it was 33): the platoon lodged on the grounds (staff housing option (a)) is ~10-20 men, and the
         # watch's range should out-foot the stable by a margin (docs/buildings.md "Barracks": ~27-53 ft); pass 5. A GUESS.
         # Feature 374 wave 125: 24 x 67 ft (it was 45 x 34), long and narrow along the east wall - 0097's drawing page: the
         # barracks is drawn 12 to 24 ft deep, never a square or squat block (above); about the same floor as before.
-        # Divided into four dwellings of ~16.75 ft, a door to each on its court face (feature 374 batch 4, building-review
+        # 24 x 70 ft since feature 374 wave 128 (it was 67), the east wall's whole free run: the floor the granary gave up to
+        # 0098's band returned here, the length a GUESS inside 0097's up to ~145 ft. Divided into four dwellings of 17.5 ft, a
+        # door to each on its court face (feature 374 batch 4, building-review
         # E2: research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, "The barracks is divided into dwellings,
-        # each an earth-floored entry and a raised floor", bays ~12-18 ft); four of ~16.75 ft a GUESS in that band.
+        # each an earth-floored entry and a raised floor", bays ~12-18 ft); four of 17.5 ft a GUESS in that band.
         b(
             "barracks",
             "service",
             24.0,
-            67.0,
+            70.0,
             "outer",
             "E",
             order=4,
             feature="barracks",
             extra_doors=("W", "W", "W"),
             door_fracs=(0.125, 0.375, 0.625, 0.8),  # the last off its dwelling's middle: the cell stands at the face's south end
-            bays=(16.75, 33.5, 50.25),
+            bays=(17.5, 35.0, 52.5),
         ),
         # 12 x 10 ft: the small end of the single cells read (Osaka's 6 mats, ~12 x 9 ft, to Tenmacho's 18); a county
         # remand cell belongs there, its size a guess in the span (feature 267 R24, research 'How our maps draw holding cells (agariya and rōya)'). It was
@@ -321,12 +346,16 @@ def county_magistracy_program() -> CompoundProgram:
         # a gatehouse of its own ~40 ft (the hand sheets since wave 101), but at 40 ft the stables find no seat on this
         # south wall - the draft's own row (`docs/building-programs.md` walled enclosure).
         # Its door opens on the gate passage (east), where the gatekeepers watch - not on the court.
-        b("gatehouse", "dark", 18.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True, door_face="E"),
+        # Feature 374 wave 128: the main gate's form is 0093's knob, rolled (GATE_FORM: this draft's roll is the one-bay gate),
+        # and a one-bay gate has no range to hold a guardroom, so its gatekeepers sit in a gatehouse of their own - drawn
+        # ~40 x 12 ft as 0093's drawing page draws one (its length a GUESS; 2 ken deep, measured). The servants' row gives
+        # it room on the south wall (above).
+        b("gatehouse", "dark", 40.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True, door_face="E"),
         # Feature 374 wave 126: 18 x 24 ft (it was 42 x 24), 0108's warrior's stable - three bays long of one-ken stalls on
         # the wall side, the earth passage running its length and the grooms' room across it toward the court
         # (`compound_parts._stable_parts`; research/questions/0108-stables-umaya.drawing.html); its door at the east end into
         # the passage, a gable-entered stable. The depths are GUESSES. Still under the barracks as docs/buildings.md asks.
-        b("stables", "service", 18.0, 24.0, "outer", "S", order=5, feature="stables", door_face="E", door_fracs=(0.5,)),
+        b("stables", "service", 18.0, 24.0, "outer", "S", order=5, feature="stables", door_face="W", door_fracs=(0.5,)),  # its west gable since wave 128: the gatehouse stands a foot off its east end
         # The grooms' and bearers' row (pass 5, building-review round 4: the bare SW ground by the stables while the
         # grooms lodged in the inner court): a servants' nagaya in the SW corner beside the stables it serves
         # (research: the domestic servants - cooks, grooms, cleaners - lived in a nagaya; a second row by the stables is

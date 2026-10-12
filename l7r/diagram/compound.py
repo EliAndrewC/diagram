@@ -492,6 +492,10 @@ _DEFS = (
     '<pattern id="garden-stipple" patternUnits="userSpaceOnUse" width="14" height="14">'
     '<rect width="14" height="14" fill="#BFCFA0"/><circle cx="3" cy="3" r="0.8" fill="#7A8C5C"/>'
     '<circle cx="10" cy="9" r="0.8" fill="#7A8C5C"/></pattern>'
+    # a takakura's timber walls, the hand sheets' slats (feature 374 wave 128: 0098's raised timber storehouse)
+    '<pattern id="granary-slats" patternUnits="userSpaceOnUse" width="14" height="6">'
+    '<rect width="14" height="6" fill="#D9B47A"/><line x1="0" y1="0" x2="14" y2="0" stroke="#7A5430" stroke-width="0.8"/>'
+    '<line x1="0" y1="3" x2="14" y2="3" stroke="#A88454" stroke-width="0.5"/></pattern>'
     '<pattern id="keiko-earth" patternUnits="userSpaceOnUse" width="16" height="16">'
     '<rect width="16" height="16" fill="#E2CE9E"/><line x1="0" y1="5" x2="16" y2="5" stroke="#C2A46C" stroke-width="0.5"/>'
     '<line x1="0" y1="13" x2="16" y2="13" stroke="#C2A46C" stroke-width="0.5"/></pattern></defs>'
@@ -670,6 +674,13 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
             parts.append("</g>")
             caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
             continue
+        if p.spec.kind == "takakura":
+            # 0098's raised timber storehouse on its posts, as the hand sheets draw one: the slatted body and a post at each
+            # corner, the posts their own kind (feature 374 wave 128)
+            parts += [f"<g{_kind_attr(p.spec.feature)}>", rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2)]
+            parts += ["<g" + _kind_attr("granary stilts") + ">", *(rect(x, y, STILT_FT, STILT_FT, "#4A3318", "none", 0) for x, y in _stilts(p)), "</g>", "</g>"]
+            caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+            continue
         if p.spec.feature == "stables":
             # the stable as every sheet draws it (feature 374 wave 126, 0108): the earth passage, the grooms' room, the stalls
             (ax, ay, ax2, ay2), walls = _stable_parts(p)
@@ -724,6 +735,14 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
             caption("area", ax, ay, aw, ah, p.spec.name, size, False, "#3A2E1C", p.spec.feature, of=(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft))  # declared: the block
         else:
             caption("point" if full else "area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+
+
+STILT_FT = 8.0 / 3.0  # a takakura's corner post, the hand sheets' 8 px square: a MAP DRAWING CONVENTION (a real post ~1 ft)
+
+
+def _stilts(p: Placed) -> list[tuple[float, float]]:
+    """The four corner posts of a raised storehouse, each STILT_FT square inside its corners."""
+    return [(x, y) for x in (p.x_ft, p.x2 - STILT_FT) for y in (p.y_ft, p.y2 - STILT_FT)]
 
 
 def _bay_walls(p: Placed, px: Callable[[float, float], tuple[float, float]], stroke: str) -> list[str]:

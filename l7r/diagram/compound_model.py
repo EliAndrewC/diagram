@@ -31,6 +31,8 @@ KINDS: dict[str, tuple[str, str]] = {
     "service": ("#C9A57A", "#6B4F2A"),
     "plain": ("#E8D2A8", "#6B4F2A"),
     "kura": ("#F2EFE4", "#4A3318"),
+    # 0098's raised timber storehouse (takakura): slatted walls on posts, the hand sheets' form (feature 374 wave 128)
+    "takakura": ("url(#granary-slats)", "#5A3F1E"),
     "shrine": ("#C9876C", "#6B2A18"),
     "cell": ("#B89868", "#5C4318"),
     "dark": ("#8C6F3E", "#4A3318"),

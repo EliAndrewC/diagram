@@ -530,7 +530,7 @@ def test_the_county_example_carries_the_program_the_outcomes_name() -> None:
     assert pa.two_court_zoning(plan) == [] and pa.divider_gates_ft(plan) == [6.0]
     assert 'data-kind="side gate"' in svg and 'data-kind="nakamon" data-part-of="court divider"' in svg
     gate = next(p for p in result.placed if p.spec.name == "gatehouse")
-    assert (gate.spec.w_ft, gate.spec.h_ft) == (18.0, 12.0) and c._gate_interval(prog.envelope)[0] - gate.x2 < 2.0
+    assert (gate.spec.w_ft, gate.spec.h_ft) == (40.0, 12.0) and c._gate_interval(prog.envelope)[0] - gate.x2 < 2.0
     doors = {k for _s, k, within in pieces(svg) if k == "door" for k in within}
     assert {"residence", "kitchen", "guest quarters", "retainers' quarters", "barracks", "servants' quarters"} <= doors
     for kind in ("family quarters", "lord's quarters", "reception room", "engawa"):
