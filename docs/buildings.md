@@ -10,7 +10,7 @@ This file is the Mode A half of the project: interior plan views of manors, magi
 <!-- Research: scale bar - CONVENTION: 90 px bar labeled 30 ft in a top corner of the sheet, where every sheet draws it -->
 <!-- Research: caption placement - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: captions declared, placed by the one placer -->
 <!-- Research: true size for every footprint - CONVENTION: point glyphs included, only stroke floors, location markers and the bales drawn about 4 ft long (0199's drawing page) diverge -->
-<!-- Research: well location marker - research/questions/0196-communal-wells-ido.drawing.html: ~22 px curb glyph marks a ~3-4 ft curb -->
+<!-- Research: well location marker - research/questions/0196-communal-wells-ido.drawing.html: ~22 px curb glyph marks a curb about 4 ft square -->
 <!-- Research: buildings at true size - CANON: the GM's ruling of 2026-07-21, buildings drawn at true size; research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html bears only on the proportion ranking, the kitchen, stable and shrine ranks being this project's reading -->
 <!-- Research: main gate passage width - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the yakuimon's ~6-8.5 ft is its frontage (間口), read as the span between its pillar centers, the passage that frontage less one pillar; the nagaya-mon's ~12 ft (~36 px) is a passage; not ~10-13 ft or ~40 px -->
 <!-- Research: yakuimon pillar - GUESS research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: ~1 ft; no yakuimon pillar was found measured -->
@@ -227,7 +227,7 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: a fourth well only for very large compounds - UNRESEARCHED: no page says how many wells a compound kept by its size -->
 <!-- Research: well glyph - research/questions/0196-communal-wells-ido.drawing.html: a square curb and mouth with its lifting gear over it - a sweep or a pulley frame, weighted by the water's depth - and a roof on about one well in three, each rolled per sheet (l7r/diagram/well_gear.py; `well_gear` in pack_audit) -->
 <!-- Research: water depth from the landform - GUESS research/questions/0196-communal-wells-ido.drawing.html: a valley floor or river plain shallow, an upland or terrace deep; a sheet whose notes record no landform rolls it -->
-<!-- Research: no roof on a well indoors - GUESS: a well inside a building (a kitchen's doma) is under its building's roof, so a rolled roof is not drawn -->
+<!-- Research: no roof on a well indoors - research/questions/0196-communal-wells-ido.drawing.html: a well inside a building (a kitchen's doma) is under its building's roof, so a rolled roof is not drawn -->
 <!-- Research: an indoor well's gear - GUESS research/questions/0196-communal-wells-ido.drawing.html: a well inside a building hangs its pulley from the building's beams, drawn as the beam and wheel with no posts; its rolled gear is not drawn (a sweep cannot work under a roof) -->
 <!-- Research: well curb size - CONVENTION: the curb drawn ~22x22 px (~7.3 ft), a marker larger than the ~4 ft curb it stands for, as 0196's drawing page draws its wells -->
 

@@ -17,20 +17,20 @@ Guesses:
   known just inside one house's gate, another beside a main house and another indoors on its earth floor, but no account places a kitchen's or a stable's well.
 - The curb's exact size, 3 to 4 ft: the one measured curb is undated, so the figure is fitted round a premodern shaft.
 - That about three wells in four took the gear their water's depth favored, and about one in three had a roof: no count of
-  either was found.
+  the gear was found, and of roofs only a 1972 count in three Tohoku farm hamlets: about one well house to every five farms.
 - That a valley floor or river plain held shallow water and an upland or terrace deep: no source ties the depth to the ground
   this way.
 - That a well indoors on a kitchen's earth floor hung its pulley from the kitchen's beams: no account names the gear of a well
   indoors.
 
 Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
-shows where the well stands; a real curb was some 3 to 4 ft across. Over each curb stands its lifting gear - a sweep, a
+shows where the well stands; a real curb was about 4 ft square. Over each curb stands its lifting gear - a sweep, a
 pole crossing the curb from a post beside it, or a pulley frame, two posts and a beam - chosen for each well, most often the one suited to how deep the
-plan's water lies, and over about one well in three a roof, drawn as a dashed outline on four corner posts; a well inside a building, on a kitchen's earth floor, has neither a sweep nor a roof of its own, and its pulley is drawn hung from the building's beams, a beam and a wheel across the curb. Where the water stood so shallow that the bucket hung from a plain pole with no post, the map draws a sweep all the same, so that one mark stands for the shallow-water gear. At a shrine set apart from the houses, the map draws
+plan's water lies, and over about one well in three a roof, drawn as a dashed outline on four corner posts. A well inside a building, on a kitchen's earth floor, is drawn with neither a sweep nor a roof of its own: its pulley, a beam and a wheel across the curb, is drawn hung from the building's beams. Where the water stood so shallow that the bucket hung from a plain pole with no post, the map draws a sweep all the same, so that one mark stands for the shallow-water gear. At a shrine set apart from the houses, the map draws
 a well for its ablution water by convention: which waters a shrine used is not recorded.
 
 Name: well
 Covers: every well curb glyph, its lifting gear and roof, and its label
 Sources: ido-jawiki, fujiclean-ido, jta-aoyagi-kakunodate, semboku-bukeyashiki, shirobito-1717-takayama, kanda-josui-jawiki, saijo-mizu-rekishikan, ndl-crd-tsurube-ido, yamaguchi-ouchi-ido, kotobank-tsurube-ido, kotobank-kurumaido, kotobank-idoyakata
-Entry: research/questions/0196-communal-wells-ido.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html
-Drawing: research/questions/0196-communal-wells-ido.drawing.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html, research/questions/0105-baths-furo.drawing.html, research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0033-row-villages-resson.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
+Entry: research/questions/0196-communal-wells-ido.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Drawing: research/questions/0196-communal-wells-ido.drawing.html, research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.drawing.html, research/questions/0105-baths-furo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0033-row-villages-resson.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
