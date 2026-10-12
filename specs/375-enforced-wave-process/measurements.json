@@ -859,5 +859,47 @@
    "first roll in a process": "seed 4 quiet: 6.26 s CPU in 4.47 s wall (another thread's start-up counted); later rolls CPU = wall to 0.01 s",
    "reading": "quiet, CPU and wall agree; under load CPU time rises with wall time (about 2.2x with six cores busy, 4-6x with all): on this hybrid-core laptop, whose clock drops under load, CPU time does not escape contention. Quiet, a seed's spread across rounds reached 7.4% (seed 39, a 3.7 s roll), the four-seed total about 2%"
   }
+ },
+ "375-a6-turn-time": {
+  "quantity": "model time per turn against context size, feature 374's session (feature 375 amendment 6, FR-033, R5)",
+  "observed": "2026-10-12",
+  "unit": "s",
+  "source": "the diagram-backlog session's transcript (~/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl), 2026-10-10 20:51 to 2026-10-11 08:35",
+  "command": "python3 scripts/measure/turn_time.py /home/agent/.claude/projects/-diagram/39c3cbfa-00fa-4115-85d4-ebf41e287c6c.jsonl --record specs/375-enforced-wave-process/measurements.json --key 375-a6-turn-time",
+  "method": "a turn is a reply after a tool result, timed from the result to the reply; least squares of its seconds on context and output tokens",
+  "value": {
+   "turns": 1385,
+   "model hours": 1.91,
+   "median turn s": 3.7,
+   "fit: s fixed, per 100k context, per 1k output": [
+    1.63,
+    0.25,
+    3.27
+   ],
+   "hours explained by context size": 0.5,
+   "median turn s by context (100k bands)": {
+    "0-200k": 2.7,
+    "200-400k": 3.0,
+    "400-600k": 3.5,
+    "600-800k": 4.2,
+    "800-1000k": 5.0
+   }
+  }
+ },
+ "375-a6-perf-and-census": {
+  "quantity": "make perf's time with the overlap census inside it, and the census alone (FR-029)",
+  "observed": "2026-10-12",
+  "unit": "s",
+  "varies": 0.3,
+  "source": "374's pushed HEAD in two detached worktrees, old code (before amendment 3) and new (2100933da), one after the other",
+  "command": "make perf LABEL=timing-<tree> in each worktree; make census in the new one",
+  "method": "date +%s.%N around each; one run each, a one-off observation",
+  "value": {
+   "make perf old s": 181.2,
+   "make perf new s": 97.0,
+   "rolls old": 16,
+   "rolls new": 4,
+   "census alone s": 73.9
+  }
  }
 }
