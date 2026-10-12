@@ -139,6 +139,8 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         skeleton margin off the wet and the ditches - UNRESEARCHED: 20 px off the toe band and the marsh, 14 px off the drawn water (`clip_to_clear`'s line margin)
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft
+        skeleton drawn worn - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: narrow, packed earth, no centerline (`worn=True`)
+        no skeleton under two houses - UNRESEARCHED: a cluster of fewer than two houses lays no skeleton lanes (`len(arcs) < 2`), there being no two houses to join
         skeleton arm's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence; each arm registers `LANE_CLEARANCE`, 7 ft from its middle, a footprint held to it at its corners
         skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (100 ft) each way; a piece under 30 ft not laid
         skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps at least 7 ft clear of a garden fence, and a lane end that reaches nothing is pulled back to the last house it serves"""

@@ -585,6 +585,8 @@ def _seats(
         privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the sun-side sector on
             72.7%, else the attested places a hamlet farm has - the yard, the front, by the stable; not the barn while a hamlet
             draws none (the open found row `_seats#privy seats - the barn 0047 names`)
+        privy sun-side radii - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: tried from 18 ft (`PRIVY_SUN_MIN_FT`) out to the reach
+        privy sun-side step - UNRESEARCHED: the radii tried 4 ft apart
         privy in the yard off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: held at a ken plus the wall gap (`PRIVY_YARD_STEP_FT`), past the page's ken, behind the found row at the constant
         shrine off its corner - UNRESEARCHED: 14 ft (`SHRINE_CORNER_FT`) out from the house's corner on both axes
         manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: on the side of the privy away from the house, along the line from its center; jittered a few feet;

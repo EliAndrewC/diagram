@@ -73,7 +73,9 @@ def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
     the tall stone on the bund's corner junction (settlement-review, 2026-09-27). 12 px is the mound's reach plus the
     stone's rise plus a clearance at a right-angled corner.
 
-    Research: corner seat - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: in the plot's corner against its bunds, 12-16 px in toward the centroid"""
+    Research:
+        corner seat - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: in the plot's corner against its bunds, 12-16 px in toward the centroid - 12-16 ft at a hamlet's 1 ft per px, twice that at a village's 2 ft per px (`Settlement.ftpx`)
+        corner seat on a tiny plot - CONVENTION: never past half-way to the centroid (`dist / 2.0`), so on a plot under 24 px from corner to middle the grave stands nearer its corner than 12 px"""
     cx, cy = _centroid(poly)
     vx, vy = poly[at % len(poly)]
     dist = math.hypot(cx - vx, cy - vy)
