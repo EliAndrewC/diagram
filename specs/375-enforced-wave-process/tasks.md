@@ -153,9 +153,11 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 5 (the GM 2026-10-11: performance recorded and flagged, never a gate)
 
-- [ ] T41 The flag, never a refusal (plan D33); the 5% line (D35); tests red on today's code (SC-016, SC-018)
+- [x] T41 The flag, never a refusal (plan D33); the 5% line (D35); tests red on today's code (SC-016, SC-018)
       research: rendering
-- [ ] T42 The machine's state, CPU time and the warm-up roll (D34); the scaling leg on request and the trend (D36); tests (SC-017, SC-019, SC-020)
+      verify: DONE. perf_review.check prints the band and the FLAG with both snapshots' machine state, exits 0; arbiter_signed removed; BAND1_PCT 5.0 in both environments; test_perf_review 27 and test_perf_bands 22 passed, 5/5.1 percent pinned (SC-016, SC-018)
+- [x] T42 The machine's state, CPU time and the warm-up roll (D34); the scaling leg on request and the trend (D36); tests (SC-017, SC-019, SC-020)
       research: rendering
+      verify: DONE. machine_state at both ends, CPU beside wall per stage after an untimed warm-up roll, metric_of CPU-else-wall; scaling only with SCALING=1; perf-report with CPU, load and free RAM per snapshot; test_perf_snapshot 27 and test_perf_scaling 14 passed; a real snapshot taken end to end (SC-017, SC-019, SC-020)
 - [ ] T43 The texts (D37); 375 closes again: tests, `make hooks-test`, the gate, the report, landed
       research: rendering
