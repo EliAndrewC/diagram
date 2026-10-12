@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Reopened 2026-10-12 for amendment 9 (glyph-check run on the hour; amendments 1-8 Done 2026-10-11/12)
+**Status**: Done 2026-10-12 - amendment 9 landed: spec FAITHFUL (round 3), plan CLEAR (round 3); glyph-check due on the feature's hour, all owed units together, or at landing (SC-032, SC-033 tested; SC-034 carried to 374); amendments 1-8 Done
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
 

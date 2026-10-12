@@ -219,6 +219,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T57 The early glyph dispatch refused, `GLYPH_DUE_OK`, the batch opened by the guard; the landing marker written by review-gate and cleared by a clean push; `make verify` naming the waiting units (D55, D56; SC-033)
       research: rendering
       verify: DONE. DONE. the pair guard refuses an early glyph dispatch (GLYPH_DUE_OK), opens the batch; review-gate marks landing, a clean push clears it; --why names the waiting units; test-pair-hooks 111, test-review-gate 41, test-sync-with-main 124 passed
-- [ ] T58 The texts (docs/reviews.md, CLAUDE.md, docs/guards.md); SC-034 carried to 374; 375 closes again: tests, `make hooks-test`, the gate, the report, landed (D57)
+- [x] T58 The texts (docs/reviews.md, CLAUDE.md, docs/guards.md); SC-034 carried to 374; 375 closes again: tests, `make hooks-test`, the gate, the report, landed (D57)
       research: rendering
+      verify: DONE. DONE. docs/reviews.md, docs/guards.md, CLAUDE.md; SC-034 carried to 374 (sc034-375-a9-glyph-per-hour); tests/tooling 1725 passed; hooks-test green (pair 111, review-gate 41, sync 124); no engine code in the amendment, so the route is DIRECT; report written; landed by the push carrying this tick
 
