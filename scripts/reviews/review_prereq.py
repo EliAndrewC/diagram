@@ -315,7 +315,7 @@ def check(clone: pathlib.Path, names: list[str], prompt: str, gate_green: bool, 
 def unit_maps(clone: pathlib.Path) -> dict[str, str]:
     """Each owed unit's slug -> the map or sheet it is reviewed on (feature 294); a plain map name maps to itself."""
     try:
-        _, units, _ = _owed_module().owed(clone)  # type: ignore[attr-defined]
+        _, units, _ = _owed_module().owed(clone, landing=True)  # type: ignore[attr-defined]  # every owed unit: a lookup, not a schedule (375 a9)
     except Exception:  # noqa: BLE001 - a hook must not fail on a repository the owed script cannot read
         return {}
     return {u.slug: u.on for u in units}
@@ -402,7 +402,7 @@ def gate_state(clone: pathlib.Path, fresh: Callable[[pathlib.Path], bool] = _fre
 def unit_sheet(clone: pathlib.Path, unit: str) -> str:
     """The map or sheet an owed review unit is judged on (`review_owed`'s `on`), or "" where the unit is not owed now."""
     try:
-        _desc, units, _problems = _owed_module().owed(clone)
+        _desc, units, _problems = _owed_module().owed(clone, landing=True)  # every owed unit: a lookup, not a schedule (375 a9)
     except Exception:  # noqa: BLE001 - an unreadable delta leaves the unit unnamed, and its verdict keyed by the engine alone
         return ""
     return next((u.on for u in units if u.slug == unit), "")

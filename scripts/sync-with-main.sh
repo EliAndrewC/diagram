@@ -523,6 +523,8 @@ push_cmd() {
   mirror_refresh
   theirs=$(git diff --name-only "$before"..HEAD | sort -u)
   date > "$(git -C "$ROOT" rev-parse --absolute-git-dir)/sync-with-main.stamp"  # post-push the clone is at main's tip = synced by definition
+  # GUARD_EDIT_OK: feature 375 amendment 9, D55 - the work has landed: review-gate.sh's landing mark (glyph units due at once) ends
+  rm -f "$(git -C "$ROOT" rev-parse --absolute-git-dir)/glyph-landing"
   overlap=$(comm -12 <(printf '%s\n' "$ours") <(printf '%s\n' "$theirs"))
   if [ -n "$overlap" ]; then
     echo "sync-with-main: PUSHED, but the pull auto-merged other sessions' edits into files your commits touched:" >&2

@@ -145,17 +145,17 @@ if [ -n "$undeclared" ]; then
   printf '%s\n' "$undeclared"
   fail="$fail occasions"; rules="$rules occasions-undeclared"
 fi
-owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" 2>/dev/null || true)"
+owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing 2>/dev/null || true)"
 # GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - A STALE RENDER IS NO OCCASION. A sheet's SVG is a gitignored render,
 # and a clone never re-renders on a merge (GM 2026-07-22), so a render drawn before main moved read as an element "new to"
 # its sheet: a spec-only push owed 374's glyph-check and size-audit on a corridor main no longer drew. Redraw what each owed
 # unit sits on (`make map` answers CACHED when the render is current), then ask again.
 if [ -n "$owed_units" ]; then
-  for on in $(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --units 2>/dev/null | awk -F'\t' '{print $4}' | sort -u); do
+  for on in $(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' '{print $4}' | sort -u); do
     g="$(find "$ROOT/pool" -path "*/$on/$on.gen.py" 2>/dev/null | head -1)"
     [ -n "$g" ] && ( cd "$ROOT" && make -s map GEN="${g#"$ROOT"/}" >/dev/null 2>&1 )
   done
-  owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" 2>/dev/null || true)"
+  owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing 2>/dev/null || true)"
 fi
 if [ -n "$owed_units" ]; then
   tree_key="$( cd "$ROOT" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
@@ -164,7 +164,7 @@ for unit in $owed_units; do
   verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$unit.json"
   if [ ! -f "$verdict_rec" ]; then
     printf '\n\033[1mREVIEW GATE: %s is owed and has no verdict record.\033[0m\n' "$unit"
-    printf 'Its occasion: %s\n' "$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --units 2>/dev/null | awk -F'\t' -v u="$unit" '$1 == u {print $5}')"
+    printf 'Its occasion: %s\n' "$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' -v u="$unit" '$1 == u {print $5}')"
     printf 'Dispatch it (`make verify` writes its prompt) once the gate is green; it records the verdict as its last act.\n'
     fail="$fail $unit"; rules="$rules unit-no-review"
     continue
@@ -190,6 +190,10 @@ for unit in $owed_units; do
   fi
 done
 
+# GUARD_EDIT_OK: feature 375 amendment 9, D55 - THE PUSH ASKS EVERY OWED UNIT (--landing above), the glyph units' hour aside; a
+# glyph unit with no answer marks the work LANDING, so the dispatch this refusal asks for is due and passes the pair guard
+# without GLYPH_DUE_OK - a clean push clears the mark (sync-with-main.sh)
+case " $fail " in *" glyph-check--"*) python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing-mark on >/dev/null 2>&1 ;; esac
 if [ -n "$fail" ]; then
   printf '\n\033[1mreview-gate FAILED:%s\033[0m\n' "$fail"
   printf 'If a case is genuinely exempt - a superseded spec, a mechanical sweep across every map -\n'

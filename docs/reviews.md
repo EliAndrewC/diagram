@@ -13,7 +13,7 @@ category of thing"*. `scripts/reviews/review_owed.py` is the one answer, asked b
 
 | check | owed when | looks at |
 |---|---|---|
-| `glyph-check` | an element new to a map or sheet, whatever its mark (detected from `ink_classes` / `data-kind`); a glyph redrawn or an element re-placed by substantially different rules (declared: `glyph-redrawn:`, `placement-changed:` - the GM's tannery) | that element, on one map where it stands |
+| `glyph-check` | an element new to a map or sheet, whatever its mark (detected from `ink_classes` / `data-kind`); a glyph redrawn or an element re-placed by substantially different rules (declared: `glyph-redrawn:`, `placement-changed:` - the GM's tannery). DUE on the feature's hour, all owed units together, or at landing (below) | that element, on one map where it stands |
 | `settlement-review` | a map new to the pool (detected); a new settlement form or tier (declared: `new-form:`, `new-tier:`) | the whole map: does it read as a distinct place, its declared economy, a new tier's fabric |
 | `fix-check` | a feature closing a defect the GM reported by eye (declared: `gm-fix: <map> - <the complaint>`) | the GM's complaint, at fit zoom first |
 | `building-review` | a sheet new to the pool (detected); a layout revised or a new program (declared: `layout-revised:`, `new-program:`) | the sheet's layout, program and coherence |
@@ -39,6 +39,16 @@ content (a review beside a running gate is refused - a gate going red mid-review
 most two rounds per unit per feature (one review and one fix-verification; a third waits for the round arbiter's ruling - feature 375, the GM's-words waiver retired by feature 379);
 the stop hook holds the turn while an owed unit has no dispatch, run or record. An engine change that moves things under rules
 already judged owes nothing and gets no report - the GM looks at the map.
+
+**A glyph check runs on the feature's hour** (feature 375 amendment 9, the GM 2026-10-12: *"run periodically rather than every
+time a map changes ... every feature which takes longer than 1 hour to implement is 'due' to run it once after every hour and
+the address findings all at once"*). Its units are found as above but are DUE only when an hour of the feature's time has passed
+- from the feature's first event in the clone, and from each batch it opens - and then every owed glyph unit is due together and
+stays due until dispatched (one per agent, in one message); fix their findings together, and what a fix re-owes waits for the
+next hour. A change with no live feature (none named, or the named one closed) owes its glyph units at landing: the push
+(`review-gate.sh`) asks every owed unit, and its refusal marks the work landing so the dispatch it asks for is due. `make verify`
+names the glyph units waiting and when they come due; the pair guard refuses an early glyph dispatch (`GLYPH_DUE_OK="<why>"`).
+The other checks are due on their occasion, as the table says.
 
 **The ledger measures it.** Every pass is a row of the ledger's measured table - the check, each finding's class, whether the
 author had missed it, and the run's cost from `make review-cost AGENT=<id>`; `make review-census` totals them per check, so a

@@ -560,6 +560,36 @@ print(json.dumps({"hookSpecificOutput": {
       guard_log pair blocked "$atype" review-multi-map
       exit 2
     fi
+    # GUARD_EDIT_OK: feature 375 amendment 9, FR-040 (the GM 2026-10-12: glyph-check "run periodically rather than every time a
+    # map changes ... once after every hour") - A GLYPH CHECK IS DISPATCHED WHEN IT IS DUE: on the feature's hour, all owed units
+    # together, or at landing (`review_owed.py --glyph-gate`); before then it is refused, naming when it comes due.
+    glyph_escaped=""
+    if [ "$atype" = "glyph-check" ] && [ -n "$named" ] && [ -f "${CLONE_ROOT:-.}/scripts/reviews/review_owed.py" ]; then
+      case "$ptext" in
+        *GLYPH_DUE_OK=*)
+          why="$(printf '%s' "$ptext" | python3 -c 'import re,sys; m=re.search(r"GLYPH_DUE_OK=\"([^\"]*)\"", sys.stdin.read()); print(m.group(1) if m else "")' 2>/dev/null)"
+          if [ -z "$why" ] || ! printf '%s' "$why" | python3 "${CLONE_ROOT}/scripts/hooks/lib/hookmatch.py" reason-ok >/dev/null 2>&1; then
+            printf '\n\033[1mBLOCKED: GLYPH_DUE_OK needs a REASON\033[0m (two words, eight characters, in quotes) - it is what a later audit reads.\n' >&2
+            guard_log pair blocked "$atype" glyph-due-no-reason
+            exit 2
+          fi
+          guard_log pair escaped "$atype" glyph-due-ok
+          log_bypass "GLYPH_DUE_OK: $why" "glyph check before its hour"
+          glyph_escaped="--escaped"
+          ;;
+        *)
+          for m in $named; do
+            if ! early="$(python3 "${CLONE_ROOT}/scripts/reviews/review_owed.py" --root "$CLONE_ROOT" --glyph-gate "$m" 2>/dev/null)"; then
+              printf '\n\033[1mBLOCKED: %s\033[0m\n' "$early" >&2
+              printf 'Owed glyph units wait for the hour and go out together; `make verify` names them and when they come due.\n' >&2
+              printf 'A check that must run now: GLYPH_DUE_OK="<why>" in the dispatch prompt.\n' >&2
+              guard_log pair blocked "$atype:$m" glyph-not-due
+              exit 2
+            fi
+          done
+          ;;
+      esac
+    fi
     # GUARD_EDIT_OK: feature 240 FR-003 to FR-006 - A REVIEW ROUND IS NOT SPENT ON AN UNVERIFIED FIX: every finding
     # of the unit's last verdict verified or accepted; every map current and complete; every quoted figure backed. Its
     # escape is REVIEW_PREREQ_OK="<why>", apart from PAIR_OK, which answers a different question.
@@ -636,6 +666,9 @@ else:
       local m span
       [ -n "$named" ] && [ -n "$key" ] || return 0
       for m in $named; do
+        # GUARD_EDIT_OK: feature 375 amendment 9, D53/D55 - a glyph dispatch on the hour (or escaped) opens a batch BEFORE its
+        # dispatch is stamped, so the batch's own first unit reads as dispatched and the rest stay due
+        [ "$atype" = "glyph-check" ] && python3 "${CLONE_ROOT:-.}/scripts/reviews/review_owed.py" --root "${CLONE_ROOT:-.}" --glyph-dispatched "$m" $glyph_escaped >/dev/null 2>&1
         span="$(record_dispatch "$m" "$key")"
         record_round "$m" "$key"
         guard_log pair permitted "$atype:$m" review-dispatched

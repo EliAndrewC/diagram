@@ -92,13 +92,13 @@ def clone(tmp_path: Path) -> Path:
 
 
 def units(root: Path) -> list[tuple[str, str, str]]:
-    _, got, problems = owed.owed(root)
+    _, got, problems = owed.owed(root, landing=True)  # what is OWED; when a glyph unit is DUE is amendment 9's, below
     assert not problems, problems
     return [(u.check, u.subject, u.on) for u in got]
 
 
 def test_nothing_changed_owes_nothing(clone: Path) -> None:
-    desc, got, _ = owed.owed(clone)
+    desc, got, _ = owed.owed(clone, landing=True)
     assert got == []
     assert "no review owed" in owed.ruling(desc, got)
 
@@ -157,7 +157,7 @@ def test_a_declared_element_not_on_the_named_map_is_a_problem(clone: Path) -> No
 
 def test_a_declared_element_no_map_draws_is_a_problem(clone: Path) -> None:
     _tasks(clone, ["glyph-redrawn: tannery"])
-    _, got, problems = owed.owed(clone)
+    _, got, problems = owed.owed(clone, landing=True)
     assert [u.subject for u in got] == ["tannery"]
     assert "drawn on no pool map" in problems[0]
     assert "PROBLEMS" in owed.ruling("x", got, problems)
@@ -165,7 +165,7 @@ def test_a_declared_element_no_map_draws_is_a_problem(clone: Path) -> None:
 
 def test_an_unknown_occasion_is_a_problem(clone: Path) -> None:
     _tasks(clone, ["repainted: privy"])
-    _, got, problems = owed.owed(clone)
+    _, got, problems = owed.owed(clone, landing=True)
     assert got == [] and "unknown occasion" in problems[0]
 
 
@@ -328,7 +328,7 @@ def test_a_repository_with_no_commits_reports_everything_new(tmp_path: Path) -> 
     git(root.parent, "init", "-q", str(root))
     _map(root, "pool", "inashiro", {"farmhouse": 1})
     assert owed.base_of(root) == ("", "no commits yet")
-    _, got, _ = owed.owed(root)
+    _, got, _ = owed.owed(root, landing=True)
     assert [(u.check, u.subject) for u in got] == [("settlement-review", "inashiro"), ("glyph-check", "farmhouse")]
 
 
@@ -347,7 +347,7 @@ def test_a_mirror_supplies_a_generated_sheets_base(clone: Path, tmp_path: Path) 
     (gen / "example.svg").write_text('<svg><g data-kind="residence"/><g data-kind="well"/></svg>')
     (mirror / "pool" / "magistracies" / "example").mkdir(parents=True)
     (mirror / "pool" / "magistracies" / "example" / "example.svg").write_text('<svg><g data-kind="residence"/></svg>')
-    _, got, _ = owed.owed(inner)
+    _, got, _ = owed.owed(inner, landing=True)
     assert [(u.check, u.subject, u.on) for u in got] == [("glyph-check", "well", "example"), ("size-audit", "well", "example")]
 
 
@@ -378,11 +378,15 @@ def test_pool_map_names_lists_maps_and_sheets_of_both_trees(clone: Path) -> None
 def test_main_prints_slugs_units_the_ruling_and_the_declaration(clone: Path, capsys: pytest.CaptureFixture[str]) -> None:
     _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "well": 1}, renders=True)
     assert owed.main(["--root", str(clone)]) == 0
+    assert capsys.readouterr().out.strip() == "", "no feature: the glyph unit is owed, and due only at landing (amendment 9)"
+    assert owed.main(["--root", str(clone), "--landing"]) == 0
     assert capsys.readouterr().out.strip() == "glyph-check--well--inashiro"
-    owed.main(["--root", str(clone), "--units"])
+    owed.main(["--root", str(clone), "--landing", "--units"])
     assert capsys.readouterr().out.strip().split("\t")[:4] == ["glyph-check--well--inashiro", "glyph-check", "well", "inashiro"]
-    owed.main(["--root", str(clone), "--why"])
+    owed.main(["--root", str(clone), "--landing", "--why"])
     assert "glyph-check:well on inashiro" in capsys.readouterr().out
+    owed.main(["--root", str(clone), "--why"])
+    assert "glyph-check--well--inashiro (at landing)" in capsys.readouterr().out
     (clone / "l7r" / "engine.py").write_text("X = 9\n")
     assert owed.main(["--root", str(clone), "--check-declared"]) == 1
     _tasks(clone, ["none: test"])
@@ -468,3 +472,125 @@ def test_the_ci_dispatcher_is_not_drawing_or_placement_code() -> None:
     """A refusal-text edit in l7r/diagram/ci/ was asked to declare its occasions (2026-10-09); it draws nothing."""
     assert not owed._CODE.match("l7r/diagram/ci/features.py")
     assert owed._CODE.match("l7r/diagram/overlap/taxonomy.py") and owed._CODE.match("pool/hamlet/x/x.gen.py")
+
+
+# ---- feature 375 amendment 9 (the GM 2026-10-12): a glyph check is due on the feature's hour, all owed units together --------
+
+
+def _feature(root: Path, started: float, *, tasks: str = "- [ ] T01 a task\n", status: str = "In progress") -> None:
+    """A live feature 999 with its event log beginning at `started`."""
+    import datetime
+
+    d = root / "specs" / "999-test"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "spec.md").write_text(f"# Feature 999\n\n**Status**: {status}\n")
+    (d / "tasks.md").write_text("# Tasks\n\n## Occasions\n\n- none: fixture\n\n## Work\n\n" + tasks)
+    (root / ".specify").mkdir(exist_ok=True)
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/999-test"}))
+    ev = root / ".git" / "l7r-events"
+    ev.mkdir(parents=True, exist_ok=True)
+    t = datetime.datetime.fromtimestamp(started, datetime.UTC).isoformat().replace("+00:00", "Z")
+    (ev / "999-test.jsonl").write_text(json.dumps({"t": t, "ev": ""}) + "\n")
+
+
+def _dispatch(root: Path, slug: str, at: float) -> None:
+    p = root / ".git" / "pairing-state.json"
+    d = json.loads(p.read_text()) if p.exists() else {}
+    d.setdefault("dispatched", {})[slug] = {"key": "k", "at": int(at)}
+    p.write_text(json.dumps(d))
+
+
+def _glyph(root: Path, *elements: str) -> list:
+    classes = {"farmhouse": 9, "privy": 4, **{e: 1 for e in elements}}
+    _map(root, "pool", "inashiro", classes, renders=True)
+    return [u for u in owed.all_owed(root)[1] if u.check == "glyph-check"]
+
+
+def _due(root: Path, now: float) -> tuple[set[str], set[str]]:
+    due, waiting = owed.glyph_due(root, owed.all_owed(root)[1], now)
+    return {u.subject for u in due}, {u.subject for u, _w in waiting}
+
+
+def test_a_glyph_unit_waits_for_the_features_hour_and_the_other_checks_do_not(clone: Path) -> None:
+    """SC-032, SC-034: before the hour the glyph unit is owed, not due; a building-review, size-audit or settlement-review unit
+    is due at once (FR-041) - here a sheet new to the pool and a kind new to a sheet."""
+    t0 = 1_800_000_000.0
+    _feature(clone, t0)
+    _glyph(clone, "wood shed")
+    _sheet(clone, "ochiba", ["residence"])
+    _map(clone, "pool", "kawa", {"farmhouse": 2})
+    assert _due(clone, t0 + 600) == (set(), {"wood shed"})
+    others = {u.check for u in owed.all_owed(clone)[1] if u.check != "glyph-check"}
+    assert {"building-review", "settlement-review"} <= others
+    due, _ = owed.glyph_due(clone, owed.all_owed(clone)[1], t0 + 600)
+    assert due == []
+    assert _due(clone, t0 + 3600) == ({"wood shed", "residence"} & _due(clone, t0 + 3600)[0] | {"wood shed"}, set())
+
+
+def test_units_owed_in_an_hour_are_all_due_at_it_and_a_batch_stays_due_until_each_is_dispatched(clone: Path) -> None:
+    t0 = 1_800_000_000.0
+    _feature(clone, t0)
+    by = {u.subject: u for u in _glyph(clone, "wood shed", "kiln")}
+    shed, kiln = by["wood shed"], by["kiln"]
+    assert _due(clone, t0 + 3599) == (set(), {"wood shed", "kiln"}), "owed at minute 5 or 59, both wait"
+    assert _due(clone, t0 + 3600) == ({"wood shed", "kiln"}, set()), "...and are due together at the hour"
+    owed.open_batch(clone, owed.all_owed(clone)[1], t0 + 3600)
+    _dispatch(clone, shed.slug, t0 + 3600)
+    assert _due(clone, t0 + 3605) == ({"kiln"}, {"wood shed"}), "the batch's second unit stays due after the first's dispatch"
+    _dispatch(clone, kiln.slug, t0 + 3610)
+    assert _due(clone, t0 + 4200) == (set(), {"wood shed", "kiln"}), "re-owed by a fix ten minutes on: the next hour"
+    assert _due(clone, t0 + 7200) == ({"wood shed", "kiln"}, set())
+
+
+def test_an_old_dispatch_does_not_start_the_features_hour(clone: Path) -> None:
+    """A clone's glyph dispatches from before the feature began (October's, never cleared) do not make its units due."""
+    t0 = 1_800_000_000.0
+    _dispatch(clone, "glyph-check--wood-shed--inashiro", t0 - 86_400)
+    _feature(clone, t0)
+    _glyph(clone, "wood shed")
+    assert _due(clone, t0 + 60) == (set(), {"wood shed"})
+
+
+@pytest.mark.parametrize(
+    ("how", "tasks", "status"),
+    [("no feature", None, None), ("Done", "- [ ] T01 a task\n", "Done 2026-10-12"), ("every task ticked under Draft", "- [x] T01 a task\n", "Draft"),
+     ("only its GM-review box open", "- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n", "Draft")],
+)
+def test_with_no_live_feature_glyph_units_are_due_only_at_landing(clone: Path, how: str, tasks: str | None, status: str | None) -> None:
+    t0 = 1_800_000_000.0
+    if tasks is not None:
+        _feature(clone, t0 - 86_400 * 3, tasks=tasks, status=status or "")
+        if "GM review" in tasks:
+            (clone / "specs" / "999-test" / "gm-review.jsonl").write_text('{"kind": "accept", "finding": "x"}\n')
+    _glyph(clone, "wood shed")
+    due, waiting = owed.glyph_due(clone, owed.all_owed(clone)[1], t0)
+    assert due == [] and [w for _u, w in waiting] == ["at landing"], how
+    owed.mark_landing(clone, True)
+    assert _due(clone, t0) == ({"wood shed"}, set()), "landing: every owed glyph unit due"
+    owed.mark_landing(clone, False)
+    assert _due(clone, t0)[0] == set(), "a clean push clears the mark"
+
+
+def test_the_cli_gates_an_early_dispatch_opens_a_batch_on_the_hour_and_on_the_escape(clone: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    import time
+
+    now = time.time()
+    _feature(clone, now - 600)
+    (shed,) = _glyph(clone, "wood shed")
+    assert owed.main(["--root", str(clone), "--glyph-gate", shed.slug]) == 1 and "not yet due" in capsys.readouterr().out
+    assert owed.main(["--root", str(clone), "--glyph-gate", shed.slug, "--escaped"]) == 0
+    assert owed.main(["--root", str(clone), "--glyph-gate", "settlement-review--x"]) == 0, "not a glyph unit: the gate is not this"
+    assert owed.main(["--root", str(clone), "--glyph-dispatched", shed.slug]) == 0
+    assert not (clone / ".git" / owed.CLOCK).exists(), "an early dispatch without the escape opens no batch"
+    assert owed.main(["--root", str(clone), "--glyph-dispatched", shed.slug, "--escaped"]) == 0
+    clock = json.loads((clone / ".git" / owed.CLOCK).read_text())["999-test"]
+    assert clock["batch"] == [shed.slug] and clock["batch_at"] >= int(now), "the escape opens a batch: the clock restarts"
+    _feature(clone, now - 7200)
+    (clone / ".git" / owed.CLOCK).unlink()
+    assert owed.main(["--root", str(clone), "--glyph-gate", shed.slug]) == 0
+    assert owed.main(["--root", str(clone), "--glyph-dispatched", shed.slug]) == 0 and (clone / ".git" / owed.CLOCK).exists(), "on the hour"
+    _dispatch(clone, shed.slug, time.time() + 1)
+    capsys.readouterr()
+    assert owed.main(["--root", str(clone), "--why"]) == 0 and "not yet due" in capsys.readouterr().out
+    assert owed.main(["--root", str(clone), "--landing"]) == 0 and shed.slug in capsys.readouterr().out
+    assert owed.main(["--root", str(clone), "--landing-mark", "on"]) == 0 and (clone / ".git" / owed.LANDING).exists()

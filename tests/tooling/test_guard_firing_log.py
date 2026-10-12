@@ -412,6 +412,12 @@ _ESCAPES = {
         "STALE_TERMS_OK=\"reason\" form is refused without a reason and recorded with one on the rewrite it lets "
         "through (feature 253)",
     ),
+    "GLYPH_DUE_OK": (
+        "command",
+        "matched in a glyph-check dispatch PROMPT only (`case \"$ptext\"`), as REVIEW_PREREQ_OK - a prompt is prose with no "
+        "command grammar; its GLYPH_DUE_OK=\"reason\" form is refused without a reason and logged with one (feature 375 "
+        "amendment 9: a glyph check dispatched before the feature's hour)",
+    ),
     "REVIEW_PREREQ_OK": (
         "command",
         "matched in a settlement-review dispatch PROMPT only (`case \"$ptext\"`, the prompt's own text taken from the "

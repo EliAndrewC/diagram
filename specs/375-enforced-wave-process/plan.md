@@ -634,6 +634,60 @@ Measured after, the cache saved about 1 s of a bundle, not the 3.7 s he was told
 holds (about 1 s against the helpers' 0.2) - for `make gm-review` to carry; FR-037's table goes in the landing message, as he
 asked. Tests, `make hooks-test`, the gate, the report.
 
+### Amendment 9 (FR-039 to FR-041)
+
+**D53 - The feature's hour, and its batch (FR-039; T56).** The clock is kept PER FEATURE in `<git dir>/glyph-clock.json`:
+`{<feature dir name>: {"batch_at": <epoch>, "batch": [<unit slugs>]}}`. The feature's hour starts at its first event in the
+clone (the first line of `<git dir>/l7r-events/<feature>.jsonl`, the event log feature 375 keeps) and again at each batch it
+opens - nothing of another feature's, nor the clone-wide `pairing-state.json`'s `dispatched` (which holds glyph units from
+October 1-3, never cleared), starts it. A reopened feature's log began at its first opening, so the first glyph unit of a
+reopening is due at once and the hourly rhythm runs from that batch on: one early check a reopening (the plan review measured
+it; the spec's start is the feature's first event, and a landing is a moment units come due, not a start). A glyph unit is
+DUE when: (a) `now - start >= 3600` (`GLYPH_HOUR_S`) - every owed glyph unit then; or (b) it is in the open batch and has no
+dispatch since `batch_at` (`dispatched[slug].at < batch_at`) - so the batch's second, third ... units stay due after the first
+is dispatched (FR-039: "due together and dispatched together"); or (c) the work is landing (D55). A BATCH OPENS at the first
+glyph dispatch the guard passes under (a): `batch_at = now`, `batch` = every glyph unit owed at that moment. A unit owed after
+`batch_at` - new, or owed again by a fix - is in no open batch and waits for the next hour.
+
+**D54 - No feature (FR-039; T56).** The active feature is `hm_arbiter.feature_dir`'s, read from `.specify/feature.json`, which
+nothing clears when a feature closes (this clone's still names 375). So "a change with no feature" is: no feature dir, or no
+event log for it, or a feature `make speckit-todo` reads as closed - `speckit-todo.feature(d).state` is `closed` or
+`done - GM review pending`, which covers a Done status line AND every task ticked (370 and 372 closed by their last tick, their
+status lines still "Draft"; the plan review, round 2). Then no glyph unit is due until the work lands (D55) - a tweak in a clone whose last feature is Done checks its glyphs once, at landing, not at
+once on the strength of a days-old event log.
+
+**D55 - Owed, due, waiting and landing (FR-039, FR-040, FR-041; T56, T57).** `review_owed.owed(root, landing=False)`: every
+non-glyph unit as today (FR-041), and the glyph units D53 makes due. `landing=True`: every owed unit, as `owed()` today; CLI
+`--landing`, passed on all four of `review-gate.sh`'s unit-listing calls (lines 148, 154, 158, 167; `--check-declared` is
+unchanged). `waiting(root)`: the owed glyph units not due, each with when it comes due (start + 3600 under a feature; "at
+landing" with none). LANDING is known by a marker: when `review-gate.sh` refuses a push for an unanswered glyph unit it writes
+`<git dir>/glyph-landing` (`{"feature": <name or "">, "at": <epoch>}`), and while it names the active feature (or "" with none)
+every owed glyph unit is due - so the dispatch the refused push asks for passes the guard without its escape; a clean push
+(`sync-with-main.sh`, both routes) removes it. The pair guard's Agent branch refuses a glyph-check dispatch whose unit is owed
+but not due, naming when it comes due, unless `GLYPH_DUE_OK="<reason>"` (two words or more, in the guard census); a passed
+dispatch under (a), or under the escape, opens a batch (D53): the clock restarts from it, as SC-032 says it does after any
+glyph dispatch; a dispatch under (b) or (c) opens none. The stop hook and `make verify` ask only for due units (they read the default).
+Tests (red on today's code), a fixture clone each: before the hour a glyph unit is owed, not due, `waiting` names its time, and a
+building-review, a size-audit, a fix-check and a settlement-review unit are each due at once; units owed at minute 5 and
+minute 59 are both due at the hour; a dispatch opens the batch and the batch's second unit is still due after the first is
+dispatched; the same unit owed again by a fix ten minutes after its dispatch is not due until the next hour; a dispatch
+recorded before the feature's first event (a clone's October dispatch) does not move its clock; no feature, a Done
+feature, a feature with every task ticked under a "Draft" status, and one with only its GM-review box open, owe nothing due
+until the landing marker, and then all; the landing marker makes every owed glyph unit due and a clean
+push removes it; `--landing` lists them all. Suite cases (`tests/hooks/test-pair-hooks.sh`, `test-review-gate.sh`): an early
+glyph dispatch refused, passed with `GLYPH_DUE_OK`, passed when due, passed after a refused push without the escape; the push
+refuses an unanswered glyph unit through `--landing` and writes the marker.
+
+**D56 - What `make verify` shows (FR-040; T57).** `review_owed.py --why` (which `make verify` and the stop hook print) adds a
+line naming the waiting glyph units and when each comes due; `make verify` hands no dispatch prompt for a waiting unit.
+
+**D57 - The texts, and SC-034 carried to 374 (FR-039-041; T58).** `docs/reviews.md`'s table and dispatch paragraph say a
+glyph check is due on the feature's hour, in batches, and at landing; the root `CLAUDE.md`'s pair-guard row names
+`GLYPH_DUE_OK`; `docs/guards.md` the guard and the marker. SC-034's after-figure - glyph-check passes per hour of feature work,
+from the ledger and the event log - is measured on feature 374, the open long feature with map work: T58 writes
+`Carried: SC-034 -> 374 sc034-375-a9-glyph-per-hour` into SC-034, so 374 closes only with that key in its measurements.json
+(close_check.py, FR-014); `375-a9-glyph-passes` is the before-figure (R8).
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

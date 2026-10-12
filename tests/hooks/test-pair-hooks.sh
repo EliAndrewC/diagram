@@ -79,6 +79,9 @@ note_says() { ( cd "$MIRROR" && printf '%s' "$1" | CLONE_MAIN="$MIRROR" "$HOOK" 
 
 case_01() {  # 9 s measured alone 2026-10-12
 # --- 1. neither half runs alone: the gate is CORRECTED into the pair, the review is refused --------
+# GUARD_EDIT_OK: feature 375 amendment 9 - the case starts from a fresh fixture: dealt after the 06-08 chain (which leaves a green
+# gate stub behind) it found the gate green and "a settlement-review alone is refused" failed - an ordering the split's scan missed
+reset_prereq
 # GUARD_EDIT_OK: feature 164 - the gate branch no longer spends a round trip telling the session to
 # type `make verify`; it rewrites the command into it (GM 2026-08-30). The RULE is unchanged - the
 # two still run together - but what used to not happen at all now happens correctly. 13 firings of
@@ -477,13 +480,47 @@ check "the disclosure is ONE string, not five copies" '[ "$(grep -c "could not b
 }
 
 
+case_16() {  # 10 s (new)
+# --- 10. A GLYPH CHECK IS DISPATCHED ON THE FEATURE'S HOUR (feature 375 amendment 9, the GM 2026-10-12) --
+# GUARD_EDIT_OK: feature 375 amendment 9, FR-040 - an owed glyph unit waits for the feature's hour; before it the dispatch is
+# refused, naming when it comes due; GLYPH_DUE_OK passes it with a reason; on the hour, or once a push was refused for it, it passes.
+reset_prereq
+local gm="$SKILL/pool/hamlets/glyphmap" early esc out
+mkdir -p "$gm"
+printf '{"meta":{"name":"glyphmap"},"ink_classes":{"farmhouse":2}}' > "$gm/glyphmap.json"; printf '# glyphmap\n' > "$gm/glyphmap.notes.md"
+( cd "$CLONE" && git add -A pool/hamlets/glyphmap >/dev/null 2>&1 && git -c user.email=t@t -c user.name=t commit -qm glyphmap >/dev/null 2>&1 && git update-ref refs/remotes/origin/main HEAD )
+printf '{"meta":{"name":"glyphmap"},"ink_classes":{"farmhouse":2,"kiln":1}}' > "$gm/glyphmap.json"
+mkdir -p "$CLONE/specs/999-g" "$CLONE/.specify" "$CLONE/.git/l7r-events"
+printf '# 999\n\n**Status**: In progress\n' > "$CLONE/specs/999-g/spec.md"
+printf '# Tasks\n\n## Occasions\n\n- none: fixture\n\n## Work\n\n- [ ] T01 x\n' > "$CLONE/specs/999-g/tasks.md"
+printf '{"feature_directory": "specs/999-g"}' > "$CLONE/.specify/feature.json"
+started() { python3 -c 'import datetime, json, sys, time; print(json.dumps({"t": datetime.datetime.fromtimestamp(time.time() - int(sys.argv[1]), datetime.UTC).isoformat().replace("+00:00", "Z"), "ev": ""}))' "$1" > "$CLONE/.git/l7r-events/999-g.jsonl"; }
+started 600; green
+early=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: glyph-check--kiln--glyphmap\nDECIDE_OK=\"a fixture feature with no plan\"\njudge it"}')
+out="$(run_pretool "$early")"
+check "a glyph check before the feature's hour is refused, naming when it comes due" 'printf "%s" "$out" | grep -q "not yet due" && [ "$(rc_pretool "$early")" -eq 2 ]'
+esc=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: glyph-check--kiln--glyphmap\nDECIDE_OK=\"a fixture feature with no plan\"\nGLYPH_DUE_OK=\"the GM asked for this one now\"\njudge it"}')
+out="$(run_pretool "$esc")"
+check "...GLYPH_DUE_OK with a reason passes the hour" '! printf "%s" "$out" | grep -q "not yet due"'
+rm -f "$CLONE/.git/glyph-clock.json" "$CLONE/.git/pairing-state.json"; started 7200; green
+out="$(run_pretool "$early")"
+check "...on the feature's hour it passes" '! printf "%s" "$out" | grep -q "not yet due"'
+rm -f "$CLONE/.git/glyph-clock.json" "$CLONE/.git/pairing-state.json"; started 600; green
+python3 "$CLONE/scripts/reviews/review_owed.py" --root "$CLONE" --landing-mark on >/dev/null 2>&1
+out="$(run_pretool "$early")"
+check "...and once a push was refused for it (the landing mark) it passes without the escape" '! printf "%s" "$out" | grep -q "not yet due"'
+rm -rf "$gm" "$CLONE/specs/999-g" "$CLONE/.specify/feature.json" "$CLONE/.git/l7r-events/999-g.jsonl" "$CLONE/.git/glyph-clock.json" "$CLONE/.git/glyph-landing"
+( cd "$CLONE" && git rm -rq --cached pool/hamlets/glyphmap >/dev/null 2>&1; git -c user.email=t@t -c user.name=t commit -qm unglyph >/dev/null 2>&1; git update-ref refs/remotes/origin/main HEAD )
+reset_prereq
+}
+
 # GUARD_EDIT_OK: feature 375 amendment 7 (FR-031) - THE CASES RUN IN PARALLEL PARTS, EACH ITS OWN PROCESS. After a script
 # change hooks-test waited on this suite (specs/375-enforced-wave-process/research.md R3). Each part re-runs the setup above in
 # its own process - its own fixture, temporary files and guard log - and then only its cases (CASES), dealt longest first by
 # the measured seconds beside each case (10 s for a new one). Every check still runs and is counted; a part that ends before
 # a case reports fails the suite and names it. SUITE_PARTS=1 runs the cases one after another in this process, as before.
-ALL_CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_12 case_13 case_14 case_15)
-declare -A WEIGHT=([case_01]=9 [case_02]=3 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=3 [case_07]=2 [case_08]=5 [case_09]=1 [case_10]=1 [case_11]=16 [case_12]=4 [case_13]=10 [case_14]=9 [case_15]=5)
+ALL_CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_12 case_13 case_14 case_15 case_16)
+declare -A WEIGHT=([case_01]=9 [case_02]=3 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=3 [case_07]=2 [case_08]=5 [case_09]=1 [case_10]=1 [case_11]=16 [case_12]=4 [case_13]=10 [case_14]=9 [case_15]=5 [case_16]=10)
 if [ -n "${CASES:-}" ]; then
   for c in $CASES; do "$c"; echo "@@reported $c"; done
   echo "@@counts $pass $fail"; exit 0
