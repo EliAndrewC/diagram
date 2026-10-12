@@ -88,23 +88,29 @@ in 328's ranking and this spec.
 
 ## Phase 7 - batch 4: the held rows answered, the country shrine's roof and the magistracies' service buildings
 
-- [ ] T13 wave 122: the two held rows answered - the door band closed on the GM's ruling; 0219's drawing page reworded to the share as a countryside rate, `fixture_quota` re-checked (FR-001, FR-004)
+- [x] T13 wave 122: the two held rows answered - the door band closed on the GM's ruling; 0219's drawing page reworded to the share as a countryside rate, `fixture_quota` re-checked (FR-001, FR-004)
       research: rendering
+      verify: DONE. DONE. wave 122: the door band closed on the GM's ruling (overrides.json); 0219's drawing page reworded to the share as a countryside rate, quote-check, record-format and translation-check answered (0219's round 3 accepted by the round arbiter); fixture_quota re-checked IN-STEP; both rows marked wave 122
 
-- [ ] T14 wave 123: Hoshigaoka's one roof with the hall at the arch end; Hayakawa's two shrines cited to 0218 (FR-001)
+- [x] T14 wave 123: Hoshigaoka's one roof with the hall at the arch end; Hayakawa's two shrines cited to 0218 (FR-001)
       research: rendering
+      verify: DONE. DONE. wave 123: Hoshigaoka's hall at the east end of its one roof (hall_at_an_end, red first); Hayakawa one shrine, the river kami in its hall (one_compound_shrine, red first), the torii 8 ft before its door (0220); building reviews and the arbiter's close (ask:batch4-review-close); rows marked wave 123
 
-- [ ] T15 wave 124: servants on the street front, never a rear rowhouse; the second rank for stores only (FR-001)
+- [x] T15 wave 124: servants on the street front, never a rear rowhouse; the second rank for stores only (FR-001)
       research: rendering
+      verify: DONE. DONE. wave 124: servants on the street front, never a rear rowhouse, the second rank for stores; by kind (R4-1): menservants in the range, grooms in the stable's room (0108), maids under the main roof (a GUESS on 0115's Aizu house); impl-drift IN-STEP; pop-ups checked; rows marked wave 124
 
-- [ ] T16 wave 125: the barracks and the county staff rowhouse at most 24 ft deep; the forecourt inside Hayakawa's gate (FR-001)
+- [x] T16 wave 125: the barracks and the county staff rowhouse at most 24 ft deep; the forecourt inside Hayakawa's gate (FR-001)
       research: rendering
+      verify: DONE. DONE. wave 125: the barracks and the staff long-house at most 24 ft deep, divided into dwellings a door each (0097); the forecourt inside Hayakawa's gate; impl-drift IN-STEP; building reviews verified; rows marked wave 125
 
-- [ ] T17 wave 126: the stable as 0108 draws it - one-ken stalls, the earth passage and the grooms' room - on every magistracy sheet (FR-001)
+- [x] T17 wave 126: the stable as 0108 draws it - one-ken stalls, the earth passage and the grooms' room - on every magistracy sheet (FR-001)
       research: rendering
+      verify: DONE. DONE. wave 126: the stable as 0108 draws it on every magistracy sheet (stall_width, red first); glyph-check stables PASS twice; impl-drift IN-STEP; rows marked wave 126
 
-- [ ] T18 batch 4's review findings fixed once and verified: the servants by kind, the county postern open, the storehouse doors, the barracks divided, the hand sheets' findings, the size bands (plan R4-1 to R4-7) (FR-001)
+- [x] T18 batch 4's review findings fixed once and verified: the servants by kind, the county postern open, the storehouse doors, the barracks divided, the hand sheets' findings, the size bands (plan R4-1 to R4-7) (FR-001)
       research: rendering
+      verify: DONE. DONE. batch 4's review findings (R4-1 to R4-7): every finding fixed and recorded (measurements b4-*) or accepted or filed (found.jsonl); postern_approach red first; claims re-checked; the round arbiter closed the reviews (ask:batch4-review-close: accept)
 
 ## Standing - the ranking's remaining rows
 
