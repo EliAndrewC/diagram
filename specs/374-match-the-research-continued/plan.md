@@ -490,11 +490,15 @@ compound repacked) is a batch of its own, the next. The rules of batches 3-5 hol
 ### Wave 135 (T27) - a well's lifting gear, a knob
 
 - **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in two forms (a sweep or a
-  pulley frame) and its drawing page rolls them by the water's depth: each plan rolls its water depth from its seed, and each
-  well's gear at the drawing page's weights for that depth (on shallow water about three wells in four a sweep, on deeper about
+  pulley frame) and its drawing page rolls them by the water's depth, which follows the ground: "Our maps take a valley floor
+  or river plain to hold shallow water, an upland or terrace deep water" (the page's GUESS, its rule all the same). Each
+  sheet's depth follows the landform its notes record - Ubame "an upland forest county" (deep), Hayakawa on its river with its
+  barge landing (a river plain: shallow), Hoshigaoka mid-slope on the hill's back-slope (upland: deep) - and only a sheet whose
+  notes record no landform rolls its depth from its seed (Ochiba, the county draft, the round-trip sheet); each well's gear is
+  rolled at the drawing page's weights for that depth (on shallow water about three wells in four a sweep, on deeper about
   three in four a pulley frame); and, as the drawing page does, a roof on posts on some wells, about one in three, rolled per
   well from the seed. Each sheet's rolls are recorded in its notes and drawn on its wells as new glyphs (glyph-check owed);
-  docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan review).
+  docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan reviews, rounds 1 and 2).
 
 ## Landing by batch (375's D18)
 
