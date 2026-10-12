@@ -138,5 +138,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T37 The measurements (plan D31): SC-013's times and SC-014's count recorded; SC-012 carried to 374
       research: rendering
       verify: DONE. SC-013 medians all at most half warm, cold below today (m:375-a3-record-tooling-after); SC-014 counted (m:375-a3-hooks-test-after); SC-012 carried to 374 (Carried line in spec.md)
-- [ ] T38 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
+- [x] T38 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
+      verify: DONE. make done green (306 s); tests/tooling 1664 passed with the make-targets page regenerated; make hooks-test green (233 s); spec FAITHFUL round 4, plan CLEAR round 3; report written; landed by the push carrying this tick
