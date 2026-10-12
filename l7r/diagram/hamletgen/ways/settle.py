@@ -92,7 +92,7 @@ def apply_pieces(s: Any, edits: Mapping[int, list[Poly]]) -> int:
     """Replace each lane `i` of `edits` by its pieces - the first in place, record and ink together, the rest as new lanes of
 
     Research:
-        split piece's room - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each split piece keeps WEB_CLEARANCE, 18 ft of lane room, whatever its source kept
+        split piece's room - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each split piece keeps WEB_CLEARANCE, the 18 ft lane room (9 ft each side of its middle), whatever its source kept
         split piece's width - research/questions/0081-village-lanes.drawing.html: a piece with no width is drawn 3 ft wide, a footpath
     the same width and kind - and drop a lane left with no piece of 1 ft or more. Returns the lanes changed."""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []

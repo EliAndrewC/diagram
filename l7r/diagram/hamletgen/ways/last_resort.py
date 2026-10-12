@@ -157,7 +157,8 @@ def refuse_unmended(s: Any) -> None:
         # (with what breaks each - the first three it names - so a refusal says where to look)
         why.append("the web still breaks " + ", ".join(f"{k} ({_first(broken[k])})" for k in sorted(broken)))
     if why:
-        raise WebRefused("the web's last resort cannot mend it without dropping a tree lane: " + "; ".join(why))
+        # ...naming the rolled lane shape the web grew from, so a refusal says which skeleton to look at (feature 374 wave 141)
+        raise WebRefused("the web's last resort cannot mend it without dropping a tree lane: " + "; ".join(why) + f" (lane skeleton {M.get('meta', {}).get('lane_skeleton')})")
 
 
 def refuse_unreached(M: Mapping[str, Any]) -> None:

@@ -187,7 +187,7 @@ in 328's ranking and this spec.
 - [ ] T32 wave 140: a dike-pond hamlet with no grow-out pond in a household's reach keeps no sty (0025) (FR-001)
       research: rendering
 
-- [ ] T33 wave 141: the polder and the dike-pond rolled beside the valley fan once their rolls are green (0019, 0020) (FR-001)
+- [ ] T33 wave 141: the polder and the dike-pond rolled beside the valley fan once their rolls are green (0019, 0020) (FR-001) [lands-open]
       research: rendering
 
 - [ ] T34 wave 142: the web lane's no-build room, 9 ft from its middle (0246) (FR-001)

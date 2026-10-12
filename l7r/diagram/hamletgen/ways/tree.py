@@ -421,7 +421,7 @@ def settle_tree(s: Any) -> int:
 
 
     Research:
-        tree lane's room - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a no-build corridor of WEB_CLEARANCE, 18 ft
+        tree lane's room - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a no-build corridor of WEB_CLEARANCE, 9 ft each side of the middle (the 18 ft room)
     Research: every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's way, laid in the gaps once the last house stands, drawn as a lane of its own"""
     M = s.M
     need = owed(M)

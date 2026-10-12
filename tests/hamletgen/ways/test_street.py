@@ -5,7 +5,8 @@ from __future__ import annotations
 import math
 import random
 
-from l7r.diagram.hamletgen.ways.street import _line_chunks, _nearest_within, brook_bounds, drawn_span, join_to, lay_row_streets, row_reach, street_run_out, street_span, thread
+from l7r.diagram.hamletgen.ways import street as street_mod
+from l7r.diagram.hamletgen.ways.street import _line_chunks, adds_a_needle, unneedled, _nearest_within, brook_bounds, drawn_span, join_to, lay_row_streets, row_reach, street_run_out, street_span, thread
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
 LINE = [(float(x), 500.0) for x in range(0, 1201, 8)]
@@ -293,3 +294,31 @@ def test_the_oracle_catches_a_dropped_segment() -> None:
     h = (300.0, 520.0)  # over segment 37, (296, 500)-(304, 500)
     assert _nearest_within(h, LINE, chunks, 150.0) == _old_nearest(h, LINE)
     assert _nearest_within(h, LINE, lossy, 150.0) != _old_nearest(h, LINE)
+
+
+def test_adds_a_needle_counts_only_the_sliver_the_new_run_closes() -> None:
+    """Feature 374 wave 141: a run drawn beside a lane closing a face under the law's needle width is a needle; one closing
+    nothing, or beside a sliver already there, adds none."""
+    base = [{"pts": [(0.0, 0.0), (100.0, 0.0)]}]
+    assert adds_a_needle(base, [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)])
+    assert not adds_a_needle(base, [(100.0, 0.0), (100.0, 200.0)])
+    assert not adds_a_needle([*base, {"pts": [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)]}], [(300.0, 0.0), (300.0, 200.0)])
+
+
+def test_unneedled_gives_up_the_joined_end_until_the_join_closes_no_needle(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 374 wave 141 (dike-pond row village seed 4): a street whose join ran up beside its first leg gives up its end
+    vertex at the joined end and is joined again; a street joined at its far end gives up that end; one whose join closes no
+    needle, or with no join, or too short to give up a vertex, is kept."""
+    s = Settlement(W=400, H=400, seed=1)
+    needles = iter([True, False])
+    monkeypatch.setattr(street_mod, "adds_a_needle", lambda lanes, pts: next(needles))
+    monkeypatch.setattr(street_mod, "join_to", lambda path, *a: [(0.0, 0.0), *path])
+    path = [(10.0, 0.0), (10.0, 40.0), (200.0, 40.0)]
+    got_path, got_joined = unneedled(s, path, [(0.0, 0.0), *path], [], [], [], [])
+    assert got_path == path[1:] and got_joined == [(0.0, 0.0), *path[1:]], "the joined start given up, joined again"
+    needles = iter([True, False])
+    monkeypatch.setattr(street_mod, "join_to", lambda path, *a: [*path, (300.0, 300.0)])
+    got_path, _ = unneedled(s, path, [*path, (300.0, 300.0)], [], [], [], [])
+    assert got_path == path[:-1], "joined at its far end: that end given up"
+    assert unneedled(s, path, list(path), [], [], [], []) == (path, path), "no join: kept"
+    assert unneedled(s, path[:2], [(0.0, 0.0), *path[:2]], [], [], [], [])[0] == path[:2], "too short to give up a vertex"

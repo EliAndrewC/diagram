@@ -323,7 +323,7 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
         no join link through a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane
         web lanes seat no house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses placed first, the lanes
             among them after
-        web lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE`, the lane's 18 ft room, recorded beside the lane
+        web lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE`, the lane's 18 ft room (9 ft each side of its middle), recorded beside the lane
         no lane over a bed or a fixture - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way goes round its own garden beds and fixtures and crosses none
         no lane over a grave - UNRESEARCHED: a web lane is refused where the overlap matrix forbids a way on a burial ground
         web lane width - research/questions/0081-village-lanes.drawing.html: 3 ft by default, the footpath's tread"""

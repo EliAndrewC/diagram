@@ -139,9 +139,11 @@ Research: front row's reach per shape - research/questions/0031-clustered-and-sc
 # of every web lane reserved the middle of the cluster and pushed the houses out - measured on the
 # four pool hamlets, the long axis grew 51%, 58%, 15% and 97%. This is the lane's own half-tread
 # plus a hand's breadth: enough that a wall is not drawn ON the tread, and no more. Since feature 328 it is the lane page's
-# own room between two homesteads, 18 ft - 7 ft at each garden fence and a 4 ft tread (it was 28, on no page).
-WEB_CLEARANCE = 18.0
-"""Research: web lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's room of 18 ft, 7 ft at each garden fence and a 4 ft tread between"""
+# own room between two homesteads, 18 ft - 7 ft at each garden fence and a 4 ft tread (it was 28, on no page) - and since
+# feature 374 wave 142 read as what it is, a HALF-width (`lane()`'s `clearance`): 9 ft from the lane's middle, the 18 ft room
+# whole; at 18.0 it held 36 ft clear.
+WEB_CLEARANCE = 9.0
+"""Research: web lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's room of 18 ft, 7 ft at each garden fence and a 4 ft tread between - 9 ft each side of the middle"""
 
 # THE LEAST ROOM BETWEEN TWO STEADINGS A WEB LANE WILL THREAD, in feet. `web_cuts` only cuts where a
 # gap is at least this wide, so a lane is placed where one can actually be walked rather than driven

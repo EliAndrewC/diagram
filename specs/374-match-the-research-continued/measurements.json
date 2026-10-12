@@ -1716,5 +1716,14 @@
     "source": "make pack-audit on each sheet (33/33/34%); the compound sizes in each notes file (247x200, 267x200, 290x200 ft); 1 tsubo = 35.58 sq ft",
     "command": "make pack-audit ARGS=pool/magistracies/<m>-magistracy/<m>-magistracy.svg",
     "method": "built area = coverage x compound area; minus the ~3,407 sq ft a 49-tsubo house frees; divided by the compound area again. The escalation-check on batch 7's report found the earlier 67-tsubo target is one 0091's drawing page declines (a later restoration's size)"
+  },
+  "w141-archetype-rolls": {
+    "quantity": "the attested field forms rolled 12 seeds each at 16 households, before and after waves 140-141's fixes",
+    "value": "before: dike-pond 6/12, polder 10/12; after: dike-pond 11/12, polder 10/12 - open: dike-pond seed 4 (a row village: one farm's front door has no route to any way, walled by its grove and the ground), polder seed 12 (a row village: the door path's first leg runs within 7 ft of a neighbor's yard and no route at the law's 7 ft gap exists), polder seed 5 (SiteRefused, 14 of 16 seated on ladder margin 1)",
+    "unit": "rolls",
+    "observed": "2026-10-12",
+    "source": "make hamlet ARGS=\"--archetype mulberry_dike_fishpond|polder_grid --households 16 --seed <s>\"",
+    "command": "make hamlet ARGS=\"--name A<s> --seed <s> --households 16 --archetype <a> --out <dir> --no-render\"",
+    "method": "exit status per roll; the open failures probed at refuse_unreached / door_path (fouled_segment = 0 via theirs on seed 12); the round arbiter (ask:b8-w141-archetype-failures) ruled route B: land the proven fixes, keep row 771 open"
   }
 }

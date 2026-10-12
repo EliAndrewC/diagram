@@ -373,10 +373,10 @@ def choose_track_out(s: Settlement, plan: SitePlan) -> Poly:
     wet = ([toe] if toe else []) + marsh_ground(s.M, but=("defense",))
     avoid = [list(plan.envelope), *crop_polys(s)]
     gate = gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, band_gate))
-    if plan.field_archetype in POLDER_ARCHETYPES:
-        track = connector_track(plan, gate, avoid=avoid, wet=wet, waters=drawn_water_segs(s), fabric=fabric)
-    else:
-        track = gateway_track(s, plan, seat, band_gate, gate, avoid, wet, drawn_water_segs(s), fabric)
+    # ...WITH THE WALLED-IN GATEWAY'S FALLBACK ON EVERY FIELD FORM (feature 374 wave 141): a polder and a dike-pond block
+    # took the bare sweep, so a gateway the houses walled in refused the roll (dike-pond seeds 1 and 10, `NoDryExit`) where a
+    # valley hamlet's turned to the next bearing
+    track = gateway_track(s, plan, seat, band_gate, gate, avoid, wet, drawn_water_segs(s), fabric)
     return connector_through(s, plan, track, avoid, wet, [*plan.watercourses, *drawn_water_segs(s)], fabric)
 
 

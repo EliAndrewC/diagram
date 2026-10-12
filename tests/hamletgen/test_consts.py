@@ -22,11 +22,12 @@ def test_the_web_reach_is_the_pages_100_ft_in_the_generator_and_in_the_gate() ->
 
 def test_the_lane_clearances_are_the_lane_pages_figures() -> None:
     """Both clearances are 0246's (feature 328): the connector and spur keep a lane's middle 7 ft off a garden fence
-    (`LANE_CLEARANCE`), and a web lane takes its 18 ft room between homesteads (`WEB_CLEARANCE`). The 40 ft once held off a
+    (`LANE_CLEARANCE`), and a web lane takes its 18 ft room between homesteads, 9 ft each side of its middle (`WEB_CLEARANCE`,
+    a half-width - feature 374 wave 142). The 40 ft once held off a
     lane the houses front was derived from the drawn minka's half-diagonal, a figure no page gives."""
     from l7r.diagram.hamletgen.consts import LANE_CLEARANCE
 
-    assert (LANE_CLEARANCE, WEB_CLEARANCE) == (7.0, 18.0)  # 0246's 7 ft to a fence (feature 328 wave 48)
+    assert (LANE_CLEARANCE, 2 * WEB_CLEARANCE) == (7.0, 18.0)  # 0246's 7 ft to a fence (feature 328 wave 48); the room whole
 
 
 def test_the_web_only_threads_a_gap_a_person_can_walk() -> None:

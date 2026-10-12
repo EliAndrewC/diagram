@@ -283,6 +283,7 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
             path = meet_the_road(path, road)
         net = [(tuple(a), tuple(b)) for ln in (laid or [ln for ln in s.M.get("lanes", []) if ln.get("connector")]) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)]
         joined = join_to(path, net, hard, walls, water)  # type: ignore[arg-type]
+        path, joined = unneedled(s, path, joined, net, hard, walls, water)  # type: ignore[arg-type]
         if len(path) >= 2 and _draw_web(s, path, STREET_WIDTH, houses=centers):
             s.M["lanes"][-1]["street"] = True
             s.M["lanes"][-1]["street_index"] = k
@@ -303,6 +304,35 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
                 s.M["lanes"][-1]["street"] = True
                 s.M["lanes"][-1]["street_index"] = None
     return n
+
+
+UNNEEDLE_TRIES = 3
+"""How many end vertices a row's street may give up at its joined end to meet the network without a needle (`unneedled`).
+
+Research: street end given up for its join - NONE: a bound on a repair, the street's farms still served by their door paths"""
+
+
+def adds_a_needle(lanes: Sequence[Mapping[str, Any]], pts: Sequence[Pt]) -> bool:
+    """Does `pts`, drawn beside `lanes`, close a sliver the law refuses (`law.needle_loops`) that the lanes alone do not?"""
+    return len(law.needle_loops({"lanes": [*lanes, {"pts": list(pts)}]})) > len(law.needle_loops({"lanes": list(lanes)}))
+
+
+def unneedled(s: Settlement, path: list[Pt], joined: list[Pt], net: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> tuple[list[Pt], list[Pt]]:
+    """(street, street with its join) where the join and the street's own end leg close no sliver (`adds_a_needle`): else the
+    street gives up its end vertex at the joined end and is joined again, up to `UNNEEDLE_TRIES` times. A street and its join
+    are tree lanes no settle may cut, so a join that ran up beside the street's first leg to meet it at its end was a needle
+    the web was refused for (feature 374 wave 141, dike-pond row village seed 4: the street's first leg ran 47 ft back down
+    beside the join).
+
+    Research: no needle between a street and its join - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network of single ways"""
+    lanes = list(s.M.get("lanes") or [])
+    for _ in range(UNNEEDLE_TRIES):
+        at_start = len(joined) > len(path) and joined[-len(path) :] == path
+        if len(path) < 3 or len(joined) <= len(path) or not adds_a_needle(lanes, joined):
+            break
+        path = path[1:] if at_start else path[:-1]
+        joined = join_to(path, net, hard, walls, water)
+    return path, joined
 
 
 MEET_THE_ROAD_FT = 60.0

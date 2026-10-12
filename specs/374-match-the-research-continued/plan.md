@@ -599,6 +599,13 @@ at landing.
   "known gap" sentence and says the forms are rolled.
 - **W141-2** (within): a failure that cannot be fixed at its placer within the batch goes to the round arbiter with its
   measurement, never into the roll: rolling a form with open failures is what the constant forbids.
+- **W141-3** (the round arbiter, ask:b8-w141-archetype-failures, 2026-10-12, route B): the fixes made at their placers land
+  with batch 8 - the turned-gateway fallback on every field form (dike-pond seeds 1 and 10 green) and a row street giving up
+  an end vertex that closed a needle with its join (`street.unneedled`) - once the cohort shows no regression. Three failures
+  stay open (`m:w141-archetype-rolls`): dike-pond seed 4 and polder seed 12, row villages each leaving one farm with no lawful
+  door path, and polder seed 5, a capacity refusal. So the polder and the dike-pond stay out of `ROLLED_ARCHETYPES`, row 771
+  stays open and T33 lands open, to be taken up in a later batch as two placer guarantees (row-village door seating, polder
+  capacity), each with a seed-pinned test that is red first.
 
 ### Wave 142 (T34) - the web lane's room, 9 ft from its middle
 - **W142-1** (within): `WEB_CLEARANCE` is a corridor HALF-width (`lane()`'s `clearance`), so 18.0 holds 36 ft clear where
@@ -619,7 +626,7 @@ at landing.
 `tasks.md` holds the current batch's tasks and one standing task, T99, for the batches still to come. A batch whose
 decisions need no new ruling adds its tasks under its own plan section, decided per task (`make decide`).
 
-**Lands open**: T99
+**Lands open**: T99, T33
 
 ## Performance bookends (constitution VI)
 
