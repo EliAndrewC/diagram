@@ -213,8 +213,9 @@ in 328's ranking and this spec.
 
 ## Batch 11 - the floodplain meadow
 
-- [ ] T39 wave 147: the grass ground's form from the land; the floodplain meadow on a river-flat map (0078) (FR-001)
+- [x] T39 wave 147: the grass ground's form from the land; the floodplain meadow on a river-flat map (0078) (FR-001)
       research: rendering
+      verify: DONE. a flood-ground map's margins drawn as floodplain meadow (pasture, no pine) from the land (grass_ground), recorded as meta.grass_ground; Kuwabata's meadow glyph-check PASS; the pop-up through form, research and depiction; 29 claims checked, the paddy-plot gap left DRIFTED (rows 775, 911 open by the plan review); gate green; bookends band 0
 
 ## Standing - the ranking's remaining rows
 

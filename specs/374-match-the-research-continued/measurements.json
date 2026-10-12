@@ -1806,5 +1806,14 @@
     "source": "dev/perf-log/20261012T191432Z-374-start, 20261012T195632Z-374-end",
     "command": "make perf LABEL=374-start|374-end; make perf-review",
     "method": "the two bookends' totals"
+  },
+  "batch11-bookends": {
+    "quantity": "make perf 374-start vs 374-end over batch 11",
+    "value": "16.8 s -> 17.0 s, band 0",
+    "unit": "s",
+    "observed": "2026-10-12",
+    "source": "dev/perf-log/20261012T200202Z-374-start, 20261012T202954Z-374-end",
+    "command": "make perf LABEL=374-start|374-end; make perf-review",
+    "method": "the two bookends' totals"
   }
 }
