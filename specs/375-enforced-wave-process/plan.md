@@ -454,6 +454,50 @@ load and free RAM at start and end (`_ends`, dashes for a snapshot from before),
 `docs/efficiency-tooling.md`; `scripts/container/append-system-prompt.md`'s standing order; `perf-audit.md` and
 `round-arbiter.md`; `docs/make-targets.html` regenerated from the Makefile.
 
+### Amendment 6 (FR-028 to FR-033)
+
+**D38 - The cohort through the roll cache (FR-028).** `cohort_audit.roll_one` obtains each seed's report by
+`rollcache.report(spec)` - the roll a gate makes, `generate` in a child, keyed by the engine functions it executed and the files
+it read, served when that key is unchanged - in place of calling `generate` itself; its own checks (households seated,
+farmstead across the brook, the matrix, ...) run on every report as before. Every refusal the roll raises is still the seed's
+verdict and is never stored. The store: `rollcache`'s directory is the clone's `.gencache/rolls`; in a LINKED worktree
+(`git rev-parse --git-common-dir` is not the worktree's own `.git`) it is the main worktree's, so a "before" leg rolled in a
+detached worktree at the merge base reads and writes the clone's store (`rollcache.roll_store_dir()`; keys are
+path-independent since feature 167). `GATE_NO_CACHE=1` and the FULL test run bypass serving as they do for the gate.
+
+**D39 - The cohort's per-seed record (FR-028).** `cohort_audit.audit` writes `dev/cohort-log/<UTC stamp>-<clone>.json`: the
+run's count, first seed, households, commit and, per seed, `served` or `rolled`, `pass`/`fail`/`refused`, its failures and the
+refusal's name. `make cohort` then commits it alone, as `make done` commits its run record (`scripts/gates/commit-run-record.sh
+<result> dev/cohort-log`, the helper gaining an optional directory; the spec review's aside, round 2).
+
+**D40 - The census on request (FR-029).** `make perf` no longer runs `make census`; `make census` is unchanged.
+
+**D41 - The suites in parallel processes (FR-030).** `test-batching-hooks.sh` and `test-pair-hooks.sh`: the helpers and the
+constants several cases share are defined once before the cases; each case is a function `case_NN`, its measured seconds
+beside it (traced 2026-10-12); with no `CASES` the suite deals the cases into `SUITE_PARTS` (default 4) processes of itself,
+each re-running the setup (its own fixture, temporary files and guard log) and then only its `CASES`, longest first onto the
+lightest part; each part prints `@@reported <case>` and `@@counts <pass> <fail>`; the parent prints every part's output,
+sums the counts, fails a part that ended before a case reported, naming it, and prints the suite's own pass line. The scan
+(each case alone in a fresh process; for each that fails alone, the shortest run of its predecessors that passes):
+batching, all 15 pass alone; pair, 12 of 15 pass alone, `case_07` needs `case_06`, `case_08` needs `06` and `07`, `case_13`
+needs `case_12` - dealt as chains, one unit each, in order. `test-entry-gate.sh` stays serial: it is one sequence of edits to
+one page in one throwaway clone, with no headed cases, and took 23 s alone (its 67 s was measured with the other suites
+running beside it, R3).
+
+**D42 - The shortcut earns the hooks stamp (FR-031).** In `make done`'s "already verified" branch: when `gate-stamp.py --fresh
+hooks` fails, `make hooks-test` runs first; red, the gate logs `failed:hooks-test`, commits its record and fails.
+
+**D43 - The gate commits its own record (FR-032).** `scripts/gates/commit-run-record.sh <result> [dir]`: the uncommitted
+files under `dir` (default `dev/run-log`), `git add` and `git commit --only -- <them>` with `the gate's run record (<result>)`,
+nothing else staged or committed; skipped inside a CodeBuild build and outside a work tree; never fails the caller. Called
+after each of `make done`'s five record writes (already verified, its hooks failure, the two red sites, green).
+
+**D44 - Measured (SC-021, SC-023, SC-026).** SC-021: the cohort on 374's delta (a detached worktree at 61a52f3c8, the
+backlog's store not copied) with today's code and the new, `N=48 JOBS=4`, a "before" leg and an "after" leg each, twice;
+key `375-a6-cohort-after`. SC-023: the two split suites, today's file (a detached worktree at the commit before) against
+the new, alternating, three runs each, the check counts compared; key `375-a6-suites-parts`. SC-026 is
+`m:375-a6-turn-time`, re-derived by `scripts/measure/turn_time.py`.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

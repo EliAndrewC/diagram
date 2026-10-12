@@ -481,3 +481,5 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
   `m:375-a6-cohort-cost`; FR-028 has the cohort keep a per-seed record and carries the seed count to amendment 7 (and "What
   it does not cover" says so); SC-023 asks for the scan's result for any suite split or left serial; turn_time's bands are
   labeled 200k.
+- spec-fidelity-verify, amendment 6 round 2 (2026-10-12): FAITHFUL - round 1's items resolved. Aside taken into the plan: the
+  cohort's record commits itself as the gate's does, or it brings the uncommitted-tree refusal back.

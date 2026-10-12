@@ -162,3 +162,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T43 The texts (D37); 375 closes again: tests, `make hooks-test`, the gate, the report, landed
       research: rendering
       verify: DONE. the texts (constitution 2.30.0, CLAUDE.md, l7r/diagram/CLAUDE.md, dev/performance.md, docs/guards.md, docs/efficiency-tooling.md, the system prompt, perf-audit and round-arbiter, the Makefile); tests/tooling 1665 and tests/tools 607 passed; hooks-test green; make done green (254 s); report written; landed by the push carrying this tick
+
+
+## Amendment 6 (the GM 2026-10-12: "two, three, six, and eight are a good place to start", 1 measured)
+
+- [ ] T44 The cohort through the roll cache and its per-seed record (plan D38, D39); tests red on today's code (SC-021)
+      research: rendering
+- [ ] T45 The census on request (D40); the gate's shortcut earns the hooks stamp (D42); the gate commits its own record (D43); tests (SC-022, SC-024, SC-025)
+      research: rendering
+- [ ] T46 The batching and pair suites in parallel processes, entry-gate serial with its reason (D41); the scan recorded (SC-023)
+      research: rendering
+- [ ] T47 The measurements (D44): the cohort two waves before and after, the suites, the turn time (SC-021, SC-023, SC-026)
+      research: rendering
+- [ ] T48 375 closes again: tests, `make hooks-test`, the gate, the report, landed
+      research: rendering
+
