@@ -155,7 +155,7 @@ def units_of(skill: Path) -> list[Any]:
     # Named by the readers' code - this file, what it imports, and the engine's reader - so a change to `module_units` reads
     # nothing kept by the old one; and not `claims-...`: `save()` drops every other `<prefix>-*.pickle` as a stale version,
     # and the two caches deleted each other (measured 2026-10-12: every module missed after a one-line edit)
-    reader = hashlib.sha256((rc.code_sha_of(Path(__file__).resolve().parents[2], Path(__file__)) + (skill / "l7r" / "diagram" / "tools" / "claims.py").read_text(encoding="utf-8")).encode())
+    reader = hashlib.sha256((rc.code_sha_of(Path(__file__).resolve().parents[2], Path(__file__)) + Path(cl.__file__).read_text(encoding="utf-8")).encode())
     memo = rc.ParseCache(common / rc.CACHE_DIR / f"claims_by_module-{reader.hexdigest()[:16]}.pickle" if common is not None else None)
     memo.PRUNE_AT = 1  # holds only what this run used, so the file does not grow with every edit
     units = cache.get("units", lambda: [u for u, _errors in cl.all_units(skill, memo=memo)])
