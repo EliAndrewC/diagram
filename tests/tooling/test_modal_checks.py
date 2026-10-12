@@ -223,9 +223,7 @@ def test_the_prepass_rules_on_the_band_the_barred_phrases_and_the_entry(
     assert "OUTSIDE THE BAND" in text and "'this project'" in text and "'This is a guess'" in text and "Entry names no file" in text
 
 
-def test_the_bundle_carries_the_modal_the_rules_and_its_owed_units(
-    tmp_path: pathlib.Path, monkeypatch
-) -> None:
+def test_the_bundle_carries_the_modal_the_rules_and_its_owed_units(tmp_path: pathlib.Path, monkeypatch) -> None:
     monkeypatch.setenv("CHECK_ORDER_OK", "the check order is tests/tooling/test_popup_order.py's subject")
     root = _tree(tmp_path)
     out = tmp_path / "b"
