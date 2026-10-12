@@ -519,7 +519,10 @@ def test_the_race_opens_out_of_the_brook_bank() -> None:
     assert not any(w["rec"] is brook for w in s.water) and s.late_water[-1]["rec"] is brook
     race = s.M["drawn_channels"][0]
     assert race["pts"][0] == [500.0, 300.0]
-    assert s.late_water[0]["bed"].count(' d="M500.0,300.0 L') == 1
+    assert s.late_water[0]["bed"].startswith('<path d="M500.0,300.0 L502.6')  # the bed's own first stroke, carried back once
+    # feature 355: the race's first 30 ft taper from the brook's hue to the supply hue, at the race's own width (w0)
+    bed = s.late_water[0]["bed"]
+    assert 'id="race-mouth-0"' in bed and 'stop-color="#9CB4C8"' in bed and 'stroke="url(#race-mouth-0)" stroke-width="6.0"' in bed
     # no brook through the tap (or none at all): nothing moves
     s2 = Settlement(1000, 1000)
     s2.field_channel([(502.6, 303.7), (560.0, 385.0)], "#7FA3BD", 6.0, 6.0, late=True)
@@ -706,3 +709,17 @@ def test_a_hamlet_keeps_its_yards_wherever_grain_is_grown() -> None:
     assert not grows_grain(SimpleNamespace(field_archetype="mulberry_dike_fishpond", leftover="pond"))  # type: ignore[arg-type]
     assert grows_grain(SimpleNamespace(field_archetype="mulberry_dike_fishpond", leftover="rice"))  # type: ignore[arg-type]
     assert grows_grain(SimpleNamespace(field_archetype="dry_terrace", leftover="rice"))  # type: ignore[arg-type]
+
+
+def test_the_race_taper_follows_the_race_for_its_length() -> None:
+    """Feature 355: `race_taper` cuts the race's own line at the taper's length - inside a segment, at the race's end when
+    the race is shorter, and nothing for a single point - and grades it from the brook's hue to the supply hue."""
+    from l7r.diagram.hamletgen.water.brook import race_taper
+    from l7r.diagram.settlement.water_ways.water import SUPPLY_HUE
+
+    svg = race_taper([(0.0, 0.0), (10.0, 0.0), (10.0, 40.0)], 30.0, 6.0, "g")
+    assert 'd="M0.0,0.0 L10.0,0.0 L10.0,20.0"' in svg and 'x2="10.0" y2="20.0"' in svg
+    assert 'stop-color="#9CB4C8"' in svg and f'stop-color="{SUPPLY_HUE}"' in svg and 'stroke-width="6.0"' in svg
+    assert 'd="M0.0,0.0 L10.0,0.0"' in race_taper([(0.0, 0.0), (10.0, 0.0)], 30.0, 6.0, "g")
+    assert race_taper([(0.0, 0.0)], 30.0, 6.0, "g") == "" and race_taper([], 30.0, 6.0, "g") == ""
+    assert 'd="M0.0,0.0 L0.0,0.0"' in race_taper([(0.0, 0.0), (0.0, 0.0)], 0.0, 6.0, "g")

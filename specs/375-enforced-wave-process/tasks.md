@@ -120,3 +120,45 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T32 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
       research: rendering
       verify: DONE. make done green (reuse: scripts only); tests/tooling 1614 passed; make hooks-test green; report written; landed by the push carrying this tick
+
+## Amendment 3 (the GM 2026-10-11: pop-up checks in order; the record tooling made fast; hooks-test by what changed)
+
+- [x] T33 The pop-up checks in order, form, research, depiction, and a round's edits settling the checks before it (plan D25, D26); tests red on today's code (SC-011)
+      research: rendering
+      verify: DONE. modal_owed.ORDER + modal_bundle.order_hold (CHECK_ORDER_OK) + apply_edits settling earlier checks; tests/tooling/test_popup_order.py 8 passed, 5 red on the old code (SC-011)
+- [x] T34 One parse per content and one git batch per revision (plan D27, D28); outputs unchanged, a changed file, a changed parser and a changed module it imports each miss (SC-013)
+      research: rendering
+      verify: DONE. record_cache.py: ParseCache by text + transitive code sha (code_sha_of), RevReader/cat_blobs; units() scoped by family and uid for each bundle; outputs identical old/new/cache-off (m:375-a3-record-tooling-after); test_record_cache 7 passed
+- [x] T35 The claims kept by their sources (plan D29); a changed engine module, a changed reader and a changed module the reader imports each miss (SC-013)
+      research: rendering
+      verify: DONE. claims.units_of keyed by engine sources, PROCEDURES and the readers' transitive imports; gc.freeze at the command's exit; claims-owed 6.47 -> 0.48 s warm, cold 6.36 vs 6.62 (m:375-a3-record-tooling-after); miss tests in test_record_cache
+- [x] T36 The script tests run by what they touch (plan D30); fixture tests (SC-014)
+      research: rendering
+      verify: DONE. hookdeps.pydeps/--pystale/--pystamp with the whole-tree fallback; Makefile pytest step per file; 27.2 of 55 per commit, 16 whole-tree (m:375-a3-hooks-test-after); test_hook_deps 15 passed
+- [x] T37 The measurements (plan D31): SC-013's times and SC-014's count recorded; SC-012 carried to 374
+      research: rendering
+      verify: DONE. SC-013 medians all at most half warm, cold below today (m:375-a3-record-tooling-after); SC-014 counted (m:375-a3-hooks-test-after); SC-012 carried to 374 (Carried line in spec.md)
+- [x] T38 375 closes again: tooling tests and `make hooks-test` green, the gate, the report, landed
+      research: rendering
+      verify: DONE. make done green (306 s); tests/tooling 1664 passed with the make-targets page regenerated; make hooks-test green (233 s); spec FAITHFUL round 4, plan CLEAR round 3; report written; landed by the push carrying this tick
+
+## Amendment 4 (the GM 2026-10-11: "yes please add that as amendment 4")
+
+- [x] T39 The sync suite's cases as functions in parallel parts (plan D32); today's 123 checks in every mode, a failed and an unreported case each fail it (SC-015)
+      research: rendering
+      verify: DONE. 26 cases as functions in 4 parts, helpers hoisted; today 150.2 s vs parts 60.5 s median, 123 checks on all 12 runs; an injected failure and an injected exit each fail it, named (m:375-a4-sync-suite-parts)
+- [x] T40 375 closes again: SC-015 measured, `make hooks-test` green, the gate, the report, landed
+      research: rendering
+      verify: DONE. make hooks-test green in 81 s (the sync suite in parts); make done verified; tooling tests unchanged by a tests/hooks-only delta; spec FAITHFUL round 2, plan CLEAR; report written; landed by the push carrying this tick
+
+## Amendment 5 (the GM 2026-10-11: performance recorded and flagged, never a gate)
+
+- [x] T41 The flag, never a refusal (plan D33); the 5% line (D35); tests red on today's code (SC-016, SC-018)
+      research: rendering
+      verify: DONE. perf_review.check prints the band and the FLAG with both snapshots' machine state, exits 0; arbiter_signed removed; BAND1_PCT 5.0 in both environments; test_perf_review 27 and test_perf_bands 22 passed, 5/5.1 percent pinned (SC-016, SC-018)
+- [x] T42 The machine's state, CPU time and the warm-up roll (D34); the scaling leg on request and the trend (D36); tests (SC-017, SC-019, SC-020)
+      research: rendering
+      verify: DONE. machine_state at both ends, CPU beside wall per stage after an untimed warm-up roll, metric_of CPU-else-wall; scaling only with SCALING=1; perf-report with CPU, load and free RAM per snapshot; test_perf_snapshot 27 and test_perf_scaling 14 passed; a real snapshot taken end to end (SC-017, SC-019, SC-020)
+- [x] T43 The texts (D37); 375 closes again: tests, `make hooks-test`, the gate, the report, landed
+      research: rendering
+      verify: DONE. the texts (constitution 2.30.0, CLAUDE.md, l7r/diagram/CLAUDE.md, dev/performance.md, docs/guards.md, docs/efficiency-tooling.md, the system prompt, perf-audit and round-arbiter, the Makefile); tests/tooling 1665 and tests/tools 607 passed; hooks-test green; make done green (254 s); report written; landed by the push carrying this tick

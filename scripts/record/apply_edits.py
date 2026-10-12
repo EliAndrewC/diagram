@@ -31,6 +31,12 @@ the owed units of the reply's check (its counts line names it) are fingerprinted
 unit whose content moved by them alone settles with its round's answer (`record_owed.settle`: at once when the answer is
 recorded at the content before them, else when `make record-checked` records it). A record-format unit whose prepass now
 raises a word the round never ruled on stays owed, and so does any unit changed in any other way.
+
+AND THE CHECKS BEFORE IT (feature 375 amendment 3, FR-019). A pop-up's checks run in order - form, research, depiction
+(`modal_owed.ORDER`) - and a round's blocks also settle each check BEFORE the replying one in that order, where its answer
+already stands at the words before them: research's fixes do not owe form again, depiction's owe neither. Never pending for
+those: an answer recorded later would answer words that check never read. A check after the replying one reads the edited
+words next, so nothing of it settles.
 """
 
 from __future__ import annotations
@@ -231,7 +237,9 @@ class Round:
     def __init__(self, root: pathlib.Path, report: str, found: list[dict]) -> None:
         self.root, self.ro = root, _sibling("record_owed")
         self.checks = self.ro.reply_checks(report)
-        self.before = self.ro.fingerprints(root, self.checks) if self.checks else {}
+        # feature 375 amendment 3 (FR-019b): a pop-up check's blocks also settle the checks BEFORE it in the order
+        self.earlier = _sibling("modal_owed").earlier_units(self.checks) if self.checks else ()
+        self.before = self.ro.fingerprints(root, (*self.checks, *self.earlier)) if self.checks else {}
         rf = "record-format" in self.checks
         self.words = {q: prepass_words(root, q) for q in touched_questions(found)} if rf else {}
 
@@ -240,11 +248,20 @@ class Round:
         answer already stands at the content before them, pending where it is not recorded yet; a record-format unit whose
         prepass now raises a word the round never ruled on stays owed. Any unit changed some other way stays owed."""
         out = []
-        after = self.ro.fingerprints(self.root, self.checks) if self.checks else {}
+        after = self.ro.fingerprints(self.root, (*self.checks, *self.earlier)) if self.checks else {}
         store = self.ro.store(self.root)
         for slug, fp in sorted(after.items()):
             before = self.before.get(slug, "")
             if not before or before == fp:
+                continue
+            if slug.split(":", 1)[0] in self.earlier:
+                # an EARLIER check settles only where its answer already stands at the words before these blocks - never
+                # pending: an answer recorded later would answer words that check never read (plan D26)
+                if self.ro.answered(store, slug, before):
+                    self.ro.settle(store, slug, before, fp)
+                    out.append(f"  {slug}: settled with its answer - the {'/'.join(self.checks)} round's blocks alone moved it (it runs before them)")
+                else:
+                    out.append(f"  {slug}: still owed - not answered at the words before these blocks")
                 continue
             q = slug.split(":", 1)[1]
             if slug.startswith("record-format:") and q in self.words and (new := sorted(prepass_words(self.root, q) - self.words[q])):

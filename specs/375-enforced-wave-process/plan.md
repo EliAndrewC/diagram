@@ -328,6 +328,132 @@ parser the bundle uses too - the spec review's aside: 15 of 343's rows had no un
 `bundle()` uses the owed record's unit, else this, so a round asked about ahead of the cap still carries its rounds, replies
 and edits (343's 13 form-check bundles had none).
 
+### Amendment 3 (FR-019, FR-020, FR-021)
+
+**D25 - The order, held at the bundle (FR-019a).** `modal_owed.ORDER = ("modal-form", "modal-research",
+"modal-depiction")`, with the units each answers (`modal-research`: the three `modal-accuracy`/`-references`/`-gaps`).
+`modal_bundle.bundle` refuses a bundle (exit 3, before anything is copied) when a check EARLIER in the order has a unit on
+the pop-up that is owed now (`record_owed.units`) and not answered at its fingerprint (`record_owed.answered`); the refusal
+names the first such check's command, `make modal-bundle KIND="<uid>" FOR=<check>`. The escape is `CHECK_ORDER_OK="<why>"`
+in the environment (make passes a command-line variable to its recipes); it needs two words or more, and the MANIFEST then
+carries a `check-order-escape: <why>` line. A check with nothing owed before it is not held (a pop-up owed only
+`modal-depiction`, a page its `Drawing:` names having moved): the rule is read off the owed units, never off the check asked
+for. The hold sits at the bundle because every modal dispatch reads a bundle (`check-bundle-hooks.sh` refuses one without);
+no hook changes.
+
+**D26 - Settling the checks before (FR-019b, c).** `apply_edits.Round` fingerprints, before the blocks, the units of the
+reply's own checks (as today) AND the units of every check EARLIER in `ORDER` than the replying one (`record_owed.earlier`,
+from `ORDER`; empty for a check outside it). After the blocks, a unit of the reply's own checks settles as today (answered,
+or pending until `make record-checked`); an earlier check's unit settles ONLY where its answer already stands at the words
+before the blocks (`record_owed.answered`) - never pending, because an answer recorded later would be an answer to words that
+check never read. Its result line says whose blocks settled it. A reply settles nothing of a check LATER in the order (c):
+`earlier("modal-form")` is empty, and `modal-research`'s blocks leave `modal-depiction` owed.
+
+**D27 - One parse per content (FR-020a, d).** `record_cache.ParseCache`: a mapping from `sha256(file text [+ its
+originals])` to the parsed `Page`, notes triple (notes, cites, readings) or write-up words, held in memory for the run and on
+disk as one pickle per version of the parsing code (`<git common dir>/l7r-cache/record-parse-<code sha>.pickle`, written
+atomically, only when the run added entries; an older version's file is deleted when a newer one is written). The code sha is
+over `record_units.py` and every project module it imports, transitively (`record_cache.code_sha_of`: an `ast` walk of
+`import`/`from` statements resolved to files beside it or under the repository; `record_units.py` imports only the standard
+library today, so its set is itself, and a test adds an import to prove the walk follows it). `Record.of(files, sources,
+cache=None)` reads through it; `record_owed.read_at` passes the clone's. A corrupt or unreadable cache is an empty one;
+`L7R_CACHE_OFF=1` disables the disk cache. A command builds only what it prints (FR-020(d)): `record_owed.units(root,
+families=, uid=)` computes only the families asked for (`record`, `translation`, `entry-drift`, `modal`) and, for the
+pop-ups, one uid (`modal_owed.owed(root, base, uid)`). `modal_bundle.bundle` asks once for its pop-up's modal units and
+hands them to the triage refusal, the D25 hold and `owed_lines` (today it computed the whole delta twice to print one
+pop-up's lines); `check-bundle Q=` (`bundle_owed.owed_for_question`) asks for the record and translation families (and
+entry-drift for `FOR=entry-drift|all`), `check-bundle KEY=` / `KEYS=` (`owed_for_key`, once per batch) and `FOR=intro-check`
+(`intro_bundle`, once per batch) for the record family alone, and each computes the whole delta only for a refusal's list of
+what IS owed - the one consumer that needs other subjects' units. `claims.py`'s command freezes its heap before exiting
+(`gc.freeze()`, in the `__main__` block only): measured 2026-10-11, the interpreter's final collection spent 3.2 s of a cold
+run walking the engine parse's objects (`m:375-a3-record-tooling-after`).
+
+**D28 - One `git` batch per revision (FR-020b).** `modal_owed._read_at(root, rev)` returns a reader backed by ONE `git
+ls-tree -r` of the directories it serves and ONE `git cat-file --batch` of their blobs (`record_owed._cat`, moved to
+`record_cache.cat_blobs` so all three import it), filled on the first read; a path outside them falls back to `git show`.
+`modals_at` and `owed` use it in place of their per-file `git show` calls (299 at the base on 374's delta), and
+`entry_owed` its own per-file calls the same way (177).
+
+**D29 - The claims kept by their sources (FR-020c).** `scripts/record/claims.current(skill, qdir)` keys the units and
+claims it builds from `all_units` on `sha256` over every `l7r/diagram/**/*.py` under `skill` (path and content) and the
+`PROCEDURES` documents, and on the code sha (`record_cache.code_sha_of`) of `scripts/record/claims.py` and every project
+module it imports, transitively (`record_units`, `claims_triage`, `record_cache` and what they import; the engine's claim
+reader is under `l7r/diagram/` already). A hit loads them from `<git common dir>/l7r-cache/claims-<key>.pickle` and
+recomputes only `research_fp` (it reads question pages, which change independently). Only the newest key is kept. Wrapping
+at `scripts/record/claims.py` keeps the engine untouched and the landing DIRECT.
+
+**D30 - The script tests by what they touch (FR-021).** `tests/hooks/hookdeps.py --pydeps <test file>` prints the test's
+freshness set: the file; each `conftest.py` from its directory up to `tests/`; the `tests/` modules it imports; every file
+of `scripts/` and `tests/hooks/` it reaches, transitively through any file (`py_closure`): a Python file reaches what it
+imports and what a string literal of its code names (a literal equal to a file's stem, `_sibling("record_owed")`, or
+ending in its file name), a shell or text file every file whose name stands in its code, as the guard suites' scan does;
+and all of `scripts/` and `tests/hooks/` - failing toward running - when the test builds a script path at run time
+(`"scripts"` joined to a non-literal, or `scripts/` inside an f-string's braces), names the `scripts` directory itself as a
+path's end (`(REPO / "scripts").rglob`, `os.path.join(REPO, "scripts")`, `SCRIPTS = REPO / "scripts"`), globs the tree, or
+reaches no file under `scripts/` or `tests/hooks/` at all (a selected file is selected because it reads `scripts/`). The Makefile's pytest step
+hashes each selected file's set, runs only the files whose hash differs from their stamp
+(`<git dir>/hooks-test/py/<test path with / as __>`), and stamps every file it ran when the run is green; a red run stamps
+none. `HOOKS_ALL=1` runs all; under `make done` the step is skipped as today.
+
+**D31 - Measured, not assumed (SC-012, SC-013, SC-014).** SC-013 is run by a scratch script on two detached worktrees at
+61a52f3c8, one with today's code and one with the new, the backlog's answer store copied: each command alternately on each,
+three runs apiece, cold (the cache directory removed) and warm, the load average recorded at the start and end; the medians
+go into `375-a3-record-tooling-after`, and each command's output is compared byte for byte between the two (and with
+`L7R_CACHE_OFF=1` on the new). SC-014's count runs `hookdeps.py --pydeps` against main's last ten commits touching `scripts/`
+and counts the files each would run; key `375-a3-hooks-test-after`. SC-012 is carried to 374: 374's next
+pop-up wave counts its dispatches per unit with `scripts/measure/popup_rounds.py <clone> --since <the wave's start>`, as
+`m:375-a3-popup-rounds-before` did.
+
+### Amendment 4 (FR-022)
+
+**D32 - The sync suite in parallel parts (FR-022).** `tests/hooks/test-sync-with-main.sh` keeps its fixture (`topology`,
+`syncmain`, `stamp_hooks`, `check`, `expect_out`) and moves the helpers several cases share (`yes_`, `no_`, `rref`,
+`in_progress`, defined mid-file until now) above the cases, so a case finds them whichever part runs it. Each of the 26
+headed cases becomes a function (`case_01` ... `case_26`, in file order, its measured seconds beside it), its body
+unchanged; no case reads a variable another sets (checked by a scan of each body against its own assignments and the
+header's). The runner deals the cases into `SYNC_PARTS` parts (default 4), longest first onto the lightest part by the
+measured times (`WEIGHT`; a case without one counts 10 s); each part is a background subshell with its own `$T`, `HOME`
+and `GUARD_LOG_DIR`, prints `@@reported <case>` after each case and writes its PASS and FAIL counts to a file; the runner
+waits for all, prints each part's output in order without the markers, sums the counts, and for a part with no counts
+file fails once for each case that never reported, naming it. The suite's last line is unchanged (`all sync-with-main tests
+passed (N checks)`), so `hookrun.sh` and the stamps are untouched. `SYNC_PARTS=1` runs the cases in order in the suite's
+own shell. SC-015 is measured by a scratch script: today's file at bfe25f2da in a detached worktree and the new one,
+alternately, three runs each, the load at both ends, every run's check count against 123; then five runs in parts and one
+with `SYNC_PARTS=1`; the two failure cases by a scratch copy with one case's body made to fail and one made to `exit`. Key
+`375-a4-sync-suite-parts`.
+
+### Amendment 5 (FR-023 to FR-027)
+
+**D33 - A flag, never a refusal (FR-023).** `perf_review.check` returns True always and prints, per environment, the pair's
+band, the records made (if any) and, at band 1 or more, `perf_bands.flag(v)`: the seeds over the line, the metric, both
+snapshots' machine state at their two ends, the load caveat and "mention it when you report the landing; nothing waits on
+it". `perf_review main check` exits 0; `sync-with-main.sh`'s step keeps calling `make perf-review` (so the flag prints at the
+push) and dies only if the command itself fails to run. `arbiter_signed` loses its one caller and is removed; the record
+commands (`explain`, `confirm`, `audit`, `signoff`, `arbiter-subject`) are unchanged, for an investigation. `perf-gate` already
+exits 0 on any band (it requires the `-start` bookend, a measurement, not a verdict) - its help line says so. `perf_bands.OWES`
+says what each band means, not what it owes.
+
+**D34 - The machine's state and CPU time (FR-024).** `perf_snapshot.machine_state()` reads `/proc/meminfo` (MemAvailable,
+MemTotal, in MB), `os.getloadavg()` and `shutil.disk_usage(SKILL)`, each field left out where the machine cannot give it.
+`record` takes it before the first roll and after the last (`machine_before`, `machine_after`) and writes `total_cpu_seconds`.
+`measure` times each stage with `time.process_time()` beside `time.time()` (`cpu_stages`, `cpu_seconds` on a row) and, with
+`warm=True` (the reference leg), rolls the first seed once untimed first. `perf_bands.metric_of` picks `cpu_seconds` when every
+compared row on both sides carries it, else `seconds`; `_judge` reads that key and its stage map; the Verdict carries `metric`
+and `machines`; `render` names the metric.
+
+**D35 - 5% (FR-025).** `BAND1_PCT = {"local": 5.0, "codebuild": 5.0}`, `BAND1_DEFAULT_PCT = 5.0`, with the GM's words and
+R4 beside them; bands 2 and 3 unchanged.
+
+**D36 - The scaling leg on request, and the trend (FR-026, FR-027).** `record(label, seeds, scaling_leg=False)` rolls the legs
+only when asked; `--scaling` on the CLI; `make perf SCALING=1`. `report` prints, per snapshot, the CPU total and the 1-minute
+load and free RAM at start and end (`_ends`, dashes for a snapshot from before), and the pair's comparison is
+`perf_bands.render` alone (the old wall-only table and its "DIAGNOSE in writing" line go: one reading of a pair, the bands').
+
+**D37 - The texts (FR-023's closing bullet).** Constitution VI's performance clause rewritten (2.30.0, MINOR); root
+`CLAUDE.md`'s push and gate rows; `l7r/diagram/CLAUDE.md`; `dev/performance.md`; `docs/guards.md`'s two rows;
+`docs/efficiency-tooling.md`; `scripts/container/append-system-prompt.md`'s standing order; `perf-audit.md` and
+`round-arbiter.md`; `docs/make-targets.html` regenerated from the Makefile.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

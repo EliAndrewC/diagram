@@ -137,7 +137,7 @@ Without these, "is this guard worth what it costs" is an impression. With them i
 | `~/.claude/guard-log/` + `make audit` | every block, rewrite, reminder, permit and escape, per guard **and per RULE**, with the **escape rate**. A guard escaped more often than obeyed is costing a round trip to prevent nothing - that is what retired the quick+done refusal (62% escaped). Since feature 168 EVERY acting branch of every guard records, and the rule slug says which of a guard's rules is carrying the cost - "no-poll fired 32 times" cannot. It is HOST-WIDE and gitignored-by-absence rather than in a clone, because a hook fires for commands that name no working tree at all; the cost, stated rather than hidden, is that a container rebuild loses it |
 | `dev/bypass-log/` | every override with the reason someone will read |
 | `make durations`, `make check-census` | where the suite's time goes; which checks re-measure a placer's guarantee |
-| the perf bookends | a seed >5% slower must be diagnosed; a total >10% blocks as a regression |
+| the perf bookends | recorded with the machine's state at both ends and flagged over 5% at landing - never a gate (feature 375 amendment 5) |
 
 ## 7. The caches, and what invalidates them
 

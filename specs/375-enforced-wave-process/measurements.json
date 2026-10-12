@@ -211,5 +211,653 @@
    "same rows": true,
    "reading": "reading only the active clones cuts the clone pass from ~0.9 s to ~0.14 s (about 85%) with the same rows; the GM's condition 'if it helps performance' holds, so the listing reads active clones"
   }
+ },
+ "375-a3-record-tooling-before": {
+  "quantity": "wall time of the record tooling on a real feature delta before amendment 3 (FR-020)",
+  "observed": "2026-10-11",
+  "source": "374's pushed HEAD 61a52f3c8 (origin backup/diagram-backlog) in a detached worktree, its record-checks answer store copied (RECORD_CHECKS_DIR); the container loaded by other sessions",
+  "command": "python3 scripts/record/record_owed.py --root .; check_bundle.py 0190 [--no-quotes]; modal_bundle.py hamlet/notice-board --for modal-depiction --reason timing; claims.py owed",
+  "method": "date +%s.%N around each command, one run each; the stages of record_owed.units timed in-process with time.perf_counter, and the git processes counted with cProfile",
+  "value": {
+   "record-owed s": 6.0,
+   "record-owed in-process s": 5.4,
+   "check-bundle Q=0190 no quotes s": 6.0,
+   "check-bundle Q=0190 with quotes, first run s": 20.7,
+   "modal-bundle hamlet/notice-board depiction s": 6.7,
+   "claims-owed s": 6.9,
+   "units() stages s": {
+    "read the working tree": 0.8,
+    "read the merge base": 0.92,
+    "owed": 0.02,
+    "translation": 0.46,
+    "entry-drift": 0.76,
+    "pop-ups": 1.25
+   },
+   "git processes": {
+    "pop-ups (modal_owed)": 299,
+    "entry-drift classes (entry_owed)": 177
+   },
+   "374 transcript, record and claims tooling": "59 min over 209 calls (modal-bundle 33, claims-owed 39, claims-bundle 32, record-owed 37, check-bundle 13 among them)",
+   "reading": "every command pays record_owed.units: the whole record parsed twice and one git process per pop-up and class file; claims-owed re-parses every engine module",
+   "claims all_units stage s": 7.29,
+   "claims current() in-process s": 9.84,
+   "note on the claims stage": "timed in-process (time.perf_counter around l7r.diagram.tools.claims.all_units, then scripts/record/claims.current) in a separate run on the same worktree while the guard suites were being timed serially beside it: the container was loaded, which is why the stage (7.29 s) exceeds claims-owed's whole earlier wall time (6.9 s)"
+  },
+  "unit": "s"
+ },
+ "375-a3-popup-rounds-before": {
+  "quantity": "pop-up check dispatches per checked unit before amendment 3 (FR-019, SC-012's baseline)",
+  "observed": "2026-10-11",
+  "source": "snapshots of the pop-up dispatches in the diagram-backlog clone's (374) and the diagram-research clone's .git/checks-open.json, kept beside the spec in popup-rounds/ (2026-10-11); their kept replies (.git/check-replies) for the EDIT counts",
+  "command": "python3 scripts/measure/popup_rounds.py --record specs/375-enforced-wave-process/measurements.json --key 375-a3-popup-rounds-before 374=specs/375-enforced-wave-process/popup-rounds/374-2026-10-11.json research-clone=specs/375-enforced-wave-process/popup-rounds/research-clone-2026-10-11.json",
+  "method": "scripts/measure/popup_rounds.py's counts over the snapshots (each dispatch counted once per pop-up it names; a unit is a (pop-up, check) pair). Not re-run by the command: the EDIT blocks per reply by round, counted once by a one-off script over the kept replies (the `notes` below), and the join of 374's second depiction rounds with the pop-ups' other checks",
+  "value": {
+   "374": {
+    "units": 34,
+    "dispatches": 71,
+    "per unit": 2.09,
+    "units with a 2nd round": 29,
+    "units with a 3rd": 4,
+    "pop-ups": 23,
+    "by check": {
+     "modal-form": {
+      "units": 5,
+      "dispatches": 10,
+      "per unit": 2.0,
+      "units with a 2nd round": 5,
+      "units with a 3rd": 0
+     },
+     "modal-research": {
+      "units": 6,
+      "dispatches": 11,
+      "per unit": 1.83,
+      "units with a 2nd round": 5,
+      "units with a 3rd": 0
+     },
+     "modal-depiction": {
+      "units": 23,
+      "dispatches": 50,
+      "per unit": 2.17,
+      "units with a 2nd round": 19,
+      "units with a 3rd": 4
+     }
+    }
+   },
+   "research-clone": {
+    "units": 82,
+    "dispatches": 169,
+    "per unit": 2.06,
+    "units with a 2nd round": 70,
+    "units with a 3rd": 11,
+    "pop-ups": 37,
+    "by check": {
+     "modal-form": {
+      "units": 22,
+      "dispatches": 37,
+      "per unit": 1.68,
+      "units with a 2nd round": 13,
+      "units with a 3rd": 1
+     },
+     "modal-research": {
+      "units": 23,
+      "dispatches": 48,
+      "per unit": 2.09,
+      "units with a 2nd round": 22,
+      "units with a 3rd": 2
+     },
+     "modal-depiction": {
+      "units": 37,
+      "dispatches": 84,
+      "per unit": 2.27,
+      "units with a 2nd round": 35,
+      "units with a 3rd": 8
+     }
+    }
+   }
+  },
+  "notes": {
+   "why rounds 2 and later were owed": "every one recorded `the modal or its Depiction tab changed` or `its About, Guesses or Entry changed`: the pop-up's own words, moved by the last round's applied edits",
+   "modal-form replies proposing edits in round 2": {
+    "research clone": "12 of 12 kept",
+    "374": "2 of 5"
+   },
+   "round-arbiter accepts at the cap": "374 wave 120: 5 units in one batch; 352: 21 triggers in one batch",
+   "374's second depiction rounds": "of the 19 pop-ups with a second modal-depiction round, 13 had no modal-form or modal-research unit at all (spec review, amendment 3 round 2): those rounds were owed by the pop-up's own words changing, not by another check's edits"
+  }
+ },
+ "375-a3-hooks-test-before": {
+  "quantity": "what make hooks-test spends: each guard suite's time, and the sync-with-main suite's cases (feature 375 amendment 3, FR-021)",
+  "observed": "2026-10-11",
+  "source": "the diagram-performance clone at eb64e2ba3; the container shared with other sessions",
+  "command": "each tests/hooks/test-*.sh run alone, one after another (date +%s.%N around each); then test-sync-with-main.sh with a timestamp on each line it printed, a case's time being from its heading line to the next",
+  "method": "a one-off observation, wall time, one run",
+  "varies": 0.3,
+  "value": {
+   "guard suites serial s": {
+    "test-agent-model-hooks.sh": 2.3,
+    "test-agent-stall-hooks.sh": 1.9,
+    "test-archive-first-hooks.sh": 0.9,
+    "test-batching-hooks.sh": 72.2,
+    "test-blocked-fetch-hooks.sh": 3.5,
+    "test-canon-read-hooks.sh": 4.1,
+    "test-check-bundle-hooks.sh": 8.1,
+    "test-checks-hooks.sh": 3.9,
+    "test-claims-file-hooks.sh": 3.3,
+    "test-claims-gate.sh": 1.6,
+    "test-clone-sync-hooks.sh": 13.7,
+    "test-conflict-marker-hooks.sh": 7.0,
+    "test-discard-hooks.sh": 5.3,
+    "test-download-copy-hooks.sh": 4.0,
+    "test-entry-gate.sh": 67.2,
+    "test-escalation-hooks.sh": 7.6,
+    "test-event-log-hooks.sh": 2.1,
+    "test-feature-approval-hooks.sh": 10.2,
+    "test-finished-run-hooks.sh": 39.8,
+    "test-gate-hooks.sh": 15.2,
+    "test-gate-stamp.sh": 4.7,
+    "test-guard-file-hooks.sh": 10.4,
+    "test-house-style-hooks.sh": 5.9,
+    "test-idle-tests-hooks.sh": 45.6,
+    "test-land-tooling.sh": 1.8,
+    "test-ledger-hooks.sh": 4.0,
+    "test-main-tree-hooks.sh": 57.9,
+    "test-make-only-hooks.sh": 21.4,
+    "test-measure-hooks.sh": 20.4,
+    "test-new-file-hooks.sh": 3.4,
+    "test-no-branch-hooks.sh": 2.6,
+    "test-no-poll-hooks.sh": 52.9,
+    "test-pair-hooks.sh": 81.8,
+    "test-plan-gate.sh": 1.5,
+    "test-readme-hooks.sh": 6.2,
+    "test-record-edit-hooks.sh": 3.7,
+    "test-repo-safety-hooks.sh": 4.5,
+    "test-review-gate.sh": 16.7,
+    "test-review-round-hooks.sh": 20.9,
+    "test-shell-check-hooks.sh": 8.8,
+    "test-source-block-hooks.sh": 1.0,
+    "test-stall-watchdog-hooks.sh": 10.0,
+    "test-sync-with-main.sh": 230.5,
+    "test-wakeup-hooks.sh": 4.0
+   },
+   "serial total s": 894.5,
+   "sync-with-main cases s": {
+    "01 1": 1.2,
+    "02 2": 1.1,
+    "03 2b": 1.3,
+    "04 3": 1.1,
+    "05 4": 4.4,
+    "06 5": 7.3,
+    "07 6": 6.8,
+    "08 7": 6.4,
+    "09 7b": 10.5,
+    "10 7c": 7.9,
+    "11 7d": 65.9,
+    "12 8": 1.1,
+    "13 8b": 1.2,
+    "14 9": 1.1,
+    "15 10": 9.1,
+    "16 11": 1.9,
+    "17 12": 12.0,
+    "18 11b": 3.7,
+    "19 11": 9.7,
+    "20 12": 3.7,
+    "21 13": 10.4,
+    "22 14": 11.3,
+    "23 15": 1.8,
+    "24 16": 9.4,
+    "25 17": 8.1,
+    "26 W": 4.0
+   },
+   "sync-with-main run with case stamps s": 202.5,
+   "the pytest step": "58 files at 4 workers, 74 s (the Makefile's own note, 2026-10-02)",
+   "reading": "test-sync-with-main.sh is held to the whole scripts tree (feature 172), so any script change re-runs it, and at 202-230 s it is the long pole of a parallel hooks-test; its 26 headed cases (keyed here by ordinal: 11 and 12 are each used twice) each build their own fixture, and one (7d) takes 66 s"
+  },
+  "unit": "s"
+ },
+ "375-a3-hooks-test-after": {
+  "quantity": "the script test files a commit touching scripts/ re-runs, before and after FR-021 (feature 375 amendment 3, SC-014)",
+  "observed": "2026-10-11",
+  "source": "main's last ten first-parent commits touching scripts/ or tests/hooks/ before amendment 3's code (from eb64e2ba3), and the test files the hooks-test step selects (the Makefile's grep: test files that build a path into scripts/)",
+  "command": "tests/hooks/hookdeps.py's pydeps per test file, intersected with each commit's changed files (git diff-tree -m --first-parent)",
+  "method": "a one-off script over the derivation as built (hookdeps.pydeps, with the plan review's whole-tree fallback); before, any change re-ran every file",
+  "value": {
+   "test files": 55,
+   "before: files run per commit": 55,
+   "after: files run per commit": {
+    "eb64e2ba3": 16,
+    "6857b279e": 30,
+    "9cc6ab8c4": 30,
+    "91182c8c1": 30,
+    "926799f0d": 30,
+    "8d4daf178": 30,
+    "144e59c0f": 16,
+    "5a32ebfb9": 30,
+    "194dfd051": 30,
+    "922fb653d": 30
+   },
+   "after: mean": 27.2,
+   "files depending on the whole tree": [
+    "tests/pipeline/test_gencache.py",
+    "tests/test_building_types.py",
+    "tests/test_citation_rule_inventory.py",
+    "tests/tooling/ci/test_cache.py",
+    "tests/tooling/ci/test_state.py",
+    "tests/tooling/test_claim_feature.py",
+    "tests/tooling/test_function_cap.py",
+    "tests/tooling/test_guard_corpus.py",
+    "tests/tooling/test_guard_firing_log.py",
+    "tests/tooling/test_guard_message_durations.py",
+    "tests/tooling/test_hook_deps.py",
+    "tests/tooling/test_hooks_resolve.py",
+    "tests/tooling/test_makefile_recipe_comments.py",
+    "tests/tooling/test_ratchets.py",
+    "tests/tooling/test_research_claims.py",
+    "tests/tooling/test_switches.py"
+   ],
+   "median freshness set": 5
+  }
+ },
+ "375-a3-record-tooling-after": {
+  "quantity": "wall time of the record tooling on 374's delta, today's code against amendment 3's, back to back (SC-013)",
+  "observed": "2026-10-11",
+  "unit": "s",
+  "varies": 0.3,
+  "source": "two detached worktrees at 374's pushed HEAD 61a52f3c8 (origin backup/diagram-backlog): one with the scripts as they stood before amendment 3's code (519a49133^), one with them after (8c1894f92); 374's answer store copied (RECORD_CHECKS_DIR); the container shared with other sessions",
+  "command": "a scratch script (plan D31): each command on the old worktree, then cold on the new (its l7r-cache removed), then warm, three rounds; its output compared old against new and against the new with L7R_CACHE_OFF=1; then claims-owed alone six more alternating rounds of old and new cold",
+  "method": "time.perf_counter around each subprocess; medians; the load average at both ends",
+  "value": {
+   "runs": {
+    "record-owed": {
+     "old": {
+      "runs s": [
+       5.56,
+       5.47,
+       5.54
+      ],
+      "median s": 5.54
+     },
+     "new cold": {
+      "runs s": [
+       2.79,
+       2.81,
+       2.84
+      ],
+      "median s": 2.81
+     },
+     "new warm": {
+      "runs s": [
+       1.8,
+       1.8,
+       1.91
+      ],
+      "median s": 1.8
+     }
+    },
+    "check-bundle Q=0190 NO_QUOTES=1": {
+     "old": {
+      "runs s": [
+       5.85,
+       5.85,
+       5.89
+      ],
+      "median s": 5.85
+     },
+     "new cold": {
+      "runs s": [
+       3.56,
+       3.66,
+       3.61
+      ],
+      "median s": 3.61
+     },
+     "new warm": {
+      "runs s": [
+       2.93,
+       2.84,
+       2.78
+      ],
+      "median s": 2.84
+     }
+    },
+    "modal-bundle hamlet/notice-board depiction": {
+     "old": {
+      "runs s": [
+       6.83,
+       6.39,
+       6.59
+      ],
+      "median s": 6.59
+     },
+     "new cold": {
+      "runs s": [
+       0.45,
+       0.46,
+       0.5
+      ],
+      "median s": 0.46
+     },
+     "new warm": {
+      "runs s": [
+       0.46,
+       0.5,
+       0.48
+      ],
+      "median s": 0.48
+     }
+    },
+    "claims-owed": {
+     "old": {
+      "runs s": [
+       6.47,
+       6.69,
+       6.4
+      ],
+      "median s": 6.47
+     },
+     "new cold": {
+      "runs s": [
+       6.5,
+       6.29,
+       6.7
+      ],
+      "median s": 6.5
+     },
+     "new warm": {
+      "runs s": [
+       0.47,
+       0.48,
+       0.55
+      ],
+      "median s": 0.48
+     }
+    }
+   },
+   "outputs identical": {
+    "record-owed": {
+     "old == new warm": true,
+     "old == new cold": true,
+     "new == new caches off": true
+    },
+    "check-bundle Q=0190 NO_QUOTES=1": {
+     "old == new warm": true,
+     "old == new cold": true,
+     "new == new caches off": true
+    },
+    "modal-bundle hamlet/notice-board depiction": {
+     "old == new warm": true,
+     "old == new cold": true,
+     "new == new caches off": true
+    },
+    "claims-owed": {
+     "old == new warm": true,
+     "old == new cold": true,
+     "new == new caches off": true
+    }
+   },
+   "load start": [
+    1.5341796875,
+    1.9326171875,
+    2.900390625
+   ],
+   "load end": [
+    2.73291015625,
+    2.3232421875,
+    2.90771484375
+   ],
+   "claims-owed six more alternating": {
+    "old s": [
+     6.59,
+     6.72,
+     6.45,
+     6.65,
+     6.52,
+     7.14
+    ],
+    "old median s": 6.62,
+    "new cold s": [
+     6.23,
+     6.45,
+     6.83,
+     6.2,
+     6.78,
+     6.26
+    ],
+    "new cold median s": 6.36
+   },
+   "reading": "warm, each at most half today's (record-owed 1.8 of 5.54, check-bundle 2.84 of 5.85, modal-bundle 0.48 of 6.59, claims-owed 0.48 of 6.47); cold, each below today's (claims-owed 6.36 against 6.62 over six alternating rounds; its three-round 6.50 against 6.47 was noise); every output identical",
+   "claims-owed exit": "before gc.freeze() at the command's exit, the cold run spent 3.2 s after main returned (time in main 6.4 s, whole 9.8 s, measured with runpy around main; /usr/bin/time: user 9.4 s against the old 6.2 s); with it, the cold medians above"
+  }
+ },
+ "375-a4-sync-suite-parts": {
+  "quantity": "test-sync-with-main.sh: today's suite against the new one in parallel parts (feature 375 amendment 4, SC-015)",
+  "observed": "2026-10-11",
+  "unit": "s",
+  "varies": 0.3,
+  "source": "today's file at bfe25f2da in a detached worktree; the new file at 22acadb6e in the diagram-performance clone; the container shared with other sessions",
+  "command": "a scratch script (plan D32): today and parts alternately three times each, five more in parts, one with SYNC_PARTS=1; a scratch copy of the suite with one case made to fail and one made to exit",
+  "method": "date +%s.%N around each run; each run's pass line read for its count; the load average at both ends",
+  "value": {
+   "today s": [
+    150.2,
+    160.4,
+    149.9
+   ],
+   "today median s": 150.2,
+   "parts s": [
+    60.5,
+    61.1,
+    53.5
+   ],
+   "parts median s": 60.5,
+   "parts, five more s": [
+    58.8,
+    60.0,
+    60.9,
+    65.5,
+    62.1
+   ],
+   "serial (SYNC_PARTS=1) s": 166.2,
+   "checks every run": 123,
+   "load start": [
+    0.76,
+    2.06,
+    2.02
+   ],
+   "load end": [
+    2.26,
+    3.38,
+    3.18
+   ],
+   "a case made to fail": "rc=1, SOME TESTS FAILED (1), the check named",
+   "a case made to exit": "rc=1, case_05 and case_03 (after it in the same part) each named as never reported",
+   "reading": "the parts' median is 40% of today's; every run of either passed exactly today's 123 checks"
+  }
+ },
+ "375-a5-wall-vs-cpu": {
+  "quantity": "wall against CPU seconds of the reference hamlet's four seeds on unchanged code, quiet and under load (feature 375 amendment 5, R4)",
+  "observed": "2026-10-11",
+  "unit": "s",
+  "varies": 0.3,
+  "source": "the diagram-performance clone at 9f121c381; Intel Core Ultra 7 155H, 22 logical CPUs (hybrid cores, 2 threads per core); the other sessions paused",
+  "command": "a scratch script: perf_snapshot's REFERENCE on DEFAULT_SEEDS, each stage timed with time.time() and time.process_time(); quiet 5 rounds, then 3 rounds with 6 busy-loop processes beside it, then 3 with 22",
+  "method": "one process per series; the 1-minute load average recorded per roll",
+  "value": {
+   "quiet": {
+    "4": {
+     "wall": [
+      4.47,
+      4.35,
+      4.49,
+      4.5,
+      4.46
+     ],
+     "cpu": [
+      6.26,
+      4.35,
+      4.48,
+      4.5,
+      4.46
+     ]
+    },
+    "25": {
+     "wall": [
+      4.4,
+      4.33,
+      4.33,
+      4.33,
+      4.31
+     ],
+     "cpu": [
+      4.4,
+      4.33,
+      4.33,
+      4.33,
+      4.31
+     ]
+    },
+    "39": {
+     "wall": [
+      3.88,
+      3.8,
+      3.64,
+      3.67,
+      3.91
+     ],
+     "cpu": [
+      3.88,
+      3.79,
+      3.64,
+      3.67,
+      3.91
+     ]
+    },
+    "47": {
+     "wall": [
+      4.63,
+      4.65,
+      4.61,
+      4.7,
+      4.69
+     ],
+     "cpu": [
+      4.63,
+      4.65,
+      4.61,
+      4.69,
+      4.69
+     ]
+    }
+   },
+   "six cores busy": {
+    "4": {
+     "wall": [
+      7.5,
+      9.76,
+      10.1
+     ],
+     "cpu": [
+      8.66,
+      9.74,
+      10.09
+     ]
+    },
+    "25": {
+     "wall": [
+      8.87,
+      9.61,
+      9.98
+     ],
+     "cpu": [
+      8.87,
+      9.61,
+      9.98
+     ]
+    },
+    "39": {
+     "wall": [
+      7.57,
+      6.14,
+      7.91
+     ],
+     "cpu": [
+      7.57,
+      6.14,
+      7.91
+     ]
+    },
+    "47": {
+     "wall": [
+      9.98,
+      10.23,
+      9.27
+     ],
+     "cpu": [
+      9.98,
+      10.23,
+      9.27
+     ]
+    }
+   },
+   "every core busy": {
+    "4": {
+     "wall": [
+      18.35,
+      26.03,
+      28.21
+     ],
+     "cpu": [
+      16.13,
+      22.72,
+      24.31
+     ]
+    },
+    "25": {
+     "wall": [
+      24.54,
+      22.54,
+      26.24
+     ],
+     "cpu": [
+      21.01,
+      19.37,
+      23.12
+     ]
+    },
+    "39": {
+     "wall": [
+      19.46,
+      25.15,
+      24.31
+     ],
+     "cpu": [
+      17.18,
+      19.57,
+      20.05
+     ]
+    },
+    "47": {
+     "wall": [
+      25.8,
+      31.64,
+      28.57
+     ],
+     "cpu": [
+      22.43,
+      26.28,
+      24.37
+     ]
+    }
+   },
+   "median roll s (rounds after the first)": {
+    "quiet wall": 4.34,
+    "quiet cpu": 4.34,
+    "six busy wall": 9.68,
+    "six busy cpu": 9.68,
+    "all busy wall": 26.13,
+    "all busy cpu": 22.92
+   },
+   "first roll in a process": "seed 4 quiet: 6.26 s CPU in 4.47 s wall (another thread's start-up counted); later rolls CPU = wall to 0.01 s",
+   "reading": "quiet, CPU and wall agree; under load CPU time rises with wall time (about 2.2x with six cores busy, 4-6x with all): on this hybrid-core laptop, whose clock drops under load, CPU time does not escape contention. Quiet, a seed's spread across rounds reached 7.4% (seed 39, a 3.7 s roll), the four-seed total about 2%"
+  }
  }
 }

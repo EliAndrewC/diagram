@@ -30,6 +30,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../reviews',)]  # the moved scripts it imports (2026-10-08)
 from moves import moved_only  # noqa: E402  (feature 329: a page the delta only moved changed no word)
+import record_cache as rc  # noqa: E402  (feature 375 amendment 3: one git batch per revision)
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
@@ -48,6 +49,29 @@ RESEARCH_CHECKS = ("modal-accuracy", "modal-references", "modal-gaps")
 DEPICTION_CHECK = "modal-depiction"
 #: the defined agent that answers the three research units (plan D4)
 RESEARCH_AGENT = "modal-research"
+#: A POP-UP'S CHECKS RUN IN THIS ORDER (feature 375 amendment 3, FR-019; the GM 2026-10-11, a speculative fix measured after:
+#: "perhaps it's worth trying to make the speculative fix and measuring it afterwards"). Run together, each check's applied
+#: edits re-owed the other two, and every second and third round on 374's and 352's pop-ups was owed by the pop-up's own
+#: words moving (specs/375-enforced-wave-process/research.md R2). Form first - its edits can carry a fact, so the substance
+#: checks read its words; depiction last - it reads About for drawing statements, which a research round may move. A
+#: check's bundle waits for the checks before it (`modal_bundle.order_hold`), and a round's applied edits settle the checks
+#: before it (`apply_edits.Round`), never the ones after, which read the edited words next.
+ORDER = (FORM_CHECK, RESEARCH_AGENT, DEPICTION_CHECK)
+#: the units each check of ORDER answers
+AGENT_UNITS = {FORM_CHECK: (FORM_CHECK,), RESEARCH_AGENT: RESEARCH_CHECKS, DEPICTION_CHECK: (DEPICTION_CHECK,)}
+
+
+def agent_of(unit_check: str) -> str:
+    """The check of ORDER that answers a unit's check (`modal-gaps` -> `modal-research`), or ''."""
+    return next((a for a, units in AGENT_UNITS.items() if unit_check in units), "")
+
+
+def earlier_units(unit_checks: Sequence[str]) -> tuple[str, ...]:
+    """The unit checks of every check BEFORE the one answering `unit_checks` in ORDER; () unless they are one check's."""
+    agents = {agent_of(c) for c in unit_checks}
+    if len(agents) != 1 or "" in agents:
+        return ()
+    return tuple(c for a in ORDER[: ORDER.index(agents.pop())] for c in AGENT_UNITS[a])
 _TAG = re.compile(
     r"^(What|Why|Note|Caveat|About|Guesses|Depiction|Name|Covers|Label|Sources|Entry|Drawing|Form):\s?(.*)$"
 )
@@ -207,16 +231,9 @@ def _read_now(root: pathlib.Path) -> Callable[[str], str | None]:
 
 
 def _read_at(root: pathlib.Path, rev: str) -> Callable[[str], str | None]:
-    def read(f: str) -> str | None:
-        p = subprocess.run(
-            ["git", "-C", str(root), "show", f"{rev}:{f}"],
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        return p.stdout if p.returncode == 0 else None
-
-    return read
+    """The files at `rev`: the modals' directories by one listing and one `git cat-file --batch` (feature 375 amendment 3,
+    plan D28 - one `git show` per file was 299 processes at the base of 374's delta), any other path by its own `git show`."""
+    return rc.RevReader(root, rev, (*MODAL_DIRS, MODALS))
 
 
 def choice_modal(path: str, text: str, about_only: bool = True) -> Modal | None:
@@ -252,20 +269,16 @@ def modals_at(
 ) -> dict[str, Modal]:
     """The modals at `rev`, keyed by uid; `about_only=False` takes the old form's too (the drawing pages a docstring listed)."""
     out = {}
+    read = _read_at(root, rev)
     for d in MODAL_DIRS:
-        for name in _git(root, "ls-tree", "--name-only", rev, d + "/").split():
+        for name in read.names(d):
             if name.endswith(".py"):
                 # keyed by registry and key: a sheet's `well` and a hamlet's `well` are two modals
-                for m in modals_in(
-                    _git(root, "show", f"{rev}:{name}"),
-                    name,
-                    _read_at(root, rev),
-                    about_only,
-                ):
+                for m in modals_in(read(name) or "", name, read, about_only):
                     out[m.uid] = m
-    for name in _git(root, "ls-tree", "--name-only", rev, MODALS + "/choice/").split():
+    for name in read.names(MODALS + "/choice"):
         if name.endswith(".md"):
-            m = choice_modal(name, _git(root, "show", f"{rev}:{name}"), about_only)
+            m = choice_modal(name, read(name) or "", about_only)
             if m is not None:
                 out[m.uid] = m
     return out
@@ -318,8 +331,8 @@ def legacy_depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
     return digest([m.uid, m.prose, m.depiction, *_pages(root, m.drawing_files())])
 
 
-def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
-    """(slug, occasion, fingerprint) for every unit an About-form modal owes against `base`."""
+def owed(root: pathlib.Path, base: str, uid: str = "") -> list[tuple[str, str, str]]:
+    """(slug, occasion, fingerprint) for every unit an About-form modal owes against `base`; `uid` scopes it to one pop-up."""
     before = modals_at(root, base) if base else {}
     changed_pages = (
         set(
@@ -345,17 +358,20 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
     # nothing" went red on main. A page changed in git is moved only if its words differ from the base's.
     if base:
         changed_pages -= moved_only(root, base, sorted(changed_pages))
-        then = _read_at(root, base)
+        listed = sorted(changed_pages)
+        old = dict(zip(listed, rc.cat_blobs(root, [f"{base}:{f}" for f in listed]), strict=True))  # one batch (plan D28)
         changed_pages = {
             f
             for f in changed_pages
-            if page_words(then(f) or "")
+            if page_words(old.get(f, ""))
             != page_words(
                 (root / f).read_text(encoding="utf-8") if (root / f).is_file() else ""
             )
         }
     rows = []
     for m in modals_now(root):
+        if uid and m.uid != uid:
+            continue
         was = before.get(m.uid)
         fp_form, fp_research = fingerprints(root, m)
         moved_text = was is None or was.prose != m.prose or was.entry != m.entry

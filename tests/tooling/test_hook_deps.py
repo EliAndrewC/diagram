@@ -156,3 +156,55 @@ def test_gate_stamp_derives_to_the_whole_tree_from_the_code_not_the_prose() -> N
     row true by accident, and a reword would have silently narrowed it."""
     assert len(hookdeps.deps_for("gate-stamp.py")) > 20
     assert hookdeps._globs_tree("gate-stamp.py")
+
+
+# ---- feature 375 amendment 3, FR-021 (SC-014): the Python test files that test scripts/, each by what it reaches ----------
+
+REPO = SCRIPTS.parent
+
+
+def _rel(paths: list[pathlib.Path]) -> set[str]:
+    return {str(p.relative_to(REPO)) for p in paths}
+
+
+def test_a_script_test_depends_on_what_it_reaches_and_not_on_the_rest() -> None:
+    deps = _rel(hookdeps.pydeps(REPO / "tests/tooling/test_ledger_lint.py"))
+    assert "scripts/reviews/ledger_lint.py" in deps and "tests/tooling/test_ledger_lint.py" in deps
+    assert "tests/conftest.py" in deps, "a conftest above it is part of its key"
+    assert "scripts/record/modal_bundle.py" not in deps, "a script it never reaches does not re-run it"
+
+
+def test_a_script_loaded_by_a_string_is_reached_and_a_prose_mention_is_not() -> None:
+    """`_sibling("record_owed")` and `script("_modal_owed")` load a script by a STRING: an import scan alone under-runs."""
+    refs = hookdeps._word_refs("x.py", 'import json\nro = _sibling("record_owed")\nmo = script("_modal_owed")\nprint("see moves.py for why")\n')
+    assert {"record_owed.py", "modal_owed.py"} <= refs
+    assert "moves.py" not in refs, "a message that mentions a file reaches nothing"
+    assert "patch.py" in hookdeps._word_refs("x.py", 'P = ROOT / "scripts" / "patch.py"\n'), "a path literal ending in its name"
+    assert "hm_arbiter.py" in hookdeps._word_refs("x.py", "from hm_arbiter import trip\n")
+    assert "guardlog.sh" in hookdeps._word_refs("x.sh", '. "$HERE/lib/guardlog.sh"\n'), "a shell file reaches every name it states"
+
+
+def test_a_test_that_builds_its_script_paths_depends_on_the_whole_tree() -> None:
+    deps = _rel(hookdeps.pydeps(REPO / "tests/tooling/test_switches.py"))
+    assert _rel(list(hookdeps._INDEX.values())) <= deps
+
+
+def test_an_unchanged_tree_runs_none_and_a_changed_dependency_runs_its_tests(tmp_path: pathlib.Path, monkeypatch) -> None:
+    gitdir = tmp_path / "git"
+    dep = tmp_path / "dep.py"
+    dep.write_text("A = 1\n", encoding="utf-8")
+    monkeypatch.setattr(hookdeps, "ROOT", tmp_path)
+    monkeypatch.setattr(hookdeps, "pydeps", lambda test: [dep] if test.name == "test_a.py" else [tmp_path / "other.py"])
+    (tmp_path / "other.py").write_text("B = 1\n", encoding="utf-8")
+    tests = ["test_a.py", "test_b.py"]
+    assert hookdeps.py_stale(gitdir, tests) == tests, "never stamped: both run"
+    hookdeps.py_stamp(gitdir, tests)
+    assert hookdeps.py_stale(gitdir, tests) == [], "an unchanged tree runs none"
+    dep.write_text("A = 2\n", encoding="utf-8")
+    assert hookdeps.py_stale(gitdir, tests) == ["test_a.py"], "only the test that reaches the changed file"
+
+
+def test_a_test_that_scans_the_scripts_directory_depends_on_the_whole_tree() -> None:
+    """The plan review of amendment 3: `(REPO / "scripts").rglob("*")` reached nothing by the scan, and would never re-run."""
+    for f in ("tests/test_citation_rule_inventory.py", "tests/test_building_types.py", "tests/tooling/test_guard_message_durations.py"):
+        assert _rel(list(hookdeps._INDEX.values())) <= _rel(hookdeps.pydeps(REPO / f)), f

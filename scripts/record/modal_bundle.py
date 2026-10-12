@@ -25,11 +25,13 @@ from __future__ import annotations
 import argparse
 import datetime
 import html
+import os
 import pathlib
 import re
 import shutil
 import sys
 from collections.abc import Sequence
+from typing import Any
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -417,7 +419,24 @@ def research_held(root: pathlib.Path, uid: str, text: str) -> list[str]:
     return out
 
 
-def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str) -> str:
+def order_hold(root: pathlib.Path, m: mo.Modal, for_: str, units: Sequence[Any]) -> str:
+    """Why `for_` must wait on `m`: a check BEFORE it in `modal_owed.ORDER` has a unit on the pop-up owed now and unanswered
+    (feature 375 amendment 3, FR-019a) - with the command that answers it; '' when nothing before it is owed."""
+    import record_owed  # noqa: PLC0415
+
+    store = record_owed.store(root)
+    by_slug = {u.slug: u for u in units}
+    for agent in mo.ORDER[: mo.ORDER.index(for_)]:
+        for c in mo.AGENT_UNITS[agent]:
+            u = by_slug.get(f"{c}:{m.uid}")
+            if u is not None and not record_owed.answered(store, u.slug, u.fingerprint, u.reading):
+                return (f"{u.slug} is owed and unanswered - a pop-up's checks run in order, form, then research, then depiction "
+                        f"(feature 375 amendment 3: run together, each one's edits re-owed the others). First: make modal-bundle "
+                        f'KIND="{m.uid}" FOR={agent}')
+    return ""
+
+
+def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str, owed: Sequence[Any] | None = None) -> str:
     """The MANIFEST's owed section in `_bundle_owed`'s shape: `owed-checks:` for the dispatch guard, `unit:` lines for
     `make record-checked BUNDLE=` - each unit this bundle answers, at the fingerprint of the words copied."""
     fp_form, fp_research = mo.fingerprints(root, m)
@@ -434,7 +453,7 @@ def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str) -> str:
     pages = [(f, b) for f in files if (b := mt.keep(root, f))]
     import record_owed  # noqa: PLC0415 - what made each unit due, read back per round by the arbiter's bundle (374)
 
-    why = {u.slug: u.occasion for u in record_owed.units(root)}
+    why = {u.slug: u.occasion for u in (owed if owed is not None else record_owed.units(root))}
     return ("## Owed (feature 311)\n\n" + f"owed-checks: {for_}\n" + "".join(f"unit: {s} {fp}\n" for s, fp in units)
             + "".join(f"page: {f} {b}\n" for f, b in pages) + "".join(f"owed: {s} - {why[s]}\n" for s, _fp in units if why.get(s)))
 
@@ -445,13 +464,22 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
         print(f"modal-bundle: no About-form modal {kind!r} (a class name or key) under {', '.join(mo.MODAL_DIRS)}", file=sys.stderr)
         return 2
     import modal_triage as mt  # noqa: PLC0415 - feature 375 FR-001: a unit owed only a triage is triaged first
+    import record_owed  # noqa: PLC0415
 
-    refused = mt.refusal(root, m, for_)
+    units = record_owed.units(root, families=("modal",), uid=m.uid)  # this pop-up's, once: the triage, the order and the owed lines all read it (amendment 3, plan D27)
+    modal_rows = [(u.slug, u.occasion, u.fingerprint) for u in units if u.check in (mo.FORM_CHECK, mo.DEPICTION_CHECK, *mo.RESEARCH_CHECKS)]
+    refused = mt.refusal(root, m, for_, modal_rows)
     if refused and len(reason.split()) < 2:
         print(f'modal-bundle: {refused}. A check the GM asked for, or a backfill: REASON="<why>"', file=sys.stderr)
         return 3
     if refused:
         print(f"modal-bundle: bundled without its triage, because: {reason}")
+    held, first = order_hold(root, m, for_, units), os.environ.get("CHECK_ORDER_OK", "").strip()
+    if held and len(first.split()) < 2:
+        print(f'modal-bundle: {held}. To bundle it anyway: CHECK_ORDER_OK="<why>" (two words or more; the MANIFEST records it)', file=sys.stderr)
+        return 3
+    if held:
+        print(f"modal-bundle: bundled out of order, because: {first}")
     out = pathlib.Path(out_arg) if out_arg else DEFAULT_ROOT / f"modal-{m.uid.replace('/', '-')}-{for_}"
     if out.exists():
         if not (out / "MANIFEST.md").is_file():
@@ -517,7 +545,8 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str, reason: str =
     for name, origin, _what in rows:
         manifest.append(f"## `{name}` - origin `{origin}`\n\n```\n{(out / name).read_text(encoding='utf-8').rstrip()}\n```\n")
     manifest.append("Reply with your report: the counts on the first line, then only what the session must act on (your contract gives the form).\n")
-    (out / "MANIFEST.md").write_text("\n".join(manifest) + "\n" + owed_lines(root, m, for_), encoding="utf-8")
+    escape = f"check-order-escape: {first}\n" if held else ""
+    (out / "MANIFEST.md").write_text("\n".join(manifest) + "\n" + owed_lines(root, m, for_, units) + escape, encoding="utf-8")
     print(f"modal-bundle: {len(rows)} file(s) in {out} - hand the {for_} agent {out / 'MANIFEST.md'}")
     return 0
 

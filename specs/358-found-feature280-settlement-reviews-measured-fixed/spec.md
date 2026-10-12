@@ -40,6 +40,8 @@ Carried word for word on 2026-10-10 (the GM, 2026-10-10: "Yes, please.", on the 
 
 ### 355 - What a reader takes for the river at the tap: the width and the hue (feature 230 pass 12, 2026-09-13)
 
+**Taken out of this wave 2026-10-11**: done by feature 355 itself, reopened at the GM's word (the goal of the session "Diagram magistracies" named 355); the hue taper is built there - this wave does not do it again.
+
 **Status**: Filed - from future-work/farming-communities.md, "What a reader takes for the river at the tap: the width and the hue (feature 230 pass 12, 2026-09-13)", 2026-10-08 (feature 330: the GM retired that directory; this is the entry as it stood)
 
 **Affects**: hamlet

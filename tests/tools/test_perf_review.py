@@ -42,102 +42,62 @@ def run(log: Path, *args: str, env: str = "local") -> int:
 
 
 def test_no_pair_means_nothing_to_review(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    assert run(log, "check") == 0 and "nothing to review" in capsys.readouterr().out
+    assert run(log, "check") == 0 and "nothing to compare" in capsys.readouterr().out
     assert run(log, "explain", "--why", "x", "--unverified", "not measured in this fixture") == 2, "no pair: the bookends come first"
 
 
 def test_no_increase_owes_nothing(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, -2.0)
-    assert run(log, "check") == 0 and "nothing owed" in capsys.readouterr().out
+    out = capsys.readouterr().out if run(log, "check") == 0 else "check refused"
+    assert "band 0" in out and "FLAG" not in out
 
 
-def test_band_1_FIRES_without_explanation_then_without_confirmation(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    band(log, 0.5)
-    assert run(log, "check") == 1
-    out = capsys.readouterr()
-    assert "MISSING: a written explanation" in out.out and "perf-audit confirmation" in out.out and "REFUSED" in out.err
+def test_a_band_is_a_flag_never_a_refusal(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 375 amendment 5 (the GM 2026-10-11: "it doesn't need to be a gate anymore"): every band exits 0 and prints the
+    FLAG with the machine's state; the records stay available for an investigation and are listed when made."""
+    for pct, band_no in ((6.0, 1), (12.0, 2), (25.0, 3)):
+        for f in log.glob("*.json"):
+            f.unlink()
+        band(log, pct)
+        assert run(log, "check") == 0
+        out = capsys.readouterr()
+        assert f"band {band_no}" in out.out and "FLAG: this looks slower" in out.out and "may be the machine's load" in out.out
+        assert "REFUSED" not in out.err and "MISSING" not in out.out
+
+
+def test_the_records_stay_available_and_are_listed_when_made(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    band(log, 12.0)
     assert run(log, "explain", "--why", "", "--unverified", "not measured in this fixture") == 2, "an empty explanation is noticed, not explained"
-    assert run(log, "explain", "--why", "seed 1 +0.5% is inside the 1.7% per-seed floor", "--unverified", "not measured in this fixture") == 0
-    assert run(log, "check") == 1 and "MISSING: a perf-audit confirmation" in capsys.readouterr().out
-    # the main session cannot confirm: the prompt, and DECLINED
-    assert run(log, "confirm", "--verdict", "consistent") == 1
-    assert "WHO IS ASKING" in capsys.readouterr().err
-    assert run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit") == 0
-    assert run(log, "check") == 0 and "every owed record present" in capsys.readouterr().out
-
-
-def test_an_inconsistent_confirmation_does_not_pass(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    band(log, 0.5)
-    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
-    assert run(log, "confirm", "--verdict", "inconsistent", "--as", "perf-audit") == 0
-    assert run(log, "check") == 1 and "negative or inconclusive records do not count: confirmation=inconsistent" in capsys.readouterr().out
+    assert run(log, "explain", "--why", "a new placement rule in web", "--unverified", "not measured in this fixture") == 0
+    assert run(log, "confirm", "--verdict", "consistent") == 1 and "WHO IS ASKING" in capsys.readouterr().err, "the main session cannot confirm"
     assert run(log, "confirm", "--verdict", "maybe", "--as", "perf-audit") == 2
-
-
-def test_band_2_needs_the_audit_with_every_criterion(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    band(log, 12.0)
-    run(log, "explain", "--why", "a new placement rule in web", "--unverified", "not measured in this fixture")
-    run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
-    assert run(log, "check") == 1 and "escalated audit" in capsys.readouterr().out
-    assert run(log, "audit", "--verdict", "justified", "--necessary", "yes", "--as", "perf-audit") == 2, "commensurate and no_way_around missing"
+    assert run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit") == 0
+    assert run(log, "audit", "--verdict", "justified", "--necessary", "yes", "--as", "perf-audit") == 2
     assert "missing: commensurate, no_way_around" in capsys.readouterr().err
-    assert run(log, "audit", "--verdict", "justified", "--necessary", "yes", "--commensurate", "yes", "--no-way-around", "no", "--as", "perf-audit") == 0
-    assert run(log, "check") == 0
     assert run(log, "audit", "--verdict", "sure", "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit") == 2
-    assert run(log, "audit", "--verdict", "justified", "--necessary", "a", "--commensurate", "b", "--no-way-around", "c") == 1, "the main session is prompted and declined"
+    assert run(log, "audit", "--verdict", "not-justified", "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit") == 0
+    capsys.readouterr()
+    assert run(log, "check") == 0
+    out = capsys.readouterr().out
+    assert "records made: audit=not-justified, confirmation=consistent, explanation=pending" in out and "FLAG" in out
 
 
-@pytest.mark.parametrize("verdict", ["not-justified", "cannot-determine"])
-def test_a_negative_or_inconclusive_audit_does_not_pass(log: Path, verdict: str, capsys: pytest.CaptureFixture[str]) -> None:
-    band(log, 12.0)
-    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
-    run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
-    assert run(log, "audit", "--verdict", verdict, "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit") == 0
-    assert run(log, "check") == 1 and f"audit={verdict}" in capsys.readouterr().out
-
-
-def test_band_3_a_GM_signoff_given_unprompted_is_still_recorded(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_a_signoff_the_GM_gives_unprompted_is_still_recorded(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, 25.0)
-    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
-    run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
-    run(log, "audit", "--verdict", "justified", "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit")
-    assert run(log, "check") == 1 and "the round arbiter's ruling" in capsys.readouterr().out
     assert run(log, "signoff", "--why", "ok", "--tty", "no") == 1, "no terminal: refused"
     assert "never asks the GM" in capsys.readouterr().err
     assert run(log, "signoff", "--why", "", "--tty", "yes") == 2
     assert run(log, "signoff", "--why", "the map gains a whole tier; accepted", "--tty", "yes") == 0
-    assert run(log, "check") == 0
     rec = json.loads(next(log.glob("*-review-129-signoff-*.json")).read_text(encoding="utf-8"))
     assert rec["granted_by"]["declared"] == "GM" and rec["band"] == 3 and rec["verdict"] == "signed" and rec["binding"]
 
 
-def test_a_record_is_bound_to_the_numbers_and_the_commit(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    band(log, 0.5)
-    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
-    run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
-    assert run(log, "check") == 0
-    # a NEWER -end with different numbers: every earlier record is stale, by name
-    snap(log, "129-end", {1: 103.0, 2: 100.0}, "20260825T020000Z", commit="def5678")
-    assert run(log, "check") == 1
-    out = capsys.readouterr().out
-    assert "stale records" in out and "review-129-confirmation" in out
-    # a fresh explanation for the new numbers does NOT revive the old confirmation: it is bound to the old ones
-    assert run(log, "explain", "--why", "the new numbers", "--unverified", "not measured in this fixture") == 0
-    assert run(log, "check") == 1 and "MISSING: a perf-audit confirmation" in capsys.readouterr().out
-
-
-def test_environments_are_checked_independently(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    # Feature 179 raised codebuild's band-1 line to 2.0%, so this needs an increase that is over it.
-    # The +0.8% this used to carry is now UNDER the floor and owes nothing - which is the subject of
-    # test_the_same_increase_lands_differently_per_environment below.
+def test_environments_are_flagged_independently(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
     band(log, -1.0, "local")
-    band(log, 3.0, "codebuild")
-    assert run(log, "check") == 1
-    out = capsys.readouterr().out
-    assert "[codebuild]" in out and "MISSING" in out and "[local]" in out and "nothing owed" in out
-    assert run(log, "explain", "--why", "x", "--unverified", "not measured in this fixture", env="codebuild") == 0
-    assert run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit", env="codebuild") == 0
+    band(log, 7.0, "codebuild")
     assert run(log, "check") == 0
+    out = capsys.readouterr().out
+    assert "[codebuild]" in out and "[local]" in out and out.count("FLAG") == 1
     assert run(log, "show", env="codebuild") == 0 and "perf bands [codebuild]" in capsys.readouterr().out
 
 
@@ -261,7 +221,7 @@ def test_a_MUTE_gate_says_it_is_mute_rather_than_passing_quietly(tmp_path) -> No
     _snap(tmp_path, "178-end", "codebuild:BUILD_GENERAL1_MEDIUM", utc="20260903T020000Z")
     ok, msg = pr.check(tmp_path, "178-x")
     assert ok, "no baseline is not a regression"
-    assert "NO COMPARABLE BASELINE" in msg and "MUTE" in msg
+    assert "NO COMPARABLE BASELINE" in msg and "nothing to compare" in msg
     assert "BUILD_GENERAL1_MEDIUM" in msg, "it must name which machine has nothing to compare against"
 
 
@@ -343,14 +303,16 @@ def test_the_cli_subcommand_returns_the_predicate_as_an_exit_code(log: Path, mon
     assert run(log, "has-start") == 0, "present -> zero, so the branch is skipped"
 
 
-def test_the_same_increase_lands_differently_per_environment(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """The new rule, stated as one assertion: +0.8% owes an explanation locally and nothing remotely."""
-    band(log, 0.8, "local")
-    band(log, 0.8, "codebuild")
-    assert run(log, "check") == 1
-    out = capsys.readouterr().out
-    assert "[local]" in out and "MISSING" in out, "the quiet machine keeps the strict rule"
-    assert "[codebuild]" in out and "nothing owed" in out, "the noisy one does not, at 5-of-6 false firings"
+def test_the_same_line_holds_in_both_environments(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 375 amendment 5: 5% in every environment - 3% is flagged in neither, 6% in both."""
+    band(log, 3.0, "local")
+    band(log, 3.0, "codebuild")
+    assert run(log, "check") == 0 and "FLAG" not in capsys.readouterr().out
+    for f in log.glob("*.json"):
+        f.unlink()
+    band(log, 6.0, "local")
+    band(log, 6.0, "codebuild")
+    assert run(log, "check") == 0 and capsys.readouterr().out.count("FLAG") == 2
 
 
 # ---- feature 240 FR-010: an attribution names its counterfactual ------------------------------------------------
@@ -376,7 +338,7 @@ def test_feature_230s_first_explanation_is_refused_without_its_counterfactual(lo
     specs = _specs(tmp_path)
     assert run(log, "explain", "--why", F230_FIRST, "--specs-dir", str(specs)) == 2
     assert "CONTROL=<measurement key>" in capsys.readouterr().err
-    assert run(log, "check") == 1, "a refused explanation recorded nothing"
+    assert not list(log.glob("*-explanation-*.json")), "a refused explanation recorded nothing"
 
 
 def test_a_control_must_name_a_record_and_then_travels_with_the_explanation(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -403,33 +365,14 @@ def test_unverified_needs_a_reason_and_not_both_kinds_of_evidence(log: Path, tmp
     assert rec["unverified"] == "no time to run it" and "control" not in rec
 
 
-def test_band_3_goes_to_the_round_arbiter_first(log: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """Feature 379 amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too"): an arbiter `accept` bound to
-    the pair's numbers stands for the sign-off; `continue`, or an accept on other numbers, does not."""
+def test_band_3_can_still_be_put_to_the_round_arbiter(log: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """An investigation may still ask the arbiter (`make perf-arbiter`); nothing at the push waits on its answer (feature 375
+    amendment 5)."""
     band(log, 25.0)
-    run(log, "explain", "--why", "cause", "--unverified", "not measured in this fixture")
-    run(log, "confirm", "--verdict", "consistent", "--as", "perf-audit")
-    run(log, "audit", "--verdict", "justified", "--necessary", "a", "--commensurate", "b", "--no-way-around", "c", "--as", "perf-audit")
-    specs = tmp_path / "specs"
-    (specs / F).mkdir(parents=True)
-
-    def check() -> int:
-        return pr.main(["check", "--feature", F, "--log-dir", str(log), "--specs-dir", str(specs)])
-
-    assert check() == 1
-    out = capsys.readouterr().out
-    assert "make perf-arbiter ENV=local" in out and "never a question to the GM" in out and "perf-signoff" not in out
     assert run(log, "arbiter-subject") == 0
     subject = capsys.readouterr().out.strip()
     assert subject.startswith("perf-band3-local-") and len(subject) == len("perf-band3-local-") + 12
-    arb = specs / F / "arbiter.jsonl"
-    arb.write_text(json.dumps({"trigger": f"ask:{subject}", "ruling": "continue", "why": "keep optimizing"}) + "\n" + "not json\n")
-    assert check() == 1, "continue: keep optimizing"
-    arb.write_text(json.dumps({"trigger": "ask:perf-band3-local-000000000000", "ruling": "accept", "why": "other numbers"}) + "\n")
-    assert check() == 1, "an accept on other numbers is stale"
-    arb.write_text(json.dumps({"trigger": f"ask:{subject}", "ruling": "accept", "why": "a whole tier gained"}) + "\n")
-    assert check() == 0, "the arbiter's accept stands for the sign-off"
-    assert run(log, "signoff", "--why", "ok", "--tty", "no") == 1 and "make perf-arbiter ENV=local" in capsys.readouterr().err
+    assert run(log, "check") == 0
 
 
 def test_only_band_3_goes_to_the_arbiter(log: Path, capsys: pytest.CaptureFixture[str]) -> None:

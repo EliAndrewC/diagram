@@ -2,7 +2,13 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-11 - amendment 2 landed: spec FAITHFUL (round 2), plan CLEAR (round 3), every task ticked; SC-009 and SC-010 tested; SC-003 and SC-004 carried to 374
+**Status**: Done 2026-10-11 - amendment 5 landed: spec FAITHFUL (round 2), plan CLEAR, every task ticked; SC-016 to SC-020 tested, a snapshot taken end to end; SC-012 carried to 374 (as SC-003 and SC-004 are)
+
+**Amendment 5 approved**: the GM, 2026-10-11, "if it looks like the performance is slowing down to a meaningful degree, that's something you can mention when you say that the work has landed on main, but it doesn't need to be a gate anymore."
+
+**Amendment 4 approved**: the GM, 2026-10-11, "yes please add that as amendment 4"
+
+**Amendment 3 approved**: the GM, 2026-10-11, "So yes, please do all of that as part of amendments to 375."
 
 **Amendment 2 approved**: the GM, 2026-10-11, "it does seem like a whole batch of pop-ups reaching the round cap at once should get a single ruling. because they are likely to be related. And that does sound like it would be more efficient. And then yes, please also do look at that bundle defect."
 
@@ -154,6 +160,101 @@ work stands; the GM approved both in one answer.
   replies and edits whether or not the guard recorded the trigger as owed (the unit is read from the trigger itself) - 343's
   session asked ahead for 13 form checks' third round, and each bundle reached the arbiter with no round history.
 
+### Amendment 3 (`request.md`, Amendment 3)
+
+The GM asked for three things after the measurement in `request.md`: the pop-up checks' structural cause of round-3 caps
+fixed, as a speculative fix measured afterwards; `modal-bundle`, `check-bundle`, `claims-owed` and `record-owed` made fast;
+`hooks-test` skipping what a change did not touch. The timing requirements are not part of it (the GM: "let's talk about
+that after you make the other changes").
+
+- **FR-019 A pop-up's checks run in order, and a round's applied edits settle the checks before it.** The structural cause,
+  measured on 374's and 352's clones (`research.md` R2): a pop-up's three checks run together, each proposes edits, and the edits
+  applied re-owe the other two - every second and third round there was owed because the pop-up itself had changed, and
+  `modal-form` proposed edits in nearly every second round in the research clone, re-owing the other two. (In 374 most
+  second rounds were `modal-depiction`'s, 19 of 29 units, and 13 of those 19 pop-ups had no other check at all: owed by the
+  pop-up's own words changing, which ordering does not reach and feature 335's settling of a check's own edits may.) A check is already not re-owed by its OWN applied edits (feature 335: `make apply-edits` settles the reply's
+  own units). Now:
+  (a) A pop-up's checks run in one order: `modal-form` (its words and their order), then `modal-research` (whether those
+  words are supported), then `modal-depiction` (whether the Depiction tab tells the drawing, read last because the research
+  round may move a drawing statement). A check's bundle for a pop-up is refused while a check before it in the order is owed
+  on that pop-up and unanswered, the refusal naming that check's bundle command. An escape, `CHECK_ORDER_OK="<why>"`, builds
+  it anyway and is recorded in the bundle's MANIFEST. A check owed nothing before it (a page only its `Drawing:` names
+  moved, say) is not held: the order is read off what is owed, never off the check asked for.
+  (b) When a round's own EDIT blocks are applied, each check BEFORE the replying check in the order settles with its answer
+  as the replying check's own units do - where that check was answered at the words before those blocks and the blocks alone
+  moved them. A unit changed any other way stays owed.
+  (c) A round's blocks settle nothing of a check AFTER the replying one: that check reads the edited words next.
+  This is the speculative fix the GM asked for, ordering all three checks; SC-012 measures it on the next pop-up rounds.
+- **FR-020 The record tooling's shared cost is paid once per content.** The four commands spend most of their time in the
+  same work, measured on 374's delta (`request.md`): re-reading the whole record at the merge base and at the working tree
+  on every call (about 1.7 s of parsing), one `git` process per file for the pop-ups and the entry-drift classes at the base
+  (299 and 177 processes; the two stages took 1.25 s and 0.76 s), and re-parsing every engine module for the research
+  claims (the `all_units` stage, 7.29 s timed in-process on a loaded container - more than `claims-owed`'s whole 6.9 s
+  run earlier; `m:375-a3-record-tooling-before`, `research.md` R1). Now:
+  (a) a question page's, notes file's or write-up's parse is kept by its content and by the source of the code that parses
+  it - the parsing module and every project module it imports, transitively - so an unchanged file is parsed once, not
+  once per call and per revision;
+  (b) a revision's files are read in one `git` batch, never one process per file;
+  (c) the engine's research claims are kept by the content of every engine module and procedure document they are read from
+  and the source of the claim readers and every project module they import, transitively;
+  (d) a command builds only what it prints (a pop-up's bundle computes that pop-up's owed lines, not the whole delta's,
+  where its result is the same).
+  A cache never changes an answer: any change to a file or to the code that reads it misses, and each command's output is
+  the same with and without it.
+- **FR-021 `hooks-test` runs only what a change touched.** Measured (`m:375-a3-hooks-test-before`, `research.md` R3): the
+  guard suites already run only when a file they depend on changed (feature 172), but the Python test files that test
+  `scripts/` run all together (74 s) whenever anything under `scripts/` or `tests/hooks/` changed, so a merge from main
+  touching one script reran every one of them. Each now runs only when it, a `conftest.py` above it, or a file it depends on
+  changed: the scripts it names and what those use, derived transitively as the guard suites' dependencies are
+  (`tests/hooks/hookdeps.py`), and all of `scripts/` for a file whose script paths cannot be derived (it builds them at run
+  time). Failing toward running, as feature 172's derivation does. `HOOKS_ALL=1` and the gate (which runs these files
+  anyway) are unchanged.
+
+### Amendment 4 (`request.md`, Amendment 4)
+
+- **FR-022 The longest guard suite runs its cases in parallel parts.** `test-sync-with-main.sh` stays held to the whole tree
+  (FR-021 and feature 172: no static reading sees which scripts its push path reaches), so every script change re-runs it,
+  and it is the long pole of a parallel `hooks-test`: 230 s run alone, 202 s with its cases timed one by one, the longest
+  66 s (`m:375-a3-hooks-test-before`, `research.md` R3). It has 26 headed cases (25 numbered - 11 and 12 each used twice -
+  and `W`; the roll-cache block runs inside the case before it), and each builds its own fixture; the helpers several share
+  (`yes_`, `no_`, `rref`, `in_progress`) are defined once before the cases. Now the cases run in parallel parts, each
+  part with its own temporary directory, `HOME` and guard log, so the suite takes about its longest part's time. Every check
+  still runs and is counted - the suite prints the same pass line with the same count as today's - and a failure in any
+  part, or a case that never reports, fails the suite. `SYNC_PARTS=1` runs the cases one after another.
+
+### Amendment 5 (`request.md`, Amendment 5)
+
+The GM's answers on the timing requirements (`request.md`), the last superseding the first where they differ: performance is
+recorded and flagged, never a gate. The cohort is not part of it.
+
+- **FR-023 Performance is recorded and flagged, never a gate.** The bookends are taken and kept as before (`make perf
+  LABEL=<NNN>-start` / `-end`, one file each under `dev/perf-log/`), and the bands are still computed and printed - by
+  `make perf-report`, by `perf-gate` and at the push - but none of them refuses anything: no push, no gate and no `make
+  tick` waits on a band, and the band records (`perf-explain`, `perf-confirm`, `perf-audit`, `perf-arbiter`, `perf-signoff`)
+  are no longer owed. They stay available for an investigation the GM or a session chooses. Where a pair crosses the
+  band-1 line, the push prints a FLAG naming the seeds and percentages and the machine's state at both ends of both
+  snapshots, with the caveat that load may explain it, and the session says so in the message that reports the landing.
+- **FR-024 Each snapshot records the machine's state at its start and its end.** Available and total RAM
+  (`/proc/meminfo`), the load averages over 1, 5 and 15 minutes, and the free and total disk on the clone's filesystem - a
+  reading before the first roll and one after the last, nothing during the run. Each stage is also timed in CPU time
+  (`time.process_time()`) beside its wall time, and an untimed warm-up roll comes first (measured, the first roll in a process
+  counts another thread's start-up work as its own: 6.26 s of CPU in 4.47 s of wall, `research.md` R4). Bands and the flag
+  read the CPU seconds where both snapshots have them, the wall seconds otherwise, and say which.
+- **FR-025 The band-1 line is 5%, in every environment.** The GM: "let's extent it from 2% to 5% for the jitter". Locally
+  the line was 0.0% and on CodeBuild 2.0%; both become 5.0%, an increase at or under it unflagged. Bands 2 and 3 keep their
+  lines as labels of how much slower a pair looks.
+- **FR-026 The scaling leg runs only when asked for.** `make perf` rolls the reference hamlet at its 15 households on its four
+  seeds, nothing more. `make perf SCALING=1` adds the 10-, 20- and 40-household legs, for investigating the algorithm; a
+  pair is banded on the legs only where both snapshots carry them, as today.
+- **FR-027 The trend says when.** `make perf-report` lists every snapshot - its time, label, commit, totals - with the load
+  and free RAM at its start and end beside it, so a run taken under load reads as one, and a real slowdown can be placed
+  between two snapshots and so between two commits.
+- Every text that states the gate says what FR-023 says - the set a grep over the always-loaded and on-demand docs finds
+  (`perf-audit|perf bands|band-1|perf_review.py --check|blocks as a regression|perf-arbiter`): constitution principle VI,
+  the root `CLAUDE.md` (the push row and the gate row of the guards table), `l7r/diagram/CLAUDE.md`, `dev/performance.md`,
+  `docs/guards.md`, `docs/efficiency-tooling.md`, `scripts/container/append-system-prompt.md` (its standing order to run
+  `perf-audit` on every band of 1 or more), `.claude/agents/perf-audit.md` and `.claude/agents/round-arbiter.md`.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -186,9 +287,55 @@ work stands; the GM approved both in one answer.
   single trigger's ruling is refused, pointing to it. The tests fail on today's code.
 - **SC-010** (FR-018) A bundle for a round trigger the guard never recorded as owed carries that unit's rounds (replaying the
   shape of 343's form-check bundles). The test fails on today's code.
+- **SC-011** (FR-019) On a fixture pop-up owed all three checks: a `modal-research` bundle is refused while `modal-form` is
+  unanswered, and a `modal-depiction` bundle while either is, each refusal naming the bundle command of the check owed first;
+  with `CHECK_ORDER_OK` each is built and its MANIFEST says why; a pop-up owed only `modal-depiction` (a page its `Drawing:`
+  names moved) is not held. Applying a `modal-research` reply's EDIT blocks leaves `modal-form` answered, and a
+  `modal-depiction` reply's leaves both answered; a hand edit after either re-owes them; a `modal-form` reply's blocks
+  applied after `modal-research` answered leave `modal-research` owed. The tests fail on today's code.
+- **SC-012** (FR-019; carried to 374) The pop-up check dispatches per checked unit on the next pop-up rounds, counted by the
+  same script as the baseline (`scripts/measure/popup_rounds.py` over a clone's kept dispatch records;
+  `m:375-a3-popup-rounds-before`, R2): 374's clone 71 dispatches over 34 units (2.09; 29 units with a second round, 4 with a
+  third), the research clone's 169 over 82 (2.06; 70 and 11). The fix WORKED if dispatches per unit fall below 1.5 and at
+  most one unit in twenty reaches a third round (the baseline's 4 of 34 and 11 of 82 are about one in eight); it HELPED if
+  either falls but not both that far; it FAILED if neither falls below the baseline.
+  `Carried: SC-012 -> 374 sc012-375-a3-popup-rounds`.
+- **SC-013** (FR-020) On 374's delta (its pushed HEAD 61a52f3c8 in a detached worktree, its answer store copied), the four
+  commands - `record-owed`, `check-bundle Q=0190` (`NO_QUOTES=1`), `modal-bundle KIND=hamlet/notice-board
+  FOR=modal-depiction`, `claims-owed` - timed back to back with today's code and the new, alternating, three runs each, the
+  load recorded at both ends (one run each before the change: 6.0 s, 6.0 s, 6.7 s and 6.9 s, R1): each new median with the
+  caches warm at most half today's median, and no new cold median above today's; each command's output byte-identical with
+  and without the caches. A test per cache shows a changed file and a changed reading module (an imported one too) each
+  miss. The times are a key of `measurements.json`.
+- **SC-014** (FR-021) With a fixture: a change to one script runs only the test files that depend on it, a file that builds
+  its script paths runs on any change under `scripts/`, an unchanged tree runs none, and `HOOKS_ALL=1` runs them all. Measured
+  over main's last ten commits touching `scripts/`: the test files each would have run, against all of them today - a key of
+  `measurements.json` beside `m:375-a3-hooks-test-before` (R3).
+
+- **SC-015** (FR-022) Today's `test-sync-with-main.sh` (at bfe25f2da, the commit before the change, in a detached worktree)
+  and the new one in parts, timed alternately, three runs each, the load recorded: the new median at most half today's, and
+  every run of either passing exactly today's count of checks (123 at bfe25f2da). Five runs in parts in a row all green with
+  that count, and one with `SYNC_PARTS=1` with it too. With one case made to fail, the suite fails and names the check; with
+  one case made to exit before reporting, the suite fails and names the case. Keys of `measurements.json` beside
+  `m:375-a3-hooks-test-before` (R3).
+
+- **SC-016** (FR-023) A pair in band 3 (and one in band 1) no longer refuses the push, `perf-gate` or `make tick`: `perf-review
+  --check` exits 0 and prints the FLAG with the seeds, percentages and both ends' machine state; with no band, no flag. The
+  tests fail on today's code.
+- **SC-017** (FR-024) A snapshot carries `machine_before` and `machine_after` (available and total RAM, three load averages,
+  free and total disk) and each stage's CPU seconds beside its wall seconds, after an untimed warm-up roll; a pair is banded on
+  CPU seconds where both have them, on wall seconds otherwise, the report naming which. The wall-against-CPU measurement
+  that led here is `research.md` R4, a key of `measurements.json`. Tests fail on today's code.
+- **SC-018** (FR-025) A test pair whose total and every seed rose 5 percent is unflagged, in both environments; one seed at 5.1
+  percent is flagged band 1. The test fails on today's code (0 and 2 percent lines).
+- **SC-019** (FR-026) `make perf` without `SCALING=1` records no scaling rows (four rolls and the warm-up, not sixteen); with
+  it, the legs as today. Tests fail on today's code.
+- **SC-020** (FR-027) `make perf-report` prints each snapshot's start and end load and free RAM beside its totals; a snapshot
+  from before FR-024 prints dashes there. The test fails on today's code.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
-until 375 has landed.
+until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020.
 
 ## What it does not cover
 
@@ -199,6 +346,8 @@ until 375 has landed.
   `make audit`, so a slide back is visible, not prevented.
 - The size of the remaining rows: 153 E3 and 43 E4 rows are real redraws and research passes; this feature makes each cheaper,
   not fewer.
+- The cohort's cost (amendment 5): reusing its "before" leg per main commit, or rolling fewer seeds, was offered to the GM as
+  a measurement and is not part of amendment 5, which settled the timing requirements.
 
 ## Decisions Recorded
 
@@ -210,6 +359,9 @@ until 375 has landed.
 | The unit of work a check belongs to is a task, never a wave | spec-fidelity round 1, 2026-10-10 | a feature without waves has tasks; 372's waves were each one task |
 | SC-003 and SC-004 carried to 374 and held there by FR-014 | spec-fidelity round 1, 2026-10-10 | 374 takes no task until 375 lands, and a feature with an open task lands nothing: keeping 375 open for them would stall both |
 | Tripwires on events, not an hourly timer | this project's decision | a pattern is caught when it happens; a timer fires mid-action and asks the looping session to judge itself |
+| The order form, research, depiction (amendment 3) | this project's decision, on the GM's "order the checks" (review round 1 offered it and the session took it) | form first: a form edit can carry a fact (374's residence-corridor round 2 had `modal-research` catch a comparison modal-form's rewording introduced), so the substance checks read form's words. Depiction last: it reads About for drawing statements, which a research round may move. Ordering only form left research and depiction re-owing each other, the same cause on two checks (the review's item 1) |
+| Ordering on the pop-ups, not a fourth round's cap or a merged check (amendment 3) | the GM, 2026-10-11 | the GM asked for the speculative fix and a measurement after it ("perhaps it's worth trying to make the speculative fix and measuring it afterwards"); the three checks keep their own contracts |
+| Caches keyed by content and by the reading code's own source, never by time (amendment 3) | this project's decision | a cache that outlives a change to its reader serves the old answer; keyed so, a fix to the parser is a miss, and an unchanged file is never read twice |
 
 ## Review history
 
@@ -233,3 +385,33 @@ until 375 has landed.
   owed); SC-009 replays 343's shape and tests the refusal. The aside (a ruling row asked ahead lost its unit) is fixed with
   FR-018's parser.
 - spec-fidelity-verify, amendment 2 round 2 (2026-10-11): FAITHFUL - round 1's three items and its aside resolved.
+- spec-fidelity, amendment 3 round 1 (2026-10-11, the counter reset): CHANGES REQUIRED. Applied: FR-019 orders all three
+  checks (form, research, depiction), each later check's applied edits settling every earlier one, not form alone; SC-012
+  says what counts as the fix working and is counted by a kept script; SC-013 times today's code and the new back to back,
+  three runs each, with the load; FR-020's claims figure is the timed `all_units` stage; a cache's key covers the reading
+  code's imports transitively; R2 reconciles the "about 20" put to the GM.
+- spec-fidelity-verify, amendment 3 round 2 (2026-10-11): CHANGES REQUIRED. Applied: FR-019's 374 sentence says what the
+  records show (13 of the 19 pop-ups with a second depiction round had no other check: owed by their own words); the
+  `all_units` stage is recorded in `m:375-a3-record-tooling-before` and R1 with its load; the pop-up baseline is counted from
+  snapshots kept in `popup-rounds/` by a command `make figures` re-runs; plan D27, D29 and D31 follow FR-020 and SC-013. Also:
+  the escape is `CHECK_ORDER_OK` (it lets any check run ahead of the order, not only form); FR-021(b) and SC-014 take on the
+  longest guard suite, measured while answering this round (`m:375-a3-hooks-test-before`, R3).
+- spec-fidelity-verify, amendment 3 round 3 (2026-10-11): CHANGES REQUIRED - round 2's four items resolved and the escape's
+  rename faithful; FR-021(b), running the longest guard suite in parallel parts, was not asked for (the GM asked that
+  `hooks-test` skip what a change did not touch; this speeds up a suite that a change DID touch). Applied: FR-021 is the skip
+  alone, SC-014 counts files only, plan D32 is removed; the parallel split goes to the GM as a proposal with R3's measurement.
+- spec-fidelity-verify, amendment 3 round 4 (2026-10-11): FAITHFUL - round 3's item resolved; plan D30's fuller account of
+  the derivation stays within FR-021.
+- spec-fidelity, amendment 4 round 1 (2026-10-11, the counter reset): CHANGES REQUIRED. Applied: SC-015 times today's suite
+  (bfe25f2da, a detached worktree) against the new one in parts and pins today's count of checks (123) on every run, so a
+  split that drops a section fails; the case count is the file's (26 headed cases; the timing table keyed by ordinal), and
+  the shared helpers are named. The review's "already red" was a copy run outside a worktree: today's file in its own
+  worktree passed its 123 checks (150 s).
+- spec-fidelity-verify, amendment 4 round 2 (2026-10-11): FAITHFUL - round 1's two items resolved; today's suite re-run at
+  bfe25f2da in its own worktree passed its 123 checks.
+- spec-fidelity, amendment 5 round 1 (2026-10-11, the counter reset): CHANGES REQUIRED. Applied: the closing bullet names
+  every text that states the gate, found by its grep (the system prompt's standing order to run perf-audit, the root
+  CLAUDE.md's rows, docs/efficiency-tooling.md added); "What it does not cover" says the cohort stays out, not the timing;
+  SC-018 pins 5 and 5.1 percent.
+- spec-fidelity-verify, amendment 5 round 2 (2026-10-11): FAITHFUL - round 1's three items resolved; the wider grep finds no
+  other text stating the gate as a rule.

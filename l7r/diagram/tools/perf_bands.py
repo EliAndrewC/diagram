@@ -1,4 +1,6 @@
-"""The three performance bands (feature 129): what a before/after pair OWES, per environment.
+"""The three performance bands (feature 129): how much slower a before/after pair looks, per environment - since feature 375
+amendment 5 (the GM, 2026-10-11: "it doesn't need to be a gate anymore") a FLAG to mention at landing, never a record owed.
+The history below is how they were set when they were a gate; the lines still label a pair.
 
 THE GM'S MATRIX (2026-08-24, superseding constitution VI's two-band rule):
 
@@ -69,19 +71,25 @@ from typing import Any
 # noise of the 8-vCPU box is UNMEASURED, and a smaller, more contended instance could be noisier. So
 # this is a measured finding on the old machine plus a chosen safety factor, carried across on the
 # assumption that the new machine is not worse. If that turns out false, this number moves.
-BAND1_PCT = {"local": 0.0, "codebuild": 2.0}
-BAND1_DEFAULT_PCT = 0.0
+#
+# 5% IN EVERY ENVIRONMENT (feature 375 amendment 5, FR-025; the GM 2026-10-11: "let's extent it from 2% to 5% for the jitter").
+# Measured on the laptop the same day (specs/375-enforced-wave-process/research.md R4): a 3.7 s roll of unchanged code varied
+# 7.4% across quiet rounds, the four-seed total about 2%, and load stretches wall and CPU time alike. And since that amendment
+# the bands are a FLAG to mention at landing, never a gate: a pair over this line is said, with the machine's state at both
+# ends, and nothing waits on it.
+BAND1_PCT = {"local": 5.0, "codebuild": 5.0}
+BAND1_DEFAULT_PCT = 5.0
 
 BAND2_TOTAL_PCT = 5.0
 BAND2_SEED_PCT = 10.0
 BAND3_TOTAL_PCT = 10.0
 BAND3_SEED_PCT = 20.0
 
-OWES = {
+OWES = {  # since feature 375 amendment 5 a band is a flag, never a debt: these say what the band MEANS
     0: "nothing - no increase above this environment's band-1 line",
-    1: "a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
-    2: "band 1, plus an escalated audit: necessary, commensurate, no way around it (make perf-audit ... AS=perf-audit)",
-    3: "bands 1 and 2, plus the round arbiter's sign-off before the push (make perf-arbiter; never a question to the GM - feature 379)",
+    1: "a flag to mention at landing - over the band-1 line, perhaps the machine's load; nothing waits on it",
+    2: "a flag to mention at landing - more than 5% on the total or 10% on a seed; nothing waits on it",
+    3: "a flag to mention at landing - more than 10% on the total or 20% on a seed; nothing waits on it",
 }
 
 
@@ -109,9 +117,11 @@ class Verdict:
     total_pct: float
     seeds: dict[int, float]
     stage_delta: dict[int, dict[str, tuple[float, float]]]
-    band: int  # the band OWED: the maximum over the reference and every leg
+    band: int  # the band reached: the maximum over the reference and every leg (a flag since feature 375 amendment 5)
     crossed: tuple[str, ...] = field(default_factory=tuple)
     legs: dict[int, Leg | None] = field(default_factory=dict)  # households -> its verdict, None where the base has no such rows
+    metric: str = "seconds"  # what was compared: `cpu_seconds` where both snapshots carry them, else wall `seconds` (FR-024)
+    machines: dict[str, dict[str, Any]] = field(default_factory=dict)  # "<base|cur> <before|after>" -> machine_state (FR-024)
 
     @property
     def owes(self) -> str:
@@ -150,7 +160,8 @@ def evaluate(base: dict[str, Any], cur: dict[str, Any]) -> Verdict:
             f"{cur.get('label')} is a {e_cur} snapshot and {base.get('label')} is {e_base} - the bands are evaluated per environment, and a cross-environment percentage is indistinguishable from a regression (FR-014)"
         )
     floor = BAND1_PCT.get(e_cur, BAND1_DEFAULT_PCT)
-    ref = _judge(base["rows"], cur["rows"], floor)
+    metric = metric_of(base["rows"], cur["rows"])
+    ref = _judge(base["rows"], cur["rows"], floor, metric)
     # THE SCALING LEG (feature 304, FR-002): each household count the current snapshot measured, against the base's rows of
     # that count - by the same lines - and the band owed is the highest of them all. A base from before the leg has none: "no
     # baseline", never an error and never a band
@@ -162,13 +173,34 @@ def evaluate(base: dict[str, Any], cur: dict[str, Any]) -> Verdict:
         if not was:
             legs[h] = None
             continue
-        leg = legs[h] = _judge(was, [r for r in cur["scaling"] if int(r["households"]) == h], floor)
+        now = [r for r in cur["scaling"] if int(r["households"]) == h]
+        leg = legs[h] = _judge(was, now, floor, metric_of(was, now))
         crossed += [f"{h} households: {c}" for c in leg.crossed]
         band = max(band, leg.band)
-    return Verdict(environment=e_cur, base=_ident(base), cur=_ident(cur), total_pct=ref.total_pct, seeds=ref.seeds, stage_delta=ref.stage_delta, band=band, crossed=tuple(crossed), legs=legs)
+    machines = {f"{side} {end}": dict(s.get(f"machine_{end}") or {}) for side, s in (("base", base), ("cur", cur)) for end in ("before", "after")}
+    return Verdict(
+        environment=e_cur,
+        base=_ident(base),
+        cur=_ident(cur),
+        total_pct=ref.total_pct,
+        seeds=ref.seeds,
+        stage_delta=ref.stage_delta,
+        band=band,
+        crossed=tuple(crossed),
+        legs=legs,
+        metric=metric,
+        machines=machines,
+    )
 
 
-def _judge(base_rows: list[dict[str, Any]], cur_rows: list[dict[str, Any]], floor: float) -> Leg:
+def metric_of(base_rows: list[dict[str, Any]], cur_rows: list[dict[str, Any]]) -> str:
+    """`cpu_seconds` when every compared row on both sides carries it (feature 375 amendment 5, FR-024), else wall `seconds`: a
+    base from before CPU timing is judged on wall time, never muted."""
+    rows = [r for r in (*base_rows, *cur_rows) if "refused" not in r]
+    return "cpu_seconds" if rows and all("cpu_seconds" in r for r in rows) else "seconds"
+
+
+def _judge(base_rows: list[dict[str, Any]], cur_rows: list[dict[str, Any]], floor: float, metric: str = "seconds") -> Leg:
     """The GM's matrix on one set of rows, seed against seed. A seed refused on either side is set aside, not compared."""
     by_seed = {int(r["seed"]): r for r in base_rows}
     seeds: dict[int, float] = {}
@@ -182,10 +214,11 @@ def _judge(base_rows: list[dict[str, Any]], cur_rows: list[dict[str, Any]], floo
         if "refused" in r or "refused" in b:
             refused[int(r["seed"])] = str(r.get("refused") or f"the base: {b['refused']}")
             continue
-        was, now = float(b["seconds"]), float(r["seconds"])
+        was, now = float(b[metric]), float(r[metric])
         was_total, now_total = was_total + was, now_total + now
         seeds[int(r["seed"])] = _pct(was, now)
-        bs, cs = dict(b.get("stages") or {}), dict(r.get("stages") or {})
+        key = "cpu_stages" if metric == "cpu_seconds" else "stages"
+        bs, cs = dict(b.get(key) or {}), dict(r.get(key) or {})
         stage_delta[int(r["seed"])] = {k: (float(bs.get(k, 0.0)), float(cs.get(k, 0.0))) for k in sorted(set(bs) | set(cs))}
     total_pct = _pct(was_total, now_total)
     crossed: list[str] = []
@@ -214,7 +247,7 @@ def _ident(s: dict[str, Any]) -> dict[str, str]:
 
 def render(v: Verdict) -> str:
     """What `perf-report` and `perf-gate` print (FR-009b: WHICH measurement, by HOW MUCH)."""
-    lines = [f"perf bands [{v.environment}]: {v.cur['label']} vs {v.base['label']} -> band {v.band}"]
+    lines = [f"perf bands [{v.environment}]: {v.cur['label']} vs {v.base['label']} -> band {v.band}, in {'CPU' if v.metric == 'cpu_seconds' else 'wall'} seconds"]
     for seed, p in sorted(v.seeds.items()):
         grew = sorted(((c - b, k) for k, (b, c) in v.stage_delta[seed].items() if c - b > 0.05), reverse=True)[:3]
         where = ("; grew: " + ", ".join(f"{k} +{d:.1f}s" for d, k in grew)) if grew and p > 0 else ""
@@ -233,5 +266,33 @@ def render(v: Verdict) -> str:
             lines.append(f"    seed {seed:>3} refused ({why})")
     for c in v.crossed:
         lines.append(f"  crossed: {c}")
-    lines.append(f"  owes: {v.owes}")
+    if v.band >= 1:
+        lines.append(flag(v))
+    return "\n".join(lines)
+
+
+def _state(m: dict[str, Any]) -> str:
+    if not m:
+        return "not recorded"
+    parts = []
+    if m.get("load"):
+        parts.append("load " + "/".join(f"{x:.1f}" for x in m["load"]))
+    if "ram_available_mb" in m:
+        parts.append(f"{m['ram_available_mb'] / 1024:.1f} of {m.get('ram_total_mb', 0) / 1024:.1f} GB RAM free")
+    if "disk_free_gb" in m:
+        parts.append(f"{m['disk_free_gb']:.0f} GB disk free")
+    return ", ".join(parts) or "not recorded"
+
+
+def flag(v: Verdict) -> str:
+    """What a pair over the band-1 line says at landing (feature 375 amendment 5, FR-023) - never a refusal. The GM, 2026-10-11:
+    "We flag it if it looks like it is getting slower with the usual caveats about maybe it's just under load"."""
+    slower = [f"seed {s} {p:+.1f}%" for s, p in sorted(v.seeds.items()) if p > BAND1_PCT.get(v.environment, BAND1_DEFAULT_PCT)]
+    lines = [
+        f"  FLAG: this looks slower - total {v.total_pct:+.1f}%" + (f", {', '.join(slower)}" if slower else "") + f" (band {v.band}, in "
+        f"{'CPU' if v.metric == 'cpu_seconds' else 'wall'} seconds). It may be the machine's load: compare the two snapshots' state -"
+    ]
+    for side, label in (("base", v.base["label"]), ("cur", v.cur["label"])):
+        lines.append(f"    {label}: at its start {_state(v.machines.get(side + ' before', {}))}; at its end {_state(v.machines.get(side + ' after', {}))}")
+    lines.append("    Mention it when you report the landing; nothing waits on it. `make perf-report` shows the trend and the stages that grew.")
     return "\n".join(lines)

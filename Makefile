@@ -27,14 +27,14 @@
 # a deleted module fails with a traceback instead of a refusal, which is the worst kind of guard.
 
 # ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
-# Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
-# subagent's confirmation; >5% total / >10% seed owes the escalated audit; >10% / >20% owes the round
-# arbiter's sign-off before the push (make perf-arbiter; GUARD_EDIT_OK: feature 379 amendment 3 - never asked of the GM). `perf-report` and `perf-gate` PRINT the verdict (FR-009b);
-# `perf-review` (run by sync-with-main.sh at the push) ENFORCES it. A subagent's shell is not
+# GUARD_EDIT_OK: feature 375 amendment 5 (the GM 2026-10-11: "it doesn't need to be a gate anymore") - a pair over the 5%
+# band-1 line (total OR any seed, per ENVIRONMENT) is a FLAG that `perf-report`, `perf-gate` and `perf-review` (at the push)
+# PRINT, with both snapshots' machine state; nothing waits on it. The records below - an explanation, the perf-audit
+# subagent's confirmation or escalated audit, the round arbiter's ruling - are for an investigation of a flagged slowdown. A subagent's shell is not
 # distinguishable from the session's (research R1), so confirm/audit PROMPT and decline without
 # AS=perf-audit - the declaration is recorded, and the record's content is what a self-grant fakes.
 PERF_REVIEW = python3 -m l7r.diagram.tools.perf_review
-perf-explain:   ## [performance] band 1, first half: the session's written cause and its evidence     WHY="..." CONTROL=<key> | UNVERIFIED="..." [ENV=local|codebuild]
+perf-explain:   ## [performance] for an investigation of a flagged slowdown: the session's written cause and its evidence     WHY="..." CONTROL=<key> | UNVERIFIED="..." [ENV=local|codebuild]
 ##  WHY=<text>           the session's written cause for a band-1 increase
 ##  CONTROL=<key>        a measurements.json key: a recorded run of the same subject with the attributed cause removed
 ##  UNVERIFIED=<text>    instead of CONTROL - why the attribution was not tested; logged like an escape
@@ -43,11 +43,11 @@ perf-explain:   ## [performance] band 1, first half: the session's written cause
 # never parsed out of WHY, and an UNVERIFIED reason lands in dev/bypass-log/ where `make audit` lists it - only once
 # the explanation was actually recorded, so a refused one logs nothing.
 	@$(PERF_REVIEW) explain --why "$(WHY)" --control "$(CONTROL)" --unverified "$(UNVERIFIED)" --environment "$(or $(ENV),local)" $(if $(UNVERIFIED),&& $(LOGBYPASS) permitted "perf-explain UNVERIFIED: $(UNVERIFIED)",)
-perf-confirm:   ## [performance] {internal} band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
+perf-confirm:   ## [performance] {internal} an investigation's confirmation of the written cause - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
 ##  VERDICT=consistent|inconsistent  whether the written cause matches the recorded per-stage delta
 ##  AS=perf-audit                    who is recording - only the subagent may pass this, and nothing else distinguishes the shells
 	@$(PERF_REVIEW) confirm --verdict "$(VERDICT)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
+perf-audit:     ## [performance] an investigation's adjudication of a slowdown - the subagent records it   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
 ##  VERDICT=justified|not-justified|cannot-determine  the band-2 adjudication
 ##  NECESSARY=<text>                                  is the slowdown necessary?
 ##  COMMENSURATE=<text>                               is it commensurate with the functionality gained?
@@ -56,15 +56,15 @@ perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=jus
 	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
 # GUARD_EDIT_OK: feature 379 amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too") - band 3 goes to the
 # round arbiter first; its accept, bound to the pair's numbers, stands for the sign-off and the GM reviews it after landing.
-perf-arbiter:   ## [performance] band 3 - put the increase to the round arbiter first (feature 379)   [ENV=local|codebuild]
+perf-arbiter:   ## [performance] an investigation may put a band-3 increase to the round arbiter - nothing waits on it (feature 375 amendment 5)   [ENV=local|codebuild]
 	@s="$$($(PERF_REVIEW) arbiter-subject --environment "$(or $(ENV),local)")" || exit 2; \
 	 $(MAKE) --no-print-directory arbiter-ask SUBJECT="$$s" WHY="band 3 on $(or $(ENV),local) for $(SPECIFY_FEATURE): accept this performance increase, or keep optimizing? The perf report is perf-report.txt beside this MANIFEST, the band-1 and band-2 records are in dev/perf-log/, and the band-3 standard is the GM's: necessary, commensurate, no way around it" && \
 	 $(PERF_REVIEW) show --environment "$(or $(ENV),local)" > "/tmp/l7r-check/arbiter-ask-$$s/perf-report.txt"
-perf-signoff:   ## [performance] band 3 - records a sign-off the GM gave UNPROMPTED, in their words (a session asks the arbiter: make perf-arbiter)   WHY="..."
+perf-signoff:   ## [performance] records a sign-off the GM gave UNPROMPTED, in their words - owed by nothing since feature 375 amendment 5   WHY="..."
 ##  WHY=<text>  the GM's own words, given unprompted - band 3
 	@: "GUARD_EDIT_OK: feature 379 amendment 3 - the help line: a session never asks the GM for band 3"
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
-perf-review:    ## [performance] does every environment's newest bookend pair carry the records its band owes? (the push runs this)
+perf-review:    ## [performance] each environment's newest bookend pair: its band, and a FLAG to mention at landing when it looks slower - never a refusal (the push runs this)
 	@$(PERF_REVIEW) check
 perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web [HOUSEHOLDS=10]
 ##  SEED=<n>      which seed to profile - e.g. `25`
@@ -723,17 +723,21 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	: " demands means they passed. A scripts-only push ran only the suites above, and a shell-check change that its own"; \
 	: " suite passed broke tests/tooling/test_guard_firing_log.py in every other session gate. The GM: the tooling must"; \
 	: " do the correct thing, never a session remembering to. The files are DERIVED - every tests/**/test_*.py naming"; \
-	: " scripts/ as code - and skipped while scripts/ and they hash to their last green run (58 files, 74 s at 4 workers); under"; \
+	: " scripts/ as code - each skipped while it and what it reaches hash to its last green run (feature 375 amendment 3); under"; \
 	: " make done (FROM_DONE) test-full runs them anyway.)"; \
 	if [ -z "$(FROM_DONE)" ]; then \
 	  : "(GUARD_EDIT_OK: the same new step - a file that BUILDS a path into scripts/, not one whose docstring mentions a"; \
 	  : " script: the mention form took in the browser tests, and on a full container the OOM killer took their Chrome)"; \
 	  pyt=$$(grep -rlE '/ *"scripts[/"]|"scripts" */|join\([^)]*"scripts"' tests --include='test_*.py' --exclude-dir=hooks | sort | tr '\n' ' '); \
-	  psha=$$( { find "$$root/scripts" "$$root/tests/hooks" -type f -not -path "*/__pycache__/*" | sort | xargs cat; cat $$pyt; } 2>/dev/null | sha256sum | cut -c1-16); \
-	  if [ -n "$$pyt" ] && { [ -n "$(HOOKS_ALL)" ] || [ "$$(cat "$$gitdir/hooks-test/pytest-scripts" 2>/dev/null)" != "$$psha" ]; }; then \
+	  : "(GUARD_EDIT_OK: feature 375 amendment 3, FR-021 - EACH FILE BY WHAT IT TOUCHES. One hash over all of scripts/ re-ran every"; \
+	  : " one of these files after any merge that touched a script (74 s). hookdeps.py --pystale names the files whose own"; \
+	  : " freshness set changed - the scripts each reaches, derived transitively, or the whole tree for one that builds its"; \
+	  : " paths - and --pystamp records each green. HOOKS_ALL=1 runs them all; nothing is loosened: a red run stamps none.)"; \
+	  stale=$$(if [ -n "$(HOOKS_ALL)" ]; then echo $$pyt; else python3 "$$root/tests/hooks/hookdeps.py" --pystale "$$gitdir" $$pyt; fi | tr '\n' ' '); \
+	  if [ -n "$$(echo $$stale)" ]; then \
 	    : "(GUARD_EDIT_OK: four workers, not the gate count - the hook suites above run beside it on a shared 10 GB container)"; \
-	    if python3 -m pytest -n 4 --dist worksteal -q --no-cov $$pyt > "$$work/pytest-scripts.log" 2>&1; then \
-	      mkdir -p "$$gitdir/hooks-test"; echo "$$psha" > "$$gitdir/hooks-test/pytest-scripts"; n=$$((n+1)); \
+	    if python3 -m pytest -n 4 --dist worksteal -q --no-cov $$stale > "$$work/pytest-scripts.log" 2>&1; then \
+	      python3 "$$root/tests/hooks/hookdeps.py" --pystamp "$$gitdir" $$stale; n=$$((n+1)); \
 	    else printf '\n\033[1mHOOK TESTS FAILED: the pytest files that test scripts/\033[0m\n'; tail -40 "$$work/pytest-scripts.log" | sed 's/^/  /'; fail="$$fail pytest-scripts"; fi; \
 	  else skipped=$$((skipped+1)); fi; \
 	fi; \
@@ -748,7 +752,8 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 # every suite is green, exactly as before.
 # (GUARD_EDIT_OK: adds gate-stamp.py to the guard roster with a .sh companion, and stamps the hooks area on green)
 
-perf-gate:      ## [performance] require the feature's -start bookend, take -end, and FAIL on a regression
+perf-gate:      ## [performance] require the feature's -start bookend, take -end, and print the comparison - a slower pair is a FLAG, never a failure (feature 375 amendment 5)
+	@: "GUARD_EDIT_OK: feature 375 amendment 5 - the help line says what the gate does since the GM retired the performance gate; the recipe already exits 0 on any band"
 	@: "(GUARD_EDIT_OK: feature 132 - a perf snapshot rolls several seeds, a sweep under the scope lock)"; \
 	f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
 	if [ -z "$$f" ] && [ -f .specify/feature.json ]; then \
@@ -1262,8 +1267,10 @@ preflight:      ## [tests] the gate's first phase, in seconds: the derived files
 
 # GUARD_EDIT_OK: feature 375 FR-012 adds three operations - the GM's review after landing: what waits on him, a finding accepted
 # with a reason (a row he may overturn), and his review recorded (which may close the feature, through its closing check).
-gm-review:      ## [project] what waits on the GM, by feature: HELD rows (work cannot go on) and TO REVIEW rows (landed; he may overturn) - feature 375
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py list
+# GUARD_EDIT_OK: EXPLAIN=1 says what needs the GM, and with F= (ROW=) each row in full (the GM 2026-10-12: he could not tell
+# what a row asked him to rule on); F= shows one feature's rows; the bare listing became a summary (the GM found 154 rows overwhelming, 2026-10-11) - nothing loosened.
+gm-review:      ## [project] what waits on the GM: HELD rows (work cannot go on) and, per feature, the TO REVIEW rows counted (landed; he may overturn) - feature 375   [F=<NNN> that feature's rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=<n>]
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py $(if $(EXPLAIN),explain $(F) $(ROW),list $(F))
 
 accept:         ## [project] accept a finding with a reason - the work goes on, and the GM may overturn it after landing (feature 375)   F=375 FINDING="<what>" REASON="<why it can stand>"
 	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
@@ -1435,7 +1442,8 @@ page-session: ## [project] start ONE page's work in a FRESH headless session, de
 
 # GUARD_EDIT_OK: feature 319 - two new operations (a modal check's bundle and its prepass); no guard changes.
 # GUARD_EDIT_OK: feature 319 D13 - the help line names the third check, modal-depiction; an operation's text, no guard changes.
-modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>]
+modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319; refused while a check before it in the order (form, research, depiction) is owed - feature 375 amendment 3   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>] [CHECK_ORDER_OK="<why>"]
+	@: "GUARD_EDIT_OK: feature 375 amendment 3 - the help line names the check order and its escape; the recipe is unchanged"
 	@if [ -z "$(KIND)" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
 	@: "GUARD_EDIT_OK: feature 375 FR-001 - REASON= bundles a unit owed only a triage anyway (refused without one)"
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",) $(if $(REASON),--reason "$(REASON)",)
@@ -1846,9 +1854,11 @@ maps:            ## [maps] regenerate and check the pool, picking its own scope 
 	@$(MAKE) --no-print-directory pool-index-if-stale
 # (GUARD_EDIT_OK: feature 132 - `maps SCOPE=all` is refused under the lock; mapcheck itself never widens while locked)
 
-perf:            ## [performance] take a performance snapshot of the reference hamlet across its seeds   LABEL=<NNN>-start|-end
+perf:            ## [performance] take a performance snapshot of the reference hamlet across its seeds, with the machine's state at both ends   LABEL=<NNN>-start|-end [SCALING=1]
 ##  LABEL=<NNN>-start|<NNN>-end  which bookend this snapshot is (default: `adhoc`, which counts as neither)
-	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)"
+##  SCALING=1                    add the 10-, 20- and 40-household legs - for investigating the algorithm, not routine work
+	@: "GUARD_EDIT_OK: feature 375 amendment 5 - the scaling leg only when asked for (the GM: not during normal operations)"
+	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)" $(if $(SCALING),--scaling,)
 	@$(MAKE) --no-print-directory census
 # GUARD_EDIT_OK: feature 306 FR-006 - the overlap census runs after every perf snapshot (the standing check) and on its own.
 

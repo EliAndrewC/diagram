@@ -81,5 +81,9 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   and `make check-bundle` refuses a bundle for a check nothing owes. When a check returns, record it -
   `make record-checked CHECK=<check> BUNDLE=<dir> RESULT="<counts>"` - or the push refuses the unit. A source-reader
   read before its note exists is declared on its bundle: `NEW="<the claim>"`.
+- A pop-up's checks run in order - `modal-form`, then `modal-research`, then `modal-depiction` - each round's EDITs applied
+  (`make apply-edits`) before the next check is bundled; `make modal-bundle` refuses a check while one before it is owed,
+  naming it. A round's applied EDITs settle the checks before it, so form is not owed again by research's fixes (feature 375
+  amendment 3: run together, each check's edits re-owed the others, and pop-ups reached the round cap).
 - An ad-hoc agent always names a `model`: `sonnet` to read, fetch, translate or extract, `opus` for anything that
   judges.

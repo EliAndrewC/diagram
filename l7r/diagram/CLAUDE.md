@@ -88,10 +88,11 @@ diagnosed and the tooling improved.
 - Update the predictably-affected unit tests in the SAME edit as the engine change. **Cycle discipline**
   (constitution v2.4.0): re-read the WHOLE diff for convention misses before the first test run, fix everything a
   failing run lists before re-running, and never write a number into a record that was not measured on the artifact.
-- **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the
-  band, and the push refuses until its records exist - your `make perf-explain`, the **`perf-audit` subagent's**
-  confirmation or audit (never pass `AS=perf-audit` yourself), and above band 2 the sign-off - the round arbiter's first
-  (`make perf-arbiter`, feature 379), the GM reviewing it after landing.
+- **Performance is recorded and flagged, never a gate** (feature 375 amendment 5, the GM 2026-10-11: "it doesn't need to
+  be a gate anymore"): take the bookends (`make perf LABEL=<NNN>-start` / `-end`; `SCALING=1` adds the 10/20/40-household
+  legs for an investigation), each with the machine's load, free RAM and disk at both ends. Over the 5% band-1 line the
+  push prints a FLAG - mention it, with its load caveat, when you report the landing; nothing waits on it. `make
+  perf-report` shows the trend, to place a real slowdown between two commits later.
 
 **Placement** ([`dev/placement.md`](../../dev/placement.md))
 

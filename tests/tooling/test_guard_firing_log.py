@@ -384,6 +384,10 @@ _ESCAPES = {
         "command",
         "feature 375 FR-010: matched on a `make done` command by hm_checks.escaped's anchored regex, reason floor and record, as FREEZE_OK",
     ),
+    "CHECK_ORDER_OK": (
+        "environment",
+        "feature 375 amendment 3 FR-019: read from os.environ by scripts/record/modal_bundle.py (a make command-line variable reaches it the same way), which a mention cannot set; two words or more, and the bundle's MANIFEST records it",
+    ),
     "DECIDE_OK": (
         "command",
         "feature 375 FR-003(a): matched in a check dispatch's PROMPT by an anchored regex with the reason floor (check-bundle-hooks.sh and pair-hooks.sh), each recording the escape with guard_log",

@@ -42,3 +42,60 @@ round history ("no Rounds section"). The session proposed one ruling for a batch
 exceptions, and to look at the bundle defect. The GM:
 
 > Yes, it does seem like a whole batch of pop-ups reaching the round cap at once should get a single ruling. because they are likely to be related. And that does sound like it would be more efficient. And then yes, please also do look at that bundle defect.
+
+## Amendment 3 (2026-10-11, the same later session)
+
+The hourly checks were stopped and the GM asked where 374's time went. Measured from its transcript (1,574 tool calls):
+model time 6.5 h, tool time 6.25 h, of which timing runs 2.5 h, the record and claims tooling 59 min (`modal-bundle`,
+`claims-owed`, `claims-bundle`, `record-owed`, `check-bundle` - each about 6 s on its real delta, run hundreds of times),
+`make hooks-test` 39 min (19 runs). Of the pop-up checks, about 20 of 374's units and 21 of 352's reached the round cap and the
+round arbiter accepted nearly all; every second and third round was owed because the pop-up changed - the edits the last
+round's checks proposed, applied - and `modal-form` proposed edits in nearly every second round. The session said a fuller fix
+would order the checks, and asked to look at more data first. The GM:
+
+> Yes please - the round 3 caps indicating "one structural cause" is definitely worth fixing as well; you mentioned that a fuller fix would order the checks, but that you wanted to look at more data before moving forward.  Do we have enough to be able to do that now?  Even if not then perhaps it's worth trying to make the speculative fix and measuring it afterwards.
+>
+> Either way, yes it sounds like `modal-bundle` and `check-bundle` and `claims-owed` and `record-owed` are all worth improving and it osunds like that could all be sped up enormously.  And I agree we could skip `hooks-test` could be skipped when not touched which it sounds like would help well.  So yes, please do all of that as part of amendments to 375.
+>
+> As for timings being thbe biggest single cost, I suspect it might make sense to relax some of the timing requirements, but let's talk about that after you make the other changes.
+
+The timing requirements are not part of this amendment: the GM will discuss them after it lands.
+
+## Amendment 4 (2026-10-11, the same later session)
+
+Amendment 3's spec review kept one change out as not asked for: `test-sync-with-main.sh`, the guard suite held to the whole
+`scripts/` tree (its push path reaches scripts at run time, feature 172), is the longest - about 230 s, re-run on every
+script change, and nearly all of amendment 3's own 233 s `hooks-test` - and its 25 cases each build their own fixture, so
+they could run in parallel parts. The session proposed it with the measurement (`research.md` R3). The GM:
+
+> yes please add that as amendment 4
+
+## Amendment 5 (2026-10-11, the same later session)
+
+Amendment 3 left the timing requirements to be discussed once it had landed. The session measured what a performance check
+runs: `make perf` rolls one reference hamlet (Inashiro's spec, 15 households) on four seeds, then the same four seeds at 10,
+20 and 40 households (the scaling leg, feature 304) - 16 rolls a snapshot, a `-start` and an `-end` per feature. 374 spent
+about 40 minutes of tool time on performance (its 109 minutes of `make cohort` were the correctness regression sweep, not
+timing). The band-1 line is 0.0% locally (2.0% on CodeBuild), so on a container shared with other sessions' gates ordinary
+load trips the bands, and a session re-runs snapshots and interleaves CPU measurements to prove it was load. The session
+named the levers: a noise floor locally, CPU time in place of wall time, and the scaling leg less often. The GM:
+
+> Yes, some amount of jitter semes worth it, and measuring CPU time instead of wall clock time does seem best - I didn't know that was an option.  And then yeah, I don't think we need to run the 10, 20, and 40 household scaling legs as part of the normal order of the tests.  Having those scaling legs available when investigating our algorithm is useful, but I don't think we need them at all during normal operations.
+
+And, while the session worked:
+
+> Like let's extent it from 2% to 5% for the jitter, in fact.
+
+The cohort's cost (reusing its "before" leg per main commit, or fewer seeds) was offered as a measurement and is not part of
+this amendment.
+
+The session then measured wall against CPU time on unchanged code (`research.md` R4): quiet, the two agree once the first
+roll has warmed up; with six cores busy, CPU time rose about 2.2 times with wall time; with every core busy, four to six
+times. On this laptop (hybrid cores, a clock that drops under load) CPU time stretches with load as wall time does. While it
+measured, the GM:
+
+> Okay, so how about this: If there is variation, then we record it. Like, we keep all of the measurements that we're doing. But then we don't actually do the perf review as part of our normal process for landing on main. We flag it if it looks like it is getting slower with the usual caveats about maybe it's just under load. And because we are measuring everything, that means that we should notionally be able to go back and look when the performance does genuinely get worse to find out approximately when it happened. And then that would allow us to look at the Git history and then figure out which changes are most likely to have contributed after the fact. But then we don't need to slow down development by insisting that we retain performance, especially when the laptop is frequently under load from multiple simultaneous sessions. But then in order to make this work, we should also make sure if we are not already doing this to capture not only the before and after times, but also the available RAM and the CPU load and, you know, I guess like the disk usage or whatever. I think we might already be doing this, but if we're not, then we should just kind of capture that stuff in the before and after. I don't think we need to capture those kinds of things during the run or anything like that. I think that a before and after snapshot is fine. And I think we might already be doing this, but if we're not, then we should start doing that. And then we can therefore skip a lot of what is slowing us down in our normal development process while still allowing us to come back and then retroactively fix things later. And then, if it looks like the performance is slowing down to a meaningful degree, that's something you can mention when you say that the work has landed on main, but it doesn't need to be a gate anymore.
+
+So amendment 5 is: performance recorded and flagged, never a gate; the machine's state (free RAM, load, disk) captured at
+each snapshot's start and end; CPU time recorded beside wall time; the 5% line as the flag's threshold; the scaling leg only
+when asked for.

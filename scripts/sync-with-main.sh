@@ -476,18 +476,17 @@ push_cmd() {
   # tasks and main unchecked (specs/243-*/research.md R1). `make tick` asks the same question, but a box can
   # be ticked by hand, so the push is where it holds.
   "$(dirname "$0")/gates/plan-gate.sh" || exit 1
-  # THE PERFORMANCE BANDS ARE ENFORCED HERE (feature 129, FR-001/FR-002/FR-009): the GM's words for
-  # band 3 are "before it is committed back to main" (its sign-off the round arbiter's since feature 379 -
-  # GUARD_EDIT_OK: comment only), so the push - not the gate - is where a
-  # missing explanation, confirmation, audit or sign-off stops the work. `make perf-review` names
-  # exactly which record is owed. CI_PERF_REVIEW is the test seam (a fixture has no skill).
+  # THE PERFORMANCE BANDS ARE PRINTED HERE, NEVER ENFORCED (feature 375 amendment 5, the GM 2026-10-11: "it doesn't
+  # need to be a gate anymore" - GUARD_EDIT_OK: a guard loosened at the GM's word). `make perf-review` prints each pair's
+  # band and, over the band-1 line, a FLAG with the machine's state at both ends, which the session mentions when it
+  # reports the landing; it exits 0. CI_PERF_REVIEW is the test seam (a fixture has no skill).
   # THE TEST SEAMS ARE HONORED ONLY IN A FIXTURE (feature 132, Principle XIV - the fidelity
   # reviewer's aside): a tree with no diagram skill Makefile is the only tree the tests build, and
   # on a real clone `CI_ROUTE=DIRECT` would have skipped the gated route entirely. So the seams
   # (CI_PERF_REVIEW, CI_ROUTE, CI_MERGE) are read only when that Makefile is absent.
   local seams=""; [ -f "$ROOT/Makefile" ] || seams=1
   if [ -n "$seams" ] && [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/Makefile" ]; then ( cd "$ROOT" && make --no-print-directory perf-review ); else true; fi \
-    || die "the performance bands owe a record (above) - the work stays in this clone until it exists (feature 129)"
+    || die "make perf-review failed to run (it never refuses on a band since feature 375 amendment 5) - see its output above"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
   # is inspected against the LATEST GitHub main (fetched above). DIRECT: no diagram engine code in
   # our own commits - today's locked pull+push, free. GATED: engine code - `make ci-merge` runs the

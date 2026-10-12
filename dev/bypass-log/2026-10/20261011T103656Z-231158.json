@@ -1,0 +1,6 @@
+{
+  "utc": "20261011T103656Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: T01 deliberately judges the map main draws now, before the uncommitted engine change that is gated on this verdict"
+}
