@@ -551,7 +551,10 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # out before 6: a kitchen well may stand as far as 20 ft out, past the bath that abuts the kitchen, serving both,
     # as the Takayama residence's bath stood with its well and kitchen (research 0105)
     for p in result.placed:
-        if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), (9.0, 12.0, 15.0, 20.0, 6.0))):
+        # the stables' 6 ft out first: their well stands in the band before them that is the outer court's way west, and at
+        # 9 ft it left ~2.3 ft either side of it (feature 374 batch 5, building-review E1)
+        offs = (6.0, 9.0, 12.0, 15.0, 20.0) if p.spec.feature == "stables" else (9.0, 12.0, 15.0, 20.0, 6.0)
+        if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), offs)):
             wells.append(w)
     for z in program.spine:
         # the garden well stands at the garden's EAST end, where the bath stood before it joined the house: at the west
@@ -620,7 +623,9 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             toward_wall = (0.85, 0.5, 0.15) if wall in ("S", "E") else (0.15, 0.5, 0.85)
             # 3.5 ft off (its face 1 ft out) last: into a narrow gap between two blocks on one wall (feature 374 batch 4, plan R4-3: the county
             # stables' only seat clear of the gate and of their well is the 7 ft gap to the servants' row)
-            for side, fracs in ((ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
+            # against the wall at either end before anywhere else (feature 374 batch 5, building-review E2: the stables'
+            # east end's court-ward seat won, a privy loose in the forecourt with no hatch)
+            for side, fracs in ((ends[0], toward_wall[:1]), (ends[1], toward_wall[:1]), (ends[0], toward_wall), (ends[1], toward_wall), (court, (0.85, 0.15, 0.5))):
                 if v := seat(p, PRIVY_FT, fracs, (4.5, 7.0, 3.5), side, well_boxes, (*zones, gate_hold)):
                     privies.append((*v, ""))
                     break

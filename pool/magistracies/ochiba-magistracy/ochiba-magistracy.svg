@@ -628,7 +628,8 @@
 
   <!-- Inner garden (feature 267 pass 2): laid out BEFORE the reception and the guest room - the whole garden
        (south) face of the re-massed house - and on east of the house below the karo's house, where the vegetable garden
-       is painted over its north-middle, the garden round it on three sides and its arm to the shrine open (feature 283). Visitors come on
+       is painted over its north-middle, the garden round it on three sides (feature 283; its arm to the shrine is gone since
+       feature 374 wave 130, the shrine in the north-east corner beside its tree). Visitors come on
        through the office's rear door and the nakamon, straight up to a stepping stone at the reception's veranda
        (research 0104, Takayama). -->
   <g data-kind="garden">
@@ -677,9 +678,10 @@
        research buildings 230: the Higuchi house's storehouse stands beyond the ground behind the main house, the source's
        niwa a yard as much as a garden - the GM, 2026-09-28: draw what the sources most safely support). Unfilled, the
        court's earth; a polygon the audit does not read as a fill. Feature 374 wave 124: it reaches west along the north wall,
-       under the storehouses' fronts, over the ground the servants' range left when it moved to the street front. -->
+       under the storehouses' fronts, over the ground the servants' range left when it moved to the street front, and east
+       past the karo's house to the shrine hall's west door (feature 374 batch 5, building-review N1). -->
   <g data-kind="rear yard">
-    <polygon points="235,156 480,156 480,200 616,200 616,156 802,156 802,210 235,210" fill="none"/>
+    <polygon points="235,156 480,156 480,200 616,200 616,156 890,156 890,250 802,250 802,210 235,210" fill="none"/>
     <text font-size="9" font-style="italic" fill="#7A6A4A">rear yard</text>
   </g>
   <!-- Household storehouses (dozo), two as the Matsushiro retainer's house kept (feature 283: the shady rear the

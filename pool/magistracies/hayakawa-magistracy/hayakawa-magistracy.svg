@@ -399,7 +399,14 @@
   <!-- Inner garden (mature - laid down by generations of magistrates) -->
   <g data-kind="garden">
     <!-- top trimmed 4 px (feature 267 pass 2: the east block moved 4 ft south for the service alley behind the house) -->
-    <rect x="460" y="326" width="240" height="124" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <!-- the garden runs on east of the pond to the annex, and north before the reception's turned east veranda (feature 374
+         wave 130, building-review E1: the shrine grove's removal left ~57 x 95 ft of bare court here; a veranda's faces are
+         garden faces, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html, and a garden's
+         extent beyond its pond is calibrated liberty, research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html). The
+         shrine's corner keeps its own ground above the arm, between the torii and the tree. -->
+    <rect x="460" y="326" width="415" height="124" fill="url(#garden-stipple)" stroke="none"/>
+    <rect x="715" y="250" width="160" height="77" fill="url(#garden-stipple)" stroke="none"/>
+    <polygon points="460,326 715,326 715,250 875,250 875,450 460,450" fill="none" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <ellipse cx="650" cy="392" rx="44" ry="22" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2" data-kind="garden pond"/>
     <!-- The guest's way in: no genkan - from the middle gate a stepping-stone path (roji) across the garden to a
          stone at the zashiki's veranda (feature 267 R07, 0104: the Koseki house's form; Hayakawa takes it,
@@ -863,7 +870,7 @@
     <!-- residence east block (reception and the lord's suite) - beside the shoe stone its guests step up from -->
     <circle cx="613" cy="326.5" r="3.8"/>
     <!-- the shrine - beside the Fire Dragon shrine's west door, toward its torii -->
-    <circle cx="843.5" cy="186" r="3.8"/>
+    <circle cx="877" cy="186" r="3.8"/>
     <!-- guest house - beside its south door -->
     <circle cx="918" cy="307.5" r="3.8"/>
     <!-- granary - beside its north door -->

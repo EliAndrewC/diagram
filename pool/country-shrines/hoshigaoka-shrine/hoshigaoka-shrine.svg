@@ -54,8 +54,9 @@
   <!-- The clearing at the hall: the sanctuary, the hall and dwelling, the privy and kitchen yard at the west
        gable (the kitchen garden below the forecourt since feature 283, for its sun), and a 39 ft forecourt before the step, holding the basin and the three innermost arches.
        Feature 374 batch 4 (building-review E3): its back line runs at the eaves behind the kitchen and the monk's rooms, and
-       rises only round the sanctuary - the lobe it kept behind them was the old sanctuary's ground, used by nothing -->
-  <polygon data-kind="precinct clearing" points="409.5,431.0 437.2,433.4 466.8,430.9 484.0,428.5 487.5,402.0 510.1,393.3 528.0,401.4 541.7,431.6 547.9,439.9 565.6,502.5 558.9,561.7 569.4,607.3 533.2,644.0 512.3,672.5 492.5,685.3 461.4,669.9 442.7,677.4 416.1,667.2 390.1,675.4 367.7,676.7 351.4,637.7 322.1,602.6 277.5,578.9 264.5,549.6 278.9,516.1 263.7,493.8 267.3,465.2 280.6,454.2 321.1,441.4 355.6,433.9 406.4,431.5" fill="url(#keidai-earth)"/>
+       rises only round the sanctuary - the lobe it kept behind them was the old sanctuary's ground, used by nothing; widened about 4 ft
+       west and 3 ft east for the three-bay sanctuary (feature 374 wave 131, building-review E1), clear of the crowns -->
+  <polygon data-kind="precinct clearing" points="409.5,431.0 437.2,433.4 466.8,430.9 470.0,428.5 470.5,401.0 510.1,393.3 537.5,398.5 541.7,431.6 547.9,439.9 565.6,502.5 558.9,561.7 569.4,607.3 533.2,644.0 512.3,672.5 492.5,685.3 461.4,669.9 442.7,677.4 416.1,667.2 390.1,675.4 367.7,676.7 351.4,637.7 322.1,602.6 277.5,578.9 264.5,549.6 278.9,516.1 263.7,493.8 267.3,465.2 280.6,454.2 321.1,441.4 355.6,433.9 406.4,431.5" fill="url(#keidai-earth)"/>
   <!-- The household's footpath to the well through the wood behind the kitchen and the monk's rooms, from the clearing's north-west corner (the kitchen side),
        never across the sanctuary's ground -->
   <path data-kind="footpath" d="M330,436 L434,183" fill="none" stroke="#E6DCC4" stroke-width="12" stroke-linecap="round"/>

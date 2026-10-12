@@ -103,9 +103,9 @@ def county_magistracy_program() -> CompoundProgram:
         garden before the house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the garden on the sunny south before the reception and the guest house; its 124 x 46 ft a GUESS
         vegetable garden site - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the site rolled among 0109's four, those the sun or the room rule out on this draft struck first (GARDEN_SITE: west of the residence)
         vegetable garden size - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.html: the soup-greens plot of ~1,076 sq ft (36 x 30 ft), the field form ruled out by the room
-        service yard - GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the kitchen yard's working ground beside the kitchen, named; its bounds a drawing convention
+        service yard - GUESS: the kitchen yard's working ground beside the kitchen, named as Ochiba's sheet names its own; no page records a kitchen yard's use, and its bounds are a drawing convention
         rear yard - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: open working ground behind the house with the storehouses beyond it, as the Higuchi house kept; its bounds a drawing convention
-        hearing court - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: before the dais, centered on the office hall and no longer than it, 80 x 32 ft; no roofed court's size was found
+        hearing court - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: before the dais, centered on the office hall and no longer than it, 80 x 26 ft; no roofed court's size was found
         forecourt - GUESS research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: open ground just inside the main gate, east of the gatehouse; its 55 x 31 ft a GUESS
         practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a swept patch beside the barracks, 33 x 42 ft
         outer yard - CONVENTION: named open ground between the hearing court and the practice ground, its bounds a drawing convention
@@ -132,7 +132,7 @@ def county_magistracy_program() -> CompoundProgram:
         stables seat - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the stables on the street (south) wall beside the servants' row, as a long-house gate's passage had servants' quarters and a stable beside it
         cell door - UNRESEARCHED: toward the cell's west end, so its approach leaves the barracks' south dwelling the ground for its own door
         maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: the maids and kitchen hands under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of the maids and servants in the house; which servants slept there, and its 10 x 10 ft, GUESSES
-        barracks dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: the barracks divided into four dwellings of ~16.75 ft, a door each on its court face; four a GUESS in the 12-18 ft bays
+        barracks dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: the barracks divided into four dwellings of 17.5 ft, a door each on its court face; four a GUESS in the 12-18 ft bays
     """
     # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,
@@ -166,11 +166,12 @@ def county_magistracy_program() -> CompoundProgram:
         # The hearing court is centered on the office hall (x 33-146 as placed since feature 374 wave 125: the 24 ft staff
         # long-house and a fire-gap west of it) and no longer than it - R22, research 0099: under the office hall's roof or its
         # own, before the dais. 80 ft leaves each end of the hall's south face out from under the roof, where its tub
-        # stands; 32 ft deep (36 until pass 5) keeps the cart slot to the stables and room for the stable well before
-        # them (docs/buildings.md "Hearing court"). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its
-        # size is a GUESS - no roofed court's size was found.
+        # stands; 26 ft deep (32 until feature 374 batch 5, 36 until pass 5) keeps a way of 8 ft past the stable well before
+        # the stables to the west of the outer court (building-review E1: at 32 ft the well left ~2.3 ft each side, the
+        # only way west). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its size is a GUESS - no
+        # roofed court's size was found.
         CourtZone(
-            "oshirasu", 49.5, 130.0, 80.0, 32.0
+            "oshirasu", 49.5, 130.0, 80.0, 26.0
         ),  # y 130 since pass 6: the office hall is 38 ft deep; x 49.5 since feature 374 wave 125, centered again on the hall the 24 ft staff long-house let slide west
         # just inside the main gate (131-139), east of the gatehouse that stands beside it, and 55 ft wide (it was 36)
         # to take the ground east of the gate the hearing court gave up when it shrank to the hall's length; a
@@ -239,7 +240,7 @@ def county_magistracy_program() -> CompoundProgram:
             door_face="N",
             # at the kitchen (west) end of the rear face, as 0107's drawing page seats the inner entrance, just east of the
             # family privy at the corner (feature 374 wave 127; it stood mid-face at 0.4); the kitchen ell takes the west face
-            door_fracs=(0.2, 0.25, 0.3),
+            door_fracs=(0.3, 0.35, 0.4),
             inset_ft=10.0,
         ),
         # THE SERVANTS LODGE ON THE STREET FRONT (feature 374 wave 124): a large household's servants are drawn in a range

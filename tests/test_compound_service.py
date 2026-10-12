@@ -124,3 +124,22 @@ def test_a_takakura_draws_its_slats_and_four_posts() -> None:
     assert 'fill="url(#granary-slats)"' in svg and 'id="granary-slats"' in svg
     stilts = svg.split('<g data-kind="granary stilts">', 1)[1].split("</g>", 1)[0]
     assert stilts.count("<rect") == 4
+
+
+def test_the_county_outer_court_keeps_a_way_west_past_the_stable_well() -> None:
+    """Feature 374 batch 5 (building-review E1): the stable well stood in the 12 ft band between the hearing court and the
+    stables, ~2.3 ft either side - the only way to the west of the outer court. The court is 26 ft deep and the well 6 ft
+    out, a way of 6 ft or more beside it."""
+    prog = c.county_magistracy_program()
+    court = next(z for z in prog.spine if z.name == "oshirasu")
+    svg = c.emit_svg(prog, c.place(prog))
+    wells = [(float(m[1]), float(m[2])) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="22" height="22"[^>]*data-kind="well"', svg)]
+    stable_well = max(wells, key=lambda w: w[1])  # the southmost: the stables'
+    assert (stable_well[1] - 45) / 3 - court.y2 >= 6.0, stable_well
+
+
+def test_the_stables_privy_stands_against_the_wall_with_its_hatch() -> None:
+    """Feature 374 batch 5 (building-review E2): a lodgers' privy seats against the wall at a building's end first."""
+    _prog, _result, svg = _county()
+    privies = [(float(m[1]), float(m[2])) for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="15" height="15"[^>]*data-kind="latrine" data-id', svg)]
+    assert any(y > 600 and 190 < x < 220 for x, y in privies), privies  # flush to the south wall, west of the stable
