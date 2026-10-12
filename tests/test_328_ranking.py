@@ -65,3 +65,36 @@ def test_a_missing_a_doubled_and_an_untiered_row_are_each_caught() -> None:
     assert "not a finding of the audit: z" in problems
     assert "not in ranking.md: z" in problems
     assert "ranking.json is not in tier order" in problems
+
+
+def test_a_key_filed_again_after_its_closing_wave_is_open() -> None:
+    """Feature 374 batch 3's plan review (W120-10): `kosatsuba_seat forms`, closed at wave 115 and filed DRIFTED by wave 120's
+    check, inherited its closing wave by key and dropped out of the work list and the report alike."""
+    import sys
+
+    sys.path.insert(0, str(FEATURE / "audit"))
+    from reopen import reopened, wave_number
+
+    assert wave_number("115") == 115.0 and wave_number("51b") == 51.0 and wave_number("") == float("inf")
+    waves = {"a": "115", "b": "121", "c": "", "d": "x"}
+    assert reopened(waves, {"a": 120.0, "b": 120.0, "c": 120.0, "d": 120.0, "e": 5.0}) == {"a": "115"}
+    assert reopened({"a": "120"}, {"a": 120.0}) == {}, "filed in the wave that closed it: closed"
+    # on the real files: no found row filed after its key's closing wave reads closed
+    import re
+
+    waves = json.loads((FEATURE / "audit" / "waves.json").read_text())
+    ranking = {r["key"]: r for r in _load("ranking.json")}
+    for path in sorted((FEATURE / "audit").glob("found-wave*.jsonl")):
+        n = float(re.match(r"found-wave(\d+)", path.stem).group(1))  # type: ignore[union-attr]
+        for line in path.read_text().splitlines():
+            key = json.loads(line)["key"] if line.strip() else ""
+            if key and waves.get(key) and n > wave_number(waves[key]) and key in ranking:
+                # skip only a key a LATER found file files again (its own reopening is judged there); an earlier one is
+                # what the reopening is for - the north annex, filed at wave 9 and again at 121 (the plan review, round 2)
+                later = [
+                    p
+                    for p in (FEATURE / "audit").glob("found-wave*.jsonl")
+                    if key in p.read_text() and float(re.match(r"found-wave(\d+)", p.stem).group(1)) > n  # type: ignore[union-attr]
+                ]
+                if not later:
+                    assert ranking[key]["wave"] == "", f"{key} filed at wave {n:.0f} reads closed at {waves[key]}"

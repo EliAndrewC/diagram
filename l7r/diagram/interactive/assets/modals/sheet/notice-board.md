@@ -3,8 +3,8 @@ Japan the boards, the kosatsuba, posted the state's standing law - the ban on Ch
 coin, fires and packhorse charges, a ban on gamblers - where traffic was heaviest: at crossroads, town entrances, bridge
 ends, barriers and ports, and before the gates of village officials' houses. In China the splayed walls flanking a
 county office's gate carried the emperor's edicts and, beside them, the magistrate's own notices and bans, among them
-notices to arrest fleeing murderers and escaped convicts, with rulings on complaints and verdicts. No board is known at
-the gate of a Japanese intendant's office; laws were posted at the gates of courts and prefectural offices only after
+notices to arrest fleeing murderers and escaped criminals, with rulings on complaints and verdicts. No board is known at
+the gate of a Japanese intendant's office; laws came to be posted at the gates of courts and prefectural offices after
 the boards were abolished, in the Meiji period.
 
 The notices were boards about a foot high, hung high, even in two tiers, so they looked down over the passers-by. The
@@ -16,9 +16,9 @@ The frames measured at two post towns on the Tokaido stood about 10 to 11 ft hig
 
 Guesses:
 - That a magistracy kept a freestanding board at its own gate: it joins the Japanese board to the Chinese office's gate
-  walls, since no board at a Japanese office was found.
-- Its size, about 7 to 9 ft long and 3 to 4 ft deep: no office's or village's board was measured; the frames measured
-  at two post towns on the Tokaido run 16 to 18 ft.
+  walls, since no board at an intendant's office or a magistracy was found.
+- Its size, a frame 16 ft long and 6 ft deep, within the sizes of those measured at two post towns on the Tokaido: no office's or
+  village's board was measured.
 
 Depiction: The plan stands the board just outside the main gate, within a few paces of the gateway, where everyone who
 comes to the court passes it.

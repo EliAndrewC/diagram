@@ -205,10 +205,18 @@ def test_explain_with_no_feature_names_only_what_needs_the_gm(root: pathlib.Path
     )
     e = gm.explain(root, width=200)
     assert "1. HELD QUESTION: a#door band\n    which door size stands?. The fix it would make: narrow the doors." in e
-    assert "2. NOT YOURS YET - it waits on other work, no decision from you: b#tubs\n    Behind #retainers" in e
-    assert "3. A TOOLING FIX DECLINED TO YOU: feature 375 row [0], modal-depiction sheet/garden" in e
+    assert "WAITING ON OTHER WORK - held in the ranking until another row is done; nothing for you to decide\n\n  * b#tubs\n"\
+        "    Waits on #retainers" in e, "a row held behind other work is not a decision of the GM's"
+    assert "2. A TOOLING FIX DECLINED TO YOU: feature 375 row [0], modal-depiction sheet/garden" in e
     assert "The other 1 row(s) are decisions already made" in e
     assert "needs a decision: 1 held question(s), 1 fix(es) declined" in gm.listing(root, width=200)
-    assert "  * b#tubs (waits on other work, not on the GM)" in gm.listing(root, width=200)
+    assert "WAITING ON OTHER WORK - held in the ranking behind another row, not on the GM\n  * b#tubs\n      waits on #retainers" in gm.listing(root, width=200)
+    assert gm.listing(root, width=200).startswith("GM REVIEW - 1 held question(s), 1 waiting on other work,")
     monkeypatch.chdir(root)
     assert gm.main(["explain", "375", "1"]) == 0 and "went red twice" in capsys.readouterr().out
+    held.write_text(json.dumps({"b#tubs": {"flag": "Held behind #retainers (row 21): after that lands"}}))
+    (d / gm.ROWS).write_text("")
+    (held.parent / "waves.json").write_text(json.dumps({"a#door band": "115"}))
+    assert gm.explain(root, width=200).startswith("WHAT NEEDS YOUR DECISION: nothing - no held question and no fix declined to you")
+    (held.parent / "waves.json").write_text(json.dumps({"b#tubs": "115"}))
+    assert gm.held(root) == [] and "WAITING ON OTHER WORK" not in gm.explain(root), "a row its wave closed is held no more"

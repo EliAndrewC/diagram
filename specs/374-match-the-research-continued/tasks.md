@@ -11,6 +11,8 @@ in 328's ranking and this spec.
 - layout-revised: ubame-magistracy - wave 113: the kitchen at 24 x 18 ft joined to the house as an ell, the covered way gone
 - layout-revised: county-magistracy-example - wave 113: the draft's kitchen abuts the house as an ell, no corridor
 - glyph-redrawn: kitchen on ochiba-magistracy - wave 113: the kitchen at 24 x 18 ft
+- placement-changed: notice board on kuwabata - wave 120: the board's seat a rolled knob; a bridge end offered only where a way reaches a bridge, so Kuwabata's roll now takes the center
+- placement-changed: woodland commons on inashiro - wave 120: the fuel wood seated by 0077's two tiers, kept off low ground by the water below the houses
 
 ## Phase 1 - wave 112: the veranda at 0102's widths, its faces rolled
 
@@ -63,6 +65,20 @@ in 328's ranking and this spec.
 - [x] T09 wave 118: the CANNOT-TELL re-checks (FR-001)
       research: rendering
       verify: DONE. wave 118: the CANNOT-TELL claims re-checked with their context (b7-ct1, b7-ct2, b8-ct1, b8-ct2): 0 CANNOT-TELL left; WITH= and PAGES= added to claims-bundle; the polder/dike-pond roll a known gap and an open DRIFTED row (plan review CLEAR)
+
+## Phase 6 - batch 3: the hamlet's code brought to the research
+
+- [x] T10 wave 119: the hamlet's lanes - a door path's working room through a grove band, and the needle-loop speck (the `_unkinked` and `settle_shapes` returning-leg rows moved to E4, not this batch) (FR-001, FR-004)
+      research: rendering
+      verify: DONE. the door path's claim IN-STEP under impl-drift (re-checked 2026-10-12 after the merge's 0036 edit); its E0 row marked wave 119; gate green 2026-10-12 on the merged tree
+
+- [x] T11 wave 120: the hamlet's ground - no wood below the houses only beside water, the board at a bridgehead (the feeder brook's width waits on its ladder question, not this batch) (FR-001, FR-004)
+      research: rendering
+      verify: DONE. the wood and bridgehead-board claims IN-STEP under impl-drift; the glyph-checks of the wood on Inashiro and the board on Kuwabata PASS; both E0 rows marked wave 120; gate green 2026-10-12
+
+- [x] T12 wave 121: claims the rows name - the kura's west annex re-checked; the belt's holes, the clump window and the south band worded to the code and re-checked (FR-001)
+      research: rendering
+      verify: DONE. the kura west annex, belt holes, clump window and south band claims re-checked IN-STEP (claims-owed reports none); kura row marked wave 121; gate green 2026-10-12
 
 ## Standing - the ranking's remaining rows
 

@@ -126,21 +126,21 @@ def test_a_settlement_is_only_offered_the_board_placements_it_can_site() -> None
     board at one, and one recording no house for its official cannot put it at their gate - so those
     values are not in the rolled pool at all, rather than being rolled and then fudged.
 
-    The two attested placements that are NOT in the value space are asserted here too, because their
-    absence is a decision: a bridgehead and a shrine precinct are real sites in the record, withheld
-    at these tiers because the pool's "bridges" are 10 ft ditch planks and its only "shrines" are
+    The bridgehead is offered where a bridge is recorded (feature 374 wave 120: 0190's village boards stood at "bridge ends",
+    no size given); the shrine precinct is not in the value space, because no kept map draws one - its only "shrines" are
     household hokora in dooryards."""
     from l7r.diagram.settlement._knobs import KNOBS
 
     knob = KNOBS["kosatsuba_seat"]
-    assert set(knob.value_space) == {"center", "entrance", "frontage"}
-    assert "bridgehead" not in knob.value_space and "shrine" not in knob.value_space
+    assert set(knob.value_space) == {"center", "entrance", "frontage", "bridgehead"}
+    assert "shrine" not in knob.value_space
 
     bare = {"has_approach": False, "has_headman_house": False}
     assert knob.allowed(bare) == ["center"], "every settlement can site the assembly ground"
     assert knob.allowed({"has_approach": True, "has_headman_house": False}) == ["center", "entrance"]
     assert knob.allowed({"has_approach": False, "has_headman_house": True}) == ["center", "frontage"]
     assert len(knob.allowed({"has_approach": True, "has_headman_house": True})) == 3
+    assert knob.allowed({"has_approach": False, "has_headman_house": False, "has_bridge": True}) == ["center", "bridgehead"]
 
 
 def test_the_board_affordances_are_read_from_the_manifest_the_checks_read() -> None:
@@ -149,7 +149,13 @@ def test_the_board_affordances_are_read_from_the_manifest_the_checks_read() -> N
     records at all, which is why a hamlet is not offered that placement."""
     from l7r.diagram.settlement.structures.fixtures import kosatsuba_affordances
 
-    assert kosatsuba_affordances({}) == {"has_approach": False, "has_headman_house": False}
+    assert kosatsuba_affordances({}) == {"has_approach": False, "has_headman_house": False, "has_bridge": False}
+    lane = {"pts": [(0.0, 0.0), (100.0, 0.0)]}
+    assert kosatsuba_affordances({"bridges": [{"x": 1.0, "y": 1.0, "span": 8.0}], "lanes": [lane]})["has_bridge"] is True
+    # Kuwabata (feature 374 wave 120's glyph-check): a plank out in the ponds no way reaches is no bridge end to post at
+    assert kosatsuba_affordances({"bridges": [{"x": 50.0, "y": 140.0, "span": 8.0}], "lanes": [lane]})["has_bridge"] is False
+    assert kosatsuba_affordances({"bridges": [{"x": 50.0, "y": 50.0}], "road": {"pts": [(0.0, 0.0), (100.0, 0.0)]}})["has_bridge"] is True
+    assert kosatsuba_affordances({"bridges": [{"x": 50.0, "y": 70.0}], "lanes": [lane], "meta": {"ftpx": 2.0}})["has_bridge"] is False, "the band in feet"
     assert kosatsuba_affordances({"lanes": [{"pts": [], "connector": True}]})["has_approach"] is True
     assert kosatsuba_affordances({"road": [(0, 0), (10, 10)]})["has_approach"] is True
     assert kosatsuba_affordances({"roads": [{"pts": [(0, 0), (1, 1)]}]})["has_approach"] is True
@@ -205,6 +211,21 @@ def test_the_frontage_anchor_is_the_official_s_own_house() -> None:
     assert kosatsuba_anchor({"houses": houses[:1]}, "frontage") is None
 
 
+def test_the_bridgehead_anchor_is_the_widest_bridge_nearest_the_houses() -> None:
+    """Feature 374 wave 120 (0190: village boards "before the gates of the village officials' houses, as well as bridge ends"):
+    the brook's bridge before a ditch's plank, and of equal spans the one nearest the houses; no bridge, no anchor."""
+    from l7r.diagram.settlement.structures.fixtures import kosatsuba_anchor
+
+    houses = [{"x": 0.0, "y": 0.0}, {"x": 20.0, "y": 0.0}]
+    bridges = [{"x": 500.0, "y": 0.0, "span": 27.0}, {"x": 30.0, "y": 0.0, "span": 8.0}, {"x": 60.0, "y": 0.0, "span": 27.0}]
+    lane = {"pts": [(0.0, 0.0), (600.0, 0.0)]}
+    assert kosatsuba_anchor({"houses": houses, "bridges": bridges, "lanes": [lane]}, "bridgehead") == (60.0, 0.0), "widest, then nearest"
+    off_the_way = [{"x": 60.0, "y": 300.0, "span": 40.0}, *bridges]
+    assert kosatsuba_anchor({"houses": houses, "bridges": off_the_way, "lanes": [lane]}, "bridgehead") == (60.0, 0.0), "only a bridge a way reaches"
+    assert kosatsuba_anchor({"houses": houses, "bridges": bridges}, "bridgehead") is None, "no way reaches a bridge"
+    assert kosatsuba_anchor({"houses": houses}, "bridgehead") is None
+
+
 def test_the_placement_is_seeded_and_reproduces() -> None:
     """FR-002 / SC-004: the same seed yields the same placement, and it draws independently of every
     other knob (`knob_rng` derives its own sub-seed), so adding it perturbs nothing already rolled."""
@@ -215,7 +236,9 @@ def test_the_placement_is_seeded_and_reproduces() -> None:
     again = [resolve_knob("kosatsuba_seat", s, ctx, {}) for s in range(40)]
     assert first == again, "a seeded knob reproduces"
     assert len(set(first)) > 1, "and it is a knob, not a constant"
-    assert set(first) <= {"center", "entrance", "frontage"}
+    assert set(first) <= {"center", "entrance", "frontage"}, "no bridge recorded, no bridgehead"
+    bridged = [resolve_knob("kosatsuba_seat", s, {**ctx, "has_bridge": True}, {}) for s in range(40)]
+    assert "bridgehead" in bridged, "a settlement with a bridge may roll its board to one (feature 374 wave 120)"
     # a pinned value overrides the roll, and one the map cannot site is a loud error
     assert resolve_knob("kosatsuba_seat", 3, ctx, {"kosatsuba_seat": "frontage"}) == "frontage"
     with pytest.raises(ValueError, match="typing rule"):

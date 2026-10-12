@@ -193,6 +193,99 @@ never records a DEVIATION to close it (328's exception path, amendment 5). The p
 (`ROLLED_ARCHETYPES`) is one, with the dike-pond block beside it: 0019's drawing page names both a known gap, and the row
 stays open until the polder and the dike-pond pass their cohort and are rolled.
 
+## Batch 3: the hamlet's code brought to the research
+
+**The work list** is 328's ranking brought current (2026-10-11): batch 2's re-checks closed 39 more rows (36 whose unit
+now carries no UNCLAIMED or MISLABELED finding, or whose claim reads IN-STEP; three UNCLAIMED rows whose decisions now
+carry claims), marked wave 118 in `audit/waves.json`; then `audit/scope.py` was re-run on today's cache (328 FR-010, the execution
+record) and re-marked 14 more open rows `scope: deferred` (the paddy and ribbon builders, a town's kiln, a city's matrix
+permissions among them; `scope.py` now counts `docs/building-programs.md` among the Mode A procedures, which it had sent to
+deferred), leaving **183 open rows** in scope (126 E3 DRIFTED) at the batch's start; by its close, with the rows its checks filed
+(`audit/found-wave120.jsonl`, `found-wave121.jsonl`) and the two a reopened key brought back (`audit/reopen.py`), with waves 119-121's three
+E0 rows marked in `audit/waves.json` and the ranking rebuilt, 183 open, 132 of them E3 DRIFTED (`m:batch3-open-rows`). `make claims-report` shows the deferred
+units' claims as DEFERRED (158).
+
+**Three rules for every wave of this batch:**
+- A row's fix text that says "label it a DEVIATION and have the drawing page record it" predates the plan review's
+  ruling (batch 2, W118-2): the code is changed to match the page (328 FR-004). Where a change still looks wrong, the
+  exception goes to `spec-fidelity` with the GM's words and is recorded only if ruled LEGITIMATE; otherwise the code
+  is changed to match the page.
+- Engine discipline: `make quick` per fix; reroll only the maps the change reaches and compare their manifests with
+  `git diff HEAD`; one `impl-drift` per wave over the claims the wave's code edits re-owe; the review occasions a
+  wave declares in `tasks.md ## Occasions` dispatched on a green gate, with no engine edit while one runs; one `make done`
+  at the batch's close with the timing pair, its band a flag mentioned at landing (375 amendment 5: no perf record owed).
+- A row whose unit `audit/scope.py` derives DEFERRED (328 FR-010, re-run on today's cache) leaves the work list: its
+  ranking row is re-marked `scope: deferred` and no wave takes it.
+
+**Not in this batch:** the two held rows (the door band, `fixture_quota`: the GM's); `oblique_at`'s square crossing,
+which waits on the E4 research row beside it (`law_water.py::oblique_at#a channel crossing at its way's angle`, named in its
+`after`); and `settle.py::_unkinked#a returning leg of 40 ft or more` with `settle_shapes#no hairpin or zigzag`, which cuts
+through it: 0081's drawing page forbids the hairpin a returning leg of 40 ft or more leaves and gives the cut only under
+40 ft, its folded spur and joining stub named exceptions to that threshold, so what a longer leg becomes is a research
+question (both rows re-tiered E4; meanwhile the code keeps its cut and the claim its GUESS label). And
+`comb.py::_comb_draw_source#feeder brook width`: its E1 fix (the brook in feet, `self.px(7.0)`) is in the code, and what
+reads DRIFTED today is the E4 question beside it, `#feeder brook width against the ladder` (0068's ladder against its
+question page's 7 ft GUESS and 0059's 7 ft, with the "narrower than the head race" bullet), named in its `after`; the code
+and both pages stay as they are meanwhile. The three waves take
+every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on research.
+
+### Wave 119 (T10) - the hamlet's lanes
+
+- `serve.py::lay_door_paths#door path off a grove band`: 0036 lays a lane through a grove band "with a footpath's
+  clearance and some working room kept off the trees on each side" (about 22 ft of a 36 ft opening: about 9.5 ft each side
+  of a 3 ft tread); the code's 0.5 ft margin becomes that working room (`GROVE_WORKING_ROOM_FT`, measured off the band's
+  rect, which bounds the trunks), and the claim cites 0036. Measured on the hamlet cohort before it is kept: a farm the wider
+  berth leaves unreached is a conflict put to `spec-fidelity` (rule 1).
+- Measured and ruled (2026-10-11): at 9.5 ft cohort seed 22's two row farms were walled in between their dooryards and a
+  neighbor's band. `spec-fidelity` ruled the 9.5 ft stands for every band (no per-farm fallback, no reading of the page as
+  "openings only"), and that widening 0036's 32 ft between groves to the 46.1 ft the router's grid wants would reword the page
+  to fit the code: the pinch is the door router's 10 ft lattice (2 x 11 ft + 2.41 cells must fit the gap). So the door router
+  asks again on a finer lattice, `DOOR_FINE_CELL_FT` (4 ft, at most 4.1 ft for the 32 ft gap), only where the coarse one finds
+  no way - the derivation `dry_exit.GROVE_EXIT_CELL_FT` records, paid where needed. The lane room stays 32 ft and 0036 is
+  unchanged. Measured: the 48-seed cohort and its six pinned rows pass but seeds 10 and 20, both refused at HEAD before the
+  change (the baseline 52/54).
+- Kashikawa, rerolled, was refused for a "needle" the law found where two door paths end on the skeleton at the point it
+  bends: a face 0.09 ft round (measured on the refused roll's manifest, 2026-10-11), three lanes noded a hair apart, no ground at all. A pre-existing defect of the law's face test
+  (constitution XIV): `law.needle_loops` skips a face whose perimeter is under `NODING_SPECK_FT` (1 ft); a real needle runs
+  the length of its ways. Kashikawa then rolls, its door paths moved; the other four pool hamlets are unchanged, and the
+  cohort with the rule matches the baseline (52/54).
+- Maps: every pool hamlet is rerolled; a hamlet whose paths change owes no glyph-check (no glyph is redrawn) - the lane
+  law's acceptance sweep and the cohort hold the change.
+
+### Wave 120 (T11) - the hamlet's ground
+
+- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page refuses only "a wood seated below
+  the houses, past the fields and beside a river or marsh". The wood follows the page's two tiers alone - the slope higher
+  than the field beside it, then the level beyond the fields (`woodland_tier` no longer ranks by the houses) - and a seat is
+  refused only where it is below the houses' median height and its square comes within `LOW_BY_WATER_FT` of a river's course
+  or a marsh (`low_by_the_water`, measured from the square's circumscribed reach, as the keep-outs measure a turned parcel:
+  every seat the keep-outs pass stands a half off the water, so a reach from the seat alone refused nothing). It is asked in
+  the scan's one qualification (`_ok`), so every seat the nudge, the row step, the size roll and the aspect steps move is
+  asked it again at its own square; the water is one geometry built once (`WaterZone`), its cost measured at 0.05 s of a
+  10 s roll. Inashiro's woodland moves under it.
+  "Beside" has no figure on the page: 46 ft, the width over which the maps draw reeds and grass interleaving at a marsh's
+  edge, recorded on 0077's drawing page as a GUESS (its record checks owed), and the claims label it so.
+- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
+  qualifier; the bridgehead joins the seat's forms where a way reaches one of the settlement's bridges - within the board's
+  60 ft band of a lane or road (`bridges_on_a_way`), since every site 0190 names is ON a road or street (the glyph-check of
+  Kuwabata, 2026-10-11: its bridges are pond-grid planks no lane comes within 136 ft of, and a board rolled to one stood 884 ft off it).
+  The shrine precinct stays withheld, its claim giving the reason: 0190 names a precinct only as its own GUESS, no
+  page it read naming one. The new form is anchored at the widest of the bridges a way reaches, a brook's before a ditch's plank, and of two alike
+  the one nearest the houses (`bridgehead_anchor`): which of a village's bridges held its board no page says, so 0190's
+  drawing page records the choice as a GUESS. The form takes its title-card label ("at the foot of a bridge") and a pop-up
+  of its own (`choice/kosatsuba_seat--bridgehead`, written from 0190 as its three siblings are), which owe the record
+  checks a new pop-up and a drawing-page sentence owe.
+- Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are
+  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).
+
+### Wave 121 (T12) - claims the rows name
+
+- `farm_fixtures.py::KURA_PARTS#west annex`: the row is the claim `#west annex` already carries; the unit re-checked
+  clears it.
+- `belt_law.py::BeltReading.holes#continuous planting`, `stands.py::village_grove#clump inside the page window`,
+  `bundle.py::_bundle_layout#south band off an unkept yard`: each claim worded to what the code does and re-checked; a
+  claim that then reads DRIFTED joins the DRIFTED work.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:
@@ -206,3 +299,5 @@ decisions need no new ruling adds its tasks under its own plan section, decided 
 | batch | waves | pair | gate | close |
 |---|---|---|---|---|
 | 1 | 112-114 | none owed: the batch's engine code is the Mode A draft (`compound.py`, `compound_parts.py`, `compound_model.py`: the kitchen ell, the corridor gone), `pack_audit` (`veranda_depths`, the hearth not a door) and `buildings/types.json`'s kitchen band - none in what the timing pair rolls (the hamlet's stages), as 372's batches 3-5 recorded | green 2026-10-10 at engine key 026828713522 | the review occasions running (three building-reviews, two glyph-checks); escalation-check 3 keep |
+| 2 | 115-118 | none owed: the batch's engine edits are `Research:` docstrings and claim wording only (no engine token moves, the maps unchanged: `git diff origin/main -- pool/` empty after the gate's roll) | green 2026-10-11 on the merged tree | the record and claims checks answered; no review occasion (no sheet or glyph moved) |
+| 3 | 119-121 | taken (the hamlet's stages changed). The pair `374-start` / `374-end` reads band 3 (+25.0%, observed 2026-10-11 by `make perf-report AGAINST=374-start`), a FLAG under 375 amendment 5, never a gate. `perf-audit` (2026-10-11, `dev/perf-log/20261011T105045Z-review-374-confirmation-local-diagram-backlog.json`) found the band is the host's load (load 5-8 on 22 shared cores; its quiet legs level, head 18.0 s against base 17.3 / 18.6 s) plus a real ~+1.2% of the total from T11's wood rule (`wood_rank.py`, `parcels.py`: seats below the houses now ranked, each asked `low_by_the_water`), about +8% of hinterland+woodland; the door router's 4 ft lattice costs nothing measurable (web/rest level) (all `m:batch3-perf-audit-legs`). Its seven alternated legs are `perf-audit-legs/*aud374*.json`; the earlier control `m:batch3-cpu-interleaved` (-9%) rests on one cell and is superseded by them | green 2026-10-11 on the bridge fix; re-gated after the merge of main on 2026-10-12 | the record and claims checks answered; the glyph-checks of the wood on Inashiro (PASS) and the board on Kuwabata (NEEDS-WORK, fixed, PASS); the band mentioned at landing |

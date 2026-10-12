@@ -254,7 +254,7 @@ def knob_of_constant(skill: Path, path: str, name: str) -> str | None:
 def scope_of(uid: str, ran: set[tuple[str, str]], read: set[str], knobs: set[str] = frozenset(), skill: Path | None = None, label: str = "") -> str:
     path, unit = uid.split("::", 1)
     path = path.replace(".claude/skills/diagram/", "")
-    if path.startswith(("buildings", "docs/buildings")):
+    if path.startswith(("buildings", "docs/buildings", "docs/building-programs")):  # both Mode A procedure docs (374 batch 3: building-programs.md had fallen to deferred)
         return "mode-a"
     if f"{path}::{unit}#{label}" in DEFERRED_ON_MEASURE:
         return "deferred"
@@ -291,8 +291,12 @@ def main(argv: list[str]) -> int:
     KIND_KEYS.update(kind_keys(skill))
     STRINGS_USED.update(strings_used(skill, ran, read))
 
+    was = json.loads(out_scope.read_text()) if out_scope.is_file() else {}
+
     def judge(key: str) -> str:
         uid, label = key.rsplit("#", 1)
+        if "::" not in uid:  # a row on no code unit (a note, a pop-up, a data file): no execution decides it (374 batch 3)
+            return str(was.get(key, "kept"))
         return scope_of(uid, ran, read, knobs, skill, label)
 
     rows = json.loads(ranking.read_text())

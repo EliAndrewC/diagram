@@ -412,6 +412,25 @@ def test_a_boxed_in_door_routes_from_a_clear_step_out_of_it(monkeypatch: pytest.
     assert serve.route_from_door(door, q, [], [], [], lambda a, b: False) == []
 
 
+def test_a_door_the_coarse_lattice_cannot_leave_is_routed_on_the_fine_one(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 374 wave 119: with 0036's working room off a grove band, the 10 ft lattice cannot hold a path in the 32 ft
+    between neighbors' groves (cohort seed 22); where no coarse route and no step out of the door finds a way, the router is
+    asked again on the `DOOR_FINE_CELL_FT` lattice, and only then."""
+    from l7r.diagram.hamletgen.ways import serve
+
+    door, q = (0.0, 0.0), (100.0, 0.0)
+    cells: list[object] = []
+
+    def fine_only(start, goal, *a, cell=None, **k):  # type: ignore[no-untyped-def]
+        cells.append(cell)
+        return [start, goal] if cell == serve.DOOR_FINE_CELL_FT else []
+
+    monkeypatch.setattr(serve, "_route", fine_only)
+    assert serve.route_from_door(door, q, [], [], [], lambda a, b: True) == [door, q]
+    assert cells[-1] == serve.DOOR_FINE_CELL_FT and cells.count(serve.DOOR_FINE_CELL_FT) == 1, "the fine lattice last, once"
+    assert serve.DOOR_FINE_CELL_FT <= (32.0 - 2 * (1.5 + serve.GROVE_WORKING_ROOM_FT)) / 2.41, "a cell 32 ft between groves holds"
+
+
 def test_a_row_farm_takes_no_door_path_only_where_its_street_already_arrives() -> None:
     """Off the network the reach alone is asked; on a row's own street, only where the street's point nearest the door is
     an end the lane law counts as serving the farm (`end_serves`) - Mizuguchi's east-end farm, its door 11 ft off the

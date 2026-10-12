@@ -1,0 +1,33 @@
+10:21:16 leg=base load: 12.24 7.43 7.83 18/2078 2713076
+    1229.5  homesteads     hamletgen/ways/tree.py:rejoined                                      488       599998
+    1190.4  sink           hamletgen/sink.py:pond_setback                                         5         5952
+    1140.8  web            hamletgen/ways/checks.py:unreached_houses                             67        76435
+    1033.2  web            settlement/city/bridges.py:undeckable_at                             158       163238
+     888.1  web            hamletgen/ways/joints.py:served                                        8         7105
+     780.0  web            hamletgen/ways/law.py:span_walkable                                    1          780
+10:27:07 leg=base done load: 8.95 8.35 8.08 2/1937 2743615
+10:27:07 leg=head load: 8.95 8.35 8.08 2/1937 2743617
+    1229.5  homesteads     hamletgen/ways/tree.py:rejoined                                      488       599998
+    1190.4  sink           hamletgen/sink.py:pond_setback                                         5         5952
+    1112.1  web            hamletgen/ways/checks.py:unreached_houses                             69        76735
+    1038.8  web            settlement/city/bridges.py:undeckable_at                             158       164123
+     903.1  web            hamletgen/ways/joints.py:served                                        8         7225
+     832.2  hinterland     hamletgen/hinterland/parcels.py:bounds_near                            6         4993
+10:31:08 leg=head done load: 4.55 6.61 7.44 2/1970 2759351
+10:31:08 leg=head load: 4.55 6.61 7.44 2/1970 2759353
+    1229.5  homesteads     hamletgen/ways/tree.py:rejoined                                      488       599998
+    1190.4  sink           hamletgen/sink.py:pond_setback                                         5         5952
+    1112.1  web            hamletgen/ways/checks.py:unreached_houses                             69        76735
+    1038.8  web            settlement/city/bridges.py:undeckable_at                             158       164123
+     903.1  web            hamletgen/ways/joints.py:served                                        8         7225
+     832.2  hinterland     hamletgen/hinterland/parcels.py:bounds_near                            6         4993
+10:34:36 leg=head done load: 2.46 4.75 6.54 4/1896 2777252
+10:34:36 leg=base load: 2.46 4.75 6.54 2/1896 2777254
+    1229.5  homesteads     hamletgen/ways/tree.py:rejoined                                      488       599998
+    1190.4  sink           hamletgen/sink.py:pond_setback                                         5         5952
+    1140.8  web            hamletgen/ways/checks.py:unreached_houses                             67        76435
+    1033.2  web            settlement/city/bridges.py:undeckable_at                             158       163238
+     888.1  web            hamletgen/ways/joints.py:served                                        8         7105
+     780.0  web            hamletgen/ways/law.py:span_walkable                                    1          780
+10:37:33 leg=base done load: 1.94 3.37 5.69 4/1903 2785091
+ALLDONE

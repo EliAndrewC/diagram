@@ -4,7 +4,7 @@ foot of bridges, at the barrier stations on the highways and at ports. In a vill
 before the gate of a village official's house. Boards were most often set where people passed, at the village center or at
 a crossroads of main highways.
 
-Those who set a board up weighed the passers-by it would meet. Nakatsugawa's board on the Nakasendo highway stood not where
+Those who set a board up often weighed the passers-by it would meet. Nakatsugawa's board on the Nakasendo highway stood not where
 its replica stands today but some 66 ft (20 m) up the slope, at the crossroads with the Hida road, so that more passers-by
 would see it. Every site known is on a road or street, and none seems to have stood on open ground set back from it.
 
@@ -12,10 +12,10 @@ How many villages turned their board to the busiest frontage rather than to some
 the only reason, for a village divided between two lords set its board at about the same distance from each half's headman's house.
 
 Guesses:
-- That a settlement's board seeks the busiest frontage or the place water is drawn at even odds: no source counts where
-  village boards stood.
+- That a settlement's board stood at its busiest frontage rather than at an official's gate or some other mark: no source counts how many village boards did, so the map sites
+  each for the passers-by it meets.
 
-Depiction: Among the seats its other choice on the title card allows, the map takes the one with the most houses and buildings near it, so the board meets the most passers-by. It stands a few feet off the way's edge where the verge has room, farther back where it does not, turned broadside to it, and is placed last, once everything else stands.
+Depiction: The map looks only beside a main road or street where it has one, and takes, of the sites with room for the board's label, the one with the most houses and buildings near it, so the board meets the most passers-by. It never sets a board midway between the halves of a village divided between two lords, for it draws no such village. In a hamlet or a village it stands a few feet off the way's edge where the verge has room; in a town or a city, or where the verge has no room, it may stand farther back. Either way it is turned broadside to the way.
 
 Name: Facing the busiest frontage
 Covers: `meta.kosatsuba_siting = frontage`

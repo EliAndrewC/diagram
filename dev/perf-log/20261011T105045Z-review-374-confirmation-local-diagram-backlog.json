@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ab378e080",
+    "label": "374-start",
+    "utc": "20261011T095952Z"
+  },
+  "binding": "4aecbc426b87b2aad82bfd540ea25db4a4eecbfc942f4532f10624709d3a5924",
+  "end": {
+    "commit": "e9491c2a8",
+    "label": "374-end",
+    "utc": "20261011T100551Z"
+  },
+  "environment": "local",
+  "feature": "374-match-the-research-continued",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "39c3cbfa-00fa-4115-85d4-ebf41e287c6c",
+    "utc": "20261011T105045Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 39.3,
+          "39": 95.9,
+          "4": 18.3,
+          "47": 0.0
+        },
+        "total_pct": 32.8
+      },
+      "20": {
+        "seeds": {
+          "25": -12.7,
+          "39": 17.1,
+          "4": 45.9,
+          "47": 4.9
+        },
+        "total_pct": 12.7
+      },
+      "40": {
+        "seeds": {
+          "25": -26.4,
+          "39": -11.5,
+          "4": 19.4,
+          "47": 34.4
+        },
+        "total_pct": 0.9
+      }
+    },
+    "seeds": {
+      "25": 50.0,
+      "39": -6.5,
+      "4": 51.9,
+      "47": 13.8
+    },
+    "total_pct": 25.0
+  },
+  "note": "The +25% band is host load, but the explanation's claim that the wood changes add no measurable cost is false. Reviewer ran 7 interleaved make-perf legs in fresh detached worktrees (scratchpad/aud-base, aud-head; *aud374*.json). Reference totals: base 37.6/17.3/18.6 s, head 19.7/21.5/18.0/25.6 s. The quiet legs are level (head 18.0 vs base 17.3/18.6), and untouched stages move with the load. web/rest is level (base mean 0.231, head mean 0.231), so the serve.py fine lattice costs nothing measurable. (hinterland+woodland)/rest is 0.223-0.236 in all 3 base legs and 0.241-0.252 in all 4 head legs, and woodland goes from 0.00 to 0.52-0.64 s summed over 16 rows. So T11 wave 120's wood rule (wood_rank.py/parcels.py: tier-2 seats now ranked rather than dropped, low_by_the_water asked per seat) costs about +8% of hinterland+woodland, about +1.2% of the total. That is band 1 by itself, and the explanation denies it. Control batch3-cpu-interleaved timed base in a worktree against head in the clone, and its -9% comes from one cell (seed 4 at 10 hh: base 18.5/11.6/16.2 vs head 7.2/8.5/9.9 user-s); without that cell base 140.2 vs head 143.6 (+2.5%). Rewrite: host load for the band plus about 1.2% real in hinterland+woodland from T11, then band 2 on that.",
+  "verdict": "inconsistent"
+}

@@ -360,6 +360,10 @@ def test_a_way_forked_round_a_needle_of_grass_is_named_and_a_block_is_not() -> N
     block = {"lanes": [_lane((0.0, 0.0), (200.0, 0.0), (200.0, 150.0)), _lane((0.0, 0.0), (0.0, 150.0), (200.0, 150.0))]}
     assert law.needle_loops(block) == [], "a block wide enough to hold a steading"
     assert law.needle_loops({"lanes": [_lane((0.0, 0.0), (200.0, 0.0))]}) == []
+    # THREE WAYS CROSSING A HAIR APART polygonize into a speck, no ground at all (Kashikawa, feature 374 wave 119: two door paths
+    # ending on the skeleton where it bends, a face 0.09 ft round): each way long, the face between them 0.24 ft round
+    speck = {"lanes": [_lane((0.0, 0.0), (100.0, 0.0)), _lane((40.0, -10.0), (51.0, 1.0)), _lane((60.0, -9.9), (49.0, 1.1))]}
+    assert law.needle_loops(speck) == [], "a face under NODING_SPECK_FT round is no needle"
 
 
 def test_a_way_target_is_reached_by_the_served_network_and_counts_as_served() -> None:

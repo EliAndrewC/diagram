@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-12T05:15:29Z",
+  "target": "claims-gate",
+  "commit": "82b101ef4",
+  "why": "CLAIMS_OK: 378 doctrine: a DRIFTED claim is a result on the claims report, code fixed only where the spec asks; both findings (settlement_form weights, KURA_PARTS north annex) are open E3 rows batch 3's checks filed in found-wave120/121, taken by 374 T99"
+}

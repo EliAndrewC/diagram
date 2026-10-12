@@ -485,6 +485,15 @@ settlement-reviews: Sawada's triangle 110 ft long and 37.7 ft at its widest, mea
 forks and rejoins around nothing"). A village block holds a steading and is five times as wide. A map drawing convention.
 Research: needle of grass - CONVENTION: a web face under 20 ft mean width"""
 
+NODING_SPECK_FT = 1.0
+"""A web face whose whole perimeter is under this is no ground at all: three lanes meeting at one point, noded a hair apart,
+polygonize into a speck (Kashikawa under feature 374 wave 119: two door paths ending on the skeleton at the point it bent,
+a face 0.09 ft round, measured 2026-10-11 from the face the reroll's refusal named, and the last resort refused the map for a
+needle it could not cut). A real needle - the same way drawn twice, or forking round nothing - runs the length of the ways
+that bound it. The bound is the 1 ft below which `needle_loops` already drops a way itself.
+
+Research: noding speck - NONE"""
+
 
 def needle_loops(M: Mapping[str, Any]) -> list[tuple[Any, list[int]]]:
     """(face, the lanes bounding it) for every face of the drawn lane web (the treads noded where they cross, then
@@ -498,7 +507,7 @@ def needle_loops(M: Mapping[str, Any]) -> list[tuple[Any, list[int]]]:
         return []
     out = []
     for face in polygonize(unary_union(list(lines.values()))):
-        if face.length <= 0 or 2.0 * face.area / face.length >= NEEDLE_LOOP_FT:
+        if face.length < NODING_SPECK_FT or 2.0 * face.area / face.length >= NEEDLE_LOOP_FT:
             continue
         edge = face.exterior.buffer(0.5)
         out.append((face, sorted(i for i, ln in lines.items() if ln.intersection(edge).length > 1.0)))

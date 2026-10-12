@@ -19,9 +19,12 @@ from ..plan import SitePlan
 from .crossing import crossed_through, crossed_through_many, reached_across  # noqa: F401 - re-exported (tests)
 from .frame import content_box, frame_bounds, title_pocket
 from .wood_rank import FIELD_BESIDE_FT as FIELD_BESIDE_FT
+from .wood_rank import LOW_BY_WATER_FT as LOW_BY_WATER_FT
+from .wood_rank import WaterZone as WaterZone
 from .wood_rank import crop_edge_points as crop_edge_points
 from .wood_rank import field_height_near as field_height_near
 from .wood_rank import house_floor as house_floor
+from .wood_rank import low_by_the_water as low_by_the_water
 from .wood_rank import woodland_tier as woodland_tier
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
@@ -271,7 +274,7 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
 
     Research:
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, the slope higher than the fields first, then the level beside them
-        no wood below the houses - GUESS: a seat below the houses' median height (`house_floor`) is dropped on any ground; the page refuses one only past the fields beside a river or marsh
+        below the houses on dry ground - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked as any seat; by the water it is refused in the scan's qualification (`open_ground_patches`, `low_by_the_water`)
         the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
         beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
     """
@@ -283,21 +286,21 @@ def _beyond_the_fields(s: Settlement, plan: SitePlan, scored: list[tuple[float, 
     # the cluster was worth 257 px of height, so Kashikawa drew a stand 886 ft down the fan and 75 ft off the reed
     # marsh. A cross-slope preference (the along/cross ratio, 2026-08-18) narrowed that and still admitted ground
     # below the houses. The record's rule is a ranking, so it is one here (`woodland_tier`): a seat higher than the
-    # field ground beside it and not below the houses (their median, `house_floor`) first; then, where the map has no such ground, a seat on
-    # the level beside the fields - not below the houses; a seat below the houses' median height is never offered. Low wet
-    # ground by a marsh or a river is left to grass and reeds: the marsh and stream keep-outs above refuse it, and it
-    # lies below the houses on a fan. Where the ground slopes the seat higher than the field next to it ranks first -
+    # field ground beside it first; then, where the map has no such ground, a seat on the level beyond the fields. The houses'
+    # height refuses a seat only by the water (feature 374 wave 120: 0077 refuses "a wood seated below the houses, past the
+    # fields and beside a river or marsh"; any ground below the houses had been refused, then ranked last). Low wet
+    # ground by a marsh or a river is left to grass and reeds: `low_by_the_water` refuses it (the marsh and stream keep-outs
+    # hold a square only off the water itself, so a square flush against a marsh had passed them). Where the ground slopes the seat higher than the field next to it ranks first -
     # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).
     dx, dy = plan.fall
     _fall = (dx, dy)
-    _house_floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], _fall)
     _tiers = [
-        woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts, s.px(FIELD_BESIDE_FT))) for t in scored
+        woodland_tier((t[1], t[2]), _fall, field_height_near((t[1], t[2]), _fall, crop_pts, s.px(FIELD_BESIDE_FT))) for t in scored
     ]  # beside in px: the edge samples are px (impl-drift, batch 3)
     # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
     # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
     # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground
-    scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True) if k < 2]
+    scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True)]
     # ...AND BEYOND THE FIELDS FROM THE HOUSES (feature 328; 0077's drawing page: "on the nearest slope beyond the fields
     # from the houses", the village running houses, then fields, then the wild land): feature 261 had preferred the
     # houses' side of the field. A RULE, not a preference: where no seat is reached across the field none is offered,
@@ -343,6 +346,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
         line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
         mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no sample of the parcel in marsh (WET_SHARE_CAP 0)
+        low ground by the water - GUESS research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a square below the houses refused within LOW_BY_WATER_FT (46 ft) of a river or marsh, measured from its corners (half the side times the square root of two)
         on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
         scan seat window - CONVENTION: a seat's center may sit up to 0.6 of the half-size outside the predicted frame, 0.8 of the square's box inside it
         title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter
@@ -358,6 +362,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     size, floor_px = s.px(size), s.px(_COMMONS_FLOOR_FT)
     dx, dy = plan.fall
     keep, keep_rects, lanes, streams, marshes, crops, crop_pts, (ccx, ccy) = _patch_keepouts(s, plan)
+    # the houses' floor and the water, built ONCE for the whole scan: `_ok` asks every seat whether it is low by the water (0077)
+    _floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], plan.fall)
+    _rivers = WaterZone([st for st, _ in streams], marshes)
 
     # THE PATCHES MUST NOT STRETCH THE FRAME. `crop_to_content` frames the map to its HARD features,
     # and a woodland patch is one - so a patch parked in a far corner of the working canvas drags the
@@ -505,7 +512,15 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # "drawing a box and then filling it in"): the crops grown by their set-back (the sunny side's deeper south of each),
                 # the keep circles and rectangles, the lanes and streams at their reach and the marsh, each grown by the square's
                 # half, so a center is one raster read (`open_ground_region`)
-                return bool(crops) and not open_ground_region(regions, half, n, sn, crops, keep, keep_rects, lanes + streams, marshes, (sx0, sy0, sx1, sy1)).taken(x, y)
+                # ...AND LOW GROUND BY A RIVER OR MARSH IS LEFT TO GRASS (0077, feature 374 wave 120): a wood whose square comes
+                # within `LOW_BY_WATER_FT` of the water below the houses - asked HERE, of every seat the nudge, the row step, the
+                # size roll and the aspect steps re-ask, at the square's own circumscribed reach (the keep-outs hold a square
+                # only a half off a marsh, so one moved after the scan could sit flush against it)
+                return (
+                    bool(crops)
+                    and not open_ground_region(regions, half, n, sn, crops, keep, keep_rects, lanes + streams, marshes, (sx0, sy0, sx1, sy1)).taken(x, y)
+                    and not low_by_the_water((x, y), plan.fall, _floor, _rivers, marshes, s.px(LOW_BY_WATER_FT) + half * math.sqrt(2.0))
+                )
 
             scored: list[tuple[float, float, float]] = []
             y = max(half + 40.0, sy0)
@@ -551,7 +566,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # by up to a fifth, both from `_hjit` - positional, so a map is unchanged by
                 # regeneration and two maps differ from each other. Every nudge is re-asked through
                 # `_ok`, and a nudge that would not qualify is simply not taken: this can only move a
-                # legal seat to another legal seat, never widen what the scan admits.
+                # legal seat to another legal seat, never widen what the scan admits - the water rule included, being in `_ok`.
                 # VARY THE STRIDE, NOT JUST THE SEAT (settlement-review x2, 2026-08-18 - the FIRST
                 # version of this fix did not work and this is why). Jittering the accepted seat off
                 # the lattice killed the identical-STAMP reading, and left the CHAIN: Mizuguchi still

@@ -7,6 +7,7 @@ Research: plumbing - NONE: the ranking's helpers
 
 import math
 from collections.abc import Sequence
+from typing import Any
 
 from ..consts import Poly, Pt
 
@@ -72,7 +73,8 @@ def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
     of Kashikawa's woodland commons: against the lowest house alone, a wood below 19 of the 20 houses ranked as above them);
     -inf with no houses.
 
-    Research: never below the houses - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood below the houses stands where the record puts grass"""
+    Research: the houses' height - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood below the houses and by the water stands where the record puts grass
+    the median house - UNRESEARCHED: "below the houses" read against their median height, not the lowest house's"""
     hs = sorted(-(x * fall[0] + y * fall[1]) for x, y in houses)
     if not hs:
         return -math.inf
@@ -80,15 +82,53 @@ def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
     return hs[m] if len(hs) % 2 else (hs[m - 1] + hs[m]) / 2
 
 
-def woodland_tier(p: Pt, fall: Pt, house_floor: float, field_height: float) -> int:
+def woodland_tier(p: Pt, fall: Pt, field_height: float) -> int:
     """Where the record puts a village's fuel wood, as a rank (269 B27, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): 0 - higher than the field
-    it adjoins and not below the houses (`house_floor`, their median) (the nearest hill ground beyond the fields); 1 - not below the houses but
-    not above that field (the level beside the fields, the record's fallback); 2 - below the houses' median height, where the
-    record puts the grass and riverbank commons, never the wood. Heights run up the fall: -p.fall.
+    it adjoins (the nearest slope beyond the fields); 1 - not above that field (the level beyond the fields, the record's
+    fallback). The page ranks by the field alone: the houses' height refuses a seat only by the water (`low_by_the_water`,
+    feature 374 wave 120 - a seat below the houses on dry ground had been refused, then ranked last). Heights run up the
+    fall: -p.fall.
 
-    Research: where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: higher ground beyond the fields first, the level next, never below the houses
+    Research: where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: on ground higher than the fields beside it first, on the level beyond the fields where there is no higher ground
     """
     h = -(p[0] * fall[0] + p[1] * fall[1])
-    if h < house_floor:
-        return 2
     return 0 if h > field_height else 1
+
+
+LOW_BY_WATER_FT = 46.0
+"""How near a river or a marsh "beside" is, for a wood seat below the houses (feature 374 wave 120): the width over which the
+maps draw reeds and grass interleaving at a marsh's edge (0077), taken for a river's bank too.
+
+Research: beside a river or marsh - GUESS research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within 46 ft of the water's edge, the reed and grass margin"""
+
+
+class WaterZone:
+    """The rivers' courses and the marshes as ONE geometry, built once and asked per seat (feature 374 wave 120: asked of every
+    lattice seat by distance loops, the hinterland stage ran a pool roll 2.5 times slower): a seat's distance to it is one
+    GEOS read, whatever the reach the square's size gives."""
+
+    def __init__(self, rivers: Sequence[Sequence[Pt]], marshes: Sequence[Poly]) -> None:
+        import shapely  # noqa: PLC0415 - bound on first use
+        from shapely.ops import unary_union  # noqa: PLC0415
+
+        parts = [shapely.LineString(list(r)) for r in rivers if len(r) >= 2] + [shapely.make_valid(shapely.Polygon(list(m))) for m in marshes if len(m) >= 3]
+        self.zone: Any = unary_union(parts) if parts else None
+        if self.zone is not None:
+            shapely.prepare(self.zone)
+
+    def near(self, p: Pt, reach: float) -> bool:
+        """Is `p` within `reach` of a river's course or of a marsh (inside it included)?"""
+        import shapely  # noqa: PLC0415
+
+        return self.zone is not None and float(shapely.distance(self.zone, shapely.Point(p[0], p[1]))) <= reach
+
+
+def low_by_the_water(p: Pt, fall: Pt, house_floor: float, rivers: Sequence[Sequence[Pt]] | WaterZone, marshes: Sequence[Poly], reach: float) -> bool:
+    """Is a wood seat low ground by a river or marsh - below the houses' median height (`house_floor`) and within `reach` of
+    a river's course or a marsh? There 0077 puts the village's grass and riverbank commons, not its wood.
+
+    Research: low ground left to grass - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood seated below the houses, past the fields and beside a river or marsh refused"""
+    if -(p[0] * fall[0] + p[1] * fall[1]) >= house_floor:
+        return False  # asked first: most seats stand above the houses, and need no zone at all
+    zone = rivers if isinstance(rivers, WaterZone) else WaterZone(rivers, marshes)
+    return zone.near(p, reach)

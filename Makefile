@@ -205,6 +205,12 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	: " the run-log entry and the ratchet: an incremental run that selected little legitimately finishes in under a minute, and it is"; \
 	: " never in the median a full run is judged against."; \
 	mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); sel=$$(python3 -m l7r.diagram.ci incremental selected 2>/dev/null || true); \
+	: "GUARD_EDIT_OK: feature 375 FR-004 - a tree that moved while the gate ran is not vouched for: no green, the file named."; \
+	: " Fixing a guard that recorded the opposite (374, 2026-10-12): this check ran AFTER the stamps and the green run-log entry,"; \
+	: " so a refused gate left a gate stamp and a 'green' row - the finished-run hook reported it green and measure-hooks"; \
+	: " refused the honest re-run as a second gate after a green one. It now runs before either, and logs the refusal as a failure."; \
+	[ -z "$$root" ] || [ ! -f "$$root/scripts/gates/preflight.py" ] || python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: tree moved"; $(STATE) failed-gate $(DONE_NAME); exit 1; }; \
+	: "(GUARD_EDIT_OK: feature 375 - a fixture tree without the script has no tree check to run)"; \
 	python3 "$$root/scripts/gates/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$$mode" || exit 1; \
 	[ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram && python3 "$$root/scripts/gates/gate-stamp.py" --write page || true; \
 	: "GUARD_EDIT_OK: feature 206 - the BROWSER stamp is earned here only when this run RAN the package (BROWSER_SKIP" ; \
@@ -235,9 +241,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	med=$$(python3 "$$root/scripts/measure/gatecost.py" $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
 	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts/measure'); import gatecost as _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
 	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else python3 "$$root/scripts/measure/ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
-	: "GUARD_EDIT_OK: feature 375 FR-004 - a tree that moved while the gate ran is not vouched for: no green, the file named"; \
-	[ ! -f "$$root/scripts/gates/preflight.py" ] || python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { $(STATE) failed-gate $(DONE_NAME); exit 1; }; \
-	: "(GUARD_EDIT_OK: feature 375 - a fixture tree without the script has no tree check to run)"; \
+	: "GUARD_EDIT_OK: 374 2026-10-12 - the moved-tree check now runs above, before the stamps and the run-log entry"; \
 	$(STATE) green-local $(DONE_NAME); \
 	: "GUARD_EDIT_OK: FINDING 2 OF THE NAMING AUDIT - both banners STATED SOMETHING FALSE. Since feature" ; \
 	: "174 the phase list is 'hooks-test test-full (+perf-gate under FULL)', so a plain make done runs the" ; \

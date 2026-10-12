@@ -1,0 +1,12 @@
+1 seed=39 hh=20 base 0m15.967s 0m0.384s
+1 seed=39 hh=20 head 0m18.212s 0m0.363s
+1 seed=47 hh=20 base 0m20.267s 0m0.432s
+1 seed=47 hh=20 head 0m23.048s 0m0.464s
+2 seed=39 hh=20 base 0m17.935s 0m0.432s
+2 seed=39 hh=20 head 0m18.504s 0m0.363s
+2 seed=47 hh=20 base 0m21.297s 0m0.374s
+2 seed=47 hh=20 head 0m27.272s 0m0.463s
+3 seed=39 hh=20 base 0m18.256s 0m0.509s
+3 seed=39 hh=20 head 0m13.452s 0m0.326s
+3 seed=47 hh=20 base 0m13.078s 0m0.263s
+3 seed=47 hh=20 head 0m10.686s 0m0.248s

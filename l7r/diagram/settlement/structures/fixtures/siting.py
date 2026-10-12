@@ -293,7 +293,8 @@ class FixtureSitingMixin:
             long axis along the route - research/questions/0190-notice-boards-kosatsuba.drawing.html: broadside to the traffic
             an approach seat faces the approach - research/questions/0190-notice-boards-kosatsuba.drawing.html: squared to the road it faces, here the way out every departure passes
             off the tread, out of water, in view - research/questions/0190-notice-boards-kosatsuba.drawing.html: never in the roadbed
-            seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat, the nearer counted double
+            seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat
+            the nearer weighted - UNRESEARCHED: a building within the inner radius counts three times, once in each radius and once more
             traffic radii - UNRESEARCHED: 260 px and 150 px, in pixels at every scale
             nearness tie-break - UNRESEARCHED: score less a third of the offset
             least offset off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road to the board drawn (its footing), not to the face tested

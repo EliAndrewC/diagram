@@ -187,5 +187,5 @@ def test_the_gate_wires_the_stats_into_every_entry_it_writes() -> None:
     assert '$(RUNSTATS) start "$$G"' in recipe and 'export L7R_GATE_FAILURES="$$G/gate-failures"' in recipe
     # Two phase loops and the reference step mark their failures.
     assert recipe.count('$(RUNSTATS) fail "$$G"') == 3
-    # Each LOGRUN that follows a run (two failure paths, the reference failure, green) carries the stats.
-    assert recipe.count('RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" ') == 4
+    # Each LOGRUN that follows a run (two failure paths, the reference failure, the moved tree, green) carries the stats.
+    assert recipe.count('RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" ') == 5
