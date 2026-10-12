@@ -99,23 +99,3 @@ measured, the GM:
 So amendment 5 is: performance recorded and flagged, never a gate; the machine's state (free RAM, load, disk) captured at
 each snapshot's start and end; CPU time recorded beside wall time; the 5% line as the flag's threshold; the scaling leg only
 when asked for.
-
-## Amendment 6 (2026-10-12, the "Diagram tooling" session)
-
-`make gm-review EXPLAIN=1` put two declined tooling fixes before the GM (feature 343, rows 83 and 84): the round arbiter had
-asked twice that an edit to a pop-up's About alone stop re-owing `modal-depiction`, after an About-only sentence split drove
-two pop-ups to the round cap, and the session declined both as contradicting FR-015 (amendment 1). FR-015's clause that About
-owes the check is the session's own wording, carried from feature 319's plan decision D13; the GM's words in amendment 1
-approve owing a check only by the words it reads. The session measured that 44 of the 222 edits to existing pop-ups since
-2026-10-05 changed About and nothing `modal-depiction` reads besides, each re-owing an Opus depiction round, and that
-`modal-form` - owed by every About edit - already holds M13 (a drawing statement in About belongs on the Depiction tab), its
-contract's stale M13 line fixed and landed the same day. The GM, asking first:
-
-> Now for the tooling fix, it sounds like what you're saying is that the arbiter proposed a tooling fix and then that was declined. And it was declined because of an interpretation of something that I had previously said about the about tab of a modal. Can you explain the details of that one a little bit more and whether or not you think that it would make things more efficient without a loss of fidelity? Because this seems like a situation where my words are being interpreted to mean something that I didn't necessarily intend, but I want to make sure.
-
-> And I guess that actually applies to both of the declined tooling fixes.
-
-Then, on the session's recommendation:
-
-> Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work.
-
