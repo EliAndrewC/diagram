@@ -632,9 +632,10 @@
     "files": [
       "l7r/diagram/hamletgen/homesteads/fixtures.py"
     ],
-    "fix": "cap the fixture count at the share (shrines 3-8 per 100 homesteads); the spec floor and half-up rounding never raise it past the cap",
-    "flag": "Held: question for the GM, deferred to the feature's end (goal amendment 2026-10-07). research/questions/0219-household-shrines-yashikigami.drawing.html: 'A map never has more shrines than three to eight homesteads in a hundred' against feature 133 T61, the GM: 'ensure that it is present' (Inashiro's fixtures_min {'shrine': 1}). Measured: Inashiro's shrine share 0.049 at 15 households caps at 0.735 - 0 shrines without the floor, 1 with it. Options: (a) the cap overrides the floor, Inashiro loses its hokora; (b) the floor stays and 0219's drawing page records it as a deviation the GM chose. Exception check (spec-fidelity, 2026-10-07): LEGITIMATE to leave open and continue",
-    "tier": "E2"
+    "fix": "No engine change: the floor stands over the cap (max(round(share x n), floor) is right). Reword research/questions/0219-household-shrines-yashikigami.drawing.html: the three-to-eight-in-a-hundred share is a rate across the countryside, not a cap within one map, so a hamlet a spec gives one shrine stands within it (and is not a deviation); drop 'A map never has more shrines than three to eight homesteads in a hundred', then the claim's impl-drift re-check",
+    "flag": "",
+    "tier": "E1",
+    "ruled": "the GM, 2026-10-12: \"For the shrine numbers, then the current behavior is good, which is to say that it is fine for a floor to take precedence over the cap. So if we say this hamlet has one shrine, then that is okay. And that's not even a deviation, because if We're saying that no more than one shrine existed for a certain number of households. Then that can mean, for instance, that one out of every four hamlets has one, and then the overall number is maintained across the countryside, even if it is not maintained within a subset of the farmhouses in the countryside, such as those within a single hamlet.\""
   },
   "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown": {
     "after": [],
@@ -3227,6 +3228,10 @@
     "flag": "Held behind #senior retainers housed apart (row 21, its after): feature 372 wave 99's plan review - Ochiba's tubs added only if the karo's house stays, Ubame's tubs counted per building then"
   },
   "l7r/diagram/buildings/types.json#door band": {
-    "flag": "Held: question for the GM, deferred to the feature's end (goal amendment 2026-10-07). research/questions/0117-doorways-and-doors-to.drawing.html records the sheets' doors (mostly 8-8.7 ft) as a drawing CONVENTION, two to three times a real door, and the draft's 6 ft as following it; the size audit's 3-6 ft band and the GM's standing rule that to-scale plans draw true sizes (raising legibility, not inflating) would narrow them to 3-6 ft. Which stands: the recorded convention, or true-size doors on every sheet?"
+    "flag": "",
+    "tier": "E0",
+    "fix": "none - the GM keeps what is implemented",
+    "e0_basis": "research/questions/0117-doorways-and-doors-to.drawing.html already records the sheets' 8-8.7 ft doors and the generated 6 ft door as a drawing CONVENTION, which is what the code draws; the GM ruled 2026-10-12 (make gm-review): \"for the door band question, I am okay with what is currently implemented.\"",
+    "ruled": "the GM, 2026-10-12, held row answered: keep the recorded convention"
   }
 }

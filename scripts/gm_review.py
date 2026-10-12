@@ -174,7 +174,8 @@ def listing(root: Path, feature: str = "", width: int = 0) -> str:
         out.append("HELD - work cannot go on until the GM decides (feature 328's ranking, carried by 374)")
         for h in hs:
             key, _, flag = h.partition(": ")
-            out += [_fit(f"  * {key}", width), _fit(f"      {re.sub(r'^Held[:,]?\s*', '', flag)}", width)]
+            behind = " (waits on other work, not on the GM)" if flag.startswith("Held behind") else ""
+            out += [_fit(f"  * {key}{behind}", width), _fit(f"      {re.sub(r'^Held[:,]?\s*', '', flag)}", width)]
         out.append("")
     if features:
         out.append("TO REVIEW - landed; the GM may overturn any row")

@@ -202,5 +202,6 @@ def test_explain_with_no_feature_names_only_what_needs_the_gm(root: pathlib.Path
     assert "3. A TOOLING FIX DECLINED TO YOU: feature 375 row [0], modal-depiction sheet/garden" in e
     assert "The other 1 row(s) are decisions already made" in e
     assert "needs a decision: 1 held question(s), 1 fix(es) declined" in gm.listing(root, width=200)
+    assert "  * b#tubs (waits on other work, not on the GM)" in gm.listing(root, width=200)
     monkeypatch.chdir(root)
     assert gm.main(["explain", "375", "1"]) == 0 and "went red twice" in capsys.readouterr().out
