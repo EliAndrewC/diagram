@@ -186,6 +186,20 @@
         }
       },
       {
+        "id": "shrine_tree",
+        "kind": "sacred tree",
+        "band_ft": {
+          "w": [
+            15,
+            50
+          ],
+          "h": [
+            15,
+            50
+          ]
+        }
+      },
+      {
         "id": "well",
         "kind": "well",
         "band_ft": {}

@@ -495,6 +495,7 @@
        its back is flush to the wall - was floated ~23 ft off it, leaving a dead
        NE strip a subordinate hall should not (size-audit backing-void sweep, 2026-07);
        the freed strip went to the inner garden. -->
+  <g data-kind="sacred tree" data-part-of="compound shrine" fill="#7A8C5C" stroke="#3E5230" stroke-width="1.4"><circle cx="840" cy="250" r="30"/></g>
   <g data-kind="compound shrine">
     <rect data-id="compound-shrine-2" x="880" y="200" width="110" height="92" fill="#C9876C" stroke="#6B2A18" stroke-width="2.5"/>
     <!-- internal rail dividing W (Ta-no-Kami) and E (Myobu) -->

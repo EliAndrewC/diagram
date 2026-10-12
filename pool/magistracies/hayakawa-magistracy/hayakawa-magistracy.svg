@@ -869,8 +869,8 @@
     <circle cx="315" cy="309.5" r="3.8"/>
     <!-- residence east block (reception and the lord's suite) - beside the shoe stone its guests step up from -->
     <circle cx="613" cy="326.5" r="3.8"/>
-    <!-- the shrine - beside the Fire Dragon shrine's west door, toward its torii -->
-    <circle cx="877" cy="186" r="3.8"/>
+    <!-- the shrine - at its south-east corner, inside the arch, beside its south door (feature 374 wave 130) -->
+    <circle cx="868" cy="185" r="3.8"/>
     <!-- guest house - beside its south door -->
     <circle cx="918" cy="307.5" r="3.8"/>
     <!-- granary - beside its north door -->

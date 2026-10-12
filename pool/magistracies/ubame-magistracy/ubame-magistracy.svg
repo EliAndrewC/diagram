@@ -538,6 +538,10 @@
     <text font-size="7" font-weight="bold" fill="#3A2E1C">storehouse</text>
   </g>
 
+  <!-- the shrine's way: from the open ground east of the reception, along the garden's north edge, drawn before the shrine so its caption paints over it, then north under the arch
+       to the hall's south door (the arch is the one built thing a way runs under, docs/buildings.md; feature 335's glyph
+       check of the torii). Its line is a GUESS. -->
+  <path d="M 845 256 H 1023 V 214" fill="none" stroke="#C8B080" stroke-width="7" stroke-linejoin="round" data-kind="inner court"/>
   <!-- THE SHRINE IN ITS CORNER, BESIDE ITS TREE (feature 374 wave 130): the inner court's north-east corner, as a household
        kept its god in a corner of its lot at a small shrine or an old tree (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html:
        "Every compound our maps draw has one modest shrine, in a corner of its grounds beside a tree"). It stood 28 ft off
@@ -583,10 +587,6 @@
        shrine's arch stands 5-12 ft before its hall). Drawn IN PLAN (docs/buildings.md "Arch (torii) and approach",
        feature 268): the 15 x 1.5 ft vermilion top beam across the approach, and its two 1.2 ft posts marked darker under
        its ends, 10.3 ft clear between them. -->
-  <!-- the shrine's way: from the open ground east of the reception, along the garden's north edge, then north under the arch
-       to the hall's south door (the arch is the one built thing a way runs under, docs/buildings.md; feature 335's glyph
-       check of the torii). Its line is a GUESS. -->
-  <path d="M 860 310 H 1023 V 214" fill="none" stroke="#C8B080" stroke-width="7" stroke-linejoin="round" data-kind="inner court"/>
   <g data-kind="torii" data-part-of="compound shrine">
     <rect x="1000.5" y="233" width="45" height="6" fill="none" id="arch"/>
     <line x1="1000.5" y1="236" x2="1045.5" y2="236" stroke="#A03020" stroke-width="4.5"/>
@@ -737,8 +737,11 @@
     <!-- it runs on east to the border wall (feature 374 wave 130, building-review E1: the shrine grove's removal left the
          inner court's east third, ~57 x 83 ft, bare): the garden before the house is a residence garden's ground, its extent
          calibrated liberty (research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html); the
-         shrine's corner above it keeps its own ground, the torii and the way to it -->
-    <rect x="520" y="326" width="540" height="118" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+         garden rises north of the reception's east strip to 8 ft below the arch (building-review round 2, E1: 0220, "a compound
+         shrine's ground is small"), leaving the arch its forecourt and the carters' strip by the reception its way to the privy -->
+    <rect x="520" y="326" width="540" height="118" fill="url(#garden-stipple)" stroke="none"/>
+    <rect x="860" y="263" width="200" height="64" fill="url(#garden-stipple)" stroke="none"/>
+    <polygon points="520,326 860,326 860,263 1060,263 1060,444 520,444" fill="none" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
     <!-- a DRY GARDEN where a pond would be: raked white gravel and set stones standing for water (feature 267 R30,
          buildings 530: the pond garden and the dry landscape are both a residence garden's forms; six of seven
          Chiran samurai-house gardens are dry). It lies before the RECEPTION - the zashiki-to-garden axis is the

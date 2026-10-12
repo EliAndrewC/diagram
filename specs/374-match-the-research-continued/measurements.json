@@ -1333,5 +1333,109 @@
     "value": {
       "drawn": true
     }
+  },
+  "b5r2-hay-e1": {
+    "quantity": "the shrine's tub off the wall",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the tub at (868,185), 2 ft below the hall's eaves at its south-east corner, clear of the wall's ink (to x 875.5) and the torii beam (y 200); fire_water_adrift and fire_water_distribution OK",
+    "value": {
+      "clear": true
+    }
+  },
+  "b5r2-hay-n1": {
+    "quantity": "the notes' north-east corner",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "line 38 now reads 'the east end of the strip they free'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-hay-n2": {
+    "quantity": "the tub's comment",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--hayakawa-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the comment reads 'at its south-east corner, inside the arch, beside its south door'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-ub-e1": {
+    "quantity": "the band east of the reception",
+    "observed": "2026-10-12",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the garden's north edge raised to y 263 for x 860-1060, 8 ft below the arch; pack-audit's largest vacancies are the named kitchen yard, the rear-yard band and the west alley",
+    "value": {
+      "largest_vacancy_sqft": 3345
+    }
+  },
+  "b5r2-ub-e2": {
+    "quantity": "notes line 33",
+    "observed": "2026-10-12",
+    "verifies": "E2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "it reads 'a modest standalone hall in a corner beside its tree, the wood's kami at a second altar inside it'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-ub-n1": {
+    "quantity": "notes line 14's grove",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "'a mature grove' now 'a wide inner garden'",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-ub-n2": {
+    "quantity": "the way painted over its caption",
+    "observed": "2026-10-12",
+    "verifies": "N2",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the way drawn before the shrine group, so the caption paints over it; the render reads INARI SHRINE whole",
+    "value": {
+      "fixed": true
+    }
+  },
+  "b5r2-cty-n1": {
+    "quantity": "the notes' hearing court size",
+    "observed": "2026-10-12",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "27996c2d35fc",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make pack-audit ARGS=<the sheet>",
+    "method": "the guess list reads 80 x 26 ft with the 6 ft cut recorded",
+    "value": {
+      "fixed": true
+    }
   }
 }
