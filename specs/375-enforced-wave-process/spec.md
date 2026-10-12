@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Reopened 2026-10-12 for amendment 10 (a reopened feature's glyph hour counts from its reopening; amendments 1-9 Done 2026-10-11/12)
+**Status**: Done 2026-10-12 - amendment 10 landed: spec FAITHFUL (round 2), plan CLEAR (round 2); a reopened feature's glyph hour counts from its most recent reopening (SC-035 tested); amendments 1-9 Done
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
 
