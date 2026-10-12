@@ -166,29 +166,32 @@ that after you make the other changes").
 - **FR-019 A pop-up's checks run in order, and a round's applied edits settle the checks before it.** The structural cause,
   measured on 374's and 352's clones (`research.md` R2): a pop-up's three checks run together, each proposes edits, and the edits
   applied re-owe the other two - every second and third round there was owed because the pop-up itself had changed, and
-  `modal-form` proposed edits in nearly every second round. A check is already not re-owed by its OWN applied edits (feature
-  335: `make apply-edits` settles the reply's own units). Now:
-  (a) On a pop-up whose `modal-form` unit is owed and unanswered, `modal-form` goes first: a `modal-research` or
-  `modal-depiction` bundle for that pop-up is refused, the refusal naming the `modal-form` bundle command. An escape,
-  `FORM_FIRST_OK="<why>"`, builds it anyway and is recorded in the bundle's MANIFEST. A pop-up owed no `modal-form` unit
-  (a page it names moved, nothing in it) is not held.
-  (b) When a `modal-research` or `modal-depiction` round's own EDIT blocks are applied, the pop-up's `modal-form` unit
-  settles with its answer as the check's own units do - where `modal-form` was answered at the words before those blocks and
-  the blocks alone moved them. A unit changed any other way stays owed.
-  (c) A `modal-form` round's blocks settle nothing of the other two checks: they read the formed words next. Between
-  `modal-research` and `modal-depiction`, each other's applied edits still owe the other as today (each reads facts the other
-  may change).
-  This is the speculative fix the GM asked for; SC-012 measures it on the next pop-up rounds.
+  `modal-form` proposed edits in nearly every second round there; in 374 most second rounds were `modal-depiction`'s (19 of
+  29 units), on pop-ups where `modal-form` ran on only 5, owed by the other checks' edits. A check is already not re-owed by its OWN applied edits (feature 335: `make apply-edits` settles the reply's
+  own units). Now:
+  (a) A pop-up's checks run in one order: `modal-form` (its words and their order), then `modal-research` (whether those
+  words are supported), then `modal-depiction` (whether the Depiction tab tells the drawing, read last because the research
+  round may move a drawing statement). A check's bundle for a pop-up is refused while a check before it in the order is owed
+  on that pop-up and unanswered, the refusal naming that check's bundle command. An escape, `FORM_FIRST_OK="<why>"`, builds
+  it anyway and is recorded in the bundle's MANIFEST. A check owed nothing before it (a page only its `Drawing:` names
+  moved, say) is not held: the order is read off what is owed, never off the check asked for.
+  (b) When a round's own EDIT blocks are applied, each check BEFORE the replying check in the order settles with its answer
+  as the replying check's own units do - where that check was answered at the words before those blocks and the blocks alone
+  moved them. A unit changed any other way stays owed.
+  (c) A round's blocks settle nothing of a check AFTER the replying one: that check reads the edited words next.
+  This is the speculative fix the GM asked for, ordering all three checks; SC-012 measures it on the next pop-up rounds.
 - **FR-020 The record tooling's shared cost is paid once per content.** The four commands spend most of their time in the
   same work, measured on 374's delta (`request.md`): re-reading the whole record at the merge base and at the working tree
   on every call (about 1.7 s of parsing), one `git` process per file for the pop-ups and the entry-drift classes at the base
-  (299 and 177 processes, about 2 s), and re-parsing every engine module for the research claims (about 7 s;
-  `m:375-a3-record-tooling-before`, `research.md` R1). Now:
-  (a) a question page's, notes file's or write-up's parse is kept by its content and the parsing code's own source, so an
-  unchanged file is parsed once, not once per call and per revision;
+  (299 and 177 processes; the two stages took 1.25 s and 0.76 s), and re-parsing every engine module for the research
+  claims (`all_units`, 7.3 s timed in-process with other runs on the container; `m:375-a3-record-tooling-before`,
+  `research.md` R1). Now:
+  (a) a question page's, notes file's or write-up's parse is kept by its content and by the source of the code that parses
+  it - the parsing module and every project module it imports, transitively - so an unchanged file is parsed once, not
+  once per call and per revision;
   (b) a revision's files are read in one `git` batch, never one process per file;
   (c) the engine's research claims are kept by the content of every engine module and procedure document they are read from
-  and the claim reader's own source;
+  and the source of the claim readers and every project module they import, transitively;
   (d) a command builds only what it prints (a pop-up's bundle computes that pop-up's owed lines, not the whole delta's,
   where its result is the same).
   A cache never changes an answer: any change to a file or to the code that reads it misses, and each command's output is
@@ -233,20 +236,26 @@ that after you make the other changes").
   single trigger's ruling is refused, pointing to it. The tests fail on today's code.
 - **SC-010** (FR-018) A bundle for a round trigger the guard never recorded as owed carries that unit's rounds (replaying the
   shape of 343's form-check bundles). The test fails on today's code.
-- **SC-011** (FR-019) On a fixture pop-up owed all three checks: a `modal-research` and a `modal-depiction` bundle are refused
-  while its `modal-form` unit is unanswered, the refusal naming the `modal-form` bundle command; with `FORM_FIRST_OK` each is
-  built and its MANIFEST says why; a pop-up owed only by a moved page is not held. With `modal-form` answered, applying a
-  `modal-research` reply's EDIT blocks leaves `modal-form` answered; a hand edit after it re-owes it; applying a `modal-form`
-  reply's blocks after `modal-research` answered leaves `modal-research` owed. The tests fail on today's code.
-- **SC-012** (FR-019; carried to 374) The pop-up check dispatches per checked unit on the next pop-up rounds, recorded beside
-  the baseline measured 2026-10-11 from the kept dispatch records (`m:375-a3-popup-rounds-before`, R2): 374's clone 71 dispatches over 34 units (2.09; 29 units
-  with a second round, 4 with a third), the research clone's 169 over 82 (2.06; 70 and 11).
+- **SC-011** (FR-019) On a fixture pop-up owed all three checks: a `modal-research` bundle is refused while `modal-form` is
+  unanswered, and a `modal-depiction` bundle while either is, each refusal naming the bundle command of the check owed first;
+  with `FORM_FIRST_OK` each is built and its MANIFEST says why; a pop-up owed only `modal-depiction` (a page its `Drawing:`
+  names moved) is not held. Applying a `modal-research` reply's EDIT blocks leaves `modal-form` answered, and a
+  `modal-depiction` reply's leaves both answered; a hand edit after either re-owes them; a `modal-form` reply's blocks
+  applied after `modal-research` answered leave `modal-research` owed. The tests fail on today's code.
+- **SC-012** (FR-019; carried to 374) The pop-up check dispatches per checked unit on the next pop-up rounds, counted by the
+  same script as the baseline (`scripts/measure/popup_rounds.py` over a clone's kept dispatch records;
+  `m:375-a3-popup-rounds-before`, R2): 374's clone 71 dispatches over 34 units (2.09; 29 units with a second round, 4 with a
+  third), the research clone's 169 over 82 (2.06; 70 and 11). The fix WORKED if dispatches per unit fall below 1.5 and at
+  most one unit in twenty reaches a third round (the baseline's 4 of 34 and 11 of 82 are about one in eight); it HELPED if
+  either falls but not both that far; it FAILED if neither falls below the baseline.
   `Carried: SC-012 -> 374 sc012-375-a3-popup-rounds`.
-- **SC-013** (FR-020) On 374's delta (its pushed HEAD 61a52f3c8 in a detached worktree, its answer store copied), wall time
-  with the caches warm, each at most half its time measured 2026-10-11 (`m:375-a3-record-tooling-before`, R1): `record-owed` 6.0 s, `check-bundle Q=0190` 6.0 s
-  (`NO_QUOTES=1`), `modal-bundle KIND=hamlet/notice-board FOR=modal-depiction` 6.7 s, `claims-owed` 6.9 s; none slower cold;
-  each command's output byte-identical with and without the caches. A test per cache shows a changed file and a changed
-  reading code each miss. The times are a key of `measurements.json`.
+- **SC-013** (FR-020) On 374's delta (its pushed HEAD 61a52f3c8 in a detached worktree, its answer store copied), the four
+  commands - `record-owed`, `check-bundle Q=0190` (`NO_QUOTES=1`), `modal-bundle KIND=hamlet/notice-board
+  FOR=modal-depiction`, `claims-owed` - timed back to back with today's code and the new, alternating, three runs each, the
+  load recorded at both ends (one run each before the change: 6.0 s, 6.0 s, 6.7 s and 6.9 s, R1): each new median with the
+  caches warm at most half today's median, and no new cold median above today's; each command's output byte-identical with
+  and without the caches. A test per cache shows a changed file and a changed reading module (an imported one too) each
+  miss. The times are a key of `measurements.json`.
 - **SC-014** (FR-021) With a fixture: a change to one script runs only the test files that depend on it, a file that builds
   its script paths runs on any change under `scripts/`, an unchanged tree runs none, and `HOOKS_ALL=1` runs them all. Measured
   over main's last ten commits touching `scripts/`: the test files each would have run, against all of them today - a key of
@@ -278,7 +287,7 @@ next wave is, so it is carried there.
 | The unit of work a check belongs to is a task, never a wave | spec-fidelity round 1, 2026-10-10 | a feature without waves has tasks; 372's waves were each one task |
 | SC-003 and SC-004 carried to 374 and held there by FR-014 | spec-fidelity round 1, 2026-10-10 | 374 takes no task until 375 lands, and a feature with an open task lands nothing: keeping 375 open for them would stall both |
 | Tripwires on events, not an hourly timer | this project's decision | a pattern is caught when it happens; a timer fires mid-action and asks the looping session to judge itself |
-| `modal-form` first, not last (amendment 3) | this project's decision | a form edit can carry a fact: 374's residence-corridor round 2 had `modal-research` catch a comparison modal-form's wording introduced, which no page supports. With form first, the substance checks read its words; their narrow fixes settle form's answer |
+| The order form, research, depiction (amendment 3) | spec-fidelity, amendment 3 round 1 | form first: a form edit can carry a fact (374's residence-corridor round 2 had `modal-research` catch a comparison modal-form's rewording introduced), so the substance checks read form's words. Depiction last: it reads About for drawing statements, which a research round may move. Ordering only form left research and depiction re-owing each other, the same cause on two checks (the review's item 1) |
 | Ordering on the pop-ups, not a fourth round's cap or a merged check (amendment 3) | the GM, 2026-10-11 | the GM asked for the speculative fix and a measurement after it ("perhaps it's worth trying to make the speculative fix and measuring it afterwards"); the three checks keep their own contracts |
 | Caches keyed by content and by the reading code's own source, never by time (amendment 3) | this project's decision | a cache that outlives a change to its reader serves the old answer; keyed so, a fix to the parser is a miss, and an unchanged file is never read twice |
 
@@ -304,3 +313,8 @@ next wave is, so it is carried there.
   owed); SC-009 replays 343's shape and tests the refusal. The aside (a ruling row asked ahead lost its unit) is fixed with
   FR-018's parser.
 - spec-fidelity-verify, amendment 2 round 2 (2026-10-11): FAITHFUL - round 1's three items and its aside resolved.
+- spec-fidelity, amendment 3 round 1 (2026-10-11, the counter reset): CHANGES REQUIRED. Applied: FR-019 orders all three
+  checks (form, research, depiction), each later check's applied edits settling every earlier one, not form alone; SC-012
+  says what counts as the fix working and is counted by a kept script; SC-013 times today's code and the new back to back,
+  three runs each, with the load; FR-020's claims figure is the timed `all_units` stage; a cache's key covers the reading
+  code's imports transitively; R2 reconciles the "about 20" put to the GM.

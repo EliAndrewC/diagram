@@ -21,3 +21,7 @@ edits. A check's OWN applied edits already settle its units (feature 335, `apply
 `modal-form` proposed edits in 12 of 12 kept second-round replies in the research clone (2 of 5 in 374's), each re-owing the
 substance checks. One case argues against running form last: 374's residence-corridor round 2, where `modal-research` caught a
 comparison that modal-form's rewording had introduced.
+
+The context put to the GM said "about 20 of 374's units" reached the round cap: that was 374's 20 `accept` rulings over all
+its tripwires (building reviews, claims checks and pop-ups together). The pop-up units alone: 4 with a third dispatch in
+374's kept records, and 5 ruled in wave 120's one batch; 352's 21 triggers are pop-up units.

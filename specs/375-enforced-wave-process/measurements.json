@@ -245,8 +245,8 @@
   "quantity": "pop-up check dispatches per checked unit before amendment 3 (FR-019, SC-012's baseline)",
   "observed": "2026-10-11",
   "source": "the kept dispatch records (.git/checks-open.json) of the diagram-backlog clone (374) and the diagram-research clone (343, 368, 335 and 352's rounds), and their kept replies (.git/check-replies)",
-  "command": "count each (pop-up, check) unit's dispatches and their `owed:` lines; count EDIT blocks per reply by round",
-  "method": "a one-off script over the JSON, read-only",
+  "command": "python3 scripts/measure/popup_rounds.py /diagram/.clones/<clone> (each clone's .git/checks-open.json); EDIT blocks per reply counted over .git/check-replies by round, read-only",
+  "method": "scripts/measure/popup_rounds.py's counts (each dispatch counted once per pop-up it names; a unit is a (pop-up, check) pair), kept so the after (SC-012) is counted the same way",
   "value": {
    "374": {
     "units": 34,
