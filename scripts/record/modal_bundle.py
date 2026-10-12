@@ -360,6 +360,16 @@ def knobs_note(doc: str) -> str:
     return "\n".join(parts)
 
 
+def stale_page(page: pathlib.Path, root: pathlib.Path) -> str:
+    """Why a pool page is older than the drawing it was written from, or '' (feature 374 wave 126: a stables crop came from
+    a page rendered before the sheet's redraw, and the check judged the old stable). The page is written beside its `.svg`
+    by the map's generator; an `.svg` edited later is not on the page until the map is regenerated."""
+    svg = page.with_suffix(".svg")
+    if svg.is_file() and svg.stat().st_mtime > page.stat().st_mtime + 1.0:
+        return f"{page.name} is older than {svg.name} - its crop would show the drawing before the edit; regenerate it first: make map GEN={page.with_suffix('.gen.py').relative_to(root)}"
+    return ""
+
+
 def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, grep_targets: list[str]) -> None:  # noqa: ANN001
     """What `modal-depiction` reads beyond the modal and the rules: each drawing page its `Drawing:` lists and each CANDIDATE
     its kind has (`drawing_candidates`), whole; the claims citing any of them; and the glyph's crop (plan D13)."""
@@ -377,6 +387,8 @@ def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, gre
     put("claims.md", "# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n" + ("\n".join(rows) if rows else "(none)") + "\n",
         str(CLAIMS_INDEX), "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")
     page = pool_page_with(root, m.key, sheet=m.uid.startswith("sheet/"))
+    if page is not None and (why := stale_page(page, root)):
+        raise SystemExit(f"modal-bundle: {why}")
     crop = out / "glyph.png"
     shape = drawn_geometry(page, m.key) if page is not None else ""
     if page is not None and glyph_crop(page, m.key, crop):
