@@ -156,3 +156,12 @@ yield table, the cohort's seeds so far (the first ten seeds would have found eve
 
 > I confirm the check-bundle thing is good as you've done it.  it's also fine to do the 10 seeds.  As for the reviews being changed, I'll look at the table when you have it, thanks
 
+## Amendment 9 (2026-10-12, the same later session)
+
+After amendment 8 landed, the session put the review checks' yield to the GM (`make review-yield`): `glyph-check` cost the most
+(9.3 hours since 2026-09-26) and yielded the least for it (46 findings acted on of 120, 5.0 an hour). The GM:
+
+> If caching is better than folding check-bundle into one process then we should take the caching approach.
+>
+> Here's what I think we should do for `glyph-check`: we make it something which is run periodically rather than every time a map changes.  For example, we could make it so that every feature which takes longer than 1 hour to implement is "due" to run it once after every hour and the address findings all at once.
+
