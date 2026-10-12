@@ -358,3 +358,5 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015.
   split that drops a section fails; the case count is the file's (26 headed cases; the timing table keyed by ordinal), and
   the shared helpers are named. The review's "already red" was a copy run outside a worktree: today's file in its own
   worktree passed its 123 checks (150 s).
+- spec-fidelity-verify, amendment 4 round 2 (2026-10-11): FAITHFUL - round 1's two items resolved; today's suite re-run at
+  bfe25f2da in its own worktree passed its 123 checks.
