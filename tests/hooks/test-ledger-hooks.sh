@@ -90,6 +90,17 @@ run 'git commit -m other'
 case "$OUT" in *"ledger-owed"*) no "a pass with its row is still reported" "$OUT" ;; *) ok "a pass with its row is not reported" ;; esac
 rm -f "$FIX/.git/check-passes.jsonl"
 
+echo "7. a command that appends its rows and commits is judged on the ledger it will commit (374, 2026-10-12)"
+printf '%s' "$HEAD_TXT" > "$FIX/dev/review-ledger.md"
+printf '%s\n' '{"date": "2026-10-10", "check": "glyph-check", "subject": "copse", "agent": "a1", "wall": "80 s", "tokens": "244k in (199k cached) / 7.8k out"}' > "$FIX/.git/check-passes.jsonl"
+ROW='| 2026-10-10 | glyph-check | copse | PASS | caught nothing | nothing | - | nothing | 80 s | 244k in (199k cached) / 7.8k out |'
+run "make append FILE=dev/review-ledger.md LINE=\"$ROW\" && git add dev && git commit -m row"
+case "$OUT" in *"ledger-owed"*) no "the row the command appends was reported owed" "$OUT" ;; *) ok "the pass whose row the same command appends is not reported" ;; esac
+[ "$RC" -eq 0 ] && ok "...and a whole appended row commits" || no "a whole appended row was refused" "(rc=$RC) $OUT"
+run "make append FILE=dev/review-ledger.md LINE=\"$SHORT\" && git add dev && git commit -m row"
+[ "$RC" -eq 2 ] && ok "a short row the command appends is linted before it lands" || no "an appended short row passed" "(rc=$RC)"
+rm -f "$FIX/.git/check-passes.jsonl"
+
 echo
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]
