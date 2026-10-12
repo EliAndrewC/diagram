@@ -979,5 +979,31 @@
    "About-only edits (owed before, not now)": 43,
    "owed now among the About-only edits": 0
   }
+ },
+ "375-a7-cohort-after": {
+  "what": "SC-022 (FR-029): make cohort N=48 JOBS=4 on 374's delta - four detached worktrees (merge base a41ab2e0f and 374's 61a52f3c8, each with today's code and with the new cohort_audit.py, cohort_roll.py and rollcache.py), a before and an after leg, two waves, old and new alternating; one-shot, 2026-10-12 01:40-01:59, load 3.3-5.2 (other sessions running). Wave 1 rolls everything on both codes (the store started empty for the cohort: subjects). Seconds per leg; per-seed verdicts from dev/cohort-log/.",
+  "date": "2026-10-12",
+  "command": "scratchpad sc021.sh (one-shot): make cohort N=48 JOBS=4 per leg in the four worktrees, timed",
+  "value": {
+   "old": {
+    "w1 before": 200.8,
+    "w1 after": 186.8,
+    "w2 before": 154.0,
+    "w2 after": 169.0
+   },
+   "new": {
+    "w1 before": 195.9,
+    "w1 after": 181.6,
+    "w2 before": 9.2,
+    "w2 after": 9.9
+   },
+   "wave 2 both legs s": {
+    "old": 323.0,
+    "new": 19.1
+   },
+   "served on wave 2": "54 of 54 in each new leg (dev/cohort-log/20261012T055859Z-cbn-1799983.json, 20261012T055909Z-bl-1800797.json)",
+   "verdicts": "every leg 52/54 passed, the same 2 refused; each served seed's verdict and failures identical to its rolled verdict on wave 1, seed by seed",
+   "the measurement before the versioned store": "0 of 54 served on wave 2 (2026-10-12 00:56-01:31, records 20261012T051120Z..053124Z): the legs evicted each other's one entry per subject (plan D38)"
+  }
  }
 }
