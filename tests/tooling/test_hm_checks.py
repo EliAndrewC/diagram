@@ -467,7 +467,9 @@ def test_a_later_batch_counts_its_rounds_afresh_and_a_batch_s_own_edits_do_not(t
     for i, m in enumerate((MANIFEST, edited)):
         assert hc.dispatch(st, f"t{i}", "quote-check", "/m", m, i, root) == ""
         hc.answered(st, "quote-check", ["q:0105"])
-    assert "passes its cap of 2" in hc.dispatch(st, "t2", "quote-check", "/m", "owed-checks: quote-check\nunit: quote-check:0105#x yyy\n", 2, root), "the same batch: round 3 trips, edits notwithstanding"
+    assert "passes its cap of 2" in hc.dispatch(st, "t2", "quote-check", "/m", "owed-checks: quote-check\nunit: quote-check:0105#x yyy\n", 2, root), (
+        "the same batch: round 3 trips, edits notwithstanding"
+    )
     batch["b"] = "main-2"  # a landing: a later batch owes the unit
     for i in range(2):
         assert hc.dispatch(st, f"n{i}", "quote-check", "/m", MANIFEST, 3 + i, root) == "", "a later batch's rounds count afresh"
