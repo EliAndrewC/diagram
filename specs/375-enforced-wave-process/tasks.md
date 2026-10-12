@@ -190,3 +190,23 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. DONE. tests/tooling 1677, tests/tools 616, tests/pipeline 106 passed; hooks-test green inside make done; make done green (335 s; its own record committed by FR-033); report written; landed by the push carrying this tick
 
+## Amendment 8 (the GM 2026-10-12: "yes please" - claims per module, check-bundle's record work, the review yield and the cohort seeds to the GM)
+
+- [x] T51 The claims cached per module (D48); tests red on today's code; SC-028 measured
+      research: rendering
+      verify: DONE. DONE. claims kept per module (parse and units keyed by source and the constants read, from reexported()); tests/tools/test_claims 41 passed, red on today's code (no memo argument); all 4,050 cores identical to c6c53f038's; SC-028 m:375-a8-claims-after: after a one-line edit 6.3-7.0 s -> 0.7 s, warm 0.5-0.7
+- [x] T52 The word frequencies and the translation pairs kept (D49); tests red on today's code; SC-029 measured
+      research: rendering
+      verify: DONE. DONE. word sets kept by bytes, a revision's pairs by its tree; tests in test_record_prepass_and_size_table and test_translation_owed red on today's code; bundles identical old/new in one tree; SC-029 m:375-a8-check-bundle-after: 3.7-3.8 s -> 2.8-2.9 s (about 1 s; FR-036 corrected from the predicted 3.7 s)
+- [x] T53 `make review-yield` (D50); its table recorded (SC-030)
+      research: rendering
+      verify: DONE. DONE. make review-yield; fixture test per opening word (28 passed); SC-030 m:375-a8-review-yield over 1,022 rows
+- [x] T54 `make cohort-seeds`, the records' feature field, and the cohort's ten seeds (D51; the GM's ruling); today's output (SC-031)
+      research: rendering
+      verify: DONE. DONE. make cohort-seeds, the records' feature field, features.json for the nine earlier records; make cohort defaults to ten seeds (the GM's choice); SC-031 m:375-a8-cohort-seeds: one change (374), seeds 10 and 20 refused:WebRefused, fewest first seeds 10
+- [x] T55 375 closes again: the yield table to the GM, the `make accept` row for check-bundle's measured saving, tests, `make hooks-test`, the gate, the report, landed (D52)
+      research: rendering
+      verify: DONE. DONE. make accept row filed (check-bundle's measured saving, for make gm-review); the yield table goes in the landing message; tests/tooling 1712+, tests/tools 622, tests/pipeline 106 passed; hooks-test inside make done; make done green (162 s, its record committed by itself); report written; landed by the push carrying this tick
+- [ ] GM review (make gm-reviewed F=375) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

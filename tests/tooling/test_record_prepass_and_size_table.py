@@ -16,6 +16,8 @@ import json
 import pathlib
 import subprocess
 
+import pytest
+
 from tests._scripts import script
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -270,3 +272,30 @@ def test_a_heading_with_an_entity_compares_equal_to_its_characters() -> None:
     section's `reed -> sedge` are one heading, and the marsh-margin question matched no section until they were."""
     assert rp._bare("The marsh margin: reed -&gt; sedge") == rp._bare("The marsh margin: reed -> sedge")
     assert rp._bare("<em>A</em> &amp; B") == rp._bare("A & B")
+
+
+def test_the_corpus_counts_parse_only_the_fragments_that_changed(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 375 amendment 8 (FR-036, plan D49): counting the record's words was 2.96 of record_prepass's 3.6 s, again
+    for every check bundle. Each fragment's words are kept by its bytes: an unchanged fragment is not parsed again, and the
+    counts equal an uncached count."""
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    record = tmp_path / "research"
+    q = record / "questions"
+    q.mkdir(parents=True)
+    (q / "0001-a.html").write_text("<p>Paddy bunds and the aze.</p>", encoding="utf-8")
+    (q / "0002-b.html").write_text("<p>The aze and a well.</p>", encoding="utf-8")
+    parsed: list[str] = []
+    real = rp.text_of
+    monkeypatch.setattr(rp, "text_of", lambda m: parsed.append(m) or real(m))
+    rp.corpus_frequency.cache_clear()
+    first = rp.corpus_frequency(str(record))
+    assert first["aze"] == 2 and first["well"] == 1 and len(parsed) == 2
+    (q / "0002-b.html").write_text("<p>The aze and a deep well.</p>", encoding="utf-8")
+    parsed.clear()
+    rp.corpus_frequency.cache_clear()
+    second = rp.corpus_frequency(str(record))
+    assert len(parsed) == 1 and "deep" in parsed[0], "the edited fragment alone is parsed"
+    monkeypatch.setenv("L7R_CACHE_OFF", "1")
+    rp.corpus_frequency.cache_clear()
+    assert second == rp.corpus_frequency(str(record)), "and the counts are an uncached count's"
+    rp.corpus_frequency.cache_clear()

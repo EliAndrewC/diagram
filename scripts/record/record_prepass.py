@@ -27,14 +27,15 @@ happens here and the model rules on a list.
 from __future__ import annotations
 
 import argparse
+import functools
+import hashlib
 import html
 import json
-import pathlib
-import functools
-import re
-from collections.abc import Mapping
 import os
+import pathlib
+import re
 import sys
+from collections.abc import Mapping
 
 GLOSSARY = "l7r/diagram/interactive/assets/glossary.json"
 RESEARCH = "research"
@@ -116,8 +117,7 @@ RARE_IN_AT_MOST = 2
 _WORD = re.compile(r"[A-Za-z][A-Za-z'-]+")
 
 
-def rare_words(text: str, defined: set[str], frequency: Mapping[str, int],
-               cutoff: int = RARE_IN_AT_MOST, keys: set[str] | None = None) -> list[tuple[str, int]]:
+def rare_words(text: str, defined: set[str], frequency: Mapping[str, int], cutoff: int = RARE_IN_AT_MOST, keys: set[str] | None = None) -> list[tuple[str, int]]:
     """The words of one entry that the glossary does not define and the record rarely uses.
 
     PURE, so its test needs no filesystem: the three things it knows - what is defined, how common a
@@ -184,7 +184,18 @@ def corpus_frequency(record_dir: str) -> dict[str, int]:
 
     The corpus is derived at run time from the fragments on disk - no file is shipped and none is kept
     in step. Measured cost is in specs/260 R4; the bar it is held to is FR-010's five seconds.
+
+    EACH FRAGMENT'S WORDS ARE KEPT BY ITS BYTES (feature 375 amendment 8, FR-036, plan D49): counting them was 2.96 of
+    `record_prepass`'s 3.6 s, again for every check bundle (specs/375-enforced-wave-process/research.md R7); a fragment
+    whose bytes are unchanged is read but not parsed, and the counts are summed as before. Kept in `prepass-words`, named
+    by this file's code; a cache that cannot be read or written costs time, never a count.
     """
+    if str(pathlib.Path(__file__).resolve().parent) not in sys.path:
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    import record_cache as rc  # noqa: PLC0415 - beside this file
+
+    kept = rc.ParseCache.at(pathlib.Path(record_dir).resolve().parent, "prepass-words", pathlib.Path(__file__))
+    kept.PRUNE_AT = 1  # only the fragments this count read, so an edited fragment's old words do not pile up
     freq: dict[str, int] = {}
     for base, _dirs, names in os.walk(record_dir):
         rel = os.path.relpath(base, record_dir).replace(os.sep, "/")
@@ -193,10 +204,12 @@ def corpus_frequency(record_dir: str) -> dict[str, int]:
         for name in names:
             if not name.endswith(".html") or name.startswith("_"):
                 continue
-            with open(os.path.join(base, name), encoding="utf-8") as fh:
-                body = text_of(strip_comments(fh.read()))
-            for word in {w.lower() for w in _WORD.findall(body)}:
+            with open(os.path.join(base, name), "rb") as fh:
+                raw = fh.read()
+            words = kept.get(hashlib.sha256(raw).hexdigest(), lambda raw=raw: tuple(sorted({w.lower() for w in _WORD.findall(text_of(strip_comments(raw.decode("utf-8"))))})))
+            for word in words:
                 freq[word] = freq.get(word, 0) + 1
+    kept.save()
     return freq
 
 
@@ -239,11 +252,13 @@ def prepass(markup: str, glossary: dict, record_dir: str | None = None) -> list[
         # AND its notes, so a candidate list drawn from the question alone would leave every term that
         # appears only in a quoted passage unraised - and those are the technical ones.
         scanned = without_code(body) + " " + notes.get(_bare(heading), "") if record_dir else ""
-        out.append({
-            "section": heading,
-            "items": session_notes(body) + vocabulary(body, known),
-            "rare": rare_words(scanned, defined, freq, keys=keys) if record_dir else [],
-        })
+        out.append(
+            {
+                "section": heading,
+                "items": session_notes(body) + vocabulary(body, known),
+                "rare": rare_words(scanned, defined, freq, keys=keys) if record_dir else [],
+            }
+        )
     return out
 
 
@@ -280,7 +295,7 @@ def notes_index(record_dir: str | None) -> dict[str, str]:
             # keyed by the heading id of the page the notes belong to (feature 303: a drawing page's notes are beside
             # it, `NNNN-<slug>.drawing.notes.html`, and its heading is not the stem's slug), by its letters and digits
             page = os.path.join(base, name[: -len(".notes.html")] + ".html")
-            found = re.search(r'<h[23] id="([^"]+)"', open(page, encoding="utf-8").read()) if os.path.isfile(page) else None
+            found = re.search(r'<h[23] id="([^"]+)"', pathlib.Path(page).read_text(encoding="utf-8")) if os.path.isfile(page) else None
             with open(os.path.join(base, name), encoding="utf-8") as fh:
                 out[_bare(found.group(1) if found else name.split("-", 1)[-1][: -len(".notes.html")])] = without_code(strip_comments(fh.read()))
     return out

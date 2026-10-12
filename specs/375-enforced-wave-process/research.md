@@ -68,3 +68,26 @@ re-owe rule (`scripts/measure/depiction_replay.py`, `m:375-a6-about-only-replay`
 `modal-depiction` reads - each an Opus depiction round under amendment 1, none now. (The reopening session's hand count put
 44 of 222; the one edit between the two counts was not traced.) Every About edit owes `modal-form`, whose contract holds M13,
 so the drawing statement the depiction check used to look for in About is still looked for there.
+
+## R7 - What is left of the record and claims tooling (feature 375 amendment 8)
+
+The claims (`m:375-a8-claims-cold`): `make claims-owed` takes 1.0 s while its cache holds, and 11.9 s after a one-line comment
+in one engine module, because the cache is keyed by every engine source together. Profiled cold, the per-module unit work is
+17.5 of 24.9 s; parsing and the cross-module constants are the rest. So a cache kept per module - by its source and the
+constants it reads - recomputes one module's units after an edit to it.
+
+The check bundle (`m:375-a8-check-bundle`): `make check-bundle Q=0021` took 15.2 s the first time (the page cache filling) and
+6.1 s the second. By phase: `record_prepass` 3.2 s, `quote_verbatim` 0.46 s (the two helpers this question ran), the other
+git reads 1.1 s, and the bundle's own owed check 1.3 s in-process; four helper interpreters start, imports and all, in 0.35 s
+(the imports alone 0.22 s), so the time is in what they compute. `record_prepass`
+spends 2.96 of its 3.6 s in `corpus_frequency`, counting every word of the whole record to judge which terms are rare, and
+does it again for every bundle; the owed check's translation pairs (`translation_owed.record_pairs`) take 0.92 s. Both read
+only the record's content, so both can be kept while it is unchanged - about 3.7 s - where folding the helpers into one process
+would save their start, about 0.2 s.
+
+Measured after (`m:375-a8-claims-after`, `m:375-a8-check-bundle-after`): `make claims-owed` after a one-line engine edit took
+6.3-7.0 s on today's code and 0.7 s on the new, alternating, three runs each; warm, 0.5-0.7 s. The check bundle - question 0022
+right after 0021, the two helpers swapped in place - took 3.7-3.8 s on today's code and 2.8-2.9 s on the new, at load about 2:
+about 1 s saved, not the 3.7 s the profile predicted. cProfile slows pure-Python loops more than the rest, so it overstated
+`corpus_frequency`'s share; and the first 6.1 s was timed at load 6. The new bundle's time by phase: `record_prepass` 0.68 s,
+`quote_verbatim` 0.20, the other git reads 0.32, the owed check in-process 0.81.

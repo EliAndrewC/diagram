@@ -37,10 +37,12 @@ from __future__ import annotations
 import ast
 import hashlib
 import inspect
+import json
 import re
-from collections.abc import Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any, Protocol
 
 #: The classes a backing may name besides question files (spec FR-001).
 CLASSES = ("GUESS", "UNRESEARCHED", "CONVENTION", "DEVIATION", "CANON", "NONE")
@@ -523,17 +525,94 @@ def _scope_trees(skill: Path, root: str = ROOT_PACKAGE) -> dict[str, tuple[Path,
     return dict(sorted(seen.items()))
 
 
-def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = False) -> Iterator[tuple[Unit, list[str]]]:
+class Memo(Protocol):
+    """What `all_units` keeps a module's parse and units in: `get(key, make)` returns the kept value, or makes and keeps it
+    (`scripts/record/record_cache.ParseCache`)."""
+
+    def get(self, key: str, make: Callable[[], Any]) -> Any:  # noqa: ANN401 - the caller's own value
+        """The kept value for `key`, or `make()`'s, kept."""
+
+
+class _NoMemo:
+    """Keeps nothing: every module parsed and its units computed, as before feature 375 amendment 8."""
+
+    def get(self, key: str, make: Callable[[], Any]) -> Any:  # noqa: ANN401, ARG002 - the Memo interface
+        return make()
+
+
+def _key_sha(*parts: str) -> str:
+    return hashlib.sha256("\x00".join(parts).encode()).hexdigest()
+
+
+def named_modules(tree: ast.Module, module: str, is_package: bool) -> set[str]:
+    """Every module name a module's constants can be read through - a `from X import Y` names X and X.Y, an `import X as m`
+    names X (`module_units`' `values`, through `import_table` and `module_aliases`) - the constants its units' key holds."""
+    pkg = module if is_package else module.rsplit(".", 1)[0]
+    out: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            src = resolve_from(pkg, node)
+            out |= {src} | {f"{src}.{a.name}" for a in node.names}
+        elif isinstance(node, ast.Import):
+            out |= {a.name for a in node.names if a.asname}
+    return out
+
+
+def _facts(path: Path, module: str, known: dict[str, Path], memo: Memo) -> tuple[str, dict[str, Any]]:
+    """(the module's source, what the scope walk and the constants need of it), the second kept by the source, the module's
+    name and the known-module set: an unchanged module is not parsed (feature 375 amendment 8, FR-035)."""
+    src = path.read_text(encoding="utf-8")
+    is_pkg = path.name == "__init__.py"
+
+    def make() -> dict[str, Any]:
+        tree = ast.parse(src)
+        return {
+            "imports": sorted(_imports_of(tree, module, is_pkg, known)),
+            "constants": module_constants(tree),
+            "table": import_table(tree, module, is_pkg),
+            "names": sorted(named_modules(tree, module, is_pkg)),
+        }
+
+    return src, memo.get("parse:" + _key_sha(src, module, str(is_pkg), *sorted(known)), make)
+
+
+def _units_of(src: str, facts: dict[str, Any], rel: str, module: str, is_pkg: bool, constants: dict[str, dict[str, str]], every: bool, where: str, memo: Memo) -> tuple[list[str], list[Unit]]:
+    """(the module's errors, its units), kept by everything `module_units` reads: the source, the path and name, the flags,
+    and the constants of every module it can read them through, as the map it is handed holds them (`reexported()`'s in
+    scope, so a constant re-exported through a package is in it; the module's own outside). `where` keeps a module that
+    moves between the scope and `claimed_outside` from reusing the other's units. A constant edit recomputes only the
+    modules that read it; a comment recomputes its own module (11.9 s for every module before, specs/375-enforced-wave-process/research.md R7)."""
+    read = json.dumps({n: constants.get(n) for n in facts["names"]}, sort_keys=True)
+
+    def make() -> tuple[list[str], list[Unit]]:
+        _claims, errors, units = module_units(ast.parse(src), rel, module, is_pkg, constants, every)
+        return errors, units
+
+    return memo.get("units:" + _key_sha(src, rel, module, str(is_pkg), str(every), where, read), make)
+
+
+def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = False, memo: Memo | None = None) -> Iterator[tuple[Unit, list[str]]]:
     """Every unit in scope with its module's errors: the code (FR-002), then the procedure sections (FR-003). Paths are
-    repository-relative, as the index keys them."""
-    mods = _scope_trees(skill)
-    constants = reexported({m: module_constants(t) for m, (_p, t) in mods.items()}, {m: import_table(t, m, p.name == "__init__.py") for m, (p, t) in mods.items()})
-    for mod, (p, tree) in mods.items():
+    repository-relative, as the index keys them. `memo` keeps each module's parse and units (feature 375 amendment 8)."""
+    memo = memo if memo is not None else _NoMemo()
+    known = engine_modules(skill)
+    mods: dict[str, tuple[Path, str, dict[str, Any]]] = {}
+    todo = [m for m in known if m == ROOT_PACKAGE or m.startswith(ROOT_PACKAGE + ".")]
+    while todo:  # the scope: the root package and every engine module it imports, as `_scope_trees` walks it
+        mod = todo.pop()
+        if mod in mods:
+            continue
+        src, facts = _facts(known[mod], mod, known, memo)
+        mods[mod] = (known[mod], src, facts)
+        todo += [m for m in facts["imports"] if m not in mods]
+    mods = dict(sorted(mods.items()))
+    constants = reexported({m: f["constants"] for m, (_p, _s, f) in mods.items()}, {m: f["table"] for m, (_p, _s, f) in mods.items()})
+    for mod, (p, src, facts) in mods.items():
         rel = repo_prefix + p.relative_to(skill).as_posix()
-        _claims, errors, units = module_units(tree, rel, mod, p.name == "__init__.py", constants, every_module_unit)
+        errors, units = _units_of(src, facts, rel, mod, p.name == "__init__.py", constants, every_module_unit, "scope", memo)
         for unit in units:
             yield unit, errors
-    yield from claimed_outside(skill, set(mods), repo_prefix)
+    yield from claimed_outside(skill, set(mods), repo_prefix, memo)
     for doc, tops in PROCEDURES.items():
         if not (skill / doc).is_file():  # a tree read at an older commit (the push's base) may predate a document
             continue
@@ -542,7 +621,7 @@ def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = Fals
             yield unit, []
 
 
-def claimed_outside(skill: Path, inside: set[str], repo_prefix: str = "") -> Iterator[tuple[Unit, list[str]]]:
+def claimed_outside(skill: Path, inside: set[str], repo_prefix: str = "", memo: Memo | None = None) -> Iterator[tuple[Unit, list[str]]]:
     """Every unit of an engine module OUTSIDE the hamlet scope that carries a `Research:` claim of its OWN (feature 378).
 
     WHY (the GM, 2026-10-10: a research feature's finding is checked against the code and a mismatch *"properly annotated
@@ -552,13 +631,14 @@ def claimed_outside(skill: Path, inside: set[str], repo_prefix: str = "") -> Ite
     carry one, so the coverage rule (every unit claimed) stays the hamlet scope's, and a module docstring's claims, which
     every unit would inherit, bring in none of them (3 such units on 2026-10-10: `compound`, `compound_model`,
     `interactive.record.site_pages`)."""
-    for mod, p in engine_modules(skill).items():
+    memo = memo if memo is not None else _NoMemo()
+    known = engine_modules(skill)
+    for mod, p in known.items():
         if mod in inside:
             continue
-        tree = ast.parse(p.read_text(encoding="utf-8"))
+        src, facts = _facts(p, mod, known, memo)
         is_pkg = p.name == "__init__.py"
-        constants = reexported({mod: module_constants(tree)}, {mod: import_table(tree, mod, is_pkg)})
-        _claims, errors, units = module_units(tree, repo_prefix + p.relative_to(skill).as_posix(), mod, is_pkg, constants)
+        errors, units = _units_of(src, facts, repo_prefix + p.relative_to(skill).as_posix(), mod, is_pkg, {mod: facts["constants"]}, False, "outside", memo)
         for unit in units:
             if unit.claims and not unit.inherited:
                 yield unit, errors

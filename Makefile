@@ -210,7 +210,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	: " Fixing a guard that recorded the opposite (374, 2026-10-12): this check ran AFTER the stamps and the green run-log entry,"; \
 	: " so a refused gate left a gate stamp and a 'green' row - the finished-run hook reported it green and measure-hooks"; \
 	: " refused the honest re-run as a second gate after a green one. It now runs before either, and logs the refusal as a failure."; \
-	[ -z "$$root" ] || [ ! -f "$$root/scripts/gates/preflight.py" ] || python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: tree moved"; $(STATE) failed-gate $(DONE_NAME); exit 1; }; \
+	[ -z "$$root" ] || [ ! -f "$$root/scripts/gates/preflight.py" ] || python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: tree moved"; $(STATE) failed-gate $(DONE_NAME); $(COMMIT_RUN_RECORD) failed; exit 1; }; : "GUARD_EDIT_OK: feature 375 amendment 7, FR-033 - the tree-moved exit commits its record too (it was left untracked, 2026-10-12)"; \
 	: "(GUARD_EDIT_OK: feature 375 - a fixture tree without the script has no tree check to run)"; \
 	python3 "$$root/scripts/gates/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$$mode" || exit 1; \
 	[ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram && python3 "$$root/scripts/gates/gate-stamp.py" --write page || true; \
@@ -466,16 +466,17 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 # session to do after a cohort failure - "reproduce with the same entry point" - could not be done for
 # any seed but 1 without a 48-seed sweep. Feature 230 needed exactly that for the two seeds its cohort
 # failed on. The reference-settlement gate above it is untouched.
-cohort:         ## [maps] roll N seeds and report every failure      N=48 [SEED=<first seed>] [JOBS=<workers>] [HOUSEHOLDS=<n>]
-##  N=<seeds>   how many seeds to roll (default: 48)
+cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=<first seed>] [JOBS=<workers>] [HOUSEHOLDS=<n>]
+##  N=<seeds>   how many seeds to roll, besides the six pinned rows (default: 10 - the GM, 2026-10-12, on the per-seed record: `make cohort-seeds`)
 ##  SEED=<n>    the FIRST seed to roll (default: 1) - `N=1 SEED=15` reproduces the cohort's own Audit-15
 ##  JOBS=<n>    worker processes (default: cpus - 2) - each holds a roll, ~0.5 GB; the containers share a 10 GB cap
+# GUARD_EDIT_OK: feature 375 amendment 8 (FR-038) - the GM chose ten seeds over 48 ("it's also fine to do the 10 seeds"); N= still asks for more. Kept below the `##` lines: between them it cut make docs' argument list short.
 # GUARD_EDIT_OK: feature 314 - the cohort's workers were cpus - 2 with no way to ask fewer: 20 on this host, ~10 GB, past the
 # containers' shared cap while other sessions run (the memwatch warned at 9.6 GB). JOBS hands cohort_audit its own --jobs.
 	$(REF_FIRST)
 	@: "GUARD_EDIT_OK: feature 328 - HOUSEHOLDS rolls the cohort at one size, the scaling question (does a change refuse a 20- or 40-household hamlet?) asked without the perf snapshot's timing - five make perf runs were spent as refusal checks on 2026-10-08"
-	@: "GUARD_EDIT_OK: feature 375 amendment 7, FR-029 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is"
-	$(RUN).tools.cohort_audit --count $(or $(N),48) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; exit $$rc
+	@: "GUARD_EDIT_OK: feature 375 amendment 7, FR-029 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is; amendment 8, FR-038 - ten seeds by default, the GM's choice"
+	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; exit $$rc
 
 # GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
 # `mapcheck` with the same auto scope, so with no SCOPE set it was `maps` minus the index refresh -
@@ -1879,6 +1880,14 @@ perf:            ## [performance] take a performance snapshot of the reference h
 
 census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
 	@python3 -m l7r.diagram.tools.overlap_census
+
+# GUARD_EDIT_OK: feature 375 amendment 8 (FR-037, FR-038) - two new read-only reports put to the GM; nothing loosened.
+.PHONY: review-yield cohort-seeds
+review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
+
+cohort-seeds:     ## [performance] which cohort seeds found which failure, over how many changes, and the fewest first seeds that find them all (dev/cohort-log/)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/cohort_seeds.py"
 
 perf-report:    ## [performance] the trend, and which BAND the newest bookend pair reaches   AGAINST=<NNN>-start ENV=local|codebuild
 ##  AGAINST=<NNN>-start  compare the newest snapshot against this bookend

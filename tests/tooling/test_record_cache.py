@@ -116,12 +116,15 @@ class _Engine:
     """A stand-in claim reader: counts the times the engine is read."""
 
     PROCEDURES = {"docs/buildings.md": None}
+    __file__ = __file__  # the reader's source, which names the per-module cache (feature 375 amendment 8)
 
     def __init__(self) -> None:
         self.reads = 0
+        self.memos: list[object] = []
 
-    def all_units(self, skill: pathlib.Path):  # noqa: ANN201
+    def all_units(self, skill: pathlib.Path, memo: object = None):  # noqa: ANN201
         self.reads += 1
+        self.memos.append(memo)
         return iter([("unit", [])])
 
 
@@ -146,3 +149,4 @@ def test_the_claims_are_kept_until_an_engine_module_or_a_procedure_changes(tmp_p
     claims.units_of(skill)
     assert eng.reads == 3, "a procedure document changed"
     assert len(list((skill / ".git" / rc.CACHE_DIR).glob("claims-*.pickle"))) == 1, "only the newest key is kept"
+    assert all(m is not None for m in eng.memos), "every miss is handed the per-module memo (amendment 8, FR-035)"

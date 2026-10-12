@@ -249,6 +249,11 @@ push
 [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "300-closed-by-status" && ok "ticking a leftover box and adding a new one (the count unchanged) is still refused" || no "tick-one-add-one landed hidden work" "(rc=$RC)"
 sed -i 's/^- \[ \] T03/- [x] T03/' "$FIX/specs/300-closed-by-status/tasks.md"; commit "T03 done"
 git -C "$FIX" update-ref refs/remotes/origin/main HEAD
+# GUARD_EDIT_OK: feature 375 amendment 8 - the GM-review box `make accept` writes is tracked by make gm-review, not hidden work
+printf -- '- [ ] GM review (make gm-reviewed F=300) [lands-open]\n' >> "$FIX/specs/300-closed-by-status/tasks.md"; commit "a row for the GM"
+push
+[ "$RC" -eq 0 ] && ok "...but the GM-review box make accept writes lands under Done: make gm-review holds it, not speckit-todo" || no "the GM-review box was refused as hidden work" "(rc=$RC) $OUT"
+git -C "$FIX" update-ref refs/remotes/origin/main HEAD
 run "make quick"
 [ "$RC" -eq 0 ] && ok "a command that is neither a git add/commit nor a push passes untouched" || no "make quick was refused" "(rc=$RC)"
 

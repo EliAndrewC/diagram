@@ -226,7 +226,7 @@ def main(argv: list[str] | None = None) -> int:
             tw = _tripwire()
             if tw:
                 print(f"\n\033[1mtripwire FAILED\033[0m on {', '.join(tw)} - the reference map is clean but the tier is not.")
-                print("Run the full cohort to see the whole failure set: python3 -m l7r.diagram.tools.cohort_audit --count 48")
+                print("Run the full cohort to see the whole failure set: make cohort")
                 all_failed += tw
                 break
             print("\n\033[1mtripwire clean\033[0m - going on to the rest of the tier\n")

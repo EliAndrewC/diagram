@@ -565,6 +565,75 @@ rendering About (`modal_bundle.render`, every check's `modal.md`); `modal-form`'
 their About part: each row's `status` becomes `closed`, with the date and T44's commit beside it. No found row has been closed
 before (all 80 on main are open) and nothing reads the field, so there is no tool to build for two rows: an edit in place.
 
+### Amendment 8 (FR-035 to FR-038)
+
+**D48 - The claims cached per module (FR-035; T51).** `tools/claims.all_units` and `claimed_outside` take an optional `memo`
+(a mutable mapping; None keeps today's behavior, so a test or a one-off caller is unchanged). Two kinds of entry:
+`parse:<sha of the module's source, its name, is-package, the sorted known-module set>` holds what the scope walk and the
+constants need of a module - its in-scope imports (`_imports_of`), `module_constants`, `import_table`, and the modules its
+`import`/`from` statements name - so an unchanged module is not parsed; `units:<sha of the source, its path, name,
+is-package, every_module_unit, the known-module set, and the constants of every module it names>` holds `module_units`'
+(claims, errors, units). Those constants are taken from the map `module_units` is handed - `reexported()`'s output in
+`all_units`, so a constant of B re-exported through A that M reads by A's name is in M's key (the plan review: 22 such reads),
+and the module's own map alone in `claimed_outside`. A module's units read only its own constants and those of modules its imports name (`module_units`'
+`values`, through `import_table` and `module_aliases`), so keying on exactly those recomputes a module when a constant it reads
+changes, and not otherwise; a module whose source changed is parsed once. `scripts/record/claims.units_of` keeps today's
+whole-scope cache as the first layer (1.0 s warm) and, on its miss, passes a memo loaded from one file
+(`<common dir>/l7r-cache/claims-modules.pickle`, through `record_cache.ParseCache`), saved after, holding only the entries this
+run used, so the file does not grow. The procedure documents (`doc_units`, a few files) are recomputed as today. Tests (red on
+today's code): an edit to one module recomputes that module's units alone (the memo's misses counted); an edit to a constant
+another module imports recomputes that module too, and so does one re-exported through a package; a module moving between the
+scope and `claimed_outside` is recomputed; the memoized units equal an uncached `all_units`; a second run is all hits.
+SC-028's time is `make claims-owed` after a one-line comment, today's code against the new, three runs each, key
+`375-a8-claims-after`.
+
+**D49 - The word frequencies and the translation pairs kept (FR-036; T52).** `record_prepass.corpus_frequency` keeps each
+fragment's word set by the sha of its bytes in `<common dir>/l7r-cache/prepass-words.pickle` (`ParseCache`; the walk and the
+reads stay, the parse of an unchanged fragment does not), and sums them as today, so the counts are the same; entries not used
+in a run are dropped on save. `translation_owed.record_pairs(root, rev)` for a revision keeps its result by that revision's
+`research/questions` tree id (`git rev-parse <rev>:research/questions`) in `<common dir>/l7r-cache/translation-pairs.pickle`,
+the newest four trees kept; the working tree's pairs are read as today. Both are keyed by content, never by time (amendment
+3's rule), and a cache that cannot be read or written costs time, never a wrong answer. `check_bundle.run_script` and the
+helpers stay as they are (Decisions Recorded). Tests (red on today's code): a second count with one fragment edited parses
+that fragment alone and equals an uncached count; the pairs for a revision are read from git once. SC-029: `make check-bundle`
+on question 0021 then 0022, today's code against the new, alternating, three runs each, key `375-a8-check-bundle-after`; the
+two bundles' files compared with an uncached run's (`L7R_CACHE_OFF=1`).
+
+**D50 - The review checks' yield (FR-037; T53).** `scripts/measure/review_yield.py`, run by `make review-yield [SINCE=<date>]`
+(default 2026-09-26, the ledger's cost columns' first full day), reads `dev/review-ledger.md`'s measured rows and prints per
+check: passes; passes with a finding; of those, DISMISSED (the free-text "acted on" cell opens with verified, accepted,
+spec/plan accepted, declined, no change, none, nothing, answered, or a bare "left"), DEFERRED (put to the GM, left for, not
+applied - unless the cell says filed, carried or follow-up), and ACTED ON (any other cell but empty, "-" or "re-dispatched":
+something changed, or the finding was filed, which FR-037 counts - measured on the ledger since 2026-09-26, "applied" opens 248
+cells and "recorded" 66, so a list of acted-on words would miss most, and the plan review found "nothing" opening 64, "answered"
+6 and a bare "left" 3, all dismissals); each opening word has a fixture test; the author had missed it (the "missed" cell yes); hours (wall) and
+tokens out;
+and the features the rows name (a three-digit number in the subject). Sorted by hours; a check's yield is acted-on findings per
+hour. `--record <file> --key <k>` writes it to `measurements.json` (`375-a8-review-yield`), as `turn_time.py` does. The GM is
+given the table and the lowest-yield checks for their cost at landing; nothing about a check changes. Tests on a small ledger
+fixture: each column counted from its cells, a row with no cost cells skipped.
+
+**D51 - The cohort's seeds (FR-038; T54).** `scripts/measure/cohort_seeds.py`, run by `make cohort-seeds`, reads
+`dev/cohort-log/*.json` and prints per failure (its name, e.g. `refused:WebRefused`) the seeds that found it and the changes
+they were rolled on; how many changes the records span; and the fewest first seeds that find every failure (the largest, over
+failures, of the smallest seed finding it; the pinned seeds, 901 on, are rolled every time and left out). A change is a record's
+`feature`: `cohort_audit.write_record` adds `"feature": $SPECIFY_FEATURE` (empty when unset); the records written before that
+field are attributed by `dev/cohort-log/features.json`, a commit -> feature map holding the two commits rolled before it
+(61a52f3c8, 374's head, and a41ab2e0f, its merge base: both feature 374). Put to the GM before landing (one change: seeds 10 and
+20, `refused:WebRefused`; the first ten seeds find every failure), he chose ten: `make cohort`'s default `N` is 10 where it was
+48, `cohort_audit --count`'s own default 10 where it was 12, and the two hints that named a bare `cohort_audit --count 48`
+(`cohort_audit.py`'s red-reference message, `mapcheck.py`'s tripwire message) name `make cohort`; "the cohort is 20-25 min"
+there becomes minutes. Tests: `make -n cohort` passes `--count 10`;
+a fixture of records from three changes names the failures, their seeds, the span and the fewest first seeds; a record with no
+feature and no mapping is counted as unattributed, by its commit.
+
+**D52 - Measured, raised and closed (T55).** SC-028 and SC-029 as D48 and D49 say; SC-030 the table's key; SC-031 the command's
+output over today's records. The GM ruled on both before landing (2026-10-12): FR-036's cache confirmed, ten seeds chosen.
+Measured after, the cache saved about 1 s of a bundle, not the 3.7 s he was told (SC-029, restated as measured), so one
+`make accept F=375` row is owed at landing - FINDING the measured saving, REASON his confirmation and the ranking it still
+holds (about 1 s against the helpers' 0.2) - for `make gm-review` to carry; FR-037's table goes in the landing message, as he
+asked. Tests, `make hooks-test`, the gate, the report.
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

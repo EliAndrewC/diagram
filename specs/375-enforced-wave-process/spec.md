@@ -2,9 +2,13 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-12 - amendments 6 and 7 landed: 6 (spec FAITHFUL round 2, plan CLEAR; SC-021 tested, replay 43 About-only edits of 221 owe no depiction; 343 rows 83-84 closed) and 7 (spec FAITHFUL, plan CLEAR after the versioned store; SC-022 cohort wave 2 323 s -> 19 s, SC-024 suites 70.6 -> 18.8 s and 71.7 -> 20.4 s, SC-023/025/026/027 tested); every task ticked; amendment 8 (claims cache, check-bundle in-process, review yield, cohort seed count) not yet opened
+**Status**: Done 2026-10-12 - amendment 8 landed: spec FAITHFUL (round 5), plan CLEAR (round 3); claims after an engine edit 6.3-7.0 s -> 0.7 s (SC-028); a check bundle 3.7 -> 2.8 s, measured, the half bar not met (SC-029); make review-yield and make cohort-seeds (SC-030, SC-031); the cohort rolls ten seeds (the GM); the GM's review row for check-bundle's measured saving open; amendments 1-7 Done
 
 **Approved**: the GM, 2026-10-12, "Yes to reopening the feature with that amendment, but instead of implementing it yourself, please reopen it and the hand off the work to the "Diagram performance" session, since it's already doing some similar work."
+
+**Amendment 8 approved**: the GM, 2026-10-12, "yes please"
+
+**Amendment 8 rulings**: the GM, 2026-10-12, "I confirm the check-bundle thing is good as you've done it.  it's also fine to do the 10 seeds.  As for the reviews being changed, I'll look at the table when you have it, thanks"
 
 **Amendment 7 approved**: the GM, 2026-10-12, "Yeah, I think I want all of those things. But I agree with you that two, three, six, and eight are a good place to start."
 
@@ -314,6 +318,37 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
   3.3 s per 1,000 tokens written - context size accounted for about half an hour in all. (The 6.5 hours the session first
   put to the GM counted the waits on background runs and on the GM as model time.) Recorded; nothing is built for it.
 
+### Amendment 8 (`request.md`, Amendment 8)
+
+Amendment 7's items 4, 5 and 7, and the cohort's seed count it carried. Items 7 and the seed count are the GM's to choose; this
+amendment builds what puts each before him with the data.
+
+- **FR-035 The claims are cached per module.** `make claims-owed`, `claims-report` and every reader of `scripts/record/claims.py`'s
+  units read them from one cache keyed by every engine source together (amendment 3, plan D29), so one engine edit - a comment
+  - recomputed all of them: 11.9 s against 1.0 s warm, measured 2026-10-12 (`m:375-a8-claims-cold`, `research.md` R7). Each
+  module's units are now kept by what they are computed from - the module's own source and what it reads of the others'
+  constants - so an edit recomputes only the units it can change, and the result is the one an uncached run gives.
+- **FR-036 A check bundle does not redo the record's work.** `make check-bundle Q=` took 6.1 s warm (15.2 s cold, the page
+  cache filling; `m:375-a8-check-bundle`, R7). Timed by phase: `record_prepass` 3.2 s, nearly all of it recounting the whole
+  record's word frequencies (`corpus_frequency`, 2.96 s under the profiler), `quote_verbatim` 0.46 s, the other git reads
+  1.1 s, and the bundle's own owed check 1.3 s, the translation pairs among it (0.9 s). Starting a helper's interpreter and its
+  imports is about 0.09 s each (0.35 s for four). The word frequencies and the translation pairs are kept by the content they
+  read - the record's pages, and a revision's tree - and reused while that is unchanged; the bundle's files are the ones an
+  uncached run writes. This builds the goal of the GM's item 5 ("check-bundle in-process") rather than its letter: folding the
+  helpers into one process saves their start, about 0.2 s of a 6.1 s bundle, where caching was predicted to save about
+  3.7 s and, measured old against new at one load, saved about 1 s: 3.7 s to 2.8 s (`m:375-a8-check-bundle-after`, R7 - the
+  profiler had inflated the word count's share, and the 6.1 s was taken at load 6) (Decisions Recorded; the GM confirmed it, 2026-10-12: "I confirm the check-bundle thing is good as you've done it").
+- **FR-037 The review checks' yield, put to the GM.** A kept command prints, per review check from `dev/review-ledger.md`: its
+  passes, the findings acted on (fixed, filed) and those dismissed (verified as fine, accepted, declined), the findings its
+  author had missed, its hours and tokens - over a period and across the features in it. The session puts that table to the GM
+  with the checks whose yield is lowest for their cost; no check is changed, dropped or moved to another tier here: that is
+  the GM's choice, and a change he makes is its own amendment or feature in his words.
+- **FR-038 The cohort's seed count, from its record.** A kept command reads `dev/cohort-log/` and prints, per failure the
+  cohort found, the seeds that found it and the features' changes they were rolled on, how many changes the records span, and
+  the fewest first seeds that would have found every failure. Put to the GM - one change, the first ten seeds finding every
+  failure - he chose ten (2026-10-12: "it's also fine to do the 10 seeds"): `make cohort` rolls the first ten seeds and the six
+  pinned rows by default, where it rolled 48; `N=` still asks for more. The command stays, for the next look at the count.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -419,10 +454,23 @@ The GM's first four (2, 3, 6, 8) and the measurement of the fifth (1); amendment
 - **SC-026** (FR-033) After `make done`, the tree is clean except for what the session left, and the record is committed
   alone with its message; a staged change of the session's is left staged and uncommitted. The test fails on today's code.
 - **SC-027** (FR-034) R5's figures are a key of `measurements.json`, re-derivable by a kept script from the transcript.
+- **SC-028** (FR-035) After a one-line edit to one engine module, `make claims-owed` takes at most twice its warm time, and the
+  units it reads equal an uncached run's; an edit to a module-level constant another module reads recomputes that module too.
+  The time before and after is a key of `measurements.json` (R7). Tests fail on today's code.
+- **SC-029** (FR-036) `make check-bundle Q=` on a second question after a first, alternating today's code and the new, three
+  runs each, is measured and recorded (`m:375-a8-check-bundle-after`, R7). The bar first written here - at most half of today's
+  6.1 s - came from the profile's prediction of about 3.7 s saved, and the 6.1 s was taken at load 6; the alternating run gave
+  3.7 s to 2.8 s at one load, about 25% saved, so the half was NOT met and the result stands as measured; the bundle's files equal an uncached run's; an edit to a record page makes the next
+  bundle recount. Tests fail on today's code.
+- **SC-030** (FR-037) The yield command prints the table FR-037 names over the ledger since 2026-09-26, its rows re-derivable
+  from the ledger; the table is a key of `measurements.json`, and the GM is given it.
+- **SC-031** (FR-038) The seed command prints, over today's records, the failures found (seeds 10 and 20, `WebRefused`) and that
+  the records span one feature's change; a test with records from three changes names the fewest first seeds that find every
+  failure. `make cohort` with no `N=` rolls seeds 1 to 10 and the six pinned rows. The test fails on today's code.
 
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027.
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020. Amendment 6 closes on SC-021. Amendment 7 closes on SC-022 to SC-027. Amendment 8 closes on SC-028 to SC-031.
 
 ## What it does not cover
 
@@ -436,7 +484,11 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
 - The cohort's cost (amendment 5): reusing its "before" leg per main commit, or rolling fewer seeds, was offered to the GM as
   a measurement and is not part of amendment 5, which settled the timing requirements.
 - The cohort's seed count (amendment 7): decided in amendment 8, with the per-seed record FR-029 starts keeping; the claims'
-  per-module cache, `check-bundle` in-process and the review checks' yield are amendment 8's too.
+  per-module cache, `check-bundle` (built as its record work cached - Decisions Recorded) and the review checks' yield are
+  amendment 8's too.
+- Amendment 8 changes no review check: FR-037 puts the table to the GM ("I'll look at the table when you have it"), and a
+  change he chooses is its own amendment or feature. The seed count is his ten (FR-038). `check-bundle`'s helpers stay separate processes - see Decisions Recorded, "check-bundle's record work
+  cached (amendment 8)".
 
 ## Decisions Recorded
 
@@ -451,6 +503,7 @@ next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 
 | The order form, research, depiction (amendment 3) | this project's decision, on the GM's "order the checks" (review round 1 offered it and the session took it) | form first: a form edit can carry a fact (374's residence-corridor round 2 had `modal-research` catch a comparison modal-form's rewording introduced), so the substance checks read form's words. Depiction last: it reads About for drawing statements, which a research round may move. Ordering only form left research and depiction re-owing each other, the same cause on two checks (the review's item 1) |
 | Ordering on the pop-ups, not a fourth round's cap or a merged check (amendment 3) | the GM, 2026-10-11 | the GM asked for the speculative fix and a measurement after it ("perhaps it's worth trying to make the speculative fix and measuring it afterwards"); the three checks keep their own contracts |
 | Caches keyed by content and by the reading code's own source, never by time (amendment 3) | this project's decision | a cache that outlives a change to its reader serves the old answer; keyed so, a fix to the parser is a miss, and an unchanged file is never read twice |
+| `check-bundle`'s record work cached, its helpers left as processes (amendment 8, FR-036) | a deviation from the letter of the GM's approval, under his standing "goal over directions"; the GM confirmed it, 2026-10-12: "I confirm the check-bundle thing is good as you've done it" | approved: "check-bundle in-process" (the session's own sketch). Measured (`m:375-a8-check-bundle`, `research.md` R7): the helpers' start is about 0.2 s of a 6.1 s bundle, the recomputed word frequencies and translation pairs predicted at about 3.7 s - measured after at one load, the cache saved about 1 s (3.7 s to 2.8 s, `m:375-a8-check-bundle-after`), still five times the helpers' start. Built: the cache. The measured figure goes to the GM at landing, with FR-037's table, and a `make accept` row carries it to `make gm-review`. Folding the helpers in as well is not ruled out by the measurement - it was left out for its cost (about 0.2 s saved) against the work, and is the GM's to ask for |
 
 ## Review history
 

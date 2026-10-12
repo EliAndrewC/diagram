@@ -82,7 +82,7 @@ def test_a_failing_TRIPWIRE_stops_the_run_and_names_the_command_that_shows_the_w
     _bench["monkeypatch"].setattr(mc, "_tripwire", lambda: ["seed 21"])
     assert mc.main([]) == 1
     out = capsys.readouterr().out
-    assert "tripwire FAILED" in out and "cohort_audit --count 48" in out
+    assert "tripwire FAILED" in out and "make cohort" in out
     assert len(_bench["runs"]) == 1, "the rest of the tier was never paid for"
 
 

@@ -347,3 +347,93 @@ def test_coverage_names_every_unit_without_a_claim_and_every_missing_question(tm
     assert "docs/building-programs.md:1 Magistrate's manor (county magistracy): no claim - add a `<!-- Research:" in text
     assert "shared.py" not in text and "docs/buildings.md:" not in text
     assert cl.coverage(cl.all_units(skill, ""), questions={"0033-row-villages-resson.html"}) == [p for p in problems if "names no question" not in p]
+
+
+# ---- feature 375 amendment 8, FR-035 (plan D48): each module's units kept by what they read ----------------------------------
+
+
+class _Memo(dict):
+    """The `Memo` interface over a dict (what `record_cache.ParseCache` gives in use)."""
+
+    def get(self, key, make):  # type: ignore[no-untyped-def, override]
+        if key not in self:
+            self[key] = make()
+        return self[key]
+
+
+def _cache_tree(tmp: Path) -> Path:
+    eng = tmp / "l7r" / "diagram"
+    (eng / "hamletgen").mkdir(parents=True)
+    (eng / "other").mkdir()
+    (eng / "hamletgen" / "__init__.py").write_text("from . import a, b\n")
+    (eng / "hamletgen" / "consts.py").write_text("from l7r.diagram.shared import X\n")  # re-exports X
+    (eng / "hamletgen" / "a.py").write_text('"""Research: all - NONE"""\nfrom l7r.diagram.shared import X\nfrom l7r.diagram.other import b\n\n\ndef reads():\n    return X\n')
+    (eng / "hamletgen" / "b.py").write_text('"""Research: all - NONE"""\nfrom .consts import X\n\n\ndef reads_through():\n    return X\n')
+    (eng / "shared.py").write_text('"""Research: all - NONE"""\nX = 1\n')
+    (eng / "other" / "__init__.py").write_text("")
+    (eng / "other" / "b.py").write_text("def thing():\n    pass\n")
+    (eng / "other" / "c.py").write_text('def court():\n    """Research: court size - NONE"""\n    return 3\n')
+    return tmp
+
+
+def _run(skill: Path, memo: _Memo | None, spy: list[str]) -> list[tuple[str, str, str, tuple[str, ...]]]:
+    spy.clear()
+    return [(u.path, u.qualname, u.core, tuple(e)) for u, e in cl.all_units(skill, "", memo=memo)]
+
+
+@pytest.fixture
+def spied(monkeypatch: pytest.MonkeyPatch) -> list[str]:
+    calls: list[str] = []
+    real = cl.module_units
+
+    def spy(source, path, *a, **k):  # type: ignore[no-untyped-def]
+        calls.append(path)
+        return real(source, path, *a, **k)
+
+    monkeypatch.setattr(cl, "module_units", spy)
+    return calls
+
+
+def test_the_kept_units_equal_an_uncached_run_and_a_second_run_computes_none(tmp_path: Path, spied: list[str]) -> None:
+    skill, memo = _cache_tree(tmp_path), _Memo()
+    plain = _run(skill, None, spied)
+    assert _run(skill, memo, spied) == plain and len(spied) == 8, "every module computed once into the memo"
+    assert _run(skill, memo, spied) == plain and spied == [], "and none again"
+
+
+def test_a_comment_recomputes_its_own_module_alone(tmp_path: Path, spied: list[str]) -> None:
+    skill, memo = _cache_tree(tmp_path), _Memo()
+    _run(skill, memo, spied)
+    f = skill / "l7r" / "diagram" / "other" / "b.py"
+    f.write_text(f.read_text() + "# a comment\n")
+    _run(skill, memo, spied)
+    assert spied == ["l7r/diagram/other/b.py"]
+
+
+def test_a_constant_recomputes_its_readers_direct_and_through_a_package_and_not_the_rest(tmp_path: Path, spied: list[str]) -> None:
+    skill, memo = _cache_tree(tmp_path), _Memo()
+    _run(skill, memo, spied)
+    (skill / "l7r" / "diagram" / "shared.py").write_text('"""Research: all - NONE"""\nX = 2\n')
+    after = _run(skill, memo, spied)
+    assert {"l7r/diagram/shared.py", "l7r/diagram/hamletgen/a.py", "l7r/diagram/hamletgen/b.py"} <= set(spied), "the reader through consts too"
+    assert "l7r/diagram/other/b.py" not in spied and "l7r/diagram/other/c.py" not in spied
+    assert after == _run(skill, None, spied), "and what it keeps is what an uncached run gives"
+
+
+def test_a_module_moving_into_the_scope_is_recomputed_there(tmp_path: Path, spied: list[str]) -> None:
+    skill, memo = _cache_tree(tmp_path), _Memo()
+    _run(skill, memo, spied)
+    a = skill / "l7r" / "diagram" / "hamletgen" / "a.py"
+    a.write_text(a.read_text().replace("from l7r.diagram.other import b\n", "from l7r.diagram.other import b, c\n"))
+    after = _run(skill, memo, spied)
+    assert "l7r/diagram/other/c.py" in spied, "c entered the scope: its units are the scope's, not claimed_outside's"
+    assert after == _run(skill, None, spied)
+
+
+def test_the_cores_hash_is_the_modules_own_and_the_cache_keys_hash_is_another() -> None:
+    """A key helper named `_sha`, defined below the module's own, replaced it for every core and fingerprint - every claim
+    would have read as moved (caught 2026-10-12 by comparing all 4,050 cores against the commit before)."""
+    import hashlib
+
+    assert cl._sha("x") == hashlib.sha256(b"x").hexdigest()[:16]
+    assert cl._key_sha("x") == hashlib.sha256(b"x").hexdigest() and cl._key_sha("a", "b") != cl._key_sha("a\x00b", "")
