@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+import glob
 import json
 import os
 import sys
@@ -84,6 +85,41 @@ def test_a_change_to_an_executed_function_rolls_again_and_an_unexecuted_one_does
     assert rollcache.obtain("toy", produce)[1] == "HIT", "a function the roll never executed cannot reach the payload"
     eng.write_text(eng.read_text().replace("x * CONSTANT", "x * CONSTANT + 1"))
     assert rollcache.obtain("toy", produce) == ({"value": 8}, "MISS"), "a changed executed function rolls for real"
+
+
+def test_two_versions_of_the_code_each_keep_their_roll(tmp_path, monkeypatch):
+    """Feature 375 amendment 7 (FR-029): a cohort's "before" leg (the merge base) and "after" leg (the clone) share the store
+    and roll the same subjects. With one version a subject they evicted each other - 0 of 54 seeds served on the second wave
+    (2026-10-12). Each version is kept, served when the code is back at it, and the oldest beyond KEPT_VERSIONS dropped."""
+    eng, _, produce = _toy(tmp_path, monkeypatch)
+    base = eng.read_text()
+    assert rollcache.obtain("toy", produce) == ({"value": 7}, "MISS")
+    eng.write_text(base.replace("x * CONSTANT", "x * CONSTANT + 1"))
+    assert rollcache.obtain("toy", produce) == ({"value": 8}, "MISS")
+    eng.write_text(base)
+    assert rollcache.obtain("toy", lambda: pytest.fail("the base's roll is kept")) == ({"value": 7}, "HIT")
+    eng.write_text(base.replace("x * CONSTANT", "x * CONSTANT + 1"))
+    assert rollcache.obtain("toy", lambda: pytest.fail("the change's roll is kept")) == ({"value": 8}, "HIT")
+    for n in range(2, 2 + rollcache.KEPT_VERSIONS):
+        eng.write_text(base.replace("x * CONSTANT", f"x * CONSTANT + {n}"))
+        assert rollcache.obtain("toy", produce)[1] == "MISS"
+    assert len(glob.glob(rollcache._entry("toy") + "*")) == rollcache.KEPT_VERSIONS, "the oldest beyond the cap dropped"
+    eng.write_text(base)
+    assert rollcache.obtain("toy", produce) == ({"value": 7}, "MISS"), "the base's roll was the oldest: dropped, rolled again"
+    assert rollcache.report_deps.__name__  # report_deps reads the same `_current` (its own test covers it)
+
+
+def test_a_kept_version_that_cannot_be_read_is_doubt(tmp_path, monkeypatch):
+    eng, _, produce = _toy(tmp_path, monkeypatch)
+    rollcache.obtain("toy", produce)
+    entry = rollcache._entry("toy")
+    (Path(entry) / "meta.json").write_text("{not json")
+    rollcache._shelve(entry, "a-new-key")  # an unreadable newest entry is left to be overwritten, never moved
+    assert not glob.glob(entry + ".v-*")
+    assert rollcache._valid_meta(entry, "toy") is None and rollcache._current("toy") is None
+    assert rollcache.obtain("toy", produce) == ({"value": 7}, "MISS")
+    rollcache._shelve(entry, json.loads((Path(entry) / "meta.json").read_text())["key"])  # the same version: nothing moves
+    assert not glob.glob(entry + ".v-*")
 
 
 def test_a_data_file_the_roll_read_is_a_dependency(tmp_path, monkeypatch):
@@ -610,13 +646,15 @@ def test_a_linked_worktree_keeps_its_rolls_in_the_main_worktrees_store(tmp_path,
         for here, want in ((main, main), (wt, main)):
             monkeypatch.setattr(gencache, "HERE", str(here))
             monkeypatch.setattr(gencache, "CACHE_DIR", str(here / ".gencache"))
-            rc.roll_store_dir.cache_clear()
+            rc._main_worktree.cache_clear()
             assert rc.roll_store_dir() == str(want / ".gencache" / "rolls"), here
+        monkeypatch.setattr(gencache, "CACHE_DIR", str(tmp_path / "elsewhere"))
+        assert rc.roll_store_dir() == str(tmp_path / "elsewhere" / "rolls"), "a cache pointed elsewhere stays where it points"
         outside = tmp_path / "plain"
         outside.mkdir()
         monkeypatch.setattr(gencache, "HERE", str(outside))
         monkeypatch.setattr(gencache, "CACHE_DIR", str(outside / ".gencache"))
-        rc.roll_store_dir.cache_clear()
+        rc._main_worktree.cache_clear()
         assert rc.roll_store_dir() == str(outside / ".gencache" / "rolls"), "outside a repository: its own"
     finally:
-        rc.roll_store_dir.cache_clear()
+        rc._main_worktree.cache_clear()

@@ -140,14 +140,29 @@ def _kind(root: pathlib.Path, old: str, new: str) -> None:
 
 
 def test_depiction_is_owed_by_the_words_it_reads(drawn: pathlib.Path) -> None:
-    """Feature 375 amendment 1, SC-007 (FR-015): a Guesses edit alone owes `modal-form` and the research checks, not depiction;
-    an About edit - where the check finds drawing statements that belong in Depiction - still owes it."""
+    """Feature 375 amendment 1, SC-007 (FR-015), as amendment 6 (FR-028, SC-021) amends it: a Guesses edit alone owes
+    `modal-form` and the research checks, not depiction; so does an About edit alone (a drawing statement in About is
+    `modal-form`'s M13 finding); a Depiction or Entry: edit still owes it."""
     base = ro.merge_base(drawn)
     _kind(drawn, "no small house was measured.", "no small house was ever measured.")
     owed = {s.split(":")[0] for s, _w, _f in mo.owed(drawn, base)}
     assert "modal-form" in owed and "modal-accuracy" in owed and "modal-depiction" not in owed
     _kind(drawn, "It was thatched.", "It was thatched with rice straw.")
-    assert "modal-depiction" in {s.split(":")[0] for s, _w, _f in mo.owed(drawn, base)}
+    owed = {s.split(":")[0] for s, _w, _f in mo.owed(drawn, base)}
+    assert "modal-form" in owed and "modal-depiction" not in owed, "an About edit alone owes modal-form, not depiction (FR-028)"
+    _kind(drawn, "The map draws every house alike.", "The map draws every house alike, thatched.")
+    assert [w for s, w, _f in mo.owed(drawn, base) if s == DEP] == ["its Depiction, Drawing: or Entry: changed"]
+
+
+def test_depiction_owed_by_is_the_one_rule() -> None:
+    """FR-028: the predicate `owed()` and the replay (`scripts/measure/depiction_replay.py`) share."""
+    def modal(**tags: str) -> object:
+        return mo.Modal("K", "k", "l7r/diagram/interactive/assets/modals/hamlet/k.md:1", {"About": "a", "Entry": "e", "Depiction": "d", **tags})
+
+    was = modal()
+    assert mo.depiction_owed_by(None, was), "new to the About form"
+    assert not mo.depiction_owed_by(was, modal(About="b")) and not mo.depiction_owed_by(was, modal(Guesses="g"))
+    assert all(mo.depiction_owed_by(was, modal(**{t: "x"})) for t in ("Entry", "Depiction", "Drawing"))
 
 
 def test_the_bundle_records_the_pages_each_unit_reads(drawn: pathlib.Path) -> None:
@@ -168,17 +183,32 @@ def test_a_page_the_bundle_never_showed_owes_everything(tmp_path: pathlib.Path) 
     assert [m.split(" ")[1] for m in msgs] == ["modal-depiction:sheet/door"]
 
 
-def test_a_guesses_edit_after_the_check_answered_does_not_reowe_depiction(drawn: pathlib.Path) -> None:
-    """The plan review of amendment 1: from a pop-up whose About already differs from the base and whose depiction was
-    answered, a later Guesses edit keeps it answered; an Entry: edit re-owes it."""
+def test_an_about_or_guesses_edit_after_the_check_answered_does_not_reowe_depiction(drawn: pathlib.Path) -> None:
+    """The plan review of amendment 1, and amendment 6 (FR-028, SC-021): from a pop-up whose Depiction already differs from the
+    base and whose depiction was answered, a later Guesses or About edit keeps it answered - so no depiction dispatch is owed,
+    and none adds a round to its count - while an Entry: edit re-owes it."""
     base = ro.merge_base(drawn)
     store = ro.store(drawn)
-    _kind(drawn, "It was thatched.", "It was thatched with rice straw.")
+    _kind(drawn, "The map draws every house alike.", "The map draws every house alike, thatched.")
     (slug, _w, fp) = next(u for u in mo.owed(drawn, base) if u[0].startswith("modal-depiction"))
     ro.write_answer(store, slug, fp, "PASS")
     _kind(drawn, "no small house was measured.", "no small house was ever measured.")
+    _kind(drawn, "It was thatched.", "It was thatched with rice straw.")
     (_s, _w, fp2) = next(u for u in mo.owed(drawn, base) if u[0].startswith("modal-depiction"))
-    assert fp2 == fp and ro.answered(store, slug, fp2), "a Guesses edit leaves what depiction read unchanged"
+    assert fp2 == fp and ro.answered(store, slug, fp2), "a Guesses or About edit leaves what depiction judges unchanged"
+    assert DEP not in {u.slug for u in ro.unanswered(drawn)}, "nothing owed, so the bundle hook lets no depiction round through"
     _kind(drawn, "0029-farmhouses-minka.html\n", "0029-farmhouses-minka.html, research/questions/0030-x.html\n")
     (_s, _w, fp3) = next(u for u in mo.owed(drawn, base) if u[0].startswith("modal-depiction"))
     assert fp3 != fp and not ro.answered(store, slug, fp3), "an Entry: edit re-owes it"
+    assert DEP in {u.slug for u in ro.unanswered(drawn)}
+
+
+def test_modal_form_holds_m13s_about_side_and_depiction_reports_nothing_from_about() -> None:
+    """FR-028, SC-021: M13 rides in every `modal-form` bundle (its guidelines) and its contract; `modal-depiction`'s says it
+    reports nothing from About. (Passes on today's code: modal-form's M13 line landed 2026-10-12.)"""
+    root = pathlib.Path(__file__).resolve().parents[2]
+    assert "**M13." in (root / mb.GUIDELINES["standard"]).read_text(encoding="utf-8")
+    form = (root / ".claude/agents/modal-form.md").read_text(encoding="utf-8")
+    assert "does NOT belong in About: it goes on the Depiction tab" in " ".join(form.split())
+    depiction = " ".join((root / ".claude/agents/modal-depiction.md").read_text(encoding="utf-8").split())
+    assert "report nothing from About" in depiction and "sits in About instead belongs here" not in depiction

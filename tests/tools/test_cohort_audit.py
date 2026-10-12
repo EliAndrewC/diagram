@@ -369,3 +369,18 @@ def test_run_under_another_module_name_the_audit_shares_the_one_refusal_and_an_i
     )
     p = subprocess.run([sys.executable, "-c", probe], cwd=str(Path(__file__).resolve().parents[2]), capture_output=True, text=True, check=False)
     assert p.returncode == 0 and p.stdout.startswith("ok"), p.stderr[-800:]
+
+
+def test_make_cohorts_record_lands_in_the_clone_and_names_itself_for_the_commit(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:
+    """FR-029: with no test directory, the record goes under the clone's `dev/cohort-log/` and its path into the git dir's
+    `last-cohort-record`, which `make cohort`'s `commit-run-record.sh` reads to commit that one file."""
+    import subprocess
+
+    repo = tmp_path / "clone"
+    repo.mkdir()
+    subprocess.run(["git", "-C", str(repo), "init", "-q"], check=True)
+    monkeypatch.setattr(ca, "HERE", str(repo))
+    monkeypatch.setattr(ca, "LOG_DIR", None)
+    path = ca.write_record([(1, 12)], [(("--- a form=nucleated", [], []), "rolled")], 1, None)
+    assert path.startswith(str(repo / "dev" / "cohort-log"))
+    assert (repo / ".git" / "last-cohort-record").read_text(encoding="utf-8") == path

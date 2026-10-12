@@ -32,7 +32,8 @@ inlined: `glyph.png`, a crop of the kind's first glyph on a pool map - Read it a
 **COVERAGE** (D2, D3). Look at the glyph and read the drawing pages. Every map drawing convention the glyph shows - a mark drawn
 larger, bolder or in another color than the real thing so it reads - must be told on the Depiction tab with what the real thing was
 like. Every standardization a drawing page RECORDS as a convention (one form drawn where reality varied) must be told with why.
-Anything about how the map draws the thing that sits in About instead belongs here (M13): report it. A drawing page's convention the
+About is in your bundle for context only: a drawing statement there is `modal-form`'s finding (M13), not yours - report nothing
+from About (feature 375 amendment 6: an About edit no longer owes this check). A drawing page's convention the
 tab leaves out is a finding.
 
 **TRUTH** (D3, D4, D6). Nothing on the tab may say the map does what the crop and the pages do not show. Nothing may present as

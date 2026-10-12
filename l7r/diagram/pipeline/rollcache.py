@@ -80,23 +80,81 @@ def bypassed() -> bool:
 
 
 @functools.cache
-def roll_store_dir() -> str:
-    """Where the rolls are kept: this tree's `.gencache/rolls` - or, in a LINKED worktree, the main worktree's (feature 375
-    amendment 7, FR-029). A cohort's "before" leg is rolled in a detached worktree at the merge base; with its own store it
-    rolled every seed again each wave (109 minutes of feature 374's tool time). The keys are the engine functions a roll
-    executed and the files it read, path-independent since feature 167, so a worktree and its clone share one store safely."""
+def _main_worktree(here: str) -> str:
+    """The main worktree of the linked worktree `here`, or "" - `here` itself is a main worktree, or in no repository. Asked
+    of git once per tree, not per roll."""
     def git(*a: str) -> str:
-        p = subprocess.run(["git", "-C", gencache.HERE, *a], capture_output=True, text=True, check=False)
+        p = subprocess.run(["git", "-C", here, *a], capture_output=True, text=True, check=False)
         return p.stdout.strip() if p.returncode == 0 else ""
 
     common, own = git("rev-parse", "--path-format=absolute", "--git-common-dir"), git("rev-parse", "--path-format=absolute", "--git-dir")
     if common and own and os.path.realpath(common) != os.path.realpath(own) and os.path.basename(common) == ".git":
-        return os.path.join(os.path.dirname(common), os.path.basename(gencache.CACHE_DIR), "rolls")
-    return os.path.join(gencache.CACHE_DIR, "rolls")
+        return os.path.dirname(common)
+    return ""
+
+
+def roll_store_dir() -> str:
+    """Where the rolls are kept: this tree's `.gencache/rolls` - or, in a LINKED worktree, the main worktree's (feature 375
+    amendment 7, FR-029). A cohort's "before" leg is rolled in a detached worktree at the merge base; with its own store it
+    rolled every seed again each wave (109 minutes of feature 374's tool time). The keys are the engine functions a roll
+    executed and the files it read, path-independent since feature 167, so a worktree and its clone share one store safely.
+    Read from `gencache.CACHE_DIR` on every call (a cached answer kept the first store a process saw, so a test pointing the
+    cache elsewhere still wrote into the first one's), and redirected only while it is the tree's own `.gencache` (a test's
+    toy cache in a worktree was written into the clone as `cache/rolls`, 2026-10-12)."""
+    own = os.path.realpath(gencache.CACHE_DIR) == os.path.realpath(os.path.join(gencache.HERE, ".gencache"))
+    main = _main_worktree(gencache.HERE) if own else ""  # a cache pointed elsewhere (a test's) is kept where it points
+    return os.path.join(main, ".gencache", "rolls") if main else os.path.join(gencache.CACHE_DIR, "rolls")
 
 
 def _entry(subject: str) -> str:
     return os.path.join(roll_store_dir(), hashlib.sha256(subject.encode()).hexdigest()[:24])
+
+
+#: How many versions of one subject the store keeps: the newest in `_entry(subject)`, the others beside it as
+#: `<entry>.v-<key>` (feature 375 amendment 7, FR-029). One version a subject made two trees sharing the store evict each
+#: other: a cohort's "before" leg (the merge base, in a detached worktree) and its "after" leg (the clone) roll the same
+#: subjects, each found the other's entry, missed and overwrote it - 0 of 54 seeds served on the second wave, measured
+#: 2026-10-12 (`specs/375-enforced-wave-process/measurements.json` `375-a7-cohort-after`). Four holds both legs and two
+#: earlier versions; an entry is ~1 MB and the store was 60 MB.
+KEPT_VERSIONS = 4
+
+
+def _valid_meta(entry: str, subject: str) -> dict[str, Any] | None:
+    """`entry`'s meta when it is this subject's and its key still matches what the roll executed, as the code stands."""
+    try:
+        meta = json.loads(Path(entry, "meta.json").read_text(encoding="utf-8"))
+    except OSError, ValueError:
+        return None
+    ok = isinstance(meta, dict) and meta.get("subject") == subject and gencache.key_for(subject.encode(), meta.get("deps")) == meta.get("key")
+    return meta if ok else None
+
+
+def _current(subject: str) -> tuple[str, dict[str, Any]] | None:
+    """(entry, meta) of the stored version of `subject` that the code as it stands produced - the newest, else a kept older
+    one, newest first - or None."""
+    entry = _entry(subject)
+    for e in (entry, *sorted(glob.glob(f"{entry}.v-*"), key=os.path.getmtime, reverse=True)):
+        meta = _valid_meta(e, subject)
+        if meta is not None:
+            return e, meta
+    return None
+
+
+def _shelve(entry: str, key: str) -> None:
+    """Before `entry` takes a version keyed `key`: a different version there is moved beside it, and the oldest beyond
+    `KEPT_VERSIONS` dropped. A reader racing the move finds no entry, which is doubt, and doubt produces (`obtain`)."""
+    try:
+        old = json.loads(Path(entry, "meta.json").read_text(encoding="utf-8")).get("key")
+    except OSError, ValueError, AttributeError:
+        return
+    if not old or old == key:
+        return
+    dest = f"{entry}.v-{str(old)[:16]}"
+    shutil.rmtree(dest, ignore_errors=True)
+    with contextlib.suppress(OSError):
+        os.replace(entry, dest)
+    for stale in sorted(glob.glob(f"{entry}.v-*"), key=os.path.getmtime, reverse=True)[KEPT_VERSIONS - 1 :]:
+        shutil.rmtree(stale, ignore_errors=True)
 
 
 def _place(data: bytes, dest: str) -> None:
@@ -292,9 +350,11 @@ def _produce_and_store[T](subject: str, produce: Callable[[], T], recorded: Call
         holder: list[T] = []
         deps = gencache.record(lambda: holder.append(produce()))
         payload = holder[0]
+    key = gencache.key_for(subject.encode(), deps)
+    _shelve(entry, key)
     os.makedirs(entry, exist_ok=True)
     _place(pickle.dumps(payload), os.path.join(entry, "payload.pickle"))
-    _place(json.dumps({"key": gencache.key_for(subject.encode(), deps), "deps": deps, "subject": subject}).encode(), os.path.join(entry, "meta.json"))
+    _place(json.dumps({"key": key, "deps": deps, "subject": subject}).encode(), os.path.join(entry, "meta.json"))
     return payload, deps
 
 
@@ -369,12 +429,10 @@ def obtain[T](subject: str, produce: Callable[[], T], share: bool = False, recor
                     os.makedirs(os.path.dirname(run_path), exist_ok=True)
                     _place(blob, run_path)
         return payload, "BYPASS"
-    entry = _entry(subject)
-    meta_path, payload_path = os.path.join(entry, "meta.json"), os.path.join(entry, "payload.pickle")
     try:
-        meta = json.loads(Path(meta_path).read_text(encoding="utf-8"))
-        if meta.get("subject") == subject and gencache.key_for(subject.encode(), meta.get("deps")) == meta.get("key"):
-            with open(payload_path, "rb") as fh:
+        found = _current(subject)
+        if found is not None:
+            with open(os.path.join(found[0], "payload.pickle"), "rb") as fh:
                 served: T = pickle.load(fh)  # noqa: S301 - our own entry, written below
             return served, "HIT"
     except OSError, ValueError, KeyError, EOFError, AttributeError, pickle.UnpicklingError:
@@ -546,14 +604,10 @@ def report_deps(spec: HamletSpec) -> dict[str, Any]:
 
     subject = f"roll:{spec!r}"  # the ONE subject per spec (feature 213); the tests' roll IS this record
     # only the META is read here - the payload path went with the store body this now delegates to
-    meta_path = os.path.join(_entry(subject), "meta.json")
-    try:
-        meta = json.loads(Path(meta_path).read_text(encoding="utf-8"))
-        if meta.get("subject") == subject and gencache.key_for(subject.encode(), meta.get("deps")) == meta.get("key"):
-            deps: dict[str, Any] = meta["deps"]
-            return deps
-    except OSError, ValueError, KeyError:
-        pass
+    found = _current(subject)
+    if found is not None and isinstance(found[1].get("deps"), dict):
+        deps: dict[str, Any] = found[1]["deps"]
+        return deps
     # DELEGATES rather than repeating the store (feature 192 FR-008). `_produce_and_store`'s docstring
     # claims the pair invariant is held by ONE body; a second copy of these lines here made that untrue.
     return _produce_and_store(subject, lambda: _hamlet_in_child(spec)[0], lambda: _hamlet_in_child(spec))[1]

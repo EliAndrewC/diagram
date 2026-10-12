@@ -321,3 +321,38 @@ def test_a_depiction_answer_under_the_old_formula_answers_the_same_words(tmp_pat
     assert not ro.legacy_depiction_answered(root, store, "record-format:0047"), "only depiction units"
     commit("research/questions/0006-dry-fields.html", "2026-01-03T00:00:00Z")
     assert not ro.legacy_depiction_answered(root, store, "modal-depiction:choice/pit"), "Entry: moved: the new formula's part is unread"
+
+
+def test_a_depiction_answer_under_amendment_1s_formula_survives_an_about_edit(tmp_path: pathlib.Path) -> None:
+    """Feature 375 amendment 6 (FR-028, SC-021): the fingerprint dropped About. An answer recorded under amendment 1's formula
+    (About in it) still answers its pop-up after an About edit - the formula change re-owes nothing by itself - and not after
+    an Entry: edit, which the check still judges."""
+    mo = _load("_modal_owed")
+    root = tmp_path / "c"
+    choice = root / mo.MODALS / "choice"
+    choice.mkdir(parents=True)
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+
+    def commit(about: str, entry: str, date: str) -> None:
+        (choice / "pit.md").write_text(f"About: {about}\n\nGuesses: its depth.\n\nDepiction: a dark ring.\n\nName: pit\nEntry: {entry}\n")
+        env = {"GIT_AUTHOR_DATE": date, "GIT_COMMITTER_DATE": date, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t", "PATH": "/usr/bin:/bin"}
+        subprocess.run(["git", "-C", str(root), "add", "-A"], check=True, env=env)
+        subprocess.run(["git", "-C", str(root), "commit", "-qm", about], check=True, env=env)
+
+    commit("a pit.", "research/questions/0047-privies.html", "2026-01-01T00:00:00Z")
+    store = tmp_path / "record-checks"
+    slug = "modal-depiction:choice/pit"
+    m = mo.find(root, "choice/pit")
+    a1 = mo.amendment1_depiction_fingerprint(root, m)
+    assert a1 != mo.depiction_fingerprint(root, m), "the two formulas differ"
+    ro.write_answer(store, slug, a1, "0/0/0")
+    rec = json.loads(next(store.iterdir()).read_text())
+    next(store.iterdir()).write_text(json.dumps({**rec, "utc": "2026-01-02T00:00:00Z"}))
+    assert ro.amendment1_depiction_answered(root, store, slug), "the same words: answered"
+    assert not ro.amendment1_depiction_answered(root, store, "record-format:0047"), "only depiction units"
+    commit("a pit, dug by hand.", "research/questions/0047-privies.html", "2026-01-03T00:00:00Z")
+    assert not ro.answered(store, slug, mo.amendment1_depiction_fingerprint(root, mo.find(root, "choice/pit"))), "today's words differ"
+    assert ro.amendment1_depiction_answered(root, store, slug), "an About edit since: still answered (FR-028)"
+    commit("a pit, dug by hand.", "research/questions/0006-dry-fields.html", "2026-01-04T00:00:00Z")
+    assert not ro.amendment1_depiction_answered(root, store, slug), "an Entry: edit since: owed again"
+    assert not ro.amendment1_depiction_answered(root, tmp_path / "empty", slug), "no answer recorded"

@@ -467,14 +467,26 @@ its NAME across the child (whose own failure is one generic RuntimeError); `roll
 `Refusal`, `roll_or_refusal` and the child's target `ROLL_TARGET` live in their own module, `l7r/diagram/tools/cohort_roll.py`,
 which every process imports by its real name (plan review round 2): `make cohort` runs `cohort_audit` as `__main__` and its
 pool workers as `__mp_main__`, so a class defined in `cohort_audit` was not the class the child unpickled, and a target named
-from `__name__` could not be imported by the child (the first measurement's legs refused 54 of 54 seeds). Tests: a refusal
+from `__name__` could not be imported by the child (the first measurement's legs, 2026-10-12, refused 54 of 54 seeds - their
+cohort-log records, discarded). Tests: a refusal
 crosses a REAL roll child as `cohort_roll.Refusal` (`tests/tools/_cohort_child.py`); `cohort_audit` run under `__mp_main__`
 in a fresh interpreter holds that one class and a target the child imports.
 A crash - the child dies, memory, a timeout - is no refusal: it raises, is reported by its name, and is never stored. The
 gate's own `roll:` subjects and `rollcache.report` are unchanged. The store: `rollcache`'s directory is the clone's `.gencache/rolls`; in a LINKED worktree
 (`git rev-parse --git-common-dir` is not the worktree's own `.git`) it is the main worktree's, so a "before" leg rolled in a
-detached worktree at the merge base reads and writes the clone's store (`rollcache.roll_store_dir()`; keys are
-path-independent since feature 167). `GATE_NO_CACHE=1` and the FULL test run bypass serving as they do for the gate.
+detached worktree at the merge base reads and writes the clone's store (`rollcache.roll_store_dir()`, asked of git once per
+tree by `_main_worktree` and read from `gencache.CACHE_DIR` on every call, redirected only while that is the tree's own
+`.gencache`; keys are path-independent since feature 167).
+`GATE_NO_CACHE=1` and the FULL test run bypass serving as they do for the gate. THE STORE KEEPS SEVERAL VERSIONS OF A SUBJECT
+(measured 2026-10-12, the second measurement): with one entry per subject, the two legs - the merge base's code and the
+clone's, rolling the same subjects - evicted each other, and the second wave served 0 of 54 in either new-code leg while the
+leg that wrote last was served 8 of 8 when asked again. So `_produce_and_store` moves a different version already in
+`_entry(subject)` beside it as `<entry>.v-<key>` before writing the new one (`_shelve`), keeping `KEPT_VERSIONS` = 4 (both
+legs and two earlier; an entry is ~1 MB, the store 60 MB); `obtain` and `report_deps` serve the newest entry whose key matches
+the code as it stands (`_current`), else an older kept one, newest first. This holds for the gate's `roll:` subjects too: a
+clone switching between two engine states (a reverted edit) is served its earlier roll. A reader racing a move finds no entry,
+which is doubt, and doubt produces. Tests: two code versions alternating are each served; the oldest beyond the cap is
+dropped; an unreadable newest entry is overwritten, never moved; red on today's code.
 
 **D39 - The cohort's per-seed record (FR-029).** `cohort_audit.audit` writes `dev/cohort-log/<UTC stamp>-<clone>-<pid>.json` in
 the CLONE (from a linked worktree, the main worktree's - a "before" leg's worktree is removed, the plan review's note): the
@@ -509,7 +521,7 @@ each of `make done`'s SIX record writes: already verified, its hooks failure, th
 sites, green.
 
 **D44 - Measured (SC-022, SC-024, SC-027).** SC-022: the cohort on 374's delta - four detached worktrees: the merge base
-a41ab2e0f and 374's 61a52f3c8, each once with today's code and once with the new `cohort_audit.py` and `rollcache.py` copied in
+a41ab2e0f and 374's 61a52f3c8, each once with today's code and once with the new `cohort_audit.py`, `cohort_roll.py` and `rollcache.py` copied in
 (the store is shared only where the new `rollcache.py` runs), the backlog's own store not copied - `make cohort N=48 JOBS=4`
 (4 = `L7R_ROLL_SLOTS`' default, the child rolls allowed at once), a "before" and an "after" leg each, twice, old and new
 alternating; key `375-a7-cohort-after`. SC-024: the two split suites, today's file (a detached worktree at the commit before) against

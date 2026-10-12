@@ -53,7 +53,7 @@ RESEARCH_AGENT = "modal-research"
 #: "perhaps it's worth trying to make the speculative fix and measuring it afterwards"). Run together, each check's applied
 #: edits re-owed the other two, and every second and third round on 374's and 352's pop-ups was owed by the pop-up's own
 #: words moving (specs/375-enforced-wave-process/research.md R2). Form first - its edits can carry a fact, so the substance
-#: checks read its words; depiction last - it reads About for drawing statements, which a research round may move. A
+#: checks read its words; depiction last - it reads the `Entry:` (its candidate drawing pages), which a research round may move. A
 #: check's bundle waits for the checks before it (`modal_bundle.order_hold`), and a round's applied edits settle the checks
 #: before it (`apply_edits.Round`), never the ones after, which read the edited words next.
 ORDER = (FORM_CHECK, RESEARCH_AGENT, DEPICTION_CHECK)
@@ -318,9 +318,17 @@ def fingerprints(root: pathlib.Path, m: Modal) -> tuple[str, str]:
 
 
 def depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
-    """The Depiction unit's fingerprint: exactly what `modal-depiction` reads (feature 375 amendment 1, FR-015) - the About, the
-    Entry: list (its drawing candidates), the Depiction tab, the Drawing: list and those pages. Not Guesses, Name or Form: with
-    them in it, a Guesses edit after the check had answered re-owed it in full (the plan review of amendment 1)."""
+    """The Depiction unit's fingerprint: what `modal-depiction` judges (feature 375 amendment 6, FR-028) - the Entry: list (its
+    drawing candidates), the Depiction tab, the Drawing: list and those pages. Not Guesses, Name or Form (amendment 1: with them
+    in it, a Guesses edit after the check had answered re-owed it in full), and not About since amendment 6: a drawing statement
+    in About is `modal-form`'s finding (M13), and 43 of 221 pop-up edits since 2026-10-05 changed About alone, each re-owing an
+    Opus depiction round (specs/375-enforced-wave-process/research.md R6)."""
+    return digest([m.uid, m.entry, m.depiction, *_pages(root, m.drawing_files())])
+
+
+def amendment1_depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
+    """The depiction fingerprint as amendment 1 computed it, About in it: what every depiction answer recorded from 2026-10-10 to
+    amendment 6 holds. Read by `record_owed.amendment1_depiction_answered`, so dropping About re-owed no answer by itself."""
     return digest([m.uid, m.tags.get("About", ""), m.entry, m.depiction, *_pages(root, m.drawing_files())])
 
 
@@ -401,16 +409,18 @@ def owed(root: pathlib.Path, base: str, uid: str = "") -> list[tuple[str, str, s
         # Depiction tab or Drawing: list, its About (drawing statements that belong in Depiction) or its Entry: (the candidate
         # drawing pages `modal_bundle.drawing_candidates` builds from it, the case above). A Guesses, Name or Form edit alone owes
         # `modal-form` and the research checks, not this one: 343's run re-checked depiction on such edits.
+        # FEATURE 375 AMENDMENT 6 (FR-028; the GM 2026-10-12): and not About - its drawing statements are `modal-form`'s (M13).
+        # An edit that does not owe the check is not dispatched, so it adds no round to the check's count on the pop-up.
         moved_drawing = [
             f for f in m.drawing_files() if f in changed_pages
         ]
-        if was is None or was.depiction != m.depiction or was.tags.get("About", "") != m.tags.get("About", "") or was.entry != m.entry:
+        if depiction_owed_by(was, m):
             rows.append(
                 (
                     f"{DEPICTION_CHECK}:{m.uid}",
                     "new to the About form"
                     if was is None
-                    else "the modal or its Depiction tab changed",
+                    else "its Depiction, Drawing: or Entry: changed",
                     depiction_fingerprint(root, m),
                 )
             )
