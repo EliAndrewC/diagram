@@ -589,6 +589,21 @@ def test_the_bundle_prints_the_round_counters_epoch_and_what_it_counted(tmp_path
     assert "1 of the 3" in line and "k3@4000000000" in line and "k1," not in line, line
 
 
+def test_a_record_checks_round_counter_reads_the_record_checks_count(tmp_path: pathlib.Path) -> None:
+    """Feature 374 batch 7, the round arbiter's tooling fix (round:quote-check|q:0019@3): the bundle read the review checks'
+    counter for a record check and printed "0 of the 0 kept" for a trigger that fired at round 3. A record check's unit is
+    counted by `hm_checks.py`, so its count and its rebase are read from that state."""
+    import subprocess
+
+    subprocess.run(["git", "-C", str(tmp_path), "init", "-q"], check=True, capture_output=True)
+    (tmp_path / ".git" / "checks-open.json").write_text('{"rounds": {"quote-check|q:0019": 3}, "rebased": {"record-format|q:0019": {"fp": "x", "n": 2}}}')
+    line = ab.round_counter(tmp_path, "quote-check|q:0019")[0]
+    assert "3 round(s) counted" in line and "quote-check|q:0019" in line and "rebased" not in line, line
+    (tmp_path / ".git" / "checks-open.json").write_text('{"rounds": {"record-format|q:0019": 4}, "rebased": {"record-format|q:0019": {"fp": "x", "n": 2}}}')
+    assert "rebased the count at round 2" in ab.round_counter(tmp_path, "record-format|q:0019")[0]
+    assert ab.record_round_counter(tmp_path, "nothing|q:1") == []
+
+
 def test_an_accept_on_a_review_unit_stands_while_its_sheet_reads_as_ruled(tmp_path: pathlib.Path) -> None:
     """Feature 374 batch 5: the review gate refused two sheets the round arbiter had accepted - their last verdicts were
     NEEDS-WORK at an older key. A unit's round ruling now carries the sheet's content key, and stands for it while it holds."""
