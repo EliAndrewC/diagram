@@ -290,3 +290,31 @@ def test_the_household_grave_takes_the_plots_southeast_or_northwest_corner() -> 
         assert se or nw, (roll, grave)
     both = _lay(("shrine", "grave"), roll=0.1)
     assert fs.clears(both["grave"], [both["shrine"]], fs.WALL_GAP_FT - 1e-6), "the grave never takes the shrine's corner"
+
+
+def test_way_in_strip_is_the_ground_from_the_house_to_its_rings_break() -> None:
+    """Feature 374 wave 146 (polder seed 12): a ring's front band is laid in two pieces, its break the way in; the strip from the
+    house's front wall to the band, as wide as the break, is where no fixture stands. No broken band, or both pieces on one
+    side of the house, is no strip."""
+    from l7r.diagram.settlement.homestead_parts.fixture_seats import way_in_strip
+
+    house = (0.0, 0.0, 40.0, 30.0)
+    south = [(-50.0, 120.0, 60.0, 17.0), (50.0, 120.0, 60.0, 17.0)]
+    assert way_in_strip(house, south, [(0, 1), (0, 1)]) == (0.0, (15.0 + 111.5) / 2, 40.0, 111.5 - 15.0)
+    east = [(120.0, -50.0, 17.0, 60.0), (120.0, 50.0, 17.0, 60.0)]
+    assert way_in_strip(house, east, [(1, 0), (1, 0)]) == ((20.0 + 111.5) / 2, 0.0, 111.5 - 20.0, 40.0)
+    assert way_in_strip(house, [south[0]], [(0, 1)]) is None, "no break"
+    assert way_in_strip(house, [south[0], (-150.0, 120.0, 60.0, 17.0)], [(0, 1), (0, 1)]) is None, "both pieces on one side"
+
+
+def test_door_room_stands_past_the_yard_on_the_line_from_the_house() -> None:
+    """Feature 374 wave 146 (the 10-household valley seed 4): the square about a grove farm's front door, where the web's path
+    starts, past the yard's far edge on the line from the house through the yard, on either axis; none with no yard."""
+    from l7r.diagram.settlement.homestead_parts.fixture_seats import door_room
+
+    house = (0.0, 0.0, 40.0, 30.0)
+    assert door_room(house, (0.0, 30.0, 30.0, 20.0), 8.0, 12.0) == (0.0, 48.0, 24.0, 24.0)
+    assert door_room(house, (0.0, -30.0, 30.0, 20.0), 8.0, 12.0) == (0.0, -48.0, 24.0, 24.0)
+    assert door_room(house, (40.0, 0.0, 20.0, 30.0), 8.0, 12.0) == (58.0, 0.0, 24.0, 24.0)
+    assert door_room(house, (-40.0, 0.0, 20.0, 30.0), 8.0, 12.0) == (-58.0, 0.0, 24.0, 24.0)
+    assert door_room(house, None, 8.0, 12.0) is None

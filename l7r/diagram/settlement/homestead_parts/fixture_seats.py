@@ -358,6 +358,7 @@ def lay_fixtures(
     shade: float = 0.0,
     turns: Sequence[float] = (0.0,),
     fruit: Sequence[Rect] = (),
+    keep: Sequence[Rect] = (),
 ) -> dict[str, Rect]:
     """Each of `kinds` laid beside the parts already laid, in the house's unturned frame centered on it: `{kind: (x, y, w,
     h)}`, the box AS LAID (a flank seat turned to lie along its flank). `roofs` are the built parts - the house first, the
@@ -387,7 +388,9 @@ def lay_fixtures(
     g = px(WALL_GAP_FT)
     # (A grove farm's bands stay roofs here: letting a persimmon's crown reach over them, feature 315 found, let it take the
     # service strip a wood shed or bath room needed, and five cohort rolls could no longer seat their households.)
-    taken: list[Rect] = [*roofs, *fruit, *ground]  # `fruit`: a grove farm's bands, ground for its persimmon alone (feature 315)
+    # `keep`: the ground a grove farm's way in crosses (`way_in_strip`) - no fixture stands on it but the bath room, which is
+    # joined to its house (feature 374 wave 146: a privy and a manure heap across a row farm's way in left it no path)
+    taken: list[Rect] = [*roofs, *fruit, *ground, *keep]  # `fruit`: a grove farm's bands, ground for its persimmon alone (feature 315)
     built: list[Rect] = list(roofs)
     laid: dict[str, Rect] = {}
     ft: dict[str, tuple[float, float]] = {}
@@ -409,7 +412,7 @@ def lay_fixtures(
             named = bath_room_seats(wall, hw, hh, w, d, (yard[0], yard[2] / 2) if yard is not None else None)
             named += bath_room_slides(wall, hw, hh, w, d, px(WALL_SLIDE_FT))
             house = roofs[0]
-            others = [t for t in taken if t is not house]
+            others = [t for t in taken if t is not house and t not in keep]
             got = next(((q, n) for q, n in named if clears(q, [house], -1e-6) and clears(q, others, g)), None)
             if got is None:
                 raise FixtureUnlaid("a bath room found no place on the house's front wall or either end wall")
@@ -541,6 +544,61 @@ def bath_room_slides(first: str, hw: float, hh: float, w: float, d: float, step:
         "floored_rooms": [(side, u, d, w) for u in along(max(0.0, (hh - w) / 2), step)],
     }
     return [(q, first) for q in table[first]] + [(q, k) for k, v in table.items() if k != first for q in v]
+
+
+def way_in_strip(house: Rect, bands: Sequence[Rect], faces: Sequence[Sequence[float]]) -> Rect | None:
+    """The ground a grove farm's way in crosses: from its house's front wall to the break in its front band, as wide as the
+    break - None where no band is broken (a farm with no ring). The front is the face whose band is laid in two pieces, the
+    break between them (`rolling/dispersed.py`, `WAY_IN_FT`); bands and house in one frame, each `(cx, cy, w, h)`.
+
+    Research: the way in kept open - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way in by the open front"""
+    by_face: dict[tuple[float, float], list[Rect]] = {}
+    for r, f in zip(bands, faces, strict=False):
+        by_face.setdefault((float(f[0]), float(f[1])), []).append(r)
+    front = next(((f, rs) for f, rs in by_face.items() if len(rs) >= 2), None)
+    if front is None:
+        return None
+    (fx, fy), pieces = front
+    ax = 0 if fx == 0 else 1  # the axis the band runs along: x for a north or south front, y for an east or west one
+    lo = max((r[ax] + r[ax + 2] / 2 for r in pieces if r[ax] < house[ax]), default=None)  # the inner end of the piece before the break
+    hi = min((r[ax] - r[ax + 2] / 2 for r in pieces if r[ax] > house[ax]), default=None)  # and of the piece after it
+    if lo is None or hi is None:  # both pieces on one side of the house: no break to keep open
+        return None
+    near = house[1 - ax] + (fy if ax == 0 else fx) * house[3 - ax] / 2  # the house's front wall
+    band = min((r[1 - ax] - (fy if ax == 0 else fx) * r[3 - ax] / 2 for r in pieces), key=lambda v: abs(v - near))  # the band's inner edge
+    mid, span = (lo + hi) / 2, max(hi - lo, 0.0)
+    across, depth = (near + band) / 2, abs(band - near)
+    return (mid, across, span, depth) if ax == 0 else (across, mid, depth, span)
+
+
+DOOR_OUT_FT = 8.0
+"""How far past the yard's far edge a grove farm's front door stands, as the web places it (`ways/serve.front_door`: a footpath's
+fabric gap plus 4 ft). Not `hamletgen/homesteads/rows.py`'s `FOOTPATH_DOOR_OUT_FT` (12 ft): that one is a row seat's door
+measured off its FRAME's front edge, this one off the yard - the point the web's path starts from.
+
+Research: the door past the yard - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: past the yard on the grove's open side"""
+
+DOOR_ROOM_HALF_FT = 12.0
+"""Half the square of ground kept clear about a grove farm's front door, so its path can leave it: a footpath's fabric gap (4 ft)
+and most of the router's 10 ft cell beside its 3 ft tread - a map drawing convention, the router's own tolerance. Not
+`rows.py`'s `DOOR_ROOM_FT` (16 ft): that is how far a row seat's door stands off the HARD ground, this how far the farm's own
+fixtures stand off its door.
+
+Research: the door's room - UNRESEARCHED: 12 ft each way, a routing tolerance a path needs to start"""
+
+
+def door_room(house: Rect, yard: Rect | None, out: float, half: float) -> Rect | None:
+    """The square kept clear about a grove farm's front door - `out` past the yard's far edge, straight out along the line
+    from the house through the yard, `half` each way - or None with no yard (feature 374 wave 146: a privy laid on that spot
+    left a row farm no path from its door)."""
+    if yard is None:
+        return None
+    dx, dy = yard[0] - house[0], yard[1] - house[1]
+    if abs(dx) >= abs(dy):
+        s = 1.0 if dx >= 0 else -1.0
+        return (yard[0] + s * (yard[2] / 2 + out), yard[1], 2 * half, 2 * half)
+    s = 1.0 if dy >= 0 else -1.0
+    return (yard[0], yard[1] + s * (yard[3] / 2 + out), 2 * half, 2 * half)
 
 
 def _first(seats: Iterable[Rect], taken: Sequence[Rect], g: float) -> Rect | None:

@@ -20,7 +20,7 @@ from . import law
 from .corridors import FORD_LANDING_FT
 from .fabric import _crosses_fabric, _draw_web
 from .route import _route, _unjog
-from .serve import door_path
+from .serve import closes_a_needle, door_path
 from .settle import Lawful
 
 STREET_WIDTH = 6
@@ -296,7 +296,7 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
             # (feature 291 on 287, cohort seed 901)
             leg = unhooked_both(join_leg(path, joined))
             lawful = Lawful(s, tree=True)
-            if len(leg) < 2 or not lawful(leg, STREET_WIDTH):
+            if len(leg) < 2 or not lawful(leg, STREET_WIDTH) or closes_a_needle(s.M.get("lanes") or [], leg):  # ...nor a needle (wave 146)
                 # ...ELSE THE LAWFUL JOIN FROM EITHER END, searched as a door path is (`serve.door_path`): a second street of one
                 # farm whose nearest join the law refused was left unjoined and its farm unreached (cohort seed 904)
                 leg = next((j for e in (path[-1], path[0]) if (j := door_path(s, e, net, hard, walls, water, [], lawful)) is not None), [])  # type: ignore[arg-type]
@@ -312,9 +312,24 @@ UNNEEDLE_TRIES = 3
 Research: street end given up for its join - NONE: a bound on a repair, the street's farms still served by their door paths"""
 
 
+def new_needles(lanes: Sequence[Mapping[str, Any]], pts: Sequence[Pt]) -> list[Pt]:
+    """The centers of the slivers the law refuses (`law.needle_loops`) that `pts`, drawn beside `lanes`, closes and the lanes
+    alone do not - matched by where they stand."""
+    before = [face.centroid.coords[0] for face, _ in law.needle_loops({"lanes": list(lanes)})]
+    after = [face.centroid.coords[0] for face, _ in law.needle_loops({"lanes": [*lanes, {"pts": list(pts)}]})]
+    return [(float(c[0]), float(c[1])) for c in after if all(math.dist(c, b) > 1.0 for b in before)]
+
+
 def adds_a_needle(lanes: Sequence[Mapping[str, Any]], pts: Sequence[Pt]) -> bool:
     """Does `pts`, drawn beside `lanes`, close a sliver the law refuses (`law.needle_loops`) that the lanes alone do not?"""
-    return len(law.needle_loops({"lanes": [*lanes, {"pts": list(pts)}]})) > len(law.needle_loops({"lanes": list(lanes)}))
+    return bool(new_needles(lanes, pts))
+
+
+UNNEEDLE_REACH_FT = 100.0
+"""How near a street's end a sliver it closes must stand for the street to give that end up (`unneedled`): a sliver farther
+along it is no end's to mend.
+
+Research: an end's reach for a sliver - NONE: a bound on a repair"""
 
 
 def unneedled(s: Settlement, path: list[Pt], joined: list[Pt], net: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> tuple[list[Pt], list[Pt]]:
@@ -327,10 +342,16 @@ def unneedled(s: Settlement, path: list[Pt], joined: list[Pt], net: Sequence[tup
     Research: no needle between a street and its join - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network of single ways"""
     lanes = list(s.M.get("lanes") or [])
     for _ in range(UNNEEDLE_TRIES):
-        at_start = len(joined) > len(path) and joined[-len(path) :] == path
-        if len(path) < 3 or len(joined) <= len(path) or not adds_a_needle(lanes, joined):
+        faces = new_needles(lanes, joined) if len(path) >= 3 else []
+        if not faces:
             break
-        path = path[1:] if at_start else path[:-1]
+        # ...AT THE END NEARER THE SLIVER (feature 374 wave 146, polder seed 4: a second street ran on past the road's start, a
+        # sliver at the street's far end, not its joined one), and only an end within reach of it
+        c = faces[0]
+        d0, d1 = math.dist(path[0], c), math.dist(path[-1], c)
+        if min(d0, d1) > s.px(UNNEEDLE_REACH_FT):
+            break
+        path = path[1:] if d0 <= d1 else path[:-1]
         joined = join_to(path, net, hard, walls, water)
     return path, joined
 

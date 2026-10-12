@@ -1788,5 +1788,14 @@
     "source": "dev/perf-log/20261012T181723Z-374-start, 20261012T184556Z-374-end",
     "command": "make perf LABEL=374-start|374-end; make perf-review",
     "method": "the two bookends' totals"
+  },
+  "w146-rolls": {
+    "quantity": "wave 146 at its final code: the cohort, the 24 archetype rolls (16 households, seeds 1-12), the 20 valley rolls (16 households, seeds 1-20) and the 10-household valley seed 4",
+    "value": "cohort 16/16; dike-pond 12/12 (seeds 3 and 4 newly green; 11/12 at HEAD); polder 10/12 - seed 12 newly green, seed 5 SiteRefused as at HEAD, seed 4 NEWLY RED (needle_loops between its two streets and the road: street 0's straight join ends on the road beside the junction street 1 passes through; at HEAD the join carried a vertex on street 1, and the road's start sat 5 px away, the fixtures having moved its gateway); valley 20/20; valley 4@10 still refused, now off_ford on a row street where at HEAD a farm stood unreached",
+    "unit": "rolls",
+    "observed": "2026-10-12",
+    "source": "make cohort; make hamlet ARGS=\"--name <n> --seed <s> --households <h> [--archetype <a>] --out <dir> --no-render\"",
+    "command": "the same per roll",
+    "method": "exit status per roll; HEAD compared in a detached worktree (lanes 0-3 of polder seed 4 dumped at both)"
   }
 }

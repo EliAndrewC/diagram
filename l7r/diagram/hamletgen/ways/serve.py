@@ -596,6 +596,15 @@ def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], wa
     return _route(door, q, hard, walls, water, gap=gap, cell=DOOR_FINE_CELL_FT)
 
 
+def closes_a_needle(lanes: Sequence[Mapping[str, Any]], path: Sequence[Pt]) -> bool:
+    """Does `path`, drawn beside `lanes`, close a sliver the lane law refuses (`law.needle_loops`) that the lanes alone do not?
+
+    Research: no needle between a door path and its way - research/questions/0081-village-lanes.drawing.html: lanes meet as a T, no needle"""
+    from .law import needle_loops  # local: the law sits above serve
+
+    return len(needle_loops({"lanes": [*lanes, {"pts": list(path)}]})) > len(needle_loops({"lanes": list(lanes)}))
+
+
 def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], quads: Sequence[Poly], lawful: Any) -> list[Pt] | None:
     """The door path from `door` to its way (`segs`) the law keeps, trying the way's six nearest points, nearest first: the
     straight step where it is clear (the router plans on a lattice and refused doors whose every neighboring cell stood in
@@ -626,7 +635,10 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
     def kept(path: list[Pt], clear: Any) -> list[Pt] | None:
         path = to_first_arrival(path, segs, _TOUCH_GAP, clear)
         path = square_run(s.M, path) if len(path) >= 2 else path
-        return path if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0) else None
+        ok_ = len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0)
+        # ...AND CLOSES NO NEEDLE WITH THE WAYS IT MEETS (feature 374 wave 146): a door path is a tree lane no settle may cut, so
+        # one laid up beside its street to meet it left a sliver the web was refused for (dike-pond seed 3, polder seed 4)
+        return path if ok_ and not closes_a_needle(s.M.get("lanes") or [], path) else None
 
     def lawful_step(a: Pt, b: Pt) -> bool:
         # a step the footpath's own test passes and the law's ground half keeps (`Lawful.on_lawful_ground`): 7 ft off a fence

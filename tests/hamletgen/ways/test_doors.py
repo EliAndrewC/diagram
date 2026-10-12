@@ -130,3 +130,13 @@ def test_a_door_path_the_law_refuses_taut_is_routed_at_the_law_s_own_gap(monkeyp
     assert got == detour
     assert gaps == [WEB_FABRIC_GAP], "the straight step was clear, so only the law's-gap route was asked of the router"
     assert asked[0] == [(0.0, 0.0), (100.0, 0.0)], "the straight step first"
+
+
+def test_closes_a_needle_refuses_a_door_path_that_makes_a_sliver() -> None:
+    """Feature 374 wave 146 (dike-pond seed 3, polder seed 4): a door path is a tree lane no settle may cut, so one closing a
+    sliver with the ways it meets is refused where it is laid."""
+    from l7r.diagram.hamletgen.ways.serve import closes_a_needle
+
+    lanes = [{"pts": [(0.0, 0.0), (100.0, 0.0)]}]
+    assert closes_a_needle(lanes, [(0.0, 0.0), (50.0, 3.0), (100.0, 0.0)])
+    assert not closes_a_needle(lanes, [(50.0, 0.0), (50.0, 80.0)]), "a T"

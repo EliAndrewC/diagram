@@ -8,7 +8,7 @@ Research: box and template plumbing - NONE
 import math
 from typing import TYPE_CHECKING, Any, cast
 
-from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures, sun_turns
+from ..homestead_parts.fixture_seats import DOOR_OUT_FT, DOOR_ROOM_HALF_FT, FixtureForms, FixtureUnlaid, door_room, lay_fixtures, sun_turns, way_in_strip
 from ..homestead_parts.grove_rules import EAST_REACH_FT
 from ..homestead_parts.grove_sides import bundle_turn
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT
@@ -400,7 +400,7 @@ class BundleGeomMixin:
         )
         # ...AND ITS FIXTURES, laid in the bundle as a nucleated household's are (feature 287, homes H32), clear of its own
         # grove (feature 291): the envelope admits the farm only with room for its privy, its wood shed and its bath room
-        self._lay_fixtures(dispersed, hx, hy, hw, hh, False, seat, bands=dispersed["groves"])
+        self._lay_fixtures(dispersed, hx, hy, hw, hh, False, seat, bands=dispersed["groves"], faces=[f for f, _d in dispersed.get("grove_faces") or ()])
         return dispersed
 
     def _lay_well_pocket(self: Settlement, base: dict[str, Any], hx: float, hy: float, hh: float, yh: float, gap: float) -> None:  # type: ignore[misc]
@@ -428,7 +428,7 @@ class BundleGeomMixin:
         except PocketUnlaid as refused:
             base["unlaid"] = str(refused)
 
-    def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any, bands: Any = ()) -> None:  # type: ignore[misc]
+    def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any, bands: Any = (), faces: Any = ()) -> None:  # type: ignore[misc]
         """THE HOUSEHOLD'S FARMSTEAD FIXTURES, parts of its homestead (feature 287, homes H32, plan M5 and D9): the kinds its
         lot keeps (`_household_fixtures`, set by the seat search) laid beside the parts already laid - built ones a crown may
         not cover, the yard and the beds it may - in the house's frame (`homestead_parts/fixture_seats.py`), with the
@@ -484,6 +484,11 @@ class BundleGeomMixin:
                 shade,
                 (self._turn_at(sx, sy),) if getattr(self, "_sun_corridor_ft", 0.0) else sun_turns(lo, hi),
                 fruit,
+                [
+                    s_
+                    for s_ in [way_in_strip(rel(base["house"]), fruit, faces), door_room(rel(base["house"]), rel(base["yard"]), self.px(DOOR_OUT_FT), self.px(DOOR_ROOM_HALF_FT)) if fruit else None]
+                    if s_ is not None
+                ],
             )
         except FixtureUnlaid as refused:  # a bath room or a wood shed with no seat in this layout: the fit refuses it (feature 280)
             base["unlaid"] = str(refused)

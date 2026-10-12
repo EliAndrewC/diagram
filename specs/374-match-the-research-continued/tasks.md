@@ -205,6 +205,11 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. every open seat inside the frame stands on the houses' side on all 7 off-sheet rolls (m:w145-offsheet-why); D11's convention recorded on 0077's drawing page with its grounds note; quote-check, record-format, the woodland-commons depiction (arbiter round 3, its EDIT applied) answered; 6 claims IN-STEP; page-check green; bookends band 0
 
+## Batch 10 - a grove farm's way in kept open
+
+- [ ] T38 wave 146: a grove farm's way in kept clear of its own fixtures; door paths and street joins close no sliver (0036) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

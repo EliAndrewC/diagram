@@ -651,6 +651,41 @@ changes, so the batch takes its timing bookends and states the band at landing.
   growing the scan or the canvas would only push the frame out: the off-sheet bearing stays, and 0077's drawing page now
   records it as a map drawing convention with its reason, the claim citing that page. The woodland-commons pop-up says so.
 
+## Batch 10: a grove farm's way in kept open (row 771's first placer guarantee)
+
+**The work list**: rows 771 and 774 wait on one failure (`m:b9-before`, `m:w141-archetype-rolls`) - a row-village farm whose
+door path finds no way to its street (dike-pond seed 4 and polder seed 12 of 771's rolls, the 10-household valley seed 4 of 774's
+trial) - and the round arbiter's route B (W141-3) takes 771 up again "as two placer guarantees (row-village door seating,
+polder capacity), each with a seed-pinned test that is red first". Batch 10 takes the first. Probed before the fix (2026-10-12):
+on polder seed 12 the farm's own privy and manure heap stood between its door and the break in its south grove band, its way
+in; on the 10-household valley seed 4 the privy stood on the very point the web's door path starts from. Two placer fixes were tried and measured to fix none and reverted: a door route routed and reserved at the row seat, and a
+door path to the whole network. The engine changes, so the batch takes its timing bookends (`374-start` taken on HEAD before the
+fix was re-applied).
+
+### Wave 146 (T38) - a grove farm's way in kept clear of its own fixtures
+- **W146-1** (within): research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html puts a farm's way in at
+  its open front, through the break in a ring's front band. The fixtures laid in a grove farm's bundle keep off that ground: the
+  strip from the house's front wall to the break, as wide as the break (`way_in_strip`), and a square about the point the web's
+  door path starts from (`door_room`, `DOOR_ROOM_HALF_FT` 12 ft each way, a routing tolerance, UNRESEARCHED). The bath room,
+  joined to its house, is exempt.
+- **W146-2** (within): a door path and a row street's join are tree lanes no settle may cut, so each is refused where it is laid
+  if it closes a sliver the lane law refuses (`closes_a_needle`, `law.needle_loops`); a street that closes one gives up the end
+  vertex nearer the sliver, up to three, where an end is within `UNNEEDLE_REACH_FT` (100 ft) of it (`unneedled`, widened from
+  wave 141's joined end).
+- **W146-3** (within): the bar, two halves. FIXED: the seed-pinned tests `tests/soak/test_row_village_doors.py` - polder seed 12
+  and dike-pond seed 4 at 16 households roll with every farm reached; both red at HEAD, green at the final code (run 2026-10-12);
+  the 10-household valley seed 4 is pinned there as a strict expected failure, its failure no longer a farm unreached but a row
+  street over the brook off a ford, still open (774 keeps waiting). NO REGRESSION: every roll that passed at HEAD still passes,
+  on the cohort, the 24 archetype rolls and the 20 valley rolls at the final code; a roll that newly fails goes to the round
+  arbiter with its measurement rather than landing silently. T33 stays open: the polder's capacity refusal (seed 5) is the
+  second guarantee.
+- **W146-4** (the round arbiter, ask:b10-w146-polder4-regression, 2026-10-12, accept): polder seed 4, green at HEAD, is refused
+  at the final code (`m:w146-rolls`): street 0's straight join ends on the road beside the junction street 1 passes through, a
+  sliver the settle no longer welds now the fixtures' new seats moved the gateway 5 px. Trimming a street's nearer end was tried
+  and failed (the sliver is mid-street). Waived as a known regression on the unrolled polder form, pinned in the soak tier as
+  its current refusal, and taken up with the polder's capacity (the second guarantee): a later street threaded past an existing
+  junction, or the settle welding a near-miss junction.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:
