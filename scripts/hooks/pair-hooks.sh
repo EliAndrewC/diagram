@@ -302,7 +302,9 @@ try:
     landed = int(subprocess.run(["git", "-C", str(rec.parent.parent), "log", "-1", "--format=%ct", "origin/main", "--", f"{feature}/tasks.md"], capture_output=True, text=True).stdout.strip() or 0)
 except Exception:
     landed = 0
-live = [k for k in d.get(feature, {}).get(unit, []) if "@" not in k or int(k.rsplit("@", 1)[1]) >= landed]
+# GUARD_EDIT_OK: feature 374 batch 5, the round arbiter's tooling fix - a bare key (kept before the epoch fix) reads as epoch 0, so
+# it is spent once the feature's tasks.md has landed at all: batch 4's bare keys counted into batch 5, its first round read as round 5
+live = [k for k in d.get(feature, {}).get(unit, []) if (int(k.rsplit("@", 1)[1]) if "@" in k else 0) >= landed]
 keys = [k.split("@", 1)[0] for k in live]
 print(len(keys) + (0 if key in keys else 1))
 PY
