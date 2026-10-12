@@ -87,7 +87,9 @@ hook prompt "$CA"; check "the skip surfaces" 'printf "%s" "$OUT" | grep -q "skip
 # a change to the clone makes the next arming roll again
 git -C "$CA" -c user.email=t@t -c user.name=t commit -q --allow-empty -m change
 hook stop "$CA"; sleep 0.2
-check "changed content rolls again" 'wait_grep_n "^end" "$RUNLOG" 2 10 && [ "$(grep -c "^start" "$RUNLOG")" = 2 ]'
+# GUARD_EDIT_OK: feature 374 batch 5 - this wait timed out once in land-tooling's worktree under load (passed in the clone at once):
+# the background roll is the hook's own, so give it 30 s, as a loaded host needs
+check "changed content rolls again" 'wait_grep_n "^end" "$RUNLOG" 2 30 && [ "$(grep -c "^start" "$RUNLOG")" = 2 ]'
 hook prompt "$CA"
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
