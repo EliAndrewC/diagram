@@ -39,6 +39,7 @@ SINCE_189: dict[str, tuple[str, ...]] = {
 }
 #: Kinds the map draws that the snapshot's registry did not have at all.
 ADDED_SINCE_189: tuple[str, ...] = (
+    "household grave",  # feature 374 wave 136: a farmstead's own grave, on the household-graves knob
     "weir",
     "pond canal",
     "alder",  # feature 261: the belt's trees where it runs into the marsh

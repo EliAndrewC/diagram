@@ -35,6 +35,7 @@ SPEC_CLASSES = [
     "bath room",  # feature 280: the bath is a room joined to the house
     "hen coop",
     "household shrine",
+    "household grave",  # feature 374 wave 136: a farmstead's own grave at its plot corner, on the household-graves knob
     "persimmon",
     "burial ground",  # feature 273: a hamlet's own burial ground, on its knob
     "homestead bamboo",

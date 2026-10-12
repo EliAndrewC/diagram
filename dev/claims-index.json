@@ -30562,18 +30562,16 @@
  "l7r/diagram/interactive/place.py::KINDS#a hamlet's dead at the village's grounds": {
   "code": "db3458db76f0cb2a",
   "core": "aebd5c4a2b2ac263",
-  "date": "2026-10-07",
-  "note": "the place-kinds.json text for a hamlet (no shrine and no cremation ground; its dead burned at the main village's and laid in the village's ground) and for a village (the district's cremation ground, and the burial ground the village and its hamlets share) both match the drawing page",
+  "date": "2026-10-12",
+  "note": "the hamlet has no cremation ground or burial ground of its own, and its dead are burned and buried at the main village's",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:031d53823997269a",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:11df2d9a630be745"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/place.py::KINDS#what each tier is": {
@@ -45932,21 +45930,27 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_corner_grave#a corner whose mound would stand in a field pond is refused, so no grave is drawn there": {
+  "code": "2e994d9a7718def6",
+  "core": "2e994d9a7718def6",
+  "date": "2026-10-12",
+  "note": "a corner whose mound would stand in a field pond is refused, so no grave is drawn there",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_corner_grave#corner grave": {
   "code": "bf839e79f96b6f9c",
   "core": "2e994d9a7718def6",
-  "date": "2026-10-10",
-  "note": "a mound at a corner of a plot it picks at random, set in from the corner, with the bund carried round it; this is the Japanese form of the even-odds knob",
+  "date": "2026-10-12",
+  "note": "the Japanese form: a mound in the plot's corner against its bunds, with the bund carried round it",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:89647304d9a0811c"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_corner_grave#corner grave size": {
@@ -46266,18 +46270,16 @@
  "l7r/diagram/settlement/fields/features.py::corner_seat#corner seat": {
   "code": "7f92f471dd02a83c",
   "core": "45f76ec101501ded",
-  "date": "2026-10-05",
-  "note": "12-16 px in toward the plot's middle",
+  "date": "2026-10-12",
+  "note": "the code sets the grave a fixed 12-16 px in (dist/3, clamped to that range and capped at half the distance), but the page says \"about 12 to 16 ft ... on a hamlet map, twice that on a village map\"; to judge it I need the px-per-ft scale of hamlet and village maps, and whether a fixed px step gives twice the feet on a village map",
   "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "95308efac6ef4a93"
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
-  "research": "b4ca088f1b0ae5d1",
+  "research": "9fe254d3e1ab2d59",
   "rests": [
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/fields/features.py::grave_form#field grave form": {
   "code": "f4bd86b036c78c2a",
@@ -48881,19 +48883,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#household grave off the house's corner": {
-  "code": "d4403764fe390f99",
+  "code": "7a046a9a962d3aca",
   "core": "35c562e9417fd7f0",
   "date": "2026-10-12",
-  "note": "the page puts the grave \"at a corner of its plot\" and records only the shares, the stones and the 8x6 size as GUESS; the code seats it 14 ft (SHRINE_CORNER_FT) off the house's corner, a stand-in the drawing page does not record. Record it on the drawing page as a GUESS, or relabel the claim UNRESEARCHED without the pointer",
-  "pages": {
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
-  },
-  "research": "9fe254d3e1ab2d59",
-  "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:18c775d60498e622",
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:7d008d761ba90094"
-  ],
-  "verdict": "DRIFTED"
+  "note": "the cited pages give the plot's corner, SE or NW first, but no distance from the house, so UNRESEARCHED holds for the 14 ft offset",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": {
   "code": "dadc98480763ff90",
@@ -49000,6 +48996,14 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#the privy's sun-side seats are tried from 18 ft (`PRIVY_SUN_MIN_FT`) outward in 4 ft steps": {
+  "code": "35c562e9417fd7f0",
+  "core": "35c562e9417fd7f0",
+  "date": "2026-10-12",
+  "note": "the privy's sun-side seats are tried from 18 ft (`PRIVY_SUN_MIN_FT`) outward in 4 ft steps",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
   "code": "f0869e5a7262f3c9",
