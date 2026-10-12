@@ -7,6 +7,7 @@ later session could break: which changed lines count, which uncovered ones stop 
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 from pathlib import Path
 
@@ -65,3 +66,20 @@ def test_modules_tested_outside_the_quick_tier_are_left_to_the_gate() -> None:
     assert "l7r/diagram/citybudget.py" in out, "tests/tier_city/test_citybudget.py reaches lines quick does not"
     assert any(f.startswith("l7r/diagram/tools/cohort_audit") for f in out), "a tooling-marked audit test"
     assert "l7r/diagram/tools/claims.py" not in out, "its tests run in the quick tier"
+
+
+def test_the_moved_tree_check_runs_before_the_gate_vouches_for_anything() -> None:
+    """374, 2026-10-12: the check ran after the gate stamps and the green run-log entry, so a refused gate left both - the
+    finished-run hook reported it green, and measure-hooks refused the honest re-run as a second gate after a green one."""
+    text = (Path(__file__).resolve().parents[2] / "Makefile").read_text(encoding="utf-8")
+    start = re.search(r"^done:", text, re.M)
+    assert start, "the Makefile has a `done` target"
+    rest = text[start.end() :]
+    end = re.search(r"^[A-Za-z0-9_.-]+:", rest, re.M)
+    recipe = rest[: end.start()] if end else rest
+    check = recipe.index("--tree-check")
+    assert check < recipe.index("check-run-plausible.py\" $(DONE_NAME)"), "the tree check comes before the plausibility floor"
+    assert check < recipe.index("gate-stamp.py\" --write diagram && "), "and before the stamps the push trusts"
+    assert check < recipe.index(" green \"$$(cat"), "and before the green run-log entry"
+    refusal = recipe[check : recipe.index("exit 1; }", check)]
+    assert '"failed: tree moved"' in refusal and "failed-gate" in refusal, "a refusal is logged as a failure"
