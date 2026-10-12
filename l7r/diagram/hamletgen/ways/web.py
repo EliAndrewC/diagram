@@ -96,6 +96,17 @@ def lane_skeleton_for(rolled: str, seed: int, side: int | None) -> str:
     return str(_roll(seed, "lane_skeleton_by_water", LANE_SKELETONS_BY_WATER))
 
 
+def oriented_skeleton(kind: str, side: int | None, lat: float, dep: float) -> dict[str, Any]:
+    """`skeleton_layout`'s template in the skeleton's local frame, its lane along the water turned onto the flank the water
+    runs along: the template lays it at local -x, so on the +x flank (`side` 1) it is mirrored (feature 374 wave 138).
+
+    Research: lane along the water on its flank - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a lane along the water, on the side the water runs"""
+    layout = skeleton_layout(kind, 0.0, 0.0, lat, dep)
+    if kind == "waterside" and side == 1:
+        layout["lanes"] = [[(-x, y) for x, y in lane] for lane in layout["lanes"]]
+    return layout
+
+
 def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Sequence[float], stands: Sequence[float]) -> list[tuple[Poly, Poly]]:
     """The cluster's internal SKELETON, laid AFTER the houses and fitted to where they went.
 
@@ -151,9 +162,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
     # lane is laid on that flank (`skeleton_layout` draws it at local -x, mirrored for the +x flank)
     side = water_along_side(_brooks(s.M), _on_margin, lat, dep)
     kind = lane_skeleton_for(plan.lane_skeleton, plan.spec.seed, side)
-    layout = skeleton_layout(kind, 0.0, 0.0, lat, dep)
-    if kind == "waterside" and side == 1:
-        layout["lanes"] = [[(-x, y) for x, y in lane] for lane in layout["lanes"]]
+    layout = oriented_skeleton(kind, side, lat, dep)
 
     raw_arms = [[_on_margin((float(p[0]), float(p[1]))) for p in lane_pts] for lane_pts in layout["lanes"]]
     crops = crop_polys(s)

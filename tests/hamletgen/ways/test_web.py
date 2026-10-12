@@ -329,3 +329,14 @@ def test_a_brook_along_a_flank_offers_the_lane_along_the_water() -> None:
     assert web.lane_skeleton_for("T", 7, None) == "T"
     by_water = {web.lane_skeleton_for("T", s, 1) for s in range(1, 80)}
     assert by_water == set(hg.consts.LANE_SKELETONS_BY_WATER) and "waterside" in by_water
+
+
+def test_the_lane_along_the_water_is_laid_on_the_flank_the_water_runs() -> None:
+    """Feature 374 wave 138: the template lays the waterside lane at local -x; on the +x flank it is mirrored, and every
+    other shape is laid as the template gives it."""
+    from l7r.diagram.hamletgen.ways import web
+
+    west = web.oriented_skeleton("waterside", -1, 100.0, 150.0)["lanes"]
+    east = web.oriented_skeleton("waterside", 1, 100.0, 150.0)["lanes"]
+    assert all(x < 0 for lane in west for x, _y in lane) and all(x > 0 for lane in east for x, _y in lane)
+    assert web.oriented_skeleton("T", 1, 100.0, 150.0)["lanes"] == web.oriented_skeleton("T", None, 100.0, 150.0)["lanes"]
