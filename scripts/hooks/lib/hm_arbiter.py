@@ -314,7 +314,11 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
            **({"tooling_fix": fix, "fix": "open"} if fix else {}),
            **({"tooling_fix_on": fix_on} if fix_on and not fix else {}),
            # a spec review's ruling names the spec it ruled on: the review gate honors it only while the spec still reads so
-           **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {})}
+           **({"spec_sha": spec_body_sha(d)} if trigger.startswith("round:spec-fidelity|") else {}),
+           # a review unit's ruling names the sheet it ruled on, so the review gate honors an accept while the sheet still
+           # reads so (feature 374 batch 5: an accepted unit's last verdict was NEEDS-WORK at an older key, and the gate refused)
+           **({"content_key": ck} if trigger.startswith("round:") and not trigger.startswith("round:spec-fidelity|")
+              and (ck := unit_content_key(root, row_unit(trig, trigger))) else {})}
     d.mkdir(parents=True, exist_ok=True)
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
@@ -406,6 +410,35 @@ def spec_ruled(d: Path) -> str:
             continue
         if str(r.get("trigger", "")).startswith(f"round:spec-fidelity|{d.name}#") and r.get("ruling") in ("accept", "process-fault") \
                 and r.get("spec_sha") == sha:
+            return str(r["trigger"])
+    return ""
+
+
+def row_unit(trig: Mapping[str, Any], trigger: str) -> str:
+    """The unit a trigger is about: its owed entry's, else read from the trigger itself."""
+    return str(trig.get("unit") or unit_of(trigger))
+
+
+def unit_content_key(root: Path, unit: str) -> str:
+    """A review unit's sheet as it reads now (`review_prereq.py content-key`), or '' where it has none."""
+    import subprocess  # noqa: PLC0415
+
+    script = Path(__file__).resolve().parents[2] / "reviews" / "review_prereq.py"
+    r = subprocess.run([sys.executable, str(script), "content-key", "--clone", str(root), "--map", unit], capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else ""
+
+
+def unit_ruled(d: Path, unit: str, content: str) -> str:
+    """The arbiter's `accept` or `process-fault` on a round of review unit `unit` that stands for its verdict - one ruled on
+    the sheet as it reads now (`content`) - or '' (feature 374 batch 5; `review-gate.sh` asks this)."""
+    f = d / "arbiter.jsonl"
+    for line in f.read_text(encoding="utf-8").splitlines() if f.is_file() and content else []:
+        try:
+            r = json.loads(line)
+        except ValueError:
+            continue
+        if r.get("unit") == unit and str(r.get("trigger", "")).startswith("round:") and r.get("ruling") in ("accept", "process-fault") \
+                and r.get("content_key") == content:
             return str(r["trigger"])
     return ""
 
@@ -530,6 +563,9 @@ def main(argv: list[str]) -> int:
         return 0
     if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # review-gate.sh: does a ruling stand for this spec's verdict?
         return 0 if spec_ruled(Path(argv[1])) else 1
+    if argv[:1] == ["unit-ruled"] and len(argv) == 3:  # review-gate.sh: does a ruling stand for this review unit's verdict?
+        d = feature_dir(Path(".").resolve())
+        return 0 if d is not None and unit_ruled(d, argv[1], argv[2]) else 1
     if argv[:1] == ["ask"] and len(argv) == 3:  # `make arbiter-ask` (feature 379 amendment 2, FR-008/FR-009)
         subject, why = argv[1].strip(), argv[2].strip()
         if not re.fullmatch(r"[\w.-]+", subject) or len(why.split()) < 2 or len(why) < 8:

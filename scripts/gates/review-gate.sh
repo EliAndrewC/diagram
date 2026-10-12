@@ -183,6 +183,9 @@ for unit in $owed_units; do
     :   # the reviewer's record, at this content
   elif [ "$rec_content" != "-" ] && [ "$rec_content" = "$now_content" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
     :   # the engine moved, but this unit's sheet is what the reviewer read
+  elif [ -n "$now_content" ] && ( cd "$ROOT" && python3 "$RG_HERE/../hooks/lib/hm_arbiter.py" unit-ruled "$unit" "$now_content" ) 2>/dev/null; then
+    :   # GUARD_EDIT_OK: feature 374 batch 5 - the round arbiter ACCEPTED this unit on the sheet as it reads now: its ruling
+        # stands for the verdict, as a spec review's does (an accepted sheet's last verdict was NEEDS-WORK at an older key)
   else
     printf '\n\033[1mREVIEW GATE: %s has a %s verdict at engine key %s, but the tree being pushed is %s.\033[0m\n' "$unit" "$verdict" "${rec_key:0:12}" "${tree_key:0:12}"
     printf 'The content moved again after that review: dispatch it again (`make verify`), within the two-round cap.\n'

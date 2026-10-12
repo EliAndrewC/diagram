@@ -587,3 +587,22 @@ def test_the_bundle_prints_the_round_counters_epoch_and_what_it_counted(tmp_path
     git("update-ref", "refs/remotes/origin/main", "HEAD")
     line = ab.round_counter(tmp_path, "u")[0]
     assert "1 of the 3" in line and "k3@4000000000" in line and "k1," not in line, line
+
+
+def test_an_accept_on_a_review_unit_stands_while_its_sheet_reads_as_ruled(tmp_path: pathlib.Path) -> None:
+    """Feature 374 batch 5: the review gate refused two sheets the round arbiter had accepted - their last verdicts were
+    NEEDS-WORK at an older key. A unit's round ruling now carries the sheet's content key, and stands for it while it holds."""
+    d = tmp_path / "specs" / "900-x"
+    d.mkdir(parents=True)
+    rows = [
+        {"trigger": "round:building-review|u@3", "unit": "u", "ruling": "continue", "content_key": "k1"},
+        "not json",
+        {"trigger": "round:building-review|u@4", "unit": "u", "ruling": "accept", "content_key": "k2"},
+    ]
+    (d / "arbiter.jsonl").write_text("\n".join(r if isinstance(r, str) else json.dumps(r) for r in rows) + "\n")
+    assert ha.unit_ruled(d, "u", "k2") == "round:building-review|u@4"
+    assert ha.unit_ruled(d, "u", "k1") == "", "a continue is no verdict"
+    assert ha.unit_ruled(d, "u", "k3") == "" and ha.unit_ruled(d, "u", "") == "", "the sheet moved since the ruling"
+    assert ha.unit_ruled(tmp_path, "u", "k2") == "", "no arbiter record"
+    assert ha.row_unit({}, "round:building-review|u@4") == ha.unit_of("round:building-review|u@4")
+    assert ha.unit_content_key(tmp_path, "building-review--nowhere") == ""

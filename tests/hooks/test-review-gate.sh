@@ -223,6 +223,15 @@ echo "{\"map\":\"glyph-check--well--m\",\"engine_key\":\"stale\",\"content_key\"
 check "a PASS record at another engine key whose sheet is unchanged ships" r1 ok
 ( cd "$T/r1" && echo "a later line" >> "$POOL/m.notes.md" && git add -A && git commit -qm notes )
 check "...and once the sheet's notes change, it is refused" r1 blocked
+# GUARD_EDIT_OK: feature 374 batch 5 - the round arbiter's ACCEPT on a unit stands for its verdict while the sheet reads as ruled
+CK2="$(cd "$T/r1" && python3 "$HERE/../../scripts/reviews/review_prereq.py" content-key --clone "$T/r1" --map glyph-check--well--m)"
+( cd "$T/r1" && mkdir -p .specify specs/902-a && echo '{"feature_directory":"specs/902-a"}' > .specify/feature.json \
+  && echo "{\"trigger\":\"round:glyph-check|glyph-check--well--m@3\",\"unit\":\"glyph-check--well--m\",\"ruling\":\"accept\",\"why\":\"fixed\",\"content_key\":\"$CK2\"}" > specs/902-a/arbiter.jsonl \
+  && git add -A && git commit -qm ruled )
+echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"NEEDS-WORK","findings":[{"id":"E1"}]}' > "$T/r1/$V"
+check "a NEEDS-WORK record at another key ships on the arbiter's accept of the sheet as it reads" r1 ok
+( cd "$T/r1" && echo "another line" >> "$POOL/m.notes.md" && git add -A && git commit -qm notes2 )
+check "...and once the sheet changes after the ruling, it is refused" r1 blocked
 mkrepo r2 withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-14" >> "$POOL/m.notes.md"; git add -A; git commit -qm reroll
 mkdir -p .git/review-verdicts; echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
 check "...and a stale-key record with the notes touched is refused too (D5: no substitute on a map with a record)" r2 blocked
