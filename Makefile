@@ -27,14 +27,14 @@
 # a deleted module fails with a traceback instead of a refusal, which is the worst kind of guard.
 
 # ---- THE PERFORMANCE BANDS (feature 129 - GUARD_EDIT_OK: adding the review-record operations) ----
-# Any increase (total OR any seed, per ENVIRONMENT) owes a written explanation and a perf-audit
-# subagent's confirmation; >5% total / >10% seed owes the escalated audit; >10% / >20% owes the round
-# arbiter's sign-off before the push (make perf-arbiter; GUARD_EDIT_OK: feature 379 amendment 3 - never asked of the GM). `perf-report` and `perf-gate` PRINT the verdict (FR-009b);
-# `perf-review` (run by sync-with-main.sh at the push) ENFORCES it. A subagent's shell is not
+# GUARD_EDIT_OK: feature 375 amendment 5 (the GM 2026-10-11: "it doesn't need to be a gate anymore") - a pair over the 5%
+# band-1 line (total OR any seed, per ENVIRONMENT) is a FLAG that `perf-report`, `perf-gate` and `perf-review` (at the push)
+# PRINT, with both snapshots' machine state; nothing waits on it. The records below - an explanation, the perf-audit
+# subagent's confirmation or escalated audit, the round arbiter's ruling - are for an investigation of a flagged slowdown. A subagent's shell is not
 # distinguishable from the session's (research R1), so confirm/audit PROMPT and decline without
 # AS=perf-audit - the declaration is recorded, and the record's content is what a self-grant fakes.
 PERF_REVIEW = python3 -m l7r.diagram.tools.perf_review
-perf-explain:   ## [performance] band 1, first half: the session's written cause and its evidence     WHY="..." CONTROL=<key> | UNVERIFIED="..." [ENV=local|codebuild]
+perf-explain:   ## [performance] for an investigation of a flagged slowdown: the session's written cause and its evidence     WHY="..." CONTROL=<key> | UNVERIFIED="..." [ENV=local|codebuild]
 ##  WHY=<text>           the session's written cause for a band-1 increase
 ##  CONTROL=<key>        a measurements.json key: a recorded run of the same subject with the attributed cause removed
 ##  UNVERIFIED=<text>    instead of CONTROL - why the attribution was not tested; logged like an escape
@@ -43,11 +43,11 @@ perf-explain:   ## [performance] band 1, first half: the session's written cause
 # never parsed out of WHY, and an UNVERIFIED reason lands in dev/bypass-log/ where `make audit` lists it - only once
 # the explanation was actually recorded, so a refused one logs nothing.
 	@$(PERF_REVIEW) explain --why "$(WHY)" --control "$(CONTROL)" --unverified "$(UNVERIFIED)" --environment "$(or $(ENV),local)" $(if $(UNVERIFIED),&& $(LOGBYPASS) permitted "perf-explain UNVERIFIED: $(UNVERIFIED)",)
-perf-confirm:   ## [performance] {internal} band 1, second half - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
+perf-confirm:   ## [performance] {internal} an investigation's confirmation of the written cause - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
 ##  VERDICT=consistent|inconsistent  whether the written cause matches the recorded per-stage delta
 ##  AS=perf-audit                    who is recording - only the subagent may pass this, and nothing else distinguishes the shells
 	@$(PERF_REVIEW) confirm --verdict "$(VERDICT)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
+perf-audit:     ## [performance] an investigation's adjudication of a slowdown - the subagent records it   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
 ##  VERDICT=justified|not-justified|cannot-determine  the band-2 adjudication
 ##  NECESSARY=<text>                                  is the slowdown necessary?
 ##  COMMENSURATE=<text>                               is it commensurate with the functionality gained?
@@ -56,11 +56,11 @@ perf-audit:     ## [performance] band 2 - the subagent adjudicates   VERDICT=jus
 	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
 # GUARD_EDIT_OK: feature 379 amendment 3 (the GM 2026-10-10: "yes it covers the band-3 perf signoff too") - band 3 goes to the
 # round arbiter first; its accept, bound to the pair's numbers, stands for the sign-off and the GM reviews it after landing.
-perf-arbiter:   ## [performance] band 3 - put the increase to the round arbiter first (feature 379)   [ENV=local|codebuild]
+perf-arbiter:   ## [performance] an investigation may put a band-3 increase to the round arbiter - nothing waits on it (feature 375 amendment 5)   [ENV=local|codebuild]
 	@s="$$($(PERF_REVIEW) arbiter-subject --environment "$(or $(ENV),local)")" || exit 2; \
 	 $(MAKE) --no-print-directory arbiter-ask SUBJECT="$$s" WHY="band 3 on $(or $(ENV),local) for $(SPECIFY_FEATURE): accept this performance increase, or keep optimizing? The perf report is perf-report.txt beside this MANIFEST, the band-1 and band-2 records are in dev/perf-log/, and the band-3 standard is the GM's: necessary, commensurate, no way around it" && \
 	 $(PERF_REVIEW) show --environment "$(or $(ENV),local)" > "/tmp/l7r-check/arbiter-ask-$$s/perf-report.txt"
-perf-signoff:   ## [performance] band 3 - records a sign-off the GM gave UNPROMPTED, in their words (a session asks the arbiter: make perf-arbiter)   WHY="..."
+perf-signoff:   ## [performance] records a sign-off the GM gave UNPROMPTED, in their words - owed by nothing since feature 375 amendment 5   WHY="..."
 ##  WHY=<text>  the GM's own words, given unprompted - band 3
 	@: "GUARD_EDIT_OK: feature 379 amendment 3 - the help line: a session never asks the GM for band 3"
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"

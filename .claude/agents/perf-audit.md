@@ -97,14 +97,15 @@ three criteria, citing before/after numbers:
     make perf-audit VERDICT=not-justified ...        (a cheaper way exists, or the cost is out of proportion)
     make perf-audit VERDICT=cannot-determine ...     (the data does not settle it - say what would)
 
-Only `justified` lets the work proceed. `cannot-determine` is a real answer and never reads as
-approval. Every criterion must have text; the command refuses an empty one.
+`justified` is the finding that the increase is worth what it costs; `cannot-determine` is a real answer and never reads
+as approval. Nothing waits on your verdict since feature 375 amendment 5 - it is what the investigation that asked for you
+learns. Every criterion must have text; the command refuses an empty one.
 
 ## Band 3 (>10% total or >20% on a seed)
 
-Everything above, AND the round arbiter's sign-off (`make perf-arbiter`; feature 379, the GM 2026-10-10: "yes it covers the
-band-3 perf signoff too" - the session never asks the GM for it). You cannot grant that and must say so in your report: name
-the measurement and the number that crossed, which the arbiter rules on.
+Everything above. An investigation may also put the increase to the round arbiter (`make perf-arbiter`), which you cannot
+do for it: name in your report the measurement and the number that crossed. Nothing waits on either since feature 375
+amendment 5.
 
 ## Your report to the main session
 
