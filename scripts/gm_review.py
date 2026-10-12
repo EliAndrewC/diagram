@@ -356,8 +356,15 @@ def reviewed(root: Path, d: Path, overturn: int | None = None, to: Path | None =
             raise ValueError("OVERTURN=<row number> needs TO=<an open feature>")
         with (to / "found.jsonl").open("a", encoding="utf-8") as fh:
             fh.write(json.dumps({"check": "gm-review", "file": d.name, "block": rs[overturn].get("trigger") or rs[overturn].get("finding"),
-                                 "finding": f"overturned by the GM: {rs[overturn].get('why', '')}", "status": "open"}, ensure_ascii=False) + "\n")
+                                 "finding": "overturned by the GM: " + " - ".join(x for x in (rs[overturn].get("why") or rs[overturn].get("tooling_fix", ""),
+                                                                                     rs[overturn].get("note", "")) if x), "status": "open"}, ensure_ascii=False) + "\n")
         msgs.append(f"row {overturn} overturned - an open row of {to.name}")
+        # the overturned row ALONE is reviewed: the rest of the feature's rows still wait on the GM (2026-10-12, overturning
+        # 343's two declined fixes would have marked its 83 other rows reviewed by the GM)
+        rs[overturn] = {**rs[overturn], "reviewed": time.strftime("%Y-%m-%d", time.gmtime()), "overturned_to": to.name}
+        (d / ROWS).write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rs), encoding="utf-8")
+        if any("reviewed" not in r for r in rs):
+            return msgs
     tasks = d / "tasks.md"
     text = tasks.read_text(encoding="utf-8") if tasks.is_file() else ""
     if box(d) in text and text.count("- [ ] ") == 1:
