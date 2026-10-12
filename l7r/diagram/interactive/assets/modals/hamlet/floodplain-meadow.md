@@ -4,8 +4,8 @@ a rule the commons of one village. In hill country that ground was the grass hil
 floodplain served instead, and on the Kanto plain villages whose own fodder ground ran short as new fields were opened came
 to depend on a great river's floodplain.
 
-In the Edo period the fodder ground was a moor where fodder and fertilizer were gathered. How a floodplain's grass looked,
-how tall it stood and when in the year it was cut is not recorded; a thatch meadow in the hills of Kyushu was cut in
+In the Edo period the fodder ground was a moor where fodder and fertilizer were gathered. How a floodplain's cut grass looked and
+how tall it stood are not recorded. The grass and young shoots for green manure were cut in early spring and plowed straight into the fields; a thatch meadow in the hills of Kyushu was cut in
 February and March, once the leaves had fallen from the stems.
 
 It was far larger than the fields: in the middle and late Edo period grass ground more than ten times their area is said to
@@ -16,13 +16,13 @@ Guesses:
 - Its look, open grass with the odd bush: how a floodplain's grass looked is not recorded, so it is drawn as the fodder
   ground's grass.
 
-Depiction: Where the map shows a river flat and no hills, it draws the open ground past the fields as meadow: grass with the
-odd brush dot, repeated across the ground as one small block with no outline, the way a map's legend shows a kind of ground,
+Depiction: Where the map shows a river flat and no hills, it draws the open dry ground the fields and houses leave, between the farmsteads and past the fields, as meadow: grass with the
+odd brush dot, repeated across the ground as one small block with no outline, the way a map's legend shows a kind of ground, stopping short of the lanes, the fields' margins and the houses' swept ground, which it leaves bare,
 and no pines, since the scraggly pines belong to a grass hill's scrub. Like the hill's scrub it runs as one band round the
 settlement and off the edge of the map, the real ground being far larger than the map.
 
 Name: floodplain meadow
 Covers: `commons[role=pasture]`
-Sources: kotobank-magusaba, satoyama-jawiki, kitamoto-magusaba, biodic-kusayama, aso-kayaba
-Entry: research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.html
-Drawing: research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html
+Sources: kotobank-magusaba, satoyama-jawiki, kitamoto-magusaba, biodic-kusayama, aso-kayaba, kotobank-karishiki
+Entry: research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.html, research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html
+Drawing: research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html, research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html
