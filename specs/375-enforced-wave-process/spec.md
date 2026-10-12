@@ -2,7 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-11 - amendment 4 landed: spec FAITHFUL (round 2), plan CLEAR, every task ticked; SC-015 measured (the sync suite in parts: 60.5 s against 150.2 s, 123 checks every run); SC-012 carried to 374 (as SC-003 and SC-004 are)
+**Status**: Reopened 2026-10-11 for amendment 5 (amendment 4 landed: spec FAITHFUL round 2, plan CLEAR, every task ticked; SC-015 measured; SC-012 carried to 374)
+
+**Amendment 5 approved**: the GM, 2026-10-11, "if it looks like the performance is slowing down to a meaningful degree, that's something you can mention when you say that the work has landed on main, but it doesn't need to be a gate anymore."
 
 **Amendment 4 approved**: the GM, 2026-10-11, "yes please add that as amendment 4"
 
@@ -220,6 +222,37 @@ that after you make the other changes").
   still runs and is counted - the suite prints the same pass line with the same count as today's - and a failure in any
   part, or a case that never reports, fails the suite. `SYNC_PARTS=1` runs the cases one after another.
 
+### Amendment 5 (`request.md`, Amendment 5)
+
+The GM's answers on the timing requirements (`request.md`), the last superseding the first where they differ: performance is
+recorded and flagged, never a gate. The cohort is not part of it.
+
+- **FR-023 Performance is recorded and flagged, never a gate.** The bookends are taken and kept as before (`make perf
+  LABEL=<NNN>-start` / `-end`, one file each under `dev/perf-log/`), and the bands are still computed and printed - by
+  `make perf-report`, by `perf-gate` and at the push - but none of them refuses anything: no push, no gate and no `make
+  tick` waits on a band, and the band records (`perf-explain`, `perf-confirm`, `perf-audit`, `perf-arbiter`, `perf-signoff`)
+  are no longer owed. They stay available for an investigation the GM or a session chooses. Where a pair crosses the
+  band-1 line, the push prints a FLAG naming the seeds and percentages and the machine's state at both ends of both
+  snapshots, with the caveat that load may explain it, and the session says so in the message that reports the landing.
+- **FR-024 Each snapshot records the machine's state at its start and its end.** Available and total RAM
+  (`/proc/meminfo`), the load averages over 1, 5 and 15 minutes, and the free and total disk on the clone's filesystem - a
+  reading before the first roll and one after the last, nothing during the run. Each stage is also timed in CPU time
+  (`time.process_time()`) beside its wall time, and an untimed warm-up roll comes first (measured, the first roll in a process
+  counts another thread's start-up work as its own: 6.26 s of CPU in 4.47 s of wall, `research.md` R4). Bands and the flag
+  read the CPU seconds where both snapshots have them, the wall seconds otherwise, and say which.
+- **FR-025 The band-1 line is 5%, in every environment.** The GM: "let's extent it from 2% to 5% for the jitter". Locally
+  the line was 0.0% and on CodeBuild 2.0%; both become 5.0%, an increase at or under it unflagged. Bands 2 and 3 keep their
+  lines as labels of how much slower a pair looks.
+- **FR-026 The scaling leg runs only when asked for.** `make perf` rolls the reference hamlet at its 15 households on its four
+  seeds, nothing more. `make perf SCALING=1` adds the 10-, 20- and 40-household legs, for investigating the algorithm; a
+  pair is banded on the legs only where both snapshots carry them, as today.
+- **FR-027 The trend says when.** `make perf-report` lists every snapshot - its time, label, commit, totals - with the load
+  and free RAM at its start and end beside it, so a run taken under load reads as one, and a real slowdown can be placed
+  between two snapshots and so between two commits.
+- Constitution principle VI's performance clause and every doc and agent contract that states the gate
+  (`l7r/diagram/CLAUDE.md`, `dev/performance.md`, `docs/guards.md`, `.claude/agents/perf-audit.md`,
+  `.claude/agents/round-arbiter.md`) say what FR-023 says.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -284,9 +317,23 @@ that after you make the other changes").
   one case made to exit before reporting, the suite fails and names the case. Keys of `measurements.json` beside
   `m:375-a3-hooks-test-before` (R3).
 
+- **SC-016** (FR-023) A pair in band 3 (and one in band 1) no longer refuses the push, `perf-gate` or `make tick`: `perf-review
+  --check` exits 0 and prints the FLAG with the seeds, percentages and both ends' machine state; with no band, no flag. The
+  tests fail on today's code.
+- **SC-017** (FR-024) A snapshot carries `machine_before` and `machine_after` (available and total RAM, three load averages,
+  free and total disk) and each stage's CPU seconds beside its wall seconds, after an untimed warm-up roll; a pair is banded on
+  CPU seconds where both have them, on wall seconds otherwise, the report naming which. The wall-against-CPU measurement
+  that led here is `research.md` R4, a key of `measurements.json`. Tests fail on today's code.
+- **SC-018** (FR-025) A test pair whose total and every seed rose by exactly the band-1 line is unflagged, in both
+  environments; one seed a tenth of a point over it is flagged band 1. The test fails on today's code.
+- **SC-019** (FR-026) `make perf` without `SCALING=1` records no scaling rows (four rolls and the warm-up, not sixteen); with
+  it, the legs as today. Tests fail on today's code.
+- **SC-020** (FR-027) `make perf-report` prints each snapshot's start and end load and free RAM beside its totals; a snapshot
+  from before FR-024 prints dashes there. The test fails on today's code.
+
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there. Amendment 4 closes on SC-015.
+next wave is, so it is carried there. Amendment 4 closes on SC-015. Amendment 5 closes on SC-016 to SC-020.
 
 ## What it does not cover
 

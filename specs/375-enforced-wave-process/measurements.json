@@ -672,5 +672,192 @@
    "a case made to exit": "rc=1, case_05 and case_03 (after it in the same part) each named as never reported",
    "reading": "the parts' median is 40% of today's; every run of either passed exactly today's 123 checks"
   }
+ },
+ "375-a5-wall-vs-cpu": {
+  "quantity": "wall against CPU seconds of the reference hamlet's four seeds on unchanged code, quiet and under load (feature 375 amendment 5, R4)",
+  "observed": "2026-10-11",
+  "unit": "s",
+  "varies": 0.3,
+  "source": "the diagram-performance clone at 9f121c381; Intel Core Ultra 7 155H, 22 logical CPUs (hybrid cores, 2 threads per core); the other sessions paused",
+  "command": "a scratch script: perf_snapshot's REFERENCE on DEFAULT_SEEDS, each stage timed with time.time() and time.process_time(); quiet 5 rounds, then 3 rounds with 6 busy-loop processes beside it, then 3 with 22",
+  "method": "one process per series; the 1-minute load average recorded per roll",
+  "value": {
+   "quiet": {
+    "4": {
+     "wall": [
+      4.47,
+      4.35,
+      4.49,
+      4.5,
+      4.46
+     ],
+     "cpu": [
+      6.26,
+      4.35,
+      4.48,
+      4.5,
+      4.46
+     ]
+    },
+    "25": {
+     "wall": [
+      4.4,
+      4.33,
+      4.33,
+      4.33,
+      4.31
+     ],
+     "cpu": [
+      4.4,
+      4.33,
+      4.33,
+      4.33,
+      4.31
+     ]
+    },
+    "39": {
+     "wall": [
+      3.88,
+      3.8,
+      3.64,
+      3.67,
+      3.91
+     ],
+     "cpu": [
+      3.88,
+      3.79,
+      3.64,
+      3.67,
+      3.91
+     ]
+    },
+    "47": {
+     "wall": [
+      4.63,
+      4.65,
+      4.61,
+      4.7,
+      4.69
+     ],
+     "cpu": [
+      4.63,
+      4.65,
+      4.61,
+      4.69,
+      4.69
+     ]
+    }
+   },
+   "six cores busy": {
+    "4": {
+     "wall": [
+      7.5,
+      9.76,
+      10.1
+     ],
+     "cpu": [
+      8.66,
+      9.74,
+      10.09
+     ]
+    },
+    "25": {
+     "wall": [
+      8.87,
+      9.61,
+      9.98
+     ],
+     "cpu": [
+      8.87,
+      9.61,
+      9.98
+     ]
+    },
+    "39": {
+     "wall": [
+      7.57,
+      6.14,
+      7.91
+     ],
+     "cpu": [
+      7.57,
+      6.14,
+      7.91
+     ]
+    },
+    "47": {
+     "wall": [
+      9.98,
+      10.23,
+      9.27
+     ],
+     "cpu": [
+      9.98,
+      10.23,
+      9.27
+     ]
+    }
+   },
+   "every core busy": {
+    "4": {
+     "wall": [
+      18.35,
+      26.03,
+      28.21
+     ],
+     "cpu": [
+      16.13,
+      22.72,
+      24.31
+     ]
+    },
+    "25": {
+     "wall": [
+      24.54,
+      22.54,
+      26.24
+     ],
+     "cpu": [
+      21.01,
+      19.37,
+      23.12
+     ]
+    },
+    "39": {
+     "wall": [
+      19.46,
+      25.15,
+      24.31
+     ],
+     "cpu": [
+      17.18,
+      19.57,
+      20.05
+     ]
+    },
+    "47": {
+     "wall": [
+      25.8,
+      31.64,
+      28.57
+     ],
+     "cpu": [
+      22.43,
+      26.28,
+      24.37
+     ]
+    }
+   },
+   "median roll s (rounds after the first)": {
+    "quiet wall": 4.34,
+    "quiet cpu": 4.34,
+    "six busy wall": 9.68,
+    "six busy cpu": 9.68,
+    "all busy wall": 26.13,
+    "all busy cpu": 22.92
+   },
+   "first roll in a process": "seed 4 quiet: 6.26 s CPU in 4.47 s wall (another thread's start-up counted); later rolls CPU = wall to 0.01 s",
+   "reading": "quiet, CPU and wall agree; under load CPU time rises with wall time (about 2.2x with six cores busy, 4-6x with all): on this hybrid-core laptop, whose clock drops under load, CPU time does not escape contention. Quiet, a seed's spread across rounds reached 7.4% (seed 39, a 3.7 s roll), the four-seed total about 2%"
+  }
  }
 }

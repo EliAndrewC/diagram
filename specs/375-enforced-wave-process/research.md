@@ -36,3 +36,14 @@ script change). `test-sync-with-main.sh` is held to the whole `scripts/` tree (f
 at run time), so it is stale after every merge that touches a script: a post-merge `hooks-test` waited on it and then on
 the Python files - 374's 19 runs took 39 min. Its 26 headed cases (25 numbered, 11 and 12 each used twice, and `W`)
 each build their own fixture; case 7d (a feature in progress lands nothing) takes 66 s, the rest 1 to 12 s each.
+
+## R4 - wall time against CPU time on this laptop (amendment 5, FR-023 to FR-025)
+
+`m:375-a5-wall-vs-cpu`. The reference hamlet's four seeds, each stage timed in wall and CPU time, on unchanged code: five
+rounds quiet, three with six busy-loop processes beside it, three with one on every logical CPU. Quiet, CPU and wall agree
+to a hundredth of a second, except the first roll in a process (6.26 s of CPU in 4.47 s of wall: another thread's start-up
+work counted). Under load CPU time rose with wall time - about 2.2 times with six cores busy, four to six times with all -
+because this processor (Intel Core Ultra 7 155H: performance and efficiency cores, a clock that drops under load) does less
+work per CPU second when it is contended. So CPU time does not separate a slower change from a busier machine here, which is
+why the GM's answer was to record and flag rather than gate. Quiet, a 3.7 s roll varied by 7.4% across rounds (seed 39) and
+the four-seed total by about 2%; rolls are short now (about 4 s each), so a seed's percentage is noisy on its own.
