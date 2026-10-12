@@ -77,7 +77,10 @@ in one engine module, because the cache is keyed by every engine source together
 constants it reads - recomputes one module's units after an edit to it.
 
 The check bundle (`m:375-a8-check-bundle`): `make check-bundle Q=0021` took 15.2 s the first time (the page cache filling) and
-6.1 s the second. Its four helper processes start in 0.22 s between them; the time is in what they compute. `record_prepass`
+6.1 s the second. By phase: `record_prepass` 3.2 s, `quote_verbatim` 0.46 s (the two helpers this question ran), the other
+git reads 1.1 s, and the bundle's own owed check 1.3 s in-process; four helper interpreters start, imports and all, in 0.35 s
+(the imports alone 0.22 s), so the time is in what they compute. `record_prepass`
 spends 2.96 of its 3.6 s in `corpus_frequency`, counting every word of the whole record to judge which terms are rare, and
-does it again for every bundle; `translation_owed` spends 0.92 s reading every page's translation pairs. Both read only the
-record's content, so both can be kept while it is unchanged. Folding the helpers into one process would save the 0.22 s.
+does it again for every bundle; the owed check's translation pairs (`translation_owed.record_pairs`) take 0.92 s. Both read
+only the record's content, so both can be kept while it is unchanged - about 3.7 s - where folding the helpers into one process
+would save their start, about 0.2 s.

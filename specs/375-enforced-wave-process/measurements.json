@@ -1058,7 +1058,7 @@
   }
  },
  "375-a8-check-bundle": {
-  "what": "FR-036: `make check-bundle Q=0021` with NOT_OWED_OK (nothing was owed), twice, in a detached worktree at 73ac5212e; then each helper run alone, its imports alone, and record_prepass and translation_owed under cProfile; one-shot 2026-10-12.",
+  "what": "FR-036: `make check-bundle Q=0021` with NOT_OWED_OK (nothing was owed), twice, in a detached worktree at 73ac5212e; then each helper run alone, its imports alone, and record_prepass and translation_owed under cProfile; one-shot 2026-10-12. The four helpers' IMPORTS alone came to 0.22 s; four interpreters started with their imports, 0.35 s. By phase in one run (run_script and subprocess.run wrapped, same day): record_prepass 3.21 s and quote_verbatim 0.46 s were the helpers that ran for Q=0021; every subprocess together 4.80 s over 24 calls, so the other git calls 1.13 s; the rest, 1.34 s, in-process - the owed check, translation_owed's pairs among it.",
   "date": "2026-10-12",
   "command": "one-shot: make check-bundle Q=0021, timed; the helpers timed alone",
   "value": {
@@ -1080,6 +1080,14 @@
    "translation_owed profiled s": {
     "owed": 0.94,
     "record_pairs": 0.92
+   },
+   "four interpreters with their imports s": 0.35,
+   "by phase s": {
+    "record_prepass": 3.21,
+    "quote_verbatim": 0.46,
+    "other subprocesses (git)": 1.13,
+    "in-process (owed check)": 1.34,
+    "total": 6.14
    }
   }
  }
