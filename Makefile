@@ -468,9 +468,9 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 # failed on. The reference-settlement gate above it is untouched.
 cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=<first seed>] [JOBS=<workers>] [HOUSEHOLDS=<n>]
 ##  N=<seeds>   how many seeds to roll, besides the six pinned rows (default: 10 - the GM, 2026-10-12, on the per-seed record: `make cohort-seeds`)
-# GUARD_EDIT_OK: feature 375 amendment 8 (FR-038) - the GM chose ten seeds over 48 ("it's also fine to do the 10 seeds"); N= still asks for more
 ##  SEED=<n>    the FIRST seed to roll (default: 1) - `N=1 SEED=15` reproduces the cohort's own Audit-15
 ##  JOBS=<n>    worker processes (default: cpus - 2) - each holds a roll, ~0.5 GB; the containers share a 10 GB cap
+# GUARD_EDIT_OK: feature 375 amendment 8 (FR-038) - the GM chose ten seeds over 48 ("it's also fine to do the 10 seeds"); N= still asks for more. Kept below the `##` lines: between them it cut make docs' argument list short.
 # GUARD_EDIT_OK: feature 314 - the cohort's workers were cpus - 2 with no way to ask fewer: 20 on this host, ~10 GB, past the
 # containers' shared cap while other sessions run (the memwatch warned at 9.6 GB). JOBS hands cohort_audit its own --jobs.
 	$(REF_FIRST)
