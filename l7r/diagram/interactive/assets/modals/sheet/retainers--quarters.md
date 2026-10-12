@@ -18,8 +18,8 @@ Guesses:
 - That a few men share each dwelling, and so how many bays the rowhouse runs to: the one case found is three retainers to a
   dwelling.
 
-Depiction: The plan draws the quarters as a rowhouse, long and narrow, never a square block, divided into dwellings of a few
-men each, and draws nothing in it as a bunk or a bunk room.
+Depiction: The plan draws the quarters as a rowhouse, long and narrow, never a square block, divided into dwellings, each with a door of its
+own, and draws nothing in it as a bunk or a bunk room.
 
 Name: retainers' quarters
 Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
