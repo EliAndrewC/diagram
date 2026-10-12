@@ -313,10 +313,13 @@
     <rect x="452" y="544" width="12" height="4" fill="#4A3318" data-kind="door"/>
   </g>
 
-  <!-- THE SANCTUARY (honden): one bay, 6 ft square, on the axis behind the hall, on its plinth -->
+  <!-- THE SANCTUARY (honden): three bays, 18 by 6 ft, on the axis behind the hall, on its plinth. Its width is a knob
+       rolled from the sheet's seed (feature 374 wave 131; notes item 9): one bay (~6 ft), two (Hie, ~12 x 6 ft) or three
+       (~18 ft) - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html; it was one
+       bay, 6 ft square -->
   <g data-kind="sanctuary">
-    <rect x="493" y="422" width="26" height="4" fill="#B8AE98" stroke="#7A7060" stroke-width="0.6"/>
-    <rect x="497" y="404" width="18" height="18" fill="#C9876C" stroke="#6B2A18" stroke-width="1.4" id="sanctuary"/>
+    <rect x="475" y="422" width="62" height="4" fill="#B8AE98" stroke="#7A7060" stroke-width="0.6"/>
+    <rect x="479" y="404" width="54" height="18" fill="#C9876C" stroke="#6B2A18" stroke-width="1.4" id="sanctuary"/>
     <text font-size="8" font-style="italic" fill="#6B2A18">sanctuary of Bishamon</text>
   </g>
 

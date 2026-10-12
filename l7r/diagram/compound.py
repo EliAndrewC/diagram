@@ -140,8 +140,11 @@ def _obstacle_end(
         if _rect_overlap(px, py, spec.w_ft, spec.h_ft, z.x_ft, z.y_ft, z.w_ft, z.h_ft):
             ends.append(z.x2 if horizontal else z.y2)
     for p in already:
-        if _rect_overlap(px, py, spec.w_ft, spec.h_ft, p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft):
-            ends.append(p.x2 if horizontal else p.y2)
+        # a building holds `tree_ft` more ground past its far end along its own wall (the compound shrine's tree)
+        along = p.spec.wall in ("N", "S", "divider")
+        w, h = (p.spec.w_ft + p.spec.tree_ft, p.spec.h_ft) if along else (p.spec.w_ft, p.spec.h_ft + p.spec.tree_ft)
+        if _rect_overlap(px, py, spec.w_ft, spec.h_ft, p.x_ft, p.y_ft, w, h):
+            ends.append(p.x_ft + w if horizontal else p.y_ft + h)
     return max(ends) if ends else None
 
 
@@ -293,10 +296,12 @@ ZONE_KINDS: dict[str, str] = {
     "inner yard": "inner court",
     "practice ground": "practice ground",
     "rear yard": "rear yard",
+    # the kitchen's working ground, named for what it is as Ochiba's sheet names its own (feature 374 wave 129)
+    "service yard": "inner court",
 }
 #: Zones drawn as bare ground, with no edge: an outlined sub-rectangle of court reads as a FENCED court, and a fenced
 #: forecourt is a GUESS the record does not support (research 0104; building-review round 3).
-UNFENCED_ZONES: frozenset[str] = frozenset({"forecourt", "yard", "cart yard", "inner yard", "rear yard"})
+UNFENCED_ZONES: frozenset[str] = frozenset({"forecourt", "yard", "cart yard", "inner yard", "rear yard", "service yard"})
 #: A zone's caption where its program name is not the reader's word: the hearing court is `oshirasu` in the program (and
 #: in its fill pattern) but the sheets caption it in English (the other drafts and the hand sheets say `hearing court`).
 #: A room's caption where its kind's name is not what the room is: the karo lodges in a BAY of the staff long-house

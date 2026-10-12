@@ -549,45 +549,36 @@
     <text font-size="9" font-style="italic" fill="#7A6A4A">service yard</text>
   </g>
 
-  <!-- Shrine-approach garden arm: the inner garden wraps north along the shrine
-       hall's west face, naming the strip the +60 px backing-void shift left
-       between residence and shrine (size-audit 2026-07-24: an unlabeled
-       ~26 x 36 ft court-earth pocket; garden matches the shrine-nested-in-garden
-       resolution already applied on the south side). Drawn BEFORE the shrine
-       hall so the hall and its labels paint on top (same draw-order rule as
-       Hayakawa's shrine grove). -->
-  <rect x="802" y="202" width="74" height="108" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3" data-kind="garden"/>
-
-  <!-- Inari shrine hall (east range, upper portion) - two altars under one roof.
-       37x31 ft: still a commanding two-altar HALL (the priest-magistrate's
-       exception, kept in spirit), but shrunk from a 53 ft square that out-
-       measured the lord's own residence blocks and, with its workshop, rivaled
-       the whole residence. A grand shrine stays subordinate to the lord's house:
-       the divergence licenses a hall, not that magnitude (size-audit direction-
-       vs-magnitude, 2026-07). BACKS THE EAST WALL: shifted +60 px (20 ft) east so
-       its back is flush to the wall - was floated ~23 ft off it, leaving a dead
-       NE strip a subordinate hall should not (size-audit backing-void sweep, 2026-07);
-       the freed strip went to the inner garden. -->
+  <!-- THE SHRINE IN ITS CORNER, BESIDE ITS TREE (feature 374 waves 130-131): the Inari hall stands in the inner court's
+       north-east corner, as a household kept its god in a corner of its lot at a small shrine or an old tree
+       (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: "Every compound our maps draw has one
+       modest shrine, in a corner of its grounds beside a tree"); its tree stands south of it against the east wall, the
+       cinnabar workshop below the tree. It stood mid-wall, wrapped in a garden on three sides - an arm of the inner garden
+       along its west face and a shrine garden below the workshop (the 2026-07 backing-void fixes) - and no source gives a
+       garden round a household's shrine (0218: "a GUESS"), so the arm is gone and the ground below the workshop is the
+       inner garden's east end, not the shrine's. The tree is 20 ft across (a GUESS: no source sizes a household god's
+       tree), its trunk 12 ft south of the hall. -->
+  <!-- Inari shrine hall - two altars under one roof (Ta-no-Kami west, Myobu east), the priest-magistrate's
+       hall. 30 x 26 ft (feature 374 wave 131): the ceiling of a hall shrine is a 3-5 ken worship hall, ~30 ft
+       (docs/buildings.md "Hall shrine"); it was 37 x 31 ft. -->
   <g data-kind="compound shrine">
-    <rect data-id="compound-shrine-2" x="880" y="200" width="110" height="92" fill="#C9876C" stroke="#6B2A18" stroke-width="2.5"/>
-    <rect x="880" y="239" width="4" height="14" fill="#4A3318" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100) -->
+    <rect data-id="compound-shrine-2" x="900" y="160" width="90" height="78" fill="#C9876C" stroke="#6B2A18" stroke-width="2.5"/>
+    <rect x="900" y="192" width="4" height="14" fill="#4A3318" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100) -->
     <!-- internal rail dividing W (Ta-no-Kami) and E (Myobu) -->
-    <line data-id="compound-shrine-3" x1="935" y1="208" x2="935" y2="284" stroke="#5C1A0A" stroke-width="2"/>
+    <line data-id="compound-shrine-3" x1="945" y1="168" x2="945" y2="230" stroke="#5C1A0A" stroke-width="2"/>
     <!-- vermillion edging -->
-    <rect data-id="compound-shrine-1" x="880" y="200" width="110" height="6" fill="#A03020"/>
-    <rect data-id="compound-shrine-4" x="880" y="286" width="110" height="6" fill="#A03020"/>
+    <rect data-id="compound-shrine-1" x="900" y="160" width="90" height="6" fill="#A03020"/>
+    <rect data-id="compound-shrine-4" x="900" y="232" width="90" height="6" fill="#A03020"/>
     <!-- W altar marker (Ta-no-Kami) - a small rice-straw doll silhouette -->
     <g data-kind="shrine altar">
-      <g transform="translate(907, 226)">
+      <g transform="translate(922, 188)">
         <rect x="-6" y="-2" width="12" height="18" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="0.8"/>
         <circle cx="0" cy="-6" r="5" fill="#E8D2A8" stroke="#6B4F2A" stroke-width="0.8"/>
       </g>
-      <!-- feature 267 pass 3: font 10 -> 8 so the name stays inside the 55 px west bay (it crossed the hall's west wall) -->
     </g>
-    <!-- pass 3: split over two lines - on one it touched the west wall and the rail -->
     <!-- E altar marker (Myobu) - torii silhouette -->
     <g data-kind="shrine altar">
-      <g transform="translate(963, 218)">
+      <g transform="translate(968, 182)">
         <line x1="-10" y1="0" x2="10" y2="0" stroke="#FFFAE6" stroke-width="2.5"/>
         <line x1="-12" y1="5" x2="12" y2="5" stroke="#FFFAE6" stroke-width="2"/>
         <line x1="-8" y1="5" x2="-8" y2="20" stroke="#FFFAE6" stroke-width="2"/>
@@ -595,44 +586,43 @@
       </g>
     </g>
   </g>
+  <g data-kind="sacred tree" data-part-of="compound shrine" fill="#7A8C5C" stroke="#3E5230" stroke-width="1.4">
+    <circle cx="945" cy="274" r="30"/>
+    <text font-size="7" font-style="italic" fill="#3A4A28" stroke="none">shrine tree</text>
+  </g>
 
-  <!-- Shrine garden: nests the shrine + workshop's south side, filling the SE inner-court
-       pocket against the east wall and divider (a shrine reads as set in a garden, and the
-       column is shorter than the wall so the leftover wall-space becomes garden, not bare
-       slack - backing-void follow-up, GM 2026-07). Drawn here (before the relic annotation
-       and workshop) so those paint on top of it. -->
+  <!-- The inner garden's east end, against the east wall and the divider below the workshop (it was drawn as the
+       shrine's garden). Drawn here (before the workshop) so the workshop paints on top of it. -->
   <g data-kind="garden">
-    <rect x="860" y="375" width="132" height="70" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
+    <rect x="860" y="390" width="132" height="55" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
   </g>
 
   <!-- Shrine hall label (above) -->
   <text font-size="12" font-weight="bold" letter-spacing="1" fill="#5C1A0A" data-kind="compound shrine" data-names="compound-shrine-1 compound-shrine-2 compound-shrine-3 compound-shrine-4"><tspan>INARI</tspan><tspan>SHRINE</tspan></text>
 
 
-  <!-- Cinnabar workshop colonnade (south of shrine, hatched to indicate covered open-air).
-       Shifted +60 px east with the shrine to back the east wall (backing-void fix). -->
+  <!-- Cinnabar workshop colonnade (below the shrine's tree, hatched to indicate covered open-air), backing the east
+       wall, narrowed with the hall to 30 ft (feature 374 wave 131: the sacred complex held under the residence). -->
   <g data-kind="cinnabar workshop">
-    <rect x="880" y="300" width="110" height="72" fill="url(#colonnade-hatch)" stroke="#6B2A18" stroke-width="2"/>
+    <rect x="900" y="312" width="90" height="72" fill="url(#colonnade-hatch)" stroke="#6B2A18" stroke-width="2"/>
     <!-- post markers -->
-    <circle cx="890" cy="310" r="3" fill="#3A1810"/>
-    <circle cx="935" cy="310" r="3" fill="#3A1810"/>
-    <circle cx="980" cy="310" r="3" fill="#3A1810"/>
-    <circle cx="890" cy="362" r="3" fill="#3A1810"/>
-    <circle cx="935" cy="362" r="3" fill="#3A1810"/>
-    <circle cx="980" cy="362" r="3" fill="#3A1810"/>
+    <circle cx="910" cy="322" r="3" fill="#3A1810"/>
+    <circle cx="945" cy="322" r="3" fill="#3A1810"/>
+    <circle cx="980" cy="322" r="3" fill="#3A1810"/>
+    <circle cx="910" cy="374" r="3" fill="#3A1810"/>
+    <circle cx="945" cy="374" r="3" fill="#3A1810"/>
+    <circle cx="980" cy="374" r="3" fill="#3A1810"/>
     <!-- river-stones drying (small gray circles) -->
     <g data-kind="drying stones and bowls">
-      <circle cx="902" cy="320" r="4" fill="#7E726A"/>
-      <circle cx="914" cy="320" r="4" fill="#7E726A"/>
-      <circle cx="926" cy="320" r="4" fill="#7E726A"/>
+      <circle cx="918" cy="332" r="4" fill="#7E726A"/>
+      <circle cx="928" cy="332" r="4" fill="#7E726A"/>
+      <circle cx="938" cy="332" r="4" fill="#7E726A"/>
       <!-- bowls drying (small lacquer-black circles) -->
-      <circle cx="958" cy="320" r="5" fill="#1A1410" stroke="#3A2418" stroke-width="0.6"/>
-      <circle cx="971" cy="320" r="5" fill="#1A1410" stroke="#3A2418" stroke-width="0.6"/>
+      <circle cx="958" cy="332" r="5" fill="#1A1410" stroke="#3A2418" stroke-width="0.6"/>
+      <circle cx="971" cy="332" r="5" fill="#1A1410" stroke="#3A2418" stroke-width="0.6"/>
     </g>
-    <!-- feature 267 round 4: the stones and bowls laid in one row under the north posts, leaving the band between
-         them and the south posts to the name (the re-seat set it over a stone and a bowl) -->
-    <!-- feature 267 pass 3: the name at font 8.5 (at 10 it ran over the colonnade's border strokes), the lower
-         stone and bowl raised 3-5 px to clear it, the sublabel lifted off the middle south post -->
+    <!-- the stones and bowls in one row under the north posts, leaving the band between them and the south posts to
+         the name (feature 267 round 4) -->
     <text font-size="8.5" font-weight="bold" fill="#3A2E1C">Cinnabar Workshop</text>
   </g>
 
@@ -779,7 +769,7 @@
     <circle cx="581" cy="470.5" r="3.8"/>
     <circle cx="331" cy="257.5" r="3.8"/>
     <circle cx="325" cy="390.5" r="3.8"/>
-    <circle cx="872.5" cy="231" r="3.8"/>
+    <circle cx="892.5" cy="186" r="3.8"/>
     <circle cx="948" cy="608.5" r="3.8"/>
     <circle cx="651" cy="710" r="3.8"/>
     <circle cx="284" cy="686" r="3.8"/>

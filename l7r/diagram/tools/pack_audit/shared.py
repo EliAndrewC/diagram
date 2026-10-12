@@ -568,3 +568,29 @@ def postern_approach(plan: ParsedPlan) -> list[str]:
                 out.append(f"the {o.ft:.1f} ft opening at svg({o.x:.0f},{o.y:.0f}) has {free / FTPX:.1f} ft clear on one face (under {CLEAR_FT:.0f} ft) - a building seals the way through")
                 break
     return out
+
+
+# THE SHRINE'S TREE (feature 374 wave 130): a household kept its god in a corner of its lot, "by building a small shrine or
+# by taking an old tree, a stone or the like as its yorishiro" (kotobank-yashikigami), and our maps set the compound's
+# shrine there and "give it the tree as well" (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html).
+# The tree is a crown tagged `sacred tree`, a part of the compound shrine, its trunk within SHRINE_TREE_FT of the hall's
+# walls. The 15 ft is a GUESS: no source gives how near the tree stood; it lets a ~20 ft crown clear the hall it stands by.
+SHRINE_TREE_FT: float = 15.0
+
+
+def shrine_tree(text: str) -> list[str]:
+    """The compound shrine stands beside its tree: a `sacred tree` crown that is a part of the `compound shrine`, its trunk
+    within SHRINE_TREE_FT of the hall (the shrine's largest rect)."""
+    found = marks(text)
+    halls = [m for m in found if m.tag == "rect" and m.kind == "compound shrine" and "sacred tree" not in m.lineage]
+    if not halls:
+        return []
+    hall = max(halls, key=lambda m: m.w * m.h)
+    crowns = [m for m in found if m.tag == "circle" and m.kind == "sacred tree" and "compound shrine" in m.lineage]
+    for c in crowns:
+        cx, cy = c.x + c.w / 2, c.y + c.h / 2
+        dx, dy = max(hall.x - cx, 0.0, cx - hall.x - hall.w), max(hall.y - cy, 0.0, cy - hall.y - hall.h)
+        if math.hypot(dx, dy) <= SHRINE_TREE_FT * FTPX:
+            return []
+    where = f"svg({hall.x:.0f},{hall.y:.0f})"
+    return [f"the compound shrine at {where} has no tree beside it"]

@@ -212,6 +212,10 @@ class BuildingSpec:
     # 0097-staff-rowhouses-and-barracks-nagaya.html: "The barracks is divided into dwellings, each an earth-floored entry
     # and a raised floor", bays of about 12-18 ft. () draws one undivided hall.
     bays: tuple[float, ...] = ()
+    # GROUND HELD FOR A TREE past the building's far end along its wall, in feet (feature 374 wave 130): the compound
+    # shrine stands in its corner beside a tree (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html),
+    # and the next building on its wall flows below the crown instead of standing a fire-gap off the shrine. 0: none.
+    tree_ft: float = 0.0
 
 
 @dataclass(frozen=True)

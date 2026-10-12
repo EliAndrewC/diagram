@@ -548,17 +548,15 @@
     <text font-size="9" font-style="italic" fill="#3A4E38">vegetable garden</text>
   </g>
 
-  <!-- Shrine grove (chinju no mori): the compound's one shrine + its approach torii
-       stand in a green precinct, not bare court-earth. It gathers the open ground ABOVE,
-       BELOW, and BETWEEN the shrines into ONE named feature - a shrine reads as set in a
-       grove (GM backing-void follow-up, 2026-07). Drawn before the shrines/torii so those
-       paint on top of it. -->
-  <g data-kind="shrine grove">
-    <rect x="740" y="190" width="105" height="265" fill="url(#garden-stipple)" stroke="#7A8C5C" stroke-width="1" stroke-dasharray="4 3"/>
-    <circle cx="828" cy="420" r="8" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-    <circle cx="762" cy="418" r="7" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-    <circle cx="806" cy="432" r="6" fill="#5C7050" stroke="#3A4E38" stroke-width="0.8"/>
-    <text font-size="9" font-style="italic" fill="#3A4E38">shrine grove</text>
+  <!-- THE SHRINE'S TREE (feature 374 wave 130): the shrine stands beside a tree, as a household kept its god in a corner
+       of its lot at a small shrine or an old tree (research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html:
+       "Every compound our maps draw has one modest shrine, in a corner of its grounds beside a tree"). It replaces the
+       stippled shrine grove this sheet drew here since the GM's backing-void follow-up of 2026-07 - a grove round a
+       compound's shrine is not in the record, and a garden laid out around it is a GUESS 0218 does not ask for. The crown
+       is 20 ft across (a GUESS: no source sizes a household god's tree), its trunk 12 ft west of the hall, along the north wall. -->
+  <g data-kind="sacred tree" data-part-of="compound shrine" fill="#7A8C5C" stroke="#3E5230" stroke-width="1.4">
+    <circle cx="804" cy="186" r="30"/>
+    <text font-size="7" font-style="italic" fill="#3A4A28" stroke="none">shrine tree</text>
   </g>
 
   <!-- THE ONE SHRINE (east range of the inner court): the Fire Dragon shrine, a modest standalone retrofitted from an
@@ -568,32 +566,30 @@
        is ONE HALL - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html) -->
   <g data-kind="compound shrine">
     <text font-size="11" font-weight="bold" letter-spacing="1" fill="#5C1A0A"><tspan>Fire</tspan><tspan>Dragon</tspan><tspan>shrine</tspan></text>
-    <rect x="773.5" y="210.5" width="33" height="21" fill="#C9876C" stroke="#6B2A18" stroke-width="2"/>
-    <rect x="773.5" y="215.5" width="4" height="11" fill="#E8D2A8" stroke="#6B2A18" stroke-width="0.6" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100) -->
-    <rect x="773.5" y="210.5" width="33" height="3" fill="#A03020"/>
-    <rect x="773.5" y="228.5" width="33" height="3" fill="#A03020"/>
+    <rect x="840" y="158" width="33" height="21" fill="#C9876C" stroke="#6B2A18" stroke-width="2"/>
+    <rect x="840" y="158" width="33" height="3" fill="#A03020"/>
+    <rect x="840" y="176" width="33" height="3" fill="#A03020"/>
     <!-- flame glyph inside, the Fire Dragon's altar; the river kami's wave below it, the second altar of the one hall -->
-    <path d="M 790 222 L 792 215.5 L 794.5 219 L 797 214.5 L 799.5 218.5 L 801 222" stroke="#FFFAE6" stroke-width="1.4" fill="none" data-kind="shrine altar"/>
-    <path d="M 789 226.5 q 2 -2.5 4 0 q 2 2.5 4 0 q 2 -2.5 4 0" stroke="#FFFAE6" stroke-width="1.2" fill="none" data-kind="shrine altar"/>
+    <path d="M 856.5 169.5 L 858.5 163 L 861 166.5 L 863.5 162 L 866 166 L 867.5 169.5" stroke="#FFFAE6" stroke-width="1.4" fill="none" data-kind="shrine altar"/>
+    <path d="M 855.5 172 q 2 -2.5 4 0 q 2 2.5 4 0 q 2 -2.5 4 0" stroke="#FFFAE6" stroke-width="1.2" fill="none" data-kind="shrine altar"/>
     <!-- the surviving Ebisu altar in the corner -->
     <g data-kind="shrine altar">
-      <rect x="779" y="219" width="8" height="8" fill="none" stroke="#FFFAE6" stroke-width="1.2"/>
+      <rect x="845.5" y="166.5" width="8" height="8" fill="none" stroke="#FFFAE6" stroke-width="1.2"/>
       <text font-size="8" font-style="italic" fill="#5C4830"><tspan>(was an Ebisu shrine</tspan><tspan>- one altar remains)</tspan></text>
-    
     </g>
+    <rect x="850" y="176" width="13" height="3" fill="#E8D2A8" stroke="#6B2A18" stroke-width="0.6" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100); on the south face since wave 130, the north and east faces against the wall -->
   </g>
 
-  <!-- The shrine's torii, about 8 ft before its west door on the door's axis (feature 374 batch 4, building-review E1:
-       research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, a compound shrine's arch stands 5-12 ft before its hall; it
-       stood 56 ft south at the grove's west edge, where feature 267 pass 2 put it so ONE torii covered two shrines - wave
-       123 left one shrine). Drawn IN PLAN (docs/buildings.md, feature 268): the 15 x 1.5 ft top beam across the approach,
-       here running north-south because the approach runs east, and its two 1.2 ft posts marked darker, 10.3 ft clear
-       between them. -->
+  <!-- The shrine's torii, about 8 ft before its south door on the door's axis (research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:
+       a compound shrine's arch stands 5-12 ft before its hall; feature 374 wave 130: the shrine moved to the inner court's
+       north-east corner, its door to the south face). Drawn IN PLAN (docs/buildings.md, feature 268): the 15 x 1.5 ft top
+       beam across the approach, running east-west because the approach runs north, and its two 1.2 ft posts marked darker,
+       10.3 ft clear between them. -->
   <g data-kind="torii" data-part-of="compound shrine">
-    <rect x="746" y="198.5" width="6" height="45" fill="none" id="arch"/>
-    <line x1="749" y1="198.5" x2="749" y2="243.5" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="747.2" y="202" width="3.6" height="3.6" fill="#5A1A10"/>
-    <rect x="747.2" y="236.4" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="834" y="200" width="45" height="6" fill="none" id="arch"/>
+    <line x1="834" y1="203" x2="879" y2="203" stroke="#A03020" stroke-width="4.5"/>
+    <rect x="837.5" y="201.2" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="871.9" y="201.2" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
 
   <!-- ============================================================ -->
@@ -866,7 +862,7 @@
     <!-- residence east block (reception and the lord's suite) - beside the shoe stone its guests step up from -->
     <circle cx="613" cy="326.5" r="3.8"/>
     <!-- the shrine - beside the Fire Dragon shrine's west door, toward its torii -->
-    <circle cx="766" cy="207.5" r="3.8"/>
+    <circle cx="843.5" cy="186" r="3.8"/>
     <!-- guest house - beside its south door -->
     <circle cx="918" cy="307.5" r="3.8"/>
     <!-- granary - beside its north door -->

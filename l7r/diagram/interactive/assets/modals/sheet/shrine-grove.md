@@ -1,8 +1,6 @@
 About: A Japanese shrine stood in its own wood, the chinju no mori, kept within and around its precinct so as to surround
 the sanctuary, the approach and the place of worship. Many such woods were what was left of the forest that stood there
-before, left to grow behind and around the shrine's buildings; many others were planted. In Japan a household's own god,
-too, was kept in a corner of its lot, in a small shrine or at an old tree; whether a compound's shrine stood in a grove of
-its own is not recorded. Caretakers chosen from among a shrine's parish households answered for its cleaning, in custom
+before, left to grow behind and around the shrine's buildings; many others were planted. Caretakers chosen from among a shrine's parish households answered for its cleaning, in custom
 recorded in modern times.
 
 A shrine's big trees stood in two places: single trees before the hall and along the approach, and the grove behind the
@@ -31,5 +29,5 @@ its crowns. No fence is drawn round the precinct or the sanctuary, and no swept 
 Name: shrine grove (chinju no mori)
 Covers: the grove's ground and its tree canopies
 Sources: chinju-no-mori-jawiki, short-2012-sacred-groves, rots-2015-chinju-no-mori, fujita-2007-shaso-slopes, kotobank-yashikigami, kotobank-ujiko, rokusha-jinja-fuchu, sano-shrine-gazetteer, chinju-jawiki
-Entry: research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html
+Entry: research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.html
 Drawing: research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html

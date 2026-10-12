@@ -30,7 +30,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   the rear corner by the family's rooms, the guests' behind the reception room, each leaving a 5 ft way along the
   alley. (Pass 6 had stood the family's flush to the wall for a hatch, ~140 ft outdoors round the house from the inner
   entrance; the hatch was a guess and is dropped for it.) THE CARTER'S ROUTE to both (pass 8): in by the kitchen
-  postern in the west wall, north along the wall past the vegetable ground, through the rear yard between the
+  postern in the west wall, north across the service yard past the vegetable ground, through the rear yard between the
   storehouses and the kitchen, and east along the rear alley, which since pass 8 runs on behind the kitchen - the kitchen stands
   10 ft off the north wall as the house does, so the kitchen ell abutting the house leaves the alley's west end open.
   Never through the ceremonial middle gate or the lord's garden. The alley opens east onto the inner court; at its
@@ -86,20 +86,30 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   the wall's room).
 - **Rear yard**: the open ground between the storehouses and the kitchen, 37 x 22 ft, the Higuchi house's rear (research 0091); its size a GUESS in the 18-45 by 12-30 ft band the size-audits of 2026-10-12 set from two storehouses of the common 2 x 3 ken and the open ground before them (no rear yard was found measured); its 12 ft (2 ken) floor keeps it apart from the 6-10 ft service alley, the rear strip's other form.
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
-- **Vegetable garden**: WEST of the house, filling the kitchen yard (research 0109: the one plot whose side
-  is given lay west; its size runs from the Takei house's ~1,070 sq ft plot to a field over about half the Yokota
-  house's grounds). Pass 7 takes the field form, as large as the yard holds - 64 x 48 ft, 3,072 sq ft, its size a
-  GUESS - leaving a ~12 ft way from the postern along the west wall (pass 6's 36 x 30 plot left ~100 x 60 ft of the
-  yard bare). It is drawn in the garden stipple, as the hand sheets draw theirs.
+- **Vegetable garden**: 0109's two knobs. Its SITE is rolled among the four the record gives, in its order, those the
+  sun or the room rule out on this draft struck first: south beside the formal garden has no room (8 ft between the
+  garden and the divider) and the rear service ground neither room nor sun (a 9-12 ft band behind the house, in its
+  shadow), so the roll is exactly `random.Random(zlib.crc32(b"county-magistracy-example:vegetable garden site")).choice(["west
+  of the residence", "on a parcel of its own"])` = west of the residence. Its SIZE is the soup-greens plot, the Takei
+  house's ~100 sq m (~1,076 sq ft), drawn 36 x 30 ft: the field form, over about half the grounds (~27,000 of the
+  54,000 sq ft), cannot stand in an inner court of 24,300 sq ft before anything is built in it, so the room rules it out
+  (feature 374 wave 129; it was a 64 x 48 ft field squeezed into the kitchen yard, a size nobody attests). It gets 9.5
+  hours of sun (`garden_sun`). The kitchen yard's working ground beside the kitchen, 26 x 62 ft, is named the service
+  yard, as Ochiba's sheet names its own (pass 6's ~100 x 60 ft of bare yard, building-review round 6, answered by naming
+  it; its bounds a drawing convention). Both are drawn as the hand sheets draw theirs.
 - **Garden**: 124 x 46 ft, from the kitchen ell's east face to the guest house (pass 7; feature 374 wave 113: 2 ft longer, the house 7 ft west): the one garden faces the
   reception and the guest house both, guests being received in the garden-facing rooms (research buildings 330).
   Pass 5's 188 ft garden ran on beside the servants' row with a bare strip; pass 6 cut it to the house's 68 ft and
-  left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. A ~76 x 36 ft band of inner court north of
-  it, east of the house (the alley's east end and the shrine's corner), stays open ground.
+  left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. The band of inner court north of
+  it, east of the house to the shrine's tree (the alley's east end), stays open ground.
 - **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
-  ~36 x 30 ft is Ochiba's particular, not the generic post's (docs/building-programs.md: "The shrine is universal
-  equipment ... Scale and dedication are the per-manor particular"). Its arch: NONE - a compound shrine may have
-  none (docs/buildings.md, Sacred features; research 0220 drawing); one shrine, so the shared-or-own knob does not arise.
+  ~30 ft is Ochiba's particular, not the generic post's (docs/building-programs.md: "The shrine is universal
+  equipment ... Scale and dedication are the per-manor particular"). It stands in the inner court's north-east corner
+  beside its tree, as 0218's drawing page draws every compound's shrine (feature 374 wave 130): the placer holds 17 ft
+  past its south end for the tree (`tree_ft`), the guest house flowing below, and the tree's 20 ft crown (a GUESS: no
+  source sizes a household god's tree) stands 2 ft clear of both, its trunk 12 ft off the hall (`shrine_tree` in
+  pack_audit). Its arch: NONE - a compound shrine may have none (docs/buildings.md, Sacred features; research 0220
+  drawing); one shrine, so the shared-or-own knob does not arise.
 - **Hearing court floor**: `white gravel`, the floor knob's first form (river cobbles the other; docs/building-programs.md,
   research 0099 drawing) - the roofed court keeps its white-gravel fill.
 - **Middle gate**: beside the office hall's east end, not behind it (docs/building-programs.md puts it customarily on the

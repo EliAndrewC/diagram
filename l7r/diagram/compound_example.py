@@ -9,7 +9,8 @@ import random
 import zlib
 
 from .buildings.types import load_types
-from .compound_model import BuildingSpec, CompoundProgram, CourtZone, Envelope
+from .compound_model import FIRE_GAP_FT, BuildingSpec, CompoundProgram, CourtZone, Envelope
+from .compound_parts import SHRINE_TREE_CLEAR_FT, SHRINE_TREE_CROWN_FT
 
 # The built-in example's pool tier: the type that declares the example as its generated exception
 # (feature 254) - the folder is the declaration's to name, not this module's.
@@ -38,6 +39,33 @@ GRANARY_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:granary
 GATE_FORMS: tuple[str, str] = ("one-bay gate", "gate range")
 GATE_W_FT: dict[str, float] = {"one-bay gate": 8.0, "gate range": 12.0}
 GATE_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(GATE_FORMS)
+
+
+#: 0109's four sites for a vegetable garden, in the record's order (research/questions/0109-vegetable-gardens-at-a-samurai-
+#: residence-saien.drawing.html: "A garden's site is a knob among four"), and what rules each out on this draft - the sun
+#: or the room, measured on the draft (feature 374 wave 129) - None where it is open; the roll is among the open ones.
+GARDEN_SITES: tuple[str, ...] = ("west of the residence", "south, beside the formal garden", "in the rear service ground", "on a parcel of its own")
+GARDEN_SITE_RULED_OUT: dict[str, str | None] = {
+    "west of the residence": None,  # the kitchen yard: 9.5 h of sun (garden_sun), room for the plot
+    "south, beside the formal garden": "no room: 8 ft between the formal garden (to y 82) and the divider (y 90)",
+    "in the rear service ground": "no room and no sun: a 9-12 ft band behind the house, the storehouses on it, in the house's shadow",
+    "on a parcel of its own": None,  # outside the walls: the plan draws the field nowhere, its notes say where it is
+}
+GARDEN_SITE: str = random.Random(zlib.crc32(b"county-magistracy-example:vegetable garden site")).choice(
+    [site for site in GARDEN_SITES if GARDEN_SITE_RULED_OUT[site] is None]
+)
+#: The plot's size: the low form of 0109's size knob, the Takei house's soup-greens plot of ~100 sq m (~1,076 sq ft), drawn
+#: 36 x 30 ft (1,080 sq ft). The field form, over about half the grounds (~27,000 of 54,000 sq ft), cannot stand in an
+#: inner court of 24,300 sq ft before anything is built in it, so the room rules it out (T21's plan review).
+GARDEN_PLOT_FT: tuple[float, float] = (36.0, 30.0)
+
+
+def garden_zones(site: str) -> tuple[CourtZone, ...]:
+    """The vegetable garden as the site rolled draws it: the plot in the kitchen yard west of the house with the yard's
+    working ground beside the kitchen named, or - on a parcel of its own - no plot inside the walls, the yard whole."""
+    if site == "west of the residence":
+        return (CourtZone("vegetable garden", 14.0, 40.0, *GARDEN_PLOT_FT), CourtZone("service yard", 54.0, 25.0, 26.0, 62.0))
+    return (CourtZone("service yard", 14.0, 25.0, 66.0, 62.0),)
 
 
 def servants_row(form: str) -> BuildingSpec:
@@ -75,7 +103,9 @@ def county_magistracy_program() -> CompoundProgram:
         envelope - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: a 270 x 200 ft walled compound, the divider at 90 ft, its buildings in the ~30-42% coverage band; the size a GUESS
         gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the main gate's form rolled from the record's two (GATE_FORM: a one-bay gate, its passage 8 ft in the yakuimon's ~6-8.5 ft); the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
         garden before the house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the garden on the sunny south before the reception and the guest house; its 124 x 46 ft a GUESS
-        vegetable garden west of the house - GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the west site among the four and the field form, 64 x 48 ft in the kitchen yard
+        vegetable garden site - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the site rolled among 0109's four, those the sun or the room rule out on this draft struck first (GARDEN_SITE: west of the residence)
+        vegetable garden size - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.html: the soup-greens plot of ~1,076 sq ft (36 x 30 ft), the field form ruled out by the room
+        service yard - GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the kitchen yard's working ground beside the kitchen, named; its bounds a drawing convention
         rear yard - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: open working ground behind the house with the storehouses beyond it, as the Higuchi house kept; its bounds a drawing convention
         hearing court - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: before the dais, centered on the office hall and no longer than it, 80 x 32 ft; no roofed court's size was found
         forecourt - GUESS research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: open ground just inside the main gate, east of the gatehouse; its 55 x 31 ft a GUESS
@@ -125,12 +155,11 @@ def county_magistracy_program() -> CompoundProgram:
         # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk
         # along the divider. Its size is a GUESS.
         CourtZone("garden", 102.0, 36.0, 124.0, 46.0),  # feature 374 wave 113: from the kitchen ell's east face (the house's west end), the house 7 ft west
-        # The vegetable ground WEST of the house, filling the kitchen yard (research 0109 and 405: west is one of the
-        # attested seats, and the sun decides among them - here it gets 9.5 h, feature 283's garden_sun; a residence's vegetable ground runs from the Takei house's ~1,070 sq ft plot to
-        # a field over about half the Yokota house's grounds). Pass 7 (building-review round 6: the yard stood ~100 x 60
-        # ft bare around the 36 x 30 plot) takes the larger, field form within the yard: 64 x 48 ft = 3,072 sq ft, a
-        # GUESS in its size, leaving a 7 ft way from the postern along the west wall and the yard's north strip.
-        CourtZone("vegetable garden", 14.0, 36.0, 64.0, 48.0),
+        # The vegetable ground at the site rolled among those the sun and the room leave (GARDEN_SITE, research 0109), at
+        # the soup-greens plot's attested size (feature 374 wave 129: it was a 64 x 48 ft field squeezed into the kitchen
+        # yard, a size nobody attests); the kitchen yard's working ground beside the kitchen named the service yard, as
+        # Ochiba's sheet names its own (pass 7's bare yard, building-review round 6, answered by naming it).
+        *garden_zones(GARDEN_SITE),
         # The rear yard (feature 374 wave 124): open working ground on the north wall between the household's storehouses
         # and the kitchen, where the servants' range stood - the Higuchi house's rear, the ground behind the main house
         # with its storehouse beyond (research buildings 230), as the hand sheets name it; it holds the kitchen and the house
@@ -243,7 +272,10 @@ def county_magistracy_program() -> CompoundProgram:
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
         # is Ochiba's particular - docs/building-programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; docs/buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).
-        b("shrine", "shrine", 18.0, 14.0, "inner", "E", order=4, feature="compound shrine"),
+        # its corner holds the ground for its tree (0218's drawing page: "in a corner of its grounds beside a tree"): the
+        # crown and its clearance either side past its south end, less the fire-gap the next building keeps anyway - the
+        # guest quarters flowing below it, the crown 2 ft clear of both (wave 130)
+        b("shrine", "shrine", 18.0, 14.0, "inner", "E", order=4, feature="compound shrine", tree_ft=SHRINE_TREE_CROWN_FT + 2 * SHRINE_TREE_CLEAR_FT - FIRE_GAP_FT),
         # A detached guest house is a GUESS (R10, research 0091: guests were received in the main house, and a
         # guest house apart at a samurai house was not found); kept as the example's draft of the item.
         b(

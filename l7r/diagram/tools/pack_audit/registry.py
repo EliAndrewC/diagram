@@ -281,6 +281,13 @@ CHECKS: tuple[Check, ...] = (
         "county-sealed-postern-red.svg",
         "keep a way of at least 3 ft clear before each gate and postern, on both faces of its wall",
     ),
+    Check(
+        "shrine_tree",
+        lambda ctx: s.shrine_tree(ctx.text),
+        False,
+        "county-shrine-without-tree-red.svg",
+        "stand a tree beside the compound shrine: a crown tagged sacred tree, data-part-of the compound shrine, its trunk within 15 ft of the hall",
+    ),
     Check("one_compound_shrine", lambda ctx: s.one_compound_shrine(ctx.text), False, "hayakawa-two-shrines-red.svg", "draw one compound shrine and enshrine the second god in its hall"),
     # --- the country shrine's own, each fixture cut from the Hoshigaoka exemplar ---
     Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "hoshigaoka-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),

@@ -429,9 +429,12 @@ impl-drift filed (found.jsonl), then rows 8-12 (the sacred features). The rules 
 
 ### Wave 129 (T21) - the county vegetable garden's form
 
-- **W129-1** (within): the garden's size is 0109's knob, rolled (this draft: the field form); a field over half the grounds
-  does not fit a magistracy's inner court, so it is drawn as large as the court's free ground holds - the room deciding,
-  as 0109's drawing page records for Ubame's plot - the claim citing 0109 as research, its exact size a GUESS.
+- **W129-1** (within): the garden's size is 0109's knob between its two attested forms, a soup-greens plot of ~1,076 sq ft or
+  a field over about half the grounds, and the ROOM rules out a form before any roll, as 0109's drawing page records for
+  Ubame ("the inner court there has room for a bed only at the size knob's low end"): a field over half the grounds does
+  not fit a magistracy's inner court, so the county draft draws the soup-greens plot at its attested ~1,076 sq ft (its
+  site rolled among the sites the sun allows). Its claim cites 0109 as research. Neither form is drawn at a size nobody
+  attests (T21's plan review: the drift a squeezed field kept).
 
 ### Wave 130 (T22) - every compound shrine in a corner beside its tree
 
@@ -446,8 +449,11 @@ impl-drift filed (found.jsonl), then rows 8-12 (the sacred features). The rules 
   Ochiba's hall and its complex resized to it.
 - **W131-2** (within): a second kami's form (one hall or a shrine of its own) is a knob rolled per sheet; Hayakawa's river
   kami (one hall, done in batch 4) and Ubame's wood kami (one hall) as their rolls give.
-- **W131-3** (within): a country shrine's sanctuary width is a knob rolled per sheet - 1, 2 (Hie, ~12 x 6 ft) or 3 bays;
-  Hoshigaoka's roll is 2 bays, drawn so and recorded.
+- **W131-3** (within): a country shrine's sanctuary width is a knob rolled per sheet - 1, 2 (Hie, ~12 x 6 ft) or 3 bays, in
+  the row's order. The roll's recipe is the sheet's own seed, its name, as its other roll is keyed (the notes' item 8:
+  "the map has no seed, so the seed is its name"; `crc32(b"hoshigaoka:shrine grove form")`): exactly
+  `random.Random(zlib.crc32(b"hoshigaoka:sanctuary width")).choice(["1 bay", "2 bays", "3 bays"])`, written into the notes
+  beside the grove's, and the sheet draws what it gives (T23's plan review: the recipe named, never the result).
 
 ## Landing by batch (375's D18)
 

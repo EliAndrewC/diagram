@@ -636,7 +636,7 @@ def test_the_county_example_seats_a_privy_per_zone_clear_of_wells_courts_and_the
             zx, zy = 7.0 * c.FTPX + z.x_ft * c.FTPX, 15.0 * c.FTPX + z.y_ft * c.FTPX
             assert not c._rect_overlap(lat.x, lat.y, lat.w, lat.h, zx, zy, z.w_ft * c.FTPX, z.h_ft * c.FTPX), z.name
     assert svg.count('data-kind="side gate"') == 2 and 'data-kind="magistrate\'s dais"' in svg and 'data-kind="cart yard"' in svg
-    assert ">residence<" in svg and "senior retainers'" in svg  # the retainers' name wraps over two lines
+    assert ">residence<" in svg and ">senior<" in svg and ">retainers'<" in svg  # the retainers' name wraps, a word a line
 
 
 # --- pass 5 (building-review round 4): the house at its researched size, privies against walls, the hall's band ---
