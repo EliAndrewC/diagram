@@ -428,3 +428,12 @@ def test_a_module_moving_into_the_scope_is_recomputed_there(tmp_path: Path, spie
     after = _run(skill, memo, spied)
     assert "l7r/diagram/other/c.py" in spied, "c entered the scope: its units are the scope's, not claimed_outside's"
     assert after == _run(skill, None, spied)
+
+
+def test_the_cores_hash_is_the_modules_own_and_the_cache_keys_hash_is_another() -> None:
+    """A key helper named `_sha`, defined below the module's own, replaced it for every core and fingerprint - every claim
+    would have read as moved (caught 2026-10-12 by comparing all 4,050 cores against the commit before)."""
+    import hashlib
+
+    assert cl._sha("x") == hashlib.sha256(b"x").hexdigest()[:16]
+    assert cl._key_sha("x") == hashlib.sha256(b"x").hexdigest() and cl._key_sha("a", "b") != cl._key_sha("a\x00b", "")

@@ -113,3 +113,25 @@ def test_a_parse_cached_by_another_parser_is_not_served(monkeypatch) -> None:  #
     monkeypatch.setattr(to, "PARSER_KEY", "another-parser")
     assert to._parsed(cache, notes, originals, "") == first, "a changed parser parses afresh"
     assert len(to.PARSER_KEY) and to.PARSER_KEY == "another-parser"
+
+
+def test_a_revisions_pairs_are_read_from_git_once(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 375 amendment 8 (FR-036, plan D49): a commit's tree never changes, so its pairs are kept by the questions'
+    tree id - every check bundle's owed check read the merge base's pages again through git."""
+    d = tmp_path
+    _git(d, "init", "-q", "-b", "main")
+    _git(d, "config", "user.email", "t@t")
+    _git(d, "config", "user.name", "t")
+    _note(d, "questions/0010-a.notes.html", '<li data-note="k">「An oak」 (translated from the Japanese by this project; original: 「樫」)</li>\n')
+    _git(d, "add", "-A")
+    _git(d, "commit", "-qm", "base")
+    calls: list[str | None] = []
+    real = to._record_pairs
+    monkeypatch.setattr(to, "_record_pairs", lambda root, rev: calls.append(rev) or real(root, rev))
+    first = to.record_pairs(d, "HEAD")
+    assert to.record_pairs(d, "HEAD") == first and calls == ["HEAD"], "read once, then kept by its tree"
+    assert ("An oak", "樫") in first
+    to.record_pairs(d, None)
+    to.record_pairs(d, None)
+    assert calls == ["HEAD", None, None], "the working tree is read every time, as before"
+    assert to.record_pairs(d, "no-such-rev") == {} and calls[-1] == "no-such-rev", "a revision git cannot name is read as before"

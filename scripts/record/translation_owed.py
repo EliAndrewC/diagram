@@ -82,7 +82,26 @@ def _parsed(cache: dict[str, list], notes: str, originals: str, page: str) -> li
 
 
 def record_pairs(root: pathlib.Path, rev: str | None) -> dict[tuple[str, str], list[tuple[str, str, str, str]]]:
-    """{(translation, original): [(notes file, key, language, ...)]} across the whole record at `rev` (None: the tree)."""
+    """{(translation, original): [(notes file, key, language, ...)]} across the whole record at `rev` (None: the tree).
+
+    A REVISION'S PAIRS ARE KEPT BY ITS QUESTIONS' TREE (feature 375 amendment 8, FR-036, plan D49): a commit's tree never
+    changes, and every check bundle's owed check read the merge base's pages again through git (part of 0.92 s,
+    specs/375-enforced-wave-process/research.md R7). The working tree's are read as before."""
+    if rev is None:
+        return _record_pairs(root, None)
+    tree = _git(root, "rev-parse", f"{rev}:{RECORD}/questions").strip()
+    if not tree:
+        return _record_pairs(root, rev)
+    import record_cache as rc  # noqa: PLC0415 - beside this file
+
+    kept = rc.ParseCache.at(root, "translation-pairs", pathlib.Path(__file__))
+    pairs = kept.get(tree, lambda: _record_pairs(root, rev))
+    kept.save()
+    return pairs
+
+
+def _record_pairs(root: pathlib.Path, rev: str | None) -> dict[tuple[str, str], list[tuple[str, str, str, str]]]:
+    """`record_pairs`, read: the tree's files, or `rev`'s by one `git cat-file --batch`."""
     if rev is None:
         files = _notes_files([str(p.relative_to(root)) for p in (root / RECORD).rglob("*.notes.html")])
         read = lambda f: (root / f).read_text(encoding="utf-8") if (root / f).is_file() else ""  # noqa: E731
@@ -98,7 +117,7 @@ def record_pairs(root: pathlib.Path, rev: str | None) -> dict[tuple[str, str], l
     cache_file = _cache_path(root)
     try:
         cache = json.loads(cache_file.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+    except OSError, ValueError:
         cache = {}
     size = len(cache)
     out: dict[tuple[str, str], list[tuple[str, str, str, str]]] = {}
