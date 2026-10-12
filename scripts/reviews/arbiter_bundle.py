@@ -372,10 +372,32 @@ def flow_sections(root: Path, out: Path, d: Path | None, files: list[str]) -> li
 unit_of = ha.unit_of  # the one parser (feature 375 amendment 2): the bundle and the ruling row read a unit alike
 
 
+def record_round_counter(root: Path, unit: str) -> list[str]:
+    """What the record checks' guard (`hm_checks.py`) counted for a record check's `unit` (`<check>|<subject>`): its rounds in
+    this feature and the round a new change rebased its count at (feature 374 batch 7, the round arbiter's tooling fix,
+    ask round:quote-check|q:0019@3: the bundle read the review checks' counter and printed "0 of the 0 kept" for a trigger
+    that fired at round 3). [] where the state holds nothing for the unit."""
+    path = hc.state_path(str(root))
+    try:
+        state = json.loads(path.read_text(encoding="utf-8")) if path is not None else {}
+    except (OSError, ValueError):
+        return []
+    n = int(state.get("rounds", {}).get(unit, 0))
+    if not n:
+        return []
+    base = state.get("rebased", {}).get(unit) or {}
+    since = f"; a new change rebased the count at round {base.get('n', 0)}" if base else ""
+    return [f"## The round counter\n\nrecord check `{unit}`: {n} round(s) counted in this feature{since} (`hm_checks.py`, the cap ROUND_CAP = {hc.ROUND_CAP} past the rebase).\n"]
+
+
 def round_counter(root: Path, unit: str) -> list[str]:
     """What the pair guard counted for `unit`'s round cap: the epoch it counts from (the commit that last landed the feature's
     tasks.md on origin/main) and the rounds kept after it (feature 374 batch 5, the round arbiter's tooling fix: batch 4's
-    rounds, kept as bare keys, counted into batch 5 and its first round read as round 5). A bare key reads as epoch 0."""
+    rounds, kept as bare keys, counted into batch 5 and its first round read as round 5). A bare key reads as epoch 0. A
+    record check's unit is counted by `hm_checks.py`, and its count is read from there (`record_round_counter`)."""
+    record = record_round_counter(root, unit)
+    if record:
+        return record
     try:
         feature = json.loads((root / ".specify" / "feature.json").read_text()).get("feature_directory", "") or "none"
         kept = json.loads((root / ".git" / "review-rounds.json").read_text()).get(feature, {}).get(unit, [])
