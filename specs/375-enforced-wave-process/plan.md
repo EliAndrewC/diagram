@@ -651,8 +651,9 @@ glyph dispatch the guard passes under (a): `batch_at = now`, `batch` = every gly
 
 **D54 - No feature (FR-039; T56).** The active feature is `hm_arbiter.feature_dir`'s, read from `.specify/feature.json`, which
 nothing clears when a feature closes (this clone's still names 375). So "a change with no feature" is: no feature dir, or no
-event log for it, or a feature CLOSED by its status line (`speckit-todo.closed_by_status`, the one reader). Then no glyph unit is
-due until the work lands (D55) - a tweak in a clone whose last feature is Done checks its glyphs once, at landing, not at
+event log for it, or a feature `make speckit-todo` reads as closed - `speckit-todo.feature(d).state` is `closed` or
+`done - GM review pending`, which covers a Done status line AND every task ticked (370 and 372 closed by their last tick, their
+status lines still "Draft"; the plan review, round 2). Then no glyph unit is due until the work lands (D55) - a tweak in a clone whose last feature is Done checks its glyphs once, at landing, not at
 once on the strength of a days-old event log.
 
 **D55 - Owed, due, waiting and landing (FR-039, FR-040, FR-041; T56, T57).** `review_owed.owed(root, landing=False)`: every
@@ -663,14 +664,16 @@ landing" with none). LANDING is known by a marker: when `review-gate.sh` refuses
 `<git dir>/glyph-landing` (`{"feature": <name or "">, "at": <epoch>}`), and while it names the active feature (or "" with none)
 every owed glyph unit is due - so the dispatch the refused push asks for passes the guard without its escape; a clean push
 (`sync-with-main.sh`, both routes) removes it. The pair guard's Agent branch refuses a glyph-check dispatch whose unit is owed
-but not due, naming when it comes due, unless `GLYPH_DUE_OK="<reason>"` (two words or more, in the guard census); on a passed
-dispatch under (a) it opens the batch (D53). The stop hook and `make verify` ask only for due units (they read the default).
+but not due, naming when it comes due, unless `GLYPH_DUE_OK="<reason>"` (two words or more, in the guard census); a passed
+dispatch under (a), or under the escape, opens a batch (D53): the clock restarts from it, as SC-032 says it does after any
+glyph dispatch; a dispatch under (b) or (c) opens none. The stop hook and `make verify` ask only for due units (they read the default).
 Tests (red on today's code), a fixture clone each: before the hour a glyph unit is owed, not due, `waiting` names its time, and a
 building-review, a size-audit, a fix-check and a settlement-review unit are each due at once; units owed at minute 5 and
 minute 59 are both due at the hour; a dispatch opens the batch and the batch's second unit is still due after the first is
 dispatched; the same unit owed again by a fix ten minutes after its dispatch is not due until the next hour; a dispatch
-recorded before the feature's first event (a clone's October dispatch) does not move its clock; no feature, and a Done
-feature, owe nothing due until the landing marker, and then all; the landing marker makes every owed glyph unit due and a clean
+recorded before the feature's first event (a clone's October dispatch) does not move its clock; no feature, a Done
+feature, a feature with every task ticked under a "Draft" status, and one with only its GM-review box open, owe nothing due
+until the landing marker, and then all; the landing marker makes every owed glyph unit due and a clean
 push removes it; `--landing` lists them all. Suite cases (`tests/hooks/test-pair-hooks.sh`, `test-review-gate.sh`): an early
 glyph dispatch refused, passed with `GLYPH_DUE_OK`, passed when due, passed after a refused push without the escape; the push
 refuses an unanswered glyph unit through `--landing` and writes the marker.
