@@ -261,7 +261,8 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
         one street per planned row - research/questions/0033-row-villages-resson.drawing.html: further streets laid beside the first
         further street joins the streets - UNRESEARCHED: only the first street takes the road, a further one joins a street laid
         street join width - CONVENTION: streets are drawn 6 ft wide (research/questions/0033-row-villages-resson.drawing.html); the join is drawn at the street's 6 ft tread
-        street join unhooked - research/questions/0081-village-lanes.drawing.html: a lane's end loses its hook"""
+        street join unhooked - research/questions/0081-village-lanes.drawing.html: a lane's end loses its hook
+        street join closing no sliver - research/questions/0081-village-lanes.drawing.html: lanes meet as a T, so a join closing a sliver (`closes_a_needle`) is refused and searched for as a door path is"""
     centers = [(float(h["x"]), float(h["y"])) for h in houses]
     # EACH STREET SPANS ITS OWN FARMS, as `seat_rows` seated them: spanned over every farm within reach, Mizuguchi's second
     # street, set out 238 ft behind the first row, took all twelve and ran 1,642 ft for the one farm of its own

@@ -384,7 +384,9 @@ def lay_fixtures(
         persimmon in its own grove bands - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: it may stand in the grove behind the house - its own grove, no other farm's
         bath room joined - research/questions/0044-baths-on-the-farm-furo.drawing.html: refused rather than walked out
         bath room's wall per house - research/questions/0044-baths-on-the-farm-furo.html: each house rolls among the three walls (`bath_wall`)
-        no seat, no persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm keeps none"""
+        no seat, no persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm keeps none
+        no fixture on the way in - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way in by the open front, through the ring's break - every kind but the bath room kept off `keep`
+        no fixture on the door's room - UNRESEARCHED: the square about the door in `keep` (`DOOR_ROOM_HALF_FT`)"""
     g = px(WALL_GAP_FT)
     # (A grove farm's bands stay roofs here: letting a persimmon's crown reach over them, feature 315 found, let it take the
     # service strip a wood shed or bath room needed, and five cohort rolls could no longer seat their households.)
@@ -590,7 +592,11 @@ Research: the door's room - UNRESEARCHED: 12 ft each way, a routing tolerance a 
 def door_room(house: Rect, yard: Rect | None, out: float, half: float) -> Rect | None:
     """The square kept clear about a grove farm's front door - `out` past the yard's far edge, straight out along the line
     from the house through the yard, `half` each way - or None with no yard (feature 374 wave 146: a privy laid on that spot
-    left a row farm no path from its door)."""
+    left a row farm no path from its door).
+
+    Research:
+        the door past the yard - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: straight out past the yard's middle on the open front
+        the door's room - UNRESEARCHED: `half` each way, a routing tolerance"""
     if yard is None:
         return None
     dx, dy = yard[0] - house[0], yard[1] - house[1]

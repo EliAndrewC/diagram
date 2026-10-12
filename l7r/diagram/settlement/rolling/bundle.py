@@ -283,7 +283,8 @@ class BundleGeomMixin:
             south band off an unkept yard - UNRESEARCHED: `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
             storehouse on the north wall - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall, a convention the page records against the record
             storehouse seam - CONVENTION: the north-wall kura annex reserved 1 ft off the house wall
-            byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall on the flank away from the garden
+            byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall beside the house
+            byre's flank - UNRESEARCHED: the flank away from the garden; the page attests the inner and outer stable, not the side
             outer stable off the wall - GUESS research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the yard-shed byre set `YARD_SHED_GAP_FT[0]` (6 ft) off the house, the near end of the page's guessed 6 to 12 ft
             dispersed farm's grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the farm's own grove on its rolled sides, turned to the wind
             south band kept off the yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: on a sun-keeping map the south band stands `CANOPY_SHADE_FT` plus 1.7 x 1.15 crown radii beyond the yard
@@ -440,6 +441,8 @@ class BundleGeomMixin:
             farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the kinds the household's lot keeps, laid in its own frame
             persimmon may stand in its own grove's bands - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: fruit=bands, the persimmon is not held out of its own farm's grove bands
             persimmon out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: held 50 ft off yards and beds at the seat's own rake, re-checked as drawn (`fit._persimmon_sun_conflict`)
+            a grove farm's way in kept clear - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way-in strip (`way_in_strip`) and the door's room (`door_room`, UNRESEARCHED in size) handed to the fixtures as `keep`
+            the door's room past the yard - UNRESEARCHED: `DOOR_OUT_FT` (8 ft) past the yard's far edge, where the web's door path starts (`ways/serve.front_door`)
         """
         kinds = getattr(self, "_household_fixtures", None) or ()
         if not kinds:

@@ -23142,6 +23142,21 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/serve.py::closes_a_needle#no needle between a door path and its way": {
+  "code": "967fe372a58ae32f",
+  "core": "6c159eedcb410de8",
+  "date": "2026-10-12",
+  "note": "an arriving way meets the other's side as a T, never a sliver beside it",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/serve.py::door_off_fixtures#a stepped door still arrives": {
   "code": "210ecd57fe971682",
   "core": "5203f142faddc057",
@@ -23175,10 +23190,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_path#a worn path takes the shortest way": {
-  "code": "5a22a7f90b994011",
-  "core": "0b8cb0750d8055f3",
-  "date": "2026-10-09",
-  "note": "straight where clear, else routed and pulled taut",
+  "code": "ddb64d60aed72771",
+  "core": "ed37ed7f1d224400",
+  "date": "2026-10-12",
+  "note": "nearest way point first, straight where clear, else routed and pulled taut",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -23186,6 +23201,21 @@
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::door_path#no sliver with the ways it meets": {
+  "code": "1cf7aca6d8bea298",
+  "core": "ed37ed7f1d224400",
+  "date": "2026-10-12",
+  "note": "refusing a door path that closes a needle keeps the meeting a T, as the page says lanes meet",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:42f6597ddcc88d3a"
   ],
   "verdict": "IN-STEP"
  },
@@ -24792,6 +24822,16 @@
   "triaged": "2026-10-07",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/street.py::UNNEEDLE_REACH_FT#an end's reach for a sliver": {
+  "code": "6336354f954e3e35",
+  "core": "444f866ae8da7cd0",
+  "date": "2026-10-12",
+  "note": "a bound on a repair, not a fact a reader reads off the map",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/street.py::UNNEEDLE_TRIES#street end given up for its join": {
   "code": "ed9bc7c74011fdd5",
   "core": "c35ad46f1990d395",
@@ -24843,10 +24883,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::adds_a_needle#street plumbing": {
-  "code": "68e8005205083cbf",
-  "core": "eb4e180cb418027d",
+  "code": "9bb6ce539bf78bbd",
+  "core": "5549fa3fc2af6c4c",
   "date": "2026-10-12",
-  "note": "predicate",
+  "note": "a predicate, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -24934,19 +24974,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::lay_row_streets#further street joins the streets": {
-  "code": "fb8a44d6ad69f43d",
-  "core": "d07df8901c4c3e11",
+  "code": "c27817334709e1e4",
+  "core": "68542047ba9805d3",
   "date": "2026-10-12",
-  "note": "the page is silent on the join",
+  "note": "the page says further streets run parallel but not where they join; the code makes the decision",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::lay_row_streets#one street per planned row": {
-  "code": "6d36dac09674c7a3",
-  "core": "d07df8901c4c3e11",
+  "code": "2656ad84a0e29604",
+  "core": "68542047ba9805d3",
   "date": "2026-10-12",
-  "note": "",
+  "note": "each further street has its own row",
   "pages": {
    "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
   },
@@ -24956,11 +24996,25 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join unhooked": {
-  "code": "859fe1dbe87def37",
-  "core": "d07df8901c4c3e11",
+ "l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join closing no sliver": {
+  "code": "43072411539ce57d",
+  "core": "68542047ba9805d3",
   "date": "2026-10-12",
-  "note": "unhooked_both",
+  "note": "the join is refused on a needle, and its fallback search through door_path refuses one too; the T meeting is attested",
+  "pages": {
+   "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
+  },
+  "research": "f3435a8848f6237e",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join unhooked": {
+  "code": "16e4865b79482054",
+  "core": "68542047ba9805d3",
+  "date": "2026-10-12",
+  "note": "unhooked_both on the join leg",
   "pages": {
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
@@ -24971,10 +25025,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join width": {
-  "code": "a8a4faf4a879b269",
-  "core": "d07df8901c4c3e11",
+  "code": "b85ba4efb5c4a722",
+  "core": "68542047ba9805d3",
   "date": "2026-10-12",
-  "note": "6 ft",
+  "note": "the 6 ft street convention",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -24997,6 +25051,16 @@
   "date": "2026-10-03",
   "note": "matches",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/street.py::new_needles#street plumbing": {
+  "code": "096e90b776a8733b",
+  "core": "e62b3eb482229c4c",
+  "date": "2026-10-12",
+  "note": "matching slivers by their centers, the 1.0 is a tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame where none is recorded": {
@@ -25180,10 +25244,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::unneedled#no needle between a street and its join": {
-  "code": "bd8b68899708adf1",
-  "core": "d0d5408c4abc3e57",
+  "code": "6a887a0a1554f8ae",
+  "core": "12828f97c65d6476",
   "date": "2026-10-12",
-  "note": "one network of single ways",
+  "note": "the lanes form one network joined where their treads meet, with no sliver of parallel ways",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -48802,6 +48866,31 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::DOOR_OUT_FT#the door past the yard": {
+  "code": "8a9944b6a0f316a9",
+  "core": "232d3ac8ac8b4b8c",
+  "date": "2026-10-12",
+  "note": "the way in is on the open front, past the yard",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::DOOR_ROOM_HALF_FT#the door's room": {
+  "code": "55ed83bb38afe4fd",
+  "core": "e558226d98ba699d",
+  "date": "2026-10-12",
+  "note": "no page says how far fixtures stood off a door",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FIXTURE_ORDER#laying order": {
   "code": "79d1e1fca6294a66",
   "core": "87e4c4d5640ca0c0",
@@ -49569,6 +49658,31 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::door_room#the door past the yard": {
+  "code": "c800d8c521e37e58",
+  "core": "8f543749916ec1cc",
+  "date": "2026-10-12",
+  "note": "the room is set straight out from the house through the yard, on the open front where the yard and the way in are",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::door_room#the door's room": {
+  "code": "b47467af362a3124",
+  "core": "8f543749916ec1cc",
+  "date": "2026-10-12",
+  "note": "the page does not give the square's size",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#bath room size": {
   "code": "33624a6f83c81d64",
   "core": "cd594ed9b6fd9540",
@@ -49754,10 +49868,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
-  "code": "ce5f8f870591db6f",
-  "core": "5bc1f2f948352e15",
+  "code": "f8d730de93c97326",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "a room of the main house, never a shed",
+  "note": "FixtureUnlaid is raised rather than standing the bath room apart; it is exempt from `keep` as part of the house",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
@@ -49769,10 +49883,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
-  "code": "0852bcfce55f6a04",
-  "core": "5bc1f2f948352e15",
+  "code": "73195ccfb10c808b",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "beyond the stable, by the main door, or joined to the floored rooms",
+  "note": "bath_wall is rolled per house among the attested walls",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
@@ -49785,20 +49899,47 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
-  "code": "ac3ef56c23eb65f9",
-  "core": "5bc1f2f948352e15",
+  "code": "efab080340d9ea11",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "note": "the questions are silent on both",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
-  "code": "e1cab9d7710a1bf8",
-  "core": "5bc1f2f948352e15",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the door's room": {
+  "code": "1a6c057dd0fca3c6",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "the farm keeps none",
+  "note": "nothing cited gives a clear room about the door",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no fixture on the way in": {
+  "code": "658b2a73a1cbb9fb",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-12",
+  "note": "the way in through the front break must stay passable for a lane; the bath room's exemption follows from it being joined to the house",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
+  "code": "37bf22bfeb347652",
+  "core": "ad39d64e14bca2aa",
+  "date": "2026-10-12",
+  "note": "seat None drops the tree",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -49809,10 +49950,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon front or behind": {
-  "code": "e968ed3a64799660",
-  "core": "5bc1f2f948352e15",
+  "code": "886276ffd574b063",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "side rolled against the per-hamlet front share",
+  "note": "each house rolls against the hamlet's persimmon_front share",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -49824,10 +49965,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in its own grove bands": {
-  "code": "3ca1edc84a665b84",
-  "core": "5bc1f2f948352e15",
+  "code": "ce90771233076567",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "its own grove, no other farm's",
+  "note": "`fruit` is dropped from `taken` for the persimmon alone",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -49838,63 +49979,60 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
-  "code": "d4f83b183df2a3c4",
-  "core": "5bc1f2f948352e15",
+  "code": "5eb4954d33a62a06",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "note": "the questions are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
-  "code": "547d064a8890a54e",
-  "core": "5bc1f2f948352e15",
+  "code": "8e7a2660082076e3",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "note": "the questions are silent on stepping for the general fixture",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the kura's walls too": {
-  "code": "2e9952577c4f86af",
-  "core": "5bc1f2f948352e15",
+  "code": "d08e48c8b1028af7",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "a GUESS no page answers",
+  "note": "the page puts the shed beside or behind the house and is silent on the annex",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the privy's reach": {
-  "code": "cf95e7fdfb025eba",
-  "core": "5bc1f2f948352e15",
+  "code": "2f275d750696236e",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "48 ft",
+  "note": "within_reach_of at 48 ft, refused by name",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
   "research": "410a08bb56c17449",
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2024bed7766a5bb4",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5",
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:e6e0da1eb4a5bbf8"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:bc74b262a32416b5"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
-  "code": "84bb30bd320d1aed",
-  "core": "5bc1f2f948352e15",
+  "code": "3b28aa3b12dab0ff",
+  "core": "ad39d64e14bca2aa",
   "date": "2026-10-12",
-  "note": "behind or beside the house, never the front",
+  "note": "steading_rects uses the house's own walls (plus the kura), behind or beside the house",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
   },
   "research": "862d7c9fcd1644d6",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
   ],
   "verdict": "IN-STEP"
  },
@@ -50010,6 +50148,22 @@
   "date": "2026-10-03",
   "note": "plumbing, nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::way_in_strip#the way in kept open": {
+  "code": "5f2ebc671a00a783",
+  "core": "329ca185af903312",
+  "date": "2026-10-12",
+  "note": "the strip runs from the front wall to the ring's single front break",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:58808907d6573fab",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::weighted#plumbing": {
@@ -57105,10 +57259,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre beside the house": {
-  "code": "00caa06e432648b3",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "the 16 x 11 ft size and the 6 ft gap fit the page, but no page puts the byre \"on the flank away from the garden\"; mark the flank UNRESEARCHED",
+  "code": "8e7dc469b9c1aa04",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the inner stable is drawn against the house and the outer stable stands 6 ft off it, inside the attested 6 to 12 ft",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
   },
@@ -57117,15 +57271,16 @@
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:36ac5a4365c0569f",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:4890be592fed3ca4",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:5d684f32a43c296a",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:e395cc0b80a84dbd"
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:e395cc0b80a84dbd",
+   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:ff4677154cd20e9f"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre footprint": {
-  "code": "629064ed2c93b182",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "16.12 x 10.92 ft, about the page's 16 by 11",
+  "code": "25a702bddc7659fc",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "about 16 by 11 ft",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
   },
@@ -57137,68 +57292,71 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre off the house": {
-  "code": "a012c052024137e9",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "6 ft, inside the guessed 6-12 ft band for the outer stable",
+  "code": "df62834af3d9743f",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "6 ft, within the guessed 6 to 12 ft",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
   },
   "research": "a75e3ada6edbbc9b",
   "rests": [
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:36ac5a4365c0569f",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:4890be592fed3ca4"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre's flank": {
+  "code": "8f2bda02d84a0f98",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the page attests the stall's form and distance, not which side of the house it stands on",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed farm's grove": {
-  "code": "e252142bfd9a4025",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "sides rolled, turned to the wind, 17 ft thin band, 36 ft way in, 32 ft between groves, 24 ft service strip",
+  "code": "9f5d2ea8318efb6a",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the sides are rolled per settlement and turned to the wind",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:072f98d7b458fdcb",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:a2869616958ab3d2",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ab7093914db746be",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:effd653c04180008"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket": {
-  "code": "6e5b56e7beb29db3",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "no cited page answers it",
+  "code": "b5661f7617a3a5a2",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the questions are silent on the margin",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#forecourt kept on a no-rice farm": {
-  "code": "8d0b29ab0c9ecf57",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "no cited page answers it",
+  "code": "246527668e9231fe",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the questions are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#frame padded for a lane": {
-  "code": "596066ff37cc3cc8",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-11",
-  "note": "pad = px(LANE_ROOM_FT)/2, so groves stand 32 ft apart; the drawing page records the 32 ft as a GUESS",
+  "code": "314d2ec2ab6925f9",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "32 ft between groves, recorded as a guess",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -57209,10 +57367,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden morning-sun reach": {
-  "code": "4b2add0501e1d98f",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "no band within 50 ft east of a bed",
+  "code": "a36b937e242bdc1a",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "50 ft east of the bed",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -57224,10 +57382,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden side": {
-  "code": "e9df66bcf566ca77",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "southeast, southwest, east or west of the house",
+  "code": "cf8cca33e1d13ca9",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "SE, SW, E or W",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -57238,26 +57396,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size": {
-  "code": "bcce42305030d3f3",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "the 44 x 34 ft cap (1,496 sq ft) is inside 108-1,507 sq ft",
+  "code": "ac3f2a2f4fa0e837",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the caps (44 x 34 = 1,496, 42 x 30 = 1,260 sq ft) stay under 1,507 sq ft",
   "pages": {
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html": "bef5d458385c0006"
   },
   "research": "e87baa30359ac98b",
   "rests": [
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html:2fa6d1d6dbaf02c6",
-   "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html:8163e7cda100908a",
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html:b3c440bb2468c83f"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#headman keeps an ordinary yard and garden": {
-  "code": "2975792fbbe25496",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "the caps hold the headman to an ordinary farm's sizes",
+  "code": "ba2e10910dcb681b",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the dispersed caps and the nucleated caps",
   "pages": {
    "0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html": "e6399a21c1165051"
   },
@@ -57268,20 +57425,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#house-to-part gap": {
-  "code": "944a143c8401c911",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "no cited page answers it",
+  "code": "4cae4c4875a3b7e8",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the questions are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#no grove of its own in a cluster": {
-  "code": "77008872da1d920e",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-08",
-  "note": "nucleated bundles carry no grove; one village belt",
+  "code": "7e5d157eb6de7269",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "no grove in the nucleated branch",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
@@ -57289,16 +57446,15 @@
   "research": "35c66821e35fb10f",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#outer stable off the wall": {
-  "code": "d6f3ad60aeb66347",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-09",
-  "note": "`byre_part(..., self.px(YARD_SHED_GAP_FT[0]))` gives 6 ft, the near end of the page's 6 to 12 ft, which the page records as a GUESS; a fixed point on that range is allowed",
+  "code": "e04f621a31bf2930",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "6 ft, the near end of the guess",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
   },
@@ -57309,10 +57465,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip": {
-  "code": "5bc6392c5b540874",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "24 ft off the back and windward walls, as the page guesses",
+  "code": "92220b8e91dab33d",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "24 ft, recorded as a guess",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -57320,42 +57476,36 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band kept off the yard's sun": {
-  "code": "cbca17a5b06e7e56",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "50 ft plus a crown margin, beyond the yard",
+  "code": "114aa07c64c7c8ad",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "CANOPY_SHADE_FT plus the crown margin beyond the yard",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:d3a563a684496e84"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard": {
-  "code": "14910d158837a103",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "0038 does answer this: no canopy tree within 50 ft south of a yard, and the rule binds every generated map (only hand-drawn maps are exempt). The unscaled 22 is a departure, so the claim should be a DEVIATION that the 0038 drawing page records, not UNRESEARCHED",
+  "code": "aa524275ac75ffcf",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "0038 answers it: no canopy tree within 50 ft south of any yard on a generated map, with only hand-drawn maps exempt; `YARD_SUN_STRIP` (22, unscaled) should either follow the 50 ft or be a DEVIATION the page records",
   "pages": {},
   "research": "",
-  "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:c3578d51ce1e884d"
-  ],
   "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall": {
-  "code": "794efd148d98d04f",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-10",
-  "note": "the page records the north-wall annex in a clustered village as a convention the record contradicts",
+  "code": "d9c05ac85c6092e5",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the deviation is recorded",
   "pages": {
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
@@ -57366,22 +57516,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse seam": {
-  "code": "851c70205e0ad0ed",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-09",
-  "note": "`kura_rect(hw, hh, \"N\", self.px(1.0))` keeps a 1 ft seam on the nucleated farm's north wall; the page calls the annex against the wall a drawing convention, and puts it on the north wall in a clustered village",
+  "code": "8b28f56f23d7b102",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "a drawing convention",
   "pages": {},
   "research": "",
-  "rests": [
-   "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#thin band": {
-  "code": "a70a401f3931dca2",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "17 ft, one tree deep, a guess the page records",
+  "code": "f912a29d4c12821a",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "17 ft, recorded as a guess",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -57390,14 +57537,13 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#way in through a ring": {
-  "code": "b2c8546c5685f6b9",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-11",
-  "note": "passes way_in=px(WAY_IN_FT), 36 ft; the page records its width and place as a GUESS",
+  "code": "f901b94d2fe24c81",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "36 ft at the front's middle, recorded as a guess",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -57408,10 +57554,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#yard before the south wall": {
-  "code": "721e5963c738b4cd",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "the yard is centered on the south front",
+  "code": "10c618ce72381a42",
+  "core": "0015c0f78a3b2993",
+  "date": "2026-10-12",
+  "note": "the rolled yard, centered before the front wall",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
@@ -57419,10 +57565,9 @@
   "research": "f7766e25e198d64d",
   "rests": [
    "0029-farmhouses-minka.drawing.html:a708d49b4d686be7",
-   "0029-farmhouses-minka.drawing.html:b92993f15df1f795",
-   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3c55d641a6c97fcc",
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:9084510422afaec6"
   ],
-  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_template#box and template plumbing": {
@@ -57480,23 +57625,41 @@
   "research": "e87baa30359ac98b",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#a grove farm's way in kept clear": {
+  "code": "0b76b868aa2f97af",
+  "core": "d3fa238f72dbdca3",
+  "date": "2026-10-12",
+  "note": "the way-in strip and the door's room are handed over as `keep`, on the open front",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
+  },
+  "research": "45be621f47448e34",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:d3185465122e9d29"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#farmstead fixtures": {
-  "code": "6cee004840ec92ff",
-  "core": "4eafcc1f7f1be62c",
-  "date": "2026-10-03",
-  "note": "the household's rolled kinds laid in its frame (0028)",
+  "code": "67642ac8f4ddb774",
+  "core": "d3fa238f72dbdca3",
+  "date": "2026-10-12",
+  "note": "the household's rolled kinds, laid in its own frame",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
   },
   "research": "b1abc6e90397da2b",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:ebc4e65aad857f7b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon may stand in its own grove's bands": {
-  "code": "fada34fc2788c1b2",
-  "core": "4eafcc1f7f1be62c",
-  "date": "2026-10-07",
-  "note": "fruit=bands is excluded from the persimmon's taken ground for its own farm only",
+  "code": "8b4145501f63acd6",
+  "core": "d3fa238f72dbdca3",
+  "date": "2026-10-12",
+  "note": "fruit=bands",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -57507,17 +57670,27 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon out of the plots' sun": {
-  "code": "96b5b11f7c3ef25b",
-  "core": "4eafcc1f7f1be62c",
-  "date": "2026-10-07",
-  "note": "CANOPY_SHADE_FT 50 ft off its own yard and beds, at the seat's own rake, on maps that keep the sun corridor",
+  "code": "49640826e03708f3",
+  "core": "d3fa238f72dbdca3",
+  "date": "2026-10-12",
+  "note": "`shade = self.px(CANOPY_SHADE_FT) if getattr(self, \"_sun_corridor_ft\", 0.0) else 0.0` holds the persimmon 0 ft off yards and beds on a map without the sun corridor, where the pages say \"never within 50 ft east, west or south of a yard or bed\" with no exemption for such maps; either hold it on every generated map or have the page record the opt-in",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:c3578d51ce1e884d"
   ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#the door's room past the yard": {
+  "code": "748ee5e4f874a34e",
+  "core": "d3fa238f72dbdca3",
+  "date": "2026-10-12",
+  "note": "DOOR_OUT_FT (8 ft) is a physical figure, and none of the cited pages give how far past the yard the door's room runs, so UNRESEARCHED is the right label",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_well_pocket#household well where none is near": {
