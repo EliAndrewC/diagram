@@ -8,8 +8,8 @@ rooms ran from the reception at the front, through the master's own rooms, to th
 set its formal room deepest in.
 
 A veranda 3 to 6 ft wide ran along the rooms, closed at night and in bad weather by sliding board storm shutters. What the
-house's walls and roof were made of is not recorded. The formal garden lay south of the formal rooms, and a guest of rank
-crossed open ground inside the gate to the genkan, the formal entrance.
+house's walls and roof were made of is not recorded; nearly every room was matted, but the kitchen was board-floored, its earth-floored doma small. The formal garden lay south of the formal rooms, and a guest of rank
+crossed open ground inside the gate to the genkan, the formal entrance, though a middle-rank house could do without one and bring its guest in along a walled garden path instead.
 
 A 150-koku district magistrate's house at Matsushiro had about 1,740 sq ft on grounds of about 0.8 acre; a
 thousand-koku samurai's house at Hagi ran somewhere between about 1,470 and 2,630 sq ft. Takayama's restored
@@ -24,6 +24,6 @@ inner rooms - stands for a suite of several rooms. The pale strip along the gard
 
 Name: residence
 Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
-Sources: boso-no-mura-takei, yamen-enwiki, machi-bugyo-jawiki, neixiang-yamen-zhwiki, takayama-jinya-city, irikawa-kotobank, katsura-rikyu-jawiki, edojo-kotobank, shirobito-612-omote-oku, touken-world-buke-madori, shoinzukuri-jawiki, kojodan-higuchi, kominkai-genkan, fuchu-joge-pamphlet, matsushiro-bukeyashiki, bunka-kuchiba, yamaguchi-kuchiba, takayama-jinya-gifu, engawa-kotobank, amado-kotobank, buke-hokonin-wiki
-Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html
+Sources: boso-no-mura-takei, yamen-enwiki, machi-bugyo-jawiki, neixiang-yamen-zhwiki, takayama-jinya-city, irikawa-kotobank, katsura-rikyu-jawiki, edojo-kotobank, shirobito-612-omote-oku, touken-world-buke-madori, shoinzukuri-jawiki, kojodan-higuchi, kominkai-genkan, fuchu-joge-pamphlet, matsushiro-bukeyashiki, bunka-kuchiba, yamaguchi-kuchiba, takayama-jinya-gifu, engawa-kotobank, amado-kotobank, buke-hokonin-wiki, liq-takayasu-daidokoro
+Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0107-kitchens-daidokoro.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html
