@@ -628,8 +628,11 @@ a fixture of records from three changes names the failures, their seeds, the spa
 feature and no mapping is counted as unattributed, by its commit.
 
 **D52 - Measured, raised and closed (T55).** SC-028 and SC-029 as D48 and D49 say; SC-030 the table's key; SC-031 the command's
-output over today's records. The GM ruled on both before landing (2026-10-12): FR-036's cache confirmed, ten seeds chosen -
-so no `make accept` row is owed; FR-037's table goes in the landing message, as he asked. Tests, `make hooks-test`, the gate, the report.
+output over today's records. The GM ruled on both before landing (2026-10-12): FR-036's cache confirmed, ten seeds chosen.
+Measured after, the cache saved about 1 s of a bundle, not the 3.7 s he was told (SC-029, restated as measured), so one
+`make accept F=375` row is owed at landing - FINDING the measured saving, REASON his confirmation and the ranking it still
+holds (about 1 s against the helpers' 0.2) - for `make gm-review` to carry; FR-037's table goes in the landing message, as he
+asked. Tests, `make hooks-test`, the gate, the report.
 
 ## Batches
 
