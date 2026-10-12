@@ -190,3 +190,16 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. DONE. tests/tooling 1677, tests/tools 616, tests/pipeline 106 passed; hooks-test green inside make done; make done green (335 s; its own record committed by FR-033); report written; landed by the push carrying this tick
 
+## Amendment 8 (the GM 2026-10-12: "yes please" - claims per module, check-bundle's record work, the review yield and the cohort seeds to the GM)
+
+- [ ] T51 The claims cached per module (D48); tests red on today's code; SC-028 measured
+      research: rendering
+- [ ] T52 The word frequencies and the translation pairs kept (D49); tests red on today's code; SC-029 measured
+      research: rendering
+- [ ] T53 `make review-yield` (D50); its table recorded (SC-030)
+      research: rendering
+- [ ] T54 `make cohort-seeds` and the records' feature field (D51); today's output (SC-031)
+      research: rendering
+- [ ] T55 375 closes again: the two gm-review rows, tests, `make hooks-test`, the gate, the report, landed (D52)
+      research: rendering
+
