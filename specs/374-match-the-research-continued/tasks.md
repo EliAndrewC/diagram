@@ -207,8 +207,9 @@ in 328's ranking and this spec.
 
 ## Batch 10 - a grove farm's way in kept open
 
-- [ ] T38 wave 146: a grove farm's way in kept clear of its own fixtures; door paths and street joins close no sliver (0036) (FR-001)
+- [x] T38 wave 146: a grove farm's way in kept clear of its own fixtures; door paths and street joins close no sliver (0036) (FR-001)
       research: rendering
+      verify: DONE. grove farms' fixtures keep off the way in and the door's room; door paths and street joins close no sliver; seed-pinned soak tests red at HEAD (2 failed), green now (polder 12, dike-pond 4); polder 4 waived by the arbiter and pinned; cohort 16/16, valley 20/20, dike-pond 12/12 (m:w146-rolls); 60 claims IN-STEP; gate green
 
 ## Standing - the ranking's remaining rows
 
