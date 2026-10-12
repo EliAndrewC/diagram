@@ -9,6 +9,8 @@ import heapq
 import math
 from collections.abc import Callable, Sequence
 
+from l7r.diagram.settlement import segments_cross
+
 from ..clearance import fabric_index
 from ..consts import (
     WEB_FABRIC_GAP,
@@ -181,8 +183,10 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
         a worn path takes the shortest way - research/questions/0081-village-lanes.drawing.html: least cost through the
             steadings, then pulled taut like a string
         clear of the fabric - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line 7 ft off by default, a tread's edge 5.5 ft
-        clear of the crop - research/questions/0081-village-lanes.drawing.html: a half-tread off the crop (`WEB_CROP_GAP`, carried by the crop polygons), 8 ft off the toe and marsh
-        lattice off the water - UNRESEARCHED: 14 ft off the water lines"""
+        clear of the crop - research/questions/0081-village-lanes.drawing.html: half the widest tread off the crop (`WEB_CROP_GAP`, carried by the crop polygons) at each cell's center, unpadded so a way can come up to the bund (padded half a cell as the walls are, cohort Audit-10's field way could not); every link the pull takes is tested at that gap, and a lattice step it keeps as it is is asked of the crop's outline (`crosses_the_crop`) - a route that would cut a crop corner is no route
+        clear of the toe and marsh - UNRESEARCHED: 8 ft (`WEB_HARD_GAP`)
+        lattice off the water - UNRESEARCHED: 14 ft off the water lines
+        a brook crossing tolled - UNRESEARCHED: the search charges a crossing (`_CROSSING["cost"]`) and the pull refuses a shortcut that adds one (`_new_crossing`)"""
     cell = ROUTE_CELL if cell is None else cell  # the standard lattice unless a caller asks a finer one
     span = math.dist(start, goal)
     if span < 1.0:
@@ -273,9 +277,22 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
         # clipped the corners the cell centers had cleared. One number, used by both.
         while j > i + 1 and (not _clear_link(path[i], path[j], hard, walls, water, gap=gap, index=_links) or (_toll and _new_crossing(path, i, j))):
             j -= 1
+        # ...AND A LATTICE STEP KEPT AS IT IS IS ASKED OF THE CROP TOO (feature 374 wave 143, impl-drift): the lattice judges each
+        # cell's CENTER at the crop's own gap (`WEB_CROP_GAP`, unpadded so a way can come up to the bund), so a diagonal step
+        # between two clear centers can still cut a crop corner - a route that would is no route
+        if j == i + 1 and crosses_the_crop(path[i], path[j], hard):
+            return []
         out.append(path[j])
         i = j
     return _unjog(out, hard, walls, water)
+
+
+def crosses_the_crop(a: Pt, b: Pt, hard: Sequence[Poly]) -> bool:
+    """Does the step a-b cross the outline of a crop polygon (one carrying its own gap, `clearance.Gapped`) - a tread laid on
+    the crop?
+
+    Research: no lane across the crop - research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops"""
+    return any(segments_cross(a, b, p[k], p[(k + 1) % len(p)]) for p in hard if hasattr(p, "gap") and len(p) >= 3 for k in range(len(p)))
 
 
 def _unjog(path: Poly, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float | None = None) -> Poly:

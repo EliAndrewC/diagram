@@ -581,7 +581,11 @@ def split_at_crossings(s: Settlement) -> int:
     FOUND AT THE 269 LANDING (Inashiro, the house bearings re-laid): a skeleton arm crossed a web lane 5 ft past its own
     bend, and the only record of the junction was a 2.4 ft "touch" nub - shorter than the gap every end test allows, so the
     tidy pass dropped it as serving nothing and the map shipped as two networks (`lanes_form_one_network`), while kept it
-    failed `test_no_lane_end_is_served_only_by_the_way_it_left`. A crossing is a junction; now it is recorded as one."""
+    failed `test_no_lane_end_is_served_only_by_the_way_it_left`. A crossing is a junction; now it is recorded as one.
+
+    Research:
+        a cut tail's room - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE`, the 18 ft lane room (9 ft each side of its middle), whatever its source kept
+        a cut tail's width - research/questions/0081-village-lanes.drawing.html: a tail with no width drawn 3 ft, the footpath's tread"""
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     cuts = 0
     i = 0

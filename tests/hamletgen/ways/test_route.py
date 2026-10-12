@@ -248,3 +248,18 @@ def test_the_lattice_search_reads_the_verdicts_already_asked_and_finds_the_same_
     assert lattice_search((0, 0), (9, 0), 10, 12, is_free, banded, 25.0, 10.0, free, band) == plain and not asked
     untolled = lattice_search((0, 0), (9, 0), 10, 12, is_free, banded, 0.0, 10.0)
     assert round(plain[0][(9, 0)] - untolled[0][(9, 0)], 6) == 25.0, "the way round enters the band once and pays its toll"
+
+
+def test_a_route_whose_kept_lattice_step_crosses_the_crop_is_no_route(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 374 wave 143 (impl-drift): the lattice judges cell centers at the crop's own gap, unpadded, so a step the pull
+    keeps as it is is asked of the crop's outline (`crosses_the_crop`); a route that would cut a crop corner is none."""
+    from l7r.diagram.hamletgen.clearance import Gapped
+    from l7r.diagram.hamletgen.ways import route
+
+    crop = Gapped([(10.0, 10.0), (20.0, 10.0), (20.0, 20.0), (10.0, 20.0)], 3.0)
+    assert route.crosses_the_crop((0.0, 15.0), (30.0, 15.0), [crop]), "across the plot"
+    assert not route.crosses_the_crop((0.0, 0.0), (30.0, 0.0), [crop]), "below it"
+    assert not route.crosses_the_crop((0.0, 15.0), (30.0, 15.0), [list(crop)]), "an ungapped polygon is not the crop"
+    assert route._route((0.0, 0.0), (100.0, 0.0), [], [], [], cell=10.0), "an open field routes"
+    monkeypatch.setattr(route, "crosses_the_crop", lambda a, b, hard: True)
+    assert route._route((0.0, 0.0), (10.0, 0.0), [], [], [], cell=10.0) == [], "a kept step over the crop: no route"

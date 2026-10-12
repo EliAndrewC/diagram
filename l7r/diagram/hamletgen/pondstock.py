@@ -114,7 +114,10 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
     Research:
         no seat in reach, no sty - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a household with no pond within that reach keeps none
         nearest pond first - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: grow-out ponds walked nearest the seat
-        seat reserved before the houses - NONE: placement order, the sty's rules unchanged"""
+        seat reserved before the houses - NONE: placement order, the sty's rules unchanged
+        the reserved seat on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: on the half of its pond's bank facing the seat (`sty_on_near_half`)
+        the reserved seat clear of the sluices - GUESS research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: `pond_fixture_fits` keeps the sty off a drawn sluice only; the record is silent on a sluice beside a sty
+        the reserved seat's disc - GUESS: no homestead within the sty's half-diagonal, 2 ft and `STY_RESERVE_REACH_FT` (24 ft) of it"""
     ponds = s.M.get("dikeponds") or []
     if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not plan.seat:
         return None
@@ -168,7 +171,7 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.pig_sty
 
     Research:
-        sties at the dike-pond only - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the pig as the dike-pond district's animal; no sty on a plain paddy hamlet
+        sties at the dike-pond only - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the pig as the dike-pond district's animal; a sty AT A POND only on a dike-pond hamlet (a paddy hamlet's sties are its farmsteads', not the ponds')
         privy over the sty - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the sty drawn alone, never
             with a privy built over it
         no duck pen - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: ducks herded in the rice, the pen modern

@@ -488,7 +488,9 @@ class UnreachableGround:
 def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
     """The ground `stage_web` hands its router as hard (`ways/web.py`), as far as it is drawn at seating: the field
     envelope, the crops, the toe band (asked before it is drawn), the wet ground. A marsh drawn later is simply absent,
-    which only refuses less."""
+    which only refuses less.
+
+    Research: the web's hard ground at seating - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the field and the crops at half the widest tread (`WEB_CROP_GAP`), the toe band and the wet ground, as `stage_web` hands its router"""
     toe = [(float(a), float(b)) for a, b in (s.toe_band() or [])]
     wet = marsh_ground(s.M, but=("defense",))
     env = list(getattr(plan, "envelope", None) or [])  # a plan with no field envelope contributes none

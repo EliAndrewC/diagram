@@ -119,7 +119,13 @@ def _key(obstacles: Sequence[Sequence[Pt]], margin: float, tight: Sequence[Seque
 
 
 def fabric_index(
-    obstacles: Sequence[Sequence[Pt]], margin: float, tight: Sequence[Sequence[Pt]] = (), tight_margin: float = 0.0, lines: Sequence[Line] = (), line_margin: float = 0.0, cell: float | None = None
+    obstacles: Sequence[Sequence[Pt]],
+    margin: float,
+    tight: Sequence[Sequence[Pt]] = (),
+    tight_margin: float = 0.0,
+    lines: Sequence[Line] = (),
+    line_margin: float = 0.0,
+    cell: float | None = None,
 ) -> FabricIndex:
     """`FabricIndex(...)`, memoized on the inputs' identity (see `_MEMO`)."""
     k = _key(obstacles, margin, tight, tight_margin, lines, line_margin, cell)

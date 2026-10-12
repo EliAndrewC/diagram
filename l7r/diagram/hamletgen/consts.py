@@ -232,12 +232,13 @@ FOOTPATH_FABRIC_GAP = 4.0
 # track runs on the baulk between plots, not twenty feet clear of the rice.
 #
 # ...AND SINCE FEATURE 374 WAVE 143 IT HOLDS OFF THE TOE AND THE MARSH ONLY: against the crop a web lane runs on the bund, its edge
-# on the plot's boundary (`WEB_CROP_GAP`), as 0081's drawing page lets it; the crop polygons carry that gap themselves
+# at most on the plot's boundary (`WEB_CROP_GAP`, half the widest tread laid on this ground - at a 3 ft lane's half-tread the
+# 6 ft streets and joins routed on the same ground stood 1.5 ft on the crop, impl-drift), as 0081's drawing page lets it; the crop polygons carry that gap themselves
 # (`clearance.Gapped`), so every reader handed the hard ground keeps each part at its own.
 WEB_HARD_GAP = 8.0
 """Research: web lane off the toe and marsh - UNRESEARCHED: 8 ft; the record says only that a lane keeps off wet ground"""
-WEB_CROP_GAP = 1.5
-"""Research: web lane against the crop - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary - its middle a half-tread (a 3 ft web lane's) off the field and the dry plots"""
+WEB_CROP_GAP = 3.0
+"""Research: web lane against the crop - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary - its middle half the widest tread laid on this ground (a row street's or a join's 6 ft) off the field and the dry plots, so no tread's edge passes the boundary"""
 
 # HOW CLOSE TWO WAYS MAY RUN BEFORE A READER SEES ONE WAY DRAWN TWICE, in feet.
 #
