@@ -48,9 +48,10 @@ def test_the_covers_are_tiles_at_the_bottom_and_leave_the_clearings_bare(gen: st
     covers = [i for i, ln in enumerate(lines) if re.search(r'fill="url\(#cover-(grass|reed)', ln)]
     assert covers or not (M.get("commons") or M.get("marshes")), "non-vacuity: a map with scrub or marsh draws its tile"
     land = next(i for i, ln in enumerate(lines) if ln.startswith("<rect width=") and "fill=" in ln)
-    # the cover slots right after the land: the tiles' <defs>, then seven covers (`Settlement._header`: the scrub and a pasture's
-    # grass, the grass-only band and its thinned edge under a wood in either class - feature 328 wave 57 - and the marsh)
-    assert all(land < i <= land + 8 for i in covers), f"a scrub or marsh tile above the land's eight cover slots: lines {covers}, land {land}"
+    # the cover slots right after the land: the tiles' <defs>, then ten covers (`Settlement._header`: the scrub's, the floodplain
+    # meadow's and the paddy's grass hill's grass, the grass-only band and its thinned edge under a wood in each of the three classes -
+    # feature 328 wave 57, feature 374 waves 147-148 - and the marsh)
+    assert all(land < i <= land + 11 for i in covers), f"a scrub or marsh tile above the land's eleven cover slots: lines {covers}, land {land}"
     # ...and no scrub tile on a swept clearing
     clearings = [Polygon(c["poly"]).buffer(0) for c in M.get("clearings") or [] if len(c.get("poly") or []) >= 3]
     for rec in M.get("commons") or []:

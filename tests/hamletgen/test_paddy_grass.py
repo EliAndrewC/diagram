@@ -62,7 +62,7 @@ def test_the_grass_hill_keeps_its_gap_off_the_plot_on_a_turned_fall(monkeypatch)
     s = Settlement(W=600, H=600, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
     s.M["fields"] = [{"plot_rings": [_shifted(280, 300)]}]
-    k = 2 ** -0.5
+    k = 2**-0.5
     plan = types.SimpleNamespace(flood_ground=False, spec=types.SimpleNamespace(seed=1), fall=(k, k))
     square = pg.seat_paddy_grass(s, plan)
     assert square is not None and pg.clear_of_plot(square, _shifted(280, 300), pg.GRASS_GAP_FT)
