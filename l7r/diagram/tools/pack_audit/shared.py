@@ -411,6 +411,37 @@ def one_compound_shrine(text: str) -> list[str]:
     )
 
 
+STALL_FT: tuple[float, float] = (4.5, 7.5)  # one ken (~6 ft) a stall, with a drawing's play either side
+
+
+def stall_width(text: str) -> list[str]:
+    """A warrior's stall was one bay wide - our maps take a bay as one ken, ~6 ft (0108's drawing page:
+    research/questions/0108-stables-umaya.drawing.html; feature 374 wave 126: the sheets drew three stalls 9.3-9.7 ft wide).
+    In each stable, the partitions drawn across its long axis part its length into spans; at least two must be a stall's
+    width. A stable with no partition draws no stalls at all."""
+    found = marks(text)
+    out = []
+    # the stable's body is its outlined rect; a floor drawn inside it (the passage's earth) carries no stroke
+    for body in (m for m in found if m.tag == "rect" and m.kind == "stables" and m.lineage[-1:] == ("stables",) and m.paint.get("stroke", "none") != "none"):
+        along_x = body.w >= body.h
+        lo, hi = (body.x, body.x2) if along_x else (body.y, body.y2)
+        cuts = sorted(
+            (m.x if along_x else m.y)
+            for m in found
+            if m.tag == "line"
+            and m.kind == "stables"
+            and (m.w < 1 if along_x else m.h < 1)
+            and lo < (m.x if along_x else m.y) < hi
+            and (body.y <= m.y and m.y2 <= body.y2 if along_x else body.x <= m.x and m.x2 <= body.x2)
+        )
+        spans = [b - a for a, b in zip([lo, *cuts], [*cuts, hi], strict=True)]
+        stalls = [w for w in spans if STALL_FT[0] * FTPX <= w <= STALL_FT[1] * FTPX]
+        if len(stalls) < 2:
+            widths = ", ".join(f"{w / FTPX:.1f}" for w in spans)
+            out.append(f"the stable at svg({body.x:.0f},{body.y:.0f}) parts its length into {widths} ft - draw its stalls one ken (~6 ft) wide")
+    return out
+
+
 HALL_MIN_SPAN_FT: float = 6.0  # an open stretch of the building shorter than this is a partition's gap, not the hall
 
 

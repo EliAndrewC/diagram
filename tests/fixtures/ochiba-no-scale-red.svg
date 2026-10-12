@@ -298,7 +298,7 @@
        under the granary with a real ~16 ft loading apron (not a 24 ft void) below the storehouse (packing
        consolidation, feature 007; the cell re-abutted in feature 267 pass 2) -->
   <g data-kind="barracks">
-    <rect x="874" y="616" width="92" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
+    <rect x="894" y="616" width="72" height="100" fill="#C9A57A" stroke="#6B4F2A" stroke-width="1.5"/>
     <line x1="920" y1="616" x2="920" y2="716" stroke="#6B4F2A" stroke-width="1"/>
     <!-- apron-facing door (informal) -->
     <rect x="908" y="616" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>

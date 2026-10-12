@@ -451,3 +451,19 @@ def test_a_compound_draws_one_shrine() -> None:
     assert rolled != red and s.one_compound_shrine(rolled) == [], "a second kami's own shrine, where its roll says so, is declared and passes"
     with open(os.path.join(os.path.dirname(_FIX), "..", "pool", "magistracies", "hayakawa-magistracy", "hayakawa-magistracy.svg"), encoding="utf-8") as fh:
         assert s.one_compound_shrine(fh.read()) == [], "its arch, tagged a part of the shrine, is not a second shrine"
+
+
+def test_a_stable_parts_its_length_into_one_ken_stalls() -> None:
+    """0108's drawing page: a warrior's stall one bay, one ken (~6 ft) wide (feature 374 wave 126)."""
+
+    def stable(lines: str, w: float = 84, h: float = 48) -> str:
+        return _svg(f'<g data-kind="stables"><rect x="0" y="0" width="{w}" height="{h}" fill="#C9A57A" stroke="#6B4F2A"/>{lines}</g>')
+
+    def cut(at: float, vertical: bool = True) -> str:
+        return f'<line x1="{at}" y1="0" x2="{at}" y2="30"/>' if vertical else f'<line x1="0" y1="{at}" x2="30" y2="{at}"/>'
+
+    assert s.stall_width(stable(cut(30) + cut(48) + cut(66))) == [], "a grooms' room and three 6 ft stalls"
+    assert "9.3, 9.3, 9.3 ft" in s.stall_width(stable(cut(28) + cut(56)))[0], "three ~9.3 ft stalls: the old sheets'"
+    assert "28.0 ft" in s.stall_width(stable(""))[0], "no partition: no stalls"
+    tall = _svg('<g data-kind="stables"><rect x="0" y="0" width="48" height="84" fill="#C9A57A" stroke="#6B4F2A"/>' + cut(30, False) + cut(48, False) + cut(66, False) + "</g>")
+    assert s.stall_width(tall) == [], "a stable drawn north-south reads the same"

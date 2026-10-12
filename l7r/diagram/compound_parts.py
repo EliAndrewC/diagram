@@ -146,6 +146,35 @@ def _lattice(p: Placed) -> list[Box]:
     return out
 
 
+STALL_FT: float = 6.0  # one ken, a warrior's stall one bay wide (0108's drawing page)
+STALLS: int = 3  # three bays, 0108's small warrior stable
+PASSAGE_FT: float = 6.0  # the earth-floored passage (kusa-no-ma) before the stalls; its depth a GUESS
+
+
+def _stable_parts(p: Placed) -> tuple[Box, list[tuple[float, float, float, float, bool]]]:
+    """A stable's inner form, the one every sheet draws (feature 374 wave 126; research/questions/0108-stables-umaya.drawing.html):
+    the earth passage along its court face before the stalls, the grooms' room taking the rest of its length at the start
+    end, three stalls one ken wide. Returns the passage's box and the partitions as (x1, y1, x2, y2, dashed) - the grooms'
+    room's wall full depth, the stalls' walls from the passage to the back, the passage's edge before the stalls dashed."""
+    nx, ny, fx, fy, length = _face(p, _court_side(p))
+    groom = length - STALLS * STALL_FT
+    if ny:
+        back = p.y2 if ny < 0 else p.y_ft
+        edge = fy - ny * PASSAGE_FT
+        lines = [(fx + groom, p.y_ft, fx + groom, p.y2, False)]
+        lines += [(fx + groom + k * STALL_FT, edge, fx + groom + k * STALL_FT, back, False) for k in (1, 2)]
+        lines.append((fx + groom, edge, fx + length, edge, True))
+        passage = (fx + groom, min(fy, edge), fx + length, max(fy, edge))
+    else:
+        back = p.x2 if nx < 0 else p.x_ft
+        edge = fx - nx * PASSAGE_FT
+        lines = [(p.x_ft, fy + groom, p.x2, fy + groom, False)]
+        lines += [(edge, fy + groom + k * STALL_FT, back, fy + groom + k * STALL_FT, False) for k in (1, 2)]
+        lines.append((edge, fy + groom, edge, fy + length, True))
+        passage = (min(fx, edge), fy + groom, max(fx, edge), fy + length)
+    return passage, lines
+
+
 def _rear_band(p: Placed) -> tuple[float, float, float, float]:
     """The strip (x, y, w, h) between a building and the wall it stands `inset_ft` off - its rear alley."""
     d = p.spec.inset_ft

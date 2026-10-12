@@ -157,7 +157,9 @@ def county_magistracy_program() -> CompoundProgram:
         b("shrine", "shrine", 18.0, 14.0, "inner", "E", order=4, feature="compound shrine"),
         # A detached guest house is a GUESS (R10, research 0091: guests were received in the main house, and a
         # guest house apart at a samurai house was not found); kept as the example's draft of the item.
-        b("guest house", "lord", 33.0, 32.0, "inner", "E", order=3, feature="guest quarters"),  # 33 x 32 (was 33 x 30; pass 6, the house's mass returned)
+        b(
+            "guest house", "lord", 36.0, 36.0, "inner", "E", order=3, feature="guest quarters"
+        ),  # 36 x 36 (33 x 32 until feature 374 wave 126, which returned the mass the stable gave up, holding the jin'ya band; 33 x 30 before pass 6)
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
         # The clerks' room is a ROOM of the office hall, at its west end on the rear (divider) side, 30 x 20 ft - the
         # footprint the freestanding clerks' building had (feature 267 R20, research buildings "The office hall and its
@@ -235,16 +237,18 @@ def county_magistracy_program() -> CompoundProgram:
         # south wall - the draft's own row (`docs/building-programs.md` walled enclosure).
         # Its door opens on the gate passage (east), where the gatekeepers watch - not on the court.
         b("gatehouse", "dark", 18.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True, door_face="E"),
-        # 42 x 24 ft (it was 33 x 23; passes 5 and 6, the same return of mass), still under the barracks as docs/buildings.md
-        # asks. Its grooms' privy is the grooms' row's, on the west wall.
-        b("stables", "service", 42.0, 24.0, "outer", "S", order=5, feature="stables"),
+        # Feature 374 wave 126: 32 x 22 ft (it was 42 x 24), the top of 0108's few-horse stable (~28-32 x 16-22 ft), drawn as
+        # 0108's drawing page draws a warrior's stable - three one-ken stalls, the earth passage before them, the grooms' room
+        # at the end (`compound_parts._stable_parts`; research/questions/0108-stables-umaya.drawing.html); its door opens on the
+        # passage. Still under the barracks as docs/buildings.md asks; its grooms' privy is the servants' row's beside it.
+        b("stables", "service", 32.0, 22.0, "outer", "S", order=5, feature="stables", door_fracs=(0.75, 0.6, 0.9)),
         # The grooms' and bearers' row (pass 5, building-review round 4: the bare SW ground by the stables while the
         # grooms lodged in the inner court): a servants' nagaya in the SW corner beside the stables it serves
         # (research: the domestic servants - cooks, grooms, cleaners - lived in a nagaya; a second row by the stables is
         # a GUESS), 44 x 18 ft. It takes the corner (order above the stables') so the stables' privy keeps its end face.
         # Feature 374 wave 124: the household's servants lodge here too - one servants' range on the street front, its
-        # south face the wall, the grooms' and the household's (0115's drawing page, above): 52 x 15 ft (it was the grooms'
+        # south face the wall, the grooms' and the household's (0115's drawing page, above): 62 x 15 ft (it was the grooms'
         # alone, 44 x 18 ft) - the 15 ft depth is 0115's GUESS for a retainer's range, its length a GUESS.
-        b("servants' row", "service", 52.0, 15.0, "outer", "S", order=6, feature="servants' quarters"),
+        b("servants' row", "service", 62.0, 15.0, "outer", "S", order=6, feature="servants' quarters"),
     )
     return CompoundProgram("County Magistracy (example)", env, spine, buildings, tier=_EXAMPLE_TIER)

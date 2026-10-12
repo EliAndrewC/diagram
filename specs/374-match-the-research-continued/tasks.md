@@ -13,6 +13,12 @@ in 328's ranking and this spec.
 - glyph-redrawn: kitchen on ochiba-magistracy - wave 113: the kitchen at 24 x 18 ft
 - placement-changed: notice board on kuwabata - wave 120: the board's seat a rolled knob; a bridge end offered only where a way reaches a bridge, so Kuwabata's roll now takes the center
 - placement-changed: woodland commons on inashiro - wave 120: the fuel wood seated by 0077's two tiers, kept off low ground by the water below the houses
+- layout-revised: hoshigaoka-shrine - wave 123: the villagers' hall at the building's east end, the dwelling west of it; the approach, arches, basin and sanctuary 22 ft east with it
+- layout-revised: hayakawa-magistracy - waves 123-126: one shrine (the river kami in the Fire Dragon's hall); the servants' range on the street front, the rear yard; the forecourt inside the gate; the stable as 0108 draws it
+- layout-revised: ochiba-magistracy - waves 124-126: the servants' range on the street front, the service gate through it; the rear yard; the stable as 0108 draws it
+- layout-revised: ubame-magistracy - waves 124-126: the servants' common room at the gate range's west end; the barracks 24 ft deep; the stable as 0108 draws it
+- layout-revised: county-magistracy-example - waves 124-126: the servants' row on the street front, storehouses and rear yard behind the house; the long-house and barracks 24 ft deep; the tax archive, cell and hearing court re-seated; the stable as 0108 draws it
+- glyph-redrawn: stables on hayakawa-magistracy - wave 126: three one-ken stalls, the earth passage before them, the grooms' room (the glyph every sheet now draws; its first use)
 
 ## Phase 1 - wave 112: the veranda at 0102's widths, its faces rolled
 

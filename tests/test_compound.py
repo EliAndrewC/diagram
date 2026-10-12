@@ -981,3 +981,14 @@ def test_a_servants_privy_serves_the_stables_only_when_it_stands_near_them() -> 
 
     assert privies(()) == 1, "the stables beside the servants' row: one privy serves both"
     assert privies((c.CourtZone("cart yard", 50.0, 95.0, 90.0, 22.0),)) == 2, "pushed past a yard ~90 ft off: each keeps its own"
+
+
+def test_a_stable_draws_its_passage_grooms_room_and_stalls_on_any_wall() -> None:
+    """Feature 374 wave 126: the stable's inner form, as 0108's drawing page draws a warrior's, on whichever wall it hugs."""
+    south = c.Placed(_b("stables", 28.0, 16.0, "outer", "S", feature="stables"), 10.0, 100.0)
+    passage, walls = cp._stable_parts(south)
+    assert passage == (20.0, 100.0, 38.0, 106.0)  # 6 ft deep along its court (north) face, beside the 10 ft grooms' room
+    assert [w[0] for w in walls[:3]] == [20.0, 26.0, 32.0] and walls[-1][4] is True  # the room's wall, two stall walls, the passage's dashed edge
+    east = c.Placed(_b("stables", 16.0, 28.0, "outer", "E", feature="stables"), 100.0, 10.0)
+    passage, walls = cp._stable_parts(east)
+    assert passage == (100.0, 20.0, 106.0, 38.0) and [w[1] for w in walls[:3]] == [20.0, 26.0, 32.0]

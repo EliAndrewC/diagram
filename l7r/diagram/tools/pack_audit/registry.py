@@ -267,6 +267,13 @@ CHECKS: tuple[Check, ...] = (
         "ochiba-zoning-red.svg",
         "put the hearing court on the gate's side of the divider and the residence behind it",
     ),
+    Check(
+        "stall_width",
+        lambda ctx: s.stall_width(ctx.text),
+        False,
+        "hayakawa-wide-stalls-red.svg",
+        "draw the stable's stalls one ken (~6 ft) wide, the earth passage before them and the grooms' room in it (0108)",
+    ),
     Check("one_compound_shrine", lambda ctx: s.one_compound_shrine(ctx.text), False, "hayakawa-two-shrines-red.svg", "draw one compound shrine and enshrine the second god in its hall"),
     # --- the country shrine's own, each fixture cut from the Hoshigaoka exemplar ---
     Check("sanctuary_on_axis", lambda ctx: s.sanctuary_on_axis(ctx.plan), False, "hoshigaoka-sanctuary-off-axis-red.svg", "set the sanctuary on the approach axis behind the hall"),

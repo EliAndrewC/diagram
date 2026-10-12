@@ -52,7 +52,7 @@ from .compound_model import (
     _gate_interval,
     _kind_attr,
 )
-from .compound_parts import _clerk_seats, _court_side, _dais, _engawa, _gate_posts, _lattice, _mats, _middle_gate, _point_features, _rear_band, _roof_posts, _wall_runs
+from .compound_parts import _clerk_seats, _court_side, _dais, _engawa, _gate_posts, _lattice, _mats, _middle_gate, _point_features, _rear_band, _roof_posts, _stable_parts, _wall_runs
 from .compound_view import OneView, View, one_view
 from .labels import Obstacle, ObstacleIndex, Placement, Subject
 from .labels import place as place_caption
@@ -666,6 +666,18 @@ def _draw_buildings(result: PlaceResult, rect: Callable[..., str], caption: Call
             # it had bracketed the caption)
             parts += [f"<g{_kind_attr(p.spec.feature)}>", rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2)]
             parts += [f'<line x1="{ox + a * FTPX:.0f}" y1="{oy + b * FTPX:.0f}" x2="{ox + c * FTPX:.0f}" y2="{oy + d * FTPX:.0f}" stroke="#3A2010" stroke-width="0.8"/>' for a, b, c, d in _lattice(p)]
+            parts.append("</g>")
+            caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
+            continue
+        if p.spec.feature == "stables":
+            # the stable as every sheet draws it (feature 374 wave 126, 0108): the earth passage, the grooms' room, the stalls
+            (ax, ay, ax2, ay2), walls = _stable_parts(p)
+            parts += [f"<g{_kind_attr(p.spec.feature)}>", rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, fill, stroke, 2)]
+            parts.append(rect(ax + 0.25, ay + 0.25, ax2 - ax - 0.5, ay2 - ay - 0.5, "#B8A07A", "none", 0))
+            parts += [
+                f'<line x1="{ox + a * FTPX:.0f}" y1="{oy + b * FTPX:.0f}" x2="{ox + c * FTPX:.0f}" y2="{oy + d * FTPX:.0f}" stroke="{stroke}" stroke-width="{0.8 if dash else 1}"{' stroke-dasharray="3 2"' if dash else ""}/>'
+                for a, b, c, d, dash in walls
+            ]
             parts.append("</g>")
             caption("area", p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft, p.spec.name, size, False, "#3A2E1C", p.spec.feature)
             continue

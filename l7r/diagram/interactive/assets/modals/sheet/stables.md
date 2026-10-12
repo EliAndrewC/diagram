@@ -16,8 +16,9 @@ Guesses:
 - How deep a stall is, and so its area: only a stall's width is recorded.
 - That the stable stays smaller than the barracks: no source says where a stable ranked among an office's buildings.
 
-Depiction: The plan draws the stable as a small building divided into three stalls. It stands in a corner of the outer
-court, against the compound wall.
+Depiction: The plan draws the stable as a warrior's small stable: three stalls one ken (about 6 ft) wide on board floors,
+an earth-floored passage before them where the door opens, and the grooms' room at one end. It stands in a corner of the
+outer court, against the compound wall.
 
 Name: stables
 Covers: the stable building, its stall divisions and its label
