@@ -286,6 +286,83 @@ every E0-E2 row in scope that is neither held, measured DEFERRED nor waiting on 
   `bundle.py::_bundle_layout#south band off an unkept yard`: each claim worded to what the code does and re-checked; a
   claim that then reads DRIFTED joins the DRIFTED work.
 
+## Batch 4: the held rows answered, the country shrine's roof and the magistracies' service buildings
+
+**The work list** is 328's ranking rebuilt on 2026-10-12 with the GM's rulings on the two held rows (`audit/overrides.json`,
+recorded by the Diagram tooling session): 183 open rows (`m:batch3-open-rows`), all E3 or E4 but those two. The batch takes the
+first open rows in ranking order: rows 0-10 of the open list and the two `compound.py` rows (21, 22) that are the same fix as
+row 6 on the county example. Rows 11-20 (the sacred features, the gates, the residence's length, the walls and the well's gear)
+are batch 5's.
+
+**The rules of batch 3 hold** (the code changed to match the page, W118-2; engine discipline; DEFERRED rows leave the list),
+with one for a hand-drawn sheet (328's edge case "A finding about a hand-drawn Mode A sheet"): the procedure
+(`docs/buildings.md`, `docs/building-programs.md`) is fixed first, then every sheet the finding names is redrawn to it, the
+sheet's comments saying what changed and why, `make pack-audit` before and after on each, and the red fixtures cut from that
+sheet re-cut in the same commit. The county example and the round-trip sheet are `compound.py`'s output: their fixes are made in
+the program and the emitter, never in the svg.
+
+- **B4-1** (within): ranking order, rows 0-10 then 21-22; 21-22 ride with row 6 because they are its rule on the generated sheet.
+- **B4-2** (within): `**Waits on**: 375` - 375 was reopened on 2026-10-12 (amendment 6, in the Diagram performance session),
+  so `make tick` refuses this batch's tasks until it closes; the waves are worked meanwhile and ticked when it does. Nothing is
+  escaped.
+- **B4-3** (within): the batch's occasions (tasks.md `## Occasions`): `building-review` on each magistracy sheet and on
+  Hoshigaoka once redrawn, and `glyph-check` on the stable's new form on one sheet (the passage and the grooms' room are new
+  to the stable glyph), dispatched at the batch's close on a green gate after the last merge of main, never mid-batch.
+- **B4-4** (within): the timing pair is owed only if a wave changes what the pair rolls (the hamlet's stages); W122's page
+  reword and rows 2-22's Mode A work do not, so the batch records "none owed" unless W122 moves `fixture_quota`'s code.
+
+### Wave 122 (T13) - the two held rows, answered
+
+- **Scope**: `l7r/diagram/buildings/types.json#door band` (E0, UNCLAIMED) and
+  `hamletgen/homesteads/fixtures.py::fixture_quota#count to the share` (E1, DRIFTED).
+- **W122-1** (within): the door band closes on the GM's ruling (2026-10-12, *"for the door band question, I am okay with what is
+  currently implemented."*): no band is added to `types.json`, the row is marked wave 122 with its `e0_basis` (0117's drawing
+  page already records the sheets' doors and the generated 6 ft door as a CONVENTION). No claim is written for it: a band
+  that does not exist has no line of code to carry one, and 0117's drawing page is where the convention is recorded.
+- **W122-2** (within): `fixture_quota` keeps its floor over the cap (no engine change; the GM, 2026-10-12, the row's `ruled`).
+  0219's drawing-page bullet "A map never has more shrines than three to eight homesteads in a hundred. The number drawn is
+  capped at that share" is reworded to the ruling: the share is a rate across the countryside, so a hamlet a spec gives one
+  shrine stands within it, and that is not a deviation. Then `impl-drift` on the claim, and the record checks the edit owes
+  (`make record-owed`), the pop-ups whose `Drawing:` names 0219 among them.
+
+### Wave 123 (T14) - the country shrine's one roof, and the second office shrine cited
+
+- **Scope**: `docs/building-programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof` and
+  `#universal shrine` (Magistrate's manor).
+- **W123-1** (within): Hoshigaoka's one roof is redrawn with the villagers' hall at the arch (approach) end and the dwelling
+  (the kitchen and the monk's rooms) at the far end, never the hall between them; the procedure's sentence says the same.
+- **W123-2** (within): Hayakawa's two shrines stand, cited to 0218's Joge post (an office kept more than one); no sheet change.
+
+### Wave 124 (T15) - servants on the street front, the second rank for stores
+
+- **Scope**: `docs/buildings.md::Latrines and the rear service strip#servants in the rear strip` and
+  `Composition: perimeter buildings + a named court-spine#second rank`.
+- **W124-1** (within): servants are housed in a street-side range, the gate range or under the main roof (0115's drawing page),
+  never a rear-strip rowhouse; "~10 servants" is dropped. Each sheet's servants' quarters behind the residence moves to a
+  street-front range on that sheet's perimeter (or into the gate range where the street front is full), about 15 ft deep
+  (0115's GUESS); the rear strip keeps its stores, privy and utility, or narrows to an alley.
+- **W124-2** (within): the second rank (`rank=2`) holds stores only (the Higuchi case the row names): `compound.py`'s rank-2
+  doctrine, the placer's examples and the county program's servants move to rank 1 on the street face.
+
+### Wave 125 (T16) - the barracks and the staff rowhouse long and narrow; the forecourt where it is
+
+- **Scope**: `Outer court (administrative / public)#barracks`, `#forecourt`, and `compound.py::county_magistracy_program#barracks
+  size` and `#senior retainers' quarters`.
+- **W125-1** (within): a barracks or staff rowhouse is 12-24 ft deep and long (0097's drawing page, ACCURATE): the county
+  program's barracks (45 x 34 ft) and staff long-house (50 x 36 ft) are re-proportioned at most 24 ft deep, the long-house's
+  bays side by side with a door each on the long face; the procedure's barracks band caps depth at 24 ft; every hand sheet's
+  barracks checked against it and any over 24 ft deep redrawn.
+- **W125-2** (within): "forecourt" names the open ground inside Hayakawa's main gate (0116, 0104); the strip behind the office
+  hall goes unnamed, or named as an alley.
+
+### Wave 126 (T17) - the stable as 0108 draws it
+
+- **Scope**: `Outer court (administrative / public)#stable stall width`, `#stable passage and grooms' quarters`, `#stables`.
+- **W126-1** (within): every magistracy stable becomes 0108's small warrior stable: three bays long of one-ken (~6 ft) stalls on
+  board floors, an earth-floored passage (kusa-no-ma) before the stalls, and a grooms' room (tozamurai) in it, still smaller than
+  the barracks; the procedure's ~84-96 px re-derived from that form; the stall depth and the 2-4 horses labeled GUESS (0108's
+  drawing page). One glyph form is drawn on all four sheets; its first use is the batch's `glyph-check` occasion.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

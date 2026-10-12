@@ -80,6 +80,23 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. the kura west annex, belt holes, clump window and south band claims re-checked IN-STEP (claims-owed reports none); kura row marked wave 121; gate green 2026-10-12
 
+## Phase 7 - batch 4: the held rows answered, the country shrine's roof and the magistracies' service buildings
+
+- [ ] T13 wave 122: the two held rows answered - the door band closed on the GM's ruling; 0219's drawing page reworded to the share as a countryside rate, `fixture_quota` re-checked (FR-001, FR-004)
+      research: rendering
+
+- [ ] T14 wave 123: Hoshigaoka's one roof with the hall at the arch end; Hayakawa's two shrines cited to 0218 (FR-001)
+      research: rendering
+
+- [ ] T15 wave 124: servants on the street front, never a rear rowhouse; the second rank for stores only (FR-001)
+      research: rendering
+
+- [ ] T16 wave 125: the barracks and the county staff rowhouse at most 24 ft deep; the forecourt inside Hayakawa's gate (FR-001)
+      research: rendering
+
+- [ ] T17 wave 126: the stable as 0108 draws it - one-ken stalls, the earth passage and the grooms' room - on every magistracy sheet (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]
