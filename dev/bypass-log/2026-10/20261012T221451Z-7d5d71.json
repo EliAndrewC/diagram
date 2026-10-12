@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-12T22:14:51Z",
+  "target": "entry-gate",
+  "commit": "d556435b0",
+  "why": "RECORD_CHECKS_OK: the pop-up's five units are owed only by the checks' own applied EDITs"
+}
