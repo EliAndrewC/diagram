@@ -553,8 +553,12 @@ def test_an_old_dispatch_does_not_start_the_features_hour(clone: Path) -> None:
 
 @pytest.mark.parametrize(
     ("how", "tasks", "status"),
-    [("no feature", None, None), ("Done", "- [ ] T01 a task\n", "Done 2026-10-12"), ("every task ticked under Draft", "- [x] T01 a task\n", "Draft"),
-     ("only its GM-review box open", "- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n", "Draft")],
+    [
+        ("no feature", None, None),
+        ("Done", "- [ ] T01 a task\n", "Done 2026-10-12"),
+        ("every task ticked under Draft", "- [x] T01 a task\n", "Draft"),
+        ("only its GM-review box open", "- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n", "Draft"),
+    ],
 )
 def test_with_no_live_feature_glyph_units_are_due_only_at_landing(clone: Path, how: str, tasks: str | None, status: str | None) -> None:
     t0 = 1_800_000_000.0
