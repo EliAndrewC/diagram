@@ -1990,13 +1990,17 @@
   "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Checklist for a new diagram#maids' room under the main roof at the kitchen end": {
-  "code": "47a44f581d23ce32",
+ "docs/buildings.md::Checklist for a new diagram#maids' room": {
+  "code": "2d6362157666091a",
   "core": "47a44f581d23ce32",
   "date": "2026-10-12",
-  "note": "maids' room under the main roof at the kitchen end",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the maids' room under the main roof at the kitchen end, as the drawing page draws it, a GUESS on the Aizu house",
+  "pages": {
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
+  },
+  "research": "6348ca5486897f20",
+  "section": "47a44f581d23ce32",
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#packing coverage": {
   "code": "91c6394bf8852df9",
@@ -4886,6 +4890,17 @@
    "0107-kitchens-daidokoro.drawing.html": "d54c467d58fc3cae"
   },
   "research": "f5247c4da8db03e3",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/compound_example.py::county_magistracy_program#maids' room": {
+  "code": "f6b58479b7fed752",
+  "core": "97ac86f2cd82a54c",
+  "date": "2026-10-12",
+  "note": "the 10 x 10 ft room at the residence's west end where the kitchen ell joins; its size a guess",
+  "pages": {
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html": "48271e1f50314e63"
+  },
+  "research": "6348ca5486897f20",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/compound_example.py::county_magistracy_program#office hall": {
