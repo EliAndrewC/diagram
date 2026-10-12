@@ -168,7 +168,7 @@ def ink_classes(text: str | None) -> set[str]:
     """The element classes a manifest's ink census names (`ink_classes`, feature 200's census), or none."""
     try:
         census = json.loads(text or "").get("ink_classes") or {}
-    except (ValueError, AttributeError):
+    except ValueError, AttributeError:
         return set()
     return {str(k) for k in census if str(k) not in NOT_ELEMENTS} if isinstance(census, dict) else set()
 
@@ -259,7 +259,7 @@ def active_features(root: Path, base: str) -> list[str]:
     found: set[str] = set()
     try:
         pointer = str(json.loads((root / ".specify" / "feature.json").read_text()).get("feature_directory", "")).rstrip("/")
-    except (OSError, ValueError):
+    except OSError, ValueError:
         pointer = ""
     # THE POINTER ONLY WHILE ITS FEATURE IS OPEN: `.specify/feature.json` outlives the feature it names, and a landed
     # feature's `## Occasions` re-declared its units on every later delta (feature 294's own copse, owed again by a tweak)
@@ -370,7 +370,7 @@ def _gitdir(root: Path) -> Path | None:
 def _read_json(path: Path | None) -> dict:
     try:
         data = json.loads(path.read_text(encoding="utf-8")) if path is not None else {}
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return {}
     return data if isinstance(data, dict) else {}
 
@@ -399,7 +399,7 @@ def active_feature(root: Path) -> str:
     return "" if todo.feature(d, todo.vocabulary(root)).state in ("closed", "done - GM review pending") else d.name
 
 
-def feature_start(root: Path, feature: str) -> float | None:
+def first_event(root: Path, feature: str) -> float | None:
     """When the feature began in this clone: the first event of its log (`<git dir>/l7r-events/<feature>.jsonl`), or None."""
     g = _gitdir(root)
     try:
@@ -408,8 +408,66 @@ def feature_start(root: Path, feature: str) -> float | None:
         from datetime import datetime  # noqa: PLC0415
 
         return datetime.fromisoformat(str(first["t"]).replace("Z", "+00:00")).timestamp()
-    except (OSError, TypeError, ValueError, KeyError):
+    except OSError, TypeError, ValueError, KeyError:
         return None
+
+
+#: how far back the reopening is looked for: no feature directory here has had more than 57 commits in an hour (271's, the
+#: densest; 375's directory has 137 commits in all, 328's 476 - counted 2026-10-12, the plan review of amendment 10), so a
+#: reopening further back than this is long past its hour
+REOPEN_WALK = 200
+_CLOSED = ("closed", "done - GM review pending")
+
+
+def last_reopening(root: Path, feature: str, since: float) -> float | None:
+    """When the feature was last REOPENED (feature 375 amendment 10, FR-042; the GM 2026-10-12: "count from the point when they
+    are most recently amended and re-opened"): the time of the newest commit to `specs/<feature>` after which its state, as
+    speckit-todo derives it from the whole directory (`hm_approval._state_at`), is open where the previous change to the
+    directory left it closed - by its status line or by every task ticked. A change is compared with the previous change to the
+    directory (`git log -- specs/<feature>`'s next entry), so a merge needs no choice of parent. Only commits since `since` (the
+    feature's first event in the clone - an older reopening loses to it anyway) are walked, and the answer is kept under the
+    feature in the clock, keyed by the directory's newest commit: a reopening is a commit there, so a new one moves the key."""
+    newest = _git(root, "log", "-1", "--format=%H", "--", f"specs/{feature}") or ""
+    if not newest:
+        return None
+    g = _gitdir(root)
+    kept = (_read_json(g / CLOCK).get(feature) or {}).get("reopened") if g is not None else None
+    if isinstance(kept, dict) and kept.get("key") == newest:
+        return kept.get("at")
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "hooks" / "lib"))
+    import tempfile  # noqa: PLC0415
+
+    import hm_approval  # noqa: PLC0415
+
+    todo = hm_approval._todo()  # noqa: SLF001 - the one reader of a past tree's state
+    vocab = todo.vocabulary(root)
+    log = (_git(root, "log", f"-{REOPEN_WALK + 1}", "--format=%H %ct", "--", f"specs/{feature}") or "").splitlines()
+    at = None
+    with tempfile.TemporaryDirectory() as tmp:
+        newer: tuple[int, str] | None = None  # (time, state) of the change after this one, newest first
+        for h, ct in (ln.split() for ln in log):
+            state = hm_approval._state_at(str(root), h, feature, todo, vocab, tmp)[0]  # noqa: SLF001
+            if newer is not None and newer[1] and newer[1] not in _CLOSED and state in _CLOSED:
+                at = float(newer[0])
+                break
+            if int(ct) < since:  # this change, older than the feature's first event, served only as the one before
+                break
+            newer = (int(ct), state)
+    if g is not None:
+        clock = _read_json(g / CLOCK)
+        clock.setdefault(feature, {})["reopened"] = {"key": newest, "at": at}
+        (g / CLOCK).write_text(json.dumps(clock, indent=1) + "\n", encoding="utf-8")
+    return at
+
+
+def feature_start(root: Path, feature: str) -> float | None:
+    """When the feature's glyph hour began (D53, D58): the LATER of its first event in the clone and its most recent reopening,
+    or None with no event log."""
+    first = first_event(root, feature)
+    if first is None:
+        return None
+    reopened = last_reopening(root, feature, first)
+    return max(first, reopened) if reopened is not None else first
 
 
 def landing(root: Path, feature: str) -> bool:
@@ -458,7 +516,7 @@ def open_batch(root: Path, units: Sequence[Unit], now: float | None = None) -> N
     if not feature or g is None:
         return
     clock = _read_json(g / CLOCK)
-    clock[feature] = {"batch_at": int(time.time() if now is None else now), "batch": sorted(u.slug for u in units if u.check == "glyph-check")}
+    clock.setdefault(feature, {}).update({"batch_at": int(time.time() if now is None else now), "batch": sorted(u.slug for u in units if u.check == "glyph-check")})
     (g / CLOCK).write_text(json.dumps(clock, indent=1) + "\n", encoding="utf-8")
 
 
@@ -537,8 +595,7 @@ def glyph_cli(root: Path, slug: str, gate: bool, escaped: bool) -> int:
         if unit in due or escaped:
             return 0
         when = next((w for u, w in waiting if u == unit), "later")
-        print(f"{slug} is owed but not yet due - due {when} (a glyph check runs on the feature's hour, all owed units together, "
-              "or at landing; feature 375 amendment 9)")
+        print(f"{slug} is owed but not yet due - due {when} (a glyph check runs on the feature's hour, all owed units together, or at landing; feature 375 amendment 9)")
         return 1
     feature = active_feature(root)
     start = feature_start(root, feature) if feature else None
@@ -583,8 +640,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(ruling(desc, units, problems))
         waiting = glyph_due(root, all_owed(root)[1])[1] if not args.landing else []
         if waiting:
-            print("glyph checks owed and not yet due (feature 375 amendment 9 - on the feature's hour, or at landing): "
-                  + ", ".join(f"{u.slug} ({when})" for u, when in waiting))
+            print("glyph checks owed and not yet due (feature 375 amendment 9 - on the feature's hour, or at landing): " + ", ".join(f"{u.slug} ({when})" for u, when in waiting))
     elif args.units:
         for u in units:
             print("\t".join((u.slug, u.check, u.subject, u.on, u.occasion)))
