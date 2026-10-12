@@ -223,3 +223,12 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. DONE. docs/reviews.md, docs/guards.md, CLAUDE.md; SC-034 carried to 374 (sc034-375-a9-glyph-per-hour); tests/tooling 1725 passed; hooks-test green (pair 111, review-gate 41, sync 124); no engine code in the amendment, so the route is DIRECT; report written; landed by the push carrying this tick
 
+## Amendment 10 (the GM 2026-10-12: a reopened feature's glyph hour counts from its most recent reopening)
+
+- [x] T59 The reopening read from history into the feature's start (D58); tests red on today's code (SC-035)
+      research: rendering
+      verify: DONE. DONE. feature_start = later of first event and last reopening (speckit-todo state via hm_approval._state_at over the whole directory), cached by the directory's newest commit; tests/tooling/test_review_owed 64 passed, the reopening tests red on today's code
+- [x] T60 The texts; 375 closes again: tests, `make hooks-test`, the report, landed (D59)
+      research: rendering
+      verify: DONE. DONE. docs/reviews.md and docs/guards.md; tests/tooling 1730 passed; hooks-test green; no engine code (DIRECT); report written; landed by the push carrying this tick
+

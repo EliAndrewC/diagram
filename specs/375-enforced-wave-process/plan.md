@@ -688,6 +688,30 @@ from the ledger and the event log - is measured on feature 374, the open long fe
 `Carried: SC-034 -> 374 sc034-375-a9-glyph-per-hour` into SC-034, so 374 closes only with that key in its measurements.json
 (close_check.py, FR-014); `375-a9-glyph-passes` is the before-figure (R8).
 
+### Amendment 10 (FR-042)
+
+**D58 - The reopening read from history (FR-042; T59).** `review_owed.feature_start(root, feature)` returns the LATER of the
+feature's first event in the clone (as amendment 9) and its most recent reopening - the later, because a reopening older than
+the clone's first event would otherwise start the hour before this clone did any of the work. The reopening: walking `git log
+--format=%H %ct -- specs/<feature>` (the WHOLE directory: the state also moves by `gm-review.jsonl`, `plan.md` and
+`plan-review.json`, through speckit-todo's `gm_rows`, `holding` and `lands_open_ids`) newest first, the first commit whose
+parent's state is closed and whose own is open. Each state is read by `hm_approval._state_at` itself (the reader D58 models:
+every file of `specs/<feature>` at that revision written into a temporary directory, then `speckit-todo.feature()`), so
+`closed` and `done - GM review pending` - which needs the GM-review rows and the plan files to be seen at all (the plan review:
+335 and 378 read `done - GM review pending` from their whole directories and `in progress` from the two files) - both count as
+closed, as D54's "no feature" does. The walk stops at the first such commit and at 200 commits: a reopening more than 200
+commits back is not less than an hour old (375's directory has 83 commits, 328's 293, counted 2026-10-12, so the bound can only
+cut a reopening long past its hour). The answer is kept in `glyph-clock.json` under the feature, keyed by the newest commit of
+its directory, so the stop hook's every turn does not walk the history again. Tests (red on today's code), fixture repos: a
+status-line close and reopen ten minutes ago - a unit owed now is due an hour after the reopening, not at once; a tick close
+(every task ticked, status "Draft") and a reopen by an added task ten minutes ago - likewise; a `done - GM review pending`
+close (every task but the GM-review box ticked, a GM-review row open) and a reopen by an added task - likewise; no reopening in
+the history - the first event starts the hour; a reopening older than the first event leaves the first event as the start;
+the kept answer is reused while the directory's newest commit is unchanged.
+
+**D59 - Closed again (T60).** The texts: `docs/reviews.md`'s glyph paragraph and `docs/guards.md`'s row say the hour starts at the
+feature's start or its latest reopening. Tests, `make hooks-test`, the report, landed (no engine code: the DIRECT route).
+
 ## Batches
 
 1. **Measurement, the two fixes and staying open**: D7, D8, D9 (the event log, the report, the transcript converter; SC-005

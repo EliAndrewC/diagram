@@ -13,6 +13,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import subprocess
+import time
 import sys
 from pathlib import Path
 from typing import Any
@@ -598,3 +599,64 @@ def test_the_cli_gates_an_early_dispatch_opens_a_batch_on_the_hour_and_on_the_es
     assert owed.main(["--root", str(clone), "--why"]) == 0 and "not yet due" in capsys.readouterr().out
     assert owed.main(["--root", str(clone), "--landing"]) == 0 and shed.slug in capsys.readouterr().out
     assert owed.main(["--root", str(clone), "--landing-mark", "on"]) == 0 and (clone / ".git" / owed.LANDING).exists()
+
+
+# ---- feature 375 amendment 10 (the GM 2026-10-12): a reopened feature's hour counts from its most recent reopening ---------
+
+
+def _commit_feature(root: Path, when: float, *, status: str, tasks: str, gm_row: bool = False) -> None:
+    """Write feature 999's spec, tasks (and a GM-review row) and commit them dated `when`."""
+    d = root / "specs" / "999-test"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "spec.md").write_text(f"# Feature 999\n\n**Status**: {status}\n")
+    (d / "tasks.md").write_text("# Tasks\n\n## Occasions\n\n- none: fixture\n\n## Work\n\n" + tasks)
+    if gm_row:
+        (d / "gm-review.jsonl").write_text('{"kind": "accept", "finding": "x"}\n')
+    elif (d / "gm-review.jsonl").exists():
+        (d / "gm-review.jsonl").unlink()
+    env = {**__import__("os").environ, "GIT_COMMITTER_DATE": f"@{int(when)} +0000", "GIT_AUTHOR_DATE": f"@{int(when)} +0000"}
+    subprocess.run(["git", "-C", str(root), "add", "-A", "specs"], check=True, capture_output=True, env=env)
+    subprocess.run(["git", "-C", str(root), "commit", "-qm", status], check=True, capture_output=True, env=env)
+
+
+_REOPENS = [
+    ("by its status line", dict(status="Done 2026-10-01", tasks="- [x] T01 a task\n"), dict(status="Reopened for an amendment", tasks="- [x] T01 a task\n- [ ] T02 more\n")),
+    ("by every task ticked", dict(status="Draft", tasks="- [x] T01 a task\n"), dict(status="Draft", tasks="- [x] T01 a task\n- [ ] T02 more\n")),
+    ("GM review pending", dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n", gm_row=True),
+     dict(status="Draft", tasks="- [x] T01 a task\n- [ ] GM review (make gm-reviewed F=999) [lands-open]\n- [ ] T02 more\n", gm_row=True)),
+]
+
+
+@pytest.mark.parametrize(("how", "closed", "reopened"), _REOPENS, ids=[r[0] for r in _REOPENS])
+def test_a_reopened_features_hour_counts_from_its_reopening(clone: Path, how: str, closed: dict, reopened: dict) -> None:
+    """SC-035 (FR-042): the event log began days ago, the feature closed, and was reopened ten minutes ago - its glyph unit is
+    due an hour after the reopening, not at once (amendment 9 counted from the first event, the GM did not like that)."""
+    now = time.time()
+    _feature(clone, now - 4 * 86_400)  # the clone's first event, days ago; the files are written again by the commits below
+    _commit_feature(clone, now - 3 * 86_400, status="In progress", tasks="- [ ] T01 a task\n")
+    _commit_feature(clone, now - 2 * 86_400, **closed)
+    _commit_feature(clone, now - 600, **reopened)
+    _glyph(clone, "wood shed")
+    assert owed.feature_start(clone, "999-test") == pytest.approx(now - 600, abs=2), how
+    assert _due(clone, now) == (set(), {"wood shed"}), f"{how}: not due at once"
+    assert _due(clone, now + 3100) == ({"wood shed"}, set()), f"{how}: due an hour after the reopening"
+
+
+def test_with_no_reopening_or_an_older_one_the_first_event_starts_the_hour(clone: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    now = time.time()
+    _feature(clone, now - 7200)
+    _commit_feature(clone, now - 7000, status="In progress", tasks="- [ ] T01 a task\n")
+    assert owed.feature_start(clone, "999-test") == pytest.approx(now - 7200, abs=2), "no reopening: the first event"
+    assert owed.last_reopening(clone, "999-test", now - 7200) is None
+    _commit_feature(clone, now - 6 * 86_400, status="Done", tasks="- [x] T01 a task\n")
+    _commit_feature(clone, now - 5 * 86_400, status="Reopened", tasks="- [x] T01\n- [ ] T02\n")
+    _feature(clone, now - 4 * 86_400)
+    _commit_feature(clone, now - 600, status="Reopened", tasks="- [x] T01\n- [ ] T02\n- [ ] T03\n")  # still open: no new reopening
+    assert owed.feature_start(clone, "999-test") == pytest.approx(now - 4 * 86_400, abs=2), "a reopening before the first event loses to it"
+    calls: list[str] = []
+    import hm_approval  # the module the walk reads states with, on the path once owed has walked
+
+    real = hm_approval._state_at
+    monkeypatch.setattr(hm_approval, "_state_at", lambda *a: calls.append(a[1]) or real(*a))
+    owed.feature_start(clone, "999-test")
+    assert calls == [], "the kept answer is reused while the directory's newest commit is unchanged"

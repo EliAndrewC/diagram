@@ -43,7 +43,8 @@ already judged owes nothing and gets no report - the GM looks at the map.
 **A glyph check runs on the feature's hour** (feature 375 amendment 9, the GM 2026-10-12: *"run periodically rather than every
 time a map changes ... every feature which takes longer than 1 hour to implement is 'due' to run it once after every hour and
 the address findings all at once"*). Its units are found as above but are DUE only when an hour of the feature's time has passed
-- from the feature's first event in the clone, and from each batch it opens - and then every owed glyph unit is due together and
+- from the feature's first event in the clone or its most recent reopening, whichever is later (375 amendment 10: the
+GM did not want a reopened feature's first check due at once), and from each batch it opens - and then every owed glyph unit is due together and
 stays due until dispatched (one per agent, in one message); fix their findings together, and what a fix re-owes waits for the
 next hour. A change with no live feature (none named, or the named one closed) owes its glyph units at landing: the push
 (`review-gate.sh`) asks every owed unit, and its refusal marks the work landing so the dispatch it asks for is due. `make verify`
