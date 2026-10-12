@@ -161,6 +161,23 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. every well draws its rolled gear and roof (well_gear check, proven red first), indoor wells a beam pulley (W135-2), the roof an outline on posts; glyph-checks PASS on county and Ubame round 2; 0196 record checks and the well pop-up answered; claims IN-STEP
 
+- [ ] T28 wave 136: a farmstead's own grave, a knob (0236), drawn at the plot's scale on the hamlets that roll it (FR-001)
+      research: rendering
+
+- [ ] T29 wave 137: the standing rack forms by their period (0016) - a search for a premodern date; drawn if dated, recorded undrawn if not (FR-001)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+
+- [ ] T30 wave 138: the lane along the water, the fifth lane shape (0031), where water runs along the cluster (FR-001)
+      research: rendering
+
+- [ ] T31 wave 139: the chessboard of ponds rolled beside the mosaic (0019, Qu Dajun 1678) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

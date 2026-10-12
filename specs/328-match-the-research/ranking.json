@@ -7897,6 +7897,24 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Scale#residence wing length",
+  "tier": "E2",
+  "fix": "residences redrawn to the record's 49-67 tsubo house (Hayakawa's ~180 ft blocks, Ochiba's 90 x 50 ft), compounds repacked",
+  "files": [
+   "docs/buildings.md",
+   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: shrinking the house several-fold repacks every compound",
+  "tier_as_ranked": "E3",
+  "held": "the round arbiter, 2026-10-12 (ask:b7-residence-route): held for the GM. The three hand sheets draw a ~145-tsubo residence (~5,150 sq ft) where 0091 records 49-67 tsubo houses (the county draft draws 49); canon gives the county magistrate Rank 5 with ~1,000 koku discretionary income (budgets.md), the 500-1,000-koku retainer's 67-tsubo house the nearer analog. Shrinking each house to 67 tsubo frees ~2,700 sq ft and drops coverage from 33-34% to ~27-28%, under 0116's 30-42% band. Routes: (A) redraw each compound smaller around the smaller house - a full repack of three hand sheets, every review section re-owed (one sheet per batch fits FR-002); (B) fill the freed ground with buildings the record does not give - rejected as unfaithful; or record the ~145-tsubo scale as a deviation. Which is the GM's question.",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "mode-a"
+ },
+ {
   "key": "docs/buildings.md::Scale#salt ward marker",
   "tier": "E2",
   "fix": "salt ward marker claim and the Scale paragraph's salt-ward marker text dropped; Hayakawa's wards already off the sheet",
@@ -11531,23 +11549,6 @@
   "tier_as_ranked": "E2",
   "moved": "T122a (fresh reader): tiered by its work - Not fixed: buildings.md:305 still fixes the drawing at 'one bay an 18-20 px rect' and states the range in prose, with no roll. 0222: 'the English Wikipedia gives 1 and 3 ken as its commonest sizes' and 'A hall built as two bays joined into one, with two doors, was a recognized form, the two-bay shrine'; 0215 gives Hie's two-bay sanctuary ~12 x 6 ft. CLAUDE.md: a choice between distinct attested fo",
   "wave": "131",
-  "scope": "mode-a"
- },
- {
-  "key": "docs/buildings.md::Scale#residence wing length",
-  "tier": "E3",
-  "fix": "residences redrawn to the record's 49-67 tsubo house (Hayakawa's ~180 ft blocks, Ochiba's 90 x 50 ft), compounds repacked",
-  "files": [
-   "docs/buildings.md",
-   "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-   "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-   "pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "deviation-tempting: shrinking the house several-fold repacks every compound",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
   "scope": "mode-a"
  },
  {

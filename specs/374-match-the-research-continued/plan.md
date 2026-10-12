@@ -518,6 +518,56 @@ compound repacked) is a batch of its own, the next. The rules of batches 3-5 hol
   indoor well drawing a sweep, posts or a roof, and a roof with no posts, each fail - and is proven red on the unfixed sheets
   first; the drafts pass `indoor` where a curb stands inside a building.
 
+## Batch 7: the hamlet's household graves, rack forms, the lane along the water and the chessboard ponds
+
+**The work list** is 328's ranking rebuilt after batch 6 landed (161 open rows, 113 E3 DRIFTED; `m:batch6-open-rows`). Its row 0
+(the residences redrawn to the record's 49-67 tsubo house) is HELD for the GM by the round arbiter (ask:b7-residence-route,
+2026-10-12): redrawing the three hand sheets wholesale or recording their ~145-tsubo houses as a deviation is a question of what
+to build, and the held list goes to the GM at the feature's end (SC-003); `audit/overrides.json` marks it E2 with the routes and
+their costs. So batch 7 is the open list's next four rows, all of the hamlet generator. The rules of batches 3-6 hold (B5-1's
+knob roll included); the engine changes, so the batch takes its timing bookends (`374-start` taken 2026-10-12 before its first
+engine edit, `374-end` at its close) and states the band at landing.
+
+### Wave 136 (T28) - a farmstead's own grave, a knob
+
+- **W136-1** (within): research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html
+  attests the household grave on its own land before modern times (a family's graveyard at its house plot's corner before the
+  Genroku era, 1688-1704; others in the woods behind the plot's shrine, in its own field or close by), so it passes the GM's rule
+  that a form attested only in modern times is not drawn. Its drawing page sets the knob: a hamlet's seed decides whether its
+  farmsteads keep graves of their own (about half of hamlet maps), and where they do, about a third of the farmsteads draw a small
+  grave of a few stones at the scale of the plot - the shares a GUESS. Drawn: a small grave (a few stones on a cleared patch,
+  sized at the plot's scale) seated after the homesteads and their fixtures, at the plot's corner or in its grove, the seat rolled
+  among those the plot leaves free (the page's places: a plot corner, the grove behind the house, own land close by); a farmstead
+  whose plot offers none keeps none. A new element on the hamlet maps: its own class and pop-up written from 0236, its glyph
+  checked (glyph-check), and the maps it lands on reviewed as their occasion requires.
+
+### Wave 137 (T29) - the standing rack forms, by their period
+
+- **W137-1** (within): research/questions/0016-rice-drying-racks-hasa-hasagi.html attests Niigata's living alder rack posts on
+  the bunds (hasagi) and Ehime's permanent tall racks, from modern encyclopedias and local histories that do not date the
+  practice; the one dated row was planted in 1943-1945. Spec 280's D1 counts an undated custom as modern, and the GM's rule
+  draws no form attested only in modern times. So the wave is a search pass for a premodern date of either form (the archive
+  first, then the web, recorded with `make source-outcome`): a form the search dates before 1868 is added as a rolled form with
+  its own glyph; a form it does not date stays undrawn, the page saying so with what was searched, and the claim names that
+  reason (the row closes IN-STEP either way).
+
+### Wave 138 (T30) - the lane along the water, the fifth lane shape
+
+- **W138-1** (within): research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html gives a village's
+  lanes five shapes (a GUESS, no page describing them): spine, T, Y, cross and a lane along the water "in a village by a
+  stream", the last needing water along the cluster. The generator rolls only four. The fifth joins `LANE_SKELETONS`, offered
+  only where a brook or channel runs along the cluster's flank (within the band the drawing page names), with its own skeleton
+  builder laying the spine parallel to the water; where no water runs along it, the roll is among the other four, as now.
+
+### Wave 139 (T31) - the chessboard of ponds, beside the mosaic
+
+- **W139-1** (within): `POND_LAYOUTS` dropped the uniform pond grid as only today's aerial view; but 0019's drawing notes quote
+  Qu Dajun's Guangdong xinyu (1678): "The land of Jiujiang is like a chessboard ... its black lines are the dikes, and the squares
+  are the ponds" - the chessboard attested at pond scale before modern times. So both forms are attested and the dike-pond block
+  rolls between the mosaic and the chessboard (`build_polder(mosaic=)`'s grid end), the odds a GUESS (the mosaic the commoner,
+  as the delta's accreted form); 0019's drawing page and the constant's note say so, and the cohort's dike-pond seeds are rolled
+  green before the wave closes.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

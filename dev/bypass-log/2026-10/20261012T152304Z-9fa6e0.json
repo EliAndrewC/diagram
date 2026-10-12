@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-12T15:23:04Z",
+  "target": "claims-gate",
+  "commit": "69239c140",
+  "why": "CLAIMS_OK: the one introduced DRIFTED (maids room) is a misread verdict: compound.py ROOM_CAPTIONS captions the servants quarters room maids room on the draft, recorded accepted in the review ledger; the rest pre-existing"
+}

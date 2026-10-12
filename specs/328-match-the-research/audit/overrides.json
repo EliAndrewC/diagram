@@ -3233,5 +3233,10 @@
     "fix": "none - the GM keeps what is implemented",
     "e0_basis": "research/questions/0117-doorways-and-doors-to.drawing.html already records the sheets' 8-8.7 ft doors and the generated 6 ft door as a drawing CONVENTION, which is what the code draws; the GM ruled 2026-10-12 (make gm-review): \"for the door band question, I am okay with what is currently implemented.\"",
     "ruled": "the GM, 2026-10-12, held row answered: keep the recorded convention"
+  },
+  "docs/buildings.md::Scale#residence wing length": {
+    "tier": "E2",
+    "held": "the round arbiter, 2026-10-12 (ask:b7-residence-route): held for the GM. The three hand sheets draw a ~145-tsubo residence (~5,150 sq ft) where 0091 records 49-67 tsubo houses (the county draft draws 49); canon gives the county magistrate Rank 5 with ~1,000 koku discretionary income (budgets.md), the 500-1,000-koku retainer's 67-tsubo house the nearer analog. Shrinking each house to 67 tsubo frees ~2,700 sq ft and drops coverage from 33-34% to ~27-28%, under 0116's 30-42% band. Routes: (A) redraw each compound smaller around the smaller house - a full repack of three hand sheets, every review section re-owed (one sheet per batch fits FR-002); (B) fill the freed ground with buildings the record does not give - rejected as unfaithful; or record the ~145-tsubo scale as a deviation. Which is the GM's question.",
+    "flag": "deviation-tempting: shrinking the house several-fold repacks every compound"
   }
 }
