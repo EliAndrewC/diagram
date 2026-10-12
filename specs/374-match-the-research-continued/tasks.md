@@ -19,6 +19,11 @@ in 328's ranking and this spec.
 - layout-revised: ubame-magistracy - waves 124-126: the servants' common room at the gate range's west end; the barracks 24 ft deep; the stable as 0108 draws it
 - layout-revised: county-magistracy-example - waves 124-126: the servants' row on the street front, storehouses and rear yard behind the house; the long-house and barracks 24 ft deep; the tax archive, cell and hearing court re-seated; the stable as 0108 draws it
 - glyph-redrawn: stables on hayakawa-magistracy - wave 126: three one-ken stalls, the earth passage before them, the grooms' room (the glyph every sheet now draws; its first use)
+- layout-revised: county-magistracy-example - waves 127-130: the granary and the main gate rolled (a 50 x 27 ft kura, a one-bay gate and a 40 ft gatehouse), the servants' row of four dwellings, the barracks, guest house and storehouses re-sized; the vegetable garden at the soup-greens plot with the service yard named; the shrine in its corner beside its tree, the guest house flowing below
+- layout-revised: hayakawa-magistracy - wave 130: the shrine in the inner court's north-east corner beside its tree, the stippled grove gone, the torii before its south door
+- layout-revised: ochiba-magistracy - waves 130-131: the shrine hall at 30 x 26 ft in the inner court's north-east corner beside its tree, the workshop below the tree, the gardens round the shrine gone
+- layout-revised: ubame-magistracy - waves 130-131: the shrine in the inner court's north-east corner beside its tree, the grove and its crowns gone, the wood kami in the one hall
+- layout-revised: hoshigaoka-shrine - wave 131: the sanctuary three bays wide, as its width knob rolls
 
 ## Phase 1 - wave 112: the veranda at 0102's widths, its faces rolled
 
