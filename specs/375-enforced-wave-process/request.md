@@ -60,3 +60,12 @@ would order the checks, and asked to look at more data first. The GM:
 > As for timings being thbe biggest single cost, I suspect it might make sense to relax some of the timing requirements, but let's talk about that after you make the other changes.
 
 The timing requirements are not part of this amendment: the GM will discuss them after it lands.
+
+## Amendment 4 (2026-10-11, the same later session)
+
+Amendment 3's spec review kept one change out as not asked for: `test-sync-with-main.sh`, the guard suite held to the whole
+`scripts/` tree (its push path reaches scripts at run time, feature 172), is the longest - about 230 s, re-run on every
+script change, and nearly all of amendment 3's own 233 s `hooks-test` - and its 25 cases each build their own fixture, so
+they could run in parallel parts. The session proposed it with the measurement (`research.md` R3). The GM:
+
+> yes please add that as amendment 4

@@ -2,7 +2,9 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-10
-**Status**: Done 2026-10-11 - amendment 3 landed: spec FAITHFUL (round 4), plan CLEAR (round 3), every task ticked; SC-011, SC-013 and SC-014 tested and measured; SC-012 carried to 374 (as SC-003 and SC-004 are)
+**Status**: Reopened 2026-10-11 for amendment 4 (amendment 3 landed: spec FAITHFUL round 4, plan CLEAR round 3, every task ticked; SC-011, SC-013, SC-014 tested and measured; SC-012 carried to 374)
+
+**Amendment 4 approved**: the GM, 2026-10-11, "yes please add that as amendment 4"
 
 **Amendment 3 approved**: the GM, 2026-10-11, "So yes, please do all of that as part of amendments to 375."
 
@@ -206,6 +208,16 @@ that after you make the other changes").
   time). Failing toward running, as feature 172's derivation does. `HOOKS_ALL=1` and the gate (which runs these files
   anyway) are unchanged.
 
+### Amendment 4 (`request.md`, Amendment 4)
+
+- **FR-022 The longest guard suite runs its cases in parallel parts.** `test-sync-with-main.sh` stays held to the whole tree
+  (FR-021 and feature 172: no static reading sees which scripts its push path reaches), so every script change re-runs it,
+  and it is the long pole of a parallel `hooks-test`: 230 s run alone, 202 s with its 25 cases timed one by one, the longest
+  case 66 s (`m:375-a3-hooks-test-before`, `research.md` R3). Its cases each build their own fixture. Now they run in parallel
+  parts, each part with its own temporary directory, `HOME` and guard log, so the suite takes about its longest part's time.
+  Every check still runs and is counted, the suite prints the same pass line with the same count, and a failure in any part,
+  or a case that never reports, fails the suite. Run one after another (`SYNC_PARTS=1`), it behaves as today.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-006) Replaying feature 372's recorded deltas for waves 106, 108 and 111 through the new owing logic: modal-depiction
@@ -263,9 +275,15 @@ that after you make the other changes").
   over main's last ten commits touching `scripts/`: the test files each would have run, against all of them today - a key of
   `measurements.json` beside `m:375-a3-hooks-test-before` (R3).
 
+- **SC-015** (FR-022) `test-sync-with-main.sh` timed on the same tree three times one after another (`SYNC_PARTS=1`) and three
+  times in parts, alternating, the load recorded: the parts' median at most half the serial median, each run passing the same
+  number of checks; and five runs in parts in a row all green with that count (no case depends on another's state). With one
+  case made to fail, the suite fails and names it; with one case made to exit before reporting, the suite fails. Keys of
+  `measurements.json` beside `m:375-a3-hooks-test-before` (R3).
+
 375 closes on SC-001, SC-002, SC-005 and SC-006; SC-003 and SC-004 are held open in 374 by FR-014, since 374 takes no task
 until 375 has landed. Amendment 3 closes on SC-011, SC-013 and SC-014; SC-012 needs pop-up rounds run under it, which 374's
-next wave is, so it is carried there.
+next wave is, so it is carried there. Amendment 4 closes on SC-015.
 
 ## What it does not cover
 
