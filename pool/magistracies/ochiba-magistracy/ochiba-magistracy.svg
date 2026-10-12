@@ -121,8 +121,8 @@
 
   <!-- Gate posts (flank the south gate opening) -->
   <g fill="#2D2A24" data-kind="main gate">
-    <rect x="572" y="744" width="16" height="14"/>
-    <rect x="612" y="744" width="16" height="14"/>
+    <rect x="582" y="747" width="6" height="6"/>
+    <rect x="612" y="747" width="6" height="6"/>
   </g>
   <!-- Kitchen postern posts (west service door: deliveries and night-soil
        never cross the hearing court) -->

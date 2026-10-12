@@ -338,8 +338,8 @@
   </g>
   <!-- the main gate's leaves hang at the passage's outer end, between these posts: 12 ft of ink between them -->
   <g fill="#2D2A24" data-kind="main gate">
-    <rect x="607" y="744" width="8" height="14"/>
-    <rect x="651" y="744" width="8" height="14"/>
+    <rect x="609" y="747" width="6" height="6"/>
+    <rect x="651" y="747" width="6" height="6"/>
   </g>
 
   <!-- Barracks (the duty watch) - backs the divider, forming the garrison range with

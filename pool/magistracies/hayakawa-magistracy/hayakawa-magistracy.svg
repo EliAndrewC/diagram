@@ -943,8 +943,8 @@
     <!-- the guardroom's door onto the passage -->
     <rect x="482" y="722" width="8" height="12" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door" data-part-of="gatehouse"/>
     <g fill="#2D2A24">
-      <rect x="482" y="745" width="8" height="14"/>
-      <rect x="526" y="745" width="8" height="14"/>
+      <rect x="484" y="747" width="6" height="6"/>
+      <rect x="526" y="747" width="6" height="6"/>
     </g>
   </g>
 

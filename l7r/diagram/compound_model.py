@@ -69,10 +69,11 @@ ROOF_POST_FT: float = 1.0
 BATH_W_FT, BATH_H_FT = 10.0, 8.0
 # The gates' posts (feature 267 R26, research 0093 'The main gate and its gatekeepers (nagaya-mon)'). Each post is drawn over the
 # cut end of the wall it closes, so the wall's opening IS the passage the audit measures between the posts
-# (`pack_audit.main_gate_passage_ft`). 4 x 14 px (1.33 x 4.67 ft) is a MAP DRAWING CONVENTION: the post block stands
-# for the gate's pillar with the wall end it caps, drawn proud of the 3 ft wall so it reads as a post, not a true-size
-# pillar (a yakuimon's pillars are about 1 ft).
-GATE_POST_W_FT, GATE_POST_D_FT = 4.0 / 3.0, 14.0 / 3.0
+# (`pack_audit.main_gate_passage_ft`). A post is drawn about 2 ft square, a MAP DRAWING CONVENTION
+# (research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: "A gate post is drawn about 2 ft square ... this
+# project's own"), set at the wall's cut end with its inner face on the passage (feature 374 wave 133; it was a 1.33 x 4.67 ft
+# block drawn proud of the wall). A yakuimon's real pillars are about 1 ft.
+GATE_POST_W_FT, GATE_POST_D_FT = 2.0, 2.0
 # The middle gate's (nakamon's) posts on the 2 ft divider: 4 x 10 px, the same convention at the divider's scale.
 NAKAMON_POST_D_FT = 10.0 / 3.0
 # An informal door on each lodging block (feature 267, docs/building-programs.md: no sealed boxes): a small dark rect set
