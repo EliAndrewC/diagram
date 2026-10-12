@@ -416,29 +416,212 @@
   "observed": "2026-10-11",
   "source": "main's last ten first-parent commits touching scripts/ or tests/hooks/ before amendment 3's code (from eb64e2ba3), and the test files the hooks-test step selects (the Makefile's grep: test files that build a path into scripts/)",
   "command": "tests/hooks/hookdeps.py's pydeps per test file, intersected with each commit's changed files (git diff-tree -m --first-parent)",
-  "method": "a one-off script over the derivation as built (hookdeps.pydeps); before, any change re-ran every file",
+  "method": "a one-off script over the derivation as built (hookdeps.pydeps, with the plan review's whole-tree fallback); before, any change re-ran every file",
   "value": {
    "test files": 55,
    "before: files run per commit": 55,
    "after: files run per commit": {
-    "eb64e2ba3": 3,
-    "6857b279e": 21,
-    "9cc6ab8c4": 21,
-    "91182c8c1": 21,
-    "926799f0d": 21,
-    "8d4daf178": 21,
-    "144e59c0f": 3,
-    "5a32ebfb9": 21,
-    "194dfd051": 21,
-    "922fb653d": 21
+    "eb64e2ba3": 16,
+    "6857b279e": 30,
+    "9cc6ab8c4": 30,
+    "91182c8c1": 30,
+    "926799f0d": 30,
+    "8d4daf178": 30,
+    "144e59c0f": 16,
+    "5a32ebfb9": 30,
+    "194dfd051": 30,
+    "922fb653d": 30
    },
-   "after: mean": 17.4,
+   "after: mean": 27.2,
    "files depending on the whole tree": [
+    "tests/pipeline/test_gencache.py",
+    "tests/test_building_types.py",
+    "tests/test_citation_rule_inventory.py",
     "tests/tooling/ci/test_cache.py",
+    "tests/tooling/ci/test_state.py",
+    "tests/tooling/test_claim_feature.py",
+    "tests/tooling/test_function_cap.py",
+    "tests/tooling/test_guard_corpus.py",
+    "tests/tooling/test_guard_firing_log.py",
+    "tests/tooling/test_guard_message_durations.py",
+    "tests/tooling/test_hook_deps.py",
     "tests/tooling/test_hooks_resolve.py",
+    "tests/tooling/test_makefile_recipe_comments.py",
+    "tests/tooling/test_ratchets.py",
+    "tests/tooling/test_research_claims.py",
     "tests/tooling/test_switches.py"
    ],
    "median freshness set": 5
+  }
+ },
+ "375-a3-record-tooling-after": {
+  "quantity": "wall time of the record tooling on 374's delta, today's code against amendment 3's, back to back (SC-013)",
+  "observed": "2026-10-11",
+  "unit": "s",
+  "varies": 0.3,
+  "source": "two detached worktrees at 374's pushed HEAD 61a52f3c8 (origin backup/diagram-backlog): one with the scripts as they stood before amendment 3's code (519a49133^), one with them after (8c1894f92); 374's answer store copied (RECORD_CHECKS_DIR); the container shared with other sessions",
+  "command": "a scratch script (plan D31): each command on the old worktree, then cold on the new (its l7r-cache removed), then warm, three rounds; its output compared old against new and against the new with L7R_CACHE_OFF=1; then claims-owed alone six more alternating rounds of old and new cold",
+  "method": "time.perf_counter around each subprocess; medians; the load average at both ends",
+  "value": {
+   "runs": {
+    "record-owed": {
+     "old": {
+      "runs s": [
+       5.56,
+       5.47,
+       5.54
+      ],
+      "median s": 5.54
+     },
+     "new cold": {
+      "runs s": [
+       2.79,
+       2.81,
+       2.84
+      ],
+      "median s": 2.81
+     },
+     "new warm": {
+      "runs s": [
+       1.8,
+       1.8,
+       1.91
+      ],
+      "median s": 1.8
+     }
+    },
+    "check-bundle Q=0190 NO_QUOTES=1": {
+     "old": {
+      "runs s": [
+       5.85,
+       5.85,
+       5.89
+      ],
+      "median s": 5.85
+     },
+     "new cold": {
+      "runs s": [
+       3.56,
+       3.66,
+       3.61
+      ],
+      "median s": 3.61
+     },
+     "new warm": {
+      "runs s": [
+       2.93,
+       2.84,
+       2.78
+      ],
+      "median s": 2.84
+     }
+    },
+    "modal-bundle hamlet/notice-board depiction": {
+     "old": {
+      "runs s": [
+       6.83,
+       6.39,
+       6.59
+      ],
+      "median s": 6.59
+     },
+     "new cold": {
+      "runs s": [
+       0.45,
+       0.46,
+       0.5
+      ],
+      "median s": 0.46
+     },
+     "new warm": {
+      "runs s": [
+       0.46,
+       0.5,
+       0.48
+      ],
+      "median s": 0.48
+     }
+    },
+    "claims-owed": {
+     "old": {
+      "runs s": [
+       6.47,
+       6.69,
+       6.4
+      ],
+      "median s": 6.47
+     },
+     "new cold": {
+      "runs s": [
+       6.5,
+       6.29,
+       6.7
+      ],
+      "median s": 6.5
+     },
+     "new warm": {
+      "runs s": [
+       0.47,
+       0.48,
+       0.55
+      ],
+      "median s": 0.48
+     }
+    }
+   },
+   "outputs identical": {
+    "record-owed": {
+     "old == new warm": true,
+     "old == new cold": true,
+     "new == new caches off": true
+    },
+    "check-bundle Q=0190 NO_QUOTES=1": {
+     "old == new warm": true,
+     "old == new cold": true,
+     "new == new caches off": true
+    },
+    "modal-bundle hamlet/notice-board depiction": {
+     "old == new warm": true,
+     "old == new cold": true,
+     "new == new caches off": true
+    },
+    "claims-owed": {
+     "old == new warm": true,
+     "old == new cold": true,
+     "new == new caches off": true
+    }
+   },
+   "load start": [
+    1.5341796875,
+    1.9326171875,
+    2.900390625
+   ],
+   "load end": [
+    2.73291015625,
+    2.3232421875,
+    2.90771484375
+   ],
+   "claims-owed six more alternating": {
+    "old s": [
+     6.59,
+     6.72,
+     6.45,
+     6.65,
+     6.52,
+     7.14
+    ],
+    "old median s": 6.62,
+    "new cold s": [
+     6.23,
+     6.45,
+     6.83,
+     6.2,
+     6.78,
+     6.26
+    ],
+    "new cold median s": 6.36
+   },
+   "reading": "warm, each at most half today's (record-owed 1.8 of 5.54, check-bundle 2.84 of 5.85, modal-bundle 0.48 of 6.59, claims-owed 0.48 of 6.47); cold, each below today's (claims-owed 6.36 against 6.62 over six alternating rounds; its three-round 6.50 against 6.47 was noise); every output identical"
   }
  }
 }
