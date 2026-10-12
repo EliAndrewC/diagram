@@ -210,3 +210,13 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] GM review (make gm-reviewed F=375) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
+
+## Amendment 9 (the GM 2026-10-12: glyph-check run on the feature's hour, findings addressed together)
+
+- [ ] T56 The feature's glyph clock, owed against due, `--landing` (D53, D54); tests red on today's code (SC-032, SC-034's due-at-once)
+      research: rendering
+- [ ] T57 The early glyph dispatch refused, `GLYPH_DUE_OK`; the landing marker; `make verify` naming the waiting units (D55, D56; SC-033)
+      research: rendering
+- [ ] T58 The texts (docs/reviews.md, CLAUDE.md, docs/guards.md); 375 closes again: tests, `make hooks-test`, the gate, the report, landed (D57)
+      research: rendering
+
