@@ -211,7 +211,8 @@
          The 12 ft passage (x 490..526, the nagaya-mon's two-ken opening, R26, 0093) runs through the range
          toward its east end, the gatekeepers' lodging and the guardroom west of it, the store east (pass 3). -->
     <!-- and along the servants' range west of it (x 172..334, feature 374 wave 124: 0115's drawing page - the street-facing
-         range is the house's wall, its servants' lodging) -->
+         range is the house's wall, its menservants' and grooms' lodging; its 54 ft length a GUESS, 0115's ordinary range
+         ~70-80 ft being a GUESS too) -->
     <line x1="140" y1="750" x2="167.5" y2="750"/>
     <line x1="578.5" y1="750" x2="880" y2="750"/>
   </g>
@@ -303,6 +304,13 @@
     <rect x="160" y="214" width="288" height="76" fill="#DDB87A"/>
     <rect data-id="inner-rooms-1" x="160" y="214" width="144" height="76" fill="#DDB87A" data-kind="inner rooms"/>
     <rect data-id="family-quarters-1" x="304" y="214" width="144" height="76" fill="#DDB87A" data-kind="family quarters"/>
+    <!-- the maids' room, 12 x 12 ft at the kitchen end, over the kitchen ell (feature 374 batch 4, building-review E2, plan
+         R4-1): the maids and the kitchen hands sleep under the main roof, as the Aizu chief retainer's house kept "the rooms
+         of the maids and servants" in the house (research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html);
+         which servants slept here, and its size, are GUESSES. The menservants and the grooms keep the street range. -->
+    <rect data-id="maids-room-1" x="412" y="254" width="36" height="36" fill="#DDB87A" data-kind="servants' quarters"/>
+    <rect x="412" y="254" width="36" height="36" fill="none" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3" data-kind="servants' quarters"/>
+    <text font-size="8" fill="#3A2E1C" data-kind="servants' quarters" data-names="maids-room-1">maids' room</text>
     <rect x="160" y="214" width="288" height="76" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <!-- the veranda (feature 374 wave 112, 0102's drawing page: 3-6 ft, the faces a knob): this hall keeps its south face
          alone, 4 ft (12 px; it was 8 px, 2.7 ft); the house's roll is shown on its formal hall, the east block -->
@@ -477,8 +485,8 @@
 
   <!-- Rear service strip (north band behind the residence) - the shady rear was
        the household's service zone, not empty ground (building-review internal-
-       dead-space + sanitation sweeps, 2026-07). Servants' quarters run along the
-       north wall; the family privy ATTACHES to the residence's rear corner,
+       dead-space + sanitation sweeps, 2026-07). The rear yard, the woodshed and the
+       storehouses hold it (the servants' range left it for the street front, feature 374 wave 124); the family privy ATTACHES to the residence's rear corner,
        cesspit toward the wall (not a lone block adrift in open ground). -->
   <!-- The rear yard (feature 374 wave 124): the servants' range that stood here, on the north wall behind the house, moved
        to the street front - 0115's drawing page draws a large household's servants in a range on its street edge, never
@@ -489,10 +497,10 @@
     <polygon points="172,158 392,158 392,194 172,194" fill="none"/>
     <text font-size="9" font-style="italic" fill="#7A6A4A">rear yard</text>
   </g>
-  <!-- The household's WOODSHED in the rear pocket east of the servants' range (feature 267 pass 3: the ~53 x 22 ft pocket
+  <!-- The household's WOODSHED at the rear yard's east end (feature 267 pass 3: the ~53 x 22 ft pocket
        was empty ground). The shady rear carried the household's service economy - storehouses among it (research
        buildings 230) - and the two-mouth kamado burns wood. 30 x 10 ft, open on its south face to the alley, the stacked
-       cordwood along its back; 6 ft off the servants' range and 2 ft off the north wall's ink. The size is a GUESS.
+       cordwood along its back; 2 ft off the north wall's ink (it stood 6 ft off the servants' range, which left in wave 124). The size is a GUESS.
        Tagged `kitchen` (the fuel is the kitchen's): no woodshed kind exists yet. -->
   <g data-kind="kitchen">
     <rect x="400" y="160.5" width="90" height="30" fill="#C9A57A"/>
@@ -506,7 +514,7 @@
     <text font-size="8.5" font-style="italic" fill="#3A2E1C">woodshed</text>
   </g>
   <!-- The rear yard's privy at its west end, by the kitchen postern, for the kitchen and the house's working servants by
-       day (feature 374 wave 124: it was the servants' range's, which moved to the street front, where the west-court
+       day - who uses it a GUESS, no page assigns a privy to them (feature 374 wave 124: it was the servants' range's, which moved to the street front, where the west-court
        latrine beside the range serves it), so the night soil goes out by the
        postern down the west strip without crossing the house (feature 267 pass 2: the servants' zone had none; a
        privy per functional zone, as the sanitation sweep of 2026-07 set). 5 x 7 ft, the size a GUESS. -->
@@ -575,16 +583,17 @@
     </g>
   </g>
 
-  <!-- The ONE torii of the shrine's ground, at the grove's west edge where the way in from the court enters, so
-       the shrine lies beyond it (feature 267 pass 2, research religion-and-death 230: one torii at a precinct's
-       boundary covers the shrines inside it; it stood mid-grove before the Fire Dragon shrine only). Drawn IN PLAN
-       (docs/buildings.md, feature 268): the 15 x 1.5 ft top beam across the approach, here running north-south because
-       the approach runs east, and its two 1.2 ft posts marked darker, 10.3 ft clear between them. -->
+  <!-- The shrine's torii, about 8 ft before its west door on the door's axis (feature 374 batch 4, building-review E1:
+       research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, a compound shrine's arch stands 5-12 ft before its hall; it
+       stood 56 ft south at the grove's west edge, where feature 267 pass 2 put it so ONE torii covered two shrines - wave
+       123 left one shrine). Drawn IN PLAN (docs/buildings.md, feature 268): the 15 x 1.5 ft top beam across the approach,
+       here running north-south because the approach runs east, and its two 1.2 ft posts marked darker, 10.3 ft clear
+       between them. -->
   <g data-kind="torii" data-part-of="compound shrine">
-    <rect x="740" y="400" width="6" height="45" fill="none" id="arch"/>
-    <line x1="743" y1="400" x2="743" y2="445" stroke="#A03020" stroke-width="4.5"/>
-    <rect x="741.2" y="403.5" width="3.6" height="3.6" fill="#5A1A10"/>
-    <rect x="741.2" y="437.9" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="746" y="198.5" width="6" height="45" fill="none" id="arch"/>
+    <line x1="749" y1="198.5" x2="749" y2="243.5" stroke="#A03020" stroke-width="4.5"/>
+    <rect x="747.2" y="202" width="3.6" height="3.6" fill="#5A1A10"/>
+    <rect x="747.2" y="236.4" width="3.6" height="3.6" fill="#5A1A10"/>
   </g>
 
   <!-- ============================================================ -->
@@ -693,7 +702,7 @@
 
   
 
-  <!-- Stables (SW corner) - 28x16 ft, a small umaya for a rich county's few
+  <!-- Stables (SW corner) - 18 x 24 ft since feature 374 wave 126 (it was 28 x 16 ft), a small umaya for a rich county's few
        mounts; deliberately kept UNDER the barracks (a stable for a handful of
        horses must not out-foot the watch's quarters - size-audit hierarchy
        sweep, 2026-07). Feature 267 pass 2: pulled up with their well to a 10 ft fire gap below the tax archive (14 ft since feature 372 wave 105 drew the archive at 0100's 24 x 18 ft) - the
@@ -868,7 +877,7 @@
     <circle cx="334" cy="442" r="3.8"/>
     <!-- gate range (west end) -->
     <circle cx="366" cy="711" r="3.8"/>
-    <!-- stables - beside its east door (wave 126: the door on the stable yard), onto the stable yard -->
+    <!-- stables - beside its east door, onto the outer court by the stable well (wave 126) -->
     <circle cx="219" cy="627" r="3.8"/>
     <!-- servants' quarters - beside the middle door of the street range (feature 374 wave 124) -->
     <circle cx="268" cy="702" r="3.8"/>

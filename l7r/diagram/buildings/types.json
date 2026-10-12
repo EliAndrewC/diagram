@@ -65,6 +65,20 @@
         }
       },
       {
+        "id": "storehouse",
+        "kind": "storehouse",
+        "band_ft": {
+          "w": [
+            12,
+            20
+          ],
+          "h": [
+            9,
+            16
+          ]
+        }
+      },
+      {
         "id": "granary",
         "kind": "granary",
         "band_ft": {

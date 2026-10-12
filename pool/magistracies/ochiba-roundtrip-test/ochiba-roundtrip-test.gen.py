@@ -52,6 +52,10 @@ def ochiba_program() -> C.CompoundProgram:
         b("residence (W)", "lord", 90.0, 25.0, "inner", "N", order=10, feature="residence"),
         b("residence (E)", "lord", 93.0, 25.0, "inner", "N", order=9, feature="residence"),
         b("servants", "service", 65.0, 15.0, "outer", "S", order=7, feature="servants' quarters"),  # the street range, as Ochiba's since feature 374 wave 124 (0115)
+        # Ochiba's two storehouses, 18 x 12 ft each, behind the house as the second rank (feature 374 batch 4: the program's
+        # storehouse item, R4-6; the second rank holds stores only, W124-2)
+        b("storehouse (W)", "kura", 18.0, 12.0, "inner", "N", order=8, rank=2, feature="storehouse"),
+        b("storehouse (E)", "kura", 18.0, 12.0, "inner", "N", order=8, rank=2, feature="storehouse"),
         b("kitchen", "service", 18.0, 24.0, "inner", "W", order=5, feature="kitchen"),  # feature 374 wave 113: 0091 measured kitchen, 24 ft along the wall (it was 40 x 33)
         b("Inari shrine", "shrine", 37.0, 31.0, "inner", "E", order=5, feature="compound shrine"),
         b("cinnabar workshop", "shrine", 37.0, 24.0, "inner", "E", order=4, feature="cinnabar workshop"),

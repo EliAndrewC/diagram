@@ -51,7 +51,9 @@ def county_magistracy_program() -> CompoundProgram:
         residence inner entrance - UNRESEARCHED: the house's inner entrance on its rear (north) face at the kitchen end
         gatehouse door - UNRESEARCHED: the gatehouse's door on the gate passage, where the gatekeepers watch
         office hall doors - UNRESEARCHED: the office hall's doors on its east face by the middle gate and on its west face
-        servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: a 76 x 15 ft range on the south (street) wall, the household's and the grooms'; the 15 ft depth a GUESS
+        servants' row - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: a 76 x 15 ft range on the south (street) wall, the menservants' and the grooms', five dwellings a door each (research/questions/0097-staff-rowhouses-and-barracks-nagaya.html); the 15 ft depth a GUESS
+        maids' room - GUESS research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: the maids and kitchen hands under the main roof at the kitchen end, as the Aizu chief retainer's house kept the rooms of the maids and servants in the house; which servants slept there, and its 10 x 10 ft, GUESSES
+        barracks dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: the barracks divided into four dwellings of ~16.75 ft, a door each on its court face; four a GUESS in the 12-18 ft bays
     """
     # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,
@@ -173,15 +175,15 @@ def county_magistracy_program() -> CompoundProgram:
         # servants' range took to the street, keeping the jin'ya band (0116) without shrinking the envelope.
         b("storehouse (W)", "kura", 12.0, 18.0, "inner", "N", order=13, feature="storehouse"),
         b("storehouse (E)", "kura", 12.0, 18.0, "inner", "N", order=12, feature="storehouse"),
-        # The kitchen stands between the servants' row and the house, an ELL abutting the residence's west end (feature 374
+        # The kitchen stands between the rear yard and the house, an ELL abutting the residence's west end (feature 374
         # wave 113, `joins`: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, a kitchen projecting
         # from one side of a one-block house, no corridor), its yard - the bath, the well, its one door, the postern - to the south
         # and west. 20 x 18 ft, part of the house's 49 tsubo (above); the kitchen's own size is a GUESS (research 380:
         # "How much of either house was kitchen is not given").
-        # Its one outside door opens WEST, onto the way between it and the servants' row that runs to the yard (pass 7,
+        # Its one outside door opens WEST, onto the rear yard, which runs south to the kitchen yard (pass 7,
         # building-review round 6: on its yard face it opened into a ~5 ft pocket between the bath, the well and the house).
         # It stands 10 ft off the north wall, as the house does (pass 8, building-review round 7): the house's rear alley
-        # then runs on behind the kitchen to the way between it and the servants' row, and down it to the kitchen yard
+        # then runs on behind the kitchen to the rear yard, and down it to the kitchen yard
         # and the postern - the night-soil carter's service route to the house's privies. Flush to the wall, the
         # kitchen closed the alley's west end, and the privies were ~400 ft round from any service edge.
         b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=10.0, joins="residence"),
