@@ -614,15 +614,17 @@ they were rolled on; how many changes the records span; and the fewest first see
 failures, of the smallest seed finding it; the pinned seeds, 901 on, are rolled every time and left out). A change is a record's
 `feature`: `cohort_audit.write_record` adds `"feature": $SPECIFY_FEATURE` (empty when unset); the records written before that
 field are attributed by `dev/cohort-log/features.json`, a commit -> feature map holding the two commits rolled before it
-(61a52f3c8, 374's head, and a41ab2e0f, its merge base: both feature 374). The GM is given today's output at landing (one
-change: seeds 10 and 20, `refused:WebRefused`), and `make accept` files the row that carries the choice past the close. Tests:
+(61a52f3c8, 374's head, and a41ab2e0f, its merge base: both feature 374). Put to the GM before landing (one change: seeds 10 and
+20, `refused:WebRefused`; the first ten seeds find every failure), he chose ten: `make cohort`'s default `N` is 10 where it was
+48, `cohort_audit --count`'s own default 10 where it was 12, and the two hints that named a bare `cohort_audit --count 48`
+(`cohort_audit.py`'s red-reference message, `mapcheck.py`'s tripwire message) name `make cohort`; "the cohort is 20-25 min"
+there becomes minutes. Tests: `make -n cohort` passes `--count 10`;
 a fixture of records from three changes names the failures, their seeds, the span and the fewest first seeds; a record with no
 feature and no mapping is counted as unattributed, by its commit.
 
 **D52 - Measured, raised and closed (T55).** SC-028 and SC-029 as D48 and D49 say; SC-030 the table's key; SC-031 the command's
-output over today's records. At landing two `make accept F=375` rows: FR-036's deviation (the cache in place of the helpers
-folded in) and the seed count's choice (FR-038), so `make gm-review` holds both for the GM; FR-037's table goes in the landing
-message. Tests, `make hooks-test`, the gate, the report.
+output over today's records. The GM ruled on both before landing (2026-10-12): FR-036's cache confirmed, ten seeds chosen -
+so no `make accept` row is owed; FR-037's table goes in the landing message, as he asked. Tests, `make hooks-test`, the gate, the report.
 
 ## Batches
 

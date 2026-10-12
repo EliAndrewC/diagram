@@ -198,8 +198,8 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
 - [ ] T53 `make review-yield` (D50); its table recorded (SC-030)
       research: rendering
-- [ ] T54 `make cohort-seeds` and the records' feature field (D51); today's output (SC-031)
+- [ ] T54 `make cohort-seeds`, the records' feature field, and the cohort's ten seeds (D51; the GM's ruling); today's output (SC-031)
       research: rendering
-- [ ] T55 375 closes again: the two gm-review rows, tests, `make hooks-test`, the gate, the report, landed (D52)
+- [ ] T55 375 closes again: the yield table to the GM, tests, `make hooks-test`, the gate, the report, landed (D52)
       research: rendering
 

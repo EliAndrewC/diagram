@@ -150,3 +150,9 @@ enough to choose from. Measured before the spec (research.md R7): `check-bundle`
 `record_prepass` recounts the whole record's word frequencies on every bundle (2.96 of its 3.6 s), so item 5 is built as that
 work cached, the goal the GM approved, rather than as the subprocesses folded in.
 
+Then, asked "are you waiting on rulings from me on anything?" and told: nothing blocks the work; at landing the review checks'
+yield table, the cohort's seeds so far (the first ten seeds would have found every failure, on one feature's change), and
+`check-bundle`'s record work cached in place of the helpers folded in, for him to confirm or overturn. The GM:
+
+> I confirm the check-bundle thing is good as you've done it.  it's also fine to do the 10 seeds.  As for the reviews being changed, I'll look at the table when you have it, thanks
+

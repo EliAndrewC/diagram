@@ -466,16 +466,17 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 # session to do after a cohort failure - "reproduce with the same entry point" - could not be done for
 # any seed but 1 without a 48-seed sweep. Feature 230 needed exactly that for the two seeds its cohort
 # failed on. The reference-settlement gate above it is untouched.
-cohort:         ## [maps] roll N seeds and report every failure      N=48 [SEED=<first seed>] [JOBS=<workers>] [HOUSEHOLDS=<n>]
-##  N=<seeds>   how many seeds to roll (default: 48)
+cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=<first seed>] [JOBS=<workers>] [HOUSEHOLDS=<n>]
+##  N=<seeds>   how many seeds to roll, besides the six pinned rows (default: 10 - the GM, 2026-10-12, on the per-seed record: `make cohort-seeds`)
+# GUARD_EDIT_OK: feature 375 amendment 8 (FR-038) - the GM chose ten seeds over 48 ("it's also fine to do the 10 seeds"); N= still asks for more
 ##  SEED=<n>    the FIRST seed to roll (default: 1) - `N=1 SEED=15` reproduces the cohort's own Audit-15
 ##  JOBS=<n>    worker processes (default: cpus - 2) - each holds a roll, ~0.5 GB; the containers share a 10 GB cap
 # GUARD_EDIT_OK: feature 314 - the cohort's workers were cpus - 2 with no way to ask fewer: 20 on this host, ~10 GB, past the
 # containers' shared cap while other sessions run (the memwatch warned at 9.6 GB). JOBS hands cohort_audit its own --jobs.
 	$(REF_FIRST)
 	@: "GUARD_EDIT_OK: feature 328 - HOUSEHOLDS rolls the cohort at one size, the scaling question (does a change refuse a 20- or 40-household hamlet?) asked without the perf snapshot's timing - five make perf runs were spent as refusal checks on 2026-10-08"
-	@: "GUARD_EDIT_OK: feature 375 amendment 7, FR-029 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is"
-	$(RUN).tools.cohort_audit --count $(or $(N),48) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; exit $$rc
+	@: "GUARD_EDIT_OK: feature 375 amendment 7, FR-029 - the cohort's per-seed record (dev/cohort-log/) is committed alone, as the gate's run record is; amendment 8, FR-038 - ten seeds by default, the GM's choice"
+	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),); rc=$$?; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; exit $$rc
 
 # GUARD_EDIT_OK: `tripwire` RETIRED as a target (GM 2026-09-05), folded into `maps`. It ran the same
 # `mapcheck` with the same auto scope, so with no SCOPE set it was `maps` minus the index refresh -

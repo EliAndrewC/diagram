@@ -325,7 +325,7 @@ def _reference_ok() -> list[str]:
 
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--count", type=int, default=12)
+    ap.add_argument("--count", type=int, default=10)  # the GM, 2026-10-12: ten (feature 375 amendment 8, FR-038)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--only", default=None, help="report only failures of this check")
     ap.add_argument("--jobs", type=int, default=None, help="worker processes (default: cpus - 2, capped at --count)")
@@ -349,13 +349,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     # `--anyway` exists because a rule with no escape hatch gets worked around rather than used -
     # but it is deliberately awkward to type and it prints why it was wrong to need it.
     if not args.anyway:
-        print("checking the reference settlement first (60 s) - the cohort is 20-25 min\n", flush=True)
+        print("checking the reference settlement first (60 s) - the cohort is minutes, every unchanged seed served from the roll cache\n", flush=True)
         ref = _reference_ok()
         if ref:
             print(f"\n\033[1mREFERENCE SETTLEMENT IS FAILING\033[0m: {', '.join(ref)}")
             print("\nThe cohort is not run. Fix the reference map first - it rebuilds in about a minute,")
-            print("and a sweep launched over a broken tree costs 25 and tells you what you already know.")
-            print("Then: python3 -m l7r.diagram.tools.cohort_audit --count 48")
+            print("and a sweep launched over a broken tree costs minutes and tells you what you already know.")
+            print("Then: make cohort")
             print("(--anyway overrides, when you genuinely need the seed list from a red tree.)")
             return 2
         print("\033[1mreference settlement clean\033[0m - running the cohort\n", flush=True)
