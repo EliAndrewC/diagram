@@ -159,8 +159,8 @@ def test_explain_says_what_fired_what_was_ruled_and_what_the_gm_is_asked(root: p
             "note": "counted per feature",
             "test": "tests/tooling/test_hm_arbiter.py",
         },
-        {"kind": "arbiter-fix-done", "trigger": "reversal:/x/.clones/c/research/a.html", "tooling_fix": "bundle the reversal", "note": "bundled now"},
-        {"kind": "arbiter", "trigger": "reversal:/x/.clones/c/research/a.html", "ruling": "process-fault", "why": "two checks pulled"},
+        {"kind": "arbiter-fix-done", "trigger": "reversal:/x/.clones/c/docs/a.md", "tooling_fix": "bundle the reversal", "note": "bundled now"},
+        {"kind": "arbiter", "trigger": "reversal:/x/.clones/c/docs/a.md", "ruling": "process-fault", "why": "two checks pulled"},
     )
     gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
     for t in ("red-gate@2026-10-10T22:25:54Z", "cascade:375", "ask:f375-x", "odd"):
@@ -172,7 +172,7 @@ def test_explain_says_what_fired_what_was_ruled_and_what_the_gm_is_asked(root: p
     assert "[3] the tooling fix: DONE" in e and "Test: tests/tooling/test_hm_arbiter.py" in e, "the fix shown under its ruling"
     assert "Where: research/questions/0047-farm-privies.html" in e and "[2] the tooling fix: DECLINED" in e
     assert "YOUR DECISION: should this fix be made after all?" in e and "OVERTURN=2 TO=" in e
-    assert "Where: research/a.html" in e and "PROCESS FAULT" in e and "A -> B -> A" in e
+    assert "Where: docs/a.md" in e and "PROCESS FAULT" in e and "A -> B -> A" in e
     assert "A session accepted this finding without fixing it: the steam arcs off center" in e
     assert "went red twice" in e and "faster than one per changed line" in e and "process question" in e and "Trigger odd." in e
     one = gm.explain(root, "375", "3", width=200)
