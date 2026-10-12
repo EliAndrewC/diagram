@@ -113,7 +113,7 @@ def test_the_county_draft_rolls_its_granary_and_gate_by_the_records_order() -> N
     prog = c.county_magistracy_program()
     by = {b.name: b for b in prog.buildings}
     assert by["granary"].kind == "kura" and (by["granary"].w_ft, by["granary"].h_ft) == (50.0, 27.0)
-    assert prog.envelope.gate_w_ft == 8.0 and by["gatehouse"].w_ft == 40.0
+    assert prog.envelope.gate_w_ft == ce.YAKUIMON_FRONTAGE_FT - ce.YAKUIMON_PILLAR_FT == 7.0 and by["gatehouse"].w_ft == 40.0  # wave 132
 
 
 def test_a_takakura_draws_its_slats_and_four_posts() -> None:

@@ -66,7 +66,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   gatehouse of its own (its length a GUESS; 2 ken deep, measured), flush west of the gate's post - the gatekeepers' place
   follows from the one-bay gate, which has no range to hold a guardroom (feature 374 wave 128; it was 18 x 12 ft).
 - **R26 main gate**: 0093's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(["one-bay
-  gate", "gate range"])` = one-bay gate: a yakuimon with an 8 ft passage between its posts (research 0093: 6-8.5 ft).
+  gate", "gate range"])` = one-bay gate: a yakuimon with an 8 ft frontage (research 0093: 6-8.5 ft, its 間口 read as the pillar-center span), its passage 7 ft between its posts - the frontage less one ~1 ft pillar, a GUESS (feature 374 wave 132; it was an 8 ft passage).
 - **R30 garden**: no pond drawn - the draft's garden is ground only, which reads as the dry-garden form; its stones and
   sand are left to the hand refinement.
 - **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack

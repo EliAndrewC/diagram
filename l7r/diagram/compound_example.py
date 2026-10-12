@@ -37,7 +37,13 @@ GRANARY_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:granary
 #: one-bay gate ~6-8.5 ft, a nagaya-mon's two ken), and this draft's roll. The gatekeepers' place follows from the form: a
 #: one-bay gate has no range to hold a guardroom, so they sit in a gatehouse of their own (T20's plan review).
 GATE_FORMS: tuple[str, str] = ("one-bay gate", "gate range")
-GATE_W_FT: dict[str, float] = {"one-bay gate": 8.0, "gate range": 12.0}
+#: The one-bay gate's frontage and its pillar (feature 374 wave 132): research/questions/0093-the-main-gate-and-its-gatekeepers-
+#: nagaya-mon.html measures a yakuimon's 間口 (frontage) at 1.8-2.6 m, read as the span between its pillar centers (a bay is
+#: counted between post centers), so the real passage is the frontage less ONE pillar; no yakuimon pillar was found measured, so
+#: ~1 ft is a GUESS. This draft takes an 8 ft frontage. The drawn ~2 ft posts are a convention outside the real passage.
+YAKUIMON_FRONTAGE_FT: float = 8.0
+YAKUIMON_PILLAR_FT: float = 1.0
+GATE_W_FT: dict[str, float] = {"one-bay gate": YAKUIMON_FRONTAGE_FT - YAKUIMON_PILLAR_FT, "gate range": 12.0}
 GATE_FORM: str = random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(GATE_FORMS)
 
 
@@ -99,7 +105,8 @@ def county_magistracy_program() -> CompoundProgram:
         tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a 24 x 18 ft kura (432 sq ft), under the ~450 sq ft records-store ceiling, its shape a GUESS
         barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 23 x 70 ft range along the east wall, 23 ft deep, long and narrow, never squat; its length a GUESS within ~145 ft
         envelope - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: a 270 x 200 ft walled compound, the divider at 90 ft, its buildings in the ~30-42% coverage band; the size a GUESS
-        gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the main gate's form rolled from the record's two (GATE_FORM: a one-bay gate, its passage 8 ft in the yakuimon's ~6-8.5 ft); the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
+        gates - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the main gate's form rolled from the record's two (GATE_FORM: a one-bay gate, an 8 ft frontage in the yakuimon's ~6-8.5 ft, read as its pillar-center span); the west kitchen postern and the south service gate 6 ft each, narrower, a GUESS
+        one-bay gate passage - GUESS research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: the frontage less one ~1 ft pillar, 7 ft; no yakuimon pillar was found measured
         garden before the house - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the garden on the sunny south before the reception and the guest house; its 124 x 46 ft a GUESS
         vegetable garden site - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: the site rolled among 0109's four, those the sun or the room rule out on this draft struck first (GARDEN_SITE: west of the residence)
         vegetable garden size - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.html: the soup-greens plot of ~1,076 sq ft (36 x 30 ft), the field form ruled out by the room

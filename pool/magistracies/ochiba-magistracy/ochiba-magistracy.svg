@@ -114,15 +114,16 @@
          its servants' lodging, in the proportion of a long-house gate) -->
     <line x1="200" y1="750" x2="351.5" y2="750"/>
     <line x1="572.5" y1="750" x2="583.5" y2="750"/>
-    <!-- South, east of gate (the main gate is a one-bay yakuimon opening 588..612 = 8 ft - feature 267 R26,
-         0093: 1.8-2.6 m; it was 13.3 ft) -->
-    <line x1="616.5" y1="750" x2="1000" y2="750"/>
+    <!-- South, east of gate (the main gate is a one-bay yakuimon, its passage 588..610.5 = 7.5 ft: an 8.5 ft frontage, the
+         largest registered (2.6 m, 0093), read as the span between its pillar centers, less one ~1 ft pillar (a GUESS: no
+         yakuimon pillar measured) - feature 374 wave 132; it was an 8 ft passage, and 13.3 ft before feature 267 R26) -->
+    <line x1="615" y1="750" x2="1000" y2="750"/>
   </g>
 
   <!-- Gate posts (flank the south gate opening) -->
   <g fill="#2D2A24" data-kind="main gate">
     <rect x="582" y="747" width="6" height="6"/>
-    <rect x="612" y="747" width="6" height="6"/>
+    <rect x="610.5" y="747" width="6" height="6"/>
   </g>
   <!-- Kitchen postern posts (west service door: deliveries and night-soil
        never cross the hearing court) -->

@@ -1188,40 +1188,64 @@
    "verdict": "CLEAR"
   },
   "T24": {
-   "section_sha256": "ca45122d1c73f5e1d96e81fc2183cda411ecc6b0d24fce1d62ccd9e393e1e794",
-   "section_text": "### Wave 132 (T24) - the one-bay gate's ~6-8.5 ft is its frontage, not its passage\n\n- **W132-1** (within): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html measures the yakuimon across its\n  frontage (1.8-2.6 m) and gives no passage; its drawing page draws the gate 6-8.5 ft wide as that frontage. So the one-bay gate's\n  6-8.5 ft runs post outside to post outside, its passage that frontage less its two posts; the gate range's ~12 ft (two ken) stays\n  a passage. docs/buildings.md's Scale claim and Main gate paragraph say so; the county draft's one-bay gate is drawn as an 8 ft\n  frontage (`GATE_W_FT` the frontage, the passage less the posts); every hand sheet drawing a one-bay main gate is redrawn to it,\n  and `main_gate_passage_ft`'s readers rechecked.\n\n",
+   "section_sha256": "4c5d91bb942d0ef44a7c335840f3bcdb1a55f7bfdad95eecdb42ca327689b658",
+   "section_text": "### Wave 132 (T24) - the one-bay gate's ~6-8.5 ft is its frontage, not its passage\n\n- **W132-1** (within): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html measures the yakuimon across its\n  frontage (1.8-2.6 m) and gives no passage; its drawing page draws the gate 6-8.5 ft wide as that frontage. So the one-bay gate's\n  6-8.5 ft is its frontage. What the passage subtracts is settled here (T24's plan review): the registered measure is 間口, the\n  frontage of a one-bay gate, read as the span between its pillar centers (a reading, the usual measure of a bay), so the real\n  passage is the frontage less ONE pillar's width; no measured yakuimon pillar was found (searched 2026-10-12: the three\n  registered entries, a web search for 薬医門 本柱 寸法 - Imafuku's gate gives 9 x 5 shaku overall, no pillar), so the pillar is\n  ~1 ft, a GUESS. The drawn ~2 ft post (W133) is a convention and never enters the real passage: the posts are drawn outside\n  the real passage, their inner faces on it, the drawn outer-to-outer wider than the frontage, which the docs note says, ending\n  with the real size. The county draft's one-bay gate takes an 8 ft frontage (its passage 7 ft; `GATE_W_FT` the frontage, the\n  passage less the pillar), Ochiba's 8.5 ft, the largest registered (2.6 m) (its passage 7.5 ft) - each a degree within the\n  attested band; the lesser gates (6 ft, a GUESS) stay narrower than either. 0093's drawing page says so; the gate range's ~12\n  ft (two ken) stays a passage; docs/buildings.md's Scale claim and Main gate paragraph say so; `main_gate_passage_ft`'s readers,\n  `gate_feeds_its_road`, the `beside_gate` gatehouse and `postern_approach` rechecked. The round-trip sheet's 13.3 ft gate\n  (neither form) is filed as a row, not this wave's.\n\n",
    "reviewed": "2026-10-12",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "W132-1a",
-     "summary": "The one-bay gate's ~6-8.5 ft is its frontage (post outside to post outside), its passage that frontage less its two posts; the gate range's ~12 ft (two ken) stays a passage",
+     "summary": "The one-bay gate's 6-8.5 ft is its frontage, not its passage",
      "class": "within",
-     "why": "Exactly the ranking row's fix (docs/buildings.md::Scale#main gate passage width): 0093's findings page measures the yakuimon 'across their frontage' and 0093's drawing page draws 'about 6 to 8.5 ft wide, the frontage'; the nagaya-mon 'opening' of two ken stays a passage. 328's request: make the implementation match the research."
+     "why": "0093's findings page measures the three registered yakuimon by 間口 (frontage) 1.8-2.6 m and gives no passage; its drawing page draws 6-8.5 ft 'the frontage'. Making the rule say so is the ranked row's fix (docs/buildings.md::Scale#main gate passage width), under 328's request to make the implementation match the research."
     },
     {
      "id": "W132-1b",
-     "summary": "docs/buildings.md's Scale claim (line 15) and Main gate paragraph (line 126) restated to the frontage reading",
+     "summary": "間口 read as the pillar-center span (the usual measure of a bay), so the real passage is the frontage less ONE pillar's width; the pillar ~1 ft, a GUESS after a recorded search",
      "class": "within",
-     "why": "Named in the row's fix; the operative doc is where the rule lives."
+     "why": "Settles round 1's open question from the record itself: 0093's ken-to-feet-grounds note already says 'a bay is counted between post centers, so the clear opening is a little less'. The ranked row's audit text said 'post outside to post outside ... less the two posts', but that text is the audit's proposal, not the GM's words; the record's own bay convention decides, and the reading is labeled a reading. The pillar width is a GUESS, labeled, with the search stated (three registered entries, a web search on 2026-10-12) - the four-class rule satisfied, not a carve-out."
     },
     {
      "id": "W132-1c",
-     "summary": "The county draft's one-bay gate drawn as an 8 ft frontage (GATE_W_FT the frontage, the passage less the posts)",
+     "summary": "The drawn ~2 ft post (W133) is a map drawing convention outside the real passage: inner faces on the passage, outer-to-outer wider than the frontage, the docs note ending with the real size",
      "class": "within",
-     "why": "The row names the draft's 8 ft yakuimon passage; 8 ft lies inside the drawn 6-8.5 ft band (a degree on a continuum, calibrated liberty, not a choice between forms), and the form itself stays rolled per plan."
+     "why": "Keeps the true passage true at scale; the ~2 ft post is W133's convention, already reviewed CLEAR as T25, and is stated as a convention with the real size beside it rather than inflating the real opening."
     },
     {
      "id": "W132-1d",
-     "summary": "Every hand sheet drawing a one-bay main gate redrawn to the frontage rule",
+     "summary": "The county draft's one-bay gate takes an 8 ft frontage (passage 7 ft); GATE_W_FT the frontage, the passage less the pillar",
      "class": "within",
-     "why": "The row's fix: 'every hand sheet whose yakuimon posts stand outside a 6-8.5 ft opening'. The sheets are magistracies, in scope by 328's amendment 8 ('include magistracies ... since those are permanently manual'). No sheet is carved out."
+     "why": "A degree inside the attested 6-8.5 ft band (calibrated liberty, not a choice between forms); the form itself stays rolled. The row names compound draft's 8 ft yakuimon."
     },
     {
      "id": "W132-1e",
-     "summary": "main_gate_passage_ft's readers (pack_audit report, roads, mapmatch) rechecked",
+     "summary": "Ochiba's one-bay gate takes an 8.5 ft frontage, the largest registered (2.6 m) (passage 7.5 ft)",
      "class": "within",
-     "why": "Named in the row's fix ('recheck main_gate_passage_ft's readers'); it serves making the audit read the rule as changed."
+     "why": "Inside the band. Ochiba is the only hand sheet drawing a one-bay main gate (Ubame and Hayakawa draw a nagaya-mon's 12 ft passage, per their notes), so naming Ochiba alone drops no sheet from round 1's 'every hand sheet drawing a one-bay main gate'."
+    },
+    {
+     "id": "W132-1f",
+     "summary": "The lesser gates (6 ft, a GUESS) stay narrower than either main gate",
+     "class": "within",
+     "why": "Preserves the existing gate hierarchy (the main gate the widest opening) under the new passages; no change of scope."
+    },
+    {
+     "id": "W132-1g",
+     "summary": "The gate range's ~12 ft (two ken) stays a passage",
+     "class": "within",
+     "why": "0093: the registered nagaya-mon 'opens in its central two ken'; the row's fix keeps it."
+    },
+    {
+     "id": "W132-1h",
+     "summary": "0093's drawing page, docs/buildings.md's Scale claim and Main gate paragraph restated; main_gate_passage_ft's readers, gate_feeds_its_road, the beside_gate gatehouse and postern_approach rechecked",
+     "class": "within",
+     "why": "The rule recorded where it lives (research finding, operative doc) and its readers rechecked so the audit enforces the rule as changed - enforcement of the requested fix."
+    },
+    {
+     "id": "W132-1i",
+     "summary": "The round-trip sheet's 13.3 ft gate (neither form) filed as a row, not this wave's",
+     "class": "within",
+     "why": "Outside this row's fix: the row covers one-bay gates whose posts frame a 6-8.5 ft opening and hand sheets; the round-trip test encodes Ochiba's pre-267 gate_w_ft=13.3 (gen.py line 41), a different drift. Filing it into the ranking keeps it on 328's 'fix all of it' list in ranked order (the request's own easiest-to-hardest order); nothing is dropped."
     }
    ],
    "verdict": "CLEAR"

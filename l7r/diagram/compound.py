@@ -800,7 +800,8 @@ def _draw_walls_and_gates(
     # drawn the way the checks read). The gates' posts follow, each gate a group of its kind (feature 267).
     parts.append('<g stroke="#2D2A24" stroke-width="9" data-kind="compound wall">')
     for _side, x1, y1, x2, y2 in _wall_runs(env):
-        parts.append(f'<line x1="{ox + x1 * FTPX:.0f}" y1="{oy + y1 * FTPX:.0f}" x2="{ox + x2 * FTPX:.0f}" y2="{oy + y2 * FTPX:.0f}"/>')
+        lx1, ly1, lx2, ly2 = _px_edges(ox, oy, x1, y1, x2 - x1, y2 - y1)  # half up, as every box's edge (wave 132: a 7 ft gate lost a pixel)
+        parts.append(f'<line x1="{lx1}" y1="{ly1}" x2="{lx2}" y2="{ly2}"/>')
         obstacles.append(Obstacle(tuple(stroke_band(px(x1, y1), px(x2, y2), 4.5)), WEIGHT_OBSTACLE))  # the wall, 9 px drawn
     parts.append("</g>")
     gates = [("main gate", "S", *_gate_interval(env), env.h_ft, GATE_POST_D_FT, "#2D2A24", "")]
@@ -812,14 +813,16 @@ def _draw_walls_and_gates(
         gates.append(("nakamon", "divider", mid[0], mid[1], env.divider_ft, NAKAMON_POST_D_FT, "#3F3A30", ' data-part-of="court divider"'))
     parts.append('<g stroke="#3F3A30" stroke-width="6" data-kind="court divider">')
     for a, b in runs:
-        parts.append(f'<line x1="{ox + a * FTPX:.0f}" y1="{oy + env.divider_ft * FTPX:.0f}" x2="{ox + b * FTPX:.0f}" y2="{oy + env.divider_ft * FTPX:.0f}"/>')
+        dx1, dy1, dx2, _dy2 = _px_edges(ox, oy, a, env.divider_ft, b - a, 0.0)
+        parts.append(f'<line x1="{dx1}" y1="{dy1}" x2="{dx2}" y2="{dy1}"/>')
         obstacles.append(Obstacle(tuple(stroke_band(px(a, env.divider_ft), px(b, env.divider_ft), 3.0)), WEIGHT_OBSTACLE))
     parts.append("</g>")
     for gkind, side, lo, hi, line, deep, ink, whole in gates:
         parts.append(f'<g fill="{ink}"{_kind_attr(gkind)}{whole}>')
         for bx, by, bx2, by2 in _gate_posts(side, lo, hi, line, GATE_POST_W_FT, deep):
             obstacles.append(Obstacle(box(bx, by, bx2 - bx, by2 - by), WEIGHT_OBSTACLE))
-            parts.append(f'<rect x="{ox + bx * FTPX:.0f}" y="{oy + by * FTPX:.0f}" width="{(bx2 - bx) * FTPX:.0f}" height="{(by2 - by) * FTPX:.0f}"/>')
+            gx0, gy0, gx1, gy1 = _px_edges(ox, oy, bx, by, bx2 - bx, by2 - by)
+            parts.append(f'<rect x="{gx0}" y="{gy0}" width="{gx1 - gx0}" height="{gy1 - gy0}"/>')
         parts.append("</g>")
 
 
