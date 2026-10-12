@@ -42,3 +42,21 @@ round history ("no Rounds section"). The session proposed one ruling for a batch
 exceptions, and to look at the bundle defect. The GM:
 
 > Yes, it does seem like a whole batch of pop-ups reaching the round cap at once should get a single ruling. because they are likely to be related. And that does sound like it would be more efficient. And then yes, please also do look at that bundle defect.
+
+## Amendment 3 (2026-10-11, the same later session)
+
+The hourly checks were stopped and the GM asked where 374's time went. Measured from its transcript (1,574 tool calls):
+model time 6.5 h, tool time 6.25 h, of which timing runs 2.5 h, the record and claims tooling 59 min (`modal-bundle`,
+`claims-owed`, `claims-bundle`, `record-owed`, `check-bundle` - each about 6 s on its real delta, run hundreds of times),
+`make hooks-test` 39 min (19 runs). Of the pop-up checks, about 20 of 374's units and 21 of 352's reached the round cap and the
+round arbiter accepted nearly all; every second and third round was owed because the pop-up changed - the edits the last
+round's checks proposed, applied - and `modal-form` proposed edits in nearly every second round. The session said a fuller fix
+would order the checks, and asked to look at more data first. The GM:
+
+> Yes please - the round 3 caps indicating "one structural cause" is definitely worth fixing as well; you mentioned that a fuller fix would order the checks, but that you wanted to look at more data before moving forward.  Do we have enough to be able to do that now?  Even if not then perhaps it's worth trying to make the speculative fix and measuring it afterwards.
+>
+> Either way, yes it sounds like `modal-bundle` and `check-bundle` and `claims-owed` and `record-owed` are all worth improving and it osunds like that could all be sped up enormously.  And I agree we could skip `hooks-test` could be skipped when not touched which it sounds like would help well.  So yes, please do all of that as part of amendments to 375.
+>
+> As for timings being thbe biggest single cost, I suspect it might make sense to relax some of the timing requirements, but let's talk about that after you make the other changes.
+
+The timing requirements are not part of this amendment: the GM will discuss them after it lands.

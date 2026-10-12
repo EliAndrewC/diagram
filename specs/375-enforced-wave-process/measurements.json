@@ -211,5 +211,63 @@
    "same rows": true,
    "reading": "reading only the active clones cuts the clone pass from ~0.9 s to ~0.14 s (about 85%) with the same rows; the GM's condition 'if it helps performance' holds, so the listing reads active clones"
   }
+ },
+ "375-a3-record-tooling-before": {
+  "quantity": "wall time of the record tooling on a real feature delta before amendment 3 (FR-020)",
+  "observed": "2026-10-11",
+  "source": "374's pushed HEAD 61a52f3c8 (origin backup/diagram-backlog) in a detached worktree, its record-checks answer store copied (RECORD_CHECKS_DIR); the container loaded by other sessions",
+  "command": "python3 scripts/record/record_owed.py --root .; check_bundle.py 0190 [--no-quotes]; modal_bundle.py hamlet/notice-board --for modal-depiction --reason timing; claims.py owed",
+  "method": "date +%s.%N around each command, one run each; the stages of record_owed.units timed in-process with time.perf_counter, and the git processes counted with cProfile",
+  "value": {
+   "record-owed s": 6.0,
+   "record-owed in-process s": 5.4,
+   "check-bundle Q=0190 no quotes s": 6.0,
+   "check-bundle Q=0190 with quotes, first run s": 20.7,
+   "modal-bundle hamlet/notice-board depiction s": 6.7,
+   "claims-owed s": 6.9,
+   "units() stages s": {
+    "read the working tree": 0.8,
+    "read the merge base": 0.92,
+    "owed": 0.02,
+    "translation": 0.46,
+    "entry-drift": 0.76,
+    "pop-ups": 1.25
+   },
+   "git processes": {
+    "pop-ups (modal_owed)": 299,
+    "entry-drift classes (entry_owed)": 177
+   },
+   "374 transcript, record and claims tooling": "59 min over 209 calls (modal-bundle 33, claims-owed 39, claims-bundle 32, record-owed 37, check-bundle 13 among them)",
+   "reading": "every command pays record_owed.units: the whole record parsed twice and one git process per pop-up and class file; claims-owed re-parses every engine module"
+  }
+ },
+ "375-a3-popup-rounds-before": {
+  "quantity": "pop-up check dispatches per checked unit before amendment 3 (FR-019, SC-012's baseline)",
+  "observed": "2026-10-11",
+  "source": "the kept dispatch records (.git/checks-open.json) of the diagram-backlog clone (374) and the diagram-research clone (343, 368, 335 and 352's rounds), and their kept replies (.git/check-replies)",
+  "command": "count each (pop-up, check) unit's dispatches and their `owed:` lines; count EDIT blocks per reply by round",
+  "method": "a one-off script over the JSON, read-only",
+  "value": {
+   "374": {
+    "units": 34,
+    "dispatches": 71,
+    "per unit": 2.09,
+    "units with a 2nd round": 29,
+    "units with a 3rd": 4
+   },
+   "research clone": {
+    "units": 82,
+    "dispatches": 169,
+    "per unit": 2.06,
+    "units with a 2nd round": 70,
+    "units with a 3rd": 11
+   },
+   "why rounds 2 and later were owed": "every one recorded `the modal or its Depiction tab changed` or `its About, Guesses or Entry changed`: the pop-up's own words, moved by the last round's applied edits",
+   "modal-form replies proposing edits in round 2": {
+    "research clone": "12 of 12 kept",
+    "374": "2 of 5"
+   },
+   "round-arbiter accepts at the cap": "374 wave 120: 5 units in one batch; 352: 21 triggers in one batch"
+  }
  }
 }

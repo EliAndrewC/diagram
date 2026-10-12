@@ -1,0 +1,23 @@
+# Feature 375 - research
+
+Load this file when: checking where amendment 3's figures came from.
+
+## R1 - the record tooling's cost on a real delta (amendment 3, FR-020)
+
+`m:375-a3-record-tooling-before`. On 374's pushed HEAD 61a52f3c8 (a detached worktree, its answer store copied), each of
+`record-owed`, `check-bundle`, `modal-bundle` and `claims-owed` took 6.0 to 6.9 s of wall time. The first three spend most of
+it in `record_owed.units`: the whole record parsed at the merge base and at the working tree (0.92 s and 0.8 s), the pop-ups
+read at the base by one `git show` each (299 processes, 1.25 s for the stage), the entry-drift classes likewise (177, 0.76 s).
+`claims-owed` re-parses every engine module for its claims. `check-bundle`'s quote pass (`quote-verbatim`) took 0.3 s with
+the page cache warm; its 20.7 s first run was the cache filling. In 374's transcript the record and claims tooling took
+59 min over 209 calls.
+
+## R2 - why pop-ups reach the round cap (amendment 3, FR-019)
+
+`m:375-a3-popup-rounds-before`. From the kept dispatch records and replies of the diagram-backlog clone (374) and the
+diagram-research clone: 2.09 and 2.06 dispatches per checked (pop-up, check) unit, 29 of 34 and 70 of 82 units with a second
+round. Every second and later round's recorded reason was the pop-up's own words having changed - the last round's applied
+edits. A check's OWN applied edits already settle its units (feature 335, `apply_edits.settle_round`); the others' do not.
+`modal-form` proposed edits in 12 of 12 kept second-round replies in the research clone (2 of 5 in 374's), each re-owing the
+substance checks. One case argues against running form last: 374's residence-corridor round 2, where `modal-research` caught a
+comparison that modal-form's rewording had introduced.
