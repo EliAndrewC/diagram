@@ -122,8 +122,9 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   the file is reused as under FR-013. A git command that may change the repository, or one whose answer cannot be asked again,
   still makes the file run.
 - **FR-016 A Python process a test starts keeps the recording.** A test file whose Python children are started in a way that
-  drops the recording (an isolated interpreter, a fresh environment) records what those children read, unless the test needs
-  the isolation itself (then the file runs, as now). The measured cost behind FR-015 and FR-016: 29 and 28 of the 102
+  drops the recording (an isolated interpreter, a fresh environment) records what those children read: the recording's variables are put into the environment the test gives the child. A
+  child started isolated (`-I`, `-E`, `-S`) ignores that environment and its file runs; no tooling test file does so on the
+  amendment's first recording (0 of 126, `scripts/measure/tooling_reuse_time.py`'s causes). The measured cost behind FR-015 and FR-016: 29 and 28 of the 102
   test-seconds that always ran (research R8, measured 2026-10-13).
 - **FR-017 Each step of a landing is timed.** `make land-tooling` writes each step's time - the worktree, the patch, the guard
   suites, the tooling tests, the push - to its log, so that where a landing's time goes is read from the log and not guessed.
@@ -135,6 +136,9 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-019 What else the measurement shows is improved and landed.** A step the FR-017 timing shows costing more than a few
   seconds that can be cut without loosening a check is cut in this amendment; one that cannot is recorded with its
   measurement.
+- **FR-020 Every other cause of an always-run file is looked at.** Each remaining cause in research R8 - `source-block-hooks.sh`,
+  ruff, node, resvg, bash, make, pdftotext, `claude`, a read of a file git ignores - is either made known (the file reused on
+  identical inputs) or recorded in the research with its test-seconds and why it cannot be.
 
 ## Success criteria
 
@@ -173,12 +177,12 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-011** (FR-014) quote-verbatim's report on a question is byte-identical with the cache on and off, and a second run is
   measured against the first; and a quotation is judged afresh when the quoted passage, the page's text or the judging
   code changes (a test).
-- **SC-012** (FR-015, FR-016) A tooling test file whose only always-run cause was a read-only git question or a Python child
+- **SC-012** (FR-015, FR-016, FR-020) A tooling test file whose only always-run cause was a read-only git question or a Python child
   is reused in a worktree with identical inputs, and runs when a git answer changes (a test with a fixture repository) or a
   file its child read changes; a git command that writes still makes the file run. The count of tooling test files that
   always run, before (38 of 126, research R8) and after, each printed by `scripts/measure/tooling_reuse_time.py`.
-- **SC-013** (FR-017, FR-018, FR-019) `make land-tooling` measured step by step: before, each step timed by hand in a worktree at main (research R7); after, on a real landing from its
-  log, with the load; each tooling test file runs at most once in the landing (its log); the guard suites and the tooling
+- **SC-013** (FR-017, FR-018, FR-019) `make land-tooling` measured step by step from FR-017's log, with the load: before, on a
+  real landing made with the timing and none of the cuts; after, on a real landing with them; each tooling test file runs at most once in the landing (its log); the guard suites and the tooling
   tests overlap in time (their step times in the log).
 
 ## Review history
