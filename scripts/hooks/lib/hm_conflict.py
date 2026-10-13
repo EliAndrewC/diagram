@@ -173,6 +173,26 @@ def staged_by(cmd: str, cwd: str) -> list[str]:
     return sorted(set(paths))
 
 
+def _one(path: str) -> bool:
+    """Does this one file carry a conflict? Unreadable as text - binary, a directory, gone - is no."""
+    return bool(conflicted([path]))
+
+
+def conflicted_tracked(root: str, files: list[str]) -> list[str]:
+    """`conflicted` over the tracked files, each file's answer kept by its content (feature 383, the GM 2026-10-12:
+    `record_cache.FileFacts`), so only a file that changed is read again. Without the cache module beside this one (a
+    fixture copy), every file is read, as before."""
+    try:
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / "record"))
+        import record_cache  # noqa: PLC0415
+    except ImportError:
+        return conflicted(files)
+    top = pathlib.Path(root).resolve()
+    rel = {f: os.path.relpath(f, top) for f in files}
+    found = record_cache.FileFacts(top, "conflict-markers", pathlib.Path(__file__)).facts(list(rel.values()), lambda r: _one(str(top / r)))
+    return sorted({f for f in files if found[rel[f]]})
+
+
 def tracked_files(root: str) -> list[str]:
     r = subprocess.run(["git", "-C", root, "ls-files", "-z"], capture_output=True, text=True, check=False)
     return [str(pathlib.Path(root) / n) for n in r.stdout.split("\0") if n]
@@ -268,7 +288,7 @@ def main(argv: list[str]) -> int:
         return 2
     root = argv[1] if len(argv) > 1 else "."
     files = tracked_files(root)
-    bad = conflicted(files)
+    bad = conflicted_tracked(root, files)
     if not bad:
         print(f"conflict-markers: none in {len(files)} tracked file(s)")
         return 0

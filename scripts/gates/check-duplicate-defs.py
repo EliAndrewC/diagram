@@ -60,34 +60,50 @@ def duplicate_defs(path: Path) -> list[tuple[str, int, int]]:
     return out
 
 
+def _facts_of(path: Path) -> list[tuple[str, int, int]] | str:
+    """What the scan reports for one file: its duplicates, or why it does not parse."""
+    try:
+        return duplicate_defs(path)
+    except SyntaxError as exc:  # a truncated merge artifact is exactly worth failing on
+        return f"unparseable ({exc})"
+
+
+def _file_facts(root: Path) -> object | None:
+    """Feature 383 (the GM 2026-10-12): each module's findings kept by its content (`record_cache.FileFacts`), so only a
+    module that changed is parsed again. None where the cache module is not beside this script (a fixture copy)."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "record"))
+        import record_cache  # noqa: PLC0415
+    except ImportError:
+        return None
+    return record_cache.FileFacts(root, "duplicate-defs", Path(__file__))
+
+
 def run(root: str = ".", scan_roots: tuple[str, ...] = SCAN_ROOTS) -> tuple[int, int]:
     """(problem_count, scanned_file_count) over every .py under root's scan dirs."""
-    bad = 0
-    scanned = 0
+    files: list[Path] = []
     for scan in scan_roots:
         base = Path(root) / scan
         if not base.is_dir():
             continue
-        for p in sorted(base.rglob("*.py")):
-            if SKIP_PARTS.intersection(
-                p.relative_to(base).parts
-            ):  # RELATIVE parts - see docstring
-                continue
-            scanned += 1
-            try:
-                found = duplicate_defs(p)
-            except (
-                SyntaxError
-            ) as exc:  # a truncated merge artifact is exactly worth failing on
-                print(f"{p}: unparseable ({exc})")
-                bad += 1
-                continue
-            for name, first, dup in found:
-                print(
-                    f"{p}:{dup}: duplicate top-level def '{name}' (first defined at line {first}) - the later definition silently shadows the earlier one"
-                )
-                bad += 1
-    return bad, scanned
+        files += [p for p in sorted(base.rglob("*.py")) if not SKIP_PARTS.intersection(p.relative_to(base).parts)]  # RELATIVE parts - see docstring
+    top = Path(root).resolve()
+    rel = {p: p.resolve().relative_to(top).as_posix() for p in files}
+    facts = _file_facts(top)
+    found = facts.facts([rel[p] for p in files], lambda r: _facts_of(top / r)) if facts is not None else {rel[p]: _facts_of(p) for p in files}  # type: ignore[attr-defined]
+    bad = 0
+    for p in files:
+        got = found[rel[p]]
+        if isinstance(got, str):
+            print(f"{p}: {got}")
+            bad += 1
+            continue
+        for name, first, dup in got:
+            print(
+                f"{p}:{dup}: duplicate top-level def '{name}' (first defined at line {first}) - the later definition silently shadows the earlier one"
+            )
+            bad += 1
+    return bad, len(files)
 
 
 def selftest() -> int:

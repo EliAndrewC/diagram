@@ -1,8 +1,7 @@
 # scripts/ - the project's tooling, by purpose
 
 Everything runs through `make` (the targets name these files); the top level holds only what a session runs by hand.
-Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no leading underscore, and
-`scripts/gates/check-old-layout.py` refuses a pointer to the old flat layout.
+Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no leading underscore.
 
 | path | what is in it |
 |---|---|

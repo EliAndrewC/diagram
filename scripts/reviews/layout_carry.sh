@@ -19,7 +19,7 @@
 # Called by sync-with-main.sh after a clone's pull and after the mirror's fast-forward. `--selftest` proves it.
 set -uo pipefail
 
-OLD_REL=".claude/skills/""diagram"   # split so the old-layout check does not find this file naming it
+OLD_REL=".claude/skills/""diagram"   # split so the old-layout check (retired, feature 383) did not find this file naming it
 
 carry() {
   local tree="$1" old moved=0 dropped=0 renamed=0 f rel dest

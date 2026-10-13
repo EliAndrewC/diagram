@@ -82,7 +82,7 @@ def read_at(root: pathlib.Path, rev: str | None, sources: set[str] | None = None
         names = _git(root, "ls-tree", "-r", "--name-only", rev, "--", ru.QUESTIONS, *ru.SOURCE_DIRS).split("\n")
         is_src = lambda n: n.startswith(tuple(d + "/" for d in ru.SOURCE_DIRS))  # noqa: E731
         names = [n for n in names if n.endswith(".html") and (sources is None or not is_src(n) or n.rsplit("/", 1)[1] in sources)]
-        blobs = _cat(root, [f"{rev}:{n}" for n in names])
+        blobs = _blobs_at(root, rev, names)
         files = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if n.startswith(ru.QUESTIONS + "/")}
         src = {n.rsplit("/", 1)[1]: b for n, b in zip(names, blobs, strict=True) if is_src(n)}
     sources = {m.group(1): text for name, text in src.items() if (m := _SOURCE_FILE.match(name))}
@@ -90,6 +90,21 @@ def read_at(root: pathlib.Path, rev: str | None, sources: set[str] | None = None
     record = ru.Record.of(files, sources, cache)
     cache.save()
     return record
+
+
+_REV_FILES: dict[pathlib.Path, rc.ParseCache] = {}
+
+
+def _blobs_at(root: pathlib.Path, rev: str, names: list[str]) -> list[str]:
+    """The files `names` at commit `rev`, kept by the two (feature 383, plan D6): a commit never changes, and a bundle, the
+    owed checks and the record gate each read the merge base's record again - 0.2 s a read, three reads a bundle."""
+    if root not in _REV_FILES:
+        _REV_FILES[root] = rc.ParseCache.at(root, "rev-files", HERE / "record_cache.py")
+        _REV_FILES[root].PRUNE_AT = 2  # a revision's record is 5 MB: keep this run's revisions and as many again, no more
+    cache = _REV_FILES[root]
+    blobs = cache.get(rc.text_key(rev, *names), lambda: _cat(root, [f"{rev}:{n}" for n in names]))
+    cache.save()
+    return blobs
 
 
 _CACHES: dict[pathlib.Path, rc.ParseCache] = {}

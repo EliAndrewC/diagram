@@ -39,6 +39,17 @@ from typing import Any
 
 OWED = "arbiter-owed.json"
 RULINGS = ("continue", "accept", "process-fault")
+#: the hourly step-back's rulings (feature 383 FR-010): nothing to change, or a binding change of route (`what`)
+HOUR_RULINGS = ("continue", "change-route")
+
+
+def _checkpoint():  # noqa: ANN202 - scripts/reviews/checkpoint.py, imported by path (a hook's helper has no package)
+    import sys  # noqa: PLC0415
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "reviews"))
+    import checkpoint  # noqa: PLC0415
+
+    return checkpoint
 #: check dispatches per hand-written changed line past which a feature's checks are cascading (FR-010), and the fewest
 #: dispatches before the ratio means anything. Set from the SC-006 replay (specs/375-enforced-wave-process/measurements.json
 #: `cascade-threshold`): 372's wave 106 ran 0.13 and its looping wave 108 1.35.
@@ -293,8 +304,11 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
     if not batch and trigger in batch_triggers(root, [trigger]) and others:
         raise ValueError(f"{len(others)} other round trigger(s) are owed with it - rule them together, ONE ruling: make "
                          "arbiter-bundle BATCH=1, then make arbiter-ruled BATCH=1 FILE=<its JSON> AS=round-arbiter (FR-017)")
-    if ruling.get("ruling") not in RULINGS or not str(ruling.get("why") or "").strip():
-        raise ValueError(f"a ruling is one of {RULINGS} with a `why`")
+    hour = trigger.startswith("hour:")  # GUARD_EDIT_OK: feature 383 FR-009/FR-010 - the hourly step-back's own two rulings
+    if ruling.get("ruling") not in (HOUR_RULINGS if hour else RULINGS) or not str(ruling.get("why") or "").strip():
+        raise ValueError(f"a ruling is one of {HOUR_RULINGS if hour else RULINGS} with a `why`")
+    if hour and ruling["ruling"] == "change-route" and not str(ruling.get("what") or "").strip():
+        raise ValueError("a `change-route` ruling names in `what` the loop or the unresearched number and the route to take")
     fix = str(ruling.get("tooling_fix") or "").strip()
     fix_on = str(ruling.get("tooling_fix_on") or "") if batch else ""  # a batch's one fix, held by another of its rows (375 a2)
     if ruling["ruling"] == "process-fault" and not fix and not fix_on:  # feature 379 FR-001: the fault IS the fix, made and held
@@ -319,12 +333,20 @@ def record_ruling(root: Path, trigger: str, ruling: Mapping[str, Any], declared:
            # reads so (feature 374 batch 5: an accepted unit's last verdict was NEEDS-WORK at an older key, and the gate refused)
            **({"content_key": ck} if trigger.startswith("round:") and not trigger.startswith("round:spec-fidelity|")
               and (ck := unit_content_key(root, row_unit(trig, trigger))) else {})}
+    for_gm = str(ruling.get("for_gm") or "").strip() if hour else ""
+    if for_gm:
+        row["for_gm"] = for_gm
     d.mkdir(parents=True, exist_ok=True)
     with (d / "arbiter.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False) + "\n")
-    _gm_row(d, {"kind": "arbiter", "trigger": trigger, "ruling": row["ruling"], "why": row["why"],
-                **({"asked": row["asked"]} if "asked" in row else {}), **({"what": row["what"]} if row["what"] else {}),
-                **({"tooling_fix": fix} if fix else {}), "utc": when})
+    # GUARD_EDIT_OK: feature 383 FR-010 - an hour with nothing to change (`continue`, no fix, nothing for the GM) adds no row to
+    # the GM's review: the one exception to "the GM reviews every ruling", stated in the arbiter's contract
+    if not hour or row["ruling"] != "continue" or fix or for_gm:
+        _gm_row(d, {"kind": "arbiter", "trigger": trigger, "ruling": row["ruling"], "why": row["why"],
+                    **({"asked": row["asked"]} if "asked" in row else {}), **({"what": row["what"]} if row["what"] else {}),
+                    **({"tooling_fix": fix} if fix else {}), **({"for_gm": for_gm} if for_gm else {}), "utc": when})
+    if hour:  # the hour is answered: the checkpoint's clock restarts from when it opened (scripts/reviews/checkpoint.py)
+        _checkpoint().close_checkpoint(root, trigger)
     if row["ruling"] == "accept" and row["kind"] == "round":
         accept_answers(root, row["unit"], f"accepted by the round arbiter ({trigger})")
     path = common_dir(root) / OWED

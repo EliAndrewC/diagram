@@ -110,20 +110,8 @@ def imported_files(path: pathlib.Path, repo: pathlib.Path, seen: set[pathlib.Pat
     if path in seen or not path.is_file():
         return seen
     seen.add(path)
-    import ast  # noqa: PLC0415
-
-    try:
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-    except (SyntaxError, UnicodeDecodeError):
-        return seen
     dirs = [path.parent, *(path.parent / d for d in ("../hooks/lib", "../reviews", "../record", "../measure", "../gates"))]
-    names: list[str] = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            names += [a.name for a in node.names]
-        elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
-            names += [node.module, *(f"{node.module}.{a.name}" for a in node.names)]
-    for name in names:
+    for name in _import_names(path, repo):
         parts = name.split(".")
         candidates = [d / f"{name}.py" for d in dirs if len(parts) == 1]
         candidates += [repo.joinpath(*parts).with_suffix(".py"), repo.joinpath(*parts, "__init__.py")]
@@ -134,11 +122,70 @@ def imported_files(path: pathlib.Path, repo: pathlib.Path, seen: set[pathlib.Pat
     return seen
 
 
+_NAMES: dict[str, list] = {}  # {path: [mtime_ns, size, names]}, the imports index below, loaded once per process
+_NAMES_DIRTY: list[bool] = [False]
+
+
+def _names_file(repo: pathlib.Path) -> pathlib.Path | None:
+    d = None if off() else common_dir(repo)
+    return d / CACHE_DIR / "imports.json" if d is not None else None
+
+
+def _import_names(path: pathlib.Path, repo: pathlib.Path) -> list[str]:
+    """The names a module imports, kept by its mtime and size (feature 383): the code key parsed every module of a tool's
+    import graph on every run - 0.4 s of a check bundle, 75 modules - though they change far less often than it runs."""
+    if not _NAMES and not _NAMES_DIRTY[0]:
+        import json  # noqa: PLC0415
+
+        f = _names_file(repo)
+        try:
+            loaded = json.loads(f.read_text(encoding="utf-8")) if f is not None and f.is_file() else {}
+        except (OSError, ValueError):
+            loaded = {}
+        _NAMES.update(loaded if isinstance(loaded, dict) else {})
+    st = path.stat()
+    kept = _NAMES.get(str(path))
+    if isinstance(kept, list) and kept[:2] == [st.st_mtime_ns, st.st_size]:
+        return kept[2]
+    import ast  # noqa: PLC0415
+
+    names: list[str] = []
+    try:
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+    except (SyntaxError, UnicodeDecodeError):
+        tree = None
+    for node in ast.walk(tree) if tree is not None else ():
+        if isinstance(node, ast.Import):
+            names += [a.name for a in node.names]
+        elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
+            names += [node.module, *(f"{node.module}.{a.name}" for a in node.names)]
+    _NAMES[str(path)] = [st.st_mtime_ns, st.st_size, names]
+    _NAMES_DIRTY[0] = True
+    return names
+
+
+def _save_names(repo: pathlib.Path) -> None:
+    f = _names_file(repo)
+    if not _NAMES_DIRTY[0] or f is None:
+        return
+    import json  # noqa: PLC0415
+
+    try:
+        f.parent.mkdir(parents=True, exist_ok=True)
+        tmp = f.with_suffix(f".{os.getpid()}.tmp")
+        tmp.write_text(json.dumps(_NAMES), encoding="utf-8")
+        os.replace(tmp, f)
+        _NAMES_DIRTY[0] = False
+    except OSError:
+        pass
+
+
 def code_sha_of(repo: pathlib.Path, *paths: pathlib.Path) -> str:
     """`code_sha` over `paths` and every project module they import, transitively, in a stable order."""
     files: set[pathlib.Path] = set()
     for p in paths:
         imported_files(p, repo, files)
+    _save_names(repo)
     return code_sha(*sorted(files))
 
 
@@ -204,3 +251,131 @@ class ParseCache:
         except Exception:  # noqa: BLE001 - an unwritable cache costs the next run its speed, never its answer
             if tmp:
                 pathlib.Path(tmp).unlink(missing_ok=True)
+
+
+# ---- feature 383 (the GM 2026-10-12): a check's work kept by the CONTENT it read ----------------------------------------------
+#: "we can compute a hash of the file within a tiny fraction of a second ... a cache that stores the previous values extracted
+#: from a file and the hash of the file at the time that they were extracted" (the GM). A clean tracked file's content id is
+#: its index blob id - git has already hashed it, so the whole repository's ids are one `ls-files -s` (0.02 s); only a file the
+#: work tree changed is read and hashed here.
+
+
+def _git_z(root: pathlib.Path, *args: str) -> list[str]:
+    p = subprocess.run(["git", "-C", str(root), *args], capture_output=True, check=False)
+    return [s for s in p.stdout.decode("utf-8", errors="surrogateescape").split("\0") if s] if p.returncode == 0 else []
+
+
+def _hash_file(path: pathlib.Path) -> str:
+    try:
+        return "w:" + hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError:
+        return "gone"
+
+
+def content_ids(root: pathlib.Path, prefixes: Sequence[str] = (), *, untracked: bool = False) -> dict[str, str]:
+    """{path: content id} for every tracked file (under `prefixes`, when given): its index blob id, or - where the work tree
+    changed it, or (with `untracked`) git does not track it and does not ignore it - a hash of its bytes. Two or three git
+    processes, never one per file."""
+    scope = ["--", *prefixes] if prefixes else []
+    ids: dict[str, str] = {}
+    for rec in _git_z(root, "ls-files", "-s", "-z", *scope):
+        meta, _, path = rec.partition("\t")
+        parts = meta.split()
+        if len(parts) == 3 and path:
+            ids[path] = parts[1]
+    for path in _git_z(root, "diff", "--name-only", "-z", *scope):
+        ids[path] = _hash_file(root / path)
+    if untracked:
+        for path in _git_z(root, "ls-files", "--others", "--exclude-standard", "-z", *scope):
+            ids[path] = _hash_file(root / path)
+    return ids
+
+
+class FileFacts:
+    """What an extractor found in each file, kept by the file's content id and the extractor's code (`ParseCache.at`'s name
+    carries the sha of `code` and every project module it imports - pass a data file the extraction depends on, such as a
+    config, among `code` too). `facts(paths, extract)` extracts only the files not kept; `facts_batch(paths, extract_many)`
+    hands the misses over together, for an extractor that is one subprocess over many files."""
+
+    def __init__(self, root: pathlib.Path, name: str, *code: pathlib.Path, ids: dict[str, str] | None = None) -> None:
+        self.root = root
+        self.cache = ParseCache.at(root, f"facts-{name}", *code)
+        self.ids = ids
+
+    def _key(self, path: str) -> str:
+        if self.ids is None:
+            self.ids = content_ids(self.root)
+        cid = self.ids.get(path) or _hash_file(self.root / path)
+        return text_key(path, cid)
+
+    def _ids_for(self, paths: Sequence[str]) -> None:
+        """The content ids of the directories `paths` sit in, listed once - not the whole repository's, for a check that
+        reads one corner of it."""
+        if self.ids is None and paths:
+            dirs = sorted({p.rsplit("/", 1)[0] if "/" in p else "." for p in paths})
+            self.ids = content_ids(self.root, () if "." in dirs or len(dirs) > 64 else dirs)
+
+    def fact(self, key_text: str, make: Callable[[], Any]) -> Any:  # noqa: ANN401 - the caller's own value
+        """One value kept by the text it was made from - for an engine reader handed this object as its memo (feature 383:
+        the record store's `MEMO`); `save()` writes what the run added."""
+        return self.cache.get(text_key(key_text), make)
+
+    def save(self) -> None:
+        self.cache.save()
+
+    def facts(self, paths: Sequence[str], extract: Callable[[str], Any]) -> dict[str, Any]:
+        self._ids_for(paths)
+        out = {p: self.cache.get(self._key(p), lambda p=p: extract(p)) for p in paths}
+        self.cache.save()
+        return out
+
+    def facts_batch(self, paths: Sequence[str], extract_many: Callable[[list[str]], dict[str, Any]]) -> dict[str, Any]:
+        self._ids_for(paths)
+        keys = {p: self._key(p) for p in paths}
+        misses = [p for p in paths if keys[p] not in self.cache.data]
+        found = extract_many(misses) if misses else {}
+        out = {}
+        for p in paths:
+            out[p] = self.cache.get(keys[p], lambda p=p: found.get(p))
+        self.cache.save()
+        return out
+
+
+class ResultMemo:
+    """A check's whole answer, kept for a run that PASSED, by the content of every file under its input trees (tracked and
+    untracked, the ignored excepted), its code and the interpreter's version. `hit()` is the kept (stdout, stderr) while
+    nothing it read changed; `keep(out, err)` records a pass. A failing run is never kept: a refusal is always computed."""
+
+    def __init__(self, root: pathlib.Path, name: str, inputs: Sequence[str], *code: pathlib.Path, argv: Sequence[str] = ()) -> None:
+        import sys  # noqa: PLC0415
+
+        ids = content_ids(root, inputs, untracked=True)
+        repo = pathlib.Path(__file__).resolve().parents[2]
+        self.key = text_key(name, *argv, sys.version, code_sha_of(repo, *code) if code else "", *(f"{p}\x1e{i}" for p, i in sorted(ids.items())))
+        d = common_dir(root)
+        self.path = None if off() or d is None else d / CACHE_DIR / f"memo-{name}.json"
+
+    def hit(self) -> tuple[str, str] | None:
+        if self.path is None:
+            return None
+        try:
+            import json  # noqa: PLC0415
+
+            kept = json.loads(self.path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return None
+        return (kept.get("out", ""), kept.get("err", "")) if isinstance(kept, dict) and kept.get("key") == self.key else None
+
+    def keep(self, out: str, err: str) -> None:
+        if self.path is None:
+            return
+        import json  # noqa: PLC0415
+
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            fd, tmp = tempfile.mkstemp(dir=self.path.parent, suffix=".tmp")
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                json.dump({"key": self.key, "out": out, "err": err}, f)
+            os.replace(tmp, self.path)
+        except OSError:
+            pass

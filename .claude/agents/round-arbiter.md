@@ -12,7 +12,9 @@ omitClaudeMd: true
 Only when a guard refuses with "a tripwire is owed its ruling first" and names `make arbiter-bundle TRIGGER=<id>`. A trigger is
 one of: a check's round past its cap on one page, pop-up or map (`round:`), an edit that put back text an earlier edit replaced
 (`reversal:`), a second red `make done` in a row (`red-gate`), check dispatches out of proportion to the change (`cascade`).
-Dispatch it on that MANIFEST and nothing else.
+Dispatch it on that MANIFEST and nothing else. And on the feature's hour (`hour:`): when `make tick` refuses because the
+feature's hourly checkpoint is due, `make step-back` opens it and builds a step-back bundle; dispatch this agent on that
+MANIFEST (feature 383).
 
 # The round arbiter (feature 375, FR-011)
 
@@ -99,6 +101,33 @@ Any tooling change you recommend - under any ruling, whether or not it caused th
 sentence naming the tool and the change (a guard that let a known hazard through, a command that misled, a bundle that hid
 what it needed). Never leave one only in `why` or `what`: a fix written there was lost (feature 379). The session MAKES it,
 with its test, before its next tick; one that would overhaul a process goes to the GM's review instead. Nobody files it.
+
+## An hour trigger: step back over the hour (feature 383)
+
+The GM, 2026-10-12: *"convert the hourly check that we are doing here into something that like happens automatically ... this
+sanity check or stepping back and looking at the problem from above check"*. On an `hour:<feature>@<n>` trigger you judge one
+hour of the session's work from outside, from its step-back bundle: where the time went (`time.md`), the checks it dispatched
+(`dispatches.md`), the guards that refused it (`refusals.md`), its open tasks (`task.md`) and its own words - replies,
+commands, edits, never a tool's output (`words.md`). Nothing has gone wrong to bring you here: the hour is up. Ask four
+questions of it:
+
+1. **Is it going in circles, or oscillating?** The same edit made and unmade, a route abandoned and taken up again, a probe
+   re-run with nothing changed between, a check's findings answered and found again.
+2. **Is it packing?** Rounds, routes or probes fitting map features into ground a number fixes - a homestead size, a spacing, a
+   reach, a band - where that number is UNRESEARCHED, a GUESS, a CONVENTION or a convenience figure, and more room would
+   settle it while the map stays within the research (the section above). Name the number.
+3. **Is a step slow, or a guard misfiring,** enough to be worth a tooling fix: a command taking minutes the hour repeated, a
+   guard refusing correct work, a bundle hiding what the session needed? Name the tool and the change.
+4. **Is anything too big for the session** - an overhaul, a question of what to build - which the GM should see?
+
+Rule one of two: **`continue`** - nothing to change; or **`change-route`** - binding: `what` names the loop or the number and
+the route the session takes now (more room first, where the answer to 2 is yes). Question 3's answer is a `tooling_fix` (made
+with its test before the next tick, or declined as an overhaul - the section below); question 4's is `for_gm`, one sentence for
+the GM's review. An hour ruled `continue` with no `tooling_fix` and no `for_gm` adds nothing to the GM's review - the one
+ruling the GM does not see, because there is nothing in it to see. Do not invent a finding to fill an hour: a quiet hour is
+`continue`.
+
+    {"ruling": "continue|change-route", "why": "<two or three sentences>", "what": "<the route to take, for change-route>", "tooling_fix": "<or omit>", "for_gm": "<or omit>"}
 
 ## Reply and record
 

@@ -145,11 +145,36 @@ def _rel(root: Path, path: Path) -> str:
     return path.relative_to(root).as_posix()
 
 
+_READERS: dict[tuple[str, str], object] = {}
+_SHOWN: dict[tuple[str, str, str], str | None] = {}
+
+
+def _shown(root: Path, base: str, path: str) -> str | None:
+    """A file at the base, read once per run (feature 383): one lookup asks a feature's `tasks.md` at the base up to six
+    times."""
+    key = (str(root), base, path)
+    if key not in _SHOWN:
+        _SHOWN[key] = _git(root, "show", f"{base}:{path}")
+    return _SHOWN[key]
+
+
+def _reader(root: Path, base: str):  # noqa: ANN202 - record_cache.RevReader, imported by path
+    """The pool trees at the base, read by ONE `ls-tree` and ONE `cat-file --batch` (feature 383, plan D5): the lookup used
+    to start a `git show` per manifest and an `ls-tree` per folder, 55 processes for half its time."""
+    key = (str(root), base)
+    if key not in _READERS:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "record"))
+        import record_cache  # noqa: PLC0415
+
+        _READERS[key] = record_cache.RevReader(root, base, TREES)
+    return _READERS[key]
+
+
 def _at_base(root: Path, base: str, path: Path) -> str | None:
     """The file's text at the merge base, or - for an untracked render (a generated sheet's gitignored SVG) - main's mirror
     copy beside `.clones/`; None when neither has it."""
     if base:
-        text = _git(root, "show", f"{base}:{_rel(root, path)}")
+        text = _reader(root, base).read(_rel(root, path))
         if text is not None:
             return text
     if ".clones" in root.parts:
@@ -161,7 +186,13 @@ def _at_base(root: Path, base: str, path: Path) -> str | None:
 
 def _existed(root: Path, base: str, folder: Path) -> bool:
     """Did this map/sheet folder exist at the merge base (any file of it tracked there)?"""
-    return bool(base) and bool(_git(root, "ls-tree", "--name-only", base, f"{_rel(root, folder)}/"))
+    if not base:
+        return False
+    rel = _rel(root, folder)
+    reader = _reader(root, base)
+    if reader.inside(rel):
+        return any(n.startswith(rel + "/") for n in reader._load())  # noqa: SLF001 - the one listing, already read
+    return bool(_git(root, "ls-tree", "--name-only", base, f"{rel}/"))
 
 
 def ink_classes(text: str | None) -> set[str]:
@@ -276,7 +307,7 @@ def active_features(root: Path, base: str) -> list[str]:
             # GUARD_EDIT_OK: feature 328's landing (2026-10-10) - a feature that landed its first waves with every box
             # ticked and then went on, its tasks.md growing by wave, was read as landed and its `## Occasions` ignored, so
             # the push of its later waves was refused as undeclared. Landed means the delta leaves its tasks.md as it was.
-            was = _git(root, "show", f"{base}:specs/{parts[1]}/tasks.md")
+            was = _shown(root, base, f"specs/{parts[1]}/tasks.md")
             now = (root / "specs" / parts[1] / "tasks.md").read_text()
             if was and "- [x]" in was and not re.search(r"^- \[ \]", was, re.M) and now.strip() == was.strip():
                 continue
@@ -314,7 +345,7 @@ def declared(root: Path, base: str) -> tuple[list[Unit], list[str], bool]:
         # owed batches 1-3's glyph checks again (engawa, kitchen, notice board, woodland commons: judged, passed and landed).
         # A line on main at the base had its review at that push (this gate); a later batch that changes the element again
         # declares a line of its own.
-        landed = set(occasions_section(_git(root, "show", f"{base}:{feature}/tasks.md") or "") or []) if base else set()
+        landed = set(occasions_section(_shown(root, base, f"{feature}/tasks.md") or "") or []) if base else set()
         sources.append((feature, None if lines is None else [o for o in lines if o not in landed]))
     if tweak := commit_occasions(root, base):
         sources.append(("the delta's commit messages", tweak))

@@ -96,13 +96,26 @@ class Mapping:
 def problems(text: str, mapping: Mapping, *, fixture: bool = False, refusal_data: bool = False, landed_spec: bool = False) -> list[str]:
     """What is wrong with the research pointers in one line of text. In a fixture a new-form question file need not
     exist; in refusal data a retired form is data."""
+    questions, sections = refs(text)
+    return resolved(questions, sections, mapping, fixture=fixture) + retired(text, mapping, refusal_data=refusal_data, landed_spec=landed_spec)
+
+
+def refs(text: str) -> tuple[list[str], list[str]]:
+    """The question files and the record's sections one line names - whether each exists is asked of the record as it
+    stands, each run (`resolved`)."""
+    return [m.group(1) for m in QUESTION.finditer(text)], [m.group(1) for m in SECTION.finditer(text)]
+
+
+def resolved(questions: list[str], sections: list[str], mapping: Mapping, *, fixture: bool = False) -> list[str]:
+    if fixture:
+        return []
+    return ([f"`research/questions/{q}` - no such question file" for q in questions if q not in mapping.questions]
+            + [f"`research/contents.json#{s}` - no such section" for s in sections if s not in mapping.sections])
+
+
+def retired(text: str, mapping: Mapping, *, refusal_data: bool = False, landed_spec: bool = False) -> list[str]:
+    """The retired forms in one line - read from the migration's mapping alone, so kept with the file (feature 383)."""
     out: list[str] = []
-    for m in QUESTION.finditer(text):
-        if m.group(1) not in mapping.questions and not fixture:
-            out.append(f"`research/questions/{m.group(1)}` - no such question file")
-    for m in SECTION.finditer(text):
-        if m.group(1) not in mapping.sections and not fixture:
-            out.append(f"`research/contents.json#{m.group(1)}` - no such section")
     if refusal_data:
         return out
     for m in GLUED.finditer(text):
@@ -179,32 +192,56 @@ def exempt(path: str) -> bool:
     return path in EXEMPT or path.rsplit("/", 1)[-1] in ("request.md", "README.md") or path.endswith((".png", ".webp", ".jpg", ".pdf", ".gz"))
 
 
+def extract(root: Path, path: str, mapping: Mapping) -> list[tuple[int, list[str], list[str], list[str]]]:
+    """Per line that can hold a pointer: (its number, the questions and sections it names, its retired forms) - all that does
+    not depend on which questions and sections exist now, which `check` asks each run."""
+    flags = {"refusal_data": path in REFUSAL_DATA, "landed_spec": path.startswith("specs/")}
+    return [(n, *refs(line), retired(line, mapping, **flags)) for n, line in candidates(root, path, mapping)]
+
+
+def candidates(root: Path, path: str, mapping: Mapping) -> list[tuple[int, str]]:
+    """The lines of one file that can hold a pointer, numbered: the GM's SOURCE blocks and quotations blanked first."""
+    try:
+        text = (root / path).read_text(encoding="utf-8")
+    except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError):
+        return []
+    text = _SOURCE_BLOCK.sub(lambda m: "\n" * m.group(0).count("\n"), text)  # the GM's own words keep theirs
+    text = _QUOTED.sub(lambda m: "\n" * m.group(0).count("\n"), text)  # and so does a quotation of them, *"..."*
+    # GUARD_EDIT_OK: 2026-10-12, the GM's hourly tooling review - ONLY A LINE THAT CAN HOLD A POINTER IS ASKED. Every
+    # pattern of `problems` needs `research/` in the line but two: the retired `PAGE=` argument, and a question's old page
+    # and number (`water 120`), which never spans a line and is found over the whole file once. Asking every line of every
+    # tracked file (1.4 million calls, ten patterns each) was 25 s of each push and gate preflight; the findings are the same.
+    # the old page-and-number form needs `[ /]` and three digits: that cheap scan comes before `Mapping.number`'s long
+    # alternation (a scan per match position over the whole text was quadratic: 77 s)
+    return [(n, line) for n, line in enumerate(text.splitlines(), 1)
+            if "research/" in line or "PAGE=" in line or (_DIGITS.search(line) and mapping.number.search(line))]
+
+
+def _file_facts(root: Path, *code: Path) -> object | None:
+    """Feature 383 (the GM 2026-10-12): each file's candidate lines kept by its content (`record_cache.FileFacts`) - the scan
+    above runs only on a file that changed. None where the cache module is not beside this script (a fixture copy)."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "record"))
+        import record_cache  # noqa: PLC0415
+    except ImportError:
+        return None
+    return record_cache.FileFacts(root, "research-pointers", *code)
+
+
 def check(root: Path) -> list[str]:
     record = root / RECORD
     if not record.is_dir():
         return []  # a repository with no record has no pointers to be right or wrong about
     mapping = Mapping(record)
+    paths = [p for p in tracked(root) if not exempt(p) and "/research/site/" not in p]
+    # the candidate filter reads the mapping (`Mapping.number`), so the mapping's content is part of the extractor's key
+    facts = _file_facts(root, Path(__file__), *((record / MAPPING,) if (record / MAPPING).is_file() else ()))
+    found = facts.facts(paths, lambda p: extract(root, p, mapping)) if facts is not None else {p: extract(root, p, mapping) for p in paths}  # type: ignore[attr-defined]
     bad: list[str] = []
-    for path in tracked(root):
-        if exempt(path) or "/research/site/" in path:
-            continue
-        try:
-            text = (root / path).read_text(encoding="utf-8")
-        except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError):
-            continue
-        text = _SOURCE_BLOCK.sub(lambda m: "\n" * m.group(0).count("\n"), text)  # the GM's own words keep theirs
-        text = _QUOTED.sub(lambda m: "\n" * m.group(0).count("\n"), text)  # and so does a quotation of them, *"..."*
-        fixture, refusal_data = path.startswith(FIXTURES), path in REFUSAL_DATA
-        # GUARD_EDIT_OK: 2026-10-12, the GM's hourly tooling review - ONLY A LINE THAT CAN HOLD A POINTER IS ASKED. Every
-        # pattern of `problems` needs `research/` in the line but two: the retired `PAGE=` argument, and a question's old page
-        # and number (`water 120`), which never spans a line and is found over the whole file once. Asking every line of every
-        # tracked file (1.4 million calls, ten patterns each) was 25 s of each push and gate preflight; the findings are the same.
-        # the old page-and-number form needs `[ /]` and three digits: that cheap scan comes before `Mapping.number`'s long
-        # alternation (a scan per match position over the whole text was quadratic: 77 s)
-        for line_no, line in enumerate(text.splitlines(), 1):
-            if "research/" not in line and "PAGE=" not in line and not (_DIGITS.search(line) and mapping.number.search(line)):
-                continue
-            bad += [f"{path}:{line_no}: {p}" for p in problems(line, mapping, fixture=fixture, refusal_data=refusal_data, landed_spec=path.startswith("specs/"))]
+    for path in paths:
+        fixture = path.startswith(FIXTURES)
+        for line_no, questions, sections, old in found.get(path) or []:
+            bad += [f"{path}:{line_no}: {p}" for p in resolved(questions, sections, mapping, fixture=fixture) + old]
     return bad
 
 
