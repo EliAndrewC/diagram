@@ -244,8 +244,9 @@ in 328's ranking and this spec.
 
 ## Batch 16 - the reseated persimmon and its own grove
 
-- [ ] T44 wave 152: the reseated persimmon may stand in its own grove, whose crowns give way round it (0046) (FR-001)
+- [x] T44 wave 152: the reseated persimmon may stand in its own grove, whose crowns give way round it (0046) (FR-001)
       research: rendering
+      verify: DONE. m:w152-reseat - 578 of 578 persimmons over the 44 rolls and 69 of 69 on the pool, no crown given way and no map moved (no reseat reaches its own grove here), polder 4/5 refusing as at HEAD, cohort 16/16; claims IN-STEP; T44 section and whole plan CLEAR; gate green
 
 ## Standing - the ranking's remaining rows
 
