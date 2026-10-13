@@ -96,13 +96,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--agent", required=True, help="the agent id (the Agent tool's result names it)")
     ap.add_argument("--root", default=str(DEFAULT_ROOT), help="the projects directory holding the session transcripts")
+    ap.add_argument("--last", action="store_true", help="only the latest return's cells, unprefixed - what `make append AGENT=` writes")
     args = ap.parse_args(argv)
     path = transcript(args.agent, Path(args.root))
     if path is None:
         print(f"_review_cost: no transcript for agent {args.agent} under {args.root}", file=sys.stderr)
         return 1
     parts = segments(path.read_text(encoding="utf-8").splitlines())
-    if len(parts) == 1:
+    if args.last:  # the row being written answers the latest return (the round arbiter on hour:374@1)
+        print(cells(cost(parts[-1])))
+    elif len(parts) == 1:
         print(cells(cost(parts[0])))
     else:  # a resumed agent: one ledger row per return, each with its own cells (feature 371)
         for n, part in enumerate(parts, 1):
