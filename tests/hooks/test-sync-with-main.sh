@@ -444,8 +444,8 @@ case "$OUT" in *"backed up HEAD"*) no_ "pushed a backup that was already at HEAD
 
 case_23() {  # 2 s measured 2026-10-11
 echo "15. a clone with work in flight syncs in a move of the project to the root (feature 329, FR-008, FR-009)"
-# GUARD_EDIT_OK: feature 329 - a NEW case. The old path is built by concatenation so the old-layout check (which reads
-# this file) does not count it; the global git config is switched off so the case proves the SCRIPT passes
+# GUARD_EDIT_OK: feature 329 - a NEW case. The old path is built by concatenation so the old-layout check (retired by feature 383; it read
+# this file) did not count it; the global git config is switched off so the case proves the SCRIPT passes
 # merge.directoryRenames, not the container's ~/.gitconfig.
 OLDP=".claude/skills/""diagram"
 D=$(topology mv)

@@ -132,7 +132,8 @@ class Registry:
             raise RecordError(f"{store.REGISTRY_DIR}/_front.html: no `<h1 id=...>` - the registry needs its title")
         self.title, self.title_id = _text(h1.group(2)), h1.group(1)
         self.intro = _TRAILING_RULE.sub("", front[h1.end() :]).strip()
-        self.groups = [(s.id, s.text, [_item(e.text, e.id) for e in s.entries]) for s in page.sections]
+        # an entry's item reads its own text alone: kept by it in the store's per-file memo (feature 383)
+        self.groups = [(s.id, s.text, [store.MEMO.fact(f"item\x1f{e.id}\x1f{e.text}", lambda e=e: _item(e.text, e.id)) for e in s.entries]) for s in page.sections]
 
     def items(self) -> list[sp.Item]:
         return [i for _g, _h, items in self.groups for i in items]
@@ -232,7 +233,8 @@ class Build:
     def __init__(self, record_dir: str) -> None:
         self.record_dir = record_dir
         self.record = store.load(record_dir)
-        self.items = {p.file: _item(store.page_html(self.record, p, record_dir), p.heading_id, p) for p in self.record.pages()}
+        tables = store.shared(self.record, record_dir)
+        self.items = {p.file: _item(store.page_html(self.record, p, record_dir, tables=tables), p.heading_id, p) for p in self.record.pages()}
         self.registry = Registry(record_dir)
         try:
             self.catalog = st.Catalog(record_dir, {i.id: i.html for i in self.registry.items()}, canon_keys(record_dir), store.REGISTRY_DIR)

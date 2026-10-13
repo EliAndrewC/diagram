@@ -56,22 +56,86 @@ def load_passes(path: Path) -> list[dict[str, str]]:
     return out
 
 
-def settled(passes: Sequence[dict[str, str]], root: Path = review_cost.DEFAULT_ROOT) -> list[dict[str, str]]:
+#: feature 383 (the GM 2026-10-12: "we probably don't need to search the entire session transcript ... if we are keeping track of
+#: how far back it is that our most recent search was for"): a pass's cells, once costed, are kept here with its transcript's
+#: path, size and mtime - a finished transcript never changes, and a resumed agent's appends change both - so a run where
+#: every pass is already costed reads no transcript, and the transcripts are listed once for the passes that are new
+SETTLED = "l7r-cache/ledger-settled.json"
+
+
+class _Transcripts:
+    """`find(agent)` - the newest transcript of an agent, from ONE listing of every subagent transcript, made on the first
+    lookup (a glob per pass was most of this check's time)."""
+
+    def __init__(self, root: Path) -> None:
+        self.root, self._index = root, None
+
+    def find(self, agent: str) -> Path | None:
+        if self._index is None:
+            found: dict[str, tuple[float, Path]] = {}
+            for path in self.root.glob("*/*/subagents/agent-*.jsonl"):
+                aid, at = path.name[len("agent-") : -len(".jsonl")], path.stat().st_mtime
+                if aid not in found or at > found[aid][0]:
+                    found[aid] = (at, path)
+            self._index = {a: p for a, (_, p) in found.items()}
+        return self._index.get(agent)
+
+
+def _stat(path: Path) -> list[float]:
+    try:
+        st = path.stat()
+    except OSError:
+        return []
+    return [st.st_size, st.st_mtime]
+
+
+def _kept_file() -> Path | None:
+    import os  # noqa: PLC0415
+
+    if os.environ.get("L7R_CACHE_OFF", "") not in ("", "0"):
+        return None
+    out = subprocess.run(["git", "rev-parse", "--git-common-dir"], capture_output=True, text=True, check=False).stdout.strip()
+    return Path(out).resolve() / SETTLED if out else None
+
+
+def settled(passes: Sequence[dict[str, str]], root: Path = review_cost.DEFAULT_ROOT, kept_file: Path | None = None) -> list[dict[str, str]]:
     """Each pass with its cells recomputed from its agent's FINISHED transcript, the segment it logged (its return) - the
     cells `make review-cost` prints. The hook logs at SubagentStop, before the agent's last call reaches the disk (measured
-    2026-10-10: a 13 s check logged as 4 s), so its own cells are provisional; they stand only where the transcript is gone."""
-    out = []
+    2026-10-10: a 13 s check logged as 4 s), so its own cells are provisional; they stand only where the transcript is gone.
+    A pass already costed is served from `kept_file` while its transcript is unchanged (feature 383)."""
+    try:
+        kept = json.loads(kept_file.read_text(encoding="utf-8")) if kept_file is not None and kept_file.is_file() else {}
+    except (OSError, ValueError):
+        kept = {}
+    kept = kept if isinstance(kept, dict) else {}
+    index, added, out = _Transcripts(root), False, []
     for p in passes:
-        path = review_cost.transcript(p["agent"], root) if p.get("agent") else None
+        key = f"{p.get('agent', '')}#{p.get('segment', '')}#{p.get('check', '')}#{p.get('wall', '')}"
+        hit = kept.get(key) if p.get("agent") else None
+        if isinstance(hit, dict) and hit.get("stat") == _stat(Path(hit.get("path", ""))):
+            out.append({**p, **hit["cells"]} if hit.get("cells") else p)
+            continue
+        path = index.find(p["agent"]) if p.get("agent") else None
         parts = review_cost.segments(path.read_text(encoding="utf-8", errors="replace").splitlines()) if path else []
         # a line logged before the segment was (2026-10-10) is settled only where its agent returned once - it can be no other
         n = int(p["segment"]) if str(p.get("segment", "")).isdigit() else (0 if len(parts) == 1 else len(parts))
+        cells: dict[str, str] = {}
         if n < len(parts):
             wall, tokens = review_cost.cells(review_cost.cost(parts[n])).split(" | ", 1)
             # the logged cells are kept beside: a row written from them before this recompute (every row of 2026-10-10's
             # sessions) still answers its pass - without them 131 answered passes read as owed again
-            p = {**p, "wall": wall, "tokens": tokens, "logged": f"{p.get('wall', '')} | {p.get('tokens', '')}"}
-        out.append(p)
+            cells = {"wall": wall, "tokens": tokens, "logged": f"{p.get('wall', '')} | {p.get('tokens', '')}"}
+        if path is not None:
+            kept[key], added = {"path": str(path), "stat": _stat(path), "cells": cells}, True
+        out.append({**p, **cells})
+    if added and kept_file is not None:
+        try:
+            kept_file.parent.mkdir(parents=True, exist_ok=True)
+            tmp = kept_file.with_suffix(".tmp")
+            tmp.write_text(json.dumps(kept), encoding="utf-8")
+            tmp.replace(kept_file)
+        except OSError:
+            pass  # an unwritable cache costs the next run its speed, never its answer
     return out
 
 
@@ -149,7 +213,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--session", default="", help="with --write: only the passes of this session's agents")
     args = ap.parse_args(argv)
     ledger = Path(args.ledger)
-    passes = distinct(settled(load_passes(Path(args.log) if args.log else default_log()), Path(args.transcripts)))
+    passes = distinct(settled(load_passes(Path(args.log) if args.log else default_log()), Path(args.transcripts), _kept_file()))
     owed = unanswered(passes, ledger.read_text(encoding="utf-8") if ledger.is_file() else "")
     if args.write:
         mine = [p for p in owed if not args.session or _session_of(p, Path(args.transcripts)) == args.session]

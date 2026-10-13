@@ -40,3 +40,15 @@ def test_a_heading_is_found_wherever_it_stands_on_its_line() -> None:
     assert [s.id for s in parts] == ["live"]
     assert "commented out" in split(page).front
     assert assemble(split(page)) == page
+
+
+def test_the_comment_test_by_bisection_hides_exactly_what_the_old_scan_hid() -> None:
+    """Feature 383: `headings` finds a heading's enclosing comment by bisection. On headings before, inside, at the edges of,
+    between and after adjacent comments, the answer is the pairwise scan's it replaced."""
+    from l7r.diagram.interactive.record.split import comments, headings
+
+    page = '<h2 id="a">A</h2><!--<h2 id="b">--><!-- x --><h2 id="c">C</h2><!-- <h2 id="d"> <h2 id="e"> --> <h2 id="f">'
+    hidden = comments(page)
+    old = [m.start() for m in __import__("re").finditer(r"<h2\b", page) if not any(s <= m.start() < e for s, e in hidden)]
+    assert [m.start() for m in headings(page, 2)] == old
+    assert len(old) == 3

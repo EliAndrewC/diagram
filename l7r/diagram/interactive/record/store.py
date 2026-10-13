@@ -19,6 +19,8 @@ from __future__ import annotations
 
 import os
 import re
+from collections.abc import Callable
+from typing import Any, Protocol
 
 from l7r.diagram.interactive.record import absence, confusables, originals, passages, xref
 from l7r.diagram.interactive.record import fragments as frag
@@ -129,9 +131,26 @@ def _heading_id(text: str) -> str:
 _NOTE_BODY = re.compile(r'(<li data-note="[^"]+">)(.*?)(</li>)', re.S)
 
 
+class Memo(Protocol):
+    """Where a per-file result is kept by the content it was made from (feature 383): `fact(key_text, make)` returns the
+    value kept for that text, or makes it. The push's record check hands one in (`scripts/gates/memo_check.py --facts`);
+    every other caller keeps nothing."""
+
+    def fact(self, key_text: str, make: Callable[[], Any]) -> Any: ...  # noqa: ANN401 - the caller's own value
+
+
+class _NoMemo:
+    def fact(self, key_text: str, make: Callable[[], Any]) -> Any:  # noqa: ANN401, ARG002 - the protocol's signature
+        return make()
+
+
+MEMO: Memo = _NoMemo()
+
+
 def page_notes(file: str, record_dir: str = RESEARCH_DIR) -> dict[str, str]:
     """{key: body} of one page's notes, as its reader sees them: originals put back, a note of several passages as a
-    list, an absence note's words (feature 292). A page with no notes file has none."""
+    list, an absence note's words (feature 292). A page with no notes file has none. Kept by the two files' text in
+    `MEMO` (feature 383): it reads nothing else, and it was a fifth of the record check's setup."""
     root = os.path.join(record_dir, qs.QUESTIONS)
     base = file[: -len(".html")]
     notes_name, orig_name = base + qs.NOTES, base + qs.ORIGINALS
@@ -139,6 +158,10 @@ def page_notes(file: str, record_dir: str = RESEARCH_DIR) -> dict[str, str]:
     if text is None:
         return {}
     stored = _read(os.path.join(root, orig_name))
+    return MEMO.fact(f"{notes_name}\x1f{text}\x1f{stored}", lambda: _page_notes(text, stored, notes_name, orig_name))
+
+
+def _page_notes(text: str, stored: str | None, notes_name: str, orig_name: str) -> dict[str, str]:
     if stored is not None:
         try:
             text = originals.restore(text, stored)
@@ -154,15 +177,22 @@ def page_notes(file: str, record_dir: str = RESEARCH_DIR) -> dict[str, str]:
         raise RecordError(str(e)) from None
 
 
-def page_html(record: qs.Record, page: qs.Page, record_dir: str = RESEARCH_DIR) -> str:
-    """A question page as its reader sees it, before its links are written for a site page: the cross-link to its
-    other half (feature 292, `xref.py`) and its *Not to be confused with:* list (`confusables.py`) written in."""
-    html = xref.link(page.text, page, xref.pairs(record))
+def shared(record: qs.Record, record_dir: str = RESEARCH_DIR) -> tuple[Any, Any]:
+    """What every question page's `page_html` reads of the whole record - the cross-link pairs and the confusables - read and
+    checked once (feature 383: once per page was 0.3 s of a build's 0.4 s of page_html)."""
     pairs = confusables.load(record_dir)
     bad = confusables.unresolved(pairs, record)
     if bad:
         raise RecordError(f"{confusables.DATA} names a section that does not exist:\n  " + "\n  ".join(bad))
-    return confusables.write(html, page.file, pairs, record)
+    return xref.pairs(record), pairs
+
+
+def page_html(record: qs.Record, page: qs.Page, record_dir: str = RESEARCH_DIR, *, tables: tuple[Any, Any] | None = None) -> str:
+    """A question page as its reader sees it, before its links are written for a site page: the cross-link to its
+    other half (feature 292, `xref.py`) and its *Not to be confused with:* list (`confusables.py`) written in. `tables`:
+    `shared(record, record_dir)`, read once by a caller writing many pages."""
+    xpairs, pairs = tables if tables is not None else shared(record, record_dir)
+    return confusables.write(xref.link(page.text, page, xpairs), page.file, pairs, record)
 
 
 def split_originals(record_dir: str = RESEARCH_DIR, *, write: bool = True) -> list[str]:

@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TAG = "research record"
 RECORD = "implementation-check.md"
 #: the project's old place, before feature 329 moved it to the root - a commit from then names its pages under it (split, so
-#: the old-layout check does not read this as a stale pointer)
+#: the old-layout check, retired by feature 383, did not read this as a stale pointer)
 _OLD_PREFIX = re.escape(".claude/skills/" + "diagram/")
 FINDINGS_PAGE = re.compile(rf"^(?:{_OLD_PREFIX})?research/questions/(\d{{4}})-[a-z0-9-]+\.html$")
 # a claim cites a question by its FINDINGS page only: a claim on the drawing page alone is fingerprinted on that page, so a

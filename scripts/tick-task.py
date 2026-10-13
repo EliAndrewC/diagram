@@ -149,6 +149,15 @@ def _arbiter():  # noqa: ANN202 - scripts/hooks/lib/hm_arbiter.py by path
     return mod
 
 
+def checkpoint_hold(root: Path) -> str:
+    """Feature 383 FR-011: the feature's hourly checkpoint - the step-back's ruling and every review it owed - holds the tick
+    (`scripts/reviews/checkpoint.py`). No escape: the hold is "not optional", as the 379 tooling-fix hold beside it is."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "reviews"))
+    import checkpoint  # noqa: PLC0415
+
+    return checkpoint.hold(root)
+
+
 def main(argv: list[str]) -> int:
     boxes = "--boxes" in argv
     from_env = "--note-from-env" in argv
@@ -178,7 +187,7 @@ def main(argv: list[str]) -> int:
         print(message, file=sys.stderr if not permitted else sys.stdout)
     if not permitted:
         return 2
-    refusal = waits_or_marks(root, d) or _arbiter().fix_hold(d)  # feature 379: an open arbiter tooling fix holds every tick
+    refusal = waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
     if refusal:
         print(f"tick: refused - {refusal}", file=sys.stderr)
         return 2

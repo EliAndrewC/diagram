@@ -41,6 +41,7 @@ CARRIED = {
         "Reading and checking are dispatched to agents": "run the mechanical pre-pass",
         "A record check reads a BUNDLE": "Checks read BUNDLES",
         "A `research record` feature closes only": "NOT: feature 378's implementation check is owed by the session that closes the feature, never by a page session",
+        "**Room before packing**": "NOT: it rules how map features are fitted - generator work, which a page session never does",
     },
 }
 

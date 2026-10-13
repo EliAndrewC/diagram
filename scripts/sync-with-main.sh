@@ -273,132 +273,48 @@ clone_page_refresh() {
 push_cmd() {
   [ -z "$(git status --porcelain)" ] || die "uncommitted changes - commit first (the procedure never writes your commit for you)"
   git fetch -q origin 2>/dev/null && refuse_unrelated_history
-  # DUPLICATE-DEF GUARD (GM 2026-07-24): a cross-session merge gave test_settlement.py two
-  # _city() helpers - the later silently shadowed the earlier and broke a seeded test - and ruff
-  # F811 cannot see this class (pyflakes only flags UNUSED redefinitions; an early helper is
-  # always used before the shadow). Screened HERE so every push is covered, merges and
-  # docs-only pushes included - the gates do not necessarily run for those. The selftest runs
-  # first: a checker that cannot prove it still bites is the failure mode that motivated it.
-  python3 "$ROOT/scripts/gates/check-duplicate-defs.py" --selftest >/dev/null || die "check-duplicate-defs selftest failed - the guard itself is broken; fix scripts/gates/check-duplicate-defs.py before pushing"
-  python3 "$ROOT/scripts/gates/check-duplicate-defs.py" "$ROOT" || die "duplicate top-level definitions (above) - a later def silently shadows the earlier; fix before pushing"
-  # GUARD_EDIT_OK: feature 173 - the ~1,000-line bar (constitution Principle X clause 13), held on
-  # BOTH routes. The gate holds it too (the skill Makefile's `lint`), but a docs- or tests-only delta
-  # takes the DIRECT route and runs no gate at all - and a file crosses the bar one edit at a time,
-  # which is precisely why the clause says the line must be CHECKED rather than felt. Selftest first,
-  # same reason check-duplicate-defs does it.
-  python3 "$ROOT/scripts/gates/check-file-scale.py" --selftest >/dev/null || die "check-file-scale selftest failed - the guard itself is broken; fix scripts/gates/check-file-scale.py before pushing"
-  # GUARD_EDIT_OK: the stale-directory check runs at the push for the same reason its two siblings do
-  # - a docs- or tests-only delta takes the DIRECT route and runs no gate at all, and a leftover
-  # namespace package is exactly the kind of thing that arrives with a deletion, which is often such
-  # a delta. Selftest first: a checker that cannot fail is worth nothing.
-  python3 "$ROOT/scripts/gates/check-stale-dirs.py" --selftest >/dev/null || die "check-stale-dirs selftest failed - the guard itself is broken; fix scripts/gates/check-stale-dirs.py before pushing"
-  python3 "$ROOT/scripts/gates/check-stale-dirs.py" "$ROOT" || die "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails"
-  # GUARD_EDIT_OK: feature 329 FR-007 - a NEW refusal: a live file naming the project's old location (moved to the root).
-  python3 "$ROOT/scripts/gates/check-old-layout.py" --selftest >/dev/null || die "check-old-layout selftest failed - fix scripts/gates/check-old-layout.py before pushing"
-  python3 "$ROOT/scripts/gates/check-old-layout.py" "$ROOT" || die "a live file names the project's old location (above) - feature 329 moved it to the repository root; drop the prefix"
-  python3 "$ROOT/scripts/gates/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
-  # GUARD_EDIT_OK: feature 370 - the 100-statement function cap, HERE as well as first in static and quick: a push of tests/ or
-  # scripts/ alone takes the DIRECT route and runs no gate, and the cap holds those trees too.
-  python3 "$ROOT/scripts/gates/check-function-cap.py" --selftest >/dev/null || die "check-function-cap selftest failed - fix scripts/gates/check-function-cap.py before pushing"
-  python3 "$ROOT/scripts/gates/check-function-cap.py" "$ROOT" || die "a function is past the 100-statement cap, or a suppression of it says not why (above) - feature 370"
-  # GUARD_EDIT_OK: feature 371 - a NEW refusal: a check's pass logged in this clone with no row in the review ledger's measured
-  # table does not land (the GM 2026-10-10: "so that we can see how often they are paying off"); the row to add is printed.
+  # GUARD_EDIT_OK: feature 383 FR-006 (the GM 2026-10-12: "Although I agree that the combining all the different checks into
+  # one is lower impact, it does still seem worth doing") - THE PUSH'S PYTHON CHECKS RUN IN ONE PROCESS, in the order this
+  # block ran them, each as it runs alone and each refusing with the line it refused with here: scripts/gates/push_checks.py
+  # holds the table (duplicate defs, file scale, stale dirs, the function cap, the ledger, entry headings, research pointers,
+  # partial citations, the download list, the record and glossary builds, spec-lint, the Affects line, conflict markers, the
+  # green-gate stamp), every guard with its self-test first - run once per version of its code (FR-007). Why each runs HERE as
+  # well as at the gate stands at its row there: a docs-, tests- or record-only delta takes the DIRECT route and runs no gate.
+  # Every check the old block ran is in the table; nothing is loosened. The two escapes stay here, logged as before.
+  local skip=()
+  # shellcheck source=/dev/null
+  . "$ROOT/scripts/hooks/lib/guardlog.sh" 2>/dev/null || guard_log() { :; }
   if [ -n "${LEDGER_ROWS_OK:-}" ]; then
-    # shellcheck source=/dev/null
-    . "$ROOT/scripts/hooks/lib/guardlog.sh" 2>/dev/null || guard_log() { :; }  # sourced further down; this escape records here
     if ! python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$LEDGER_ROWS_OK" >/dev/null; then
       guard_log sync-with-main blocked "$LEDGER_ROWS_OK" LEDGER_ROWS_OK-no-reason
       die "LEDGER_ROWS_OK needs a REASON: two words and eight characters, saying why these passes land without their rows"
     fi
     guard_log sync-with-main escaped "$LEDGER_ROWS_OK" ledger-rows-ok
     echo "sync-with-main: ledger-row guard BYPASSED - $LEDGER_ROWS_OK" >&2
-  else
-    ( cd "$ROOT" && python3 "$ROOT/scripts/reviews/ledger_owed.py" --ledger "$ROOT/dev/review-ledger.md" --refuse ) \
-      || die "a check's pass has no row in dev/review-ledger.md (above) - add the row printed, its ?s filled; feature 371"
+    skip+=(--skip ledger-owed)
   fi
-  # GUARD_EDIT_OK: feature 234 - both halves of "the record and the modals stay in step" run HERE for
-  # the same reason the three above do: the delta that breaks either is a research-page edit touching
-  # no Python, which takes the DIRECT route and runs no gate at all, so a gate-only check would surface
-  # the breakage as an inherited red on the next session's unrelated work. Selftest first, same reason.
-  python3 "$ROOT/scripts/gates/check-entry-headings.py" --selftest >/dev/null || die "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing"
-  python3 "$ROOT/scripts/gates/check-entry-headings.py" "$ROOT" || die "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234"
-  # GUARD_EDIT_OK: feature 301 FR-014 - every pointer to the research names a fragment that exists, and no pointer names a
-  # built page; here as well as at the gate because a docs-only or spec-only delta takes the DIRECT route. Selftest first.
-  python3 "$ROOT/scripts/gates/check-research-pointers.py" --selftest >/dev/null || die "check-research-pointers selftest failed - the guard itself is broken; fix scripts/gates/check-research-pointers.py before pushing"
-  python3 "$ROOT/scripts/gates/check-research-pointers.py" "$ROOT" || die "a pointer to the research does not resolve, or names a built page (above) - feature 301; \`make fragment-move\` moves a fragment with its pointers"
-  # GUARD_EDIT_OK: feature 312 FR-020 - a NEW check: a footnote citing a source no one can wholly read (paywalled,
-  # gm-partial, never-read) stands only on a passage quote-check confirmed in the readable part; here and at make quick.
-  # GUARD_EDIT_OK: feature 312 - `-B`: the check imports a sibling module, and its bytecode left the tree dirty for the next push (test-sync-with-main 7b, 10)
-  python3 -B "$ROOT/scripts/gates/check-partial-citations.py" "$ROOT" || die "a footnote cites a source no one can wholly read with no confirmed passage (above) - feature 312 FR-020; confirm the passage (quote-check) and record it in research/partial-confirmations.jsonl, or make the note an absence note"
-  # GUARD_EDIT_OK: feature 313 FR-010 - a NEW check: the canonical download list stays append-only against main (no entry
-  # lost, moved or inserted, no id reused, every entry with its mark lines). Selftest first, as the pointer check's.
-  python3 "$ROOT/scripts/record/downloads.py" selftest || die "the download-list check's selftest failed - the guard itself is broken; fix scripts/record/downloads.py before pushing"
-  ( cd "$ROOT" && python3 "$ROOT/scripts/record/downloads.py" check ) || die "the canonical download list is not append-only against main (above) - feature 313; \`make download-add FILE=<draft.md>\` appends an entry"
-  "$ROOT/scripts/gates/entry-gate.sh" || exit 1
-  # GUARD_EDIT_OK: feature 316 - the claims gate, on both routes for entry-gate's reason: a research-only delta that moves a
-  # question's findings under a claim takes the DIRECT route, and owes the claim's re-check all the same.
-  "$ROOT/scripts/gates/claims-gate.sh" || exit 1
-  # GUARD_EDIT_OK: feature 258 - the record's assembly check runs HERE as well as at the gate, and for
-  # the reason entry-gate.sh is also in both places: a record-only change takes the DIRECT route, where
-  # the gate never runs, so a check only at the gate has a hole exactly where this feature's own commits
-  # land. It costs 0.11 s over the whole record (specs/258 R7).
-  # ...where there IS a record to check. A test fixture is a bare git tree with no skill in it, and a
-  # check that fails on the absence of the thing it checks is a check that fails everywhere else.
-  if [ -d "$ROOT/research/sources" ]; then
-    # GUARD_EDIT_OK: feature 301 - the same call, a new meaning: nothing assembled is committed any more, so CHECK
-    # builds the whole site in memory and fails on a refusal (a link that lands nowhere, an id used twice, a note
-    # nothing cites, a cited work with no write-up). The record still owes it at the push for the reason above.
-    ( cd "$ROOT" && make --no-print-directory record CHECK=1 >/dev/null ) \
-      || die "the record does not build cleanly (above; \`make record CHECK=1\` at the repository root names each refusal) - features 258 and 301"
-    # GUARD_EDIT_OK: feature 259 - the glossary is assembled from per-term files now, and takes the
-    # DIRECT route for the same reason the record does: a definition edit touches no engine code.
-    ( cd "$ROOT" && make --no-print-directory glossary CHECK=1 >/dev/null ) \
-      || die "the committed glossary differs from its per-term files (run \`make glossary\` at the repository root, then commit) - feature 259, spec FR-006"
-  fi
-  # GUARD_EDIT_OK: feature 236 - spec-lint runs HERE as well as at the gate, for the reason its four
-  # siblings above do: the delta it judges is a `specs/` edit that touches no Python, which takes the
-  # DIRECT route and runs no gate at all. It reads only the spec directories the delta touches, and a
-  # spec with no `tasks.md` (the number claim, the milestone push) passes three of its four checks by
-  # construction, so the two pushes the root CLAUDE.md protects are untouched. Selftest first.
-  python3 "$ROOT/scripts/gates/spec-lint.py" --selftest >/dev/null || die "spec-lint selftest failed - the guard itself is broken; fix scripts/gates/spec-lint.py before pushing"
-  python3 "$ROOT/scripts/gates/spec-lint.py" --delta "$ROOT" || die "spec-lint found something a review round would otherwise spend itself on (above) - feature 236, the GM: mistakes caught early and cheaply"
-  # GUARD_EDIT_OK: the GM 2026-10-10 - every open feature names what it affects (its stage derives from that), held HERE because a spec
-  # is filed by a specs/-only push, which takes the DIRECT route and runs no gate. The message names the line to add.
-  python3 "$ROOT/scripts/speckit-todo.py" --root "$ROOT" --check || die "an open feature does not say what it affects (above): add its **Affects** line - make speckit-todo CHECK=1 re-checks"
-  # GUARD_EDIT_OK: feature 241 - THE CONFLICT-MARKER BACKSTOP runs here as well as in the gate's static
-  # phase, and of the six checks in this block it is the one with the strongest claim to the push: the
-  # delta that lands a marker is a MERGE, and a merge's own delta is whatever the two sides touched -
-  # frequently docs, tests and manifests, which take the DIRECT route and run no gate at all. That is
-  # exactly how 23 marker-carrying files reached a commit on 2026-09-13. The hook refuses STAGING one;
-  # this asks whether one is already committed, which no hook can see. Selftest first, same reason.
-  python3 "$ROOT/scripts/hooks/lib/hm_conflict.py" --selftest >/dev/null || die "_hm_conflict selftest failed - the guard itself is broken; fix scripts/hooks/lib/hm_conflict.py before pushing"
-  python3 "$ROOT/scripts/hooks/lib/hm_conflict.py" --tracked "$ROOT" || die "a tracked file still carries an unresolved merge conflict (above) - the history here is never rewritten, so resolve it before it lands, feature 241"
-  # GREEN-GATE GUARD (constitution Principle XIII, GM 2026-08-17). The principle's enforcement
-  # clause says this procedure "does not run to completion on a red or regressed state" - which was
-  # ASPIRATIONAL until now: nothing here knew whether a gate had run, so compliance was a session
-  # remembering to comply, the very shape the principle abolishes. Python-only and per-area, so a
-  # docs-only push still skips the gate (CLAUDE.md) and a webapp change is not blocked by the
-  # diagram gate. Selftest FIRST, same reason check-duplicate-defs does it: a checker that cannot
-  # prove it still bites is the failure mode that motivated it.
-  # GUARD_EDIT_OK: feature 170 - THE THIRD SILENT PERMIT, and the worst of them. This bypasses the
-  # rule that nothing lands which a green gate did not see, and it recorded NOTHING: this file has no
-  # `guard_log` call anywhere and never sourced `guardlog.sh`, so `make audit` could not show that
-  # the push guard had ever been worked around. Found by the round-2 review of this feature, which
-  # derived the census from the tree rather than reading the session's list. The reason must also
-  # clear the floor now - an environment variable's VALUE is its reason (GM 2026-08-30).
+  # GUARD_EDIT_OK: feature 170 - the green-gate guard's escape records its firing and needs a reason (an environment
+  # variable's VALUE is its reason, GM 2026-08-30); an escape nobody can audit is indistinguishable from the rule not existing.
   if [ -n "${GATE_STAMP_OK:-}" ]; then
-    # shellcheck source=/dev/null
-    . "$ROOT/scripts/hooks/lib/guardlog.sh"
     if ! python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$GATE_STAMP_OK" >/dev/null; then
       guard_log sync-with-main blocked "$GATE_STAMP_OK" GATE_STAMP_OK-no-reason
       die "GATE_STAMP_OK needs a REASON, not just a value: two words and eight characters, e.g. GATE_STAMP_OK=\"the gate is green on this content, the stamp predates a docs-only commit\". An escape nobody can audit is indistinguishable from the rule not existing (GM 2026-08-30, feature 170)."
     fi
     guard_log sync-with-main escaped "$GATE_STAMP_OK" gate-stamp-ok
     echo "sync-with-main: green-gate guard BYPASSED - $GATE_STAMP_OK" >&2
-  else
-    python3 "$ROOT/scripts/gates/gate-stamp.py" --selftest >/dev/null || die "gate-stamp selftest failed - the guard itself is broken; fix scripts/gates/gate-stamp.py before pushing"
-    python3 "$ROOT/scripts/gates/gate-stamp.py" --check origin/main || die "push refused by the green-gate guard (above)"
+    skip+=(--skip "gate-stamp selftest" --skip gate-stamp)
   fi
+  # GUARD_EDIT_OK: feature 375 FR-009/FR-014, moved into the runner by feature 383 (its plan review: a pass or refusal with an
+  # escape, as the two above) - a touched feature that reads closed carries its report and the measurements other specs
+  # carried to it; a genuinely exempt case passes CLOSE_OK="<reason>", recorded
+  if [ -n "${CLOSE_OK:-}" ] && python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$CLOSE_OK" >/dev/null 2>&1; then
+    guard_log sync-with-main escaped "$CLOSE_OK" close-ok
+    skip+=(--skip closing)
+  fi
+  python3 "$ROOT/scripts/gates/push_checks.py" "$ROOT" "${skip[@]}" || exit 1
+  # the record gate and the claims gate are shell scripts with their own refusals, not Python checks (features 311, 316)
+  "$ROOT/scripts/gates/entry-gate.sh" || exit 1
+  "$ROOT/scripts/gates/claims-gate.sh" || exit 1
   # files OUR unpushed commits touch, captured BEFORE the pull so the overlap test is honest.
   # INCOMING files = what the pull moves HEAD across - NOT a diff against post-push origin/main,
   # which contains our own commits and false-flags every push (the script's own first dogfood run
@@ -417,6 +333,10 @@ push_cmd() {
   # with ONE mechanical exception the GM kept: a delta consisting solely of that feature's own
   # specs/NNN-*/ directory (the spec-number claim for concurrent sessions). Nothing else rides along.
   local active="" pointer="" f
+  # GUARD_EDIT_OK: feature 383 FR-006 - the Python calls from here on stay out of push_checks.py, each for one reason: it runs
+  # after the fetch (the checks above precede it) and its answer is a VALUE the shell's own branches read - the feature
+  # pointer, which features are in progress, the performance flag, the remote merge's route -
+  # not a pass or refusal of its own. The escape reads (`hm_escape.py reason-ok`) run only when an escape is set.
   pointer=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("feature_directory","").rstrip("/"))' "$ROOT/.specify/feature.json" 2>/dev/null || true)
   for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
     # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
@@ -430,22 +350,7 @@ push_cmd() {
     fi
   done
   active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
-  # GUARD_EDIT_OK: feature 375 FR-009/FR-014 - a touched feature that reads closed carries its report and the measurements other
-  # specs carried to it, whichever route closed it (its last tick, a Done / Superseded by / Withdrawn status line)
-  local closing
-  . "$ROOT/scripts/hooks/lib/guardlog.sh" 2>/dev/null || guard_log() { :; }
-  closing="$(cd "$ROOT" && python3 scripts/gates/close_check.py --push "$base...HEAD" 2>/dev/null)" || true
-  if [ -n "$closing" ]; then
-    if [ -n "${CLOSE_OK:-}" ] && python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$CLOSE_OK" >/dev/null 2>&1; then
-      guard_log sync-with-main escaped "$CLOSE_OK" close-ok
-    else
-      printf '\n\033[1mREFUSED: a feature this push closes owes what closing owes (feature 375):\033[0m\n' >&2
-      printf '%s\n' "$closing" | sed 's/^/  /' >&2
-      printf 'A case that is genuinely exempt: CLOSE_OK="<reason>" (recorded).\n\n' >&2
-      guard_log sync-with-main blocked "closing" closing-owes
-      exit 1
-    fi
-  fi
+  # (the closing check - a touched feature that reads closed carries its report - runs in push_checks.py, above; feature 383)
   if [ -n "$active" ]; then
     local outside
     outside=$(printf '%s\n' "$ours" | grep -vE "^(${active// /|})/" || true)
