@@ -2,9 +2,11 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: In progress 2026-10-13 - amendment 1 (land-tooling reuses the clone's passes; quote-verbatim's verdicts cached). Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
+
+**Amendment 1 approved**: the GM, 2026-10-13, "Yes please we should definitely skip suites the clone already passed."
 
 **Approved**: the GM, 2026-10-12, "Yes, please file it that way and then go ahead and work it start to finish. Thanks."
 
@@ -99,6 +101,17 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-012 The manual check retires.** Once phase 3 has landed, this session's hand-run hourly check of the backlog session
   is stopped.
 
+### Amendment 1 - what the clone already passed, and quote-verbatim (`request.md`, Amendment 1)
+
+- **FR-013 A tooling test file the clone passed is not run again on identical inputs.** A tooling test file that passed in the
+  clone records what it read - the files it opened and the directories it listed, in its own process and in every Python
+  process it started - each by its content. Where `make land-tooling` (and any run asked to reuse) finds every one of them
+  unchanged, the file is not run again and the run says so; a file that started any other program against the repository is
+  always run, since what that program read is not known. A failure is never kept. The guard suites keep the reuse they have.
+- **FR-014 quote-verbatim keeps its verdicts by content.** A quotation's verdict is kept by the quoted passage and the page's
+  text, under the version of the code that judged it, and served again while both are unchanged; its report is the same with
+  the cache as without it.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -129,6 +142,12 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   nothing to change.
 - **SC-009** (FR-012) The closing report says this session's hourly cron job was deleted, and the session's job list
   shows none.
+
+- **SC-010** (FR-013) A tooling test file passed in a clone is skipped in a worktree with identical inputs, and runs when a file
+  it read, a directory it listed or a module a child process opened has changed, or when it started another program against
+  the repository; a failing run records nothing. `make land-tooling`'s checks measured before and after on the same landing.
+- **SC-011** (FR-014) quote-verbatim's report on a question is byte-identical with the cache on and off, and a second run is
+  measured against the first.
 
 ## Review history
 

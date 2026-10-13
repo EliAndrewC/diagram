@@ -40,3 +40,16 @@ and one feature in three phases: (1) the caches and cheap fixes, the old-layout 
 process, (3) the hourly step-back. The GM:
 
 > Yes, please file it that way and then go ahead and work it start to finish. Thanks.
+
+## Amendment 1 (2026-10-13, same session)
+
+The session measured the make targets' times since the landing; `make land-tooling` was the longest a session waited on
+regularly (median 133 s), and it offered to have it skip what the clone had already passed. The GM:
+
+> Yes please we should definitely skip suites the clone already passed.
+>
+> And also, while I realize we don't run it very often, I feel like `quote-verbatim` would benefit from the same caching layer we implemented elsewhere, right?
+
+The session found its own claim wrong in part: the guard suites already reuse a pass on identical inputs in the worktree
+`land-tooling` builds (2026-10-12, f58e9df4e); the tooling test tree (1,784 tests, about 40 s) is what still runs whole every
+time. It took the GM's words to cover that tree.
