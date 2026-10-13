@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-13T09:40:45Z",
+  "target": "claims-gate",
+  "commit": "801084df0",
+  "why": "CLAIMS_OK: the two strip decisions are claimed where they are decided (in_belt, _strip_blocked); the belt bamboo drift predates batch 17 and is filed in 374 found.jsonl for a later batch"
+}

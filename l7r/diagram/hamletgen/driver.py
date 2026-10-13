@@ -31,6 +31,7 @@ from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
 from .homesteads.sties import stage_sties
+from .homesteads.wells import stage_lane_wells
 from .plan import HamletSpec, SitePlan, plan_site
 from .pondstock import stage_pond_stock
 from .sink import stage_sink
@@ -115,6 +116,7 @@ STAGES = (
     # lane, and after this reorder it does, because the byre is simply part of the fabric the web
     # threads around.
     stage_web,
+    stage_lane_wells,  # the communal wells the lanes wait for: the lane-side form on a lane's verge (feature 374 wave 154, 0196)
     stage_hinterland,
     stage_woodland,
     stage_windbreak,
@@ -160,6 +162,7 @@ Research:
     water, then field, then sink - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: the field shaped by its water, the drain along its field's low line
     homesteads before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every lane drawn after the farmhouses
     track before the wells - UNRESEARCHED: a well dug where the track already runs
+    lane-side wells after the web - research/questions/0196-communal-wells-ido.drawing.html: a clustered hamlet's lane-side well seated on a lane's verge once the lanes stand (`stage_lane_wells`)
     web after everything that reserves ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it
     pig sties after the crossings - CANON: the GM's ruling of 2026-10-12, the order an implementation detail where the placement keeps to the research; each sty is seated where no way runs, as research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html has a household's way go round its fixtures, and in the bundle it moved the seating and the web refused maps (m:w151-sty-room)
     washing places after the crossings - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a lane, a bridge or a building takes a footing's spot it is moved along the bank, so they stand first

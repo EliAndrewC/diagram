@@ -16,6 +16,7 @@ from ..consts import (
     BUNDLE_PITCH,
     WEB_CLEARANCE,
     WEB_REACH_FT,
+    WELL_VERGE_FT,
     Poly,
     Pt,
 )
@@ -153,6 +154,7 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
 
     Research:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: houses, yards, beds, sheds, wells and
+        a cluster well keeps its verge - research/questions/0196-communal-wells-ido.drawing.html: a cluster-form well off every lane, the lanes laid after it held `WELL_VERGE_FT` off its curb
             fixtures are fabric a lane keeps off
         no lane through a farm's grove - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the grove band is fabric, but for its own farm's path; no lane runs through a farm's own wood, a GUESS the page names
         a path leaves its own yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the owner's dooryard is not a wall to its own path; its beds, sheds and fixtures are, the way leaving round them
@@ -204,6 +206,10 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         # with the matrix quite rightly calling it an overlap. Octagon rather than diamond for the
         # same reason: a four-point ring inscribed in a circle understates it by 30%.
         r = max(float(w.get("r", 8.0)), float(w.get("vr", 0.0)))
+        # ...AND A CLUSTER-FORM WELL KEEPS ITS VERGE (feature 374 wave 154, 0196: "off every lane"): it is seated before the web,
+        # so the lanes laid after it keep a verge's width off its curb, or a lane passing beside it makes it a lane-side well
+        if w.get("form") == "cluster":
+            r += s.px(WELL_VERGE_FT)
         out.append(([(float(w["x"]) + r * math.cos(math.pi * k / 4), float(w["y"]) + r * math.sin(math.pi * k / 4)) for k in range(8)], None, "wells"))
     for key in ("farm_sheds", "byres", "retirement_houses"):
         for r in s.M.get(key, []):

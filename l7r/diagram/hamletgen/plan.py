@@ -61,6 +61,7 @@ from .consts import (
     SETTLEMENT_FORMS,
     SINKS,
     SQ_FT_PER_ACRE,
+    WELL_SITINGS,
     WIND_BACK_MIN_DOT,
     WIND_VECTORS,
     Poly,
@@ -128,6 +129,7 @@ class HamletSpec:
     row_sides: str | None = None  # one | both sides of the row's street (feature 291; `ROW_SIDES`)
     row_water: str | None = None  # own | shared wells along a row (feature 291; `ROW_WATERS`)
     row_shelter: str | None = None  # own_grove | sheltered, a row's leeward farms (feature 374 wave 153; `ROW_SHELTERS`)
+    well_siting: str | None = None  # lane | cluster, a clustered hamlet's communal wells (feature 374 wave 154; `WELL_SITINGS`)
     farm_water: str | None = None  # a dispersed farm's own water, channel | well (feature 291 amendment 5; `FARM_WATERS`)
     field_archetype: str | None = None
     pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 150; `POND_LAYOUTS`)
@@ -186,6 +188,7 @@ class HamletSpec:
             ("row_sides", self.row_sides, ROW_SIDES),
             ("row_water", self.row_water, ROW_WATERS),
             ("row_shelter", self.row_shelter, ROW_SHELTERS),
+            ("well_siting", self.well_siting, WELL_SITINGS),
             ("farm_water", self.farm_water, FARM_WATERS),
         ):
             if _val is not None and _val not in _space:
@@ -287,6 +290,7 @@ class SitePlan:
     row_sides: str = "one"
     row_water: str = "own"
     row_shelter: str = "own_grove"  # ...and the leeward row's shelter (feature 374 wave 153; `ROW_SHELTERS`), drawn only on a two-sided row
+    well_siting: str = "cluster"  # ...and where a clustered hamlet's communal wells stand (feature 374 wave 154; `WELL_SITINGS`)
     farm_water: str = "well"  # ...and a DISPERSED farm's own water (amendment 5; `FARM_WATERS`), drawn only where the form is dispersed
     # THE VIEW, DECIDED ONCE (feature 287, M6): (x, y, w, h), fixed at the end of `stage_hinterland`'s seating by
     # `hinterland.frame.frame_for`, and set exactly by `stage_frame`. Every rule that reads the picture reads this.
@@ -528,6 +532,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         row_sides=spec.row_sides or str(_roll(spec.seed, "row_sides", ROW_SIDES)),
         row_water=spec.row_water or str(_roll(spec.seed, "row_water", ROW_WATERS)),
         row_shelter=spec.row_shelter or str(_roll(spec.seed, "row_shelter", ROW_SHELTERS)),
+        well_siting=spec.well_siting or str(_roll(spec.seed, "well_siting", WELL_SITINGS)),
         farm_water=spec.farm_water or str(_roll(spec.seed, "farm_water", FARM_WATERS)),
         field_archetype=_archetype,
         pond_layout=_pond_layout,

@@ -2269,5 +2269,63 @@
   "value": {
    "note": "every drawn band spans its farm's frame (b17-glyph-bamboo-f1), so none reads as a bar midway between two farms"
   }
+ },
+ "w154-lane-wells": {
+  "observed": "2026-10-13",
+  "subject": "wave 154: the lane-side well form",
+  "answers": "",
+  "source": "the 44 rolls (scratchpad r13Y) and Inashiro, the lane-side form at the 80 ft seat gap",
+  "quantity": "how often a lane-side well finds a seat, and what refuses the verge seats",
+  "command": "tools13/roll13.sh; a throwaway probe of seat_wells on Inashiro (seed 4)",
+  "method": "each well's recorded form; each verge seat's first refusing test",
+  "value": {
+   "cohort_lane_rolls": 5,
+   "cohort_lane_seated": 0,
+   "cohort_cluster_rolls": 14,
+   "cohort_wells_over_ten": 0,
+   "inashiro_verge_points": 1428,
+   "inashiro_passing_prefilter": 470,
+   "refused_by": {
+    "fits": 181,
+    "registry (threshing yards, gardens, other lanes)": 164,
+    "wood floor": 78,
+    "past the crop": 47
+   },
+   "verge_8ft": "all 450 prefilter seats refused alike",
+   "track_first": "no seat beside the track (no dwelling within 80 ft of its verge)",
+   "sawada_served": [
+    6,
+    13
+   ]
+  }
+ },
+ "w154-wells": {
+  "observed": "2026-10-13",
+  "subject": "wave 154: a clustered hamlet's wells by the rolled siting",
+  "answers": "",
+  "source": "the 44 rolls (scratchpad r13U) and the pool (Inashiro, Kuwabata, Sawada) after make map",
+  "quantity": "each clustered hamlet's rolled siting, the forms its wells were drawn by, and the households the busiest well is nearest to",
+  "command": "tools13/roll13.sh; make map for the three pool maps",
+  "method": "each well's recorded form; meta.well_siting, wells_over_ten, well_fallback",
+  "value": {
+   "cohort_nucleated": 19,
+   "cohort_cluster_rolls": {
+    "pocket+cluster": 14
+   },
+   "cohort_lane_rolls": {
+    "pocket+lane": 5
+   },
+   "cohort_fallback": 0,
+   "cohort_wells_over_ten": 0,
+   "cohort_cluster_wells_on_a_verge": 0,
+   "cohort_linear_or_dispersed_lattice_wells": 0,
+   "cohort_refusing": "polder 4 and 5, as at HEAD",
+   "pool": {
+    "inashiro": "lane, pocket+lane",
+    "kuwabata": "cluster, pocket+cluster",
+    "sawada": "cluster, pocket+cluster, no well over ten"
+   },
+   "history": "the lane form seated on 1 of 5 before the households' reserved ways counted as lanes (scratchpad r13Z); Sawada served 6 and 13 before the cluster well kept off the reserved ways (r13W2)"
+  }
  }
 }

@@ -185,9 +185,32 @@ def roll_how(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[t
         header += f" row={getattr(plan, 'row_line', '?')}/{getattr(plan, 'row_sides', '?')}/{getattr(plan, 'row_water', '?')}"
     if getattr(plan, "settlement_form", None) == "dispersed":
         header += f" water={getattr(plan, 'farm_water', '?')}"
+    if getattr(plan, "settlement_form", None) == "nucleated":
+        drawn = sorted({str(w.get("form")) for w in _M.get("wells") or [] if w.get("form")})
+        header += f" wells={getattr(plan, 'well_siting', '?')}/{'+'.join(drawn) or 'none'}"
     if _meta.get("seat_offwind"):
         header += " seat=OFFWIND"
     return (header, report.failures, report.fail_lines), ("served" if how == "HIT" else "rolled")
+
+
+#: a rolled knob value is DEAD when it is rolled this many times or more and never drawn (the round arbiter's tooling fix on
+#: ask:w154-lane-wells: the lane-side well form was rolled on five hamlets and drawn on none, caught only by an arbiter)
+NEVER_DRAWN_ROLLS = 3
+
+
+def never_drawn(headers: Any) -> list[str]:
+    """Each per-settlement knob value the cohort ROLLED at least `NEVER_DRAWN_ROLLS` times and never DREW, as `knob=value`:
+    a clustered hamlet's well siting (`wells=<rolled>/<forms drawn>`), drawn where a well of that form stands."""
+    rolled: collections.Counter[str] = collections.Counter()
+    drawn: set[str] = set()
+    for h in headers:
+        if " wells=" not in h:
+            continue
+        siting, forms = h.split(" wells=")[1].split()[0].split("/", 1)
+        rolled[siting] += 1
+        if siting in forms.split("+"):
+            drawn.add(siting)
+    return [f"well_siting={v}" for v, n in sorted(rolled.items()) if n >= NEVER_DRAWN_ROLLS and v not in drawn]
 
 
 def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None = None, households: int | None = None) -> int:
@@ -241,6 +264,11 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
     if missing and not only:
         failing += 1
         tally.update(["row_knob_value_never_rolled"])
+    dead = never_drawn(h for h, _f, _l in results)
+    print(f"knob values rolled but never drawn: {', '.join(dead) or 'none'}")
+    if dead and not only:
+        failing += 1
+        tally.update(["knob_value_never_drawn"])
     print(f"\n{count - failing}/{count} passed the whole gate")
     if tally:
         print("residue by check:")

@@ -5085,6 +5085,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::seat_wells#seated a little closer than the check",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "seat a lattice well with a dwelling's wall within WELL_SEAT_FT (80 ft, a GUESS: 'a little closer than' the 95 ft check, 0196), the check unchanged - built in wave 154",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 154 (2026-10-13): the claims report's place_wells#wells among the houses drift (seats held to the check's own 95 px), which no ranking row carried",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/homesteads/wells.py::well_target#how many wells",
   "tier": "E1",
   "fix": "cap a hamlet's well count at two (min(2, round(households/6)))",
@@ -12137,6 +12152,56 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::record_over_ten#more than ten to a well, recorded",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "keep every communal well at ten households or fewer (0196: five to ten at Karihama); no well serves more than ten on the 44 rolls or the pool since wave 154 (m:w154-wells); the deviation stays recorded (meta.wells_over_ten) and the row open until a pocket well inside a homestead (row 787) can no longer push a well over ten",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first"
+  ],
+  "flag": "",
+  "found": "feature 374 wave 154 (2026-10-13, ask:w154-lane-wells): Sawada's wells serve 6 and 13 households; no seat keeps both at ten while the pocket stands; not measured since the cluster well keeps off the reserved ways: Sawada 2 wells at ten or fewer, the 44 rolls none over ten (m:w154-wells, 2026-10-13)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#beside the street",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "roll a row village's shared wells by the lane or among the houses (0196: a per-settlement knob), as wave 154 rolls a clustered hamlet's; or record the fixed street form as a deviation on 0196 drawing",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "feature 374 wave 154 (2026-10-13): impl-drift on the wave's claims; pre-existing, shown when 0196 drawing named the knob for a clustered hamlet",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::stage_lane_wells#lane-side wells after the lanes",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "let a clustered hamlet that rolls the lane form draw it - met in wave 154 by counting the households' reserved ways as lanes (W154-2): 5 of 5 lane rolls draw the lane form (m:w154-wells)",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py",
+   "l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first"
+  ],
+  "flag": "",
+  "found": "feature 374 wave 154 (2026-10-13, ask:w154-lane-wells and hour:374-match-the-research-continued@3): on the 44 rolls the lane form is drawn on valley seed 20 alone; dike-pond 2, polder 2 and valley 2 and 13 rolled it and took the cluster form (W154-5a), their verges taken by yards, beds and other lanes (m:w154-lane-wells, m:w154-wells); met in wave 154: with the households' reserved ways counted as lanes, the lane form seats on all 5 lane rolls (m:w154-wells)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -14250,6 +14315,23 @@
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the annex rests on the same contradicted sentence",
   "wave": "",
   "reopened_from": "117",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_well_pocket#household well where none is near",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the pocket stands a shared wellhead inside one household's homestead, neither form 0196 attests; settled with place_wells#well pockets drawn first (move the pocket off the farmstead), else record it as a deviation on 0196 drawing",
+  "files": [
+   "l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first"
+  ],
+  "flag": "",
+  "found": "feature 374 wave 154 (2026-10-13): impl-drift on the wave's claims; pre-existing, the same defect as the place_wells pocket row",
+  "tier_as_ranked": "E3",
+  "wave": "",
   "scope": "kept"
  },
  {

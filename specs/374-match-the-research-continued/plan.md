@@ -892,6 +892,59 @@ and closed there.
 - **W153-5** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); counts measured.
   The occasions: a glyph check where a pool map's farm loses its grove or gains a south strip (placement-changed).
 
+## Batch 18: where a clustered hamlet's wells stand (the wells rows)
+
+**The work list**: the next free rows in ranking order. Rows 771 and 774 stay open behind their found rows (batch 13), and
+782, 783 and 785 are each a rewrite of the seating, so the wells come first as the smaller form:
+`homesteads/wells.py::place_wells#wells among the houses` (DRIFTED, row 786) - 0196's drawing page makes the wells' siting
+a knob ("Whether a village's wells stand by the lane or among the houses is a knob": the lane-side form on a lane verge,
+clear of the tread, or the cluster form in the open ground among five to ten houses, off every lane), and says "the map
+places its wells a little closer than" the 95 ft check, where the lattice seats on the check's own 95. Row 787 (the well
+pocket drawn inside its own homestead) waits for this wave and is its own wave: it is a seating change, and on every
+clustered map measured (19 of the 44 rolls; Inashiro, Kuwabata and Sawada) the two wells are one pocket and one lattice
+well, so this wave moves the lattice well alone.
+
+### Wave 154 (T46) - the wells' siting rolled, and seated a little closer than the check
+- **W154-1** (within): a per-settlement knob, `well_siting`, rolled from the seed between the two forms 0196 records -
+  `lane` and `cluster` - at even odds (a GUESS: no page gives shares). It decides where the communal wells the lattice
+  seats stand; how many is `well_target` as before, and the pocket well (row 787) is untouched. Only a clustered
+  (nucleated) hamlet reaches the lattice: `place_wells` hands every grove farm to `grove_water` first, and every farm of a
+  row village or a scattered hamlet is a grove farm, so a row village keeps its `row_water` forms (its shared wells on the
+  street verge, `shared_row_wells`) and a scattered farm its own water, as before (m:w154-wells: no linear or dispersed map
+  of the 44 rolls draws a lattice well).
+- **W154-2** (within): the lane-side form - a wellhead on a lane's verge, its curb clear of the tread and within a verge's
+  width of it (`WELL_VERGE_FT`, 8 ft, a GUESS: no page gives a verge's width), a dwelling's wall within `WELL_SEAT_FT`
+  (W154-4). The lanes stand only once `stage_web` has run (the wells are seated in `stage_appurtenances`, before it, and the
+  web keeps off every well as fabric, never routing to one), so a lane-side well is tried first beside the track (the way
+  already laid) and then seated in a stage after `stage_web` (`stage_lane_wells`), on the lattice kept to seats on a
+  verge, before the hinterland fills the open ground; the households' ways the seating reserved (`access_corridors`), drawn
+  as lanes later, count as lanes. A clustered hamlet's web lanes run between the farmsteads, where a verge is often a yard
+  or a bed; with the reserved ways counted the form seats on all 5 lane rolls (m:w154-wells; m:w154-lane-wells measured
+  it at 0 before the verge test, ask:w154-lane-wells ruled room first), each well's form recorded.
+- **W154-3** (within, with one narrowing): the cluster form - a wellhead in the open ground among five to ten houses, off
+  every lane: the lattice asks five houses round the seat (0196: "the five to ten houses that each dug well served at
+  Karihama"), and where no seat has five within the neighborhood reach, the REACH widens (190, 300, 520 px, then the
+  760 ft surface-water reach of 0196) - the reach is the convenience number, the five the researched one. The ceiling of
+  ten is held by measurement: the households whose nearest well is each well, counted on the pool and the 44 rolls,
+  recorded (`m:w154-wells`); the seat search ranks a seat keeping every well at ten first, and the cluster well keeps off
+  the households' reserved ways as off the lanes. Where no seat keeps every well at ten, the well stands as a recorded
+  deviation (`meta.wells_over_ten`), filed as a found row after row 787, whose wave moves the pocket
+  (ask:w154-lane-wells); measured, none does (Sawada 6 and 13 before the reserved ways were kept, now within ten).
+  - **W154-3a** (narrowing): three, then two houses, only where five cannot be gathered at all - a hamlet with fewer than
+    five households needing a lattice well, or a group of them beyond the 760 ft reach of every five-house seat - since
+    0196's reach rule still owes those households a well.
+- **W154-4** (within): the lattice seats a well only with a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS: "a little
+  closer than" the 95 ft check, 0196), the check's own 95 unchanged, so a seat the placer takes always passes the check
+  with room. Its drift has no ranking row: filed as a found row (`audit/found-wave154.jsonl`) and closed by this wave.
+- **W154-5** (the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); counts measured, each
+  well's form recorded on the manifest (`meta.well_siting`; per well `form`: lane, cluster, or `fallback`).
+  - **W154-5a** (narrowing): only after the reach has widened inside the rolled form, a hamlet that finds no seat takes
+    the other form's (both forms the research's).
+  - **W154-5b** (narrowing): past both forms, today's three-then-two ladder seats the well ONLY as a recorded deviation:
+    the well marked `form: fallback`, the seeds measured to need it named in the found row it files, and the claim left
+    as found (as wave 149's row 777 was) - never silent. The occasions: a glyph check where a pool map's lattice well
+    moves (placement-changed: well on Inashiro, Kuwabata and Sawada).
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

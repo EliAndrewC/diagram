@@ -394,3 +394,32 @@ def test_a_cohort_record_names_the_feature_it_was_rolled_for(monkeypatch: pytest
     monkeypatch.delenv("SPECIFY_FEATURE")
     path = ca.write_record([(1, 12)], [(("--- a form=nucleated", [], []), "rolled")], 1, None)
     assert json.loads(Path(path).read_text(encoding="utf-8"))["feature"] == ""
+
+
+def test_a_knob_value_rolled_three_times_and_never_drawn_fails_the_cohort() -> None:
+    """The round arbiter's tooling fix (ask:w154-lane-wells): a clustered hamlet's well siting rolled three times or more and
+    drawn on none is named; drawn once, or rolled fewer times, it passes."""
+    from l7r.diagram.tools.cohort_audit import never_drawn
+
+    dead = [f"--- Audit-0{i} form=nucleated wells=lane/cluster+pocket" for i in range(3)]
+    assert never_drawn(dead) == ["well_siting=lane"]
+    assert never_drawn([*dead, "--- Audit-09 form=nucleated wells=lane/lane+pocket"]) == [], "drawn once"
+    assert never_drawn(dead[:2]) == [], "rolled only twice"
+    assert never_drawn(["--- Audit-05 form=linear row=street/one/own"]) == []
+
+
+def test_the_cohort_names_a_well_siting_rolled_and_never_drawn(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """A clustered hamlet's header carries its rolled well siting and the forms drawn; the audit fails a value rolled three
+    times and drawn on none (the round arbiter's tooling fix on ask:w154-lane-wells)."""
+    rep = _report([])
+    rep.plan.settlement_form = "nucleated"
+    rep.plan.well_siting = "lane"
+    rep.manifest = {"meta": {}, "wells": [{"x": 1.0, "y": 1.0, "form": "pocket"}, {"x": 300.0, "y": 1.0, "form": "cluster"}, {"x": 600.0, "y": 1.0, "private": True}]}
+    monkeypatch.setattr(ca, "_report_of", lambda spec: (rep, "MISS"))
+    header, _failures, _lines = ca.roll_one((7, 16))
+    assert header.endswith(" wells=lane/cluster+pocket")
+    rows = "row=street/one/own water=channel", "row=edge/both/shared water=well"
+    _patch_roll(monkeypatch, lambda spec: (f"--- seed {spec[0]} {rows[spec[0] % 2]} form=nucleated wells=lane/cluster+pocket", [], []), how="rolled")
+    assert ca.audit(3, 1, jobs=1) == 1
+    out = capsys.readouterr().out
+    assert "knob values rolled but never drawn: well_siting=lane" in out and "knob_value_never_drawn" in out

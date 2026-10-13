@@ -70,7 +70,7 @@ def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance(
 
     from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 
-    plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0)
+    plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0, well_siting="cluster")
     north = (1000.0, 890.0)
     assert math.hypot(north[0] - 1000.0, north[1] - 1000.0) <= 112.0, "inside the old rungs' center distance"
     assert well_gap_to_dwellings(_WELL_HOUSES, *north) == pytest.approx(97.0), "and 97 px from its wall"
@@ -96,7 +96,7 @@ def test_a_lattice_well_keeps_170_px_off_a_pocket_well() -> None:
     stopped reaching it when the yard persimmon moved behind the house (GM 2026-10-02)."""
     from types import SimpleNamespace
 
-    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0)  # two wells wanted
+    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0, well_siting="cluster")  # two wells wanted
     east = (1110.0, 1000.0)
     pocketed = [{**_WELL_HOUSES[0], "well_pocket": [1000.0, 1040.0]}, *_WELL_HOUSES[1:]]
     wells: list[tuple[float, float]] = []

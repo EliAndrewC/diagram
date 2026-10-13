@@ -940,6 +940,18 @@ ROW_SHELTERS = ("own_grove", "sheltered")
 """Research:
     row village's shelter - research/questions/0033-row-villages-resson.drawing.html: the grove kept windward whichever side the road runs, or the bamboo set south where a row of grove farms across the road already broke the wind
     even odds - GUESS: no page gives shares between the two forms"""
+# ...and a clustered hamlet's WELLS (feature 374 wave 154): by the lane, on its verge, or in the open ground among five to
+# ten houses - the two forms 0196 records as a knob. No page gives shares between them: even odds, a GUESS.
+WELL_SITINGS = ("lane", "cluster")
+"""Research:
+    the wells' siting - research/questions/0196-communal-wells-ido.drawing.html: by the lane or among the houses, a knob
+    even odds - GUESS: no page gives shares between the two forms"""
+
+WELL_VERGE_FT = 8.0
+"""How far past a lane's tread a lane-side wellhead's curb may stand, and how far a cluster-form well keeps the lanes laid
+after it: a lane's verge, clear of the tread (0196; feature 374 wave 154).
+
+Research: on the lane's verge - GUESS research/questions/0196-communal-wells-ido.drawing.html: the curb within about 8 ft of the tread, a GUESS the page names"""
 # A DISPERSED farm's own water (feature 291 amendment 5; homesteads/200): a small channel led off the irrigation water into
 # its grounds - the Tonami museum: "in many areas a small channel was led into the house's grounds", the fan's water table
 # too deep for a well (ACCURATE) - or its own well, the other areas as this record reads them (a GUESS). Even odds, a GUESS.

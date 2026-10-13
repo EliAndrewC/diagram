@@ -87,6 +87,7 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         row_sides=plan.row_sides,
         row_water=plan.row_water,
         row_shelter=plan.row_shelter,
+        well_siting=plan.well_siting if plan.settlement_form == "nucleated" else None,
         farm_water=plan.farm_water,
         field_footbridges=True,
         water_kind="stream",

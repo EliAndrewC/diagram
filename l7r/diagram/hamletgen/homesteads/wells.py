@@ -13,7 +13,7 @@ from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, surface_
 from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats, well_keepout
 from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 
-from ..consts import Pt
+from ..consts import WELL_VERGE_FT, Pt
 from ..plan import SitePlan
 from .holds import release_held
 
@@ -56,6 +56,61 @@ def crop_extent_added(s: Any, c: Pt, xs: Sequence[float], ys: Sequence[float]) -
     by0, by1 = min((b[2] for b in boxes), default=min(ys)), max((b[3] for b in boxes), default=max(ys))
     r = drawn_r(s)
     return max(0.0, bx0 - (c[0] - r), (c[0] + r) - bx1, by0 - (c[1] - r), (c[1] + r) - by1)
+
+
+WELL_SEAT_FT = 80.0
+"""How near a dwelling's wall a communal well is seated: "the map places its wells a little closer than" the 95 ft check
+(0196), so a seat the placer takes always passes the check with room (feature 374 wave 154).
+
+Research: seated a little closer than the check - research/questions/0196-communal-wells-ido.drawing.html: "a little closer than" the 95 ft, 80 ft its calibration, a GUESS the page names"""
+
+WELL_SERVES_MAX = 10
+"""The most households one communal well is the nearest well to, where a seat keeps it so: "the five to ten houses that each
+dug well served at Karihama" (0196).
+
+Research: five to ten houses a well - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama"""
+
+
+#: the old neighborhood ladder: the third-nearest house within 190, 300, 520 px, then two houses
+THREE_THEN_TWO = ((190.0, 3), (300.0, 3), (520.0, 3), (520.0, 2))
+"""Research: three, then two houses - GUESS research/questions/0196-communal-wells-ido.drawing.html: the cluster form's only where fewer than five households share a well, and the fallback's, as the page records; the lane-side form's neighborhood (no page gives one) and the 190/300/520 px reaches are this project's"""
+
+
+def mark_form(s: Any, x: float, y: float, form: str) -> None:
+    """Record on the well just drawn at (x, y) the form that seated it (feature 374 wave 154) - `pocket`, `cluster`, `lane`
+    or `fallback` - where the manifest holds it.
+
+    Research: a well's form recorded - NONE: the manifest's record of which form seated each well"""
+    for w in reversed((getattr(s, "M", None) or {}).get("wells") or []):
+        if abs(float(w["x"]) - round(x, 1)) < 0.06 and abs(float(w["y"]) - round(y, 1)) < 0.06:
+            w["form"] = form
+            return
+
+
+def grid_points(x0: float, x1: float, y0: float, y1: float, step: float) -> list[Pt]:
+    """The lattice over a box, row by row, `step` apart (the sweep `seat_wells` offers by default).
+
+    Research: well lattice - NONE: the sweep's own geometry"""
+    out: list[Pt] = []
+    y = y0
+    while y <= y1:
+        x = x0
+        while x <= x1:
+            out.append((x, y))
+            x += step
+        y += step
+    return out
+
+
+def most_served_after(c: tuple[float, float, float], houses: Sequence[Mapping[str, Any]], wells: Sequence[Pt]) -> int:
+    """How many households the busiest well is nearest to, once a well is dug at `c` (`c` = (_, x, y)).
+
+    Research: households a well serves - NONE: each household counted to its nearest well"""
+    pts = [*wells, (c[1], c[2])]
+    count = [0] * len(pts)
+    for h in houses:
+        count[min(range(len(pts)), key=lambda i: math.hypot(h["x"] - pts[i][0], h["y"] - pts[i][1]))] += 1
+    return max(count)
 
 
 def well_target(households: int) -> int:
@@ -252,21 +307,14 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     cell (`settlement_has_wells`, seed 3).
 
     The well pockets the seating laid in the households' bundles are drawn first (feature 287, homes H10), and a grove
-    farm takes its own water; the communal wells beyond them are seated here. Their seats are derived from the HOUSES: a
-    candidate must have several homesteads around it and none too far, which is what "among the dwellings" means, and
-    the innermost candidates are tried first. `well_at` gives the engine's own verdict on each - it refuses a seat on a lane, a crop, a
-    footprint or too near another well - so nothing here restates a placement rule.
+    farm takes its own water; the communal wells beyond them are seated by the hamlet's rolled `well_siting` (feature 374
+    wave 154): the cluster form here (`seat_cluster`), among the houses before the lanes; the lane-side form once the lanes
+    stand (`stage_lane_wells`). `seat_wells` carries the seat search and `well_at` the engine's own verdict on each seat.
 
     Research:
-        wells among the houses - research/questions/0196-communal-wells-ido.drawing.html: seats with a dwelling near and a neighborhood round them, the first innermost, each later one serving the worst-served household
         well pockets drawn first - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: each household's pocket drawn as a well
-        surface water counts - research/questions/0196-communal-wells-ido.drawing.html: a house within 760 ft (over the map's ft per px) of surface water needs no well
-        not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: belt seats sorted last, never refused
-        neighborhood ladder - research/questions/0196-communal-wells-ido.drawing.html: the third-nearest house within 190, 300, 520 px, then two houses
-        wells apart - UNRESEARCHED: 170 px between wells
-        no well past the crop - research/questions/0196-communal-wells-ido.drawing.html: every well stands among the houses it serves; refused where the wellhead would widen the crop
         grove farms take their own water - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a dispersed farm draws from its own channel or well, not the shared-well rule of towns, so every grove farm takes its own water (`grove_water`) and is left out of the communal wells
-        no well over a household's wood floor - UNRESEARCHED: no well seated over a household's reserved wood-floor seats
+        the wells' siting rolled - research/questions/0196-communal-wells-ido.drawing.html: by the lane or among the houses, a knob; the cluster form seated before the lanes, the lane-side form tried beside the track first and seated on a lane's verge once the lanes stand
     """
     grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]
     if grove_farms:
@@ -274,9 +322,6 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         houses = [h for h in houses if h not in grove_farms]  # the communal wells serve the rest, if any
         if not houses:
             return len(s.M.get("wells", []))
-    xs = [h["x"] for h in houses]
-    ys = [h["y"] for h in houses]
-    ccx, ccy = sum(xs) / len(xs), sum(ys) / len(ys)
     want = well_target(plan.spec.households)
     placed: list[Pt] = []
     # THE POCKETS FIRST (feature 287, homes H10 and H11): each household the seating gave a well pocket (`well_pocket`)
@@ -287,7 +332,65 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
             wx, wy = float(h["well_pocket"][0]), float(h["well_pocket"][1])
             release_held(s, "wells", wx, wy)  # held since the seating, so the track kept off it (`hold_laid_parts`)
             s.well(wx, wy)
+            mark_form(s, wx, wy, "pocket")
             placed.append((wx, wy))
+    # NO RESCUE AND NO LAST RESORT (feature 287, homes H10-H12). A ring probe spiraled out from each dry household and
+    # `open_seat` was asked when the lattice found nothing; both are gone, because what they rescued is carried by
+    # construction now: every household seated is within `WATER_REACH_FT` of a well pocket or of open water
+    # (`needs_pocket`), and the first always carries one - so no house is left dry and no settlement wellless, and no
+    # well is drawn outside its among-the-dwellings floor or past the crop to rescue one.
+    # THE ROLLED SITING (feature 374 wave 154, 0196's knob): the cluster form is seated now, among the houses before the lanes
+    # are laid; the lane-side form waits for the lanes (`stage_lane_wells`), as do any wells the cluster form could not seat
+    s.M.setdefault("meta", {})["well_siting"] = plan.well_siting
+    if plan.well_siting == "cluster":
+        seat_cluster(s, plan, houses, placed, want)
+    else:
+        # ...the lane-side form first beside the way already laid - the track out, through the open ground at the cluster's
+        # gateway, a wayside well (0196) - since the web's lanes run between the homesteads, where a verge is a yard or a
+        # bed (measured on the 44 rolls: no lane-side seat beside a web lane ever cleared them)
+        seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "lane", seat_ok=on_a_verge(s), step=11.0)
+    s._wells_owed = (want, ("cluster",) if plan.well_siting == "cluster" else ())  # type: ignore[attr-defined]
+    return len(placed)
+
+
+def seat_wells(
+    s: Settlement,
+    plan: SitePlan,
+    houses: Sequence[Mapping[str, Any]],
+    placed: list[Pt],
+    want: int,
+    rungs: Sequence[tuple[float, int]],
+    form: str,
+    gap: float = 0.0,
+    seat_ok: Any = None,
+    candidates: Sequence[Pt] | None = None,
+    step: float = 22.0,
+) -> list[Pt]:
+    """Seat communal wells among `houses` until `placed` holds `want`: the neighborhood ladder `rungs` - (third, want_near):
+    the `want_near`-th nearest house within `third` px - over the lattice (or `candidates`), each seat with a dwelling's wall
+    within `gap` (`WELL_SEAT_FT` by default), passing `seat_ok`, ranked by the worst-served household's walk with no well
+    serving more than `WELL_SERVES_MAX` households where a seat avoids it, and the engine's `well_at` verdict. Each well it
+    draws records its `form`. Returns the seats drawn. (Lifted out of `place_wells`, feature 374 wave 154.)
+
+    Research:
+        wells among the houses - research/questions/0196-communal-wells-ido.drawing.html: seats with a dwelling near and a neighborhood round them, the first innermost, each later one serving the worst-served household
+        seated a little closer than the check - research/questions/0196-communal-wells-ido.drawing.html: a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS the page names), the 95 ft check unchanged
+        no well serving more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama; a seat that keeps every well at ten or fewer ranked first
+        not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: belt seats sorted last, never refused
+        surface water counts - research/questions/0196-communal-wells-ido.drawing.html: a house within 760 ft (over the map's ft per px) of surface water needs no well
+        wells apart - UNRESEARCHED: 170 px between wells
+        no well past the crop - research/questions/0196-communal-wells-ido.drawing.html: every well stands among the houses it serves; refused where the wellhead would widen the crop
+        no well over a household's wood floor - UNRESEARCHED: no well seated over a household's reserved wood-floor seats
+    """
+    new: list[Pt] = []
+    if not houses or len(placed) >= want:
+        return new
+    gap = gap or WELL_SEAT_FT / max(plan.ftpx, 0.01)
+    seat_ok = seat_ok or (lambda _x, _y: True)
+    xs = [h["x"] for h in houses]
+    ys = [h["y"] for h in houses]
+    ccx, ccy = sum(xs) / len(xs), sum(ys) / len(ys)
+    served = list(houses)
     # A WELLHEAD MAY NOT STAND IN THE SHELTER BELT (settlement-review, Inashiro 2026-08-18). The
     # belt is drawn later, but `village_grove` SKIPS any clump whose canopy would reach a wellhead
     # (`wells_clear_of_trees` - a well lost under the grove reads wrong), so a well seated inside
@@ -348,11 +451,10 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     # and each `well_at` built the water, dry-plot and wet-ring grids again for its one seat (cohort seed 44: 71 builds);
     # the scope asserts on exit that the terrain it froze is the terrain that stands
     with s.frozen_terrain():
-        for third, want_near in ((190.0, 3), (300.0, 3), (520.0, 3), (520.0, 2)):
+        for third, want_near in rungs:
             if len(placed) >= want:
                 break
             seats: list[tuple[float, float, float]] = []
-            step = 22.0
             # THE SWEEP BOX IS THE HOMESTEADS', NOT THE HOUSE CENTERS' (2026-08-15, cohort seed 44).
             # A bundle's courtyard ground extends ~a house-length past its house CENTER, so a cluster
             # strung along its field margin can keep every legal well pocket just OUTSIDE the centers'
@@ -362,23 +464,19 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
             # dwelling's wall within 95 px, so an open-field corner of the padded box is rejected exactly
             # as the docstring above promises.
             pad = 120.0
-            y = min(ys) - pad
-            while y <= max(ys) + pad:
-                x = min(xs) - pad
-                while x <= max(xs) + pad:
-                    near = sorted(math.hypot(x - h["x"], y - h["y"]) for h in houses)
-                    # the center distance PREFILTERS (a wall is never nearer than its center less the half-diagonal); the
-                    # rule's own predicate decides
-                    if (
-                        len(near) >= want_near
-                        and near[want_near - 1] <= third
-                        and near[0] <= WELL_AMONG_DWELLINGS_PX + reach_r
-                        and _among_dwellings(houses, x, y)
-                        and not _wood.disc_covers(x, y, _well_r)
-                    ):
-                        seats.append((math.hypot(x - ccx, y - ccy), x, y))
-                    x += step
-                y += step
+            for x, y in candidates if candidates is not None else grid_points(min(xs) - pad, max(xs) + pad, min(ys) - pad, max(ys) + pad, step):
+                near = sorted(math.hypot(x - h["x"], y - h["y"]) for h in houses)
+                # the center distance PREFILTERS (a wall is never nearer than its center less the half-diagonal); the
+                # rule's own predicate decides
+                if (
+                    len(near) >= want_near
+                    and near[want_near - 1] <= third
+                    and near[0] <= gap + reach_r
+                    and well_gap_to_dwellings(houses, round(x, 1), round(y, 1)) <= gap
+                    and seat_ok(x, y)
+                    and not _wood.disc_covers(x, y, _well_r)
+                ):
+                    seats.append((math.hypot(x - ccx, y - ccy), x, y))
             # GREEDY COVERAGE, not central-first throughout (settlement-review, Mizuguchi/Sawada
             # 2026-08-15): sorting every well toward the centroid put both of Mizuguchi's wells in one
             # lobe of a two-lobed cluster - the six eastern households walked 248-424 ft while the west
@@ -511,9 +609,9 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                     # bought nothing. Behind the minimax bucket it can only decide between seats that
                     # serve the households equally well - which is all "do not stand in the windbreak"
                     # was ever entitled to decide.
-                    def _key(c: tuple[float, float, float]) -> tuple[float, int, float, float, float]:
+                    def _key(c: tuple[float, float, float]) -> tuple[int, float, int, float, float, float]:
                         _w, _e = _worst_after(c), _extent_added(c)
-                        return ((_w + _e) // 66.0, _in_belt(c), _e, _w, _neighborhood(c))
+                        return (int(most_served_after(c, served, placed) > WELL_SERVES_MAX), (_w + _e) // 66.0, _in_belt(c), _e, _w, _neighborhood(c))
 
                     pool.sort(key=_key)
                     _sorted_at = len(placed)
@@ -526,10 +624,107 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                     # reaches past the box the crop will set is refused, not drawn
                     continue
                 if s.well_at(x, y):
+                    mark_form(s, x, y, form)
                     placed.append((x, y))
-    # NO RESCUE AND NO LAST RESORT (feature 287, homes H10-H12). A ring probe spiraled out from each dry household and
-    # `open_seat` was asked when the lattice found nothing; both are gone, because what they rescued is carried by
-    # construction now: every household seated is within `WATER_REACH_FT` of a well pocket or of open water
-    # (`needs_pocket`), and the first always carries one - so no house is left dry and no settlement wellless, and no
-    # well is drawn outside its among-the-dwellings floor or past the crop to rescue one.
-    return len(placed)
+                    new.append((x, y))
+    return new
+
+
+def seat_cluster(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]], placed: list[Pt], want: int) -> list[Pt]:
+    """The cluster form (feature 374 wave 154): wells in the open ground among five houses, the neighborhood's reach widened
+    (190, 300, 520 px, then 0196's 760 ft) before the count gives way; three, then two, only where fewer than five households
+    need the communal wells. Returns the seats drawn.
+
+    Research:
+        among five to ten houses - research/questions/0196-communal-wells-ido.drawing.html: the cluster form in the open ground among five to ten houses, off every lane
+        the reach widens first - GUESS research/questions/0196-communal-wells-ido.drawing.html: how far round a seat the five may stand is this project's choice - 190, 300, 520 px, then 760 ft - widened before the count gives way
+        off every lane - research/questions/0196-communal-wells-ido.drawing.html: the cluster well off every lane, its verge included (`on_a_verge`)
+        three, then two, only where five cannot be gathered - research/questions/0196-communal-wells-ido.drawing.html: a household is still owed a well within reach"""
+    reach = max(520.0, 760.0 / max(plan.ftpx, 0.01))
+    verge = on_a_verge(s)
+    off_lanes = lambda x, y: not verge(x, y)  # noqa: E731 - off every lane, its verge included (0196), where lanes stand
+    new = seat_wells(s, plan, houses, placed, want, ((190.0, 5), (300.0, 5), (520.0, 5), (reach, 5)), "cluster", seat_ok=off_lanes)
+    if len(placed) < want and len(houses) < 5:
+        new += seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "cluster", seat_ok=off_lanes)
+    return new
+
+
+def on_a_verge(s: Settlement) -> Any:
+    """The lane-side form's seat test: the wellhead's curb within `WELL_VERGE_FT` of a lane's tread - its center no farther
+    from the tread's edge than the wellhead's half-extent and the verge (a curb ON the tread is `well_at`'s to refuse).
+
+    Research: a lane-side well's seat - research/questions/0196-communal-wells-ido.drawing.html: on a lane's verge, clear of the tread, its curb within `WELL_VERGE_FT`"""
+    # the lanes standing and the households' ways the seating reserved (`access_corridors`), drawn as lanes later: a cluster well
+    # seated before the web keeps their verges too (feature 374 wave 154: two cohort wells stood on an access way's verge)
+    M = getattr(s, "M", None) or {}
+    lanes = [([(float(p[0]), float(p[1])) for p in ln["pts"]], float(ln.get("w", 3.0)) / 2) for ln in [*(M.get("lanes") or []), *(M.get("access_corridors") or [])] if len(ln.get("pts") or []) >= 2]
+    reach = s._well_vr() + s.px(WELL_VERGE_FT) if lanes else 0.0
+
+    def ok(x: float, y: float) -> bool:
+        return any(seg_dist(x, y, a, b) - half <= reach for pts, half in lanes for a, b in zip(pts, pts[1:], strict=False))
+
+    return ok
+
+
+def stage_lane_wells(s: Settlement, plan: SitePlan) -> None:
+    """THE WELLS THE LANES WAIT FOR (feature 374 wave 154): once the web stands, the communal wells still owed - the
+    lane-side form's, or the cluster form's that found no seat - are seated: on a lane's verge (unless the lane-side form
+    was tried), then among five houses (unless the cluster form was), then by the old three-then-two ladder at the 95 ft
+    check, each such well marked `fallback` and counted (`meta.well_fallback`) - a recorded deviation, never silent.
+
+    Steps:
+        l7r.diagram.hamletgen.homesteads.wells.lane_and_fallback_wells
+        l7r.diagram.hamletgen.homesteads.wells.record_over_ten
+
+    Research:
+        lane-side wells after the lanes - research/questions/0196-communal-wells-ido.drawing.html: the lane-side form on a lane verge, clear of the tread, within reach of the houses
+        the other form only after the reach widened - research/questions/0196-communal-wells-ido.drawing.html: both forms the research's
+        the old ladder a recorded deviation - DEVIATION research/questions/0196-communal-wells-ido.drawing.html: three, then two houses at the 95 ft check, marked `fallback`, past both forms"""
+    owed = getattr(s, "_wells_owed", None)
+    if not owed:
+        return
+    try:
+        lane_and_fallback_wells(s, plan, owed)
+    finally:
+        record_over_ten(s)
+
+
+def record_over_ten(s: Settlement) -> None:
+    """A communal well nearest to more than `WELL_SERVES_MAX` households, recorded (`meta.wells_over_ten`: each such well's
+    count) - a recorded deviation, never silent: the seat search ranks a seat that keeps every well at ten first, and where
+    none does (a pocket well fixed inside its homestead, row 787's subject) the well stands and is counted.
+
+    Research: more than ten to a well, recorded - DEVIATION research/questions/0196-communal-wells-ido.drawing.html: the well serving more than ten stands where no seat keeps every well to ten, marked on the map's record"""
+    ws = [(float(w["x"]), float(w["y"])) for w in s.M.get("wells") or [] if not w.get("private") and not w.get("shrine")]
+    houses = [h for h in s.M.get("houses") or [] if not (h.get("geom") or {}).get("groves") and h.get("kind") != "abandoned"]
+    if not ws or not houses:
+        return
+    count = [0] * len(ws)
+    for h in houses:
+        count[min(range(len(ws)), key=lambda i: math.hypot(float(h["x"]) - ws[i][0], float(h["y"]) - ws[i][1]))] += 1
+    over = [c for c in count if c > WELL_SERVES_MAX]
+    if over:
+        s.M["meta"]["wells_over_ten"] = over
+
+
+def lane_and_fallback_wells(s: Settlement, plan: SitePlan, owed: tuple[int, Sequence[str]]) -> None:
+    """The wells still owed once the lanes stand: the lane-side form, the cluster form, then the recorded fallback.
+
+    Research:
+        the order of the forms - research/questions/0196-communal-wells-ido.drawing.html: the lane-side form on a verge once the lanes stand, the other form where no verge has room
+        the fallback - DEVIATION research/questions/0196-communal-wells-ido.drawing.html: among three houses, then two, at the 95 ft, where neither form finds a seat, marked `fallback`"""
+    want, tried = owed
+    houses = [h for h in s.M.get("houses") or [] if not (h.get("geom") or {}).get("groves")]
+    placed = [(float(w["x"]), float(w["y"])) for w in s.M.get("wells") or [] if not w.get("private") and not w.get("shrine")]
+    if len(placed) >= want or not houses:
+        return
+    if "lane" not in tried:
+        # the lattice at 11 px, half its step elsewhere: the verge test admits a band only `WELL_VERGE_FT` wide beside each
+        # lane, which a 22 px lattice steps over rather than samples - the same ground offered, never a tighter fit
+        # (hour:374-match-the-research-continued@3 ruled the step and the seat gap fixed: make room, never pack)
+        seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "lane", seat_ok=on_a_verge(s), step=11.0)
+    if len(placed) < want and "cluster" not in tried:
+        seat_cluster(s, plan, houses, placed, want)
+    if len(placed) < want:
+        n = len(seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "fallback", gap=WELL_AMONG_DWELLINGS_PX))
+        s.M["meta"]["well_fallback"] = int(s.M["meta"].get("well_fallback", 0)) + n

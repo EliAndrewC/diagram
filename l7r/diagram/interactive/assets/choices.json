@@ -49,6 +49,15 @@
    }
   },
   {
+   "key": "well_siting",
+   "name": "Where the shared wells stand",
+   "when": "[settlement_form=nucleated]",
+   "values": {
+    "lane": "by the lane",
+    "cluster": "among the houses"
+   }
+  },
+  {
    "key": "farm_water",
    "name": "Each scattered farm's water",
    "when": "[settlement_form=dispersed]",

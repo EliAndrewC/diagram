@@ -18,7 +18,7 @@ Guesses:
 
 Depiction: The map sets the shared wells along the street, each at the middle of its stretch of the row, so that no farm
 along the row lies far from one. The well is drawn as a marker larger than life, about 19 ft across, so a reader can find
-it; a real well's curb was a frame only a few feet across round a shaft about 3 ft wide.
+it; a real well's curb was a frame only a few feet across round a shaft about 3 ft wide. Where the water lay shallowest and the bucket hung from a plain pole with no post, the map still draws a sweep on its post.
 
 Name: Wells shared along the way
 Covers: `meta.row_water = shared`

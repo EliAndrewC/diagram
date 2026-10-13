@@ -25,7 +25,7 @@ def test_a_well_past_the_crop_is_refused_now_the_pockets_water_every_house() -> 
     assert crop_extent_added(boxed, (1000.0, 1000.0), [0.0], [0.0]) == 0.0
     assert crop_extent_added(boxed, (1100.0, 1000.0), [0.0], [0.0]) == pytest.approx(12.376)  # the glyph's roof half-size (feature 328)
     east = (1110.0, 1000.0)
-    plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0)
+    plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0, well_siting="cluster")
     fake = _only_seat(*east)
     fake._crop_boxes = lambda city: [(950.0, 1100.0, 950.0, 1450.0)]  # type: ignore[attr-defined]
     assert hg.place_wells(fake, plan, _WELL_HOUSES) == 0, "the one legal seat reaches 22 px past the box"  # type: ignore[arg-type]
