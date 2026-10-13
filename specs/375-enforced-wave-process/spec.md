@@ -401,7 +401,8 @@ before it. Each block of the plan is judged once, and judged again only when it 
   CLEAR verdict keeps it; a block added or changed owes a review of that block alone (a typo-scale change, as FR-005(b), owes
   none). A batch's edits outside its own task section therefore owe a review of the edited blocks, never of the whole plan. A
   plan reviewed whole records every block's verdict; a review of changed blocks records theirs. A verdict recorded before this
-  amendment counts for the blocks of the plan text it reviewed.
+  amendment counts for the blocks of the plan text it reviewed. FR-005(b)'s voiding now reaches only the block the edit is in;
+  the plan's other blocks keep their verdicts.
 - **FR-044 Finished sections leave the plan.** One command moves the sections of tasks that are all ticked and carry a CLEAR
   verdict out of `plan.md` into `plan-done.md`, leaving one generated line naming them and where they went. No review reads
   `plan-done.md`; a removed section owes no review, and the generated line owes none.
@@ -546,7 +547,7 @@ before it. Each block of the plan is judged once, and judged again only when it 
   (its status line never closed) and reopened ten minutes ago by adding a task; with no reopening in its history the first
   event starts the hour, as before. The test fails on today's code.
 - **SC-036** (FR-043) In a fixture feature with a CLEAR plan, an edit to one block outside any task section owes a review of
-  that block alone - `make tick` names it and the dispatch reads only it - and once it is recorded CLEAR the tick passes; an
+  that block alone - `make tick` names it and the dispatch reads only that block of the plan (with FR-046's bundle) - and once it is recorded CLEAR the tick passes; an
   unchanged block keeps its verdict; a record from before the amendment covers the blocks it reviewed. On 374's plan as it
   stands, the review owed after batch 18's edits is of the changed blocks only, measured against a whole-plan review's reads.
 - **SC-037** (FR-044) The archive command moves only all-ticked, CLEAR sections, leaves its generated line, owes no review, and

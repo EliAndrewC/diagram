@@ -232,3 +232,15 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
       verify: DONE. DONE. docs/reviews.md and docs/guards.md; tests/tooling 1730 passed; hooks-test green; no engine code (DIRECT); report written; landed by the push carrying this tick
 
+## Amendment 11 (the GM 2026-10-13: a plan reviewed by its changed blocks)
+
+- [ ] T61 Blocks and their verdicts in `plan_gate.py` (D60), the changed-blocks review and its record (D61); tests red on today's code (SC-036)
+      research: rendering
+- [ ] T62 The archive, `make plan-archive` (D62); tests (SC-037)
+      research: rendering
+- [ ] T63 No plan copy in the verdict, the history read, `slim`, every record converted (D63); tests (SC-038)
+      research: rendering
+- [ ] T64 The lean bundle, `make decide` and `make plan-delta` on it (D64); tests (SC-039)
+      research: rendering
+- [ ] T65 Measured on 374 (SC-036 to SC-039); the texts; 375 closes again: tests, `make hooks-test`, the gate, the report, landed
+      research: rendering
