@@ -266,10 +266,13 @@ def _git_z(root: pathlib.Path, *args: str) -> list[str]:
 
 
 def _hash_file(path: pathlib.Path) -> str:
+    """A file's id as git would give it (its blob id), so the same bytes have the same id whether the index holds them or the
+    work tree does - in a clone and in its worktree alike (feature 383 amendment 1)."""
     try:
-        return "w:" + hashlib.sha256(path.read_bytes()).hexdigest()
+        data = path.read_bytes()
     except OSError:
         return "gone"
+    return hashlib.sha1(b"blob %d\x00" % len(data) + data, usedforsecurity=False).hexdigest()
 
 
 def content_ids(root: pathlib.Path, prefixes: Sequence[str] = (), *, untracked: bool = False) -> dict[str, str]:

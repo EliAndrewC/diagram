@@ -315,7 +315,21 @@ def unmarked(have: str) -> tuple[str, list[int]]:
     return "".join(have[i] for i in kept), kept
 
 
+#: the verdicts kept by their passage and page text (feature 383 amendment 1, the GM 2026-10-13: "quote-verbatim would benefit
+#: from the same caching layer"): the nearest-stretch search for a passage NOT on the page verbatim was 21 of a 25 s run, and
+#: a passage and its page rarely change between runs. Set by `main`; None (no cache) for every other caller
+_VERDICTS = None
+
+
 def verdict(passage: str, page: str) -> dict:
+    """`_verdict`, kept by the passage and the page's text (record_cache.ParseCache, under this module's code sha)."""
+    if _VERDICTS is None:
+        return _verdict(passage, page)
+    key = hashlib.sha256(f"{passage}\x1f{hashlib.sha256(page.encode()).hexdigest()}".encode()).hexdigest()
+    return dict(_VERDICTS.get(key, lambda: _verdict(passage, page)))
+
+
+def _verdict(passage: str, page: str) -> dict:
     """VERBATIM, DIFFERS (with the page's text and the differences) or NOT-ON-PAGE for one passage."""
     want, have = squeeze(passage), squeeze(page)
     pieces = [p for p in ELISION.split(want) if p]
@@ -553,6 +567,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"quote-verbatim: {args.q or args.within or 'nothing'!r} names no question - e.g. make quote-verbatim Q=0041 or IN=homesteads", file=sys.stderr)
         return 2
     pages = Pages(pathlib.Path(args.offline)) if args.offline else cached_pages()
+    global _VERDICTS  # noqa: PLW0603 - one run's cache, set where the run begins
+    import record_cache  # noqa: PLC0415 - beside this file
+
+    _VERDICTS = record_cache.ParseCache.at(pathlib.Path(args.root).resolve(), "quote-verdicts", pathlib.Path(__file__))
     only = wanted(args.notes)
     entries: list[dict] = []
     for file in files:
@@ -567,6 +585,7 @@ def main(argv: list[str] | None = None) -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"page": name, "footnotes": entries, "refused": pages.refused}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"  report for quote-check: {out}")
+    _VERDICTS.save()
     return 0
 
 

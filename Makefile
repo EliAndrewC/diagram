@@ -1127,7 +1127,8 @@ QUICK_BUDGET = 60
 # around - the same gap `make durations` filled for "why is this slow".
 # (GUARD_EDIT_OK: a green test-file records green-local - feature 130, FR-012)
 tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes
-	@$(GATE_EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
+	@: "GUARD_EDIT_OK: feature 383 amendment 1 - the gate's tooling run records each test file's reads on a pass, for make land-tooling to reuse"
+	@$(GATE_EXHAUSTIVE_ENV) L7R_TEST_DEPS=$${L7R_TEST_DEPS:-record} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
 
 # GUARD_EDIT_OK: feature 188 (GM 2026-09-05: "there's no actual reason to rerun all the tests for style sheet
 # changes"). THE PAGE CHECK is what an edit to interactive/assets/ owes instead of the gate: the interactive unit
@@ -1660,7 +1661,8 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 # GUARD_EDIT_OK: adding a refusal - with FILE unset (`F=` mistyped, 2026-10-10) pytest collected the WHOLE suite under
 # a low-memory warning; an empty FILE now refuses with the variable's name instead.
 	@if [ -z "$(strip $(FILE))" ]; then echo "test-file: no FILE given - run \`make test-file FILE=tests/<path>\` (the variable is FILE, not F); \`make test-full\` runs every test" >&2; exit 2; fi
-	@python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
+	@: "GUARD_EDIT_OK: feature 383 amendment 1 (FR-013) - each tooling test file's reads recorded on a pass (L7R_TEST_DEPS=record), reused by make land-tooling (=reuse)"
+	@L7R_TEST_DEPS=$${L7R_TEST_DEPS:-record} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) --dist worksteal -q --no-cov $(if $(K),-k "$(K)",) $(FILE) && $(STATE) green-local test-file
 
 # GUARD_EDIT_OK: feature 216 - the audit that answered "are you really not able to combine?" is a command now, for any
 # tier. ONE recipe line: `$(RUN)` carries its own `@`, so a `: "..." ; \` continuation in front of it put `@python3`

@@ -86,5 +86,18 @@
    "conflict": 0.37,
    "gate-stamp selftest": 0.09
   }
+ },
+ "land-tooling-tests-reuse": {
+  "quantity": "make test-file FILE=tests/tooling in a fresh worktree at the clone's HEAD, with the clone's passes reused (L7R_TEST_DEPS=reuse)",
+  "observed": "2026-10-13",
+  "source": "this clone; load 6.5",
+  "command": "python3 scripts/measure/tooling_reuse_time.py",
+  "method": "the script: record in the clone, a detached worktree at HEAD, the reuse run then the full run back to back",
+  "unit": "s",
+  "varies": true,
+  "value": 27.58,
+  "without": 36.21,
+  "ran": 606,
+  "of": 1796
  }
 }

@@ -61,6 +61,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T15 Close: SC-001 measured, the gate, `make feature-report F=383 WRITE=1`, landed; this session's hourly cron deleted (plan D14)
       research: rendering
       verify: DONE. DONE. SC-001 measured (R6: 19.87 s -> 1.92 s in one process), the gate green on this content, make feature-report F=383 WRITE=1 written, the tooling landed in 0906d798a, the hourly cron ddf30448 deleted (CronList: no scheduled jobs); the rest lands by the push carrying this tick
+## Amendment 1 (the GM 2026-10-13: skip what the clone already passed; quote-verbatim's cache)
+
+- [x] T16 The reads recorded and reused (plan D15, D16): `tests/tooling/_test_deps.py`, `_deps_site/sitecustomize.py`, `make test-file`, `land-tooling.sh`; tests (SC-010); measured
+      research: rendering
+      verify: DONE. DONE. tests/tooling/_test_deps.py + _deps_site/sitecustomize.py record each tooling test file's reads (in-process and in Python children) on a whole pass, in make test-file, the gate's tooling run and land-tooling's reuse run; land-tooling reuses with L7R_TEST_DEPS=reuse; test_reuse_and_quotes 4 passed; 88 of 126 files reusable, 36.21 -> 27.58 s (m:land-tooling-tests-reuse, scripts/measure/tooling_reuse_time.py)
+- [x] T17 quote-verbatim's verdicts kept (plan D17); tests and the byte-for-byte comparison (SC-011)
+      research: rendering
+      verify: DONE. DONE. quote_verbatim.verdict kept in a ParseCache by passage and page sha256 under the module's code sha; report byte-identical with L7R_CACHE_OFF=1 (0049); second run 6.25 -> 1.29 s; test_reuse_and_quotes: a changed passage or page judged afresh, kept on disk
+- [x] T18 Close: the tooling tests, `make hooks-test`, the gate, the report, landed
+      research: rendering
+      verify: DONE. DONE. tooling tests 1796 passed, make hooks-test green, make done green, the report written; landed by the push carrying this tick
+
 - [ ] GM review (make gm-reviewed F=383) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

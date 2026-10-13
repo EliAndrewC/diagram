@@ -2,9 +2,11 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (88 of 126 files reused, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
+
+**Amendment 1 approved**: the GM, 2026-10-13, "Yes please we should definitely skip suites the clone already passed." and "And also, while I realize we don't run it very often, I feel like `quote-verbatim` would benefit from the same caching layer we implemented elsewhere, right?"
 
 **Approved**: the GM, 2026-10-12, "Yes, please file it that way and then go ahead and work it start to finish. Thanks."
 
@@ -99,6 +101,17 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-012 The manual check retires.** Once phase 3 has landed, this session's hand-run hourly check of the backlog session
   is stopped.
 
+### Amendment 1 - what the clone already passed, and quote-verbatim (`request.md`, Amendment 1)
+
+- **FR-013 A tooling test file the clone passed is not run again on identical inputs.** A tooling test file that passed in the
+  clone records what it read - the files it opened and the directories it listed, in its own process and in every Python
+  process it started - each by its content. Where `make land-tooling` - the one caller, through a named switch its
+  checks set - finds every one of them unchanged, the file is not run again and the run says so; a file that started any other program against the repository is
+  always run, since what that program read is not known. A failure is never kept. The guard suites keep the reuse they have.
+- **FR-014 quote-verbatim keeps its verdicts by content.** A quotation's verdict is kept by the quoted passage and the page's
+  text, under the version of the code that judged it, and served again while both are unchanged; its report is the same with
+  the cache as without it.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -130,6 +143,13 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-009** (FR-012) The closing report says this session's hourly cron job was deleted, and the session's job list
   shows none.
 
+- **SC-010** (FR-013) A tooling test file passed in a clone is skipped in a worktree with identical inputs, and runs when a file
+  it read, a directory it listed or a module a child process opened has changed, or when it started another program against
+  the repository; a failing run records nothing. `make land-tooling`'s checks measured before and after on the same landing.
+- **SC-011** (FR-014) quote-verbatim's report on a question is byte-identical with the cache on and off, and a second run is
+  measured against the first; and a quotation is judged afresh when the quoted passage, the page's text or the judging
+  code changes (a test).
+
 ## Review history
 
 - spec-fidelity, Mode 2, round 1 (2026-10-12): CHANGES REQUIRED, one item, applied: FR-007's "its code" is the check and every
@@ -137,6 +157,12 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - spec-fidelity-verify, Mode 3, round 2 (2026-10-12): CHANGES REQUIRED, one item, applied: SC-001 named two baselines as one;
   it now keeps the GM's 24 s, names the claim-time re-measurement (`m:push-checks-before`, 19.87 s) and measures the after
   with the same command.
+
+- spec-fidelity-verify, Mode 3, round 3 (2026-10-12): FAITHFUL; its aside applied (D8 and T09 carry the test that a changed
+  imported module re-runs a kept self-test).
+- Amendment 1, spec-fidelity-verify, round 1 (2026-10-13): CHANGES REQUIRED, four items, applied: SC-011 tests that a changed
+  passage, page or code is judged afresh; the approval line quotes both of the GM's sentences; FR-013's reuse is one named
+  switch, `make land-tooling` its one caller; this history's round 3 line.
 
 ## Decisions Recorded
 
