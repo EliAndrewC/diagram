@@ -26,6 +26,21 @@ tooling() { case "$1" in scripts/*|tests/*|.claude/agents/*|.claude/skills/*|CLA
 
 ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a git checkout"
 [ "$(basename "$(dirname "$ROOT")")" = ".clones" ] || die "$ROOT is not a session clone under .clones/"
+# GUARD_EDIT_OK: feature 383 amendment 2, FR-017 (the GM 2026-10-13: "figure out where the rest of the 100 or so seconds goes")
+# - EACH STEP IS TIMED: its seconds go to the log and, one JSON line per landing, to <git dir>/land-tooling-steps.jsonl, so
+# where a landing's time went is read, never guessed. Nothing is printed to the terminal.
+log="$ROOT/.git/land-tooling.log"
+: > "$log"
+steps_t=${EPOCHREALTIME/,/.}; steps_json=""
+step() { # <name>: the time since the last step, under that name
+  local now=${EPOCHREALTIME/,/.}
+  local s; s=$(awk -v a="$steps_t" -v b="$now" 'BEGIN { printf "%.2f", b - a }')
+  printf 'land-tooling: step %s %s s\n' "$1" "$s" >> "$log"
+  steps_json="$steps_json${steps_json:+, }\"$1\": $s"; steps_t=$now
+}
+steps_done() { # <outcome>
+  printf '{"at": "%s", "outcome": "%s", "load": "%s", "steps": {%s}}\n' "$(date -u +%FT%TZ)" "$1" "$(cut -d' ' -f1 /proc/loadavg 2>/dev/null)" "$steps_json" >> "$ROOT/.git/land-tooling-steps.jsonl"
+}
 git -C "$ROOT" fetch -q origin 2>/dev/null || true
 base=$(git -C "$ROOT" merge-base HEAD origin/main) || die "no merge base with origin/main"
 
@@ -53,7 +68,9 @@ git -C "$ROOT" diff --binary "$base" HEAD -- "$@" > "$patch"
 
 WT="$(dirname "$ROOT")/$(basename "$ROOT")-tooling"
 [ -e "$WT" ] && die "$WT exists (a run that did not finish?) - remove it: git -C $ROOT worktree remove --force $WT"
+step prepare
 git -C "$ROOT" worktree add -q --detach "$WT" origin/main || die "cannot add the worktree at $WT"
+step worktree
 cleanup() { git -C "$ROOT" worktree remove --force "$WT" 2>/dev/null; rm -f "$patch"; }
 trap cleanup EXIT
 
@@ -63,29 +80,38 @@ case " $* " in *" Makefile "*) ( cd "$WT" && make -s docs >/dev/null 2>&1 ) && g
 subjects=$(git -C "$ROOT" log --format='- %s' "$base"..HEAD -- "$@" | head -20)
 msg=$(printf 'Tooling from %s, landed alone mid-feature (make land-tooling, feature 379)\n\n%s\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n' "$(basename "$ROOT")" "$subjects")
 git -C "$WT" commit -q -m "$msg" || die "nothing to commit in the worktree"
-
-log="$ROOT/.git/land-tooling.log"
+step patch
 # every test it lands runs here: one needing work not yet landed fails in the worktree, never on main (FR-005)
-checks=${LAND_TOOLING_CHECKS:-make hooks-test && make test-file FILE=tests/tooling}
+# GUARD_EDIT_OK: feature 383 amendment 2, plan D21 - the guard suites and the tooling tests are two steps, each timed (the plan
+# review: one "checks" figure cannot show where the time goes). LAND_TOOLING_CHECKS, the suite's seam, stands for both.
+guards=${LAND_TOOLING_CHECKS:-make hooks-test}
+tooling_tests=${LAND_TOOLING_CHECKS:-make test-file FILE=tests/tooling}
 run_test=${LAND_TOOLING_TEST:-make test-file FILE=}
-for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && checks="$checks && $run_test\"$f\"" ;; esac; done
+for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && tooling_tests="$tooling_tests && $run_test\"$f\"" ;; esac; done
 # GUARD_EDIT_OK: feature 374 batch 4 - THE CHECKS RUN WITHOUT THE CALLER'S ESCAPES: a LEDGER_ROWS_OK meant for the push reached
 # the hook suites, where it waived the very refusals they test, and ten sync-with-main cases failed (twice, 2026-10-12). The
 # push below keeps them.
 unset_escapes=$(env | sed -n 's/^\([A-Z][A-Z_]*_OK\)=.*/-u \1/p' | tr '\n' ' ')
-# shellcheck disable=SC2086 # one word per `-u NAME`
 # GUARD_EDIT_OK: feature 383 amendment 1 (the GM 2026-10-13: "skip suites the clone already passed") - the tooling tests reuse
 # each test file's pass the clone recorded on identical inputs (tests/tooling/_test_deps.py); the guard suites already do
-if ! ( cd "$WT" && env $unset_escapes L7R_TEST_DEPS=reuse bash -c "$checks" ) > "$log" 2>&1; then
-  tail -25 "$log" >&2
-  die "the checks failed in the worktree (full log: $log) - fix in the clone, commit, run this again"
-fi
+check() { # <step name> <command>: run in the worktree without the escapes; a failure ends the landing
+  # shellcheck disable=SC2086 # one word per `-u NAME`
+  if ! ( cd "$WT" && env $unset_escapes L7R_TEST_DEPS=reuse bash -c "$2" ) >> "$log" 2>&1; then
+    step "$1"; steps_done "$1-failed"
+    tail -25 "$log" >&2
+    die "the checks failed in the worktree (full log: $log) - fix in the clone, commit, run this again"
+  fi
+  step "$1"
+}
+check guard-suites "$guards"
+check tooling-tests "$tooling_tests"
 push=${LAND_TOOLING_PUSH:-scripts/sync-with-main.sh done}
 # SYNC_BACKUP=off: the worktree is not a clone - its work is the clone's own commits, backed up at the clone's own stop. Backed
 # up under the fixed name backup/<clone>-tooling, a refused landing left a tip no later landing contained, and every one
 # after it warned "HEAD is NOT backed up" (2026-10-11)
 ( cd "$WT" && SYNC_BACKUP=off bash -c "$push" ) >> "$log" 2>&1
 rc=$?
+step push; steps_done "push-exit-$rc"
 # a refusal's reason is above the push's last lines: six lines showed the backup notice and hid the ledger's refusal
 if [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ]; then tail -6 "$log"; else tail -25 "$log" >&2; fi
 [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ] || die "the push failed (exit $rc; log: $log) - nothing landed"
