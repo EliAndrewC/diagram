@@ -230,3 +230,13 @@ def test_over_the_cap_commands_shrink_before_any_reply_is_dropped() -> None:
     out = sb.words(recs, t1, t1 + 3600, cap=2000)
     assert all(f"reply {i}" in out for i in range(6)), "every reply kept"
     assert "RAN: python3 - <<'EOF'" in out and "x = 1" not in out, "each command cut to its first line"
+
+
+def test_past_the_hour_a_gate_or_a_dispatch_is_refused_until_the_step_back_opens(clone: Path) -> None:
+    assert cp.due(clone, "Bash", now=T0 + 3599) == "", "under the hour: nothing"
+    assert "make step-back" in cp.due(clone, "Bash", now=T0 + 3600)
+    assert "make step-back" in cp.due(clone, "Agent", "glyph-check", now=T0 + 3600)
+    assert cp.due(clone, "Agent", "round-arbiter", now=T0 + 3600) == "", "the round arbiter is the step-back"
+    cp.open_checkpoint(clone, T0 + 3601)
+    assert cp.due(clone, "Agent", "glyph-check", now=T0 + 3700) == "", "open: the hour's work goes on"
+    assert cp.main(["due", "--root", str(clone), "--tool", "Bash"]) in (0, 1)
