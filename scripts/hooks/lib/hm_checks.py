@@ -726,8 +726,8 @@ def _close(path: Path | None, state: dict[str, Any], subject: str, reason: str, 
     if not escaped("CHECK_CLOSED", f'CHECK_CLOSED="{reason}"'):
         print("check-closed: REASON needs two words and eight characters - it is what a later audit reads", file=sys.stderr)
         return 2
-    silent = [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", []) and d.get("state") in ("running", "pending")
-              and (now - float(d.get("t", 0)) > STALE_S or (agent and d.get("aid") == agent))]
+    silent = [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", [])
+              and ((d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S) or (agent and d.get("aid") == agent and d.get("state") != "answered"))]
     for d in silent:
         d["state"] = "answered"
         d["closed"] = reason
