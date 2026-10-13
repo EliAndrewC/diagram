@@ -161,10 +161,10 @@ Research:
     homesteads before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every lane drawn after the farmhouses
     track before the wells - UNRESEARCHED: a well dug where the track already runs
     web after everything that reserves ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it
-    pig sties after the crossings - UNRESEARCHED: each sty seated against its farmstead's walls once every way and crossing stands, so the seating and the web are as without it (m:w151-sty-room); no page orders them
-    washing places after the crossings - UNRESEARCHED: each footing seated where every way, bridge and building already stands; no page orders them
+    pig sties after the crossings - CANON: the GM's ruling of 2026-10-12, the order an implementation detail where the placement keeps to the research; each sty is seated where no way runs, as research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html has a household's way go round its fixtures, and in the bundle it moved the seating and the web refused maps (m:w151-sty-room)
+    washing places after the crossings - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a lane, a bridge or a building takes a footing's spot it is moved along the bank, so they stand first
     notice board last - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed once everything else stands
-    notice board after the frame - CANON: the GM's ruling of 2026-08-29, the board the very last thing put on the map, after the frame
+    notice board after the frame - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed after the map is cropped to its frame (the GM's ruling of 2026-08-29)
     waterward fringe before the houses - UNRESEARCHED: a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground
     labels last - CONVENTION
 """

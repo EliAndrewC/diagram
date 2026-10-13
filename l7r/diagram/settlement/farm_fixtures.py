@@ -51,7 +51,7 @@ PIT_FT = 3.5
 FIXTURE_CLASS_BY_FORM = {"pit": "manure pit"}
 
 STY_FT = (8.0, 6.0)  # a simple pig shed: on the dike (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html) or against a farmhouse (0049)
-"""Research: sty size - UNRESEARCHED: 8 x 6 ft (0025 gives no size for a sty, and 0049's drawing page leaves it "not yet set")"""
+"""Research: sty size - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: about 8 by 6 ft, shed and pen together, its size not searched for"""
 
 FIXTURE_FT: dict[str, tuple[float, float]] = {
     "privy": (6.0, 6.0),
@@ -68,11 +68,11 @@ FIXTURE_FT: dict[str, tuple[float, float]] = {
 Research:
     privy size - research/questions/0047-farm-privies-and-their-night-soil-benjo.html: 6 x 6 ft, the one-ken default the placer overrides
     wood shed size - research/questions/0043-firewood-stacks-and-sheds-kigoya.html: 24 x 12 ft, 4 x 2 ken
-    manure heap size - GUESS: 8 x 6 ft
+    manure heap size - GUESS research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: 8 x 6 ft
     bath room size - research/questions/0044-baths-on-the-farm-furo.html: 6 x 6 ft, the placer passes its length
-    hen coop size - GUESS: 5 x 5 ft
+    hen coop size - GUESS research/questions/0045-chickens-and-chicken-coops.drawing.html: 5 x 5 ft
     household shrine size - CONVENTION: drawn at the 6 x 6 ft small-shed module, not the stone's 1.3 ft
-    pig sty size - UNRESEARCHED: 8 x 6 ft, the dike-pond sty's (`STY_FT`)
+    pig sty size - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: about 8 x 6 ft, the dike-pond sty's (`STY_FT`)
     household grave size - GUESS research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: an 8 x 6 ft patch with a few stones, at the plot's scale; no household grave was found measured
 """
 # radius: "a persimmon grows to about 12 m tall and 7 m across, a crown of about 23 ft" (research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html, pfaf-kaki;

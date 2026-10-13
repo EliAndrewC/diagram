@@ -125,7 +125,7 @@ Research:
     household shrine share - research/questions/0219-household-shrines-yashikigami.drawing.html: 0.03-0.08
     persimmon share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: 0.80-0.95
     household grave share - GUESS research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: about a third of farmsteads, where the hamlet keeps household graves at all
-    pig sty share - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: about two households in three, varying from hamlet to hamlet - 0.57-0.77, the band's width the coop's
+    pig sty share - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: about two households in three, varying from hamlet to hamlet - 0.57-0.77, the band's width the coop's calibrated liberty
 """
 # THE FOUR ATTESTED PRIVY SEATS (269 B10, research/questions/0047-farm-privies-and-their-night-soil-benjo.html "Farm privies and their night soil (benjo)"): under the eaves by the
 # stable beside the entrance (sinyoken), a separate outhouse in the yard (sinyoken), the front yard (Sugiura 1977, northern

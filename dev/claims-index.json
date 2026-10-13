@@ -7550,44 +7550,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#homesteads before lanes": {
-  "code": "ad6d6bdfbe7a0d8b",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "houses seated before any lane",
+  "code": "c3a5458806815900",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "farmhouses seated before any lane",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#labels last": {
-  "code": "b90b5657da48242d",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "convention",
+  "code": "87cde8570d3fce0f",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "drawing convention",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#notice board after the frame": {
-  "code": "75899e3e7b87a745",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "GM ruling named",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/driver.py::STAGES#notice board last": {
-  "code": "cd9053bb220d1981",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "board placed after everything else, after the crop",
+  "code": "61465d436f6329ff",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "board placed last, after the crop",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
@@ -7597,31 +7587,58 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/driver.py::STAGES#notice board last": {
+  "code": "44b3dc2aa9e5309a",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "placed once everything else is drawn",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
+  },
+  "research": "5b977d097fda2bb4",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/driver.py::STAGES#pig sties after the crossings": {
+  "code": "d1e68ca80bf9e4d8",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "CANON names the GM's ruling of 2026-10-12; seating the sty where no way runs gives the same result as 0246's way going round the fixtures",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/driver.py::STAGES#track before the wells": {
-  "code": "edc5246bd5037420",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "unresearched order",
+  "code": "84064a99ddc03662",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#washing places after the crossings": {
-  "code": "0acb9d20083bb655",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "no page orders the stages",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "code": "2801be96913a9f33",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "the footing is moved along the bank off a lane, bridge or building",
+  "pages": {
+   "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6"
+  },
+  "research": "05b5d29f8bd0d208",
+  "rests": [
+   "0065-washing-places-at-the-waters-edge.drawing.html:8c38dba2f4c10ba6"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#water, then field, then sink": {
-  "code": "b0b570e2fd29e4d0",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "network laid first, drain along the low line",
+  "code": "922ed7a44c1226e2",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "water first, paddies cut between, drain on the low line",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e",
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
@@ -7629,33 +7646,31 @@
   "research": "1056eb04b585452b",
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0",
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#waterward fringe before the houses": {
-  "code": "25902c6c40baa425",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "unresearched order",
+  "code": "ce4b4d17c0bbbdf7",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#web after everything that reserves ground": {
-  "code": "691d8d966bde98c8",
-  "core": "e3e4f9197cd0450c",
-  "date": "2026-10-12",
-  "note": "lanes laid after the houses stand",
+  "code": "f610e3bcad183065",
+  "core": "45851d8df2764426",
+  "date": "2026-10-13",
+  "note": "ways laid once the last house stands",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:82d03d7e6a2180e2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
@@ -7669,9 +7684,9 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::_run_stages#driving the roll": {
-  "code": "d1f2ad2a98103607",
-  "core": "a36963b80ae9f342",
-  "date": "2026-10-12",
+  "code": "0c16c2668a8044df",
+  "core": "2a74f906932069b6",
+  "date": "2026-10-13",
   "note": "plumbing",
   "pages": {},
   "research": "",
@@ -11242,10 +11257,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#bath room share": {
-  "code": "bd06d959a00ec2d0",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "0.20-0.30, \"two or three in ten\"",
+  "code": "1470c30bb7935728",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "two or three in ten",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
@@ -11256,10 +11271,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#coop share": {
-  "code": "bcc3c9611425a353",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "\"about seven and nine in ten\" around 82%",
+  "code": "93f8780f522282a7",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "around 82%",
   "pages": {
    "0045-chickens-and-chicken-coops.drawing.html": "09fa83d177b6f5e9"
   },
@@ -11270,10 +11285,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#household grave share": {
-  "code": "22603ddd70d21fa6",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "0.30-0.36, about a third, recorded as a GUESS",
+  "code": "62fdee9106ccd564",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "about a third, recorded as a GUESS",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
@@ -11284,25 +11299,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#household shrine share": {
-  "code": "479c115a4e242f8f",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "3 to 8 in 100",
+  "code": "85c253bb2b28aa40",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "3-8 in 100",
   "pages": {
    "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
   "research": "bbd8ad39d56fdfde",
   "rests": [
-   "0219-household-shrines-yashikigami.drawing.html:21c7e5d135c2fbb6",
-   "0219-household-shrines-yashikigami.drawing.html:6595021c1942d896"
+   "0219-household-shrines-yashikigami.drawing.html:21c7e5d135c2fbb6"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#manure heap share": {
-  "code": "403ef9be50f2ed1b",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "40 to 70 in 100",
+  "code": "d9a4d9ac73bf4abc",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "40-70 in 100",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "88a5a7358b74ffeb"
   },
@@ -11313,10 +11327,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#persimmon share": {
-  "code": "d5a96876a4afa6e3",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "80 to 95 in 100",
+  "code": "24ec2a1d7c757cec",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "80-95 in 100",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -11326,28 +11340,26 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#pig sty against the house": {
-  "code": "ee0ca400baae18f0",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "the bands have no sty kind, but the cited page says \"about two households in three ... have a small pig sty ... against the farmhouse\" on a plain paddy hamlet; draw the sty, or make it a DEVIATION that the page records",
+ "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#pig sty share": {
+  "code": "f9ab2a60858e8dec",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "0.57-0.77 rolled per hamlet around two in three",
   "pages": {
-   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "53a79181b03e2afe"
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
-  "research": "e07eb128fb625b52",
+  "research": "6346c9047e54840e",
   "rests": [
    "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:58bda23727de5d6e",
-   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:70eb8aaba4159fcc",
-   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b",
-   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:cf2b6977efce4d5a"
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#privy share": {
-  "code": "0e2989d7d942c734",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "85 to 95 in 100",
+  "code": "caf59516a57638d8",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "85-95 in 100",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
@@ -11358,10 +11370,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#wood shed share": {
-  "code": "44c2d3ce445c1385",
-  "core": "62a4e140002dd8ce",
-  "date": "2026-10-12",
-  "note": "35 to 45 in 100",
+  "code": "8ffc07022ed6edfa",
+  "core": "874a656f427ca790",
+  "date": "2026-10-13",
+  "note": "35-45 in 100",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
   },
@@ -11479,10 +11491,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_laid#which pits go to the field": {
-  "code": "41c5b879a7fea36d",
-  "core": "5e6b148b6b29bd6e",
-  "date": "2026-10-12",
-  "note": "a field share rolled per hamlet in 2-85%, per house",
+  "code": "e7b61b7c09b79edd",
+  "core": "0faa6f13f093b5a9",
+  "date": "2026-10-13",
+  "note": "field share rolled 2-85 in 100 per hamlet",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
@@ -11707,27 +11719,41 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": {
-  "code": "26da710472262d1e",
-  "core": "77fb828f29aead20",
-  "date": "2026-10-12",
-  "note": "the code takes max(rolled share, floor/n), so the count is the share's count, raised to the spec's floor; this matches the per-hamlet rolled share and the rule that a hamlet whose description gives it a shrine draws one below the share",
+  "code": "6674501dc152cb83",
+  "core": "edd40ccb1c056b02",
+  "date": "2026-10-13",
+  "note": "share's count, floor honored",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },
   "research": "4b0518138b09a1f4",
   "rests": [
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:ebc4e65aad857f7b",
    "0219-household-shrines-yashikigami.drawing.html:6595021c1942d896"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_shares#no house sty on a dike-pond hamlet": {
+  "code": "d39b3b83909b7201",
+  "core": "bda20bba159744e1",
+  "date": "2026-10-13",
+  "note": "dike-pond sties on the banks",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:70eb8aaba4159fcc"
+  ],
+  "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_shares#shares rolled per hamlet": {
-  "code": "ccf6325ddd288bf0",
-  "core": "8e14419a5edd8a66",
-  "date": "2026-10-12",
-  "note": "each kind's share rolled per hamlet inside its range",
+  "code": "e113e9b366a3b1b0",
+  "core": "bda20bba159744e1",
+  "date": "2026-10-13",
+  "note": "rolled per hamlet within its band",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
   },
@@ -13696,10 +13722,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a household's wood share": {
-  "code": "2a304db0dbae0b98",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "a clustered household is seated only where it reserves the 6,000 sq ft floor of copse within the 90 ft dooryard reach",
+  "code": "75e7139ae052ef62",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "6,000 sq ft floor within 90 ft",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -13707,27 +13733,25 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:56bf66b98afe5452",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a pushed front seat's retry": {
-  "code": "5881f874dc185adc",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "quarter-pitch retries; nothing cited answers it",
+  "code": "99efd70814ee9b75",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's rows": {
-  "code": "0123c5cdd1a7f59c",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "farms step at the farmstead's width, capped at 240 ft; no ranks or later passes behind a row",
+  "code": "00af9f803d042e26",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "frame pitch capped at 240 ft, next street rather than ranks",
   "pages": {
    "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e",
    "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
@@ -13736,16 +13760,15 @@
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
    "0033-row-villages-resson.drawing.html:a88545fe00a7de6d",
-   "0033-row-villages-resson.html:0a40ab8c614384bc",
-   "0033-row-villages-resson.html:79c103aabcc7b882"
+   "0033-row-villages-resson.html:6ad8fb4c257faa5c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": {
-  "code": "cb7b15fdb7302c33",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "the scattered form (not grown, not rows) gets a front row capped at sqrt(N*aspect) plus brick ranks behind (`_seat_rank_rounds`), but the page has each scattered farm \"in the middle of their own fields\" and \"the whole line is hugged to the field edge in single file\"; ranks behind a row are a clustered form",
+  "code": "ae8082dc60c725d3",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "a dispersed hamlet's front row is capped at max(6, sqrt(N x aspect)) and `_seat_rank_rounds` seats the rest in ranks behind, where 0031 has the scattered line \"hugged to the field edge in single file\", each farm amid its own fields",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -13758,80 +13781,78 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)": {
-  "code": "f254741a6bff5d46",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "reach is the core bbox at `_house_max`, garden excluded; unresearched",
+  "code": "4753a5991cee7017",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#shared byre pockets": {
-  "code": "75988d33a2eb3675",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "only on the rolled detached_commons form, in a clustered hamlet: shared sheds on common ground among the houses, reserved first",
+  "code": "ca28699b6e855aab",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "shared shed on common ground among the houses",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
   },
   "research": "a75e3ada6edbbc9b",
   "rests": [
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:5d684f32a43c296a",
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:8e9a1c027cabe064",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:9dd3e953a6b92d53"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's offer": {
-  "code": "9ff0ea8633ff3ed2",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "`min(households, 12)` off the row form; nothing cited answers it",
+  "code": "e467de2bdcaf9b75",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's size": {
-  "code": "5441741bfa42ae60",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "`max(6, round(sqrt(N*(lo+hi))))`, capped at N; nothing cited gives a count",
+  "code": "b3b6cf1c768c9057",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the passage share": {
-  "code": "1dae557e0a355699",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "rolled only where `grows(plan)` (clustered), 0 for the other forms",
+  "code": "4169d82784d9cab5",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "clustered only, none to a quarter",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:71315c33d0ad6f37",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating band": {
-  "code": "6aaf5b0866fdfcb7",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "`SEATING_GROUND_FT` per household; the cited pages give no figure (§60 is a fitting rule, not a measure)",
+  "code": "b4ade3f075031d53",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach": {
-  "code": "5bccf837ee517780",
-  "core": "0fb7782ac94674a8",
-  "date": "2026-10-10",
-  "note": "`bound * 1.3` on the front row, `FORM_BOUND` 1.15 or 2.5 for a row; nothing cited answers it",
+  "code": "2f0cd4d139a3a4b7",
+  "core": "d70c6fadf6fb9226",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
   "rests": [],
@@ -14193,6 +14214,138 @@
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::ALIGN_TOL_DEG#a part square to its house": {
+  "code": "fa1739cef973a6d9",
+  "core": "e3bbe3a7edb35017",
+  "date": "2026-10-13",
+  "note": "nothing cited",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::PART_KEYS#pig sty plumbing": {
+  "code": "cc51dcdda5d80a58",
+  "core": "385d4d9826bac5b4",
+  "date": "2026-10-13",
+  "note": "record list; the clearance rule lives in sty_seat",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::WALL_KEYS#the outbuildings": {
+  "code": "f67a40cd940e090a",
+  "core": "16be03fb7a79188f",
+  "date": "2026-10-13",
+  "note": "farmhouse or an outbuilding",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82"
+  ],
+  "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::farmstead#the farmstead's parts": {
+  "code": "32332f2dacca9520",
+  "core": "24fe29b3a57ec078",
+  "date": "2026-10-13",
+  "note": "the plot's parts",
+  "pages": {
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
+  },
+  "research": "b1abc6e90397da2b",
+  "rests": [
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:0b02f5e3492a4ce2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::in_frame#plumbing": {
+  "code": "adca28281b38c3c2",
+  "core": "316be7a2bd031f4e",
+  "date": "2026-10-13",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::stage_sties#about two households in three": {
+  "code": "cc7680f15ec26105",
+  "core": "f4614ee45662f89d",
+  "date": "2026-10-13",
+  "note": "share counted to households, none on a dike-pond hamlet",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:58bda23727de5d6e",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:70eb8aaba4159fcc",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82"
+  ],
+  "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::stage_sties#passed to the next household": {
+  "code": "faa3e28f22a2525f",
+  "core": "f4614ee45662f89d",
+  "date": "2026-10-13",
+  "note": "UNRESEARCHED; 0049 is silent on passing a sty on",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::sty_seat#against the farmhouse or an outbuilding": {
+  "code": "8fc85980349ffcd8",
+  "core": "60ffc8ccfc79b4db",
+  "date": "2026-10-13",
+  "note": "on the household's own plot",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82"
+  ],
+  "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::sty_seat#the gap, the step and the rake": {
+  "code": "9c1e47c73257a374",
+  "core": "60ffc8ccfc79b4db",
+  "date": "2026-10-13",
+  "note": "UNRESEARCHED; 0049 says \"against the farmhouse or an outbuilding\" and is silent on the gap, the step and the rake",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::to_frame#plumbing": {
+  "code": "4e30cec3d4fbc1d5",
+  "core": "ae09ac8e83442c9d",
+  "date": "2026-10-13",
+  "note": "rotation",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/sties.py::to_world#plumbing": {
+  "code": "be8514184df5422c",
+  "core": "8b38cc2ea5963c7d",
+  "date": "2026-10-13",
+  "note": "rotation",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::BEND_LOOK_FT#well arithmetic": {
@@ -15244,20 +15397,18 @@
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sties at the dike-pond only": {
   "code": "7ae3bae48b25b211",
   "core": "20ea7f4d2c705f21",
-  "date": "2026-10-12",
-  "note": "returns unless the hamlet is mulberry_dike_fishpond; a paddy hamlet's sties are at its farmsteads",
+  "date": "2026-10-13",
+  "note": "pond sty on dike-pond hamlets only",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html": "ba8c07825c06383f",
-   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "53a79181b03e2afe"
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
-  "research": "4d662491c3689f5e",
+  "research": "83a6e18d0926272a",
   "rests": [
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:851381b05828251d",
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:c8fa4a578dd3f7fb",
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:fc2e8e67969d621d",
-   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:70eb8aaba4159fcc",
-   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:cf2b6977efce4d5a"
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:70eb8aaba4159fcc"
   ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sty count": {
@@ -37436,20 +37587,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_CLASSIFIED#geometry and bookkeeping": {
-  "code": "660a3049fc20c44f",
-  "core": "ee6a669920591090",
-  "date": "2026-10-12",
-  "note": "plumbing",
+  "code": "82b5721eca38b5f3",
+  "core": "260583e9b4a68bf1",
+  "date": "2026-10-13",
+  "note": "set union",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house": {
-  "code": "a4fbeda9d990a1e0",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "kura west or north wall; grove sides and depth",
+  "code": "31e31e1a8d519a81",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "kura annex convention; grove sides and 24 ft strip",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c",
@@ -37458,26 +37609,26 @@
   "research": "8bf4154cb971fb14",
   "rests": [
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:57e17cedabbc7ead",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:784ca5d6e795312e",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#bookkeeping records": {
-  "code": "62b2f4192c9046e5",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "records",
+  "code": "e32b307bf99968c4",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "records, not ink",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#border as a line": {
-  "code": "23ba806b1b2644a6",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
+  "code": "6a480ce34656da5f",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
   "note": "deviation recorded",
   "pages": {
    "0083-clan-borders-and-their-markers.drawing.html": "aae7d10697713dff"
@@ -37485,16 +37636,15 @@
   "research": "4acfcf3809873ba2",
   "rests": [
    "0083-clan-borders-and-their-markers.drawing.html:0e0382314cbd0076",
-   "0083-clan-borders-and-their-markers.drawing.html:ae415b96bff5fbc3",
    "0083-clan-borders-and-their-markers.drawing.html:eaec007272de042c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#built on what it serves": {
-  "code": "f9807671f01a5d54",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "the washing-place line is fine, but the claim cites 0210 for \"booms\" and the `log_booms` entry exempts \"a cabled chain of floating logs\", while 0210 says \"never as a floating log boom\" and \"No floating log boom is drawn\". Drop booms from the claim, or retire the `log_booms` entry",
+  "code": "fa46b093a5eebc3b",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "the `log_booms` exemption is \"a cabled chain of floating logs\", where 0210 has the stock \"never as a floating log boom\"; the exemption and claim should name the moored rafts",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
    "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6",
@@ -37507,27 +37657,16 @@
   },
   "research": "4f90d0da44ab444f",
   "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
-   "0065-washing-places-at-the-waters-edge.drawing.html:8c38dba2f4c10ba6",
-   "0065-washing-places-at-the-waters-edge.drawing.html:de3a336bab36800b",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:4cf713416d6978b3",
-   "0148-towers-along-the-city-wall-mamian.drawing.html:ec7e78082e19e5d1",
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:aa542f9e785bb0a1",
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:dcd25bf8ea2758a1",
-   "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html:7c51f27cec137cd5",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
    "0210-timber-yards-and-log-booms-kiba.drawing.html:4ef8408e54f82f55",
    "0210-timber-yards-and-log-booms-kiba.drawing.html:eac260ce154f9535"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#copse and bamboo against a house": {
-  "code": "82f75bbcdc486ce1",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "clump against a house; copse in the gaps; no bamboo in the copse",
+  "code": "c00a3d3e92e6b8ba",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "against a house, never on it",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
@@ -37536,92 +37675,91 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#in-field ditches": {
-  "code": "0abaaf32ce0d4259",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "ditches drawn in the field",
+  "code": "7b5650a2f291005f",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "ditches end within the field",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
   "rests": [
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:fe85b102b5eb5beb"
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0fc478156a744cc7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#in-field ponds, rocks and graves": {
-  "code": "40ee87a83cd2ede1",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "sunk into one plot",
+  "code": "4860f75eb006b7f7",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "sunk in one plot, paddy carved round",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
   "research": "2b8a8213b9c89d51",
   "rests": [
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:07108ce9127e5e0d",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:7c3e3563d5367b62"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#inspection post on the gate": {
-  "code": "da52c34bd8f3494f",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "part of the gate complex",
+  "code": "0ad0c772a6f6e571",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "the exemption lets the inspection post \"overlap the gate furniture\", where 0147 has \"the buildings at a gate never overlap\", the hall stepped out until clear with about 36 ft round each",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
   },
   "research": "1e01770d340670bb",
   "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4159cd89cf5f0fe8",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:94f63315ef481c6c"
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:ec3f0e008c8c4528"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant estate court": {
-  "code": "8448883d48c17144",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "walled court round its building",
+  "code": "400260388c0d7489",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "walled court round the house",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html": "8bbd1b525592811a"
   },
   "research": "fecf245455f376f6",
   "rests": [
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:70d0d58d6befbe40",
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:ef188e7005fcd323"
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:1b43d2f683a78fe0"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant storehouses": {
-  "code": "d84a035ad88a01f2",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "storehouses behind and close by the house",
+  "code": "c132c93f91f1e9f1",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "storehouses on the merchant's lot",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html": "125c108c12eec337"
   },
   "research": "bbd5f6847264a04c",
   "rests": [
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:3eb6dc26135ce630",
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:6868f819f1618126",
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:8faef3ee57cdcecd"
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html:6d547dbe1da596cf"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream": {
-  "code": "925fceea7629708b",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "on the bank, wheel in its race",
+  "code": "77fa9a2d33741da6",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "bank seat, wheel in its race",
   "pages": {
    "0064-water-mills-suisha.drawing.html": "e3fdbcecc090b29c"
   },
@@ -37632,105 +37770,102 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#pig sty on the dike": {
-  "code": "295c2e7de8097651",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "on the bank, not by the canal",
+  "code": "2b626ab938bfee08",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "set in by half the bank",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
   "rests": [
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:02c8bea0e76c8504",
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed",
-   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#polder dike crossed": {
-  "code": "e442f52fb5bd9cd9",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "a band cut where channels cross",
+  "code": "a88d8f8cfcfadaa2",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "walkable top, channels through a cut",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
   },
   "research": "aaf76ce9023b39a0",
   "rests": [
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:232a60c6a51c5109",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#stable yard round its stables": {
-  "code": "3d7c94ca1acb915e",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "beaten-earth yard",
+  "code": "cdc3fcbea4f09dca",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "beaten-earth scatter",
   "pages": {
    "0195-stable-yards-and-watering-troughs.drawing.html": "15451a48113d9f9d"
   },
   "research": "d16baad4c6a0e9f3",
   "rests": [
-   "0195-stable-yards-and-watering-troughs.drawing.html:010b3d0aa1acb7d1",
+   "0195-stable-yards-and-watering-troughs.drawing.html:4ae2e1d99a78ba2e",
    "0195-stable-yards-and-watering-troughs.drawing.html:ab7e3ee60728257b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#wellhead among the houses": {
-  "code": "68c0bca7c5926cc7",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "the neighbors' draw-point among the houses",
+  "code": "79c900264eb1bcbd",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "among the houses it serves",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "307fc85eb601e9b5"
   },
   "research": "9a0011db4b57ed16",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:3c550b8df2ea63e9",
-   "0196-communal-wells-ido.drawing.html:a24e8638e374e060"
+   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
+   "0196-communal-wells-ido.drawing.html:f24c28a6073fe0eb"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard persimmon near its house": {
-  "code": "1e07dd8e2f0dda90",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "near the house, front or back",
+  "code": "80e0cd8313154f26",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "front or behind, within about 30 ft",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:591f08ea01d694fd",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297",
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:de4ee1b2d962f08c"
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house": {
-  "code": "8e428437b2f99736",
-  "core": "b33c58b1bc113c98",
-  "date": "2026-10-12",
-  "note": "yard beside the house, garden, bath joined, shed behind or beside",
+  "code": "573b715cbb3fa499",
+  "core": "4f4e1908e021bcf3",
+  "date": "2026-10-13",
+  "note": "the claim seats the wood shed \"a ken beyond the wall's clear strip, about 9.5 ft off a wall\", but 0043 says \"about 6 ft (a ken) off a wall\". Either the placer's 9.5 ft or the page needs to change so they agree; the yard, bath and sty parts match their pages",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72",
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html": "bef5d458385c0006",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129",
-   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
+   "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
   },
-  "research": "05857c7127a1c04f",
+  "research": "813dd45cdb7424da",
   "rests": [
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:03bd5cc33e2068a4",
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html:0b02f5e3492a4ce2",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf",
-   "0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html:b3c440bb2468c83f",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
-   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53"
+   "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_LINEAR#ground kept clear": {
   "code": "a665dae82111d28a",
@@ -46028,10 +46163,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_CLASS#fixture records and class names": {
-  "code": "48a580c2d928a98e",
-  "core": "acc804a04061ad8c",
-  "date": "2026-10-12",
-  "note": "a class-name vocabulary",
+  "code": "d6f82a736dbf0fb6",
+  "core": "ce41bc1573491431",
+  "date": "2026-10-13",
+  "note": "class vocabulary",
   "pages": {},
   "research": "",
   "rests": [],
@@ -46046,35 +46181,38 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_FT#bath room size": {
-  "code": "075dfc48d9a5e077",
-  "core": "0cafe3da132710b3",
-  "date": "2026-10-12",
-  "note": "1 tsubo, 6 x 6 ft",
+  "code": "0aa03a9104ef6304",
+  "core": "d865a77a9dccfcfb",
+  "date": "2026-10-13",
+  "note": "1 tsubo",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
-   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
    "0044-baths-on-the-farm-furo.html:cd48fd2aad413cde"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_FT#hen coop size": {
-  "code": "dd50e3e6f9a7f2c7",
-  "core": "0cafe3da132710b3",
-  "date": "2026-10-12",
-  "note": "an unmeasured GUESS",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "code": "9c6974245977fa7a",
+  "core": "d865a77a9dccfcfb",
+  "date": "2026-10-13",
+  "note": "5 x 5 ft, recorded as a GUESS on the page",
+  "pages": {
+   "0045-chickens-and-chicken-coops.drawing.html": "09fa83d177b6f5e9"
+  },
+  "research": "2aa89976080fb73c",
+  "rests": [
+   "0045-chickens-and-chicken-coops.drawing.html:63e09dc9241066b2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_FT#household grave size": {
-  "code": "16b1b32902686458",
-  "core": "0cafe3da132710b3",
-  "date": "2026-10-12",
-  "note": "8 x 6 ft, recorded as a GUESS",
+  "code": "d1edb3cadf6389e2",
+  "core": "d865a77a9dccfcfb",
+  "date": "2026-10-13",
+  "note": "8x6 recorded as a GUESS",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "31813c08c61c8776"
   },
@@ -46085,30 +46223,48 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_FT#household shrine size": {
-  "code": "57b0cb4cc2312679",
-  "core": "0cafe3da132710b3",
-  "date": "2026-10-12",
-  "note": "drawn larger than life so it can be seen",
+  "code": "a68b65757c3c6297",
+  "core": "d865a77a9dccfcfb",
+  "date": "2026-10-13",
+  "note": "larger than life, so it can be seen",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_FT#manure heap size": {
-  "code": "e078f31e3c5b6d7d",
-  "core": "0cafe3da132710b3",
-  "date": "2026-10-12",
-  "note": "an unmeasured GUESS",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "code": "dc6f516a33f3f08d",
+  "core": "d865a77a9dccfcfb",
+  "date": "2026-10-13",
+  "note": "8 x 6 ft, recorded as a GUESS on the page",
+  "pages": {
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html": "88a5a7358b74ffeb"
+  },
+  "research": "64b079a992498adb",
+  "rests": [
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:18190b6b92e45405"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_FT#pig sty size": {
+  "code": "00d28f65bfa9ae1c",
+  "core": "d865a77a9dccfcfb",
+  "date": "2026-10-13",
+  "note": "about 8 x 6 ft, the dike-pond sty's size, recorded as a GUESS",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:f88b01275f152437"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_FT#privy size": {
-  "code": "a25e884653861236",
-  "core": "0cafe3da132710b3",
-  "date": "2026-10-12",
-  "note": "6 x 6 ft is among the sixteen Kakimochi sizes",
+  "code": "08dbab655f26426c",
+  "core": "d865a77a9dccfcfb",
+  "date": "2026-10-13",
+  "note": "6x6 among the sixteen",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.html": "294720e58dd17df3"
   },
@@ -46119,10 +46275,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_FT#wood shed size": {
-  "code": "79c965383ba6db67",
-  "core": "0cafe3da132710b3",
-  "date": "2026-10-12",
-  "note": "4 x 2 ken, three of seven",
+  "code": "08bd860ff97ca516",
+  "core": "d865a77a9dccfcfb",
+  "date": "2026-10-13",
+  "note": "4 x 2 ken",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.html": "d73fe9244ad2732e"
   },
@@ -46133,10 +46289,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FIXTURE_KINDS#fixture records and class names": {
-  "code": "826493dd8be7a672",
-  "core": "af473ce45b08e79d",
-  "date": "2026-10-12",
-  "note": "plumbing",
+  "code": "8b6da0ca70f5e96c",
+  "core": "ad87ff0cc709e383",
+  "date": "2026-10-13",
+  "note": "key list",
   "pages": {},
   "research": "",
   "rests": [],
@@ -46151,35 +46307,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FarmFixturesMixin.farm_fixture#fixture glyphs": {
-  "code": "e5ae9884f9c39793",
-  "core": "0978932da41d7a96",
-  "date": "2026-10-12",
-  "note": "the glyphs are drawing marks",
+  "code": "4d4b585f8bf8157b",
+  "core": "2e85abd0f547aac2",
+  "date": "2026-10-13",
+  "note": "drawing convention",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FarmFixturesMixin.farm_fixture#household grave": {
-  "code": "a1e1f7950f2b3c6c",
-  "core": "0978932da41d7a96",
-  "date": "2026-10-12",
-  "note": "a grave on the household's own land, at a corner of the plot",
+  "code": "a1b8fd6aee09a38b",
+  "core": "2e85abd0f547aac2",
+  "date": "2026-10-13",
+  "note": "grave on a corner of own land",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html": "25f3daa260e791cd"
   },
   "research": "09455ec01c8ca36b",
   "rests": [
-   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:b3e7f0b846f18b0f",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html:d6a078d4e683edf6"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::FarmFixturesMixin.farm_fixture#manure heap or pit": {
-  "code": "7c2fb03b6810b8ef",
-  "core": "0978932da41d7a96",
-  "date": "2026-10-12",
-  "note": "a buried jar, 3.5 ft inside its 3-5 ft mouth",
+  "code": "00b16c4be31786ee",
+  "core": "2e85abd0f547aac2",
+  "date": "2026-10-13",
+  "note": "buried jar's mouth",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.html": "41e1245eb64400c5"
   },
@@ -46189,22 +46344,33 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/farm_fixtures.py::FarmFixturesMixin.farm_fixture#pig sty on the farmstead": {
+  "code": "ce4bafde78893833",
+  "core": "2e85abd0f547aac2",
+  "date": "2026-10-13",
+  "note": "against the house or an outbuilding, drawn with the dike-pond sty's shed-and-pen glyph",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b9f3c80b07059d82",
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:f88b01275f152437"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/farm_fixtures.py::FarmFixturesMixin.farm_fixture#the farmstead's fixtures": {
-  "code": "256f296c85059705",
-  "core": "0978932da41d7a96",
-  "date": "2026-10-12",
-  "note": "the kinds the page names",
+  "code": "b3b3965690758937",
+  "core": "2e85abd0f547aac2",
+  "date": "2026-10-13",
+  "note": "the yashiki's listed outbuildings",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.html": "2f98e739d9ff02ad"
   },
   "research": "c31bbe822b715147",
   "rests": [
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.html:0436fd3a6a3ed0de",
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.html:342a720cffeea782",
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.html:392fefeecce51ce6",
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.html:5965467b78fece3f",
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.html:601a65de3b17cea1",
-   "0028-the-farmstead-and-what-stood-on-it-yashiki.html:a801320b020f233c"
+   "0028-the-farmstead-and-what-stood-on-it-yashiki.html:601a65de3b17cea1"
   ],
   "verdict": "IN-STEP"
  },
@@ -46304,22 +46470,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pig_sty#sty glyph": {
-  "code": "074ec7f8df0566b2",
-  "core": "d523798a6864185f",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
+  "code": "b3591cffc26d1cab",
+  "core": "6e13bfbbfb64c1bb",
+  "date": "2026-10-13",
+  "note": "drawing convention",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pig_sty#sty on the dike": {
-  "code": "753829facd6a0d04",
-  "core": "d523798a6864185f",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
+  "code": "0830d3f0a8b58b17",
+  "core": "6e13bfbbfb64c1bb",
+  "date": "2026-10-13",
+  "note": "pen on the pond bank",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html": "ba8c07825c06383f"
   },
   "research": "c2db08a5a30de209",
+  "rests": [
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:8cd57681bf90272e"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty clearance": {
@@ -46350,11 +46520,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::STY_FT#sty size": {
-  "code": "194f4732cf23f273",
+  "code": "20858489ae4dfb3c",
   "core": "2bf1880e81b8198b",
-  "date": "2026-10-03",
-  "note": "the bundle gives no sty size",
-  "research": "",
+  "date": "2026-10-13",
+  "note": "about 8 by 6 ft, shed and pen together, its size not searched for, a GUESS",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:f88b01275f152437"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": {
@@ -46401,6 +46577,15 @@
    "0040-farm-storehouses-kura.drawing.html:90057266aa2f2fa5",
    "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/farm_fixtures.py::sty_parts#sty glyph": {
+  "code": "b6e78160dd20c565",
+  "core": "9eb35a3ffa823946",
+  "date": "2026-10-13",
+  "note": "drawing convention",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/__init__.py::FieldsMixin#package composition": {
@@ -50440,6 +50625,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_part#against the farmhouse or one of its outbuildings": {
+  "code": "cb1e2902aac2b02f",
+  "core": "82b623f0b0170bcf",
+  "date": "2026-10-13",
+  "note": "the page records it as a GUESS",
+  "pages": {
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html": "1d379bbb81ad22fb"
+  },
+  "research": "6346c9047e54840e",
+  "rests": [
+   "0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html:b533db817cf2560b"
+  ],
+  "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::against_a_wall#plumbing": {
   "code": "704c85bc7594ebcb",
   "core": "7e28089186bcd13c",
@@ -50606,10 +50806,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#bath room size": {
-  "code": "33624a6f83c81d64",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "6 ft out by 6-12 ft along",
+  "code": "14a8ac843a56f7ee",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "6 by 6 to 12 ft",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396"
   },
@@ -50620,10 +50820,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#coop size": {
-  "code": "faed58b7146cf001",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "5 x 5 ft",
+  "code": "8ee73a8804a89864",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "5x5",
   "pages": {
    "0045-chickens-and-chicken-coops.drawing.html": "09fa83d177b6f5e9"
   },
@@ -50634,10 +50834,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#manure heap size": {
-  "code": "3db7fd1f5c149ae8",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "8 x 6 ft",
+  "code": "bddd8543f05b472b",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "8x6",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "88a5a7358b74ffeb"
   },
@@ -50648,10 +50848,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#manure pit size": {
-  "code": "8541d070d22e7db9",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "3.5 ft is inside the jar mouth's ~3-5 ft",
+  "code": "03e6cdf1c8e20e1a",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "inside 3-5 ft mouth",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.html": "41e1245eb64400c5"
   },
@@ -50662,10 +50862,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#one-ken default": {
-  "code": "586d98213961c2d7",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "6 x 6 ft is among the sixteen and is the bath's one tsubo",
+  "code": "4a12073f951c70ea",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "one of the sixteen; one tsubo",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "73540b7fd2cc2396",
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
@@ -50678,10 +50878,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#other fixtures' sizes": {
-  "code": "bc2bd2ad4e6694db",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "wood shed 24 x 12 ft",
+  "code": "42cf4a9152fbb8b8",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "wood shed 24x12",
   "pages": {
    "0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html": "94f3f9866afe3bdc"
   },
@@ -50692,25 +50892,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#persimmon crown": {
-  "code": "d07116e7c6a95b8e",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
+  "code": "86dc248109af7ccc",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
   "note": "23 ft across",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:95a4bdb23ba3bcdf",
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:de4ee1b2d962f08c"
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:95a4bdb23ba3bcdf"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#privy size": {
-  "code": "dfe52a064905bc23",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "the sixteen sizes at even odds",
+  "code": "492697b2f7646998",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "sixteen sizes, equally likely",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },
@@ -50721,20 +50920,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#retirement house size": {
-  "code": "31b6c470cac12df8",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "nothing in the bundle answers it",
+  "code": "279b4c521eb66601",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "nothing cited",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::fixture_ft#shrine size": {
-  "code": "85f0275e34c83848",
-  "core": "cd594ed9b6fd9540",
-  "date": "2026-10-12",
-  "note": "6 x 6 ft, larger than life",
+  "code": "8fee516138f3b274",
+  "core": "c4919078caa71d49",
+  "date": "2026-10-13",
+  "note": "6x6, larger than life",
   "pages": {
    "0219-household-shrines-yashikigami.drawing.html": "0c9da3e6ad2b7eb4"
   },

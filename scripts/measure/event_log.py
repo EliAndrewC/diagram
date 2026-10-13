@@ -67,6 +67,10 @@ _MANIFEST = re.compile(r"(/[^\s`\"'<>)]*MANIFEST\.md)")
 _NOTIFICATION = re.compile(r"<task-id>([^<]+)</task-id>")
 _RESULT = re.compile(r"<result>(.*?)(?:</result>|$)", re.S)
 #: A returned check's verdict word, the first that appears (plan D8: the report counts BLOCKED reviews and clean runs)
+#: a count of findings in a reply's summary line - a number other than nought before what it counts
+_FINDING_COUNT = re.compile(r"\b[1-9]\d*\s+(?:findings?|unfootnoted|EDITs?|DOES-NOT-SUPPORT|DRIFTED|MISLABELED|FIX|VOCABULARY|SESSION NOTE|HISTORY)\b")
+#: a reply that says it found nothing
+_CLEAN_SAID = re.compile(r"\b(?:nothing to act on|no findings)\b", re.I)
 _VERDICT = re.compile(r"\b(NOT-REVIEWABLE|NOT FAITHFUL|CHANGES REQUIRED|BLOCKED|FAITHFUL|CLEAR|NEEDS-WORK|PASS|FAIL)\b")
 
 
@@ -77,6 +81,12 @@ def verdict_of(text: str) -> str:
     if m:
         return m.group(1)
     first = next((ln for ln in text.strip().splitlines() if ln.strip()), "")
+    # ...A SUMMARY THAT NAMES WHAT IT COUNTS is read by its finding counts alone: a round's number, a question's, or "2 changed
+    # blocks" counts no finding (the round arbiter on round:quote-check|q:0049@3, feature 374 wave 151)
+    if _FINDING_COUNT.search(first):
+        return "findings"
+    if _CLEAN_SAID.search(text[:600]):
+        return "clean"
     nums = re.findall(r"\b\d+\b", first)
     if nums:
         return "clean" if all(n == "0" for n in nums) else "findings"

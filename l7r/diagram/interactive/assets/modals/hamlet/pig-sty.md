@@ -1,5 +1,4 @@
-About: A pig sty was a household's pig pen. In most regions of China a farm kept a pig and some chickens in its yard, along
-with a draft animal or two.
+About: A pig sty was a household's pig pen. In most regions of China a farm kept a pig and some chickens in its yard.
 
 [field_archetype=valley_paddy|polder_grid] On a plain paddy hamlet pigs were kept for their manure,
 the simple way to get it when bought manure and hired hands were dear. In the 1920s, in the
@@ -41,7 +40,7 @@ the harvest, which a summer map does not show.
 
 [field_archetype=mulberry_dike_fishpond] It stands on the bank itself, on the half of its pond's bank that faces the houses,
 so that it reads as a household's. Nothing is drawn to carry its waste
-into the water, and no foul patch of water beside it, since both are known only from modern manuals. No duck pen is
+into the water, and no foul patch of water beside it, since both are known only from modern times. No duck pen is
 drawn, since the ducks were herded in the rice fields. A sty at a fish pond is drawn on a dike-pond hamlet only.
 
 Name: pig sty

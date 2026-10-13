@@ -91,7 +91,9 @@ def sty_seat(s: Settlement, house: Mapping[str, Any]) -> dict[str, Any] | None:
     """The first place against a wall of the house or an outbuilding (`against_a_part`), clear of the plot's other parts by the
     fixture wall gap, that the registry of what stands admits: the record `farm_fixture` will write, or None.
 
-    Research: against the farmhouse or an outbuilding - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: on the household's own plot"""
+    Research:
+        against the farmhouse or an outbuilding - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: on the household's own plot
+        the gap, the step and the rake - UNRESEARCHED: the fixtures' 3.5 ft wall gap off the plot's other parts (`WALL_GAP_FT`), places 4 ft apart along each wall (`WALL_SLIDE_FT`), the sty raked with its house"""
     walls, parts = farmstead(s.M, house)
     w, d = s.px(STY_FT[0]), s.px(STY_FT[1])
     taken = list(parts)
@@ -111,7 +113,9 @@ def stage_sties(s: Settlement, plan: SitePlan) -> None:
     against its farmstead (`sty_seat`) and drawn; a household with no place passes its sty on to the next that keeps none.
     Recorded: the count asked (`meta.sty_target`) and the count no farmstead had room for (`meta.sty_short`).
 
-    Research: about two households in three - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the share counted to the households; none on a dike-pond hamlet, whose sties stand on its ponds"""
+    Research:
+        about two households in three - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the share counted to the households; none on a dike-pond hamlet, whose sties stand on its ponds
+        passed to the next household - UNRESEARCHED: a household with no place gives its sty to the next that keeps none, so the hamlet draws the share's count wherever its walls allow"""
     houses = list(s.M.get("houses") or [])
     share = fixture_shares(s.seed, plan.field_archetype)["sty"]
     carriers = quota_carriers(s.seed, "sty", len(houses), share)
