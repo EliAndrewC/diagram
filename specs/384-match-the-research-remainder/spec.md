@@ -54,7 +54,7 @@ fixed, not escaped).
   need to figure out how to make this go faster"*). Measured for that decision (374's event log, `make feature-report F=374`):
   328's `waves.json` gained nine rows from 2026-10-12 18:00 to 374's close (batches 15-18, which landed between 01:40 and
   07:57 on 2026-10-13 by their commits); batch 19 (row 787) was built, measured and reverted.
-- **FR-004 (the usage cap)**: 374's FR-003, the cap at 90% of the weekly window, armed with `~/.claude/hooks/usage_cap.py`.
+- **FR-004 (the usage cap)**: 374's FR-003, the cap at `90%` of the weekly window (`request.md`), armed with `~/.claude/hooks/usage_cap.py`.
 
 ## Success Criteria *(mandatory)*
 
