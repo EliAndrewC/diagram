@@ -142,6 +142,11 @@ def apply_edit(root: pathlib.Path, b: dict, dry: bool, form: bool = False) -> st
         return f"REFUSED - no file {b['path']}"
     text = target.read_text(encoding="utf-8")
     count = text.count(b["old"])
+    # ALREADY APPLIED: a block whose new text holds its old text still finds the old text once it is in, so a second run
+    # applied it again (feature 374 wave 154: a re-run doubled a pop-up's `Entry:` path). Its new text standing where the
+    # old text stands is the block applied: skipped, never written twice.
+    if b["old"] and b["old"] in b["new"] and b["new"] in text and text.count(b["new"]) >= count:
+        return f"already applied to {target.name}"
     if count != 1:
         return f"REFUSED - the old text occurs {count} times in {target.name}, not once"
     if not dry:
