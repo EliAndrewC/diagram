@@ -69,8 +69,9 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T17 quote-verbatim's verdicts kept (plan D17); tests and the byte-for-byte comparison (SC-011)
       research: rendering
       verify: DONE. DONE. quote_verbatim.verdict kept in a ParseCache by passage and page sha256 under the module's code sha; report byte-identical with L7R_CACHE_OFF=1 (0049); second run 6.25 -> 1.29 s; test_reuse_and_quotes: a changed passage or page judged afresh, kept on disk
-- [ ] T18 Close: the tooling tests, `make hooks-test`, the gate, the report, landed
+- [x] T18 Close: the tooling tests, `make hooks-test`, the gate, the report, landed
       research: rendering
+      verify: DONE. DONE. tooling tests 1796 passed, make hooks-test green, make done green, the report written; landed by the push carrying this tick
 
 - [ ] GM review (make gm-reviewed F=383) [lands-open]
       research: rendering
