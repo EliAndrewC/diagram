@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-13T05:12:53Z",
+  "target": "review-accept",
+  "commit": "4668a0cf2",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--pig-sty--inashiro F6: a confirmation: the glyph is asymmetric, no face reading"
+}
