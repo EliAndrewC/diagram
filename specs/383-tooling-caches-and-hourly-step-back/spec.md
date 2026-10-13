@@ -143,7 +143,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **The record check's inputs are measured, not guessed** (research R1, an audit hook on `open`): `research/`, the glossary
   assets and the import closure of the module run. Map drawing convention: N/A - tooling.
 - **Partial citations are not cached** (research R3): keeping 5,400 small files per file cost what reading them does (0.33 s
-  against 0.32 s). Tried, measured, reverted; the plan review ruled the narrowing LEGITIMATE.
+  against 0.32 s, observed 2026-10-12; method: `/usr/bin/time`, research R3). Tried, measured, reverted; the plan review ruled the narrowing LEGITIMATE.
 - **The record's render is not cached per page**: every page reads the whole record's link index, so the whole-check memo is
   its cache; each per-file setup step goes through the store's memo (research R4).
 - **The step-back is the round arbiter** on an `hour` trigger (the GM's "hourly arbiter"); a quiet `continue` adds no row to
