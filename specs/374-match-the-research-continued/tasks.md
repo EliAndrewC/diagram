@@ -231,8 +231,9 @@ in 328's ranking and this spec.
 
 ## Batch 14 - washing places
 
-- [ ] T42 wave 150: washing places where a stream or ditch passes the houses, shared or one at each house (0065) (FR-001)
+- [x] T42 wave 150: washing places where a stream or ditch passes the houses, shared or one at each house (0065) (FR-001)
       research: rendering
+      verify: DONE. m:w150-washing - 63 washing places over the 42 rolls built, none without a seat, polder 4/5 refusing as at HEAD; pool clean, cohort 16/16; gate green; glyph-check PASS on Inashiro; impl-drift rounds to all IN-STEP; T42 section and whole plan CLEAR
 
 ## Standing - the ranking's remaining rows
 
