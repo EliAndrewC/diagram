@@ -102,6 +102,14 @@ def digest(text: str) -> str:
     return hashlib.sha1(text.encode("utf-8")).hexdigest()[:12]
 
 
+def heading_only(text: str) -> bool:
+    """Is an edit's new text one Markdown heading line and nothing else (`### Amendment 6 (FR-028)`)? Such a line coming back
+    is a number reused over a different body - feature 375's amendment 6 renumbered to 7, then 6 taken again by another
+    session's amendment - not text an earlier edit replaced (the round arbiter's tooling fix, feature 383)."""
+    lines = [ln for ln in text.splitlines() if ln.strip()]
+    return len(lines) == 1 and lines[0].lstrip().startswith("#")
+
+
 def make_target(command: str) -> str:
     """The first make target a Bash command runs (`make -C x quick ALL=1` -> `quick`), or ''."""
     m = _MAKE.search(command.split("<<", 1)[0]) if "<<" in command else _MAKE.search(command)
@@ -153,6 +161,8 @@ def line(payload: Mapping[str, Any], t: str | None = None) -> dict[str, Any]:
             out["path"] = ti.get("file_path") or ti.get("notebook_path") or ""
             if tool == "Edit":
                 out.update(old=digest(str(ti.get("old_string") or "")), new=digest(str(ti.get("new_string") or "")))
+                if heading_only(str(ti.get("new_string") or "")):
+                    out["heading"] = True  # a heading put back over a different body is no reversal (hm_arbiter.reversal)
             elif tool == "Write":
                 out["new"] = digest(str(ti.get("content") or ""))
         elif tool == "Agent":
@@ -243,7 +253,7 @@ def reversal_wire(root: Path, log: Path, row: Mapping[str, Any]) -> bool:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "hooks" / "lib"))
     import hm_arbiter  # noqa: PLC0415
 
-    if not hm_arbiter.reversal(list(read_jsonl(log)), str(row.get("path")), str(row.get("old")), str(row.get("new"))):
+    if row.get("heading") or not hm_arbiter.reversal(list(read_jsonl(log)), str(row.get("path")), str(row.get("old")), str(row.get("new"))):
         return False
     return hm_arbiter.trip(root, f"reversal:{row.get('path')}", "reversal", str(row.get("path")),
                            f"an Edit put back text an earlier Edit of {row.get('path')} replaced (A -> B -> A)")

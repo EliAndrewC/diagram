@@ -300,3 +300,26 @@ def test_an_edit_putting_back_replaced_text_trips_the_arbiter(tmp_path: Path, mo
     edit("the bath is 12 ft", "the bath is 10 ft")
     owed = json.loads((clone / ".git" / "arbiter-owed.json").read_text())
     assert list(owed) == ["reversal:/a.md"] and owed["reversal:/a.md"]["kind"] == "reversal"
+
+
+def test_a_heading_put_back_over_another_body_trips_no_reversal(tmp_path) -> None:  # noqa: ANN001
+    """The round arbiter's tooling fix (feature 383, on 375's plan): `### Amendment 6` renumbered to 7 and then taken again by
+    another amendment is a number reused, not an undone fix - a lone heading line never trips; real text still does."""
+    import os
+
+    assert el.heading_only("### Amendment 6 (FR-028)\n") and not el.heading_only("### A\nbody\n") and not el.heading_only("X = 4")
+    root = tmp_path / "clone"
+    root.mkdir()
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    log = tmp_path / "log.jsonl"
+    a, b = el.digest("### Amendment 6 (FR-028)"), el.digest("### Amendment 7 (FR-028)")
+    log.write_text(json.dumps({"ev": "PreToolUse", "tool": "Edit", "path": "p.md", "old": a, "new": b}) + "\n")
+    here = os.getcwd()
+    try:
+        os.chdir(root)
+        assert not el.reversal_wire(root, log, {"path": "p.md", "old": b, "new": a, "heading": True})
+        x, y = el.digest("X = 4"), el.digest("X = 5")
+        log.write_text(json.dumps({"ev": "PreToolUse", "tool": "Edit", "path": "q.py", "old": x, "new": y}) + "\n")
+        assert el.reversal_wire(root, log, {"path": "q.py", "old": y, "new": x}), "a value put back still trips"
+    finally:
+        os.chdir(here)
