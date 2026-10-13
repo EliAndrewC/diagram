@@ -8,6 +8,8 @@
 
 **Amendment 1 approved**: the GM, 2026-10-13, "Yes please we should definitely skip suites the clone already passed." and "And also, while I realize we don't run it very often, I feel like `quote-verbatim` would benefit from the same caching layer we implemented elsewhere, right?"
 
+**Amendment 2 approved**: the GM, 2026-10-13, "Yes, please. So go ahead and do the savings that you've already measured, no matter what." and "And then go ahead and land whatever timing improvements you are able to figure out."
+
 **Approved**: the GM, 2026-10-12, "Yes, please file it that way and then go ahead and work it start to finish. Thanks."
 
 **Input**: `request.md` (the GM, 2026-10-12)
@@ -112,6 +114,28 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   text, under the version of the code that judged it, and served again while both are unchanged; its report is the same with
   the cache as without it.
 
+### Amendment 2 - the files that always ran, and the rest of a landing (`request.md`, Amendment 2)
+
+- **FR-015 A read-only git question is part of what a test file read.** A tooling test file that asked git about the
+  repository (for example `git ls-files`, `git diff`, `git log`, `git show`, `git rev-parse`) records each question and its
+  answer's digest; where every question asked again in the worktree gets the same answer, and every other input is unchanged,
+  the file is reused as under FR-013. A git command that may change the repository, or one whose answer cannot be asked again,
+  still makes the file run.
+- **FR-016 A Python process a test starts keeps the recording.** A test file whose Python children are started in a way that
+  drops the recording (an isolated interpreter, a fresh environment) records what those children read, unless the test needs
+  the isolation itself (then the file runs, as now). The measured cost behind FR-015 and FR-016: 29 and 28 of the 102
+  test-seconds that always ran (2026-10-13, this session).
+- **FR-017 Each step of a landing is timed.** `make land-tooling` writes each step's time - the worktree, the patch, the guard
+  suites, the tooling tests, the push - to its log, so that where a landing's time goes is read from the log and not guessed.
+- **FR-018 A landing runs each test once, and its independent checks side by side.** In a landing, a tooling test file that
+  `make hooks-test` would run and that the landing's tooling test run also runs runs only once, in the run that can reuse the
+  clone's pass; the guard suites and the tooling tests, which share nothing they write, run at the same time. Measured in the
+  same session before writing this: the guard suites' step 80.7 s, of which the scripts' pytest files (57 of 60 of them
+  tooling files, run again by the next step, 30.2 s) are about 45 s.
+- **FR-019 What else the measurement shows is improved and landed.** A step the FR-017 timing shows costing more than a few
+  seconds that can be cut without loosening a check is cut in this amendment; one that cannot is recorded with its
+  measurement.
+
 ## Success criteria
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
@@ -149,6 +173,13 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-011** (FR-014) quote-verbatim's report on a question is byte-identical with the cache on and off, and a second run is
   measured against the first; and a quotation is judged afresh when the quoted passage, the page's text or the judging
   code changes (a test).
+- **SC-012** (FR-015, FR-016) A tooling test file whose only always-run cause was a read-only git question or a Python child
+  is reused in a worktree with identical inputs, and runs when a git answer changes (a test with a fixture repository) or a
+  file its child read changes; a git command that writes still makes the file run. The count of tooling test files that
+  always run, before and after (126 files, 38 always run before).
+- **SC-013** (FR-017, FR-018, FR-019) `make land-tooling` measured step by step: before, each step timed by hand in a worktree at main (research R7); after, on a real landing from its
+  log, with the load; each tooling test file runs at most once in the landing (its log); the guard suites and the tooling
+  tests overlap in time (their step times in the log).
 
 ## Review history
 

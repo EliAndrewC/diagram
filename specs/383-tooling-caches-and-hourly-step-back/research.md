@@ -72,3 +72,20 @@ event log (read only), each bundle handed to the `round-arbiter` agent with the 
 `m:push-checks-runner-after`: the runner, one process, 1.92 s - against `m:push-checks-before`'s 19.87 s for the same checks
 (gate-stamp and the closing check added). Run as separate processes they now sum to 3.43 s (`m:push-checks-separate-after`):
 the content-keyed cache took 16.4 s off, and one process took 1.5 s more.
+
+## R7 Where a landing's time goes (amendment 2, measured 2026-10-13 by hand)
+
+A worktree at origin/main (2026-10-13 09:22, load 1.8 -> 5.1), each step of `make land-tooling` run alone in it:
+
+| step | time |
+|---|---|
+| `git worktree add --detach` | 1.4 s |
+| `make hooks-test` (4 guard suites stale, 42 unchanged; then the scripts' pytest files, 60, 57 of them `tests/tooling`, `-n 4`, no reuse) | 80.7 s |
+| of which: the deps loop (37 `hookdeps.py --deps` calls) | 6.1 s |
+| of which: the four suites alone - sync-with-main 33.2, review-gate 22.1, entry-gate 18.9, gate-stamp 4.4 (run in parallel: about 33 s) | |
+| of which: the scripts' pytest files (by difference; 28.1 s as one `make test-file` at the full worker count) | about 45 s |
+| `make test-file FILE=tests/tooling` with reuse (606 of 1,798 tests ran) | 30.2 s |
+| `scripts/sync-with-main.sh render-sync`, nothing to render | 0.8 s |
+
+Landings in the event log: four `land-tooling` runs, median 153.8 s. So the guard suites' step is the largest, and 57
+files of its pytest phase run twice in a landing - once there, without reuse, once in the tooling test run.

@@ -53,3 +53,16 @@ regularly (median 133 s), and it offered to have it skip what the clone had alre
 The session found its own claim wrong in part: the guard suites already reuse a pass on identical inputs in the worktree
 `land-tooling` builds (2026-10-12, f58e9df4e); the tooling test tree (1,784 tests, about 40 s) is what still runs whole every
 time. It took the GM's words to cover that tree.
+
+## Amendment 2 (2026-10-13, same session)
+
+The session reported that the reuse of amendment 1 left 102 of the tooling tests' 175 test-seconds in files that always run
+- they ask git about the repository (29 test-seconds, 6 more with ruff), start a Python process that drops the recording (28),
+run a bash guard (16), or other programs (22) - and that a landing's other ~100 s had not been measured. The GM asked:
+
+> But does that really mean that there is no smartly when we can skip such that it would be more difficult than a simple spec, and so we haven't tried? because this does seem like it's worth looking into to see whether that could be sped up by figuring even if it's a little bit more complicated. And hey, maybe it's just not feasible, that's fine, but it just seems worth looking at, you know?
+
+The session proposed replaying each read-only git question and keeping the Python children's recording, and timing each step
+of a landing first. The GM:
+
+> Yes, please. So go ahead and do the savings that you've already measured, no matter what. And then, like you said, figure out where the rest of the 100 or so seconds goes. And then see what can be done there. And then go ahead and land whatever timing improvements you are able to figure out. Thanks.
