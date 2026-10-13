@@ -61,6 +61,15 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T15 Close: SC-001 measured, the gate, `make feature-report F=383 WRITE=1`, landed; this session's hourly cron deleted (plan D14)
       research: rendering
       verify: DONE. DONE. SC-001 measured (R6: 19.87 s -> 1.92 s in one process), the gate green on this content, make feature-report F=383 WRITE=1 written, the tooling landed in 0906d798a, the hourly cron ddf30448 deleted (CronList: no scheduled jobs); the rest lands by the push carrying this tick
+## Amendment 1 (the GM 2026-10-13: skip what the clone already passed; quote-verbatim's cache)
+
+- [ ] T16 The reads recorded and reused (plan D15, D16): `tests/tooling/_test_deps.py`, `_deps_site/sitecustomize.py`, `make test-file`, `land-tooling.sh`; tests (SC-010); measured
+      research: rendering
+- [ ] T17 quote-verbatim's verdicts kept (plan D17); tests and the byte-for-byte comparison (SC-011)
+      research: rendering
+- [ ] T18 Close: the tooling tests, `make hooks-test`, the gate, the report, landed
+      research: rendering
+
 - [ ] GM review (make gm-reviewed F=383) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

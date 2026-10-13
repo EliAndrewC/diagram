@@ -74,7 +74,9 @@ for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.p
 # push below keeps them.
 unset_escapes=$(env | sed -n 's/^\([A-Z][A-Z_]*_OK\)=.*/-u \1/p' | tr '\n' ' ')
 # shellcheck disable=SC2086 # one word per `-u NAME`
-if ! ( cd "$WT" && env $unset_escapes bash -c "$checks" ) > "$log" 2>&1; then
+# GUARD_EDIT_OK: feature 383 amendment 1 (the GM 2026-10-13: "skip suites the clone already passed") - the tooling tests reuse
+# each test file's pass the clone recorded on identical inputs (tests/tooling/_test_deps.py); the guard suites already do
+if ! ( cd "$WT" && env $unset_escapes L7R_TEST_DEPS=reuse bash -c "$checks" ) > "$log" 2>&1; then
   tail -25 "$log" >&2
   die "the checks failed in the worktree (full log: $log) - fix in the clone, commit, run this again"
 fi

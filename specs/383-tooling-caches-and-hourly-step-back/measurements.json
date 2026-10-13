@@ -86,5 +86,15 @@
    "conflict": 0.37,
    "gate-stamp selftest": 0.09
   }
+ },
+ "land-tooling-tests-reuse": {
+  "quantity": "make test-file FILE=tests/tooling in a fresh worktree of the clone's commit, with L7R_TEST_DEPS=reuse after the clone recorded its passes",
+  "observed": "2026-10-13",
+  "source": "this clone, a detached worktree at HEAD",
+  "command": "make test-file FILE=tests/tooling (L7R_TEST_DEPS=reuse) in a worktree",
+  "method": "/usr/bin/time, one run each way, back to back: 764 of 1,792 tests ran with reuse",
+  "unit": "s",
+  "value": 29.77,
+  "without": 40.72
  }
 }

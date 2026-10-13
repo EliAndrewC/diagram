@@ -248,3 +248,30 @@ the closing report.
 
 Each phase lands its tooling with `make land-tooling` once its tasks are ticked, so other sessions get the faster push while
 the feature runs. D2's splitter fix is engine code and lands with the feature's close by the gated route.
+
+## Amendment 1 (FR-013, FR-014)
+
+**D15 - A tooling test file's reads, recorded (FR-013).** `tests/tooling/_test_deps.py`, a pytest plugin `make test-file`
+loads (`-p`), with `L7R_TEST_DEPS=record` its default:
+- in each test worker an audit hook notes, for the tooling test file running, every file opened for reading and every
+  directory listed under the repository; a compiled module read (`__pycache__/*.pyc`) stands for its source;
+- every Python process a test starts imports `tests/tooling/_deps_site/sitecustomize.py` (on PYTHONPATH; it runs the system's
+  own sitecustomize first) and notes its reads the same way, each written as first seen, never only at exit;
+- a program that is not a recording Python process, started in or on the repository - `git` or `make` without `-C` naming
+  elsewhere and naming no path outside the repository, a Python child run isolated or with the recording dropped - marks the
+  file `opaque`;
+- when every test of a file passed, in a run not filtered by `-k`, a marker or a node id, its reads are kept by content in
+  `<git common dir>/l7r-cache/tooling-test-passes.json`: a file by its git blob id (`record_cache.content_ids`, a changed file
+  hashed as git would, so the same bytes match in a clone and its worktree), a directory by its entries (tracked and
+  untracked, the ignored aside), the interpreter's version beside them. Reads of the content caches (`.git/l7r-cache/`) are
+  left out: every entry there is keyed by what it holds. A failure removes the file's entry.
+
+**D16 - Reused by `make land-tooling` alone (FR-013).** `land-tooling.sh` runs its checks with `L7R_TEST_DEPS=reuse`, the one
+switch, and nothing else sets it. A kept file is deselected where the interpreter matches, nothing was opaque, nothing it read
+is a file git ignores, and every file and directory reads the same now; the run prints how many files and tests it reused.
+The guard suites keep their own reuse (`make hooks-test`). Measured on this clone's commit, in a fresh worktree:
+`m:land-tooling-tests-reuse`.
+
+**D17 - quote-verbatim's verdicts (FR-014).** `verdict(passage, page)` is kept in a `ParseCache` named by the module's code
+sha (`quote-verdicts-<sha>.pickle`), keyed by the passage and the page text's sha256; `main` opens it and saves it. The
+report is compared byte for byte with `L7R_CACHE_OFF=1`.
