@@ -199,9 +199,15 @@ def test_over_the_cap_commands_shrink_before_any_reply_is_dropped() -> None:
     t1 = T0 + 3600
     recs = []
     for i in range(6):
-        recs.append({"type": "assistant", "timestamp": _iso(t1 + i * 60), "message": {"content": [
-            {"type": "text", "text": f"reply {i}"},
-            {"type": "tool_use", "id": str(i), "name": "Bash", "input": {"command": "python3 - <<'EOF'\n" + "x = 1\n" * 400 + "EOF"}}]}})
+        recs.append(
+            {
+                "type": "assistant",
+                "timestamp": _iso(t1 + i * 60),
+                "message": {
+                    "content": [{"type": "text", "text": f"reply {i}"}, {"type": "tool_use", "id": str(i), "name": "Bash", "input": {"command": "python3 - <<'EOF'\n" + "x = 1\n" * 400 + "EOF"}}]
+                },
+            }
+        )
     out = sb.words(recs, t1, t1 + 3600, cap=2000)
     assert all(f"reply {i}" in out for i in range(6)), "every reply kept"
     assert "RAN: python3 - <<'EOF'" in out and "x = 1" not in out, "each command cut to its first line"
