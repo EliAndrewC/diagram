@@ -99,5 +99,68 @@
   "without": 36.21,
   "ran": 606,
   "of": 1796
+ },
+ "land-tooling-tests-reuse-a2": {
+  "quantity": "make test-file FILE=tests/tooling in a fresh worktree at the clone's HEAD, with the clone's passes reused (L7R_TEST_DEPS=reuse), after amendment 2",
+  "observed": "2026-10-13",
+  "source": "this clone; load 5.5",
+  "command": "python3 scripts/measure/tooling_reuse_time.py",
+  "method": "the script: record in the clone, a detached worktree at HEAD, the reuse run then the full run back to back",
+  "unit": "s",
+  "varies": true,
+  "value": 19.35,
+  "without": 35.82,
+  "ran": 297,
+  "of": 1801,
+  "files": 127,
+  "always_run": 18
+ },
+ "land-tooling-landing-before": {
+  "quantity": "a real make land-tooling, every step, before amendment 2's cuts",
+  "observed": "2026-10-13T13:47Z",
+  "source": "this clone's land-tooling-steps.jsonl; load 3.49",
+  "command": "make land-tooling FILES=...",
+  "method": "FR-017's step log",
+  "unit": "s",
+  "varies": true,
+  "value": 113.98,
+  "steps": {
+   "prepare": 0.26,
+   "worktree": 1.38,
+   "patch": 0.51,
+   "guard-suites": 70.06,
+   "tooling-tests": 25.11,
+   "push": 16.68
+  }
+ },
+ "land-tooling-landing-after": {
+  "quantity": "a real make land-tooling, every step, with amendment 2's cuts",
+  "observed": "2026-10-13T13:58Z",
+  "source": "this clone's land-tooling-steps.jsonl; load 3.44",
+  "command": "make land-tooling FILES=...",
+  "method": "FR-017's step log",
+  "unit": "s",
+  "varies": true,
+  "value": 37.05,
+  "steps": {
+   "prepare": 0.26,
+   "worktree": 1.39,
+   "patch": 0.55,
+   "guard-suites": 17.92,
+   "tooling-tests": 25.07,
+   "checks": 25.11,
+   "push": 9.74
+  }
+ },
+ "claims-gate-push": {
+  "quantity": "scripts/gates/claims-gate.sh, warm, before and after the base memo",
+  "observed": "2026-10-13",
+  "source": "this clone; load about 2",
+  "command": "scripts/gates/claims-gate.sh",
+  "method": "wall time, second of two runs",
+  "unit": "s",
+  "varies": true,
+  "value": 1.65,
+  "before": 8.53
  }
 }

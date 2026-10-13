@@ -149,3 +149,37 @@ asked again as a git question is; making each known would mean modeling what tha
 | test_soak_suite, test_invocation, test_make_docs, test_coord, test_gate_record_and_shortcut, test_test_file_target | make | 1.8 | make runs recipes in the repository; what they read is not known |
 
 Over the run's workers (8), the 41.4 test-seconds are about 5 s of wall time in a landing.
+
+**A landing, step by step** (SC-013; FR-017's log, `<git dir>/land-tooling-steps.jsonl`, two real landings 2026-10-13):
+
+| step | before (13:47, load 3.49) | after (13:58, load 3.44) |
+|---|---|---|
+| prepare | 0.26 s | 0.26 s |
+| worktree | 1.38 s | 1.39 s |
+| patch | 0.51 s | 0.55 s |
+| guard-suites | 70.06 s | 17.92 s (side by side with the next) |
+| tooling-tests | 25.11 s | 25.07 s (370 of 1,801 tests ran) |
+| checks (wall) | 95.17 s (the two in turn) | 25.11 s |
+| push | 16.68 s | 9.74 s |
+| total | 113.98 s | 37.05 s |
+
+What the two landings differ in besides the cuts: the before ran four stale guard suites and the scripts' pytest phase over 60
+files (57 of them tooling files, run again in the next step); the after ran one stale suite and that phase over the 3 files
+outside `tests/tooling/`. A landing with the before's four suites stale would take their 33 s (research R7) beside the
+tooling tests' 25 s - about 35 s of checks. The tooling tests' 25 s ran on cores shared with the guard suites; the same reuse
+run alone in the clone takes 12.9 s (297 tests). Of a tooling run, startup and collection are 4.5 s, and the reuse decision
+1.4 s more (every worker reads the content ids and asks the git questions).
+
+**The push** (FR-019, timed alone in a fresh worktree at main, 2026-10-13, load 2): the claims gate was 8.56 s of it - it parsed
+every module of the base tree again on every push. Its units are now kept by module content (`claims.base_cores`, a
+`claims_base_by_module` memo), 1.65 s warm, its output byte-identical with `L7R_CACHE_OFF=1`. The rest: the push's Python
+checks in one process 2.46 s, `entry-gate.sh` 1.70 s, `git fetch` 0.18 s, `review-gate.sh`, `plan-gate.sh` and `make
+perf-review` under 0.1 s each; the push itself and render-sync (0.8 s) are network and lock time.
+
+**Found on the way and fixed:** the reuse summary line never printed under xdist (the workers deselect, the controller did
+not know) - the workers now report it; `make append` judged a review-ledger row only at the commit, which a commit in the same
+command as the append passed unjudged - the row is now linted before it is appended.
+
+**Remaining, recorded** (FR-019): the tooling tests' 18 always-run files (41.4 test-seconds, about 5 s of wall, the table
+above); startup and collection 4.5 s; the guard suites a landing's files reach (each runs whole, 4 to 33 s, beside the tooling
+tests now); the push's network and lock time.

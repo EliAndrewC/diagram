@@ -176,9 +176,15 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:  # n
     worker = getattr(config, "workerinput", {}).get("workerid", "main")
     if d:
         with open(os.path.join(d, f"worker-{worker}.json"), "w", encoding="utf-8") as fh:
-            json.dump({"reads": {f: {k: sorted(v) for k, v in r.items()} for f, r in _reads.items()}, "failed": sorted(_failed), "ran": _ran, "deselected": sorted(_deselected)}, fh)
+            reused = list(getattr(config, "_l7r_reused", (0, 0)))
+            json.dump({"reads": {f: {k: sorted(v) for k, v in r.items()} for f, r in _reads.items()}, "failed": sorted(_failed), "ran": _ran, "deselected": sorted(_deselected), "reused": reused}, fh)
     if hasattr(config, "workerinput") or not d:
         return
+    # UNDER XDIST THE WORKERS DESELECT, the controller does not (383 amendment 2: the summary line never printed in a landing):
+    # each worker reuses the same files, so the controller reports one worker's count
+    counts = [json.loads(w.read_text(encoding="utf-8")).get("reused", [0, 0]) for w in pathlib.Path(d).glob("worker-*.json")]
+    if not getattr(config, "_l7r_reused", None) and any(c[0] for c in counts):
+        config._l7r_reused = tuple(max(counts))  # type: ignore[attr-defined]
     if any("::" in a for a in config.args):
         return  # a run of named tests: a file's other tests did not run, so its pass is not the file's
     _keep(pathlib.Path(d))
@@ -276,8 +282,7 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     gone = [i for i in items if _rel(i.nodeid) in skip]
     items[:] = [i for i in items if _rel(i.nodeid) not in skip]
     config.hook.pytest_deselected(items=gone)
-    if not hasattr(config, "workerinput"):
-        config._l7r_reused = (len(skip), len(gone))  # type: ignore[attr-defined]
+    config._l7r_reused = (len(skip), len(gone))  # type: ignore[attr-defined]
 
 
 def pytest_terminal_summary(terminalreporter, config: pytest.Config) -> None:  # noqa: ANN001
