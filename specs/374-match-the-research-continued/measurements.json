@@ -2081,5 +2081,68 @@
         "between": "the walk varied alone (run r15c) put a sty on its farm's grove band on 4 cohort rolls (fixtures_on_groves); the grove added to the parts kept clear mended all four"
       }
     }
+  },
+  "b15-glyph-f3": {
+    "observed": "2026-10-13",
+    "subject": "glyph-check--pig-sty--inashiro",
+    "answers": "cdb083734f9b",
+    "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
+    "quantity": "where each of Inashiro's sties stands on its farmstead: the wall it is against, in its house's frame, and its spot along that wall",
+    "verifies": "F3",
+    "command": "each farm_fixtures record of kind sty turned into its house's frame (the house's rot undone)",
+    "method": "the side from the offset past the house's half-depth or half-width; the spot along the wall as a fraction of the half-wall, -1 to 1",
+    "value": {
+      "sides": {
+        "west": 3,
+        "back": 2,
+        "east": 1,
+        "front": 3
+      },
+      "offsets_along_wall": [
+        -0.54,
+        -0.87,
+        0.0,
+        0.56,
+        -0.85,
+        -0.6,
+        1.12,
+        1.11,
+        -1.01
+      ],
+      "before": "all 9 on the back wall, 5 dead center (the glyph check's own count)"
+    }
+  },
+  "b15-glyph-f1": {
+    "observed": "2026-10-13",
+    "subject": "glyph-check--pig-sty--inashiro",
+    "answers": "cdb083734f9b",
+    "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
+    "quantity": "the sty's fills against the privy's on Inashiro's sheet",
+    "verifies": "F1",
+    "command": "the fill colors counted in inashiro.svg",
+    "method": "the sty's shed and pen fills against the privy's roof fill",
+    "value": {
+      "sty_shed_fill": "#6E5434",
+      "sty_shed_count": 9,
+      "sty_pen_fill": "#CDB58A",
+      "sty_pen_count": 9,
+      "privy_fill": "#8F7548",
+      "privy_count": 13,
+      "before": "the sty's shed drew in the privy's own #8F7548 with its edge and ridge"
+    }
+  },
+  "b15-glyph-f2": {
+    "observed": "2026-10-13",
+    "subject": "glyph-check--pig-sty--inashiro",
+    "answers": "cdb083734f9b",
+    "source": "pool/hamlets/inashiro/inashiro.json and .svg after make map at engine key cf7320ac18ef",
+    "quantity": "the sty's pen as drawn on Inashiro's sheet",
+    "verifies": "F2",
+    "command": "the pen's rect read from inashiro.svg",
+    "method": "its fill and its rail's stroke",
+    "value": {
+      "pen": "a filled rect (#CDB58A) with a solid 0.9 px rail and a 0.7 px rail across, where the dashed 0.8 px outline drew nothing at fit zoom",
+      "pens_drawn": 9
+    }
   }
 }
