@@ -261,8 +261,9 @@ in 328's ranking and this spec.
 
 ## Batch 18 - where a clustered hamlet's wells stand
 
-- [ ] T46 wave 154: a clustered hamlet's communal wells by the lane or among the houses, rolled per settlement, and seated a little closer than the 95 ft check (0196) (FR-001)
+- [x] T46 wave 154: a clustered hamlet's communal wells by the lane or among the houses, rolled per settlement, and seated a little closer than the 95 ft check (0196) (FR-001)
       research: rendering
+      verify: DONE. wave 154: the well siting knob for a clustered hamlet - lane rolls 5/5 drawn lane-side, cluster wells off every way, none over ten (m:w154-wells); glyph checks PASS on inashiro, kuwabata, sawada
 
 ## Standing - the ranking's remaining rows
 
