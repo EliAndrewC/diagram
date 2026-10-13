@@ -151,6 +151,25 @@ def test_a_review_owed_at_the_checkpoint_holds_the_tick_until_it_is_dispatched(c
     assert cp.hold(clone, T0 + 3700) == ""
 
 
+def test_a_unit_answered_at_the_tree_s_key_before_the_checkpoint_holds_nothing(clone: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 374 wave 151: two glyph checks passed at the current engine key minutes before the step-back, and the tick was held
+    for them as undispatched. A verdict at the tree's key answers the unit; one at an older key does not."""
+    _map(clone, "inashiro", {"farmhouse": 9, "kiln": 1})
+    trigger = cp.open_checkpoint(clone, T0 + 3600)
+    units = cp.state(clone, T0 + 3600)["units"]
+    _rule(clone, trigger, {"ruling": "continue", "why": "steady"})
+    d = clone / ".git" / "review-verdicts"
+    d.mkdir(exist_ok=True)
+    for u in units:
+        (d / f"{u}.json").write_text(json.dumps({"verdict": "PASS", "engine_key": "old"}))
+    monkeypatch.setattr(cp, "current_key", lambda root: "now")
+    assert "not yet dispatched" in cp.hold(clone, T0 + 3700), "a verdict at an older key answers nothing"
+    for u in units:
+        (d / f"{u}.json").write_text(json.dumps({"verdict": "PASS", "engine_key": "now"}))
+    assert cp.hold(clone, T0 + 3700) == ""
+    assert cp.current_key(clone) == "" or isinstance(cp.current_key(clone), str)
+
+
 def test_the_bundle_carries_the_hour(clone: Path, tmp_path: Path) -> None:
     t1 = T0 + 3600
     lines = [
