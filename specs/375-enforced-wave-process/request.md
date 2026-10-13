@@ -172,3 +172,19 @@ its first glyph check comes due at once. The GM:
 
 > I don't like this detail, can we make it not fire for reopened features, or count from the point when they are most recently amended and re-opened?
 
+
+## Amendment 11 (2026-10-13, the "diagram-performance" session)
+
+The GM asked:
+
+> Is feature 374 growing too large in a way that eats tokens from the specs/374-match-the-research-continued/* files growing too large?
+
+The session measured it: the main session reads 374's files by line (3% of its tool output), but the plan reviews read them
+whole. Sixteen whole-plan reviews, run after nearly every batch because any edit outside a task's own section staled the
+plan-stage verdict, cost 13.7 million input tokens, each re-judging every earlier decision (129 by batch 17); 32 section reviews
+cost 20.8 million, most reading the whole spec.md; plan-review.json had grown to 386 KB holding a full copy of the plan. It
+proposed: (1) a verdict per block of the plan, so only changed blocks are reviewed; (2) finished batches' sections moved out of
+plan.md to a file reviewers do not read; (3) no copy of the plan in the verdict - block hashes, the old text from git; (4) a lean
+bundle for a section review - the section and the spec's requirements it cites, not the whole spec. The GM:
+
+> Yes please do all 4 items now, thanks.
