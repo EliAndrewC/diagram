@@ -2327,5 +2327,34 @@
    },
    "history": "the lane form seated on 1 of 5 before the households' reserved ways counted as lanes (scratchpad r13Z); Sawada served 6 and 13 before the cluster well kept off the reserved ways (r13W2)"
   }
+ },
+ "w155-wells": {
+  "observed": "2026-10-13",
+  "subject": "wave 155: no well pocket in a clustered hamlet's homesteads; the reach and the ceiling of ten held by the wells",
+  "answers": "",
+  "source": "the 44 rolls (scratchpad r155d) and the pool (Inashiro, Kuwabata, Sawada) after make map",
+  "quantity": "wells inside a homestead, the households the busiest well is nearest to, wells added for the reach or for the ten, households dry",
+  "command": "tools13/roll13.sh; make map for the three pool maps",
+  "method": "each well against every household's homestead bbox; households counted to their nearest well; meta.wells_for_reach, wells_for_ten, dry_households, well_fallback, wells_over_ten",
+  "value": {
+   "cohort_nucleated": 19,
+   "wells_inside_a_homestead": 0,
+   "cohort_wells_over_ten": 0,
+   "cohort_wells_for_ten": {
+    "polder_grid-2": "lane x2 + cluster, serves 5/4/7",
+    "v-13": "lane x2 + cluster, serves 8/3/5",
+    "v-17": "cluster x3, serves 10/4/2"
+   },
+   "cohort_wells_for_reach": 0,
+   "cohort_dry_households": 0,
+   "cohort_fallback": 0,
+   "cohort_refusing": "polder 4 and 5, as at HEAD",
+   "pool": {
+    "inashiro": "lane x3 (one for the ten), serves 7/3/5",
+    "kuwabata": "cluster x2, serves 9/7",
+    "sawada": "cluster x2, serves 10/9"
+   },
+   "history": "first roll (r155): four rolls over ten (12, 13, 12, 12) with the first well at the cluster's middle; the first well at its share's middle (r155b) and one step ahead (r155c) left three, their share's seats refused by the homesteads (valley 17: 40 threshing yards, 33 gardens, 25 houses, 45 the fit)"
+  }
  }
 }

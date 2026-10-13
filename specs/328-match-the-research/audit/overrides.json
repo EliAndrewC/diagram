@@ -3245,5 +3245,23 @@
     "moved": "wave 149: re-tiered E4 behind the settle row (328's fix-that-changes-many-maps case)",
     "fix": "the order is free (the GM's ruling); give more households room for their strip (57 of 159 wanting one drew one at m:w149-strips), each beside its own house with no way over it or between it and the house - FIRST by more room per homestead (the GM, 2026-10-12: room before packing), then by whichever order works",
     "ruled": "the GM, 2026-10-12: \"I don't really care about the order in which it is seated as long as its placement within the map is consistent with our research, then the ordering is an implementation detail and we can pick whichever ordering makes things easier.\""
+  },
+  "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first": {
+    "tier": "E4",
+    "flag": "",
+    "after": [
+      "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats"
+    ],
+    "moved": "wave 155 (2026-10-13): re-tiered E4 behind the settle row - built and measured (specs/374-match-the-research-continued/w155-pocket-attempt.patch, m:w155-wells: no well in a homestead, none over ten, the pool clean, 42/44 as at HEAD), then reverted by the round arbiter (ask:w155-cohort-seed10, route b): taking the pocket's room out of the homesteads re-deals the seats and cohort seed 10 knots (lane_knots); re-land the patch, with no waiver, once the web carries a re-deal",
+    "fix": "re-land the wave 155 patch once settle_the_web carries a re-deal of the seats: no well pocket in a clustered hamlet's homesteads, every well a shared well of the rolled siting, the water reach and the ceiling of ten held by the wells (reach_wells), the first of several wells at its share's middle"
+  },
+  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_well_pocket#household well where none is near": {
+    "tier": "E4",
+    "flag": "",
+    "after": [
+      "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats"
+    ],
+    "moved": "wave 155 (2026-10-13): re-tiered E4 behind the settle row - built and measured (specs/374-match-the-research-continued/w155-pocket-attempt.patch, m:w155-wells: no well in a homestead, none over ten, the pool clean, 42/44 as at HEAD), then reverted by the round arbiter (ask:w155-cohort-seed10, route b): taking the pocket's room out of the homesteads re-deals the seats and cohort seed 10 knots (lane_knots); re-land the patch, with no waiver, once the web carries a re-deal",
+    "fix": "re-land the wave 155 patch once settle_the_web carries a re-deal of the seats: no well pocket in a clustered hamlet's homesteads, every well a shared well of the rolled siting, the water reach and the ceiling of ten held by the wells (reach_wells), the first of several wells at its share's middle"
   }
 }

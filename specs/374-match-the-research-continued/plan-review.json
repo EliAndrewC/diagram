@@ -2007,6 +2007,39 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T47": {
+   "section_sha256": "4dcc3fdd15d40a0ec02ce427b6cab87c59726053b6f90a97619de762cf1cd756",
+   "reviewed": "2026-10-13",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "W155-1",
+     "summary": "a clustered hamlet lays no well pocket in any homestead; grove farm own water (0196/0031) and row village row_water (0033) untouched",
+     "class": "within",
+     "why": "Brings the hamlet's well into line with the research it cites (0028, a well shared off the farmstead) - the work list carried from 328 is matching the research. The forms left untouched are left by the research's own finding that a dispersed farm or a row village draws its own water, not carved out of the request; the room given back follows the GM's room-before-packing rule."
+    },
+    {
+     "id": "W155-2",
+     "summary": "all wells well_target owes are seated by wave 154's rolled siting forms, unchanged",
+     "class": "within",
+     "why": "Reuses the siting already reviewed in wave 154 with no new form; the pocket's well becomes a shared well of the rolled form, which is what 0028 describes."
+    },
+    {
+     "id": "W155-3",
+     "summary": "the 760 ft water-reach guarantee moves from the pocket to the wells: a household beyond reach is owed one more shared well of the same form (wave 154 fallback as a recorded deviation where none seats); a hamlet drawing more than well_target wells is recorded in meta.wells_for_reach although 0196 gives a hamlet one or two",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to 0196's count of one or two wells, so it was ruled on rather than passed as within. It is legitimate on the purpose test: the reach rule comes from the same research page (0196, every household within 760 ft of a well or open water). Where houses spread, holding the count literally would leave a household dry, which breaks matching the research on reach. Neither rule is dropped silently. The default count stays well_target. The extra well is the same research form, and every excess is recorded per hamlet and measured over the bar's rolls (m:w155-wells) rather than labeled away. The fallback is wave 154's existing recorded deviation, not a new one."
+    },
+    {
+     "id": "W155-4",
+     "summary": "the bar: no HEAD-passing roll refuses; no well inside a homestead; every household within reach; no hamlet over ten wells; counts measured (m:w155-wells); glyph occasions on Inashiro, Kuwabata, Sawada",
+     "class": "within",
+     "why": "Verification and occasions that enforce W155-1 to W155-3 and the no-regression rule. Removing the requested change would leave the checks with nothing to check."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  },
  "reviewed": "2026-10-13",
