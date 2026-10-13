@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-10
 
-**Status**: Draft (specified 2026-10-10 from its filed form) - the open work of feature 372 (itself 328's remainder), moved here at the GM's word for a fresh session
+**Status**: Superseded by 384 (2026-10-13, the GM: *"move all of the remaining work to a new feature and then close out this feature and land it on main"*) - batches 1-18 landed (waves 112-154; `report.md`); wave 155 built, measured and reverted (ask:w155-cohort-seed10); T48's baseline measured (`m:w156-redeal-cohort`); T33, T47, T48 and T99's open rows moved to `specs/384-match-the-research-remainder`. Specified 2026-10-10 from its filed form - the open work of feature 372 (itself 328's remainder)
 
 **Affects**: hamlet, magistracy, research record
 

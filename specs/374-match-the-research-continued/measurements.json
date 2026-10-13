@@ -2371,5 +2371,61 @@
    "re_deal_net": "+2 new failures (10, 24), 1 mended (17)",
    "pre_existing_to_fix": "17, 21, 40, 45 fail at HEAD (constitution XIV)"
   }
+ },
+ "sc012-375-a3-popup-rounds": {
+  "quantity": "pop-up check dispatches per checked unit after 375 amendment 3 (SC-012, carried to 374)",
+  "observed": "2026-10-13",
+  "source": "the diagram-backlog clone's .git/checks-open.json (374's pop-up dispatches)",
+  "command": "python3 scripts/measure/popup_rounds.py --since 2026-10-11T21:08:34-04:00 --json .",
+  "method": "the baseline's script and counting (m:375-a3-popup-rounds-before), from amendment 3's landing (8c1894f92) to 374's close",
+  "value": {
+   "units": 102,
+   "dispatches": 172,
+   "per unit": 1.69,
+   "units with a 2nd round": 41,
+   "units with a 3rd": 16,
+   "pop-ups": 57,
+   "by check": {
+    "modal-form": {
+     "units": 23,
+     "dispatches": 45,
+     "per unit": 1.96,
+     "units with a 2nd round": 9,
+     "units with a 3rd": 5
+    },
+    "modal-research": {
+     "units": 23,
+     "dispatches": 39,
+     "per unit": 1.7,
+     "units with a 2nd round": 11,
+     "units with a 3rd": 4
+    },
+    "modal-depiction": {
+     "units": 56,
+     "dispatches": 88,
+     "per unit": 1.57,
+     "units with a 2nd round": 21,
+     "units with a 3rd": 7
+    }
+   }
+  },
+  "verdict": "HELPED (375 SC-012's own terms): dispatches per unit fell 2.09 -> 1.69 but not below 1.5; third rounds 16 of 102 units (about one in six), not at most one in twenty - no better than the baseline's one in eight"
+ },
+ "sc034-375-a9-glyph-per-hour": {
+  "quantity": "glyph-check passes per hour of a long feature after 375 amendment 9 (glyph-check due on the feature's hour; SC-034, carried to 374)",
+  "observed": "2026-10-13",
+  "source": "374's event log (.git/l7r-events/374-match-the-research-continued.jsonl in diagram-backlog) and dev/review-ledger.md",
+  "command": "the event log's Agent events with agent glyph-check from amendment 9's landing (525932f95, 2026-10-12T12:19Z) to 374's close; the ledger's glyph-check rows dated 2026-10-12 and 2026-10-13",
+  "method": "a launched pass is a PostToolUse event of a glyph-check dispatch (a PreToolUse with no PostToolUse was refused by a guard, 20 of 40); the hours are the event log's span over the window",
+  "value": {
+   "window_hours": 24.9,
+   "glyph_dispatches_launched": 20,
+   "glyph_dispatches_refused_by_a_guard": 20,
+   "launched_per_hour": 0.8,
+   "ledger_rows_dated_10_12_and_10_13": 28,
+   "ledger_later_round_rows": 10,
+   "before (R8, m:375-a9-glyph-passes)": "158 passes from 2026-09-26 to 2026-10-12 (about 16.5 days, every clone), 46 a later round: about 0.4 an hour of calendar time over all clones, 29% later rounds"
+  },
+  "verdict": "not comparable at the same grain: R8 counts every clone over calendar days, this one feature over its active day. On 374, 0.8 glyph passes an hour, a third of them (10 of 28 rows) later rounds against R8's 29%; and half the dispatches the session tried were refused by a guard first (the due hour, a missing render, an unrecorded figure) - each refusal a dispatch re-sent"
  }
 }
