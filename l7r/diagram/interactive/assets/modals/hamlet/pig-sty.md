@@ -1,11 +1,12 @@
-About: A pig sty was a household's pig pen.
+About: A pig sty was a household's pig pen. In most regions of China a farm kept a pig and some chickens in its yard, along
+with a draft animal or two.
 
-[field_archetype=valley_paddy|polder_grid] On a plain paddy hamlet most farms kept pigs,
-and each household's small sty stood on its own plot. In the 1920s, in the
+[field_archetype=valley_paddy|polder_grid] On a plain paddy hamlet pigs were kept for their manure,
+the simple way to get it when bought manure and hired hands were dear. In the 1920s, in the
 rice-growing provinces of east-central China, hogs were kept on nearly two farms in three; how many kept them before 1912
 is not recorded.
 
-[field_archetype=mulberry_dike_fishpond] On a dike-pond hamlet the sty stood on the bank of a fish pond. The pig was the
+[field_archetype=mulberry_dike_fishpond] On a dike-pond hamlet the sty seems to have stood on the bank of a fish pond. The pig was the
 dike-pond country's animal: in the Pearl River delta in the Qing, feed raised on the pond's surface went to the pigs, and
 their dung, with the pond mud, went to manure the mulberry on the banks. In the late Ming a sheep pen could stand on a
 fish-pond bank, its dung swept into the water each morning to feed the fish.
@@ -45,6 +46,6 @@ drawn, since the ducks were herded in the rice fields. A sty at a fish pond is d
 
 Name: pig sty
 Covers: every `pig_sties[]` record - a shed with its railed pen on a pond bank - and every `farm_fixtures[]` record of kind `sty`, against its farmhouse or an outbuilding
-Sources: daizhige-bunongshu, zhang-guo-2019-nongshu, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, zhwiki-nongzheng-quanshu, guangdong-xinyu-20, hudson-munoz-2023, qimin-yaoshu-yangzhu, qimin-yaoshu-enwiki, artic-pigsty-latrine, pig-toilet-enwiki, fao-ac264e, buck-1930-farm-economy
-Entry: research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html
+Sources: cambridge-animals-china, daizhige-bunongshu, zhang-guo-2019-nongshu, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, zhwiki-nongzheng-quanshu, guangdong-xinyu-20, hudson-munoz-2023, qimin-yaoshu-yangzhu, qimin-yaoshu-enwiki, artic-pigsty-latrine, pig-toilet-enwiki, fao-ac264e, buck-1930-farm-economy
+Entry: research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.html[field_archetype=valley_paddy|polder_grid], research/questions/0045-chickens-and-chicken-coops.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html
 Drawing: research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html
