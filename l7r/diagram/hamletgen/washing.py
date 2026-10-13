@@ -129,12 +129,12 @@ def shared_places(s: Settlement, M: Mapping[str, Any]) -> list[dict[str, Any]]:
         nearest the households it serves - GUESS research/questions/0065-washing-places-at-the-waters-edge.drawing.html: at the point nearest the middle of those households, on their side of the water"""
     reach = s.px(PASS_REACH_FT)
     courses = passing_courses(M)
+    if not courses:
+        return []
     banks: dict[tuple[int, int], list[tuple[int, float, Pt, Pt]]] = {}
     for hx in M.get("houses") or []:
         h = (float(hx["x"]), float(hx["y"]))
         near = [(nearest_on(course, h), k) for k, (course, _hw) in enumerate(courses)]
-        if not near:
-            continue
         (q, d, seg), k = min(near, key=lambda n: n[0][1])
         if d <= reach:
             banks.setdefault((k, bank_of(courses[k][0], seg, h)), []).append((seg, math.dist(courses[k][0][seg], q), h, q))

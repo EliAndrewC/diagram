@@ -16197,20 +16197,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/washing.py::shared_places#its nearest water": {
-  "code": "6fd298d21743e96d",
-  "core": "c6ad8684c4eeb7db",
+  "code": "2ac3c49db4cdda12",
+  "core": "26e92bcbd6a6010f",
   "date": "2026-10-12",
-  "note": "the page is silent on which of two waters a household used",
+  "note": "the page does not say which of two passing waters a household used; the early return when no water passes changes no behavior",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/washing.py::shared_places#nearest the households it serves": {
-  "code": "a2cc5c19bd19d340",
-  "core": "c6ad8684c4eeb7db",
+  "code": "80f45a9ef155c2bd",
+  "core": "26e92bcbd6a6010f",
   "date": "2026-10-12",
-  "note": "the bank point nearest the middle household, on their side, a GUESS",
+  "note": "the seat is the bank point nearest the group's middle household, on their side, moved up to 32 ft along the bank, with no seat kept when none is found; the drawing page records this spot as a guess",
   "pages": {
    "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6"
   },
@@ -16222,10 +16221,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/washing.py::shared_places#one for every few households on that bank": {
-  "code": "fe5a1ea6c034b713",
-  "core": "c6ad8684c4eeb7db",
+  "code": "771410ff19f972a0",
+  "core": "26e92bcbd6a6010f",
   "date": "2026-10-12",
-  "note": "grouped per water and per bank, 4 to a group",
+  "note": "one footing per 4 households (HOUSEHOLDS_PER_WASHING) on each bank of each water; the drawing page records this count as a guess",
   "pages": {
    "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6"
   },

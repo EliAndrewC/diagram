@@ -3241,10 +3241,9 @@
   },
   "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes": {
     "tier": "E4",
-    "after": [
-      "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats"
-    ],
-    "flag": "Held for the GM (feature 374 wave 149, ask:b13-w149-route-matrix): every route seating the farm's bamboo strip ahead of the ways moved a refusal into the pool or the cohort (m:w149-route-matrix); the order waits on the web settle's row, the claim DRIFTED. The GM's question: does 0075's drawing page bind the order (the strip seated with the sheds, before the lanes) or only its result (no way over a strip or between a house and its strip)?",
-    "moved": "wave 149: re-tiered E4 behind the settle row (328's fix-that-changes-many-maps case)"
+    "flag": "",
+    "moved": "wave 149: re-tiered E4 behind the settle row (328's fix-that-changes-many-maps case)",
+    "fix": "the order is free (the GM's ruling); give more households room for their strip (57 of 159 wanting one drew one at m:w149-strips), each beside its own house with no way over it or between it and the house, by whichever order works",
+    "ruled": "the GM, 2026-10-12: \"I don't really care about the order in which it is seated as long as its placement within the map is consistent with our research, then the ordering is an implementation detail and we can pick whichever ordering makes things easier.\""
   }
 }

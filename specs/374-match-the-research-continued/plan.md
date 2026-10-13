@@ -772,7 +772,7 @@ scope is the kept and Mode A rows). The engine changes, so the batch takes its t
 **The work list**: the next free row (`homesteads/farm_water.py::farm_channels#washing places`, DRIFTED): 0065's drawing page draws
 washing places wherever a stream or ditch passes a settlement's houses - shared, or one at each house where a channel runs past
 them, a knob - and the code draws none and never rolls the knob. Rows 516 (the residence size), 771 and 774 stay as already
-ruled, and the bamboo strip's order is held. The engine changes, so the batch takes its timing bookends; the pool roll is taken
+ruled; the bamboo strip's order the GM ruled free on 2026-10-12 ("the ordering is an implementation detail and we can pick whichever ordering makes things easier"), its row judged on the strip's placement. The engine changes, so the batch takes its timing bookends; the pool roll is taken
 with every measurement (batch 13's lesson).
 
 ### Wave 150 (T42) - washing places where water passes the houses
@@ -783,10 +783,11 @@ with every measurement (batch 13's lesson).
   over the 44 rolls no field ditch runs past a house - the nearest comes within 61 ft of a house's center, beyond its lot -
   while the farm channels end in the dooryards on the three dispersed channel rolls, so a farm channel is the only "channel
   that runs past the houses" the map draws. Recorded in the manifest's meta and among the rolled choices.
-- **W150-2** (within): the shared form - where a stream, a ditch (any field ditch, the drain included: 0065 names any
+- **W150-2** (within): the shared form - where a stream, the head race from the intake, a ditch (any field ditch, the drain included: 0065 names any
   stream or ditch) or a farm channel (0065: a shared footing "on the channel or stream bank") passes within reach of the houses, one footing of
   steps down the bank, about 4 ft wide (0065, a GUESS), for every few households on that bank (0065, a GUESS - the number
-  chosen recorded beside its constant), each set at the bank point nearest the households it serves, on their side of the
+  chosen recorded beside its constant; each household counted at its nearest passing water, on its own side of it, so a group never
+  straddles the water - impl-drift's round 1), each set at the bank point nearest the households it serves, on their side of the
   water, clear of every lane, bridge, ford and footprint; the reach and the share recorded as GUESSes with their why. A
   group whose every seat along the bank (out to 32 ft either way) is taken keeps no footing - it cannot stand on a lane, a
   bridge, a ford or a footprint - and is counted (`meta.washing_no_seat`), with the per-map counts of W150-5.

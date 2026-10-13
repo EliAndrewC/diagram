@@ -204,6 +204,7 @@
  "l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": "E2",
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#how far a channel's source is sought: 20 ft steps, 60 ft spread, widened fourfold": "E0",
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#where the channel ends": "E1",
+ "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places": "E3",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_SEATS#bath room wall": "E2",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats": "E1",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall": "E2",

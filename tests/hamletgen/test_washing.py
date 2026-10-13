@@ -107,3 +107,9 @@ def test_a_bank_is_one_side_of_the_water_and_a_house_takes_its_nearest_water() -
     got = wa.shared_places(s, s.M)
     assert len(got) == 3, "the two banks of the brook apart, and the house by the ditch at the ditch"
     assert sorted(round(r["y"]) for r in got) == [304, 393, 407], "the ditch's 1 ft half-width plus the footing's 3, the brook's 4 plus 3 either side"
+
+
+def test_no_water_no_washing_place() -> None:
+    s = _s()
+    s.M["houses"] = [{"x": 300.0, "y": 330.0}]
+    assert wa.shared_places(s, s.M) == [] and "washing_places" not in s.M
