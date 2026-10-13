@@ -34078,11 +34078,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/split.py::headings#plumbing": {
-  "code": "8bc12b7faf3c5c4d",
-  "core": "da18e689b1b75ebc",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "c19cbb0e2b417181",
+  "core": "81201630c4eca758",
+  "date": "2026-10-13",
+  "note": "finds headings outside comments by bisection; nothing physical",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/split.py::sections_of#plumbing": {
@@ -34107,6 +34109,36 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/interactive/record/store.py::MEMO#plumbing": {
+  "code": "e3e69de7f0a14a18",
+  "core": "dbb0f0aa0c159e0d",
+  "date": "2026-10-13",
+  "note": "default memo that keeps nothing; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/interactive/record/store.py::Memo#plumbing": {
+  "code": "8bf92dfe0a05207a",
+  "core": "cb4612efac8b9540",
+  "date": "2026-10-13",
+  "note": "memo protocol, caching only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/interactive/record/store.py::Memo.fact#plumbing": {
+  "code": "afd712c9e41aac39",
+  "core": "f995a36c9df404fe",
+  "date": "2026-10-13",
+  "note": "protocol signature, caching only",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/store.py::REGISTRY#plumbing": {
@@ -34139,6 +34171,26 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/interactive/record/store.py::_NoMemo#plumbing": {
+  "code": "911c7a526bd13577",
+  "core": "45d47d15b58c96af",
+  "date": "2026-10-13",
+  "note": "no-op memo class",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/interactive/record/store.py::_NoMemo.fact#plumbing": {
+  "code": "be3d596ce33d7c37",
+  "core": "b86feb163d397363",
+  "date": "2026-10-13",
+  "note": "calls make() and keeps nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/store.py::_entries#plumbing": {
@@ -34181,6 +34233,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/interactive/record/store.py::_page_notes#plumbing": {
+  "code": "a1b226d970b8a92b",
+  "core": "af150b4e5d7fd8a9",
+  "date": "2026-10-13",
+  "note": "parses, restores and merges notes; I/O and parsing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/interactive/record/store.py::_read#plumbing": {
   "code": "6b99cd3df3b3bdd3",
   "core": "eab5438cf1bc7b66",
@@ -34214,19 +34276,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/store.py::page_html#plumbing": {
-  "code": "21d183901b56b3e1",
-  "core": "aed52dc61b587aed",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "608ae7fb2f002226",
+  "core": "2e6b0fa7078d4dde",
+  "date": "2026-10-13",
+  "note": "writes cross-links and confusables using shared tables; plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/store.py::page_notes#plumbing": {
-  "code": "1f0849c9473bb20a",
-  "core": "05811cbbc1c576f3",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "6e3b90c5047cec08",
+  "core": "ae640b0f166b859f",
+  "date": "2026-10-13",
+  "note": "reads files and memoizes by their text; plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/store.py::read_fragments#plumbing": {
@@ -34243,6 +34309,16 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/interactive/record/store.py::shared#plumbing": {
+  "code": "2e49d38b6fdf4ad3",
+  "core": "988da036bce4d045",
+  "date": "2026-10-13",
+  "note": "loads and checks the cross-link and confusables tables once; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/record/store.py::split_originals#plumbing": {
