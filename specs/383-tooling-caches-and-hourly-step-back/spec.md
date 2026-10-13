@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Draft
+**Status**: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
@@ -140,4 +140,17 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 
 ## Decisions Recorded
 
-(Filled as the plan's decisions are made.)
+- **The record check's inputs are measured, not guessed** (research R1, an audit hook on `open`): `research/`, the glossary
+  assets and the import closure of the module run. Map drawing convention: N/A - tooling.
+- **Partial citations are not cached** (research R3): keeping 5,400 small files per file cost what reading them does (0.33 s
+  against 0.32 s). Tried, measured, reverted; the plan review ruled the narrowing LEGITIMATE.
+- **The record's render is not cached per page**: every page reads the whole record's link index, so the whole-check memo is
+  its cache; each per-file setup step goes through the store's memo (research R4).
+- **The step-back is the round arbiter** on an `hour` trigger (the GM's "hourly arbiter"); a quiet `continue` adds no row to
+  the GM's review.
+- **No escape on the checkpoint hold** (plan review round 1): the 379 tooling-fix hold beside it has none either.
+- **Phases landed together**: phases 1-3's tooling landed in one `make land-tooling` (0906d798a) once phase 3's tasks were
+  ticked, because one Makefile change carried all three; the engine edits (the splitter's bisection, the store's memo
+  protocol) land with the feature's close by the gated route.
+- **Found while working**: `make land-tooling` cannot see the clone's own review-ledger rows, so a feature's review passes
+  read as owed in its worktree; landed under `LEDGER_ROWS_OK` with the reason, and named in the closing report for a fix.
