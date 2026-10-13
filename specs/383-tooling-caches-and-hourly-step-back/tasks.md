@@ -14,7 +14,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       research: rendering
 - [ ] T02 The record and glossary build checks (plan D2): `scripts/gates/memo_check.py` and the Makefile's CHECK branches; the splitter's comment test by bisection; tests (SC-002: same answer on and off, a changed input re-runs, a failing run not kept)
       research: rendering
-- [ ] T03 The four whole-tree checks on per-file facts (plan D3): research pointers, duplicate defs, function cap, conflict markers; tests (SC-002 per check)
+- [ ] T03 The four whole-tree checks on per-file facts (plan D3): research pointers, duplicate defs, function cap, conflict markers; the rest measured (research R3), the Affects check reading its features once; tests (SC-002 per check)
       research: rendering
 - [ ] T04 The ledger check costs a pass once (plan D4); tests (SC-003: same answers, no transcript read when all are costed)
       research: rendering
@@ -36,7 +36,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ### Phase 3 - the hourly step-back
 
-- [ ] T11 The checkpoint (plan D10) and the hold (plan D13): `review_owed.checkpoint`, `owed(checkpoint=True)`, `tick-task.py`'s refusal, `CHECKPOINT_OK`; tests (SC-007)
+- [ ] T11 The checkpoint (plan D10) and the hold (plan D13): `review_owed.checkpoint`, `owed(checkpoint=True)`, `tick-task.py`'s refusal, no escape; tests (SC-007)
       research: rendering
 - [ ] T12 The step-back (plan D11, D12): `make step-back`, `scripts/reviews/stepback_bundle.py`, the `hour` trigger in `hm_arbiter.py` and its rulings, the round arbiter's contract; tests (SC-007)
       research: rendering

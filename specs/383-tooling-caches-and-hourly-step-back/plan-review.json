@@ -1,0 +1,123 @@
+{
+ "feature": "383-tooling-caches-and-hourly-step-back",
+ "plan_sha256": "f8b7cf4a8d8f9a719a7c36edcf7e6c9eb695d85fa67a04ad7d69a22f9f5ef1bd",
+ "plan_text": "# Implementation Plan: tooling caches, one-process push checks, and the hourly step-back (feature 383)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Builds on**: `scripts/record/record_cache.py` (feature 375 amendment 3:\n`ParseCache`, `RevReader`, `cat_blobs`, `code_sha_of`), the glyph clock (`scripts/reviews/review_owed.py`, 375 amendments 9\nand 10), the round arbiter (`scripts/hooks/lib/hm_arbiter.py`, `scripts/reviews/arbiter_bundle.py`,\n`.claude/agents/round-arbiter.md`) and its tooling-fix items (feature 379).\n\n## Summary\n\nPhase 1 puts a content-keyed cache under the push's checks:\n- a whole-check memo for the record and glossary build checks, whose inputs are a known set of trees;\n- per-file facts for the four checks that read every tracked file;\n- costed passes kept for the ledger check;\n- one batched read of the base for the review lookup and for check-bundle;\n- the review lookup taken out of the gate start and the turn's end;\n- the old-layout check retired.\n\nPhase 2 runs the push's Python checks in one interpreter and skips a self-test whose code already passed. Phase 3 makes the\nglyph clock the feature's hourly checkpoint, owing every due review and a step-back ruling from the round arbiter, and holds\nthe next `make tick` until both are answered.\n\n## Constitution Check\n\n- I-V: N/A (no UI, no pool content, no SOURCE blocks).\n- VI: no generator change. The one engine edit, the record splitter's quadratic comment test, changes no output.\n- XII: N/A (no physical decision); every task is `research: rendering`.\n- XIII: every check's output is compared with the cache on and off, and before and after the runner; the tooling tests,\n  `make hooks-test` and the gate run green before each landing.\n- XIV: fixed where found: the splitter's quadratic comment test (D2).\n- XVI: built as asked. Where the plan reads a request it states the reading (D8, D11).\n\n## Decisions\n\n### Phase 1\n\n**D1 - Two layers in one module.** `scripts/record/record_cache.py`, already the project's one cache module, gains:\n\n- `content_ids(root, paths=None) -> dict[path, str]`: every tracked file's content id.\n  - A clean file's id is its index blob id (`git ls-files -s -z`; measured at 0.02 s over the repository).\n  - A file the work tree changed (`git diff --name-only -z`) is hashed from its bytes, as is an untracked file a caller\n    names.\n  - Two git processes in all, never one per file.\n- `FileFacts(root, name, *code)`: a `ParseCache` keyed per file by `(path, content id)`. Its file name carries `code_sha_of`\n  over the extracting code, so a changed extractor starts empty (FR-001).\n  - `facts(paths, extract) -> dict[path, value]` extracts only the misses.\n  - `facts_batch(paths, extract_many)` passes the misses together, for an extractor that is one subprocess over many files\n    (ruff).\n- `ResultMemo(root, name, inputs, *code)`: a check's whole answer, kept only for a run that PASSED.\n  - The key is the content ids of every file under the declared input trees (tracked and untracked, `.gitignore`d excluded),\n    plus the code sha and the Python version.\n  - A hit replays the kept output and exits 0. A failing run is never kept, so a refusal is always computed afresh.\n\n`L7R_CACHE_OFF=1` turns both off, as it does `ParseCache` today; it is the comparison every SC-002 test makes.\n\n**D2 - The record and glossary build checks: a memo over their inputs, and the splitter fixed.**\n- `make record CHECK=1` and `make glossary CHECK=1` run through `scripts/gates/memo_check.py <name> --inputs <trees> -- <command>`\n  (the Makefile's CHECK branch). The inputs are measured, not guessed: the files the check opens, recorded by an audit hook\n  during one run (research R1). The memo's inputs are those trees: `research/`, `l7r/`, `pyproject.toml`.\n- Every push that does not touch them costs two git listings. One that does pays the build.\n- The build itself gets faster too. `split.headings` tested every heading against every comment with `any(...)`: 11.7\n  million comparisons, 5.5 s of the profiled 15 s. It now finds each heading's enclosing comment by bisection over the\n  sorted comment starts, with the same answer (a test pins it on a page with nested and adjacent comments). This is engine\n  code, so it lands by the gated route at the feature's close.\n\n**D3 - The four whole-tree checks: per-file facts, resolved each run.**\n- **research pointers.** The per-file fact is the list of candidate lines `(line_no, line, flags)`, taken after the SOURCE\n  and quotation blanking, by the same filter as today.\n  - `problems()` runs on the candidates against the current record each run. Questions and sections come and go; the file\n    did not change.\n  - The filter's `mapping.number` alternation is built from `research/moved-303.json`, so that file's content id is part of\n    the extractor's key.\n- **duplicate defs.** The per-file fact is the duplicates found.\n- **function cap.** Two per-file facts: ruff's findings for the cap rule, from one ruff run over the misses only with the\n  same config, and `suppression_problems`. `pyproject.toml`'s content id is in the key; the config-level check runs every\n  time (one file).\n- **conflict markers (`hm_conflict --tracked`).** The per-file fact is `has_conflict`. The exemption declarations are read as\n  today.\n\nEach check's command, arguments and output are unchanged. SC-002's tests run each check over a fixture repository and over\nthis one with `L7R_CACHE_OFF=1` and without, change one file, and assert a fresh extraction.\n\n**D4 - The ledger check costs a pass once (FR-002).**\n- `settled()` keeps each costed pass's cells in `<git common dir>/l7r-cache/ledger-settled.json`, keyed by\n  `(agent, segment)`. Beside the cells it keeps the transcript's path, size and mtime.\n- A kept pass is served while its transcript's size and mtime are unchanged: a resumed agent appends, which changes both,\n  and a finished one never does.\n- A pass not yet kept is the only one whose transcript is looked up. The lookup is one listing of\n  `*/*/subagents/agent-*.jsonl` made at most once per run, not a glob per pass.\n- So a run where every pass is already costed reads no transcript. The answers are unchanged: the same `settled` result is\n  fed to `distinct` and `unanswered`. The ledger hook's commit-time call benefits without change.\n\n**D5 - The review lookup: asked where it matters, read once (FR-003).**\n- **The reads.** `_at_base` and `_existed` go through one `RevReader` over the pool trees at the base: one `ls-tree` and one\n  `cat-file --batch`, in place of a `git show` per manifest and an `ls-tree` per folder. The `ls-files` for a moved folder\n  reads the same listing.\n- **The callers.**\n  - `pair-hooks.sh`'s gate-start branch no longer asks it: the gate runs as typed.\n  - The stop branch's \"a turn may not end on a green gate with reviews owed\" is retired.\n  - A review dispatch still asks (the guard refuses a dispatch nothing owes, and an early glyph-check).\n  - `make verify` asks on request. `review-gate.sh` asks at the push. The checkpoint asks on the hour (D10).\n- **The snapshot.** The reviewer's snapshot and per-unit prompt files the gate-start branch wrote (by rewriting `make done`\n  into `make verify`, or by taking the snapshot itself) are written by `make verify`, unchanged, which the checkpoint's hold\n  (D13) and the push's refusal name: a review comes due at the hour or the landing, and `make verify` is the gate plus the\n  units it owes. A plain `make done` runs as typed.\n- **The suite.** `tests/hooks/test-pair-hooks.sh` asserts the lookup is not run at gate start or at a turn's end (the\n  script's own trace marker), and that the push and the checkpoint still refuse what is owed.\n\n**D6 - check-bundle reads the base once and runs its helpers in-process (FR-004).**\n- The base revision's files come through a `RevReader` kept in a `ParseCache` under the revision id: a bundle built twice\n  over one base reads the base from the cache.\n- `run_script` imports the helper (`record_prepass`, `quote_verbatim`, `style_prepass`, `translation_owed`) and calls its\n  `main(argv)` with its output captured, in place of a new interpreter; `source_pages.py`, which fetches over the network,\n  stays a subprocess.\n- The bundle's files are compared byte for byte with today's (SC-005).\n\n**D7 - The old-layout check is retired (FR-005).** Removed:\n- `scripts/gates/check-old-layout.py`;\n- its calls in `scripts/sync-with-main.sh` and in the Makefile's `static`;\n- its tests;\n- its mentions in `scripts/CLAUDE.md`, `docs/guards.md` and `docs/efficiency-tooling.md`;\n- the `_moves.py` table only it reads, if nothing else reads it (measured in the task).\n\nSpecs and logs keep their words (the house rule for history).\n\n### Phase 2\n\n**D8 - One runner (FR-006).** `scripts/gates/push_checks.py <root> [--skip <name>...]`:\n- **The table.** One row per check: name, script, argv, the refusal line `sync-with-main.sh` prints today. The table is the\n  order `push_cmd` runs them in today.\n- **How a check runs.** Each runs through `runpy.run_path(script, run_name=\"__main__\")` with `sys.argv` set, catching\n  `SystemExit`: the same code path as `python3 script args`. `sys.path`, `sys.dont_write_bytecode` and the working directory\n  are restored after each.\n- **The record and glossary checks.** Run as the memo's command (D2), in-process through `runpy.run_module`.\n- **Failure.** The first failing check prints its refusal line and the runner exits 1, as the shell's `die` does.\n- **In the shell.** `sync-with-main.sh` calls the runner once in place of the 24 lines; the escapes stay in the shell.\n  `LEDGER_ROWS_OK` passes `--skip ledger-owed` after its log line.\n- **Left as their own processes:** `entry-gate.sh`, `claims-gate.sh`, `review-gate.sh` and `plan-gate.sh`, which are shell\n  scripts with their own refusals; `gate-stamp.py --check`, run under its own escape branch; and anything that runs `make`.\n  Each says why at its call.\n- **Proof (SC-006).** A test runs every check alone and in the runner, on this tree and on fixture trees seeded to fail\n  each, comparing output and exit. A second test keeps a self-test as passed, changes a module its check imports, and sees the\n  self-test run again.\n\nThe GM's \"the 35 separate Python startups\" is read as the push's checks, which is where they were counted.\n\n**D9 - A self-test runs once per version of its code (FR-007).** The runner keeps `<git common dir>/l7r-cache/selftests.json`:\n`{script: code_sha_of(script)}` for each self-test that passed. One whose code sha is kept is skipped; a failing one is never\nkept. `L7R_CACHE_OFF=1` runs them all.\n\n### Phase 3\n\n**D10 - The checkpoint (FR-008).**\n- `review_owed.py` gains `checkpoint(root, now) -> Checkpoint(due: bool, since: float, hour_no: int)`:\n  - The feature's start is `feature_start` (first event or latest reopening, as today).\n  - The last checkpoint is the clock's `checkpoint_at`, written when a step-back ruling is recorded.\n  - Due when an hour (`GLYPH_HOUR_S`, renamed `CHECKPOINT_S` with the old name kept as an alias) has passed since the later\n    of the two.\n- Glyph-check's own due rule reads the same clock: its batch opens at the checkpoint. A feature with no event log, or under\n  its hour, owes nothing.\n- At the checkpoint, every owed review unit is due (`owed(root, checkpoint=True)`): the glyph units and, since D5, the\n  others.\n\n**D11 - The step-back is the round arbiter on an `hour` trigger (FR-009).**\n- **The trigger.** `make step-back` records `hour:<feature>@<n>` (`hm_arbiter.trip`, kind `hour`) and builds its bundle with\n  `scripts/reviews/stepback_bundle.py`, the way `make arbiter-ask` does for an ask.\n- **The bundle** (`MANIFEST.md` plus files) is mechanical:\n  - The hour's window: the last checkpoint, or the start, to now.\n  - The session: the event log's `sid` gives the transcript, `~/.claude/projects/<project>/<sid>.jsonl`.\n  - Where the time went: model time, tool time by normalized command (`make <target>` or the program), waits and subagent\n    time. These are `scripts/measure/turn_time.py`'s and the hourly log's measures, made a module.\n  - The dispatches and verdicts from the event log, and the guard refusals from the guard log.\n  - The task in progress (`make task-start`'s record) and the feature's open boxes.\n  - The session's own words in the hour: its assistant text, each command it ran (no tool output), and the numbers it\n    edited, capped at about 40k characters, newest kept.\n- **The contract.** `.claude/agents/round-arbiter.md` gains an \"An hour trigger\" section with the four questions of FR-009\n  and its rulings:\n  - `continue`: nothing to change;\n  - `change-route`: a binding `what`, naming the loop or the unresearched number and the route to take, Room before packing\n    first;\n  - plus the optional `tooling_fix` and `for_gm` fields.\n- **For a replay** (SC-008), the bundle builder takes `--transcript`, `--since` and `--until`.\n\nThe GM's \"hourly arbiter\" is read as this agent: it judges the process from outside, and its rulings already bind and reach\nthe GM's review.\n\n**D12 - What a ruling does (FR-010).** `record_ruling` for an `hour` trigger:\n- writes `checkpoint_at` (D10);\n- a `change-route` ruling is binding as any ruling is, and its `what` goes on the GM's review;\n- a `tooling_fix` opens a 379 item (tick and close held until `arbiter-fix-done`/`-declined`);\n- a `for_gm` adds a GM-review row;\n- a `continue` with neither field adds no GM-review row (the one exception to \"the GM reviews every ruling\", stated in the\n  contract).\n\n**D13 - The hold (FR-011).**\n- `scripts/tick-task.py` asks `checkpoint(root)`. While it is due, it refuses unless both hold:\n  - an `hour` ruling is recorded for this hour;\n  - every review unit due at the checkpoint has been dispatched since the checkpoint opened (the pair state's `dispatched`).\n- The refusal names `make step-back` and the owed units' dispatch commands.\n- `CHECKPOINT_OK=\"<reason>\"` is the logged escape, as every hold has one.\n- A feature under an hour, or with no event log, is never held.\n\n**D14 - The manual check retires (FR-012).** After phase 3 lands, this session deletes its hourly cron job and says so in\nthe closing report.\n\n## Research\n\n- **R1 (D2): the record check's inputs.** Measured with an audit hook on `open` during one `record_asset --check`. The\n  trees read are recorded in `research.md` with the run. If any input lies outside `research/` and `l7r/`, it is added to\n  the memo's inputs.\n- **R2: the baseline.** `scripts/measure/push_check_times.py`, two runs each, the second kept, recorded in\n  `measurements.json`.\n\n## Phases and landing\n\nEach phase lands its tooling with `make land-tooling` once its tasks are ticked, so other sessions get the faster push while\nthe feature runs. D2's splitter fix is engine code and lands with the feature's close by the gated route.\n",
+ "reviewed": "2026-10-12",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "content_ids + FileFacts + ResultMemo in record_cache.py; L7R_CACHE_OFF bypasses",
+   "class": "within",
+   "why": "FR-001's content-keyed cache with the extractor's code (code_sha_of is transitive over imports) in the key"
+  },
+  {
+   "id": "D2",
+   "summary": "record and glossary build checks served by a whole-check ResultMemo over research/, l7r/, pyproject.toml; no per-file cache under the build",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001 names the record build check as served by the per-file mechanism (the file is not re-parsed while unchanged; a changed file is extracted again). Nothing under l7r/diagram/interactive/record/ uses ParseCache, so under D2 a push touching any research file, or any file in l7r/ (R1 measured 29 files there, the memo takes the whole tree), re-parses every research file. The 374 backlog session that prompted the request changes engine code every batch, so the memo would almost never serve it: word-plausible, purpose-fatal. Not impossible: D3 shows per-file facts plus cross-file resolution each run for a check of this shape. Fix: the build's per-file parse kept by FileFacts by content id (a whole-check memo may sit above it), and the memo's inputs the files R1 measured, not all of l7r/."
+  },
+  {
+   "id": "D2-splitter",
+   "summary": "split.headings comment test by bisection, same answer, engine code landed gated at close",
+   "class": "within",
+   "why": "speed of a push check the GM asked to be faster; constitution XIV"
+  },
+  {
+   "id": "D3",
+   "summary": "per-file facts for pointers, duplicate defs, function cap, conflict markers; resolution against the current record each run",
+   "class": "within",
+   "why": "FR-001's four named whole-tree checks"
+  },
+  {
+   "id": "D3-scope",
+   "summary": "the cache's set is the four checks plus record/glossary; FR-001's 'any other push check whose measured time is mostly per-file work' is not examined",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001's catch-all sets scope by measurement, and the plan measures none. Observed 2026-10-12 (method: /usr/bin/time, second of two runs, this clone, load 1.8-3.1): bare python3 0.02 s; check-file-scale 0.18 s, check-partial-citations 0.32 s, speckit-todo --check 0.27 s, all of which read many tracked files. About 0.7 s outside the plan's set against SC-001's 6 s. Fix: state each remaining push check's measured time split (start-up vs per-file) and put under FileFacts every one whose time is mostly per-file work."
+  },
+  {
+   "id": "D4",
+   "summary": "ledger: costed passes kept by (agent, segment) with transcript size/mtime; one listing per run for the rest",
+   "class": "within",
+   "why": "FR-002 as written, the GM's 'keeping track of how far back our most recent search was'"
+  },
+  {
+   "id": "D5",
+   "summary": "review lookup: one batched base read; out of gate start and turn end; kept at dispatch, make verify, push, checkpoint; make done runs as typed",
+   "class": "within",
+   "why": "FR-003's callers exactly; the GM's 'why are we comparing to main when not ready to land'"
+  },
+  {
+   "id": "D6",
+   "summary": "check-bundle: base cached by revision; helpers in-process except source_pages.py, kept a subprocess because it fetches over the network",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004: helper steps run without starting a new interpreter each. 'Fetches over the network' is no impossibility: source_pages.py imports only the standard library, carries its own fetch timeout, reads the page cache first, and check_bundle.py line 426 already loads it in-process with spec_from_file_location. Fix: source_pages.py through the same in-process main(argv) path as the other helpers."
+  },
+  {
+   "id": "D7",
+   "summary": "old-layout check, self-test, calls, tests, mentions removed; _moves.py if only it reads it",
+   "class": "within",
+   "why": "FR-005; the GM: 'retire the old layout check'"
+  },
+  {
+   "id": "D8",
+   "summary": "one runner for the push's Python checks; left out: shell gates, gate-stamp.py --check (its own escape branch), anything that runs make",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The shell gates fall outside FR-006's 'Python checks' (fine). But gate-stamp.py --check is a Python check, and its stated reason is not a must: the same decision handles LEDGER_ROWS_OK's escape branch with --skip ledger-owed. Also, the Python processes push_cmd starts after the fetch (close_check.py, speckit-todo.py --holding and --closed-by-status per feature, the python3 -c feature.json read) are neither in the runner nor named with a reason, and 'anything that runs make' names no check. FR-006 requires each check left out to say why it must stand alone. Fix: list every python3 process push_cmd starts; each is a runner row (gate-stamp with --skip under GATE_STAMP_OK) or carries at its call a reason it must run alone."
+  },
+  {
+   "id": "D8-reading",
+   "summary": "the GM's '35 separate Python startups' read as the push's checks",
+   "class": "within",
+   "why": "the measurement the GM saw counted them at the push; the spec settles it"
+  },
+  {
+   "id": "D9",
+   "summary": "self-test stamp keyed by code_sha_of(script), a failure never kept",
+   "class": "within",
+   "why": "FR-007; code_sha_of covers every imported project module transitively (record_cache.py line 137)"
+  },
+  {
+   "id": "D10",
+   "summary": "checkpoint on the glyph clock, from feature_start or checkpoint_at; all owed units due; no event log or under an hour owes nothing",
+   "class": "within",
+   "why": "FR-008; it defines the start by the feature's first event, so with no event log there is nothing to measure from"
+  },
+  {
+   "id": "D11",
+   "summary": "step-back = round arbiter on an hour trigger; mechanical bundle including the session's own words (about 40k chars); continue / change-route rulings; replay flags",
+   "class": "within",
+   "why": "FR-009; the GM's 'hourly arbiter'. The fifth bundle item serves FR-009's questions and SC-008; the replay flags serve SC-008"
+  },
+  {
+   "id": "D12",
+   "summary": "a ruling writes checkpoint_at; change-route binding and to the GM's review; tooling_fix a 379 item; for_gm a row; a quiet continue adds no row",
+   "class": "within",
+   "why": "FR-010 as written, the quiet-hour case included"
+  },
+  {
+   "id": "D13",
+   "summary": "make tick held while the checkpoint is due until the ruling and the owed dispatches; escape CHECKPOINT_OK=<reason>",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-011 is headed 'Held, not optional'. An escape the session sets itself makes it optional, and the session most likely to use it is the one in a loop, which is the failure the step-back exists to catch (374 batch 13). The ground 'as every hold has one' is false on the plan's own analogue: the 379 tooling-fix hold FR-010 names (hm_arbiter.fix_hold, tick-task.py line 181) reads no escape. In any case consistency is not a legitimacy ground. Nothing is impossible: the remedy is make step-back, and a stuck process goes to the round arbiter. Fix: no session-set escape on the checkpoint hold."
+  },
+  {
+   "id": "D14",
+   "summary": "this session's hourly cron deleted after phase 3 lands, said in the closing report",
+   "class": "within",
+   "why": "FR-012 / SC-009"
+  },
+  {
+   "id": "Phases",
+   "summary": "each phase lands its tooling with make land-tooling; the splitter fix with the close by the gated route",
+   "class": "within",
+   "why": "the GM's three-phase filing; the project's landing rules"
+  }
+ ],
+ "verdict": "BLOCKED"
+}
