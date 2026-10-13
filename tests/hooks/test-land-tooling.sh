@@ -50,6 +50,8 @@ ok "main carries the guard fix" '[ "$(on_main scripts/a.sh | tail -1)" = "TWO" ]
 ok "main carries none of the engine work" '[ "$(on_main l7r/e.py)" = "e = 1" ]'
 ok "main keeps the other session's work" '[ "$(on_main other.txt)" = "other" ]'
 ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep -q c-tooling'
+ok "each step is timed in the log (383 amendment 2, FR-017)" 'for s in prepare worktree patch checks push; do grep -q "^land-tooling: step $s [0-9.]* s$" "$C/.git/land-tooling.log" || exit 1; done'
+ok "...and the landing's steps are one JSON line" 'python3 -c "import json,sys; r=json.loads(open(sys.argv[1]).readlines()[-1]); sys.exit(not (r[\"outcome\"] == \"push-exit-0\" and set(r[\"steps\"]) == {\"prepare\", \"worktree\", \"patch\", \"checks\", \"push\"}))" "$C/.git/land-tooling-steps.jsonl"'
 ok "the clone's history is untouched" '[ "$(git -C "$C" log --format=%s -1)" = "a guard fix" ]'
 git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
 ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
