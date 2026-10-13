@@ -644,11 +644,21 @@ def base_tree(root: Path, base: str, into: Path) -> Path:
     return into
 
 
-def base_cores(skill: Path) -> dict[str, str]:
+def base_cores(skill: Path, keep: Path | None = None) -> dict[str, str]:
     """uid -> core for EVERY unit at a tree, claimed or not: the base the push compares with may hold no claims at all (this
-    feature's own landing, where main has none), and a unit's code is the same whatever its claims say."""
+    feature's own landing, where main has none), and a unit's code is the same whatever its claims say.
+
+    EACH MODULE KEPT BY WHAT IT READS, as `pairs_of` keeps the head's (feature 383 amendment 2, FR-019): with no memo every push
+    parsed the whole base tree again - 8.5 of a landing's 16.7 s push (research R9) - though consecutive bases differ in a few
+    modules. `keep` is the repository whose common git directory holds the memo; none keeps nothing."""
     cl = engine(Path(__file__).resolve().parents[2])
-    return {f"{u.path}::{u.qualname}": u.core for u, _errors in cl.all_units(skill, every_module_unit=True)}
+    common = rc.common_dir(keep) if keep is not None else None
+    reader = hashlib.sha256((rc.code_sha_of(Path(__file__).resolve().parents[2], Path(__file__)) + Path(cl.__file__).read_text(encoding="utf-8")).encode())
+    memo = rc.ParseCache(common / rc.CACHE_DIR / f"claims_base_by_module-{reader.hexdigest()[:16]}.pickle" if common is not None else None)
+    memo.PRUNE_AT = 1  # holds only this base's modules; the next base shares nearly all of them
+    cores = {f"{u.path}::{u.qualname}": u.core for u, _errors in cl.all_units(skill, every_module_unit=True, memo=memo)}
+    memo.save()
+    return cores
 
 
 def classify(
@@ -713,7 +723,7 @@ def gate(root: Path) -> tuple[list[str], list[str]]:
     base_index = json.loads(_git(root, "show", f"{mb}:{INDEX}") or "{}") if mb else {}
     with tempfile.TemporaryDirectory() as tmp:
         bskill = base_tree(root, mb, Path(tmp)) if mb else Path(tmp)
-        cores = base_cores(bskill) if mb else {}
+        cores = base_cores(bskill, keep=root) if mb else {}
         intro, pre = classify(cur, index, base_index, cores, bskill / "research" / "questions", load_deferred(root / DEFERRED))
     return refuse + [f"introduced: {x}" for x in intro], [f"pre-existing: {x}" for x in pre]
 

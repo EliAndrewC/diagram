@@ -17,3 +17,6 @@ def _sources_home(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.
     # a page session's own feature (set by its runner) overrides a fixture's `.specify/feature.json`: two arbiter tests
     # failed only under a page session (368's check session, 2026-10-10)
     monkeypatch.delenv("L7R_FEATURE_DIRECTORY", raising=False)
+    # the clone's own active feature (`.specify/feature.json`, which git ignores) is no input of any tooling test: one fixed
+    # feature, so a test's result is the same in every clone and a landing's worktree can reuse its pass (383 amendment 2)
+    monkeypatch.setenv("SPECIFY_FEATURE", "000-tooling-tests")

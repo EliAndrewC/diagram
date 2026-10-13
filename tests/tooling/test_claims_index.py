@@ -331,3 +331,24 @@ def test_the_base_tree_is_read_when_a_listed_path_is_gone(tmp_path: pathlib.Path
     assert (tree / "l7r" / "diagram" / "hamletgen" / "rows.py").is_file()
     assert (tree / "research" / "questions" / "0033-row-villages-resson.html").is_file()
     assert "l7r/diagram/hamletgen/rows.py::SHARE" in cx.base_cores(tree), "the base's units are read, so a finding is judged against them"
+
+
+def test_the_base_tree_s_units_are_kept_by_module(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """383 amendment 2 (FR-019): every push parsed the whole base tree (8.5 s of a landing's push); each module's units are kept
+    by what it reads, so the next base reads the memo - and the same cores either way."""
+    root = _repo(tmp_path)
+    _commit(root, "base")
+    base = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    out = tmp_path / "base"
+    out.mkdir()
+    tree = cx.base_tree(root, base, out)
+    monkeypatch.delenv("L7R_CACHE_OFF", raising=False)
+    first = cx.base_cores(tree, keep=root)
+    assert first == cx.base_cores(tree), "the memo changes no core"
+    cl = cx.engine(pathlib.Path(cx.__file__).resolve().parents[2])
+
+    def parsed_again(*_a, **_k):  # noqa: ANN002, ANN003, ANN202
+        raise AssertionError("a module the memo holds was parsed again")
+
+    monkeypatch.setattr(cl, "module_units", parsed_again)
+    assert cx.base_cores(tree, keep=root) == first, "the second read comes from the memo"

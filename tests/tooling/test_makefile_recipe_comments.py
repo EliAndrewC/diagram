@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import importlib.util
 import pathlib
+import subprocess
 import sys
 from typing import Any
 
@@ -43,7 +44,11 @@ def test_no_recipe_comment_in_the_repository_would_run() -> None:
     # rather than returning a verdict. It surfaced the day the gate moved to the `loadgroup` scheduler, which runs
     # a module's tests closer together in time, but the race was always there. A `.tmp-` directory is no more a
     # repository Makefile than a clone's is, so it is excluded by the same rule rather than by catching the error.
-    makefiles = [p for p in REPO.rglob("Makefile") if not {".clones", ".git"} & set(p.relative_to(REPO).parts) and not any(part.startswith(".tmp-") for part in p.relative_to(REPO).parts)]
+    # ...AND ONLY THE REPOSITORY'S OWN (383 amendment 2): the glob also read the Makefiles of stale agent worktrees under
+    # `.claude/worktrees/`, which git ignores - another checkout's state, not this one's. The tracked Makefiles are the
+    # repository's, and neither a sibling clone nor a test's temporary directory is tracked.
+    tracked = subprocess.run(["git", "-C", str(REPO), "ls-files", "--", "Makefile", "*/Makefile"], capture_output=True, text=True, check=True).stdout.split()
+    makefiles = [REPO / t for t in tracked]
     assert SKILL / "Makefile" in makefiles
     bad = {str(p.relative_to(REPO)): hm.recipe_comment_hazards(p.read_text()) for p in makefiles}
     bad = {k: v for k, v in bad.items() if v}

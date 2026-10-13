@@ -36,6 +36,8 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
             mode = args[1] if len(args) > 1 else "r"
             if isinstance(mode, str) and any(c in mode for c in "wax+"):
                 return
+            if mode is None and not os.path.isabs(os.fsdecode(args[0])):
+                return  # an os.open by name under a directory handle (shutil.rmtree of a temporary tree): not a path here
             p = l7r_dep_rules.under(args[0], _ROOT)
             if p:
                 _note("file", p)

@@ -72,8 +72,15 @@ def main(argv: list[str] | None = None) -> int:
         full_s, full_out, rc2 = _run(test, wt, {"L7R_TEST_DEPS": "off"})
     finally:
         subprocess.run(["git", "-C", str(root), "worktree", "remove", "--force", str(wt)], capture_output=True)
-    row = {"reuse_s": round(reuse_s, 2), "reuse_ran": _passed(reuse_out), "full_s": round(full_s, 2), "full_ran": _passed(full_out),
-           "load": round(os.getloadavg()[0], 1), "ok": rc1 == 0 and rc2 == 0, **kept}
+    row = {
+        "reuse_s": round(reuse_s, 2),
+        "reuse_ran": _passed(reuse_out),
+        "full_s": round(full_s, 2),
+        "full_ran": _passed(full_out),
+        "load": round(os.getloadavg()[0], 1),
+        "ok": rc1 == 0 and rc2 == 0,
+        **kept,
+    }
     print(f"with reuse {row['reuse_s']} s ({row['reuse_ran']} tests ran), without {row['full_s']} s ({row['full_ran']}), load {row['load']}")
     print(f"tooling test files kept {kept['files']}, always run {kept['always_run']} (by program: {kept['by_cause']})")
     if args.json:

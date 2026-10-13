@@ -82,10 +82,14 @@ msg=$(printf 'Tooling from %s, landed alone mid-feature (make land-tooling, feat
 git -C "$WT" commit -q -m "$msg" || die "nothing to commit in the worktree"
 step patch
 # every test it lands runs here: one needing work not yet landed fails in the worktree, never on main (FR-005)
-# GUARD_EDIT_OK: feature 383 amendment 2, plan D21 - the guard suites and the tooling tests are two steps, each timed (the plan
-# review: one "checks" figure cannot show where the time goes). LAND_TOOLING_CHECKS, the suite's seam, stands for both.
-guards=${LAND_TOOLING_CHECKS:-make hooks-test}
-tooling_tests=${LAND_TOOLING_CHECKS:-make test-file FILE=tests/tooling}
+# GUARD_EDIT_OK: feature 383 amendment 2, plan D21 + D22 (the GM 2026-10-13: "see what can be done there") - TWO CHECKS, EACH
+# TIMED, SIDE BY SIDE, EACH TEST ONCE. The guard suites and the tooling tests share no write (the pass store is the tooling
+# run's, the suites' stamps theirs), so they run at the same time; and hooks-test leaves tests/tooling/ to the tooling run,
+# which reuses the clone's passes - 57 files ran twice before, once without reuse (research R7). Both must pass; each one's
+# output and seconds land in the landing's log. LAND_TOOLING_CHECKS, the suite's seam, stands for both;
+# LAND_TOOLING_GUARDS and LAND_TOOLING_TOOLING for one each.
+guards=${LAND_TOOLING_GUARDS:-${LAND_TOOLING_CHECKS:-make hooks-test HOOKS_PYTEST_SKIP=tests/tooling/}}
+tooling_tests=${LAND_TOOLING_TOOLING:-${LAND_TOOLING_CHECKS:-make test-file FILE=tests/tooling}}
 run_test=${LAND_TOOLING_TEST:-make test-file FILE=}
 for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.py) [ -f "$WT/$f" ] && tooling_tests="$tooling_tests && $run_test\"$f\"" ;; esac; done
 # GUARD_EDIT_OK: feature 374 batch 4 - THE CHECKS RUN WITHOUT THE CALLER'S ESCAPES: a LEDGER_ROWS_OK meant for the push reached
@@ -94,17 +98,28 @@ for f in "$@"; do case "$f" in tests/tooling/*|tests/hooks/*) ;; tests/*test_*.p
 unset_escapes=$(env | sed -n 's/^\([A-Z][A-Z_]*_OK\)=.*/-u \1/p' | tr '\n' ' ')
 # GUARD_EDIT_OK: feature 383 amendment 1 (the GM 2026-10-13: "skip suites the clone already passed") - the tooling tests reuse
 # each test file's pass the clone recorded on identical inputs (tests/tooling/_test_deps.py); the guard suites already do
-check() { # <step name> <command>: run in the worktree without the escapes; a failure ends the landing
+check() { # <step name> <command>: run in the worktree without the escapes, to <log>.<name>, its exit and seconds beside it
+  local t0=${EPOCHREALTIME/,/.} rc
   # shellcheck disable=SC2086 # one word per `-u NAME`
-  if ! ( cd "$WT" && env $unset_escapes L7R_TEST_DEPS=reuse bash -c "$2" ) >> "$log" 2>&1; then
-    step "$1"; steps_done "$1-failed"
-    tail -25 "$log" >&2
-    die "the checks failed in the worktree (full log: $log) - fix in the clone, commit, run this again"
-  fi
-  step "$1"
+  ( cd "$WT" && env $unset_escapes L7R_TEST_DEPS=reuse bash -c "$2" ) > "$log.$1" 2>&1; rc=$?
+  awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.2f", b - a }' > "$log.$1.s"
+  echo "$rc" > "$log.$1.rc"
 }
-check guard-suites "$guards"
-check tooling-tests "$tooling_tests"
+check guard-suites "$guards" & check tooling-tests "$tooling_tests" & wait
+failed=""
+for j in guard-suites tooling-tests; do
+  s=$(cat "$log.$j.s"); rc=$(cat "$log.$j.rc")
+  { printf -- '--- %s: exit %s\n' "$j" "$rc"; cat "$log.$j"; printf 'land-tooling: step %s %s s\n' "$j" "$s"; } >> "$log"
+  steps_json="$steps_json${steps_json:+, }\"$j\": $s"
+  [ "$rc" = 0 ] || failed="$failed $j"
+  rm -f "$log.$j" "$log.$j.s" "$log.$j.rc"
+done
+step checks
+if [ -n "$failed" ]; then
+  steps_done "checks-failed:${failed# }"
+  tail -25 "$log" >&2
+  die "the checks failed in the worktree (${failed# }; full log: $log) - fix in the clone, commit, run this again"
+fi
 push=${LAND_TOOLING_PUSH:-scripts/sync-with-main.sh done}
 # SYNC_BACKUP=off: the worktree is not a clone - its work is the clone's own commits, backed up at the clone's own stop. Backed
 # up under the fixed name backup/<clone>-tooling, a refused landing left a tip no later landing contained, and every one

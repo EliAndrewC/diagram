@@ -38,6 +38,9 @@ import l7r_dep_rules as rules  # noqa: E402 - beside the children's shim, which 
 TREE = "tests/tooling/"
 MODE = os.environ.get("L7R_TEST_DEPS", "")
 STORE_NAME = "tooling-test-passes.json"
+#: what a kept pass holds: 2 adds the git questions' answers (amendment 2). A pass kept in another form is never reused - an
+#: older reader would skip the answers it does not know to ask
+STORE_VERSION = 2
 
 _current: list[str] = [""]
 _reads: dict[str, dict[str, set[str]]] = {}
@@ -72,6 +75,8 @@ def _hook(event: str, args: tuple) -> None:
         mode = args[1] if len(args) > 1 else "r"
         if isinstance(mode, str) and any(c in mode for c in "wax+"):
             return
+        if mode is None and not os.path.isabs(os.fsdecode(args[0])):
+            return  # an os.open by name under a directory handle (shutil.rmtree of a temporary tree): not a path here
         p = _under(args[0])
         if p:
             _reads.setdefault(f, {}).setdefault("file", set()).add(p)
@@ -117,8 +122,9 @@ def _rel_path(path: str) -> str:
     return rel
 
 
-#: reads that cannot change a result: the content caches (`record_cache`), whose every entry is keyed by what it holds
-CACHE_READS = (".git/l7r-cache/",)
+#: reads that cannot change a result: the content caches, whose every entry is keyed by what it holds - `record_cache`'s, the
+#: gate stamp's semantic ids (a blob id to its id), and the translation pairs' `ParseCache` (amendment 2, FR-020)
+CACHE_READS = (".git/l7r-cache/", ".git/semantic-id-cache.json", ".git/record-checks/translation-pairs.json")
 
 
 def _state(kind: str, rel: str, ids: dict[str, str], entries: dict[str, list[str]]) -> str:
@@ -202,6 +208,7 @@ def _keep(d: pathlib.Path) -> None:
     if store is None:
         return
     ids, entries = _ids()
+    answers: dict[str, str] = {}
     try:
         kept = json.loads(store.read_text(encoding="utf-8")) if store.is_file() else {}
     except OSError, ValueError:
@@ -218,10 +225,12 @@ def _keep(d: pathlib.Path) -> None:
         if any(p == ".git" or p.startswith(".git/") for p in opened if (ROOT / p).is_dir()):
             files.add(".git")  # the repository's own git state was read: not known by content, so never reused
         kept[f] = {
+            "v": STORE_VERSION,
             "py": sys.version,
             "opaque": sorted(r.get("opaque", set())),
             "files": {p: _state("file", p, ids, entries) for p in sorted(files)},
             "dirs": {p: _state("dir", p, ids, entries) for p in sorted(dirs)},
+            "git": {q: answer(q, answers) for q in sorted(r.get("git", set()))},
         }
     store.parent.mkdir(parents=True, exist_ok=True)
     tmp = store.with_suffix(f".{os.getpid()}.tmp")
@@ -229,15 +238,23 @@ def _keep(d: pathlib.Path) -> None:
     tmp.replace(store)
 
 
-def reusable(kept: dict, ids: dict[str, str], entries: dict[str, list[str]]) -> bool:
+def reusable(kept: dict, ids: dict[str, str], entries: dict[str, list[str]], answers: dict[str, str] | None = None) -> bool:
     """Is a kept pass still good: the same interpreter, no other program run against the repository, no read of a file git
-    ignores, and every read unchanged? Reads are kept relative to the repository, so a worktree compares with its clone."""
-    if kept.get("py") != sys.version or kept.get("opaque"):
+    ignores, every read unchanged, and every git question it asked answered the same here (amendment 2, FR-015)? Reads are kept relative to the repository, so a worktree compares with its clone."""
+    if kept.get("v") != STORE_VERSION or kept.get("py") != sys.version or kept.get("opaque"):
         return False
     files, dirs = kept.get("files", {}), kept.get("dirs", {})
-    if "ignored" in files.values():
+    if "ignored" in files.values() or "error" in kept.get("git", {}).values():
         return False
-    return all(_state("file", p, ids, entries) == was for p, was in files.items()) and all(_state("dir", p, ids, entries) == was for p, was in dirs.items())
+    same = all(_state("file", p, ids, entries) == was for p, was in files.items()) and all(_state("dir", p, ids, entries) == was for p, was in dirs.items())
+    return same and all(answer(q, answers if answers is not None else {}) == was for q, was in kept.get("git", {}).items())
+
+
+def answer(question: str, answers: dict[str, str]) -> str:
+    """A git question's answer here (`l7r_dep_rules.ask`), asked once per run however many test files asked it."""
+    if question not in answers:
+        answers[question] = rules.ask(question, str(ROOT))
+    return answers[question]
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
@@ -252,7 +269,8 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     if not kept or not files:
         return
     ids, entries = _ids()
-    skip = {f for f in files if f in kept and reusable(kept[f], ids, entries)}
+    answers: dict[str, str] = {}
+    skip = {f for f in files if f in kept and reusable(kept[f], ids, entries, answers)}
     if not skip:
         return
     gone = [i for i in items if _rel(i.nodeid) in skip]

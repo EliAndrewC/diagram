@@ -119,3 +119,33 @@ test_bundle_owed 1.2, test_downloads 0.9, test_record_prepass_and_size_table 0.8
 Some of them also read a file git ignores (ci/test_state `.git/semantic-id-cache.json`, test_check_bundle `.git/record-checks/`),
 which keeps them running until that read is known too. `scripts/measure/tooling_reuse_time.py` prints the file counts again. On amendment 2's first recording with Python children adopted
 (2026-10-13), 0 of 126 files ran a child isolated (`-I`, `-E`, `-S`).
+
+## R9 Amendment 2 - what was made known, what stays, and a landing step by step
+
+**The tests write nothing in the repository** (the premise of plan D18, measured 2026-10-13): `git status --porcelain --ignored`
+of this clone was identical before and after a whole tooling run (1,800 tests, `L7R_TEST_DEPS=off`), and no file outside `.git`
+and the byte-code and lint caches was newer after it than before, but the session's own edits made during the run.
+
+**Made known** (each file now reused on identical inputs, plan D18-D20): every file whose only cause was a git question or a
+Python child; four files that seemed to read `.git` (an `os.open` by name under `shutil.rmtree`'s directory handle, resolved
+against the repository); two content caches under `.git` (`semantic-id-cache.json`, the translation pairs' `ParseCache`); the
+clone's `.specify/feature.json` (the tooling tests now run under one fixed `SPECIFY_FEATURE`); the stale agent worktrees'
+Makefiles (`test_makefile_recipe_comments` now checks the tracked ones).
+
+**Stays** (FR-020): each program below is what its test file exists to run, or writes what it produces, so its reads cannot be
+asked again as a git question is; making each known would mean modeling what that program reads. Test-seconds measured
+2026-10-13 (`make test-file` of the 18 files with `--junitxml`, `L7R_TEST_DEPS=off`, load about 4), 41.4 in all:
+
+| file | program | test-seconds | why it stays |
+|---|---|---|---|
+| test_guard_firing_log | `source-block-hooks.sh` and every other guard (bash) | 16.5 | the guards are the subject; a bash script's reads (its sourced libraries, the tools it pipes through) are not seen by any recorder here |
+| test_push_checks | ruff | 5.6 | ruff on the test's own temporary files: those are gone or changed when a landing would ask again, so the same question is not the same input |
+| test_modal_checks | node | 4.7 | the modal checks' script is the subject; node's reads are not recorded |
+| pipeline/test_gencache | resvg | 3.1 | it writes the render it produces |
+| test_page_session | bash, claude | 2.9 | the page-session runner (bash) and a stand-in `claude` are the subject |
+| test_function_cap | ruff | 2.1 | as test_push_checks |
+| test_plan_gate, test_hm_checks, test_one_gate, test_setup_ensure | bash | 3.1 | a guard or gate script is the subject |
+| test_archive, test_archive_ops | pdftotext, grep | 1.4 | pdftotext writes its text file; grep with it on the archive's own fixture files |
+| test_soak_suite, test_invocation, test_make_docs, test_coord, test_gate_record_and_shortcut, test_test_file_target | make | 1.8 | make runs recipes in the repository; what they read is not known |
+
+Over the run's workers (8), the 41.4 test-seconds are about 5 s of wall time in a landing.

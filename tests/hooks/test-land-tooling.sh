@@ -50,11 +50,21 @@ ok "main carries the guard fix" '[ "$(on_main scripts/a.sh | tail -1)" = "TWO" ]
 ok "main carries none of the engine work" '[ "$(on_main l7r/e.py)" = "e = 1" ]'
 ok "main keeps the other session's work" '[ "$(on_main other.txt)" = "other" ]'
 ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep -q c-tooling'
-ok "each step is timed in the log (383 amendment 2, FR-017)" 'for s in prepare worktree patch guard-suites tooling-tests push; do grep -q "^land-tooling: step $s [0-9.]* s$" "$C/.git/land-tooling.log" || exit 1; done'
-ok "...and the landing's steps are one JSON line" 'python3 -c "import json,sys; r=json.loads(open(sys.argv[1]).readlines()[-1]); sys.exit(not (r[\"outcome\"] == \"push-exit-0\" and set(r[\"steps\"]) == {\"prepare\", \"worktree\", \"patch\", \"guard-suites\", \"tooling-tests\", \"push\"}))" "$C/.git/land-tooling-steps.jsonl"'
+ok "each step is timed in the log (383 amendment 2, FR-017)" 'for s in prepare worktree patch guard-suites tooling-tests checks push; do grep -q "^land-tooling: step $s [0-9.]* s$" "$C/.git/land-tooling.log" || exit 1; done'
+ok "...and the landing's steps are one JSON line" 'python3 -c "import json,sys; r=json.loads(open(sys.argv[1]).readlines()[-1]); sys.exit(not (r[\"outcome\"] == \"push-exit-0\" and set(r[\"steps\"]) == {\"prepare\", \"worktree\", \"patch\", \"guard-suites\", \"tooling-tests\", \"checks\", \"push\"}))" "$C/.git/land-tooling-steps.jsonl"'
 ok "the clone's history is untouched" '[ "$(git -C "$C" log --format=%s -1)" = "a guard fix" ]'
 git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
 ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
+
+echo "2b. the guard suites and the tooling tests run side by side, each timed; a failing one is named (383 amendment 2, D22)"
+setup
+LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='sleep 1' LAND_TOOLING_TOOLING='sleep 1' land scripts/a.sh; rc=$?
+ok "landed with both jobs" '[ "$rc" -eq 0 ]'
+ok "they overlapped: the checks took less than the two jobs one after the other" 'python3 -c "import json,sys; s=json.loads(open(sys.argv[1]).readlines()[-1])[\"steps\"]; sys.exit(not (s[\"guard-suites\"] >= 1 and s[\"tooling-tests\"] >= 1 and s[\"checks\"] < 1.8))" "$C/.git/land-tooling-steps.jsonl"'
+setup
+LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='echo guard-out; exit 1' LAND_TOOLING_TOOLING='true' land scripts/a.sh; rc=$?
+ok "a failing job is named and lands nothing" '[ "$rc" -ne 0 ] && grep -q "checks failed in the worktree (guard-suites" "$T/out" && grep -q guard-out "$C/.git/land-tooling.log" && [ "$(on_main scripts/a.sh | tail -1)" = "two" ]'
+ok "...and leaves no job file behind" '! ls "$C/.git/" | grep -q "land-tooling.log\\."'
 
 echo "3. a change that does not apply cleanly onto main, and a failed check, land nothing"
 setup
