@@ -1,0 +1,703 @@
+# 374-match-the-research-continued - the plan's finished sections (feature 375 FR-044; no review reads this file)
+
+<!-- plan-archive: archived 2026-10-13 -->
+## Batch 1 (T01-T05)
+
+Three waves, the first three rows the ranking leaves open after its two held E2 rows (the door band and `fixture_quota`, held for
+the GM), with the kitchen's two rows taken as one wave because both redraw the same building; then the two measuring tasks 375
+carried here (spec FR-006), which are not among the three measured.
+
+**Pair (FR-002)**: none owed if the batch's engine code stays out of what the timing pair rolls (the hamlet's stages) - this
+batch's engine code is `pack_audit` (a review tool) and `buildings/types.json`'s kitchen band, read by the Mode A draft and the
+pack audit only, as 372's batches 3-5 recorded. If a wave touches the hamlet's stages, the pair is owed and taken.
+
+### Wave 112 (T01) - the veranda's width and faces
+
+- **Scope**: `docs/buildings.md::Inner court (private / sacred)#engawa` (E3). 0102's drawing page: a veranda 3-6 ft wide (half a
+  ken to one ken, Katsura's widths), free to change from face to face, the garden face at the wider end a GUESS; which faces
+  carry it a KNOB between two attested forms - the garden face alone, or a continuous veranda along two or three faces - never
+  all four. The procedure says "~8 px" (2.7 ft) along the south face of each block, and every sheet draws 8 px on the garden face (each
+  sheet's `data-kind="engawa"` rects read 2026-10-10, grep of the three SVGs).
+- **Check first**: a `pack_audit` check, `veranda_depths`: every `data-kind="engawa"` strip's short side is 3-6 ft (9-18 px),
+  reading the strip's rect (a `data-kind="engawa"` group's rect too). Red on all three magistracy sheets now; a red fixture
+  beside the others. Its limits cite 0102's drawing page, ACCURATE (Katsura's measured widths).
+- **The knob on the hand sheets**: each sheet rolls its faces as its other knobs are rolled, `random.Random(zlib.crc32(b"<map>:
+  residence veranda faces")).choice(["garden face alone", "two or three faces"])` - **Hayakawa** two or three faces, **Ochiba**
+  and **Ubame** the garden face alone (computed 2026-10-10). Each sheet's notes record the roll and the form drawn, as the
+  shrine-arch knob is recorded.
+- **Widths** (calibrated liberty within 3-6 ft, the garden face at the wider end - 0102's GUESS): every garden-face strip 12 px
+  (4 ft); Hayakawa's turned faces 9 px (3 ft), as Katsura's veranda narrows where it turns the corner. Hayakawa's board veranda to
+  the guests' privy (already 9 px) stays. What a widened strip runs into (a door, a stone, a tub, the garden) moves with it, each
+  move audited.
+- **Hayakawa's two or three faces**: the east block's veranda runs on round its south-east corner up the reception's east end
+  (the formal end, facing the garden's east side), a third face being its north board veranda already drawn; the west block keeps
+  its garden face alone (a hall of its own; the knob is the house's, and the house shows it on its formal hall).
+- **The procedure**: the bullet's veranda sentence says 3-6 ft (9-18 px), the faces a rolled knob between the two forms, never all
+  four; the claim gets the knob and the widths, each labeled (the forms ACCURATE, the garden face wider a GUESS).
+- **The generated draft** (`compound.py`, seedless) keeps its 4 ft garden-face veranda, the form 0102's drawing page records it
+  taking; it cannot roll a knob, and that is recorded there.
+- **Tooling gap fixed here** (spec FR-007, carried from 372): a glyph-check verdict is keyed by element alone, so this batch's
+  second sheet would overwrite the first's; the verdict is keyed by element and map, with a test red on the old keying.
+- **Occasions**: glyph-redrawn: engawa on hayakawa-magistracy (the new turned form); glyph-redrawn: engawa on ochiba-magistracy
+  (the garden-face form; Ubame's the same glyph).
+
+### Wave 113 (T02) - the kitchen at 0091's size, joined as an ell
+
+- **Scope**: `docs/buildings.md::Inner court (private / sacred)#kitchen` (E3) and `#kitchen corridor tagged residence corridor`
+  (E3, after the first; the same building). 0091: the one kitchen measured, the Kuchiba house's east wing, is about 12 tsubo
+  (~440 sq ft, 5.9 x 6.9 m) by the prefecture's measure, about a sixth of the house; a middle-rank house was one block, its kitchen
+  projecting from one side, with almost no corridors. The sheets draw 120 x 100 px (40 x 33 ft, ~1,320 sq ft) kitchens (each kitchen's rect read off the three SVGs, 2026-10-10), and
+  Hayakawa joins its kitchen to the house by a covered way tagged a residence corridor.
+- **The fix**: each sheet's kitchen drawn about 24 x 18 ft (72 x 54 px), the size of 0091's measured wing taken as the
+  kitchen's - a GUESS, as 0091's drawing page holds a kitchen's size (impl-drift, wave 113: the plan first called it an ACCURATE ceiling), joined to the house as an ell (abutting it, no corridor); Hayakawa's covered way removed. The kitchen band in
+  `buildings/types.json` narrowed so the old size fails it: w 18-24 by h 14-18 ft (either orientation; at most 432 sq ft, under the measured ~440 - the T02 preflight's aside). The procedure's kitchen
+  bullet and both claims say ~24 x 18 ft, an ell, 0091 cited; "a large institutional daidokoro" goes (the ranked fix sizes it to
+  the measured house; nothing in the record sizes a kitchen to its feeding). The draft's kitchen is 20 x 18 ft (`compound.py`'s program,
+  read 2026-10-10), already inside the new band.
+- **What stands in the kitchen moves with it**: the kamado range, a well drawn inside the kitchen (0105's drawing page: inside
+  the kitchen on a hand plan), its door, the two tubs at its door (wave 106's rule, `tubs_off_their_doors`), the bath abutting it.
+  The ground the smaller kitchen frees is left as the court or service ground it opens onto. Each move audited.
+- **Amendment 1 (2026-10-10, found in the work)**: (a) Ubame joins its kitchen by a covered corridor too (an L across its service
+  alley, tagged a residence corridor), so its kitchen becomes an ell as Hayakawa's does: it projects south from the west block under
+  the shuttered wing, its door on its west face toward the kitchen postern, the bath on its south face; the west block's veranda
+  starts at the kitchen's east face. Hayakawa's ell projects south from its west block's family end, the bath on its west face, the
+  door on its south face; Ochiba's is the ell it was, shrunk into the house's corner. (b) The generated draft
+  (`compound_parts._point_features`) also joins its kitchen by a covered corridor (`_corridor`, `CORRIDOR_W_FT`) across the 7 ft
+  fire-gap the placer leaves: the procedure now drops that form, so the draft draws the ell - a `BuildingSpec.joins` names the
+  building an ell projects from, the placer abuts the two with no fire-gap (`_place_one`), and the corridor code goes. Its
+  occasion: layout-revised: county-magistracy-example. (c) Knock-ons in the tooling, each fixed where found: `pack_audit` read a
+  kamado tagged `hearth` as a door glyph adrift (`floating_doors`) once a small kitchen put it within a door's reach of a wall -
+  a rect inside a `hearth` element is no door (a test); the round-trip sheet's program kitchen 18 x 24 ft (its court face then
+  seats the bath; at 24 x 18 the bath found no clear run); the frozen red fixtures' kitchens brought to 72 x 54 px against their
+  houses, their contents and baths moved with them, so each fires only its own check (the two whose check counts tubs at the old
+  kitchen keep it).
+- **Amendment 3 (2026-10-10, impl-drift)**: the kitchen claim relabeled GUESS on 0091's drawing page (above), and the
+  corridor claim renamed `#kitchen abuts the house, no corridor` - its old name described the corridor the wave removed.
+- **Amendment 4 (2026-10-10, impl-drift round 2)**: the kitchen's size is taken from the measured wing as a size, whatever the
+  house's size, not as its sixth share - recorded so on 0091's drawing page as a GUESS (the ranked fix's ~12 tsubo kept; sizing
+  every kitchen to a sixth of its house was impl-drift's other way out, and would size the hand sheets' larger houses'
+  kitchens past the measured wing); the claim names that page. The residence-rooms claim (T03) renamed `#residence of about
+  six rooms`. The residence-corridor pop-up's guess bullet gives the drawn width (about 11 ft, Hayakawa's and Ubame's) and its
+  `Covers:` drops "covered" (modal-form round 1).
+- **Amendment 2 (2026-10-10, the draft as built)**: with the ell abutting the house's west end, the house's west face keeps 6 ft
+  free below the kitchen, short of a door's 8 ft approach, so the draft's inner entrance opens on the house's rear (north)
+  face at the kitchen end, onto the rear alley; 0107's drawing page said "on the residence's face toward the kitchen" and now
+  says "on the residence's back, at the end the kitchen stands against" (its record checks owed: the pop-ups naming the
+  page triaged, quote-check on the note in that block, record-format). The house stands 7 ft further west with the gap gone,
+  so the draft's garden zone starts 7 ft west to stay before the whole south face; the family privy at the house's rear west
+  corner stands a foot in from it, its half-foot margin off the kitchen. Hayakawa's kitchen door stands on its south face,
+  its two tubs either side.
+- **Occasions**: layout-revised: hayakawa-magistracy and ubame-magistracy (the kitchen joined as an ell, the corridor gone);
+  layout-revised: county-magistracy-example (the draft's ell); glyph-redrawn: kitchen on ochiba-magistracy.
+
+### Wave 114 (T03) - the residence's rooms
+
+- **Scope**: `docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms` (E3). The procedure says a real
+  residence of this footprint held ~18-25 tatami rooms; 0091 sizes the residence to the 49-tsubo district magistrate's house, and
+  the one house measured with its rooms, the thousand-koku Kuchiba house of 41-74 tsubo, held six. The fix follows the record:
+  the procedure says the labeled zones TOGETHER compress a house of about six rooms (0091 - the count is the whole house's), and
+  the claim cites it; the sheets label
+  zones, not rooms, so no sheet is redrawn. Searched 2026-10-10: Hayakawa's notes alone state the count ("a real residence of
+  this footprint holds ~18-25 tatami rooms"); that line says the house held about six (0091), as the procedure does.
+- **Occasions**: none (no drawn element changes).
+
+### T04 - 375's SC-003 over T01-T03 (key `sc003-375-first-three-tasks`)
+
+From `make feature-report F=374` at batch 1's close: red gates and their causes against the preflight's checks, pages re-checked
+while a check on them was outstanding, plan-review BLOCKs on a decision a decision preflight had ruled on. Recorded in
+`measurements.json` with its command.
+
+### T05 - 375's SC-004 over T01-T03 (key `sc004-375-dispatches-per-row`)
+
+The dispatches per closed row of T01-T03 (four rows), from the same report, beside 372's ~10 (375's "Why", an estimate).
+
+## Batch 2 (T06-T09): the claims labeled as the record has them
+
+**The work list** stays 328's ranking (FR-001), brought current with the claims report (`make claims-report`, 2026-10-10:
+DRIFTED 119, MISLABELED 28, UNCLAIMED 21, NEEDS-RESEARCH 16, CANNOT-TELL 11). The ranking had gone stale against it both ways:
+26 of its open rows read IN-STEP now (closed by later relabels - the room order and the senior retainers' rows among them),
+closed by that re-check and marked wave 115 in `audit/waves.json`; and 56 of the report's findings were not in it, added as
+found rows (`audit/found-wave115.jsonl`, tiered E0 for a label, E1 for a re-check, E3 for a drift, E4 for a research question)
+and the ranking rebuilt (`audit/merge.py`); then every report finding still without an open row was given one - a row closed
+at an earlier wave whose claim drifts again reopened (Ochiba's clump inside the page window, closed at wave 10; the belt's
+continuous planting, wave 47; eleven more), and the procedure rows `audit/scope.json` marked deferred that the report counts in
+scope (the country shrine's three, the manor's universal shrine, the divider gate, the latrines by zone) set in scope: 243 open
+rows, every in-scope finding of the report among them (measured 2026-10-10: 0 findings without an open row). The 34 open rows that are no claim at all - review and cohort
+findings, Sawada's zigzag, the 20/40-household reach rows, the held door band - stay on the list under T99. This batch takes the
+cheapest tier first, as 328's did: the MISLABELED, UNCLAIMED and CANNOT-TELL claims - labels, new claims, fuller re-checks, no
+drawn change. A finding whose fix is a drawn change (the compound shrine's grove) or a code change (a label the code
+contradicts) waits for the wave that makes it. Docstring and comment edits change no engine key (the gate's short-circuit), so no
+map moves and no review occasion is owed.
+
+### Wave 115 (T06) - the procedures' four relabels
+
+- `docs/building-programs.md` `#divider gate on the axis`: a GUESS recorded on 0090's drawing page (new sentence: the gate
+  behind the office hall, no page placing a jin'ya's middle gate); "customarily on the main axis" goes from the program's text.
+- `#latrines by zone`: a GUESS on 0101's drawing page (about one per part of the compound, three or four, near service gates).
+- `docs/buildings.md` `#named court spine`: cites 0116's drawing page (the open courts), not 0099.
+- `#office front, residence rear`: a DEVIATION on 0090's drawing page (the yamen's order kept as a deliberate simplification;
+  Takayama's residence stood beside the office); "universal in both traditions" goes from the text.
+- Owed: impl-drift on the six (the four and the two below); the record checks the 0090 sentence owes (record-format, quote-check on its block, the pop-ups
+  naming the page triaged).
+- A re-check's own finding is answered in the same wave: the manor's two-court bullet drops "never through the divider
+  gate" (impl-drift: it left formal visitors no way to the house, against 0104's drawing page), and the alley behind the
+  hall, which the bullet names, is claimed UNRESEARCHED.
+
+### Wave 116 (T07) - the hamlet's ways and hinterland labeled
+
+The MISLABELED and UNCLAIMED claims under `l7r/diagram/hamletgen/` (ways, hinterland, plan, rows): each label set to what
+its finding says (a GUESS on the drawing page that records it, CONVENTION, UNRESEARCHED where unsearched, NONE for plumbing),
+each UNCLAIMED decision given its claim; where a finding says the page answers the question, the claim cites the page. A finding
+that needs the code changed (a value the page contradicts) is not relabeled: it stays for its DRIFTED wave.
+
+### Wave 117 (T08) - the settlement, waterfields, labels and interactive claims labeled
+
+The same, for `l7r/diagram/settlement/`, `waterfields/`, `labels/` and `interactive/`.
+
+### Wave 118 (T09) - the CANNOT-TELL re-checks
+
+Each of the 11 CANNOT-TELL claims re-checked by impl-drift with the reader or page it said it lacked added to its bundle
+(`make claims-bundle UNITS=`, the named function or page beside it); a claim that then reads DRIFTED joins the DRIFTED work.
+A re-check that finds a departure the drawing page never recorded reads DRIFTED and joins the DRIFTED work; the session
+never records a DEVIATION to close it (328's exception path, amendment 5). The polder kept out of the random roll
+(`ROLLED_ARCHETYPES`) is one, with the dike-pond block beside it: 0019's drawing page names both a known gap, and the row
+stays open until the polder and the dike-pond pass their cohort and are rolled.
+
+### Wave 119 (T10) - the hamlet's lanes
+
+- `serve.py::lay_door_paths#door path off a grove band`: 0036 lays a lane through a grove band "with a footpath's
+  clearance and some working room kept off the trees on each side" (about 22 ft of a 36 ft opening: about 9.5 ft each side
+  of a 3 ft tread); the code's 0.5 ft margin becomes that working room (`GROVE_WORKING_ROOM_FT`, measured off the band's
+  rect, which bounds the trunks), and the claim cites 0036. Measured on the hamlet cohort before it is kept: a farm the wider
+  berth leaves unreached is a conflict put to `spec-fidelity` (rule 1).
+- Measured and ruled (2026-10-11): at 9.5 ft cohort seed 22's two row farms were walled in between their dooryards and a
+  neighbor's band. `spec-fidelity` ruled the 9.5 ft stands for every band (no per-farm fallback, no reading of the page as
+  "openings only"), and that widening 0036's 32 ft between groves to the 46.1 ft the router's grid wants would reword the page
+  to fit the code: the pinch is the door router's 10 ft lattice (2 x 11 ft + 2.41 cells must fit the gap). So the door router
+  asks again on a finer lattice, `DOOR_FINE_CELL_FT` (4 ft, at most 4.1 ft for the 32 ft gap), only where the coarse one finds
+  no way - the derivation `dry_exit.GROVE_EXIT_CELL_FT` records, paid where needed. The lane room stays 32 ft and 0036 is
+  unchanged. Measured: the 48-seed cohort and its six pinned rows pass but seeds 10 and 20, both refused at HEAD before the
+  change (the baseline 52/54).
+- Kashikawa, rerolled, was refused for a "needle" the law found where two door paths end on the skeleton at the point it
+  bends: a face 0.09 ft round (measured on the refused roll's manifest, 2026-10-11), three lanes noded a hair apart, no ground at all. A pre-existing defect of the law's face test
+  (constitution XIV): `law.needle_loops` skips a face whose perimeter is under `NODING_SPECK_FT` (1 ft); a real needle runs
+  the length of its ways. Kashikawa then rolls, its door paths moved; the other four pool hamlets are unchanged, and the
+  cohort with the rule matches the baseline (52/54).
+- Maps: every pool hamlet is rerolled; a hamlet whose paths change owes no glyph-check (no glyph is redrawn) - the lane
+  law's acceptance sweep and the cohort hold the change.
+
+### Wave 120 (T11) - the hamlet's ground
+
+- `hinterland/parcels.py::_beyond_the_fields#no wood below the houses`: 0077's drawing page refuses only "a wood seated below
+  the houses, past the fields and beside a river or marsh". The wood follows the page's two tiers alone - the slope higher
+  than the field beside it, then the level beyond the fields (`woodland_tier` no longer ranks by the houses) - and a seat is
+  refused only where it is below the houses' median height and its square comes within `LOW_BY_WATER_FT` of a river's course
+  or a marsh (`low_by_the_water`, measured from the square's circumscribed reach, as the keep-outs measure a turned parcel:
+  every seat the keep-outs pass stands a half off the water, so a reach from the seat alone refused nothing). It is asked in
+  the scan's one qualification (`_ok`), so every seat the nudge, the row step, the size roll and the aspect steps move is
+  asked it again at its own square; the water is one geometry built once (`WaterZone`), its cost measured at 0.05 s of a
+  10 s roll. Inashiro's woodland moves under it.
+  "Beside" has no figure on the page: 46 ft, the width over which the maps draw reeds and grass interleaving at a marsh's
+  edge, recorded on 0077's drawing page as a GUESS (its record checks owed), and the claims label it so.
+- `_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld`: 0190 attests boards at bridge ends with no size
+  qualifier; the bridgehead joins the seat's forms where a way reaches one of the settlement's bridges - within the board's
+  60 ft band of a lane or road (`bridges_on_a_way`), since every site 0190 names is ON a road or street (the glyph-check of
+  Kuwabata, 2026-10-11: its bridges are pond-grid planks no lane comes within 136 ft of, and a board rolled to one stood 884 ft off it).
+  The shrine precinct stays withheld, its claim giving the reason: 0190 names a precinct only as its own GUESS, no
+  page it read naming one. The new form is anchored at the widest of the bridges a way reaches, a brook's before a ditch's plank, and of two alike
+  the one nearest the houses (`bridgehead_anchor`): which of a village's bridges held its board no page says, so 0190's
+  drawing page records the choice as a GUESS. The form takes its title-card label ("at the foot of a bridge") and a pop-up
+  of its own (`choice/kosatsuba_seat--bridgehead`, written from 0190 as its three siblings are), which owe the record
+  checks a new pop-up and a drawing-page sentence owe.
+- Maps: the pool hamlets rerolled. Occasions: the board's new bridgehead seat and the wood's newly allowed ground are
+  elements re-placed (`placement-changed:`, a glyph-check each on one hamlet where the roll moves them).
+
+### Wave 121 (T12) - claims the rows name
+
+- `farm_fixtures.py::KURA_PARTS#west annex`: the row is the claim `#west annex` already carries; the unit re-checked
+  clears it.
+- `belt_law.py::BeltReading.holes#continuous planting`, `stands.py::village_grove#clump inside the page window`,
+  `bundle.py::_bundle_layout#south band off an unkept yard`: each claim worded to what the code does and re-checked; a
+  claim that then reads DRIFTED joins the DRIFTED work.
+
+### Wave 122 (T13) - the two held rows, answered
+
+- **Scope**: `l7r/diagram/buildings/types.json#door band` (E0, UNCLAIMED) and
+  `hamletgen/homesteads/fixtures.py::fixture_quota#count to the share` (E1, DRIFTED).
+- **W122-1** (within): the door band closes on the GM's ruling (2026-10-12, *"for the door band question, I am okay with what is
+  currently implemented."*): no band is added to `types.json`, the row is marked wave 122 with its `e0_basis` (0117's drawing
+  page already records the sheets' doors and the generated 6 ft door as a CONVENTION). No claim is written for it: a band
+  that does not exist has no line of code to carry one, and 0117's drawing page is where the convention is recorded.
+- **W122-2** (within): `fixture_quota` keeps its floor over the cap (no engine change; the GM, 2026-10-12, the row's `ruled`).
+  0219's drawing-page bullet "A map never has more shrines than three to eight homesteads in a hundred. The number drawn is
+  capped at that share" is reworded to the ruling: the share is a rate across the countryside, so a hamlet a spec gives one
+  shrine stands within it, and that is not a deviation. Then `impl-drift` on the claim, and the record checks the edit owes
+  (`make record-owed`), the pop-ups whose `Drawing:` names 0219 among them.
+- **W122-3** (within): both rulings become rows of the spec's Decisions Recorded table (SC-003: a row the GM rules should stay
+  as it is becomes a Decisions Recorded row), with the GM's words and where each is recorded.
+
+### Wave 123 (T14) - the country shrine's one roof, and the second office shrine cited
+
+- **Scope**: `docs/building-programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof` and
+  `#universal shrine` (Magistrate's manor).
+- **W123-1** (within): Hoshigaoka's one roof is redrawn with the villagers' hall at the arch (approach) end and the dwelling
+  (the kitchen and the monk's rooms) at the far end, never the hall between them; the procedure's sentence says the same.
+- **W123-2** (within): Hayakawa is redrawn to ONE compound shrine, as 0218's drawing page says ("Our maps draw one modest
+  shrine, however many a real office kept ... a deliberate deviation"): its second shrine removed, and the river kami it held
+  enshrined in the one hall beside the first - the form row 14's roll gives Hayakawa (`one hall`), so batch 5's row 14 finds
+  Hayakawa already drawn to its roll and does not undo this. The procedure's universal-shrine sentence says one shrine.
+
+### Wave 124 (T15) - servants on the street front, the second rank for stores
+
+- **Scope**: `docs/buildings.md::Latrines and the rear service strip#servants in the rear strip` and
+  `Composition: perimeter buildings + a named court-spine#second rank`.
+- **W124-1** (within): servants are housed in a street-side range, the gate range or under the main roof (0115's drawing page),
+  never a rear-strip rowhouse; "~10 servants" is dropped. Each sheet's servants' quarters behind the residence moves to a
+  street-front range on that sheet's perimeter (or into the gate range where the street front is full), about 15 ft deep
+  (0115's GUESS); the rear strip keeps its stores, privy and utility, or narrows to an alley.
+- **W124-2** (within): the second rank (`rank=2`) holds stores only (the Higuchi case the row names): `compound.py`'s rank-2
+  doctrine, the placer's examples and the county program's servants move to rank 1 on the street face.
+
+### Wave 125 (T16) - the barracks and the staff rowhouse long and narrow; the forecourt where it is
+
+- **Scope**: `Outer court (administrative / public)#barracks`, `#forecourt`, and `compound.py::county_magistracy_program#barracks
+  size` and `#senior retainers' quarters`.
+- **W125-1** (within): a barracks or staff rowhouse is 12-24 ft deep and long (0097's drawing page, ACCURATE): the county
+  program's barracks (45 x 34 ft) and staff long-house (50 x 36 ft) are re-proportioned at most 24 ft deep, the long-house's
+  bays side by side with a door each on the long face; the procedure's barracks band caps depth at 24 ft; every hand sheet's
+  barracks checked against it and any over 24 ft deep redrawn.
+- **W125-2** (within): "forecourt" names the open ground inside Hayakawa's main gate (0116, 0104); the strip behind the office
+  hall goes unnamed, or named as an alley.
+
+### Wave 126 (T17) - the stable as 0108 draws it
+
+- **Scope**: `Outer court (administrative / public)#stable stall width`, `#stable passage and grooms' quarters`, `#stables`.
+- **W126-1** (within): every magistracy stable becomes 0108's small warrior stable: three bays long of one-ken (~6 ft) stalls on
+  board floors, an earth-floored passage (kusa-no-ma) before the stalls, and a grooms' room (tozamurai) in it, still smaller than
+  the barracks; the procedure's ~84-96 px re-derived from that form; the stall depth and the 2-4 horses labeled GUESS (0108's
+  drawing page). One glyph form is drawn on all four sheets; its first use is the batch's `glyph-check` occasion.
+
+### Batch 4's review findings (T18) - fixed once, verified
+
+The occasions' ten reviews (2026-10-12) returned six PASS and four building reviews plus the storehouse glyph NEEDS-WORK; the
+round arbiter ruled the three sheets at their cap `continue`, each finding fixed once and verified without a further round.
+
+- **R4-1** (within W124-1): the servants' seat goes by the servant's kind. The street or gate range lodges the menservants (chugen)
+  and the gatekeeper, whose work is the gate and the outer court (0115, 0097, 0118 record them in the gate range); the grooms keep
+  the stable's grooms' room (0108: a warrior's stable held its grooms' quarters; modal-research's gap, 2026-10-12); the maids and
+  kitchen hands sleep in rooms under the main roof at the kitchen end, as the Aizu chief retainer's house kept "the rooms of the
+  maids and servants" in the house beside a gate range of retainers (0115). That the maids slept there is a GUESS. Each sheet labels a
+  maids' room in the residence at the kitchen end; no wicket is drawn in the divider (no page records one). This answers the four
+  sheets' kitchen-route findings (Hayakawa E2, Ochiba E1/Q1, the county E6, Ubame Q1/Q2).
+- **R4-2** (within): a postern's opening keeps an unbuilt approach on both faces of its wall. The county draft's south postern was
+  sealed by the cell and the barracks while `passage_blockers` and `gate_feeds_its_road` passed: a `pack_audit` check
+  (`postern_approach`) is written red on the draft first, then the placer keeps each postern's approach clear.
+- **R4-3** (within): the grooms share a seated servants' or garrison privy in their court within 55 ft (`GROOMS_PRIVY_FT`);
+  otherwise the stable's own privy stands on the stable's side away from the main gate, its pit toward a service edge.
+- **R4-4** (within W125-1, W124-1): every storehouse draws its door (`DOOR_KINDS`, 0117); the county barracks is divided into
+  dwellings, a door each (0097); the long-house's bays draw their partitions; the county servants' row draws a door per dwelling,
+  one of 0097's two forms (its roll is the filed `servants' row entry form` row, batch 5).
+- **R4-5** (within): the hand sheets' findings are fixed on the sheet: Hoshigaoka's sacred tree back to its clearance from the wood
+  and the arches, the clearing's back line to the eaves; Hayakawa's torii 5-12 ft before the shrine's west door (0220's drawing
+  page); Ubame's rear band west of the storehouses narrowed to an alley (0091: no wide empty band behind the house) and its stable
+  door clear of the kennel; every notes, map-note and SVG-comment line the reviews named stale brought to the drawing; Ochiba's
+  service passage through the range labeled a GUESS.
+- **R4-6** (within): the size audits' bands are recorded: the storehouse 12-20 by 9-16 ft (the Yokota pair, the national register)
+  in `buildings/types.json`; the rear yard's 18-45 by 10-30 ft a GUESS in its notes. Filed as rows, not fixed here: the stable's
+  depth against its length (its depths are GUESSES, no source), the Higuchi storehouse's position, 0091's Yokota figures 5-7% under
+  the register's.
+- **R4-7** (within): verification - the three capped sheets' fix-verification is put to the round arbiter ahead of its cap; the
+  other units take their second round on the fixed content.
+
+### Wave 127 (T19) - the county draft's small rows
+
+- **W127-1** (within): the practice ground's comment restated to the barracks as drawn; the inner entrance's claim cites
+  0107's drawing page (the residence's back at the kitchen end) and its door is seated there; the middle gate drawn ~8 ft as
+  docs/building-programs.md says (or the doc and the Envelope made to agree on what the record gives); the servants' row
+  entry form row marked done (batch 4 rolled it).
+
+### Wave 128 (T20) - the county granary and gate as the record's forms
+
+- **W128-1** (within): the granary's form is 0098's knob, rolled (this draft: the raised timber storehouse, takakura), drawn
+  with its posts, at 0098's ~43-50 x 25-27 ft (the coverage band kept by floor given back elsewhere, measured).
+- **W128-2** (within): the main gate's form is 0093's knob, rolled (this draft: the one-bay gate, ~6-8.5 ft); the
+  gatekeepers' place follows from it - a one-bay gate has no range to hold a guardroom, so its gatekeepers sit in a
+  gatehouse of their own (Takayama's form), drawn ~40 ft x 2 ken as 0093's drawing page draws one (its length a GUESS);
+  a gate range rolls the place between the two (follows from the definitions).
+
+### Wave 129 (T21) - the county vegetable garden's form
+
+- **W129-1** (within): the garden's size is 0109's knob between its two attested forms, a soup-greens plot of ~1,076 sq ft or
+  a field over about half the grounds, and the ROOM rules out a form before any roll, as 0109's drawing page records for
+  Ubame ("the inner court there has room for a bed only at the size knob's low end"): a field over half the grounds does
+  not fit a magistracy's inner court, so the county draft draws the soup-greens plot at its attested ~1,076 sq ft (its
+  site rolled among the sites the sun allows). Its claim cites 0109 as research. Neither form is drawn at a size nobody
+  attests (T21's plan review: the drift a squeezed field kept).
+
+### Wave 130 (T22) - every compound shrine in a corner beside its tree
+
+- **W130-1** (within): 0218's drawing page: the compound shrine stands in a corner of its grounds beside a tree. The
+  county draft's placer seats it in a corner with its tree; on the hand sheets the stippled grove rectangle gives way
+  to the one tree beside the shrine (Hayakawa, Ochiba, Ubame), Ochiba's surrounding garden removed. A pack_audit check
+  holds the tree beside the shrine, red on a sheet without one first.
+
+### Wave 131 (T23) - the shrine hall's ceiling, the second kami, the sanctuary's width
+
+- **W131-1** (within): the hall shrine's ceiling ~30 ft (a 3-5 ken haiden), "under half a residence" labeled a GUESS;
+  Ochiba's hall and its complex resized to it.
+- **W131-2** (within): a second kami's form (one hall or a shrine of its own) is a knob rolled per sheet; Hayakawa's river
+  kami (one hall, done in batch 4) and Ubame's wood kami (one hall) as their rolls give.
+- **W131-3** (within): a country shrine's sanctuary width is a knob rolled per sheet - 1, 2 (Hie, ~12 x 6 ft) or 3 bays, in
+  the row's order. The roll's recipe is the sheet's own seed, its name, as its other roll is keyed (the notes' item 8:
+  "the map has no seed, so the seed is its name"; `crc32(b"hoshigaoka:shrine grove form")`): exactly
+  `random.Random(zlib.crc32(b"hoshigaoka:sanctuary width")).choice(["1 bay", "2 bays", "3 bays"])`, written into the notes
+  beside the grove's, and the sheet draws what it gives (T23's plan review: the recipe named, never the result).
+
+### Wave 132 (T24) - the one-bay gate's ~6-8.5 ft is its frontage, not its passage
+
+- **W132-1** (within): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html measures the yakuimon across its
+  frontage (1.8-2.6 m) and gives no passage; its drawing page draws the gate 6-8.5 ft wide as that frontage. So the one-bay gate's
+  6-8.5 ft is its frontage. What the passage subtracts is settled here (T24's plan review): the registered measure is 間口, the
+  frontage of a one-bay gate, read as the span between its pillar centers (a reading, the usual measure of a bay), so the real
+  passage is the frontage less ONE pillar's width; no measured yakuimon pillar was found (searched 2026-10-12: the three
+  registered entries, a web search for 薬医門 本柱 寸法 - Imafuku's gate gives 9 x 5 shaku overall, no pillar), so the pillar is
+  ~1 ft, a GUESS. The drawn ~2 ft post (W133) is a convention and never enters the real passage: the posts are drawn outside
+  the real passage, their inner faces on it, the drawn outer-to-outer wider than the frontage, which the docs note says, ending
+  with the real size. The county draft's one-bay gate takes an 8 ft frontage (its passage 7 ft; `GATE_W_FT` the frontage, the
+  passage less the pillar), Ochiba's 8.5 ft, the largest registered (2.6 m) (its passage 7.5 ft) - each a degree within the
+  attested band; the lesser gates (6 ft, a GUESS) stay narrower than either. 0093's drawing page says so; the gate range's ~12
+  ft (two ken) stays a passage; docs/buildings.md's Scale claim and Main gate paragraph say so; `main_gate_passage_ft`'s readers,
+  `gate_feeds_its_road`, the `beside_gate` gatehouse and `postern_approach` rechecked. The round-trip sheet's 13.3 ft gate
+  (neither form) is filed as a row, not this wave's.
+
+### Wave 133 (T25) - the main gate's posts about 2 ft square
+
+- **W133-1** (within): the gate posts drawn ~2 ft square (they are 2.7-5.3 x 4.7 ft on the hand sheets), each passage's inner
+  face kept, on Ochiba, Hayakawa and Ubame, AND in the compound draft's emitter (`GATE_POST_W_FT` / `GATE_POST_D_FT`, which draw
+  the main gate's and the side gates' posts on the county draft and the round-trip sheet - both regenerated); docs/buildings.md's
+  gate-post line says so, the ~2 ft recorded as a map drawing convention, as
+  research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html records it ("this project's own"), not a
+  measurement (T25's plan review).
+
+### Wave 134 (T26) - a structure stands a foot or two clear of the wall's face
+
+- **W134-1** (within): research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html sets a building "a foot or two"
+  off the wall, its eaves nearly touching. docs/buildings.md's "Structures ABUT a wall" bullet and its claim measure from the FACE:
+  ~2.5-3.5 ft from a compound wall's centerline, ~2-3 ft from a divider's; pack_audit `structures_on_walls` holds that clearance
+  (red first on a sheet that breaks it); the structures 0.5 ft off the face are moved - Ochiba's two, Ubame's one, Hayakawa's one -
+  and the compound draft's emitter keeps the clearance (its WALL_MARGIN measured from the face).
+
+### Wave 135 (T27) - a well's lifting gear, a knob
+
+- **W135-1** (within): research/questions/0196-communal-wells-ido.html attests a well's lifting gear in two forms (a sweep or a
+  pulley frame) and its drawing page rolls them by the water's depth, which follows the ground: "Our maps take a valley floor
+  or river plain to hold shallow water, an upland or terrace deep water" (the page's GUESS, its rule all the same). Each
+  sheet's depth follows the landform its notes record - Ubame "an upland forest county" (deep), Hayakawa on its river with its
+  barge landing (a river plain: shallow), Hoshigaoka mid-slope on the hill's back-slope (upland: deep) - and only a sheet whose
+  notes record no landform rolls its depth from its seed (Ochiba, the county draft, the round-trip sheet); each well's gear is
+  rolled at the drawing page's weights for that depth (on shallow water about three wells in four a sweep, on deeper about
+  three in four a pulley frame); and, as the drawing page does, a roof on posts on some wells, about one in three, rolled per
+  well from the seed. Each sheet's rolls are recorded in its notes and drawn on its wells as new glyphs (glyph-check owed);
+  docs/buildings.md's well-glyph claim says so, citing the drawing page (T27's plan reviews, rounds 1 and 2).
+- **W135-2** (within, from the batch 6 reviews): the drawing page's gear and roof are an OPEN-AIR well's. A sweep pivots on a
+  tall post and cannot work under a roof, and a well standing indoors (its curb inside a building, as the kitchen wells on
+  Hayakawa, Ochiba and Ubame stand in their doma) has its building's roof over it. So an indoor well takes neither: it is
+  drawn with a pulley hung from the building's beams - the beam across the curb, no posts of its own, a GUESS (no page names
+  an indoor kitchen well's gear: 0196, 0107 and 0091 searched, and the review's search of minka interiors and the daidokoro
+  found the indoor well but not its gear) recorded on 0196's drawing page; its gear and roof rolls are recorded in the notes
+  and not drawn. A roof is drawn OVER the curb, as an outline on four corner posts, not as a square under it: the square read
+  as the paved apron the same page draws (glyph-check, county draft). The pack audit's `well_gear` check holds both - an
+  indoor well drawing a sweep, posts or a roof, and a roof with no posts, each fail - and is proven red on the unfixed sheets
+  first; the drafts pass `indoor` where a curb stands inside a building.
+
+### Wave 136 (T28) - a farmstead's own grave, a knob
+
+- **W136-1** (within): research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html
+  attests the household grave on its own land before modern times (a family's graveyard at its house plot's corner before the
+  Genroku era, 1688-1704; others in the woods behind the plot's shrine, in its own field or close by), so it passes the GM's rule
+  that a form attested only in modern times is not drawn. Its drawing page sets the knob: a hamlet's seed decides whether its
+  farmsteads keep graves of their own (about half of hamlet maps), and where they do, about a third of the farmsteads draw a small
+  grave of a few stones at the scale of the plot - the shares a GUESS. Drawn: a small grave (a few stones on a cleared patch,
+  sized at the plot's scale) seated after the homesteads and their fixtures, at the plot's corner or in its grove, the seat rolled
+  among those the plot leaves free (the page's places: a plot corner, the grove behind the house, own land close by); a farmstead
+  whose plot offers none keeps none. A new element on the hamlet maps: its own class and pop-up written from 0236, its glyph
+  checked (glyph-check), and the maps it lands on reviewed as their occasion requires.
+
+### Wave 137 (T29) - the standing rack forms, by their period
+
+- **W137-1** (within): research/questions/0016-rice-drying-racks-hasa-hasagi.html attests Niigata's living alder rack posts on
+  the bunds (hasagi) and Ehime's permanent tall racks, from modern encyclopedias and local histories that do not date the
+  practice; the one dated row was planted in 1943-1945. Spec 280's D1 counts an undated custom as modern, and the GM's rule
+  draws no form attested only in modern times. So the wave is a search pass for a premodern date of either form, covering
+  Chinese sources as well as Japanese (the geography doctrine searches China first), the archive first, then the web, every
+  page recorded with `make source-outcome`: a form the search places before modernity as 280's D1 dates it (Japan before 1868,
+  China before the end of the Qing, 1912) is added as a rolled form with its own glyph; a form it does not so place stays
+  undrawn, the page saying so with what was searched, and the claim names that reason (the row closes IN-STEP either way). The
+  outcome is a Decisions Recorded row of the spec (T29's plan review).
+
+### Wave 138 (T30) - the lane along the water, the fifth lane shape
+
+- **W138-1** (within): research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html gives a village's
+  lanes five shapes (a GUESS, no page describing them): spine, T, Y, cross and a lane along the water "in a village by a
+  stream", the last needing water along the cluster. The generator rolls only four. The fifth joins `LANE_SKELETONS`, offered
+  only where a brook or channel runs along the cluster's flank (no page names a distance, so the band is a GUESS: within 120 ft of a flank over more than three fifths of it, pointed at from the drawing page's rule), with its own skeleton
+  builder laying the spine parallel to the water; where no water runs along it, the roll is among the other four, as now.
+
+### Wave 139 (T31) - the chessboard of ponds, beside the mosaic
+
+- **W139-1** (within): `POND_LAYOUTS` dropped the uniform pond grid as only today's aerial view; but 0019's drawing notes quote
+  Qu Dajun's Guangdong xinyu (1678): "The land of Jiujiang is like a chessboard ... its black lines are the dikes, and the squares
+  are the ponds" - the chessboard attested at pond scale before modern times. So both forms are attested and the dike-pond block
+  rolls between the mosaic and the chessboard (`build_polder(mosaic=)`'s grid end), the odds a GUESS (the mosaic the commoner,
+  as the delta's accreted form); 0019's drawing page and the constant's note say so, and the cohort's dike-pond seeds are rolled
+  green before the wave closes.
+
+### Wave 140 (T32) - a dike-pond hamlet with no grow-out pond in a household's reach keeps no sty
+- **W140-1** (within): 5 of the 6 dike-pond failures are `StyRefused`: the code's own floor of one sty per dike-pond hamlet
+  (claimed UNRESEARCHED; feature 287 wave 5's design, no GM ruling) refuses a hamlet whose farmhouses stand 450-860 ft from
+  every grow-out pond (a fry village keeps the smallest ponds, 70% of the pond area, for fry). The record says the opposite:
+  research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html, "No sty stands more than 320 ft
+  from a farmhouse ... A household with no pond within that reach keeps none." So the floor goes: the reservation keeps the
+  seat where one qualifies and returns none where none does; the stage draws every sty that fits up to the rolled share, none
+  where none fits, and records how many it drew. The refusal's three-rule diagnostic is kept as the record of why a hamlet drew
+  none (`meta.pond_stock`).
+
+### Wave 142 (T34) - the web lane's room, 9 ft from its middle
+- **W142-1** (within): `WEB_CLEARANCE` is a corridor HALF-width (`lane()`'s `clearance`), so 18.0 holds 36 ft clear where
+  research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html gives "a lane's room of 18 ft - 7 ft at
+  each garden fence and a 4 ft tread between": 9 ft from the middle. The constant becomes 9.0; the pool hamlets are
+  regenerated and what moves is reported.
+
+### Wave 143 (T35) - the web lane off the crop by its half-tread, off the toe and marsh by its own gap
+- **W143-1** (within): research/questions/0081-village-lanes.drawing.html lets a lane touch a plot's boundary (it runs on the
+  bund); `WEB_HARD_GAP` holds it 8 ft off crop, toe and marsh alike. The hard ground splits: against crop the gap is half the
+  widest tread laid on that ground (a row street's or a join's 6 ft, so 3 ft: at a 3 ft lane's half-tread those wider ways stood on
+  the crop, impl-drift), so no tread's edge passes the plot's boundary; against the toe band and marsh a separate gap, kept at
+  8 ft and claimed UNRESEARCHED. The router's lattice judges cell centers at the crop's own gap and asks every step it keeps of
+  the crop's outline (padded half a cell instead, cohort seed Audit-10's field way could not reach the bund). The five readers (`ways/serve.py`, `ways/route.py`, `ways/clearance.py`, `ways/web.py`,
+  `homesteads/boundary.py`) take the two lists apart.
+
+### Wave 145 (T37) - a hamlet's rolled wood drawn on its sheet
+- **W145-1** (within): research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html places a village's
+  coppice on the nearest slope beyond the fields, or on the far side of the fields on the level. The code records a rolled wood
+  with no parcel on the sheet as a bearing (`meta.woodland_offsheet`), which no page records. The scan or the canvas grows so
+  at least one rolled parcel is seated on the sheet beyond the fields; the off-sheet bearing retires, or stays only as the
+  record of a roll whose ground the sheet cannot hold, measured. The bar: the cohort green, and the off-sheet count on the same
+  20 seeds re-measured.
+- **W145-2** (measured, then decided): the ground the sheet cannot hold is feature 287's D11 case, which the GM approved
+  (2026-09-30, *"I approve those 5 decisions"*, specs/287-placer-guarantees/research.md): the frame stays tight to the working
+  settlement and no wood sets it. On every one of the 7 off-sheet rolls the scan found open seats inside the frame (6 to 194
+  per rung) and every one of them stood on the houses' side of the fields - `_beyond_the_fields` returned none
+  (`m:w145-offsheet-why`, each map with its counts). So no in-sheet seat keeps 0077's order of houses, fields, then wood, and
+  growing the scan or the canvas would only push the frame out: the off-sheet bearing stays, and 0077's drawing page now
+  records it as a map drawing convention with its reason, the claim citing that page. The woodland-commons pop-up says so.
+
+### Wave 146 (T38) - a grove farm's way in kept clear of its own fixtures
+- **W146-1** (within): research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html puts a farm's way in at
+  its open front, through the break in a ring's front band. The fixtures laid in a grove farm's bundle keep off that ground: the
+  strip from the house's front wall to the break, as wide as the break (`way_in_strip`), and a square about the point the web's
+  door path starts from (`door_room`, `DOOR_ROOM_HALF_FT` 12 ft each way, a routing tolerance, UNRESEARCHED). The bath room,
+  joined to its house, is exempt.
+- **W146-2** (within): a door path and a row street's join are tree lanes no settle may cut, so each is refused where it is laid
+  if it closes a sliver the lane law refuses (`closes_a_needle`, `law.needle_loops`); a street that closes one gives up the end
+  vertex nearer the sliver, up to three, where an end is within `UNNEEDLE_REACH_FT` (100 ft) of it (`unneedled`, widened from
+  wave 141's joined end).
+- **W146-3** (within): the bar, two halves. FIXED: the seed-pinned tests `tests/soak/test_row_village_doors.py` - polder seed 12
+  and dike-pond seed 4 at 16 households roll with every farm reached; both red at HEAD, green at the final code (run 2026-10-12);
+  the 10-household valley seed 4 is pinned there as a strict expected failure, its failure no longer a farm unreached but a row
+  street over the brook off a ford, still open (774 keeps waiting). NO REGRESSION: every roll that passed at HEAD still passes,
+  on the cohort, the 24 archetype rolls and the 20 valley rolls at the final code, save polder seed 4 (W146-4); a roll that newly
+  fails goes to the round arbiter with its measurement rather than landing silently. T33 stays open: the polder's capacity refusal (seed 5) is the
+  second guarantee.
+- **W146-4** (the round arbiter, ask:b10-w146-polder4-regression, 2026-10-12, accept): polder seed 4, green at HEAD, is refused
+  at the final code (`m:w146-rolls`): street 0's straight join ends on the road beside the junction street 1 passes through, a
+  sliver the settle no longer welds now the fixtures' new seats moved the gateway 5 px. Trimming a street's nearer end was tried
+  and failed (the sliver is mid-street). Waived as a known regression on the unrolled polder form, pinned in the soak tier as
+  its current refusal, and taken up with the polder's capacity (the second guarantee): a later street threaded past an existing
+  junction, or the settle welding a near-miss junction.
+
+### Wave 147 (T39) - the floodplain meadow on a river-flat map
+- **W147-1** (within): the grass ground's form follows the land the map shows (0078's drawing page: "depends on the land the map
+  shows"): a map on flood ground (`plan.flood_ground` - the polder and dike-pond forms, the dike-top village) takes the
+  floodplain, every other map the grass hill. On the floodplain the hinterland's margins are open meadow - grass and the odd
+  brush dot, no scraggly pine (the commons' `pasture` role); on the grass hill they stay the open scrub drawn now. The form is
+  recorded per map (`meta.grass_ground`) and listed among the derived, unrolled values (`choices.json` `not_choices`).
+- **W147-2** (within): the meadow is a kind of its own on the page (`floodplain meadow`), with a pop-up written from 0078 and
+  the glyph check its new element owes on Kuwabata.
+
+### Wave 148 (T40) - a small grass hill set aside for one paddy
+- **W148-1** (within): a per-settlement roll, `paddy_grass_hill`, on a grass-hill map only (a floodplain map has no hill above its
+  paddies): about one hamlet in three keeps one (a GUESS - the page says "now and then" and gives no rate). Recorded in
+  `meta.paddy_grass_hill` and listed among the rolled choices.
+- **W148-2** (within): where it is rolled, one patch of about one paddy plot's own area (a GUESS, the page's "about the paddy's own
+  size") is seated on the open ground just upslope of a plot at the field's upslope edge, asked of the engine's own seat search
+  (`open_seat`) so it stands off the crop, the houses and their ground, the lanes and the water; where no plot has such ground,
+  none is drawn and the record says so.
+- **W148-3** (within): it is drawn as a cut patch on the scrubby slope, the hill's scrub kept out of it - see W148-5 for the mark; a kind of its own on the page (`paddy's grass hill`), its pop-up written
+  from 0078, and the glyph check its new element owes on the map that draws it.
+- **W148-4** (within): built and measured (`m:w148-paddy-grass`): rolled on 3 of 20 valley rolls, all 3 seated, none unseated;
+  in the pool Inashiro draws one. The square is checked as seated - 6 ft clear of its plot and wholly upslope of the plot's top -
+  because the seat search may slide it; it is held against later placers only once drawn, because held before, the commons'
+  keep-out left its own grass bare (Inashiro's first gate drew no ink for it). Which top plot gets it is the first with room, an
+  UNRESEARCHED choice the page leaves open; the pop-up does not claim the hill's scrub is kept off it, which 0078 does not say.
+- **W148-5** (within; the glyph check of the hill on Inashiro, NEEDS-WORK): drawn first with the meadow's grass (the scrub's own
+  tile, less its pines), it could not be told from the scrub around it. It is now its own tile, `grass-cut`: the scrub's tufts
+  without the brush dot, half of them kept, no clump overlay, over a fresh-green ground - a cut sward (0078's grass cut for one
+  paddy), its tint and density a map drawing convention told on the pop-up's Depiction tab with its real counterpart.
+
+### Wave 149 (T41) - the farm's bamboo strip drawn; its order deferred
+- **W149-1** (within; a defect fixed, measured 2026-10-12): no farm strip is drawn at HEAD on any roll or pool map - the three
+  pool maps that roll farm bamboo (Inashiro, Kuwabata, Sawada) draw none. A household's placed box is its whole bundle, which
+  takes in the ground beside its own house, so every candidate was refused by its own farm (cohort seeds 2, 3, 5, 6, probe: 53
+  of 53). Fixed: the strip is tested against each part of every homestead by itself (`parts_hit`, `PART_GAP_FT`), the bundle
+  boxes excused (`skip`, from each house's `geom.bbox`).
+- **W149-2** (within): the farm's own parts then refuse the near seats, so a strip is offered out to three strip depths (54 ft off
+  the wall) and slid one strip's width along its side (`STRIP_STEPS_OUT`, UNRESEARCHED, recorded with its why), none nearer
+  another house's center than its own. The strip and the ground between it and its house are held as fabric for what is laid
+  after it. `meta.household_bamboo_wanted`, `_strips` and `_no_room` record per map how many farms rolled one and found room.
+- **W149-3** (the round arbiter's ruling, ask:b13-w149-route-matrix, 2026-10-12, continue): the ORDER is kept - the strip seated
+  after the web, as at HEAD - and row 777 waits on a found row against the web settle, its claim left DRIFTED and on SC-003's
+  held list (328's fix-that-changes-many-maps case). Five routes ahead of the ways were built and measured on the pool, the
+  cohort and the 44 rolls (`m:w149-route-matrix`): laid in the bundle (with the copse's seats kept off it, and a way kept 7 ft
+  off its own beds; without the bed gap; alone), and at the seating's end; each re-dealt the seats or the ways and moved a
+  refusal into the pool (Inashiro) or the cohort; only this route (E) has none. The round arbiter's earlier accept of route A
+  (ask:b13-w149-strip-route) is superseded: it was taken without the pool, which then refused Inashiro under it. Found rows: the
+  settle's island, the strip as a bundle part, and the HEAD mismatch of a way's own-bed clearance (2 ft at seating, 7 ft in the
+  drawn law). Whether 0075's page binds the order or only its result (no way over a strip or between a house and its strip) is
+  the GM's, asked only if the page must change.
+- **W149-4** (within; found on the way, a crash at HEAD): the field router read an overlap-registry owner that is an id as a
+  house's point and crashed (cohort seed 7 under route C); an owner that is not a point is never the route's own (`owner_point`).
+- **W149-5** (within): the record - `m:w149-strips` (HEAD against E: strips drawn, none over or beside a lane; refusals, pool,
+  cohort and capacity unchanged) and `m:w149-route-matrix`; occasions: `homestead bamboo` new to the pool maps that now draw it,
+  a glyph unit owed by detection.
+
+### Wave 150 (T42) - washing places where water passes the houses
+- **W150-1** (within): a per-settlement knob, `washing_form`, rolled from the seed between the two forms 0065 records - shared
+  washing places on the bank, or one at each house where a channel runs past the houses - at even odds (the page: "the record
+  gives no shares between the two, so the odds are arbitrary", a GUESS). The one-at-each-house form is open only where farm
+  channels are drawn to the houses (`farm_water` channel); elsewhere the shared form is taken. Measured (`m:w150-ditch-reach`):
+  over the 44 rolls no field ditch runs past a house - the nearest comes within 61 ft of a house's center, beyond its lot -
+  while the farm channels end in the dooryards on the three dispersed channel rolls, so a farm channel is the only "channel
+  that runs past the houses" the map draws. Recorded in the manifest's meta and among the rolled choices.
+- **W150-2** (within): the shared form - where a stream, the head race from the intake, a ditch (any field ditch, the drain included: 0065 names any
+  stream or ditch) or a farm channel (0065: a shared footing "on the channel or stream bank") passes within reach of the houses, one footing of
+  steps down the bank, about 4 ft wide (0065, a GUESS), for every few households on that bank (0065, a GUESS - the number
+  chosen recorded beside its constant; each household counted at its nearest passing water, on its own side of it, so a group never
+  straddles the water - impl-drift's round 1), each set at the bank point nearest the households it serves, on their side of the
+  water, clear of every lane, bridge, ford and footprint; the reach and the share recorded as GUESSes with their why. A
+  group whose every seat along the bank (out to 32 ft either way) is taken keeps no footing - it cannot stand on a lane, a
+  bridge, a ford or a footprint - and is counted (`meta.washing_no_seat`), with the per-map counts of W150-5.
+- **W150-3** (within): the one-at-each-house form - a step at the end of each farm's channel in its dooryard (0065: "one step at
+  each house on it").
+- **W150-4** (within): seated in a stage of its own after the crossings (`stage_crossings`), so the lanes, bridges and fords it
+  keeps clear of stand; a FIXTURE mounted on the WATER in the overlap matrix, as a dock is; drawn as a small pale stone
+  footing with step lines; a kind of its own on the page (`washing place`) with its pop-up written from 0065; recorded as
+  `washing_places` with the meta counts. A glyph check is owed on the pool map that first draws one; no pool map draws a farm
+  channel, so the one-at-each-house step is first drawn on a dispersed channel roll (valley seeds 15, 16, 19) and judged there
+  by eye on its render, recorded with the measurement.
+- **W150-5** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls, baselined at HEAD);
+  capacity unchanged; the counts per map measured and recorded.
+
+### Wave 151 (T43) - a pig sty against the house on a plain paddy hamlet
+- **W151-1** (within): a fixture kind, `sty`, in each plain paddy hamlet's farmstead bands: its share rolled once per hamlet
+  inside a band about two in three (0049: "about two in three, the share varying from hamlet to hamlet around that figure",
+  Buck's nearly two farms in three) - 0.57 to 0.77, the plus-or-minus 0.10 the coop's band takes, calibrated liberty (a
+  GUESS). Nil on a dike-pond hamlet, whose sties stand on the pond dikes (0025; `pondstock.py`, unchanged). The share is
+  counted to the households as every kind is (`round(share x n)`).
+- **W151-2** (within): its seat - against a wall of the farmhouse or one of its outbuildings (the storehouse, the byre, the
+  shed, the wood shed, the retirement house), on the household's own plot (0049, a GUESS the page names): offered along each
+  building's walls in the house's own frame, the house's first, touching that wall, clear of the plot's other parts by the
+  fixture wall gap, and asked of the registry of what stands. It is seated in a stage of its own once the ways and crossings
+  stand (`stage_sties`, before the washing places), never laid in the homestead's bundle: laid there, every sty found its
+  wall but the web refused maps that pass at HEAD, and ROOM BEFORE PACKING (the GM, 2026-10-12) was tried first - more
+  ground per homestead (110, 116 ft; the seating ground 172 ft) only moved the refusals about (`m:w151-sty-room`). The
+  order is an implementation detail (the GM's ruling of 2026-10-12 on the bamboo strip). The share's count is drawn: a
+  household with no place passes its sty to the next that keeps none; a sty no farmstead of the hamlet has room for is
+  counted (`meta.sty_short`), and a short count on any roll the bar measures - the pool, the cohort or the 44 - is met by
+  more room for the walls before it may stand. A polder hamlet is a paddy form and takes the sty; only the dike-pond hamlet
+  does not (W151-1).
+- **W151-3** (within): drawn at the dike-pond sty's size, 8 x 6 ft (0049: "its size not yet set"; UNRESEARCHED), with the
+  dike-pond sty's glyph (a ridged shed and a railed pen, a convention, one glyph for both), one class (`pig sty`) whose
+  pop-up is extended to the plain paddy farm's sty from 0049; recorded among the farm's fixtures (`farm_fixtures`, kind `sty`).
+- **W151-4** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); every other fixture
+  still drawn to its count; the sty counts measured per map. A glyph check is owed on the pool map that first draws one.
+
+### Wave 152 (T44) - the reseated persimmon may stand in its own grove, which gives way
+- **W152-1** (within): the reseat lays its tree as the seating does: its own grove's bands open to it, as the seating's
+  `fruit` are, a neighbor's grove still refusing (0046: "its own grove, no other farm's"); its own grove's crowns do not
+  refuse it, and every crown of its own grove under the persimmon's crown is taken out - out of the drawing and out of the
+  record of crowns (`tree_crowns`, the conifers' list) - so the grove gives way round it as 0046 records; another stand's
+  conifer still refuses it (UNRESEARCHED, as before). The crowns taken out are counted (`meta`).
+- **W152-2** (within; the bar): no roll that passes at HEAD refuses; every rolled persimmon still drawn; the crowns given
+  way counted per map. A glyph check is owed only where a pool map's persimmon is re-placed by the change (placement-changed).
+
+### Wave 153 (T45) - the row farm across the street from a grove row, and its bamboo to the south
+- **W153-1** (within): a per-settlement knob, `row_shelter`, rolled from the seed on a row village between the two forms
+  0033 records - every farm's own windward grove, or the leeward row sheltered by the grove row across the street - at
+  even odds (a GUESS: no page gives shares). It acts only where farms stand on BOTH sides of a street (`row_sides`) and the
+  street runs across the wind: a farm is sheltered only where its street lies within 67.5 degrees of its windward
+  bearing (a GUESS), so a street running with the wind shelters no one and falls to the first form, as a one-sided row does.
+- **W153-2** (within): in the second form, a farm on the street's leeward side - the street, and the grove farms beyond it,
+  on its windward side - keeps its grove on its windward sides, drawn one tree deep (0033's account: the Ogawa farm, its
+  road on the north, "the grove north of the house ... rather thin"; one tree deep, the thin band's depth, a GUESS), and
+  keeps its bamboo along its south side (0033; 0075's findings, "a madake grove all along its south side"), its grove
+  drawing none; its row seat, lot and holding are as before. Every sheltered farm keeps the band, whatever a farm's own roll,
+  on a map whose bamboo knob gives its farmsteads bamboo (homestead or both); on a map with none at the farmsteads it keeps
+  none - "none" is the cold upland where madake does not grow (0075). (Round 3 had the band drawn whatever the knob; the
+  record checks found that a drift, so it follows the knob.) TRUE SOUTH governs, as the record says, whatever the map's wind. The farms on the
+  windward row keep their full groves. Recorded per farm (`sheltered`) and counted in `meta`. (Round 2 had the sheltered
+  farm keep no grove, as this project's reading; quote-check found the account's farm kept its thin north grove, so the
+  thin grove is drawn.)
+- **W153-3** (within): the south bamboo is a band along the farm's whole south side - as wide as the farmstead (its house,
+  yard and beds across), as deep as a farm's bamboo strip (16 ft, the strip's GUESS) - standing just past its yard's and
+  beds' sun ground (0038: no canopy, bamboo included, in a plot's sun; the GM's ruling that no canopy tree is exempt). The
+  south side or none: where the band finds no room it is stepped further south (room before packing, the GM, 2026-10-12),
+  and only past that is it left out, counted (`meta`); a short count on the pool, the cohort or the 44 is met by more room
+  before it may stand. It is drawn as the farm's bamboo is (the stand glyph), and the strip search's tests (the paddy, the
+  water, the lanes, the parts, the belt) are its tests.
+- **W153-4** (within; a claim): `fall_backs_the_wind`'s predicate cites 0031's drawing page, which names the windward-high
+  case it tests.
+- **W153-5** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); counts measured.
+  The occasions: a glyph check where a pool map's farm loses its grove or gains a south strip (placement-changed).
+
+### Wave 154 (T46) - the wells' siting rolled, and seated a little closer than the check
+- **W154-1** (within): a per-settlement knob, `well_siting`, rolled from the seed between the two forms 0196 records -
+  `lane` and `cluster` - at even odds (a GUESS: no page gives shares). It decides where the communal wells the lattice
+  seats stand; how many is `well_target` as before, and the pocket well (row 787) is untouched. Only a clustered
+  (nucleated) hamlet reaches the lattice: `place_wells` hands every grove farm to `grove_water` first, and every farm of a
+  row village or a scattered hamlet is a grove farm, so a row village keeps its `row_water` forms (its shared wells on the
+  street verge, `shared_row_wells`) and a scattered farm its own water, as before (m:w154-wells: no linear or dispersed map
+  of the 44 rolls draws a lattice well).
+- **W154-2** (within): the lane-side form - a wellhead on a lane's verge, its curb clear of the tread and within a verge's
+  width of it (`WELL_VERGE_FT`, 8 ft, a GUESS: no page gives a verge's width), a dwelling's wall within `WELL_SEAT_FT`
+  (W154-4). The lanes stand only once `stage_web` has run (the wells are seated in `stage_appurtenances`, before it, and the
+  web keeps off every well as fabric, never routing to one), so a lane-side well is tried first beside the track (the way
+  already laid) and then seated in a stage after `stage_web` (`stage_lane_wells`), on the lattice kept to seats on a
+  verge, before the hinterland fills the open ground; the households' ways the seating reserved (`access_corridors`), drawn
+  as lanes later, count as lanes. A clustered hamlet's web lanes run between the farmsteads, where a verge is often a yard
+  or a bed; with the reserved ways counted the form seats on all 5 lane rolls (m:w154-wells; m:w154-lane-wells measured
+  it at 0 before the verge test, ask:w154-lane-wells ruled room first), each well's form recorded.
+- **W154-3** (within, with one narrowing): the cluster form - a wellhead in the open ground among five to ten houses, off
+  every lane: the lattice asks five houses round the seat (0196: "the five to ten houses that each dug well served at
+  Karihama"), and where no seat has five within the neighborhood reach, the REACH widens (190, 300, 520 px, then the
+  760 ft surface-water reach of 0196) - the reach is the convenience number, the five the researched one. The ceiling of
+  ten is held by measurement: the households whose nearest well is each well, counted on the pool and the 44 rolls,
+  recorded (`m:w154-wells`); the seat search ranks a seat keeping every well at ten first, and the cluster well keeps off
+  the households' reserved ways as off the lanes. Where no seat keeps every well at ten, the well stands as a recorded
+  deviation (`meta.wells_over_ten`), filed as a found row after row 787, whose wave moves the pocket
+  (ask:w154-lane-wells); measured, none does (Sawada 6 and 13 before the reserved ways were kept, now within ten).
+  - **W154-3a** (narrowing): three, then two houses, only where five cannot be gathered at all - a hamlet with fewer than
+    five households needing a lattice well, or a group of them beyond the 760 ft reach of every five-house seat - since
+    0196's reach rule still owes those households a well.
+- **W154-4** (within): the lattice seats a well only with a dwelling's wall within `WELL_SEAT_FT` (80 ft, a GUESS: "a little
+  closer than" the 95 ft check, 0196), the check's own 95 unchanged, so a seat the placer takes always passes the check
+  with room. Its drift has no ranking row: filed as a found row (`audit/found-wave154.jsonl`) and closed by this wave.
+- **W154-5** (the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); counts measured, each
+  well's form recorded on the manifest (`meta.well_siting`; per well `form`: lane, cluster, or `fallback`).
+  - **W154-5a** (narrowing): only after the reach has widened inside the rolled form, a hamlet that finds no seat takes
+    the other form's (both forms the research's).
+  - **W154-5b** (narrowing): past both forms, today's three-then-two ladder seats the well ONLY as a recorded deviation:
+    the well marked `form: fallback`, the seeds measured to need it named in the found row it files, and the claim left
+    as found (as wave 149's row 777 was) - never silent. The occasions: a glyph check where a pool map's lattice well
+    moves (placement-changed: well on Inashiro, Kuwabata and Sawada).
+
