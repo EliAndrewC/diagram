@@ -136,3 +136,18 @@ def test_an_asks_cited_files_are_copied_beside_its_manifest(tmp_path: pathlib.Pa
     assert (out / "evidence" / "rolls.txt").read_text() == "v-18 exit=2\n" and (out / "evidence" / "rolls-2.txt").read_text() == "v-18 exit=0\n"
     assert "`evidence/rolls.txt`" in lines[0] and "`evidence/rolls-2.txt`" in lines[0] and "MISSING: `" in lines[0]
     assert ab.evidence_section(out, []) == [], "no files cited, no section"
+
+
+def test_a_route_question_must_state_the_pool(tmp_path: pathlib.Path) -> None:
+    """The round arbiter's tooling fix (feature 374 wave 149, ask:b13-w149-route-matrix): a question offering routes, or about a
+    regression, states each route's pool result - an accept taken on the cohort and the 44 rolls alone was overturned when the
+    pool then refused the reference map. Other questions pass untouched."""
+    a, b = tmp_path / "routeA.txt", tmp_path / "routeB.txt"
+    a.write_text("pool: Inashiro refused; cohort 16/16\n")
+    b.write_text("cohort seed 7 fails\n")
+    assert ab.pool_unstated("may the cap be raised?", []) == []
+    assert ab.pool_unstated("which route lands?", [])[0].startswith("the question names a route")
+    assert ab.pool_unstated("which route lands?", [str(a)]) == []
+    assert ab.pool_unstated("which route lands? A or B", [str(a), str(b)]) == [f"{b}: a route's evidence states no pool result"]
+    assert ab.main(["--check-ask", "a regression on seed 10: waive it?"]) == 2
+    assert ab.main(["--check-ask", "a regression on seed 10, the pool clean: waive it?"]) == 0
