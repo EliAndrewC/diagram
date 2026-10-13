@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: Draft
+**Status**: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
@@ -64,8 +64,8 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-006 One process runs the push's Python checks.** The push's Python checks run inside one interpreter, each with the
   same output and exit as when run alone. A refusal still names the check, its fix and its escape. A check that must run as
   its own process says why at the point it is left out.
-- **FR-007 A self-test runs when its code changed.** A check's self-test passes once per version of its code and is not run
-  again until that code changes.
+- **FR-007 A self-test runs when its code changed.** A check's self-test passes once per version of its code - the check and
+  every project module it imports, as FR-001 - and is not run again until that changes.
 
 ### Phase 3 - the hourly step-back
 
@@ -101,10 +101,11 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 
 ## Success criteria
 
-- **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks, measured warm in one clone back to back with the
-  same commands as the 2026-10-13 measurement: from about 24 s to under 6 s (the 24 s observed 2026-10-13; method: each of
-  the push's checks timed alone in this clone, load about 6). Each phase's own measurement is recorded in
-  `measurements.json`.
+- **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
+  (observed 2026-10-13; method: each check timed alone in this clone, load about 6), re-measured at the feature's claim as
+  19.87 s (`m:push-checks-before`, research R2), to under 6 s, measured with R2's command
+  (`scripts/measure/push_check_times.py`, warm) so that before and after are comparable. Each phase's own measurement is
+  recorded in `measurements.json`.
 - **SC-002** (FR-001) For every check the cache serves: its output over the repository is identical with the cache on and
   off. A file changed after a cached run, and a changed extractor, each produce a fresh extraction (tests).
 - **SC-003** (FR-002) The ledger check over the clone's pass log answers as before, and its run with every pass already
@@ -115,8 +116,9 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-005** (FR-004) A bundle built twice over the same base is identical to today's, and the second build reads the base
   from the cache.
 - **SC-006** (FR-006, FR-007) Every push check, run in the one process, gives the same output and exit as run alone, on a
-  passing tree and on a tree seeded to fail each.
-- **SC-007** (FR-008 to FR-011) In a fixture clone:
+  passing tree and on a tree seeded to fail each. A self-test kept as passed runs again when a module its check imports
+  changes (a test).
+- **SC-007** (FR-008, FR-009, FR-010, FR-011) In a fixture clone:
   - an hour into a feature, `make tick` refuses, naming the step-back and the owed reviews;
   - the bundle carries the hour;
   - a ruling with a tooling fix opens an item that holds the next tick;
@@ -125,7 +127,30 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-008** (FR-009) The step-back run on the recorded hour of 374's batch 13 (the bamboo strip: five seating-order routes
   and two probes, room never tried) names the packing and the number; run on a quiet hour of the same session, it finds
   nothing to change.
+- **SC-009** (FR-012) The closing report says this session's hourly cron job was deleted, and the session's job list
+  shows none.
+
+## Review history
+
+- spec-fidelity, Mode 2, round 1 (2026-10-12): CHANGES REQUIRED, one item, applied: FR-007's "its code" is the check and every
+  project module it imports, as FR-001; SC-006 tests that a changed imported module re-runs a kept self-test.
+- spec-fidelity-verify, Mode 3, round 2 (2026-10-12): CHANGES REQUIRED, one item, applied: SC-001 named two baselines as one;
+  it now keeps the GM's 24 s, names the claim-time re-measurement (`m:push-checks-before`, 19.87 s) and measures the after
+  with the same command.
 
 ## Decisions Recorded
 
-(Filled as the plan's decisions are made.)
+- **The record check's inputs are measured, not guessed** (research R1, an audit hook on `open`): `research/`, the glossary
+  assets and the import closure of the module run. Map drawing convention: N/A - tooling.
+- **Partial citations are not cached** (research R3): keeping 5,400 small files per file cost what reading them does (0.33 s
+  against 0.32 s, observed 2026-10-12; method: `/usr/bin/time`, research R3). Tried, measured, reverted; the plan review ruled the narrowing LEGITIMATE.
+- **The record's render is not cached per page**: every page reads the whole record's link index, so the whole-check memo is
+  its cache; each per-file setup step goes through the store's memo (research R4).
+- **The step-back is the round arbiter** on an `hour` trigger (the GM's "hourly arbiter"); a quiet `continue` adds no row to
+  the GM's review.
+- **No escape on the checkpoint hold** (plan review round 1): the 379 tooling-fix hold beside it has none either.
+- **Phases landed together**: phases 1-3's tooling landed in one `make land-tooling` (0906d798a) once phase 3's tasks were
+  ticked, because one Makefile change carried all three; the engine edits (the splitter's bisection, the store's memo
+  protocol) land with the feature's close by the gated route.
+- **Found while working**: `make land-tooling` cannot see the clone's own review-ledger rows, so a feature's review passes
+  read as owed in its worktree; landed under `LEDGER_ROWS_OK` with the reason, and named in the closing report for a fix.

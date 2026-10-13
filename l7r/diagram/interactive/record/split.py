@@ -22,6 +22,7 @@ Research: plumbing - NONE
 
 from __future__ import annotations
 
+import bisect
 import re
 from dataclasses import dataclass
 
@@ -71,7 +72,15 @@ def comments(html: str) -> list[tuple[int, int]]:
 def headings(html: str, level: int) -> list[re.Match[str]]:
     """Every `<hN` that opens a real section: not one inside a comment, wherever it sits on its line."""
     hidden = comments(html)
-    return [m for m in re.finditer(rf"<h{level}\b", html) if not any(start <= m.start() < end for start, end in hidden)]
+    # by bisection (feature 383): comments never overlap, so the only one that can hide a heading is the last to open at or
+    # before it. Testing every heading against every comment was 11.7 million comparisons per record build, 5.5 s of 15.
+    starts = [start for start, _ in hidden]
+
+    def inside(at: int) -> bool:
+        i = bisect.bisect_right(starts, at) - 1
+        return i >= 0 and at < hidden[i][1]
+
+    return [m for m in re.finditer(rf"<h{level}\b", html) if not inside(m.start())]
 
 
 def heading_id(html: str, at: int) -> str:

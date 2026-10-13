@@ -49,7 +49,16 @@ stays due until dispatched (one per agent, in one message); fix their findings t
 next hour. A change with no live feature (none named, or the named one closed) owes its glyph units at landing: the push
 (`review-gate.sh`) asks every owed unit, and its refusal marks the work landing so the dispatch it asks for is due. `make verify`
 names the glyph units waiting and when they come due; the pair guard refuses an early glyph dispatch (`GLYPH_DUE_OK="<why>"`).
-The other checks are due on their occasion, as the table says.
+The other checks are owed on their occasion, as the table says.
+
+**The hourly checkpoint** (feature 383, the GM 2026-10-12: *"for longer running features, we will have a set of checks that we
+do, which previously was only the glyph check ... but now will be the glyph check and also this sanity check"*). The glyph
+clock is the feature's checkpoint. When its hour is up, `make tick` refuses until `make step-back` has opened the checkpoint
+and the round arbiter has ruled on its step-back bundle (a loop, packing against an unresearched number, a slow step or a
+misfiring guard, something for the GM - `.claude/agents/round-arbiter.md`, "An hour trigger"), and every review unit owed at
+that moment has been dispatched (`make verify` writes one prompt per unit). No escape. A review is never asked at a gate's
+start or held at a turn's end: since feature 383 it comes due at the checkpoint or at the landing (`review-gate.sh`), the
+one place the delta against main is the thing about to land.
 
 **The ledger measures it.** Every pass is a row of the ledger's measured table - the check, each finding's class, whether the
 author had missed it, and the run's cost from `make review-cost AGENT=<id>`; `make review-census` totals them per check, so a
@@ -127,13 +136,11 @@ off-canvas clumps - and the *first* attempt at the lane fix (a relaxation ladder
 point of change as having measurably done nothing, because a fix that fails is worth as much to the
 next reader as the one that works.
 
-## A `PAIR_OK` waiver is honored by the stop hook
+## No review is held at a turn's end (feature 383)
 
-A gate run with `PAIR_OK="<reason>"` records `waived_key` against that exact engine key, and `scripts/hooks/pair-hooks.sh stop`
-honors it - per content, so an engine edit after a waived gate is guarded again. Do not drop that record: without it the
-guard told a session to do the thing it had just done, which teaches that the documented remedy does not work
-(`tests/hooks/test-pair-hooks.sh` holds it). A one-off PAIRING HALF-OPEN report while a review is genuinely in flight was seen
-once and not reproduced (likely a race against a transcript still being written); the hook fires once per engine key.
+The pair guard's stop branch - a turn could not end on a green gate with an owed review undispatched - and the gate's
+`PAIR_OK` waiver it read are retired: a review comes due at the hourly checkpoint or at the landing. `pair-hooks.sh stop`
+stays a no-op for a session whose settings predate the change.
 
 ## `impl-drift` is owed by the claims index, not by an occasion (feature 316)
 

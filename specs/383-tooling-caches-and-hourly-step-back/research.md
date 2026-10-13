@@ -1,0 +1,74 @@
+# Feature 383 - research
+
+## R1 - what the record build check reads (plan D2)
+
+Measured 2026-10-12 with an audit hook on `open` during one `record_asset --check` in this clone: it opened 29 files under
+`l7r/diagram/`, every other file under `research/` (`archive/` 3,222, `sources/` 3,238, `questions/` 1,428, `assets/` 5, and
+seven JSON files at the top), and 55 standard-library files. Nothing else in the repository. Of the 29 under `l7r/diagram/`,
+the one that is no module is `l7r/diagram/interactive/assets/glossary.json`; it never opens `pyproject.toml`. So the memo's
+inputs are `research/` and `l7r/diagram/interactive/assets/`, with the code sha of the module run and every project module it
+imports standing for the 28 modules, and the Python version for the standard library. Listing their content ids
+(`git ls-files -s`, `git diff --name-only`, the untracked files under them) took 0.04 s (observed 2026-10-12; method: `time`
+over the three git listings).
+
+## R2 - the baseline (SC-001)
+
+`m:push-checks-before` in `measurements.json`: the push's checks that read the tree, 19.87 s in all at load 4.2, the record
+build check 6.38, the research pointers 4.70, duplicate definitions 1.88, the function cap 1.46, conflict markers 1.25,
+the old layout 1.16, the ledger 0.89, the rest under 0.35 each.
+
+## R3 - the rest of the push's checks, and the record's rebuild (plan D2, D3)
+
+Observed 2026-10-12 in this clone; method: each check of `push_checks.py`'s table run twice inside one interpreter
+(`run_one`), the second run's wall time kept. Duplicate definitions 0.13 s, stale directories 0.01, file scale 0.16, the
+function cap 0.19, the ledger 0.03, entry headings 0.00, research pointers 0.17, partial citations 0.23, the download list
+0.04, spec-lint 0.07, the Affects check 0.18, conflict markers 0.32.
+
+- Partial citations, kept per file (the registry write-ups and archive manifest rows read by `access_tags.load`, and the notes
+  files): 0.33 s against 0.32 s without (observed 2026-10-12; method: `/usr/bin/time`, second of three runs). Listing the
+  content ids of 5,400 small files costs what reading them does. Reverted.
+- File scale, profiled (observed 2026-10-12; method: cProfile, one run): the directory census 0.08 s, the line counts 0.06 s.
+- The Affects check read every feature twice; read once, 0.25 s to 0.15 s (observed 2026-10-12; method: `/usr/bin/time`).
+- The record check (observed 2026-10-12; method: `/usr/bin/time` on `make record CHECK=1`): cold 5.63 s; after one question
+  file changed, with each unchanged page's notes kept, 5.15 s; replayed 0.15 s. Unprofiled, the build's setup is 1.76 s and
+  its render 3.38 s; the render reads the whole record's link index for every page.
+
+## R4 - the record build's setup, step by step (plan D2)
+
+Observed 2026-10-12 in this clone; method: each step of `site.Build`'s setup timed with `perf_counter`, the second of two runs
+in one interpreter, nothing kept. The per-file steps - each reading one file's text alone - go through the store's per-file
+memo; the cross-file steps read the whole record and are left to the whole-check memo:
+
+| step | s | kind |
+|---|---|---|
+| a page's notes (`page_notes`, every page) | 0.52 | per file: kept |
+| the URLs of each registry entry and notes file (`archive.cited`, run twice a build) | 0.27 each | per file: kept |
+| the registry's items (`Registry`) | 0.33 | per entry: kept (the assembly and split read the whole registry) |
+| a page's cross-link and confusables (`page_html`, every page) | 0.40 | cross-file: the pairs and confusables were read once per page (0.31 s of it, observed 2026-10-12; method: perf_counter over the 477 calls); now once per build |
+| the archive's manifest rows (`archive.load`) | 0.06 | per file, but cheaper than keeping |
+| the questions (`store.load`) | 0.04 | cross-file (tags, sections) |
+
+The record check after one question's edit, the memo warm: 4.85 s, against 5.46 s with nothing kept (observed 2026-10-12;
+method: `/usr/bin/time` on `make record CHECK=1`, `L7R_CACHE_OFF=1` for the second). The render, which reads the whole record's
+link index for every page, is the rest.
+
+## R5 - the step-back replayed on two past hours (SC-008)
+
+Observed 2026-10-13; method: `make step-back TRIGGER=... TRANSCRIPT=... SINCE= UNTIL=` on the backlog session's own transcript and
+event log (read only), each bundle handed to the `round-arbiter` agent with the instruction not to record (a replay).
+
+- **Batch 13's hour, 22:15 to 23:15 UTC 2026-10-12** (the bamboo strip): `change-route`. "The strongest signal is packing ...
+  it never asked whether the farmstead has room. The numbers it is fitting against are `PART_GAP_FT = 2.0`, the `(0.0, 1.0)`
+  offset ladder, the strip's reach (`within_reach_of`) and the bundle's seat margin ... none of them research-tagged". Route:
+  more room in the farmstead lot first, not a longer ladder, a smaller gap, a shorter strip or a lower prevalence. It also
+  gave a `tooling_fix` (`make test-file ARGS=` so a probe needs no temporary test file) and a `for_gm` (three shipped maps
+  declare homestead bamboo with none drawn). The hour the GM named as the worked example is named, with its numbers.
+- **A quiet hour, 21:15 to 22:15 UTC 2026-10-12**: `continue` - no oscillation, no packing ("the session kept their labels and
+  defended none of them"). It gave one `tooling_fix` (flag a map whose meta records an element drawn while its ink classes
+  have none), from a missed review the session found by hand that hour.
+
+## R6 - the push's checks after phases 1 and 2 (SC-001)
+
+`m:push-checks-runner-after`: the runner, one process, 1.92 s - against `m:push-checks-before`'s 19.87 s for the same checks
+(gate-stamp and the closing check added). Run as separate processes they now sum to 3.43 s (`m:push-checks-separate-after`):
+the content-keyed cache took 16.4 s off, and one process took 1.5 s more.

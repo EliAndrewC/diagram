@@ -93,13 +93,15 @@ class Cited:
 def cited(research_dir: str) -> dict[str, Cited]:
     """Every URL the record cites (spec FR-001), registry entries first, then the footnotes' own links."""
     out: dict[str, Cited] = {}
+    # each body's URLs depend on its own text alone, so they are kept by it in the store's per-file memo (feature 383): the
+    # push's record check hands one in, and the build asks this twice (the archive's refusals and the blocked domains')
     for key, body in _ENTRY.findall(store.registry_html(research_dir)):
-        for url in urls_in(body, comments=True):
+        for url in store.MEMO.fact(f"urls-entry\x1f{body}", lambda body=body: urls_in(body, comments=True)):
             out.setdefault(url, Cited()).keys.append(key)
     for path in sorted(glob.glob(os.path.join(research_dir, QUESTIONS, "*.notes.html"))):
         with open(path, encoding="utf-8") as fh:
             text = fh.read()
-        for url in urls_in(text):
+        for url in store.MEMO.fact(f"urls-notes\x1f{text}", lambda text=text: urls_in(text)):
             out.setdefault(url, Cited()).notes.append(os.path.basename(path))
     return out
 
