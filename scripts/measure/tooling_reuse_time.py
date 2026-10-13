@@ -6,7 +6,8 @@ SC-010) - the measurement as a command, so it can be taken again.
 
 It records the clone's passes on its HEAD (`make test-file FILE=tests/tooling`), builds a detached worktree at that HEAD -
 the checkout `make land-tooling` builds - and times `make test-file FILE=tests/tooling` there with `L7R_TEST_DEPS=reuse`, then
-with the reuse off, back to back; it prints both, the tests each ran, and the load. The worktree is removed on every exit.
+with the reuse off, back to back; it prints both, the tests each ran, and the load. The worktree is removed on every exit. It
+also prints, from the clone's kept passes, how many tooling test files always run and which program makes each run.
 The clone's tree must be clean (what it records must be what the worktree holds).
 """
 
@@ -33,6 +34,20 @@ def _passed(out: str) -> int:
     return int(m[-1]) if m else 0
 
 
+def always_run(store: Path) -> dict[str, object]:
+    """From the kept passes: how many tooling test files are kept, and how many always run (a program started against the
+    repository whose reads are not known), by that program."""
+    try:
+        kept = json.loads(store.read_text(encoding="utf-8"))
+    except OSError, ValueError:
+        return {"files": 0, "always_run": 0, "by_cause": {}}
+    causes: dict[str, int] = {}
+    for e in kept.values():
+        for c in e.get("opaque") or []:
+            causes[c] = causes.get(c, 0) + 1
+    return {"files": len(kept), "always_run": sum(1 for e in kept.values() if e.get("opaque")), "by_cause": dict(sorted(causes.items()))}
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("--root", default=".")
@@ -47,6 +62,8 @@ def main(argv: list[str] | None = None) -> int:
     if rc != 0:
         print(out[-2000:], file=sys.stderr)
         return 1
+    common = subprocess.run(["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True).stdout.strip()
+    kept = always_run(Path(common) / "l7r-cache" / "tooling-test-passes.json")
     wt = root.parent / f"{root.name}-reuse-measure"
     subprocess.run(["git", "-C", str(root), "worktree", "remove", "--force", str(wt)], capture_output=True)
     subprocess.run(["git", "-C", str(root), "worktree", "add", "-q", "--detach", str(wt), "HEAD"], check=True)
@@ -55,9 +72,17 @@ def main(argv: list[str] | None = None) -> int:
         full_s, full_out, rc2 = _run(test, wt, {"L7R_TEST_DEPS": "off"})
     finally:
         subprocess.run(["git", "-C", str(root), "worktree", "remove", "--force", str(wt)], capture_output=True)
-    row = {"reuse_s": round(reuse_s, 2), "reuse_ran": _passed(reuse_out), "full_s": round(full_s, 2), "full_ran": _passed(full_out),
-           "load": round(os.getloadavg()[0], 1), "ok": rc1 == 0 and rc2 == 0}
+    row = {
+        "reuse_s": round(reuse_s, 2),
+        "reuse_ran": _passed(reuse_out),
+        "full_s": round(full_s, 2),
+        "full_ran": _passed(full_out),
+        "load": round(os.getloadavg()[0], 1),
+        "ok": rc1 == 0 and rc2 == 0,
+        **kept,
+    }
     print(f"with reuse {row['reuse_s']} s ({row['reuse_ran']} tests ran), without {row['full_s']} s ({row['full_ran']}), load {row['load']}")
+    print(f"tooling test files kept {kept['files']}, always run {kept['always_run']} (by program: {kept['by_cause']})")
     if args.json:
         Path(args.json).write_text(json.dumps(row, indent=1) + "\n", encoding="utf-8")
     return 0 if row["ok"] else 1

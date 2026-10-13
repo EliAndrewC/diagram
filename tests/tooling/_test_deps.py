@@ -32,9 +32,15 @@ import pytest
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 SITE = HERE / "_deps_site"
+sys.path.insert(0, str(SITE))
+import l7r_dep_rules as rules  # noqa: E402 - beside the children's shim, which uses the same rules
+
 TREE = "tests/tooling/"
 MODE = os.environ.get("L7R_TEST_DEPS", "")
 STORE_NAME = "tooling-test-passes.json"
+#: what a kept pass holds: 2 adds the git questions' answers (amendment 2). A pass kept in another form is never reused - an
+#: older reader would skip the answers it does not know to ask
+STORE_VERSION = 2
 
 _current: list[str] = [""]
 _reads: dict[str, dict[str, set[str]]] = {}
@@ -58,12 +64,7 @@ def _store() -> pathlib.Path | None:
 
 
 def _under(path: object) -> str:
-    try:
-        p = os.path.abspath(os.fsdecode(path))  # type: ignore[arg-type]
-    except TypeError, ValueError:
-        return ""
-    root = str(ROOT)
-    return p if p == root or p.startswith(root + os.sep) else ""
+    return rules.under(path, str(ROOT))
 
 
 def _hook(event: str, args: tuple) -> None:
@@ -74,6 +75,8 @@ def _hook(event: str, args: tuple) -> None:
         mode = args[1] if len(args) > 1 else "r"
         if isinstance(mode, str) and any(c in mode for c in "wax+"):
             return
+        if mode is None and not os.path.isabs(os.fsdecode(args[0])):
+            return  # an os.open by name under a directory handle (shutil.rmtree of a temporary tree): not a path here
         p = _under(args[0])
         if p:
             _reads.setdefault(f, {}).setdefault("file", set()).add(p)
@@ -82,61 +85,16 @@ def _hook(event: str, args: tuple) -> None:
         if p:
             _reads.setdefault(f, {}).setdefault("dir", set()).add(p)
     elif event == "subprocess.Popen" and args:
-        why = opaque_child(args, str(SITE))
-        if why:
-            _reads.setdefault(f, {}).setdefault("opaque", set()).add(why)
+        kind, what = rules.judge(args, str(ROOT), str(SITE))
+        if kind:
+            _reads.setdefault(f, {}).setdefault(kind, set()).add(what)
 
 
 def opaque_child(args: tuple, site: str) -> str:
-    """The name of a program a test started whose reads are not known (`subprocess.Popen`'s audit arguments: executable, argv,
-    cwd, env), or "": a Python child that records itself is known; any other program run in or on the repository is not, nor
-    a Python child run isolated or with the recording dropped from its environment."""
-    exe, argv = args[0], args[1]
-    cwd = args[2] if len(args) > 2 else None
-    env = args[3] if len(args) > 3 else None
-    try:
-        name = os.path.basename(os.fsdecode(exe if exe else (argv[0] if argv else "")))
-    except TypeError, IndexError:
-        name = ""
-    if name.startswith("python"):
-        flags = {os.fsdecode(a) for a in list(argv or [])[1:3] if isinstance(a, (str, bytes))}
-        recorded = env is None or (env.get("L7R_TEST_DEP_LOG") and site in str(env.get("PYTHONPATH", "")))
-        return "" if recorded and not flags & {"-I", "-S", "-E", "-IS", "-ISE"} else name
-    words = [os.fsdecode(a) for a in (argv or []) if isinstance(a, (str, bytes))]
-    # where the program works: `git -C <dir>` and `make -C <dir>` name it, else its cwd (a test's git in its own tmp repo is not
-    # the repository - 64 of the first recording's 74 unknown files were that)
-    return name if against_repo(name, words, cwd, _under) else ""
-
-
-def against_repo(name: str, words: list[str], cwd: object, under) -> bool:  # noqa: ANN001 - under: a path test
-    """Does a program work in or on the repository? Unless both its working directory (and any `-C`) are outside it and no
-    argument names a path inside it, yes - the plan review's rule (a `git worktree add /tmp/x HEAD` run in the repository
-    names an outside path and reads the repository). Two git forms read nothing where they run: `git init <dir>` and
-    `git clone <src> <dst>`, judged by the paths they name."""
-    where = next((words[i + 1] for i, w in enumerate(words[:-1]) if w == "-C"), None)
-    paths = [w for w in words[1:] if os.path.isabs(w) and w != where]
-    sub = next((w for w in words[1:] if not w.startswith("-") and w != where and "=" not in w), "")
-    if name in READ_NOTHING:
-        return False
-    if name == "git" and sub == "rev-parse" and _location_only(words):
-        return False
-    if name == "git" and where is None and sub in ("init", "clone") and paths:
-        return any(under(w) for w in paths)
-    return bool(under(where or cwd or os.getcwd())) or any(under(w) for w in paths)
-
-
-#: programs that read no file of the repository wherever they run
-READ_NOTHING = frozenset({"sleep", "true", "false", "echo"})
-#: `git rev-parse` asking only WHERE the repository is: its answer depends on the checkout's place, not on its content (the
-#: commonest unknown in the first recordings - `record_cache.common_dir`, `--show-toplevel`)
-LOCATION = frozenset(
-    {"--show-toplevel", "--git-dir", "--git-common-dir", "--absolute-git-dir", "--show-prefix", "--show-cdup", "--is-inside-work-tree", "--path-format=absolute", "--path-format=relative"}
-)
-
-
-def _location_only(words: list[str]) -> bool:
-    rest = words[words.index("rev-parse") + 1 :]
-    return bool(rest) and all(w in LOCATION for w in rest)
+    """The name of a program a test started whose reads are not known, or "" (`l7r_dep_rules.judge`: a git question is known -
+    its answer is kept and asked again - and so is a Python child that records itself)."""
+    kind, what = rules.judge(args, str(ROOT), site)
+    return what if kind == "opaque" else ""
 
 
 def _ids() -> tuple[dict[str, str], dict[str, list[str]]]:
@@ -164,8 +122,9 @@ def _rel_path(path: str) -> str:
     return rel
 
 
-#: reads that cannot change a result: the content caches (`record_cache`), whose every entry is keyed by what it holds
-CACHE_READS = (".git/l7r-cache/",)
+#: reads that cannot change a result: the content caches, whose every entry is keyed by what it holds - `record_cache`'s, the
+#: gate stamp's semantic ids (a blob id to its id), and the translation pairs' `ParseCache` (amendment 2, FR-020)
+CACHE_READS = (".git/l7r-cache/", ".git/semantic-id-cache.json", ".git/record-checks/translation-pairs.json")
 
 
 def _state(kind: str, rel: str, ids: dict[str, str], entries: dict[str, list[str]]) -> str:
@@ -249,6 +208,7 @@ def _keep(d: pathlib.Path) -> None:
     if store is None:
         return
     ids, entries = _ids()
+    answers: dict[str, str] = {}
     try:
         kept = json.loads(store.read_text(encoding="utf-8")) if store.is_file() else {}
     except OSError, ValueError:
@@ -265,10 +225,12 @@ def _keep(d: pathlib.Path) -> None:
         if any(p == ".git" or p.startswith(".git/") for p in opened if (ROOT / p).is_dir()):
             files.add(".git")  # the repository's own git state was read: not known by content, so never reused
         kept[f] = {
+            "v": STORE_VERSION,
             "py": sys.version,
             "opaque": sorted(r.get("opaque", set())),
             "files": {p: _state("file", p, ids, entries) for p in sorted(files)},
             "dirs": {p: _state("dir", p, ids, entries) for p in sorted(dirs)},
+            "git": {q: answer(q, answers) for q in sorted(r.get("git", set()))},
         }
     store.parent.mkdir(parents=True, exist_ok=True)
     tmp = store.with_suffix(f".{os.getpid()}.tmp")
@@ -276,15 +238,23 @@ def _keep(d: pathlib.Path) -> None:
     tmp.replace(store)
 
 
-def reusable(kept: dict, ids: dict[str, str], entries: dict[str, list[str]]) -> bool:
+def reusable(kept: dict, ids: dict[str, str], entries: dict[str, list[str]], answers: dict[str, str] | None = None) -> bool:
     """Is a kept pass still good: the same interpreter, no other program run against the repository, no read of a file git
-    ignores, and every read unchanged? Reads are kept relative to the repository, so a worktree compares with its clone."""
-    if kept.get("py") != sys.version or kept.get("opaque"):
+    ignores, every read unchanged, and every git question it asked answered the same here (amendment 2, FR-015)? Reads are kept relative to the repository, so a worktree compares with its clone."""
+    if kept.get("v") != STORE_VERSION or kept.get("py") != sys.version or kept.get("opaque"):
         return False
     files, dirs = kept.get("files", {}), kept.get("dirs", {})
-    if "ignored" in files.values():
+    if "ignored" in files.values() or "error" in kept.get("git", {}).values():
         return False
-    return all(_state("file", p, ids, entries) == was for p, was in files.items()) and all(_state("dir", p, ids, entries) == was for p, was in dirs.items())
+    same = all(_state("file", p, ids, entries) == was for p, was in files.items()) and all(_state("dir", p, ids, entries) == was for p, was in dirs.items())
+    return same and all(answer(q, answers if answers is not None else {}) == was for q, was in kept.get("git", {}).items())
+
+
+def answer(question: str, answers: dict[str, str]) -> str:
+    """A git question's answer here (`l7r_dep_rules.ask`), asked once per run however many test files asked it."""
+    if question not in answers:
+        answers[question] = rules.ask(question, str(ROOT))
+    return answers[question]
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
@@ -299,7 +269,8 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     if not kept or not files:
         return
     ids, entries = _ids()
-    skip = {f for f in files if f in kept and reusable(kept[f], ids, entries)}
+    answers: dict[str, str] = {}
+    skip = {f for f in files if f in kept and reusable(kept[f], ids, entries, answers)}
     if not skip:
         return
     gone = [i for i in items if _rel(i.nodeid) in skip]

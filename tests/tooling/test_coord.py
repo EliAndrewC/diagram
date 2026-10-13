@@ -89,3 +89,15 @@ def test_append_with_an_agent_closes_a_ledger_row_with_its_cost_cells(tmp_path: 
 def test_agent_cells_runs_review_cost_last_or_says_why_not() -> None:
     with pytest.raises(ValueError):
         co.agent_cells("no-such-agent-ever-0000")
+
+
+def test_a_ledger_row_is_linted_before_it_is_appended(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
+    """Feature 383 amendment 2: a row the ledger's lint refuses is never appended (a commit in the same command as the append
+    was judged before the row existed); any other file, and a good row, are appended as before."""
+    ledger = tmp_path / "dev" / "review-ledger.md"
+    bad = "| 2026-10-13 | spec-fidelity | x | PASS | - | process | no | labeled | 4 s | 1k in (0k cached) / 0.1k out |"
+    assert co.main(["append", str(ledger)], {"LINE": bad}) == 2 and not ledger.exists()
+    assert "class 'process'" in capsys.readouterr().err
+    good = bad.replace("| process | no | labeled |", "| paperwork | no | fixed |")
+    assert co.main(["append", str(ledger)], {"LINE": good}) == 0 and ledger.read_text() == good + "\n"
+    assert co.main(["append", str(tmp_path / "notes.md")], {"LINE": bad}) == 0, "not the ledger: nothing to judge"

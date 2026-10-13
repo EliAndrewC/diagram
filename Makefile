@@ -752,9 +752,14 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  : " freshness set changed - the scripts each reaches, derived transitively, or the whole tree for one that builds its"; \
 	  : " paths - and --pystamp records each green. HOOKS_ALL=1 runs them all; nothing is loosened: a red run stamps none.)"; \
 	  stale=$$(if [ -n "$(HOOKS_ALL)" ]; then echo $$pyt; else python3 "$$root/tests/hooks/hookdeps.py" --pystale "$$gitdir" $$pyt; fi | tr '\n' ' '); \
+	  : "(GUARD_EDIT_OK: feature 383 amendment 2, plan D22 - adding an operation, nothing loosened: HOOKS_PYTEST_SKIP=<prefix> leaves out"; \
+	  : " the files a caller runs itself. make land-tooling passes tests/tooling/, which its own tooling run covers whole with the"; \
+	  : " clone's passes reused: 57 of these 60 files ran twice in a landing, here without reuse at 4 workers (about 45 s, research"; \
+	  : " R7). The plugin records each tooling file's pass here too, so a clone's own hooks-test leaves passes a landing reuses.)"; \
+	  if [ -n "$(HOOKS_PYTEST_SKIP)" ]; then stale=$$(for f in $$stale; do case $$f in $(HOOKS_PYTEST_SKIP)*) ;; *) printf '%s ' "$$f" ;; esac; done); fi; \
 	  if [ -n "$$(echo $$stale)" ]; then \
 	    : "(GUARD_EDIT_OK: four workers, not the gate count - the hook suites above run beside it on a shared 10 GB container)"; \
-	    if python3 -m pytest -n 4 --dist worksteal -q --no-cov $$stale > "$$work/pytest-scripts.log" 2>&1; then \
+	    if L7R_TEST_DEPS=$${L7R_TEST_DEPS:-record} python3 -m pytest -p tests.tooling._test_deps -n 4 --dist worksteal -q --no-cov $$stale > "$$work/pytest-scripts.log" 2>&1; then \
 	      python3 "$$root/tests/hooks/hookdeps.py" --pystamp "$$gitdir" $$stale; n=$$((n+1)); \
 	    else printf '\n\033[1mHOOK TESTS FAILED: the pytest files that test scripts/\033[0m\n'; tail -40 "$$work/pytest-scripts.log" | sed 's/^/  /'; fail="$$fail pytest-scripts"; fi; \
 	  else skipped=$$((skipped+1)); fi; \

@@ -62,6 +62,18 @@ def append(path: pathlib.Path, line: str) -> None:
         fh.write(lead + line.rstrip("\n").encode("utf-8") + b"\n")
 
 
+def ledger_row_problems(path: pathlib.Path, line: str) -> list[str]:
+    """A review-ledger row judged by the ledger's own lint BEFORE it is appended (feature 383 amendment 2, a defect found on the
+    way: `make append ... && git commit` in one command had the commit's ledger hook judge the ledger before the row existed,
+    so a row with a wrong class word was committed and only a tooling test caught it). Any other file: nothing to judge."""
+    if path.name != "review-ledger.md" or path.parent.name != "dev":
+        return []
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "reviews"))
+    import ledger_lint  # noqa: PLC0415 - the one lint, from its own directory
+
+    return [p.split(": ", 1)[-1] for p in ledger_lint.problems(f"{ledger_lint.MEASURED_HEADING}\n{line}\n")]
+
+
 def with_cost(line: str, cells: str) -> str:
     """A ledger row closed with its cost cells: `line` (its cells up to `acted on`) then `wall | tokens |`."""
     head = line.rstrip()
@@ -106,6 +118,10 @@ def main(argv: list[str], env: dict[str, str] | None = None) -> int:
             except ValueError as e:
                 print(f"make append: AGENT={env['AGENT']} - {e}", file=sys.stderr)
                 return 2
+        bad = ledger_row_problems(path, line)
+        if bad:
+            print("make append: the ledger row was NOT appended - " + "; ".join(bad), file=sys.stderr)
+            return 2
         append(path, line)
         print(f"appended to {path}")
         return 0

@@ -27,62 +27,28 @@ if _LOG and os.environ.get("L7R_TEST_DEP_FILE"):
     _ROOT = os.environ.get("L7R_TEST_DEP_ROOT", "")
     _FILE = os.environ.get("L7R_TEST_DEP_FILE", "")
     _SEEN: set[tuple[str, str]] = set()
-    _LOCATION = {
-        "--show-toplevel",
-        "--git-dir",
-        "--git-common-dir",
-        "--absolute-git-dir",
-        "--show-prefix",
-        "--show-cdup",
-        "--is-inside-work-tree",
-        "--path-format=absolute",
-        "--path-format=relative",
-    }  # _test_deps.LOCATION
+    import l7r_dep_rules  # beside this file, on the same PYTHONPATH
 
-    def _under(path: object) -> str:
-        try:
-            p = os.path.abspath(os.fsdecode(path))  # type: ignore[arg-type]
-        except TypeError, ValueError:
-            return ""
-        return p if _ROOT and (p == _ROOT or p.startswith(_ROOT + os.sep)) else ""
+    _SITE = os.path.dirname(os.path.abspath(__file__))
 
     def _hook(event: str, args: tuple) -> None:
         if event == "open" and args and isinstance(args[0], (str, bytes)):
             mode = args[1] if len(args) > 1 else "r"
             if isinstance(mode, str) and any(c in mode for c in "wax+"):
                 return
-            p = _under(args[0])
+            if mode is None and not os.path.isabs(os.fsdecode(args[0])):
+                return  # an os.open by name under a directory handle (shutil.rmtree of a temporary tree): not a path here
+            p = l7r_dep_rules.under(args[0], _ROOT)
             if p:
                 _note("file", p)
         elif event in ("os.listdir", "os.scandir") and args:
-            p = _under(args[0] if args[0] is not None else ".")
+            p = l7r_dep_rules.under(args[0] if args[0] is not None else ".", _ROOT)
             if p:
                 _note("dir", p)
         elif event == "subprocess.Popen" and args:
-            exe, argv, cwd = args[0], args[1], args[2] if len(args) > 2 else None
-            env = args[3] if len(args) > 3 else None
-            name = os.path.basename(os.fsdecode(exe if exe else (argv[0] if argv else ""))) if (exe or argv) else ""
-            flags = {os.fsdecode(a) for a in (argv or [])[1:3] if isinstance(a, (str, bytes))}
-            recorded = env is None or (env.get("L7R_TEST_DEP_LOG") and _HERE in str(env.get("PYTHONPATH", "")))
-            if name.startswith("python") and recorded and not flags & {"-I", "-S", "-E", "-IS", "-ISE"}:
-                return  # a Python child records its own reads through this module
-            if name.startswith("python"):
-                _note("opaque", name)  # isolated, or its environment drops this module: what it reads is not known
-                return
-            words = [os.fsdecode(a) for a in (argv or []) if isinstance(a, (str, bytes))]
-            where = next((words[i + 1] for i, w in enumerate(words[:-1]) if w == "-C"), None)
-            paths = [w for w in words[1:] if os.path.isabs(w) and w != where]
-            sub = next((w for w in words[1:] if not w.startswith("-") and w != where and "=" not in w), "")
-            if name in ("sleep", "true", "false", "echo"):
-                hit = False  # reads no file of the repository
-            elif name == "git" and sub == "rev-parse" and words[words.index("rev-parse") + 1 :] and all(w in _LOCATION for w in words[words.index("rev-parse") + 1 :]):
-                hit = False  # asks only where the repository is
-            elif name == "git" and where is None and sub in ("init", "clone") and paths:
-                hit = any(_under(w) for w in paths)  # init and clone read nothing where they run: the paths they name
-            else:
-                hit = bool(_under(where or cwd or os.getcwd())) or any(_under(w) for w in paths)
-            if hit:
-                _note("opaque", name)  # the same rule as tests/tooling/_test_deps.py's against_repo
+            kind, what = l7r_dep_rules.judge(args, _ROOT, _SITE)  # the same rule as the test's own process
+            if kind:
+                _note(kind, what)
 
     try:
         _OUT = open(_LOG, "a", encoding="utf-8", buffering=1)  # noqa: SIM115 - written as each read is first seen
