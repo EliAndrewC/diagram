@@ -205,8 +205,8 @@
    "reviewed": "2026-10-13"
   },
   "## Amendment 1 (FR-013, FR-014)": {
-   "sha256": "c710e91e0fe9dfb9a4c670660b628efba170290a9900d7417e1910070e86a2ca",
-   "verdict": "BLOCKED",
+   "sha256": "bf15c3993b1306d44da5c2f5d714c0fa9407b2f84cc2ebeb3633e5902ed2f4fb",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-13",
    "declared": "spec-fidelity"
   }
@@ -293,6 +293,76 @@
      "summary": "quote-verbatim verdict(passage, page) in a ParseCache named by the module's code sha, keyed by passage and page-text sha256; report compared byte for byte with L7R_CACHE_OFF=1",
      "class": "within",
      "why": "FR-014: kept by passage and page text under the code version that judged it, report the same with and without the cache (SC-011); the comparison enforces the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-13",
+   "blocks": [
+    "## Amendment 1 (FR-013, FR-014)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D15-record",
+     "summary": "audit hook in each worker and a sitecustomize in every child Python note files read and directories listed, written as first seen",
+     "class": "within",
+     "why": "FR-013: a file records what it read in its own process and every Python process it started."
+    },
+    {
+     "id": "D15-opaque",
+     "summary": "a non-recording program marks the file opaque unless its cwd (and any -C) is outside the repository and no argument names a path inside it; an isolated or unrecorded Python child is opaque",
+     "class": "within",
+     "why": "Implements FR-013's 'a file that started any other program against the repository is always run'; it closes the previous round's hole (an outside path no longer exempts a git run in the repository). Read 'inside the repository' as any path whose git common dir is this repository's (the clone, its worktrees), resolved through symlinks, so a linked tree outside the directory counts as inside; a linked tree made outside the test file is a detection gap, not a decision the block makes."
+    },
+    {
+     "id": "D15-init-clone",
+     "summary": "git init <dir> and git clone <src> <dst> judged by the paths they name",
+     "class": "within",
+     "why": "With every named path outside the repository they read nothing of it, so they are not 'against the repository'; a <src> that is this repository or any tree of it names an inside path and is opaque."
+    },
+    {
+     "id": "D15-rev-parse",
+     "summary": "git rev-parse asking only where the repository is is not opaque",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-013 gives its own reason: always run 'since what that program read is not known'. A location query reads the repository's location, not its content, and reuse is keyed by content under the accepted spec, so the rule's purpose is not touched. Bounded to location options only (--show-toplevel, --git-dir, --absolute-git-dir, --git-common-dir, --show-prefix, --show-cdup, --is-inside-work-tree); any form that resolves a revision or reads refs or config (HEAD, --verify, --abbrev-ref, ...) is outside 'their kind' and opaque."
+    },
+    {
+     "id": "D15-trivial",
+     "summary": "sleep, true, false, echo are not opaque",
+     "class": "within",
+     "why": "They read nothing of the repository."
+    },
+    {
+     "id": "D15-keep",
+     "summary": "a fully passed, unfiltered file's reads kept by blob id / directory entries / interpreter version; content caches left out; a failure removes the entry",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; FR-013 'each by its content', 'a failure is never kept'."
+    },
+    {
+     "id": "D16-reuse-switch",
+     "summary": "L7R_TEST_DEPS=reuse set by land-tooling.sh alone",
+     "class": "within",
+     "why": "FR-013: make land-tooling the one caller through a named switch its checks set."
+    },
+    {
+     "id": "D16-record-runs",
+     "summary": "reuse runs, the gate's -m tooling run and make test-file record passes",
+     "class": "within",
+     "why": "Recording in more runs serves FR-013's 'a file the clone passed'. It rests on the premise that -m tooling selects whole files, which D15's 'not filtered by a marker' contradicts as written: the implementation must satisfy D15's 'every test of a file passed' by checking the file's collected tests all ran, not by trusting the marker, and D15's wording should name the whole-file case so the two agree. A conflict between two within decisions, not against the request."
+    },
+    {
+     "id": "D16-deselect",
+     "summary": "deselected where interpreter matches, nothing opaque, nothing git-ignored read, every file and directory reads the same; counts printed",
+     "class": "within",
+     "why": "FR-013: not run again where every input is unchanged, and the run says so. Figure m:land-tooling-tests-reuse carries its key and command; not re-run under the bundle's read-nothing-in-the-repository rule."
+    },
+    {
+     "id": "D17",
+     "summary": "quote-verbatim verdicts in a ParseCache by code sha, keyed by passage and page sha256; compared with L7R_CACHE_OFF=1",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; FR-014."
     }
    ]
   }

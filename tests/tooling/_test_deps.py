@@ -40,6 +40,12 @@ _current: list[str] = [""]
 _reads: dict[str, dict[str, set[str]]] = {}
 _failed: set[str] = set()
 _ran: dict[str, int] = {}
+_deselected: set[str] = set()
+
+
+def pytest_deselected(items: list[pytest.Item]) -> None:
+    """A file any of whose tests was deselected - by `-k`, a marker, or a reuse - did not run whole: its pass is not kept."""
+    _deselected.update(_rel(i.nodeid) for i in items)
 
 
 def _rel(nodeid: str) -> str:
@@ -211,12 +217,11 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:  # n
     if d:
         with open(os.path.join(d, f"worker-{worker}.json"), "w", encoding="utf-8") as fh:
             json.dump({"reads": {f: {k: sorted(v) for k, v in r.items()} for f, r in _reads.items()}, "failed": sorted(_failed),
-                       "ran": _ran}, fh)
+                       "ran": _ran, "deselected": sorted(_deselected)}, fh)
     if hasattr(config, "workerinput") or not d:
         return
-    # the gate selects the tree by its marker, `-m tooling`, which every test under tests/tooling carries: still whole files
-    if config.option.keyword or config.option.markexpr not in ("", "tooling") or any("::" in a for a in config.args):
-        return  # a filtered run: a file's other tests did not run, so its pass is not the file's
+    if any("::" in a for a in config.args):
+        return  # a run of named tests: a file's other tests did not run, so its pass is not the file's
     _keep(pathlib.Path(d))
 
 
@@ -231,6 +236,7 @@ def _keep(d: pathlib.Path) -> None:
             for k, v in r.items():
                 reads.setdefault(f, {}).setdefault(k, set()).update(v)
         failed.update(data["failed"])
+        failed.update(data.get("deselected", []))  # not run whole (the plan review: checked, never trusted to a marker)
         for f, n in data["ran"].items():
             ran[f] = ran.get(f, 0) + n
     for log in d.glob("children-*.log"):

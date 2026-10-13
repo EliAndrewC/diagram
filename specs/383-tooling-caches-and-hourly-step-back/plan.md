@@ -263,7 +263,9 @@ loads (`-p`), with `L7R_TEST_DEPS=record` its default:
   `git init <dir>` and `git clone <src> <dst>` (judged by the paths they name), `git rev-parse` asking only where the
   repository is (`--show-toplevel`, `--git-common-dir` and their kind), and `sleep`, `true`, `false`, `echo`. A Python child
   run isolated or with the recording dropped from its environment is opaque;
-- when every test of a file passed, in a run not filtered by `-k`, a marker or a node id, its reads are kept by content in
+- when every test of a file ran and passed - none of them deselected, by `-k`, a marker or a reuse (checked from pytest's
+  deselections, so the gate's `-m tooling` run counts only where it really ran whole files), and no node id named - its
+  reads are kept by content in
   `<git common dir>/l7r-cache/tooling-test-passes.json`: a file by its git blob id (`record_cache.content_ids`, a changed file
   hashed as git would, so the same bytes match in a clone and its worktree), a directory by its entries (tracked and
   untracked, the ignored aside), the interpreter's version beside them. Reads of the content caches (`.git/l7r-cache/`) are
