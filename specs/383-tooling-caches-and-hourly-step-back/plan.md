@@ -61,10 +61,13 @@ the next `make tick` until both are answered.
   re-runs it; only a change to the record, its assets or its code does. The inputs live once, as `memo_check.py`'s presets
   `record` and `glossary`, which both the Makefile's CHECK branches and the push's runner (D8) name.
 - **A rebuild reuses each unchanged file's parse.** A miss runs the build IN the memo's process and hands the record store a
-  `FileFacts` as its `MEMO` (`store.Memo`, a protocol with a no-op default, so every other caller keeps nothing): a page's
-  notes - read from its two files alone, a fifth of the setup - are kept by the two files' text. What remains is the render,
-  which reads the whole record's link index, registry and works for every page (its "cache" would be keyed by the whole
-  record, which is the memo above). Measured (research R3): cold 5.6 s, after one question's edit 5.2 s, replayed 0.15 s.
+  `FileFacts` as its `MEMO` (`store.Memo`, a protocol with a no-op default, so every other caller keeps nothing). Every setup
+  step that reads one file's text alone goes through it (research R4): a page's notes, the URLs of each registry entry and
+  notes file (`archive.cited`, asked twice a build - the second is served from the memo), and each registry entry's item.
+  The cross-file steps are named with their figures in R4: `page_html`'s cross-link pairs and confusables (now read once per
+  build, not once per page), the questions' load, the archive's manifest rows (per file, but cheaper than keeping). Then the
+  render, which reads the whole record's link index, registry and works for every page and so stays under the whole-check
+  memo. Measured: cold 5.5 s, after one question's edit 4.9 s, replayed 0.15 s.
 - **The splitter is fixed.** `split.headings` tested every heading against every comment (`any(...)`), quadratic; it now
   finds a heading's enclosing comment by bisection over the sorted comment starts, with the same answer (a test pins it on
   adjacent and edge-placed comments). Setup fell from 8.3 s to 2.7 s under the profiler (observed 2026-10-12; method:
@@ -148,18 +151,21 @@ Specs and logs keep their words (the house rule for history).
   self-test, and a path it needs (the record and glossary rows need `research/sources`, as the shell's `if [ -d ... ]` did).
   Every Python check of the old block is a row, in its order: duplicate defs, file scale, stale dirs, the function cap, the
   ledger, entry headings, research pointers, partial citations, the download list, spec-lint, the Affects check, conflict
-  markers, the record and glossary builds (`memo_check.py record|glossary`, the presets of D2) and the green-gate stamp.
+  markers, the record and glossary builds (`memo_check.py record|glossary`, the presets of D2), the green-gate stamp and
+  the closing check.
 - **How a check runs.** Each runs through `runpy.run_path(script, run_name="__main__")` with `sys.argv` set, catching
   `SystemExit`: the same code path as `python3 script args`. `sys.path`, `sys.argv` and the working directory are restored
   after each; a self-test's stdout is dropped, as the shell's `>/dev/null` did.
 - **Failure.** The first failing check prints its refusal line (`sync-with-main: ...`) and the runner exits 1, as `die` did.
 - **The escapes stay in the shell**, logged as before: `LEDGER_ROWS_OK` passes `--skip ledger-owed`, `GATE_STAMP_OK` passes
   `--skip "gate-stamp selftest" --skip gate-stamp`.
+- **The closing check** (`close_check.py --push origin/main...HEAD`) is a row too, after gate-stamp: a pass or a refusal with
+  an escape - `CLOSE_OK` passes `--skip closing` - and its refusal is logged to the guard log as the shell logged it.
 - **Every other Python process `push_cmd` starts, and why it stays one** (said at the call): the shell gates
   (`entry-gate.sh`, `claims-gate.sh`, `review-gate.sh`, `plan-gate.sh`) are shell scripts, not Python checks. After the
-  fetch, the feature pointer read (`python3 -c`), `speckit-todo.py --holding` and `--closed-by-status`, `close_check.py`,
+  fetch, the feature pointer read (`python3 -c`), `speckit-todo.py --holding` and `--closed-by-status`,
   `make perf-review`, `make ci-status` and `make ci-merge` each produce a VALUE the shell's own branches read - which
-  features are in progress, what the closing check found, the performance flag, the remote route - not a pass or a refusal
+  features are in progress, the performance flag, the remote route - not a pass or a refusal
   to fold into the runner, and they run after the fetch the checks precede. `hm_escape.py reason-ok` runs only when an
   escape is set. `make render-sync` runs on main after the landing, not as a check.
 - **Proof (SC-006).** A test runs every check alone and in the runner, on this tree and on fixture trees seeded to fail

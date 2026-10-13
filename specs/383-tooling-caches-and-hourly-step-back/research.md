@@ -4,9 +4,12 @@
 
 Measured 2026-10-12 with an audit hook on `open` during one `record_asset --check` in this clone: it opened 29 files under
 `l7r/diagram/`, every other file under `research/` (`archive/` 3,222, `sources/` 3,238, `questions/` 1,428, `assets/` 5, and
-seven JSON files at the top), and 55 standard-library files. Nothing else in the repository. So the memo's inputs are
-`research/`, `l7r/` and `pyproject.toml`, and the Python version stands for the standard library. Listing their content
-ids (`git ls-files -s`, `git diff --name-only`, the untracked files under them) took 0.04 s (observed 2026-10-12; method: `time` over the three git listings).
+seven JSON files at the top), and 55 standard-library files. Nothing else in the repository. Of the 29 under `l7r/diagram/`,
+the one that is no module is `l7r/diagram/interactive/assets/glossary.json`; it never opens `pyproject.toml`. So the memo's
+inputs are `research/` and `l7r/diagram/interactive/assets/`, with the code sha of the module run and every project module it
+imports standing for the 28 modules, and the Python version for the standard library. Listing their content ids
+(`git ls-files -s`, `git diff --name-only`, the untracked files under them) took 0.04 s (observed 2026-10-12; method: `time`
+over the three git listings).
 
 ## R2 - the baseline (SC-001)
 
@@ -29,3 +32,22 @@ function cap 0.19, the ledger 0.03, entry headings 0.00, research pointers 0.17,
 - The record check (observed 2026-10-12; method: `/usr/bin/time` on `make record CHECK=1`): cold 5.63 s; after one question
   file changed, with each unchanged page's notes kept, 5.15 s; replayed 0.15 s. Unprofiled, the build's setup is 1.76 s and
   its render 3.38 s; the render reads the whole record's link index for every page.
+
+## R4 - the record build's setup, step by step (plan D2)
+
+Observed 2026-10-12 in this clone; method: each step of `site.Build`'s setup timed with `perf_counter`, the second of two runs
+in one interpreter, nothing kept. The per-file steps - each reading one file's text alone - go through the store's per-file
+memo; the cross-file steps read the whole record and are left to the whole-check memo:
+
+| step | s | kind |
+|---|---|---|
+| a page's notes (`page_notes`, every page) | 0.52 | per file: kept |
+| the URLs of each registry entry and notes file (`archive.cited`, run twice a build) | 0.27 each | per file: kept |
+| the registry's items (`Registry`) | 0.33 | per entry: kept (the assembly and split read the whole registry) |
+| a page's cross-link and confusables (`page_html`, every page) | 0.40 | cross-file: the pairs and confusables were read once per page (0.31 s of it, observed 2026-10-12; method: perf_counter over the 477 calls); now once per build |
+| the archive's manifest rows (`archive.load`) | 0.06 | per file, but cheaper than keeping |
+| the questions (`store.load`) | 0.04 | cross-file (tags, sections) |
+
+The record check after one question's edit, the memo warm: 4.85 s, against 5.46 s with nothing kept (observed 2026-10-12;
+method: `/usr/bin/time` on `make record CHECK=1`, `L7R_CACHE_OFF=1` for the second). The render, which reads the whole record's
+link index for every page, is the rest.
