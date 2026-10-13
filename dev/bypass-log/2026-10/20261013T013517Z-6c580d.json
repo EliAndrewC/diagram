@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-13T01:35:17Z",
+  "target": "claims-gate",
+  "commit": "02fd388ef",
+  "why": "CLAIMS_OK: the order DRIFTED is row 777 deferred by the round arbiter (ask:b13-w149-route-matrix); the field-way CANNOT-TELL and the belt-and-commons DRIFTED are pre-existing decisions re-checked, the latter filed in found.jsonl"
+}
