@@ -154,9 +154,10 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     Research:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: houses, yards, beds, sheds, wells and
             fixtures are fabric a lane keeps off
-        no lane through a farm's grove - UNRESEARCHED: the grove band is fabric, but for its own farm's path
+        no lane through a farm's grove - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the grove band is fabric, but for its own farm's path; no lane runs through a farm's own wood, a GUESS the page names
         a path leaves its own yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the owner's dooryard is not a wall to its own path; its beds, sheds and fixtures are, the way leaving round them
-        village groves and commons as fabric - UNRESEARCHED: a village grove and a grazing common count as fabric a lane keeps off"""
+        village groves and commons as fabric - DEVIATION research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: a lane gets through the belt and the commons leave the lanes bare, but the web's lanes keep off both as fabric - the track and the field way cross them (`corridors.field_router`)
+        the farms' bamboo strips as fabric - research/questions/0075-bamboo-groves-chikurin.drawing.html: the lanes keep off the strip; the ground between it and its house is `seat_strips`' own claim"""
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses", []):
         c = (float(h["x"]), float(h["y"]))

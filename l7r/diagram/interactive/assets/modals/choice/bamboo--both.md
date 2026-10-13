@@ -22,7 +22,7 @@ Guesses:
 Depiction: A bamboo culm is far too slim to see at the map's scale, so the map draws each stand as an area, its place and
 size to scale, filled with paired culm strokes and a leafy fork in jade green over a light jade wash - a mark taken from
 modern map legends, which stands for the bamboo and does not count it. A stand too narrow to read at the whole map's zoom
-is left off. A farm's stand is a strip beside the house, or a patch inside its own grove where it shows between the tree
+is left off. A farm's stand is a strip near the house, set out past its yard and outbuildings where they fill the ground beside it, and left off where no room is found; or a patch inside its own grove where it shows between the tree
 crowns; the thicket stands on dry ground behind the houses. No stand is drawn on a paddy, since bamboo dies in standing
 water.
 

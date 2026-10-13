@@ -25,7 +25,7 @@ Guesses:
 
 Depiction: A bamboo culm is far too slim to see at the map's scale, so the map draws each stand as an area, its place and
 size to scale, filled with paired culm strokes and a leafy fork in jade green over a light jade wash - a mark taken from
-modern map legends, which stands for the bamboo and does not count it. A farm's stand is a strip beside the house, clear of
+modern map legends, which stands for the bamboo and does not count it. A farm's stand is a strip near the house, set out past the yard, beds and outbuildings where they fill the ground beside it, or left undrawn where no room is found close by; it is kept clear of
 the lanes; a farm drawn with its own grove keeps the patch inside the grove, on the house side of
 its windward band, where it shows only between the tree crowns, as real bamboo grew under them. No stand is drawn on a paddy,
 since bamboo dies in standing water, and a stand too narrow to read at the map's full view is
@@ -35,4 +35,4 @@ Name: Bamboo: stands at the farmsteads
 Covers: `meta.bamboo = homestead`
 Sources: take-jawiki, chikurin-jawiki, phyllostachys-enwiki, sendai-igune-modelplan, yashikirin-jawiki, tonami-yashikirin-haichi, tsuijimatsu, pmc5723622-bamboo-range, qimin-yaoshu-zhongzhu, kashima-kainyo-1987
 Entry: research/questions/0075-bamboo-groves-chikurin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html
-Drawing: research/questions/0075-bamboo-groves-chikurin.drawing.html
+Drawing: research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html

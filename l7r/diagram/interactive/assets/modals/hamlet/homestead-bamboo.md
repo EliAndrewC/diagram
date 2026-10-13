@@ -31,7 +31,7 @@ leafy fork in jade green over a light wash, one small block of marks repeated ac
 across, is far too slim to see at the map's scale, and the marks stand for the bamboo rather than count it. The mark is
 the one modern Japanese map legends give bamboo, first found on survey maps of about 1910; before then map-makers painted the
 growth itself and left no symbol to use instead. A farm's stand is a strip kept off its lanes and well, and on the
-windward corner when the wind comes on a diagonal; a stand too narrow to read at the map's full view is left out. Where a farm has its own grove, the bamboo is a
+windward corner when the wind comes on a diagonal. Where the farm's yard, beds and outbuildings fill the ground beside the house, the strip stands out from it until it is clear, and a farm with no room for one near its house has none drawn; a stand too narrow to read at the map's full view is left out. Where a farm has its own grove, the bamboo is a
 patch inside it, showing only between the crowns and along the edge, since a crown drawn from above hides what grew
 beneath it. No stand is drawn on a paddy, where standing water kills bamboo. Whether a settlement's bamboo stands on its
 farms, in a thicket of its own, or both, the title card says.

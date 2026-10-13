@@ -348,7 +348,8 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         across the groves - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the village groves are no wall to a field way, as a lane crosses the belt and the planting resumes on both sides
         off the farm groves - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a farm's own grove bands are walls, kept 7 ft (`FIELD_ROUTE_GAP_FT`) off - a footpath's clearance and some working room off the trees
         out of its own house - NONE: a route starting within `GABLE_MARGIN_FT` + `FIELD_ROUTE_GAP_FT` (13 ft) of its own house is not walled by it, so it can leave the door
-        across the commons - UNRESEARCHED: the commons are not a wall to a path
+        across the commons - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the commons' block leaves the lanes and their verges bare, so it is no wall to a path
+        its own dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard, the threshing yard of the house within `law.DOORSTEP_FT` of where the route starts no wall to it
         the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the
             path's own dooryard
