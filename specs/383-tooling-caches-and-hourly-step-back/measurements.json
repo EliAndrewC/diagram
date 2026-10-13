@@ -1,0 +1,41 @@
+{
+ "push-checks-before": {
+  "quantity": "the push's checks that read the tree, each timed as push_cmd runs it, the second of two runs (warm), summed",
+  "observed": "2026-10-12",
+  "source": "this clone at 383's claim; load 4.2",
+  "command": "python3 scripts/measure/push_check_times.py --json <out>",
+  "method": "each command run twice, the second run's wall time kept; the rows summed",
+  "unit": "s",
+  "varies": true,
+  "value": 19.87,
+  "rows": {
+   "push checks (one process)": null,
+   "duplicate-defs selftest": 0.06,
+   "duplicate-defs": 1.88,
+   "file-scale selftest": 0.05,
+   "stale-dirs selftest": 0.04,
+   "stale-dirs": 0.05,
+   "old-layout selftest": 0.09,
+   "old-layout": 1.16,
+   "file-scale": 0.22,
+   "function-cap selftest": 0.08,
+   "function-cap": 1.46,
+   "ledger-owed": 0.89,
+   "entry-headings selftest": 0.07,
+   "entry-headings": 0.07,
+   "research-pointers selftest": 0.05,
+   "research-pointers": 4.7,
+   "partial-citations": 0.32,
+   "downloads selftest": 0.08,
+   "downloads": 0.11,
+   "record CHECK=1": 6.38,
+   "glossary CHECK=1": 0.14,
+   "spec-lint selftest": 0.11,
+   "spec-lint": 0.17,
+   "speckit-todo check": 0.25,
+   "conflict selftest": 0.07,
+   "conflict": 1.25,
+   "gate-stamp selftest": 0.12
+  }
+ }
+}

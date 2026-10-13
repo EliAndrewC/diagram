@@ -64,8 +64,8 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-006 One process runs the push's Python checks.** The push's Python checks run inside one interpreter, each with the
   same output and exit as when run alone. A refusal still names the check, its fix and its escape. A check that must run as
   its own process says why at the point it is left out.
-- **FR-007 A self-test runs when its code changed.** A check's self-test passes once per version of its code and is not run
-  again until that code changes.
+- **FR-007 A self-test runs when its code changed.** A check's self-test passes once per version of its code - the check and
+  every project module it imports, as FR-001 - and is not run again until that changes.
 
 ### Phase 3 - the hourly step-back
 
@@ -103,8 +103,8 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 
 - **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks, measured warm in one clone back to back with the
   same commands as the 2026-10-13 measurement: from about 24 s to under 6 s (the 24 s observed 2026-10-13; method: each of
-  the push's checks timed alone in this clone, load about 6). Each phase's own measurement is recorded in
-  `measurements.json`.
+  the push's checks timed alone in this clone, load about 6; the baseline is research R2). Each phase's own measurement is
+  recorded in `measurements.json`.
 - **SC-002** (FR-001) For every check the cache serves: its output over the repository is identical with the cache on and
   off. A file changed after a cached run, and a changed extractor, each produce a fresh extraction (tests).
 - **SC-003** (FR-002) The ledger check over the clone's pass log answers as before, and its run with every pass already
@@ -115,8 +115,9 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-005** (FR-004) A bundle built twice over the same base is identical to today's, and the second build reads the base
   from the cache.
 - **SC-006** (FR-006, FR-007) Every push check, run in the one process, gives the same output and exit as run alone, on a
-  passing tree and on a tree seeded to fail each.
-- **SC-007** (FR-008 to FR-011) In a fixture clone:
+  passing tree and on a tree seeded to fail each. A self-test kept as passed runs again when a module its check imports
+  changes (a test).
+- **SC-007** (FR-008, FR-009, FR-010, FR-011) In a fixture clone:
   - an hour into a feature, `make tick` refuses, naming the step-back and the owed reviews;
   - the bundle carries the hour;
   - a ruling with a tooling fix opens an item that holds the next tick;
@@ -125,6 +126,13 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-008** (FR-009) The step-back run on the recorded hour of 374's batch 13 (the bamboo strip: five seating-order routes
   and two probes, room never tried) names the packing and the number; run on a quiet hour of the same session, it finds
   nothing to change.
+- **SC-009** (FR-012) The closing report says this session's hourly cron job was deleted, and the session's job list
+  shows none.
+
+## Review history
+
+- spec-fidelity, Mode 2, round 1 (2026-10-12): CHANGES REQUIRED, one item, applied: FR-007's "its code" is the check and every
+  project module it imports, as FR-001; SC-006 tests that a changed imported module re-runs a kept self-test.
 
 ## Decisions Recorded
 
