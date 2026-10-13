@@ -11971,6 +11971,23 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#row farm's bamboo to the south",
+  "tier": "E3",
+  "fix": "roll the second attested form per settlement (bamboo set south where a grove row across the road breaks the wind) as a knob",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/bamboo.py",
+   "l7r/diagram/hamletgen/homesteads/rows.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row farm faces its street"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": "153",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places",
   "tier": "E3",
   "fix": "new element: washing places where a stream or ditch passes the houses, shared-or-one-per-house rolled as a knob",
@@ -12028,23 +12045,6 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "116",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#row farm's bamboo to the south",
-  "tier": "E3",
-  "fix": "roll the second attested form per settlement (bamboo set south where a grove row across the road breaks the wind) as a knob",
-  "files": [
-   "l7r/diagram/hamletgen/homesteads/bamboo.py",
-   "l7r/diagram/hamletgen/homesteads/rows.py"
-  ],
-  "after": [
-   "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row farm faces its street"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
   "scope": "kept"
  },
  {
@@ -12152,6 +12152,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#fall square to or away from the wind",
+  "tier": "E3",
+  "fix": "cite 0031 drawing for the predicate (it tests the windward-high case 0031 names); the limit on the roll is fixed in plan_site",
+  "files": [
+   "l7r/diagram/hamletgen/plan.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E0",
+  "verdict": "MISLABELED",
+  "wave": "153",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind",
   "tier": "E3",
   "fix": "roll the fall over every direction, with the high-windward case one outcome among several (share a GUESS), and let seat_cluster seat a margin whose back is to the wind but not upslope",
@@ -12181,22 +12197,6 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#fall square to or away from the wind",
-  "tier": "E3",
-  "fix": "cite 0031 drawing for the predicate (it tests the windward-high case 0031 names); the limit on the roll is fixed in plan_site",
-  "files": [
-   "l7r/diagram/hamletgen/plan.py"
-  ],
-  "after": [
-   "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E0",
-  "verdict": "MISLABELED",
   "wave": "",
   "scope": "kept"
  },

@@ -722,5 +722,7 @@
   "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places": "150",
   "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#pig sty against the house": "151",
   "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown": "152",
-  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values": "139"
+  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values": "139",
+  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#row farm's bamboo to the south": "153",
+  "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#fall square to or away from the wind": "153"
 }
