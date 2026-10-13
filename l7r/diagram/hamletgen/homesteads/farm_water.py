@@ -266,8 +266,8 @@ def farm_channels(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> list[Ma
         farms nearest the water first - UNRESEARCHED: the order channels are laid
         led off an earlier channel - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each drawn channel a source for the next
         a farm no channel reaches - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: returned for a well of its own
-        washing places - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: no washing place drawn by the
-            stream, a ditch or a farm's channel, shared or one at each house; the knob is never rolled
+        washing places - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: a farm's channel is one of the
+            waters a washing place stands on, and the one-at-each-house form a step at its end (drawn by `hamletgen/washing.py`)
     """
     from ..ways.checks import drawn_water_segs  # local: the ways are a later stage
 

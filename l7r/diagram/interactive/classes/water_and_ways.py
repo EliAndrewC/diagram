@@ -33,6 +33,12 @@ class Weir(Kind):
     key = "weir"
 
 
+# Feature 374 wave 150 (0065): a footing of steps at the water's edge where a stream or ditch passes the houses - shared on the
+# bank or one at each house's channel, the `washing_form` knob.
+class WashingPlace(Kind):
+    key = "washing place"
+
+
 class Pond(Kind):
     key = 'pond'
 

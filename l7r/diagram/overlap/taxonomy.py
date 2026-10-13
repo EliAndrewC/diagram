@@ -183,6 +183,7 @@ _OVERLAP_EXEMPT = {
     "inspection_stations": "an inspection post sited AT the city gate, part of the gate complex (overlaps the gate furniture)",
     "water_gates": "the shuimen arch stands ON the city wall over its canal - intentional, like the kido on its fence",
     "weirs": "the bar across the brook at the intake sits ON the water by definition - a weir IS a structure in a stream, and the head race leaves the bank at the same point (feature 230)",
+    "washing_places": "a footing of steps down a bank to the water stands at the waterline by definition (feature 374 wave 150, 0065), seated where the matrix admits it",
     "sluice_gates": "the field-channel intake/outfall board sits ON its channel at a water-to-water handoff (moat/river tap -> comb canal, drain -> culvert) - the control structure IS the junction",
     "jetties": "planked mooring fingers running out over the river water, like bridge decks",
     "log_booms": "a cabled chain of floating logs holding rafted timber against the bank - it FLOATS on the river, so overlapping the water is the whole point, exactly as a jetty deck does",
@@ -209,7 +210,7 @@ Research:
     pig sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: exempt because it stands on the pond dike, on the bank itself, half the bank's width in from the plot's edge, not over the water
     wellhead among the houses - research/questions/0196-communal-wells-ido.drawing.html: in the gaps between dwellings
     border as a line - DEVIATION research/questions/0083-clan-borders-and-their-markers.drawing.html: a line of law with no footprint, which a frontier magistracy's wall stands on (the parley room with the line across its floor); no mound drawn, nothing keeps clear
-    built on what it serves - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html, research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0148-towers-along-the-city-wall-mamian.drawing.html, research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: bridges, weirs, gates, jetties, towers, booms
+    built on what it serves - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html, research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0148-towers-along-the-city-wall-mamian.drawing.html, research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html, research/questions/0065-washing-places-at-the-waters-edge.drawing.html: bridges, weirs, gates, jetties, towers, booms, washing places on their banks
     mill beside its stream - research/questions/0064-water-mills-suisha.drawing.html: on the bank beside its watercourse, its wheel dipping into the water
     in-field ponds, rocks and graves - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: each sunk into one paddy plot, the field tiling round it, drawn on the paddy
     copse and bamboo against a house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clump stands against a house, never on it, so the village groves and bamboo stands, drawn last in open ground, may abut a house; the copse spread through the gaps between the houses, the belt on the windward north and west; the copse draws no bamboo, the thicket a stand of its own
@@ -327,6 +328,7 @@ _LABEL_BY_KIND = ("buildings",)
 _LABEL_EXEMPT = {
     "districts": "a declared district is a REGION overlay like a quarter - it draws nothing, so there is nothing under it for a caption to bury",
     "weirs": "a bar five feet thick across a seven-foot brook, at the field's head where no caption is drawn - there is no room under it to bury and nothing captions it",
+    "washing_places": "a footing four feet wide at the water's edge that nothing captions - there is no room under it to bury",
     "precincts": "a reservation region, never drawn - the halls inside it are the drawn features",
     "borders": "a jurisdictional line has no footprint to protect - there is nothing under it to be buried by a caption, and its own caption is drawn in the top layer so no ground feature can paint over it",
     # CORRECTED 2026-08-18: this said "an ANNEX abutting its own farmhouse (draft_byres places it
@@ -461,7 +463,7 @@ OVERLAP_CLASS: dict[str, str] = {
     #   docks               a landing stands at the waterline by definition
     #   gate_structs        the guard station and tower ARE the gate complex, standing on wall and road
     #   log_booms           a cabled log pen floats ON the river it holds timber in
-    **{k: "FIXTURE" for k in ("bridges", "kido", "water_gates", "sluice_gates", "weirs", "inspection_stations", "jetties", "wall_towers", "docks", "gate_structs", "log_booms")},
+    **{k: "FIXTURE" for k in ("bridges", "kido", "water_gates", "sluice_gates", "weirs", "washing_places", "inspection_stations", "jetties", "wall_towers", "docks", "gate_structs", "log_booms")},
     # RECORD - bookkeeping geometry that duplicates ground already classified elsewhere, or an
     # in-field flourish drawn ON the paddy by design (feature 012). Never tested.
     #   drawn_channels  a z-order record of the drawn field-channel strokes; the ground it covers is
@@ -537,6 +539,7 @@ _FIXTURE_MOUNTS: dict[str, frozenset[str]] = {
     "log_booms": frozenset({"WATER"}),  # a cabled log pen floats ON the river it holds timber in
     "sluice_gates": frozenset({"WATER"}),  # the intake/outfall board IS the water-to-water junction
     "weirs": frozenset({"WATER"}),  # a weir is a bar built ACROSS a stream - the water is what it stands in
+    "washing_places": frozenset({"WATER"}),  # a footing of steps down the bank stands at the waterline (0065)
     "water_gates": frozenset(
         {"WATER", "wall"}
     ),  # the shuimen arch stands over its canal AND on the city wall - the wall IS a matrix feature now (classified SOLID for feature 017), so the mount it always had must be stated
@@ -561,6 +564,7 @@ Research:
     log boom - research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: on the river
     sluice and water gate - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: a board on its channel, an arch over its canal on the wall
     weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: across the brook
+    washing place - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: a footing of steps down the bank to the water
     ward gate - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: on the ward fence where a way passes
     gate complex and inspection post - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: on the wall and the road at the gate
     wall tower - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: on the rampart
@@ -803,6 +807,7 @@ _MX_FIXTURE_BOX: dict[str, Any] = {
     "jetties": lambda o: (float(o["len"]), 6.4),  # the planked finger, at the width the glyph draws
     "sluice_gates": lambda o: (float(o.get("span") or 10.8), 8.4),  # post to post across the channel (bank to bank where a span is recorded), the beam and drum to the posts along it
     "weirs": lambda o: (float(o["len"]), float(o["w"])),  # the oblique bar: its length across the brook, its thickness along it
+    "washing_places": lambda o: (float(o["w"]), float(o["h"])),  # the footing: its width along the bank, its depth down it
 }
 """Research: drawn fixture box - NONE: mirrors each glyph's drawn size"""
 

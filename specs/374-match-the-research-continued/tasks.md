@@ -229,6 +229,11 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. DONE as ruled (ask:b13-w149-route-matrix): the farm's bamboo strip drawn - HEAD drew none, its own bundle box refusing every seat; tested part by part, stepped out along its side; 57 of 159 drawn over the 44 rolls, none over or beside a lane (m:w149-strips); pool clean, cohort 16/16; Inashiro's homestead-bamboo glyph-check PASS. Its order with the sheds and gardens deferred: five routes measured (m:w149-route-matrix), row 777 held for the GM behind the web settle's found row; a field-router crash fixed; claims IN-STEP but the deferred order; bookends +9% (flag)
 
+## Batch 14 - washing places
+
+- [ ] T42 wave 150: washing places where a stream or ditch passes the houses, shared or one at each house (0065) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

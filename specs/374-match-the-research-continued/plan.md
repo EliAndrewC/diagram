@@ -767,6 +767,40 @@ scope is the kept and Mode A rows). The engine changes, so the batch takes its t
   cohort and capacity unchanged) and `m:w149-route-matrix`; occasions: `homestead bamboo` new to the pool maps that now draw it,
   a glyph unit owed by detection.
 
+## Batch 14: washing places at the water's edge (the washing-places row)
+
+**The work list**: the next free row (`homesteads/farm_water.py::farm_channels#washing places`, DRIFTED): 0065's drawing page draws
+washing places wherever a stream or ditch passes a settlement's houses - shared, or one at each house where a channel runs past
+them, a knob - and the code draws none and never rolls the knob. Rows 516 (the residence size), 771 and 774 stay as already
+ruled, and the bamboo strip's order is held. The engine changes, so the batch takes its timing bookends; the pool roll is taken
+with every measurement (batch 13's lesson).
+
+### Wave 150 (T42) - washing places where water passes the houses
+- **W150-1** (within): a per-settlement knob, `washing_form`, rolled from the seed between the two forms 0065 records - shared
+  washing places on the bank, or one at each house where a channel runs past the houses - at even odds (the page: "the record
+  gives no shares between the two, so the odds are arbitrary", a GUESS). The one-at-each-house form is open only where farm
+  channels are drawn to the houses (`farm_water` channel); elsewhere the shared form is taken. Measured (`m:w150-ditch-reach`):
+  over the 44 rolls no field ditch runs past a house - the nearest comes within 61 ft of a house's center, beyond its lot -
+  while the farm channels end in the dooryards on the three dispersed channel rolls, so a farm channel is the only "channel
+  that runs past the houses" the map draws. Recorded in the manifest's meta and among the rolled choices.
+- **W150-2** (within): the shared form - where a stream, a ditch (any field ditch, the drain included: 0065 names any
+  stream or ditch) or a farm channel (0065: a shared footing "on the channel or stream bank") passes within reach of the houses, one footing of
+  steps down the bank, about 4 ft wide (0065, a GUESS), for every few households on that bank (0065, a GUESS - the number
+  chosen recorded beside its constant), each set at the bank point nearest the households it serves, on their side of the
+  water, clear of every lane, bridge, ford and footprint; the reach and the share recorded as GUESSes with their why. A
+  group whose every seat along the bank (out to 32 ft either way) is taken keeps no footing - it cannot stand on a lane, a
+  bridge, a ford or a footprint - and is counted (`meta.washing_no_seat`), with the per-map counts of W150-5.
+- **W150-3** (within): the one-at-each-house form - a step at the end of each farm's channel in its dooryard (0065: "one step at
+  each house on it").
+- **W150-4** (within): seated in a stage of its own after the crossings (`stage_crossings`), so the lanes, bridges and fords it
+  keeps clear of stand; a FIXTURE mounted on the WATER in the overlap matrix, as a dock is; drawn as a small pale stone
+  footing with step lines; a kind of its own on the page (`washing place`) with its pop-up written from 0065; recorded as
+  `washing_places` with the meta counts. A glyph check is owed on the pool map that first draws one; no pool map draws a farm
+  channel, so the one-at-each-house step is first drawn on a dispersed channel roll (valley seeds 15, 16, 19) and judged there
+  by eye on its render, recorded with the measurement.
+- **W150-5** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls, baselined at HEAD);
+  capacity unchanged; the counts per map measured and recorded.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

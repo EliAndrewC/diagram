@@ -49,6 +49,14 @@
    }
   },
   {
+   "key": "washing_form",
+   "name": "Where the households wash",
+   "values": {
+    "shared": "shared washing places on the bank",
+    "each_house": "a step at each house where its channel ends"
+   }
+  },
+  {
    "key": "grove_sides",
    "name": "Which sides of each farm its grove takes",
    "when": "[settlement_form=dispersed|linear]",

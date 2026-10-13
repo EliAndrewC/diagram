@@ -63,6 +63,7 @@ SPEC_CLASSES = [
     # the bar across the brook at a `weir` hamlet's intake (feature 230; the form is rolled, so a map may
     # have none - the class is present on the page only when the map drew one)
     "weir",
+    "washing place",
     # the one `field ditch` became two (feature 230, GM 2026-09-12: the ditches that feed the paddies and the
     # ditch that drains them are different questions with different records behind them)
     "irrigation ditch",
