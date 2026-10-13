@@ -257,9 +257,12 @@ loads (`-p`), with `L7R_TEST_DEPS=record` its default:
   directory listed under the repository; a compiled module read (`__pycache__/*.pyc`) stands for its source;
 - every Python process a test starts imports `tests/tooling/_deps_site/sitecustomize.py` (on PYTHONPATH; it runs the system's
   own sitecustomize first) and notes its reads the same way, each written as first seen, never only at exit;
-- a program that is not a recording Python process, started in or on the repository - `git` or `make` without `-C` naming
-  elsewhere and naming no path outside the repository, a Python child run isolated or with the recording dropped - marks the
-  file `opaque`;
+- a program that is not a recording Python process marks the file `opaque` unless its working directory (and any `-C`) is
+  outside the repository and no argument names a path inside it (the plan review: `git worktree add /tmp/x HEAD` run in the
+  repository names an outside path and reads the repository). Three exceptions read nothing of the repository's content:
+  `git init <dir>` and `git clone <src> <dst>` (judged by the paths they name), `git rev-parse` asking only where the
+  repository is (`--show-toplevel`, `--git-common-dir` and their kind), and `sleep`, `true`, `false`, `echo`. A Python child
+  run isolated or with the recording dropped from its environment is opaque;
 - when every test of a file passed, in a run not filtered by `-k`, a marker or a node id, its reads are kept by content in
   `<git common dir>/l7r-cache/tooling-test-passes.json`: a file by its git blob id (`record_cache.content_ids`, a changed file
   hashed as git would, so the same bytes match in a clone and its worktree), a directory by its entries (tracked and
@@ -267,10 +270,12 @@ loads (`-p`), with `L7R_TEST_DEPS=record` its default:
   left out: every entry there is keyed by what it holds. A failure removes the file's entry.
 
 **D16 - Reused by `make land-tooling` alone (FR-013).** `land-tooling.sh` runs its checks with `L7R_TEST_DEPS=reuse`, the one
-switch, and nothing else sets it. A kept file is deselected where the interpreter matches, nothing was opaque, nothing it read
+switch, and nothing else sets it; a reuse run records what it ran, as the gate's tooling run (`-m tooling`, which selects whole
+files) and `make test-file` record, so the clone usually has passes to reuse. A kept file is deselected where the interpreter matches, nothing was opaque, nothing it read
 is a file git ignores, and every file and directory reads the same now; the run prints how many files and tests it reused.
-The guard suites keep their own reuse (`make hooks-test`). Measured on this clone's commit, in a fresh worktree:
-`m:land-tooling-tests-reuse`.
+The guard suites keep their own reuse (`make hooks-test`). Measured on this clone's commit, in a fresh worktree, by
+`scripts/measure/tooling_reuse_time.py`: `m:land-tooling-tests-reuse`, 27.58 s with reuse (606 tests ran) against 36.21 s
+without (1,796); 88 of 126 test files reusable.
 
 **D17 - quote-verbatim's verdicts (FR-014).** `verdict(passage, page)` is kept in a `ParseCache` named by the module's code
 sha (`quote-verdicts-<sha>.pickle`), keyed by the passage and the page text's sha256; `main` opens it and saves it. The
