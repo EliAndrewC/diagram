@@ -51,6 +51,8 @@ EXEMPT = (f"{RECORD}/{MAPPING}", "specs/303-research-organization/migration.md")
 _SOURCE_BLOCK = re.compile(r"<!-- SOURCE: GM NOTES.*?<!-- END SOURCE -->", re.S)
 #: A quotation in the docs' form, `*"..."*` - the GM's words, which keep theirs (a retired path they mention is history).
 _QUOTED = re.compile(r'\*"[^"]*?"\*', re.S)
+#: a space or slash and three digits: every old page-and-number pointer has one (the cheap scan before `Mapping.number`)
+_DIGITS = re.compile(r"[ /]\d{3}")
 
 
 class Mapping:
@@ -193,7 +195,15 @@ def check(root: Path) -> list[str]:
         text = _SOURCE_BLOCK.sub(lambda m: "\n" * m.group(0).count("\n"), text)  # the GM's own words keep theirs
         text = _QUOTED.sub(lambda m: "\n" * m.group(0).count("\n"), text)  # and so does a quotation of them, *"..."*
         fixture, refusal_data = path.startswith(FIXTURES), path in REFUSAL_DATA
+        # GUARD_EDIT_OK: 2026-10-12, the GM's hourly tooling review - ONLY A LINE THAT CAN HOLD A POINTER IS ASKED. Every
+        # pattern of `problems` needs `research/` in the line but two: the retired `PAGE=` argument, and a question's old page
+        # and number (`water 120`), which never spans a line and is found over the whole file once. Asking every line of every
+        # tracked file (1.4 million calls, ten patterns each) was 25 s of each push and gate preflight; the findings are the same.
+        # the old page-and-number form needs `[ /]` and three digits: that cheap scan comes before `Mapping.number`'s long
+        # alternation (a scan per match position over the whole text was quadratic: 77 s)
         for line_no, line in enumerate(text.splitlines(), 1):
+            if "research/" not in line and "PAGE=" not in line and not (_DIGITS.search(line) and mapping.number.search(line)):
+                continue
             bad += [f"{path}:{line_no}: {p}" for p in problems(line, mapping, fixture=fixture, refusal_data=refusal_data, landed_spec=path.startswith("specs/"))]
     return bad
 
