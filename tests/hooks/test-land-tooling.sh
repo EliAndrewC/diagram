@@ -80,6 +80,12 @@ setup
 mkdir -p "$C/dev"; printf '| row |\n' > "$C/dev/review-ledger.md"; git -C "$C" add dev; git -C "$C" commit -qm "the checks' rows"
 land scripts/a.sh dev/review-ledger.md; rc=$?
 ok "the ledger's rows land beside the guard fix" '[ "$rc" -eq 0 ] && [ "$(on_main dev/review-ledger.md)" = "| row |" ]'
+# GUARD_EDIT_OK: feature 383 (the GM 2026-10-13) - and unnamed: a clone that changed its ledger lands it with any FILES
+setup
+mkdir -p "$C/dev"; printf '| row 2 |\n' > "$C/dev/review-ledger.md"; git -C "$C" add dev; git -C "$C" commit -qm "the checks' rows"
+land scripts/a.sh; rc=$?
+ok "the ledger lands unnamed when the clone changed it" '[ "$rc" -eq 0 ] && [ "$(on_main dev/review-ledger.md)" = "| row 2 |" ]'
+ok "...and says so" 'grep -q "dev/review-ledger.md lands too" "$T/out"'
 
 echo "6. the push runs with the backup off: the worktree is not a clone (a stale backup/<clone>-tooling, 2026-10-11)"
 setup
