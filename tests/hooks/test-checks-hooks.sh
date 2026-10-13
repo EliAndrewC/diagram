@@ -62,6 +62,12 @@ edit "about 10 by 8 feet" "about 10 by 8 ft"; rc=$?
 out="$( cd "$C" && python3 "$H/lib/hm_checks.py" close q:0105 "the agent died silently" )"  # what `make check-closed` runs
 edit "about 10 by 8 feet" "about 10 by 8 ft"; rc=$?
 [ "$rc" = 2 ] && printf '%s' "$out" | grep -q "0 silent dispatch(es)" && ok "make check-closed leaves a LIVE check alone (only a silent one closes)" || no "check-closed closed a live check" "rc=$rc $out"
+# a check the session STOPPED itself (TaskStop) never returns: AGENT= closes it though it is not silent (374, arbiter hour 4)
+out="$( cd "$C" && python3 "$H/lib/hm_checks.py" close q:0105 "the session stopped it" ag9 )"
+printf '%s' "$out" | grep -q "0 silent dispatch(es)" && ok "AGENT= closes only the agent it names" || no "AGENT= closed another agent's check" "$out"
+out="$( cd "$C" && python3 "$H/lib/hm_checks.py" close q:0105 "the session stopped it" ag5 )"
+again="$( cd "$C" && python3 "$H/lib/hm_checks.py" close q:0105 "nothing left running now" )"
+printf '%s' "$out" | grep -q "1 silent dispatch(es)" && ! printf '%s' "$again" | grep -q "still running" && ok "make check-closed AGENT= closes the check the session stopped: nothing is left running on its page" || no "the stopped check still counts as running" "$out / $again"
 bash_call "make quick"; rc=$?
 [ "$rc" = 0 ] && ok "STAYS QUIET: an unrelated command" || no "make quick refused" "rc=$rc"
 "$H/checks-hooks.sh" bogus >/dev/null 2>&1; rc=$?

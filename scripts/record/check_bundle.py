@@ -629,9 +629,20 @@ def main(argv: list[str] | None = None) -> int:
         codes = [entry_bundle(root, q, out / f"batch-{i}", args.extra, not args.no_quotes, args.kind, frozenset(b), args.for_,
                               bo.manifest_lines(bo.batch_units(units, frozenset(b)), checks, args.not_owed_ok), bare)
                  for i, b in enumerate(batches, start=1)]
+        print(batched_manifests(out, len(batches)))
         return max(codes)
     # bare here too: NOTES=unfootnoted re-checked no block at all without it (feature 319 H9, 2026-10-05)
     return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed, bare)
+
+
+def batched_manifests(out: pathlib.Path, n: int) -> str:
+    """A split bundle's closing word: each batch's MANIFEST to dispatch, one agent each, and NO top-level one - an earlier
+    unsplit run's MANIFEST.md left in `out` is removed, because a session handed it to quote-check as if it were current
+    (feature 374, round arbiter hour 4: the stale manifest cost a dispatch, a stop and a freeze escape)."""
+    stale = out / MANIFEST
+    stale.unlink(missing_ok=True)
+    lines = [f"check-bundle: {n} batches - dispatch each MANIFEST below, one agent each (there is no top-level one):"]
+    return "\n".join(lines + [f"  {out / f'batch-{i}' / MANIFEST}" for i in range(1, n + 1)])
 
 
 def fragments_for_q(root: pathlib.Path, q: str) -> list[str]:

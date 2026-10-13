@@ -368,3 +368,14 @@ def test_an_entry_bundle_lists_its_residue_pages(tmp_path: pathlib.Path, monkeyp
     assert cb.main(["0086-ferries-and-fords-watashi.html", "--for", "quote-check", "--out", str(out), "--root", str(REPO)]) == 0
     assert "| `pages/` | `the host's page cache (feature 288)` |" in (out / "MANIFEST.md").read_text(encoding="utf-8")
     assert (out / "pages" / "01-example.org.txt").is_file()
+
+
+def test_a_split_bundle_names_every_batch_and_leaves_no_stale_top_manifest(tmp_path: pathlib.Path) -> None:
+    """Feature 374, round arbiter hour 4: an unsplit run's MANIFEST.md left beside the batches was handed to quote-check as
+    current. The split's closing word removes it and names every batch's MANIFEST, not only the last."""
+    cb = _load()
+    (tmp_path / "MANIFEST.md").write_text("stale\n")
+    said = cb.batched_manifests(tmp_path, 3)
+    assert not (tmp_path / "MANIFEST.md").exists()
+    assert all(str(tmp_path / f"batch-{i}" / "MANIFEST.md") in said for i in (1, 2, 3)) and "no top-level" in said
+    assert "3 batches" in cb.batched_manifests(tmp_path, 3), "no stale file is fine too"
