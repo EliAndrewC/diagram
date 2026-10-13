@@ -719,5 +719,6 @@
   "l7r/diagram/hamletgen/hinterland/stages.py::woodland_on_the_sheet#wood beyond the sheet": "145",
   "l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#grass ground form": "148",
   "l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#grass ground forms": "148",
-  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places": "150"
+  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places": "150",
+  "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#pig sty against the house": "151"
 }

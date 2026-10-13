@@ -206,6 +206,7 @@
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#where the channel ends": "E1",
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places": "E3",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_SEATS#bath room wall": "E2",
+ "l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#pig sty against the house": "E3",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats": "E1",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall": "E2",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": "E1",
