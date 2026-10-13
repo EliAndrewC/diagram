@@ -130,7 +130,11 @@ def test_memo_check_replays_a_pass_and_always_runs_a_failure(tmp_path: pathlib.P
     mc = _load("memo_check")
     d = _repo(tmp_path, {"in/a.txt": "1"})
     count = tmp_path / "count"
-    cmd = [sys.executable, "-c", f"import pathlib,sys; p=pathlib.Path({str(count)!r}); p.write_text(p.read_text()+'x' if p.exists() else 'x'); print('ran'); sys.exit(int(pathlib.Path({str(d / 'in' / 'a.txt')!r}).read_text()=='bad'))"]
+    cmd = [
+        sys.executable,
+        "-c",
+        f"import pathlib,sys; p=pathlib.Path({str(count)!r}); p.write_text(p.read_text()+'x' if p.exists() else 'x'); print('ran'); sys.exit(int(pathlib.Path({str(d / 'in' / 'a.txt')!r}).read_text()=='bad'))",
+    ]
     assert mc.run(d, "c", ["in"], cmd) == 0 and mc.run(d, "c", ["in"], cmd) == 0
     assert count.read_text() == "x", "the second pass was replayed"
     assert capsys.readouterr().out == "ran\nran\n", "with the same output"

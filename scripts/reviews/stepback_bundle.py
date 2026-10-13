@@ -140,6 +140,13 @@ def words(records: list[dict], since: float, until: float, cap: int = WORDS_CAP)
                 elif name == "Agent":
                     parts.append(f"[{stamp}] DISPATCHED {inp.get('subagent_type') or 'agent'}: {inp.get('description') or ''}")
     text = "\n".join(parts)
+    if len(text) <= cap:
+        return text
+    # OVER THE CAP, COMMANDS AND EDITS SHRINK FIRST (the round arbiter's tooling fix on hour:383@1): multi-line heredoc bodies
+    # filled the cap and the hour's first half - its reviews, its replies - was cut. Each RAN and EDIT keeps its first line,
+    # every SAID and DISPATCHED stays whole, and only then are the oldest entries dropped.
+    parts = [p if p.split("] ", 1)[-1].startswith(("SAID", "DISPATCHED")) else p.split("\n", 1)[0][:200] for p in parts]
+    text = "\n".join(parts)
     return text if len(text) <= cap else "[... the hour's earlier words cut to the cap ...]\n" + text[-cap:]
 
 

@@ -154,19 +154,35 @@ def test_a_review_owed_at_the_checkpoint_holds_the_tick_until_it_is_dispatched(c
 def test_the_bundle_carries_the_hour(clone: Path, tmp_path: Path) -> None:
     t1 = T0 + 3600
     lines = [
-        {"type": "assistant", "timestamp": _iso(t1 + 10), "message": {"content": [{"type": "text", "text": "Trying a fifth seating order."},
-                                                                                   {"type": "tool_use", "id": "a", "name": "Bash", "input": {"command": "make hamlet SEED=3"}}]}},
+        {
+            "type": "assistant",
+            "timestamp": _iso(t1 + 10),
+            "message": {"content": [{"type": "text", "text": "Trying a fifth seating order."}, {"type": "tool_use", "id": "a", "name": "Bash", "input": {"command": "make hamlet SEED=3"}}]},
+        },
         {"type": "user", "timestamp": _iso(t1 + 70), "message": {"content": [{"type": "tool_result", "tool_use_id": "a", "content": "rolled"}]}},
-        {"type": "assistant", "timestamp": _iso(t1 + 80), "requestId": "r", "message": {"usage": {"input_tokens": 10}, "content": [
-            {"type": "tool_use", "id": "b", "name": "Edit", "input": {"file_path": "bamboo.py", "old_string": "BAND = 40", "new_string": "BAND = 38"}}]}},
+        {
+            "type": "assistant",
+            "timestamp": _iso(t1 + 80),
+            "requestId": "r",
+            "message": {
+                "usage": {"input_tokens": 10},
+                "content": [{"type": "tool_use", "id": "b", "name": "Edit", "input": {"file_path": "bamboo.py", "old_string": "BAND = 40", "new_string": "BAND = 38"}}],
+            },
+        },
     ]
     tr = tmp_path / "s1.jsonl"
     tr.write_text("\n".join(json.dumps(x) for x in lines) + "\n")
-    (clone / ".git" / "l7r-events" / "999-test.jsonl").write_text("\n".join(json.dumps(x) for x in (
-        {"t": _iso(T0), "ev": "", "sid": "s1"},
-        {"t": _iso(t1 + 20), "ev": "SubagentStart", "aid": "x", "agent": "glyph-check", "cat": "review check", "sid": "s1"},
-        {"t": _iso(t1 + 200), "ev": "SubagentStop", "aid": "x", "agent": "glyph-check", "verdict": "NEEDS-WORK", "sid": "s1"},
-    )) + "\n")
+    (clone / ".git" / "l7r-events" / "999-test.jsonl").write_text(
+        "\n".join(
+            json.dumps(x)
+            for x in (
+                {"t": _iso(T0), "ev": "", "sid": "s1"},
+                {"t": _iso(t1 + 20), "ev": "SubagentStart", "aid": "x", "agent": "glyph-check", "cat": "review check", "sid": "s1"},
+                {"t": _iso(t1 + 200), "ev": "SubagentStop", "aid": "x", "agent": "glyph-check", "verdict": "NEEDS-WORK", "sid": "s1"},
+            )
+        )
+        + "\n"
+    )
     out = tmp_path / "bundle"
     manifest = sb.build("hour:999-test@1", clone, out, t1, t1 + 3600, tr)
     assert "hour:999-test@1" in manifest.read_text() and "Room before packing" in manifest.read_text()
@@ -175,3 +191,17 @@ def test_the_bundle_carries_the_hour(clone: Path, tmp_path: Path) -> None:
     assert "fifth seating order" in words and "BAND = 40" in words and "rolled" not in words, "the session's words, no tool output"
     assert "glyph-check (review check): 180 s, NEEDS-WORK" in (out / "dispatches.md").read_text()
     assert "T01 a task" in (out / "task.md").read_text()
+
+
+def test_over_the_cap_commands_shrink_before_any_reply_is_dropped() -> None:
+    """The round arbiter's tooling fix on hour:383@1: long heredoc commands filled the cap and the hour's first replies were
+    cut. Now each command keeps its first line and every reply stays, while they fit."""
+    t1 = T0 + 3600
+    recs = []
+    for i in range(6):
+        recs.append({"type": "assistant", "timestamp": _iso(t1 + i * 60), "message": {"content": [
+            {"type": "text", "text": f"reply {i}"},
+            {"type": "tool_use", "id": str(i), "name": "Bash", "input": {"command": "python3 - <<'EOF'\n" + "x = 1\n" * 400 + "EOF"}}]}})
+    out = sb.words(recs, t1, t1 + 3600, cap=2000)
+    assert all(f"reply {i}" in out for i in range(6)), "every reply kept"
+    assert "RAN: python3 - <<'EOF'" in out and "x = 1" not in out, "each command cut to its first line"

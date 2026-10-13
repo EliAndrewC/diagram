@@ -74,7 +74,9 @@ def open_checkpoint(root: Path, now: float | None = None) -> str:
     if st.get("open"):
         return st["open"]
     if not st.get("due"):
-        when = time.strftime("%H:%M", time.localtime(st["since"] + CHECKPOINT_S)) if "since" in st else "never (no feature or event log)"
+        # the minutes alone read as "now" for the minute before it: say how long is left too
+        when = (time.strftime("%H:%M:%S", time.localtime(st["since"] + CHECKPOINT_S)) + f", in {int(st['since'] + CHECKPOINT_S - now)} s"
+                if "since" in st else "never (no feature or event log)")
         raise ValueError(f"the checkpoint is not due - the feature's next hour is up at {when}")
     trigger = f"hour:{st['feature']}@{st['hour']}"
     path, clock = _clock(root)

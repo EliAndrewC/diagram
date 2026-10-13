@@ -58,3 +58,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
       verify: DONE. DONE. CLAUDE.md (pair guard row: the checkpoint; the push row: push_checks.py), docs/reviews.md (the checkpoint; the stop branch retired), docs/guards.md, docs/efficiency-tooling.md; make docs regenerated
 - [ ] T15 Close: SC-001 measured, the gate, `make feature-report F=383 WRITE=1`, landed; this session's hourly cron deleted (plan D14)
       research: rendering
+- [ ] GM review (make gm-reviewed F=383) [lands-open]
+      research: rendering
+      verify: the GM reviewed every row (make gm-review lists them)

@@ -109,7 +109,9 @@ def test_a_passed_self_test_is_kept_until_its_code_or_an_import_changes(tmp_path
     (scripts / "gates" / "check-x.py").write_text(
         "import pathlib, sys\nsys.path.insert(0, str(pathlib.Path(__file__).parent))\nimport helper\n"
         "log = pathlib.Path(__file__).with_name('ran.log')\nlog.write_text(log.read_text() + 'x' if log.exists() else 'x')\n"
-        "sys.exit(0 if helper.OK else 1)\n", encoding="utf-8")
+        "sys.exit(0 if helper.OK else 1)\n",
+        encoding="utf-8",
+    )
     root = tmp_path / "clone"
     root.mkdir()
     _git(root, "init", "-q")
