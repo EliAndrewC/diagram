@@ -320,7 +320,6 @@ def test_door_room_stands_past_the_yard_on_the_line_from_the_house() -> None:
     assert door_room(house, None, 8.0, 12.0) is None
 
 
-
 def test_a_seat_against_a_part_touches_one_of_its_walls_clear_of_every_other_part() -> None:
     """Feature 374 wave 151 (0049): the pig sty's seat - against a wall of the house first, then of an outbuilding, clear of
     every other part by the gap; None where every wall's ground is taken."""

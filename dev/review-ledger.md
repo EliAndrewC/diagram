@@ -1655,3 +1655,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-12 | record-format | 374 batch 15 round 2: 0049 drawing page | 0 VOCABULARY, 0 SESSION NOTE, 0 HISTORY | nothing to act on | nothing | yes | verified | 17 s | 61k in (38k cached) / 1.2k out |
 | 2026-10-12 | modal-form | 374 batch 15 round 2: pig sty pop-up | 0 FIX, 2 NOTE | a source kind named in Depiction; an off-subject clause in the opening | paperwork | yes | fixed (both notes taken) | 24 s | 26k in (9k cached) / 2.0k out |
 | 2026-10-12 | modal-research | 374 batch 15 round 2: pig sty pop-up | ACCURACY 0, REFERENCES 0, GAPS 0 | nothing to act on (0045's pig in the yard confirmed attested) | nothing | yes | verified | 64 s | 300k in (229k cached) / 5.3k out |
+| 2026-10-12 | impl-drift | 374 batch 15 round 3: _draw_laid after the sty left its target | 1 IN-STEP | nothing to act on | nothing | yes | verified | 12 s | 32k in (20k cached) / 0.7k out |

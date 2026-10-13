@@ -11491,10 +11491,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_laid#which pits go to the field": {
-  "code": "e7b61b7c09b79edd",
-  "core": "0faa6f13f093b5a9",
+  "code": "66fa9b4ec7c4e875",
+  "core": "f77954a48ca003ad",
   "date": "2026-10-13",
-  "note": "field share rolled 2-85 in 100 per hamlet",
+  "note": "on a pit hamlet, each house's position hash against a field share rolled in PIT_FIELD_SHARE_BAND (0.02, 0.85), the page's \"between 2 and 85 in 100\"; leaving the sty out of farm_fixtures_target does not affect this claim",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "aa12f387172a2a21"
   },

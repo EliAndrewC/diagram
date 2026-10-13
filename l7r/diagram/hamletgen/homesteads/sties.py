@@ -14,7 +14,7 @@ Research: pig sty plumbing - NONE: the frame, the farmstead's parts read back fr
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
@@ -102,7 +102,15 @@ def sty_seat(s: Settlement, house: Mapping[str, Any]) -> dict[str, Any] | None:
         if q is None:
             return None
         x, y = to_world((q[0], q[1]), house)
-        rec = {"kind": "sty", "x": round(x, 1), "y": round(y, 1), "w": round(q[2], 1), "h": round(q[3], 1), "rot": round(float(house.get("rot") or 0.0), 1), "of": [round(float(house["x"]), 1), round(float(house["y"]), 1)]}
+        rec = {
+            "kind": "sty",
+            "x": round(x, 1),
+            "y": round(y, 1),
+            "w": round(q[2], 1),
+            "h": round(q[3], 1),
+            "rot": round(float(house.get("rot") or 0.0), 1),
+            "of": [round(float(house["x"]), 1), round(float(house["y"]), 1)],
+        }
         if s.admits("farm_fixtures", rec):
             return rec
         taken.append((q[0], q[1], q[2], q[3]))  # refused by what stands: the next place along
@@ -112,6 +120,10 @@ def stage_sties(s: Settlement, plan: SitePlan) -> None:
     """Each plain paddy hamlet's sties, once the ways stand: the share's count of households (`quota_carriers`), each seated
     against its farmstead (`sty_seat`) and drawn; a household with no place passes its sty on to the next that keeps none.
     Recorded: the count asked (`meta.sty_target`) and the count no farmstead had room for (`meta.sty_short`).
+
+    Steps:
+        l7r.diagram.hamletgen.homesteads.sties.sty_seat
+        l7r.diagram.settlement.farm_fixtures.FarmFixturesMixin.farm_fixture
 
     Research:
         about two households in three - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the share counted to the households; none on a dike-pond hamlet, whose sties stand on its ponds

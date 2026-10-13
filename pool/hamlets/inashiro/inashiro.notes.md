@@ -1533,7 +1533,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **342** clumps drawn
 - farmhouses: **15**
 - family form: **retirement_house**, retirement houses **10**
-- farmstead fixtures: bath **4**, coop **13**, manure **8**, privy **13**, shrine **1**, woodpile **6**
+- farmstead fixtures: bath **4**, coop **13**, manure **8**, privy **13**, shrine **1**, sty **9**, woodpile **6**
 - storehouses: **2** of **15** farmhouses
 - notice board at the entrance, **(2144.1, 1829.9)**: **15** of 15 households' ways out pass it
 <!-- /census -->

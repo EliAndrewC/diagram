@@ -347,7 +347,7 @@ def _draw_laid(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]
     n_h = len(houses)
     # the lots' own count (`quota_carriers`: floor(n x p + 0.5), a half rounded up - not Python's round, which rounds a half
     # to even and so declared 10 privies where the lots, rightly, laid 11)
-    meta["farm_fixtures_target"] = {k: max(math.floor(shares[k] * n_h + 0.5), mins.get(k, 0)) for k in FIXTURE_BANDS}
+    meta["farm_fixtures_target"] = {k: max(math.floor(shares[k] * n_h + 0.5), mins.get(k, 0)) for k in FIXTURE_BANDS if k != "sty"}  # the sty's own: `sty_target`
     # ...A ROLLED TREE A HOUSEHOLD COULD NOT KEEP, KEPT BY ONE THAT CAN (feature 315, B10): the roll is honored by what is drawn
     from .persimmon_reseat import reseat_persimmons
 

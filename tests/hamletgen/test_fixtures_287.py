@@ -22,7 +22,7 @@ def test_each_kinds_quota_is_its_share_of_the_households_and_a_floor_raises_it(n
     quota = fx.fixture_quota(7, n, {"shrine": 2})
     lots = HouseholdLots(7, n, 0.0, quota)
     kept = Counter(k for i in range(n) for k in lots.fixtures_of(i))
-    for kind, share in shares.items():
+    for kind, share in ((k, p) for k, p in shares.items() if k != "sty"):  # the sty is seated once the ways stand, never laid
         want = max(math.floor(share * n + 0.5), 2 if kind == "shrine" else 0)
         assert kept[kind] == want, (kind, kept[kind], want)
     assert lots.fixtures_of(n) == () and lots.fixtures_of(-1) == ()
@@ -137,4 +137,4 @@ def test_about_two_households_in_three_keep_a_sty_and_a_dike_pond_hamlet_none() 
         assert 0.57 <= fx.fixture_shares(s)["sty"] <= 0.77
         assert 0.57 <= fx.fixture_shares(s, "valley_paddy")["sty"] <= 0.77
         assert fx.fixture_shares(s, "mulberry_dike_fishpond")["sty"] == 0.0
-        assert fx.fixture_quota(s, 10, {}, "mulberry_dike_fishpond")["sty"] == 0.0
+        assert "sty" not in fx.fixture_quota(s, 10, {}), "never laid in the bundle: seated once the ways stand (`sties.py`)"

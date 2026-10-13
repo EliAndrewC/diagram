@@ -652,7 +652,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **434** clumps drawn
 - farmhouses: **19**
 - family form: **one_roof**, retirement houses **0**
-- farmstead fixtures: bath **5**, coop **14**, pit **13**, privy **17**, shrine **1**, woodpile **8**
+- farmstead fixtures: bath **5**, coop **14**, pit **13**, privy **17**, shrine **1**, sty **14**, woodpile **8**
 - storehouses: **2** of **19** farmhouses
 - notice board at the entrance, **(4232.7, 1931.5)**: **19** of 19 households' ways out pass it
 <!-- /census -->
