@@ -210,6 +210,7 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats": "E1",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall": "E2",
  "l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": "E1",
+ "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown": "E3",
  "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::reseat_persimmons#the rolled count honored": "E0",
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#a holding plot that touches a lane or stream is left undrawn": "E0",
  "l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#cell on a lane or stream left undrawn": "E0",

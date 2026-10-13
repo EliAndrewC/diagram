@@ -1672,3 +1672,4 @@ above this heading are classified once, as data, in `docs/review-ledger-r0.json`
 | 2026-10-13 | spec-fidelity | 374 whole-plan review after batch 15 | CLEAR, 116 decisions | W151-2c legitimate; W151-3's "railed pen" wording older than the redraw | judgment | yes | verified | 79 s | 444k in (386k cached) / 6.6k out |
 | 2026-10-13 | spec-fidelity | 374 T44 section review (the reseated persimmon and its own grove) | CLEAR, 2 decisions | none ruled against | judgment | yes | verified | 42 s | 264k in (215k cached) / 3.4k out |
 | 2026-10-13 | impl-drift | 374 batch 16: 11 reseat claims (its own grove gives way) | 11 IN-STEP | nothing to act on | nothing | yes | verified | 30 s | 48k in (25k cached) / 2.5k out |
+| 2026-10-13 | spec-fidelity | 374 whole-plan review after batch 16 | CLEAR, 119 decisions | none ruled against | judgment | yes | verified | 52 s | 371k in (318k cached) / 4.3k out |
