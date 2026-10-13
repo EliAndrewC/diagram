@@ -2327,5 +2327,105 @@
    },
    "history": "the lane form seated on 1 of 5 before the households' reserved ways counted as lanes (scratchpad r13Z); Sawada served 6 and 13 before the cluster well kept off the reserved ways (r13W2)"
   }
+ },
+ "w155-wells": {
+  "observed": "2026-10-13",
+  "subject": "wave 155: no well pocket in a clustered hamlet's homesteads; the reach and the ceiling of ten held by the wells",
+  "answers": "",
+  "source": "the 44 rolls (scratchpad r155d) and the pool (Inashiro, Kuwabata, Sawada) after make map",
+  "quantity": "wells inside a homestead, the households the busiest well is nearest to, wells added for the reach or for the ten, households dry",
+  "command": "tools13/roll13.sh; make map for the three pool maps",
+  "method": "each well against every household's homestead bbox; households counted to their nearest well; meta.wells_for_reach, wells_for_ten, dry_households, well_fallback, wells_over_ten",
+  "value": {
+   "cohort_nucleated": 19,
+   "wells_inside_a_homestead": 0,
+   "cohort_wells_over_ten": 0,
+   "cohort_wells_for_ten": {
+    "polder_grid-2": "lane x2 + cluster, serves 5/4/7",
+    "v-13": "lane x2 + cluster, serves 8/3/5",
+    "v-17": "cluster x3, serves 10/4/2"
+   },
+   "cohort_wells_for_reach": 0,
+   "cohort_dry_households": 0,
+   "cohort_fallback": 0,
+   "cohort_refusing": "polder 4 and 5, as at HEAD",
+   "pool": {
+    "inashiro": "lane x3 (one for the ten), serves 7/3/5",
+    "kuwabata": "cluster x2, serves 9/7",
+    "sawada": "cluster x2, serves 10/9"
+   },
+   "history": "first roll (r155): four rolls over ten (12, 13, 12, 12) with the first well at the cluster's middle; the first well at its share's middle (r155b) and one step ahead (r155c) left three, their share's seats refused by the homesteads (valley 17: 40 threshing yards, 33 gardens, 25 houses, 45 the fit)"
+  }
+ },
+ "w156-redeal-cohort": {
+  "observed": "2026-10-13",
+  "subject": "T48 baseline: the 48-seed cohort (54 with the pinned rows) at HEAD and with the wave 155 pocket patch applied, the re-deal of the seats",
+  "answers": "",
+  "source": ".git/cohort48-head.log and .git/cohort48-patched.log in diagram-backlog; dev/cohort-log records",
+  "quantity": "seeds failing the whole gate",
+  "command": "make cohort N=48, then git apply w155-pocket-attempt.patch and make cohort N=48, then the patch reversed",
+  "method": "each seed's verdict",
+  "value": {
+   "head": "50/54: 17 and 21 WebRefused (nucleated), 40 row_rules farm_not_on_its_street (linear), 45 fixtures_on_groves sty on its own grove bands (dispersed)",
+   "patched": "49/54: 21, 40, 45 as at HEAD; 17 now passes; 10 and 24 newly fail (nucleated)",
+   "re_deal_net": "+2 new failures (10, 24), 1 mended (17)",
+   "pre_existing_to_fix": "17, 21, 40, 45 fail at HEAD (constitution XIV)"
+  }
+ },
+ "sc012-375-a3-popup-rounds": {
+  "quantity": "pop-up check dispatches per checked unit after 375 amendment 3 (SC-012, carried to 374)",
+  "observed": "2026-10-13",
+  "source": "the diagram-backlog clone's .git/checks-open.json (374's pop-up dispatches)",
+  "command": "python3 scripts/measure/popup_rounds.py --since 2026-10-11T21:08:34-04:00 --json .",
+  "method": "the baseline's script and counting (m:375-a3-popup-rounds-before), from amendment 3's landing (8c1894f92) to 374's close",
+  "value": {
+   "units": 102,
+   "dispatches": 172,
+   "per unit": 1.69,
+   "units with a 2nd round": 41,
+   "units with a 3rd": 16,
+   "pop-ups": 57,
+   "by check": {
+    "modal-form": {
+     "units": 23,
+     "dispatches": 45,
+     "per unit": 1.96,
+     "units with a 2nd round": 9,
+     "units with a 3rd": 5
+    },
+    "modal-research": {
+     "units": 23,
+     "dispatches": 39,
+     "per unit": 1.7,
+     "units with a 2nd round": 11,
+     "units with a 3rd": 4
+    },
+    "modal-depiction": {
+     "units": 56,
+     "dispatches": 88,
+     "per unit": 1.57,
+     "units with a 2nd round": 21,
+     "units with a 3rd": 7
+    }
+   }
+  },
+  "verdict": "HELPED (375 SC-012's own terms): dispatches per unit fell 2.09 -> 1.69 but not below 1.5; third rounds 16 of 102 units (about one in six), not at most one in twenty - no better than the baseline's one in eight"
+ },
+ "sc034-375-a9-glyph-per-hour": {
+  "quantity": "glyph-check passes per hour of a long feature after 375 amendment 9 (glyph-check due on the feature's hour; SC-034, carried to 374)",
+  "observed": "2026-10-13",
+  "source": "374's event log (.git/l7r-events/374-match-the-research-continued.jsonl in diagram-backlog) and dev/review-ledger.md",
+  "command": "the event log's Agent events with agent glyph-check from amendment 9's landing (525932f95, 2026-10-12T12:19Z) to 374's close; the ledger's glyph-check rows dated 2026-10-12 and 2026-10-13",
+  "method": "a launched pass is a PostToolUse event of a glyph-check dispatch (a PreToolUse with no PostToolUse was refused by a guard, 20 of 40); the hours are the event log's span over the window",
+  "value": {
+   "window_hours": 24.9,
+   "glyph_dispatches_launched": 20,
+   "glyph_dispatches_refused_by_a_guard": 20,
+   "launched_per_hour": 0.8,
+   "ledger_rows_dated_10_12_and_10_13": 28,
+   "ledger_later_round_rows": 10,
+   "before (R8, m:375-a9-glyph-passes)": "158 passes from 2026-09-26 to 2026-10-12 (about 16.5 days, every clone), 46 a later round: about 0.4 an hour of calendar time over all clones, 29% later rounds"
+  },
+  "verdict": "not comparable at the same grain: R8 counts every clone over calendar days, this one feature over its active day. On 374, 0.8 glyph passes an hour, a third of them (10 of 28 rows) later rounds against R8's 29%; and half the dispatches the session tried were refused by a guard first (the due hour, a missing render, an unrecorded figure) - each refusal a dispatch re-sent"
  }
 }

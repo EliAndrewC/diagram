@@ -1,0 +1,1116 @@
+diff --git a/l7r/diagram/hamletgen/homesteads/region.py b/l7r/diagram/hamletgen/homesteads/region.py
+index 4066270a9..72eb40caf 100644
+--- a/l7r/diagram/hamletgen/homesteads/region.py
++++ b/l7r/diagram/hamletgen/homesteads/region.py
+@@ -215,7 +215,7 @@ def smallest_sides(s: Settlement) -> tuple[list[tuple[float, float, float, float
+     unturned, relative to the house's center, as (x0, y0, x1, y1) - and the yard's box the same way (None for a bundle with no
+     yard)."""
+     hw, hh = s.px(46) * LENGTH_FACTORS[0], s.px(28) * DEPTH_FACTORS[0]
+-    saved = {k: s.__dict__.pop(k) for k in ("_household_seat", "_household_byre", "_household_well", "_household_fixtures") if k in s.__dict__}
++    saved = {k: s.__dict__.pop(k) for k in ("_household_seat", "_household_byre", "_household_fixtures") if k in s.__dict__}
+     try:
+         sides: list[tuple[float, float, float, float]] = []
+         yard: tuple[float, float, float, float] | None = None
+diff --git a/l7r/diagram/hamletgen/homesteads/stages.py b/l7r/diagram/hamletgen/homesteads/stages.py
+index c718e0d8d..33662d6ad 100644
+--- a/l7r/diagram/hamletgen/homesteads/stages.py
++++ b/l7r/diagram/hamletgen/homesteads/stages.py
+@@ -235,7 +235,6 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
+     s._way_out_anchor = s._way_out_bearing = None  # type: ignore[attr-defined]
+     s._seat_region = None
+     s._unreachable = None
+-    s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
+     s._lots = None  # the lots are the seating's (the byre form stays: `draft_byres` draws the stalls it reserved)
+     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
+     # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
+@@ -450,7 +449,6 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
+     # ladder and the k-th place in the kura quota, so the counts close whatever seat each household lands on
+     s._byre_form, _share = household_byre_form(s)
+     s._byre_pockets = []
+-    s._pockets = []  # the well pockets this seating has laid (feature 287, homes H10-H11; `needs_pocket`)
+     # ...AND EACH HOUSEHOLD'S SHARE OF THE WOOD FLOOR (feature 287, woods W25 made absolute; plan D9): a household is seated
+     # only where it can reserve copse seats covering `HOMESTEAD_WOOD_FT2`'s floor within the dooryard copse's reach of its
+     # own house, and no later household or corridor takes them (`homestead_parts/wood_share.py`)
+@@ -661,13 +659,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
+     # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
+     # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
+     # off a paddy beside it by a garden's width, 81 px on Inashiro against the 60 the cluster is held to)
+-    # ...AND THE WELL POCKET (feature 287, homes H10): a household carrying one - the first always does, and it is the most
+-    # central front seat - reaches that much further toward a paddy beside or before its yard, so the row stands off by it
+-    s._household_well = True
+-    try:
+-        _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
+-    finally:
+-        s._household_well = False
++    # (a clustered household carries no well pocket since feature 374 wave 155, so the reach holds none)
++    _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
+     _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed"), _g0.get("well")) if r is not None])
+     _reach = (_core[0] - _core[2] / 2, _core[1] - _core[3] / 2, _core[0] + _core[2] / 2, _core[1] + _core[3] / 2)  # (left, top, right, bottom) about the house center
+     # A ROW VILLAGE'S ROW (feature 291): the whole farmstead - its grove too, which may face the field - stands off the field,
+diff --git a/l7r/diagram/hamletgen/homesteads/wells.py b/l7r/diagram/hamletgen/homesteads/wells.py
+index ec0227a48..1dd9de47a 100644
+--- a/l7r/diagram/hamletgen/homesteads/wells.py
++++ b/l7r/diagram/hamletgen/homesteads/wells.py
+@@ -36,8 +36,7 @@ def drawn_r(s: Any) -> float:
+ 
+ 
+ # THE AMONG-THE-DWELLINGS RULE lives with the wellhead (`settlement/shrines_wells/wells.py`: `WELL_AMONG_DWELLINGS_PX`,
+-# `well_gap_to_dwellings`), moved there so the bundle's well pocket asks the same predicate (feature 287, homes H09);
+-# `seat_wells` asks it at each seat, against its own `gap` (feature 374 wave 154: the 80 ft seat, the 95 ft check)
++# `well_gap_to_dwellings`, feature 287, homes H09); `seat_wells` asks it at each seat, against its own `gap` (feature 374 wave 154: the 80 ft seat, the 95 ft check)
+ 
+ 
+ def crop_extent_added(s: Any, c: Pt, xs: Sequence[float], ys: Sequence[float]) -> float:
+@@ -95,6 +94,38 @@ def grid_points(x0: float, x1: float, y0: float, y1: float, step: float) -> list
+     return out
+ 
+ 
++def first_share_middle(houses: Sequence[Mapping[str, Any]], n: int) -> Pt:
++    """The middle of the first of `n` equal shares of `houses`, the shares cut along the cluster's long axis (the principal
++    axis of the house centers): where the first of `n` wells stands so each later one, seated by the worst-served walk, takes
++    a share of its own (feature 374 wave 155).
++
++    Research: the first well at its share's middle - GUESS research/questions/0196-communal-wells-ido.drawing.html: five to ten houses a well at Karihama; the shares cut along the long axis are this project's choice, no page says how a hamlet's wells divided its houses"""
++    xs, ys = [float(h["x"]) for h in houses], [float(h["y"]) for h in houses]
++    mx, my = sum(xs) / len(xs), sum(ys) / len(ys)
++    sxx = sum((x - mx) ** 2 for x in xs)
++    syy = sum((y - my) ** 2 for y in ys)
++    sxy = sum((x - mx) * (y - my) for x, y in zip(xs, ys, strict=True))
++    th = 0.5 * math.atan2(2.0 * sxy, sxx - syy)
++    along = sorted(zip(xs, ys, strict=True), key=lambda q: (q[0] - mx) * math.cos(th) + (q[1] - my) * math.sin(th))
++    share = along[: max(1, round(len(along) / max(n, 1)))]
++    return sum(q[0] for q in share) / len(share), sum(q[1] for q in share) / len(share)
++
++
++PAIR_LOOK = 40
++"""How many of the seats nearest the first share's middle the first well's look ahead ranks (feature 374 wave 155): a
++bound on the pairs it measures, the nearest 40 of a rung's few hundred seats.
++
++Research: the look ahead's bound - NONE: a bound on the search's cost, not a rule of the map"""
++
++
++def pair_keeps_ten(c: tuple[float, float, float], seats: Sequence[tuple[float, float, float]], houses: Sequence[Mapping[str, Any]]) -> bool:
++    """Would a first well at `c` leave a second seat among `seats`, 170 px off it, with both wells nearest to no more than
++    `WELL_SERVES_MAX` households? The look ahead the first of two wells is ranked by (feature 374 wave 155).
++
++    Research: no well serving more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama"""
++    return any(math.hypot(c[1] - d[1], c[2] - d[2]) >= 170.0 and most_served_after(d, houses, [(c[1], c[2])]) <= WELL_SERVES_MAX for d in seats)
++
++
+ def most_served_after(c: tuple[float, float, float], houses: Sequence[Mapping[str, Any]], wells: Sequence[Pt]) -> int:
+     """How many households the busiest well is nearest to, once a well is dug at `c` (`c` = (_, x, y)).
+ 
+@@ -299,13 +330,13 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
+     it starves an elongated cluster of wells entirely, because the inset box no longer holds a grid
+     cell (`settlement_has_wells`, seed 3).
+ 
+-    The well pockets the seating laid in the households' bundles are drawn first (feature 287, homes H10), and a grove
+-    farm takes its own water; the communal wells beyond them are seated by the hamlet's rolled `well_siting` (feature 374
+-    wave 154): the cluster form here (`seat_cluster`), among the houses before the lanes; the lane-side form once the lanes
+-    stand (`stage_lane_wells`). `seat_wells` carries the seat search and `well_at` the engine's own verdict on each seat.
++    A grove farm takes its own water; the communal wells are ALL seated by the hamlet's rolled `well_siting` (feature 374
++    waves 154 and 155): the cluster form here (`seat_cluster`), among the houses before the lanes; the lane-side form once
++    the lanes stand (`stage_lane_wells`), with the wells the water reach still owes (`reach_wells`). `seat_wells` carries the
++    seat search and `well_at` the engine's own verdict on each seat.
+ 
+     Research:
+-        well pockets drawn first - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: each household's pocket drawn as a well
++        no well in a household's homestead - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0196-communal-wells-ido.drawing.html: the well shared off the farmstead, by the lane or among the houses, never a pocket inside one household's homestead
+         grove farms take their own water - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a dispersed farm draws from its own channel or well, not the shared-well rule of towns, so every grove farm takes its own water (`grove_water`) and is left out of the communal wells
+         the wells' siting rolled - research/questions/0196-communal-wells-ido.drawing.html: by the lane or among the houses, a knob; the cluster form seated before the lanes, the lane-side form tried beside the track first and seated on a lane's verge once the lanes stand
+     """
+@@ -317,21 +348,11 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
+             return len(s.M.get("wells", []))
+     want = well_target(plan.spec.households)
+     placed: list[Pt] = []
+-    # THE POCKETS FIRST (feature 287, homes H10 and H11): each household the seating gave a well pocket (`well_pocket`)
+-    # has its wellhead's ground reserved inside its own homestead, before its yard - drawn there as a well, with no seat to
+-    # seek. The lattice below adds the rest of `well_target`, held off every pocket as off every well.
+-    for h in houses:
+-        if h.get("well_pocket"):
+-            wx, wy = float(h["well_pocket"][0]), float(h["well_pocket"][1])
+-            release_held(s, "wells", wx, wy)  # held since the seating, so the track kept off it (`hold_laid_parts`)
+-            s.well(wx, wy)
+-            mark_form(s, wx, wy, "pocket")
+-            placed.append((wx, wy))
+-    # NO RESCUE AND NO LAST RESORT (feature 287, homes H10-H12). A ring probe spiraled out from each dry household and
+-    # `open_seat` was asked when the lattice found nothing; both are gone, because what they rescued is carried by
+-    # construction now: every household seated is within `WATER_REACH_FT` of a well pocket or of open water
+-    # (`needs_pocket`), and the first always carries one - so no house is left dry and no settlement wellless, and no
+-    # well is drawn outside its among-the-dwellings floor or past the crop to rescue one.
++    # NO WELL POCKET IN A CLUSTERED HAMLET'S HOMESTEADS (feature 374 wave 155, row 787): the seating laid the first household
++    # a well inside its own homestead, before its yard, and this drew it there - where 0028 draws "the well, shared off the
++    # farmstead". Every well `well_target` owes is now a shared well of the rolled siting, and the water reach the pocket
++    # carried by construction is held by the wells once the lanes stand (`reach_wells`). No ring probe and no `open_seat`
++    # rescue (feature 287, homes H10-H12): no well is drawn outside its among-the-dwellings floor or past the crop to rescue one.
+     # THE ROLLED SITING (feature 374 wave 154, 0196's knob): the cluster form is seated now, among the houses before the lanes
+     # are laid; the lane-side form waits for the lanes (`stage_lane_wells`), as do any wells the cluster form could not seat
+     s.M.setdefault("meta", {})["well_siting"] = plan.well_siting
+@@ -477,7 +498,17 @@ def seat_wells(
+             # LATER well takes the legal seat FARTHEST from the wells already standing, ties toward the
+             # center - i.e. it serves the households the placed wells do not, which is why a real hamlet
+             # digs a second well at all.
+-            pool = sorted(seats, key=lambda c: (_in_belt(c), c[0]))  # the FIRST well is central too, but never in the belt if anywhere else will do
++            # THE FIRST OF SEVERAL WELLS AT ITS SHARE'S MIDDLE (feature 374 wave 155): with the pocket gone, a first well at the
++            # cluster's middle left the second, held 170 px off it, three or four households - the first served 12 or 13 on four
++            # of the 44 rolls (m:w155-wells). Seated at the middle of its own share of the houses, the shares split along the
++            # cluster's long axis, it leaves the second the other share (`first_share_middle`)
++            _fx, _fy = first_share_middle(houses, want - len(placed)) if not placed and want - len(placed) >= 2 else (ccx, ccy)
++            pool = sorted(seats, key=lambda c: (_in_belt(c), math.hypot(c[1] - _fx, c[2] - _fy)))  # never in the belt if anywhere else will do
++            if not placed and want - len(placed) >= 2:
++                # ...AND ONE STEP AHEAD: the nearest seats to the share's middle are ranked by whether the best second well
++                # this rung offers, 170 px off, would leave both at ten or fewer (`pair_keeps_ten`) - a first seat the rung's
++                # ground pushed off its share left the second three or four households on three of the 44 rolls (m:w155-wells)
++                pool[:PAIR_LOOK] = sorted(pool[:PAIR_LOOK], key=lambda c: not pair_keeps_ten(c, seats, served))
+             # RE-SORTED ONLY WHEN A WELL HAS LANDED (feature 278, FR-004). The key reads the wells placed and the crop boxes, and
+             # inside this loop only a well that lands changes either - so a pass that popped a seat and placed nothing left a
+             # list already sorted by the key it would be sorted by again (Kuwabata: 168 sorts, 72,324 key evaluations, the
+@@ -613,8 +644,8 @@ def seat_wells(
+                     continue  # `wells_not_clustered`: shared wells serve separate courtyards
+                 if crop_extent_added(s, (x, y), xs, ys) > 0.0:
+                     # NO WELL HOLDS THE CROP OPEN (feature 287, homes H12): the frame term was a score because a padded seat was
+-                    # sometimes the only way to water a household; the pockets water every one now, so a lattice well that
+-                    # reaches past the box the crop will set is refused, not drawn
++                    # sometimes the only way to water a household; a lattice well that reaches past the box the crop will set
++                    # is refused, not drawn, and the reach is held by `reach_wells` (feature 374 wave 155)
+                     continue
+                 if s.well_at(x, y):
+                     mark_form(s, x, y, form)
+@@ -667,6 +698,7 @@ def stage_lane_wells(s: Settlement, plan: SitePlan) -> None:
+ 
+     Steps:
+         l7r.diagram.hamletgen.homesteads.wells.lane_and_fallback_wells
++        l7r.diagram.hamletgen.homesteads.wells.reach_wells
+         l7r.diagram.hamletgen.homesteads.wells.record_over_ten
+ 
+     Research:
+@@ -678,14 +710,71 @@ def stage_lane_wells(s: Settlement, plan: SitePlan) -> None:
+         return
+     try:
+         lane_and_fallback_wells(s, plan, owed)
++        reach_wells(s, plan)
+     finally:
+         record_over_ten(s)
+ 
+ 
++def dry_households(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
++    """The households beyond `WATER_REACH_FT` of every communal well and of open water (`surface_water_dist`, the measure
++    the seat search and the gate's watered rule read).
++
++    Research: every household watered - research/questions/0196-communal-wells-ido.drawing.html: a well, channel, pond or stream within 760 ft"""
++    reach = s.px(WATER_REACH_FT)
++    ws = [(float(w["x"]), float(w["y"])) for w in s.M.get("wells") or [] if not w.get("private") and not w.get("shrine")]
++    return [h for h in houses if not any(math.hypot(float(h["x"]) - x, float(h["y"]) - y) <= reach for x, y in ws) and surface_water_dist(s.M, float(h["x"]), float(h["y"])) > reach]
++
++
++def reach_wells(s: Settlement, plan: SitePlan) -> None:
++    """THE WATER REACH HELD BY THE WELLS (feature 374 wave 155, row 787): the guarantee the first household's well pocket
++    carried by construction - every household within `WATER_REACH_FT` of a well or open water - is held here, once the forms
++    have seated what `well_target` owes. While a household is dry, one more shared well is seated: the rolled form first, then
++    the other, then the recorded fallback, each ranking the seat that best serves the worst-served household. A well beyond
++    `well_target` is counted (`meta.wells_for_reach`), and a household still dry past all three (`meta.dry_households`).
++    ...AND THE CEILING OF TEN (feature 374 wave 155, W155-6): while a well is nearest to more than `WELL_SERVES_MAX`
++    households, one more shared well is seated the same way (`meta.wells_for_ten` counts those) - a clustered hamlet's
++    homesteads stand edge to edge, and with no pocket no seat among a full share's houses may be open; a third well for
++    sixteen households is one to five, within the record's one to 2-20 for a hamlet (0196).
++
++    Research:
++        a well for every household beyond reach - research/questions/0196-communal-wells-ido.drawing.html: every household within 760 ft of a well or open water, one more shared well where the houses spread past the hamlet's one or two
++        one more well where one serves more than ten - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses a Karihama well served, a hamlet's wells as many as one to 2-20 households
++        the forms' order - research/questions/0196-communal-wells-ido.drawing.html: the rolled siting first, the other form, then the fallback (`lane_and_fallback_wells`)"""
++    houses = [h for h in s.M.get("houses") or [] if not (h.get("geom") or {}).get("groves") and h.get("kind") != "abandoned"]
++    added = over = 0
++    last = len(houses) + 1
++    for _ in range(len(houses)):
++        placed = [(float(w["x"]), float(w["y"])) for w in s.M.get("wells") or [] if not w.get("private") and not w.get("shrine")]
++        most = most_served_after((0.0, placed[-1][0], placed[-1][1]), houses, placed[:-1]) if placed else 0
++        busy = most > WELL_SERVES_MAX and most < last  # a well that left the busiest count where it was is not tried again
++        if not dry_households(s, houses) and not busy:
++            break
++        last, over = most, over + int(busy)
++        want = len(placed) + 1
++        for form in (plan.well_siting, "cluster" if plan.well_siting == "lane" else "lane"):
++            if len(placed) < want:
++                if form == "lane":
++                    seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "lane", seat_ok=on_a_verge(s), step=11.0)
++                else:
++                    seat_cluster(s, plan, houses, placed, want)
++        if len(placed) < want:
++            if not seat_wells(s, plan, houses, placed, want, THREE_THEN_TWO, "fallback", gap=WELL_AMONG_DWELLINGS_PX):
++                break
++            s.M["meta"]["well_fallback"] = int(s.M["meta"].get("well_fallback", 0)) + 1
++        added += 1
++    if added - over:
++        s.M["meta"]["wells_for_reach"] = added - over
++    if over:
++        s.M["meta"]["wells_for_ten"] = over
++    dry = dry_households(s, houses)
++    if dry:
++        s.M["meta"]["dry_households"] = len(dry)
++
++
+ def record_over_ten(s: Settlement) -> None:
+     """A communal well nearest to more than `WELL_SERVES_MAX` households, recorded (`meta.wells_over_ten`: each such well's
+     count) - a recorded deviation, never silent: the seat search ranks a seat that keeps every well at ten first, and where
+-    none does (a pocket well fixed inside its homestead, row 787's subject) the well stands and is counted.
++    none does the well stands and is counted.
+ 
+     Research: more than ten to a well, recorded - DEVIATION research/questions/0196-communal-wells-ido.drawing.html: the well serving more than ten stands where no seat keeps every well to ten, marked on the map's record"""
+     ws = [(float(w["x"]), float(w["y"])) for w in s.M.get("wells") or [] if not w.get("private") and not w.get("shrine")]
+diff --git a/l7r/diagram/settlement/houses.py b/l7r/diagram/settlement/houses.py
+index 8a4fea7ea..23ebc846a 100644
+--- a/l7r/diagram/settlement/houses.py
++++ b/l7r/diagram/settlement/houses.py
+@@ -692,8 +692,8 @@ class HousesMixin:
+         # (px(46) = 23px at 2 ft/px). A modest, position-seeded wealth tier scales the whole bundle. See
+         # research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html ('How far is it across this map? The scale, tier by tier'.
+         # THE HOUSEHOLD'S PARTS (feature 287, plan M5): its lot - the k-th plain household seated takes lot k, its size
+-        # rung, its kura and its beast - and its well pocket, whatever seat it lands on (`rolling/lot.py`)
+-        _lot, _byre_form, _well = household_parts(self, x, y, kind, role)
++        # rung, its kura and its beast, whatever seat it lands on (`rolling/lot.py`)
++        _lot, _byre_form = household_parts(self, x, y, kind, role)
+         if size is not None:  # explicit footprint in FEET (e.g. a larger headman)
+             if max(size) > FARMHOUSE_MAX_ASPECT * min(size):  # a caller's input error, not a map check (homes H08)
+                 raise ValueError(f"a farmhouse of {size[0]} x {size[1]} ft runs past {FARMHOUSE_MAX_ASPECT}:1 - it would read as a shed")
+diff --git a/l7r/diagram/settlement/rolling/bundle.py b/l7r/diagram/settlement/rolling/bundle.py
+index b7bb77cc4..f1f49c6ff 100644
+--- a/l7r/diagram/settlement/rolling/bundle.py
++++ b/l7r/diagram/settlement/rolling/bundle.py
+@@ -13,7 +13,6 @@ from ..homestead_parts.grove_rules import EAST_REACH_FT
+ from ..homestead_parts.grove_sides import bundle_turn
+ from ..homestead_parts.tree_shade import CANOPY_SHADE_FT
+ from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
+-from ..shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+ from .bearing import BEARING_SPREAD_DEG
+ from .dispersed import LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, YARD_SUN_STRIP, clear_east_of_beds, dispersed_layout
+ from .lot import kura_rect
+@@ -22,75 +21,6 @@ if TYPE_CHECKING:
+     from ..core import Settlement
+ 
+ 
+-def boxes_meet(a: Any, b: Any) -> bool:
+-    """Do two (cx, cy, w, h) boxes overlap - share more than an edge?"""
+-    return bool(abs(a[0] - b[0]) < (a[2] + b[2]) / 2 and abs(a[1] - b[1]) < (a[3] + b[3]) / 2)
+-
+-
+-def box_gap(a: Any, b: Any) -> float:
+-    """The edge gap between two (cx, cy, w, h) boxes: the larger of the two axes' clear distances, negative where they
+-    overlap on both (so `box_gap(a, b) < 0` is `boxes_meet(a, b)`, and 0 is a shared edge)."""
+-    return float(max(abs(a[0] - b[0]) - (a[2] + b[2]) / 2, abs(a[1] - b[1]) - (a[3] + b[3]) / 2))
+-
+-
+-class PocketUnlaid(ValueError):
+-    """A well pocket that can keep neither its gap from every bed nor its wall gap to its own dwelling - within
+-    `WELL_AMONG_DWELLINGS_PX` of the wall (`well_gap_to_dwellings`), its footprint clear of the house's (`box_gap`) - in
+-    this layout (feature 287, homes H09). The layout is then NOT the household's (`_lay_well_pocket` marks it `unlaid`
+-    and the fit refuses it, `_bundle_side_fits`), as a bath room with no seat is (`FixtureUnlaid`): another garden side
+-    or another seat is sought - never a well drawn out in the commons."""
+-
+-
+-def pocket_keeps_its_dwelling(box: tuple[float, float, float, float], house: tuple[float, float, float, float]) -> bool:
+-    """Does the pocket `box` keep the wall gap the wells rule reads to its own `house` (both (cx, cy, w, h), unturned in the
+-    house's frame, which the rake turns as one piece)? At most `WELL_AMONG_DWELLINGS_PX` from the wall, on the rule's own
+-    predicate (`well_gap_to_dwellings`, its center to the house's drawn quad), and its footprint - the wellhead and its
+-    margin - clear of the house's (`box_gap` at least 0: a shared edge, no overlap).
+-
+-    Research: well among the doors it serves - research/questions/0196-communal-wells-ido.drawing.html: within `WELL_AMONG_DWELLINGS_PX` of its own house's wall, its footprint clear of the house
+-    """
+-    hx, hy, hw, hh = house
+-    near = well_gap_to_dwellings([{"x": hx, "y": hy, "w": hw, "h": hh}], box[0], box[1]) <= WELL_AMONG_DWELLINGS_PX
+-    return near and box_gap(box, house) >= 0.0
+-
+-
+-def pocket_clear_of_beds(xs: Any, y: float, p: float, beds: Any, gap: float, house: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
+-    """THE WELL POCKET NEVER ON A BED (feature 287 M8: the overlap matrix forbids a wellhead on a garden, its own household's
+-    too). The pocket, `p` square at height `y`, is offered at each flank in `xs` in turn (the flank away from the primary
+-    bed first); a bed split to flank the house on both walls (`_garden_beds`) can stand on either, and cohort 1-60 laid 8
+-    wells on a bed so. Where both flanks hold a bed, the pocket stands past the outermost bed of the first flank, `gap`
+-    beyond it - still beside the dooryard, on the same line.
+-
+-    PUSHED, IT KEEPS THE GAP FROM EVERY BED (feature 287, homes H09): the push steps past each bed within `gap` of the
+-    pocket (`box_gap`), not only the beds it lies on, so a bed it clears by a hair - on the line, or beside it - is stepped
+-    past too, and the pocket it returns stands at least `gap` from every bed.
+-
+-    ...AND ITS WALL GAP TO ITS OWN DWELLING (homes H09's other half, research R12): wherever it stands, the pocket keeps
+-    what the wells rule reads (`pocket_keeps_its_dwelling`) - a push past the beds walks it outward, so the push stops,
+-    refusing the layout (`PocketUnlaid`), the moment it is carried past the rule's reach; that also bounds the push.
+-
+-    Research: well pocket off the garden beds - research/questions/0196-communal-wells-ido.drawing.html: never on a crop plot; pushed past every bed by a gap, on the flank away from the primary bed
+-    """
+-    for x in xs:
+-        box = (x, y, p, p)
+-        if not any(boxes_meet(box, b) for b in beds):
+-            return _kept(box, house)
+-    x = xs[0]
+-    side = 1.0 if x >= xs[-1] else -1.0
+-    while near := [b for b in beds if box_gap((x, y, p, p), b) < gap - 1e-9]:
+-        x = max(b[0] * side + b[2] / 2 for b in near) * side + side * (gap + p / 2)  # past the bed's outer edge on this flank
+-        _kept((x, y, p, p), house)  # every step walks it outward, so the first past the reach refuses (both flanks met a bed: one step at least)
+-    return (x, y, p, p)
+-
+-
+-def _kept(box: tuple[float, float, float, float], house: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
+-    """`box`, if it keeps its dwelling (`pocket_keeps_its_dwelling`); else `PocketUnlaid`, naming the gap."""
+-    if not pocket_keeps_its_dwelling(box, house):
+-        wall = well_gap_to_dwellings([{"x": house[0], "y": house[1], "w": house[2], "h": house[3]}], box[0], box[1])
+-        raise PocketUnlaid(f"the well pocket at ({box[0]:.1f}, {box[1]:.1f}) stands {wall:.1f} px from its dwelling's wall, footprint gap {box_gap(box, house):.1f} px")
+-    return box
+-
+-
+ class BundleGeomMixin:
+     @staticmethod
+     def _bbox_of(rects: Any) -> tuple[float, float, float, float]:
+@@ -237,7 +167,6 @@ class BundleGeomMixin:
+             bool(getattr(self, "_nucleated", False)),
+             seat,
+             getattr(self, "_household_byre", None),
+-            bool(getattr(self, "_household_well", False)),
+             tuple(getattr(self, "_household_fixtures", None) or ()),
+         )
+         cache = self.__dict__.setdefault("_bundle_templates", {})
+@@ -367,14 +296,13 @@ class BundleGeomMixin:
+                 bw, bh = self.px(BYRE_FT[0]), self.px(BYRE_FT[1])
+                 dx, dy, w, h, _turn = byre_part(hw, hh, bw, bh, garden_side, form, self.px(YARD_SHED_GAP_FT[0]))
+                 base["byre"] = (hx + dx, hy + dy, w, h)
+-            self._lay_well_pocket(base, hx, hy, hh, yh, gap)
+             self._lay_fixtures(base, hx, hy, hw, hh, shed, seat)
+             return base  # raked and boxed by `_bundle_geom`, per seat
+         # DISPERSED farmstead: the farm's own GROVE round the ground it works, on the sides its settlement rolled
+         # (feature 291, `grove_sides.py`). Laid out in the CANONICAL frame - the wind from the northwest, the deep bands
+         # on the north and west, the yard on the south front, the garden on the east - then carried to the map's wind
+         # by `dispersed_layout`'s turn. The multi-bed garden split is a NUCLEATED feature; a dispersed farm keeps one bed. Its
+-        # own well pocket is laid in the canonical frame (`canonical_farmstead`), turned with the rest - never `_lay_well_pocket`.
++        # own well pocket is laid in the canonical frame (`canonical_farmstead`), turned with the rest (a clustered farmstead lays none: feature 374 wave 155).
+         # THE THIN BANDS KEEP OUT OF THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): on a map that
+         # keeps the sun, the garden stands beside the yard and the east band closes the house's east side only (`sun_band`,
+         # `dispersed.canonical_farmstead`: the frontage stays inside the record's 240 ft), and a ring's south band stands the
+@@ -397,38 +325,13 @@ class BundleGeomMixin:
+             way_in=self.px(WAY_IN_FT),
+             pad=self.px(LANE_ROOM_FT) / 2.0,
+             back=self.px(SERVICE_STRIP_FT),
+-            well=2.0 * self._well_vr() + self.px(6.0),  # the wellhead and a 3 ft margin, as `_lay_well_pocket`'s
++            well=2.0 * self._well_vr() + self.px(6.0),  # the wellhead and a 3 ft margin
+         )
+         # ...AND ITS FIXTURES, laid in the bundle as a nucleated household's are (feature 287, homes H32), clear of its own
+         # grove (feature 291): the envelope admits the farm only with room for its privy, its wood shed and its bath room
+         self._lay_fixtures(dispersed, hx, hy, hw, hh, False, seat, bands=dispersed["groves"], faces=[f for f, _d in dispersed.get("grove_faces") or ()])
+         return dispersed
+ 
+-    def _lay_well_pocket(self: Settlement, base: dict[str, Any], hx: float, hy: float, hh: float, yh: float, gap: float) -> None:  # type: ignore[misc]
+-        """THE HOUSEHOLD'S WELL POCKET, a part of its homestead (feature 287, homes H09-H11): where the seating asked this
+-        household to carry one (`_household_well`), the wellhead's ground - its drawn well-house and a 3 ft margin - is
+-        laid beside the yard on the dooryard side, on the flank away from the garden (the side the byre takes, below it), so
+-        the envelope admits the household only with room for its well and the well stands among the doors it serves
+-        (within `WELL_AMONG_DWELLINGS_PX` of the wall: `pocket_clear_of_beds` refuses a pocket that would not be, and the
+-        layout is then marked `unlaid`, which the fit refuses). Beside the yard rather than before it, so the homestead
+-        reaches no deeper toward a paddy the yard faces than the yard does.
+-
+-        Research:
+-            household well where none is near - research/questions/0196-communal-wells-ido.drawing.html: a pocket among the doors it serves
+-            pocket beside the yard - UNRESEARCHED: on the dooryard side, on the flank away from the garden
+-            pocket size and depth - GUESS: the wellhead with a 3 ft margin round it, the pocket set 2 ft below the yard line; no page gives either figure
+-        """
+-        if not getattr(self, "_household_well", False):
+-            return
+-        p = 2.0 * self._well_vr() + self.px(6.0)
+-        yard = base["yard"]
+-        sx = -1.0 if base["garden"][0] > hx else 1.0  # away from the garden's side
+-        wy = hy + hh / 2 + gap + p / 2 + self.px(2.0)
+-        try:
+-            base["well"] = pocket_clear_of_beds([hx + sx * (yard[2] / 2 + gap + p / 2), hx - sx * (yard[2] / 2 + gap + p / 2)], wy, p, base["gardens"], gap, base["house"])
+-        except PocketUnlaid as refused:
+-            base["unlaid"] = str(refused)
+-
+     def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any, bands: Any = (), faces: Any = ()) -> None:  # type: ignore[misc]
+         """THE HOUSEHOLD'S FARMSTEAD FIXTURES, parts of its homestead (feature 287, homes H32, plan M5 and D9): the kinds its
+         lot keeps (`_household_fixtures`, set by the seat search) laid beside the parts already laid - built ones a crown may
+diff --git a/l7r/diagram/settlement/rolling/fit.py b/l7r/diagram/settlement/rolling/fit.py
+index 39474ab09..6044d6c36 100644
+--- a/l7r/diagram/settlement/rolling/fit.py
++++ b/l7r/diagram/settlement/rolling/fit.py
+@@ -14,7 +14,7 @@ from .._geom.water_index import crosses_a_stream
+ from ..farm_fixtures import PERSIMMON_CROWN_FT
+ from ..homestead_parts.tree_shade import CANOPY_SHADE_FT, crown_shades
+ from .access import access_corridor, legs
+-from .lot import bundle_admitted, watered
++from .lot import bundle_admitted
+ from .passage import opens, passage_of
+ 
+ if TYPE_CHECKING:
+@@ -68,17 +68,14 @@ def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
+ 
+ class BundleFitMixin:
+     # WHAT A HAMLET'S SEATING INSTALLS for the fit test (feature 287, plan M3 and M5), None outside it: the access tree
+-    # (`rolling/access.py`), the well pockets laid so far, the households' lots and the byre form their bundles reserve a
++    # (`rolling/access.py`), the households' lots and the byre form their bundles reserve a
+     # stall for (`rolling/lot.py`), and - for the one household being sought a seat - which of those parts its bundle carries
+     _access: Any = None
+     _way_out_anchor: Any = None  # the seating's reach seed past the seat band (feature 320 D1, `stages._seat_households`)
+     _way_out_bearing: Any = None  # ...and its lawful bearing out, the gate's (feature 320 D2)
+-    _pockets: Any = None
+     _lots: Any = None
+     _byre_form: str | None = None
+     _household_byre: str | None = None
+-    _household_well: bool = False
+-    _household_watered: bool = False  # the household being sought is held to `lot.watered` (homes wave 5)
+     _byre_pockets: Any = None  # the shared sheds' pockets the seating reserved (`detached_commons`, homes H06)
+     _household_fixtures: Any = ()  # the fixture kinds the household being sought a seat keeps (homes H32)
+     _fixture_forms: Any = None  # the hamlet's rolled fixture forms, set by the seating (`FixtureForms`)
+@@ -348,8 +345,6 @@ class BundleFitMixin:
+         if geom.get("unlaid"):
+             return False
+         house = geom["house"]
+-        if not self._candidate_watered(geom):
+-            return False
+         # THE FEW LOOKUPS THAT REFUSE MOST OF WHAT THE CORRIDOR WOULD BE ASKED, FIRST (the perf-audit's owed lever, 287
+         # 2026-09-30): a part over a seat another household's wood reserved, a yard or bed out of the sun. Each only refuses
+         # and reads neither the corridor nor anything its search writes, so the order changes no verdict. Measured per rule
+@@ -753,21 +748,12 @@ class BundleFitMixin:
+         Research: windbreak off the plots' afternoon sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `feet` clear west and southwest of every yard and bed"""
+         self._west_sun_ft = float(feet)
+ 
+-    def _candidate_watered(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+-        """Does the household being seated reach water from this candidate's house (`lot.watered`)? Asked only while a
+-        household is sought (`_household_watered`, set by `household_parts`)."""
+-        if not getattr(self, "_household_watered", False):
+-            return True
+-        return watered(self, geom["house"][0], geom["house"][1], geom.get("well") is not None)
+-
+     def _bundle_common_fits(self: Settlement, geom: Any, grove_off_field: bool = True) -> bool:  # type: ignore[misc]
+         """The fit checks that do NOT depend on which side the garden is on - the house, the south threshing
+         yard, a north kura, the windward grove (dispersed only), and the yard sun-corridor. Same for every
+         garden side at a given position, so it is tested once per position.
+ 
+         Research: no grove on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm's grove bands off every drawn tread"""
+-        if not self._candidate_watered(geom):
+-            return False
+         if (
+             self._rect_blocked(part_box(geom, "house"), fields=True)
+             or (geom.get("yard") is not None and self._rect_blocked(part_box(geom, "yard"), fields=True))
+diff --git a/l7r/diagram/settlement/rolling/lot.py b/l7r/diagram/settlement/rolling/lot.py
+index 582acc957..c922c703e 100644
+--- a/l7r/diagram/settlement/rolling/lot.py
++++ b/l7r/diagram/settlement/rolling/lot.py
+@@ -160,89 +160,35 @@ class HouseholdLots:
+         return lf, df, self.kura[k], self.byre[k]
+ 
+ 
+-#: How far a household may live from water, in feet: `settlement_dwellings_watered`'s ~760 real ft to the nearest well,
+-#: channel, pond or stream (homes H11) - the figure `place_wells` has always served.
+-WATER_REACH_FT = 760.0
+-"""Research: farthest a household lives from water - research/questions/0196-communal-wells-ido.drawing.html: 760 real ft to a well, channel, pond or stream"""
+-
+-
+-def needs_pocket(s: Any, x: float, y: float) -> bool:
+-    """Does a household seated at (x, y) carry a WELL POCKET (feature 287, homes H10 and H11)? The first household
+-    always does - so a settlement always has a well - and every later one exactly when no pocket stands within
+-    `WATER_REACH_FT` of it and no surface water serves it (`surface_water_dist`, the watered rule's own measure): so every
+-    household is within reach of a well or open water by construction, and two pockets stand at least that far apart.
+-
+-    Research: wells shared, one where none is near - research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the first household carries a well, a later one only beyond every well's and water's reach
+-    """
+-    pockets = getattr(s, "_pockets", None)
+-    if pockets is None:
+-        return False
+-    if not pockets:
+-        return True
+-    from ..land.wet import surface_water_within  # the leaf stays free of the land package at import
+-
+-    reach = s.px(WATER_REACH_FT)
+-    return all(math.hypot(x - px, y - py) > reach for px, py in pockets) and not surface_water_within(s.M, x, y, reach, water_index(s))
+-
+-
+-def water_index(s: Any) -> Any:
+-    """The surface water's segments in a `PointGrid`, built once and kept while the water it reads stands (its lines and their
+-    each its own list and length, the moat and the pond as they are) - the seating asks `needs_pocket` of every seat it lays out."""
+-    from .._geom.indexes import PointGrid
+-    from ..land.wet import water_lines
+-
+-    lines = water_lines(s.M)
+-    sig = (tuple((id(ln), len(ln)) for ln in lines), id(s.M.get("moat")), tuple(s.M.get("pond") or ()))
+-    got = s.__dict__.get("_water_index")
+-    if got is None or got[0] != sig:
+-        grid = PointGrid()
+-        grid.extend((a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for ln in lines for a, b in zip(ln, ln[1:], strict=False))
+-        got = s.__dict__["_water_index"] = (sig, grid)
+-    return got[1]
+-
+-
+-def watered(s: Any, x: float, y: float, well: bool) -> bool:
+-    """THE ONE PREDICATE of a household's water (feature 287, homes wave 5; `test_every_household_can_reach_water`): a
+-    household whose house stands at (x, y) reaches water - it carries its own well pocket (`well`), or a pocket already laid
+-    or surface water stands within `WATER_REACH_FT` (`needs_pocket` asks no more of it). Asked of the house where it is
+-    PLACED: the pocket was decided at the point the seat was sought from, and the placer may move the house off it (the
+-    envelope's computed move, the dispersed slides), so a candidate carried out of every pocket's reach is refused.
+-
+-    Research: every household watered - research/questions/0196-communal-wells-ido.drawing.html: its own pocket, or a well or open water within `WATER_REACH_FT`
+-    """
+-    return well or not needs_pocket(s, x, y)
+-
+-
+-def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[tuple[float, float, bool, bool] | None, str | None, bool]:
++def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[tuple[float, float, bool, bool] | None, str | None]:
+     """What the household about to be seated at (x, y) carries (plan M5): its lot (the k-th plain household takes lot
+-    k), the byre form its bundle reserves a stall for (a keeper on a household form), whether it carries a well pocket, and
+-    its farmstead fixtures (the lot's kinds). Set on the settlement for the seat search (`_household_byre`,
+-    `_household_well`, `_household_fixtures`, and `_household_watered`, which holds its candidates to `watered`), where
+-    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down.
++    k), the byre form its bundle reserves a stall for (a keeper on a household form), and its farmstead fixtures (the
++    lot's kinds). Set on the settlement for the seat search (`_household_byre`, `_household_fixtures`), where
++    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down. No household carries a well
++    pocket and none is held to a watered seat (feature 374 wave 155): a clustered hamlet's wells are shared, off the
++    farmstead, and seated after the houses with the water reach (`homesteads/wells.reach_wells`); a grove farm's own well
++    is laid in its canonical frame whatever the seat (`dispersed.canonical_farmstead`).
+ 
+     Research:
+         quota, record and registry plumbing - NONE: the k-th plain household takes lot k; the parts set on the settlement for the seat search
+         a role household gets no byre and no farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: a household with a role (the headman) takes no lot, so no stall and no fixtures, where 0028 says a headman's carries several
+-        watered seats for plain households - UNRESEARCHED: only plain households are held to watered seats and given a well pocket
+     """
+     lots = getattr(s, "_lots", None)
+     k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
+     lot = lots.lot(k) if lots is not None and kind == "plain" and role is None else None
+     form = getattr(s, "_byre_form", None) if lot is not None and lot[3] else None
+-    well = kind == "plain" and needs_pocket(s, x, y)
+-    s._household_byre, s._household_well = form, well
+-    s._household_watered = kind == "plain"  # the placer holds a household's candidates to `watered`
++    s._household_byre = form
+     s._household_fixtures = lots.fixtures_of(k) if lots is not None and lot is not None else ()
+-    return lot, form, well
++    return lot, form
+ 
+ 
+ def seat_parts_done(s: Any) -> None:
+-    s._household_byre, s._household_well, s._household_fixtures, s._household_watered = None, False, (), False
++    s._household_byre, s._household_fixtures = None, ()
+ 
+ 
+ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> None:
+     """The reserved parts a seated household's record carries: its stall (`byre`: where it is drawn, its turn, its box),
+-    its well pocket (`well_pocket`, the wellhead's center), which the seating also remembers (`_pockets`), its farmstead
++    a grove farm's own well pocket (`well_pocket`, the wellhead's center), its farmstead
+     fixtures (`fixtures`: each laid in the bundle), and its share of the wood floor (`wood_share`: the copse seats it
+     reserved, their crowns' radius and the ground they cover in sq ft)."""
+     cx, cy = rec["x"], rec["y"]
+@@ -254,8 +200,6 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
+         rec["byre"] = {"x": bx, "y": by, "rot": rec["rot"] + turn, "box": list(geom["boxes"]["byre"])}
+     if geom.get("well") is not None:
+         rec["well_pocket"] = [geom["well"][0], geom["well"][1]]
+-        if getattr(s, "_pockets", None) is not None:  # remembered only while a seating runs (a grove farm's bundle lays its own)
+-            s._pockets.append((geom["well"][0], geom["well"][1]))
+     boxes = (geom.get("boxes") or {}).get("fixtures") or {}
+     if geom.get("fixtures"):  # the fixtures laid in the bundle (homes H32), drawn where they were laid (`farmstead_fixtures`)
+         rec["fixtures"] = [{"kind": k, "x": r[0], "y": r[1], "w": r[2], "h": r[3], "box": list(boxes[k])} for k, r in geom["fixtures"].items()]
+diff --git a/l7r/diagram/settlement/rolling/place.py b/l7r/diagram/settlement/rolling/place.py
+index 0f672efaa..85bc18a30 100644
+--- a/l7r/diagram/settlement/rolling/place.py
++++ b/l7r/diagram/settlement/rolling/place.py
+@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Any
+ from .._geom import Indexed, Pt, point_in_poly
+ from .access import seat_reaches_tree
+ from .fit import part_box
+-from .lot import watered
+ from .passage import landlocked
+ 
+ if TYPE_CHECKING:
+@@ -243,7 +242,6 @@ class PlacerMixin:
+             a tight seat only on landlocked land - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: taken only where some layout walks to the neighbor's yard and none has a way of its own (`passage.landlocked`)
+             a seat refused unless its yard opens onto lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way is sought for a household while it is seated; its dooryard must open onto the ground the lanes are laid in (`SeatRegion.opens`)
+             the village roll's corridor - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a roll with no seat region (a village's) asks for a corridor candidate instead (`seat_reaches_tree`)
+-            a seat refused where the household is not watered - research/questions/0196-communal-wells-ido.drawing.html: its own pocket, or a well or open water within reach (`lot.watered`)
+         """
+         self._seat_search["placer_calls"] += 1
+         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
+@@ -265,12 +263,10 @@ class PlacerMixin:
+         # laying the household's fixtures, were built for nothing on a third of the exhaustive pass's offers.
+         if self._house_box_refused(self._house_box(x, y, hw, hh)):
+             return None
+-        # THE SEAT'S OWN QUESTIONS, ONCE (feature 297, FR-002, plan C, amended by research R10): the water depends only on
+-        # where the house stands (no distance from the field refuses a seat, feature 318) - asked here, before any layout; the
+-        # corridor to the access tree depends on the house and its yard, common to all four garden sides (558 of 558 seats measured, research R6) - asked ONCE per seat
+-        # below, after the envelope (the cheaper refusal: asked first, it ran the costliest search on every offered seat, R10).
+-        if getattr(self, "_household_watered", False) and not watered(self, x, y, bool(getattr(self, "_household_well", False))):
+-            return None
++        # THE SEAT'S OWN QUESTIONS, ONCE (feature 297, FR-002, plan C, amended by research R10): the corridor to the access tree
++        # depends on the house and its yard, common to all four garden sides (558 of 558 seats measured, research R6) - asked ONCE
++        # per seat below, after the envelope (the cheaper refusal: asked first, it ran the costliest search on every offered seat,
++        # R10). No seat is refused for its water (feature 374 wave 155): the wells are seated after the houses, with the reach.
+         # THE FOUR CONFIGURATIONS BUILT ONCE (dev/performance.md): the envelope is their union, and the loop below judges
+         # each at this seat - it built all four again (seed 17: 25,000 bundles, half of them rebuilt)
+         _at = {side: self._bundle_geom(x, y, hw, hh, side, shed) for side in self._NUC_SIDES}
+diff --git a/l7r/diagram/settlement/shrines_wells/wells.py b/l7r/diagram/settlement/shrines_wells/wells.py
+index 764e017d9..767ddc4a4 100644
+--- a/l7r/diagram/settlement/shrines_wells/wells.py
++++ b/l7r/diagram/settlement/shrines_wells/wells.py
+@@ -23,12 +23,11 @@ if TYPE_CHECKING:
+ 
+ WELL_AMONG_DWELLINGS_PX = 95.0
+ """How far a well may stand from the nearest dwelling's WALL - `wells_among_dwellings`' bar, the figure the retired
+-finished-map test read, unchanged by feature 287, which lays each well pocket inside its household's envelope beside the
+-yard and refuses a layout whose pocket would stand farther (`rolling/bundle.py:pocket_clear_of_beds`). Its origin is not
++finished-map test read, unchanged by feature 287 (whose clustered well pocket, refused past this bar, feature 374 wave 155
++retired: a clustered hamlet's wells are all shared, off the farmstead). Its origin is not
+ recorded beside it; what the record gives is the reason for a bar at all - a well is dug among the doors it serves, the
+ dooryard well of the idiom 井戸端会議 (idobata kaigi, "well-side meeting"), not out in the commons. MOVED here from
+-`hamletgen/homesteads/wells.py` (feature 287, homes H09) so the bundle's pocket asks the same predicate the placer does;
+-the hamlet module imports it back.
++`hamletgen/homesteads/wells.py` (feature 287, homes H09); the hamlet module imports it back.
+ 
+ Research: a well among the dwellings it serves - research/questions/0196-communal-wells-ido.drawing.html: 95 px from the nearest dwelling's wall
+ """
+@@ -38,7 +37,7 @@ def well_gap_to_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: floa
+     """The gap from a well at (x, y) to the nearest dwelling's drawn wall - 0 inside one; abandoned houses are no dwelling.
+ 
+     THE ONE PREDICATE of the among-the-dwellings rule (feature 287, FR-003, homes H09): every seat `place_wells` offers
+-    is held to `WELL_AMONG_DWELLINGS_PX` by it, every well pocket the bundle lays (`pocket_clear_of_beds`), and the
++    is held to `WELL_AMONG_DWELLINGS_PX` by it (the hamlet's `seat_wells` at its own nearer seat gap), and the
+     finished-map test reads it. The two used to disagree: the placer's lattice asked for a house CENTER within 105-112 px,
+     which admits a wall 99 px off beside a 26 px-deep house, while the test measured the gap to an unturned box. The
+     test's reading is the right one, turned: a gap verdict reads the footprint, never the center (`dev/placement.md`,
+diff --git a/research/questions/0196-communal-wells-ido.drawing.html b/research/questions/0196-communal-wells-ido.drawing.html
+index a869f1ddc..8f89dace8 100644
+--- a/research/questions/0196-communal-wells-ido.drawing.html
++++ b/research/questions/0196-communal-wells-ido.drawing.html
+@@ -15,7 +15,7 @@
+ <ul>
+ <li><strong>Every well stands among the houses it serves, never out in the fields.</strong><br>On hamlet and town maps a well must have a dwelling within about 95 ft, and the map places its wells a little closer than that.<!-- wells_among_dwellings ~95 px; place_wells(near=85) --></li>
+ <li><strong>Whether a village's wells stand by the lane or among the houses is a knob.</strong><br>Each settlement takes one of two forms, chosen from its seed. In the lane-side form the wellhead stands on a lane verge, clear of the tread, within reach of the houses; in the cluster form it stands in the open ground among five to ten houses, off every lane - the five to ten houses that each dug well served at Karihama, a coastal village in Ehime on Shikoku.<sup class="fn" data-note="seiyo-karihama-ido"></sup> The cluster form is this project's reading of that village; the lane-side form is attested for wayside wells in general,<sup class="fn" data-note="kotobank-tsujiido"></sup> and its use in a village is a GUESS.</li>
+-<li><strong>How a clustered hamlet seats each form.</strong><br>Its lanes are drawn after its farmsteads, through the ground between them, so a lane-side well is seated once the lanes stand: on a lane's verge, its curb within about 8 ft of the tread. Where every verge is a yard, a bed or another lane, as it often is between a hamlet's farmsteads, the well takes the other form and stands in the open ground among the houses instead. A cluster well is seated among five houses, off every lane; how far round a seat the five may stand is this project's choice, widened before the count of five gives way, and only a hamlet with fewer than five households to share a well takes three, or two. A well is seated with a dwelling's wall within 80 ft, a little closer than the 95 ft every well must keep. The verge's width and the 80 ft are each a GUESS: no page gives either. Where neither form finds a seat, the well is seated among three houses, then two, at the 95 ft, a deviation from both forms.<!-- marked on the map's record --> Where no seat keeps every well to ten households, as when one well stands inside a farmstead, the well serving more stands as a deviation from the five to ten houses a Karihama well served.<!-- marked on the map's record --><!-- feature 374 wave 154 (ask:w154-lane-wells, hour:374-match-the-research-continued@3): m:w154-wells, m:w154-lane-wells; the lane form drawn on 1 of 5 lane rolls of the 44 --></li>
++<li><strong>How a clustered hamlet seats each form.</strong><br>Its lanes are drawn after its farmsteads, through the ground between them, so a lane-side well is seated once the lanes stand: on a lane's verge, its curb within about 8 ft of the tread. Where every verge is a yard, a bed or another lane, as it often is between a hamlet's farmsteads, the well takes the other form and stands in the open ground among the houses instead. A cluster well is seated among five houses, off every lane; how far round a seat the five may stand is this project's choice, widened before the count of five gives way, and only a hamlet with fewer than five households to share a well takes three, or two. A well is seated with a dwelling's wall within 80 ft, a little closer than the 95 ft every well must keep. The verge's width and the 80 ft are each a GUESS: no page gives either. Where neither form finds a seat, the well is seated among three houses, then two, at the 95 ft, a deviation from both forms.<!-- marked on the map's record --> No well stands inside a household's farmstead: every well a clustered hamlet owes is a shared well of its form. Where a household stands beyond the 760 ft reach of every well and of open water, or one well would be the nearest for more than ten households, one more well is seated by the same form, so a hamlet whose houses spread past two wells' reach, or crowd round one, draws more than the one or two above: still within the one well to 2-20 households the record counts for a hamlet.<!-- marked on the map's record --> Where even that leaves a well serving more than ten, it stands as a deviation from the five to ten houses a Karihama well served.<!-- marked on the map's record --><!-- feature 374 wave 154 (ask:w154-lane-wells, hour:374-match-the-research-continued@3): m:w154-wells, m:w154-lane-wells; the lane form drawn on 1 of 5 lane rolls of the 44 --></li>
+ <li><strong>A communal well sits on a paved apron about 4 ft wider than its curb all round.</strong><br>The village of Karihama, in Ehime, paved the ground round many of its common wells;<sup class="fn" data-note="seiyo-karihama-ido"></sup> the apron's width is a GUESS.</li>
+ <li><strong>No well is drawn out on open common ground.</strong><br>No page we read sets a village's well there.</li>
+ <li><strong>A shrine or temple set apart from the houses keeps its own ablution well.</strong><br>Where its nearest dwelling is more than about 150 ft off, a well stands beside the hall, measured from the hall's edge, so a large hall pushes its well outward. It is a well rather than a ditch or a pond by the map's convention, not a finding: no page we read says which waters a shrine used.</li>
+diff --git a/tests/hamletgen/homesteads/test_growth.py b/tests/hamletgen/homesteads/test_growth.py
+index a5483545c..5b47f2465 100644
+--- a/tests/hamletgen/homesteads/test_growth.py
++++ b/tests/hamletgen/homesteads/test_growth.py
+@@ -248,7 +248,7 @@ def test_the_next_households_reach_is_rolled_with_its_own_lot_and_its_parts_take
+     s._bundle_envelope = envelope  # type: ignore[method-assign]
+     assert household_reach(s, (10.0, 20.0), (99.0, 99.0)) == (20.0, 20.0, 30.0, 30.0)  # type: ignore[arg-type]
+     assert asked == [(46 * 1.2, 28 * 1.1, True, ("privy",))], "its own house from the size ladder, its kura, its fixtures set"
+-    assert s._household_fixtures == () and s._household_well is False, "...and taken down after"
++    assert s._household_fixtures == (), "...and taken down after"
+     s2 = _Ground(room=40.0)
+     s2._bundle_envelope = lambda x, y, w, h, shed=False: asked.append((w, h, shed, ())) or (x, y, 10.0, 10.0)  # type: ignore[method-assign]
+     household_reach(s2, (0.0, 0.0), (99.0, 98.0))  # type: ignore[arg-type]
+diff --git a/tests/hamletgen/homesteads/test_well_siting_154.py b/tests/hamletgen/homesteads/test_well_siting_154.py
+index b8b8a16e9..3d2c75029 100644
+--- a/tests/hamletgen/homesteads/test_well_siting_154.py
++++ b/tests/hamletgen/homesteads/test_well_siting_154.py
+@@ -1,4 +1,4 @@
+-"""A clustered hamlet's communal wells by the lane or among the houses (feature 374 wave 154, 0196): the rolled siting, the
++"""A clustered hamlet's communal wells by the lane or among the houses (feature 374 waves 154 and 155, 0196): the rolled siting, the
+ order the forms are tried in once the lanes stand, the three-then-two only where five cannot be gathered, the verge test,
+ and the wells serving more than ten recorded."""
+ 
+@@ -36,8 +36,9 @@ def test_the_lanes_stage_tries_the_lane_form_then_the_cluster_form_then_records_
+         return []
+ 
+     monkeypatch.setattr(wl, "seat_wells", seat)
++    monkeypatch.setattr(wl, "reach_wells", lambda s, plan: None)  # its own test below
+     plan = types.SimpleNamespace(ftpx=1.0)
+-    s = _s([{"x": 1.0, "y": 1.0, "form": "pocket"}], HOUSES)
++    s = _s([{"x": 1.0, "y": 1.0, "form": "cluster"}], HOUSES)
+     s._wells_owed = (2, ())
+     wl.stage_lane_wells(s, plan)  # type: ignore[arg-type]
+     assert calls == ["lane", "cluster", "fallback"] and s.M["meta"]["well_fallback"] == 1
+@@ -90,3 +91,100 @@ def test_the_verge_test_and_the_count_a_dig_leaves_and_the_form_recorded() -> No
+     wl.mark_form(s, 5.0, 5.0, "lane")
+     wl.mark_form(s, 50.0, 50.0, "cluster")
+     assert s.M["wells"][0]["form"] == "lane"
++
++
++def test_the_water_reach_is_held_by_the_wells_once_the_forms_have_seated(monkeypatch: pytest.MonkeyPatch) -> None:
++    """Feature 374 wave 155 (row 787): no household carries a well pocket, so the reach the first household's pocket held
++    by construction is held here - while a household is beyond 760 ft of every well and of open water, one more shared well
++    is seated, the rolled form first; the extra wells are counted, and a household no seat can water is recorded."""
++    far = [{"x": 0.0, "y": 0.0}, {"x": 2000.0, "y": 0.0}]
++    forms: list[str] = []
++
++    def seat(s, plan, houses, placed, want, rungs, form, gap=0.0, seat_ok=None, candidates=None, step=22.0):  # noqa: ANN001, ANN202
++        forms.append(form)
++        if form != "lane":
++            s.M["wells"].append({"x": 1990.0, "y": 0.0})
++            placed.append((1990.0, 0.0))
++            return [(1990.0, 0.0)]
++        return []
++
++    monkeypatch.setattr(wl, "seat_wells", seat)
++    monkeypatch.setattr(wl, "surface_water_dist", lambda M, x, y: 1e9)
++    s = _s([{"x": 0.0, "y": 0.0}], far)
++    assert wl.dry_households(s, far) == [far[1]]  # type: ignore[arg-type]
++    wl.reach_wells(s, types.SimpleNamespace(well_siting="lane", ftpx=1.0))  # type: ignore[arg-type]
++    assert forms == ["lane", "cluster"] and s.M["meta"] == {"wells_for_reach": 1}, "the rolled form, then the other"
++    forms.clear()
++    watered = _s([{"x": 0.0, "y": 0.0}, {"x": 2000.0, "y": 0.0}], far)
++    wl.reach_wells(watered, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
++    assert forms == [] and watered.M["meta"] == {}, "every household within reach: nothing seated"
++    monkeypatch.setattr(wl, "seat_wells", lambda *a, **k: [])
++    dry = _s([{"x": 0.0, "y": 0.0}], far)
++    wl.reach_wells(dry, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
++    assert dry.M["meta"] == {"dry_households": 1}, "no seat at all: the dry household recorded, never silent"
++
++
++def test_a_fallback_reach_well_is_counted() -> None:
++    """The reach well past both forms is the recorded fallback (`meta.well_fallback`), as wave 154's is."""
++    far = [{"x": 0.0, "y": 0.0}, {"x": 2000.0, "y": 0.0}]
++    s = _s([{"x": 0.0, "y": 0.0}], far)
++    calls: list[str] = []
++
++    def seat(s_, plan, houses, placed, want, rungs, form, **k):  # noqa: ANN001, ANN202
++        calls.append(form)
++        if form == "fallback":
++            s_.M["wells"].append({"x": 1990.0, "y": 0.0})
++            placed.append((1990.0, 0.0))
++            return [(1990.0, 0.0)]
++        return []
++
++    mp = pytest.MonkeyPatch()
++    try:
++        mp.setattr(wl, "seat_wells", seat)
++        mp.setattr(wl, "surface_water_dist", lambda M, x, y: 1e9)
++        wl.reach_wells(s, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
++    finally:
++        mp.undo()
++    assert calls == ["cluster", "cluster", "lane", "fallback"], "five, then three-then-two (two households), the lane, the fallback"
++    assert s.M["meta"] == {"wells_for_reach": 1, "well_fallback": 1}
++
++
++def test_the_first_of_two_wells_stands_at_its_shares_middle() -> None:
++    """Feature 374 wave 155: the first of several wells is seated at the middle of its own share of the houses, cut along
++    the cluster's long axis, so the second takes the other share and neither serves more than ten."""
++    row = [{"x": float(10 * i), "y": 0.0} for i in range(16)]  # a row along x: the long axis
++    assert wl.first_share_middle(row, 2) == (35.0, 0.0), "the eight at one end"
++    col = [{"x": 0.0, "y": float(10 * i)} for i in range(4)]
++    assert wl.first_share_middle(col, 2) == (0.0, 5.0), "a column: the long axis is y"
++    assert wl.first_share_middle(row, 1) == (75.0, 0.0), "one well: all of them"
++
++
++def test_the_first_well_looks_one_well_ahead() -> None:
++    """Feature 374 wave 155: a first seat is ranked by whether some second seat 170 px off would keep both wells at ten or
++    fewer - here sixteen houses in two groups of eight 400 px apart: a seat in one group leaves the other group's seat, eight
++    a well; a seat with no second seat 170 px off it keeps nothing."""
++    houses = [{"x": float(10 * i), "y": 0.0} for i in range(8)] + [{"x": 400.0 + 10 * i, "y": 0.0} for i in range(8)]
++    seats = [(0.0, 35.0, 0.0), (0.0, 435.0, 0.0), (0.0, 235.0, 0.0)]
++    assert wl.pair_keeps_ten(seats[0], seats, houses), "one group's middle: the other group's seat keeps both at eight"
++    assert not wl.pair_keeps_ten(seats[2], seats[2:], houses), "no second seat 170 px off: nothing keeps ten"
++
++
++def test_one_more_well_where_one_serves_more_than_ten(monkeypatch: pytest.MonkeyPatch) -> None:
++    """Feature 374 wave 155 (W155-6): while a well is nearest to more than ten households, one more shared well is seated
++    and counted (`meta.wells_for_ten`); a well that leaves the busiest count where it was ends the search."""
++    houses = [{"x": float(10 * i), "y": 0.0} for i in range(12)]
++    monkeypatch.setattr(wl, "surface_water_dist", lambda M, x, y: 0.0)  # every household watered: only the ceiling asks
++
++    def seat(s, plan, houses_, placed, want, rungs, form, **k):  # noqa: ANN001, ANN202
++        s.M["wells"].append({"x": 110.0, "y": 0.0})
++        placed.append((110.0, 0.0))
++        return [(110.0, 0.0)]
++
++    monkeypatch.setattr(wl, "seat_wells", seat)
++    s = _s([{"x": 0.0, "y": 0.0}], houses)
++    wl.reach_wells(s, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
++    assert s.M["meta"] == {"wells_for_ten": 1} and len(s.M["wells"]) == 2, "twelve at one well: a second, counted for the ten"
++    stuck = _s([{"x": 0.0, "y": 0.0}], houses)
++    monkeypatch.setattr(wl, "seat_wells", lambda s_, plan, h, placed, *a, **k: s_.M["wells"].append({"x": 500.0, "y": 0.0}) or placed.append((500.0, 0.0)) or [(500.0, 0.0)])
++    wl.reach_wells(stuck, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
++    assert len(stuck.M["wells"]) == 2, "a well that served none of the twelve: not tried again"
+diff --git a/tests/hamletgen/test_homesteads.py b/tests/hamletgen/test_homesteads.py
+index 7c988a26e..b456907e1 100644
+--- a/tests/hamletgen/test_homesteads.py
++++ b/tests/hamletgen/test_homesteads.py
+@@ -65,7 +65,7 @@ def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance(
+     the two used to disagree: a lattice seat 110 px from a 26 px-deep house's CENTER, inside the old rungs' 112 px, but
+     97 px from its wall. It is refused - on the lattice, by the rescue ring and at the last resort alike, which is
+     handed the same seat - and the hamlet digs no well there. A seat the same center distance off the house's long
+-    end (wall 80 px off) is taken, and so is a last-resort seat among the doors."""
++    end (wall 80 px off) is taken. (A clustered household's pocket, always drawn here before, is gone: feature 374 wave 155.)"""
+     from types import SimpleNamespace
+ 
+     from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+@@ -83,28 +83,27 @@ def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance(
+ 
+     door = (1001.5, 960.0)  # off the lattice: with no rescue and no last resort (feature 287, H10-H12), nothing seeks it
+     assert hg.place_wells(_only_seat(*door, open_seat=door), plan, _WELL_HOUSES) == 0  # type: ignore[arg-type]
+-    pocketed = [{**_WELL_HOUSES[0], "well_pocket": [1000.0, 1040.0]}, *_WELL_HOUSES[1:]]
+-    wells: list[tuple[float, float]] = []
+-    fake = _only_seat(*door)
+-    fake.well = lambda x, y: wells.append((x, y))  # type: ignore[attr-defined]
+-    assert hg.place_wells(fake, plan, pocketed) == 1 and wells == [(1000.0, 1040.0)], "...but a pocket is always drawn"  # type: ignore[arg-type]
+ 
+ 
+-def test_a_lattice_well_keeps_170_px_off_a_pocket_well() -> None:
+-    """`wells_not_clustered`: with a household's pocket well standing, the lattice's seat 117 px from it - one the engine
+-    would allow - is passed over, and no second well is dug near the first. Asserted directly since the pool's maps
+-    stopped reaching it when the yard persimmon moved behind the house (GM 2026-10-02)."""
++def test_a_lattice_well_keeps_170_px_off_a_standing_well() -> None:
++    """`wells_not_clustered`: with a well standing, the lattice's seat 117 px from it - one the engine would allow - is
++    passed over, and no second well is dug near the first. Asserted directly since the pool's maps stopped reaching it
++    when the yard persimmon moved behind the house (GM 2026-10-02); the standing well was a household's pocket until
++    feature 374 wave 155 made every clustered well a shared one."""
+     from types import SimpleNamespace
+ 
+-    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0, well_siting="cluster")  # two wells wanted
++    from l7r.diagram.hamletgen.homesteads.wells import seat_wells
++
++    plan = SimpleNamespace(spec=SimpleNamespace(households=12), ftpx=1.0, well_siting="cluster")
+     east = (1110.0, 1000.0)
+-    pocketed = [{**_WELL_HOUSES[0], "well_pocket": [1000.0, 1040.0]}, *_WELL_HOUSES[1:]]
+     wells: list[tuple[float, float]] = []
+     fake = _only_seat(*east)
+     fake.well = lambda x, y: wells.append((x, y))  # type: ignore[attr-defined]
+     fake._crop_boxes = lambda city=False: []  # type: ignore[attr-defined]
++    standing = [(1000.0, 1040.0)]
+     assert math.hypot(east[0] - 1000.0, east[1] - 1040.0) < 170.0
+-    assert hg.place_wells(fake, plan, pocketed) == 1 and wells == [(1000.0, 1040.0)]  # type: ignore[arg-type]
++    assert seat_wells(fake, plan, _WELL_HOUSES, standing, 2, ((520.0, 2),), "cluster") == [] and wells == []  # type: ignore[arg-type]
++    assert seat_wells(fake, plan, _WELL_HOUSES, [], 1, ((520.0, 2),), "cluster") == [east], "with nothing standing it is taken"  # type: ignore[arg-type]
+ 
+ 
+ def test_the_well_gap_reads_the_turned_wall_and_passes_over_a_derelict() -> None:
+diff --git a/tests/hamletgen/test_homesteads_287.py b/tests/hamletgen/test_homesteads_287.py
+index a88ab9cfc..077dbba16 100644
+--- a/tests/hamletgen/test_homesteads_287.py
++++ b/tests/hamletgen/test_homesteads_287.py
+@@ -1,4 +1,4 @@
+-"""Feature 287's homes guarantees at the homestead stage: the well pockets laid at seating and drawn (H10-H12), the
++"""Feature 287's homes guarantees at the homestead stage: the wells (H12; no clustered pocket since feature 374 wave 155), the
+ household bamboo on its house's bank (H01), the eaves stack against its steading (H35) and the woodpile form (H33).
+ 
+ Split from test_homesteads.py when feature 287 took it past the 1,000-line bar; the helpers stay there.
+@@ -31,61 +31,16 @@ def test_a_well_past_the_crop_is_refused_now_the_pockets_water_every_house() ->
+     assert hg.place_wells(fake, plan, _WELL_HOUSES) == 0, "the one legal seat reaches 22 px past the box"  # type: ignore[arg-type]
+ 
+ 
+-def test_every_household_seated_has_a_well_pocket_or_water_within_reach() -> None:
+-    """Feature 287, homes H10 and H11: the first household always carries a pocket; a later one exactly when no pocket
+-    and no open water stands within 760 ft - so every house is watered and no settlement is wellless."""
+-    from l7r.diagram.settlement.rolling.lot import needs_pocket
+-
+-    s = Settlement(3000, 3000, seed=3)
+-    s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
+-    assert not needs_pocket(s, 100.0, 100.0), "no seating: no pockets asked"
+-    s._pockets = []
+-    assert needs_pocket(s, 100.0, 100.0), "the first household carries one"
+-    s._pockets.append((100.0, 100.0))
+-    assert not needs_pocket(s, 700.0, 100.0), "600 ft from a pocket"
+-    assert needs_pocket(s, 1000.0, 100.0), "900 ft from it, and no water"
+-    s.M["streams"] = [{"poly": [[1000.0, 0.0], [1000.0, 200.0]], "w": 6.0}]
+-    assert not needs_pocket(s, 1000.0, 100.0), "open water beside it"
+-
+-
+-def test_a_household_moved_off_the_seat_it_was_sought_from_past_every_pockets_reach_is_refused() -> None:
+-    """Feature 287, homes wave 5 (`test_every_household_can_reach_water`): the pocket is decided at the seek point, and the
+-    placer may carry the house off it - a candidate out of every pocket's and every water's reach, carrying no pocket of its
+-    own, is refused (`lot.watered`, asked by `_parts_fit` and `_bundle_common_fits`); within reach, or with its own pocket,
+-    it is not. The rule rests once the household is seated."""
+-    from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done, watered
+-
+-    s = Settlement(3000, 3000, seed=3)
+-    s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
+-    s._nucleated = True  # a nucleated bundle: a grove farm's carries its own pocket always (feature 291 on 287)
+-    s._pockets = [(800.0, 300.0)]
+-    assert household_parts(s, 800.0, 1000.0, "plain", None)[2] is False, "sought 700 ft from the pocket: no pocket of its own"
+-    near, far = s._bundle_geom(800.0, 1000.0, 46.0, 28.0), s._bundle_geom(800.0, 1100.0, 46.0, 28.0)
+-    assert s._candidate_watered(near) and s._bundle_common_fits(near)
+-    assert not s._candidate_watered(far) and not s._bundle_common_fits(far) and not s._parts_fit(far), "moved 100 ft on, 800 ft off: dry"
+-    assert watered(s, 800.0, 1100.0, True), "a candidate carrying its own pocket is watered wherever it stands"
+-    seat_parts_done(s)
+-    assert s._candidate_watered(far), "no household sought: nothing asked"
+-
+-
+-def test_a_seating_draws_a_well_at_every_pocket_it_laid() -> None:
+-    """The seat half and the draw half together: a toy hamlet's pockets are laid in the bundles (inside each envelope,
+-    beside the yard, among the doors) and `place_wells` draws every one."""
++def test_no_clustered_household_carries_a_well_pocket_and_every_well_is_shared() -> None:
++    """Feature 374 wave 155 (row 787, 0028: "the well, shared off the farmstead"): a clustered hamlet's seating lays no
++    well inside any household's homestead, and every well `place_wells` draws is a shared well of the rolled siting."""
+     from l7r.diagram.hamletgen.homesteads import stage_homesteads
+-    from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+ 
+-    s, plan = _toy_hamlet(10, seed=4)  # seed 4: under feature 280's forms seed 3's margin seats eight of ten and is refused
++    s, plan = _toy_hamlet(10, seed=4)
+     stage_homesteads(s, plan)
+-    pockets = [h for h in s.M["houses"] if h.get("well_pocket")]
+-    assert pockets and pockets[0] is s.M["houses"][0], "the first household carries one"
+-    for h in pockets:
+-        px, py = h["well_pocket"]
+-        ex, ey, ew, eh = h["geom"]["bbox"]
+-        assert abs(px - ex) <= ew / 2 and abs(py - ey) <= eh / 2
+-        assert well_gap_to_dwellings(s.M["houses"], px, py) <= WELL_AMONG_DWELLINGS_PX
++    assert not any(h.get("well_pocket") for h in s.M["houses"]), "no household's homestead holds a well"
+     hg.place_wells(s, plan, s.M["houses"])
+-    drawn = {(round(w["x"], 1), round(w["y"], 1)) for w in s.M["wells"]}
+-    assert all((round(h["well_pocket"][0], 1), round(h["well_pocket"][1], 1)) in drawn for h in pockets)
++    assert s.M["wells"] and {w.get("form") for w in s.M["wells"]} <= {"cluster", "lane"}
+ 
+ 
+ def test_a_household_bamboo_strip_stands_on_its_house_bank_and_names_its_house() -> None:
+diff --git a/tests/settlement/test_m8_placers_287.py b/tests/settlement/test_m8_placers_287.py
+index b828cb65a..112361dee 100644
+--- a/tests/settlement/test_m8_placers_287.py
++++ b/tests/settlement/test_m8_placers_287.py
+@@ -16,16 +16,11 @@ from l7r.diagram.settlement.homestead_parts.groves import crown_lift
+ from l7r.diagram.settlement.homestead_parts.stands import crown_reach
+ from l7r.diagram.settlement.homestead_parts.wood_share import BAR_MARGIN_PX, ground_blocks, open_water_discs
+ from l7r.diagram.settlement.rolling import access
+-from l7r.diagram.settlement.rolling.bundle import BundleGeomMixin, PocketUnlaid, box_gap, boxes_meet, pocket_clear_of_beds, pocket_keeps_its_dwelling
+ from l7r.diagram.settlement.rolling.lot import bundle_admitted, bundle_records, held_part_records
+-from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+ from tests.settlement._builders import seed_tree
+ 
+ from ._builders import _crop_settlement
+ 
+-HOUSE = (0.0, -40.0, 40.0, 20.0)
+-"""The dwelling the pockets below keep: its front wall 30 px above their row, clear of every one they are laid at."""
+-
+ 
+ def _hamlet(W: float = 1400.0) -> Settlement:
+     s = Settlement(W, W, seed=3)
+@@ -33,18 +28,6 @@ def _hamlet(W: float = 1400.0) -> Settlement:
+     return s
+ 
+ 
+-def test_the_well_pocket_is_never_laid_on_a_bed() -> None:
+-    """A bed split to flank the house on both walls stood where the pocket is laid (cohort 1-60: 8 wells on a bed). The
+-    pocket takes the flank with no bed, else steps past the outermost bed of its flank."""
+-    beds = [(30.0, 0.0, 12.0, 20.0)]
+-    assert pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, beds, 3.0, HOUSE) == (-30.0, 0.0, 20.0, 20.0), "the other flank"
+-    both = [(30.0, 0.0, 12.0, 20.0), (-30.0, 0.0, 12.0, 20.0), (50.0, 0.0, 12.0, 20.0)]
+-    x, y, w, h = pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, both, 3.0, HOUSE)
+-    assert (x, y) == (69.0, 0.0) and not any(boxes_meet((x, y, w, h), b) for b in both), "past the outermost bed, on its flank"
+-    assert pocket_clear_of_beds([-30.0, 30.0], 0.0, 20.0, both, 3.0, HOUSE)[0] == -49.0
+-    assert not boxes_meet((0.0, 0.0, 10.0, 10.0), (10.0, 0.0, 10.0, 10.0)), "sharing an edge is not meeting"
+-
+-
+ def test_a_corridor_keeps_off_its_own_beds_and_house_and_leaves_its_yard_once() -> None:
+     s = _hamlet()
+     geom = s._bundle_geom(700.0, 700.0, 46.0, 28.0, "E", rot=0.0)
+@@ -161,12 +144,15 @@ def test_a_burial_ground_is_not_seated_on_an_access_corridor() -> None:
+ 
+ 
+ def _laid_bundle(s: Settlement, x: float = 700.0, y: float = 700.0) -> dict[str, Any]:
+-    """A nucleated bundle at (x, y) laying a well pocket and a privy - the parts the hold stands at the seating's end."""
+-    s._nucleated, s._household_well, s._household_fixtures = True, True, ("privy",)
++    """A nucleated bundle at (x, y) laying a privy, with a well pocket beside its yard as a grove farm's canonical frame lays
++    one (a clustered farmstead lays none since feature 374 wave 155) - the parts the hold stands at the seating's end."""
++    s._nucleated, s._household_fixtures = True, ("privy",)
+     try:
+-        return s._bundle_geom(x, y, 46.0, 28.0, "E", rot=0.0)
++        geom = s._bundle_geom(x, y, 46.0, 28.0, "E", rot=0.0)
+     finally:
+-        s._household_well, s._household_fixtures = False, ()
++        s._household_fixtures = ()
++    geom["well"] = (x - 60.0, y + 30.0, 26.0, 26.0)
++    return geom
+ 
+ 
+ def _ditch_at(s: Settlement, x: float, y: float) -> None:
+@@ -214,7 +200,7 @@ def test_the_bundle_fit_refuses_a_layout_the_registry_refuses(monkeypatch: pytes
+     _ditch_at(s, privy[0], privy[1])
+     assert not s._bundle_fits(geom), "the privy on a ditch"
+     t = _hamlet()
+-    for rule in ("_candidate_watered", "_gardens_sun_ok", "_sun_corridor_ok"):
++    for rule in ("_gardens_sun_ok", "_sun_corridor_ok"):
+         monkeypatch.setattr(type(t), rule, lambda self, *a: True)
+     assert t._parts_fit(geom)
+     _ditch_at(t, privy[0], privy[1])
+@@ -230,70 +216,3 @@ def test_a_shared_shed_and_a_sty_ask_the_registry_first() -> None:
+     assert t.pond_fixture_fits(300.0, 300.0, 0.0)
+     _ditch_at(t, 300.0, 300.0)
+     assert not t.pond_fixture_fits(300.0, 300.0, 0.0), "a sty on a ditch"
+-
+-
+-def test_a_pushed_well_pocket_keeps_its_gap_from_every_bed() -> None:
+-    """Homes H09: past the beds the pocket keeps `gap` from each - a bed it would clear by a hair beside the line (here 1 px
+-    above the pocket's row, not meeting it) is stepped past too."""
+-    assert box_gap((0.0, 0.0, 10.0, 10.0), (10.0, 0.0, 10.0, 10.0)) == 0.0 and box_gap((0.0, 0.0, 10.0, 10.0), (0.0, 0.0, 2.0, 2.0)) < 0
+-    assert box_gap((0.0, 0.0, 10.0, 10.0), (5.0, 13.0, 10.0, 10.0)) == 3.0, "beside, clear on one axis alone"
+-    beds = [(30.0, 0.0, 12.0, 20.0), (-30.0, 0.0, 12.0, 20.0), (60.0, 21.0, 12.0, 20.0)]
+-    old_x = 36.0 + 3.0 + 10.0  # the old push: past the one bed it lay on, 1 px beside the next
+-    assert box_gap((old_x, 0.0, 20.0, 20.0), beds[2]) == 1.0, "the violating case: under the gap"
+-    got = pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, beds, 3.0, HOUSE)
+-    assert got == (79.0, 0.0, 20.0, 20.0) and min(box_gap(got, b) for b in beds) >= 3.0
+-
+-
+-def _houses(house: tuple[float, float, float, float]) -> list[dict[str, float]]:
+-    return [{"x": house[0], "y": house[1], "w": house[2], "h": house[3]}]
+-
+-
+-def test_a_pushed_well_pocket_keeps_its_wall_gap_to_its_own_dwelling_or_the_layout_is_refused() -> None:
+-    """Homes H09's other half (research R12): a push past the beds walks the pocket outward, and nothing asked its gap to
+-    its own dwelling. A row of beds that carries it past `WELL_AMONG_DWELLINGS_PX` from the wall - the wells rule's own
+-    predicate, `well_gap_to_dwellings` - refuses the layout (`PocketUnlaid`) instead of laying a well out in the commons;
+-    the push that stays within the reach is laid as before."""
+-    row = [(30.0 + 25.0 * k, 0.0, 12.0, 20.0) for k in range(6)] + [(-30.0, 0.0, 12.0, 20.0)]  # beds 25 px apart, out to x=161
+-    old_x = 161.0 + 3.0 + 10.0  # where the unchecked push laid it: past the last bed of the row
+-    assert well_gap_to_dwellings(_houses(HOUSE), old_x, 0.0) > WELL_AMONG_DWELLINGS_PX, "the violating case: out of reach"
+-    with pytest.raises(PocketUnlaid, match="from its dwelling's wall"):
+-        pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, row, 3.0, HOUSE)
+-    kept = pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, row[:2] + row[-1:], 3.0, HOUSE)
+-    assert kept == (74.0, 0.0, 20.0, 20.0) and well_gap_to_dwellings(_houses(HOUSE), 74.0, 0.0) <= WELL_AMONG_DWELLINGS_PX
+-
+-
+-def test_a_well_pocket_on_its_own_dwellings_footprint_is_refused() -> None:
+-    """The lower bound: the pocket - the wellhead and its margin - clear of the house's footprint (a shared edge is clear,
+-    an overlap is not), even where the flank it is offered holds no bed."""
+-    assert pocket_keeps_its_dwelling((0.0, -20.0, 20.0, 20.0), HOUSE), "sharing the house's front wall"
+-    assert not pocket_keeps_its_dwelling((0.0, -25.0, 20.0, 20.0), HOUSE), "5 px into the house"
+-    assert not pocket_keeps_its_dwelling((0.0, 200.0, 20.0, 20.0), HOUSE), "out of reach"
+-    with pytest.raises(PocketUnlaid, match="footprint gap -5.0 px"):
+-        pocket_clear_of_beds([0.0, 40.0], -25.0, 20.0, [], 3.0, HOUSE)
+-
+-
+-def test_a_layout_whose_well_pocket_is_refused_is_marked_unlaid() -> None:
+-    """`_lay_well_pocket` turns the refusal into the layout's `unlaid` mark, which the fit refuses (`_bundle_side_fits`):
+-    the envelope admits the household only where its well stands among its doors."""
+-
+-    class _Stub:
+-        _household_well = True
+-
+-        def _well_vr(self) -> float:
+-            return 7.0
+-
+-        def px(self, ft: float) -> float:
+-            return ft
+-
+-    primary = (30.0, 12.0, 12.0, 20.0)  # the garden's bed on the east wall: the pocket is offered west first, then east
+-    row = [(-30.0 - 25.0 * k, 12.0, 12.0, 20.0) for k in range(8)]  # beds out along the west flank, past the reach
+-
+-    def layout(beds: list[tuple[float, float, float, float]]) -> dict[str, Any]:
+-        base: dict[str, Any] = {"house": (0.0, 0.0, 40.0, 20.0), "yard": (0.0, 40.0, 30.0, 20.0), "garden": primary, "gardens": [primary, *beds]}
+-        BundleGeomMixin._lay_well_pocket(_Stub(), base, 0.0, 0.0, 20.0, 20.0, 3.0)  # type: ignore[arg-type]
+-        return base
+-
+-    refused = layout(row)
+-    assert "well" not in refused and "from its dwelling's wall" in refused["unlaid"]
+-    kept = layout(row[:1])
+-    assert kept["well"] == (-49.0, 25.0, 20.0, 20.0) and "unlaid" not in kept
+diff --git a/tests/settlement/test_seat_once_297.py b/tests/settlement/test_seat_once_297.py
+index a44829a67..d90d81fd7 100644
+--- a/tests/settlement/test_seat_once_297.py
++++ b/tests/settlement/test_seat_once_297.py
+@@ -44,20 +44,13 @@ def test_a_seat_reaches_the_tree_only_where_a_door_has_a_corridor_and_the_search
+     assert not seat_reaches_tree(s, s._core_geom(300.0, 200.0, 46.0, 28.0)), "no candidate at all: the seat is refused"
+ 
+ 
+-def test_a_seat_failing_its_own_questions_builds_no_layout_and_its_corridor_is_asked_once(monkeypatch) -> None:
+-    """The water refuses before any layout; the corridor - the costliest question - is asked once per seat,
+-    after the envelope, for all its unmoved sides (research R10)."""
++def test_a_seats_corridor_is_asked_once_for_its_four_sides(monkeypatch) -> None:
++    """The corridor - the costliest question - is asked once per seat, after the envelope, for all its unmoved sides
++    (research R10). No seat is refused for its water since feature 374 wave 155: the wells hold the reach."""
+     from l7r.diagram.settlement.rolling import place
+ 
+     s = _open()
+     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
+-    built: list[str] = []
+-    real_geom = type(s)._bundle_geom
+-    monkeypatch.setattr(type(s), "_bundle_geom", lambda self, *a, **k: built.append("x") or real_geom(self, *a, **k))
+-    s._household_watered, s._household_well = True, False
+-    monkeypatch.setattr(place, "watered", lambda s_, x, y, well: False)
+-    assert s._place_bundle_nucleated(500.0, 500.0, 46.0, 28.0) is None and not built, "no water: no layout"
+-    monkeypatch.setattr(place, "watered", lambda s_, x, y, well: True)
+     asked: list[int] = []
+     monkeypatch.setattr(place, "seat_reaches_tree", lambda s_, g: asked.append(1) or False)
+     assert s._place_bundle_nucleated(500.0, 500.0, 46.0, 28.0) is None

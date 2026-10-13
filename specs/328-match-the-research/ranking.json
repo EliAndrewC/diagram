@@ -12136,39 +12136,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first",
-  "tier": "E3",
-  "fix": "seat the pocket well off the farmstead, shared, by a lane or among the houses, not inside its own homestead before its yard",
-  "files": [
-   "l7r/diagram/hamletgen/homesteads/wells.py"
-  ],
-  "after": [
-   "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#wells among the houses"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/homesteads/wells.py::record_over_ten#more than ten to a well, recorded",
-  "verdict": "DRIFTED",
-  "tier": "E3",
-  "fix": "keep every communal well at ten households or fewer (0196: five to ten at Karihama); no well serves more than ten on the 44 rolls or the pool since wave 154 (m:w154-wells); the deviation stays recorded (meta.wells_over_ten) and the row open until a pocket well inside a homestead (row 787) can no longer push a well over ten",
-  "files": [
-   "l7r/diagram/hamletgen/homesteads/wells.py"
-  ],
-  "after": [
-   "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first"
-  ],
-  "flag": "",
-  "found": "feature 374 wave 154 (2026-10-13, ask:w154-lane-wells): Sawada's wells serve 6 and 13 households; no seat keeps both at ten while the pocket stands; not measured since the cluster well keeps off the reserved ways: Sawada 2 wells at ten or fewer, the 44 rolls none over ten (m:w154-wells, 2026-10-13)",
-  "tier_as_ranked": "E3",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#beside the street",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -14318,23 +14285,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_well_pocket#household well where none is near",
-  "verdict": "DRIFTED",
-  "tier": "E3",
-  "fix": "the pocket stands a shared wellhead inside one household's homestead, neither form 0196 attests; settled with place_wells#well pockets drawn first (move the pocket off the farmstead), else record it as a deviation on 0196 drawing",
-  "files": [
-   "l7r/diagram/settlement/rolling/bundle.py"
-  ],
-  "after": [
-   "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first"
-  ],
-  "flag": "",
-  "found": "feature 374 wave 154 (2026-10-13): impl-drift on the wave's claims; pre-existing, the same defect as the place_wells pocket row",
-  "tier_as_ranked": "E3",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut out of a bed's morning sun",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -15580,6 +15530,40 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first",
+  "tier": "E4",
+  "fix": "re-land the wave 155 patch once settle_the_web carries a re-deal of the seats: no well pocket in a clustered hamlet's homesteads, every well a shared well of the rolled siting, the water reach and the ceiling of ten held by the wells (reach_wells), the first of several wells at its share's middle",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E3",
+  "moved": "wave 155 (2026-10-13): re-tiered E4 behind the settle row - built and measured (specs/374-match-the-research-continued/w155-pocket-attempt.patch, m:w155-wells: no well in a homestead, none over ten, the pool clean, 42/44 as at HEAD), then reverted by the round arbiter (ask:w155-cohort-seed10, route b): taking the pocket's room out of the homesteads re-deals the seats and cohort seed 10 knots (lane_knots); re-land the patch, with no waiver, once the web carries a re-deal",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/homesteads/wells.py::record_over_ten#more than ten to a well, recorded",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "keep every communal well at ten households or fewer (0196: five to ten at Karihama); no well serves more than ten on the 44 rolls or the pool since wave 154 (m:w154-wells); the deviation stays recorded (meta.wells_over_ten) and the row open until a pocket well inside a homestead (row 787) can no longer push a well over ten",
+  "files": [
+   "l7r/diagram/hamletgen/homesteads/wells.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first"
+  ],
+  "flag": "",
+  "found": "feature 374 wave 154 (2026-10-13, ask:w154-lane-wells): Sawada's wells serve 6 and 13 households; no seat keeps both at ten while the pocket stands; not measured since the cluster well keeps off the reserved ways: Sawada 2 wells at ten or fewer, the 44 rolls none over ten (m:w154-wells, 2026-10-13)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width",
   "tier": "E4",
   "fix": "record silent on a link's width (inherit vs rank 3/5/6 ft)",
@@ -15985,6 +15969,24 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E0",
   "moved": "amendment 9 round 1 (spec-fidelity): a NEEDS-RESEARCH finding is E4 with the research pass first (spec Edge Cases), not a relabel",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_well_pocket#household well where none is near",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "re-land the wave 155 patch once settle_the_web carries a re-deal of the seats: no well pocket in a clustered hamlet's homesteads, every well a shared well of the rolled siting, the water reach and the ceiling of ten held by the wells (reach_wells), the first of several wells at its share's middle",
+  "files": [
+   "l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [
+   "l7r/diagram/hamletgen/ways/settle.py::settle_the_web#a re-deal of the seats"
+  ],
+  "flag": "",
+  "found": "feature 374 wave 154 (2026-10-13): impl-drift on the wave's claims; pre-existing, the same defect as the place_wells pocket row",
+  "tier_as_ranked": "E3",
+  "moved": "wave 155 (2026-10-13): re-tiered E4 behind the settle row - built and measured (specs/374-match-the-research-continued/w155-pocket-attempt.patch, m:w155-wells: no well in a homestead, none over ten, the pool clean, 42/44 as at HEAD), then reverted by the round arbiter (ask:w155-cohort-seed10, route b): taking the pocket's room out of the homesteads re-deals the seats and cohort seed 10 knots (lane_knots); re-land the patch, with no waiver, once the web carries a re-deal",
   "wave": "",
   "scope": "kept"
  },

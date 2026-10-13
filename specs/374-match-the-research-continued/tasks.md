@@ -16,6 +16,9 @@ in 328's ranking and this spec.
 - placement-changed: well on inashiro - wave 154: the lattice well seated by the rolled siting (by the lane or among five houses), a little closer than the check
 - placement-changed: well on kuwabata - wave 154: the lattice well seated by the rolled siting (by the lane or among five houses), a little closer than the check
 - placement-changed: well on sawada - wave 154: the lattice well seated by the rolled siting (by the lane or among five houses), a little closer than the check
+- placement-changed: well on inashiro - wave 155: the pocket well off its farmstead, a shared well of the rolled siting
+- placement-changed: well on kuwabata - wave 155: the pocket well off its farmstead, a shared well of the rolled siting
+- placement-changed: well on sawada - wave 155: the pocket well off its farmstead, a shared well of the rolled siting
 - glyph-redrawn: pig sty on kuwabata - wave 151: one sty glyph for the dike's sty and the farmhouse's, a dark ridged shed and a filled pen (glyph-check of Inashiro F1, F2)
 - placement-changed: notice board on kuwabata - wave 120: the board's seat a rolled knob; a bridge end offered only where a way reaches a bridge, so Kuwabata's roll now takes the center
 - placement-changed: woodland commons on inashiro - wave 120: the fuel wood seated by 0077's two tiers, kept off low ground by the water below the houses
@@ -264,6 +267,11 @@ in 328's ranking and this spec.
 - [x] T46 wave 154: a clustered hamlet's communal wells by the lane or among the houses, rolled per settlement, and seated a little closer than the 95 ft check (0196) (FR-001)
       research: rendering
       verify: DONE. wave 154: the well siting knob for a clustered hamlet - lane rolls 5/5 drawn lane-side, cluster wells off every way, none over ten (m:w154-wells); glyph checks PASS on inashiro, kuwabata, sawada
+
+## Batch 19 - the household's well off its farmstead
+
+T47 (wave 155: built, measured, reverted - ask:w155-cohort-seed10) and T48 (wave 156: the web carries a re-deal of the seats; its baseline
+measured, `m:w156-redeal-cohort`) moved to `specs/384-match-the-research-remainder` when 374 closed (the GM, 2026-10-13).
 
 ## Standing - the ranking's remaining rows
 

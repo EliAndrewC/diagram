@@ -263,6 +263,65 @@ clustered map measured (19 of the 44 rolls; Inashiro, Kuwabata and Sawada) the t
 well, so this wave moves the lattice well alone.
 
 <!-- plan-archive: T46 to T46 moved to plan-done.md, 2026-10-13 (feature 375 FR-044) -->
+## Batch 19: the household's well off its farmstead (row 787)
+
+**The work list**: the next free rows in ranking order, the one batch 18 named as next:
+`homesteads/wells.py::place_wells#well pockets drawn first` (DRIFTED, E3 row 79 - the global row 787) and the same defect's
+second claim, `settlement/rolling/bundle.py::BundleGeomMixin._lay_well_pocket#household well where none is near` (DRIFTED,
+E3 row 218, filed by wave 154). 0028's drawing page draws "the well, shared off the farmstead" and "not one to a farm"
+outside a row village, and 0196's two forms stand a shared well on a lane's verge or in the open ground among the houses -
+neither inside one household's homestead, which is where the seating lays its pocket today. Measured on the 44 rolls
+(r13U, the wave 154 roll): every one of the 19 clustered hamlets draws exactly one pocket (the first household's, which
+always carries one) and one lattice well; no roll draws a second pocket. Rows 771 and 774 stay open behind their found
+rows (batch 13); 782, 783 and 785 follow.
+
+### Wave 155 (T47) - the pocket well becomes a shared well of the rolled siting
+- **W155-1** (within): a clustered hamlet's seating lays no well pocket in any household's homestead: `needs_pocket` asks
+  for none and `_lay_well_pocket` lays no wellhead ground, so the homestead gives that room back (room before packing). A
+  grove farm's own water (`grove_water`, 0196/0031: a dispersed farm draws from its own channel or well) and a row village's
+  `row_water` forms (0033) are untouched.
+- **W155-2** (within): the wells `well_target` owes are ALL seated by the rolled siting (wave 154's forms, unchanged: the
+  cluster form among five houses off every lane; the lane form on a lane's verge after the web), so the well the pocket
+  stood for is now a shared well of the same form as its fellow - "shared off the farmstead" (0028).
+- **W155-3** (within): the water-reach guarantee the pocket carried by construction (`WATER_REACH_FT`, 760 ft, 0196: every
+  household within reach of a well or open water) moves to the wells: once the rolled form has seated what it owes, any
+  household beyond reach of every well and of open water is owed one more shared well, seated by the same form with that
+  household inside its reach - more wells where the houses spread, never a household left dry. Where the form finds no
+  seat, the wave 154 fallback seats it as a recorded deviation (`form: fallback`, `meta.well_fallback`), off every
+  farmstead. Measured on the bar's rolls (W155-4) how many such wells there are; a hamlet that draws more than `well_target`
+  wells is recorded (`meta.wells_for_reach`), since 0196 gives a hamlet "one or two".
+- **W155-5** (within, found in measuring): with the pocket gone, the first well the lattice seats was its innermost seat,
+  the cluster's middle, and the second, held 170 px off it, took three or four households - the first served 12 or 13 on
+  four of the 44 rolls (r155, against none at HEAD). Where two or more wells are owed, the first is seated at the middle of
+  its own share of the houses, the shares cut along the cluster's long axis (a GUESS: no page says how a hamlet's wells
+  divided its houses), so the second, by the worst-served walk as before, takes the other share: 0196's five to ten a well.
+  The 40 seats nearest the share's middle are ranked one well ahead (`pair_keeps_ten`: a second seat 170 px off keeping
+  both at ten). Measured: three rolls stayed over ten (r155c), the seats near the share's middle refused by the homesteads
+  standing there (on valley 17: 40 by threshing yards, 33 by gardens, 25 by houses, 45 by the fit test; no open ground
+  among a full share's houses).
+- **W155-6** (within, found in measuring): while a well is nearest to more than ten households, one more shared well is
+  seated by the same forms and counted (`meta.wells_for_ten`) - a third well for sixteen households is one to five, within
+  the record's one to 2-20 households a well for a hamlet (0196's count bullet); a well that leaves the busiest count where
+  it was ends the search. The alternative priced first was more room: a shared well's ground reserved at the seating, which
+  the room-before-packing rule prefers but which reseats every clustered hamlet; the third well is inside the research's
+  own range, so it is taken and the reserved ground is not.
+- **W155-4** (the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); no well stands inside a
+  homestead on any of them; every household within reach of water; no well over ten; counts measured and recorded
+  (`m:w155-wells`). The occasions: a glyph check where a pool map's well moves (placement-changed: well on Inashiro,
+  Kuwabata and Sawada - each drew a pocket).
+
+**The round arbiter's ruling** (ask:w155-cohort-seed10, 2026-10-13, route b): wave 155 is REVERTED. Built and measured
+(`m:w155-wells`: no well in a homestead, none over ten, the pool clean, the 44 rolls as at HEAD), it took cohort seed 10
+from pass to `lane_knots`: the pocket's room leaving the homesteads re-deals the seats, and the web over them knots where no
+gather, cut or tee is lawful (the probe: every gather a needle, the stub's cut splits the web, the crossing's cut a needle
+join). That is the found row `settle_the_web#a re-deal of the seats` (found-wave149, E4), which rows 777 and 787 now both
+wait on, so it is taken next (T48). The wave's diff is kept whole (`w155-pocket-attempt.patch`) and re-lands on the settled
+web with no waiver (T47); rows 787 and the pocket's second claim are E4 behind the settle row in 328's `audit/overrides.json`.
+
+### Wave 156 (T48) - the web carries a re-deal of the seats (the settle row)
+To be decided (`make decide`) once its measurement is taken: the seeds the found row names (7, 2, 10, 8, and Inashiro and
+valley 18 under batch 13's routes), each re-dealt seat's knot or refusal, and what the settle cannot mend on each.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:
