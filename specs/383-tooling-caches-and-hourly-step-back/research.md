@@ -89,3 +89,32 @@ A worktree at origin/main (2026-10-13 09:22, load 1.8 -> 5.1), each step of `mak
 
 Landings in the event log: four `land-tooling` runs, median 153.8 s. So the guard suites' step is the largest, and 57
 files of its pytest phase run twice in a landing - once there, without reuse, once in the tooling test run.
+
+## R8 Which tooling test files always run, and what they cost (amendment 2, measured 2026-10-13)
+
+Method: `make test-file FILE=tests/tooling` in this clone with `PYTEST_ADDOPTS="--junitxml=<out>"` (per-test times, summed per
+file, over 8 workers), against the kept passes in `.git/l7r-cache/tooling-test-passes.json` (each file's `opaque` programs, and
+any read of a file git ignores). 126 files kept, 38 of them always run; their tests take 101.7 of the run's 174.7
+test-seconds. By the program that makes a file run, in test-seconds:
+
+| cause | test-seconds |
+|---|---|
+| git asked about the repository | 28.9 |
+| a Python child that drops the recording (`python3`) | 28.3 |
+| `source-block-hooks.sh` | 16.3 |
+| git and ruff | 5.9 |
+| node | 4.7 |
+| resvg | 4.1 |
+| bash | 2.9 |
+| bash and claude | 2.9 |
+| ruff | 2.5 |
+| make | 1.8 |
+| a file git ignores, read | 1.6 |
+| pdftotext | 1.0 |
+| grep and pdftotext | 0.4 |
+| bash and make | 0.3 |
+
+The git-only files, largest first: test_content_cache 13.6, test_open_questions 4.9, test_check_bundle 2.9, ci/test_state 1.8,
+test_bundle_owed 1.2, test_downloads 0.9, test_record_prepass_and_size_table 0.8, test_translation_owed 0.6, the rest under 0.6.
+Some of them also read a file git ignores (ci/test_state `.git/semantic-id-cache.json`, test_check_bundle `.git/record-checks/`),
+which keeps them running until that read is known too. `scripts/measure/tooling_reuse_time.py` prints the file counts again.

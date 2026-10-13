@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: In progress 2026-10-13 - amendment 2 (FR-015..FR-019). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (88 of 126 files reused, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: In progress 2026-10-13 - amendment 2 (FR-015..FR-019). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
@@ -124,13 +124,13 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-016 A Python process a test starts keeps the recording.** A test file whose Python children are started in a way that
   drops the recording (an isolated interpreter, a fresh environment) records what those children read, unless the test needs
   the isolation itself (then the file runs, as now). The measured cost behind FR-015 and FR-016: 29 and 28 of the 102
-  test-seconds that always ran (2026-10-13, this session).
+  test-seconds that always ran (research R8, measured 2026-10-13).
 - **FR-017 Each step of a landing is timed.** `make land-tooling` writes each step's time - the worktree, the patch, the guard
   suites, the tooling tests, the push - to its log, so that where a landing's time goes is read from the log and not guessed.
 - **FR-018 A landing runs each test once, and its independent checks side by side.** In a landing, a tooling test file that
   `make hooks-test` would run and that the landing's tooling test run also runs runs only once, in the run that can reuse the
-  clone's pass; the guard suites and the tooling tests, which share nothing they write, run at the same time. Measured in the
-  same session before writing this: the guard suites' step 80.7 s, of which the scripts' pytest files (57 of 60 of them
+  clone's pass; the guard suites and the tooling tests, which share nothing they write, run at the same time. Measured (research R7,
+  2026-10-13): the guard suites' step 80.7 s, of which the scripts' pytest files (57 of 60 of them
   tooling files, run again by the next step, 30.2 s) are about 45 s.
 - **FR-019 What else the measurement shows is improved and landed.** A step the FR-017 timing shows costing more than a few
   seconds that can be cut without loosening a check is cut in this amendment; one that cannot is recorded with its
@@ -176,7 +176,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **SC-012** (FR-015, FR-016) A tooling test file whose only always-run cause was a read-only git question or a Python child
   is reused in a worktree with identical inputs, and runs when a git answer changes (a test with a fixture repository) or a
   file its child read changes; a git command that writes still makes the file run. The count of tooling test files that
-  always run, before and after (126 files, 38 always run before).
+  always run, before (38 of 126, research R8) and after, each printed by `scripts/measure/tooling_reuse_time.py`.
 - **SC-013** (FR-017, FR-018, FR-019) `make land-tooling` measured step by step: before, each step timed by hand in a worktree at main (research R7); after, on a real landing from its
   log, with the load; each tooling test file runs at most once in the landing (its log); the guard suites and the tooling
   tests overlap in time (their step times in the log).
