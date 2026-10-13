@@ -390,6 +390,15 @@ def test_the_projects_directory_is_the_one_page_session_sh_names(monkeypatch) ->
     assert ps.projects_dir("/diagram/.clones/diagram-x") == "/h/.claude/projects/-diagram--clones-diagram-x"
 
 
+def _sid(name: str) -> str:
+    """A session id no other test run on this machine shares: `session_pids` finds a session's processes machine-wide by its
+    `--session-id`, so a fixed id let one run's watch end another run's fake session - each then saw no process of its own
+    and the stall test failed under parallel runs (2026-10-13; it passed five times running alone)."""
+    import uuid
+
+    return f"{name}-{uuid.uuid4().hex[:12]}"
+
+
 def _fake_claude(tmp_path: pathlib.Path, sid: str):  # noqa: ANN202
     """A live process whose argv is a session's: a copy of bash named `claude`, `--session-id <sid>` among its args."""
     import shutil
@@ -401,10 +410,11 @@ def _fake_claude(tmp_path: pathlib.Path, sid: str):  # noqa: ANN202
 
 
 def test_session_pids_finds_the_session_by_its_argument_and_nothing_else(tmp_path: pathlib.Path) -> None:
-    proc = _fake_claude(tmp_path, "sid-295")
+    sid = _sid("sid-295")
+    proc = _fake_claude(tmp_path, sid)
     try:
-        assert ps.session_pids("sid-295") == [proc.pid]
-        assert ps.session_pids("sid-other") == []
+        assert ps.session_pids(sid) == [proc.pid]
+        assert ps.session_pids(_sid("sid-other")) == []
     finally:
         proc.kill()
         proc.wait()
@@ -415,16 +425,17 @@ def test_the_watch_ends_a_silent_session_and_leaves_a_writing_one(tmp_path: path
     import os
     import time
 
-    proc = _fake_claude(tmp_path, "sid-quiet")
+    quiet = _sid("sid-quiet")
+    proc = _fake_claude(tmp_path, quiet)
     try:
-        (tmp_path / "sid-quiet.jsonl").write_text("{}", encoding="utf-8")
-        os.utime(tmp_path / "sid-quiet.jsonl", (time.time() - 3600, time.time() - 3600))
-        busy = ps.StallWatch(str(tmp_path), "sid-quiet", check=0.05, after=5)
+        (tmp_path / f"{quiet}.jsonl").write_text("{}", encoding="utf-8")
+        os.utime(tmp_path / f"{quiet}.jsonl", (time.time() - 3600, time.time() - 3600))
+        busy = ps.StallWatch(str(tmp_path), quiet, check=0.05, after=5)
         busy.start()
         time.sleep(0.3)
         busy.stop()
         assert not busy.stalled, "silence is counted from the watch's start, never from before it (a resume's old transcript)"
-        watch = ps.StallWatch(str(tmp_path), "sid-quiet", check=0.05, after=0.2)
+        watch = ps.StallWatch(str(tmp_path), quiet, check=0.05, after=0.2)
         watch.start()
         assert proc.wait(timeout=10) != 0, "the silent session's process was ended"
         watch.join(timeout=5)
@@ -432,7 +443,7 @@ def test_the_watch_ends_a_silent_session_and_leaves_a_writing_one(tmp_path: path
     finally:
         proc.kill()
         proc.wait()
-    gone = ps.StallWatch(str(tmp_path), "sid-none", check=0.05, after=0.0)
+    gone = ps.StallWatch(str(tmp_path), _sid("sid-none"), check=0.05, after=0.0)
     gone.start()
     time.sleep(0.3)
     gone.stop()
