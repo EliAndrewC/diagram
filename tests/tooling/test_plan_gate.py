@@ -262,6 +262,9 @@ def test_a_task_section_carries_its_own_decision_verdict(tmp_path: pathlib.Path)
     with pytest.raises(ValueError, match="must be a list"):
         gate.record_task(d, "T05", {"section_sha256": sha}, "spec-fidelity")
     assert gate.record_task(d, "T05", {"section_sha256": sha, "decisions": [WITHIN]}, "spec-fidelity")["verdict"] == "CLEAR"
+    # ...the section's digest under the plan-stage key, as the reviewer's brief names it, is taken too (feature 374 wave 153: two
+    # task reviews were refused for writing `plan_sha256`, which their MODE 4 JSON shape calls it)
+    assert gate.record_task(d, "T05", {"plan_sha256": sha, "decisions": [WITHIN]}, "spec-fidelity")["verdict"] == "CLEAR"
     review = json.loads((d / "plan-review.json").read_text())
     assert gate.task_current(review, text, "T05") and not gate.task_current(review, text, "T06")
     grown = text.replace("- the bath 10 x 8 ft\n", "- the bath 10 x 8 ft\n- a second bath for guests\n")
