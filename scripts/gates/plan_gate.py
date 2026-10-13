@@ -386,7 +386,8 @@ def record_task(spec_dir: pathlib.Path, task: str, review: dict, declared: str, 
         raise ValueError("decisions must be a list")
     verdict = derive_verdict(decisions)
     rec_path = spec_dir / RECORD
-    out = json.loads(rec_path.read_text(encoding="utf-8")) if rec_path.is_file() else {"feature": spec_dir.name}
+    # slimmed as it is rewritten (amendment 11, D63): a record converts at its next recording
+    out = slim_record(json.loads(rec_path.read_text(encoding="utf-8"))) if rec_path.is_file() else {"feature": spec_dir.name}
     out.setdefault("tasks", {})[task] = {"section_sha256": review["section_sha256"],  # its text is in git (D63), not copied
                                          "reviewed": today or datetime.date.today().isoformat(), "declared": declared,
                                          "decisions": decisions, "verdict": verdict}

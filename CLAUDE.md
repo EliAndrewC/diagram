@@ -177,7 +177,9 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - A spec is reviewed against the GM's own words by `spec-fidelity` before implementation
   (`scripts/gates/review-gate.sh` refuses the push otherwise): up to five rounds on the initial acceptance,
   then the round arbiter rules (a sixth round waits for it; feature 379); an amendment after acceptance resets the counter. A plan's decisions are
-  reviewed by the same agent before a task is ticked (`make tick`, `scripts/gates/plan-gate.sh`). A later
+  reviewed by the same agent before a task is ticked (`make tick`, `scripts/gates/plan-gate.sh`) - block by block since 375
+  amendment 11: a changed block owes `make plan-delta F=<n>` (a review of that block alone, on a lean bundle), never the whole
+  plan again, and `make plan-archive F=<n>` moves finished sections to `plan-done.md`, which no review reads. A later
   round is handed the previous verdict and the diff by `scripts/hooks/review-round-hooks.sh`.
 - No known regressions (constitution XIII). A regression is measured, never remembered: the baseline
   is taken in a detached worktree (`git worktree add --detach /tmp/base HEAD`, never a stash) and

@@ -1,7 +1,6 @@
 {
  "feature": "368-record-0047-loose-ends",
  "plan_sha256": "f67ae0076141203a4443513f0063a7f61d45fe6e983a3aa0afded2cc858c07c2",
- "plan_text": "# Implementation Plan: loose ends in the privy record (0047), and two of 0006's (feature 368)\n\n**Spec**: `spec.md` | **Request**: `request.md`\n\n## Summary\n\nA research-record feature: five record defects fixed on two questions, their checks answered, and the implementation\ncheck. The record edits are `research: physical` where they touch a quotation (items 2, 3); the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Edits made by FRESH page sessions from briefs (`make page-session BRIEF=\"m2-write.md m2-check.md\"`): one\n  write session for 0047 and 0006, one check-and-apply session. Two questions, no new registry key expected.\n- **The figures.** `measure/privy_reach.py` over the five pool hamlets' recorded manifests; its output\n  `measure/privy-reach.txt` is the page's source (FR-001). The script is the feature's, kept in its directory.\n- **The stroke.** The same tan-brown outline (stroke `#A98C58`, width 1.4) is drawn at THREE sites, each with its own\n  seams (FR-005: \"every dry plot\", read from the code that draws it):\n  - the hem: `l7r/diagram/settlement/fields/comb.py` (the dry-crop polygon), its plots and seams built by\n    `l7r/diagram/waterfields/carve.py` `_dry_fields` (shared column lines that read the family strips apart);\n  - the row village's holdings: `l7r/diagram/hamletgen/homesteads/rows.py` (`cls=\"farm holding\"`), its seams the\n    `HOLDING_CELL_FT` cuts, which the code calls a map drawing convention;\n  - the town near ring: `l7r/diagram/settlement/land/nearring.py` `near_ring_cropland`, its seams the cell tiler's.\n  The write session reads all three.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the figures are measured on today's maps and the method stated; quotations re-read on the paper.\n- **XIII**: tooling tests green.\n- **XVI**: built as written; the code is not changed (FR-007).\n\n## Decisions\n\n**D1 - Item 1** (FR-001): 0047's drawing page gives `measure/privy-reach.txt`'s figures and its method (privies only;\ncenter to center, not the engine's corner-to-wall reach; the house's own frame; the half-degree tolerance). The August\ntable stays whole and dated, apart from today's rows; the \"15 of 86\" run is marked an unrecorded August run. Every share\nstatement (the lead's \"fewer than half\", the table, the paragraph, the bullet) agrees.\n\n**D2 - Items 2 and 3** (FR-002, FR-003): the Kyoto PDF read for p.2242's spelling (the archive first); both copies of\n`wang-ochiai-2022-5` set to it. `wang-ochiai-2022-2`'s \"Type V1\" glossed from the paper's definition if it stands\nthere, else cut at the \"...\". Both owe quote-check.\n\n**D3 - Items 4 and 5** (FR-004, FR-005): 0006 gains a visible clause pointing to 0033's holdings; its drawing page says\nwhat the dry plot's stroke stands for at the outer edge and at the seam AT EACH OF THE THREE SITES in Technical Context\n(the hem, the row village's holdings, the near ring), and whether it is drawn wider than real, read from that code.\n\n**D4 - The checks** (FR-006): `make record-owed` after the write; every owed unit dispatched from its bundle by the check\nsession (quote-check, record-format, entry-drift, and the depiction checks of 0006's modals).\n\n**D5 - The implementation check** (FR-007): the claims citing 0047's and 0006's findings, re-owed by the change, are\ntriaged or re-checked with `impl-drift`; a claim the new figures contradict is recorded DRIFTED, the code unchanged.\n\n## Project Structure\n\n```text\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo.html\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo.notes.html\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html\nresearch/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.notes.html\nresearch/questions/0006-dry-fields-and-their-crops-hatake.html\nresearch/questions/0006-dry-fields-and-their-crops-hatake.drawing.html\nspecs/368-record-0047-loose-ends/measure/   the script and its output\n```\n",
  "reviewed": "2026-10-11",
  "declared": "spec-fidelity",
  "decisions": [
@@ -78,5 +77,42 @@
    "why": "The same six files as round 2's brace forms, each confirmed to exist under research/questions/. The set covers every page the five items name (0047's drawing page and both notes files; 0006's visible text and drawing page). No decision added or removed."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "CLEAR",
+ "blocks": {
+  "preamble": {
+   "sha256": "a34f001dbc54489507c5ef0e57f68542bc486a33a0ebaf1de8cc2b0d3f42878f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Summary": {
+   "sha256": "40b3c9a10c15ca7a953ad73329a01aa2d9fd20b2c3d7dccc63201d85a1e84e2f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Technical Context": {
+   "sha256": "db3df7f7c56694989f4b2067fe8ef7bf3fc0b7761a7676cb7241a03d611230d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Constitution Check": {
+   "sha256": "0ed7c885feb1cff33efc6c62e0c59c7302877cabd505b43bed7afc0af5e12368",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Decisions": {
+   "sha256": "71bf4fb9ee2f9500a1eeb91e803d37150f673c893968648571129e506f4afc32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Project Structure": {
+   "sha256": "4afbaf9be38a322eb38e545fa5e82025581ef1d5f0a7569b2543b9fee764ed3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  }
+ }
 }

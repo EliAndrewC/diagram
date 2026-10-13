@@ -1,7 +1,6 @@
 {
  "feature": "355-reader-takes-river-tap-width-hue",
  "plan_sha256": "c582b66d8bf712bc1def4a0a12bd1f20576043ce45a7072a7cc58f12c10679de",
- "plan_text": "# Implementation Plan: the head race's mouth does not read as the river (355)\n\n**Spec**: `spec.md`\n\n## Summary\n\nThe sketch's order: first the judgment (FR-000), then - only if the race reads as the river - the taper (FR-001), the race's\nwidth untouched (FR-002), nothing else moved (FR-003), 358's copy marked done (FR-004, already in 358's spec).\n\n## Decisions\n\n- **D1 - the judgment (FR-000)**: a `glyph-check` of the head race at its mouth on Sawada, on the map as main draws it today\n  (the pool SVG rendered at 9 px per map unit, 260 x 220 units round the tap at (4575, 3455)), dispatched with that crop and\n  the SVG; its verdict is the gate. If it reads the race as the river (or as liable to be confused with it), D2 is built; if not,\n  355 closes with the verdict recorded and no code lands.\n- **D2 - the taper (FR-001, FR-002)**: `hamletgen/water/brook.py` `open_race_mouth`, after it carries the race's first stroke back\n  to the tap, appends to the race's bed `race_taper`: the race's own polyline cut at `s.px(RACE_TAPER_FT)` (30 ft, the entry's\n  figure), stroked at the race's own width with a `linearGradient` (userSpaceOnUse, from the tap to the cut) from the brook's bed\n  hue `#9CB4C8` to `SUPPLY_HUE`. It paints with the race's bed, so the brook (moved to paint after the race by the same function)\n  still covers the mouth; it ends in the race's own color, so it joins the bed beneath without a seam. The gradient id is the\n  entry's index in `s.late_water` (deterministic). A `CONVENTION` research claim beside it.\n- **D3 - tests and verification**: unit tests of `race_taper` (cut inside a segment, a race shorter than the taper, a single\n  point) and of `open_race_mouth` appending it; the pool hamlets re-rolled by the gate; a `glyph-check` of the redrawn mouth\n  (`glyph-redrawn: head race on sawada`) after the gate.\n",
  "reviewed": "2026-10-11",
  "declared": "spec-fidelity",
  "decisions": [
@@ -24,5 +23,22 @@
    "why": "Verification and enforcement of FR-001..FR-003 and SC-001/SC-002 (taper present, width unchanged, gate green); the post-gate glyph-check is the occasion feature 294 owes a redrawn glyph. No new map, tier or property is verified."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "CLEAR",
+ "blocks": {
+  "preamble": {
+   "sha256": "63aaf6adc13a4335d7b51650afd3536248e62472706b006d2a953ce8f103e7b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Summary": {
+   "sha256": "c286028d9918a5877f7670fac25a1e7900cfed02402220bc23b5d5eeea2d910a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Decisions": {
+   "sha256": "d902945a08d66a9c04a9fcb06638db7fd4f41a8abd8ff8d53744280621a5a0cb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  }
+ }
 }

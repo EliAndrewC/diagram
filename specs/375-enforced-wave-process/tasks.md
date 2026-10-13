@@ -234,13 +234,17 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 11 (the GM 2026-10-13: a plan reviewed by its changed blocks)
 
-- [ ] T61 Blocks and their verdicts in `plan_gate.py` (D60), the changed-blocks review and its record (D61); tests red on today's code (SC-036)
+- [x] T61 Blocks and their verdicts in `plan_gate.py` (D60), the changed-blocks review and its record (D61); tests red on today's code (SC-036)
       research: rendering
-- [ ] T62 The archive, `make plan-archive` (D62); tests (SC-037)
+      verify: DONE. DONE. plan_gate blocks/block_digest/reviewed_blocks/block_status (a removed block owed), judge per block, record writes blocks, record_blocks + make plan-verdict BLOCKS=1, make plan-delta; tests/tooling/test_plan_blocks.py (one block owed, recorded clears; old record covers its blocks; hand deletion owed) and test_plan_gate 24 passed; live: 375's plan owed 2 blocks, reviewed CLEAR on their bundle
+- [x] T62 The archive, `make plan-archive` (D62); tests (SC-037)
       research: rendering
-- [ ] T63 No plan copy in the verdict, the history read, `slim`, every record converted (D63); tests (SC-038)
+      verify: DONE. DONE. archivable/archive + make plan-archive, the generated line out of every digest; test_plan_blocks archive test; on a copy of 374: 38 tasks moved, plan.md 93,762 -> 30,706 bytes, nothing new owed (R11)
+- [x] T63 No plan copy in the verdict, the history read, `slim`, every record converted (D63); tests (SC-038)
       research: rendering
-- [ ] T64 The lean bundle, `make decide` and `make plan-delta` on it (D64); tests (SC-039)
+      verify: DONE. DONE. no plan_text/section_text written; History walks git uncapped in chunks of 25; slim_record + plan_gate.py slim; 105 records converted judge the same (R11); record_task and record_blocks slim as they rewrite (374's converts at its next review)
+- [x] T64 The lean bundle, `make decide` and `make plan-delta` on it (D64); tests (SC-039)
       research: rendering
+      verify: DONE. DONE. scripts/gates/plan_bundle.py (MANIFEST, request whole, cited FR/SC/D, index, blocks, earlier text) for make decide and make plan-delta; spec-fidelity's contract names it; 374 T46 bundle 12,648 vs 117,065 bytes (R11)
 - [ ] T65 Measured on 374 (SC-036 to SC-039); the texts; 375 closes again: tests, `make hooks-test`, the gate, the report, landed
       research: rendering

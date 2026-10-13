@@ -1,7 +1,6 @@
 {
  "feature": "337-big-was-roofed-hearing-court",
  "plan_sha256": "d2d3f7042ecd47b079fef910e01ba8f1304d4b54e93a867809130eb5b13a0458",
- "plan_text": "# Implementation Plan: how big was a roofed hearing court? (feature 337)\n\n**Spec**: `spec.md` | **Request**: `request.md` | **Research**: `research.md`\n\n## Summary\n\nA research-record feature: the finding written into the record, its checks answered, and its implementation check.\nEvery task is `research: physical` for the record write; the rest `research: rendering`.\n\n## Technical Context\n\n- **The record.** Its edits are made by a FRESH page session from a brief (`make page-session`), shared by features 336,\n  337, 338 and 343: one write session, then one check-and-apply session, as the record's process requires. The session\n  makes ONE COMMIT PER FEATURE, its subject opening with the feature's number, so `make impl-check` attributes each\n  change.\n- **The claims.** Through the existing claims commands (`make claims-owed`, `claims-bundle`, `claims-checked`, the\n  triage) and feature 378's `make impl-check`.\n\n## Performance bookends\n\nN/A: no generator change.\n\n## Constitution Check\n\n- **I-V, VI**: N/A.\n- **XII (research)**: the finding is recorded with its sources and limits; the record checks it owes are answered.\n- **XIII**: tooling tests green.\n- **XVI**: built as written.\n\n## Decisions\n\n**D1 - The absence note** (FR-001): 0099's findings page gains an absence note on the roofed court's size, naming what\nwas searched as FR-001 lists it: the record, the archive, Takayama's official and city pages, Japanese Wikipedia, imidas,\nkotobank, and coverage of the Edo, Sado and Suibara magistracies. research.md R1 now records each of these searches (plan\nreview round 1 found the summary had left them out). Written by the shared write session, committed `337: ...`.\n\n**D2 - The Why's \"49 mats\"** was struck from the spec; R1 now carries the tourist pages' 49-mat great hall as what it is,\na search summary about the great hall, not the court.\n\n**D3 - `make open-questions`** must list it (SC-001): the note's form is the one `open-questions` reads.\n\n**D4 - The implementation check** (FR-091): the claims citing 0099's findings (`ROOFED_ZONES` in `compound_model.py` and\nthe procedure sections) are re-owed and checked.\n\n## Project Structure\n\n```text\nresearch/questions/0099-the-hearing-court-shirasu.html\nresearch/questions/0099-the-hearing-court-shirasu.notes.html\n```\n",
  "reviewed": "2026-10-11",
  "declared": "spec-fidelity",
  "decisions": [
@@ -42,5 +41,42 @@
    "why": "the same two files as before, written so the pointer check resolves them; both exist; no scope change"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "CLEAR",
+ "blocks": {
+  "preamble": {
+   "sha256": "08241e69272482cd3e69c59306a18005033f9a0e9d67cce67fa3683b758b8e5f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Summary": {
+   "sha256": "5dbe123a54cdd39fc4aeca9d8dd38d7765326f95dfd38630e9e5f98c08c270c7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Technical Context": {
+   "sha256": "0cfa9f85279b2900b6a13e1f178ed43bc5058d7c150f8f9e66b0ff6d5fbaa6df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Constitution Check": {
+   "sha256": "434f2d65c3138c1b427fa9498352afa18cadd4f2f3135f800de03f8cb620bce6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Decisions": {
+   "sha256": "a1862ec74fdab39c14464c7cd60701cb980ff72480b0d5f3619b9791ede66a78",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  },
+  "## Project Structure": {
+   "sha256": "dbbbc76a1f649149285ad77182d354c5801444787ff4c7f5f36e1f20bc1b007a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-11"
+  }
+ }
 }
