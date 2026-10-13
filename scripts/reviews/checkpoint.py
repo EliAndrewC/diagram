@@ -101,14 +101,35 @@ def close_checkpoint(root: Path, trigger: str) -> None:
     _write(path, clock)
 
 
+def current_key(root: Path) -> str:
+    """The engine key of the clone's working tree (`make -s engine-key REF=worktree`), '' where it cannot be had."""
+    import subprocess
+
+    out = subprocess.run(["make", "-s", "engine-key", "REF=worktree"], cwd=root, capture_output=True, text=True, check=False)
+    return out.stdout.strip() if out.returncode == 0 else ""
+
+
+def answered(root: Path, slug: str, key: str) -> bool:
+    """Does the unit's verdict record answer it at `key` - PASS or NEEDS-WORK recorded at the engine key the tree has now? A
+    check answered before the checkpoint opened is owed no dispatch: feature 374 wave 151's two glyph checks passed at the
+    current key minutes before the step-back, and the tick was held for them as undispatched."""
+    rec = ro._read_json((ro._gitdir(root) or Path("/nonexistent")) / "review-verdicts" / f"{slug}.json")  # noqa: SLF001
+    return bool(key) and rec.get("verdict") in ("PASS", "NEEDS-WORK") and str(rec.get("engine_key") or "") == key
+
+
 def _undispatched(root: Path, units: list[str], since: float) -> list[str]:
-    """The checkpoint's units still owed and not dispatched since it opened (the pair guard's `dispatched[<slug>].at`)."""
+    """The checkpoint's units still owed, not dispatched since it opened (the pair guard's `dispatched[<slug>].at`) and not
+    answered at the tree's engine key (`answered`)."""
     if not units:
         return []
     owed_now = {u.slug for u in ro.all_owed(root)[1]}
     disp = ro._read_json((ro._gitdir(root) or Path("/nonexistent")) / ro.PAIRING).get("dispatched") or {}  # noqa: SLF001
     at = lambda s: float((disp.get(s) or {}).get("at") or 0) if isinstance(disp.get(s), dict) else 0.0  # noqa: E731
-    return [s for s in units if s in owed_now and at(s) < since]
+    left = [s for s in units if s in owed_now and at(s) < since]
+    if not left:
+        return []
+    key = current_key(root)
+    return [s for s in left if not answered(root, s, key)]
 
 
 def hold(root: Path, now: float | None = None) -> str:
