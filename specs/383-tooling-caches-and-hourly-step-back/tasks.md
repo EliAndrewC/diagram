@@ -79,18 +79,18 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ## Amendment 2 (the GM 2026-10-13: the savings measured, then the rest of a landing)
 
-- [ ] T19 Each step of a landing timed (plan D21); the suite's case; landed alone, then a landing measured as the before (SC-013)
+- [x] T19 Each step of a landing timed (plan D21); the suite's case; landed alone, then a landing measured as the before (SC-013)
       research: rendering
-      verify: the land-tooling suite green; a real landing's step lines in its log and its JSON line
-- [ ] T20 Git questions kept and asked again; Python children adopted; relative os.open ignored (plan D18, D19); tests (SC-012)
+      verify: DONE. DONE. land-tooling times prepare, worktree, patch, guard-suites, tooling-tests, checks and push into its log and land-tooling-steps.jsonl; the suite green (28); landed alone first, the before landing measured 113.98 s (m:land-tooling-landing-before)
+- [x] T20 Git questions kept and asked again; Python children adopted; relative os.open ignored (plan D18, D19); tests (SC-012)
       research: rendering
-      verify: test_reuse_and_quotes green with a fixture repository; the always-run count before (38 of 126) and after
-- [ ] T21 The ignored reads made known and every other cause looked at (plan D20); research R9 (SC-014)
+      verify: DONE. DONE. tests/tooling/_deps_site/l7r_dep_rules.py: read-only git questions kept with their answers and asked again (STORE_VERSION 2), Python children given a fresh environment adopted, an os.open by name under a directory handle ignored; test_reuse_and_quotes 5 passed with a fixture repository; always run 38 of 126 -> 18 of 127 (tooling_reuse_time.py)
+- [x] T21 The ignored reads made known and every other cause looked at (plan D20); research R9 (SC-014)
       research: rendering
-      verify: no kept file blocked by an ignored read; each remaining cause reused or recorded with its seconds
-- [ ] T22 One run per test file and the checks side by side in a landing (plan D22); tests (SC-013)
+      verify: DONE. DONE. CACHE_READS gains the semantic-id cache and the translation pairs; one fixed SPECIFY_FEATURE; test_makefile_recipe_comments reads the tracked Makefiles; 0 kept files blocked by an ignored read; the 18 remaining files recorded in research R9 with their 41.4 test-seconds and why each stays
+- [x] T22 One run per test file and the checks side by side in a landing (plan D22); tests (SC-013)
       research: rendering
-      verify: the land-tooling and hooks-test suites green; a landing's log shows each tooling file once and the two jobs overlapping
-- [ ] T23 Close: measured after (SC-012, SC-013), the remaining steps looked at (plan D23), the gate, the report, landed
+      verify: DONE. DONE. make hooks-test HOOKS_PYTEST_SKIP=tests/tooling/ and the plugin in its pytest phase; land-tooling runs the guard suites and the tooling tests side by side; the suite green (28, the overlap and a named failing job); the after landing: guard-suites 17.92 s beside tooling-tests 25.07 s, checks 25.11 s wall
+- [x] T23 Close: measured after (SC-012, SC-013), the remaining steps looked at (plan D23), the gate, the report, landed
       research: rendering
-      verify: research R9 holds before and after; the gate green; the report written; landed
+      verify: DONE. DONE. measured after: tooling reuse 27.58 -> 19.35 s (m:land-tooling-tests-reuse-a2), a landing 113.98 -> 37.05 s at load 3.4-3.5 (m:land-tooling-landing-before/-after), the claims gate 8.53 -> 1.65 s (m:claims-gate-push); research R9; the gate green; the report written; landed by the push carrying this tick
