@@ -1,0 +1,179 @@
+"""Feature 375 amendment 11 (SC-036 to SC-039): a plan reviewed by its changed blocks, finished sections archived, no plan copy
+in the verdict, a lean bundle for a section's review.
+
+WHAT THESE PROVE, on a feature in a real git repository: an edit to one block owes that block alone, and recording it clears the
+tick; an unchanged block keeps its verdict; a record from before the amendment covers the blocks of the text it reviewed; the
+archive moves only finished, CLEAR sections, byte for byte, and owes no review; a converted record keeps every verdict and holds
+no plan text; a typo is still a typo, read from git; the bundle carries the request, the cited requirements whole, the index,
+the blocks and their earlier text - and less than the spec and plan it stands in for.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import importlib.util
+import json
+import pathlib
+import subprocess
+import sys
+
+import pytest
+
+from tests._scripts import script
+
+_spec = importlib.util.spec_from_file_location("_plan_gate_blocks", script("plan_gate"))
+assert _spec and _spec.loader
+gate = importlib.util.module_from_spec(_spec)
+sys.modules["_plan_gate_blocks"] = gate
+_spec.loader.exec_module(gate)
+
+PLAN = """# Plan
+
+**D1 - shared.** Every gate is checked once.
+
+## Batch 1
+
+### Wave 1 (T01)
+
+**D2 - the sty.** The sty stands by the house (FR-001).
+
+## Batch 2
+
+### Wave 2 (T02)
+
+**D3 - the well.** The well stands by the lane (FR-002).
+
+## Notes
+
+A note on the waves, 3 items.
+"""
+SPEC = """# Spec
+
+## Requirements
+
+- **FR-001 The sty.** A sty stands against the house, as the record says.
+- **FR-002 The well.** A well stands by its lane.
+- **FR-003 Unrelated.** Something else entirely.
+
+## Success criteria
+
+- **SC-001** (FR-001) The sty is drawn.
+"""
+WITHIN = {"id": "D", "summary": "s", "class": "within", "why": "w"}
+
+
+@pytest.fixture(autouse=True)
+def _census(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GUARD_LOG_DIR", str(tmp_path / "guard-log"))
+
+
+def _git(root: pathlib.Path, *args: str) -> str:
+    return subprocess.run(["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t", *args], check=True, capture_output=True, text=True).stdout
+
+
+def feature(tmp: pathlib.Path, tasks: str = "- [x] T01 the sty\n- [ ] T02 the well\n") -> pathlib.Path:
+    root = tmp / "repo"
+    root.mkdir()
+    _git(root, "init", "-q")
+    d = root / "specs" / "999-x"
+    d.mkdir(parents=True)
+    (d / "plan.md").write_text(PLAN)
+    (d / "spec.md").write_text(SPEC)
+    (d / "request.md").write_text("> the GM's words\n")
+    (d / "tasks.md").write_text(tasks)
+    gate.record(d, {"plan_sha256": hashlib.sha256(PLAN.encode()).hexdigest(), "decisions": [WITHIN]}, "spec-fidelity")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "the plan, reviewed")
+    return d
+
+
+def test_an_edit_to_one_block_owes_that_block_alone(tmp_path: pathlib.Path) -> None:
+    d = feature(tmp_path)
+    assert gate.owed(d) is None
+    (d / "plan.md").write_text(PLAN.replace("A note on the waves, 3 items.", "A note on the waves, 4 items, and a new rule."))
+    rule, reason = gate.owed(d)
+    assert rule == "plan-review-stale" and "## Notes" in reason and "Batch 1" not in reason, "only the edited block is named"
+    keys, _ = gate.block_status(json.loads((d / "plan-review.json").read_text()), (d / "plan.md").read_text(), set())
+    assert keys == ["## Notes"], "every other block keeps its verdict"
+    body = dict((k, b) for k, b, _a in gate.blocks((d / "plan.md").read_text()))["## Notes"]
+    with pytest.raises(PermissionError):
+        gate.record_blocks(d, {"blocks": {"## Notes": gate.block_digest(body)}, "decisions": []}, "main")
+    with pytest.raises(ValueError, match="changed while"):
+        gate.record_blocks(d, {"blocks": {"## Notes": "0" * 64}, "decisions": []}, "spec-fidelity")
+    gate.record_blocks(d, {"blocks": {"## Notes": gate.block_digest(body)}, "decisions": [WITHIN]}, "spec-fidelity")
+    assert gate.owed(d) is None, "the changed block's review clears the tick"
+
+
+def test_a_record_from_before_the_amendment_covers_the_blocks_it_reviewed(tmp_path: pathlib.Path) -> None:
+    d = feature(tmp_path)
+    old = {"plan_sha256": hashlib.sha256(PLAN.encode()).hexdigest(), "plan_text": PLAN, "verdict": "CLEAR", "decisions": [WITHIN]}
+    (d / "plan-review.json").write_text(json.dumps(old))
+    (d / "plan.md").write_text(PLAN.replace("by the lane", "by the pond"))
+    assert gate.owed(d)[1].count("block(s)") == 1 and "Wave 2 (T02)" in gate.owed(d)[1]
+    slim = gate.slim_record(old)
+    assert "plan_text" not in slim and all(e["verdict"] == "CLEAR" for e in slim["blocks"].values())
+    (d / "plan-review.json").write_text(json.dumps(slim))
+    assert "Wave 2 (T02)" in gate.owed(d)[1], "converted, it owes the same"
+    (d / "plan.md").write_text(PLAN.replace("checked once", "cheked once"))
+    assert gate.owed(d) is None, "a typo is still a typo: its earlier text read from git (FR-045)"
+
+
+def test_the_archive_moves_only_finished_clear_sections_and_owes_nothing(tmp_path: pathlib.Path) -> None:
+    d = feature(tmp_path)
+    sec = gate.task_sections(PLAN)["T01"]
+    assert [s for s in gate.archivable(d)] == [sec], "T02 is open: its section stays"
+    assert gate.archive(d, today="2026-10-13") == ["T01"]
+    plan = (d / "plan.md").read_text()
+    assert sec not in plan and "<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-13" in plan
+    assert sec in (d / "plan-done.md").read_text(), "byte for byte"
+    assert gate.owed(d) is None, "the move owes no review"
+    (d / "tasks.md").write_text("- [x] T01 the sty\n- [x] T02 the well\n")
+    assert gate.archive(d) == ["T02"] and "Wave 2" not in (d / "plan.md").read_text() and gate.owed(d) is None
+
+
+def test_the_bundle_is_lean_and_whole_where_it_must_be(tmp_path: pathlib.Path) -> None:
+    import os
+
+    d = feature(tmp_path)
+    (d / "plan.md").write_text(PLAN.replace("by the lane (FR-002)", "by the lane, two to a lane (FR-002)"))
+    here = os.getcwd()
+    try:
+        os.chdir(d.parent.parent)
+        out = subprocess.run([sys.executable, str(script("plan_gate")), "delta", str(d)], capture_output=True, text=True, check=True).stdout
+    finally:
+        os.chdir(here)
+    manifest = pathlib.Path(out.split("read ", 1)[1].split(" and the files", 1)[0])
+    b = manifest.parent
+    assert (b / "request.md").read_text() == "> the GM's words\n", "the GM's words, whole"
+    assert "FR-002 The well.** A well stands by its lane." in (b / "spec-cited.md").read_text()
+    assert "FR-003" not in (b / "spec-cited.md").read_text() and "FR-003 Unrelated" in (b / "spec-index.md").read_text()
+    assert "two to a lane" in (b / "blocks.md").read_text() and "Batch 1" not in (b / "blocks.md").read_text()
+    assert "by the lane (FR-002)" in (b / "earlier.md").read_text(), "the block as last judged CLEAR, from git"
+    assert "BLOCKS=1" in manifest.read_text()
+    size = sum(f.stat().st_size for f in b.iterdir())
+    assert size < len(SPEC) + len(PLAN) + 2000, "a bundle no larger than the spec and plan it stands in for"
+
+
+def test_a_block_deleted_by_hand_is_owed_and_its_removal_reviewed(tmp_path: pathlib.Path) -> None:
+    """The plan review of amendment 11: a decision deleted outside `make plan-archive` is a change like any other."""
+    d = feature(tmp_path)
+    (d / "plan.md").write_text(PLAN.replace(gate.task_sections(PLAN)["T02"], ""))
+    rule, reason = gate.owed(d)
+    assert rule == "plan-review-stale" and "(removed) ### Wave 2 (T02)" in reason
+    gate.record_blocks(d, {"blocks": {"(removed) ### Wave 2 (T02)": "removed"}, "decisions": [WITHIN]}, "spec-fidelity")
+    assert gate.owed(d) is None, "its removal judged, it leaves the record"
+
+
+def test_a_typo_s_earlier_text_is_found_however_far_back(tmp_path: pathlib.Path) -> None:
+    """The plan review: no cap on the history walk - the reviewed text sits more than a chunk of versions back."""
+    d = feature(tmp_path)
+    root = d.parent.parent
+    for i in range(gate.HISTORY_CHUNK + 5):  # later commits that touch only another block, kept CLEAR by their reviews
+        (d / "plan.md").write_text((d / "plan.md").read_text().replace(f"items{'.' if i == 0 else f' v{i - 1}.'}", f"items v{i}."))
+        _git(root, "commit", "-qam", f"v{i}")
+    review = json.loads((d / "plan-review.json").read_text())
+    notes = dict((k, b) for k, b, _a in gate.blocks((d / "plan.md").read_text()))["## Notes"]
+    review["blocks"]["## Notes"]["sha256"] = gate.block_digest(notes)
+    (d / "plan-review.json").write_text(json.dumps(review))
+    (d / "plan.md").write_text((d / "plan.md").read_text().replace("checked once", "cheked once"))
+    assert gate.owed(d) is None, "the typo is measured against text 30 versions back"

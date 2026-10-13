@@ -219,9 +219,12 @@ PLAN_375 = b"# plan\n\n**D1 - the gatehouse.** Each sheet draws its gatehoue at 
 def test_a_verdict_survives_a_typo_and_nothing_more(tmp_path: pathlib.Path, edit: tuple) -> None:
     """Feature 375 FR-005(b), plan D6: an edit that adds or changes no decision keeps the verdict; any other voids it."""
     old, new, keeps = edit
+    _git_init(tmp_path)
     d = feature(tmp_path, plan=PLAN_375)
     gate.record(d, current([WITHIN], plan=PLAN_375), "spec-fidelity")
-    assert json.loads((d / "plan-review.json").read_text())["plan_text"] == PLAN_375.decode()
+    _git(tmp_path, "add", "-A")
+    _git(tmp_path, "commit", "-q", "-m", "the reviewed plan")  # amendment 11 (D63): the earlier text is read from git
+    assert "plan_text" not in json.loads((d / "plan-review.json").read_text()), "no copy of the plan in its verdict (FR-045)"
     assert gate.owed(d) is None
     (d / "plan.md").write_bytes(PLAN_375.replace(old, new))
     assert (gate.owed(d) is None) is keeps, f"{old!r} -> {new!r}"
@@ -302,7 +305,10 @@ def test_a_check_waits_for_its_task_s_decisions(tmp_path: pathlib.Path) -> None:
     assert "no section for this task" in gate.decision_refusal(root) and "plan-review" in gate.decision_refusal(root)
     gate.record(d, current([WITHIN], plan=PLAN_TASKS), "spec-fidelity")
     assert gate.decision_refusal(root) == "", "no section: the plan-stage verdict decides"
-    assert "MODE 4: PLAN REVIEW of one task's section" in gate.decide_prompt(d, "T05") and "TASK=T05" in gate.decide_prompt(d, "T05")
+    prompt = gate.decide_prompt(d, "T05")
+    assert "MODE 4: PLAN REVIEW of one task's section" in prompt and "MANIFEST.md" in prompt
+    manifest = pathlib.Path(prompt.split("read ", 1)[1].split(" and the files", 1)[0])
+    assert "TASK=T05" in manifest.read_text(), "the bundle says how to record it (amendment 11, D64)"
     (root / ".specify" / "feature.json").write_text("not json")
     assert gate.active_task(root) == (None, "")
 

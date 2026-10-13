@@ -1168,7 +1168,18 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 ##  FILE=<json>        the reviewer's JSON: plan_sha256, decisions, verdict (feature 243 plan P3)
 ##  AS=spec-fidelity   who is recording - only the subagent may pass this, and nothing else distinguishes the shells
 	@: "GUARD_EDIT_OK: feature 375 FR-003(a) - TASK= records a decision preflight on one task's plan section"
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" $(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
+	@: "GUARD_EDIT_OK: feature 375 amendment 11 (D61) - BLOCKS=1 records a review of the plan's changed blocks"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" $(if $(BLOCKS),record-blocks "$(F)",$(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)")) "$(abspath $(FILE))" --as "$(or $(AS),main)"
+
+# GUARD_EDIT_OK: feature 375 amendment 11 (the GM 2026-10-13: "Yes please do all 4 items now") - two new operations: the review of a
+# plan's changed blocks alone, and the move of finished sections out of plan.md.
+plan-delta:     ## [project] the review a plan owes since amendment 11: only its blocks changed since their CLEAR verdict, on a lean bundle (feature 375 FR-043)   F=<feature>
+	@if [ -z "$(F)" ]; then printf 'make plan-delta: F=<feature> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" delta "$(F)"
+
+plan-archive:   ## [project] move a plan's finished sections (every task ticked, CLEAR) into plan-done.md, which no review reads (feature 375 FR-044)   F=<feature>
+	@if [ -z "$(F)" ]; then printf 'make plan-archive: F=<feature> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" archive "$(F)"
 
 # GUARD_EDIT_OK: feature 375 FR-003(b) adds an operation - close a check that went silent, so its page is not frozen for good
 check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>"

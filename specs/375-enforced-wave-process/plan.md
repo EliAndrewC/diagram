@@ -715,7 +715,8 @@ feature's start or its latest reopening. Tests, `make hooks-test`, the report, l
 ### Amendment 11 (FR-043 to FR-046)
 
 Measured on 374 before it (the GM's question, `request.md` Amendment 11): sixteen whole-plan reviews, 13.7 million input tokens;
-32 section reviews, 20.8 million; `plan-review.json` 386 KB.
+32 section reviews, 20.8 million; `plan-review.json` 386 KB (observed 2026-10-13; method: the input-token cells of 374's
+`spec-fidelity` rows in `dev/review-ledger.md`, summed, and `ls -la` of the record).
 
 **D60 - Blocks, and a verdict per block (FR-043).** `plan_gate.blocks(text)` splits the plan at every heading line (`#` to
 `####`): each block runs from its heading to the next heading of any level, and the text before the first heading is the
@@ -725,6 +726,9 @@ archive's generated lines (D62) taken out. `plan-review.json` keeps `blocks: {ke
 - every other block is owed unless the record holds a CLEAR verdict at its digest, or a typo-scale change (FR-005(b)) from the
   block's text at that digest, read from git (D63);
 - a record from before the amendment (a `plan_text` and one verdict) is read as that verdict on each block of its `plan_text`;
+- a block the record holds that `plan.md` no longer has is owed too, as `(removed) <key>` - unless `plan-done.md` holds it at
+  its digest (the archive moved it, D62): a decision deleted by hand is a change like any other (FR-005(b)), and its review
+  records `"removed"` as its digest, which takes it out of the record;
 - any owed block names the refusal - `plan-review-stale`, the owed keys, and `make plan-delta F=<n>`; a block whose verdict
   is BLOCKED is `plan-review-blocked`, as today.
 
@@ -742,9 +746,10 @@ The generated line is taken out of every digest, so the block it lands in keeps 
 The reviewers' prompts name `plan.md` only. Nothing moves a section whose task is open.
 
 **D63 - No copy of the plan (FR-045).** `record` and `record_task` stop writing `plan_text` and `section_text`; a task entry
-keeps its section's digest. Where a typo-scale comparison needs a block's (or a section's) earlier text, `earlier_text`
-walks `git log` of `plan.md` (newest first, at most 60 versions, read by one `cat-file --batch`) for the version holding a
-block of that key at that digest; none found is no typo - the conservative side. `plan_gate.py slim <spec_dir>` converts a
+keeps its section's digest. Where a typo-scale comparison needs a block's (or a section's) earlier text, `History`
+walks `git log` of `plan.md` newest first, reading 25 versions per `cat-file --batch` and stopping at the first version that
+holds a block of that key at that digest - the whole history if need be, with no cap (374's plan already had 61 versions);
+text git never saw is found nowhere, and that is no typo - the conservative side. `plan_gate.py slim <spec_dir>` converts a
 record (each block of its `plan_text` under its verdict; task entries without their text); every `specs/*/plan-review.json`
 is converted once, by the command, in this amendment.
 
