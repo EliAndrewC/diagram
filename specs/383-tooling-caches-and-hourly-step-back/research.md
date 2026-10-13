@@ -117,4 +117,5 @@ test-seconds. By the program that makes a file run, in test-seconds:
 The git-only files, largest first: test_content_cache 13.6, test_open_questions 4.9, test_check_bundle 2.9, ci/test_state 1.8,
 test_bundle_owed 1.2, test_downloads 0.9, test_record_prepass_and_size_table 0.8, test_translation_owed 0.6, the rest under 0.6.
 Some of them also read a file git ignores (ci/test_state `.git/semantic-id-cache.json`, test_check_bundle `.git/record-checks/`),
-which keeps them running until that read is known too. `scripts/measure/tooling_reuse_time.py` prints the file counts again.
+which keeps them running until that read is known too. `scripts/measure/tooling_reuse_time.py` prints the file counts again. On amendment 2's first recording with Python children adopted
+(2026-10-13), 0 of 126 files ran a child isolated (`-I`, `-E`, `-S`).

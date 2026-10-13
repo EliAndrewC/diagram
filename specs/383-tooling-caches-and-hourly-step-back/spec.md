@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in a session clone)
 **Created**: 2026-10-12
-**Status**: In progress 2026-10-13 - amendment 2 (FR-015..FR-019). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
+**Status**: In progress 2026-10-13 - amendment 2 (FR-015..FR-020). Before it: Done 2026-10-13 - amendment 1 landed: spec FAITHFUL (round 3), plan block CLEAR; land-tooling's tooling tests 36.21 -> 27.58 s (606 of 1,796 tests ran with reuse, m:land-tooling-tests-reuse), quote-verbatim's verdicts cached. Before it: Done 2026-10-13 - spec FAITHFUL (round 3), plan CLEAR (round 3), every task ticked; push checks 19.87 s -> 1.92 s (research R6); tooling landed 0906d798a; the GM's review open (the first step-back's note)
 
 **Affects**: tooling, review process
 
@@ -124,7 +124,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 - **FR-016 A Python process a test starts keeps the recording.** A test file whose Python children are started in a way that
   drops the recording (an isolated interpreter, a fresh environment) records what those children read: the recording's variables are put into the environment the test gives the child. A
   child started isolated (`-I`, `-E`, `-S`) ignores that environment and its file runs; no tooling test file does so on the
-  amendment's first recording (0 of 126, `scripts/measure/tooling_reuse_time.py`'s causes). The measured cost behind FR-015 and FR-016: 29 and 28 of the 102
+  amendment's first recording (0 of 126, `scripts/measure/tooling_reuse_time.py`'s causes, measured 2026-10-13; research R8). The measured cost behind FR-015 and FR-016: 29 and 28 of the 102
   test-seconds that always ran (research R8, measured 2026-10-13).
 - **FR-017 Each step of a landing is timed.** `make land-tooling` writes each step's time - the worktree, the patch, the guard
   suites, the tooling tests, the push - to its log, so that where a landing's time goes is read from the log and not guessed.
@@ -137,7 +137,7 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   seconds that can be cut without loosening a check is cut in this amendment; one that cannot is recorded with its
   measurement.
 - **FR-020 Every other cause of an always-run file is looked at.** Each remaining cause in research R8 - `source-block-hooks.sh`,
-  ruff, node, resvg, bash, make, pdftotext, `claude`, a read of a file git ignores - is either made known (the file reused on
+  ruff, node, resvg, bash, make, pdftotext, grep, `claude`, a read of a file git ignores - is either made known (the file reused on
   identical inputs) or recorded in the research with its test-seconds and why it cannot be.
 
 ## Success criteria
@@ -181,6 +181,9 @@ long-running feature does for itself, on the clock glyph-check already keeps.
   is reused in a worktree with identical inputs, and runs when a git answer changes (a test with a fixture repository) or a
   file its child read changes; a git command that writes still makes the file run. The count of tooling test files that
   always run, before (38 of 126, research R8) and after, each printed by `scripts/measure/tooling_reuse_time.py`.
+- **SC-014** (FR-020) For each other cause in research R8, either the files it kept running are reused on identical inputs
+  (they leave the after count of SC-012), or the research records the cause with its test-seconds and why it cannot be made
+  known.
 - **SC-013** (FR-017, FR-018, FR-019) `make land-tooling` measured step by step from FR-017's log, with the load: before, on a
   real landing made with the timing and none of the cuts; after, on a real landing with them; each tooling test file runs at most once in the landing (its log); the guard suites and the tooling
   tests overlap in time (their step times in the log).
