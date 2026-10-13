@@ -155,7 +155,9 @@ def sheltered_by_the_row_across(side: int, normal: Pt, windward: str) -> bool:
     """Does a farm seated on `side` of its street (+1 the far side, -1 the near, the street at -side x `normal` from it) have
     its street, and the grove farms beyond it, on its windward side?
 
-    Research: the leeward row - research/questions/0033-row-villages-resson.drawing.html: the row across the road already broke the wind; its farm keeping no grove of its own is this project's reading of that account (a GUESS)"""
+    Research:
+        the leeward row - research/questions/0033-row-villages-resson.drawing.html: the row across the road already broke the wind, and the leeward farm kept a thin grove with its bamboo to the south
+        a street across the wind - GUESS: within 67.5 degrees of the farm's windward bearing (`ACROSS_THE_WIND_COS`); no page gives an angle"""
     wx, wy = WIND_VECTORS.get(windward, WIND_VECTORS["NW"])
     return -side * (normal[0] * wx + normal[1] * wy) > ACROSS_THE_WIND_COS
 
@@ -544,6 +546,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         frame off the street - UNRESEARCHED: half the street plus half `FIELD_KEEP_FT`, 15 ft off its centerline
         first street on the hard ground's edge - research/questions/0033-row-villages-resson.drawing.html: the first street runs along the stretch of the hard ground's edge that holds the most clear frames (`best_row_line`)
         streets rounded at a corner - UNRESEARCHED: a street is rounded on the inside of a corner at `street_bend_radius_ft`
+        the leeward row marked sheltered - research/questions/0033-row-villages-resson.drawing.html: on a street with farms on both sides, where the settlement rolled the sheltered form (`row_shelter`), a farm with its street and the grove row beyond it to windward (`sheltered_by_the_row_across`) is seated as a full farm and marked `sheltered`
     """
     want = plan.spec.households
     field = [(float(x), float(y)) for x, y in (plan.envelope or [])]
@@ -629,11 +632,10 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
                     continue
             # THE LEEWARD ROW SHELTERED BY THE GROVE ROW ACROSS ITS STREET (feature 374 wave 153, 0033's second form): on a
             # two-sided street whose settlement rolled it, a farm with the street - and the grove farms beyond it - on its
-            # windward side is laid with no grove of its own (`_farm_sheltered`, read by the bundle) and keeps its bamboo south
+            # windward side is seated on a full farm's frame, its record marked `sheltered`: the bundle draws its grove one
+            # tree deep (`_farmsteads_bundle`) and the bamboo stage gives it a band along its south side (`south_band`)
             shelter = sides == "both" and plan.row_shelter == "sheltered" and sheltered_by_the_row_across(side, nrm, plan.windward)
-            s._farm_sheltered = shelter  # type: ignore[attr-defined]
             seated = s.try_place(hx, hy, "plain")
-            s._farm_sheltered = False  # type: ignore[attr-defined]
             if seated and shelter:
                 s._pending_farmsteads[-1]["sheltered"] = True
                 s.M["meta"]["sheltered_farms"] = int(s.M["meta"].get("sheltered_farms", 0)) + 1

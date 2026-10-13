@@ -1946,64 +1946,40 @@
    "verdict": "CLEAR"
   },
   "T45": {
-   "section_sha256": "91870daf6309068ebf1518ace828b8a503225568cf4c28f17f9df533aa29e624",
-   "section_text": "### Wave 153 (T45) - the row farm across the street from a grove row, and its bamboo to the south\n- **W153-1** (within): a per-settlement knob, `row_shelter`, rolled from the seed on a row village between the two forms\n  0033 records - every farm's own windward grove, or the leeward row sheltered by the grove row across the street - at\n  even odds (a GUESS: no page gives shares). It acts only where farms stand on BOTH sides of a street (`row_sides`) and the\n  street runs across the wind: a farm is sheltered only where its street lies within 67.5 degrees of its windward\n  bearing (a GUESS), so a street running with the wind shelters no one and falls to the first form, as a one-sided row does.\n- **W153-2** (within): in the second form, a farm on the street's leeward side - the street, and the grove farms beyond it,\n  on its windward side - keeps its grove on its windward sides, drawn one tree deep (0033's account: the Ogawa farm, its\n  road on the north, \"the grove north of the house ... rather thin\"; one tree deep, the thin band's depth, a GUESS), and\n  keeps its bamboo along its south side (0033; 0075's findings, \"a madake grove all along its south side\"), its grove\n  drawing none; its row seat, lot and holding are as before. Every sheltered farm keeps the band, whatever the hamlet's\n  bamboo knob or a farm's own roll. TRUE SOUTH governs, as the record says, whatever the map's wind. The farms on the\n  windward row keep their full groves. Recorded per farm (`sheltered`) and counted in `meta`. (Round 2 had the sheltered\n  farm keep no grove, as this project's reading; quote-check found the account's farm kept its thin north grove, so the\n  thin grove is drawn.)\n- **W153-3** (within): the south bamboo is a band along the farm's whole south side - as wide as the farmstead (its house,\n  yard and beds across), as deep as a farm's bamboo strip (16 ft, the strip's GUESS) - standing just past its yard's and\n  beds' sun ground (0038: no canopy, bamboo included, in a plot's sun; the GM's ruling that no canopy tree is exempt). The\n  south side or none: where the band finds no room it is stepped further south (room before packing, the GM, 2026-10-12),\n  and only past that is it left out, counted (`meta`); a short count on the pool, the cohort or the 44 is met by more room\n  before it may stand. It is drawn as the farm's bamboo is (the stand glyph), and the strip search's tests (the paddy, the\n  water, the lanes, the parts, the belt) are its tests.\n- **W153-4** (within; a claim): `fall_backs_the_wind`'s predicate cites 0031's drawing page, which names the windward-high\n  case it tests.\n- **W153-5** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); counts measured.\n  The occasions: a glyph check where a pool map's farm loses its grove or gains a south strip (placement-changed).\n\n",
+   "section_sha256": "09d64e0b11f09bb8f2b7fc938ae18feac2e60d86ead62cc1bcf58f5407deb913",
+   "section_text": "### Wave 153 (T45) - the row farm across the street from a grove row, and its bamboo to the south\n- **W153-1** (within): a per-settlement knob, `row_shelter`, rolled from the seed on a row village between the two forms\n  0033 records - every farm's own windward grove, or the leeward row sheltered by the grove row across the street - at\n  even odds (a GUESS: no page gives shares). It acts only where farms stand on BOTH sides of a street (`row_sides`) and the\n  street runs across the wind: a farm is sheltered only where its street lies within 67.5 degrees of its windward\n  bearing (a GUESS), so a street running with the wind shelters no one and falls to the first form, as a one-sided row does.\n- **W153-2** (within): in the second form, a farm on the street's leeward side - the street, and the grove farms beyond it,\n  on its windward side - keeps its grove on its windward sides, drawn one tree deep (0033's account: the Ogawa farm, its\n  road on the north, \"the grove north of the house ... rather thin\"; one tree deep, the thin band's depth, a GUESS), and\n  keeps its bamboo along its south side (0033; 0075's findings, \"a madake grove all along its south side\"), its grove\n  drawing none; its row seat, lot and holding are as before. Every sheltered farm keeps the band, whatever a farm's own roll,\n  on a map whose bamboo knob gives its farmsteads bamboo (homestead or both); on a map with none at the farmsteads it keeps\n  none - \"none\" is the cold upland where madake does not grow (0075). (Round 3 had the band drawn whatever the knob; the\n  record checks found that a drift, so it follows the knob.) TRUE SOUTH governs, as the record says, whatever the map's wind. The farms on the\n  windward row keep their full groves. Recorded per farm (`sheltered`) and counted in `meta`. (Round 2 had the sheltered\n  farm keep no grove, as this project's reading; quote-check found the account's farm kept its thin north grove, so the\n  thin grove is drawn.)\n- **W153-3** (within): the south bamboo is a band along the farm's whole south side - as wide as the farmstead (its house,\n  yard and beds across), as deep as a farm's bamboo strip (16 ft, the strip's GUESS) - standing just past its yard's and\n  beds' sun ground (0038: no canopy, bamboo included, in a plot's sun; the GM's ruling that no canopy tree is exempt). The\n  south side or none: where the band finds no room it is stepped further south (room before packing, the GM, 2026-10-12),\n  and only past that is it left out, counted (`meta`); a short count on the pool, the cohort or the 44 is met by more room\n  before it may stand. It is drawn as the farm's bamboo is (the stand glyph), and the strip search's tests (the paddy, the\n  water, the lanes, the parts, the belt) are its tests.\n- **W153-4** (within; a claim): `fall_backs_the_wind`'s predicate cites 0031's drawing page, which names the windward-high\n  case it tests.\n- **W153-5** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); counts measured.\n  The occasions: a glyph check where a pool map's farm loses its grove or gains a south strip (placement-changed).\n\n",
    "reviewed": "2026-10-13",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "W153-1",
-     "summary": "row_shelter knob at even odds (GUESS) between 0033's two forms; acts only on a two-sided row whose street lies within 67.5 degrees of the farm's windward bearing (GUESS); otherwise the first form",
+     "summary": "row_shelter knob rolled per row village between 0033's two forms at even odds (GUESS); acts only on two-sided streets running across the wind (within 67.5 degrees of windward, GUESS)",
      "class": "within",
-     "why": "Rolling the second attested form as a knob is the ranking row's fix and the project's knob rule. Round 1's note is met: the 67.5-degree predicate follows from the form itself (a street running with the wind puts no grove row windward of the farm), and it is labeled a GUESS."
+     "why": "Implements both forms 0033 records as a seeded knob, per the project's knob rule; the guesses are labeled. Serves 328's request that the implementation match the research. Unchanged since round 3."
     },
     {
-     "id": "W153-2a",
-     "summary": "in the second form the leeward farm keeps its windward grove, drawn one tree deep (a labeled GUESS for 'rather thin'), and its grove draws no bamboo; the windward row keeps full groves",
+     "id": "W153-2",
+     "summary": "the sheltered leeward farm keeps a one-tree-deep windward grove and a south bamboo band; the band now follows the map's bamboo knob (kept where farmsteads keep bamboo - homestead or both - none where the knob gives none); true south governs",
      "class": "within",
-     "why": "Round 3's change brings the drawing closer to the record than round 2's no-grove reading: 0033 (akiyama-1992, p. 8) - the Ogawa farm, road on its north, 'North of the main house it is mainly zelkova with a little white oak mixed in, but as a homestead grove it has become rather thin', and its bamboo 'all along the south side'. The grove is kept, it is thin, and it is not bamboo - all three drawn. The depth is a degree on a continuum the record does not measure, labeled a GUESS at the plan and on 0033's drawing page (calibrated liberty, not a choice between forms). Narrows nothing asked."
+     "why": "The round-4 change removes a drift rather than adding a carve-out: 0075 records that a cold upland hamlet may have no bamboo (the frost limit is sourced), and the knob's 'none' is that case, so drawing the band whatever the knob contradicted the record. Checked on 0075's page and against bamboo.py's knob values ('homestead', 'both'). Following the knob is matching the research, which is the request."
     },
     {
-     "id": "W153-2c",
-     "summary": "every sheltered farm keeps its south bamboo whatever the hamlet's bamboo knob or the farm's own roll",
+     "id": "W153-3",
+     "summary": "the band spans the farmstead's south side, 16 ft deep (the strip's GUESS), past the plots' sun ground (0038); stepped further south before being left out, counted; drawn and tested as the farm's bamboo strip",
      "class": "within",
-     "why": "Round 1's NOT LEGITIMATE item is resolved: a farm in the second form now always has the bamboo that defines the form, so no sheltered farm is drawn with neither grove nor bamboo by the prevalence gate."
-    },
-    {
-     "id": "W153-2d",
-     "summary": "true south governs, whatever the map's wind",
-     "class": "within",
-     "why": "The record says 'set south' (0033, 0075). Choosing the record's own bearing matches the research; round 1's note is met."
-    },
-    {
-     "id": "W153-3a",
-     "summary": "the band is a band along the farm's whole south side, as wide as the farmstead (house, yard, beds), 16 ft deep (the strip's GUESS)",
-     "class": "within",
-     "why": "Round 1's NOT LEGITIMATE item (the generic strip) is resolved: 0075's findings give the extent, 'a madake grove all along its south side', and the band now spans it. The record gives no depth; 16 ft is a labeled GUESS that the section does not defend - a short count is met by more room - which is what the GM's 2026-10-12 rule (an unresearched size is a knob to move) asks."
-    },
-    {
-     "id": "W153-3b",
-     "summary": "the band stands just past the yard's and beds' sun ground",
-     "class": "within",
-     "why": "0038's drawing page: no bamboo 'stands within 50 ft east, west or south of a yard or bed', and the GM's ruling exempts no canopy. 'Along its south side' sets no distance, so both research pages are honored."
-    },
-    {
-     "id": "W153-3c",
-     "summary": "south or none: where the band finds no room it is stepped further south, then left out and counted; a short count on the pool, the cohort or the 44 is met by more room before it may stand",
-     "class": "within",
-     "why": "Round 1's NOT LEGITIMATE fallback to other sides is gone. A band stepped further south is still the attested form on the attested side; every shortfall past that is counted, and on the bar's rolls is met by more room first - the GM's 2026-10-12 rule ('Room before packing'), as batch 15's W151-2 does. Consistent with round 1's within ruling on the count."
+     "why": "Follows 0038's sun rule and the GM's room-before-packing ruling of 2026-10-12; a left-out band is counted, not silently dropped. Unchanged since round 3."
     },
     {
      "id": "W153-4",
      "summary": "fall_backs_the_wind's predicate cites 0031's drawing page",
      "class": "within",
-     "why": "Unchanged from round 1: the ranking row's MISLABELED fix verbatim."
+     "why": "A Research: claim correction, the matching the request asks for."
     },
     {
      "id": "W153-5",
-     "summary": "the bar (no roll passing at HEAD refuses; counts measured) and the glyph occasion",
+     "summary": "no roll passing at HEAD refuses (pool, cohort, the 44); glyph-check occasion where a pool farm loses its grove or gains a south strip",
      "class": "within",
-     "why": "Unchanged from round 1: enforces the request and the no-regression rule; adds no behavior."
+     "why": "Enforces 328's carried edge case (a newly failing seed is a regression) and the review occasions; it adds no requirement of its own."
     }
    ],
    "verdict": "CLEAR"

@@ -99,14 +99,15 @@ def household_bamboo(
         strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
         strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
-        strip seated after the lanes - research/questions/0075-bamboo-groves-chikurin.drawing.html: seated after the web, the lanes laid before it
+        strip seated after the lanes - CANON: seated after the web; no page gives an order, and the GM ruled it an implementation detail (2026-10-12: "the ordering is an implementation detail") so long as no lane crosses a strip
         a stepped strip its own farm's - UNRESEARCHED: none seated nearer another house's center than its own
-        row farm's bamboo to the south - research/questions/0033-row-villages-resson.drawing.html: on a row village that rolled the second form,
-            a farm the grove row across its street shelters keeps its bamboo whatever the knob, a band along its south side (`south_band`)
+        row farm's bamboo to the south - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: on a
+            row village that rolled the second form and a map whose farmsteads keep bamboo, every farm the grove row across its street shelters
+            keeps it, a band along its south side (`south_band`)
     """
     out: list[Poly] = []
     keeps = plan.bamboo in ("homestead", "both")
-    if not houses or not (keeps or any(q.get("sheltered") for q in houses)):  # a sheltered row farm keeps its bamboo whatever the knob (0033)
+    if not houses or not keeps:
         return out
     px = s.px
     fields = [list(f) for f in s.field_polys]
@@ -127,7 +128,9 @@ def household_bamboo(
     meta = s.M["meta"]
     for h in houses:
         hx, hy = float(h["x"]), float(h["y"])
-        if not h.get("sheltered") and (not keeps or s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE):
+        # A SHELTERED ROW FARM KEEPS ITS BAMBOO WHERE THE FARMSTEADS DO (374 wave 153): always, not three in five, but never on a map
+        # whose knob gave its farmsteads none - "none" is the cold upland where madake does not grow (0075)
+        if not h.get("sheltered") and s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
             continue
         # A FARM WITH ITS OWN GROVE KEEPS ITS BAMBOO IN THAT GROVE (feature 291; research/contents.json#vegetation
         # "Bamboo groves (chikurin)"). Its deep windward bands draw
@@ -158,7 +161,7 @@ def household_bamboo(
 
 
 BAND_STEPS_OUT = 6
-"""Research: the band stepped further south - UNRESEARCHED: room before packing (the GM, 2026-10-12), out to six strip depths past its
+"""Research: the band stepped further south - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: moved further south when its ground is taken, how far a GUESS; room before packing (the GM, 2026-10-12), out to six strip depths past its
 plots' sun ground (96 ft), where a strip steps three; still its own farmstead's (none nearer another house's center)"""
 
 
@@ -174,24 +177,49 @@ def own_ground(ground: StripGround, lanes: Sequence[Mapping[str, Any]], house: P
 
 def south_band(h: Mapping[str, Any], px: Any) -> Iterator[tuple[float, float, float, float]]:
     """A sheltered row farm's bamboo seats, first choice first, each (cx, cy, w, h): a band along its whole south side - as wide
-    as its house, yard and beds across, a strip deep - just past its plots' sun ground, then stepped further south a strip's
-    depth at a time (`BAND_STEPS_OUT`), true south whatever the map's wind.
+    as the farmstead's frame, a strip deep - just past its plots' sun ground, then stepped further south a strip's depth at a
+    time (`BAND_STEPS_OUT`), true south whatever the map's wind; a farmstead-wide span is stepped all the way south before a
+    narrower one is tried (`band_spans`), as the page moves the band before it gives it up (feature 374 wave 153: the glyph
+    check found bands only the house-and-beds wide, a third of a 222-249 ft farm, floating between two farms).
 
     Research:
-        a madake grove along its south side - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.html: the bamboo set south where the row across broke the wind, all along the farm's south side
+        a madake grove along its south side - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.html: the bamboo set south where the row across broke the wind, all along the farm's south side, as wide as the farmstead
         the band's depth - GUESS: a farm's bamboo strip's 16 ft (`HOUSEHOLD_BAMBOO_FT`)
         past the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no canopy, bamboo included, within 50 ft south of a yard or bed (`BAMBOO_SHADE_FT`)
-        stepped further south - UNRESEARCHED: room before packing (the GM, 2026-10-12), a strip's depth a step, out to `BAND_STEPS_OUT`"""
+        stepped further south - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: moved further south when its ground is taken, a strip's depth a step, out to `BAND_STEPS_OUT`"""
     g = h.get("geom") or {}
     boxes = [b for b in ([g.get("house")] + [g.get("yard")] + list(g.get("gardens") or ())) if b]
     if not boxes:
         return
-    west = min(float(b[0]) - float(b[2]) / 2 for b in boxes)
-    east = max(float(b[0]) + float(b[2]) / 2 for b in boxes)
+    spans = band_spans(g, boxes)
     south = max(float(b[1]) + float(b[3]) / 2 for b in boxes)
     depth = px(HOUSEHOLD_BAMBOO_FT[1])
-    for k in range(BAND_STEPS_OUT + 1):
-        yield ((west + east) / 2, south + px(BAMBOO_SHADE_FT) + px(1.0) + depth / 2 + k * depth, east - west, depth)
+    for west, east in spans:
+        for k in range(BAND_STEPS_OUT + 1):
+            yield ((west + east) / 2, south + px(BAMBOO_SHADE_FT) + px(1.0) + depth / 2 + k * depth, east - west, depth)
+
+
+def band_spans(g: Mapping[str, Any], boxes: Sequence[Sequence[float]]) -> list[tuple[float, float]]:
+    """The (west, east) spans a sheltered farm's south band is offered, widest first, each once: the frame's whole width (its
+    `bbox`), then the frame between its west- and east-facing grove bands - each as wide as the farmstead. A farm with no
+    frame is offered its house, yard and beds across.
+
+    Research:
+        as wide as the farmstead - research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0033-row-villages-resson.drawing.html: a band as wide as the farmstead, all along its south side
+        inside its own side groves - UNRESEARCHED: the frame less its west and east grove bands, the farmstead's width within its grove
+        a farm with no frame - UNRESEARCHED: its house, yard and beds across"""
+    own = (min(float(b[0]) - float(b[2]) / 2 for b in boxes), max(float(b[0]) + float(b[2]) / 2 for b in boxes))
+    bbox = g.get("bbox")
+    if not bbox:
+        return [own]
+    fw, fe = float(bbox[0]) - float(bbox[2]) / 2, float(bbox[0]) + float(bbox[2]) / 2
+    side = {(int(f[0]), int(f[1])): float(r[2]) for r, (f, _d) in zip(g.get("groves") or (), g.get("grove_faces") or (), strict=False)}
+    inner = (fw + side.get((-1, 0), 0.0), fe - side.get((1, 0), 0.0))
+    out: list[tuple[float, float]] = []
+    for s in ((fw, fe), inner):
+        if s[1] - s[0] > 0 and s not in out:
+            out.append(s)
+    return out
 
 
 class StripGround(NamedTuple):
@@ -308,7 +336,7 @@ def seat_strips(s: Settlement, plan: SitePlan) -> int:
     no room (`meta.household_bamboo_wanted` / `_no_room`, feature 374 wave 149). Returns the count seated.
 
     Research:
-        strip seated after the lanes - research/questions/0075-bamboo-groves-chikurin.drawing.html: seated after the web, the lanes laid before it
+        strip seated after the lanes - CANON: seated after the web; no page gives an order, and the GM ruled it an implementation detail (2026-10-12: "the ordering is an implementation detail") so long as no lane crosses a strip
         off the grove farms' bands - UNRESEARCHED: every grove farm's band a part the strip keeps off
         the ground between held clear - UNRESEARCHED: the strip and its hull to the house held as fabric for the lanes laid after"""
     from ..hinterland.belt import belt_polygon  # local: the hinterland imports this package
@@ -341,9 +369,10 @@ def household_bamboo_wanted(s: Settlement, plan: SitePlan, houses: Sequence[Mapp
 
     Research:
         which farms keep bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_PREVALENCE` by each house's position hash
-        a sheltered row farm keeps bamboo - research/questions/0033-row-villages-resson.drawing.html: the bamboo set south where a row of grove farms across the road broke the wind"""
-    keeps = plan.bamboo in ("homestead", "both")
-    return sum(1 for h in houses if h.get("sheltered") or (keeps and s._hjit(float(h["x"]), float(h["y"]), 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE and not (h.get("geom") or {}).get("groves")))
+        a sheltered row farm keeps bamboo - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: the bamboo set south where a row of grove farms across the road broke the wind, on a map whose farmsteads keep bamboo"""
+    if plan.bamboo not in ("homestead", "both"):
+        return 0
+    return sum(1 for h in houses if h.get("sheltered") or (s._hjit(float(h["x"]), float(h["y"]), 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE and not (h.get("geom") or {}).get("groves")))
 
 
 def between(house: Pt, strip: Sequence[Pt]) -> Poly:
@@ -429,6 +458,8 @@ def _strip_blocked(
     Research:
         off the paddy - research/questions/0075-bamboo-groves-chikurin.drawing.html: no stand on a paddy
         what a strip or fixture keeps off - UNRESEARCHED: the pads, 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
+        no lane across it - research/questions/0075-bamboo-groves-chikurin.drawing.html: no lane or well is drawn across a strip; a tread within its half-width of a corner, or crossing an edge, refuses it
+        off the notice board, byres and retirement houses - UNRESEARCHED: 6 ft off each, as off wells and sheds
     """
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True
@@ -479,7 +510,9 @@ def _strip_blocked(
     tc = s.M.get("tree_crowns") or []
     for k in range(0, len(tc) - 2, 3):
         tx, ty, tr = float(tc[k]), float(tc[k + 1]), float(tc[k + 2])
-        hd = math.hypot(cw, ch) / 2  # the check squares a RAKED footprint on its half-diagonal; mirror it
-        if max(abs(cx - tx) - hd, 0.0) ** 2 + max(abs(cy - ty) - hd, 0.0) ** 2 < (tr + 0.6) ** 2:
+        # the stand is drawn axis-aligned (cw x ch), so a crown is measured to its own box: squaring it on the half-diagonal, as
+        # a raked footprint is, made a sheltered farm's 240 x 16 ft south band a 240 ft square that every crown within 120 ft of
+        # it refused (feature 374 wave 153: Kashikawa's 77 frame-wide offers all refused, the bands left a third of the farm wide)
+        if max(abs(cx - tx) - cw / 2, 0.0) ** 2 + max(abs(cy - ty) - ch / 2, 0.0) ** 2 < (tr + 0.6) ** 2:
             return True
     return bool(pond) and ((cx - pond[0]) / (pond[2] + 20.0)) ** 2 + ((cy - pond[1]) / (pond[3] + 20.0)) ** 2 <= 1.0

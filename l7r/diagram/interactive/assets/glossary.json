@@ -16228,5 +16228,18 @@
   "variants": [
    "kana"
   ]
+ },
+ "go board": {
+  "def": "The board for the game of go, ruled in a square grid of nineteen lines each way - so roads laid like the squares of a go board form a grid.",
+  "variants": [
+   "go board",
+   "go-board"
+  ]
+ },
+ "interlinear": {
+  "def": "Written between the lines of a text - here the author's own small-print commentary set within the chapter.",
+  "variants": [
+   "interlinear"
+  ]
  }
 }

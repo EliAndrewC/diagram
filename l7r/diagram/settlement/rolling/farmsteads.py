@@ -82,6 +82,7 @@ class FarmsteadFlushMixin:
             band drawn at one density - NONE: a band cut along its length into pieces of 28 crowns' ground; the density is `GROVE_CROWN_SQFT`'s (0080), not the cut's
             canopy edge at the band's inner edge - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the drawn band gives up one crown radius on the house's side, keeping the service strip clear
             bamboo patch in the windward bands - research/questions/0075-bamboo-groves-chikurin.drawing.html: 22 x 16 ft on the house side of each windward band
+            a sheltered row farm's grove - research/questions/0033-row-villages-resson.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: its windward bands drawn one tree deep (`thinned`, a GUESS) and no bamboo in them - its bamboo is its band to the south
         """
         survivors: list[Any] = []
         bundled: list[Any] = []

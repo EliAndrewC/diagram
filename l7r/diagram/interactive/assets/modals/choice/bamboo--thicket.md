@@ -20,7 +20,7 @@ Guesses:
 Depiction: A bamboo culm is far too slim to see at the map's scale, so the map draws the thicket as an area, its place and
 size to scale, filled with paired culm strokes and a leafy fork in jade green over a light
 jade wash - a mark taken from modern map legends, which stands for the bamboo and does not count it. It stands on dry
-ground behind the houses, never on a paddy, a marsh or a pond, and clear of the houses, yards, gardens and lanes. A stand too narrow to read at the
+ground just beyond the back row of houses, never on a paddy, a marsh or a pond. A stand too narrow to read at the
 map's full view is left out.
 
 Name: Bamboo: a village thicket

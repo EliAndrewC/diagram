@@ -18,16 +18,16 @@ Guesses:
 - How deep the windward stand runs, about one and a half house depths: no source gives how deep a grove stood beside its house (the one old measure gives whole homestead woods' sides and area, not where the house stood in them), so it is reckoned
   from tree counts and crown sizes.
 
-Depiction: Every farm in the settlement takes the same shape of grove, since the shape went by region. The map draws each tree
-at its real size, the windward sides as a deep stand and the third side as a thinner band of lesser trees, one tree deep,
+Depiction: Every farm in the settlement takes the same shape of grove, since the shape went by region; in a row village, the farms across the street from the wind may instead keep a windward grove one tree deep, with any bamboo they keep in a band of its own to the south; the title card says whether this village's do. The map draws each tree
+at its real size, the windward sides - those facing the map's winter wind, from the northwest unless the map declares a wind of its own - as a deep stand and the third side as a thinner band of lesser trees, one tree deep,
 leaving open the front away from the wind, where the yard and the way in are; on the Tonami plain that front held a thin planting of flowering and fruit trees - the map plants none there, and a farm
 that dries its grain in its front yard keeps its persimmon behind the house. No tree stands in the yard's or the kitchen
 garden's sun. Only the crowns are drawn: no tree is drawn under another's crown, so the understory of saplings and shrubs
-does not show. Where a farm keeps bamboo, it is drawn as a patch of paired culm marks in jade green on the house side of each
+does not show; neighboring crowns are drawn overlapping at their edges so the stand reads as closed, though real crowns could keep a gap. Where a farm keeps bamboo, it is drawn as a patch of paired culm marks in jade green on the house side of each
 windward stand, a mark standing for culms too small to see; under the crowns it is hidden.
 
 Name: Grove on three sides
 Covers: `meta.grove_sides = 3`
 Sources: visit-toyama-sankyoson, kashima-kainyo-1987, tonami-yashikirin-haichi, yashikirin-jawiki, miura-2014-kainyo, takehara-2004-yashikirin
 Entry: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0038-sunlight-and-shade-on-the-farm.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html
-Drawing: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html
+Drawing: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html, research/questions/0033-row-villages-resson.drawing.html

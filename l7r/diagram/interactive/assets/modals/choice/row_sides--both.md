@@ -1,14 +1,14 @@
-About: A row village could take both sides of its road, a line of houses on each side. A road village is defined
-as a farming settlement whose houses stand along a fairly narrow street, on one side of it or on both. On the Musashino
+About: A row village could take both sides of its road, a line of houses on each side. The kind strung along a road, the road village, was
+a farming settlement whose houses stood along a fairly narrow street, on one side of it or on both. On the Musashino
 plateau, Santome's house lots, fields and coppice were set out in strips on both sides of its road, and the Nobidome
-villages of 1661 lay the same way along the Kawagoe road.
+villages' lots lay the same way along the Kawagoe road.
 
-Each farm's land ran back behind its house, so the row was a street of homesteads between two belts of strips. In the 1980s
-zelkova and white oak lined Santome's road as an avenue. A row facing another across the road sheltered it: at Ogawa a farm
-south of its road grew its bamboo on its south side, its owners said, because the row of grove farms across the road already
-broke the wind from the north.
+On a planned row each farm's land ran back behind its house, so the row was a street of homesteads between two belts of strips; on a dike, a farm's land lay near its house and fairly compact.
+A row facing another across the road seems to have sheltered it: at Minami-cho, on the old Yanagikubo new fields, a farm
+south of its road kept its bamboo on its south side, not its north, where the row of grove farms across the road
+likely broke the wind.
 
-Ome Shinmachi, opened on the Ome road in 1596-1615, had 33 lots on each side, 66 in all, each about 54 ft wide. Whether one side or both was the commoner form is not recorded.
+Ome Shinmachi, a row opened on the Ome road, had 33 lots on each side, 66 in all, each about 54 ft wide. Whether one side or both was the commoner form is not recorded.
 
 Guesses:
 - That a row's farms take both sides of the way or one at even odds: both are attested, and neither is counted against the
@@ -19,7 +19,7 @@ Guesses:
   gate is not recorded.
 
 Depiction: The map stands the farms on both sides of the street, each farm's lot and grove set against the next. The far row has its
-holding drawn behind each farm as dry field, a strip running back from the street and cut into plots, long where the street was laid first and short on the paddy's dry edge; the near row, between the paddy and the street, has none. A near-row farm walled
+holding drawn behind each farm as dry field, a strip running back from the street and cut into plots of one even size, long where the street was laid first and short on the paddy's dry edge (how large the real plots were is not recorded); the near row, between the paddy and the street, has none. A near-row farm walled
 from the street by its grove reaches it by a path round the trees.
 
 Name: Both sides of the way

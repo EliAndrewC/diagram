@@ -441,7 +441,7 @@ def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
 
     Research:
         high side and windward side as one - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin
-        fall square to or away from the wind - UNRESEARCHED: 0072 sets the belt to the wind, not the fall"""
+        fall square to or away from the wind - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high margin on the windward side, one case among several (how common, a GUESS); a fall square to or away from the wind keeps the high side and the windward side together"""
     return _fall_into_wind(down_deg, windward) <= 1e-9
 
 

@@ -37,8 +37,10 @@ enough apart for a lane to reach each door. Where a farm keeps bamboo, its stems
 drawn as a patch of jade culm marks that stand for the bamboo rather than count it, showing only between the crowns, as
 real bamboo filled the grove beneath its trees.
 
+[row_shelter=sheltered] A farm across the street from a row of grove farms is drawn as those farms sheltered it: its windward grove one tree deep, and any bamboo it keeps in a band of its own to the south rather than in the grove.
+
 Name: homestead grove
 Covers: `groves`
 Sources: visit-toyama-sankyoson, tonami-kainyoclub, irie-2020-igune, miura-2014-kainyo, kashima-kainyo-1987, tonami-yashikirin-haichi, yashikirin-jawiki, miura-2019-yashikiyama, shakkanho-jawiki, kotobank-yashikirin-heibonsha, takehara-2004-yashikirin
 Entry: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html
-Drawing: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html
+Drawing: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0033-row-villages-resson.drawing.html, research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html

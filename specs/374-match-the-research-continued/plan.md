@@ -873,8 +873,10 @@ and closed there.
   on its windward side - keeps its grove on its windward sides, drawn one tree deep (0033's account: the Ogawa farm, its
   road on the north, "the grove north of the house ... rather thin"; one tree deep, the thin band's depth, a GUESS), and
   keeps its bamboo along its south side (0033; 0075's findings, "a madake grove all along its south side"), its grove
-  drawing none; its row seat, lot and holding are as before. Every sheltered farm keeps the band, whatever the hamlet's
-  bamboo knob or a farm's own roll. TRUE SOUTH governs, as the record says, whatever the map's wind. The farms on the
+  drawing none; its row seat, lot and holding are as before. Every sheltered farm keeps the band, whatever a farm's own roll,
+  on a map whose bamboo knob gives its farmsteads bamboo (homestead or both); on a map with none at the farmsteads it keeps
+  none - "none" is the cold upland where madake does not grow (0075). (Round 3 had the band drawn whatever the knob; the
+  record checks found that a drift, so it follows the knob.) TRUE SOUTH governs, as the record says, whatever the map's wind. The farms on the
   windward row keep their full groves. Recorded per farm (`sheltered`) and counted in `meta`. (Round 2 had the sheltered
   farm keep no grove, as this project's reading; quote-check found the account's farm kept its thin north grove, so the
   thin grove is drawn.)

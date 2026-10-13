@@ -6254,21 +6254,28 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/consts.py::BAMBOO_FORMS#where the bamboo stands": {
-  "code": "f04d4a2061ff7f5a",
+ "l7r/diagram/hamletgen/consts.py::BAMBOO_FORMS#the forms' odds": {
+  "code": "3b38d2ea5013a412",
   "core": "8589c8bfdde8cfa2",
-  "date": "2026-10-05",
-  "note": "all four attested places rolled per map; the page gives no weights, so 2:1:1:1 is calibrated",
+  "date": "2026-10-13",
+  "note": "the page rolls the knob \"at random\" and gives no odds",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts.py::BAMBOO_FORMS#where the bamboo stands": {
+  "code": "c37e1ad16dadf765",
+  "core": "8589c8bfdde8cfa2",
+  "date": "2026-10-13",
+  "note": "the four forms §9 lists, rolled per map",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:79b7211c72484f93",
-   "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
+   "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9",
+   "0075-bamboo-groves-chikurin.drawing.html:79b7211c72484f93"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch": {
@@ -6942,10 +6949,33 @@
   "date": "2026-10-03",
   "note": "street or dry edge, even odds, recorded as a GUESS",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts.py::ROW_SHELTERS#even odds": {
+  "code": "b55d6936356313d5",
+  "core": "6272add89592e4d9",
+  "date": "2026-10-13",
+  "note": "the page records the even odds as a GUESS",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts.py::ROW_SHELTERS#row village's shelter": {
+  "code": "45c61686c614f4c9",
+  "core": "6272add89592e4d9",
+  "date": "2026-10-13",
+  "note": "the two forms the page draws, rolled per row village; the turned house is the separate DEVIATION",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::ROW_SIDES#row village's sides": {
@@ -6954,9 +6984,9 @@
   "date": "2026-10-03",
   "note": "one side or both, even odds",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -6966,9 +6996,9 @@
   "date": "2026-10-03",
   "note": "own or shared wells, even odds",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -7938,9 +7968,9 @@
   "date": "2026-10-03",
   "note": "14 ft, the convention 0075 records",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -7966,9 +7996,9 @@
   "date": "2026-10-07",
   "note": "84 by 58 ft is the size the drawing page gives and records as a GUESS",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:19e6e6b416628986"
   ],
@@ -7993,9 +8023,9 @@
   "date": "2026-10-07",
   "note": "every search caps the stand's near edge at this depth behind the back row's back edge, which matches the drawing page's \"just beyond the back row of houses\"",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d"
   ],
@@ -8075,9 +8105,9 @@
   "date": "2026-10-10",
   "note": "near edge held within 30 ft behind the back row's back edge, a calibration of \"just beyond the back row\"",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d"
   ],
@@ -8114,9 +8144,9 @@
   "date": "2026-10-07",
   "note": "no stand on paddy; on dry ground, kept off marsh and pond",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d",
    "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
@@ -8148,17 +8178,16 @@
  "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket by the knob": {
   "code": "a26746e483b40ba5",
   "core": "4b83bca7081277a6",
-  "date": "2026-10-07",
-  "note": "a thicket is drawn only for the knob's thicket and both values",
+  "date": "2026-10-13",
+  "note": "a thicket only on thicket or both",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:79b7211c72484f93",
-   "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
+   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d",
+   "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9"
   ],
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept off every household's reserved copse seats": {
@@ -8167,9 +8196,9 @@
   "date": "2026-10-07",
   "note": "the copse draws no bamboo and a stand is nearly one species, so the stand gives way to the seats",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:399c3deb721a5928",
    "0075-bamboo-groves-chikurin.drawing.html:482ec6b700c3e1bc"
@@ -8197,9 +8226,9 @@
   "date": "2026-10-07",
   "note": "on dry ground just beyond the back row; the 40 ft target is a calibration within that, and the side is a recorded guess",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d"
   ],
@@ -8212,9 +8241,9 @@
   "date": "2026-10-07",
   "note": "BAMBOO_THICKET_FT (84, 58) is drawn at full size only, and the page records 84 by 58 ft as a GUESS",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:19e6e6b416628986"
   ],
@@ -9542,9 +9571,9 @@
   "date": "2026-10-03",
   "note": "modern legend mark, a convention",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -9958,6 +9987,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::BAND_STEPS_OUT#the band stepped further south": {
+  "code": "df62a7bce68bc7e1",
+  "core": "3e65c247a0c8f861",
+  "date": "2026-10-13",
+  "note": "how far it is moved is recorded as a GUESS",
+  "pages": {
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
+  },
+  "research": "7d323351e0241d76",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:ca070263ae5e6ff6",
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657"
+  ],
+  "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::Footing#strip geometry": {
   "code": "12416d666d1e4171",
   "core": "945d33bc566892b4",
@@ -9985,14 +10030,16 @@
  "l7r/diagram/hamletgen/homesteads/bamboo.py::HOUSEHOLD_BAMBOO_FT#strip size": {
   "code": "6b5d222c2ea46f4d",
   "core": "fc1ab0a5dec5b37d",
-  "date": "2026-10-03",
-  "note": "22 x 16 ft as the drawing page states (labeled GUESS there)",
+  "date": "2026-10-13",
+  "note": "22 x 16 ft",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "research": "7d323351e0241d76",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:b9d2178357ac666a"
+  ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::PART_GAP_FT#off the seated parts": {
@@ -10008,17 +10055,16 @@
  "l7r/diagram/hamletgen/homesteads/bamboo.py::STRIP_SEATS#strip seats": {
   "code": "e874b436936d9db8",
   "core": "f828cd49bccfe550",
-  "date": "2026-10-12",
-  "note": "the page names stepping the strip out until it stands clear as a GUESS; \"near the house\" fits",
+  "date": "2026-10-13",
+  "note": "stepped out until clear, the reach a GUESS",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:c299baf40666f6ab",
    "0075-bamboo-groves-chikurin.drawing.html:ca070263ae5e6ff6"
   ],
-  "triage": "touched",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::STRIP_SEATS#the slide along the side": {
@@ -10033,18 +10079,16 @@
  "l7r/diagram/hamletgen/homesteads/bamboo.py::STRIP_STEPS_OUT#strip reach": {
   "code": "d338361243e80245",
   "core": "c35ad46f1990d395",
-  "date": "2026-10-12",
-  "note": "6 + 3 x 16 = 54 ft, the page's GUESS reach of \"38 to 54 ft off the wall\"",
+  "date": "2026-10-13",
+  "note": "6 + 3 x 16 = 54 ft, the page's 38 to 54 ft, a GUESS",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:b9d2178357ac666a",
-   "0075-bamboo-groves-chikurin.drawing.html:c299baf40666f6ab",
    "0075-bamboo-groves-chikurin.drawing.html:ca070263ae5e6ff6"
   ],
-  "triage": "touched",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::StripGround#strip ground": {
@@ -10068,45 +10112,64 @@
  "l7r/diagram/hamletgen/homesteads/bamboo.py::_HOUSEHOLD_BAMBOO_SIDES#strip side": {
   "code": "421837b54d91ec42",
   "core": "b0663ceb9485db36",
-  "date": "2026-10-12",
-  "note": "35/25/30/10 match the page's weights; the Inashiro outcome is the seats falling through, not the weights",
+  "date": "2026-10-13",
+  "note": "35/30/25/10 as §12 gives them, recorded as a GUESS",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824",
-   "0075-bamboo-groves-chikurin.html": "08cc34e0e3c96ed9"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64",
+   "0075-bamboo-groves-chikurin.html": "e645ac0948f951c8"
   },
-  "research": "de2b70fbe2e9cb07",
+  "research": "02e250949403c30c",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d",
-   "0075-bamboo-groves-chikurin.drawing.html:ca070263ae5e6ff6",
-   "0075-bamboo-groves-chikurin.html:90c3eccb33d5d8d0"
+   "0075-bamboo-groves-chikurin.drawing.html:132b3dc214524136",
+   "0075-bamboo-groves-chikurin.html:460210fe00d23efe"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#off the paddy": {
-  "code": "8f1c46cd612da965",
-  "core": "da890c4121f1343b",
-  "date": "2026-10-12",
-  "note": "corners kept off paddy or marsh within 6 ft",
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#no lane across it": {
+  "code": "cc5efb3b3ad3eb7f",
+  "core": "b342bf270913dd58",
+  "date": "2026-10-13",
+  "note": "refuses a lane tread within half-width of a corner, crossing an edge, or ending inside; matches \"no lane or well is drawn across it\" (wells kept off at 6 ft in the loop above)",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
+   "0075-bamboo-groves-chikurin.drawing.html:132b3dc214524136"
   ],
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#what a strip or fixture keeps off": {
-  "code": "739af6b5304c0f2c",
-  "core": "da890c4121f1343b",
-  "date": "2026-10-07",
-  "note": "the pads match the code (2 ft off placed boxes and houses, 6 ft off wells, sheds and wet rings, 3 ft off dry plots, off water and crowns, 20 ft past the pond); no cited page sets them",
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#off the notice board, byres and retirement houses": {
+  "code": "ebc9391c15ef40cf",
+  "core": "b342bf270913dd58",
+  "date": "2026-10-13",
+  "note": "the kosatsuba, byres and retirement_houses keys are cleared at 6 ft, the same as wells and sheds; no cited page speaks to these clearances",
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#off the paddy": {
+  "code": "e2500ba27823bee3",
+  "core": "b342bf270913dd58",
+  "date": "2026-10-13",
+  "note": "refuses any corner inside or within 6 ft of a paddy ring",
+  "pages": {
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
+  },
+  "research": "7d323351e0241d76",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#what a strip or fixture keeps off": {
+  "code": "9fd8fb199c58774f",
+  "core": "b342bf270913dd58",
+  "date": "2026-10-13",
+  "note": "the margins, and the new crown-to-box test, are not answered by the cited pages",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::across_a_lane#the strip on its house's side of a lane": {
@@ -10115,10 +10178,45 @@
   "date": "2026-10-03",
   "note": "bamboo on the household's own farmstead/grove",
   "pages": {
-   "0075-bamboo-groves-chikurin.html": "08cc34e0e3c96ed9"
+   "0075-bamboo-groves-chikurin.html": "e645ac0948f951c8"
   },
-  "research": "9302fd4dd65d131d",
-  "triaged": "2026-10-05",
+  "research": "edf229d4ece120f0",
+  "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::band_spans#a farm with no frame": {
+  "code": "dfae0b5ec382057b",
+  "core": "8416c5f1467fc0ac",
+  "date": "2026-10-13",
+  "note": "with no bbox, the span is the house, yard and beds across; no page says what the farmstead's width is when there is no frame",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::band_spans#as wide as the farmstead": {
+  "code": "d5865c89406d1ace",
+  "core": "8416c5f1467fc0ac",
+  "date": "2026-10-13",
+  "note": "the first span offered is the frame's whole bbox width, read as \"a band as wide as the farmstead\", \"all along its south side\"; the frame is the farm's own ground and grove",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
+  },
+  "research": "1ac90bf218a4e45c",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3",
+   "0033-row-villages-resson.drawing.html:a88545fe00a7de6d",
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::band_spans#inside its own side groves": {
+  "code": "e7248812456c97f5",
+  "core": "8416c5f1467fc0ac",
+  "date": "2026-10-13",
+  "note": "the fallback is the frame less its west and east grove bands; no page gives that width, and it stays consistent with \"a band of its own to the south, not in its grove\"",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::between#no lane between a house and its bamboo": {
@@ -10131,83 +10229,90 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#a grove farm's bamboo in its grove": {
-  "code": "21eeda136e0c1661",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "no strip, counted for the grove",
+  "code": "73bd81f27f1b1370",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "a grove farm that is not sheltered gets no strip and is counted",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#a stepped strip its own farm's": {
-  "code": "820ecc1f1a9d9178",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "no page bears on whose strip a stepped seat is",
+  "code": "1eada4e2ee0904a1",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "no page covers a nearest-house rule; §13 says the stepping reach is a GUESS",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#row farm's bamboo to the south": {
-  "code": "73e1b6088daf25c5",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "the drawing page records drawing only the full windward grove",
+  "code": "2003f81434db7ec7",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "knob gate homestead/both, every sheltered farm keeps it, south_band, none where there is no room",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "3f66a452776b32a9",
+  "research": "43819605c7d2d33d",
   "rests": [
-   "0033-row-villages-resson.drawing.html:f5e09c253273ce75"
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3",
+   "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9",
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#side rolled, then the others": {
-  "code": "00e5fcb62bb5e5dd",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "weights 35/30/25/10 match",
+  "code": "aefe2e7727cc7309",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "weighted side first, then the rest",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d"
+   "0075-bamboo-groves-chikurin.drawing.html:132b3dc214524136"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip clearances": {
-  "code": "f78e4b5977d012b2",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "no page gives the clearances",
+  "code": "20f00b866c5f33fe",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "§12 says no lane crosses a strip but gives no clearance figure",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip kept off the village's shelter belt (`belt`)": {
+  "code": "5d5f273ec81653fc",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "strip kept off the village's shelter belt (`belt`)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip off the copse seats": {
-  "code": "7c2da6508a46cb97",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "no page gives it",
+  "code": "52c7a008f601dc68",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "§19 covers what the copse is planted with, not where the strip may stand",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip on its house's bank": {
-  "code": "625a9da97c811ed4",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "the farmstead stands whole on one bank",
+  "code": "62bb01c531091bb4",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "the farmstead stays whole on one bank",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -10219,10 +10324,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip out of the sun": {
-  "code": "9f9fae5f965f1b93",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "BAMBOO_SHADE_FT 50, as for a tree",
+  "code": "05807b7083fdb16f",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "BAMBOO_SHADE_FT 50 ft, as §95 says for bamboo",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -10233,65 +10338,82 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip refused on paddy, marsh and pond (fields/marsh/pond in StripGround; 0075 §23 backs the paddy part)": {
+  "code": "5d5f273ec81653fc",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "strip refused on paddy, marsh and pond (fields/marsh/pond in StripGround; 0075 §23 backs the paddy part)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes": {
-  "code": "db88e7a20d2b0d83",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "the page says the strip \"is seated with the sheds and gardens, so the lanes and wells keep off it\"; the code seats it after the web (known gap, row 777 deferred)",
-  "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
-  },
-  "research": "358ef93419211de0",
-  "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d"
-  ],
-  "triaged": "2026-10-12",
-  "verdict": "DRIFTED"
+  "code": "e95157274a5e4d44",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "CANON names the GM's 2026-10-12 ruling; no cited page gives a seating order, and its condition matches the page's \"no lane or well is drawn across it\" (the strip keeps 6 ft off every lane)",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip size": {
-  "code": "78e1c59457d1b6a5",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "22 x 16 ft",
+  "code": "abf418d611e7b6ee",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "22 x 16 ft, recorded as a GUESS",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:b9d2178357ac666a"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#which farms keep bamboo": {
-  "code": "f2ff1195d31a717d",
-  "core": "2bb78ea20787bf0e",
-  "date": "2026-10-12",
-  "note": "0.6, three in five",
+  "code": "332539fd896c679b",
+  "core": "5d5f273ec81653fc",
+  "date": "2026-10-13",
+  "note": "0.6 by position hash under the knob; sheltered farms are covered by their own claim",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9",
    "0075-bamboo-groves-chikurin.drawing.html:e6d16be9cc94af32"
   ],
-  "triaged": "2026-10-12",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo_wanted#a sheltered row farm keeps bamboo": {
+  "code": "1a4f4588536c3a51",
+  "core": "d772e66de6978e6c",
+  "date": "2026-10-13",
+  "note": "every sheltered farm counted, and only when the knob is homestead/both",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
+  },
+  "research": "43819605c7d2d33d",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3",
+   "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9",
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo_wanted#which farms keep bamboo": {
-  "code": "5abeafecf9f205f8",
-  "core": "4cebbb67e3049e97",
-  "date": "2026-10-12",
-  "note": "0.6, grove farms excluded",
+  "code": "244248e40da9398b",
+  "core": "d772e66de6978e6c",
+  "date": "2026-10-13",
+  "note": "0.6 by position hash, grove farms left out",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:e6d16be9cc94af32",
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::in_belt#no strip in the belt": {
@@ -10308,6 +10430,16 @@
   "date": "2026-10-03",
   "note": "overlap test",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::own_ground#its own path no bar": {
+  "code": "3b602be2ab593060",
+  "core": "74b6f404d57d3a53",
+  "date": "2026-10-13",
+  "note": "the pages are silent on where the gate stood",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::parts_hit#off the seated parts": {
@@ -10330,19 +10462,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::seat_strips#strip seated after the lanes": {
-  "code": "71259cdd4e2e37c3",
+  "code": "e24eab281d249771",
   "core": "261325e0e1604c0c",
-  "date": "2026-10-12",
-  "note": "the code calls the strip after the web in stage_hinterland; the page says \"seated with the sheds and gardens, so the lanes and wells keep off it\" (known gap, row 777 deferred)",
-  "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
-  },
-  "research": "40b2cb4239c05cce",
-  "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d"
-  ],
-  "triaged": "2026-10-13",
-  "verdict": "DRIFTED"
+  "date": "2026-10-13",
+  "note": "CANON names the GM's ruling; no page orders strip against web; the strip and the ground between it and its house are held as fabric for lanes laid later, so no lane crosses",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::seat_strips#the ground between held clear": {
   "code": "c62165c564643e1f",
@@ -10353,21 +10479,73 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::south_band#a madake grove along its south side": {
+  "code": "eaa5c63665dad60b",
+  "core": "b7cfd54cd7304534",
+  "date": "2026-10-13",
+  "note": "yields bands true south of the house, yard and beds, at the spans band_spans gives; matches \"madake grove all along its south side\" for the sheltered leeward farm",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0075-bamboo-groves-chikurin.html": "e645ac0948f951c8"
+  },
+  "research": "5812b6e559d3fd85",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3",
+   "0075-bamboo-groves-chikurin.html:e37455e2dc5f4e01"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::south_band#past the plots' sun": {
+  "code": "b9b73c97f30279d1",
+  "core": "b7cfd54cd7304534",
+  "date": "2026-10-13",
+  "note": "the band's north edge sits BAMBOO_SHADE_FT (50 ft) + 1 ft below the southmost box, so it is clear of every plot's 50 ft east, west and south",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::south_band#stepped further south": {
+  "code": "2edbd1ab72fb3762",
+  "core": "b7cfd54cd7304534",
+  "date": "2026-10-13",
+  "note": "each farmstead-wide span is stepped a strip's depth (16 ft) at a time, out to BAND_STEPS_OUT=6, before a narrower span is tried; \"moved further south\", with how far recorded as a GUESS",
+  "pages": {
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
+  },
+  "research": "7d323351e0241d76",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/bamboo.py::south_band#the band's depth": {
+  "code": "7d9e173df3d2268b",
+  "core": "b7cfd54cd7304534",
+  "date": "2026-10-13",
+  "note": "depth is HOUSEHOLD_BAMBOO_FT[1]=16 ft, \"a strip's depth\", which the page records as a GUESS",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_candidates#side rolled, then the others": {
   "code": "da6dc4f817fc32af",
   "core": "9e40a3d3c7b9f11b",
-  "date": "2026-10-12",
-  "note": "weights back .35 / wind .30 / shed .25 / other flank .10 match the page's 35/30/25/10; trying the other sides when the rolled one has no room matches the Inashiro outcomes the page reports",
+  "date": "2026-10-13",
+  "note": "weighted side, then listed order",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d",
-   "0075-bamboo-groves-chikurin.drawing.html:c299baf40666f6ab",
-   "0075-bamboo-groves-chikurin.drawing.html:ca070263ae5e6ff6"
+   "0075-bamboo-groves-chikurin.drawing.html:132b3dc214524136"
   ],
-  "triage": "touched",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_candidates#the near seat": {
@@ -10461,18 +10639,17 @@
  "l7r/diagram/hamletgen/homesteads/bamboo.py::wind_seat#windward seat": {
   "code": "7e7cb83e331e8c4c",
   "core": "8802e88c05019186",
-  "date": "2026-10-12",
-  "note": "the windward side, and the corner under a diagonal wind, as Inashiro's windward northwest strip",
+  "date": "2026-10-13",
+  "note": "windward side; the corner for a NW wind, as on Inashiro",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d",
+   "0075-bamboo-groves-chikurin.drawing.html:132b3dc214524136",
    "0075-bamboo-groves-chikurin.drawing.html:ca070263ae5e6ff6"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/boundary.py::ELLIPSE_SIDES#site boundary": {
@@ -12854,18 +13031,16 @@
  "l7r/diagram/hamletgen/homesteads/row_rules.py::bamboo_mismatch#grove bamboo as rolled": {
   "code": "d478b7e6ce86092d",
   "core": "fa25c344dfb53a57",
-  "date": "2026-10-12",
-  "note": "a farm with its own grove keeps its bamboo inside it, so grove bamboo must match the farm's rolled stand",
+  "date": "2026-10-13",
+  "note": "checks the grove draws bamboo exactly where the farm rolled it",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:c299baf40666f6ab",
-   "0075-bamboo-groves-chikurin.drawing.html:e6d16be9cc94af32",
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
-  "triage": "touched",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::continuous#manifest reading": {
@@ -12879,8 +13054,8 @@
  "l7r/diagram/hamletgen/homesteads/row_rules.py::row_rules#door reach of a street": {
   "code": "f827f4f06e06d822",
   "core": "9d37f97c7e1d5f0b",
-  "date": "2026-10-07",
-  "note": "60 ft matches 0246's recorded GUESS for a lane serving a house",
+  "date": "2026-10-13",
+  "note": "60 ft, the page's GUESS reach",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -12896,12 +13071,13 @@
   "date": "2026-10-07",
   "note": "any row_holdings record that has no drawn dry_plot is flagged, matching a holding drawn behind each far-row farm",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:22b02e1d1507e48b"
   ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::row_rules#farms on their street": {
@@ -12910,17 +13086,17 @@
   "date": "2026-10-07",
   "note": "within a frame of the street, no second line behind, frames lot against lot",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "5d6cf0f35aef4cde",
+  "research": "a9aa86f8eee368dc",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
    "0033-row-villages-resson.drawing.html:a88545fe00a7de6d",
    "0033-row-villages-resson.html:79c103aabcc7b882",
    "0033-row-villages-resson.html:e389da796967af90"
   ],
-  "triaged": "2026-10-07",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::row_rules#street one continuous way": {
@@ -12929,15 +13105,15 @@
   "date": "2026-10-07",
   "note": "each planned street is one line that runs on off the map",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:071bd73215fda123",
    "0033-row-villages-resson.drawing.html:0a23ce156774ee9f",
    "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
-  "triaged": "2026-10-07",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::row_rules#way ends on its own street": {
@@ -12946,13 +13122,13 @@
   "date": "2026-10-07",
   "note": "the door is near its street or served by a door path",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
   ],
-  "triaged": "2026-10-07",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::water_rules#a row's water": {
@@ -12961,9 +13137,9 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -12987,6 +13163,15 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/rows.py::ACROSS_THE_WIND_COS#a street across the wind": {
+  "code": "e5fdcd54a0509453",
+  "core": "08bbbc9bebb9786a",
+  "date": "2026-10-13",
+  "note": "no angle on the page",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/rows.py::DOOR_ROOM_FT#door room": {
   "code": "8626efbc9fd42d9e",
   "core": "ddcca1f41a746781",
@@ -13001,9 +13186,9 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13021,9 +13206,9 @@
   "date": "2026-10-07",
   "note": "150 ft plots, a recorded convention",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:d08ad775dbfe9fa1"
   ],
@@ -13033,24 +13218,22 @@
  "l7r/diagram/hamletgen/homesteads/rows.py::HOLDING_DEPTH_FRAMES#far-row dry-field share": {
   "code": "1b2c6351fc907cf1",
   "core": "53917c8a6f3c7727",
-  "date": "2026-10-07",
-  "note": "three lots on a street laid first and one on the dry edge, all dry field; the page records the depths and the dry field as GUESSes, and the share follows from them",
+  "date": "2026-10-13",
+  "note": "3 lots and 1 lot",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "5d6cf0f35aef4cde",
+  "research": "a9aa86f8eee368dc",
   "rests": [
    "0033-row-villages-resson.drawing.html:40d16df7be480e77",
    "0033-row-villages-resson.drawing.html:6181eeb7e6f73fde",
    "0033-row-villages-resson.drawing.html:ac6b0bb135a2aab0",
    "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa",
    "0033-row-villages-resson.html:68b06a089f5f62f5",
-   "0033-row-villages-resson.html:92ec6ffc05597628",
-   "0033-row-villages-resson.html:b10903e73759fdf6",
    "0033-row-villages-resson.html:d89b4eeade3db9de"
   ],
-  "triage": "touched",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::MAX_STREETS#most streets": {
@@ -13059,9 +13242,9 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13071,10 +13254,10 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "69b9afe54b02977a",
+  "research": "a9aa86f8eee368dc",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13084,9 +13267,9 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13120,9 +13303,9 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13203,9 +13386,9 @@
   "date": "2026-10-07",
   "note": "every cell takes its crop from DRY_CROPS, none paddy; dry field is recorded as a GUESS",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:6181eeb7e6f73fde"
   ],
@@ -13218,9 +13401,9 @@
   "date": "2026-10-07",
   "note": "max(1, round(depth / px(150 ft))) matches \"plots about 150 ft deep\", which the page records as a convention",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:d08ad775dbfe9fa1"
   ],
@@ -13305,10 +13488,10 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "69b9afe54b02977a",
+  "research": "a9aa86f8eee368dc",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13318,10 +13501,10 @@
   "date": "2026-10-07",
   "note": "each next street is offset past the far row, its holding (both sides only) and the gaps, so it stands parallel beside the last and never as a second rank behind it",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "69b9afe54b02977a",
+  "research": "a9aa86f8eee368dc",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
    "0033-row-villages-resson.drawing.html:22b02e1d1507e48b",
@@ -13337,10 +13520,10 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "69b9afe54b02977a",
+  "research": "a9aa86f8eee368dc",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13350,10 +13533,10 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "69b9afe54b02977a",
+  "research": "a9aa86f8eee368dc",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13374,174 +13557,196 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#at most MAX_STREETS (6) parallel streets": {
-  "code": "b5c062effe6ff530",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "the drawing page records at most six streets as a guess",
+  "code": "d5abf1a6376f59aa",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "six, a GUESS",
   "pages": {},
   "research": "",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row dry-field share": {
-  "code": "3918aefb2ad1e58c",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "only the far row on a two-sided street gets a holding, one lot wide and hold_depth deep; the near row and a one-sided row get none, as the page says",
+  "code": "305c1e7d7e3cafe1",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "far row only, 3 lots street / 1 lot edge, dry field",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "5d6cf0f35aef4cde",
+  "research": "a9aa86f8eee368dc",
   "rests": [
    "0033-row-villages-resson.drawing.html:22b02e1d1507e48b",
    "0033-row-villages-resson.drawing.html:40d16df7be480e77",
    "0033-row-villages-resson.drawing.html:6181eeb7e6f73fde",
-   "0033-row-villages-resson.drawing.html:ac6b0bb135a2aab0",
-   "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa"
+   "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa",
+   "0033-row-villages-resson.html:92ec6ffc05597628"
   ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row farm only with its holding": {
-  "code": "96f179c8fe8fb954",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "a far-row seat (side > 0, both sides) is skipped when holding_clear returns None, so every far-row farm seated has its holding",
+  "code": "ff794d72703b47d5",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "every far-row farm has its holding drawn",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
-   "0033-row-villages-resson.drawing.html:22b02e1d1507e48b",
-   "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa"
+   "0033-row-villages-resson.drawing.html:22b02e1d1507e48b"
   ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms one frame apart, never more than 240 ft": {
-  "code": "f634edcb4c563835",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "lot = min(fw, 240 ft) steps the row, lot against lot",
+  "code": "92c217c60870ce83",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "lot = min(frame, 240 ft)",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:a88545fe00a7de6d"
   ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street": {
-  "code": "40b63dc44f920b33",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "when a street is full the code moves to the next of its parallel offset streets, never a second rank of farms behind",
+  "code": "9d0da6e1863e6e8b",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "parallel further streets, never a second rank",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf"
   ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#first street on the hard ground's edge": {
-  "code": "90902e1a6348c93e",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "the stretch of the dry edge holding the most farms, the project's method",
+  "code": "932fa08cc1aa43a2",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "the stretch holding the most frames",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:071bd73215fda123"
   ],
-  "triaged": "2026-10-07",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#frame off the street": {
-  "code": "130765137d58c42a",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "no page gives a figure for how far a house stood off its street",
+  "code": "e0fcac0a80b497b1",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "no page gives the frame's offset",
   "pages": {},
   "research": "",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:d41ee4495f2368b5",
-   "0033-row-villages-resson.html:3f49b8942eeaf074",
-   "0033-row-villages-resson.html:79c103aabcc7b882"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front": {
-  "code": "97e9391fa91a28ec",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "the record says nothing of a farm's gate or door ground",
+  "code": "295bb7af12839a3c",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "no page measures it",
   "pages": {},
   "research": "",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1",
-   "0033-row-villages-resson.html:c3222f5e71221a85"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#holding set behind its frame": {
-  "code": "325edca745d325a2",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "hc starts the strip at gap/2 (7.5 ft) behind the frame; the bundle gives no gap between a house lot and its field",
+  "code": "007fbd629b4d2449",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "page says only behind the farm",
   "pages": {},
   "research": "",
-  "rests": [
-   "0033-row-villages-resson.drawing.html:22b02e1d1507e48b",
-   "0033-row-villages-resson.html:d89b4eeade3db9de"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row farm faces its street": {
-  "code": "e6f20281b604c2d9",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-10",
-  "note": "every frame takes its front from grove_faces(plan.windward, ...), so only the grove-to-windward form is drawn and the house turned to its road never is; the page says \"The map draws only the first\" of the two attested forms",
+  "code": "f0fcb851b21dc2e8",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "the page records \"The house turned to face its road is not drawn\"",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
-   "0033-row-villages-resson.drawing.html:005c73edae057da1",
-   "0033-row-villages-resson.drawing.html:f5e09c253273ce75"
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#streets rounded at a corner": {
-  "code": "1eadda8bb2e83bf7",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "no page measures how sharply a street bends",
+  "code": "4d6e6cfb0381a346",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "no page rules on a street's bend",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#the leeward row marked sheltered": {
+  "code": "807446662979d11c",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "two-sided row, a street across the wind, the roll taken per row village",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
   "rests": [
-   "0033-row-villages-resson.drawing.html:4f85f319664ea57f"
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#the next street past the last one's holdings": {
-  "code": "e7061cc2b28b453d",
-  "core": "5de28bb7864ce127",
-  "date": "2026-10-07",
-  "note": "row_offsets(..., hold_depth + gap) sets each further street past the last street's frames and holdings, parallel to it",
+  "code": "30b638060e3cb2bc",
+  "core": "c74c00a83b5ff2ca",
+  "date": "2026-10-13",
+  "note": "parallel street past frames and holdings",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
-   "0033-row-villages-resson.drawing.html:22b02e1d1507e48b",
-   "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa"
+   "0033-row-villages-resson.drawing.html:22b02e1d1507e48b"
+  ],
+  "triaged": "2026-10-13",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/rows.py::sheltered_by_the_row_across#a street across the wind": {
+  "code": "75350b9cb541e2e7",
+  "core": "abb5211aef6d5194",
+  "date": "2026-10-13",
+  "note": "the page names no angle",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/rows.py::sheltered_by_the_row_across#the leeward row": {
+  "code": "55b216d53e9de09d",
+  "core": "abb5211aef6d5194",
+  "date": "2026-10-13",
+  "note": "the farm with its street on its windward side",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3"
   ],
   "verdict": "IN-STEP"
  },
@@ -13559,10 +13764,10 @@
   "date": "2026-10-03",
   "note": "matches its backing",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "69b9afe54b02977a",
+  "research": "a9aa86f8eee368dc",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -13809,10 +14014,10 @@
   "date": "2026-10-13",
   "note": "frame pitch capped at 240 ft, next street rather than ranks",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "69b9afe54b02977a",
+  "research": "a9aa86f8eee368dc",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
    "0033-row-villages-resson.drawing.html:a88545fe00a7de6d",
@@ -14189,18 +14394,16 @@
  "l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a grove farm's own bamboo": {
   "code": "ddec5bd872985590",
   "core": "48d4891b645e94a3",
-  "date": "2026-10-12",
-  "note": "the knob is homestead or both, and the bamboo sits in the grove",
+  "date": "2026-10-13",
+  "note": "_household_bamboo is set only for homestead/both",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7",
-   "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
+   "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9",
+   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a yard's south sun": {
@@ -14452,10 +14655,10 @@
   "date": "2026-10-05",
   "note": "760 ft",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
    "0196-communal-wells-ido.drawing.html": "307fc85eb601e9b5"
   },
-  "research": "38fc8ee8e67ae8d7",
+  "research": "8aad07713687f175",
   "rests": [
    "0033-row-villages-resson.drawing.html:18c4dc9ae3cbd807",
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
@@ -14508,14 +14711,17 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::grove_water#a row's water": {
   "code": "e4fe7575f3b62618",
   "core": "15b482c9fa1b5c94",
-  "date": "2026-10-03",
-  "note": "shared wells along the streets or a well at every farm, per the row_water knob",
+  "date": "2026-10-13",
+  "note": "own or shared, 760 ft reach",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
-  "triage": "touched",
-  "triaged": "2026-10-07",
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:18c4dc9ae3cbd807",
+   "0033-row-villages-resson.drawing.html:4783bb7b8054d5c1"
+  ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::grove_water#a scattered farm's water": {
@@ -14726,9 +14932,9 @@
   "date": "2026-10-03",
   "note": "middle of stretches of at most 1.6 x 760 ft",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -14789,26 +14995,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec#declared fields honored, the rest rolled": {
-  "code": "ad9da3198dd19f84",
-  "core": "91eef1a3a87f0d4b",
-  "date": "2026-10-03",
+  "code": "882f82825a53bc6a",
+  "core": "b18775e1b5c56926",
+  "date": "2026-10-13",
   "note": "plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec#default households": {
-  "code": "52a36c45c4ffeca5",
-  "core": "91eef1a3a87f0d4b",
-  "date": "2026-10-03",
-  "note": "REF_HOUSEHOLDS 15",
+  "code": "227c92b38cdf51f0",
+  "core": "b18775e1b5c56926",
+  "date": "2026-10-13",
+  "note": "within the 10-20 band",
+  "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#hamlet household band": {
-  "code": "e670735725774181",
-  "core": "d5487fa2d6457ae3",
-  "date": "2026-10-12",
-  "note": "10 to 20 households",
+  "code": "3cea980752b96d38",
+  "core": "33f11632b613ba68",
+  "date": "2026-10-13",
+  "note": "10 to 20",
   "pages": {
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html": "8d5bae222470dc31"
   },
@@ -14820,20 +15029,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#knob values": {
-  "code": "bbfd601aae5c0c52",
-  "core": "d5487fa2d6457ae3",
-  "date": "2026-10-12",
-  "note": "validation plumbing",
+  "code": "0d6d3ce7114f08a4",
+  "core": "33f11632b613ba68",
+  "date": "2026-10-13",
+  "note": "membership checks only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values": {
-  "code": "8b2caf577764448c",
-  "core": "d5487fa2d6457ae3",
-  "date": "2026-10-12",
-  "note": "accepts both attested layouts, mosaic and grid",
+  "code": "32816c43b3343c85",
+  "core": "33f11632b613ba68",
+  "date": "2026-10-13",
+  "note": "mosaic or chessboard",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -14844,10 +15053,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#water sink values": {
-  "code": "7aea4b6a0cfa63e7",
-  "core": "d5487fa2d6457ae3",
-  "date": "2026-10-12",
-  "note": "a pond at the foot, or off the map",
+  "code": "86bc869fc8bcf5b0",
+  "core": "33f11632b613ba68",
+  "date": "2026-10-13",
+  "note": "pond, or onward to the brook or off the map",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
@@ -14875,11 +15084,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan#spec and plan plumbing": {
-  "code": "865d9ee75c292c8f",
-  "core": "5f158e61664c2d74",
-  "date": "2026-10-03",
-  "note": "defaults overwritten by plan_site",
+  "code": "18c47545b92d563f",
+  "core": "550830d58f73e6f6",
+  "date": "2026-10-13",
+  "note": "fields only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan.fall#spec and plan plumbing": {
@@ -14984,12 +15195,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#fall square to or away from the wind": {
-  "code": "c091648687b7f864",
+  "code": "9bcb590a9378c594",
   "core": "ba35a313a4b8fa74",
-  "date": "2026-10-03",
-  "note": "0031 drawing bears on it: \"the high margin on the windward side is one case among several; how common it was is a GUESS\". Limiting every rolled fall to one with its back to the wind fixes that one case; cite 0031 and record it as DEVIATION, or roll the other margins",
-  "research": "",
-  "verdict": "MISLABELED"
+  "date": "2026-10-13",
+  "note": "the docstring says \"a rolled fall is rolled over the falls this admits, so the seat's back to the wind holds by construction\". That makes the high windward margin every map's case, where the page calls it \"one case among several\". Either some settlements' rolls should admit falls that do not back the wind, or the drawing page should record always-windward as this project's deviation",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#high side and windward side as one": {
   "code": "2336e70b72a5831d",
@@ -15024,20 +15241,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#canvas": {
-  "code": "8364ca7c30a7c526",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "canvas sizing, cropped later",
+  "code": "7c5b795d923bafb6",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "sizing, cropped later",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#dike-pond knobs only on a dike-pond": {
-  "code": "28b1e582e65e4a4e",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "a rice polder is pinned to the grid; the layout is rolled only on a dike-pond",
+  "code": "aa6081bcdaffad23",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "rice polder keeps the grid",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -15050,10 +15267,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#flood-prone ground": {
-  "code": "7008887f0a34572b",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "reclaimed ground behind dikes, or houses on a dike",
+  "code": "70beaf1ae2dea372",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "polder or dike-top",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
@@ -15064,24 +15281,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#grove sides refused outside two to four": {
-  "code": "14133a5fceaa807a",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "two, three or four sides",
+  "code": "748baff9b28948b0",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "two, three or four",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ab7093914db746be"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#harvest weather default": {
-  "code": "77f8f66e27378a44",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
+  "code": "1ec3978287f6940d",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
   "note": "settled unless declared",
   "pages": {
    "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
@@ -15090,14 +15306,13 @@
   "rests": [
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:cd323d78a44a7ec9"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#knob rolls": {
-  "code": "331dc5d5ae3e3ced",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "shape, lanes, plot size and dry-row drift rolled per hamlet, the drift within 8 degrees",
+  "code": "62c6d119d288d889",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "shape, lanes, plot size, drift rolled; no split hamlet; drift within 8",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -15110,26 +15325,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#paddy by households": {
-  "code": "591f1bf4454c9d76",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "1.3 acres per household, inside the 1-2.5 band",
+  "code": "ce3647eef4795f65",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "1.3 acres, inside 1-2.5",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
   },
   "research": "fa526bd6ae6238be",
   "rests": [
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:5fee94012929bfb6",
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:9347ee2726e82d57",
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:b53810ad8bfaff92"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:9347ee2726e82d57"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder grid's orientation": {
-  "code": "68a70aca51f8b69c",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "the page records not tilting the grid as a deviation",
+  "code": "f8e4b93b3f02c077",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "the untilted grid is recorded as a deviation",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -15140,10 +15353,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder on the survey grid": {
-  "code": "a2bcf87296096c7c",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "a surveyed grid",
+  "code": "d765d8280a8e8e13",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "surveyed grid",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -15151,29 +15364,27 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#regional wind": {
-  "code": "39f33046deb1dace",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "northwest unless declared",
+  "code": "66ca8c62d3783562",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "NW unless declared",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
   "research": "5892781a1ab23bcb",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind": {
-  "code": "826d6c8103f79925",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "the rolled fall is narrowed to falls that leave the settlement its back to the wind",
+  "code": "16efea46de541aac",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "back to the wind",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
@@ -15184,39 +15395,40 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#row on the edge on flood ground": {
-  "code": "8b684452bacb53b7",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "the row always takes the dry edge",
+  "code": "40f3a31c0f9ba9c1",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "always the dry edge",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:4f7d33405340d1f8"
   ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#water flow follows the fall": {
-  "code": "2d2621f311a4f8f3",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "`water_flow = down_deg` by default, but the page says the two \"differ by design\" and \"Deriving the flow from the slope would force every stream straight down the fall line, which is wrong\"; declare the flow apart from the fall, or make this a DEVIATION the page records",
+  "code": "9a026c2a7e38fa23",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "both declared separately; a zero divergence within the under-90 bound",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:ce19b6f21b7553a6"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#woodland patches": {
-  "code": "91c416f38d964284",
-  "core": "7c05f60eca377a04",
-  "date": "2026-10-12",
-  "note": "2 to 4 as a calibration of \"a few patches\"",
+  "code": "bba4425568a38f46",
+  "core": "fe48284225d402d1",
+  "date": "2026-10-13",
+  "note": "\"a few patches\"",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
@@ -15224,7 +15436,6 @@
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::seat_room#spec and plan plumbing": {
@@ -18362,10 +18573,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#compact bundle for the clustered form only": {
-  "code": "0f95dfb24dd1755f",
-  "core": "8358e4fa8506d2eb",
-  "date": "2026-10-08",
-  "note": "`_nucleated` is true only for the nucleated form, so scattered and row farms each get their own grove",
+  "code": "2680f3562ba53748",
+  "core": "7c5ac0fded0fe73a",
+  "date": "2026-10-13",
+  "note": "row and scattered farms keep their own groves",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -18376,10 +18587,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#fall and drainage declared first": {
-  "code": "825ca000ea296565",
-  "core": "8358e4fa8506d2eb",
-  "date": "2026-10-08",
-  "note": "`water_flow` and `down_deg` are written to the meta before any placement",
+  "code": "420fd831c2e3725f",
+  "core": "7c5ac0fded0fe73a",
+  "date": "2026-10-13",
+  "note": "every map declares both",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
@@ -18390,10 +18601,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#field footbridges on every hamlet": {
-  "code": "b03966726f71ab93",
-  "core": "8358e4fa8506d2eb",
-  "date": "2026-10-08",
-  "note": "`field_footbridges=True`, a crossing where a bund path meets a ditch",
+  "code": "7ec60c38fe2a2aa8",
+  "core": "7c5ac0fded0fe73a",
+  "date": "2026-10-13",
+  "note": "crossing where a bund path meets a ditch",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -18405,37 +18616,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#house racks": {
-  "code": "91ed00111f2b7f73",
-  "core": "8358e4fa8506d2eb",
-  "date": "2026-10-08",
-  "note": "`_house_racks` is set from changeable harvest weather, never by chance",
+  "code": "f00d80271bc40e85",
+  "core": "7c5ac0fded0fe73a",
+  "date": "2026-10-13",
+  "note": "a rack by every house where weather is changeable",
   "pages": {
    "0016-rice-drying-racks-hasa-hasagi.drawing.html": "63977fd38b35883b"
   },
   "research": "f94cd7cea915d311",
   "rests": [
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:329b76a32a9e4883",
-   "0016-rice-drying-racks-hasa-hasagi.drawing.html:6af92987eeb511b9",
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:9f40d3caab4e03ed"
   ],
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#manifest record": {
-  "code": "8201f86c5882ccfe",
-  "core": "8358e4fa8506d2eb",
-  "date": "2026-10-08",
-  "note": "writes the rolled plan to the meta and decides nothing",
+  "code": "e749a34283c02cf4",
+  "core": "7c5ac0fded0fe73a",
+  "date": "2026-10-13",
+  "note": "plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#no work yards where no grain grows": {
-  "code": "f4fcb95ec4901c66",
-  "core": "8358e4fa8506d2eb",
-  "date": "2026-10-08",
-  "note": "`work_yards=grows_grain(plan)`; the GM's ruling is named in the claim",
+  "code": "63b6e20870d875f8",
+  "core": "7c5ac0fded0fe73a",
+  "date": "2026-10-13",
+  "note": "grain farms keep yards; the GM's ruling named for the no-grain case",
   "pages": {
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "b5fc46ab116a4b72"
   },
@@ -18444,7 +18653,6 @@
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
-  "triaged": "2026-10-09",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/arcs.py::arc_at#arc-length plumbing": {
@@ -20790,16 +20998,16 @@
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#the farms' bamboo strips as fabric": {
   "code": "8a2951dc1196f8e4",
   "core": "f37d26a8095c1174",
-  "date": "2026-10-12",
-  "note": "the strip is seated with the sheds and gardens, \"so the lanes and wells keep off it\"; the ground between strip and house is left to seat_strips' own claim",
+  "date": "2026-10-13",
+  "note": "no lane drawn across the strip",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d"
+   "0075-bamboo-groves-chikurin.drawing.html:132b3dc214524136"
   ],
-  "triage": "touched",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#village groves and commons as fabric": {
@@ -24481,16 +24689,16 @@
  "l7r/diagram/hamletgen/ways/serve.py::lay_door_paths#round the grove to the street": {
   "code": "39c76231e261a7fe",
   "core": "af106eb8b72ef58d",
-  "date": "2026-10-11",
-  "note": "a row farm's path goes to its own street, routed round its grove, a GUESS on the page",
+  "date": "2026-10-13",
+  "note": "a path round the grove, a GUESS",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
-   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1",
-   "0033-row-villages-resson.drawing.html:f5e09c253273ce75"
+   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
   ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::own_street#a row farm fronts its street": {
@@ -24499,9 +24707,9 @@
   "date": "2026-10-03",
   "note": "matches the claim",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -25672,10 +25880,10 @@
   "date": "2026-10-09",
   "note": "the connector and streets are skipped by every step",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ea7832697c7c7c5f",
+  "research": "5ee053538ac783e1",
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496",
    "0081-village-lanes.drawing.html:16df95fc169329f7"
@@ -25887,9 +26095,9 @@
   "date": "2026-10-03",
   "note": "matches",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -25899,9 +26107,9 @@
   "date": "2026-10-07",
   "note": "240 ft sits in the 220 to 260 ft range, at Santome's 40-ken lot",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:a88545fe00a7de6d"
   ],
@@ -25914,9 +26122,9 @@
   "date": "2026-10-03",
   "note": "0033: 6 ft",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -26086,9 +26294,9 @@
   "date": "2026-10-12",
   "note": "each further street has its own row",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf"
   ],
@@ -26138,9 +26346,9 @@
   "date": "2026-10-03",
   "note": "matches",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -26168,9 +26376,9 @@
   "date": "2026-10-07",
   "note": "the default is `ROW_FRAME_FT`",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:a88545fe00a7de6d"
   ],
@@ -26219,10 +26427,10 @@
   "date": "2026-10-07",
   "note": "runs straight on off the map from the nearer end, a calibrated choice within the finding",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "17c913b9c41d0e18",
+  "research": "9c7a4d33b39cfdc3",
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496",
    "0081-village-lanes.drawing.html:16df95fc169329f7"
@@ -26236,9 +26444,9 @@
   "date": "2026-10-07",
   "note": "a run off the map from both ends of the street",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
@@ -26252,9 +26460,9 @@
   "note": "matches",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "d7e021675b8e8820",
+  "research": "c7499e2ba613a178",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -26317,9 +26525,9 @@
   "date": "2026-10-07",
   "note": "the road's runs end at the first street's ends, so those ends are joints and it is not cut",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
@@ -26877,14 +27085,16 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::carry_to_dooryard#grove band not crossed": {
   "code": "1e19e05eb7eb9b72",
   "core": "6545b6d0c93b3158",
-  "date": "2026-10-03",
-  "note": "matches",
+  "date": "2026-10-13",
+  "note": "grove walked round",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
-  "triage": "touched",
-  "triaged": "2026-10-07",
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
+  ],
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut": {
@@ -27297,9 +27507,9 @@
   "date": "2026-10-10",
   "note": "the street is the row's line and runs off the map as the road, so it is never dropped as debris",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
    "0033-row-villages-resson.drawing.html:0a23ce156774ee9f",
@@ -27425,10 +27635,10 @@
   "date": "2026-10-10",
   "note": "connector and street ends are neither extended nor moved; the track out and the street run off the map",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04",
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
    "0081-village-lanes.drawing.html": "bda632c13f05e5c9"
   },
-  "research": "ea7832697c7c7c5f",
+  "research": "5ee053538ac783e1",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
    "0033-row-villages-resson.drawing.html:8c303daeddea6496",
@@ -28139,9 +28349,9 @@
   "date": "2026-10-09",
   "note": "the street runs on off the map at both ends, and the far end is marked run_on",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
@@ -28165,9 +28375,9 @@
   "date": "2026-10-09",
   "note": "width=6 is the street's 6 ft",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:64088e4ad721724e"
   ],
@@ -28695,18 +28905,18 @@
  "l7r/diagram/hamletgen/ways/tree.py::prune_the_tree#street and door path never pruned": {
   "code": "71f916734467bc44",
   "core": "be660904c909f501",
-  "date": "2026-10-04",
-  "note": "the street and the path round the grove",
+  "date": "2026-10-13",
+  "note": "the ways a row's farms are reached by",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "3f66a452776b32a9",
+  "research": "37ada2a33aa587d2",
   "rests": [
-   "0033-row-villages-resson.drawing.html:8c303daeddea6496",
+   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
+   "0033-row-villages-resson.drawing.html:64088e4ad721724e",
    "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-07",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::prune_the_tree#the way of a household another is reached across": {
@@ -29538,9 +29748,9 @@
   "date": "2026-10-12",
   "note": "lay_row_streets on a linear form",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
    "0033-row-villages-resson.drawing.html:0a23ce156774ee9f"
@@ -39904,18 +40114,18 @@
  "l7r/diagram/settlement/_knobs.py::<module>#bamboo forms": {
   "code": "04aee895b5c135f4",
   "core": "9a3103912a0619ab",
-  "date": "2026-10-11",
-  "note": "the page attests all four values, rolled per settlement",
+  "date": "2026-10-13",
+  "note": "none/homestead/thicket/both registered and rolled",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13",
-   "0075-bamboo-groves-chikurin.html": "08cc34e0e3c96ed9"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64",
+   "0075-bamboo-groves-chikurin.html": "e645ac0948f951c8"
   },
-  "research": "b23db9fd51664d4b",
+  "research": "02e250949403c30c",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd",
+   "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9",
+   "0075-bamboo-groves-chikurin.html:8dca8d522287fd32",
    "0075-bamboo-groves-chikurin.html:c741662bfa12f450"
   ],
-  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#byre_form forms": {
@@ -40203,16 +40413,16 @@
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "737a784edf93e4b8",
+  "research": "18d036baf6d4d841",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:29bc8b2e5b97173b",
    "0031-clustered-and-scattered-villages-shuson-sanson.html:16ae76f064c850db",
    "0033-row-villages-resson.html:61167d80a1335f3c",
    "0033-row-villages-resson.html:a46cc0e9dbe13048"
   ],
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#settlement_form weights": {
@@ -52004,9 +52214,9 @@
   "date": "2026-10-10",
   "note": "a stand is near single-species and the copse draws no bamboo; the two-crown growth is a drawing margin.",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:399c3deb721a5928",
    "0075-bamboo-groves-chikurin.drawing.html:482ec6b700c3e1bc"
@@ -52546,30 +52756,32 @@
  "l7r/diagram/settlement/homestead_parts/groves.py::GROVE_BAMBOO_PATCH_FT#grove bamboo patch": {
   "code": "3e3f5a352085a118",
   "core": "fc1ab0a5dec5b37d",
-  "date": "2026-10-03",
-  "note": "22 x 16 ft on each windward band, as 0075 states",
+  "date": "2026-10-13",
+  "note": "22 x 16 ft each windward band, a GUESS",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
+  ],
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GROVE_BAMBOO_SHARE#bamboo in a windbreak clump": {
   "code": "08561d75a195baa7",
   "core": "69e7532a7b2e4b3a",
-  "date": "2026-10-05",
-  "note": "0.08, about one in twelve, farm grove and belt alike",
+  "date": "2026-10-13",
+  "note": "the 8% matches §18's \"one plant in twelve\", but the claim draws it in the village belt \"even where the bamboo knob rolled none\", against §9's \"no bamboo\" form and the §41 frost limit; no block records the belt's share as independent of the knob. The belt's share should follow the knob, or 0075's drawing page should record a DEVIATION",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:8814c0e6e1d63c8e",
-   "0075-bamboo-groves-chikurin.drawing.html:98be5820b93e25f7"
+   "0075-bamboo-groves-chikurin.drawing.html:16e1255fd1f6b4b9",
+   "0075-bamboo-groves-chikurin.drawing.html:8814c0e6e1d63c8e"
   ],
-  "triaged": "2026-10-13",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GROVE_CLUMP_CROWNS#crowns a band piece holds": {
   "code": "121f43cda565892f",
@@ -52740,12 +52952,12 @@
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced": {
   "code": "1811d42fd74de774",
   "core": "a6c280c694c37362",
-  "date": "2026-10-08",
-  "note": "the page records the grove patch and its seat as a GUESS; items in the box are drawn as bamboo and no top-up crown is thrown over it",
+  "date": "2026-10-13",
+  "note": "patch inside the grove, a GUESS",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
@@ -52755,12 +52967,12 @@
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo under the crowns": {
   "code": "088f93677b3d71e4",
   "core": "a6c280c694c37362",
-  "date": "2026-10-08",
-  "note": "0.08 is the page's \"about one in twelve\"; inked only clear of drawn crowns; none in the dooryard or alder mixes",
+  "date": "2026-10-13",
+  "note": "one in twelve, inked only in gaps; none in copse or alder",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:399c3deb721a5928",
    "0075-bamboo-groves-chikurin.drawing.html:8814c0e6e1d63c8e",
@@ -52959,9 +53171,9 @@
   "date": "2026-10-08",
   "note": "the same GROVE_BAMBOO_SHARE; the page holds it \"in the village's shelter belt alike\" and records it as a guess",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:8814c0e6e1d63c8e"
   ],
@@ -53313,19 +53525,17 @@
  "l7r/diagram/settlement/homestead_parts/groves.py::HOUSEHOLD_BAMBOO_PREVALENCE#farms with bamboo": {
   "code": "bb69c5f8d76462b4",
   "core": "1d6b70823f288449",
-  "date": "2026-10-05",
-  "note": "three in five, recorded GUESS",
+  "date": "2026-10-13",
+  "note": "three in five, the page's GUESS",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.html": "d50c180f2a1ef785",
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "c5bbea879460fbaf",
+  "research": "5f97c2a592d215ac",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.html:fb074db8b2769c5d",
    "0075-bamboo-groves-chikurin.drawing.html:e6d16be9cc94af32"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size": {
@@ -53448,21 +53658,24 @@
   "date": "2026-10-03",
   "note": "paired culms and a leafy fork in jade, as 0075 states",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::bamboo_patch#patch on the house side": {
   "code": "af3239b73a7bbba5",
   "core": "97677a83dc075e2b",
-  "date": "2026-10-03",
-  "note": "house side matches 0075; the centering along the band is not stated on the page",
+  "date": "2026-10-13",
+  "note": "house side of the band",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
+  ],
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -53730,9 +53943,9 @@
   "date": "2026-10-03",
   "note": "area to scale, marks on a 7-unit grid (the docstring's \"pale yellow-green\" is stale; the marks are jade)",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -57249,9 +57462,9 @@
   "date": "2026-10-03",
   "note": "paired culms on a 7 ft grid over a wash, per 0075",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "be7de8ef99982e13"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "40b2cb4239c05cce",
+  "research": "7d323351e0241d76",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -59570,89 +59783,96 @@
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farm_rolls_bamboo#farms keeping their own bamboo": {
   "code": "56eb6e1fce7a9fb4",
   "core": "a2cfff7e7a8d87cd",
-  "date": "2026-10-05",
-  "note": "about three in five, rolled per position under the bamboo knob",
+  "date": "2026-10-13",
+  "note": "three in five by position, under the knob",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:e6d16be9cc94af32",
-   "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
+   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#a sheltered row farm's grove": {
+  "code": "d7f7d922ea50347a",
+  "core": "8aad155876864cc9",
+  "date": "2026-10-13",
+  "note": "deep bands thinned to one tree (a GUESS), no bamboo flag or patch for sheltered farms",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200",
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
+  },
+  "research": "43819605c7d2d33d",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3",
+   "0075-bamboo-groves-chikurin.drawing.html:e27bb8739d8ba657"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#bamboo patch in the windward bands": {
-  "code": "98694b60142f53f6",
-  "core": "ade8e9b0548f6743",
-  "date": "2026-10-08",
-  "note": "the patch is px(22) x px(16) on the house side, and only in deep bands",
+  "code": "e23b3715bba7f4e2",
+  "core": "8aad155876864cc9",
+  "date": "2026-10-13",
+  "note": "22 x 16 ft house side, each windward band",
   "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "aaf6e3a0e76ab824"
+   "0075-bamboo-groves-chikurin.drawing.html": "ad7603d86b39ef64"
   },
-  "research": "358ef93419211de0",
+  "research": "7d323351e0241d76",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:b9d2178357ac666a",
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#band drawn at one density": {
-  "code": "ea35dcc2735dc752",
-  "core": "ade8e9b0548f6743",
-  "date": "2026-10-08",
-  "note": "this unit's GROVE_CLUMP_CROWNS cut (the `_cap` passed to band_clumps) only splits the band into separately rolled pieces and sets no spacing; density is GROVE_CROWN_SQFT's and is judged at that constant's claim against 0080",
+  "code": "1183a3b0898ae750",
+  "core": "8aad155876864cc9",
+  "date": "2026-10-13",
+  "note": "plumbing",
   "pages": {},
   "research": "",
-  "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:02dd5d25f9e2f806"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#canopy edge at the band's inner edge": {
-  "code": "e50d6b84cd9c0dac",
-  "core": "ade8e9b0548f6743",
-  "date": "2026-10-08",
-  "note": "the band gives up one crown radius on the house side, which keeps the 24 ft service strip clear",
+  "code": "0b0cefcd857b0b2b",
+  "core": "8aad155876864cc9",
+  "date": "2026-10-13",
+  "note": "service strip off the house kept clear",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:02dd5d25f9e2f806",
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#no tree over a building": {
-  "code": "38cf3aa8af88d7cb",
-  "core": "ade8e9b0548f6743",
-  "date": "2026-10-08",
-  "note": "this unit only orders the passes: houses are drawn before `_draw_grove`, so the keep-out sees them; the keep-out rule itself lives in `_draw_grove` and is claimed there against 0071",
+  "code": "c60d968ccb66a3e2",
+  "core": "8aad155876864cc9",
+  "date": "2026-10-13",
+  "note": "draw order",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#thin band's lesser trees": {
-  "code": "679b7bbf851fb614",
-  "core": "ade8e9b0548f6743",
-  "date": "2026-10-08",
-  "note": "a non-deep band is drawn with the dooryard mix: broadleaf, no conifer, the mix recorded as a GUESS",
+  "code": "2e0ad4c4b5e2c6d5",
+  "core": "8aad155876864cc9",
+  "date": "2026-10-13",
+  "note": "lesser trees, the mix a GUESS",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "e0199791957e944c"
   },
   "research": "45be621f47448e34",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386"
   ],
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_legacy#every farm keeps a yard and a garden": {
@@ -59784,6 +60004,20 @@
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/rolling/farmsteads.py::thinned#a thin windward grove": {
+  "code": "2dbcc4708b2c6730",
+  "core": "7d81b4270f1cbc0e",
+  "date": "2026-10-13",
+  "note": "the band cut to one tree deep with its house-side edge kept, recorded as a GUESS",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
+  },
+  "research": "37ada2a33aa587d2",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:514e71a741d206f3"
   ],
   "verdict": "IN-STEP"
  },
@@ -61631,9 +61865,9 @@
   "date": "2026-10-03",
   "note": "keeps the planned frame-by-frame lot spacing of 0033",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "triaged": "2026-10-13",
   "verdict": "IN-STEP"
  },
@@ -62351,10 +62585,10 @@
   "note": "0033 finds row neighbors \"one frontage apart, lot against lot\" (about 54-240 ft) and rows \"on one side of its line or on both\"; the code takes uniform random positions along the line (clumps and gaps, no frontage) with symmetric jitter, and does not roll one side or both",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+   "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "3e85e033a638774b",
-  "triaged": "2026-10-05",
+  "research": "775716bbb484ad7e",
+  "triaged": "2026-10-13",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/seeds.py::SeedFormsMixin.ring#big houses capped": {
@@ -68307,9 +68541,9 @@
   "date": "2026-10-09",
   "note": "the pass skips `ln.get(\"street\")`, so the street runs on off the map as the road into it",
   "pages": {
-   "0033-row-villages-resson.drawing.html": "f43eb3ec14015c04"
+   "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "f339ada89f22148a",
+  "research": "37ada2a33aa587d2",
   "rests": [
    "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],

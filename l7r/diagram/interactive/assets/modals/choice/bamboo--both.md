@@ -5,10 +5,10 @@ the Edo period settlements round Kyoto stood ringed by bamboo, and the villages 
 bamboo as a tax and managed their own groves.
 
 Each stand was a thicket of its own, nearly all of one kind, spreading by shoots from an underground rhizome and shading
-out almost everything beneath it. Madake, the common timber bamboo, grew a culm about 66 ft (20 m) tall and at most about
-4 in (10 cm) across. It went into baskets, tools and building, and its shoots were eaten.
+out almost everything beneath it. Madake, the common timber bamboo, could grow a culm about 66 ft (20 m) tall and at most about
+4 in (10 cm) across. Bamboo went into baskets, tools and building, and its shoots were eaten.
 
-How many farmsteads kept their own bamboo before modern times, and how large a village thicket was, are not recorded. On
+How many farmsteads kept their own bamboo before modern times, and how large a farmstead's stand or a village thicket was, are not recorded. On
 the Tonami plain the farmstead groves once held many stands, and in one hamlet there in modern times every homestead
 kept one, so a farm's own bamboo was probably common.
 
@@ -23,11 +23,11 @@ Depiction: A bamboo culm is far too slim to see at the map's scale, so the map d
 size to scale, filled with paired culm strokes and a leafy fork in jade green over a light jade wash - a mark taken from
 modern map legends, which stands for the bamboo and does not count it. A stand too narrow to read at the whole map's zoom
 is left off. A farm's stand is a strip near the house, set out past its yard and outbuildings where they fill the ground beside it, and left off where no room is found; or a patch inside its own grove where it shows between the tree
-crowns; the thicket stands on dry ground behind the houses. No stand is drawn on a paddy, since bamboo dies in standing
+crowns; a row farm sheltered by the grove farms across its street keeps its bamboo instead in a band along its south side, as wide as the farm, and none where no room is found; the thicket stands on dry ground behind the houses. No stand is drawn on a paddy, since bamboo dies in standing
 water.
 
 Name: Bamboo: stands at the farmsteads and a village thicket
 Covers: `meta.bamboo = both`
 Sources: chikurin-jawiki, yashikirin-jawiki, sendai-igune-modelplan, nagaokakyo-take-takenoko, nagaokakyo-take-nishiyama, take-jawiki, phyllostachys-enwiki, tonami-yashikirin-haichi, pmc5723622-bamboo-range, qimin-yaoshu-zhongzhu, kashima-kainyo-1987
 Entry: research/questions/0075-bamboo-groves-chikurin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html
-Drawing: research/questions/0075-bamboo-groves-chikurin.drawing.html
+Drawing: research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0033-row-villages-resson.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html

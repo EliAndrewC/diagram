@@ -950,8 +950,9 @@ FARM_WATERS = ("channel", "well")
 # temperate lowland hamlet usually has one - the research puts bamboo below the frost line as a
 # matter of course - and "none" is the cold-upland minority. Read the knob's note in `_knobs.py`.
 BAMBOO_FORMS = ("homestead", "homestead", "thicket", "both", "none")
-"""Research: where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none, weighted homestead 2 in 5 and
-    the others 1 in 5, where the registry's knob rolls the four evenly"""
+"""Research:
+    where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none
+    the forms' odds - UNRESEARCHED: homestead 2 in 5 and the others 1 in 5, where the registry's knob rolls the four evenly; no page gives odds"""
 PLOT_SIZES = ("small_irregular", "medium", "medium", "large_block")
 """Research: paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: small 1, medium 2, large block 1"""
 GRAIN_DRIFTS = (-8, -4, 0, 0, 4, 8)

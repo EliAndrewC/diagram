@@ -1245,6 +1245,8 @@ glyph	glyph
 glyphs	glyph
 gm	GM
 go	go
+go board	go board
+go-board	go board
 gobunsho	Ofumi
 gobunshō	Ofumi
 god of government office	yamen-god
@@ -1705,6 +1707,7 @@ intensive farming	intensive farming
 inter	inter
 interceptor	interceptor
 interceptor channel	interceptor
+interlinear	interlinear
 interlinear commentary	interlinear commentary
 interlinear note	interlinear commentary
 interment	inter

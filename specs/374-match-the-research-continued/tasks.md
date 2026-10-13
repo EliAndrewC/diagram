@@ -12,7 +12,7 @@ in 328's ranking and this spec.
 - layout-revised: county-magistracy-example - wave 113: the draft's kitchen abuts the house as an ell, no corridor
 - glyph-redrawn: kitchen on ochiba-magistracy - wave 113: the kitchen at 24 x 18 ft
 - placement-changed: homestead bamboo on kashikawa - wave 153: the leeward row's farms keep their bamboo in a band along the south side (the sheltered form, 0033)
-- placement-changed: homestead grove on kashikawa - wave 153: the leeward row's farms keep no grove of their own
+- placement-changed: homestead grove on kashikawa - wave 153: the leeward row's farms keep a thin windward grove, one tree deep
 - glyph-redrawn: pig sty on kuwabata - wave 151: one sty glyph for the dike's sty and the farmhouse's, a dark ridged shed and a filled pen (glyph-check of Inashiro F1, F2)
 - placement-changed: notice board on kuwabata - wave 120: the board's seat a rolled knob; a bridge end offered only where a way reaches a bridge, so Kuwabata's roll now takes the center
 - placement-changed: woodland commons on inashiro - wave 120: the fuel wood seated by 0077's two tiers, kept off low ground by the water below the houses
@@ -252,7 +252,7 @@ in 328's ranking and this spec.
 
 ## Batch 17 - the sheltered row farm, and a citation
 
-- [ ] T45 wave 153: a row village's leeward farms sheltered by the grove row across the street - no grove of their own, their bamboo to the south - rolled per settlement (0033); fall_backs_the_wind cites 0031 (FR-001)
+- [ ] T45 wave 153: a row village's leeward farms sheltered by the grove row across the street - a thin windward grove, their bamboo to the south where the farmsteads keep bamboo - rolled per settlement (0033); fall_backs_the_wind cites 0031 (FR-001)
       research: rendering
 
 ## Standing - the ranking's remaining rows

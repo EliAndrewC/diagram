@@ -1,5 +1,5 @@
-"""A row village's leeward farm sheltered by the grove row across its street (feature 374 wave 153, 0033's second form): no grove
-of its own, its bamboo a band along its south side past its plots' sun."""
+"""A row village's leeward farm sheltered by the grove row across its street (feature 374 wave 153, 0033's second form): its
+windward grove one tree deep, its bamboo a band along its south side past its plots' sun."""
 
 from __future__ import annotations
 
@@ -33,18 +33,27 @@ def test_a_sheltered_farm_s_windward_band_is_drawn_one_tree_deep_against_its_hou
 def test_the_south_band_runs_the_whole_farmstead_across_past_its_plots_sun() -> None:
     h = {"geom": {"house": (100.0, 100.0, 46.0, 28.0), "yard": (100.0, 132.0, 40.0, 30.0), "gardens": [(140.0, 132.0, 20.0, 24.0)]}}
     seats = list(bm.south_band(h, lambda v: v))
-    assert len(seats) == bm.BAND_STEPS_OUT + 1
+    assert len(seats) == bm.BAND_STEPS_OUT + 1, "no frame: the house, yard and beds across alone"
     cx, cy, w, d = seats[0]
     assert (cx - w / 2, cx + w / 2) == (77.0, 150.0), "the house, yard and beds across"
     assert cy - d / 2 == pytest.approx(147.0 + bm.BAMBOO_SHADE_FT + 1.0) and d == bm.HOUSEHOLD_BAMBOO_FT[1]
     assert seats[1][1] - seats[0][1] == d, "stepped south a strip's depth at a time"
     assert list(bm.south_band({"geom": {}}, lambda v: v)) == []
+    framed = {"geom": {**h["geom"], "bbox": (110.0, 150.0, 240.0, 200.0), "groves": [(110.0, 58.0, 240.0, 17.0), (-1.5, 150.0, 17.0, 200.0)], "grove_faces": [([0, -1], "deep"), ([-1, 0], "deep")]}}
+    offers = list(bm.south_band(framed, lambda v: v))
+    spans = [(round(c - w / 2, 1), round(c + w / 2, 1)) for c, _y, w, _d in offers]
+    n = bm.BAND_STEPS_OUT + 1
+    assert spans == [(-10.0, 230.0)] * n + [(7.0, 230.0)] * n, "the frame whole stepped all the way south, then between its side groves"
+    assert offers[1][1] - offers[0][1] == bm.HOUSEHOLD_BAMBOO_FT[1]
+    assert bm.band_spans({"bbox": (0.0, 0.0, 10.0, 10.0), "groves": [(0.0, 0.0, 10.0, 2.0)], "grove_faces": [([0, -1], "deep")]}, [(0.0, 0.0, 10.0, 4.0)]) == [(-5.0, 5.0)], "each span once"
 
 
-def test_every_sheltered_farm_wants_its_bamboo_whatever_the_knob() -> None:
+def test_every_sheltered_farm_wants_its_bamboo_where_the_farmsteads_keep_it() -> None:
     s = types.SimpleNamespace(_hjit=lambda x, y, salt: 0.99)  # a roll that keeps no strip of its own
     houses = [{"x": 1.0, "y": 1.0, "sheltered": True, "geom": {}}, {"x": 2.0, "y": 2.0, "geom": {}}]
-    assert bm.household_bamboo_wanted(s, types.SimpleNamespace(bamboo="none"), houses) == 1
+    assert bm.household_bamboo_wanted(s, types.SimpleNamespace(bamboo="homestead"), houses) == 1, "always, not three in five"
+    assert bm.household_bamboo_wanted(s, types.SimpleNamespace(bamboo="none"), houses) == 0, "none where the knob gave the farmsteads none"
+    assert bm.household_bamboo_wanted(s, types.SimpleNamespace(bamboo="thicket"), houses) == 0
     assert bm.household_bamboo_wanted(s, types.SimpleNamespace(bamboo="homestead"), houses[1:]) == 0
 
 
@@ -61,17 +70,3 @@ def test_its_own_door_path_does_not_part_a_farm_from_its_band() -> None:
     mine = bm.own_ground(ground, lanes, (100.0, 100.0))
     assert mine.lanes == [ground.lanes[1]], "its own path out, a public lane kept"
     assert bm.own_ground(ground, lanes, (5.0, 5.0)).lanes == ground.lanes
-
-
-def test_a_sheltered_farm_takes_its_front_door_and_the_row_rule_judges_it_by_the_row_s_frame() -> None:
-    from l7r.diagram.hamletgen.homesteads.row_rules import row_rules
-    from l7r.diagram.hamletgen.ways.serve import front_door
-
-    h = {"x": 100.0, "y": 100.0, "geom": {"house": (100.0, 100.0, 46.0, 28.0), "yard": (100.0, 132.0, 40.0, 30.0)}}
-    assert front_door(h, 7.0) is None, "a farm with no grove of its own and no shelter: no front door"
-    assert front_door({**h, "sheltered": True}, 7.0) is not None
-    street = [[0.0, 0.0], [400.0, 0.0]]
-    grove = {"x": 100.0, "y": 60.0, "geom": {"bbox": (100.0, 60.0, 200.0, 120.0)}}
-    lee = {"x": 300.0, "y": 150.0, "sheltered": True, "geom": {"bbox": (300.0, 150.0, 60.0, 50.0)}}
-    M = {"meta": {"settlement_form": "linear"}, "row_street_plans": [street], "houses": [grove, lee], "lanes": []}
-    assert ("farm_off_its_street", (300.0, 150.0)) not in row_rules(M), "judged by the row's 200 ft frame, not its own 60"
