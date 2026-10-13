@@ -136,7 +136,8 @@ Specs and logs keep their words (the house rule for history).
   scripts with their own refusals; `gate-stamp.py --check`, run under its own escape branch; and anything that runs `make`.
   Each says why at its call.
 - **Proof (SC-006).** A test runs every check alone and in the runner, on this tree and on fixture trees seeded to fail
-  each, comparing output and exit.
+  each, comparing output and exit. A second test keeps a self-test as passed, changes a module its check imports, and sees the
+  self-test run again.
 
 The GM's "the 35 separate Python startups" is read as the push's checks, which is where they were counted.
 

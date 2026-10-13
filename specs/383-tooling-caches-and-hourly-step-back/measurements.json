@@ -3,7 +3,7 @@
   "quantity": "the push's checks that read the tree, each timed as push_cmd runs it, the second of two runs (warm), summed",
   "observed": "2026-10-12",
   "source": "this clone at 383's claim; load 4.2",
-  "command": "python3 scripts/measure/push_check_times.py --json <out>",
+  "command": "python3 scripts/measure/push_check_times.py",
   "method": "each command run twice, the second run's wall time kept; the rows summed",
   "unit": "s",
   "varies": true,

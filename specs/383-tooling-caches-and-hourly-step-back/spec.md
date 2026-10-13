@@ -101,9 +101,10 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 
 ## Success criteria
 
-- **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks, measured warm in one clone back to back with the
-  same commands as the 2026-10-13 measurement: from about 24 s to under 6 s (the 24 s observed 2026-10-13; method: each of
-  the push's checks timed alone in this clone, load about 6; the baseline is research R2). Each phase's own measurement is
+- **SC-001** (FR-001, FR-002, FR-005, FR-006, FR-007) The push's checks: from about 24 s, the measurement the GM saw
+  (observed 2026-10-13; method: each check timed alone in this clone, load about 6), re-measured at the feature's claim as
+  19.87 s (`m:push-checks-before`, research R2), to under 6 s, measured with R2's command
+  (`scripts/measure/push_check_times.py`, warm) so that before and after are comparable. Each phase's own measurement is
   recorded in `measurements.json`.
 - **SC-002** (FR-001) For every check the cache serves: its output over the repository is identical with the cache on and
   off. A file changed after a cached run, and a changed extractor, each produce a fresh extraction (tests).
@@ -133,6 +134,9 @@ long-running feature does for itself, on the clock glyph-check already keeps.
 
 - spec-fidelity, Mode 2, round 1 (2026-10-12): CHANGES REQUIRED, one item, applied: FR-007's "its code" is the check and every
   project module it imports, as FR-001; SC-006 tests that a changed imported module re-runs a kept self-test.
+- spec-fidelity-verify, Mode 3, round 2 (2026-10-12): CHANGES REQUIRED, one item, applied: SC-001 named two baselines as one;
+  it now keeps the GM's 24 s, names the claim-time re-measurement (`m:push-checks-before`, 19.87 s) and measures the after
+  with the same command.
 
 ## Decisions Recorded
 

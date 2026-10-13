@@ -29,7 +29,7 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 
 ### Phase 2 - the push checks in one process
 
-- [ ] T09 The runner (plan D8) and the self-test stamp (plan D9): `scripts/gates/push_checks.py`, `sync-with-main.sh` calling it once; tests (SC-006: alone and in the runner, passing and seeded to fail)
+- [ ] T09 The runner (plan D8) and the self-test stamp (plan D9): `scripts/gates/push_checks.py`, `sync-with-main.sh` calling it once; tests (SC-006: alone and in the runner, passing and seeded to fail; a changed imported module re-runs a kept self-test)
       research: rendering
 - [ ] T10 Phase 2 measured, `test-sync-with-main.sh` and `make hooks-test` green, landed with `make land-tooling`
       research: rendering
