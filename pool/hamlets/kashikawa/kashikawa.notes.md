@@ -649,7 +649,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - family form: **one_roof**, retirement houses **0**
 - farmstead fixtures: bath **5**, coop **18**, pit **9**, privy **17**, shrine **1**, sty **15**, woodpile **7**
 - storehouses: **3** of **20** farmhouses
-- notice board at the entrance, **(1830.7, 5535.2)**: **20** of 20 households' ways out pass it
+- notice board at the entrance, **(1833.0, 5527.5)**: **20** of 20 households' ways out pass it
 <!-- /census -->
 
 ## 2026-08-29 - feature 154: an `entrance` board on the windward fringe ate the shelter belt (CLOSED)

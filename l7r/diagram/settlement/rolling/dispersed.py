@@ -92,6 +92,7 @@ def canonical_farmstead(
 
     Research:
         grove sides and depths - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: deep bands on the two windward sides, a thin band on a third and fourth rolled side, the corners closed
+        no grove where the row across shelters it - research/questions/0033-row-villages-resson.drawing.html: `sides` 0, a row farm whose street and the grove row beyond it break its wind
         yard on the south front - research/questions/0029-farmhouses-minka.drawing.html, research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: the yard before the house's south wall, 3 ft (`gap`) off it
         garden placement - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: against the east wall, or beside the yard when the map keeps the sun
         thin bands clear of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: east band past the garden's reach (`sun_east`, 50 ft), south band past the yard's strip (`yard_sun`: the 50 ft canopy reach and a crown on a map keeping the sun - every scripted hamlet opts in, `stages.py`'s `sun_corridor`; the 22 ft `YARD_SUN_STRIP` default only where a hand map never opted in)
@@ -137,10 +138,14 @@ def canonical_farmstead(
     east_out = east_w + max(gap, sun_east + 1.0) + thin if sides >= 3 else east_w  # +1 px: the reach is a strict bound
     south_in = south_w + max(gap, yard_sun + 1.0)  # +1 px, the same
     south_out = south_in + thin if sides == 4 else south_w
-    groves: list[tuple[Rect, tuple[int, int], str]] = [
-        (_box(west_in - b, north_in - b, east_out, north_in), N, "deep"),
-        (_box(west_in - b, north_in, west_in, south_out), W, "deep"),
-    ]
+    groves: list[tuple[Rect, tuple[int, int], str]] = (
+        [
+            (_box(west_in - b, north_in - b, east_out, north_in), N, "deep"),
+            (_box(west_in - b, north_in, west_in, south_out), W, "deep"),
+        ]
+        if sides
+        else []
+    )  # NO SIDES, NO GROVE: a row farm sheltered by the grove row across its street (feature 374 wave 153, 0033)
     if sides >= 3:
         # ...ALONG THE HOUSE ONLY, ON A MAP THAT KEEPS EVERY TREE OUT OF THE PLOTS' SUN (feature 310, GM 2026-10-02): the garden then
         # stands beside the yard (`sun_band`), every plot's sun ground begins at the house's front line, and a band run on past it

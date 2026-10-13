@@ -40,6 +40,15 @@
    }
   },
   {
+   "key": "row_shelter",
+   "name": "The leeward row's shelter",
+   "when": "[settlement_form=linear][row_sides=both]",
+   "values": {
+    "own_grove": "every farm its own grove",
+    "sheltered": "sheltered by the grove row across the way"
+   }
+  },
+  {
    "key": "farm_water",
    "name": "Each scattered farm's water",
    "when": "[settlement_form=dispersed]",

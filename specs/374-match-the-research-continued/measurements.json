@@ -2163,5 +2163,36 @@
       "cohort": "16/16 passed",
       "reading": "no roll here reseats a tree into its own grove: the code now follows 0046 where one does, and no map moves"
     }
+  },
+  "w153-sheltered": {
+    "quantity": "the row village's leeward farms sheltered by the grove row across the street (wave 153): the farms sheltered, their south bands seated and short, the rolls that refuse, the pool and the cohort; and whether more room for the band seats more",
+    "observed": "2026-10-13",
+    "source": "the session's scratchpad runs r17a-r17c (the 44 rolls - valley seeds 1-20, dike-pond and polder seeds 1-12 at 16 households - make maps SCOPE=all and make cohort) and two throwaway probes of valley seed 3 (since deleted)",
+    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort; the probes built HamletSpec(seed=3, households=16) through driver.build with bamboo.strip_refused wrapped",
+    "method": "per manifest: houses with sheltered, meta.household_bamboo_wanted and _no_room; the probes counted each band's refusing test and the band count at BAND_STEPS_OUT 3, 6 and 12",
+    "value": {
+      "refused_44": [
+        "polder 4 (as at HEAD)",
+        "polder 5 (as at HEAD)"
+      ],
+      "sheltered_44": {
+        "valley 3": "8, 3 with no room",
+        "dike-pond 3": "6, all seated",
+        "polder 3": "6, 1 with no room"
+      },
+      "pool": {
+        "kashikawa": "10 sheltered, every band seated",
+        "others": "none (not a two-sided row that rolled it)"
+      },
+      "pool_maps": "clean",
+      "cohort": "16/16 passed",
+      "first_runs": "a sheltered farm with no grove had no front door (serve.front_door) and 7 of valley 3's were unreached; the row rule judged it by its own grove-less frame; both mended",
+      "room_spent": {
+        "steps 3": "5 of 8 short on valley 3",
+        "steps 6": "3 short",
+        "steps 12": "3 short - the paddy and the neighbors' footprints, not distance"
+      },
+      "its_own_path": "8 of valley 3's band refusals were its own door path between house and band; a public lane still refuses"
+    }
   }
 }

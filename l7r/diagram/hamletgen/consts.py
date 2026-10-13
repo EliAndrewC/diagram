@@ -933,6 +933,13 @@ ROW_SIDES = ("one", "both")
 # does not transfer to a paddy row - even odds, a GUESS.
 ROW_WATERS = ("own", "shared")
 """Research: row village's water - research/questions/0033-row-villages-resson.drawing.html: own wells or shared, even odds"""
+# ...and its SHELTER (feature 374 wave 153): every farm's own grove on its windward sides whichever side its street runs, or
+# the leeward row sheltered by the grove row across the street, its bamboo set south - the two forms 0033 records (the
+# Musashino farms). No page gives shares between them: even odds, a GUESS. Drawn only where farms stand on BOTH sides.
+ROW_SHELTERS = ("own_grove", "sheltered")
+"""Research:
+    row village's shelter - research/questions/0033-row-villages-resson.drawing.html: the grove kept windward whichever side the road runs, or the bamboo set south where a row of grove farms across the road already broke the wind
+    even odds - GUESS: no page gives shares between the two forms"""
 # A DISPERSED farm's own water (feature 291 amendment 5; homesteads/200): a small channel led off the irrigation water into
 # its grounds - the Tonami museum: "in many areas a small channel was led into the house's grounds", the fan's water table
 # too deep for a well (ACCURATE) - or its own well, the other areas as this record reads them (a GUESS). Even odds, a GUESS.

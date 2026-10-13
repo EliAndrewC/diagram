@@ -90,10 +90,13 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     lanes = list(M.get("lanes") or [])
     own: dict[tuple[float, float], int] = {}
     drawn_st = {k: [sg for ln in lanes if ln.get("street") and ln.get("street_index") == k for sg in _segs(ln["pts"])] for k in range(len(plans))}
+    # A SHELTERED ROW FARM STANDS ON THE ROW'S OWN LOT (feature 374 wave 153): its grove dropped, its own frame is smaller, but
+    # its seat is the row's frame's, so it is judged by the row's largest frame, as its grove farms are
+    row_frame = max((max(f[2], f[3]) for f in (_frame(q) for q in houses if not q.get("sheltered")) if f), default=240.0)
     for h in houses:
         c = (float(h["x"]), float(h["y"]))
         fr = _frame(h)
-        size = max(fr[2], fr[3]) if fr else 240.0  # the house may stand at its frame's far side from the street
+        size = row_frame if h.get("sheltered") else (max(fr[2], fr[3]) if fr else 240.0)  # the house may stand at its frame's far side from the street
         d = [_dist(c, s) for s in streets]
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or c
         own[_key(c)] = min(range(len(streets)), key=lambda i: _dist(door, drawn_st.get(i) or streets[i]))  # the street its door faces, as drawn (`serve.own_street`)

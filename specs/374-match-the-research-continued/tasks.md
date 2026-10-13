@@ -11,6 +11,8 @@ in 328's ranking and this spec.
 - layout-revised: ubame-magistracy - wave 113: the kitchen at 24 x 18 ft joined to the house as an ell, the covered way gone
 - layout-revised: county-magistracy-example - wave 113: the draft's kitchen abuts the house as an ell, no corridor
 - glyph-redrawn: kitchen on ochiba-magistracy - wave 113: the kitchen at 24 x 18 ft
+- placement-changed: homestead bamboo on kashikawa - wave 153: the leeward row's farms keep their bamboo in a band along the south side (the sheltered form, 0033)
+- placement-changed: homestead grove on kashikawa - wave 153: the leeward row's farms keep no grove of their own
 - glyph-redrawn: pig sty on kuwabata - wave 151: one sty glyph for the dike's sty and the farmhouse's, a dark ridged shed and a filled pen (glyph-check of Inashiro F1, F2)
 - placement-changed: notice board on kuwabata - wave 120: the board's seat a rolled knob; a bridge end offered only where a way reaches a bridge, so Kuwabata's roll now takes the center
 - placement-changed: woodland commons on inashiro - wave 120: the fuel wood seated by 0077's two tiers, kept off low ground by the water below the houses
@@ -247,6 +249,11 @@ in 328's ranking and this spec.
 - [x] T44 wave 152: the reseated persimmon may stand in its own grove, whose crowns give way round it (0046) (FR-001)
       research: rendering
       verify: DONE. m:w152-reseat - 578 of 578 persimmons over the 44 rolls and 69 of 69 on the pool, no crown given way and no map moved (no reseat reaches its own grove here), polder 4/5 refusing as at HEAD, cohort 16/16; claims IN-STEP; T44 section and whole plan CLEAR; gate green
+
+## Batch 17 - the sheltered row farm, and a citation
+
+- [ ] T45 wave 153: a row village's leeward farms sheltered by the grove row across the street - no grove of their own, their bamboo to the south - rolled per settlement (0033); fall_backs_the_wind cites 0031 (FR-001)
+      research: rendering
 
 ## Standing - the ranking's remaining rows
 

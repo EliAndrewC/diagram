@@ -854,6 +854,40 @@ reseat always finds a household), so the change is which household and where, ne
 - **W152-2** (within; the bar): no roll that passes at HEAD refuses; every rolled persimmon still drawn; the crowns given
   way counted per map. A glyph check is owed only where a pool map's persimmon is re-placed by the change (placement-changed).
 
+## Batch 17: the row farm sheltered by the grove row across its street (the row-bamboo row, and a citation)
+
+**The work list**: the next free rows. `homesteads/bamboo.py::household_bamboo#row farm's bamboo to the south` (DRIFTED):
+0033's drawing page records two forms of a row farm's shelter - the grove kept on the windward sides whichever side the
+street runs, and "the bamboo set south where a row of grove farms across the road already broke the wind" - and the map
+draws only the first, the second recorded as a deviation. And `plan.py::fall_backs_the_wind#fall square to or away from
+the wind` (MISLABELED): cite 0031's drawing page for the predicate. Row 788 (the pond layout) was found done by wave 139
+and closed there.
+
+### Wave 153 (T45) - the row farm across the street from a grove row, and its bamboo to the south
+- **W153-1** (within): a per-settlement knob, `row_shelter`, rolled from the seed on a row village between the two forms
+  0033 records - every farm's own windward grove, or the leeward row sheltered by the grove row across the street - at
+  even odds (a GUESS: no page gives shares). It acts only where farms stand on BOTH sides of a street (`row_sides`) and the
+  street runs across the wind: a farm is sheltered only where its street lies within 67.5 degrees of its windward
+  bearing (a GUESS), so a street running with the wind shelters no one and falls to the first form, as a one-sided row does.
+- **W153-2** (within): in the second form, a farm on the street's leeward side - the street, and the grove farms beyond it,
+  on its windward side - keeps no grove of its own (its bundle laid with none: this project's reading of 0033's account,
+  where the row across already broke the wind; labeled so at the code) and keeps its bamboo along its south side (0033;
+  0075's findings, "a madake grove all along its south side"); its row seat, lot and holding are as before. Every sheltered
+  farm keeps it, whatever the hamlet's bamboo knob or a farm's own roll. TRUE SOUTH governs, as the record says, whatever
+  the map's wind. The farms on the windward row keep their groves as the first form draws them. Recorded per farm
+  (`sheltered`) and counted in `meta`.
+- **W153-3** (within): the south bamboo is a band along the farm's whole south side - as wide as the farmstead (its house,
+  yard and beds across), as deep as a farm's bamboo strip (16 ft, the strip's GUESS) - standing just past its yard's and
+  beds' sun ground (0038: no canopy, bamboo included, in a plot's sun; the GM's ruling that no canopy tree is exempt). The
+  south side or none: where the band finds no room it is stepped further south (room before packing, the GM, 2026-10-12),
+  and only past that is it left out, counted (`meta`); a short count on the pool, the cohort or the 44 is met by more room
+  before it may stand. It is drawn as the farm's bamboo is (the stand glyph), and the strip search's tests (the paddy, the
+  water, the lanes, the parts, the belt) are its tests.
+- **W153-4** (within; a claim): `fall_backs_the_wind`'s predicate cites 0031's drawing page, which names the windward-high
+  case it tests.
+- **W153-5** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); counts measured.
+  The occasions: a glyph check where a pool map's farm loses its grove or gains a south strip (placement-changed).
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

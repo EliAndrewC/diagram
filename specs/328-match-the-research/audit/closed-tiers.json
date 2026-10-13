@@ -246,6 +246,7 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#well seat falls back a half and a quarter lot either way along the street": "E4",
  "l7r/diagram/hamletgen/homesteads/wells.py::well_target#how many wells": "E1",
  "l7r/diagram/hamletgen/plan.py::BELT_REACH#belt's far row": "E0",
+ "l7r/diagram/hamletgen/plan.py::HamletSpec.__post_init__#pond layout values": "E3",
  "l7r/diagram/hamletgen/plan.py::plan_site#a farmstead grove takes 2, 3 or 4 sides the spec refusal": "E0",
  "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind": "E3",
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#edge midpoints first": "E2",

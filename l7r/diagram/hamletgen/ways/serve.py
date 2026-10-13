@@ -283,21 +283,23 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
 def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
     """Where a path to a farm with its own grove begins (feature 291): `clear` past the far edge of the farm's yard, straight
     out along the line from the house through the yard - the front, the side a grove leaves open (or breaks for the way
-    in). None for a farm with no grove of its own, or no yard.
+    in). None for a farm with no grove of its own, or no yard - but a sheltered row farm, which keeps none, takes its door.
 
     Research:
         the way in at the front - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
             past the yard on the grove's open side, at the middle of a ring's break"""
     g = h.get("geom") or {}
     y = g.get("yard")
-    if not g.get("groves") or y is None:
+    # ...and a row farm the grove row across its street shelters, which keeps no grove but is a row farm owed its way to its
+    # street all the same (feature 374 wave 153: seed 3's seven sheltered farms were left off the network with no door)
+    if not (g.get("groves") or h.get("sheltered")) or y is None:
         return None
     # A RING'S DOOR LINES UP WITH ITS WAY IN: the yard turns with the house's rake and the bands do not, so "straight out
     # through the yard" can miss a gap 24 ft wide (cohort seed 12: three farms' doors walled on all four sides). The door
     # stays just past the yard - a door out in the gap itself, ~80 ft from the house, is past the reach a path's arrival
     # is judged by, and seed 12 then stranded 13 - but it takes the gap's middle across the front.
     faces = list(g.get("grove_faces") or ())
-    split = [r for r, (face, _d) in zip(g["groves"], faces, strict=False) if sum(1 for f2, _d2 in faces if f2 == face) == 2]
+    split = [r for r, (face, _d) in zip(g.get("groves") or (), faces, strict=False) if sum(1 for f2, _d2 in faces if f2 == face) == 2]
     gap_mid: Pt | None = None
     if len(split) == 2:
         (ax, ay, aw, ah), (bx, by, bw, bh) = split

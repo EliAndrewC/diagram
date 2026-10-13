@@ -55,6 +55,7 @@ from .consts import (
     REF_HOUSEHOLDS,
     ROLLED_ARCHETYPES,
     ROW_LINES,
+    ROW_SHELTERS,
     ROW_SIDES,
     ROW_WATERS,
     SETTLEMENT_FORMS,
@@ -126,6 +127,7 @@ class HamletSpec:
     row_line: str | None = None  # a linear row's line, street | edge (feature 291; `ROW_LINES`); None rolls it (flood ground: edge)
     row_sides: str | None = None  # one | both sides of the row's street (feature 291; `ROW_SIDES`)
     row_water: str | None = None  # own | shared wells along a row (feature 291; `ROW_WATERS`)
+    row_shelter: str | None = None  # own_grove | sheltered, a row's leeward farms (feature 374 wave 153; `ROW_SHELTERS`)
     farm_water: str | None = None  # a dispersed farm's own water, channel | well (feature 291 amendment 5; `FARM_WATERS`)
     field_archetype: str | None = None
     pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 150; `POND_LAYOUTS`)
@@ -183,6 +185,7 @@ class HamletSpec:
             ("row_line", self.row_line, ROW_LINES),
             ("row_sides", self.row_sides, ROW_SIDES),
             ("row_water", self.row_water, ROW_WATERS),
+            ("row_shelter", self.row_shelter, ROW_SHELTERS),
             ("farm_water", self.farm_water, FARM_WATERS),
         ):
             if _val is not None and _val not in _space:
@@ -283,6 +286,7 @@ class SitePlan:
     row_line: str = "edge"
     row_sides: str = "one"
     row_water: str = "own"
+    row_shelter: str = "own_grove"  # ...and the leeward row's shelter (feature 374 wave 153; `ROW_SHELTERS`), drawn only on a two-sided row
     farm_water: str = "well"  # ...and a DISPERSED farm's own water (amendment 5; `FARM_WATERS`), drawn only where the form is dispersed
     # THE VIEW, DECIDED ONCE (feature 287, M6): (x, y, w, h), fixed at the end of `stage_hinterland`'s seating by
     # `hinterland.frame.frame_for`, and set exactly by `stage_frame`. Every rule that reads the picture reads this.
@@ -523,6 +527,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         row_line=spec.row_line or ("edge" if _flood else str(_roll(spec.seed, "row_line", ROW_LINES))),
         row_sides=spec.row_sides or str(_roll(spec.seed, "row_sides", ROW_SIDES)),
         row_water=spec.row_water or str(_roll(spec.seed, "row_water", ROW_WATERS)),
+        row_shelter=spec.row_shelter or str(_roll(spec.seed, "row_shelter", ROW_SHELTERS)),
         farm_water=spec.farm_water or str(_roll(spec.seed, "farm_water", FARM_WATERS)),
         field_archetype=_archetype,
         pond_layout=_pond_layout,

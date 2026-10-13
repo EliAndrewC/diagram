@@ -26,7 +26,7 @@ from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.homestead_parts.grove_sides import grove_faces
 from l7r.diagram.settlement.rolling.dispersed import LANE_ROOM_FT
 
-from ..consts import Poly, Pt
+from ..consts import WIND_VECTORS, Poly, Pt
 from ..plan import SitePlan
 
 FIELD_KEEP_FT = 24.0
@@ -144,6 +144,20 @@ def street_line(hard: Any, anchor: Pt, offset: float, length: float, form: str, 
     full = length + slack
     m_ = max(2, int(full / 8.0) + 1)
     return [((cx + t[0] * u, cy + t[1] * u), nrm) for u in (-full / 2 + k * full / (m_ - 1) for k in range(m_))]
+
+
+ACROSS_THE_WIND_COS = math.cos(math.radians(67.5))
+"""Research: a street across the wind - GUESS: the street within 67.5 degrees of the farm's windward bearing shelters it; one
+running with the wind shelters no one (no page gives an angle)"""
+
+
+def sheltered_by_the_row_across(side: int, normal: Pt, windward: str) -> bool:
+    """Does a farm seated on `side` of its street (+1 the far side, -1 the near, the street at -side x `normal` from it) have
+    its street, and the grove farms beyond it, on its windward side?
+
+    Research: the leeward row - research/questions/0033-row-villages-resson.drawing.html: the row across the road already broke the wind; its farm keeping no grove of its own is this project's reading of that account (a GUESS)"""
+    wx, wy = WIND_VECTORS.get(windward, WIND_VECTORS["NW"])
+    return -side * (normal[0] * wx + normal[1] * wy) > ACROSS_THE_WIND_COS
 
 
 def frame_extent(bbox: Sequence[float], direction: Pt) -> float:
@@ -613,7 +627,17 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
                 hold = holding_clear(holding_quad(hc, t, nrm, along_here, hold_depth), hard, boxes, bounds)
                 if hold is None:
                     continue
-            if s.try_place(hx, hy, "plain"):
+            # THE LEEWARD ROW SHELTERED BY THE GROVE ROW ACROSS ITS STREET (feature 374 wave 153, 0033's second form): on a
+            # two-sided street whose settlement rolled it, a farm with the street - and the grove farms beyond it - on its
+            # windward side is laid with no grove of its own (`_farm_sheltered`, read by the bundle) and keeps its bamboo south
+            shelter = sides == "both" and plan.row_shelter == "sheltered" and sheltered_by_the_row_across(side, nrm, plan.windward)
+            s._farm_sheltered = shelter  # type: ignore[attr-defined]
+            seated = s.try_place(hx, hy, "plain")
+            s._farm_sheltered = False  # type: ignore[attr-defined]
+            if seated and shelter:
+                s._pending_farmsteads[-1]["sheltered"] = True
+                s.M["meta"]["sheltered_farms"] = int(s.M["meta"].get("sheltered_farms", 0)) + 1
+            if seated:
                 placed += 1
                 took += 1
                 mine.append((float(s._pending_farmsteads[-1]["x"]), float(s._pending_farmsteads[-1]["y"])))

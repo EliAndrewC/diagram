@@ -86,6 +86,7 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         row_line=plan.row_line,
         row_sides=plan.row_sides,
         row_water=plan.row_water,
+        row_shelter=plan.row_shelter,
         farm_water=plan.farm_water,
         field_footbridges=True,
         water_kind="stream",

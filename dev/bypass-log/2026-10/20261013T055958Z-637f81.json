@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-13T05:59:58Z",
+  "target": "claims-gate",
+  "commit": "1328a1ba2",
+  "why": "CLAIMS_OK: pre-existing drifts left to their ranking rows"
+}
