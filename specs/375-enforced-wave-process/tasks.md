@@ -246,5 +246,6 @@ Every task is tooling: nothing a map draws changes and no physical decision is m
 - [x] T64 The lean bundle, `make decide` and `make plan-delta` on it (D64); tests (SC-039)
       research: rendering
       verify: DONE. DONE. scripts/gates/plan_bundle.py (MANIFEST, request whole, cited FR/SC/D, index, blocks, earlier text) for make decide and make plan-delta; spec-fidelity's contract names it; 374 T46 bundle 12,648 vs 117,065 bytes (R11)
-- [ ] T65 Measured on 374 (SC-036 to SC-039); the texts; 375 closes again: tests, `make hooks-test`, the gate, the report, landed
+- [x] T65 Measured on 374 (SC-036 to SC-039); the texts; 375 closes again: tests, `make hooks-test`, the gate, the report, landed
       research: rendering
+      verify: DONE. DONE. measured on 374 (R11: 1 of 69 blocks owed vs the whole plan; archive 93.8 -> 30.7 KB; record 376 -> 232 KB; T46 bundle 12.6 vs 117 KB); CLAUDE.md and spec-fidelity's contract; tooling tests and make hooks-test green; make done green; the report written; landed by the push carrying this tick
