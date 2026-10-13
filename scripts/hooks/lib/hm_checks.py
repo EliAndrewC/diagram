@@ -200,6 +200,13 @@ def _sentence_key(s: str) -> str:
     return hashlib.sha1(s.encode("utf-8")).hexdigest()[:12]
 
 
+def batch_root(manifest: str) -> str:
+    """The bundle a split bundle's `batch-N/MANIFEST.md` belongs to (`make check-bundle` writes one directory per batch), or ''
+    for a bundle that is not a batch."""
+    parent = Path(manifest).parent
+    return str(parent.parent) if re.fullmatch(r"batch-\d+", parent.name) else ""
+
+
 def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: str, now: float, root: Path | None = None, freeze_ok: bool = False, arbiter_ok: bool = False) -> str:
     """Record a check's dispatch, or say why it is refused (FR-003(c) apply once, FR-010 the round cap and the tripwires, which
     the round arbiter rules on - `hm_arbiter.py`)."""
@@ -210,8 +217,12 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         if held:
             return hm_arbiter.refusal(held)
     current = {s: sentences(subject_blocks(root, s)) for s in subjects} if root is not None else {}
+    # GUARD_EDIT_OK: feature 374 wave 151 - A SPLIT BUNDLE'S BATCHES ARE ONE ROUND: the second batch of a bundle `make check-bundle`
+    # split is no re-dispatch into a running round, and no round of its own (0049's quote-check batch-2 was refused while batch-1 ran)
+    root_of = batch_root(manifest)
+    sibling = {s: bool(root_of) and any(d["check"] == check and batch_root(str(d.get("manifest") or "")) == root_of for d in open_round(state, s, now)) for s in subjects}
     for s in subjects:
-        same = [] if freeze_ok else [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
+        same = [] if freeze_ok or sibling[s] else [d for d in open_round(state, s, now) if d["check"] == check and d.get("state") != "pending"]
         if same and [d for d in running(state, s, now) if d.get("state") == "running"]:  # launched, not a refused call's record
             return (
                 f"`{check}` is already in {s}'s round and that round has a check still running - all of a round's checks "
@@ -240,7 +251,7 @@ def dispatch(state: dict[str, Any], tid: str, check: str, manifest: str, text: s
         if not open_round(state, s, now):
             state.setdefault("edits", {})[s] = []  # a new round: the last round's proposals are spent
         unit = f"{check}|{s}"
-        if not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):  # a fresh reading is no repeat
+        if not sibling[s] and not fresh_reading(state, unit, notes) and not first_look(state, unit, current.get(s, [])):  # a fresh reading is no repeat
             state.setdefault("rounds", {})[unit] = state.get("rounds", {}).get(unit, 0) + 1  # every other dispatch let through is a round
         state.setdefault("round_batch", {})[unit] = batch_of(root)  # the batch this round counts in (`new_cause`)
         if s in current:  # what this check has now read of the subject, for the next dispatch's first-look test

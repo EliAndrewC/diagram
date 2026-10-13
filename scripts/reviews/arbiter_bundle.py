@@ -148,7 +148,7 @@ def mark_rounds(replies: list[str], others: list[tuple[str, str]] | None = None)
     for reply in replies:
         blocks = [(o, n) for _p, o, n in hc._blocks(reply)]
         marked = []
-        for f in findings_of(reply):
+        for f in [] if el.verdict_of(reply) == "clean" else findings_of(reply):  # a clean round's passes are no finding
             marked.append(("REPEATED" if _repeats(f, seen) else "NEW", f))
             seen.append(f)
         # what this round said no page holds: a later round asking for it again re-raises it (343's main-gate ruling: round 1's
