@@ -708,23 +708,26 @@ def _handle(mode: str, payload: Mapping[str, Any], path: Path, now: float) -> st
     return out
 
 
-def close(root: Path, subject: str, reason: str, now: float) -> int:
+def close(root: Path, subject: str, reason: str, now: float, agent: str = "") -> int:
     """`make check-closed`: close the checks on `subject` that went SILENT - running past STALE_S with no return - and record
     each use with its reason in the guard census. A live check is never closed here (the plan review of amendment 1: closing
-    any check at any time was an unlogged way past the freeze)."""
+    any check at any time was an unlogged way past the freeze) - except the one `agent` names, a check the session STOPPED
+    itself (TaskStop): it will never return, and before this it held its page frozen until it went stale (feature 374,
+    round arbiter hour 4 - a quote-check sent the stale top-level MANIFEST and stopped needed FREEZE_OK to move on)."""
     path = state_path(str(root))
     if path is None:
-        return _close(None, {}, subject, reason, now)
+        return _close(None, {}, subject, reason, now, agent)
     with locked(path):
-        return _close(path, load(path), subject, reason, now)
+        return _close(path, load(path), subject, reason, now, agent)
 
 
-def _close(path: Path | None, state: dict[str, Any], subject: str, reason: str, now: float) -> int:
+def _close(path: Path | None, state: dict[str, Any], subject: str, reason: str, now: float, agent: str = "") -> int:
     """`close`'s body, with the state loaded under its lock."""
     if not escaped("CHECK_CLOSED", f'CHECK_CLOSED="{reason}"'):
         print("check-closed: REASON needs two words and eight characters - it is what a later audit reads", file=sys.stderr)
         return 2
-    silent = [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", []) and d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S]
+    silent = [d for d in state.get("dispatches", {}).values() if subject in d.get("subjects", [])
+              and ((d.get("state") == "running" and now - float(d.get("t", 0)) > STALE_S) or (agent and d.get("aid") == agent and d.get("state") != "answered"))]
     for d in silent:
         d["state"] = "answered"
         d["closed"] = reason
@@ -743,8 +746,8 @@ def escape_for(msg: str) -> str:
 
 def main(argv: list[str]) -> int:
     mode = argv[0] if argv else ""
-    if mode == "close" and len(argv) == 3:  # make check-closed SUBJECT= REASON=
-        return close(Path(os.getcwd()), argv[1], argv[2], time.time())
+    if mode == "close" and len(argv) in (3, 4):  # make check-closed SUBJECT= REASON= [AGENT=]
+        return close(Path(os.getcwd()), argv[1], argv[2], time.time(), argv[3] if len(argv) == 4 else "")
     try:
         payload = json.loads(sys.stdin.read() or "{}")
     except ValueError:

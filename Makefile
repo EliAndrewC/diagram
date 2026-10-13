@@ -1182,9 +1182,9 @@ plan-archive:   ## [project] move a plan's finished sections (every task ticked,
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" archive "$(F)"
 
 # GUARD_EDIT_OK: feature 375 FR-003(b) adds an operation - close a check that went silent, so its page is not frozen for good
-check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>"
+check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>" [AGENT=<id> a check you stopped yourself, closed though not silent]
 	@if [ -z "$(SUBJECT)" ] || [ -z "$(REASON)" ]; then printf 'make check-closed: SUBJECT=<q:NNNN or modal:<registry>/<slug>> and REASON="<why>" are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_checks.py close "$(SUBJECT)" "$(REASON)"
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_checks.py close "$(SUBJECT)" "$(REASON)" $(if $(AGENT),"$(AGENT)",)
 
 # GUARD_EDIT_OK: feature 375 FR-011 adds two operations - the round arbiter's bundle, and the recording of its ruling
 # (only the `round-arbiter` subagent passes AS=round-arbiter; a ruling is binding, one per trigger).
