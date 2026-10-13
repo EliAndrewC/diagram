@@ -38,6 +38,7 @@ setup
 run "$(bash_ev 'python3 -m pytest test_settlement.py -q -n auto --no-cov -k \"kura_side or punishment\"')"; check "the subset run itself is allowed" ok $?
 run "$(bash_ev 'make done')"; check "make done BLOCKED after a subset-only run" blocked $?
 grep -q "WHOLE test file" "$HOOK_ERR" && { echo "  ok    message says what to run instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
+grep -qF "make done  # GATE_OK: <reason>" "$HOOK_ERR" && grep -q "refused as a prompt override" "$HOOK_ERR" && { echo "  ok    the escape tip names the form that passes (383 amendment 2)"; PASS=$((PASS+1)); } || { echo "  FAIL  the escape tip"; FAIL=$((FAIL+1)); }
 run "$(bash_ev 'make done')"; check "re-issuing the gate goes through (blocks once, no deadlock)" ok $?
 teardown
 
