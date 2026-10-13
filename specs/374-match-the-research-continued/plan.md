@@ -802,6 +802,40 @@ with every measurement (batch 13's lesson).
 - **W150-5** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls, baselined at HEAD);
   capacity unchanged; the counts per map measured and recorded.
 
+## Batch 15: the pig sty against the house (the pig-sty row)
+
+**The work list**: the next free row (`homesteads/fixtures.py::FIXTURE_BANDS#pig sty against the house`, DRIFTED): 0049's
+drawing page has about two households in three on a plain paddy hamlet keep a small pig sty against the farmhouse or one of
+its outbuildings, on the household's own plot, and the code draws no sty on any farmstead. Rows 516 (the residence size) and
+774 stay as already ruled; 771 is normal work behind the polder seeds; the bamboo row is judged on placement (the GM,
+2026-10-12). Room before packing (the GM, 2026-10-12): where the sties do not find walls, the homestead's ground grows
+before any packing. The engine changes, so the batch takes its timing bookends; the pool roll is taken with every
+measurement.
+
+### Wave 151 (T43) - a pig sty against the house on a plain paddy hamlet
+- **W151-1** (within): a fixture kind, `sty`, in each plain paddy hamlet's farmstead bands: its share rolled once per hamlet
+  inside a band about two in three (0049: "about two in three, the share varying from hamlet to hamlet around that figure",
+  Buck's nearly two farms in three) - 0.57 to 0.77, the plus-or-minus 0.10 the coop's band takes, calibrated liberty (a
+  GUESS). Nil on a dike-pond hamlet, whose sties stand on the pond dikes (0025; `pondstock.py`, unchanged). The share is
+  counted to the households as every kind is (`round(share x n)`).
+- **W151-2** (within): its seat - against a wall of the farmhouse or one of its outbuildings (the storehouse, the byre, the
+  shed, the wood shed, the retirement house), on the household's own plot (0049, a GUESS the page names): offered along each
+  building's walls in the house's own frame, the house's first, touching that wall, clear of the plot's other parts by the
+  fixture wall gap, and asked of the registry of what stands. It is seated in a stage of its own once the ways and crossings
+  stand (`stage_sties`, before the washing places), never laid in the homestead's bundle: laid there, every sty found its
+  wall but the web refused maps that pass at HEAD, and ROOM BEFORE PACKING (the GM, 2026-10-12) was tried first - more
+  ground per homestead (110, 116 ft; the seating ground 172 ft) only moved the refusals about (`m:w151-sty-room`). The
+  order is an implementation detail (the GM's ruling of 2026-10-12 on the bamboo strip). The share's count is drawn: a
+  household with no place passes its sty to the next that keeps none; a sty no farmstead of the hamlet has room for is
+  counted (`meta.sty_short`), and a short count on any roll the bar measures - the pool, the cohort or the 44 - is met by
+  more room for the walls before it may stand. A polder hamlet is a paddy form and takes the sty; only the dike-pond hamlet
+  does not (W151-1).
+- **W151-3** (within): drawn at the dike-pond sty's size, 8 x 6 ft (0049: "its size not yet set"; UNRESEARCHED), with the
+  dike-pond sty's glyph (a ridged shed and a railed pen, a convention, one glyph for both), one class (`pig sty`) whose
+  pop-up is extended to the plain paddy farm's sty from 0049; recorded among the farm's fixtures (`farm_fixtures`, kind `sty`).
+- **W151-4** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); every other fixture
+  still drawn to its count; the sty counts measured per map. A glyph check is owed on the pool map that first draws one.
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

@@ -31,7 +31,16 @@ if TYPE_CHECKING:
 # glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in research/contents.json#homesteads).
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is the `interactive/classes/` package; a kind missing here is a KeyError at draw time, never silent ink.
-FIXTURE_CLASS = {"privy": "privy", "woodpile": "wood shed", "manure": "manure heap", "bath": "bath room", "coop": "hen coop", "shrine": "household shrine", "grave": "household grave"}
+FIXTURE_CLASS = {
+    "privy": "privy",
+    "woodpile": "wood shed",
+    "manure": "manure heap",
+    "bath": "bath room",
+    "coop": "hen coop",
+    "shrine": "household shrine",
+    "grave": "household grave",
+    "sty": "pig sty",
+}
 # THE MANURE FIXTURE HAS TWO ATTESTED FORMS (feature 150, GM 2026-08-28 choosing audit A2): the HEAP by the
 # privy or stable (Tohoku, Sugiura 1973) and the PIT - "pits made of earthenware, half buried in the ground at
 # the back of the building" and lined along the road (Fei 1939, Lake Tai). Two forms -> a knob, rolled per
@@ -41,6 +50,9 @@ PIT_FT = 3.5
 """Research: manure pit - research/questions/0042-manure-heaps-and-compost-kyuhi.html: a jar mouth about 3.5 ft across"""
 FIXTURE_CLASS_BY_FORM = {"pit": "manure pit"}
 
+STY_FT = (8.0, 6.0)  # a simple pig shed: on the dike (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html) or against a farmhouse (0049)
+"""Research: sty size - UNRESEARCHED: 8 x 6 ft (0025 gives no size for a sty, and 0049's drawing page leaves it "not yet set")"""
+
 FIXTURE_FT: dict[str, tuple[float, float]] = {
     "privy": (6.0, 6.0),
     "woodpile": (24.0, 12.0),
@@ -49,6 +61,7 @@ FIXTURE_FT: dict[str, tuple[float, float]] = {
     "coop": (5.0, 5.0),
     "shrine": (6.0, 6.0),  # DRAWN at the small-shed module, not the ~1.3 ft stone: a glyph convention (GM 2026-08-27, T62)
     "grave": (8.0, 6.0),  # the household grave (feature 374 wave 136): a few stones on a small cleared patch, at the plot's scale
+    "sty": STY_FT,  # the plain paddy farm's pig sty against its house (feature 374 wave 151), the dike-pond sty's size
 }
 """Each fixture's drawn size.
 
@@ -59,6 +72,7 @@ Research:
     bath room size - research/questions/0044-baths-on-the-farm-furo.html: 6 x 6 ft, the placer passes its length
     hen coop size - GUESS: 5 x 5 ft
     household shrine size - CONVENTION: drawn at the 6 x 6 ft small-shed module, not the stone's 1.3 ft
+    pig sty size - UNRESEARCHED: 8 x 6 ft, the dike-pond sty's (`STY_FT`)
     household grave size - GUESS research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: an 8 x 6 ft patch with a few stones, at the plot's scale; no household grave was found measured
 """
 # radius: "a persimmon grows to about 12 m tall and 7 m across, a crown of about 23 ft" (research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html, pfaf-kaki;
@@ -146,6 +160,7 @@ class FarmFixturesMixin:
             manure heap or pit - research/questions/0042-manure-heaps-and-compost-kyuhi.html: the pit form drawn as a jar mouth
             fixture glyphs - CONVENTION: the privy's jar, the shed's log ends, the cauldron, the coop's slats, the shrine's torii, the grave's stones
             household grave - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: a household's grave on its own land, at the plot's corner
+            pig sty on the farmstead - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: a small pig sty against the farmhouse or an outbuilding, drawn with the dike-pond sty's glyph
         """
         if kind not in FIXTURE_FT:
             raise ValueError(f"unknown farm fixture kind {kind!r}")
@@ -186,6 +201,8 @@ class FarmFixturesMixin:
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" fill="#B9A070" stroke="{edge}" stroke-width="0.8"/>')
             for k in (-0.25, 0.0, 0.25):  # the slats/niches of the enclosure
                 g.append(f'<line x1="{k * w:.1f}" y1="{y0 + 0.8:.1f}" x2="{k * w:.1f}" y2="{-y0 - 0.8:.1f}" stroke="{edge}" stroke-width="0.6"/>')
+        elif kind == "sty":  # the plain paddy farm's sty (feature 374 wave 151): the dike-pond sty's own glyph
+            g += sty_parts(x0, y0, w, h, edge)
         elif kind == "grave":
             # the household grave (feature 374 wave 136): a small cleared patch with a few upright stones, the idiom of the
             # field grave's stones (`fields/features.py`) on a squared patch, never a mound in a field - the stones staggered,
@@ -246,14 +263,24 @@ class FarmFixturesMixin:
 
 # ---- the stock a dike-pond hamlet keeps on its ponds (feature 150 A3/A4) ---------------------------
 
-STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, on the bank itself (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html)
-"""Research: sty size - UNRESEARCHED: 8 x 6 ft (0025 gives no size for a sty)"""
 # NO DUCK PEN (269 B32, the GM 2026-09-28): the fenced dry and wet run is a modern fish-cum-duck form, read only
 # in the FAO/NACA manual, and a form attested only in modern sources is not drawn; premodern delta ducks were
 # herded in the rice fields, not penned at the fish ponds (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html).
 # NO PER-POND SLUICE (feature 280 M57, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html): a sluice through EACH pond's dike is defined only by the
 # FAO training manual, so it is not drawn - and the sty's keep-clear of it (feature 233) went with it. The polder's own
 # gates (the dou) stay.
+
+
+def sty_parts(x0: float, y0: float, w: float, h: float, edge: str) -> list[str]:
+    """A pig sty's strokes, its box from (x0, y0) `w` by `h`: a ridged shed on 0.62 of its length and a railed pen - one
+    glyph for the dike's sty and the farmhouse's.
+
+    Research: sty glyph - CONVENTION: a ridged shed on 0.62 of the length and a railed pen"""
+    return [
+        f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w * 0.62:.1f}" height="{h:.1f}" rx="1" fill="#8F7548" stroke="{edge}" stroke-width="1.1"/>',  # the shed
+        f'<line x1="{x0 + 1:.1f}" y1="{y0 + h / 2:.1f}" x2="{x0 + w * 0.62 - 1:.1f}" y2="{y0 + h / 2:.1f}" stroke="#D8C08C" stroke-width="1"/>',  # its ridge
+        f'<rect x="{x0 + w * 0.62:.1f}" y="{y0:.1f}" width="{w * 0.38:.1f}" height="{h:.1f}" fill="none" stroke="{edge}" stroke-width="0.8" stroke-dasharray="1.2,1.2"/>',  # the railed pen
+    ]
 
 
 class PondStockMixin:
@@ -285,13 +312,7 @@ class PondStockMixin:
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         x0, y0 = -w / 2, -h / 2
         edge = "#5A4326"
-        g = [
-            f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">',
-            f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w * 0.62:.1f}" height="{h:.1f}" rx="1" fill="#8F7548" stroke="{edge}" stroke-width="1.1"/>',  # the shed
-            f'<line x1="{x0 + 1:.1f}" y1="0" x2="{x0 + w * 0.62 - 1:.1f}" y2="0" stroke="#D8C08C" stroke-width="1"/>',  # its ridge
-            f'<rect x="{x0 + w * 0.62:.1f}" y="{y0:.1f}" width="{w * 0.38:.1f}" height="{h:.1f}" fill="none" stroke="{edge}" stroke-width="0.8" stroke-dasharray="1.2,1.2"/>',  # the railed pen
-            "</g>",
-        ]
+        g = [f'<g transform="translate({cx:.1f},{cy:.1f}) rotate({rot:.2f})">', *sty_parts(x0, y0, w, h, edge), "</g>"]
         self.add_top("".join(g), cls="pig sty")
         rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)}
         if pond is not None:

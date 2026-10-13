@@ -21,6 +21,7 @@ Split from one `homesteads.py` by feature 173, as LAYERS emitted bottom-up (ever
 | `holds.py` | the parts the seating laid, held in the registry of what stands until they are drawn (feature 287) |
 | `rows.py` | THE ROW VILLAGE (feature 291): a linear hamlet's farms in rows along their streets, never in ranks behind a row |
 | `row_rules.py` | the row village's and the grove farm's rules, read off a finished manifest - pure functions, each returning what breaks its rule |
+| `sties.py` | the plain paddy farm's pig sty (feature 374 wave 151, 0049): `stage_sties`, seated against its farmstead's walls in the house's frame once the ways stand, never in the bundle |
 | `farm_water.py` | a DISPERSED farm's own water as a channel led into its grounds (feature 291) |
 | `persimmon_reseat.py` | the persimmon a household could not keep, given to one that has room (feature 315) |
 | `__init__.py` | the composed surface only - the re-exports that keep every existing importer working. Never add logic here |

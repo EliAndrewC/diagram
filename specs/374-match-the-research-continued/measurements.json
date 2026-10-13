@@ -1998,5 +1998,77 @@
       "pool_maps": "clean",
       "cohort": "16/16 passed"
     }
+  },
+  "w151-sty-room": {
+    "quantity": "the pig sty laid in the homestead bundle (against a wall of the house or an outbuilding): the sties drawn against the share's count, and the rolls that refuse, at the homestead ground HEAD sizes the band on (HOMESTEAD_GROUND_FT 104) and with more ground per homestead (110, 116; SEATING_GROUND_FT 172 on the four failing rolls)",
+    "observed": "2026-10-12",
+    "source": "the session's scratchpad runs r15a, room15 and full15 (each the 44 rolls - valley seeds 1-20, dike-pond and polder seeds 1-12 at 16 households - make maps SCOPE=all and make cohort), at the clone's working tree with the sty in the bundle",
+    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort; the constant edited between variants and restored",
+    "method": "per roll: the refusal and its reason; per manifest: the sties drawn against meta.farm_fixtures_target['sty']",
+    "value": {
+      "HEAD (no sty)": {
+        "refused_44": [
+          "polder 4",
+          "polder 5"
+        ],
+        "cohort": "16/16"
+      },
+      "bundle, ground 104": {
+        "sties": "322 of 322",
+        "refused_44": [
+          "valley 13",
+          "polder 4",
+          "polder 5"
+        ],
+        "cohort": "13/16 (Audit-10 lane knot, Audit-903 a lane through a grove, Audit-904 two farmhouses off the network)",
+        "pool": "clean, every sty drawn"
+      },
+      "bundle, ground 110": {
+        "refused_44": [
+          "dike-pond 5",
+          "polder 3",
+          "polder 4"
+        ],
+        "cohort": "12/16"
+      },
+      "bundle, ground 116": {
+        "refused_44": [
+          "valley 2",
+          "valley 13",
+          "dike-pond 4",
+          "dike-pond 12",
+          "polder 11"
+        ],
+        "cohort": "15/16"
+      },
+      "bundle, seating ground 172 (4 failing rolls only)": {
+        "valley 13": "refused",
+        "cohort subset": "the same three fail"
+      },
+      "reading": "every sty found its wall at every size; the refusals are the web's, moved about by any change to the bundle's layout, so room does not mend them"
+    }
+  },
+  "w151-sties": {
+    "quantity": "the pig sty seated after the ways (`stage_sties`): sties drawn against the share's count, the rolls that refuse, and whether the pool and the cohort pass",
+    "observed": "2026-10-12",
+    "source": "the session's scratchpad run r15b: the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), make maps SCOPE=all and make cohort at the clone's working tree",
+    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort",
+    "method": "per manifest: meta.sty_target, meta.sty_short and the farm_fixtures of kind sty",
+    "value": {
+      "refused_44": [
+        "polder 4 (as at HEAD)",
+        "polder 5 (as at HEAD)"
+      ],
+      "sties_44": "334 of 334, none short",
+      "pool": {
+        "inashiro": "9 of 9",
+        "kashikawa": "15 of 15",
+        "kuwabata": "0 (dike-pond)",
+        "mizuguchi": "9 of 9",
+        "sawada": "14 of 14"
+      },
+      "pool_maps": "clean",
+      "cohort": "16/16 passed"
+    }
   }
 }

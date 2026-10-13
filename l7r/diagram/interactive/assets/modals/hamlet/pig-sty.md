@@ -1,4 +1,11 @@
-About: A pig sty on a dike-pond hamlet was a household's pig pen, standing on the bank of a fish pond. The pig was the
+About: A pig sty was a household's pig pen.
+
+[field_archetype=valley_paddy|polder_grid] On a plain paddy hamlet most farms kept pigs, as the Shen family farm manual of the
+seventeenth century has a rice farm do, and each household's small sty stood on its own plot. In the 1920s, in the
+rice-growing provinces of east-central China, hogs were kept on nearly two farms in three, the only count found; no count
+from before 1912 was found.
+
+[field_archetype=mulberry_dike_fishpond] On a dike-pond hamlet the sty stood on the bank of a fish pond. The pig was the
 dike-pond country's animal: in the Pearl River delta in the Qing, feed raised on the pond's surface went to the pigs, and
 their dung, with the pond mud, went to manure the mulberry on the banks. A late-Ming farming compendium has a pen on a
 fish-pond bank, its dung swept into the water each morning to feed the fish, though that pen held sheep. The delta's ducks
@@ -10,23 +17,34 @@ fattened the pigs fast, and not too clean, since mud and muck let them escape th
 commonly built over the sty, a custom as old as the Han dynasty. Sheds built over the water, or built so that their waste
 ran straight into the pond, are known only from modern times.
 
-How many households kept a sty, how many pigs it held and how big it was are not recorded. In the 1920s, in the
-rice-growing provinces of east-central China, hogs were kept on nearly two farms in three.
+How many pigs a sty held and how big it was are not recorded.
+
+[field_archetype=mulberry_dike_fishpond] How many households of a dike-pond village kept a sty is not recorded either.
 
 Guesses:
-- That a quarter to a half of a hamlet's households keep a sty, the share differing by hamlet: no count of the households
+- [field_archetype=valley_paddy|polder_grid] That about two households in three keep a sty, the share differing by hamlet
+  around the 1920s count: no count from before modern times was found.
+- [field_archetype=valley_paddy|polder_grid] That the sty stands against the farmhouse or one of its outbuildings: no page
+  read says where an ordinary paddy farm kept its sty.
+- [field_archetype=mulberry_dike_fishpond] That a quarter to a half of a hamlet's households keep a sty, the share differing by hamlet: no count of the households
   that kept a pig in a dike-pond village was found.
-- That each household's sty stands at a grow-out pond of its own near the houses, within about 320 ft of its farmhouse: no
+- [field_archetype=mulberry_dike_fishpond] That each household's sty stands at a grow-out pond of its own near the houses, within about 320 ft of its farmhouse: no
   account says how a household's sty and its pond went together, or how far a household walked to its pigs.
 - Its size on the map, about 8 by 6 ft for shed and pen together: no size for a sty was found.
 
-Depiction: The map draws a sty as a small ridged shed with a railed pen beside it, standing on the bank itself, on the
-half of its pond's bank that faces the houses, so that it reads as a household's. Nothing is drawn to carry its waste
+Depiction: The map draws a sty as a small ridged shed with a railed pen beside it.
+
+[field_archetype=valley_paddy|polder_grid] It stands against a wall of its farmhouse or of one of the farm's outbuildings, on
+the household's own plot. No duck pen is drawn in the yard, since the rice country's ducks fed out on the reaped fields after
+the harvest, which a summer map does not show.
+
+[field_archetype=mulberry_dike_fishpond] It stands on the bank itself, on the half of its pond's bank that faces the houses,
+so that it reads as a household's. Nothing is drawn to carry its waste
 into the water, and no foul patch of water beside it, since both are known only from modern manuals. No duck pen is
 drawn, since the ducks were herded in the rice fields. A sty at a fish pond is drawn on a dike-pond hamlet only.
 
 Name: pig sty
-Covers: every `pig_sties[]` record - a shed with its railed pen on a pond bank
-Sources: pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, zhwiki-nongzheng-quanshu, guangdong-xinyu-20, hudson-munoz-2023, qimin-yaoshu-yangzhu, qimin-yaoshu-enwiki, artic-pigsty-latrine, pig-toilet-enwiki, fao-ac264e, buck-1930-farm-economy
+Covers: every `pig_sties[]` record - a shed with its railed pen on a pond bank - and every `farm_fixtures[]` record of kind `sty`, against its farmhouse or an outbuilding
+Sources: daizhige-bunongshu, zhang-guo-2019-nongshu, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, zhwiki-nongzheng-quanshu, guangdong-xinyu-20, hudson-munoz-2023, qimin-yaoshu-yangzhu, qimin-yaoshu-enwiki, artic-pigsty-latrine, pig-toilet-enwiki, fao-ac264e, buck-1930-farm-economy
 Entry: research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html
 Drawing: research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html

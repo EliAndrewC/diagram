@@ -33,6 +33,7 @@ from .homesteads import stage_appurtenances, stage_homesteads
 from .plan import HamletSpec, SitePlan, plan_site
 from .pondstock import stage_pond_stock
 from .sink import stage_sink
+from .homesteads.sties import stage_sties
 from .washing import stage_washing
 from .water import stage_field, stage_water_frame, stage_waterward
 from .ways import stage_seat, stage_track, stage_web
@@ -119,6 +120,7 @@ STAGES = (
     stage_windbreak,
     stage_bamboo,  # the bamboo stands, over the scrub that kept out of them (feature 133 T47)
     stage_crossings,
+    stage_sties,  # the pig sty against its farmhouse, once the ways stand (feature 374 wave 151, 0049)
     stage_washing,  # washing places where water passes the houses, clear of every way and crossing (feature 374 wave 150, 0065)
     stage_frame,
     # THE NOTICE BOARD GOES LAST - AFTER THE FRAME (GM 2026-08-29). It used to sit between the lane
@@ -159,6 +161,7 @@ Research:
     homesteads before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every lane drawn after the farmhouses
     track before the wells - UNRESEARCHED: a well dug where the track already runs
     web after everything that reserves ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it
+    pig sties after the crossings - UNRESEARCHED: each sty seated against its farmstead's walls once every way and crossing stands, so the seating and the web are as without it (m:w151-sty-room); no page orders them
     washing places after the crossings - UNRESEARCHED: each footing seated where every way, bridge and building already stands; no page orders them
     notice board last - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed once everything else stands
     notice board after the frame - CANON: the GM's ruling of 2026-08-29, the board the very last thing put on the map, after the frame

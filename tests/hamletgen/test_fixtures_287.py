@@ -128,3 +128,13 @@ def test_about_half_of_hamlets_keep_household_graves_and_the_rest_draw_none() ->
     for s in range(1, 40):
         share = fx.fixture_shares(s)["grave"]
         assert (share == 0.0) if not fx.household_graves(s) else (0.30 <= share <= 0.36), (s, share)
+
+
+def test_about_two_households_in_three_keep_a_sty_and_a_dike_pond_hamlet_none() -> None:
+    """Feature 374 wave 151 (0049's drawing page): a plain paddy hamlet's sty share rolled inside two in three's band; a
+    dike-pond hamlet's sties stand on its ponds, so its farmhouses keep none."""
+    for s in range(1, 40):
+        assert 0.57 <= fx.fixture_shares(s)["sty"] <= 0.77
+        assert 0.57 <= fx.fixture_shares(s, "valley_paddy")["sty"] <= 0.77
+        assert fx.fixture_shares(s, "mulberry_dike_fishpond")["sty"] == 0.0
+        assert fx.fixture_quota(s, 10, {}, "mulberry_dike_fishpond")["sty"] == 0.0

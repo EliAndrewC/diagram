@@ -458,7 +458,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         install_wood_shares(s, HOMESTEAD_WOOD_FT2[0], COPSE_HOUSE_REACH_FT, ACCESS_HALF_FT)
     # ...AND ITS FARMSTEAD FIXTURES (feature 287, homes H32): a quota per kind, laid in the bundle with the hamlet's forms
     s._fixture_forms = fixture_forms(plan.spec.seed, plan.manure_form)
-    _quota = {**fixture_quota(plan.spec.seed, plan.spec.households, {k: int(v) for k, v in plan.fixtures_min.items()}), **retirement_quota(s, plan.spec.households)}
+    _quota = {**fixture_quota(plan.spec.seed, plan.spec.households, {k: int(v) for k, v in plan.fixtures_min.items()}, plan.field_archetype), **retirement_quota(s, plan.spec.households)}
     # ...ON EVERY FORM (feature 291 on 287): a grove farm keeps its fixtures in its lot as a clustered household does; its byre
     # is not a part of its bundle (no stall is laid beside a grove farm's house), so its lot keeps no beast
     s._lots = HouseholdLots(plan.spec.seed, plan.spec.households, _share if getattr(s, "_nucleated", False) else 0.0, _quota)

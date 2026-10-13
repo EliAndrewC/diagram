@@ -235,6 +235,11 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. m:w150-washing - 63 washing places over the 42 rolls built, none without a seat, polder 4/5 refusing as at HEAD; pool clean, cohort 16/16; gate green; glyph-check PASS on Inashiro; impl-drift rounds to all IN-STEP; T42 section and whole plan CLEAR
 
+## Batch 15 - the pig sty against the house
+
+- [ ] T43 wave 151: a pig sty against the farmhouse or an outbuilding on about two households in three of a plain paddy hamlet (0049) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

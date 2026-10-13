@@ -112,6 +112,7 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
     "shrine": (0.03, 0.08),
     "persimmon": (0.80, 0.95),
     "grave": (0.30, 0.36),  # where the hamlet keeps household graves (HOUSEHOLD_GRAVE_SHARE of hamlets): about a third of farmsteads
+    "sty": (0.57, 0.77),  # about two in three (0049, Buck's nearly two farms in three); +/-0.10 the coop's calibrated liberty, a GUESS
 }
 """Each fixture kind's per-hamlet share band.
 
@@ -124,7 +125,7 @@ Research:
     household shrine share - research/questions/0219-household-shrines-yashikigami.drawing.html: 0.03-0.08
     persimmon share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: 0.80-0.95
     household grave share - GUESS research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: about a third of farmsteads, where the hamlet keeps household graves at all
-    pig sty against the house - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: no sty kind; no farmstead on a plain paddy hamlet draws a sty against its house
+    pig sty share - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: about two households in three, varying from hamlet to hamlet - 0.57-0.77, the band's width the coop's
 """
 # THE FOUR ATTESTED PRIVY SEATS (269 B10, research/questions/0047-farm-privies-and-their-night-soil-benjo.html "Farm privies and their night soil (benjo)"): under the eaves by the
 # stable beside the entrance (sinyoken), a separate outhouse in the yard (sinyoken), the front yard (Sugiura 1977, northern
@@ -198,27 +199,34 @@ def household_graves(seed: int) -> bool:
     return knob_rng(seed, "household_graves").random() < HOUSEHOLD_GRAVE_SHARE
 
 
-def fixture_shares(seed: int) -> dict[str, float]:
+def fixture_shares(seed: int, archetype: str | None = None) -> dict[str, float]:
     """This hamlet's share of households keeping each fixture kind, rolled once inside its band (`FIXTURE_BANDS`); the
-    household grave's share is nil on a hamlet whose roll keeps no household graves (`household_graves`).
+    household grave's share is nil on a hamlet whose roll keeps no household graves (`household_graves`), and the pig sty's
+    on a dike-pond hamlet, whose sties stand on its ponds (`pondstock.py`).
 
-    Research: shares rolled per hamlet - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: once per map inside each kind's band
+    Research:
+        shares rolled per hamlet - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: once per map inside each kind's band
+        no house sty on a dike-pond hamlet - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: a dike-pond hamlet's sties stand on the fish-pond banks
     """
     rng = knob_rng(seed, "farm_fixtures")
     shares = {k: round(lo + rng.random() * (hi - lo), 3) for k, (lo, hi) in FIXTURE_BANDS.items()}
     if not household_graves(seed):
         shares["grave"] = 0.0
+    if archetype == "mulberry_dike_fishpond":
+        shares["sty"] = 0.0
     return shares
 
 
-def fixture_quota(seed: int, households: int, mins: Mapping[str, int]) -> dict[str, float]:
+def fixture_quota(seed: int, households: int, mins: Mapping[str, int], archetype: str | None = None) -> dict[str, float]:
     """The share each kind's household quota is drawn at (feature 287, homes H32): the rolled share, raised where a spec
     floor asks more (`fixtures_min`) - so exactly `max(round(share x n), floor)` of `n` households keep it.
 
     Research: count to the share - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0219-household-shrines-yashikigami.drawing.html: exactly the share's count, raised to a spec's floor
     """
     n = max(1, households)
-    return {k: max(p, float(mins.get(k, 0)) / n) for k, p in fixture_shares(seed).items()}
+    # ...BUT THE PIG STY, which is seated against its farmstead's walls once the ways stand (`homesteads/sties.py`), never laid
+    # in the bundle: in the bundle it moved the seating, and the web refused other maps (feature 374 wave 151, m:w151-sty-room)
+    return {k: max(p, float(mins.get(k, 0)) / n) for k, p in fixture_shares(seed, archetype).items() if k != "sty"}
 
 
 def fixture_forms(seed: int, manure_form: str) -> FixtureForms:
@@ -323,7 +331,7 @@ def _draw_laid(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]
     """
     forms = getattr(s, "_fixture_forms", None) or fixture_forms(s.seed, plan.manure_form)
     meta = s.M["meta"]
-    shares = fixture_shares(s.seed)
+    shares = fixture_shares(s.seed, plan.field_archetype)
     meta["farm_fixtures"] = dict(shares)
     meta["privy_seats"] = dict(forms.privy_weights)
     meta["bath_stable_share"] = forms.bath_stable_share

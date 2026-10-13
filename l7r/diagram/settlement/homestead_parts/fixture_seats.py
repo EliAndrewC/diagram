@@ -443,6 +443,19 @@ def lay_fixtures(
     return laid
 
 
+def against_a_part(built: Sequence[Rect], w: float, d: float, g: float, taken: Sequence[Rect], step: float) -> Rect | None:
+    """The first place touching a wall of one of `built` - the house first, then each outbuilding as laid - clear of every
+    other part in `taken` by the wall gap `g`: a seat `w` along the wall and `d` out from it (`wall_places`), or None.
+
+    Research: against the farmhouse or one of its outbuildings - GUESS research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the sty stands against the farmhouse or an outbuilding, a GUESS the page names"""
+    for part in built:
+        others = [t for t in taken if t is not part]
+        for q in wall_places([part], w, d, 0.0, step):
+            if clears(q, [part], -1e-6) and clears(q, others, g):
+                return q
+    return None
+
+
 def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[float], float]) -> bool:
     """THE WOOD SHED'S RULE (feature 280 M21; settlement-reviews of Inashiro and Kuwabata, where sheds stood 25-37 ft out,
     between farmsteads): a building of its own a ken off its house - clear of the house by the wall gap and `WOODSHED_STEP_FT`

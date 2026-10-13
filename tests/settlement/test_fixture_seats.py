@@ -318,3 +318,15 @@ def test_door_room_stands_past_the_yard_on_the_line_from_the_house() -> None:
     assert door_room(house, (40.0, 0.0, 20.0, 30.0), 8.0, 12.0) == (58.0, 0.0, 24.0, 24.0)
     assert door_room(house, (-40.0, 0.0, 20.0, 30.0), 8.0, 12.0) == (-58.0, 0.0, 24.0, 24.0)
     assert door_room(house, None, 8.0, 12.0) is None
+
+
+
+def test_a_seat_against_a_part_touches_one_of_its_walls_clear_of_every_other_part() -> None:
+    """Feature 374 wave 151 (0049): the pig sty's seat - against a wall of the house first, then of an outbuilding, clear of
+    every other part by the gap; None where every wall's ground is taken."""
+    q = fs.against_a_part([HOUSE, KURA], 8.0, 6.0, fs.WALL_GAP_FT, [HOUSE, KURA, YARD, GARDEN], 4.0)
+    assert q is not None and fs.against_a_wall(q, [HOUSE], 0.0, tol=1e-6), "against the house's wall"
+    assert fs.clears(q, [KURA, YARD, GARDEN], fs.WALL_GAP_FT - 1e-6), "clear of the storehouse, the yard and the bed"
+    shed = (0.0, -60.0, 24.0, 12.0)
+    assert fs.against_a_part([shed], 8.0, 6.0, 3.5, [shed, (0.0, 0.0, 200.0, 200.0)], 4.0) is None, "every wall's ground taken"
+    assert fs.against_a_part([shed], 8.0, 6.0, 3.5, [shed], 4.0) is not None, "an outbuilding's wall takes it"
