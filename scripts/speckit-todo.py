@@ -335,11 +335,12 @@ def report(specs: Path, show_closed: bool = False, by_affects: bool = False, onl
     return "\n".join(out) + "\n"
 
 
-def untagged(specs: Path) -> list[Feature]:
-    """The open features that name no known tag, or an unknown one - none in a repository with no vocabulary."""
+def untagged(specs: Path, listed: list[Feature] | None = None) -> list[Feature]:
+    """The open features that name no known tag, or an unknown one - none in a repository with no vocabulary. `listed`: the
+    features already read (the check reads them once for both questions - feature 383: twice was half its time)."""
     if not (specs.parent / AFFECTS).is_file():
         return []
-    return [f for f in features(specs) if f.state != "closed" and (not f.affects or f.unknown)]
+    return [f for f in (features(specs) if listed is None else listed) if f.state != "closed" and (not f.affects or f.unknown)]
 
 
 def _problem(f: Feature) -> str:
@@ -366,12 +367,12 @@ def check_message(missing: list[Feature], vocab: Vocabulary | None = None) -> st
     )
 
 
-def off_placeholder(specs: Path, vocab: Vocabulary) -> list[Feature]:
+def off_placeholder(specs: Path, vocab: Vocabulary, listed: list[Feature] | None = None) -> list[Feature]:
     """The open features owed at a tier not yet scripted that are not that tier's placeholder (the GM, 2026-10-10: *"all of
     the things that are owed when we implement villages should be consolidated into a single spec kit feature"*, and the
     same for each later tier)."""
     return [
-        f for f in features(specs)
+        f for f in (features(specs) if listed is None else listed)
         if f.state != "closed" and f.owed in STAGES[1:] and f.name != vocab.placeholders.get(f.owed)
     ]
 
@@ -418,7 +419,8 @@ def main(argv: list[str]) -> int:
     if args.check:
         vocab = vocabulary(Path(args.root))
         specs = Path(args.root) / "specs"
-        msg = check_message(untagged(specs), vocab) + placeholder_message(off_placeholder(specs, vocab), vocab)
+        listed = features(specs)
+        msg = check_message(untagged(specs, listed), vocab) + placeholder_message(off_placeholder(specs, vocab, listed), vocab)
         sys.stderr.write(msg)
         return 1 if msg else 0
     if args.state:

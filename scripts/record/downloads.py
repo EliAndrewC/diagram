@@ -294,7 +294,7 @@ def git(root: pathlib.Path, *args: str) -> subprocess.CompletedProcess:
 
 #: Where the project lived before feature 329 moved it to the repository root: a sync recorded before the move names a
 #: commit that holds the list under this prefix (2026-10-09, the first ingest after 329 was refused).
-PRE_329 = ".claude/skills/" + "diagram/"  # split so check-old-layout does not take the fallback for a stale pointer
+PRE_329 = ".claude/skills/" + "diagram/"  # split: the old-layout check (retired, feature 383) read this file
 
 
 def at_commit(root: pathlib.Path, commit: str) -> str:

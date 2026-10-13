@@ -605,7 +605,8 @@ building-programs: ## [docs] render each declared Mode A type's required-items t
 # `interactive/assets/glossary.json` from `interactive/assets/glossary/` BEFORE it derives the asset. The
 # order is stated here rather than left to the caller: the asset is derived from the assembled file.
 glossary:       ## [docs] assemble interactive/assets/glossary.json from its per-term files, then write research/assets/glossary.js from it - the ONE glossary the map's modals and the record's pages share (features 209, 259)   CHECK=1: exit 1 if either is stale   SPLIT=1: the one-time split into per-term files
-	$(RUN).tools.glossary_asset $(if $(CHECK),--check,) $(if $(SPLIT),--split,)
+	@: "GUARD_EDIT_OK: feature 383 D2 - CHECK=1 replays its last pass while nothing it reads changed - research/, the glossary assets, the modules it imports (memo_check.py); a failing run is never kept, so nothing is loosened"
+	$(if $(CHECK),@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/memo_check.py" glossary,$(RUN).tools.glossary_asset $(if $(SPLIT),--split,))
 
 # GUARD_EDIT_OK: feature 235 - ADDING AN OPERATION, `footnote-census`. Nothing in this project counted the
 # record's footnotes; `notes-census` above counts MAP FEATURES and is unrelated. Every footnote figure quoted
@@ -625,7 +626,8 @@ citations:      ## [docs] the same as `make record` (feature 301: the record's s
 # main checkout by render-sync), not the committed pages - and what CHECK means: the record builds cleanly.
 # GUARD_EDIT_OK: feature 303 - `record` loses SPLIT= (the one-time split of a whole page; no page directory is left to split)
 record:         ## [docs] build the record's site, research/site/, from its questions (features 258, 301, 303) - a page per question, a page per section of each half and per tag, the whole record on one page   CHECK=1: build in memory and exit 1 on any refusal, writing nothing
-	$(RUN).tools.record_asset $(if $(CHECK),--check,)
+	@: "GUARD_EDIT_OK: feature 383 D2 - CHECK=1 replays its last pass while nothing it reads changed - research/, the glossary assets, the modules it imports (memo_check.py; measured in specs/383 research R1) - and a rebuild reuses each unchanged page's notes; a failing run is never kept, so nothing is loosened"
+	$(if $(CHECK),@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/memo_check.py" record,$(RUN).tools.record_asset)
 	@: "GUARD_EDIT_OK: feature 288 FR-005 - after assembling, a filled registry entry marks its URL cited on the sources-consulted ledger (not under CHECK=1, which writes nothing); a new step, nothing loosened"
 	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" mark-filled)
 
@@ -1199,6 +1201,11 @@ arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what wa
 	@: "GUARD_EDIT_OK: 2026-10-11 hourly check - several fixes one change made settle in one command (343 carried 36 open)"
 	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"
+
+# GUARD_EDIT_OK: feature 383 FR-009 - a new operation: the feature's hourly checkpoint opened and its step-back bundle built in one
+# command (the GM 2026-10-12: "converting the check that we are doing now into something that every session does for itself").
+step-back:  ## [project] the feature's hourly checkpoint: open it and build the round arbiter's step-back bundle (feature 383)   [TRIGGER=hour:<f>@<n> TRANSCRIPT=<jsonl> SINCE=<ISO> UNTIL=<ISO>: replay an hour]
+	@cd "$$(git rev-parse --show-toplevel)" && if [ -n "$(TRIGGER)" ]; then python3 scripts/reviews/stepback_bundle.py "$(TRIGGER)" --root "$$(pwd)" $(if $(TRANSCRIPT),--transcript "$(TRANSCRIPT)",) $(if $(SINCE),--since "$(SINCE)",) $(if $(UNTIL),--until "$(UNTIL)",) $(if $(OUT),--out "$(OUT)",); else t=$$(python3 scripts/reviews/checkpoint.py open) && python3 scripts/reviews/stepback_bundle.py "$$t" --root "$$(pwd)"; fi
 
 # GUARD_EDIT_OK: feature 379 amendment 2 (the GM 2026-10-10: "things should go to the arbiter at the point where they were
 # previously coming to me") - a process stop the session would have put to the GM goes to the round arbiter first.
@@ -1974,8 +1981,7 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	python3 scripts/make-docs.py . --check
 	python3 scripts/gates/check-stale-dirs.py --selftest
 	python3 scripts/gates/check-stale-dirs.py .
-	python3 scripts/gates/check-old-layout.py --selftest
-	python3 scripts/gates/check-old-layout.py .
+	: "GUARD_EDIT_OK: feature 383 FR-005 - the old-layout check is RETIRED (the GM 2026-10-12: no clone uses the old layout any more)"
 	bash scripts/reviews/layout_carry.sh --selftest
 
 format:          ## [static] ruff format over the tree

@@ -152,10 +152,26 @@ def config_ignores(toml_text: str) -> list[str]:
     return found
 
 
+def _file_facts(root: Path) -> object | None:
+    """Feature 383 (the GM 2026-10-12): each file's suppression problems kept by its content (`record_cache.FileFacts`) -
+    tokenizing every held file was nearly all of this check's 1.5 s; ruff, the other half, is 0.07 s. None where the cache
+    module is not beside this script (a fixture copy)."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "record"))
+        import record_cache  # noqa: PLC0415
+    except ImportError:
+        return None
+    return record_cache.FileFacts(root, "function-cap", Path(__file__))
+
+
 def check(root: Path, config: Path = REPO / "pyproject.toml") -> list[str]:
     """Every refusal, as the lines to print; empty when the tree is under the cap."""
     msgs = [f"  {f}:{n}  {msg}" for f, n, msg in over_cap(root, config)]
-    problems = [f"  {p.relative_to(root)}:{n}  {why}" for p in held_files(root) for n, why in suppression_problems(p)]
+    files = held_files(root)
+    rel = {p: p.relative_to(root).as_posix() for p in files}
+    facts = _file_facts(root)
+    found = facts.facts([rel[p] for p in files], lambda r: suppression_problems(root / r)) if facts is not None else {rel[p]: suppression_problems(p) for p in files}  # type: ignore[attr-defined]
+    problems = [f"  {p.relative_to(root)}:{n}  {why}" for p in files for n, why in found[rel[p]]]
     pyproject = root / "pyproject.toml"
     ignores = config_ignores(pyproject.read_text()) if pyproject.is_file() else []
     out: list[str] = []

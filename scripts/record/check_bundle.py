@@ -199,9 +199,41 @@ def fresh(out: pathlib.Path) -> None:
     out.mkdir(parents=True, exist_ok=True)
 
 
+#: the helpers run in THIS interpreter (feature 383, plan D6): each was a new interpreter re-importing and re-reading what this
+#: one already had - two of them were 2.0 s of a 4.2 s bundle. `source_pages.py` too: it imports only the standard library
+#: and carries its own fetch timeout, so nothing needs a process of its own (the plan review).
+IN_PROCESS = ("record_prepass.py", "quote_verbatim.py", "style_prepass.py", "translation_owed.py", "source_pages.py")
+
+
 def run_script(name: str, args: list[str], root: pathlib.Path) -> tuple[int, str]:
+    if name in IN_PROCESS:
+        return _run_in_process(name, args, root)
     got = subprocess.run([sys.executable, str(HERE / name), *args], cwd=root, capture_output=True, text=True, check=False)
     return got.returncode, got.stdout + got.stderr
+
+
+def _run_in_process(name: str, args: list[str], root: pathlib.Path) -> tuple[int, str]:
+    """`main(args)` of a helper beside this file, with its working directory, its output and its exit as a process would
+    give them: stdout then stderr, an exit status from its return or its SystemExit."""
+    import contextlib  # noqa: PLC0415
+    import importlib  # noqa: PLC0415
+    import io  # noqa: PLC0415
+    import os  # noqa: PLC0415
+
+    mod = importlib.import_module(name.removesuffix(".py"))
+    out, err, here = io.StringIO(), io.StringIO(), os.getcwd()
+    try:
+        os.chdir(root)
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            try:
+                code = mod.main(list(args))
+            except SystemExit as stop:
+                code = stop.code if isinstance(stop.code, int) else (0 if stop.code is None else 1)
+                if stop.code is not None and not isinstance(stop.code, int):
+                    print(stop.code, file=sys.stderr)
+    finally:
+        os.chdir(here)
+    return int(code or 0), out.getvalue() + err.getvalue()
 
 
 def manifest(out: pathlib.Path, title: str, rows: list[tuple[str, str, str]]) -> str:

@@ -82,29 +82,18 @@ case_01() {  # 9 s measured alone 2026-10-12
 # GUARD_EDIT_OK: feature 375 amendment 9 - the case starts from a fresh fixture: dealt after the 06-08 chain (which leaves a green
 # gate stub behind) it found the gate green and "a settlement-review alone is refused" failed - an ordering the split's scan missed
 reset_prereq
-# GUARD_EDIT_OK: feature 164 - the gate branch no longer spends a round trip telling the session to
-# type `make verify`; it rewrites the command into it (GM 2026-08-30). The RULE is unchanged - the
-# two still run together - but what used to not happen at all now happens correctly. 13 firings of
-# the old refusal, 7 escaped with PAIR_OK in the very next call.
-check "the gate alone is REWRITTEN into the paired command" 'run_pretool "$GATE" | python3 -c "
-import json,sys
-try: sys.exit(0 if json.load(sys.stdin)[\"hookSpecificOutput\"][\"updatedInput\"][\"command\"] == \"make verify\" else 1)
-except Exception: sys.exit(1)"'
-check "...and the correction says to dispatch the review in the same turn" 'run_pretool "$GATE" | grep -q "WHEN THE GATE IS GREEN"'
-check "...and still names the override for a one-sided case" 'run_pretool "$GATE" | grep -q "PAIR_OK"'
-# GUARD_EDIT_OK: feature 212 - a shape `verify` cannot take is RECORDED AND PERMITTED with the
-# DISPATCH NOW context, not refused (GM 2026-09-07): the census found the rewrite above fired once
-# while every real refusal - eight `make maps`, three detached `make done` - was such a shape.
-rm -f "$CLONE/.git/pairing-state.json"
-permitted_with "make done FULL=1 is permitted, told the review is owed, and told it serializes" "$GATE_FULL" "FOREGROUND"
+# GUARD_EDIT_OK: feature 383 FR-003, SC-004 (the GM 2026-10-12: "why are we comparing our stuff to main when we're not ready
+# to land there?") - THE GATE RUNS AS TYPED, with a review owed (this fixture's moved map) or not: no rewrite into `make
+# verify`, no permit naming owed units, and NO review lookup at all - the trace of the hook's run never reaches review_owed.py.
+# A review comes due at the checkpoint (`make tick`'s hold) or at the landing (review-gate.sh).
+check "the gate runs as typed with a review owed" '[ "$(rc_pretool "$GATE")" -eq 0 ]'
+check "...is not rewritten into make verify" '! run_pretool "$GATE" | grep -q "updatedInput"'
+check "...says nothing" '[ -z "$(run_pretool "$GATE")" ]'
 check "...and records the gate key for the pairing" 'grep -q "gate_key" "$CLONE/.git/pairing-state.json"'
-MAPS=$(stdin_for Bash '{"command":"make maps SCOPE=all 2>&1 | tail -60"}')
-permitted_with "make maps ... | tail is permitted (foreground: the review follows the gate)" "$MAPS" "FOREGROUND"
-DETACHED=$(stdin_for Bash '{"command":"setsid nohup make done > /tmp/done.log 2>&1 &"}')
-permitted_with "a detached make done is permitted and told the review overlaps" "$DETACHED" "detached"
-BGGATE=$(stdin_for Bash '{"command":"make maps","run_in_background":true}')
-permitted_with "a run_in_background gate counts as detached" "$BGGATE" "detached"
-check "...the permit names PAIR_OK for the one-sided case" 'run_pretool "$MAPS" | grep -q "PAIR_OK"'
+check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$GATE" | bash -x "$HOOK" pretool 2>&1 ) | grep -q "review_owed.py"'
+for shape in "$GATE_FULL" "$(stdin_for Bash '{"command":"make maps SCOPE=all 2>&1 | tail -60"}')" "$(stdin_for Bash '{"command":"setsid nohup make done > /tmp/done.log 2>&1 &"}')" "$(stdin_for Bash '{"command":"make maps","run_in_background":true}')"; do
+  check "every gate shape runs as typed: $(printf '%s' "$shape" | cut -c1-60)" '[ "$(rc_pretool "$shape")" -eq 0 ] && ! run_pretool "$shape" | grep -q "updatedInput"'
+done
 rm -f "$CLONE/.git/pairing-state.json"
 check "a settlement-review alone is refused" '[ "$(rc_pretool "$REVIEW")" -eq 2 ]'
 }
@@ -151,73 +140,40 @@ check "with a green record the review runs" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]
 }
 
 case_05() {  # 1 s measured alone 2026-10-12
-# --- 5. the override runs the command and leaves its reason ---------------------------------------
+# --- 5. a gate's PAIR_OK escapes nothing since feature 383 (the gate runs as typed): no bypass is logged for it -------
 rm -f "$CLONE/.git/pairing-state.json" "$CLONE/.git/verification-state.json" "$CLONE/.git/stub-gate-green"
 OVER=$(stdin_for Bash '{"command":"PAIR_OK=\"docs only, no map ink\" make done"}')
-check "the override runs the gate alone" '[ "$(rc_pretool "$OVER")" -eq 0 ]'
-check "...and logs its reason for the audit" 'grep -rql "docs only, no map ink" "$SKILL/dev/bypass-log"'
+check "the gate with PAIR_OK runs" '[ "$(rc_pretool "$OVER")" -eq 0 ]'
+check "...and logs no bypass: there was nothing to escape" '! grep -rql "docs only, no map ink" "$SKILL/dev/bypass-log" 2>/dev/null'
 }
 
 case_06() {  # 3 s of its chain, measured as one 2026-10-12
-# --- 6. stop: a half-open pairing is refused ONCE --------------------------------------------------
-# GUARD_EDIT_OK: feature 317 - a green `make test-file` writes the content's key to the verification record and is no gate:
-# the stop branch asks the gate stamp, so it is quiet until a gate went green on this content
-printf '{"engine_key":"%s","target":"test-file"}' "$KEY" > "$CLONE/.git/verification-state.json"
-rm -f "$CLONE/.git/pairing-state.json"
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); TESTFILE=$?
-check "stop is quiet when only a test file went green on this content" '[ "$TESTFILE" -eq 0 ]'
+# --- 6. stop: RETIRED (feature 383 FR-003) - a turn ends on a green gate with a review owed --------------------------
+# GUARD_EDIT_OK: feature 383 SC-004 - the stop verb is a no-op kept for a session whose settings predate the landing: quiet on a
+# green gate with the fixture's review owed and none dispatched, and it asks no review lookup
 printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; touch "$CLONE/.git/stub-gate-green"
+rm -f "$CLONE/.git/pairing-state.json"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); FIRST=$?
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); SECOND=$?
-check "stop refuses a half-open pairing" '[ "$FIRST" -eq 2 ]'
-check "...and never twice for the same content" '[ "$SECOND" -eq 0 ]'
+check "stop is quiet on a green gate with a review owed" '[ "$FIRST" -eq 0 ]'
+check "...and asks no review lookup (SC-004)" '! ( cd "$CLONE" && printf "%s" "$STOP" | bash -x "$HOOK" stop 2>&1 ) | grep -q "review_owed.py"'
 }
 
 case_07() {  # 2 s of its chain, measured as one 2026-10-12
-# --- 7. the documented remedy CLEARS the stop hook -------------------------------------------------
-# The stop message says "record why it is not owed: PAIR_OK=... on your next gate run". Before
-# 2026-08-29 doing exactly that logged a bypass and changed nothing stop reads, so the hook fired
-# again and repeated the remedy the session had just used. An escape that cannot clear its own guard
-# is the shape this project's guard rules single out.
+# --- 7. a gate with PAIR_OK still runs (feature 383: the waiver is retired with the stop branch, its only reader) -----
 rm -f "$CLONE/.git/pairing-state.json"
-printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
 WAIVE=$(stdin_for Bash '{"command":"PAIR_OK=\"the review read these exact maps and nothing moved\" make done"}')
-check "the waived gate runs" '[ "$(rc_pretool "$WAIVE")" -eq 0 ]'
-check "...and records the waiver against this content" 'grep -q "waived_key" "$CLONE/.git/pairing-state.json"'
-STOP2=$(printf '{"transcript_path":"%s","session_id":"sid-2","cwd":"%s"}' "$TMP/proj/sid-2.jsonl" "$CLONE")
-( cd "$CLONE" && printf '%s' "$STOP2" | "$HOOK" stop >/dev/null 2>&1 ); WAIVED=$?
-check "...so stop does not fire on content the gate waived" '[ "$WAIVED" -eq 0 ]'
-# and the waiver is per-CONTENT: a waiver recorded against OTHER content does not cover this one, so
-# an engine edit after a waived gate is guarded again rather than riding the old waiver
-printf '{"waived_key":"deadbeefdeadbeef"}' > "$CLONE/.git/pairing-state.json"
-printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
-( cd "$CLONE" && printf '%s' "$STOP2" | "$HOOK" stop >/dev/null 2>&1 ); OTHER=$?
-check "...but a waiver for OTHER content does not cover this one" '[ "$OTHER" -eq 2 ]'
+check "a gate carrying PAIR_OK runs as typed" '[ "$(rc_pretool "$WAIVE")" -eq 0 ] && ! run_pretool "$WAIVE" | grep -q "updatedInput"'
 }
 
 
 case_08() {  # 5 s of its chain, measured as one 2026-10-12
-# --- 6. NO LAYOUT CHANGE, NO REVIEW (feature 231, GM 2026-09-12) -----------------------------------
-# GUARD_EDIT_OK: feature 231 - the new branch and its three properties: the gate runs as typed, the stop
-# branch stays quiet, and the waiver is RECORDED with its reason so `make audit` can count it. The
-# motivating case is feature 228: one path's `d`, a byte-identical manifest, 18.7 minutes of review.
+# --- 6. NO LAYOUT CHANGE, NO REVIEW - and since feature 383 none at a gate's start either way ---------------------------
 unmoved
 rm -f "$CLONE/.git/pairing-state.json" "$CLONE/.git/verification-state.json"
-check "with no manifest moved the gate runs as typed" '[ "$(rc_pretool "$GATE")" -eq 0 ]'
-check "...and is NOT rewritten into make verify" '! run_pretool "$GATE" | grep -q "updatedInput"'
-check "...and the context says no review is owed" 'run_pretool "$GATE" | grep -q "NO REVIEW CHECK OWED"'
-check "...and says why, in the words of the script" 'run_pretool "$GATE" | grep -q "no occasion in the delta"'
-check "...and the context is valid JSON - a quoting slip here is silent" 'run_pretool "$GATE" | python3 -c "import json,sys; json.load(sys.stdin)"'
-printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); QUIET=$?
-check "...and the stop branch does not fire half-open" '[ "$QUIET" -eq 0 ]'
-check "...having recorded the automatic waiver" 'grep -q "waived_key" "$CLONE/.git/pairing-state.json"'
-check "...with the reason it was waived for" 'grep -q "no occasion in the delta" "$CLONE/.git/pairing-state.json"'
+check "with no manifest moved the gate runs as typed, silently" '[ "$(rc_pretool "$GATE")" -eq 0 ] && [ -z "$(run_pretool "$GATE")" ]'
 moved
 rm -f "$CLONE/.git/pairing-state.json"
-check "...while a MOVED manifest owes the review again" 'run_pretool "$GATE" | grep -q "updatedInput"'
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); OWED=$?
-check "...and the stop branch fires on it" '[ "$OWED" -eq 2 ]'
+check "...and with a moved one, the same" '[ "$(rc_pretool "$GATE")" -eq 0 ] && [ -z "$(run_pretool "$GATE")" ]'
 }
 
 case_09() {  # 1 s measured alone 2026-10-12
@@ -246,12 +202,6 @@ check "a review escaped with a reason runs" '[ "$(rc_pretool "$ESCREV")" -eq 0 ]
 # at its VERDICT. What 231 fixed stays fixed: once that review writes its verdict, the stop branch is quiet.
 check "...and records the content it reviews" 'grep -q "review_dispatch_key" "$CLONE/.git/pairing-state.json"'
 check "...and no longer counts itself done at dispatch" '! grep -q "\"review_key\"" "$CLONE/.git/pairing-state.json"'
-printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
-mkdir -p "$CLONE/.git/review-verdicts"
-printf '{"map":"testmap","engine_key":"%s","verdict":"PASS","findings":[]}' "$KEY" > "$CLONE/.git/review-verdicts/settlement-review--testmap.json"
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); AFTER_ESC=$?
-check "...so once its verdict is written the stop branch does not fire half-open on it" '[ "$AFTER_ESC" -eq 0 ]'
-rm -rf "$CLONE/.git/review-verdicts"
 }
 
 
@@ -318,25 +268,10 @@ check "REVIEW_PREREQ_OK with a reason runs the review" '[ "$(rc_pretool "$ESC")"
 check "...and logs its reason for the audit" 'grep -rql "a negative fixture left bad on purpose" "$SKILL/dev/bypass-log"'
 check "...and the escape is recorded under its own rule" 'grep -rq "review-prereq-ok" "$GUARD_LOG_ROOT"'
 
-# FR-002: a NOT-REVIEWABLE verdict closes nothing; a PASS for this content closes the pair
+# FR-002: a dispatch is permitted on a green gate (whether a verdict closes the unit is asked at the push, by review-gate.sh,
+# since feature 383 retired the stop branch that asked it at each turn's end)
 reset_prereq; green
 check "the review dispatch runs" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
-# GUARD_EDIT_OK: feature 240 SC-001 - a review stopped before it returns writes no verdict, and closes nothing
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); NONE=$?
-check "a dispatched review with NO verdict written leaves the pair open" '[ "$NONE" -eq 2 ]'
-rm -f "$CLONE/.git/pairing-state.json"
-printf '{"review_dispatch_key":"%s"}' "$KEY" > "$CLONE/.git/pairing-state.json"
-verdict NOT-REVIEWABLE '[]'
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); NR=$?
-check "a NOT-REVIEWABLE verdict leaves the pair OPEN" '[ "$NR" -eq 2 ]'
-rm -f "$CLONE/.git/pairing-state.json"
-verdict PASS '[]' feedfacefeedface
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); STALE=$?
-check "a PASS for OTHER content leaves it open too" '[ "$STALE" -eq 2 ]'
-rm -f "$CLONE/.git/pairing-state.json"
-verdict PASS '[]'
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); CLOSED=$?
-check "a PASS for this content closes it" '[ "$CLOSED" -eq 0 ]'
 reset_prereq
 }
 
@@ -373,36 +308,16 @@ check "...and records the dispatch: the map, at this key" 'python3 -c "import js
 }
 
 case_13() {  # 10 s of its chain, measured as one 2026-10-12
-# --- 11. EVERY OWED MAP IS DISPATCHED BEFORE THE TURN ENDS (feature 248 FR-003), and the span recorded (FR-004) ----
-# testmap is dispatched (section 10), othermap is not: the stop branch names othermap, once; a later dispatch of
-# othermap clears it, and the span between the two dispatch clocks is recorded as parallel or serialized.
-STOP=$(printf '{"transcript_path":"%s","session_id":"sid-1","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$CLONE")
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >"$TMP/stop-missing.txt" 2>&1 ); MISSING=$?
-check "stop refuses while an owed map has no dispatch" '[ "$MISSING" -eq 2 ]'
-check "...naming the missing map and its prompt file" 'grep -q "othermap" "$TMP/stop-missing.txt" && grep -q "review-snapshot/settlement-review--othermap/dispatch.md" "$TMP/stop-missing.txt"'
-check "...not the dispatched one" '! grep -q "FOR: settlement-review--testmap" "$TMP/stop-missing.txt"'
-check "...recorded under its own rule" 'grep -rl "review-map-undispatched" "$GUARD_LOG_ROOT" >/dev/null'
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); AGAIN=$?
-check "...and refuses once per missing set, never twice" '[ "$AGAIN" -eq 0 ]'
+# --- 11. the span between two owed maps' dispatches is recorded (feature 248 FR-004) ----------------------------------
+# testmap is dispatched (section 10), othermap after it: the span between the two dispatch clocks is recorded as parallel
+# or serialized. (The stop branch's demand that every owed map be dispatched before the turn ends is retired, feature 383.)
 OTHER=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"UNIT: settlement-review--othermap\nreview /x/.git/review-snapshot/settlement-review--othermap/clone against main"}')
 FIRST_AT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["dispatched"]["settlement-review--testmap"]["at"])' "$CLONE/.git/pairing-state.json")
 check "the second map's dispatch, a fixture-clock half-minute later, is permitted" '[ "$(cd "$CLONE" && printf "%s" "$OTHER" | PAIR_NOW=$((FIRST_AT + 30)) "$HOOK" pretool >/dev/null 2>&1; echo $?)" -eq 0 ]'
 check "...and every owed map now dispatched within the span records reviews-parallel" 'grep -rl "reviews-parallel" "$GUARD_LOG_ROOT" >/dev/null'
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); COVERED=$?
-check "...so the stop branch is quiet" '[ "$COVERED" -eq 0 ]'
 # the serialized shape: the same two maps dispatched two minutes apart
 rm -f "$CLONE/.git/pairing-state.json"; ( cd "$CLONE" && printf '%s' "$ONE" | PAIR_NOW=1000 "$HOOK" pretool >/dev/null 2>&1; printf '%s' "$OTHER" | PAIR_NOW=1120 "$HOOK" pretool >/dev/null 2>&1 )
 check "two dispatches a fixture-clock two minutes apart record reviews-serialized" 'grep -rl "reviews-serialized" "$GUARD_LOG_ROOT" >/dev/null'
-# a running review naming a map covers it: a pending agent transcript whose prompt names othermap
-rm -f "$CLONE/.git/pairing-state.json"; ( cd "$CLONE" && printf '%s' "$ONE" | "$HOOK" pretool >/dev/null 2>&1 )
-printf '{"type":"user","message":{"role":"user","content":"UNIT: settlement-review--othermap\nsettlement-review of /x/.git/review-snapshot/settlement-review--othermap/clone"}}\n{"type":"assistant","message":{"content":[{"type":"tool_use","id":"t1"}]}}\n{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"t1"}]}}\n' > "$DIR/agent-pending1.jsonl"
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); PENDING=$?
-check "a review still running that names the other map covers it" '[ "$PENDING" -eq 0 ]'
-rm -f "$DIR/agent-pending1.jsonl"
-# a waived gate is never refused for missing maps (the plan review's note: the check sits after the waivers)
-rm -f "$CLONE/.git/pairing-state.json"; printf '{"waived_key":"%s"}' "$KEY" > "$CLONE/.git/pairing-state.json"
-( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); WAIVED2=$?
-check "a waived gate is not refused for missing maps" '[ "$WAIVED2" -eq 0 ]'
 rm -f "$CLONE/.git/pairing-state.json"; rm -rf "$MAPDIR_G"; moved; reset_prereq
 }
 
@@ -460,19 +375,14 @@ case_15() {  # 5 s measured alone 2026-10-12
 GHOST=$(printf '{"tool_name":"Bash","tool_input":{"command":"make done FULL=1"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
 printf '%s' "$MIRROR/.clones/never-created" > "$MIRROR/.clones/.session-clones/ghost"
 moved
-check "a claimed-but-uncreated clone falls back and the gate branch DISCLOSES it" 'note_says "$GHOST" | grep -q "could not be resolved"'
-check "...and says the verdict was judged against main" 'note_says "$GHOST" | grep -q "judged against MAIN"'
-check "...and names the remedy" 'note_says "$GHOST" | grep -q "rename"'
-check "...and the context is still valid JSON" 'note_says "$GHOST" | python3 -c "import json,sys; json.load(sys.stdin)"'
+# GUARD_EDIT_OK: feature 383 FR-003 - the gate branch says nothing at all now (it runs as typed), and the stop branch is
+# retired, so the review refusal is the one branch left that speaks on a fallback
+check "a claimed-but-uncreated clone's gate runs as typed, saying nothing" '[ -z "$(note_says "$GHOST")" ]'
 GHOSTREV=$(printf '{"tool_name":"Agent","tool_input":{"subagent_type":"settlement-review","prompt":"review it"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
 rm -f "$MIRROR/.git/pairing-state.json" "$MIRROR/.git/verification-state.json"
-check "the review refusal discloses it too" 'note_says "$GHOSTREV" | grep -q "could not be resolved"'
-printf '{"engine_key":"%s"}' "$KEY" > "$MIRROR/.git/verification-state.json"
-mkdir -p "$MIRROR/pool/hamlets/m"
-printf '{"meta":{"name":"m"}}' > "$MIRROR/pool/hamlets/m/m.json"   # a manifest, so a review IS owed there
-printf 'engine-key:\n\t@printf "%%s" %s\n' "$KEY" > "$MIRROR/Makefile"
-GHOSTSTOP=$(printf '{"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
-check "the half-open stop discloses it too" 'note_says "$GHOSTSTOP" stop | grep -q "could not be resolved"'
+check "the review refusal discloses the fallback" 'note_says "$GHOSTREV" | grep -q "could not be resolved"'
+check "...says the verdict was judged against main" 'note_says "$GHOSTREV" | grep -q "judged against MAIN"'
+check "...and names the remedy" 'note_says "$GHOSTREV" | grep -q "rename"'
 check "a RESOLVED clone adds nothing" '! run_pretool "$GATE_FULL" | grep -q "could not be resolved"'
 QUIET_ONE=$(printf '{"tool_name":"Bash","tool_input":{"command":"make quick"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
 check "...and a branch that says nothing today still says nothing" '[ -z "$(note_says "$QUIET_ONE")" ]'
