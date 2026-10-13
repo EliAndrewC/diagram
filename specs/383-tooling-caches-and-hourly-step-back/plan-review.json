@@ -205,7 +205,7 @@
    "reviewed": "2026-10-13"
   },
   "## Amendment 1 (FR-013, FR-014)": {
-   "sha256": "bf15c3993b1306d44da5c2f5d714c0fa9407b2f84cc2ebeb3633e5902ed2f4fb",
+   "sha256": "589ee79b016406ecaa488f3453d18175a3d390ad4c4ba09909fe5e990a2c13d5",
    "verdict": "CLEAR",
    "reviewed": "2026-10-13",
    "declared": "spec-fidelity"
@@ -363,6 +363,33 @@
      "summary": "quote-verbatim verdicts in a ParseCache by code sha, keyed by passage and page sha256; compared with L7R_CACHE_OFF=1",
      "class": "within",
      "why": "Unchanged since its CLEAR verdict; FR-014."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-13",
+   "blocks": [
+    "## Amendment 1 (FR-013, FR-014)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D15",
+     "summary": "A tooling test file's reads recorded by an audit hook in the worker and every Python child; an unrecorded program against the repository makes the file opaque (git init/clone judged by their paths, git rev-parse location queries, sleep/true/false/echo excepted as reading no repository content); a pass is kept by content only when every test of the file ran and passed - none deselected by -k, a marker or a reuse, checked from pytest's deselections, and no node id named; a failure removes the entry.",
+     "class": "within",
+     "why": "FR-013 keeps a pass of a FILE; the change only tightens when a pass counts as the file's (a partly deselected file is not a file that passed), so fewer passes are kept, never more, and it lets the gate's -m tooling run record exactly where it ran whole files, which D16 already relied on. Nothing the GM asked to skip is narrowed; the opaque rule and its exceptions are unchanged from the CLEAR text and only exempt programs that read no repository content, which FR-013's 'what that program read is not known' does not reach."
+    },
+    {
+     "id": "D16",
+     "summary": "Reuse switched on by land-tooling alone (L7R_TEST_DEPS=reuse); reuse, gate -m tooling and make test-file runs record; a kept file is skipped when interpreter, opacity, ignored-file and content checks all match; the run prints what it reused; guard suites keep their own reuse.",
+     "class": "within",
+     "why": "Unchanged since CLEAR; implements 'skip suites the clone already passed' for the one caller FR-013 names."
+    },
+    {
+     "id": "D17",
+     "summary": "quote-verbatim verdicts kept in a ParseCache named by the module's code sha, keyed by passage and page-text sha256; report compared byte for byte with the cache off.",
+     "class": "within",
+     "why": "Unchanged since CLEAR; is FR-014 and the GM's quote-verbatim ask."
     }
    ]
   }
