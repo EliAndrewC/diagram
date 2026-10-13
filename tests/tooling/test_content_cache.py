@@ -63,7 +63,9 @@ def test_a_clean_file_is_its_blob_and_a_changed_or_untracked_one_its_bytes(tmp_p
     (d / "a.txt").write_text("changed\n", encoding="utf-8")
     (d / "sub" / "new.txt").write_text("new\n", encoding="utf-8")
     again = rc.content_ids(d, untracked=True)
-    assert again["a.txt"].startswith("w:") and again["a.txt"] != ids["a.txt"]
+    assert again["a.txt"] != ids["a.txt"]
+    assert again["a.txt"] == subprocess.run(["git", "-C", str(d), "hash-object", "a.txt"], capture_output=True, text=True).stdout.strip(), \
+        "a changed file's id is the blob id git would give it (383 amendment 1: same bytes, same id, in a clone or a worktree)"
     assert again["sub/b.txt"] == ids["sub/b.txt"] and "sub/new.txt" in again
     assert "sub/new.txt" not in rc.content_ids(d), "untracked files only when asked"
     assert set(rc.content_ids(d, ["sub"], untracked=True)) == {"sub/b.txt", "sub/new.txt"}
