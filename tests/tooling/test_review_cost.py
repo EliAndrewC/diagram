@@ -77,3 +77,5 @@ def test_a_resumed_agent_is_split_at_each_new_prompt_and_main_prints_a_line_per_
     assert rc.main(["--agent", "r", "--root", str(tmp_path)]) == 0
     out = capsys.readouterr().out.splitlines()
     assert out[0].startswith("return 1: 30 s |") and out[1].startswith("return 2: 40 s |")
+    assert rc.main(["--agent", "r", "--root", str(tmp_path), "--last"]) == 0
+    assert capsys.readouterr().out.strip().startswith("40 s |"), "--last: only the latest return, unprefixed (make append AGENT=)"

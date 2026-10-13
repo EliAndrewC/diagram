@@ -73,7 +73,14 @@ for i, w in enumerate(words):
     if w == "make" and i + 1 < len(words) and words[i + 1] == "append":
         args = dict(a.split("=", 1) for a in words[i + 2 : i + 6] if "=" in a)
         if args.get("FILE", "").rstrip("/").endswith("dev/review-ledger.md") and args.get("LINE"):
-            print(args["LINE"])' 2>/dev/null)
+            line = args["LINE"]
+            if args.get("AGENT"):  # GUARD_EDIT_OK: hour:374@1 tooling fix - the row as `make append AGENT=` will write it
+                import subprocess, pathlib
+                out = subprocess.run([sys.executable, sys.argv[1], "--agent", args["AGENT"], "--last"], capture_output=True, text=True, check=False)
+                if out.returncode == 0 and out.stdout.strip():
+                    head = line.rstrip()
+                    line = head + ("" if head.endswith("|") else " |") + " " + out.stdout.strip().splitlines()[-1] + " |"
+            print(line)' "$ROOT/scripts/reviews/review_cost.py" 2>/dev/null)
 if [ -n "$APPENDED" ]; then
   JUDGED=$(mktemp); trap 'rm -f "$JUDGED"' EXIT
   { cat "$ROOT/$LEDGER"; printf '%s\n' "$APPENDED"; } > "$JUDGED"

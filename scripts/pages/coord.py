@@ -62,6 +62,25 @@ def append(path: pathlib.Path, line: str) -> None:
         fh.write(lead + line.rstrip("\n").encode("utf-8") + b"\n")
 
 
+def with_cost(line: str, cells: str) -> str:
+    """A ledger row closed with its cost cells: `line` (its cells up to `acted on`) then `wall | tokens |`."""
+    head = line.rstrip()
+    return f"{head}{'' if head.endswith('|') else ' |'} {cells} |"
+
+
+def agent_cells(agent: str) -> str:
+    """The latest return's cost cells of review agent `agent`, from `review_cost.py --last` - the one place they are read.
+
+    WHY (the round arbiter on hour:374-match-the-research-continued@1): a session composing the cells through a shell variable
+    (`C=$(make review-cost ...)`, then `LINE="... $C |"`) had its row judged by the ledger hook before the shell expanded it -
+    about fourteen refusals in a window, one taking the reply file written before it down too."""
+    script = pathlib.Path(__file__).resolve().parents[1] / "reviews" / "review_cost.py"
+    out = subprocess.run([sys.executable, str(script), "--agent", agent, "--last"], capture_output=True, text=True, check=False)
+    if out.returncode != 0 or not out.stdout.strip():
+        raise ValueError(out.stderr.strip() or f"no cost for agent {agent}")
+    return out.stdout.strip().splitlines()[-1]
+
+
 def main(argv: list[str], env: dict[str, str] | None = None) -> int:
     env = dict(os.environ) if env is None else env
     if len(argv) == 3 and argv[0] == "lines":
@@ -81,6 +100,12 @@ def main(argv: list[str], env: dict[str, str] | None = None) -> int:
             print("make append: LINE=<text> is required, and it is ONE line", file=sys.stderr)
             return 2
         path = resolve(argv[1])
+        if env.get("AGENT"):  # `make append ... AGENT=<id>`: the row's cost cells filled from the agent's own transcript
+            try:
+                line = with_cost(line, agent_cells(env["AGENT"]))
+            except ValueError as e:
+                print(f"make append: AGENT={env['AGENT']} - {e}", file=sys.stderr)
+                return 2
         append(path, line)
         print(f"appended to {path}")
         return 0

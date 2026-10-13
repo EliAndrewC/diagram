@@ -12,6 +12,8 @@ import os
 import pathlib
 import subprocess
 
+import pytest
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 SKILL = REPO
 
@@ -65,3 +67,25 @@ def test_both_run_through_make_from_the_clone_root(tmp_path: pathlib.Path) -> No
     got = run("lines", f"FILE={f}", "KEY=^- 700: IN-STEP")
     assert got.stdout.splitlines() == ["1: - 700: IN-STEP, it's \"fine\"", "(1 of 1 lines shown)"], got.stderr
     assert run("lines", f"FILE={f}").returncode == 2 and run("append").returncode == 2
+
+
+def test_append_with_an_agent_closes_a_ledger_row_with_its_cost_cells(tmp_path: pathlib.Path, monkeypatch, capsys) -> None:  # noqa: ANN001
+    """The round arbiter on hour:374-match-the-research-continued@1: `make append ... AGENT=<id>` fills the row's cost cells
+    from the agent's own transcript, so no session composes them through a shell variable the ledger hook judges unexpanded."""
+    assert co.with_cost("| d | c | s | v | f | k | yes | fixed |", "9 s | 1k in (0k cached) / 0.1k out") == "| d | c | s | v | f | k | yes | fixed | 9 s | 1k in (0k cached) / 0.1k out |"
+    assert co.with_cost("| a | b ", "9 s | x") == "| a | b | 9 s | x |"
+    f = tmp_path / "ledger.md"
+    monkeypatch.setattr(co, "agent_cells", lambda agent: "12 s | 3k in (1k cached) / 0.2k out")
+    assert co.main(["append", str(f)], {"LINE": "| a | b |", "AGENT": "x"}) == 0
+    assert f.read_text() == "| a | b | 12 s | 3k in (1k cached) / 0.2k out |\n"
+
+    def none(agent: str) -> str:
+        raise ValueError("no transcript")
+
+    monkeypatch.setattr(co, "agent_cells", none)
+    assert co.main(["append", str(f)], {"LINE": "| a |", "AGENT": "y"}) == 2 and "no transcript" in capsys.readouterr().err
+
+
+def test_agent_cells_runs_review_cost_last_or_says_why_not() -> None:
+    with pytest.raises(ValueError):
+        co.agent_cells("no-such-agent-ever-0000")
