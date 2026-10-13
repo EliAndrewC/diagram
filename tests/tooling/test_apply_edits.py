@@ -294,3 +294,16 @@ def test_the_checks_a_reply_answers_are_read_from_its_counts_line() -> None:
     assert ro.reply_checks(REPLY) == ("record-format",)
     assert ro.reply_checks("\nmodal-research: Farmhouse - ACCURACY 0 findings") == ("modal-accuracy", "modal-references", "modal-gaps")
     assert ro.reply_checks("EDIT notes/x.md\n<<<") == ()
+
+
+def test_a_block_already_applied_is_not_applied_twice(tmp_path, capsys) -> None:
+    """Feature 374 wave 154: a block whose new text holds its old text still found the old text once applied, and a re-run
+    wrote it again (a pop-up's `Entry:` path doubled). Its new text standing in the file is the block applied: skipped."""
+    q = _tree(tmp_path)
+    rel = str(q.relative_to(tmp_path))
+    report = tmp_path / "r.md"
+    report.write_text("record-format: 1 note\n" + _report(rel, "the gloss said stipend", "the gloss said stipend, a yearly one"), encoding="utf-8")
+    ae.main([str(report), "--root", str(tmp_path)])
+    ae.main([str(report), "--root", str(tmp_path)])
+    assert q.read_text(encoding="utf-8").count("a yearly one") == 1
+    assert "already applied" in capsys.readouterr().out
