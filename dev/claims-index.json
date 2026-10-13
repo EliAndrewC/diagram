@@ -12342,6 +12342,26 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::_CIRCLE#plumbing": {
+  "code": "dd4d6ad6611121fd",
+  "core": "8068f2fc11403115",
+  "date": "2026-10-13",
+  "note": "regex for reading the drawing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::_TRANSLATE#plumbing": {
+  "code": "9159672ec90fdf04",
+  "core": "2be4f684f88ac80a",
+  "date": "2026-10-13",
+  "note": "regex for reading the drawing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::_turned#plumbing": {
   "code": "0eb42d63d4b760ee",
   "core": "bae48e3ae89f9648",
@@ -12350,11 +12370,49 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::give_way#the grove gives way round it": {
+  "code": "1d6ed7ee044152d6",
+  "core": "d98940bce842fff0",
+  "date": "2026-10-13",
+  "note": "only crowns of its own grove that overlap the persimmon's disc are removed, from the drawing, the crown record and the conifers' list; \"the grove's trees give way round it\"",
+  "pages": {
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
+  },
+  "research": "1640adf91280aca1",
+  "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::in_bands#plumbing": {
+  "code": "3520a8fb74dca793",
+  "core": "ec50cbb9afb18e5f",
+  "date": "2026-10-13",
+  "note": "point-in-box test",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#in no other farm's grove": {
-  "code": "30331b07daee333f",
-  "core": "e80552c87a09aeaa",
-  "date": "2026-10-12",
-  "note": "\"its own grove, no other farm's\"",
+  "code": "1356f7ea98d64462",
+  "core": "623b60c4a916c284",
+  "date": "2026-10-13",
+  "note": "a seat whose box overlaps any other household's grove band is refused; \"its own grove, no other farm's\"",
+  "pages": {
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
+  },
+  "research": "1640adf91280aca1",
+  "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#its own grove gives way": {
+  "code": "0b04191342d11f56",
+  "core": "623b60c4a916c284",
+  "date": "2026-10-13",
+  "note": "its own grove's bands are not counted as taken ground, and its own conifers are dropped from the bar",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -12365,81 +12423,66 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#out of the plots' sun": {
-  "code": "d05941c06c3b6796",
-  "core": "e80552c87a09aeaa",
-  "date": "2026-10-12",
-  "note": "50 ft east, west and south of its own and its neighbors' plots",
+  "code": "d9c29cd6879f045b",
+  "core": "623b60c4a916c284",
+  "date": "2026-10-13",
+  "note": "every seat tried must be clear of 50 ft of its own yard's and beds' sun and of its neighbors' plots' sun",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#persimmon in the dooryard": {
-  "code": "2208ccc70484a544",
-  "core": "e80552c87a09aeaa",
-  "date": "2026-10-12",
-  "note": "front or behind, never the flank, or none",
+  "code": "5d3d4492b1fb3ec4",
+  "core": "623b60c4a916c284",
+  "date": "2026-10-13",
+  "note": "front or behind is rolled from the hamlet's front-likelier share (the rolled side first, then the other); no flank seat; a farm with no seat gets no tree",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:591f08ea01d694fd",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297",
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:de4ee1b2d962f08c",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown": {
-  "code": "4bddd425b1492498",
-  "core": "e80552c87a09aeaa",
-  "date": "2026-10-12",
-  "note": "`clear` refuses the persimmon under any crown in `s._conifer_crowns`, while the page says \"the grove's trees give way round it\". If that list holds this household's own grove at reseat time, this is DRIFTED; if not, it is MISLABELED (the rule belongs to the UNRESEARCHED other-stands claim). I need to know what `_conifer_crowns` holds at reseat",
-  "pages": {
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
-  },
-  "research": "1640adf91280aca1",
-  "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
-  ],
-  "verdict": "CANNOT-TELL"
- },
  "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no other stand's conifer": {
-  "code": "5ab1dc5371509d1c",
-  "core": "e80552c87a09aeaa",
-  "date": "2026-10-12",
-  "note": "the page records nothing for other stands",
+  "code": "3dbfb08d8340dc8a",
+  "core": "623b60c4a916c284",
+  "date": "2026-10-13",
+  "note": "the page says nothing about a persimmon under another stand's conifer; §4 covers only its own grove",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::reseat_persimmons#the rolled count honored": {
-  "code": "56a149b6895c30a1",
-  "core": "9e9d69f49ce1a95d",
-  "date": "2026-10-07",
-  "note": "the trees still short of the hamlet's 80-95% roll go to households without one; a household with no seat keeps none",
+  "code": "1c3d5f3f3b298cec",
+  "core": "58388faacbcdec26",
+  "date": "2026-10-13",
+  "note": "fills the shortfall against the per-hamlet 80-95 in 100 share",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:193e9c0583a2d29a",
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297"
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:193e9c0583a2d29a"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::reseat_persimmons#which household takes it": {
-  "code": "1d2588a10b5335f8",
-  "core": "9e9d69f49ce1a95d",
-  "date": "2026-10-03",
-  "note": "unattested",
+  "code": "99a7d2f9d4740b78",
+  "core": "58388faacbcdec26",
+  "date": "2026-10-13",
+  "note": "the page says nothing on which household takes the tree",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/region.py::LaneGround#lane ground": {

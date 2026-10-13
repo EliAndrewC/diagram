@@ -2144,5 +2144,24 @@
       "pen": "a filled rect (#CDB58A) with a solid 0.9 px rail and a 0.7 px rail across, where the dashed 0.8 px outline drew nothing at fit zoom",
       "pens_drawn": 9
     }
+  },
+  "w152-reseat": {
+    "quantity": "the persimmon reseat with its own grove open to it (wave 152): rolled persimmons against drawn, the crowns given way, the rolls that refuse, the pool and the cohort",
+    "observed": "2026-10-13",
+    "source": "the session's scratchpad run r16a: the 44 rolls (valley seeds 1-20, dike-pond and polder seeds 1-12, 16 households), make maps SCOPE=all and make cohort at the clone's working tree",
+    "command": "make hamlet ARGS=\"--name <n> --seed <s> --households 16 [--archetype <a>] --out <dir> --no-render\" over the 44 seeds; make maps SCOPE=all; make cohort",
+    "method": "per manifest: meta.farm_fixtures_target['persimmon'] against len(persimmons), meta.persimmon_grove_gave_way",
+    "value": {
+      "persimmons_44": "578 of 578",
+      "persimmons_pool": "69 of 69",
+      "crowns_given_way": 0,
+      "refused_44": [
+        "polder 4 (as at HEAD)",
+        "polder 5 (as at HEAD)"
+      ],
+      "pool": "clean, no manifest changed",
+      "cohort": "16/16 passed",
+      "reading": "no roll here reseats a tree into its own grove: the code now follows 0046 where one does, and no map moves"
+    }
   }
 }

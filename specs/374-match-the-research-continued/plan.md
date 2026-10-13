@@ -836,6 +836,24 @@ measurement.
 - **W151-4** (within; the bar): no roll that passes at HEAD refuses (the pool, the cohort, the 44 rolls); every other fixture
   still drawn to its count; the sty counts measured per map. A glyph check is owed on the pool map that first draws one.
 
+## Batch 16: the reseated persimmon and its own grove (the persimmon row)
+
+**The work list**: the next free row (`homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown`, DRIFTED):
+0046's drawing page has a farm's persimmon stand at the edge of its own grove behind the house, "and the grove's trees give
+way round it"; the seating's persimmon is honored that way (the grove is drawn round it), but a tree short of the hamlet's
+roll, given afterwards to a household that rolled none (feature 315's reseat), is refused its own grove's band and every
+conifer already drawn there. Measured first: all 647 rolled persimmons are drawn over the 44 rolls and the pool (the
+reseat always finds a household), so the change is which household and where, never a count. Rows 516, 771, 774 as ruled.
+
+### Wave 152 (T44) - the reseated persimmon may stand in its own grove, which gives way
+- **W152-1** (within): the reseat lays its tree as the seating does: its own grove's bands open to it, as the seating's
+  `fruit` are, a neighbor's grove still refusing (0046: "its own grove, no other farm's"); its own grove's crowns do not
+  refuse it, and every crown of its own grove under the persimmon's crown is taken out - out of the drawing and out of the
+  record of crowns (`tree_crowns`, the conifers' list) - so the grove gives way round it as 0046 records; another stand's
+  conifer still refuses it (UNRESEARCHED, as before). The crowns taken out are counted (`meta`).
+- **W152-2** (within; the bar): no roll that passes at HEAD refuses; every rolled persimmon still drawn; the crowns given
+  way counted per map. A glyph check is owed only where a pool map's persimmon is re-placed by the change (placement-changed).
+
 ## Landing by batch (375's D18)
 
 374 is the remainder of 328's ranking, too long for one clone, so it lands batch by batch and stays open between them:

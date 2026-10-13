@@ -242,6 +242,11 @@ in 328's ranking and this spec.
       research: rendering
       verify: DONE. m:w151-sties - 334 of 334 sties over the 44 rolls, 47 of 47 on the pool, polder 4/5 refusing as at HEAD, cohort 16/16; in the bundle the web refused maps at every ground size tried (m:w151-sty-room), so the sty is seated once the ways stand; pop-up through form, research and depiction; 0049 drawing page checked; claims IN-STEP; glyph-check PASS on Inashiro (round 2) and Kuwabata; gate green
 
+## Batch 16 - the reseated persimmon and its own grove
+
+- [ ] T44 wave 152: the reseated persimmon may stand in its own grove, whose crowns give way round it (0046) (FR-001)
+      research: rendering
+
 ## Standing - the ranking's remaining rows
 
 - [ ] T99 Batches 2 on: the ranking's remaining open rows, wave by wave in ranking order, each batch's tasks added here as it starts (plan, "Lands open") [lands-open]

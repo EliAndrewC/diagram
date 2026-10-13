@@ -14,6 +14,7 @@ Research: plumbing - NONE
 from __future__ import annotations
 
 import math
+import re
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -37,8 +38,8 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
     Research:
         persimmon in the dooryard - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: by the seat search every persimmon takes, front or behind
         out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: its own plots' and its neighbors', `CANOPY_SHADE_FT`
-        under no conifer's crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm's own grove trees give way round the persimmon
-        under no other stand's conifer - UNRESEARCHED: a persimmon is also refused under the crown of any other stand's conifer; the page records nothing for other stands
+        its own grove gives way - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: its own grove's bands open to it, its own grove's crowns no bar (taken out after, `give_way`)
+        under no other stand's conifer - UNRESEARCHED: a persimmon is refused under the crown of any other stand's conifer; the page records nothing for other stands
         in no other farm's grove - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: a neighbor's grove refuses the tree"""
     g = h.get("geom") or {}
     if not g.get("house"):
@@ -52,9 +53,12 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
 
     roofs = [(0.0, 0.0, hw, hh), *(frame(g[k]) for k in ("shed", "byre", "well") if g.get(k) is not None)]
     ground = [frame(r) for r in ([g["yard"]] if g.get("yard") is not None else []) + list(g.get("gardens") or ())]
-    taken = [*roofs, *ground, *(frame(r) for r in (g.get("fixtures") or {}).values()), *(frame(b) for b in g.get("groves") or ())]
+    # ITS OWN GROVE OPEN TO IT, AS THE SEATING'S `fruit` ARE (feature 374 wave 152, 0046: "its own grove, no other farm's"):
+    # the bands are not taken ground, and the grove's conifers are no bar - the grove gives way round the tree (`give_way`)
+    taken = [*roofs, *ground, *(frame(r) for r in (g.get("fixtures") or {}).values())]
     sunlit = _sunlit(ground, s.px(CANOPY_SHADE_FT), (turn,))
-    cones = getattr(s, "_conifer_crowns", None) or []
+    own = [tuple(float(v) for v in b) for b in g.get("groves") or ()]
+    cones = [c for c in getattr(s, "_conifer_crowns", None) or [] if not in_bands(c[0], c[1], own)]
 
     crown, shade = s.px(PERSIMMON_CROWN_FT + 1.0), s.px(CANOPY_SHADE_FT)
 
@@ -83,6 +87,52 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
     return None
 
 
+def in_bands(x: float, y: float, bands: Sequence[Sequence[float]]) -> bool:
+    """Is (x, y) inside one of `bands`, each a world box (center x, center y, w, h)?
+
+    Research: plumbing - NONE: a point in a box"""
+    return any(abs(x - b[0]) <= b[2] / 2 and abs(y - b[1]) <= b[3] / 2 for b in bands)
+
+
+_CIRCLE = re.compile(r'<circle cx="(-?[0-9.]+)" cy="(-?[0-9.]+)" r="([0-9.]+)"[^>]*/>')
+_TRANSLATE = re.compile(r'^<g transform="translate\((-?[0-9.]+),(-?[0-9.]+)\)">')
+
+
+def give_way(s: Settlement, x: float, y: float, r: float, bands: Sequence[Sequence[float]]) -> int:
+    """Take out every crown of the farm's own grove (centered in `bands`) that lies under a persimmon's crown at (x, y) of radius
+    `r`: from the drawing (its clump's circle), from the record of crowns (`tree_crowns`) and from the conifers' list; the
+    number taken out.
+
+    Research: the grove gives way round it - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the grove's trees give way round the farm's persimmon, wholly - no crown's edge under its disc, as the seating's grove gives way"""
+
+    def under(cx: float, cy: float, cr: float) -> bool:
+        return in_bands(cx, cy, bands) and math.hypot(cx - x, cy - y) < cr + r + 0.2
+
+    flat = s.M.get("tree_crowns") or []
+    keep: list[float] = []
+    gone: list[tuple[float, float]] = []
+    for i in range(0, len(flat) - 2, 3):
+        cx, cy, cr = float(flat[i]), float(flat[i + 1]), float(flat[i + 2])
+        if under(cx, cy, cr):
+            gone.append((cx, cy))
+        else:
+            keep += [flat[i], flat[i + 1], flat[i + 2]]
+    if not gone:
+        return 0
+    s.M["tree_crowns"] = keep
+    s._conifer_crowns = [c for c in getattr(s, "_conifer_crowns", None) or [] if not under(*c)]  # type: ignore[attr-defined]
+
+    def drop(text: str) -> str:
+        t = _TRANSLATE.match(text)
+        if t is None:
+            return text
+        tx, ty = float(t.group(1)), float(t.group(2))
+        return _CIRCLE.sub(lambda m: "" if any(abs(tx + float(m.group(1)) - gx) < 0.2 and abs(ty + float(m.group(2)) - gy) < 0.2 for gx, gy in gone) else m.group(0), text)
+
+    s.out[:] = [drop(o) for o in s.out]
+    return len(gone)
+
+
 def reseat_persimmons(s: Settlement, houses: Sequence[dict[str, Any]], target: int, forms: FixtureForms) -> int:
     """Lay, for each tree the hamlet's rolled `target` is short of, a persimmon at the next household without one that has a
     seat for it (`persimmon_for`), in the houses' own order; the trees laid. Only on the map that keeps the sun corridor.
@@ -104,6 +154,8 @@ def reseat_persimmons(s: Settlement, houses: Sequence[dict[str, Any]], target: i
             continue
         h.setdefault("fixtures", []).append(rec)
         g = h.get("geom") or {}
+        gave = give_way(s, rec["x"], rec["y"], rec["w"] / 2.0, [tuple(float(v) for v in b) for b in g.get("groves") or ()])
+        s.M["meta"]["persimmon_grove_gave_way"] = int(s.M["meta"].get("persimmon_grove_gave_way", 0)) + gave
         g["fixtures"] = {**(g.get("fixtures") or {}), "persimmon": (rec["x"], rec["y"], rec["w"], rec["h"])}
         laid += 1
     return laid

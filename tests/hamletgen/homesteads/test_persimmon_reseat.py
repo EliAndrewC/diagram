@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from l7r.diagram.hamletgen.homesteads.persimmon_reseat import _turned, persimmon_for, reseat_persimmons
+from l7r.diagram.hamletgen.homesteads.persimmon_reseat import _turned, give_way, in_bands, persimmon_for, reseat_persimmons
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.homestead_parts.fixture_seats import FixtureForms
 
@@ -110,3 +110,45 @@ def test_a_household_without_a_seat_on_its_rolled_side_tries_the_other(monkeypat
     monkeypatch.setattr(persimmon_reseat, "_persimmon", lambda hw, hh, taken, roofs, front, px, clear: sides.append(front) or (None if front else (0.0, -40.0, 23.0, 23.0)))
     rec = persimmon_for(s, h, FixtureForms(persimmon_front=0.95))
     assert sides == [True, False] and rec is not None, "front rolled, no seat there: behind the house"
+
+
+def test_its_own_grove_is_open_to_the_tree_and_its_conifers_no_bar() -> None:
+    """Feature 374 wave 152 (0046): a farm's persimmon may stand in its own grove, whose trees give way round it - its own bands
+    are not taken ground and its own conifers do not refuse the seat; another stand's conifer still does."""
+    s = _hamlet()
+    h = _house(1000.0, 1000.0)
+    s.M["houses"] = [h]
+    seat = persimmon_for(s, h, FixtureForms(persimmon_front=0.05))
+    assert seat is not None
+    h["geom"]["groves"] = [(seat["x"], seat["y"], 80.0, 40.0)]
+    s._conifer_crowns = [(seat["x"], seat["y"], 10.0)]
+    own = persimmon_for(s, h, FixtureForms(persimmon_front=0.05))
+    assert own is not None and (own["x"], own["y"]) == (seat["x"], seat["y"]), "its own grove gives way"
+    h["geom"]["groves"] = []
+    other = persimmon_for(s, h, FixtureForms(persimmon_front=0.05))
+    assert other is None or (other["x"], other["y"]) != (seat["x"], seat["y"]), "another stand's conifer refuses it"
+
+
+def test_the_grove_gives_way_out_of_the_drawing_and_the_record() -> None:
+    s = _hamlet()
+    s.M["tree_crowns"] = [100.0, 100.0, 8.0, 160.0, 100.0, 8.0, 100.0, 300.0, 8.0]
+    s._conifer_crowns = [(100.0, 100.0, 8.0), (100.0, 300.0, 8.0)]
+    s.out[:] = ['<g transform="translate(90.0,90.0)"><circle cx="10.0" cy="10.0" r="8.0" fill="#2A4"/><circle cx="70.0" cy="10.0" r="8.0" fill="#2A4"/></g>', "<path/>"]
+    bands = [(130.0, 100.0, 100.0, 40.0)]
+    assert in_bands(100.0, 100.0, bands) and not in_bands(100.0, 300.0, bands)
+    assert give_way(s, 100.0, 100.0, 11.5, bands) == 1, "only the crown under the tree, of its own grove"
+    assert s.M["tree_crowns"] == [160.0, 100.0, 8.0, 100.0, 300.0, 8.0] and s._conifer_crowns == [(100.0, 300.0, 8.0)]
+    assert 'cx="10.0"' not in s.out[0] and 'cx="70.0"' in s.out[0] and s.out[1] == "<path/>"
+    assert give_way(s, 500.0, 500.0, 11.5, bands) == 0, "nothing under it, nothing taken"
+
+
+def test_a_reseated_tree_in_its_own_grove_counts_the_crowns_given_way(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    import l7r.diagram.hamletgen.homesteads.persimmon_reseat as pr
+
+    s = _hamlet()
+    a = _house(1000.0, 1000.0, groves=[(1000.0, 960.0, 80.0, 40.0)])
+    s.M["houses"] = [a]
+    s.M["tree_crowns"] = [1000.0, 960.0, 8.0]
+    monkeypatch.setattr(pr, "persimmon_for", lambda s_, h, f: {"kind": "persimmon", "x": 1000.0, "y": 960.0, "w": 23.0, "h": 23.0})
+    assert reseat_persimmons(s, s.M["houses"], 1, FixtureForms()) == 1
+    assert s.M["meta"]["persimmon_grove_gave_way"] == 1 and s.M["tree_crowns"] == []
